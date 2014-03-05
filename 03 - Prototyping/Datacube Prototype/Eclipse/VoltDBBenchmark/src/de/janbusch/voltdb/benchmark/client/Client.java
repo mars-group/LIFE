@@ -1,0 +1,55 @@
+package de.janbusch.voltdb.benchmark.client;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import de.janbusch.voltdb.benchmark.VoltDBInsertionThread;
+
+public class Client {
+	private static final int THREAD_COUNT = 10;
+	private static final int ELEM_COUNT = 50000 / THREAD_COUNT;
+
+	public static void main(String[] args) throws IOException,
+			InterruptedException {
+		ExecutorService es = Executors.newFixedThreadPool(THREAD_COUNT);
+
+		List<Callable<Boolean>> callables = new LinkedList<>();
+
+		for (int i = 0; i < THREAD_COUNT; i++) {
+			callables.add(new VoltDBInsertionThread(ELEM_COUNT, new String[] {
+					"dOne", "dTwo", "dThree", "dFour", "dFive", "dSix",
+					"dSeven", "dEight", "dNine", "dTen" }, "localhost",
+					"ThreadNo" + i));
+		}
+
+		System.out.println("Starting " + THREAD_COUNT + " threads inserting "
+				+ ELEM_COUNT + " elements each.");
+		long start = System.currentTimeMillis();
+		List<Future<Boolean>> results = es.invokeAll(callables);
+		long end = System.currentTimeMillis();
+		System.out.println("Duration: " + (end - start) + "ms, "
+				+ (end - start) / 1000 + "secs, " + (end - start) / 1000 / 60.0
+				+ "mins.");
+
+		for (Future<Boolean> f : results) {
+			try {
+				if (!f.isDone() || !f.get()) {
+					System.err
+							.println("There were errors while executing the Inserts.");
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		}
+
+		es.shutdownNow();
+	}
+}

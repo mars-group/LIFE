@@ -1,0 +1,16 @@
+CREATE TABLE facts
+(
+  f_fact VARCHAR(36) NOT NULL,
+  f_t1 VARCHAR(36) NOT NULL REFERENCES d_t1 ( functionalId ),
+  f_t2 VARCHAR(36) NOT NULL REFERENCES d_t2 ( functionalId ),
+  f_t3 VARCHAR(36) NOT NULL REFERENCES d_t3 ( functionalId ),
+  f_t4 VARCHAR(36) NOT NULL REFERENCES d_t4 ( functionalId ),
+  f_t5 VARCHAR(36) NOT NULL REFERENCES d_t5 ( functionalId ),
+  f_t6 VARCHAR(36) NOT NULL REFERENCES d_t6 ( functionalId ),
+  f_t7 VARCHAR(36) NOT NULL REFERENCES d_t7 ( functionalId ),
+  f_t8 VARCHAR(36) NOT NULL REFERENCES d_t8 ( functionalId ),
+  f_t9 VARCHAR(36) NOT NULL REFERENCES d_t9 ( functionalId ),
+  f_t10 VARCHAR(36) NOT NULL REFERENCES d_t10 ( functionalId ),
+  functionalId VARCHAR(36) NOT NULL,
+  PRIMARY KEY (functionalId),
+);

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerticaClientLib", "VerticaClientLib\VerticaClientLib.csproj", "{B34597A0-9BA5-49C6-A7AB-C6A2F8E85F91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerticaClientLibTester", "VerticaClientLibTester\VerticaClientLibTester.csproj", "{D30366D9-B680-4135-BBD8-F5CDEA4DC8DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B34597A0-9BA5-49C6-A7AB-C6A2F8E85F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B34597A0-9BA5-49C6-A7AB-C6A2F8E85F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B34597A0-9BA5-49C6-A7AB-C6A2F8E85F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B34597A0-9BA5-49C6-A7AB-C6A2F8E85F91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D30366D9-B680-4135-BBD8-F5CDEA4DC8DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D30366D9-B680-4135-BBD8-F5CDEA4DC8DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D30366D9-B680-4135-BBD8-F5CDEA4DC8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D30366D9-B680-4135-BBD8-F5CDEA4DC8DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

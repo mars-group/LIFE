@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Core:jar">
+    <output-path>$PROJECT_DIR$/../../02 - Implementation/T_Components</output-path>
+    <root id="archive" name="Core.jar">
+      <element id="module-output" name="Core" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/jmdns.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/jcores.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/lipermi.mod.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/classworlds-1.0.mod.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/essence-rmi-1.03-mod.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

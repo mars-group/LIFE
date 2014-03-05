@@ -1,0 +1,33 @@
+<component name="libraryTable">
+  <library name="commons-cli-1.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/commons-cli-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-lang3-3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/guava-12.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-continuation-7.6.1.v20120215.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-http-7.6.1.v20120215.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-io-7.6.1.v20120215.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-server-7.6.1.v20120215.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-util-7.6.1.v20120215.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jline-2.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jna.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jsch-0.1.50.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/protobuf-java-2.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/servlet-api-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-nop-1.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/snappy-java-1.0.5-M3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/super-csv-2.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/tomcat-jdbc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/tomcat-juli.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/voltdb-3.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zmq-2.1.11.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/voltdb-3.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zmq-2.1.11.jar!/" />
+    </SOURCES>
+  </library>
+</component>

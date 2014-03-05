@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBookCommonLib", "PhoneBookCommonLib\PhoneBookCommonLib.csproj", "{966B2E0C-6BAD-4923-9FCC-FC477888A475}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBookServer", "PhoneBookServer\PhoneBookServer.csproj", "{DF8B117F-47BB-447F-A3CD-6BC6702084A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBookClient", "PhoneBookClient\PhoneBookClient.csproj", "{D19FA2AB-1FB3-409D-8383-A29CC068491D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF8B117F-47BB-447F-A3CD-6BC6702084A0} = {DF8B117F-47BB-447F-A3CD-6BC6702084A0}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{734B94EC-75A4-4481-9C9A-AB1BFCB0D71A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scs", "Scs\Scs.csproj", "{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF8B117F-47BB-447F-A3CD-6BC6702084A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF8B117F-47BB-447F-A3CD-6BC6702084A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF8B117F-47BB-447F-A3CD-6BC6702084A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF8B117F-47BB-447F-A3CD-6BC6702084A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D19FA2AB-1FB3-409D-8383-A29CC068491D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D19FA2AB-1FB3-409D-8383-A29CC068491D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D19FA2AB-1FB3-409D-8383-A29CC068491D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D19FA2AB-1FB3-409D-8383-A29CC068491D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

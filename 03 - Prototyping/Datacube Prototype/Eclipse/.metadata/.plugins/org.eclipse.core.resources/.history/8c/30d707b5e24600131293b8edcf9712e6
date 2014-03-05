@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SampleApplication" default="serverStart">
+	<description>
+ 		Ant Script for VoltDB activities
+ 	</description>
+
+	<property name="ddlLocation" location="./ddl" />
+	<property name="jarFileName" value="catalog.jar" />
+	<property name="ddlFileName" value="ddl.sql" />
+	<property name="VoltHome" value="/opt/voltdb" />
+	<property name="sourceCodePath" value="./src" />
+	<property name="compileOutputDir" value="./bin" />
+	<property name="voltClasspath" value=".:${VoltHome}/lib/*:${VoltHome}/voltdb/*" />
+
+	<path id="class.path">
+		<fileset dir="${VoltHome}">
+			<include name="**/*.jar" />
+			<include name="./bin" />
+		</fileset>
+	</path>
+	<!-- ================================= 
+ 		target: serverStart
+ 		Start the server after compiling the DDL and stored procedures 
+ 	================================= -->
+	<target name="serverStart" depends="catalog">
+		<exec executable="${VoltHome}/bin/voltdb">
+			<arg value="create" />
+			<arg value="catalog ${jarFileName}" />
+			<arg value="host localhost" />
+			<arg value="deployment deployment.xml" />
+		</exec>
+	</target>
+	<!-- =================================
+		 target: compile
+		 Compiles the source files for the Java stored procedures
+	 ================================= -->
+	<target name="compile.src">
+		<javac debug="on" srcdir="${sourceCodePath}" destdir="${compileOutputDir}">
+			<classpath refid="class.path" />
+		</javac>
+	</target>
+	<!-- =================================
+		 target: catalog
+		 Runs voltdb compile command to create the VoltDB catalog jar file 
+	 ================================= -->
+	<target name="catalog" depends="compile.src">
+		<exec executable="${VoltHome}/bin/voltdb">
+			<arg value="compile" />
+			<arg value="--classpath='./:${voltClasspath}:${compileOutputDir}'" />
+			<arg value="-o" />
+			<arg value="${jarFileName}" />
+			<arg value="${ddlLocation}/${ddlFileName}" />
+		</exec>
+	</target>
+	<!-- =================================
+ target: serverStop
+ Runs voltadmin shutdown on the default port.
+ ================================= -->
+	<target name="serverStop">
+		<exec executable="${VoltHome}/bin/voltadmin">
+			<arg value="shutdown" />
+		</exec>
+	</target>
+	<!-- =================================
+ target: clean
+ Deletes the class files from compile.src
+ ================================= -->
+	<target name="clean">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${compileOutputDir}" includes="**/*" defaultexcludes="no" />
+		</delete>
+	</target>
+</project>

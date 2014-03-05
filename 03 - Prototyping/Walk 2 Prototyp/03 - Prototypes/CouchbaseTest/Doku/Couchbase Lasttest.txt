@@ -1,0 +1,79 @@
+Anforderungen an die Datenlösung:
+- Datacube Struktur mit Star-Schema in relationaler Datenbank als persistenten Lösung mit quasi unbegrenztem Speicherplatz
+- Buffer-DB als In-Memory Datenbank für die Entgegenahme von Schreibvorgängen aus der Simulation
+- ETL Prozess schreibt Daten von Buffer-DB in Datacube
+- Leseanfragen aus Simulation gehen zunächst an Datacube, falls dort noch nicht vorhanden dann an die Buffer-DB
+- DB-Access Interface aus Sim soll möglichst uniform und abstrakt sein.
+
+
+
+2 Stationen, multithreaded, maximaler Throughput
+Specs:
+1 x MacBook Pro QuadCore i7 2,3Ghz, 8GB Ram, Gigabit Lan
+
+1 x Desktop Rechner, QuadCore i5 3,2Ghz, 8GB Ram, Gigabit Lan
+
+Server:
+Dual Xeon 6 Kerne +HT (24 logische Kerne), 2,8Ghz
+48 GB Ram
+Daten -> 1 TB HDD
+Indizes -> 1 TB HDD
+(getrennte Platten)
+
+1 Node für Datenbank
+
+Datenaufbau:
+TestObject:
+	- 10 Strings aus UUIDs (36 Chars) als Daten
+	- 1 String aus UUID als Key
+	-> ca. 600 Byte
+per GSON in JSON umgewandelt
+
+Verhalten bei hoher Last:
+Zu Anfang hohe Zahl Sets/sec, zunehmend schlechtere Performance, sobald RAM Quota ausgefüllt ist.
+Server lagert in SWAP aus (Ram: 35 GB, SWAP 60 GB), dann Sets/sec nur noch bei 9K. Sets werden dann auf Clients im RAM vorgehalten. 
+
+CPU-Last bei Write-Only nahezu irrelevant. 7% bei 24 logischen Kernen.
+
+Vorteil Lokalität: Wenn Couchbase Cluster Nodes mit jedem Simulationsrechner mitlaufen, sind Daten aus dem SimNode lokal im Cluster vorhanden, aber dennoch aus anderen clustern zugreifbar.
+
+ETL Test
+
+Bei der Abfrage aus Couchbase muss auf eine View zurückgegriffen werden. Diese holt sortiert alle IDs der Dokumente anhand ihres Time-Wertes aus der Datenbank. Davon wird das oberste Ergebnis genommen, da es sich hierbei um das Älteste Element in der Datenbank hält. wird dieses nun in den Datacube übertragen und anschließend per Key aus der DB gelöscht, ergibt sich die Problemsituation beim nächsten Objekt, dass der Index des Views noch nicht geupdatet wurde, so dass man abermals die ID zum bereits gelöschten Objekt erhält.
+
+Problem ist: Couchbase kann Views erst berechnen, wenn Daten auf der HDD (oder SSD) persistiert sind. Daher ist dies keine wirkliche In-Memory Lösung. Couchbase Typed Buckets nutzen allerdings RAM als Cache
+
+Couchbase: 20 MB / Item
+Memcached: 1 MB / Item
+
+Lösung um die Views zu umgehen:
+Simulation muss beim Speichern den Key an den ETL Prozess weitergeben, damit dieser ohne View das Dokument aus der Datenbank holen kann.
+
+Problem: StarJoin SQL Anfrage an CUBE, Daten nicht im CUBE, lesen aus Couchbase
+Lösung: Übersetzung von StarJoin in map/reduce Funktion in einem View. Muss schon vor Simulationsbeginn bekannt und hinterlegt sein. Frage: Ist die Übersetzung immer möglich?
+
+Idee: Wenn man einen starJoin als map/reduce Funktion ausdrücken kann, braucht man dann überhaupt noch den Datacube?
+
+
+Alternativen:
+
+PostGRESQL - Datacube
+Couchbase - als Buffer oder vielleicht auch als Standalone Lösung?
+
+JOIN-Less (geht das dann noch?):
+HBase - wir schreiben unveränderliche Daten und wollen schnell beliebig verschnitten drauf zugreifen -> Anforderung an BigTable / HBase
+Hypertable - HBase in NoSQL
+
+NewSQL Lösungen:
+VoltDB - implementiert das H-Store Konzept. Shared-Nothing-Architecture. Schnell wie NoSQL, trotzdem transaktional, keine Replikas bis jetzt
+
+Kommerzielle Lösungen:
+EXASOL -> InMemory, Gewinner des TPC-H Benchmarks in allen Klassen, Bestes Preis/Leistungs Verhältnis, aus Nürnberg, 
+MySQL Cluster CGE -> Always-On, In-Memory, Sharded DB, kann sogar auch NoSQL Anfragen beantworten.
+
+
+--> Zusammenfassung:
+ich denke VoltDB als Caching Mechanismus mit StoredProcedures, die zuvor über das Deployment der Layer initiiert worden sind, und eine anschließende old-school RDBMS wie PostGRE SQL als Long-Term-Storage und für beliebige Abfragen, sollten eine gelungene Kombination abgeben. 
+
+VoltDB Optimierung:
+die Partitionierung der Tabellen und Procedures sollte an die Art und Weise angepasst werden, wie die Procedures auf die Daten zugreifen.

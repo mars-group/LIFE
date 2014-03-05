@@ -1,0 +1,20 @@
+package de.janbusch.voltdb.benchmark.storedprocs;
+
+import org.voltdb.SQLStmt;
+import org.voltdb.VoltProcedure;
+import org.voltdb.VoltTable;
+
+public class InsertFact extends VoltProcedure {
+
+	public final SQLStmt sql = new SQLStmt(
+			"INSERT INTO facts VALUES (?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+	public VoltTable[] run(int fId, int dIdOne, int dIdTwo, int dIdThree,
+			int dIdFour, int dIdFive, int dIdSix, int dIdSeven, int dIdEight,
+			int dIdNine, int dIdTen) {
+		voltQueueSQL(sql, fId, dIdOne, dIdTwo, dIdThree, dIdFour, dIdFive,
+				dIdSix, dIdSeven, dIdEight, dIdNine, dIdTen);
+		voltExecuteSQL();
+		return null;
+	}
+}

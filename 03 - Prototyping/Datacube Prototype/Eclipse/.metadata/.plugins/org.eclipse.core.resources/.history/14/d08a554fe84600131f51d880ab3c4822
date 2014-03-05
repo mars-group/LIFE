@@ -1,0 +1,8 @@
+package de.janbusch.voltdb.benchmark.storedprocs;
+
+import org.voltdb.SQLStmt;
+
+public class InsertDimensionOne {
+	public final SQLStmt sql = new SQLStmt(
+			"INSERT INTO facts VALUES (?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+}

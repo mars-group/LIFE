@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ETLProcess:jar">
+    <output-path>$USER_HOME$/Desktop/ETLProcess</output-path>
+    <root id="archive" name="ETLProcess.jar">
+      <element id="module-output" name="ETLProcess" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Couchbase-Java-Client-1.1.7/couchbase-client-1.1.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Couchbase-Java-Client-1.1.7/spymemcached-2.9.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Couchbase-Java-Client-1.1.7/httpcore-4.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Couchbase-Java-Client-1.1.7/httpcore-nio-4.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Couchbase-Java-Client-1.1.7/commons-codec-1.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Couchbase-Java-Client-1.1.7/jettison-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Couchbase-Java-Client-1.1.7/netty-3.5.5.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/google-gson-2.2.4/gson-2.2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/postgresql-9.2-1002.jdbc4.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

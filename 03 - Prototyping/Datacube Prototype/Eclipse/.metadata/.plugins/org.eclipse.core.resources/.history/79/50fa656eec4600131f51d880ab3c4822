@@ -1,0 +1,6 @@
+package de.janbusch.voltdb.benchmark.client;
+
+public class Client {
+	private static final int THREAD_COUNT = 10;
+	private static final int ELEM_COUNT = 50000 / THREAD_COUNT;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AwesomePlugin/AwesomePlugin.iml" filepath="$PROJECT_DIR$/AwesomePlugin/AwesomePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MegaAwesomePlugin/MegaAwesomePlugin.iml" filepath="$PROJECT_DIR$/MegaAwesomePlugin/MegaAwesomePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PluginAPI/PluginAPI.iml" filepath="$PROJECT_DIR$/PluginAPI/PluginAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
+    </modules>
+  </component>
+</project>
+

@@ -1,0 +1,44 @@
+Für AW1:
+- Recherche Agentenarchitekturen
+- *Wer* hat *was* bereits entwickelt? (Forschung, Papers lesen, gibt es "Best-Practices"?)
+- Wo liegen die Hürden?
+- Rechercheergebnisse auf 10 Seiten Ausarbeitung und in 25 Minuten Präsentation vorstellen
+
+ifaamas.org
+railsbeck / grimm 
+
+MARS - Multi Agent Research Simulation
+**************************************
+Hauptverantwortlichkeit: Agenten
+
+Bisherige Erkenntnis:
+
+Anforderungen:
+- Verteilbarkeit der Lösung
+- Skalierung und Performanz für Masseneinsatz
+  (Leistung dabei leicht zweitrangig durch obigen Punkt) - generischer Ansatz
+  - nur Grundlage für domänenspezifische Implementation
+  - muß diesbezüglich konfigurierbar sein (mittels DSL)
+  - darf nicht einschränkend wirken
+
+Rahmenbedingungen:
+- Entwicklung auf Basis der .NET / Mono-Bibliotheken
+  => Sprache: C#
+  => Keine Standard-Frameworks vorhanden (alle für Java)
+  - aber Vorteil: Eine Version für alle Betriebssysteme!
+ 
+Grundlagen:
+- Softwarebezogen: Nichts! Beginn bei null ...
+- Architekturen / allgemeine Konzepte:
+  * WALK-Agentenaufteilung (Vierteiligkeit, Container)
+  * GAA - Standardansatz, BDI <=> reaktiv
+  * GEAMAS - vllt.Subsysteme, Schichtenkommunikation (?)
+
+- Einbindung in das Gesamtsystem:
+  * Agent von der Umwelt loslösen (=> Container)
+  * Wie ist die Schnittstelle für Ein- und Ausgaben?
+  * Lebt in einem Layer (allein / mit gleichen Agenten?)
+  
+- Interne Aufgaben:
+  * Was ist allgemeingültig und was domänenbezogen?
+  * Entwurf von Wissens-, Ziel- und Planrepräsentationen

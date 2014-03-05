@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ForestLayer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts</output-path>
+    <root id="archive" name="ForestLayer.jar">
+      <element id="module-output" name="ForestLayer" />
+      <element id="module-output" name="LayerAPI" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/T_Components/JSPF Remote.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Copy nodefinder.app to outputdir">
+    <output-path>$PROJECT_DIR$/out/production/SAPD Erlang</output-path>
+    <root id="root">
+      <element id="file-copy" path="$PROJECT_DIR$/SAPD Erlang/src/nodefinder.app" />
+    </root>
+  </artifact>
+</component>

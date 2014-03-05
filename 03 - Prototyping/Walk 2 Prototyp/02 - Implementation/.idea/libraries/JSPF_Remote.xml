@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="JSPF Remote">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/T_Components/JSPF Remote.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/T_Components/JSPF Remote.jar!/" />
+    </SOURCES>
+  </library>
+</component>

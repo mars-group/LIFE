@@ -1,0 +1,51 @@
+package de.janbusch.voltdb.benchmark;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+
+import org.voltdb.client.Client;
+import org.voltdb.client.ClientFactory;
+
+public class VoltDBInsertionThread implements Callable<Boolean> {
+	private final Client client;
+	private int elements;
+	private final int totalElements;
+	private final int dimCount;
+	private final String[] dimNames;
+
+	public VoltDBInsertionThread(int elements, String[] dimNames, String host,
+			String threadName) throws IOException {
+		this.elements = elements;
+		this.totalElements = elements;
+		this.dimCount = dimNames.length;
+		this.dimNames = dimNames;
+		Thread.currentThread().setName(threadName);
+
+		client = ClientFactory.createClient();
+		client.createConnection(host);
+	}
+
+	@Override
+	public Boolean call() throws Exception {
+		int[] randIds = null;
+		while (!Thread.currentThread().isInterrupted()) {
+			randIds = new int[dimCount];
+
+			for (int i = 0; i < randIds.length; i++) {
+				randIds[i] = UUID.randomUUID().hashCode();
+				client.callProcedure("InsertDimensionX", randIds[i],
+						dimNames[i]);
+			}
+
+			if (--elements == 0) {
+				System.out.println("Thread " + Thread.currentThread().getName()
+						+ " created " + totalElements + " Elements.");
+				return true;
+			}
+		}
+		return false;
+	}
+}

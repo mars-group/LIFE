@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SAPD Erlang/SAPD Erlang.iml" filepath="$PROJECT_DIR$/SAPD Erlang/SAPD Erlang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SAPDTimer/SAPDTimer.iml" filepath="$PROJECT_DIR$/SAPDTimer/SAPDTimer.iml" />
+    </modules>
+  </component>
+</project>
+

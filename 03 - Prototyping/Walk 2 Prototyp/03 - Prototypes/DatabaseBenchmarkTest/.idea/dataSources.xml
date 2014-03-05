@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="181320394">
+    <data-source source="LOCAL" name="3ten.de" product="MySQL" version="5.1.56-community" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.25 ( Revision: ${bzr.revision-id} )" uuid="ccab32a0-4c40-43f5-931e-dc950b9c3cc9">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://3ten.de:3306/datacube_test_ch</jdbc-url>
+      <user-name>christian</user-name>
+      <user-password>df89df9ddf93dfe8dfd2df9bdf93df92df9c</user-password>
+      <libraries>
+        <library>
+          <url>jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.25-bin.jar!/</url>
+        </library>
+      </libraries>
+    </data-source>
+  </component>
+</project>
+

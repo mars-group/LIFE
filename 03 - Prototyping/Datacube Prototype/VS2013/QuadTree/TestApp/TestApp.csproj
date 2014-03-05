@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DD0C76CA-4CE9-4174-8649-CF17181BE683}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestApp</RootNamespace>
+    <AssemblyName>TestApp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotSpatial.Projections, Version=0.11.9.6, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\DotSpatial.Projections.dll</HintPath>
+    </Reference>
+    <Reference Include="DotSpatial.Projections.Wrapper">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\DotSpatial.Projections.Wrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoAPI">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\GeoAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.GDB">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.GDB.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.GeoJSON">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.GeoJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.GeoTools">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.GeoTools.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.MsSqlSpatial">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.MsSqlSpatial.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.PostGis">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.PostGis.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.ShapeFile">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.ShapeFile.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.SpatiaLite">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.SpatiaLite.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.SqlServer2008">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.SqlServer2008.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.Tests">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.IO.Tests.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.Samples.Console">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.Samples.Console.exe</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.Samples.Console.vshost">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.Samples.Console.vshost.exe</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.TestRunner">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.TestRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.TestRunner.Console">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.TestRunner.Console.exe</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.Tests.NUnit">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.Tests.NUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.Tests.Vivid.XUnit">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.Tests.Vivid.XUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.Windows.Media">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\NetTopologySuite.Windows.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\pnunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjNet">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\ProjNet.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="ROCKCommon">
+      <HintPath>..\..\..\..\..\..\marsrock\ROCKCommon\ROCKCommon\bin\Debug\ROCKCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Test.NetTopologySuite.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\Test.NetTopologySuite.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit">
+      <HintPath>..\..\..\..\..\..\marsrock\Binaries\nettopology\xunit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="coords.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="coordsBerlin.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

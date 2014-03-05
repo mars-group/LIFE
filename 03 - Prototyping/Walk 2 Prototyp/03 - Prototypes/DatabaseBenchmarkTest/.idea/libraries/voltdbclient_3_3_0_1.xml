@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="voltdbclient-3.3.0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/VoltDB/voltdb-3.3.0.1/voltdb/voltdbclient-3.3.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,40 @@
+package de.janbusch.voltdb.benchmark;
+
+import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+
+import org.voltdb.client.Client;
+import org.voltdb.client.ClientFactory;
+
+public class VoltDBInsertionThread implements Callable<Boolean> {
+	private final Client client;
+	private int elements;
+	private final int total_elements;
+
+	public VoltDBInsertionThread(int elements, String host, String threadName)
+			throws IOException {
+		this.elements = elements;
+		this.total_elements = elements;
+		Thread.currentThread().setName(threadName);
+
+		client = ClientFactory.createClient();
+		client.createConnection(host);
+	}
+
+	@Override
+	public Boolean call() throws Exception {
+		while (!Thread.currentThread().isInterrupted()) {
+			String sUuid = UUID.randomUUID().toString();
+
+			
+			
+			if (--elements == 0) {
+				System.out.println("Thread " + Thread.currentThread().getName()
+						+ " created " + total_elements + " Elements.");
+				return true;
+			}
+		}
+		return false;
+	}
+}

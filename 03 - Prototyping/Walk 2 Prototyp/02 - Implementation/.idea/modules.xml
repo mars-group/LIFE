@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FarmerLayer/FarmerLayer.iml" filepath="$PROJECT_DIR$/FarmerLayer/FarmerLayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ForestLayer/ForestLayer.iml" filepath="$PROJECT_DIR$/ForestLayer/ForestLayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GlobalTypes/GlobalTypes.iml" filepath="$PROJECT_DIR$/GlobalTypes/GlobalTypes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LayerAPI/LayerAPI.iml" filepath="$PROJECT_DIR$/LayerAPI/LayerAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LayerContainer/LayerContainer.iml" filepath="$PROJECT_DIR$/LayerContainer/LayerContainer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/R_Components/NetworkAdapter/NetworkAdapter.iml" filepath="$PROJECT_DIR$/R_Components/NetworkAdapter/NetworkAdapter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NodeRegistry/NodeRegistry.iml" filepath="$PROJECT_DIR$/NodeRegistry/NodeRegistry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SAPD Erlang/SAPD Erlang.iml" filepath="$PROJECT_DIR$/SAPD Erlang/SAPD Erlang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SAPDTimer/SAPDTimer.iml" filepath="$PROJECT_DIR$/SAPDTimer/SAPDTimer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimCore/SimCore.iml" filepath="$PROJECT_DIR$/SimCore/SimCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimulationController/SimulationController.iml" filepath="$PROJECT_DIR$/SimulationController/SimulationController.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimulationControllerMOCK/SimulationControllerMOCK.iml" filepath="$PROJECT_DIR$/SimulationControllerMOCK/SimulationControllerMOCK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WeatherLayer/WeatherLayer.iml" filepath="$PROJECT_DIR$/WeatherLayer/WeatherLayer.iml" />
+    </modules>
+  </component>
+</project>
+

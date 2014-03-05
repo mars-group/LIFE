@@ -1,0 +1,17 @@
+package de.janbusch.voltdb.benchmark.storedprocs;
+
+import org.voltdb.SQLStmt;
+import org.voltdb.VoltProcedure;
+import org.voltdb.VoltTable;
+
+public class InsertDimensionOne extends VoltProcedure {
+	public final SQLStmt sql = new SQLStmt("INSERT INTO dOne VALUES (?, ?, ?);");
+
+	public VoltTable[] run(int dId, String value, String time)
+			throws VoltAbortException {
+		voltQueueSQL(sql, hello, world, language);
+		voltExecuteSQL();
+
+		return null;
+	}
+}
