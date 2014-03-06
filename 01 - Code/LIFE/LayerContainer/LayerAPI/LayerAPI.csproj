@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LayerAPI</RootNamespace>
     <AssemblyName>LayerAPI</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Mono</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,12 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ICustomLayer.cs" />
     <Compile Include="Interfaces\IEventDrivenLayer.cs" />
     <Compile Include="Interfaces\ILayer.cs" />
     <Compile Include="Interfaces\ISteppedLayer.cs" />
     <Compile Include="Interfaces\LayerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataTypes\LayerInitData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

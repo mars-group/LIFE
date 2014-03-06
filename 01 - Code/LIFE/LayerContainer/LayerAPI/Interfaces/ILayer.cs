@@ -4,11 +4,8 @@ using LIFE.LayerContainer.LayerAPI.DataTypes;
 namespace LIFE.LayerContainer.LayerAPI.Interfaces
 {
     /// <summary>
-    /// This interface must be implemented by anyone who
-    /// wants to create a new Layer runnable in a LayerContainer.
-    /// The interface IServices may be used inside of that
-    /// implementation to access the provided services
-    /// from the LayerContainer.
+    /// Base Interface for all layers. DO NOT IMPLEMENT THIS!
+    /// Instead use ISteppedLayer or IEventDrivenLayer depending on your requirements.
     /// </summary>
     interface ILayer
     {
@@ -16,8 +13,7 @@ namespace LIFE.LayerContainer.LayerAPI.Interfaces
         /// Initializes the layer with layerInitData.
         /// Use this instead of the constructor, as it is
         /// guaranteed to be called in the correct load order.
-        /// <pre>This layer was successfully added to</pre> 
-        /// its container.
+        /// <pre>This layer was successfully added to its container.</pre> 
         /// <post> This layer is in a state which allows
         /// it to start the simulation.</post>
         /// <param name="layerInitData">A datatype holding the
