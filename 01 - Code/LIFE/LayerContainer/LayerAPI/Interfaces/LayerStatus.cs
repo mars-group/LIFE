@@ -1,7 +1,7 @@
 ﻿
-namespace LIFE.LayerContainer.LayerAPI.Interfaces
+namespace LayerAPI.Interfaces
 {
-    enum LayerStatus
+    public enum LayerStatus
     {
         Running,
         Idle,

@@ -1,5 +1,5 @@
 ﻿
-namespace LIFE.LayerContainer.LayerAPI.Interfaces
+namespace LayerAPI.Interfaces
 {
     interface IEventDrivenLayer : ILayer
     {

@@ -1,6 +1,4 @@
-﻿
-
-namespace CommonTypes.TypeEnums
+﻿namespace CommonTypes.Types
 {
     public enum NodeType
     {

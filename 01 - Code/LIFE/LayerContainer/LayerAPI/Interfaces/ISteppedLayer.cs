@@ -1,6 +1,4 @@
-﻿using LIFE.LayerContainer.LayerAPI.Interfaces;
-
-namespace LIFE.LayerContainer.LayerAPI.Interfaces
+﻿namespace LayerAPI.Interfaces
 {
     interface ISteppedLayer : ILayer
     {

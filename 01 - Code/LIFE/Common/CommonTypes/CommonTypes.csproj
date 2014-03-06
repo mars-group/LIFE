@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypes\DistributionInformation.cs" />
+    <Compile Include="DataTypes\NodeEndpoint.cs" />
+    <Compile Include="DataTypes\NodeInformationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeEnums\NodeType.cs" />
+    <Compile Include="Types\NodeType.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

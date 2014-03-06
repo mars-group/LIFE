@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractLayers\AbstractDistributedEventDrivenLayer.cs" />
+    <Compile Include="AbstractLayers\AbstractDistributedSteppedLayer.cs" />
     <Compile Include="Interfaces\ICustomLayer.cs" />
     <Compile Include="Interfaces\IEventDrivenLayer.cs" />
     <Compile Include="Interfaces\ILayer.cs" />
