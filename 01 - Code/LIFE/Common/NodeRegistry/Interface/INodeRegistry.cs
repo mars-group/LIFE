@@ -21,13 +21,13 @@ namespace NodeRegistry.Interface
         /// Get all NodeEndpoints currently discovered
         /// </summary>
         /// <returns>List of INodeEndpoints, empty list if no discovered Nodes are found</returns>
-        List<NodeInformationType> GetAllNodeEndpoints();
+        List<NodeInformationType> GetAllNodes();
 
         /// <summary>
         /// Get all NodeEndpoints of type <param name="nodeType"></param>
         /// </summary>
         /// <param name="nodeType"></param>
         /// <returns></returns>
-        List<NodeInformationType> GetAllNodeEndpointsByType(NodeType nodeType);
+        List<NodeInformationType> GetAllNodesByType(NodeType nodeType);
     }
 }

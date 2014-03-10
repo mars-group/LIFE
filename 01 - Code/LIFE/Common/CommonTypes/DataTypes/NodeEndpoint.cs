@@ -12,13 +12,13 @@ namespace CommonTypes.DataTypes
 
         public int Port { get; private set; }
 
-        public NodeType NodeType { get; private set; }
+        
 
-        public NodeEndpoint(IPAddress ipAddress, int port, NodeType nodeType)
+        public NodeEndpoint(IPAddress ipAddress, int port)
         {
             IpAddress = ipAddress;
             Port = port;
-            NodeType = nodeType;
+           
         }
     }
 }
