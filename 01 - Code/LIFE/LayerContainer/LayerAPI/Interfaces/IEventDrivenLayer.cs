@@ -1,7 +1,17 @@
 ﻿
+using Mono.Addins;
+
 namespace LayerAPI.Interfaces
 {
-    interface IEventDrivenLayer : ILayer
+    /// <summary>
+    /// An event driven layer. Implement this interface if you want a purely event driven layer
+    /// without and synchronization between two consecutive steps. You may, however, use
+    /// the optional parameter "pseudoTickDuration" in StartLayer() to internally count the
+    /// ticks which are made by other, stepped Layers. This feature may be used to provide some kind of
+    /// un-precise logical time.
+    /// </summary>
+    [TypeExtensionPoint]
+    public interface IEventDrivenLayer : ILayer
     {
         /// <summary>
         /// Starts this layer at startTime or
@@ -9,9 +19,8 @@ namespace LayerAPI.Interfaces
         /// A pseudo tick duration may be provided to count a pseudo tick number 
         /// for advancement tracking. This tick does NOT control execution!
         /// </summary>
-        /// <param name="startTime">Time at which to start, defaults to now</param>
         /// <param name="pseudoTickDuration">Duration of one pseudo tick, defaults to 0</param>
-        void StartLayer(long startTime=0, long pseudoTickDuration=0);
+        void StartLayer(long pseudoTickDuration=0);
 
         /// <summary>
         /// Pauses this layer. Allows to continue execution.

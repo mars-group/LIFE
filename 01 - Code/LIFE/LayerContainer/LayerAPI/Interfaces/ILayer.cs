@@ -10,7 +10,7 @@ namespace LayerAPI.Interfaces
     /// OR extend AbstractDistributedEventDrivenLayer or AbstractDistributedSteppedLayer if you want 
     /// transparent and automatically distributed, pre-implemented layers.
     /// </summary>
-    interface ILayer
+    public interface ILayer
     {
         /// <summary>
         /// Initializes the layer with layerInitData.
