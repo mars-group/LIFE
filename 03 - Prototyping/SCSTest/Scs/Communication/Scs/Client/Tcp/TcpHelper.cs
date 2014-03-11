@@ -18,13 +18,19 @@ namespace Hik.Communication.Scs.Client.Tcp
         /// <exception cref="SocketException">Throws SocketException if can not connect.</exception>
         /// <exception cref="TimeoutException">Throws TimeoutException if can not connect within specified timeoutMs</exception>
         public static Socket ConnectToServer(EndPoint endPoint, int timeoutMs)
+
         {
-            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            var socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+           
+
+
             try
             {
-                socket.Blocking = false;
-                socket.Connect(endPoint);
+
                 socket.Blocking = true;
+                
+                socket.Connect(endPoint);
+               //socket.Blocking = true;
                 return socket;
             }
             catch (SocketException socketException)

@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBookCommonLib", "PhoneBookCommonLib\PhoneBookCommonLib.csproj", "{966B2E0C-6BAD-4923-9FCC-FC477888A475}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBookServer", "PhoneBookServer\PhoneBookServer.csproj", "{DF8B117F-47BB-447F-A3CD-6BC6702084A0}"
@@ -29,6 +27,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{966B2E0C-6BAD-4923-9FCC-FC477888A475}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF8B117F-47BB-447F-A3CD-6BC6702084A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

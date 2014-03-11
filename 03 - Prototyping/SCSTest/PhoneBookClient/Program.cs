@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,10 +18,16 @@ namespace PhoneBookClient
 
         static void Main(string[] args)
         {
+
+            
+
             //Create a client to connect to phone book service on local server and
             //10048 TCP port.
+            
             var client = ScsServiceClientBuilder.CreateClient<IPhoneBookService>(
-                new ScsTcpEndPoint("127.0.0.1", 10048));
+                new ScsTcpEndPoint(IPAddress.IPv6Loopback.ToString(), 10048)
+                //new ScsTcpEndPoint("127.0.0.1", 10048)
+                );
 
             //Console.WriteLine("Press enter to connect to phone book service...");
             //Console.ReadLine();
@@ -30,8 +37,8 @@ namespace PhoneBookClient
 
             client.ServiceProxy.AddPerson(new PhoneBookRecord
             {
-                Name = "Christian",
-                Phone = "123"
+                Name = "peter petersen",
+                Phone = "1235"
             });
 
 
