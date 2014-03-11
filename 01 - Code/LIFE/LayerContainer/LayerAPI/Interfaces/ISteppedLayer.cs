@@ -1,6 +1,9 @@
-﻿namespace LayerAPI.Interfaces
+﻿using Mono.Addins;
+
+namespace LayerAPI.Interfaces
 {
-    interface ISteppedLayer : ILayer
+    [TypeExtensionPoint]
+    public interface ISteppedLayer : ILayer
     {
         /// <summary>
         /// Advances the layer by one tick. A tick is
