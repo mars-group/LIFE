@@ -1,21 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3FB9B913-0061-40AB-B8AB-C83233B6B76C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{6C7F5166-6D0F-4CD9-B95B-14EBB11F7033}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExampleLayerApp</RootNamespace>
-    <AssemblyName>ExampleLayerApp</AssemblyName>
+    <RootNamespace>ExampleLayer</RootNamespace>
+    <AssemblyName>ExampleLayer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,15 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExampleLayer.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\LayerContainer\LayerAPI\LayerAPI.csproj">
-      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
   </ItemGroup>

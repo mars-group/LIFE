@@ -2,14 +2,21 @@
 
 using LayerAPI.AbstractLayers;
 using LayerAPI.Interfaces;
+using LIFE.LayerContainer.LayerAPI.DataTypes;
 
-namespace ExampleLayerApp
+namespace ExampleLayer
 {
     public class ExampleLayer : AbstractDistributedEventDrivenLayer
     {
-        public override void StartLayer(long startTime = 0, long pseudoTickDuration = 0)
+        public override bool InitLayer(LayerInitData layerInitData)
         {
             throw new NotImplementedException();
+        }
+
+        public override void StartLayer(long pseudoTickDuration = 0)
+        {
+            Console.WriteLine("Hallo Welt");
+            Console.ReadLine();
         }
 
         public override void PauseLayer()

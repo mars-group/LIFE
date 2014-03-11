@@ -4,7 +4,7 @@ using LIFE.LayerContainer.LayerAPI.DataTypes;
 
 namespace LayerAPI.AbstractLayers
 {
-    abstract class AbstractDistributedSteppedLayer : ISteppedLayer
+    public abstract class AbstractDistributedSteppedLayer : ISteppedLayer
     {
 
         public bool InitLayer(LayerInitData layerInitData)
