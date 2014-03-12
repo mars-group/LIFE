@@ -5,13 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-using Mono.Addins;
-
-[assembly: AssemblyTitle("LayerContainer")]
+[assembly: AssemblyTitle("Extension")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LayerContainer")]
+[assembly: AssemblyProduct("Extension")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +20,7 @@ using Mono.Addins;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a7fded24-4deb-4b4d-b01f-dde00baac8d0")]
+[assembly: Guid("bcc23bc1-1a75-4d88-bace-a7e760a04a13")]
 
 // Version information for an assembly consists of the following four values:
 //

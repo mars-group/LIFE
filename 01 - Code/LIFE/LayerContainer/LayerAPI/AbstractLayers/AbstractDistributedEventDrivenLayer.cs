@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Reflection;
+using LayerAPI.DataTypes;
 using LayerAPI.Interfaces;
-using LIFE.LayerContainer.LayerAPI.DataTypes;
-using Mono.Addins;
+
 
 namespace LayerAPI.AbstractLayers
 {
-    [assembly:Addin]
-    [assembly:AddinDependency("LayerContainer","0,1")]
-    
-    [Extension]
+
     public abstract class AbstractDistributedEventDrivenLayer : IEventDrivenLayer
     {
-        private Guid ID;
+        private readonly Guid _id;
 
         public AbstractDistributedEventDrivenLayer()
         {
-            ID = Guid.NewGuid();
+            _id = Guid.NewGuid();
         }
 
 
@@ -24,7 +20,7 @@ namespace LayerAPI.AbstractLayers
 
         public Guid GetID()
         {
-            return this.ID;
+            return this._id;
         }
 
         public abstract void StartLayer(long pseudoTickDuration = 0);

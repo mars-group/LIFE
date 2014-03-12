@@ -1,5 +1,5 @@
 ﻿using System;
-using LIFE.LayerContainer.LayerAPI.DataTypes;
+using LayerAPI.DataTypes;
 
 namespace LayerAPI.Interfaces
 {

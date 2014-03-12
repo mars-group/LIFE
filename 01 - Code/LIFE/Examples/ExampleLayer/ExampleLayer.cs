@@ -1,37 +1,28 @@
 ﻿using System;
-
 using LayerAPI.AbstractLayers;
+using LayerAPI.DataTypes;
 using LayerAPI.Interfaces;
-using LIFE.LayerContainer.LayerAPI.DataTypes;
+using Mono.Addins;
 
+[assembly:Addin]
+[assembly:AddinDependency("LayerContainer", "0.1")]
 namespace ExampleLayer
 {
-    public class ExampleLayer : AbstractDistributedEventDrivenLayer
+
+    [Extension(typeof(IEventDrivenLayer))]
+    public class ExampleLayer : AbstractDistributedSteppedLayer
     {
-        public override bool InitLayer(LayerInitData layerInitData)
+
+        public override void AdvanceOneTick()
         {
             throw new NotImplementedException();
         }
 
-        public override void StartLayer(long pseudoTickDuration = 0)
-        {
-            Console.WriteLine("Hallo Welt");
-            Console.ReadLine();
-        }
-
-        public override void PauseLayer()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void StopLayer()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override LayerStatus GetLayerStatus()
+        public override long GetCurrentTick()
         {
             throw new NotImplementedException();
         }
     }
+
+
 }

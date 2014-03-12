@@ -1,19 +1,20 @@
-﻿using LayerAPI.Interfaces;
-using Mono.Addins;
+﻿using System;
+using System.Linq;
+using LayerAPI.AddinLoader;
+using LayerAPI.Interfaces;
 
 namespace LayerContainer
 {
-    [assembly:AddinRoot ("LayerContainer","0.1")]
+
     class Program
     {
         static void Main(string[] args)
         {
-            AddinManager.Initialize();
-            AddinManager.Registry.Update();
-            foreach (var eventLayer in AddinManager.GetExtensionObjects<IEventDrivenLayer>())
-            {
-                eventLayer.StartLayer();
-            }
+            var addinLoader = new AddinLoader();
+            addinLoader.LoadAddins();
+            var addin = addinLoader.GetAllLayers().First<ILayer>();
+            Console.WriteLine("Layer has ID: " + addin.GetID());
+            Console.ReadLine();
         }
     }
 }

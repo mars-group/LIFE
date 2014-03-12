@@ -1,5 +1,4 @@
-﻿
-using Mono.Addins;
+﻿using Mono.Addins;
 
 namespace LayerAPI.Interfaces
 {

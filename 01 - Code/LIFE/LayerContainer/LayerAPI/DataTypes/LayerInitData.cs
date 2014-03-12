@@ -1,7 +1,7 @@
 ﻿
 using CommonTypes.DataTypes;
 
-namespace LIFE.LayerContainer.LayerAPI.DataTypes
+namespace LayerAPI.DataTypes
 {
     /// <summary>
     /// This class contains the initial distribution information as well as an accessor to the data needed to 
