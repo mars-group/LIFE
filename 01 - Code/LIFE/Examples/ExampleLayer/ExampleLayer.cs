@@ -12,6 +12,10 @@ namespace ExampleLayer
     [Extension(typeof(IEventDrivenLayer))]
     public class ExampleLayer : AbstractDistributedSteppedLayer
     {
+        public override bool InitLayer(LayerInitData layerInitData)
+        {
+            throw new NotImplementedException();
+        }
 
         public override void AdvanceOneTick()
         {
