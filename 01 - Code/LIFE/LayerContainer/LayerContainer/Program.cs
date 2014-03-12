@@ -1,7 +1,4 @@
-﻿
-using System;
-using System.Reflection;
-using LayerAPI.Interfaces;
+﻿using LayerAPI.Interfaces;
 using Mono.Addins;
 
 namespace LayerContainer
@@ -16,7 +13,6 @@ namespace LayerContainer
             foreach (var eventLayer in AddinManager.GetExtensionObjects<IEventDrivenLayer>())
             {
                 eventLayer.StartLayer();
-
             }
         }
     }
