@@ -4,8 +4,8 @@ using LayerAPI.DataTypes;
 namespace LayerAPI.Interfaces
 {
 
-    public delegate void RegisterAgent(ITickClient tickClient);
-    public delegate void UnregisterAgent(ITickClient tickClient);
+    public delegate void RegisterAgent(ILayer layer, ITickClient tickClient);
+    public delegate void UnregisterAgent(ILayer layer, ITickClient tickClient);
 
     /// <summary>
     /// Base Interface for all layers. 

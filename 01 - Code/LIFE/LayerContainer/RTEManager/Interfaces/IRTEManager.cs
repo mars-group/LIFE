@@ -3,18 +3,22 @@ using LayerAPI.Interfaces;
 
 namespace RTEManager.Interfaces
 {
+    using LayerAPI.DataTypes;
+
     public interface IRTEManager
     {
-        void RegisterLayer(ILayer layer);
+        void RegisterLayer(ILayer layer, LayerInitData layerInitData);
 
         void UnregisterLayer(ILayer layer);
 
-        void UnregisterTickClient(ITickClient tickClient);
+        void UnregisterTickClient(ILayer layer, ITickClient tickClient);
 
-        void RegisterTickClient(ITickClient tickClient);
+        void RegisterTickClient(ILayer layer, ITickClient tickClient);
 
-        IEnumerable<ITickClient> GetAllTickClients();
+        void InitializeAllLayers();
 
-        long AdvanceOneTick();
+        IEnumerable<ITickClient> GetAllTickClientsByLayer(ILayer layer);
+
+        int AdvanceOneTick();
     }
 }

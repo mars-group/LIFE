@@ -21,7 +21,7 @@ namespace ExampleLayer
 
         public override bool InitLayer(LayerInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
-            registerAgentHandle.Invoke(_agent);
+            registerAgentHandle.Invoke(this, _agent);
             return true;
         }
 

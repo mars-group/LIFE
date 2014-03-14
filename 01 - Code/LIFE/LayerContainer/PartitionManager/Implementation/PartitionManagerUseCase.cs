@@ -1,5 +1,4 @@
-﻿using System;
-using CommonTypes.DataTypes;
+﻿using CommonTypes.DataTypes;
 using LayerRegistry.Interfaces;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
@@ -17,7 +16,7 @@ namespace PartitionManager.Implementation
 
         public void Setup(DistributionInformation distributionInformation)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
