@@ -3,6 +3,10 @@ using LayerAPI.DataTypes;
 
 namespace LayerAPI.Interfaces
 {
+
+    public delegate void RegisterAgent(ITickClient tickClient);
+    public delegate void UnregisterAgent(ITickClient tickClient);
+
     /// <summary>
     /// Base Interface for all layers. 
     /// DO NOT IMPLEMENT THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
@@ -21,9 +25,10 @@ namespace LayerAPI.Interfaces
         /// it to start the simulation.</post>
         /// <param name="layerInitData">A datatype holding the
         /// information of how to initialize a layer.</param>
+        /// <param name="registerAgentHandle"> </param>
         /// </summary>
         /// <returns>True if init finished successfully, false otherwise</returns>
-        Boolean InitLayer(LayerInitData layerInitData);
+        Boolean InitLayer(LayerInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
         /// <summary>
         /// The unique ID of this layer as a GUID.
@@ -33,4 +38,5 @@ namespace LayerAPI.Interfaces
         Guid GetID();
 
     }
+
 }

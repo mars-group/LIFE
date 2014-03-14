@@ -16,7 +16,7 @@ namespace LayerAPI.AbstractLayers
         }
 
 
-        public abstract bool InitLayer(LayerInitData layerInitData);
+        public abstract bool InitLayer(LayerInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
         public Guid GetID()
         {

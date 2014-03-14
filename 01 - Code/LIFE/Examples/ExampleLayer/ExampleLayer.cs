@@ -9,17 +9,20 @@ using Mono.Addins;
 namespace ExampleLayer
 {
 
-    [Extension(typeof(IEventDrivenLayer))]
+    [Extension(typeof(ISteppedLayer))]
     public class ExampleLayer : AbstractDistributedSteppedLayer
     {
-        public override bool InitLayer(LayerInitData layerInitData)
+        private readonly AgentSmith _agent;
+
+        public ExampleLayer() : base()
         {
-            throw new NotImplementedException();
+            _agent = new AgentSmith();
         }
 
-        public override void AdvanceOneTick()
+        public override bool InitLayer(LayerInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
-            throw new NotImplementedException();
+            registerAgentHandle.Invoke(_agent);
+            return true;
         }
 
         public override long GetCurrentTick()

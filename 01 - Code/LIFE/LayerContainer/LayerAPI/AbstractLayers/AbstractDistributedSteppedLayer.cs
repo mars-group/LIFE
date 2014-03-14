@@ -15,13 +15,13 @@ namespace LayerAPI.AbstractLayers
         }
 
 
-        public abstract bool InitLayer(LayerInitData layerInitData);
+        public abstract bool InitLayer(LayerInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
         public Guid GetID()
         {
             return this._id;
         }
-        public abstract void AdvanceOneTick();
+
         public abstract long GetCurrentTick();
     }
 }
