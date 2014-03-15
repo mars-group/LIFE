@@ -72,13 +72,11 @@
                 this.tickClientsPerLayer.Keys,
                 layer => Parallel.ForEach(this.tickClientsPerLayer[layer],
                     client => client.tick()
-                    )
+                )
             );
 
             var then = DateTime.Now;
             return then.Millisecond - now.Millisecond;
-
-
         }
 
         #endregion

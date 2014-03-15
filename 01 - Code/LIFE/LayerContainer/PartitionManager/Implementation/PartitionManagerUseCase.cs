@@ -9,9 +9,12 @@ namespace PartitionManager.Implementation
     {
         private readonly ILayerRegistry _layerRegistry;
 
+        private readonly IRTEManager _rteManager;
+
         public PartitionManagerUseCase(ILayerRegistry layerRegistry, IRTEManager rteManager)
         {
             _layerRegistry = layerRegistry;
+            _rteManager = rteManager;
         }
 
         public void Setup(DistributionInformation distributionInformation)

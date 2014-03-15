@@ -20,5 +20,7 @@ namespace RTEManager.Interfaces
         IEnumerable<ITickClient> GetAllTickClientsByLayer(ILayer layer);
 
         int AdvanceOneTick();
+
+        // TODO: Information methods needed!
     }
 }

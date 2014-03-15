@@ -1,10 +1,9 @@
-﻿
-using CommonTypes.DataTypes;
-
-namespace PartitionManager.Interfaces
+﻿namespace PartitionManager.Interfaces
 {
+    using System;
+
     public interface IPartitionManager
     {
-        void Setup(DistributionInformation distributionInformation);
+        bool AddLayer(Uri layerUri, Guid layerID);
     }
 }
