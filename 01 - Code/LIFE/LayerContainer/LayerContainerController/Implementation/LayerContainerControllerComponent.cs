@@ -1,4 +1,6 @@
-﻿namespace LayerContainerController.Implementation
+﻿using LayerContainerController.Interfaces;
+
+namespace LayerContainerController.Implementation
 {
     using NodeRegistry.Interface;
 
@@ -6,7 +8,7 @@
 
     using RTEManager.Interfaces;
 
-    public class LayerContainerControllerComponent
+    public class LayerContainerControllerComponent : ILayerContainerController
     {
         private LayerContainerControllerUseCase _layerContainerControllerUseCase;
 
