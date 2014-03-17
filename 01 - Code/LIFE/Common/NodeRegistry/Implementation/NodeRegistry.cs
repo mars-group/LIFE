@@ -11,7 +11,7 @@ namespace NodeRegistry.Implementation
     {
 
 
-        public void startDiscovery()
+        public void Node()
         {
             throw new NotImplementedException();
         }
