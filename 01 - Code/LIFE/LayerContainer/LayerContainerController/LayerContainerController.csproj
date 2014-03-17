@@ -43,7 +43,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\LayerContainerControllerComponent.cs" />
+    <Compile Include="Implementation\LayerContainerControllerUseCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PartitionManager\PartitionManager.csproj">
+      <Project>{F27FA428-D097-482D-A947-063317FE8A60}</Project>
+      <Name>PartitionManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RTEManager\RTEManager.csproj">
+      <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
+      <Name>RTEManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

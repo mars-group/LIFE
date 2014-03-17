@@ -4,7 +4,7 @@ using LayerAPI.Interfaces;
 
 namespace LayerAPI.AddinLoader
 {
-    interface IAddinLoader
+    public interface IAddinLoader
     {
         void LoadAddins();
 

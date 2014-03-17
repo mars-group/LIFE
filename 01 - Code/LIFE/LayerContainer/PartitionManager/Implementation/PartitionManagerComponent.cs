@@ -5,6 +5,8 @@ using RTEManager.Interfaces;
 
 namespace PartitionManager.Implementation
 {
+    using System;
+
     public class PartitionManagerComponent : IPartitionManager
     {
         private readonly PartitionManagerUseCase _partitionManagerUseCase;
@@ -17,6 +19,11 @@ namespace PartitionManager.Implementation
         public void Setup(DistributionInformation distributionInformation)
         {
             _partitionManagerUseCase.Setup(distributionInformation);
+        }
+
+        public bool AddLayer(Uri layerUri, Guid layerID)
+        {
+            return _partitionManagerUseCase.AddLayer(layerUri, layerID);
         }
     }
 }

@@ -5,6 +5,8 @@ using RTEManager.Interfaces;
 
 namespace PartitionManager.Implementation
 {
+    using System;
+
     class PartitionManagerUseCase : IPartitionManager
     {
         private readonly ILayerRegistry _layerRegistry;
@@ -20,6 +22,11 @@ namespace PartitionManager.Implementation
         public void Setup(DistributionInformation distributionInformation)
         {
             
+        }
+
+        public bool AddLayer(Uri layerUri, Guid layerId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
