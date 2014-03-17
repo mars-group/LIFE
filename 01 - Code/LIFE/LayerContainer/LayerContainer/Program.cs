@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-using LayerAPI.AddinLoader;
-using LayerAPI.Interfaces;
+﻿using LayerContainerFacade;
 
-namespace LayerContainerFacade
+namespace LayerContainer
 {
 
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {

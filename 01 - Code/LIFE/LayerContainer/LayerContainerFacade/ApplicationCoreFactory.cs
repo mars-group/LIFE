@@ -1,6 +1,4 @@
-﻿
-using Autofac;
-using Autofac.Core;
+﻿using Autofac;
 using LayerContainerController.Implementation;
 using LayerContainerController.Interfaces;
 using LayerContainerFacade.Interfaces;

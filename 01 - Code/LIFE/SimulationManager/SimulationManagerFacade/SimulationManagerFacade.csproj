@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</ProjectGuid>
+    <ProjectGuid>{58149FF0-0801-46F8-A9C6-571B6030DC1E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayerContainerFacade</RootNamespace>
-    <AssemblyName>LayerContainerFacade</AssemblyName>
+    <RootNamespace>SimulationManagerFacade</RootNamespace>
+    <AssemblyName>SimulationManagerFacade</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.3.3.0\lib\net40\Autofac.dll</HintPath>
+      <HintPath>..\..\packages\Autofac.3.3.0\lib\net40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,31 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationCoreFactory.cs" />
-    <Compile Include="Implementation\LayerContainerFacade.cs" />
-    <Compile Include="Interfaces\ILayerContainerFacade.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LayerContainer\LayerContainerController\LayerContainerController.csproj">
-      <Project>{EFF972E8-87D1-42F5-BD73-1314EC88CDD2}</Project>
-      <Name>LayerContainerController</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LayerContainer\LayerRegistry\LayerRegistry.csproj">
-      <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
-      <Name>LayerRegistry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LayerContainer\PartitionManager\PartitionManager.csproj">
-      <Project>{F27FA428-D097-482D-A947-063317FE8A60}</Project>
-      <Name>PartitionManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LayerContainer\RTEManager\RTEManager.csproj">
-      <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
-      <Name>RTEManager</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
