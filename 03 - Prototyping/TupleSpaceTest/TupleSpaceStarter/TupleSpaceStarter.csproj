@@ -36,9 +36,9 @@
     <StartupObject>TupleSpaceStarter.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GigaSpaces.Core, Version=9.7.0.0, Culture=neutral, PublicKeyToken=94297b57ee0e4ad5, processorArchitecture=AMD64">
+    <Reference Include="GigaSpaces.Core, Version=9.7.0.0, Culture=neutral, PublicKeyToken=94297b57ee0e4ad5, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\GigaSpaces\XAP.NET 9.7.0 x86\NET v4.0.30319\Bin\GigaSpaces.Core.dll</HintPath>
+      <HintPath>..\Libraries\GigaSpaces.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
