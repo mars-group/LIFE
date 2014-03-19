@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,13 +21,15 @@ namespace MulticastAdapter.Test
 
             int port = 50100;
             string input = "";
-            IPAddress multicastAddress = IPAddress.Parse("ff02::1");
+            IPAddress multicastAddress = IPAddress.Parse("224.0.0.1");
             ASCIIEncoding ASCII = new ASCIIEncoding();
-
-            IMulticastClientAdapter multicastClient = new Implementation.MulticastClient(multicastAddress, port);
+          
+            //Console.WriteLine("IP is " + multicastAddress + " from type " + multicastAddress.GetType() + " this adress is linklocal " + multicastAddress.IsIPv6LinkLocal);
+            //Console.WriteLine("this address is a IPv6 Multicastaddress: " + multicastAddress.IsIPv6Multicast);
+            
+            IMulticastClientAdapter multicastClient = new Implementation.UDPMulticastClient(multicastAddress, port);
             TextReciever textReciever = new TextReciever();
-
-
+            
             Console.WriteLine("<<Hello, willkommen zum super aufregenden Multicastchat");
             Console.Write(">>");
             input = Console.ReadLine();
@@ -34,10 +37,9 @@ namespace MulticastAdapter.Test
             multicastClient.SendMessageToMulticastGroup(ASCII.GetBytes(input));
             
             Thread listenThread= new Thread(new ThreadStart(textReciever.readNextMessage));
-
-
+            
             listenThread.Start();
-
+            
         }
         
     }
@@ -45,11 +47,11 @@ namespace MulticastAdapter.Test
     class TextReciever
     {
 
-        private MulticastReciever multicastReciever;
+        private UDPMulticastReciever multicastReciever;
        
         public TextReciever()
         {
-            multicastReciever = new MulticastReciever(IPAddress.Parse("ff02::1"), 50101);
+            multicastReciever = new UDPMulticastReciever(IPAddress.Any, 50101);
         }
 
         public void readNextMessage()
