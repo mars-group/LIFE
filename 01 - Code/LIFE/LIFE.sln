@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulation Manager", "Simulation Manager", "{060A5DF3-4C49-402B-9B3F-142A9ECD30B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuntimeEnvironment", "SimulationManager\RuntimeEnvironment\RuntimeEnvironment.csproj", "{CD379E3D-8606-4136-978A-2E1E7DD933A1}"
@@ -53,6 +55,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerContainerFacade", "LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj", "{6EF23027-A874-4533-9F39-2C4B165D8BB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MulticastAdapter", "MulticastAdapter\MulticastAdapter.csproj", "{20A316C2-8779-474D-98FB-A13DAC9043AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agents", "Agents\Agents.csproj", "{DAFAB3D3-4D92-45CF-8022-09EB3785FFBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,6 +132,10 @@ Global
 		{20A316C2-8779-474D-98FB-A13DAC9043AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20A316C2-8779-474D-98FB-A13DAC9043AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20A316C2-8779-474D-98FB-A13DAC9043AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAFAB3D3-4D92-45CF-8022-09EB3785FFBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAFAB3D3-4D92-45CF-8022-09EB3785FFBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAFAB3D3-4D92-45CF-8022-09EB3785FFBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAFAB3D3-4D92-45CF-8022-09EB3785FFBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,6 +155,7 @@ Global
 		{F27FA428-D097-482D-A947-063317FE8A60} = {4FB29566-3D30-44FD-8EE7-2CED4E2FC81F}
 		{6EF23027-A874-4533-9F39-2C4B165D8BB9} = {4FB29566-3D30-44FD-8EE7-2CED4E2FC81F}
 		{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81} = {1E0C812C-C957-42CF-9BBF-EE9EFCFEA58E}
+		{DAFAB3D3-4D92-45CF-8022-09EB3785FFBB} = {1E0C812C-C957-42CF-9BBF-EE9EFCFEA58E}
 		{6C7F5166-6D0F-4CD9-B95B-14EBB11F7033} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
 		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{20A316C2-8779-474D-98FB-A13DAC9043AB} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
