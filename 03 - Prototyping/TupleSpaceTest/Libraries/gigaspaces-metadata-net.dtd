@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT gigaspaces-mapping (class+)>
+<!ELEMENT class (property*, version?, id?,routing?, persist?, dynamic-properties?, exclude*)>
+<!ATTLIST class
+	name CDATA #REQUIRED
+	replicate CDATA #IMPLIED
+	persist CDATA #IMPLIED
+	fifo CDATA #IMPLIED
+	include-properties CDATA #IMPLIED
+	include-fields CDATA #IMPLIED
+	alias-name CDATA #IMPLIED
+>
+<!ELEMENT property EMPTY>
+<!ATTLIST property
+	name CDATA #REQUIRED
+	index CDATA #IMPLIED
+	null-value CDATA #IMPLIED
+	alias-name CDATA #IMPLIED
+	storage-type CDATA #IMPLIED
+>
+<!ELEMENT version EMPTY>
+<!ATTLIST version
+	name CDATA #REQUIRED
+>
+<!ELEMENT persist EMPTY>
+<!ATTLIST persist
+	name CDATA #REQUIRED
+>
+<!ELEMENT dynamic-properties EMPTY>
+<!ATTLIST dynamic-properties
+	name CDATA #REQUIRED	
+	storage-type CDATA #IMPLIED
+>
+<!ELEMENT id EMPTY>
+<!ATTLIST id
+	name CDATA #REQUIRED
+	auto-generate CDATA #IMPLIED
+>
+<!ELEMENT routing EMPTY>
+<!ATTLIST routing
+	name CDATA #REQUIRED
+>
+<!ELEMENT exclude EMPTY>
+<!ATTLIST exclude
+	name CDATA #REQUIRED
+>
+<!ELEMENT compound-index EMPTY>
+<!ATTLIST compound-index
+	paths CDATA #REQUIRED
+>
