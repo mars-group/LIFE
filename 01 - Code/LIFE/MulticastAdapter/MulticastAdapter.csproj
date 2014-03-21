@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\MulticastNetworkUtils.cs" />
-    <Compile Include="Implementation\UDPMulticastReciever.cs" />
+    <Compile Include="Implementation\UDPMulticastReceiver.cs" />
     <Compile Include="Implementation\UDPMulticastClient.cs" />
     <Compile Include="Interface\IMulticastClientAdapter.cs" />
     <Compile Include="Interface\IMulticastReciever.cs" />

@@ -30,6 +30,10 @@ namespace MulticastAdapter.Implementation
             BindSocketToNetworkinterface();
         }
 
+
+        /// <summary>
+        /// bind the udp socket to an interface
+        /// </summary>
         private void BindSocketToNetworkinterface()
         {
 
@@ -41,20 +45,10 @@ namespace MulticastAdapter.Implementation
             {
                 if (!recieverClient.Client.IsBound)
                 {
-                    foreach (IPAddressInformation unicastAddress in multicastInterface.GetIPProperties().UnicastAddresses)
-                    {
-                        //TODO aus konfig lesen ob ip v4 oder v6 Multicast
-                        //TODO prüfen ob man ipv4 multicastadresse in ipv6 adresse umwandeln kann
+                   
+                    recieverClient.Client.Bind(GetNetworkInterfaceEndpoint());
 
-                        // Check which IP Version is enabled TODO atm only ipv4 is supported
-                        if (unicastAddress.Address.AddressFamily != AddressFamily.InterNetworkV6)
-                        {
-                            var endPoint = new IPEndPoint(unicastAddress.Address, sourcePort);
 
-                            recieverClient.Client.Bind(endPoint);
-                            break;
-                        }
-                    }
                 }
             }
         }
@@ -66,16 +60,11 @@ namespace MulticastAdapter.Implementation
         /// <exception cref="MissingArgumentException">This exception is thrown when u want to listen to a specific interface, but your description of the specific Interface is missing, or use a wrong key</exception>
         /// <exception cref="NoInterfaceFoundException">This exception is thrown when u want to listen to a specific interface and no interface with your given description was found. </exception>
         /// <returns>An IPEndPoint that contains the ip address of the Networkinterface (can be Any) and the port on which the socket is listening. Can NOT be null</returns>
-        private IPEndPoint GetListenEndpoint()
+        private IPEndPoint GetNetworkInterfaceEndpoint()
         {
             IPEndPoint sourceEndPoint = null;
 
-            if (Boolean.Parse(ConfigurationManager.AppSettings.Get("ListenOnAllInterfaces")))
-            {
-                sourceEndPoint = new IPEndPoint(IPAddress.Any, sourcePort);
-            }
-            else
-            {
+           
                 if (ConfigurationManager.AppSettings.AllKeys.Contains("GetListenInterfaceByName"))
                 {
                     var interfaceNames = ConfigurationManager.AppSettings.Get("GetListenInterfaceByName");
@@ -117,11 +106,8 @@ namespace MulticastAdapter.Implementation
                 {
                     throw new MissingArgumentException("Missing argument in Configfile. if u dont want to listen to all networkinterfaces u have to define a network. Use Key = GetListenInterfaceByName  value = <Interfacename>, or Key = GetListenInterfaceByIP value = <IP>");
                 }
-            }
-            if (sourceEndPoint == null)
-            {
+            
 
-            }
             return sourceEndPoint;
         }
 
@@ -135,7 +121,19 @@ namespace MulticastAdapter.Implementation
         /// <returns> the written bytestream</returns>
         public byte[] readMulticastGroupMessage()
         {
-            IPEndPoint sourceEndPoint = GetListenEndpoint();
+
+            IPEndPoint sourceEndPoint;
+
+            if (MulticastNetworkUtils.GetAddressFamily() == AddressFamily.InterNetworkV6)
+            {
+                sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, sourcePort);
+            }
+            else
+            {
+                sourceEndPoint = new IPEndPoint(IPAddress.Any, sourcePort);
+            }
+
+        
 
             return recieverClient.Receive(ref sourceEndPoint);
         }
