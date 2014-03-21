@@ -45,10 +45,7 @@ namespace MulticastAdapter.Implementation
             {
                 if (!recieverClient.Client.IsBound)
                 {
-                   
                     recieverClient.Client.Bind(GetNetworkInterfaceEndpoint());
-
-
                 }
             }
         }
@@ -64,49 +61,49 @@ namespace MulticastAdapter.Implementation
         {
             IPEndPoint sourceEndPoint = null;
 
-           
-                if (ConfigurationManager.AppSettings.AllKeys.Contains("GetListenInterfaceByName"))
-                {
-                    var interfaceNames = ConfigurationManager.AppSettings.Get("GetListenInterfaceByName");
-                    var multicastInterface = MulticastNetworkUtils.GetInterfaceByName(interfaceNames);
 
-                    if (multicastInterface == null)
+            if (ConfigurationManager.AppSettings.AllKeys.Contains("GetListenInterfaceByName"))
+            {
+                var interfaceNames = ConfigurationManager.AppSettings.Get("GetListenInterfaceByName");
+                var multicastInterface = MulticastNetworkUtils.GetInterfaceByName(interfaceNames);
+
+                if (multicastInterface == null)
+                {
+                    throw new NoInterfaceFoundException("No interface with the given Name " + interfaceNames + " was found. Please check if your interface description, in app.config, is right.");
+                }
+                foreach (var unicastAddress in multicastInterface.GetIPProperties().UnicastAddresses)
+                {
+                    if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
                     {
-                        throw new NoInterfaceFoundException("No interface with the given Name " + interfaceNames + " was found. Please check if your interface description, in app.config, is right.");
-                    }
-                    foreach (var unicastAddress in multicastInterface.GetIPProperties().UnicastAddresses)
-                    {
-                        if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
-                        {
-                            sourceEndPoint = new IPEndPoint(unicastAddress.Address, sourcePort);
-                            break;
-                        }
+                        sourceEndPoint = new IPEndPoint(unicastAddress.Address, sourcePort);
+                        break;
                     }
                 }
-                else if (ConfigurationManager.AppSettings.AllKeys.Contains("GetListenInterfaceByIP"))
+            }
+            else if (ConfigurationManager.AppSettings.AllKeys.Contains("GetListenInterfaceByIP"))
+            {
+                var ipAddress = IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetListenInterfaceByIP"));
+                var multicastInterface = MulticastNetworkUtils.GetInterfaceByIP(ipAddress);
+
+                if (multicastInterface == null)
                 {
-                    var ipAddress = IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetListenInterfaceByIP"));
-                    var multicastInterface = MulticastNetworkUtils.GetInterfaceByIP(ipAddress);
+                    throw new NoInterfaceFoundException("No interface with the given IP " + ipAddress + " was found. Please check if your interface description, in app.config, is right.");
+                }
 
-                    if (multicastInterface == null)
+                foreach (var unicastAddress in multicastInterface.GetIPProperties().UnicastAddresses)
+                {
+                    if (unicastAddress.Address.Equals(ipAddress))
                     {
-                        throw new NoInterfaceFoundException("No interface with the given IP " + ipAddress + " was found. Please check if your interface description, in app.config, is right.");
-                    }
-
-                    foreach (var unicastAddress in multicastInterface.GetIPProperties().UnicastAddresses)
-                    {
-                        if (unicastAddress.Address.Equals(ipAddress))
-                        {
-                            sourceEndPoint = new IPEndPoint(ipAddress, sourcePort);
-                            break; ;
-                        }
+                        sourceEndPoint = new IPEndPoint(ipAddress, sourcePort);
+                        break; ;
                     }
                 }
-                else
-                {
-                    throw new MissingArgumentException("Missing argument in Configfile. if u dont want to listen to all networkinterfaces u have to define a network. Use Key = GetListenInterfaceByName  value = <Interfacename>, or Key = GetListenInterfaceByIP value = <IP>");
-                }
-            
+            }
+            else
+            {
+                throw new MissingArgumentException("Missing argument in Configfile. if u dont want to listen to all networkinterfaces u have to define a network. Use Key = GetListenInterfaceByName  value = <Interfacename>, or Key = GetListenInterfaceByIP value = <IP>");
+            }
+
 
             return sourceEndPoint;
         }
@@ -133,7 +130,7 @@ namespace MulticastAdapter.Implementation
                 sourceEndPoint = new IPEndPoint(IPAddress.Any, sourcePort);
             }
 
-        
+
 
             return recieverClient.Receive(ref sourceEndPoint);
         }
