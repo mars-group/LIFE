@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using Hik.Collections;
 using Hik.Communication.Scs.Communication.Messages;
@@ -117,7 +118,16 @@ namespace Hik.Communication.ScsServices.Service
                 throw new Exception("Service '" + type.Name + "' is already added before.");                
             }
 
-            _serviceObjects[type.Name] = new ServiceObject(type, service);
+
+            var cacheableService = service as INotifyPropertyChanged;
+            if (cacheableService != null)
+            {
+                _serviceObjects[type.Name] = new CacheableServiceObject(type, service);
+            }
+            else
+            {
+                _serviceObjects[type.Name] = new ServiceObject(type, service);    
+            }
         }
 
         /// <summary>
@@ -143,6 +153,7 @@ namespace Hik.Communication.ScsServices.Service
         /// <param name="e">Event arguments</param>
         private void ScsServer_ClientConnected(object sender, ServerClientEventArgs e)
         {
+            
             var requestReplyMessenger = new RequestReplyMessenger<IScsServerClient>(e.Client);
             requestReplyMessenger.MessageReceived += Client_MessageReceived;
             requestReplyMessenger.Start();
@@ -198,6 +209,7 @@ namespace Hik.Communication.ScsServices.Service
                 }
 
                 //Get service object
+                // TODO : Extend _serviceObjects by an ID to allow multiple ServiceObjects per Service
                 var serviceObject = _serviceObjects[invokeMessage.ServiceClassName];
                 if (serviceObject == null)
                 {
@@ -208,6 +220,12 @@ namespace Hik.Communication.ScsServices.Service
                 //Invoke method
                 try
                 {
+                    var cacheableServiceObject = serviceObject as CacheableServiceObject;
+                    if (cacheableServiceObject != null)
+                    {
+                        cacheableServiceObject.AddClient(requestReplyMessenger);
+                    }
+
                     object returnValue;
                     //Set client to service, so user service can get client
                     //in service method using CurrentClient property.
@@ -243,6 +261,7 @@ namespace Hik.Communication.ScsServices.Service
                 return;
             }
         }
+
 
         /// <summary>
         /// Sends response to the remote application that invoked a service method.
@@ -303,7 +322,7 @@ namespace Hik.Communication.ScsServices.Service
         /// Represents a user service object.
         /// It is used to invoke methods on a ScsService object.
         /// </summary>
-        private sealed class ServiceObject
+        private class ServiceObject
         {
             /// <summary>
             /// The service object that is used to invoke methods on.
@@ -364,6 +383,55 @@ namespace Hik.Communication.ScsServices.Service
                 //Invoke method and return invoke result
                 return method.Invoke(Service, parameters);
             }
+        }
+
+        private class CacheableServiceObject : ServiceObject
+        {
+            private readonly List<IMessenger> _clients;
+            private readonly IDictionary<string,PropertyInfo> _properties;
+
+            public CacheableServiceObject(Type serviceInterfaceType, ScsService service) : base(serviceInterfaceType, service)
+            {
+                _clients = new List<IMessenger>();
+                
+                _properties = new Dictionary<string, PropertyInfo>();
+                foreach (var propertyInfo in serviceInterfaceType.GetProperties())
+                {
+                    _properties.Add(propertyInfo.Name, propertyInfo);
+                }
+
+                var propChanger = service as INotifyPropertyChanged;
+                if (propChanger != null)
+                {
+                    propChanger.PropertyChanged += PropChangerOnPropertyChanged;
+                }
+            }
+            /// <summary>
+            /// Send PropertyUpdatedMessage to all subscribed clients
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="propertyChangedEventArgs"></param>
+            private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+            {
+                // send PropertyUpdatedMessage to all subscribed clients
+                foreach (var scsServerClient in _clients)
+                {
+                    var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Invoke(Service, null);
+
+                    scsServerClient.SendMessage(new PropertyUpdatedMessage(newValue, propertyChangedEventArgs.PropertyName));
+                }
+            }
+
+            public void AddClient(IMessenger client)
+            {
+                _clients.Add(client);
+            }
+
+            public List<IMessenger> GetAllClients()
+            {
+                return _clients;
+            }
+
         }
 
         #endregion

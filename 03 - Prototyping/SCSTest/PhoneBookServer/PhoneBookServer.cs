@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace PhoneBookServer
         private readonly SortedList<string, PhoneBookRecord> _records;
 
         private IScsServiceApplication server;
+        private string _title;
 
         /// <summary>
         /// Creates a new PhoneBookService object.
@@ -33,14 +35,25 @@ namespace PhoneBookServer
             server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(10048));
             
             //Add Phone Book Service to service application
-
             server.AddService<IPhoneBookService, PhoneBookService>(this);
 
             //Start server
             server.Start();
         }
 
-        public string Title { get; set; }
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                if (value != Title)
+                {
+                    _title = value;
+                    OnPropertyChanged("Title");
+                }
+
+            }
+        }
 
         /// <summary>
         /// Adds a new person to phone book.
@@ -105,5 +118,20 @@ namespace PhoneBookServer
         {
             server.Stop();
         }
+
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
