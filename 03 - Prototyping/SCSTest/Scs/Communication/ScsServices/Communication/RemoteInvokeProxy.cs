@@ -25,7 +25,6 @@ namespace Hik.Communication.ScsServices.Communication
 
         private List<MethodInfo> _cacheableMethods;
         private readonly Type _typeOfTProxy;
-        private PropertyInfo[] _properties;
 
         private IDictionary<string,object> _cache;
 
@@ -58,7 +57,11 @@ namespace Hik.Communication.ScsServices.Communication
             }
 
             //retreive all properties of TProxy
-            _properties = _typeOfTProxy.GetProperties();
+            var properties = _typeOfTProxy.GetProperties();
+            foreach (var propertyInfo in properties)
+            {
+                _cacheableMethods.Add(propertyInfo.GetGetMethod());
+            }
         }
 
         /// <summary>
