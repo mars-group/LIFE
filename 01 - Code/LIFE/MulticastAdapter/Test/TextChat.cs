@@ -24,36 +24,45 @@ namespace MulticastAdapter.Test
             IPAddress multicastAddress = IPAddress.Parse("224.10.99.1");
             ASCIIEncoding ASCII = new ASCIIEncoding();
             TextReciever textReciever = new TextReciever();
-           
-            
-            
+
+
+
             Thread listenThread = new Thread(new ThreadStart(textReciever.readNextMessage));
 
             listenThread.Start();
-            
+
             Thread.Sleep(200);
 
             //Console.WriteLine("IP is " + multicastAddress + " from type " + multicastAddress.GetType() + " this adress is linklocal " + multicastAddress.IsIPv6LinkLocal);
             //Console.WriteLine("this address is a IPv6 Multicastaddress: " + multicastAddress.IsIPv6LinkLocal);
-            
+
             IMulticastClientAdapter multicastClient = new UDPMulticastClient(multicastAddress, port);
-           
-            
             Console.WriteLine("<<Hello, willkommen zum super aufregenden Multicastchat");
-            Console.Write(">>");
-            input = Console.ReadLine();
-            
-            multicastClient.SendMessageToMulticastGroup(ASCII.GetBytes(input));
-            
+            Console.WriteLine("<<Type 'quit' to Exit the chat. ");
+
+            while (input != "quit")
+            {
+              
+                Console.Write(">>");
+                input = Console.ReadLine();
+                if (input != "quit")
+                {
+                    multicastClient.SendMessageToMulticastGroup(ASCII.GetBytes(input));
+                }
+            }
+
+            listenThread.Interrupt();
+       
+
         }
-        
+
     }
 
     class TextReciever
     {
 
         private UDPMulticastReciever multicastReciever;
-       
+
         public TextReciever()
         {
             multicastReciever = new UDPMulticastReciever(IPAddress.Parse("224.10.99.1"), 5100);
@@ -66,12 +75,18 @@ namespace MulticastAdapter.Test
 
             byte[] msg;
             Console.WriteLine("waiting for Message");
-            msg = multicastReciever.readMulticastGroupMessage();
-            Console.WriteLine(("<<" + ascii.GetString(msg)));
 
-            
+            while (Thread.CurrentThread.IsAlive)
+            {
+                msg = multicastReciever.readMulticastGroupMessage();
+                Console.WriteLine(("<<" + ascii.GetString(msg)));
+            }
+
+            multicastReciever.CloseSocket();
+
+
         }
-        
+
     }
 
 }

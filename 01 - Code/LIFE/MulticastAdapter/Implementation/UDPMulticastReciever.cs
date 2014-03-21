@@ -22,7 +22,7 @@ namespace MulticastAdapter.Implementation
             recieverClient = new UdpClient(AddressFamily.InterNetwork);
             recieverClient.JoinMulticastGroup(mCastAdr);
             senderEndPoint = new IPEndPoint(IPAddress.Any, sourcePort);
-            recieverClient.Client.Bind(new IPEndPoint(IPAddress. Parse("10.0.0.6"), sourcePort));
+            recieverClient.Client.Bind(new IPEndPoint(IPAddress.Parse("10.0.0.6"), sourcePort));
         }
 
 
@@ -32,5 +32,11 @@ namespace MulticastAdapter.Implementation
             return recieverClient.Receive(ref senderEndPoint);
 
         }
+
+        public void CloseSocket()
+        {
+            recieverClient.Close();
+        }
+
     }
 }

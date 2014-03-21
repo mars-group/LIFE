@@ -9,6 +9,6 @@ namespace MulticastAdapter.Interface
     interface IMulticastReciever
     {
         byte[] readMulticastGroupMessage();
-        
+        void CloseSocket();
     }
 }
