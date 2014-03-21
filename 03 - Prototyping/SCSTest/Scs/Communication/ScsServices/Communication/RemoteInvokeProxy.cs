@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
@@ -26,6 +27,8 @@ namespace Hik.Communication.ScsServices.Communication
         private readonly Type _typeOfTProxy;
         private PropertyInfo[] _properties;
 
+        private IDictionary<string,object> _cache;
+
 
         /// <summary>
         /// Creates a new RemoteInvokeProxy object.
@@ -35,6 +38,8 @@ namespace Hik.Communication.ScsServices.Communication
             : base(typeof(TProxy))
         {
             _clientMessenger = clientMessenger;
+
+            _cache = new Dictionary<string, object>();
 
             _typeOfTProxy = typeof (TProxy);
 
@@ -70,6 +75,11 @@ namespace Hik.Communication.ScsServices.Communication
             }
             // TODO Extend to support additional parameter for target agent.
 
+            if (_cache.ContainsKey(message.MethodName))
+            {
+                return new ReturnMessage(_cache[message.MethodName], null, 0, message.LogicalCallContext, message);
+            }
+
             var requestMessage = new ScsRemoteInvokeMessage
             {
                 ServiceClassName = _typeOfTProxy.Name,
@@ -81,6 +91,11 @@ namespace Hik.Communication.ScsServices.Communication
             if (responseMessage == null)
             {
                 return null;
+            }
+
+            if (responseMessage.RemoteException == null && _cacheableMethods.Exists(m => m.Name.Equals(message.MethodName)))
+            {
+                _cache.Add(message.MethodName, responseMessage.ReturnValue);
             }
 
             return responseMessage.RemoteException != null

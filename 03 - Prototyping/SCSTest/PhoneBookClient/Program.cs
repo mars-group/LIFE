@@ -14,7 +14,7 @@ namespace PhoneBookClient
     class Program
     {
         private const int ResetEventCount = 1;
-        private const int ItemCount = 100;
+        private const int ItemCount = 1000;
 
         static void Main(string[] args)
         {
