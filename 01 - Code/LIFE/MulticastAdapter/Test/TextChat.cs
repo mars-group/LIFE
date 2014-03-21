@@ -37,28 +37,9 @@ namespace MulticastAdapter.Test
             //Console.WriteLine("IP is " + multicastAddress + " from type " + multicastAddress.GetType() + " this adress is linklocal " + multicastAddress.IsIPv6LinkLocal);
             //Console.WriteLine("this address is a IPv6 Multicastaddress: " + multicastAddress.IsIPv6LinkLocal);
 
-            /*
+            
             List<NetworkInterface> multicastInterfaces = new List<NetworkInterface>();
-
-            Console.WriteLine("networkinterfaces: ");
-            foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (networkInterface.SupportsMulticast && networkInterface.GetIPProperties().MulticastAddresses.Any() && OperationalStatus.Up == networkInterface.OperationalStatus )
-                {
-                   multicastInterfaces.Add(networkInterface);
-                }
-            }
-
-            foreach (var multicastInterface in multicastInterfaces)
-            {
-                foreach (IPAddressInformation unicast in multicastInterface.GetIPProperties().UnicastAddresses)
-                {
-                    Console.WriteLine(unicast.Address);
-                }
-            }
-            */
-
-
+            
             IMulticastClientAdapter multicastClient = new UDPMulticastClient(multicastAddress, port);
             Console.WriteLine("<<Hello, willkommen zum super aufregenden Multicastchat");
             Console.WriteLine("<<Type 'quit' to Exit the chat. ");
@@ -84,11 +65,11 @@ namespace MulticastAdapter.Test
     class TextReciever
     {
 
-        private UDPMulticastReciever multicastReciever;
+        private UDPMulticastReceiver multicastReciever;
 
         public TextReciever()
         {
-            multicastReciever = new UDPMulticastReciever(IPAddress.Parse("224.10.99.1"), 5100);
+            multicastReciever = new UDPMulticastReceiver(IPAddress.Parse("224.10.99.1"), 5100);
         }
 
         public void readNextMessage()
