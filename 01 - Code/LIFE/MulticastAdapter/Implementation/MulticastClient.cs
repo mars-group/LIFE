@@ -49,7 +49,7 @@ namespace MulticastAdapter.Implementation
 
         public void SendMessageToMulticastGroup(byte[] msg)
         {
-            client.Connect( );
+            //client.Connect( );
 
             client.Send(msg, msg.Length);
         }

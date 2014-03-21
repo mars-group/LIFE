@@ -7,7 +7,7 @@
     using LayerAPI.DataTypes;
     using LayerAPI.Interfaces;
 
-    using RTEManager.Interfaces;
+    using Interfaces;
 
     internal class RTEManagerUseCase : IRTEManager
     {

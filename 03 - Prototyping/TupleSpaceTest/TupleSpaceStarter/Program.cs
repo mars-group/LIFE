@@ -13,7 +13,7 @@ namespace TupleSpaceStarter
 
 
             Console.WriteLine("Write (store) a couple of entries in the data grid:");
-            for (int i = 0; i < 10000; i++) { spaceProxy.Write(new Person { Ssn = i, FirstName = "Vincent", LastName = "Chase" }); }
+            for (int i = 0; i < 100000; i++) { spaceProxy.Write(new Person { Ssn = i, FirstName = "Vincent", LastName = "Chase" }); }
 
             spaceProxy.Write(new Person { Ssn = 2, FirstName = "Johnny", LastName = "Drama" });
 
