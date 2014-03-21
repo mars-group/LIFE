@@ -14,7 +14,7 @@ namespace PhoneBookClient
     class Program
     {
         private const int ResetEventCount = 1;
-        private const int ItemCount = 100;
+        private const int ItemCount = 1000;
 
         static void Main(string[] args)
         {
@@ -60,11 +60,13 @@ namespace PhoneBookClient
                     {
                         var g = new Guid();
                         var nr = new Guid();
-                        client.ServiceProxy.AddPerson(new PhoneBookRecord
+                        /*client.ServiceProxy.AddPerson(new PhoneBookRecord
                         {
                             Name = g.ToString(),
                             Phone = nr.ToString()
                         });
+                        */
+                        client.ServiceProxy.Title = "Titel";
                     }
 
                     lock (resetEventsLock)
@@ -100,8 +102,8 @@ namespace PhoneBookClient
                     for (var i = 0; i <= ItemCount; i++)
                     {
                         //Search for a person
-                        var person = client.ServiceProxy.FindPerson("Christian");
-
+                        //var person = client.ServiceProxy.FindPerson("Christian");
+                        var titel = client.ServiceProxy.Title;
                     }
 
                     lock (resetEventsLock)
