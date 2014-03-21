@@ -40,6 +40,8 @@ namespace PhoneBookServer
             server.Start();
         }
 
+        public string Title { get; set; }
+
         /// <summary>
         /// Adds a new person to phone book.
         /// </summary>

@@ -1,8 +1,11 @@
-﻿using System.Runtime.Remoting.Messaging;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
-using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.ScsServices.Communication.Messages;
+using Hik.Communication.ScsServices.Service;
 
 namespace Hik.Communication.ScsServices.Communication
 {
@@ -19,6 +22,11 @@ namespace Hik.Communication.ScsServices.Communication
         /// </summary>
         private readonly RequestReplyMessenger<TMessenger> _clientMessenger;
 
+        private List<MethodInfo> _cacheableMethods;
+        private readonly Type _typeOfTProxy;
+        private PropertyInfo[] _properties;
+
+
         /// <summary>
         /// Creates a new RemoteInvokeProxy object.
         /// </summary>
@@ -27,6 +35,25 @@ namespace Hik.Communication.ScsServices.Communication
             : base(typeof(TProxy))
         {
             _clientMessenger = clientMessenger;
+
+            _typeOfTProxy = typeof (TProxy);
+
+            //retreive all methods which are marked as cacheable
+            var methodsOfTProxy = _typeOfTProxy.GetMethods();
+            _cacheableMethods = new List<MethodInfo>();
+
+            foreach (var method in methodsOfTProxy)
+            {
+                var cacheable = Attribute.GetCustomAttribute(method,
+                    typeof(CacheableAttribute), false) as CacheableAttribute;
+                if (cacheable == null)
+                    continue;
+                // store methodInfos
+                _cacheableMethods.Add(method);
+            }
+
+            //retreive all properties of TProxy
+            _properties = _typeOfTProxy.GetProperties();
         }
 
         /// <summary>
@@ -42,9 +69,10 @@ namespace Hik.Communication.ScsServices.Communication
                 return null;
             }
             // TODO Extend to support additional parameter for target agent.
+
             var requestMessage = new ScsRemoteInvokeMessage
             {
-                ServiceClassName = typeof (TProxy).Name,
+                ServiceClassName = _typeOfTProxy.Name,
                 MethodName = message.MethodName,
                 Parameters = message.InArgs
             };
