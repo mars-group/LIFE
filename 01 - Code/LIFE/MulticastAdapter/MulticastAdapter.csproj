@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\MulticastReciever.cs" />
-    <Compile Include="Implementation\MulticastClient.cs" />
+    <Compile Include="Implementation\UDPMulticastReciever.cs" />
+    <Compile Include="Implementation\UDPMulticastClient.cs" />
     <Compile Include="Interface\IMulticastClientAdapter.cs" />
     <Compile Include="Interface\IMulticastReciever.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

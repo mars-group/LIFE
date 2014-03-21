@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,38 +19,53 @@ namespace MulticastAdapter.Test
         public static void Main(string[] args)
         {
 
-            int port = 50100;
+            int port = 5100;
             string input = "";
-            IPAddress multicastAddress = IPAddress.Parse("ff02::1");
+            IPAddress multicastAddress = IPAddress.Parse("224.10.99.1");
             ASCIIEncoding ASCII = new ASCIIEncoding();
-
-            IMulticastClientAdapter multicastClient = new Implementation.MulticastClient(multicastAddress, port);
             TextReciever textReciever = new TextReciever();
 
 
-            Console.WriteLine("<<Hello, willkommen zum super aufregenden Multicastchat");
-            Console.Write(">>");
-            input = Console.ReadLine();
-            
-            multicastClient.SendMessageToMulticastGroup(ASCII.GetBytes(input));
-            
-            Thread listenThread= new Thread(new ThreadStart(textReciever.readNextMessage));
 
+            Thread listenThread = new Thread(new ThreadStart(textReciever.readNextMessage));
 
             listenThread.Start();
 
+            Thread.Sleep(200);
+
+            //Console.WriteLine("IP is " + multicastAddress + " from type " + multicastAddress.GetType() + " this adress is linklocal " + multicastAddress.IsIPv6LinkLocal);
+            //Console.WriteLine("this address is a IPv6 Multicastaddress: " + multicastAddress.IsIPv6LinkLocal);
+
+            IMulticastClientAdapter multicastClient = new UDPMulticastClient(multicastAddress, port);
+            Console.WriteLine("<<Hello, willkommen zum super aufregenden Multicastchat");
+            Console.WriteLine("<<Type 'quit' to Exit the chat. ");
+
+            while (input != "quit")
+            {
+              
+                Console.Write(">>");
+                input = Console.ReadLine();
+                if (input != "quit")
+                {
+                    multicastClient.SendMessageToMulticastGroup(ASCII.GetBytes(input));
+                }
+            }
+
+            listenThread.Interrupt();
+       
+
         }
-        
+
     }
 
     class TextReciever
     {
 
-        private MulticastReciever multicastReciever;
-       
+        private UDPMulticastReciever multicastReciever;
+
         public TextReciever()
         {
-            multicastReciever = new MulticastReciever(IPAddress.Parse("ff02::1"), 50101);
+            multicastReciever = new UDPMulticastReciever(IPAddress.Parse("224.10.99.1"), 5100);
         }
 
         public void readNextMessage()
@@ -58,11 +74,19 @@ namespace MulticastAdapter.Test
             ASCIIEncoding ascii = new ASCIIEncoding();
 
             byte[] msg;
-            msg = multicastReciever.readMulticastGroupMessage();
-            Console.WriteLine((ascii.GetString(msg)));
+            Console.WriteLine("waiting for Message");
+
+            while (Thread.CurrentThread.IsAlive)
+            {
+                msg = multicastReciever.readMulticastGroupMessage();
+                Console.WriteLine(("<<" + ascii.GetString(msg)));
+            }
+
+            multicastReciever.CloseSocket();
+
 
         }
-        
+
     }
 
 }
