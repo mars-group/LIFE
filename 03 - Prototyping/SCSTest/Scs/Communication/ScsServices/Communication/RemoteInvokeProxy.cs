@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
+using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.ScsServices.Communication.Messages;
 using Hik.Communication.ScsServices.Service;
@@ -38,6 +38,10 @@ namespace Hik.Communication.ScsServices.Communication
         {
             _clientMessenger = clientMessenger;
 
+            // subscribe for new PropertyChangedMessages. Will work since
+            // SendAndWaitForReply() does not raise MessageReceived Event
+            _clientMessenger.MessageReceived += ClientMessengerOnMessageReceived;
+
             _cache = new Dictionary<string, object>();
 
             _typeOfTProxy = typeof (TProxy);
@@ -64,6 +68,15 @@ namespace Hik.Communication.ScsServices.Communication
             }
         }
 
+        private void ClientMessengerOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        {
+            var msg = messageEventArgs.Message as PropertyChangedMessage;
+            if (msg != null)
+            {
+                _cache[msg.PropertyGetMethodName] = msg.NewValue;
+            }
+        }
+
         /// <summary>
         /// Overrides message calls and translates them to messages to remote application.
         /// </summary>
@@ -78,6 +91,7 @@ namespace Hik.Communication.ScsServices.Communication
             }
             // TODO Extend to support additional parameter for target agent.
 
+            // Answer request from cache if available
             if (_cache.ContainsKey(message.MethodName))
             {
                 return new ReturnMessage(_cache[message.MethodName], null, 0, message.LogicalCallContext, message);
@@ -96,9 +110,18 @@ namespace Hik.Communication.ScsServices.Communication
                 return null;
             }
 
+            // Store result in cache if no exception was thrown and the method has been marked as cacheable
             if (responseMessage.RemoteException == null && _cacheableMethods.Exists(m => m.Name.Equals(message.MethodName)))
             {
-                _cache.Add(message.MethodName, responseMessage.ReturnValue);
+                if (!_cache.ContainsKey(message.MethodName))
+                {
+                    _cache.Add(message.MethodName, responseMessage.ReturnValue);
+                }
+                else
+                {
+                    _cache[message.MethodName] = responseMessage.ReturnValue;
+                }
+
             }
 
             return responseMessage.RemoteException != null

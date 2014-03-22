@@ -35,7 +35,7 @@ namespace PhoneBookCommonLib
         /// <param name="name">Name of person to search.
         /// Name might not fully match, it can be a part of person's name</param>
         /// <returns>Person informations if found, else null</returns>
-        [Cacheable]
+        
         PhoneBookRecord FindPerson(string name);
     }
 }

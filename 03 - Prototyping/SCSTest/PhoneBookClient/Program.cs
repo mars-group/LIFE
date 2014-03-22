@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Security.AccessControl;
 using System.Threading;
-using System.Threading.Tasks;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
-using Hik.Communication.ScsServices.Client;
 using PhoneBookCommonLib;
 
 namespace PhoneBookClient
@@ -14,32 +9,48 @@ namespace PhoneBookClient
     class Program
     {
         private const int ResetEventCount = 1;
-        private const int ItemCount = 1000;
+        private const int ItemCount = 10000;
 
         static void Main(string[] args)
         {
 
-            
+            Benchmark(ItemCount);
+            //TestCacheUpdates();
+        }
 
-            //Create a client to connect to phone book service on local server and
-            //10048 TCP port.
-            
-            var client = ScsServiceClientBuilder.CreateClient<IPhoneBookService>(
-                new ScsTcpEndPoint(IPAddress.IPv6Loopback.ToString(), 10048)
-                //new ScsTcpEndPoint("127.0.0.1", 10048)
-                );
 
-            //Console.WriteLine("Press enter to connect to phone book service...");
-            //Console.ReadLine();
+        private static void TestCacheUpdates()
+        {
+            var client1 = new Client();
+            var client2 = new Client();
 
-            //Connect to the server
-            client.Connect();
+            client1.Title = "ErsterTitel";
 
-            client.ServiceProxy.AddPerson(new PhoneBookRecord
+            Console.WriteLine("Client1.Title = " + client1.Title);
+            Console.WriteLine("Client2.Title = " + client2.Title);
+
+            client2.Title = "ZweiterTitel";
+
+            Console.WriteLine("Client1.Title = " + client1.Title);
+            Console.WriteLine("Client2.Title = " + client2.Title);
+
+            client1.Disconnect();
+            client2.Disconnect();
+
+            Console.ReadLine();
+        }
+
+        private static void Benchmark(int count)
+        {
+            var client = new Client();
+
+
+            client.AddPerson(new PhoneBookRecord
             {
-                Name = "peter petersen",
+                Name = "Christian",
                 Phone = "1235"
             });
+            client.Title = "Titel0";
 
 
             var resetEventsLock = new object();
@@ -60,13 +71,14 @@ namespace PhoneBookClient
                     {
                         var g = new Guid();
                         var nr = new Guid();
-                        /*client.ServiceProxy.AddPerson(new PhoneBookRecord
+
+                        client.AddPerson(new PhoneBookRecord
                         {
                             Name = g.ToString(),
                             Phone = nr.ToString()
                         });
-                        */
-                        client.ServiceProxy.Title = "Titel";
+                        
+                        client.Title = "Titel";
                     }
 
                     lock (resetEventsLock)
@@ -102,8 +114,8 @@ namespace PhoneBookClient
                     for (var i = 0; i <= ItemCount; i++)
                     {
                         //Search for a person
-                        //var person = client.ServiceProxy.FindPerson("Christian");
-                        var titel = client.ServiceProxy.Title;
+                        var person = client.FindPerson("Christian");
+                        var titel = client.Title;
                     }
 
                     lock (resetEventsLock)
@@ -119,18 +131,11 @@ namespace PhoneBookClient
 
             then = DateTime.Now;
             Console.WriteLine("READ:" + (then - now).TotalMilliseconds);
-            
 
-
-
-
-
-            Console.WriteLine();
-            Console.WriteLine("Press enter to disconnect from phone book service...");
             Console.ReadLine();
 
             //Disconnect from server
-            client.Disconnect();
+            client.Disconnect();    
         }
 
 

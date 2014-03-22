@@ -407,18 +407,18 @@ namespace Hik.Communication.ScsServices.Service
                 }
             }
             /// <summary>
-            /// Send PropertyUpdatedMessage to all subscribed clients
+            /// Send PropertyChangedMessage to all subscribed clients
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="propertyChangedEventArgs"></param>
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             {
-                // send PropertyUpdatedMessage to all subscribed clients
+                // send PropertyChangedMessage to all subscribed clients
                 foreach (var scsServerClient in _clients)
                 {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Invoke(Service, null);
 
-                    scsServerClient.SendMessage(new PropertyUpdatedMessage(newValue, propertyChangedEventArgs.PropertyName));
+                    scsServerClient.SendMessage(new PropertyChangedMessage(newValue, _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Name));
                 }
             }
 
