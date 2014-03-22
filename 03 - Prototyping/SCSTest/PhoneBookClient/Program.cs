@@ -8,13 +8,13 @@ namespace PhoneBookClient
 {
     class Program
     {
-        private const int ResetEventCount = 1;
-        private const int ItemCount = 1;
+        private const int ResetEventCount = 10;
+        private const int ItemCount = 10000;
 
         static void Main(string[] args)
         {
-            BenchmarkWriteAndRead();
-            //BenchmarkWriteAndReadWithChanges();
+            //BenchmarkWriteAndRead();
+            BenchmarkWriteAndReadWithChanges();
         }
 
 
@@ -146,46 +146,53 @@ namespace PhoneBookClient
 
             for (var o = 0; o < ResetEventCount; o++)
             {
-                var rootid = resetEvents.Count + 1;
-
-                resetEvents.Add(rootid, new ManualResetEvent(false));
-
-                var clientWrite = new Client(GuidProvider.GetIdenticalGuid());
-                ThreadPool.QueueUserWorkItem(delegate
+                int rootid;
+                if (o == 3 || o == 7)
                 {
+                    rootid = resetEvents.Count + 1;
 
-                    for (var i = 0; i <= ItemCount; i++)
+                    resetEvents.Add(rootid, new ManualResetEvent(false));
+
+                    var clientWrite = new Client(GuidProvider.GetIdenticalGuid());
+                    int rootid2 = rootid;
+                    ThreadPool.QueueUserWorkItem(delegate
                     {
-                        var title = "Titel" + i;
 
-                        clientWrite.Title = title;
-                        Console.WriteLine("WRITTEN: " + title);
+                        for (var i = 0; i <= ItemCount; i++)
+                        {
+                            var title = "Titel" + i;
 
-                    }
-                    clientWrite.Disconnect();
-                    lock (resetEventsLock)
-                    {
-                        resetEvents[rootid].Set();
-                    }
-                }, rootid);
+                            clientWrite.Title = title;
+                            //Console.WriteLine("WRITTEN: " + title);
+
+                        }
+                        clientWrite.Disconnect();
+                        lock (resetEventsLock)
+                        {
+                            resetEvents[rootid2].Set();
+                        }
+                    }, rootid);
+
+                }
 
                 rootid = resetEvents.Count + 1;
 
                 resetEvents.Add(rootid, new ManualResetEvent(false));
 
                 var clientRead = new Client(GuidProvider.GetIdenticalGuid());
+                int rootid1 = rootid;
                 ThreadPool.QueueUserWorkItem(delegate
                 {
 
                     for (var i = 0; i <= ItemCount; i++)
                     {
                         var title = clientRead.Title;
-                        Console.WriteLine("READ: " + title);
+                        //Console.WriteLine("READ: " + title);
                     }
                     clientRead.Disconnect();
                     lock (resetEventsLock)
                     {
-                        resetEvents[rootid].Set();
+                        resetEvents[rootid1].Set();
                     }
 
                 }, rootid);
@@ -197,7 +204,7 @@ namespace PhoneBookClient
             WaitHandle.WaitAll(resetEvents.Values.ToArray());
 
             var then = DateTime.Now;
-            Console.WriteLine("READ:" + (then - now).TotalMilliseconds);
+            Console.WriteLine("Time:" + (then - now).TotalMilliseconds);
 
             Console.ReadLine();
 
