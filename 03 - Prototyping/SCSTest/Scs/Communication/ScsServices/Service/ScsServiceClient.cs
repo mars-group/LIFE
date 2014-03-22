@@ -104,9 +104,9 @@ namespace Hik.Communication.ScsServices.Service
         /// </summary>
         /// <typeparam name="T">Type of client interface</typeparam>
         /// <returns>Client interface</returns>
-        public T GetClientProxy<T>() where T : class
+        public T GetClientProxy<T>(Guid serviceID) where T : class
         {
-            _realProxy = new RemoteInvokeProxy<T, IScsServerClient>(_requestReplyMessenger);
+            _realProxy = new RemoteInvokeProxy<T, IScsServerClient>(_requestReplyMessenger, serviceID);
             return (T)_realProxy.GetTransparentProxy();
         }
 

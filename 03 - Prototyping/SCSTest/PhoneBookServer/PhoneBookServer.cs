@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using PhoneBookCommonLib;
@@ -28,7 +25,8 @@ namespace PhoneBookServer
         /// <summary>
         /// Creates a new PhoneBookService object.
         /// </summary>
-        public PhoneBookService()
+        /// <param name="id"></param>
+        public PhoneBookService(Guid id) : base(id.ToByteArray())
         {
             _records = new SortedList<string, PhoneBookRecord>();
             //Create a Scs Service application that runs on 10048 TCP port.

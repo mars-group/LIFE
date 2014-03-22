@@ -26,6 +26,11 @@ namespace Hik.Communication.ScsServices.Communication.Messages
         public object[] Parameters { get; set; }
 
         /// <summary>
+        /// Guid of the ServiceInstance to call
+        /// </summary>
+        public Guid ServiceID { get; set; }
+
+        /// <summary>
         /// Represents this object as string.
         /// </summary>
         /// <returns>String representation of this object</returns>

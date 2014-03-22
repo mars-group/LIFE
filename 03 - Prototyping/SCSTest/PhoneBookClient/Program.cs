@@ -13,16 +13,15 @@ namespace PhoneBookClient
 
         static void Main(string[] args)
         {
-
             Benchmark(ItemCount);
-            //TestCacheUpdates();
+            TestCacheUpdates();
         }
 
 
         private static void TestCacheUpdates()
         {
-            var client1 = new Client();
-            var client2 = new Client();
+            var client1 = new Client(GuidProvider.GetIdenticalGuid());
+            var client2 = new Client(GuidProvider.GetIdenticalGuid());
 
             client1.Title = "ErsterTitel";
 
@@ -42,7 +41,7 @@ namespace PhoneBookClient
 
         private static void Benchmark(int count)
         {
-            var client = new Client();
+            var client = new Client(GuidProvider.GetIdenticalGuid());
 
 
             client.AddPerson(new PhoneBookRecord
@@ -137,7 +136,5 @@ namespace PhoneBookClient
             //Disconnect from server
             client.Disconnect();    
         }
-
-
     }
 }

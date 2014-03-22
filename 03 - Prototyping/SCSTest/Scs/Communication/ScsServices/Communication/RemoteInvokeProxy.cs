@@ -18,25 +18,30 @@ namespace Hik.Communication.ScsServices.Communication
     /// <typeparam name="TMessenger">Type of the messenger object that is used to send/receive messages</typeparam>
     internal class RemoteInvokeProxy<TProxy, TMessenger> : RealProxy where TMessenger : IMessenger
     {
+
         /// <summary>
         /// Messenger object that is used to send/receive messages.
         /// </summary>
         private readonly RequestReplyMessenger<TMessenger> _clientMessenger;
 
-        private List<MethodInfo> _cacheableMethods;
+        private readonly Guid _serviceId;
+
+        private readonly List<MethodInfo> _cacheableMethods;
         private readonly Type _typeOfTProxy;
 
-        private IDictionary<string,object> _cache;
+        private readonly IDictionary<string,object> _cache;
 
 
         /// <summary>
         /// Creates a new RemoteInvokeProxy object.
         /// </summary>
         /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
-        public RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger)
+        public RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, Guid serviceID)
             : base(typeof(TProxy))
         {
+
             _clientMessenger = clientMessenger;
+            _serviceId = serviceID;
 
             // subscribe for new PropertyChangedMessages. Will work since
             // SendAndWaitForReply() does not raise MessageReceived Event
@@ -89,7 +94,8 @@ namespace Hik.Communication.ScsServices.Communication
             {
                 return null;
             }
-            // TODO Extend to support additional parameter for target agent.
+
+            // TODO Extend to support additional parameter for target agent. Was soll das ???
 
             // Answer request from cache if available
             if (_cache.ContainsKey(message.MethodName))
@@ -101,7 +107,8 @@ namespace Hik.Communication.ScsServices.Communication
             {
                 ServiceClassName = _typeOfTProxy.Name,
                 MethodName = message.MethodName,
-                Parameters = message.InArgs
+                Parameters = message.InArgs,
+                ServiceID = _serviceId
             };
 
             var responseMessage = _clientMessenger.SendMessageAndWaitForResponse(requestMessage) as ScsRemoteInvokeReturnMessage;

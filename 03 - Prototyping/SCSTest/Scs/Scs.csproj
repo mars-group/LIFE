@@ -57,6 +57,7 @@
     <Compile Include="Communication\ScsServices\Communication\Messages\ScsRemoteInvokeReturnMessage.cs" />
     <Compile Include="Communication\ScsServices\Communication\RemoteInvokeProxy.cs" />
     <Compile Include="Communication\ScsServices\Service\CacheableAttribute.cs" />
+    <Compile Include="Communication\ScsServices\Service\ICacheable.cs" />
     <Compile Include="Communication\Scs\Communication\Messengers\RequestReplyMessenger.cs" />
     <Compile Include="Communication\ScsServices\Service\IScsServiceApplication.cs" />
     <Compile Include="Communication\ScsServices\Service\IScsServiceClient.cs" />

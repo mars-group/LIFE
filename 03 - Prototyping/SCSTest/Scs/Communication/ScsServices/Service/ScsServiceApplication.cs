@@ -38,11 +38,12 @@ namespace Hik.Communication.ScsServices.Service
 
         /// <summary>
         /// User service objects that is used to invoke incoming method invocation requests.
-        /// Key: Service interface type's name.
+        /// Key1: Service interface type's name.
+        /// Key2: ID of the ServiceObjects Instance, encoded as a GUID 
         /// Value: Service object.
         /// </summary>
         // TODO Allow for multiple serviceObjects per Interface
-        private readonly ThreadSafeSortedList<string, ServiceObject> _serviceObjects;
+        private readonly ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>> _serviceObjects;
 
         /// <summary>
         /// All connected clients to service.
@@ -70,7 +71,7 @@ namespace Hik.Communication.ScsServices.Service
             _scsServer = scsServer;
             _scsServer.ClientConnected += ScsServer_ClientConnected;
             _scsServer.ClientDisconnected += ScsServer_ClientDisconnected;
-            _serviceObjects = new ThreadSafeSortedList<string, ServiceObject>();
+            _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
             _serviceClients = new ThreadSafeSortedList<long, IScsServiceClient>();
         }
 
@@ -118,15 +119,31 @@ namespace Hik.Communication.ScsServices.Service
                 throw new Exception("Service '" + type.Name + "' is already added before.");                
             }
 
-
-            var cacheableService = service as INotifyPropertyChanged;
+            // check if service is cacheable
+            var cacheableService = service as ICacheable;
             if (cacheableService != null)
             {
-                _serviceObjects[type.Name] = new CacheableServiceObject(type, service);
+                if (_serviceObjects.ContainsKey(type.Name))
+                {
+                    _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
+                }
+                else
+                {
+                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+                    _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
+                }
             }
             else
             {
-                _serviceObjects[type.Name] = new ServiceObject(type, service);    
+                if (_serviceObjects.ContainsKey(type.Name))
+                {
+                    _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
+                }
+                else
+                {
+                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+                    _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
+                }  
             }
         }
 
@@ -210,7 +227,7 @@ namespace Hik.Communication.ScsServices.Service
 
                 //Get service object
                 // TODO : Extend _serviceObjects by an ID to allow multiple ServiceObjects per Service
-                var serviceObject = _serviceObjects[invokeMessage.ServiceClassName];
+                var serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
                 if (serviceObject == null)
                 {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null, new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
@@ -385,7 +402,7 @@ namespace Hik.Communication.ScsServices.Service
             }
         }
 
-        private class CacheableServiceObject : ServiceObject
+        private sealed class CacheableServiceObject : ServiceObject
         {
             private readonly List<IMessenger> _clients;
             private readonly IDictionary<string,PropertyInfo> _properties;
@@ -400,12 +417,13 @@ namespace Hik.Communication.ScsServices.Service
                     _properties.Add(propertyInfo.Name, propertyInfo);
                 }
 
-                var propChanger = service as INotifyPropertyChanged;
+                var propChanger = service as ICacheable;
                 if (propChanger != null)
                 {
                     propChanger.PropertyChanged += PropChangerOnPropertyChanged;
                 }
             }
+
             /// <summary>
             /// Send PropertyChangedMessage to all subscribed clients
             /// </summary>
@@ -426,12 +444,6 @@ namespace Hik.Communication.ScsServices.Service
             {
                 _clients.Add(client);
             }
-
-            public List<IMessenger> GetAllClients()
-            {
-                return _clients;
-            }
-
         }
 
         #endregion

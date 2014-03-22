@@ -1,7 +1,4 @@
-﻿
-using System.ComponentModel;
-using System.Security.Cryptography.X509Certificates;
-using Hik.Communication.ScsServices.Service;
+﻿using Hik.Communication.ScsServices.Service;
 
 namespace PhoneBookCommonLib
 {
@@ -10,7 +7,7 @@ namespace PhoneBookCommonLib
     /// that can be called remotely by client applications.
     /// </summary>
     [ScsService(Version = "1.0.0.0")]
-    public interface IPhoneBookService : INotifyPropertyChanged
+    public interface IPhoneBookService : ICacheable
     {
 
         string Title { get; set; }
