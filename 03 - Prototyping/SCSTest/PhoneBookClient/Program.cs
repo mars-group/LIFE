@@ -9,12 +9,12 @@ namespace PhoneBookClient
     class Program
     {
         private const int ResetEventCount = 1;
-        private const int ItemCount = 10000;
+        private const int ItemCount = 1;
 
         static void Main(string[] args)
         {
-            Benchmark(ItemCount);
-            TestCacheUpdates();
+            BenchmarkWriteAndRead();
+            //BenchmarkWriteAndReadWithChanges();
         }
 
 
@@ -38,8 +38,7 @@ namespace PhoneBookClient
 
             Console.ReadLine();
         }
-
-        private static void Benchmark(int count)
+        private static void BenchmarkWriteAndRead()
         {
             var client = new Client(GuidProvider.GetIdenticalGuid());
 
@@ -135,6 +134,74 @@ namespace PhoneBookClient
 
             //Disconnect from server
             client.Disconnect();    
+        }
+        private static void BenchmarkWriteAndReadWithChanges()
+        {
+
+
+
+            var resetEventsLock = new object();
+            var resetEvents = new Dictionary<int, ManualResetEvent>();
+
+
+            for (var o = 0; o < ResetEventCount; o++)
+            {
+                var rootid = resetEvents.Count + 1;
+
+                resetEvents.Add(rootid, new ManualResetEvent(false));
+
+                var clientWrite = new Client(GuidProvider.GetIdenticalGuid());
+                ThreadPool.QueueUserWorkItem(delegate
+                {
+
+                    for (var i = 0; i <= ItemCount; i++)
+                    {
+                        var title = "Titel" + i;
+
+                        clientWrite.Title = title;
+                        Console.WriteLine("WRITTEN: " + title);
+
+                    }
+                    clientWrite.Disconnect();
+                    lock (resetEventsLock)
+                    {
+                        resetEvents[rootid].Set();
+                    }
+                }, rootid);
+
+                rootid = resetEvents.Count + 1;
+
+                resetEvents.Add(rootid, new ManualResetEvent(false));
+
+                var clientRead = new Client(GuidProvider.GetIdenticalGuid());
+                ThreadPool.QueueUserWorkItem(delegate
+                {
+
+                    for (var i = 0; i <= ItemCount; i++)
+                    {
+                        var title = clientRead.Title;
+                        Console.WriteLine("READ: " + title);
+                    }
+                    clientRead.Disconnect();
+                    lock (resetEventsLock)
+                    {
+                        resetEvents[rootid].Set();
+                    }
+
+                }, rootid);
+
+            }
+
+            var now = DateTime.Now;
+
+            WaitHandle.WaitAll(resetEvents.Values.ToArray());
+
+            var then = DateTime.Now;
+            Console.WriteLine("READ:" + (then - now).TotalMilliseconds);
+
+            Console.ReadLine();
+
+
         }
     }
 }

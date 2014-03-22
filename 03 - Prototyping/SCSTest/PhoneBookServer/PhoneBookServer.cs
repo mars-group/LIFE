@@ -19,7 +19,7 @@ namespace PhoneBookServer
         /// </summary>
         private readonly SortedList<string, PhoneBookRecord> _records;
 
-        private IScsServiceApplication server;
+        private readonly IScsServiceApplication _server;
         private string _title;
 
         /// <summary>
@@ -30,13 +30,13 @@ namespace PhoneBookServer
         {
             _records = new SortedList<string, PhoneBookRecord>();
             //Create a Scs Service application that runs on 10048 TCP port.
-            server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(10048));
+            _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(10048));
             
             //Add Phone Book Service to service application
-            server.AddService<IPhoneBookService, PhoneBookService>(this);
+            _server.AddService<IPhoneBookService, PhoneBookService>(this);
 
             //Start server
-            server.Start();
+            _server.Start();
         }
 
         public string Title
@@ -49,7 +49,6 @@ namespace PhoneBookServer
                     _title = value;
                     OnPropertyChanged("Title");
                 }
-
             }
         }
 
@@ -114,7 +113,7 @@ namespace PhoneBookServer
 
         public void Stop()
         {
-            server.Stop();
+            _server.Stop();
         }
 
 

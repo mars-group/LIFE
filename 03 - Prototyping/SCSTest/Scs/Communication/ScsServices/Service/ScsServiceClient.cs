@@ -91,6 +91,7 @@ namespace Hik.Communication.ScsServices.Service
 
         #region Public methods
 
+
         /// <summary>
         /// Closes client connection.
         /// </summary>
