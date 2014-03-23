@@ -13,7 +13,7 @@ namespace PhoneBookClient
 
         static void Main(string[] args)
         {
-            //BenchmarkWriteAndRead();
+            BenchmarkWriteAndRead();
             BenchmarkWriteAndReadWithChanges();
         }
 

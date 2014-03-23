@@ -241,7 +241,7 @@ namespace Hik.Communication.ScsServices.Service
                     var cacheableServiceObject = serviceObject as CacheableServiceObject;
                     if (cacheableServiceObject != null)
                     {
-                        cacheableServiceObject.AddClient(client.ClientId, requestReplyMessenger);
+                        cacheableServiceObject.AddClient(client.ClientId, requestReplyMessenger.Messenger);
                     }
 
                     object returnValue;
