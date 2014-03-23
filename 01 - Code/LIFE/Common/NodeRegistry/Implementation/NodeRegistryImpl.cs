@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonTypes.DataTypes;
+using CommonTypes.Types;
 using NodeRegistry.Interface;
 
 namespace NodeRegistry.Implementation
 {
-    class NodeRegistry : INodeRegistry
+    class NodeRegistryImpl : INodeRegistry
     {
-
-
-        public void Node()
+        public void startDiscovery()
         {
             throw new NotImplementedException();
         }
@@ -21,12 +21,12 @@ namespace NodeRegistry.Implementation
             throw new NotImplementedException();
         }
 
-        public List<CommonTypes.DataTypes.NodeInformationType> GetAllNodes()
+        public List<NodeInformationType> GetAllNodes()
         {
             throw new NotImplementedException();
         }
 
-        public List<CommonTypes.DataTypes.NodeInformationType> GetAllNodesByType(CommonTypes.Types.NodeType nodeType)
+        public List<NodeInformationType> GetAllNodesByType(NodeType nodeType)
         {
             throw new NotImplementedException();
         }

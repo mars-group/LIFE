@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace MulticastAdapter.Interface
 {
-    public interface IMulticastReciever
+    class MissingArgumentException : Exception
     {
-        byte[] readMulticastGroupMessage();
-        void CloseSocket();
+        public MissingArgumentException(string msg) : base(msg)
+        {
+            
+        }
+
+
     }
 }

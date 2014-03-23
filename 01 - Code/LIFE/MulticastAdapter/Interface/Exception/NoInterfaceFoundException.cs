@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace MulticastAdapter.Interface
 {
-    public interface IMulticastReciever
+    class NoInterfaceFoundException : Exception
     {
-        byte[] readMulticastGroupMessage();
-        void CloseSocket();
+        public NoInterfaceFoundException(string msg) : base(msg)
+        {
+          
+        }
+
+
     }
 }

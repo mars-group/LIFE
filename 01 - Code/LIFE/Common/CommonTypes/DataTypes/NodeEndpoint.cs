@@ -8,13 +8,13 @@ namespace CommonTypes.DataTypes
     /// </summary>
     public class NodeEndpoint
     {
-        public IPAddress IpAddress { get; private set; }
+        public string IpAddress { get; private set; }
 
         public int Port { get; private set; }
 
         
 
-        public NodeEndpoint(IPAddress ipAddress, int port)
+        public NodeEndpoint(string ipAddress, int port)
         {
             IpAddress = ipAddress;
             Port = port;

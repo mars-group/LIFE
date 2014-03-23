@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MulticastAdapter.Interface
 {
-    interface IMulticastClientAdapter
+    public interface IMulticastClientAdapter
     {
 
         /// <summary>
