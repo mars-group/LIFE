@@ -38,11 +38,11 @@ namespace Hik.Communication.ScsServices.Service
 
         /// <summary>
         /// User service objects that is used to invoke incoming method invocation requests.
-        /// Key: Service interface type's name.
+        /// Key1: Service interface type's name.
+        /// Key2: ID of the ServiceObjects Instance, encoded as a GUID 
         /// Value: Service object.
         /// </summary>
-        // TODO Allow for multiple serviceObjects per Interface
-        private readonly ThreadSafeSortedList<string, ServiceObject> _serviceObjects;
+        private readonly ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>> _serviceObjects;
 
         /// <summary>
         /// All connected clients to service.
@@ -70,7 +70,8 @@ namespace Hik.Communication.ScsServices.Service
             _scsServer = scsServer;
             _scsServer.ClientConnected += ScsServer_ClientConnected;
             _scsServer.ClientDisconnected += ScsServer_ClientDisconnected;
-            _serviceObjects = new ThreadSafeSortedList<string, ServiceObject>();
+            _scsServer.ClientDisconnected += CacheableServiceObject.CacheableObject_OnClientDisconnected;
+            _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
             _serviceClients = new ThreadSafeSortedList<long, IScsServiceClient>();
         }
 
@@ -118,15 +119,31 @@ namespace Hik.Communication.ScsServices.Service
                 throw new Exception("Service '" + type.Name + "' is already added before.");                
             }
 
-
-            var cacheableService = service as INotifyPropertyChanged;
+            // check if service is cacheable
+            var cacheableService = service as ICacheable;
             if (cacheableService != null)
             {
-                _serviceObjects[type.Name] = new CacheableServiceObject(type, service);
+                if (_serviceObjects.ContainsKey(type.Name))
+                {
+                    _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
+                }
+                else
+                {
+                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+                    _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
+                }
             }
             else
             {
-                _serviceObjects[type.Name] = new ServiceObject(type, service);    
+                if (_serviceObjects.ContainsKey(type.Name))
+                {
+                    _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
+                }
+                else
+                {
+                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+                    _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
+                }  
             }
         }
 
@@ -157,6 +174,7 @@ namespace Hik.Communication.ScsServices.Service
             var requestReplyMessenger = new RequestReplyMessenger<IScsServerClient>(e.Client);
             requestReplyMessenger.MessageReceived += Client_MessageReceived;
             requestReplyMessenger.Start();
+
 
             var serviceClient = ScsServiceClientFactory.CreateServiceClient(e.Client, requestReplyMessenger);
             _serviceClients[serviceClient.ClientId] = serviceClient;
@@ -207,10 +225,9 @@ namespace Hik.Communication.ScsServices.Service
                     requestReplyMessenger.Messenger.Disconnect();
                     return;
                 }
-
+                
                 //Get service object
-                // TODO : Extend _serviceObjects by an ID to allow multiple ServiceObjects per Service
-                var serviceObject = _serviceObjects[invokeMessage.ServiceClassName];
+                var serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
                 if (serviceObject == null)
                 {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null, new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
@@ -220,10 +237,11 @@ namespace Hik.Communication.ScsServices.Service
                 //Invoke method
                 try
                 {
+                    // store RequestReplyMessenger in ServiceObject to publish changes in its properties
                     var cacheableServiceObject = serviceObject as CacheableServiceObject;
                     if (cacheableServiceObject != null)
                     {
-                        cacheableServiceObject.AddClient(requestReplyMessenger);
+                        cacheableServiceObject.AddClient(client.ClientId, requestReplyMessenger.Messenger);
                     }
 
                     object returnValue;
@@ -385,14 +403,14 @@ namespace Hik.Communication.ScsServices.Service
             }
         }
 
-        private class CacheableServiceObject : ServiceObject
+        private sealed class CacheableServiceObject : ServiceObject
         {
-            private readonly List<IMessenger> _clients;
+            private static ThreadSafeSortedList<long, IMessenger> _clients;
             private readonly IDictionary<string,PropertyInfo> _properties;
 
             public CacheableServiceObject(Type serviceInterfaceType, ScsService service) : base(serviceInterfaceType, service)
             {
-                _clients = new List<IMessenger>();
+                _clients = new ThreadSafeSortedList<long, IMessenger>();
                 
                 _properties = new Dictionary<string, PropertyInfo>();
                 foreach (var propertyInfo in serviceInterfaceType.GetProperties())
@@ -400,12 +418,14 @@ namespace Hik.Communication.ScsServices.Service
                     _properties.Add(propertyInfo.Name, propertyInfo);
                 }
 
-                var propChanger = service as INotifyPropertyChanged;
+                var propChanger = service as ICacheable;
                 if (propChanger != null)
                 {
                     propChanger.PropertyChanged += PropChangerOnPropertyChanged;
                 }
             }
+
+
             /// <summary>
             /// Send PropertyChangedMessage to all subscribed clients
             /// </summary>
@@ -414,24 +434,48 @@ namespace Hik.Communication.ScsServices.Service
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             {
                 // send PropertyChangedMessage to all subscribed clients
-                foreach (var scsServerClient in _clients)
+                foreach (var scsServerClient in _clients.GetAllItems())
                 {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Invoke(Service, null);
 
-                    scsServerClient.SendMessage(new PropertyChangedMessage(newValue, _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Name));
+
+                    try
+                    {
+                        scsServerClient.SendMessage(new PropertyChangedMessage(newValue,
+                            _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Name));
+                    }
+                    catch
+                    {
+                        // suppress all exceptions on purpose, since it might happen, that clients have disconnected meanwhile
+                        // The send command will fail in that case, but that's ok.
+                    }
+                    
                 }
             }
 
-            public void AddClient(IMessenger client)
+            /// <summary>
+            /// Catches the event of a client disconnect and removes its reference from this
+            /// CacheableServiceObject's client list.
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param>
+            public static void CacheableObject_OnClientDisconnected(object sender, ServerClientEventArgs e)
             {
-                _clients.Add(client);
+                if (_clients.ContainsKey(e.Client.ClientId))
+                {
+                    _clients.Remove(e.Client.ClientId);   
+                }
             }
 
-            public List<IMessenger> GetAllClients()
+            /// <summary>
+            /// Add a client to the CacheableObject's client list.
+            /// This method is thread-safe.
+            /// </summary>
+            /// <param name="client"></param>
+            public void AddClient(long clientID, IMessenger client)
             {
-                return _clients;
+                _clients[clientID] = client;
             }
-
         }
 
         #endregion

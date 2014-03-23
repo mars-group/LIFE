@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GuidProvider.cs" />
     <Compile Include="IPhoneBookService.cs" />
     <Compile Include="PhoneBookRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

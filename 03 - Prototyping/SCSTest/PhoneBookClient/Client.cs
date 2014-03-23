@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Net;
-using System.Text;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
 using PhoneBookCommonLib;
@@ -12,17 +9,16 @@ namespace PhoneBookClient
 {
     public class Client : IPhoneBookService
     {
-        private IScsServiceClient<IPhoneBookService> _client;
-        private int _basePort = 10048;
+        private readonly IScsServiceClient<IPhoneBookService> _client;
+        private const int BasePort = 10048;
 
-        public Client()
+        public Client(Guid serviceID)
         {
             //Create a client to connect to phone book service on local server and
             //10048 TCP port.
 
             _client = ScsServiceClientBuilder.CreateClient<IPhoneBookService>(
-                new ScsTcpEndPoint(IPAddress.IPv6Loopback.ToString(), _basePort)
-                );
+                new ScsTcpEndPoint(IPAddress.IPv6Loopback.ToString(), BasePort), serviceID);
 
             //Connect to the server
             _client.Connect();

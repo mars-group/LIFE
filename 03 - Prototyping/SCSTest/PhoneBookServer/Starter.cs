@@ -10,17 +10,7 @@ namespace PhoneBookServer
 
         static void Main(string[] args)
         {
-            //Create a Scs Service application that runs on 10048 TCP port.
-            //var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(10048));
-
-            //Add Phone Book Service to service application
-
-            //server.AddService<IPhoneBookService, PhoneBookService>(new PhoneBookService());
-
-            //Start server
-            //server.Start();
-
-            var pbS = new PhoneBookService();
+            var pbS = new PhoneBookService(GuidProvider.GetIdenticalGuid());
             //Wait user to stop server by pressing Enter
             Console.WriteLine(
                 "Phone Book Server started successfully. Press enter to stop...");
