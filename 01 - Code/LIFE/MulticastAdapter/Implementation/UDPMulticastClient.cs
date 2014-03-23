@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -16,6 +17,16 @@ namespace MulticastAdapter.Implementation
         private int port;
 
 
+
+        public UDPMulticastClient()
+        {
+            this.mGrpAdr = IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP"));
+            this.port = Int32.Parse(ConfigurationManager.AppSettings.Get("Port"));
+            this.client = new UdpClient(port,AddressFamily.InterNetwork);
+            client.JoinMulticastGroup(mGrpAdr);
+
+        }
+
         public UDPMulticastClient(IPAddress ipAddress, int port)
         {
             this.mGrpAdr = ipAddress;
@@ -23,9 +34,6 @@ namespace MulticastAdapter.Implementation
             this.client = new UdpClient(port, AddressFamily.InterNetwork);
             client.JoinMulticastGroup(mGrpAdr);
         }
-
-
-
 
         private void ValidateSocket()
         {
@@ -56,9 +64,7 @@ namespace MulticastAdapter.Implementation
 
         public void SendMessageToMulticastGroup(byte[] msg)
         {
-            Console.WriteLine("try to send Message under IP " + mGrpAdr + " Port " + port);
             client.Send(msg, msg.Length, new IPEndPoint(mGrpAdr, port));
-            Console.WriteLine("Sending done");
         }
 
     }

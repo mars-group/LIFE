@@ -20,9 +20,9 @@ namespace MulticastAdapter.Test
         public static void Main(string[] args)
         {
 
-            int port = 5100;
+          
             string input = "";
-            IPAddress multicastAddress = IPAddress.Parse("224.10.99.1");
+           
             ASCIIEncoding ASCII = new ASCIIEncoding();
             TextReciever textReciever = new TextReciever();
 
@@ -40,7 +40,7 @@ namespace MulticastAdapter.Test
             
             List<NetworkInterface> multicastInterfaces = new List<NetworkInterface>();
             
-            IMulticastClientAdapter multicastClient = new UDPMulticastClient(multicastAddress, port);
+            IMulticastClientAdapter multicastClient = new UDPMulticastClient();
             Console.WriteLine("<<Hello, willkommen zum super aufregenden Multicastchat");
             Console.WriteLine("<<Type 'quit' to Exit the chat. ");
 
@@ -69,7 +69,7 @@ namespace MulticastAdapter.Test
 
         public TextReciever()
         {
-            multicastReciever = new UDPMulticastReceiver(IPAddress.Parse("224.10.99.1"), 5100);
+            multicastReciever = new UDPMulticastReceiver();
         }
 
         public void readNextMessage()

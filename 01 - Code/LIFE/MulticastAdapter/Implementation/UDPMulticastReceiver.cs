@@ -18,11 +18,20 @@ namespace MulticastAdapter.Implementation
 
         private UdpClient recieverClient;
         private int sourcePort;
+        
+
+        public UDPMulticastReceiver()
+        {
+            this.sourcePort = Int32.Parse(ConfigurationManager.AppSettings.Get("Port"));
+            recieverClient = new UdpClient(AddressFamily.InterNetwork);
+            recieverClient.JoinMulticastGroup(IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP")));
+            
+            BindSocketToNetworkinterface();
+        }
 
 
         public UDPMulticastReceiver(IPAddress mCastAdr, int sourcePort)
         {
-
             this.sourcePort = sourcePort;
             this.recieverClient = new UdpClient(AddressFamily.InterNetwork);
             recieverClient.JoinMulticastGroup(mCastAdr);
@@ -31,12 +40,14 @@ namespace MulticastAdapter.Implementation
         }
 
 
+
+
+
         /// <summary>
         /// bind the udp socket to an interface
         /// </summary>
         private void BindSocketToNetworkinterface()
         {
-
             //Get all relveant Networkinterfaces(try to filter intrerface that dont enable mutlicast and virtual interfaces)
             var multicastInterfaces = MulticastNetworkUtils.GetAllMulticastInterfaces();
 
