@@ -64,7 +64,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp
         /// </summary>
         private void StartSocket()
         {
-            _listenerSocket = new TcpListener(System.Net.IPAddress.IPv6Any, _endPoint.TcpPort);
+            _listenerSocket = new TcpListener(System.Net.IPAddress.Any, _endPoint.TcpPort);
             _listenerSocket.Start();
         }
 

@@ -20,7 +20,7 @@ namespace Hik.Communication.Scs.Client.Tcp
         public static Socket ConnectToServer(EndPoint endPoint, int timeoutMs)
 
         {
-            var socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
            
 
 
