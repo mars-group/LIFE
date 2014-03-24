@@ -42,6 +42,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -52,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Messages\MulticastMessageFactory.cs" />
+    <Compile Include="Implementation\Messages\NodeRegistryMessage.cs" />
+    <Compile Include="Implementation\Messages\NodeRegistryMessageType.cs" />
     <Compile Include="Implementation\NodeRegistryImpl.cs" />
     <Compile Include="Implementation\NodeRegistryManager.cs" />
     <Compile Include="Interface\INodeRegistry.cs" />

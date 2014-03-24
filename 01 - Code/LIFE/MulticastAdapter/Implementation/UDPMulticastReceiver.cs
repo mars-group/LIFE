@@ -13,7 +13,7 @@ using MulticastAdapter.Interface;
 
 namespace MulticastAdapter.Implementation
 {
-    class UDPMulticastReceiver : IMulticastReciever
+    public class UDPMulticastReceiver : IMulticastReciever
     {
 
         private UdpClient recieverClient;

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
 using Newtonsoft.Json;
 
@@ -23,36 +24,28 @@ namespace NodeRegistry.Implementation
 
         public NodeRegistryManager()
         {
-            if (Boolean.Parse(ConfigurationManager.AppSettings.Get("ReadNodesFromConfig")))
-            {
-               ReadNodesFromAppConfig();
-            }
-        }
-
-        private void ReadNodesFromAppConfig()
-        {
-             String[] setupNodes = ConfigurationManager.AppSettings.GetValues("SetupNoes");
-
-            foreach (var IP in setupNodes)
-            {
-              
-            }
-
+            activeNodeList = new List<NodeInformationType>();
+            Reciever = new UDPMulticastReceiver();
 
         }
-
+        
         public List<NodeInformationType> GetActiveNodes()
         {
             return activeNodeList.Select(type => type).ToList();
         }
 
+        private void ListenOnMulticastChannel()
+        {
+            
 
-        
+
+
+        }
 
 
     }
 
 
-   
+
 
 }

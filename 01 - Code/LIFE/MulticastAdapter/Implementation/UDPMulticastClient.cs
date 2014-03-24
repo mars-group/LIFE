@@ -10,7 +10,7 @@ using MulticastAdapter.Interface;
 
 namespace MulticastAdapter.Implementation
 {
-    class UDPMulticastClient : IMulticastClientAdapter
+    public class UDPMulticastClient : IMulticastClientAdapter
     {
         private UdpClient client;
         private IPAddress mGrpAdr;
