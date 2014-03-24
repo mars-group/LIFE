@@ -37,8 +37,9 @@ namespace Hik.Communication.ScsServices.Service
         /// <summary>
         /// Gets the client proxy interface that provides calling client methods remotely.
         /// </summary>
+        /// <param name="serviceID">The ID of the ServiceObject on the Server</param>
         /// <typeparam name="T">Type of client interface</typeparam>
         /// <returns>Client interface</returns>
-        T GetClientProxy<T>() where T : class;
+        T GetClientProxy<T>(Guid serviceID) where T : class;
     }
 }

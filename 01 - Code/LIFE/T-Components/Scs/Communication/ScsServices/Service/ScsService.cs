@@ -39,5 +39,16 @@ namespace Hik.Communication.ScsServices.Service
                 _currentClient = value;
             }
         }
+
+        /// <summary>
+        /// Initializes a new ScsService Class with a unique Guid
+        /// </summary>
+        /// <param name="serviceGuid">Optional parameter to set the Guid of this Service. Usually auto-generated.</param>
+        protected ScsService(byte[] serviceGuid = null)
+        {
+            ServiceID = serviceGuid != null ? new Guid(serviceGuid) : Guid.NewGuid();
+        }
+
+        public Guid ServiceID { get; private set; }
     }
 }
