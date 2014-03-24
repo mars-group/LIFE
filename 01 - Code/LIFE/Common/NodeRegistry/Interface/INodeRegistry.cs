@@ -29,5 +29,8 @@ namespace NodeRegistry.Interface
         /// <param name="nodeType"></param>
         /// <returns></returns>
         List<NodeInformationType> GetAllNodesByType(NodeType nodeType);
+
+        void LeaveCluster();
+
     }
 }

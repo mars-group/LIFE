@@ -22,6 +22,8 @@ namespace MulticastAdapter.Implementation
 
         public UDPMulticastReceiver()
         {
+
+          
             this.sourcePort = Int32.Parse(ConfigurationManager.AppSettings.Get("Port"));
             recieverClient = new UdpClient(AddressFamily.InterNetwork);
             recieverClient.JoinMulticastGroup(IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP")));

@@ -12,7 +12,7 @@ namespace CommonTypes.DataTypes
     public class NodeEndpoint
     {
         [ProtoMember(1)]
-        public IPAddress IpAddress { get; private set; }
+        public string IpAddress { get; private set; }
         
         [ProtoMember(2)]
         public int Port { get; private set; }
@@ -22,7 +22,7 @@ namespace CommonTypes.DataTypes
             
         }
 
-        public NodeEndpoint(IPAddress ipAddress, int port)
+        public NodeEndpoint(string ipAddress, int port)
         {
             IpAddress = ipAddress;
             Port = port; 

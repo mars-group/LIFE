@@ -9,7 +9,7 @@ using ProtoBuf;
 
 namespace NodeRegistry.Implementation.Messages
 {
-    class MulticastMessageFactory
+    class NodeRegistryMessageFactory
     {
 
         public static byte[] GetJoinMessage(NodeInformationType informationType)

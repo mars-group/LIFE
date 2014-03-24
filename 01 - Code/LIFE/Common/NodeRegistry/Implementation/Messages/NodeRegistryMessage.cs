@@ -12,18 +12,24 @@ namespace NodeRegistry.Implementation.Messages
     class NodeRegistryMessage
     {
         [ProtoMember(1)]
-        private NodeRegistryMessageType messageType;
-        [ProtoMember(2)]
-        private NodeInformationType nodeInformationType;
+        public NodeRegistryMessageType messageType { get; private set; }
 
+
+        [ProtoMember(2)]
+        public NodeInformationType nodeInformationType { get; private set; }
+
+
+        private NodeRegistryMessage()
+        {
+            
+        }
 
         public NodeRegistryMessage(NodeRegistryMessageType messageType, NodeInformationType informationType)
         {
-
             this.messageType = messageType;
             this.nodeInformationType = informationType;
         }
     }
 
-    
+
 }
