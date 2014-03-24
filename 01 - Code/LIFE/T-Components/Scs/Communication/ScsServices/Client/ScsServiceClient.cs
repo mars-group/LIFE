@@ -100,8 +100,9 @@ namespace Hik.Communication.ScsServices.Client
         /// </summary>
         /// <param name="client">Underlying IScsClient object to communicate with server</param>
         /// <param name="clientObject">The client object that is used to call method invokes in client side.
-        /// May be null if client has no methods to be invoked by server.</param>
-        public ScsServiceClient(IScsClient client, object clientObject)
+        ///     May be null if client has no methods to be invoked by server.</param>
+        /// <param name="serviceID"></param>
+        public ScsServiceClient(IScsClient client, object clientObject, Guid serviceID)
         {
             _client = client;
             _clientObject = clientObject;
@@ -112,7 +113,7 @@ namespace Hik.Communication.ScsServices.Client
             _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
             _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
-            _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this);
+            _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this, serviceID);
             ServiceProxy = (T)_realServiceProxy.GetTransparentProxy();
         }
 
