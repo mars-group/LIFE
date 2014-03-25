@@ -1,5 +1,6 @@
 ﻿
 using Mono.Addins;
+using Mono.Addins.Setup;
 
 [assembly:AddinRoot("HelloWorld" ,"1.0")]
 
@@ -11,7 +12,8 @@ namespace MonoAddins
         {
             AddinManager.Initialize ("./addinRegistry");
 		    AddinManager.Registry.Update ();
-		
+
+
 		    foreach (var cmd in AddinManager.GetExtensionObjects<ICommand> ()){
 			    cmd.Run ();
 	        }

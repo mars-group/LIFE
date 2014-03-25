@@ -16,7 +16,7 @@ namespace NodeRegistryTest
     {
         static void Main(string[] args)
         {
-            INodeRegistry nodeRegistry = new NodeRegistryManager(new NodeInformationType(NodeType.LayerContainer, "blarg", new NodeEndpoint("10.0.0.6", 60100)));
+            INodeRegistry nodeRegistry = new NodeRegistryManager(new NodeInformationType(NodeType.LayerContainer, "blarg", new NodeEndpoint("10.0.0.7", 60100)));
 
 
             var nodeList= new List<NodeInformationType>();

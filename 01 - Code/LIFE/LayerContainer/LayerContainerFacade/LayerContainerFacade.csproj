@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationCoreFactory.cs" />
-    <Compile Include="Implementation\LayerContainerFacade.cs" />
+    <Compile Include="Implementation\LayerContainerFacadeImplementation.cs" />
     <Compile Include="Interfaces\ILayerContainerFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

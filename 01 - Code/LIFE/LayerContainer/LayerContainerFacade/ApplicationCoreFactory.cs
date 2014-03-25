@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using LayerContainerController.Implementation;
 using LayerContainerController.Interfaces;
+using LayerContainerFacade.Implementation;
 using LayerContainerFacade.Interfaces;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
@@ -40,7 +41,13 @@ namespace LayerContainerFacade
                 _containerBuilder.RegisterType<RTEManagerComponent>()
                     .As<IRTEManager>()
                     .InstancePerDependency();
+
+                _containerBuilder.RegisterType<LayerContainerFacadeImplementation>()
+                    .As<ILayerContainerFacade>()
+                    .InstancePerDependency();
             }
+
+            _container = _containerBuilder.Build();
 
             return _container.Resolve<ILayerContainerFacade>();
         }

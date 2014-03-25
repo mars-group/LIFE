@@ -20,6 +20,8 @@ namespace LayerAPI.AddinLoader
             AddinManager.Initialize("./addinRegistry");
             AddinManager.Registry.Update();
 
+
+
             foreach (var layer in AddinManager.GetExtensionObjects<IEventDrivenLayer>())
             {
                 _layers.Add(typeof(IEventDrivenLayer), layer);
