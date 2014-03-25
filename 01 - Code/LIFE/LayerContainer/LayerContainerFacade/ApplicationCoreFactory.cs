@@ -3,6 +3,8 @@ using LayerContainerController.Implementation;
 using LayerContainerController.Interfaces;
 using LayerContainerFacade.Implementation;
 using LayerContainerFacade.Interfaces;
+using LayerFactory.Implementation;
+using LayerFactory.Interface;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
 using PartitionManager.Implementation;
@@ -44,6 +46,12 @@ namespace LayerContainerFacade
 
                 _containerBuilder.RegisterType<LayerContainerFacadeImplementation>()
                     .As<ILayerContainerFacade>()
+                    .InstancePerDependency();
+
+
+
+                _containerBuilder.RegisterType<LayerFactoryComponent>()
+                    .As<ILayerFactory>()
                     .InstancePerDependency();
             }
 

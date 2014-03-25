@@ -1,10 +1,9 @@
-﻿namespace LayerRegistry.Implementation
+﻿using LayerAPI.Interfaces;
+
+namespace LayerRegistry.Implementation
 {
     using System;
-    using System.Collections.Generic;
-    using LayerAPI.AddinLoader;
-    using LayerAPI.Interfaces;
-    using LayerRegistry.Interfaces;
+    using Interfaces;
 
     public class LayerRegistryComponent : ILayerRegistry
     {
@@ -12,25 +11,9 @@
 
         public LayerRegistryComponent()
         {
-            _layerRegistryUseCase = new LayerRegistryUseCase(new AddinLoader());
+            _layerRegistryUseCase = new LayerRegistryUseCase();
 
         }
-
-        public ILayer LoadLayer(Uri layerUri, Guid layerID)
-        {
-            return _layerRegistryUseCase.LoadLayer(layerUri, layerID);
-        }
-
-        public ILayer GetLayerByID(Guid layerID)
-        {
-            return _layerRegistryUseCase.GetLayerByID(layerID);
-        }
-
-        public IList<ILayer> GetAllLayers()
-        {
-            return _layerRegistryUseCase.GetAllLayers();
-        }
-
         public ILayer RemoveLayerInstance(Guid layerID)
         {
             return _layerRegistryUseCase.RemoveLayerInstance(layerID);
@@ -39,6 +22,16 @@
         public void ResetLayerRegistry()
         {
             _layerRegistryUseCase.ResetLayerRegistry();
+        }
+
+        public ILayer GetLayerInstance(Type parameterType)
+        {
+            return _layerRegistryUseCase.GetLayerInstance(parameterType);
+        }
+
+        public void RegisterLayer(ILayer layer)
+        {
+            _layerRegistryUseCase.RegisterLayer(layer);
         }
     }
 }

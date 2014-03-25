@@ -1,6 +1,7 @@
 ﻿
+using System;
+using LayerAPI.AddinLoader;
 using Mono.Addins;
-using Mono.Addins.Setup;
 
 [assembly:AddinRoot("HelloWorld" ,"1.0")]
 
@@ -10,15 +11,12 @@ namespace MonoAddins
     {
         static void Main(string[] args)
         {
-            AddinManager.Initialize ("./addinRegistry");
-		    AddinManager.Registry.Update ();
-
-
-		    foreach (var cmd in AddinManager.GetExtensionObjects<ICommand> ()){
-			    cmd.Run ();
-	        }
+            var addinLoader = new AddinLoader();
+            var exLayer = addinLoader.LoadLayer(typeof(ExampleLayer.ExampleLayer));
+            var result = addinLoader.LoadLayer(typeof(AwesomeExampleLayer.AwesomeExampleLayer));
+            var awesomeLayer = result.Type.GetConstructors()[0].Invoke(new []{exLayer.CreateInstance()});
+            Console.WriteLine("result=" + awesomeLayer.GetType());
+            Console.ReadLine();
         }
     }
-
-
 }

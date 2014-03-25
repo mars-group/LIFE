@@ -2,39 +2,14 @@
 namespace LayerRegistry.Interfaces
 {
     using System;
-    using System.Collections.Generic;
     using LayerAPI.Interfaces;
 
     /// <summary>
     /// The LayerRegistry. 
-    /// Takes care of loading layers from remote HTTP location
-    /// and / or creating remote stubs if layer needs them as dependencies.
+    /// Takes care of resolving layer instances locally and remotely
     /// </summary>
     public interface ILayerRegistry
     {
-        /// <summary>
-        /// Loads and instantiates the layer with ID layerID from 
-        /// location layerUri.
-        /// </summary>
-        /// <param name="layerUri">The download link for the layer addin</param>
-        /// <param name="layerID">The unique ID of the layer</param>
-        /// <returns></returns>
-        ILayer LoadLayer(Uri layerUri, Guid layerID);
-
-        /// <summary>
-        /// Returns a layer by its ID. 
-        /// </summary>
-        /// <param name="layerID">The unique ID of the layer</param>
-        /// <returns>ILayer if found</returns>
-        /// <throws>LayerNotPresentException if no layer with ID layerID can be found.</throws>
-        ILayer GetLayerByID(Guid layerID);
-
-        /// <summary>
-        /// Returns all layers currently instantiated at this node.
-        /// </summary>
-        /// <returns>List of layers if any, empty List otherwise.</returns>
-        IList<ILayer> GetAllLayers();
-
         /// <summary>
         /// Removes the layer with instance layerID.
         /// CAUTION: Can not be undone! Use only in re-partitioning process
@@ -50,5 +25,18 @@ namespace LayerRegistry.Interfaces
         /// CAUTION: This cannot be undone!
         /// </summary>
         void ResetLayerRegistry();
+
+        /// <summary>
+        /// Returns an instance of parameterType either as local object or as a stub
+        /// </summary>
+        /// <param name="parameterType"></param>
+        /// <returns></returns>
+        ILayer GetLayerInstance(Type parameterType);
+
+        /// <summary>
+        /// Registers layer as being instantiated on this node
+        /// </summary>
+        /// <param name="layer"></param>
+        void RegisterLayer(ILayer layer);
     }
 }

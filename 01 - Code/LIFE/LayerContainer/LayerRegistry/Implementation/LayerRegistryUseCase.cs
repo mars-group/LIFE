@@ -1,36 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using NChordLib;
 
 
 namespace LayerRegistry.Implementation
 {
-    using LayerAPI.AddinLoader;
+
     using LayerAPI.Interfaces;
 
-    using LayerRegistry.Interfaces;
+    using Interfaces;
 
+    /// <summary>
+    /// TODO: Use http://nchord.sourceforge.net/ and store information in DHT
+    /// </summary>
     class LayerRegistryUseCase : ILayerRegistry
     {
-        private readonly IAddinLoader addinLoader;
 
-        public LayerRegistryUseCase(IAddinLoader addinLoader)
+        public LayerRegistryUseCase()
         {
-            this.addinLoader = addinLoader;
-        }
-
-        public ILayer LoadLayer(Uri layerUri, Guid layerID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ILayer GetLayerByID(Guid layerID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<ILayer> GetAllLayers()
-        {
-            throw new NotImplementedException();
+            ChordServer.LocalNode = new ChordNode(
+                System.Net.Dns.GetHostName(),
+                int.Parse(ConfigurationManager.AppSettings.Get("NChordPort"))
+                );
         }
 
         public ILayer RemoveLayerInstance(Guid layerID)
@@ -39,6 +31,16 @@ namespace LayerRegistry.Implementation
         }
 
         public void ResetLayerRegistry()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILayer GetLayerInstance(Type parameterType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegisterLayer(ILayer layer)
         {
             throw new NotImplementedException();
         }

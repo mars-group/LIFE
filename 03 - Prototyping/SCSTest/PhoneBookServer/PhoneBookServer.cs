@@ -47,7 +47,7 @@ namespace PhoneBookServer
                 if (value != Title)
                 {
                     _title = value;
-                    OnPropertyChanged("Title");
+                    //OnPropertyChanged("Title");
                 }
             }
         }

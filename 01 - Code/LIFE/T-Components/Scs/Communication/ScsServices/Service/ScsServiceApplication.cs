@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using Hik.Collections;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Messengers;
@@ -434,14 +435,14 @@ namespace Hik.Communication.ScsServices.Service
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             {
                 // send PropertyChangedMessage to all subscribed clients
-                foreach (var scsServerClient in _clients.GetAllItems())
+                Parallel.ForEach(_clients.GetAllItems(), messenger =>
                 {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Invoke(Service, null);
 
 
                     try
                     {
-                        scsServerClient.SendMessage(new PropertyChangedMessage(newValue,
+                        messenger.SendMessage(new PropertyChangedMessage(newValue,
                             _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Name));
                     }
                     catch
@@ -449,8 +450,7 @@ namespace Hik.Communication.ScsServices.Service
                         // suppress all exceptions on purpose, since it might happen, that clients have disconnected meanwhile
                         // The send command will fail in that case, but that's ok.
                     }
-                    
-                }
+                });
             }
 
             /// <summary>

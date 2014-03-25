@@ -1,13 +1,12 @@
-﻿
-using System.Collections.Generic;
-using LayerAPI.Interfaces;
+﻿using System;
+using Mono.Addins;
 
 namespace LayerAPI.AddinLoader
 {
     public interface IAddinLoader
     {
-        void LoadAddins();
+        void UpdateAddinRegistry();
 
-        IEnumerable<ILayer> GetAllLayers(); 
+        TypeExtensionNode LoadLayer(Uri layerUri, Type layerType);
     }
 }
