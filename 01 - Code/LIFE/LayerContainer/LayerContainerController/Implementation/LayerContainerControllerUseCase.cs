@@ -1,9 +1,7 @@
 ﻿namespace LayerContainerController.Implementation
 {
     using NodeRegistry.Interface;
-
     using PartitionManager.Interfaces;
-
     using RTEManager.Interfaces;
 
     public class LayerContainerControllerUseCase
