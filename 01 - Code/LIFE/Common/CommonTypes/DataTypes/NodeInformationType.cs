@@ -32,7 +32,7 @@ namespace CommonTypes.DataTypes
             NodeEndpoint = nodeEndpoint;
         }
 
-
+         
         
 
     }

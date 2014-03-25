@@ -22,7 +22,9 @@ namespace MulticastAdapter.Implementation
         {
             this.mGrpAdr = IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP"));
             this.port = Int32.Parse(ConfigurationManager.AppSettings.Get("Port"));
-            this.client = new UdpClient(port,AddressFamily.InterNetwork);
+            this.client = new UdpClient(port, AddressFamily.InterNetwork);
+            
+          
             client.JoinMulticastGroup(mGrpAdr);
 
         }
@@ -32,10 +34,30 @@ namespace MulticastAdapter.Implementation
             this.mGrpAdr = ipAddress;
             this.port = port;
             this.client = new UdpClient(port, AddressFamily.InterNetwork);
+           
             client.JoinMulticastGroup(mGrpAdr);
         }
 
-        private void ValidateSocket()
+
+        private void BindSocketToInterface()
+        {
+            
+
+            BindSocketToInterfaceByIP();
+        }
+
+        private void BindSocketToInterfaceByIP()
+        {
+            client.Client.Bind(new IPEndPoint(IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetSendingInterfaceByIPv4")), port));
+        }
+
+        private void BindSocketToInterfaceByName()
+        {
+            throw new NotImplementedException();
+        }
+
+
+    private void ValidateSocket()
         {
             throw new NotImplementedException();
         }
