@@ -18,7 +18,7 @@ namespace PhoneBookClient
             //10048 TCP port.
 
             _client = ScsServiceClientBuilder.CreateClient<IPhoneBookService>(
-                new ScsTcpEndPoint(IPAddress.Parse("10.0.0.7").ToString(), BasePort), serviceID);
+                new ScsTcpEndPoint(IPAddress.Loopback.ToString(), BasePort), serviceID);
 
             //Connect to the server
             _client.Connect();

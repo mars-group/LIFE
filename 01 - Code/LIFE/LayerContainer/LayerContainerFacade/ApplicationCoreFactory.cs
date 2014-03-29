@@ -19,6 +19,11 @@ namespace LayerContainerFacade
         private static IContainer _container;
         private static ContainerBuilder _containerBuilder;
 
+        /// <summary>
+        /// Returns a new instance of a LayerContainerFacade.
+        /// Containing all depenencies.
+        /// </summary>
+        /// <returns></returns>
         public static ILayerContainerFacade GetLayerContainerFacade()
         {
             if (_container == null)
@@ -53,9 +58,11 @@ namespace LayerContainerFacade
                 _containerBuilder.RegisterType<LayerFactoryComponent>()
                     .As<ILayerFactory>()
                     .InstancePerDependency();
+
+
+                _container = _containerBuilder.Build();
             }
 
-            _container = _containerBuilder.Build();
 
             return _container.Resolve<ILayerContainerFacade>();
         }
