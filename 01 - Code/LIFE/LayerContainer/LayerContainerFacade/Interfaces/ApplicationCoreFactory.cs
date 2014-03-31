@@ -50,6 +50,8 @@ namespace LayerContainerFacade.Interfaces
                 _containerBuilder.RegisterType<LayerContainerFacadeImpl>()
                     .As<ILayerContainerFacade>()
                     .InstancePerDependency();
+
+                _container = _containerBuilder.Build();
             }
 
             return _container.Resolve<ILayerContainerFacade>();

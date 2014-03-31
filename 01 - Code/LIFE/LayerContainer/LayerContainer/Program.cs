@@ -1,4 +1,5 @@
-﻿using LayerContainerFacade;
+﻿using System;
+using LayerContainerFacade;
 using LayerContainerFacade.Interfaces;
 
 namespace LayerContainer
@@ -9,6 +10,8 @@ namespace LayerContainer
         static void Main(string[] args)
         {
             var _facade = ApplicationCoreFactory.GetLayerContainerFacade();
+            
+            Console.ReadLine();
         }
     }
 }
