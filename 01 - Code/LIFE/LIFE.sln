@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulation Manager", "Simulation Manager", "{060A5DF3-4C49-402B-9B3F-142A9ECD30B1}"
 EndProject
@@ -62,6 +62,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerFactory", "LayerContainer\LayerFactory\LayerFactory.csproj", "{A88C77DB-0DAC-46D5-8136-C27B3D72717F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationManagerController", "SimulationManagerController\SimulationManagerController.csproj", "{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2894E98B-0CAF-47F4-A7E0-1AF9FA565906}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerContainerComponentTests", "Tests\LayerContainerComponentTests\LayerContainerComponentTests.csproj", "{528AB6AF-7217-4603-BC96-4893D9FD9C65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -145,6 +149,10 @@ Global
 		{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{528AB6AF-7217-4603-BC96-4893D9FD9C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{528AB6AF-7217-4603-BC96-4893D9FD9C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{528AB6AF-7217-4603-BC96-4893D9FD9C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{528AB6AF-7217-4603-BC96-4893D9FD9C65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,5 +177,6 @@ Global
 		{6C7F5166-6D0F-4CD9-B95B-14EBB11F7033} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
 		{20A316C2-8779-474D-98FB-A13DAC9043AB} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
+		{528AB6AF-7217-4603-BC96-4893D9FD9C65} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 	EndGlobalSection
 EndGlobal
