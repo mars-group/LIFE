@@ -18,12 +18,12 @@ namespace NodeRegistryTest
             var nodeName = Console.ReadLine();
 
             Console.WriteLine("Good job Human. Now enter your IP, cause I am to lazy to parse it from your interface.");
-            Console.Write("<< ");
+            Console.WriteLine("wait chris is made, so am i ... i parse it.");
 
-            var ip = Console.ReadLine();
+      
 
 
-            INodeRegistry nodeRegistry = new NodeRegistryManager(new NodeInformationType(NodeType.LayerContainer, nodeName, new NodeEndpoint(ip, 60100)));
+            INodeRegistry nodeRegistry = new NodeRegistryManager(nodeName);
 
             Console.WriteLine("Ok. Node Registry ist starting, brace yourself!");
 
