@@ -1,4 +1,5 @@
 ﻿using LayerContainerFacade;
+using LayerContainerFacade.Interfaces;
 
 namespace LayerContainer
 {
