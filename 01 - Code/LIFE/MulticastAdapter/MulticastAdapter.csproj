@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Implementation\MulticastNetworkUtils.cs" />
     <Compile Include="Implementation\UDPMulticastReceiver.cs" />
-    <Compile Include="Implementation\UDPMulticastClient.cs" />
+    <Compile Include="Implementation\UDPMulticastSender.cs" />
     <Compile Include="Interface\Exceptions\InvalidConfigurationException.cs" />
     <Compile Include="Interface\IMulticastClientAdapter.cs" />
     <Compile Include="Interface\IMulticastReciever.cs" />

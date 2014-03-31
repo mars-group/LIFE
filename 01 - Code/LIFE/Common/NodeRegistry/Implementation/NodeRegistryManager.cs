@@ -21,7 +21,7 @@ namespace NodeRegistry.Implementation
 {
     public class NodeRegistryManager : INodeRegistry
     {
-        private Dictionary<String,NodeInformationType> activeNodeList;
+        private Dictionary<String, NodeInformationType> activeNodeList;
         private IMulticastReciever reciever;
         private IMulticastClientAdapter clientAdapter;
         private NodeInformationType nodeInformation;
@@ -30,46 +30,133 @@ namespace NodeRegistry.Implementation
 
         public NodeRegistryManager(NodeInformationType nodeInformation)
         {
-            activeNodeList = new Dictionary<string, NodeInformationType>();
-            reciever = new UDPMulticastReceiver();
-            clientAdapter = new UDPMulticastClient();
+            
+            SetupNetworkAdapters();
+
+            this.activeNodeList = new Dictionary<string, NodeInformationType>();
+
             this.nodeInformation = nodeInformation;
+
             this.listenThread = new Thread(new ThreadStart(this.Listen));
+
             listenThread.Start();
 
         }
 
-    
+        public NodeRegistryManager(string nodeName, NodeType nodeType)
+        {
+            SetupNetworkAdapters();
+
+            this.activeNodeList = new Dictionary<string, NodeInformationType>();
+
+            this.nodeInformation = new NodeInformationType(nodeType, nodeName, ParseNodeEndpointFromConfig());
+
+            this.listenThread = new Thread(new ThreadStart(this.Listen));
+
+            listenThread.Start();
+        }
+
+
+        public NodeRegistryManager(string nodeName)
+        {
+            SetupNetworkAdapters();
+
+            this.activeNodeList = new Dictionary<string, NodeInformationType>();
+           
+            this.nodeInformation = new NodeInformationType(ParseNodeTypeFromConfig(), nodeName, ParseNodeEndpointFromConfig());
+
+            this.listenThread = new Thread(new ThreadStart(this.Listen));
+
+            listenThread.Start();
+        }
+        
+
+        public NodeRegistryManager()
+        {
+            SetupNetworkAdapters();
+
+            this.activeNodeList = new Dictionary<string, NodeInformationType>();
+           
+            this.nodeInformation = ParseNodeInformationTypeFromConfig();
+
+            this.listenThread = new Thread(new ThreadStart(this.Listen));
+
+            listenThread.Start();
+        }
+
+        private void SetupNetworkAdapters()
+        {
+            this.reciever = new UDPMulticastReceiver();
+            this.clientAdapter = new UDPMulticastSender();
+        }
+
+        private NodeEndpoint ParseNodeEndpointFromConfig()
+        {
+            return new NodeEndpoint(
+                ConfigurationManager.AppSettings.Get("NodeEndPointIP"),
+                Int32.Parse(ConfigurationManager.AppSettings.Get("NodeEndPointPort"))
+                );
+        }
+
+
+
+        private NodeInformationType ParseNodeInformationTypeFromConfig()
+        {
+            ConfigurationManager.AppSettings.Get("");
+
+            return new NodeInformationType(
+                ParseNodeTypeFromConfig(),
+                ConfigurationManager.AppSettings.Get("NodeIdentifier"),
+                ParseNodeEndpointFromConfig()
+                );
+        }
+
+        private NodeType ParseNodeTypeFromConfig()
+        {
+            var configEntry = ConfigurationManager.AppSettings.Get("NodeType");
+
+            switch (Int32.Parse(configEntry))
+            {
+                case 0:
+                    return NodeType.LayerContainer; 
+                case 1:
+                    return NodeType.SimulationManager;
+                case 2: 
+                    return NodeType.SimulationController;
+            }
+            throw new ArgumentException("Illigale Argument for NodeType. Valid Parameter are 0 for LayerContainer, 1 for SimulationManager , 2 for SimulationController");
+
+        }
 
         public void DropAllNodes()
         {
             activeNodeList = new Dictionary<string, NodeInformationType>();
         }
 
-        public  void Listen()
+        public void Listen()
         {
             while (Thread.CurrentThread.IsAlive)
             {
                 byte[] msg = reciever.readMulticastGroupMessage();
                 var stream = new MemoryStream(msg);
                 var nodeRegestryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
-                AnswerMessage(nodeRegestryMessage); 
+                AnswerMessage(nodeRegestryMessage);
             }
-            
+
         }
 
-        private  void AnswerMessage(NodeRegistryMessage nodeRegestryMessage)
+        private void AnswerMessage(NodeRegistryMessage nodeRegestryMessage)
         {
 
-          
-             switch (nodeRegestryMessage.messageType)
+
+            switch (nodeRegestryMessage.messageType)
             {
                 case NodeRegistryMessageType.Answer:
-                    if (! activeNodeList.ContainsKey(nodeRegestryMessage.nodeInformationType.NodeIdentifier))
+                    if (!activeNodeList.ContainsKey(nodeRegestryMessage.nodeInformationType.NodeIdentifier))
                     {
                         activeNodeList.Add(nodeRegestryMessage.nodeInformationType.NodeIdentifier, nodeRegestryMessage.nodeInformationType);
                     }
-                    
+
                     break;
                 case NodeRegistryMessageType.Join:
                     clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetAnswerMessage(nodeInformation));

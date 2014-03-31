@@ -1,47 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Odbc;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Exceptions;
 
 namespace MulticastAdapter.Implementation
 {
-    public class UDPMulticastClient : IMulticastClientAdapter
+    public class UDPMulticastSender : IMulticastClientAdapter
     {
-        private UdpClient client;
+        private IList<UdpClient> clients;
         private IPAddress mGrpAdr;
         private int sendingPort;
         private int listenPort;
 
 
 
-        public UDPMulticastClient()
+        public UDPMulticastSender()
         {
             this.mGrpAdr = IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP"));
             this.sendingPort = Int32.Parse(ConfigurationManager.AppSettings.Get("SendingPort"));
             this.listenPort = Int32.Parse(ConfigurationManager.AppSettings.Get("ListenPort"));
-            this.client = new UdpClient(GetBindingEndpoint());
-
-            GetBindingEndpoint();
-            client.JoinMulticastGroup(mGrpAdr, IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetSendingInterfaceByIPv4")));
+            this.clients = GetSendingInterfaces();
 
         }
 
-        public UDPMulticastClient(IPAddress ipAddress, int sendingPort, int listenPort)
+        public UDPMulticastSender(IPAddress ipAddress, int sendingPort, int listenPort)
         {
             this.mGrpAdr = ipAddress;
             this.sendingPort = sendingPort;
             this.listenPort = listenPort;
-            this.client = new UdpClient(GetBindingEndpoint());
+            this.clients = GetSendingInterfaces();
 
-            GetBindingEndpoint();
-            client.JoinMulticastGroup(mGrpAdr);
+        }
+
+        private IList<UdpClient> GetSendingInterfaces()
+        {
+
+            IList<UdpClient> resultList = new List<UdpClient>();
+
+            if (Boolean.Parse(ConfigurationManager.AppSettings.Get("SendOnAllInterfaces")))
+            {
+                foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
+                {
+                    foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
+                    {
+                        if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
+                        {
+                            var updClient = new UdpClient(new IPEndPoint(unicastAddress.Address, sendingPort));
+                            updClient.JoinMulticastGroup(mGrpAdr, IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetSendingInterfaceByIPv4")));
+                            resultList.Add(updClient);
+                        }
+                    }   
+                }
+            }
+            else
+            {
+                var updClient = new UdpClient(GetBindingEndpoint());
+                updClient.JoinMulticastGroup(mGrpAdr, IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetSendingInterfaceByIPv4")));
+                resultList.Add(updClient);
+            }
+
+
+            return resultList;
         }
 
 
@@ -100,33 +122,34 @@ namespace MulticastAdapter.Implementation
 
         public void CloseSocket()
         {
-            client.DropMulticastGroup(mGrpAdr);
-            client.Close();
+            foreach (var client in clients)
+            {
+                client.DropMulticastGroup(mGrpAdr);
+                client.Close();   
+            }
+
+           
         }
 
         public void ReopenSocket()
         {
-            client = new UdpClient(sendingPort, AddressFamily.InterNetwork);
-            client.JoinMulticastGroup(mGrpAdr);
+            CloseSocket();
+            clients = GetSendingInterfaces();
         }
 
-        public void ReopenSocket(IPAddress ipAddress, int _port)
-        {
-            this.mGrpAdr = ipAddress;
-            this.sendingPort = _port;
-
-            client = new UdpClient(sendingPort, AddressFamily.InterNetwork);
-            client.JoinMulticastGroup(ipAddress);
-        }
+        
 
 
         public void SendMessageToMulticastGroup(byte[] msg)
         {
-            if (client.Client != null)
+            foreach (var client in clients)
             {
-                client.Send(msg, msg.Length, new IPEndPoint(mGrpAdr, listenPort));   
+                if (client.Client != null)
+                {
+                    client.Send(msg, msg.Length, new IPEndPoint(mGrpAdr, listenPort));
+                }
             }
-           
+            
         }
 
     }

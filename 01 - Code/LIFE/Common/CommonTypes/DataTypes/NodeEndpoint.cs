@@ -1,7 +1,5 @@
-﻿using System.Net;
+﻿using ProtoBuf;
 using System.Text;
-using CommonTypes.Types;
-using ProtoBuf;
 
 namespace CommonTypes.DataTypes
 {
