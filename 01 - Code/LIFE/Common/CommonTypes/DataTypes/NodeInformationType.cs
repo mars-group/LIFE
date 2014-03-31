@@ -11,7 +11,7 @@ namespace CommonTypes.DataTypes
     {
         [ProtoMember(1)]
         public NodeType NodeType { get; private set; }
-        
+
         [ProtoMember(2)]
         public string NodeIdentifier { get; private set; }
 
@@ -21,7 +21,7 @@ namespace CommonTypes.DataTypes
 
         private NodeInformationType()
         {
-            
+
         }
 
         public NodeInformationType(NodeType nodeType, string nodeIdentifier, NodeEndpoint nodeEndpoint)
@@ -34,15 +34,23 @@ namespace CommonTypes.DataTypes
 
         public override string ToString()
         {
-              var sb = new  StringBuilder();
-                
-              return sb.AppendFormat("[NodeIdentifier {0}, NodeNodeType {1}, NodeEndpoint {2}]", NodeIdentifier, NodeType, NodeEndpoint).ToString();
+            var sb = new StringBuilder();
 
-
-           
+            return sb.AppendFormat("[NodeIdentifier{0}, NodeType{1}, NodeEndpoint{2}]", NodeIdentifier, NodeType, NodeEndpoint).ToString();
         }
-       
-        
 
+        public override bool Equals(object obj)
+        {
+            if (obj is NodeInformationType)
+            {
+                var nodeInfo = (NodeInformationType)obj;
+                if (nodeInfo.NodeIdentifier.Equals(NodeIdentifier))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
     }
 }

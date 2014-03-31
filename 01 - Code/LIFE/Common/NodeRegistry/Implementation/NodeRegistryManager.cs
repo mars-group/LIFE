@@ -1,20 +1,16 @@
-﻿using System;
+﻿using CommonTypes.DataTypes;
+using CommonTypes.Types;
+using MulticastAdapter.Implementation;
+using MulticastAdapter.Interface;
+using NodeRegistry.Implementation.Messages;
+using NodeRegistry.Interface;
+using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using CommonTypes.DataTypes;
-using CommonTypes.Types;
-using MulticastAdapter.Implementation;
-using MulticastAdapter.Interface;
-using Newtonsoft.Json;
-using NodeRegistry.Implementation.Messages;
-using NodeRegistry.Interface;
-using ProtoBuf;
 
 
 namespace NodeRegistry.Implementation
@@ -22,72 +18,50 @@ namespace NodeRegistry.Implementation
     public class NodeRegistryManager : INodeRegistry
     {
         private Dictionary<String, NodeInformationType> activeNodeList;
+        private NodeInformationType localNodeInformation;
         private IMulticastReciever reciever;
         private IMulticastClientAdapter clientAdapter;
-        private NodeInformationType nodeInformation;
+
         private Thread listenThread;
+
 
 
         public NodeRegistryManager(NodeInformationType nodeInformation)
         {
-            
-            SetupNetworkAdapters();
 
             this.activeNodeList = new Dictionary<string, NodeInformationType>();
+            this.localNodeInformation = nodeInformation;
 
-            this.nodeInformation = nodeInformation;
-
-            this.listenThread = new Thread(new ThreadStart(this.Listen));
-
-            listenThread.Start();
-
-        }
-
-        public NodeRegistryManager(string nodeName, NodeType nodeType)
-        {
+            ParseNodeInformationTypeFromConfig();
             SetupNetworkAdapters();
 
-            this.activeNodeList = new Dictionary<string, NodeInformationType>();
-
-            this.nodeInformation = new NodeInformationType(nodeType, nodeName, ParseNodeEndpointFromConfig());
-
-            this.listenThread = new Thread(new ThreadStart(this.Listen));
-
-            listenThread.Start();
         }
-
-
-        public NodeRegistryManager(string nodeName)
-        {
-            SetupNetworkAdapters();
-
-            this.activeNodeList = new Dictionary<string, NodeInformationType>();
-           
-            this.nodeInformation = new NodeInformationType(ParseNodeTypeFromConfig(), nodeName, ParseNodeEndpointFromConfig());
-
-            this.listenThread = new Thread(new ThreadStart(this.Listen));
-
-            listenThread.Start();
-        }
-        
 
         public NodeRegistryManager()
         {
-            SetupNetworkAdapters();
 
             this.activeNodeList = new Dictionary<string, NodeInformationType>();
-           
-            this.nodeInformation = ParseNodeInformationTypeFromConfig();
+            this.localNodeInformation = ParseNodeInformationTypeFromConfig();
+            SetupNetworkAdapters();
 
-            this.listenThread = new Thread(new ThreadStart(this.Listen));
-
-            listenThread.Start();
         }
 
         private void SetupNetworkAdapters()
         {
             this.reciever = new UDPMulticastReceiver();
             this.clientAdapter = new UDPMulticastSender();
+            this.listenThread = new Thread(new ThreadStart(this.Listen));
+
+            listenThread.Start();
+        }
+        
+        private NodeInformationType ParseNodeInformationTypeFromConfig()
+        {
+            return new NodeInformationType(
+                ParseNodeTypeFromConfig(),
+                ConfigurationManager.AppSettings.Get("NodeIdentifier"),
+                ParseNodeEndpointFromConfig()
+                );
         }
 
         private NodeEndpoint ParseNodeEndpointFromConfig()
@@ -98,33 +72,21 @@ namespace NodeRegistry.Implementation
                 );
         }
 
-
-
-        private NodeInformationType ParseNodeInformationTypeFromConfig()
-        {
-            ConfigurationManager.AppSettings.Get("");
-
-            return new NodeInformationType(
-                ParseNodeTypeFromConfig(),
-                ConfigurationManager.AppSettings.Get("NodeIdentifier"),
-                ParseNodeEndpointFromConfig()
-                );
-        }
-
         private NodeType ParseNodeTypeFromConfig()
         {
-            var configEntry = ConfigurationManager.AppSettings.Get("NodeType");
 
-            switch (Int32.Parse(configEntry))
+            var argument = Int32.Parse(ConfigurationManager.AppSettings.Get("NodeType"));
+
+            switch (argument)
             {
                 case 0:
-                    return NodeType.LayerContainer; 
+                    return NodeType.LayerContainer;
                 case 1:
                     return NodeType.SimulationManager;
-                case 2: 
+                case 2:
                     return NodeType.SimulationController;
             }
-            throw new ArgumentException("Illigale Argument for NodeType. Valid Parameter are 0 for LayerContainer, 1 for SimulationManager , 2 for SimulationController");
+            throw new ArgumentException("Illigale Argument for NodeType. Valid Parameter are 0 for LayerContainer, 1 for SimulationManager , 2 for SimulationController. Ypur argument was " + argument + ".");
 
         }
 
@@ -159,7 +121,11 @@ namespace NodeRegistry.Implementation
 
                     break;
                 case NodeRegistryMessageType.Join:
-                    clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetAnswerMessage(nodeInformation));
+                    
+                        clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetAnswerMessage(localNodeInformation));
+                   
+
+
                     break;
                 case NodeRegistryMessageType.Leave:
                     activeNodeList.Remove(nodeRegestryMessage.nodeInformationType.NodeIdentifier);
@@ -172,24 +138,33 @@ namespace NodeRegistry.Implementation
 
         public void LeaveCluster()
         {
-            clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(nodeInformation));
-            clientAdapter.CloseSocket();
+           
+                clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(localNodeInformation));
+            
+
+        }
+
+        private void JoinCluster()
+        {
+
+                clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(localNodeInformation));
+     
+        }
+
+        public void ShutDownNodeRegistry()
+        {
+            LeaveCluster();
             reciever.CloseSocket();
+            clientAdapter.CloseSocket();
             listenThread.Interrupt();
         }
 
-        public void JoinCluster()
-        {
-            clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(nodeInformation));
-        }
-
-
-        public void startDiscovery()
+        public void StartDiscovery()
         {
             JoinCluster();
         }
 
-        public void restartDiscovery()
+        public void RestartDiscovery()
         {
             DropAllNodes();
             LeaveCluster();
