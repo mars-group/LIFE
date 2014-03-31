@@ -35,29 +35,27 @@ namespace LayerContainerFacade
 
                 _containerBuilder.RegisterType<LayerContainerControllerComponent>()
                     .As<ILayerContainerController>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<LayerRegistryComponent>()
                     .As<ILayerRegistry>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<PartitionManagerComponent>()
                     .As<IPartitionManager>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<RTEManagerComponent>()
                     .As<IRTEManager>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<LayerContainerFacadeImplementation>()
                     .As<ILayerContainerFacade>()
                     .InstancePerDependency();
 
-
-
                 _containerBuilder.RegisterType<LayerFactoryComponent>()
                     .As<ILayerFactory>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
 
                 _container = _containerBuilder.Build();

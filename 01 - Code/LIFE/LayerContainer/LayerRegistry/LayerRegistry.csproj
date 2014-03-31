@@ -34,6 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Daylight">
+      <HintPath>..\..\Libraries\Kademlia\Daylight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -50,6 +53,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
