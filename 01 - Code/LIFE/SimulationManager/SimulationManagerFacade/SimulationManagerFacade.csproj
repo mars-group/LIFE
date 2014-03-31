@@ -54,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SimulationManagerController\SimulationManagerController.csproj">
       <Project>{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}</Project>
       <Name>SimulationManagerController</Name>

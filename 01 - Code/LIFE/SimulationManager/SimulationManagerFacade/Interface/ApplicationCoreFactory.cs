@@ -2,7 +2,7 @@
 using ModelContainer.Implementation;
 using ModelContainer.Interfaces;
 using NodeRegistry.Implementation;
-using NodeRegistry.Interfaces;
+using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation;
 using RuntimeEnvironment.Interfaces;
 using SimulationManagerController.Implementation;
@@ -38,7 +38,7 @@ namespace SimulationManagerFacade.Interface
                     .As<ISimulationManagerController>()
                     .InstancePerLifetimeScope();
 
-                builder.RegisterType<NodeRegistryComponent>()
+                builder.RegisterType<NodeRegistryManager>()
                     .As<INodeRegistry>()
                     .InstancePerLifetimeScope();
 
