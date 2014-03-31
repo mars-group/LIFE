@@ -49,8 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractLayers\AbstractDistributedEventDrivenLayer.cs" />
-    <Compile Include="AbstractLayers\AbstractDistributedSteppedLayer.cs" />
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
     <Compile Include="DataTypes\LayerInitData.cs" />

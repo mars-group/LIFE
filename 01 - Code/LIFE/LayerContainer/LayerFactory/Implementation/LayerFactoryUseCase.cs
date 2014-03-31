@@ -10,7 +10,7 @@ namespace LayerFactory.Implementation
     class LayerFactoryUseCase : ILayerFactory
     {
         private readonly ILayerRegistry _layerRegistry;
-        private IAddinLoader _addinLoader;
+        private readonly IAddinLoader _addinLoader;
 
         public LayerFactoryUseCase(ILayerRegistry layerRegistry)
         {

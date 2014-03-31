@@ -8,6 +8,7 @@ namespace PhoneBookServer
 
         static void Main(string[] args)
         {
+
             var pbS = new PhoneBookService(GuidProvider.GetIdenticalGuid());
             //Wait user to stop server by pressing Enter
             Console.WriteLine(

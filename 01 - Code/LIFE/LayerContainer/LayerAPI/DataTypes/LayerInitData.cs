@@ -9,11 +9,8 @@ namespace LayerAPI.DataTypes
     /// </summary>
     public class LayerInitData
     {
-        public DistributionInformation DistributionInformation { get; private set; }
-
-        public LayerInitData(DistributionInformation distributionInformation)
+        public LayerInitData()
         {
-            DistributionInformation = distributionInformation;
         }
 
         // TODO: Maybe some kind of CUBE Object inside here?

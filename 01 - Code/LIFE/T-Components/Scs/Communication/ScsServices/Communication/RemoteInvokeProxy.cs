@@ -32,25 +32,19 @@ namespace Hik.Communication.ScsServices.Communication
         private readonly IDictionary<string,object> _cache;
 
 
-        /// <summary>
-        /// Creates a new RemoteInvokeProxy object.
-        /// </summary>
-        /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
-        /// <param name="serviceID"></param>
-        public RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, Guid serviceID)
+
+
+        protected RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger)
             : base(typeof(TProxy))
         {
-
             _clientMessenger = clientMessenger;
-            _serviceId = serviceID;
-
             // subscribe for new PropertyChangedMessages. Will work since
             // SendAndWaitForReply() does not raise MessageReceived Event
             _clientMessenger.MessageReceived += ClientMessengerOnMessageReceived;
 
             _cache = new Dictionary<string, object>();
 
-            _typeOfTProxy = typeof (TProxy);
+            _typeOfTProxy = typeof(TProxy);
 
             //retreive all methods which are marked as cacheable
             var methodsOfTProxy = _typeOfTProxy.GetMethods();
@@ -72,6 +66,17 @@ namespace Hik.Communication.ScsServices.Communication
             {
                 _cacheableMethods.Add(propertyInfo.GetGetMethod());
             }
+        }
+
+        /// <summary>
+        /// Creates a new RemoteInvokeProxy object.
+        /// </summary>
+        /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
+        /// <param name="serviceID"></param>
+        public RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, Guid serviceID)
+            : this(clientMessenger)
+        {
+            _serviceId = serviceID;
         }
 
         private void ClientMessengerOnMessageReceived(object sender, MessageEventArgs messageEventArgs)

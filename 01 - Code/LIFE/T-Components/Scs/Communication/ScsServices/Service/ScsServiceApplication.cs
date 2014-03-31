@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Hik.Collections;
@@ -228,7 +229,17 @@ namespace Hik.Communication.ScsServices.Service
                 }
                 
                 //Get service object
-                var serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
+                ServiceObject serviceObject;
+                if (invokeMessage.ServiceID.Equals(Guid.Empty))
+                {
+                    // we are not looking for a specific implementation, but just for any, so use first found
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].GetAllItems().First();
+                }
+                else
+                {
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
+                }
+
                 if (serviceObject == null)
                 {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null, new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));

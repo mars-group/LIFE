@@ -3,6 +3,7 @@ using System.Runtime.Remoting.Messaging;
 using Hik.Communication.Scs.Client;
 using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.Messengers;
+using Hik.Communication.ScsServices.Client;
 
 namespace Hik.Communication.ScsServices.Communication
 {
@@ -27,6 +28,12 @@ namespace Hik.Communication.ScsServices.Communication
         /// <param name="serviceID"></param>
         public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client, Guid serviceID)
             : base(clientMessenger, serviceID)
+        {
+            _client = client;
+        }
+
+        public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client)
+            : base(clientMessenger)
         {
             _client = client;
         }
