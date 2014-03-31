@@ -1,4 +1,5 @@
 ﻿using LayerAPI.Interfaces;
+using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation
 {
@@ -9,9 +10,9 @@ namespace LayerRegistry.Implementation
     {
         private readonly ILayerRegistry _layerRegistryUseCase;
 
-        public LayerRegistryComponent()
+        public LayerRegistryComponent(INodeRegistry nodeRegistry)
         {
-            _layerRegistryUseCase = new LayerRegistryUseCase();
+            _layerRegistryUseCase = new LayerRegistryUseCase(nodeRegistry);
 
         }
         public ILayer RemoveLayerInstance(Guid layerID)

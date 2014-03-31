@@ -20,15 +20,13 @@ namespace LayerFactory.Implementation
 
         public ILayer GetLayer<T>(Uri layerUri) where T : ILayer
         {
-            var result = default(T);
-
             var typeExtensionNode = _addinLoader.LoadLayer(layerUri, typeof(T));
             var constructors = typeExtensionNode.GetType().GetConstructors();
 
             // check if there is an empty constructor
             if (constructors.Any(c => c.GetParameters().Length == 0))
             {
-                result = (T) typeExtensionNode.CreateInstance();
+                return (T) typeExtensionNode.CreateInstance();
             }
 
             // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
@@ -43,7 +41,7 @@ namespace LayerFactory.Implementation
                 actualParameters[i] = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
                 i++;
             }
-            result = (T)currentConstructor.Invoke(actualParameters);
+            var result = (T)currentConstructor.Invoke(actualParameters);
 
             _layerRegistry.RegisterLayer(result);
 
