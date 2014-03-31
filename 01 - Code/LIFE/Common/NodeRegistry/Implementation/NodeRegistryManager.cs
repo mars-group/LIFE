@@ -1,7 +1,6 @@
 ﻿using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using MulticastAdapter.Implementation;
-using MulticastAdapter.Interface;
+
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Interface;
 using ProtoBuf;
@@ -15,6 +14,9 @@ using System.Threading;
 
 namespace NodeRegistry.Implementation
 {
+    using MulticastAdapter.Implementation;
+    using MulticastAdapter.Interface;
+
     public class NodeRegistryManager : INodeRegistry
     {
         private Dictionary<String, NodeInformationType> activeNodeList;

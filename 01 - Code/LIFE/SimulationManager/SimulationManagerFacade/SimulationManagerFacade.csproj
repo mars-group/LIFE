@@ -61,10 +61,6 @@
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SimulationManagerController\SimulationManagerController.csproj">
-      <Project>{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}</Project>
-      <Name>SimulationManagerController</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ModelContainer\ModelContainer.csproj">
       <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
       <Name>ModelContainer</Name>
@@ -72,6 +68,10 @@
     <ProjectReference Include="..\RuntimeEnvironment\RuntimeEnvironment.csproj">
       <Project>{CD379E3D-8606-4136-978A-2E1E7DD933A1}</Project>
       <Name>RuntimeEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimulationManagerController\SimulationManagerController.csproj">
+      <Project>{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}</Project>
+      <Name>SimulationManagerController</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
