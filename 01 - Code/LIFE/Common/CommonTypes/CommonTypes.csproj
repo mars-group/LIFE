@@ -52,7 +52,7 @@
     <Compile Include="DataTypes\NodeInformationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransportTypes\SimulationControl\DistributionInformation.cs" />
-    <Compile Include="TransportTypes\SimulationControl\LayerIdType.cs" />
+    <Compile Include="TransportTypes\SimulationControl\LayerInstanceIdType.cs" />
     <Compile Include="TransportTypes\TModel.cs" />
     <Compile Include="TransportTypes\TSimModel.cs" />
     <Compile Include="Types\NodeType.cs" />

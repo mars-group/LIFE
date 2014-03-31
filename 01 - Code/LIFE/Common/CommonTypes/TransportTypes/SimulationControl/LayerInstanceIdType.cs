@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonTypes.TransportTypes.SimulationControl
 {
-    public class LayerIdType
+    public class LayerInstanceIdType
     {
 
     }

@@ -1,4 +1,6 @@
 ﻿
+using CommonTypes.TransportTypes.SimulationControl;
+
 namespace LayerRegistry.Interfaces
 {
     using System;
@@ -11,13 +13,22 @@ namespace LayerRegistry.Interfaces
     public interface ILayerRegistry
     {
         /// <summary>
-        /// Removes the layer with instance layerID.
+        /// Removes the layer with instance layerInstanceId.
+        /// CAUTION: Can not be undone! Use only in re-partitioning process
+        /// or if new simulation shall be startet.
+        /// </summary>
+        /// <param name="layerInstanceId"></param>
+        /// <returns>The removed ILayer, Null if no Layer could be found.</returns>
+        ILayer RemoveLayerInstance(LayerInstanceIdType layerInstanceId);
+
+        /// <summary>
+        /// Removes the layer with instance layerInstanceId.
         /// CAUTION: Can not be undone! Use only in re-partitioning process
         /// or if new simulation shall be startet.
         /// </summary>
         /// <param name="layerID"></param>
         /// <returns>The removed ILayer, Null if no Layer could be found.</returns>
-        ILayer RemoveLayerInstance(Guid layerID);
+        ILayer RemoveLayerInstance(Type layerType);
 
         /// <summary>
         /// Resets the whole LayerRegistry, loosing all implementations, statets and
@@ -32,6 +43,13 @@ namespace LayerRegistry.Interfaces
         /// <param name="parameterType"></param>
         /// <returns></returns>
         ILayer GetLayerInstance(Type parameterType);
+
+        /// <summary>
+        /// Returns an instance of parameterType either as local object or as a stub
+        /// </summary>
+        /// <param name="parameterType"></param>
+        /// <returns></returns>
+        ILayer GetLayerInstance(LayerInstanceIdType layerInstanceId);
 
         /// <summary>
         /// Registers layer as being instantiated on this node
