@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using NChordLib;
 
 
 namespace LayerRegistry.Implementation
@@ -16,13 +15,15 @@ namespace LayerRegistry.Implementation
     /// </summary>
     class LayerRegistryUseCase : ILayerRegistry
     {
+        private readonly int _chordPort;
+        private readonly string _chordSeedHost;
+        private readonly int _chordSeedPort;
 
         public LayerRegistryUseCase()
         {
-            ChordServer.LocalNode = new ChordNode(
-                System.Net.Dns.GetHostName(),
-                int.Parse(ConfigurationManager.AppSettings.Get("NChordPort"))
-                );
+            _chordPort = int.Parse(ConfigurationManager.AppSettings.Get("NChordPort"));
+            _chordSeedPort = int.Parse(ConfigurationManager.AppSettings.Get("NChordSeedPort"));
+            _chordSeedHost = ConfigurationManager.AppSettings.Get("NChordSeedHost");
         }
 
         public ILayer RemoveLayerInstance(Guid layerID)
@@ -44,5 +45,14 @@ namespace LayerRegistry.Implementation
         {
             throw new NotImplementedException();
         }
+
+        #region Private Methods
+
+        private void JoinChordRing()
+        {
+
+        }
+
+        #endregion
     }
 }
