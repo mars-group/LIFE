@@ -45,10 +45,11 @@
     <Compile Include="Implementation\MulticastNetworkUtils.cs" />
     <Compile Include="Implementation\UDPMulticastReceiver.cs" />
     <Compile Include="Implementation\UDPMulticastClient.cs" />
+    <Compile Include="Interface\Exceptions\InvalidConfigurationException.cs" />
     <Compile Include="Interface\IMulticastClientAdapter.cs" />
     <Compile Include="Interface\IMulticastReciever.cs" />
-    <Compile Include="Interface\Exception\MissingArgumentException.cs" />
-    <Compile Include="Interface\Exception\NoInterfaceFoundException.cs" />
+    <Compile Include="Interface\Exceptions\MissingArgumentException.cs" />
+    <Compile Include="Interface\Exceptions\NoInterfaceFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\TextChat.cs" />
   </ItemGroup>

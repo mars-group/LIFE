@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 using CommonTypes.Types;
 using ProtoBuf;
 
@@ -27,5 +28,12 @@ namespace CommonTypes.DataTypes
             IpAddress = ipAddress;
             Port = port; 
         }
+
+        public override string ToString()
+        {
+            return new StringBuilder().AppendFormat("{0} IP {1} Port {2}", this.GetType().Name, IpAddress, Port).ToString();
+        }
+
+
     }
 }

@@ -25,6 +25,7 @@ namespace NodeRegistry.Implementation
         private IMulticastReciever reciever;
         private IMulticastClientAdapter clientAdapter;
         private NodeInformationType nodeInformation;
+        private Thread listenThread;
 
 
         public NodeRegistryManager(NodeInformationType nodeInformation)
@@ -33,7 +34,7 @@ namespace NodeRegistry.Implementation
             reciever = new UDPMulticastReceiver();
             clientAdapter = new UDPMulticastClient();
             this.nodeInformation = nodeInformation;
-            var listenThread = new Thread(new ThreadStart(this.Listen));
+            this.listenThread = new Thread(new ThreadStart(this.Listen));
             listenThread.Start();
 
         }
@@ -47,17 +48,20 @@ namespace NodeRegistry.Implementation
 
         public  void Listen()
         {
-            byte[] msg = reciever.readMulticastGroupMessage();
-            var stream = new MemoryStream(msg);
-            var nodeRegestryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
-            AnswerMessage(nodeRegestryMessage);
+            while (Thread.CurrentThread.IsAlive)
+            {
+                byte[] msg = reciever.readMulticastGroupMessage();
+                var stream = new MemoryStream(msg);
+                var nodeRegestryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
+                AnswerMessage(nodeRegestryMessage); 
+            }
             
         }
 
         private  void AnswerMessage(NodeRegistryMessage nodeRegestryMessage)
         {
 
-            Console.WriteLine("Got new Message yeah");
+          
              switch (nodeRegestryMessage.messageType)
             {
                 case NodeRegistryMessageType.Answer:
@@ -82,6 +86,9 @@ namespace NodeRegistry.Implementation
         public void LeaveCluster()
         {
             clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(nodeInformation));
+            clientAdapter.CloseSocket();
+            reciever.CloseSocket();
+            listenThread.Interrupt();
         }
 
         public void JoinCluster()
@@ -97,7 +104,9 @@ namespace NodeRegistry.Implementation
 
         public void restartDiscovery()
         {
-            throw new NotImplementedException();
+            DropAllNodes();
+            LeaveCluster();
+            JoinCluster();
         }
 
         public List<NodeInformationType> GetAllNodes()

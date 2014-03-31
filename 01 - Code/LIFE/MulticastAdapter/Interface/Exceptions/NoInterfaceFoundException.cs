@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MulticastAdapter.Interface
+namespace MulticastAdapter.Interface.Exceptions
 {
     class NoInterfaceFoundException : Exception
     {

@@ -1,6 +1,8 @@
 ﻿
+using System;
 using System.CodeDom;
 using System.Security.Cryptography;
+using System.Text;
 using CommonTypes.Types;
 using ProtoBuf;
 
@@ -32,7 +34,17 @@ namespace CommonTypes.DataTypes
             NodeEndpoint = nodeEndpoint;
         }
 
-         
+
+        public override string ToString()
+        {
+              var sb = new  StringBuilder();
+                
+              return sb.AppendFormat("[NodeIdentifier {0}, NodeNodeType {1}, NodeEndpoint {2}]", NodeIdentifier, NodeType, NodeEndpoint).ToString();
+
+
+           
+        }
+       
         
 
     }
