@@ -13,17 +13,13 @@ namespace NodeRegistryTest
         {
 
             Console.WriteLine("Enter your Nodename, now!");
-            Console.Write("<< ");
+            Console.WriteLine("wait chris is made, so am i ... i parse it.");
 
-            var nodeName = Console.ReadLine();
+          
 
-            Console.WriteLine("Good job Human. Now enter your IP, cause I am to lazy to parse it from your interface.");
-            Console.Write("<< ");
+            INodeRegistry nodeRegistry = new NodeRegistryManager();
+           
 
-            var ip = Console.ReadLine();
-
-
-            INodeRegistry nodeRegistry = new NodeRegistryManager(new NodeInformationType(NodeType.LayerContainer, nodeName, new NodeEndpoint(ip, 60100)));
 
             Console.WriteLine("Ok. Node Registry ist starting, brace yourself!");
 
@@ -48,7 +44,7 @@ namespace NodeRegistryTest
                 {
                     case 1:
                         Console.WriteLine("joining cluster");
-                        nodeRegistry.startDiscovery();
+                        nodeRegistry.StartDiscovery();
                         Console.WriteLine("done.");
                         break;
                     case 2:

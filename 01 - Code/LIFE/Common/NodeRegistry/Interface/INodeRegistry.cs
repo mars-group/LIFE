@@ -10,12 +10,12 @@ namespace NodeRegistry.Interface
         /// <summary>
         /// Start discovering nodes
         /// </summary>
-        void startDiscovery();
+        void StartDiscovery();
 
         /// <summary>
         /// Reset list of known nodes and restart discovery
         /// </summary>
-        void restartDiscovery();
+        void RestartDiscovery();
 
         /// <summary>
         /// Get all NodeEndpoints currently discovered
@@ -30,7 +30,16 @@ namespace NodeRegistry.Interface
         /// <returns></returns>
         List<NodeInformationType> GetAllNodesByType(NodeType nodeType);
 
+        /// <summary>
+        /// Leave the Current cluster
+        /// </summary>
         void LeaveCluster();
+
+        /// <summary>
+        /// Leave the Current cluster and shut down all networksockets
+        /// </summary>
+        void ShutDownNodeRegistry();
+
 
     }
 }
