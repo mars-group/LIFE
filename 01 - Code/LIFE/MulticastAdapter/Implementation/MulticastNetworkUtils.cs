@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using MulticastAdapter.Interface;
 
 namespace MulticastAdapter.Implementation
 {
     class MulticastNetworkUtils
     {
 
-
+        //TODO implement iterateOverAllNetworkInterfaces(delegate)
+        
         /// <summary>
         /// Return the first networkinterface that matches the given name. If no Interface with the given name was found null is returned.
         /// </summary>

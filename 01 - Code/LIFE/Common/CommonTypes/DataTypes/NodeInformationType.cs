@@ -1,10 +1,7 @@
 ﻿
-using System;
-using System.CodeDom;
-using System.Security.Cryptography;
-using System.Text;
 using CommonTypes.Types;
 using ProtoBuf;
+using System.Text;
 
 namespace CommonTypes.DataTypes
 {

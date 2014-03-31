@@ -32,7 +32,7 @@ namespace NodeRegistry.Implementation
         {
             activeNodeList = new Dictionary<string, NodeInformationType>();
             reciever = new UDPMulticastReceiver();
-            clientAdapter = new UDPMulticastClient();
+            clientAdapter = new UDPMulticastSender();
             this.nodeInformation = nodeInformation;
             this.listenThread = new Thread(new ThreadStart(this.Listen));
             listenThread.Start();
