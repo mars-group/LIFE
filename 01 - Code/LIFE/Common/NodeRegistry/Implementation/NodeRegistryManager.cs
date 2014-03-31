@@ -75,7 +75,7 @@ namespace NodeRegistry.Implementation
         private NodeType ParseNodeTypeFromConfig()
         {
 
-            var argument = Int32.Parse(ConfigurationManager.AppSettings.Get("NodeType"));
+            var argument = Int32.Parse(ConfigurationManager.AppSettings.Get("TNode"));
 
             switch (argument)
             {
@@ -86,7 +86,7 @@ namespace NodeRegistry.Implementation
                 case 2:
                     return NodeType.SimulationController;
             }
-            throw new ArgumentException("Illigale Argument for NodeType. Valid Parameter are 0 for LayerContainer, 1 for SimulationManager , 2 for SimulationController. Ypur argument was " + argument + ".");
+            throw new ArgumentException("Illigale Argument for TNode. Valid Parameter are 0 for LayerContainer, 1 for SimulationManager , 2 for SimulationController. Ypur argument was " + argument + ".");
 
         }
 

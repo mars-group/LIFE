@@ -36,7 +36,7 @@ namespace CommonTypes.DataTypes
         {
             var sb = new StringBuilder();
 
-            return sb.AppendFormat("[NodeIdentifier{0}, NodeType{1}, NodeEndpoint{2}]", NodeIdentifier, NodeType, NodeEndpoint).ToString();
+            return sb.AppendFormat("[NodeIdentifier{0}, TNode{1}, NodeEndpoint{2}]", NodeIdentifier, NodeType, NodeEndpoint).ToString();
         }
 
         public override bool Equals(object obj)
