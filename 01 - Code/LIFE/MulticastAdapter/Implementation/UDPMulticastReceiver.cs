@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MulticastAdapter.Interface;
+using MulticastAdapter.Interface.Exceptions;
 
 namespace MulticastAdapter.Implementation
 {
@@ -17,14 +18,14 @@ namespace MulticastAdapter.Implementation
     {
 
         private UdpClient recieverClient;
-        private int sourcePort;
+        private int listenPort;
         
 
         public UDPMulticastReceiver()
         {
 
           
-            this.sourcePort = Int32.Parse(ConfigurationManager.AppSettings.Get("Port"));
+            this.listenPort = Int32.Parse(ConfigurationManager.AppSettings.Get("ListenPort"));
             recieverClient = new UdpClient(AddressFamily.InterNetwork);
             recieverClient.JoinMulticastGroup(IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP")));
             
@@ -32,9 +33,9 @@ namespace MulticastAdapter.Implementation
         }
 
 
-        public UDPMulticastReceiver(IPAddress mCastAdr, int sourcePort)
+        public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort)
         {
-            this.sourcePort = sourcePort;
+            this.listenPort = listenPort;
             this.recieverClient = new UdpClient(AddressFamily.InterNetwork);
             recieverClient.JoinMulticastGroup(mCastAdr);
 
@@ -88,7 +89,7 @@ namespace MulticastAdapter.Implementation
                 {
                     if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
                     {
-                        sourceEndPoint = new IPEndPoint(unicastAddress.Address, sourcePort);
+                        sourceEndPoint = new IPEndPoint(unicastAddress.Address, listenPort);
                         break;
                     }
                 }
@@ -107,7 +108,7 @@ namespace MulticastAdapter.Implementation
                 {
                     if (unicastAddress.Address.Equals(ipAddress))
                     {
-                        sourceEndPoint = new IPEndPoint(ipAddress, sourcePort);
+                        sourceEndPoint = new IPEndPoint(ipAddress, listenPort);
                         break; ;
                     }
                 }
@@ -136,11 +137,11 @@ namespace MulticastAdapter.Implementation
 
             if (MulticastNetworkUtils.GetAddressFamily() == AddressFamily.InterNetworkV6)
             {
-                sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, sourcePort);
+                sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, listenPort);
             }
             else
             {
-                sourceEndPoint = new IPEndPoint(IPAddress.Any, sourcePort);
+                sourceEndPoint = new IPEndPoint(IPAddress.Any, listenPort);
             }
 
 

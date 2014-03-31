@@ -62,7 +62,7 @@ namespace NodeRegistryTest
                         Console.WriteLine(" cant read input :-(");
                         break;
                 }
-
+                Console.WriteLine("");
                 Console.Write("<< ");
                 input = Console.ReadLine();
 
