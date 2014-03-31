@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using System.IO;                // file operations
 using System.Drawing;           // make pictures
 using System.Drawing.Imaging;   // image formats
