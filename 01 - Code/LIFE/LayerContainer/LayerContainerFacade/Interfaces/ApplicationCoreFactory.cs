@@ -1,5 +1,9 @@
-﻿using LayerContainerController.Implementation;
+﻿using Autofac;
+using LayerContainerController.Implementation;
 using LayerContainerController.Interfaces;
+using LayerContainerFacade.Implementation;
+using LayerFactory.Implementation;
+using LayerFactory.Interface;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
 using PartitionManager.Implementation;
@@ -25,18 +29,26 @@ namespace LayerContainerFacade.Interfaces
 
                 _containerBuilder.RegisterType<LayerContainerControllerComponent>()
                     .As<ILayerContainerController>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<LayerRegistryComponent>()
                     .As<ILayerRegistry>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<PartitionManagerComponent>()
                     .As<IPartitionManager>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<RTEManagerComponent>()
                     .As<IRTEManager>()
+                    .InstancePerLifetimeScope();
+
+                _containerBuilder.RegisterType<LayerFactoryComponent>()
+                    .As<ILayerFactory>()
+                    .InstancePerLifetimeScope();
+
+                _containerBuilder.RegisterType<LayerContainerFacadeImpl>()
+                    .As<ILayerContainerFacade>()
                     .InstancePerDependency();
             }
 

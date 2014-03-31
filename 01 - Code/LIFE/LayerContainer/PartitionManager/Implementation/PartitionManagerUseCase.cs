@@ -1,4 +1,5 @@
 ﻿using CommonTypes.DataTypes;
+using CommonTypes.TransportTypes.SimulationControl;
 using LayerRegistry.Interfaces;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
