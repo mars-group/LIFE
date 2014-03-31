@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using CommonTypes.DataTypes;
 using CommonTypes.TransportTypes.SimulationControl;
 using CommonTypes.Types;
 using Daylight;
+using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+using Hik.Communication.Scs.Server;
+using Hik.Communication.ScsServices.Client;
 using Newtonsoft.Json;
 using NodeRegistry.Interface;
 
@@ -50,29 +55,51 @@ namespace LayerRegistry.Implementation
             throw new NotImplementedException();
         }
 
-        public ILayer GetLayerInstance(Type parameterType)
+        public ILayer GetLayerInstance(Type layerType)
         {
-            throw new NotImplementedException();
+            return GetLayerInstance(GetFromDHT(layerType), layerType);
         }
 
-        public ILayer GetLayerInstance(LayerInstanceIdType layerInstanceId)
-        {
-            var registryEntries = _kademliaNode.Get(ID.Hash(layerInstanceId.ToString()));
-            if (registryEntries.Count > 0)
-            {
-                var entry = JsonConvert.DeserializeObject<LayerRegistryEntry>(registryEntries.First());
-              //  new RemoteInvoke
-            }
-            return null;
-        }
 
         public void RegisterLayer(ILayer layer)
         {
-            var value = JsonConvert.SerializeObject(new LayerRegistryEntry(_ownIpAddress, _ownPort, layer.GetType()));
-            _kademliaNode.Put(ID.Hash(layer.GetID().ToString()), JsonConvert.SerializeObject(value));
+            PutIntoDHT(layer.GetType());
         }
 
+
+
         #region Private Methods
+        private ICollection<string> GetFromDHT(Type layerType)
+        {
+            return _kademliaNode.Get(ID.Hash(layerType.Name));
+        }
+
+        private void PutIntoDHT(Type layerType)
+        {
+            var value = JsonConvert.SerializeObject(new LayerRegistryEntry(_ownIpAddress, _ownPort, layerType));
+            _kademliaNode.Put(ID.Hash(layerType.ToString()), JsonConvert.SerializeObject(value));
+        }
+
+        /// <summary>
+        /// Deserializes RegistryEntry, reflects generic method CreateClient from SCS Framework
+        /// and invokes it with parameters fetched from the retreived RegistryEntry.
+        /// The return value is retreived as 'dynamic' to be able to get the ServiceProxy of layerType.
+        /// </summary>
+        /// <param name="registryEntries"></param>
+        /// <param name="layerType"></param>
+        /// <returns></returns>
+        private static ILayer GetLayerInstance(ICollection<string> registryEntries, Type layerType)
+        {
+            if (registryEntries.Count <= 0) throw new LayerInstanceNotRegisteredException();
+
+            var entry = JsonConvert.DeserializeObject<LayerRegistryEntry>(registryEntries.First());
+
+            var createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient");
+            var genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
+            dynamic scsStub = genericCreateClientMethod.Invoke(null, new[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port) });
+
+            return scsStub.ServiceProxy;
+        }
 
         private void JoinKademliaDHT()
         {
@@ -98,5 +125,9 @@ namespace LayerRegistry.Implementation
         }
 
         #endregion
+    }
+
+    internal class LayerInstanceNotRegisteredException : Exception
+    {
     }
 }

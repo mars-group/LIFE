@@ -1,4 +1,6 @@
-﻿using Mono.Addins;
+﻿using System;
+using System.Runtime.Serialization;
+using Mono.Addins;
 
 namespace LayerAPI.Interfaces
 {

@@ -9,7 +9,7 @@
 
     public class RTEManagerComponent : IRTEManager
     {
-        private readonly RTEManagerUseCase _rteManagerUseCase;
+        private readonly IRTEManager _rteManagerUseCase;
 
         public RTEManagerComponent()
         {
@@ -19,37 +19,37 @@
 
         public void RegisterLayer(ILayer layer, LayerInitData layerInitData)
         {
-            this._rteManagerUseCase.RegisterLayer(layer, layerInitData);
+            _rteManagerUseCase.RegisterLayer(layer, layerInitData);
         }
 
         public void UnregisterLayer(ILayer layer)
         {
-            this._rteManagerUseCase.UnregisterLayer(layer);
+            _rteManagerUseCase.UnregisterLayer(layer);
         }
 
         public void UnregisterTickClient(ILayer layer, ITickClient tickClient)
         {
-            this._rteManagerUseCase.UnregisterTickClient(layer, tickClient);
+            _rteManagerUseCase.UnregisterTickClient(layer, tickClient);
         }
 
         public void RegisterTickClient(ILayer layer, ITickClient tickClient)
         {
-            this._rteManagerUseCase.RegisterTickClient(layer, tickClient);
+            _rteManagerUseCase.RegisterTickClient(layer, tickClient);
         }
 
         public void InitializeAllLayers()
         {
-            this._rteManagerUseCase.InitializeAllLayers();
+            _rteManagerUseCase.InitializeAllLayers();
         }
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(ILayer layer)
         {
-            return this._rteManagerUseCase.GetAllTickClientsByLayer(layer);
+            return _rteManagerUseCase.GetAllTickClientsByLayer(layer);
         }
 
         public int AdvanceOneTick()
         {
-            return this._rteManagerUseCase.AdvanceOneTick();
+            return _rteManagerUseCase.AdvanceOneTick();
         }
     }
 }

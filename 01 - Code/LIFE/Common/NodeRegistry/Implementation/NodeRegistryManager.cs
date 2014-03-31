@@ -54,7 +54,7 @@ namespace NodeRegistry.Implementation
 
             listenThread.Start();
         }
-        
+
         private NodeInformationType ParseNodeInformationTypeFromConfig()
         {
             return new NodeInformationType(
@@ -118,14 +118,9 @@ namespace NodeRegistry.Implementation
                     {
                         activeNodeList.Add(nodeRegestryMessage.nodeInformationType.NodeIdentifier, nodeRegestryMessage.nodeInformationType);
                     }
-
                     break;
                 case NodeRegistryMessageType.Join:
-                    
-                        clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetAnswerMessage(localNodeInformation));
-                   
-
-
+                    clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetAnswerMessage(localNodeInformation));
                     break;
                 case NodeRegistryMessageType.Leave:
                     activeNodeList.Remove(nodeRegestryMessage.nodeInformationType.NodeIdentifier);
@@ -138,17 +133,17 @@ namespace NodeRegistry.Implementation
 
         public void LeaveCluster()
         {
-           
-                clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(localNodeInformation));
-            
+
+            clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(localNodeInformation));
+
 
         }
 
         private void JoinCluster()
         {
 
-                clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(localNodeInformation));
-     
+            clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(localNodeInformation));
+
         }
 
         public void ShutDownNodeRegistry()

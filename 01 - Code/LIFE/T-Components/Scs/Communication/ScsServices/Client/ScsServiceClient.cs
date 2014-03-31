@@ -117,6 +117,21 @@ namespace Hik.Communication.ScsServices.Client
             ServiceProxy = (T)_realServiceProxy.GetTransparentProxy();
         }
 
+        public ScsServiceClient(IScsClient client, object clientObject)
+        {
+            _client = client;
+            _clientObject = clientObject;
+
+            _client.Connected += Client_Connected;
+            _client.Disconnected += Client_Disconnected;
+
+            _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
+            _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
+
+            _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this);
+            ServiceProxy = (T)_realServiceProxy.GetTransparentProxy();
+        }
+
         #endregion
 
         #region Public methods

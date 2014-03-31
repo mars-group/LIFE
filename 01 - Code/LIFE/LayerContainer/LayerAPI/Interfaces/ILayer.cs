@@ -1,5 +1,5 @@
 ﻿using System;
-using LayerAPI.DataTypes;
+using CommonTypes.TransportTypes.SimulationControl;
 
 namespace LayerAPI.Interfaces
 {
@@ -28,14 +28,7 @@ namespace LayerAPI.Interfaces
         /// <param name="registerAgentHandle"> </param>
         /// </summary>
         /// <returns>True if init finished successfully, false otherwise</returns>
-        Boolean InitLayer(LayerInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
-
-        /// <summary>
-        /// The unique ID of this layer as a GUID.
-        /// </summary>
-        /// <returns>GUID representing the unique ID
-        /// of this layer</returns>
-        Guid GetID();
+        Boolean InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
     }
 

@@ -26,6 +26,7 @@ namespace LayerRegistry.Interfaces
         /// CAUTION: Can not be undone! Use only in re-partitioning process
         /// or if new simulation shall be startet.
         /// </summary>
+        /// <param name="layerType"></param>
         /// <param name="layerID"></param>
         /// <returns>The removed ILayer, Null if no Layer could be found.</returns>
         ILayer RemoveLayerInstance(Type layerType);
@@ -42,14 +43,7 @@ namespace LayerRegistry.Interfaces
         /// </summary>
         /// <param name="parameterType"></param>
         /// <returns></returns>
-        ILayer GetLayerInstance(Type parameterType);
-
-        /// <summary>
-        /// Returns an instance of parameterType either as local object or as a stub
-        /// </summary>
-        /// <param name="parameterType"></param>
-        /// <returns></returns>
-        ILayer GetLayerInstance(LayerInstanceIdType layerInstanceId);
+        ILayer GetLayerInstance(Type layerType);
 
         /// <summary>
         /// Registers layer as being instantiated on this node
