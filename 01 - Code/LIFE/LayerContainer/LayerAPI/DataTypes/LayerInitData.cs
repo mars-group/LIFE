@@ -1,5 +1,6 @@
 ﻿
 using CommonTypes.DataTypes;
+using CommonTypes.TransportTypes.SimulationControl;
 
 namespace LayerAPI.DataTypes
 {

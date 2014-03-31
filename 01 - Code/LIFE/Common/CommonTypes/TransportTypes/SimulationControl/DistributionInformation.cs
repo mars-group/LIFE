@@ -1,4 +1,4 @@
-﻿namespace CommonTypes.DataTypes
+﻿namespace CommonTypes.TransportTypes.SimulationControl
 {
     /// <summary>
     /// This class holds the distribution information for layers and their agents.
