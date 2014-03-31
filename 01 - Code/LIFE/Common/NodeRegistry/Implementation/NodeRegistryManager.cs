@@ -21,7 +21,7 @@ namespace NodeRegistry.Implementation
 {
     public class NodeRegistryManager : INodeRegistry
     {
-        private List<NodeInformationType> activeNodeList;
+        private Dictionary<String,NodeInformationType> activeNodeList;
         private IMulticastReciever reciever;
         private IMulticastClientAdapter clientAdapter;
         private NodeInformationType nodeInformation;
@@ -30,7 +30,7 @@ namespace NodeRegistry.Implementation
 
         public NodeRegistryManager(NodeInformationType nodeInformation)
         {
-            activeNodeList = new List<NodeInformationType>();
+            activeNodeList = new Dictionary<string, NodeInformationType>();
             reciever = new UDPMulticastReceiver();
             clientAdapter = new UDPMulticastClient();
             this.nodeInformation = nodeInformation;
@@ -43,7 +43,7 @@ namespace NodeRegistry.Implementation
 
         public void DropAllNodes()
         {
-            activeNodeList = new List<NodeInformationType>();
+            activeNodeList = new Dictionary<string, NodeInformationType>();
         }
 
         public  void Listen()
@@ -65,9 +65,9 @@ namespace NodeRegistry.Implementation
              switch (nodeRegestryMessage.messageType)
             {
                 case NodeRegistryMessageType.Answer:
-                    if (! activeNodeList.Contains(nodeRegestryMessage.nodeInformationType))
+                    if (! activeNodeList.ContainsKey(nodeRegestryMessage.nodeInformationType.NodeIdentifier))
                     {
-                        activeNodeList.Add(nodeRegestryMessage.nodeInformationType);
+                        activeNodeList.Add(nodeRegestryMessage.nodeInformationType.NodeIdentifier, nodeRegestryMessage.nodeInformationType);
                     }
                     
                     break;
@@ -75,7 +75,7 @@ namespace NodeRegistry.Implementation
                     clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetAnswerMessage(nodeInformation));
                     break;
                 case NodeRegistryMessageType.Leave:
-                    activeNodeList.Remove(nodeRegestryMessage.nodeInformationType);
+                    activeNodeList.Remove(nodeRegestryMessage.nodeInformationType.NodeIdentifier);
                     break;
                 default:
                     break;
@@ -111,7 +111,7 @@ namespace NodeRegistry.Implementation
 
         public List<NodeInformationType> GetAllNodes()
         {
-            return activeNodeList.Select(type => type).ToList();
+            return activeNodeList.Values.Select(type => type).ToList();
         }
 
         public List<NodeInformationType> GetAllNodesByType(NodeType nodeType)

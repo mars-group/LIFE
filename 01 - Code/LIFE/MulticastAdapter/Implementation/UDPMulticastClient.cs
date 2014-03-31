@@ -122,7 +122,11 @@ namespace MulticastAdapter.Implementation
 
         public void SendMessageToMulticastGroup(byte[] msg)
         {
-            client.Send(msg, msg.Length, new IPEndPoint(mGrpAdr, listenPort));
+            if (client.Client != null)
+            {
+                client.Send(msg, msg.Length, new IPEndPoint(mGrpAdr, listenPort));   
+            }
+           
         }
 
     }

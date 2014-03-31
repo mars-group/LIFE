@@ -19,16 +19,16 @@ namespace MulticastAdapter.Implementation
 
         private UdpClient recieverClient;
         private int listenPort;
-        
+
 
         public UDPMulticastReceiver()
         {
 
-          
+
             this.listenPort = Int32.Parse(ConfigurationManager.AppSettings.Get("ListenPort"));
             recieverClient = new UdpClient(AddressFamily.InterNetwork);
             recieverClient.JoinMulticastGroup(IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP")));
-            
+
             BindSocketToNetworkinterface();
         }
 
@@ -134,7 +134,7 @@ namespace MulticastAdapter.Implementation
         {
 
             IPEndPoint sourceEndPoint;
-
+            byte[] msg = new byte[] { };
             if (MulticastNetworkUtils.GetAddressFamily() == AddressFamily.InterNetworkV6)
             {
                 sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, listenPort);
@@ -144,9 +144,23 @@ namespace MulticastAdapter.Implementation
                 sourceEndPoint = new IPEndPoint(IPAddress.Any, listenPort);
             }
 
+            try
+            {
+                if (recieverClient.Client != null)
+                {
+                    msg = recieverClient.Receive(ref sourceEndPoint);
+                }
 
+            }
+            catch (SocketException ex)
+            {
+                if (ex.ErrorCode != 10004)
+                {
+                    throw;
+                }
 
-            return recieverClient.Receive(ref sourceEndPoint);
+            }
+            return msg;
         }
 
         public void CloseSocket()
