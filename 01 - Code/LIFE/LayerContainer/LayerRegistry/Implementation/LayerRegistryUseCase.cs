@@ -47,7 +47,7 @@ namespace LayerRegistry.Implementation
 
         public ILayer RemoveLayerInstance(Type layerType)
         {
-            throw new NotImplementedException();
+			throw new NotImplementedException();
         }
 
         public void ResetLayerRegistry()
