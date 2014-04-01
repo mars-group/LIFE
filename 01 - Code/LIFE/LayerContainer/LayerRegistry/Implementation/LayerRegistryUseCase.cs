@@ -29,20 +29,19 @@ namespace LayerRegistry.Implementation
         private readonly KademliaNode _kademliaNode;
         private readonly string _ownIpAddress;
         private readonly int _ownPort;
+		private readonly IDictionary<Type, ILayer> _localLayers;
 
         public LayerRegistryUseCase(INodeRegistry nodeRegistry)
         {
             _nodeRegistry = nodeRegistry;
+
+			_localLayers = new Dictionary<Type, ILayer> ();
+
             _kademliaPort = int.Parse(ConfigurationManager.AppSettings.Get("KademliaPort"));
             _ownIpAddress = ConfigurationManager.AppSettings.Get("MainNetworkAddress");
             _ownPort = int.Parse(ConfigurationManager.AppSettings.Get("MainNetworkPort"));
             _kademliaNode = new KademliaNode(_kademliaPort);
             JoinKademliaDHT();
-        }
-
-        public ILayer RemoveLayerInstance(LayerInstanceIdType layerInstanceId)
-        {
-            throw new NotImplementedException();
         }
 
         public ILayer RemoveLayerInstance(Type layerType)
@@ -55,15 +54,23 @@ namespace LayerRegistry.Implementation
             throw new NotImplementedException();
         }
 
-        public ILayer GetLayerInstance(Type layerType)
+        public ILayer GetRemoteLayerInstance(Type layerType)
         {
-            return GetLayerInstance(GetFromDHT(layerType), layerType);
+			if (_localLayers.ContainsKey (layerType)) {
+				return _localLayers [layerType];
+			} else {
+				return GetRemoteLayerInstance (GetFromDHT (layerType), layerType);
+			}
         }
 
 
         public void RegisterLayer(ILayer layer)
         {
-            PutIntoDHT(layer.GetType());
+			// store in Dict for local usage
+			_localLayers.Add (layer.GetType, layer);
+
+			// store LayerRegistryEntry in DHT for remote usage
+			PutIntoDHT(layer.GetType());
         }
 
 
@@ -88,7 +95,7 @@ namespace LayerRegistry.Implementation
         /// <param name="registryEntries"></param>
         /// <param name="layerType"></param>
         /// <returns></returns>
-        private static ILayer GetLayerInstance(ICollection<string> registryEntries, Type layerType)
+        private static ILayer GetRemoteLayerInstance(ICollection<string> registryEntries, Type layerType)
         {
             if (registryEntries.Count <= 0) throw new LayerInstanceNotRegisteredException();
 

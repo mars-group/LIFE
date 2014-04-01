@@ -17,15 +17,6 @@ namespace LayerRegistry.Interfaces
         /// CAUTION: Can not be undone! Use only in re-partitioning process
         /// or if new simulation shall be startet.
         /// </summary>
-        /// <param name="layerInstanceId"></param>
-        /// <returns>The removed ILayer, Null if no Layer could be found.</returns>
-        ILayer RemoveLayerInstance(LayerInstanceIdType layerInstanceId);
-
-        /// <summary>
-        /// Removes the layer with instance layerInstanceId.
-        /// CAUTION: Can not be undone! Use only in re-partitioning process
-        /// or if new simulation shall be startet.
-        /// </summary>
         /// <param name="layerType"></param>
         /// <param name="layerID"></param>
         /// <returns>The removed ILayer, Null if no Layer could be found.</returns>
@@ -43,10 +34,12 @@ namespace LayerRegistry.Interfaces
         /// </summary>
         /// <param name="parameterType"></param>
         /// <returns></returns>
-        ILayer GetLayerInstance(Type layerType);
+        ILayer GetRemoteLayerInstance(Type layerType);
 
         /// <summary>
-        /// Registers layer as being instantiated on this node
+		/// Registers layer as being instantiated on this node.
+		/// Will store a reference for local usage, as well as
+		/// connection information in the DHT
         /// </summary>
         /// <param name="layer"></param>
         void RegisterLayer(ILayer layer);

@@ -38,7 +38,7 @@ namespace LayerFactory.Implementation
             var i = 0;
             foreach (var parameterInfo in neededParameters)
             {
-                actualParameters[i] = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
+                actualParameters[i] = _layerRegistry.GetRemoteLayerInstance(parameterInfo.ParameterType);
                 i++;
             }
             var result = (T)currentConstructor.Invoke(actualParameters);

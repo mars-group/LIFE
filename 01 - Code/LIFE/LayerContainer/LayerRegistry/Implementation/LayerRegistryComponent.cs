@@ -17,11 +17,6 @@ namespace LayerRegistry.Implementation
 
         }
 
-        public ILayer RemoveLayerInstance(LayerInstanceIdType layerInstanceId)
-        {
-            return _layerRegistryUseCase.RemoveLayerInstance(layerInstanceId);
-        }
-
         public ILayer RemoveLayerInstance(Type layerType)
         {
             return _layerRegistryUseCase.RemoveLayerInstance(layerType);
@@ -32,9 +27,9 @@ namespace LayerRegistry.Implementation
             _layerRegistryUseCase.ResetLayerRegistry();
         }
 
-        public ILayer GetLayerInstance(Type layerType)
+        public ILayer GetRemoteLayerInstance(Type layerType)
         {
-            return _layerRegistryUseCase.GetLayerInstance(layerType);
+            return _layerRegistryUseCase.GetRemoteLayerInstance(layerType);
         }
 
         public void RegisterLayer(ILayer layer)
