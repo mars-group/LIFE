@@ -67,7 +67,7 @@ namespace LayerRegistry.Implementation
         public void RegisterLayer(ILayer layer)
         {
 			// store in Dict for local usage
-			_localLayers.Add (layer.GetType, layer);
+			_localLayers.Add(layer.GetType(), layer);
 
 			// store LayerRegistryEntry in DHT for remote usage
 			PutIntoDHT(layer.GetType());

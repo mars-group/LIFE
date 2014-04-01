@@ -73,7 +73,7 @@
         <BuildCommand>$(NuGetCommand) pack "$(ProjectPath)" -Properties "Configuration=$(Configuration);Platform=$(Platform)" $(NonInteractiveSwitch) -OutputDirectory "$(PackageOutputDir)" -symbols</BuildCommand>
 
         <!-- We need to ensure packages are restored prior to assembly resolve -->
-        <BuildDependsOn Condition="$(RestorePackages) == 'true'">
+        <BuildDependsOn Condition="$(RestorePackages) == 'false'">
             RestorePackages;
             $(BuildDependsOn);
         </BuildDependsOn>

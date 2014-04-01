@@ -4,6 +4,7 @@ using LayerRegistry.Interfaces;
 using LayerRegistry.Implementation;
 using ExampleLayer;
 using LayerAPI.Interfaces;
+using NodeRegistry.Implementation;
 
 namespace LayerContainerComponentTests
 {
@@ -15,23 +16,17 @@ namespace LayerContainerComponentTests
 
 		ISteppedLayer _layer;
 
-		[SetUpFixture]
-		public void InitFixture(){
-			_layerRegistry = new LayerRegistryComponent ();
-			_layer = new ExampleLayer ();
-		}
-
 		[SetUp]
 		public void Init(){
-
+			_layerRegistry = new LayerRegistryComponent(new NodeRegistryManager());
+			_layer = new ExampleLayer.ExampleLayer();
 		}
 
 		[Test ()]
 		public void TestRegister ()
 		{
 			_layerRegistry.RegisterLayer (_layer);
-			Assert.AreEqual(_layer, _layerRegistry.GetLayerInstance(_layer.GetType);
+			Assert.AreEqual(_layer, _layerRegistry.GetRemoteLayerInstance(_layer.GetType()));
 		}
 	}
 }
-
