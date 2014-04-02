@@ -62,7 +62,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeRegistry", "Common\Node
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationManagerController", "SimulationManager\SimulationManagerController\SimulationManagerController.csproj", "{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppSettingsManager", "Common\AppSettingsManager\AppSettingsManager.csproj", "{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationAdapter", "Common\AppSettingsManager\ConfigurationAdapter.csproj", "{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

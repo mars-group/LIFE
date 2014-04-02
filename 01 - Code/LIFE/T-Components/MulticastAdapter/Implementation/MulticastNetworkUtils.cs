@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.Hosting;
+using AppSettingsManager.Implementation;
 
 namespace MulticastAdapter.Implementation
 {
@@ -72,7 +74,10 @@ namespace MulticastAdapter.Implementation
         /// <returns>The AddressFamily of the IPversion</returns>
         public static AddressFamily GetAddressFamily()
         {
-            if (ConfigurationManager.AppSettings.Get("IpVersion").ToLower() == "ipv6")
+
+            var configAdapter = new AppSettingAdapterImpl();
+
+            if (configAdapter.GetValue("IpVersion").ToLower() == "ipv6")
             {
                 return AddressFamily.InterNetworkV6;
             }

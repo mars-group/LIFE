@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using AppSettingsManager.Implementation;
+using AppSettingsManager.Interface;
 using CommonTypes.DataTypes;
 using CommonTypes.TransportTypes.SimulationControl;
 using CommonTypes.Types;
@@ -30,16 +32,18 @@ namespace LayerRegistry.Implementation
         private readonly string _ownIpAddress;
         private readonly int _ownPort;
 		private readonly IDictionary<Type, ILayer> _localLayers;
+        private IConfigurationAdapter _configurationAdapter;
 
         public LayerRegistryUseCase(INodeRegistry nodeRegistry)
         {
+            _configurationAdapter = new AppSettingAdapterImpl();
             _nodeRegistry = nodeRegistry;
 
-			_localLayers = new Dictionary<Type, ILayer> ();
+            _localLayers = new Dictionary<Type, ILayer>();
 
-            _kademliaPort = int.Parse(ConfigurationManager.AppSettings.Get("KademliaPort"));
-            _ownIpAddress = ConfigurationManager.AppSettings.Get("MainNetworkAddress");
-            _ownPort = int.Parse(ConfigurationManager.AppSettings.Get("MainNetworkPort"));
+            _kademliaPort = _configurationAdapter.GetInt32("KademliaPort");
+            _ownIpAddress = _configurationAdapter.GetValue("MainNetworkAddress");
+            _ownPort = _configurationAdapter.GetInt32("MainNetworkPort");
             _kademliaNode = new KademliaNode(_kademliaPort);
             JoinKademliaDHT();
         }

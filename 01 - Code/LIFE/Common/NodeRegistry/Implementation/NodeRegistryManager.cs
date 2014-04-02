@@ -1,4 +1,6 @@
-﻿using CommonTypes.DataTypes;
+﻿using AppSettingsManager.Implementation;
+using AppSettingsManager.Interface;
+using CommonTypes.DataTypes;
 using CommonTypes.Types;
 
 using NodeRegistry.Implementation.Messages;
@@ -23,6 +25,7 @@ namespace NodeRegistry.Implementation
         private NodeInformationType localNodeInformation;
         private IMulticastReciever reciever;
         private IMulticastClientAdapter clientAdapter;
+        private IConfigurationAdapter configurationAdapter; 
 
         private Thread listenThread;
 
@@ -33,17 +36,19 @@ namespace NodeRegistry.Implementation
 
             this.activeNodeList = new Dictionary<string, NodeInformationType>();
             this.localNodeInformation = nodeInformation;
+            this.configurationAdapter = new AppSettingAdapterImpl();
 
-            ParseNodeInformationTypeFromConfig();
+           
             SetupNetworkAdapters();
 
         }
 
         public NodeRegistryManager()
         {
-
+            this.configurationAdapter = new AppSettingAdapterImpl();
             this.activeNodeList = new Dictionary<string, NodeInformationType>();
             this.localNodeInformation = ParseNodeInformationTypeFromConfig();
+          
             SetupNetworkAdapters();
 
         }
@@ -61,7 +66,7 @@ namespace NodeRegistry.Implementation
         {
             return new NodeInformationType(
                 ParseNodeTypeFromConfig(),
-                ConfigurationManager.AppSettings.Get("NodeIdentifier"),
+                configurationAdapter.GetValue("NodeIdentifier"),
                 ParseNodeEndpointFromConfig()
                 );
         }
@@ -69,26 +74,16 @@ namespace NodeRegistry.Implementation
         private NodeEndpoint ParseNodeEndpointFromConfig()
         {
             return new NodeEndpoint(
-                ConfigurationManager.AppSettings.Get("NodeEndPointIP"),
-                Int32.Parse(ConfigurationManager.AppSettings.Get("NodeEndPointPort"))
+                configurationAdapter.GetValue("NodeEndPointIP"),
+               configurationAdapter.GetInt32("NodeEndPointPort")
                 );
         }
 
         private NodeType ParseNodeTypeFromConfig()
         {
 
-            var argument = Int32.Parse(ConfigurationManager.AppSettings.Get("TNode"));
-
-            switch (argument)
-            {
-                case 0:
-                    return NodeType.LayerContainer;
-                case 1:
-                    return NodeType.SimulationManager;
-                case 2:
-                    return NodeType.SimulationController;
-            }
-            throw new ArgumentException("Illigale Argument for TNode. Valid Parameter are 0 for LayerContainer, 1 for SimulationManager , 2 for SimulationController. Ypur argument was " + argument + ".");
+            var argument = configurationAdapter.GetInt32("NodeType");
+            return (NodeType) argument;
 
         }
 
