@@ -54,7 +54,7 @@ namespace MulticastAdapter.Implementation
                         if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
                         {
                             var updClient = new UdpClient(new IPEndPoint(unicastAddress.Address, sendingPort));
-                            updClient.JoinMulticastGroup(mGrpAdr, configuration.GetIpAddress("GetSendingInterfaceByIPv4"));
+                            updClient.JoinMulticastGroup(mGrpAdr, unicastAddress.Address);
                             resultList.Add(updClient);
                         }
                     }
