@@ -36,7 +36,7 @@ namespace NodeRegistry.Implementation
 
             this.activeNodeList = new Dictionary<string, NodeInformationType>();
             this.localNodeInformation = nodeInformation;
-            this.configurationAdapter = new NiniAdapterImpl("NodeRegistry");
+            this.configurationAdapter = new AppSettingAdapterImpl();
 
            
             SetupNetworkAdapters();

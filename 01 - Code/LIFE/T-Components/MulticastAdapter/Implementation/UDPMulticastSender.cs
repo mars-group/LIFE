@@ -22,7 +22,7 @@ namespace MulticastAdapter.Implementation
         public UDPMulticastSender()
         {
 
-            this.configuration = new NiniAdapterImpl("MulticastAdapter");
+            this.configuration = new AppSettingAdapterImpl();
             this.mGrpAdr = configuration.GetIpAddress("IP");
             this.sendingPort = configuration.GetInt32("SendingPort");
             this.listenPort = configuration.GetInt32("ListenPort");
@@ -32,7 +32,7 @@ namespace MulticastAdapter.Implementation
 
         public UDPMulticastSender(IPAddress ipAddress, int sendingPort, int listenPort)
         {
-            this.configuration = new NiniAdapterImpl("MulticastAdapter");
+            this.configuration = new AppSettingAdapterImpl();
             this.mGrpAdr = ipAddress;
             this.sendingPort = sendingPort;
             this.listenPort = listenPort;

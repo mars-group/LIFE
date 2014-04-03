@@ -17,7 +17,7 @@ namespace MulticastAdapter.Implementation
 
         public UDPMulticastReceiver()
         {
-            this.configuration = new NiniAdapterImpl("MulticastAdapter");
+            this.configuration = new AppSettingAdapterImpl();
 
             this.mcastAddress = configuration.GetIpAddress("IP");
             this.listenPort = configuration.GetInt32("ListenPort");
@@ -28,7 +28,7 @@ namespace MulticastAdapter.Implementation
 
         public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort)
         {
-            this.configuration = new NiniAdapterImpl("MulticastAdapter");
+            this.configuration = new AppSettingAdapterImpl();
             this.mcastAddress = mCastAdr;
             this.listenPort = listenPort;
             recieverClient = GetClient(listenPort);
