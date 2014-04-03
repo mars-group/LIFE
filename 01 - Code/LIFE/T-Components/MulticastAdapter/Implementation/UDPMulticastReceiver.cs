@@ -1,4 +1,6 @@
-﻿using MulticastAdapter.Interface;
+﻿using AppSettingsManager.Implementation;
+using AppSettingsManager.Interface;
+using MulticastAdapter.Interface;
 using System;
 using System.Configuration;
 using System.Net;
@@ -11,13 +13,14 @@ namespace MulticastAdapter.Implementation
         private IPAddress mcastAddress;
         private UdpClient recieverClient;
         private int listenPort;
-
+        private IConfigurationAdapter configuration;
 
         public UDPMulticastReceiver()
         {
+            this.configuration = new NiniAdapterImpl("MulticastAdapter");
 
-            this.mcastAddress = IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP"));
-            this.listenPort = Int32.Parse(ConfigurationManager.AppSettings.Get("ListenPort"));
+            this.mcastAddress = configuration.GetIpAddress("IP");
+            this.listenPort = configuration.GetInt32("ListenPort");
             recieverClient = GetClient(listenPort);
             JoinMulticastGroupes();
         }
@@ -25,6 +28,7 @@ namespace MulticastAdapter.Implementation
 
         public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort)
         {
+            this.configuration = new NiniAdapterImpl("MulticastAdapter");
             this.mcastAddress = mCastAdr;
             this.listenPort = listenPort;
             recieverClient = GetClient(listenPort);
@@ -49,7 +53,8 @@ namespace MulticastAdapter.Implementation
 
         private UdpClient GetClient(int listenPort)
         {
-            if ("ipv6".Equals(ConfigurationManager.AppSettings.Get("IpVersion").ToLower()))
+
+            if ("ipv6".Equals(configuration.GetValue("IpVersion").ToLower()))
             {
                 return new UdpClient(new IPEndPoint(IPAddress.IPv6Any, listenPort));
             }

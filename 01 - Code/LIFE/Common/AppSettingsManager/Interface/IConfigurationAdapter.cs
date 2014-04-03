@@ -14,6 +14,11 @@ namespace AppSettingsManager.Interface
         int GetInt32(string key);
         
         IPAddress GetIpAddress(string key);
-        
+
+        Boolean GetBoolean(string key);
+
+        float GetFloat(string key);
+
+        double GetDouble(string key);
     }
 }

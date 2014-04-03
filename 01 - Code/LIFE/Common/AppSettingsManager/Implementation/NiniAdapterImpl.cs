@@ -1,35 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AppSettingsManager.Interface;
+using Nini.Config;
 
 namespace AppSettingsManager.Implementation
 {
-    public class AppSettingAdapterImpl : IConfigurationAdapter
+    public class NiniAdapterImpl : IConfigurationAdapter
     {
-        private NameValueCollection appSettings;
 
-        public AppSettingAdapterImpl()
+        private static String _XMLCONFIGSOURCE = "Life.xml";
+
+        private IConfigSource _config;
+        private string _sectionName;
+
+        public NiniAdapterImpl(string sectionName)
         {
-            appSettings = ConfigurationManager.AppSettings;
-        }
-
+            _sectionName = sectionName;
+            _config = new XmlConfigSource(_XMLCONFIGSOURCE);
+        } 
 
         public string GetValue(string key)
         {
-            return appSettings.Get(key);
+            return _config.Configs[_sectionName].Get(key);
+
         }
 
         public int GetInt32(string key)
         {
-            return Int32.Parse(GetValue(key));
+           return Int32.Parse(GetValue(key));
         }
-
 
         public IPAddress GetIpAddress(string key)
         {
@@ -38,7 +41,7 @@ namespace AppSettingsManager.Implementation
 
         public bool GetBoolean(string key)
         {
-            
+            throw new NotImplementedException();
         }
 
         public float GetFloat(string key)

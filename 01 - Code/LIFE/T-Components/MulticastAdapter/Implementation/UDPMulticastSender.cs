@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
+using AppSettingsManager.Implementation;
+using AppSettingsManager.Interface;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Exceptions;
 
@@ -14,20 +16,23 @@ namespace MulticastAdapter.Implementation
         private IPAddress mGrpAdr;
         private int sendingPort;
         private int listenPort;
-
+        private IConfigurationAdapter configuration;
 
 
         public UDPMulticastSender()
         {
-            this.mGrpAdr = IPAddress.Parse(ConfigurationManager.AppSettings.Get("IP"));
-            this.sendingPort = Int32.Parse(ConfigurationManager.AppSettings.Get("SendingPort"));
-            this.listenPort = Int32.Parse(ConfigurationManager.AppSettings.Get("ListenPort"));
+
+            this.configuration = new NiniAdapterImpl("MulticastAdapter");
+            this.mGrpAdr = configuration.GetIpAddress("IP");
+            this.sendingPort = configuration.GetInt32("SendingPort");
+            this.listenPort = configuration.GetInt32("ListenPort");
             this.clients = GetSendingInterfaces();
 
         }
 
         public UDPMulticastSender(IPAddress ipAddress, int sendingPort, int listenPort)
         {
+            this.configuration = new NiniAdapterImpl("MulticastAdapter");
             this.mGrpAdr = ipAddress;
             this.sendingPort = sendingPort;
             this.listenPort = listenPort;
@@ -39,7 +44,7 @@ namespace MulticastAdapter.Implementation
         {
 
             IList<UdpClient> resultList = new List<UdpClient>();
-
+            configuration.
             if (Boolean.Parse(ConfigurationManager.AppSettings.Get("SendOnAllInterfaces")))
             {
                 foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())

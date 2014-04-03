@@ -75,7 +75,7 @@ namespace MulticastAdapter.Implementation
         public static AddressFamily GetAddressFamily()
         {
 
-            var configAdapter = new AppSettingAdapterImpl();
+            var configAdapter = new NiniAdapterImpl("MulticastAdapter");
 
             if (configAdapter.GetValue("IpVersion").ToLower() == "ipv6")
             {
