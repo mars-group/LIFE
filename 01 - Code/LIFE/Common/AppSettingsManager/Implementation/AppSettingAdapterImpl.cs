@@ -10,7 +10,7 @@ using AppSettingsManager.Interface;
 
 namespace AppSettingsManager.Implementation
 {
-    public class AppSettingAdapterImpl : IConfigurationAdapter
+    public class AppSettingAdapterImpl : AbstractConfigAdapter
     {
         private NameValueCollection appSettings;
 
@@ -20,35 +20,11 @@ namespace AppSettingsManager.Implementation
         }
 
 
-        public string GetValue(string key)
+        public override string GetValue(string key)
         {
             return appSettings.Get(key);
         }
 
-        public int GetInt32(string key)
-        {
-            return Int32.Parse(GetValue(key));
-        }
-
-
-        public IPAddress GetIpAddress(string key)
-        {
-            return IPAddress.Parse(GetValue(key));
-        }
-
-        public bool GetBoolean(string key)
-        {
-            
-        }
-
-        public float GetFloat(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetDouble(string key)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

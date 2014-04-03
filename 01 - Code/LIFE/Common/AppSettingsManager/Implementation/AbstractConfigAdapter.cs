@@ -8,33 +8,29 @@ using AppSettingsManager.Interface;
 
 namespace AppSettingsManager.Implementation
 {
-    class AbstractConfigAdapter : IConfigurationAdapter
+    public abstract class AbstractConfigAdapter : IConfigurationAdapter
     {
-           
+         public abstract string GetValue(string key);
 
-        public int GetInt32(string key)
-        {
-            throw new NotImplementedException();
-        }
+       
+         public int GetInt32(string key)
+         {
+             return Int32.Parse(GetValue(key));
+         }
+        
+         public IPAddress GetIpAddress(string key)
+         {
+             return IPAddress.Parse(GetValue(key));
+         }
 
-        public IPAddress GetIpAddress(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool GetBoolean(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public float GetFloat(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetDouble(string key)
-        {
-            throw new NotImplementedException();
-        }
+         public bool GetBoolean(string key)
+         {
+             return Boolean.Parse(GetValue(key));
+         }
+        
+         public double GetDouble(string key)
+         {
+             return Double.Parse(GetValue(key));
+         }
     }
 }

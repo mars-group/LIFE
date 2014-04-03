@@ -9,7 +9,7 @@ using Nini.Config;
 
 namespace AppSettingsManager.Implementation
 {
-    public class NiniAdapterImpl : IConfigurationAdapter
+    public class NiniAdapterImpl : AbstractConfigAdapter
     {
 
         private static String _XMLCONFIGSOURCE = "Life.xml";
@@ -23,35 +23,10 @@ namespace AppSettingsManager.Implementation
             _config = new XmlConfigSource(_XMLCONFIGSOURCE);
         } 
 
-        public string GetValue(string key)
+        public override string GetValue(string key)
         {
             return _config.Configs[_sectionName].Get(key);
-
         }
-
-        public int GetInt32(string key)
-        {
-           return Int32.Parse(GetValue(key));
-        }
-
-        public IPAddress GetIpAddress(string key)
-        {
-            return IPAddress.Parse(GetValue(key));
-        }
-
-        public bool GetBoolean(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public float GetFloat(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetDouble(string key)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

@@ -44,8 +44,8 @@ namespace MulticastAdapter.Implementation
         {
 
             IList<UdpClient> resultList = new List<UdpClient>();
-            configuration.
-            if (Boolean.Parse(ConfigurationManager.AppSettings.Get("SendOnAllInterfaces")))
+
+            if (configuration.GetBoolean("SendOnAllInterfaces"))
             {
                 foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
                 {
@@ -54,16 +54,16 @@ namespace MulticastAdapter.Implementation
                         if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
                         {
                             var updClient = new UdpClient(new IPEndPoint(unicastAddress.Address, sendingPort));
-                            updClient.JoinMulticastGroup(mGrpAdr, IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetSendingInterfaceByIPv4")));
+                            updClient.JoinMulticastGroup(mGrpAdr, configuration.GetIpAddress("GetSendingInterfaceByIPv4"));
                             resultList.Add(updClient);
                         }
-                    }   
+                    }
                 }
             }
             else
             {
                 var updClient = new UdpClient(GetBindingEndpoint());
-                updClient.JoinMulticastGroup(mGrpAdr, IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetSendingInterfaceByIPv4")));
+                updClient.JoinMulticastGroup(mGrpAdr, configuration.GetIpAddress("GetSendingInterfaceByIPv4"));
                 resultList.Add(updClient);
             }
 
@@ -74,11 +74,11 @@ namespace MulticastAdapter.Implementation
 
         private IPEndPoint GetBindingEndpoint()
         {
-            if ("ip".Equals(ConfigurationManager.AppSettings.Get("BindSendingInterfaceBy").ToLower()))
+            if ("ip".Equals(configuration.GetValue("BindSendingInterfaceBy").ToLower()))
             {
                 return GetIPEndPointByIp();
             }
-            else if ("name".Equals(ConfigurationManager.AppSettings.Get("BindSendingInterfaceBy").ToLower()))
+            else if ("name".Equals(configuration.GetValue("BindSendingInterfaceBy").ToLower()))
             {
                 return GetIPEndPointByName();
             }
@@ -90,7 +90,7 @@ namespace MulticastAdapter.Implementation
         private IPEndPoint GetIPEndPointByIp()
         {
 
-            var networkInterface = MulticastNetworkUtils.GetInterfaceByIP(IPAddress.Parse(ConfigurationManager.AppSettings.Get("GetSendingInterfaceByIPv4")));
+            var networkInterface = MulticastNetworkUtils.GetInterfaceByIP(configuration.GetIpAddress("GetSendingInterfaceByIPv4"));
             IPAddress ipAddress = null;
 
             foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
@@ -104,7 +104,7 @@ namespace MulticastAdapter.Implementation
 
             if (ipAddress != null)
             {
-              return new IPEndPoint(ipAddress, sendingPort);
+                return new IPEndPoint(ipAddress, sendingPort);
             }
             else
             {
@@ -130,10 +130,10 @@ namespace MulticastAdapter.Implementation
             foreach (var client in clients)
             {
                 client.DropMulticastGroup(mGrpAdr);
-                client.Close();   
+                client.Close();
             }
 
-           
+
         }
 
         public void ReopenSocket()
@@ -142,7 +142,7 @@ namespace MulticastAdapter.Implementation
             clients = GetSendingInterfaces();
         }
 
-        
+
 
 
         public void SendMessageToMulticastGroup(byte[] msg)
@@ -154,7 +154,7 @@ namespace MulticastAdapter.Implementation
                     client.Send(msg, msg.Length, new IPEndPoint(mGrpAdr, listenPort));
                 }
             }
-            
+
         }
 
     }
