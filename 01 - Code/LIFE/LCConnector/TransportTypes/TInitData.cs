@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonTypes.TransportTypes.SimulationControl
+namespace LCConnector.TransportTypes
 {
-    public class LayerInstanceIdType
+    public class TInitData
     {
-
     }
 }
