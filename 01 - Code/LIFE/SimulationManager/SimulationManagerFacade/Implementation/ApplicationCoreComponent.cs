@@ -1,8 +1,5 @@
 ﻿using SimulationManagerFacade.Interface;
 
-namespace SimulationManagerFacade.Implementation
-{
-    public class ApplicationCoreComponent : IApplicationCore
-    {
-    }
+namespace SimulationManagerFacade.Implementation {
+    public class ApplicationCoreComponent : IApplicationCore {}
 }

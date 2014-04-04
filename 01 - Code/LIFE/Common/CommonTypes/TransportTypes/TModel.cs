@@ -1,6 +1,3 @@
-﻿namespace CommonTypes.TransportTypes
-{
-    public class TModel
-    {
-    }
+﻿namespace CommonTypes.TransportTypes {
+    public class TModel {}
 }

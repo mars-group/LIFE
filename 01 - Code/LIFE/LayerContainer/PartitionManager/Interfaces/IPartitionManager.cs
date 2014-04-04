@@ -1,9 +1,7 @@
-﻿namespace PartitionManager.Interfaces
-{
-    using System;
+﻿using System;
 
-    public interface IPartitionManager
-    {
+namespace PartitionManager.Interfaces {
+    public interface IPartitionManager {
         bool AddLayer(Uri layerUri, Guid layerID);
     }
 }

@@ -2,205 +2,151 @@
 using System.Collections.Generic;
 using System.Threading;
 
-
-namespace Hik.Threading
-{
+namespace Hik.Threading {
     /// <summary>
-    /// A ThreadSafe List
+    ///     A ThreadSafe List
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ThreadSafeList<T> : IList<T>
-    {
-
+    public class ThreadSafeList<T> : IList<T> {
         protected readonly List<T> InternalList;
 
         protected static ReaderWriterLockSlim Lock;
 
-        public ThreadSafeList()
-        {
+        public ThreadSafeList() {
             Lock = new ReaderWriterLockSlim();
             InternalList = new List<T>();
-        } 
+        }
 
-        public IEnumerator<T> GetEnumerator()
-        {
+        public IEnumerator<T> GetEnumerator() {
             return Clone().GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
+        IEnumerator IEnumerable.GetEnumerator() {
             return Clone().GetEnumerator();
         }
 
 
-        private List<T> Clone()
-        {
+        private List<T> Clone() {
             var newList = new List<T>();
 
             Lock.EnterReadLock();
-            try
-            {
+            try {
                 InternalList.ForEach(x => newList.Add(x));
             }
-            finally
-            {
+            finally {
                 Lock.ExitReadLock();
             }
 
             return newList;
         }
 
-        public void Add(T item)
-        {
+        public void Add(T item) {
             InternalList.Add(item);
         }
 
-        public void Clear()
-        {
+        public void Clear() {
             Lock.EnterWriteLock();
-            try
-            {
+            try {
                 InternalList.Clear();
             }
-            finally
-            {
+            finally {
                 Lock.ExitWriteLock();
             }
-
         }
 
-        public bool Contains(T item)
-        {
+        public bool Contains(T item) {
             Lock.EnterReadLock();
-            try
-            {
+            try {
                 return InternalList.Contains(item);
             }
-            finally
-            {
+            finally {
                 Lock.ExitReadLock();
             }
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
-        {
+        public void CopyTo(T[] array, int arrayIndex) {
             Lock.EnterReadLock();
-            try
-            {
+            try {
                 InternalList.CopyTo(array, arrayIndex);
             }
-            finally
-            {
+            finally {
                 Lock.ExitReadLock();
             }
-
         }
 
-        public bool Remove(T item)
-        {
+        public bool Remove(T item) {
             Lock.EnterWriteLock();
-            try
-            {
+            try {
                 return InternalList.Remove(item);
             }
-            finally 
-            {
+            finally {
                 Lock.ExitWriteLock();
             }
         }
 
-        public int Count
-        {
-            get
-            {
+        public int Count {
+            get {
                 Lock.EnterReadLock();
-                try
-                {
+                try {
                     return InternalList.Count;
                 }
-                finally
-                {
+                finally {
                     Lock.ExitReadLock();
                 }
             }
             private set { }
         }
 
-        public bool IsReadOnly
-        {
-            get;
-            private set;
-        }
+        public bool IsReadOnly { get; private set; }
 
-        public int IndexOf(T item)
-        {
+        public int IndexOf(T item) {
             Lock.EnterReadLock();
-            try
-            {
+            try {
                 return InternalList.IndexOf(item);
             }
-            finally
-            {
+            finally {
                 Lock.ExitReadLock();
             }
-
         }
 
-        public void Insert(int index, T item)
-        {
+        public void Insert(int index, T item) {
             Lock.EnterWriteLock();
-            try
-            {
+            try {
                 InternalList.Insert(index, item);
             }
-            finally
-            {
+            finally {
                 Lock.ExitWriteLock();
             }
-
         }
 
-        public void RemoveAt(int index)
-        {
+        public void RemoveAt(int index) {
             Lock.EnterWriteLock();
-            try
-            {
+            try {
                 InternalList.RemoveAt(index);
             }
-            finally
-            {
+            finally {
                 Lock.ExitWriteLock();
             }
-
         }
 
-        public T this[int index]
-        {
-            get
-            {
+        public T this[int index] {
+            get {
                 Lock.EnterReadLock();
-                try
-                {
+                try {
                     return InternalList[index];
                 }
-                finally
-                {
+                finally {
                     Lock.ExitReadLock();
                 }
-
             }
-            set
-            {
+            set {
                 Lock.EnterWriteLock();
-                try
-                {
+                try {
                     InternalList[index] = value;
                 }
-                finally
-                {
+                finally {
                     Lock.ExitWriteLock();
                 }
-
             }
         }
     }

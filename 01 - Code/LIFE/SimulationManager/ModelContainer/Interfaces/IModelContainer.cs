@@ -1,12 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using CommonTypes.TransportTypes;
 
-namespace ModelContainer.Interfaces
-{
-    public interface IModelContainer
-    {
+namespace ModelContainer.Interfaces {
+    public interface IModelContainer {
         IList<TSimModel> GetAllModels();
 
         TSimModel GetModel(int modelID);

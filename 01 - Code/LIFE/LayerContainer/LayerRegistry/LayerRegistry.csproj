@@ -36,9 +36,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Daylight">
-      <HintPath>..\..\Libraries\Kademlia\Daylight.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -74,6 +71,10 @@
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Daylight\Daylight.csproj">
+      <Project>{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}</Project>
+      <Name>Daylight</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
       <Project>{0dc81b09-3abf-4bb3-8c08-4e8ee4432bdc}</Project>

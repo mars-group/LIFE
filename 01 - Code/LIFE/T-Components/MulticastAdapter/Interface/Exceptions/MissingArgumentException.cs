@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MulticastAdapter.Interface.Exceptions
-{
-    class MissingArgumentException : Exception
-    {
-        public MissingArgumentException(string msg) : base(msg)
-        {
-            
-        }
-
-
+namespace MulticastAdapter.Interface.Exceptions {
+    internal class MissingArgumentException : Exception {
+        public MissingArgumentException(string msg) : base(msg) {}
     }
 }

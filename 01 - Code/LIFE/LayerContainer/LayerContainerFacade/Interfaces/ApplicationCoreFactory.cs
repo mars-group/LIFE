@@ -11,21 +11,14 @@ using PartitionManager.Interfaces;
 using RTEManager.Implementation;
 using RTEManager.Interfaces;
 
-namespace LayerContainerFacade.Interfaces
-{
-    public static class ApplicationCoreFactory
-    {
+namespace LayerContainerFacade.Interfaces {
+    public static class ApplicationCoreFactory {
         private static IContainer _container;
         private static ContainerBuilder _containerBuilder;
 
-        public static ILayerContainerFacade GetLayerContainerFacade()
-        {
-            if (_container == null)
-            {
-                if (_containerBuilder == null)
-                {
-                    _containerBuilder = new ContainerBuilder();
-                }
+        public static ILayerContainerFacade GetLayerContainerFacade() {
+            if (_container == null) {
+                if (_containerBuilder == null) _containerBuilder = new ContainerBuilder();
 
                 _containerBuilder.RegisterType<LayerContainerControllerComponent>()
                     .As<ILayerContainerController>()

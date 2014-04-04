@@ -1,9 +1,5 @@
-﻿
-using LayerContainerFacade.Interfaces;
+﻿using LayerContainerFacade.Interfaces;
 
-namespace LayerContainerFacade.Implementation
-{
-    internal class LayerContainerFacadeImpl : ILayerContainerFacade
-    {
-    }
+namespace LayerContainerFacade.Implementation {
+    internal class LayerContainerFacadeImpl : ILayerContainerFacade {}
 }

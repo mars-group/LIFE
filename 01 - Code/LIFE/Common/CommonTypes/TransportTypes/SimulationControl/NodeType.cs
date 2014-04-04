@@ -1,6 +1,3 @@
-﻿namespace CommonTypes.TransportTypes.SimulationControl
-{
-    public class NodeType
-    {
-    }
+﻿namespace CommonTypes.TransportTypes.SimulationControl {
+    public class NodeType {}
 }
