@@ -1,3 +1,5 @@
-﻿namespace LayerContainerController.Interfaces {
-    public interface ILayerContainerController {}
+﻿using LCConnector;
+
+namespace LayerContainerController.Interfaces {
+    public interface ILayerContainerController : ILayerContainer {}
 }
