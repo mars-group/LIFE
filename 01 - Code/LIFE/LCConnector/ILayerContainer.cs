@@ -9,6 +9,7 @@ namespace LCConnector {
         ///     type instantiated, it will be overwritten by the new one.
         /// </summary>
         /// <param name="instanceId">A simulation wide unique layer identification.</param>
+        /// <param name="layerBinary">the binary code of the layer.</param>
         void Instantiate(TLayerInstanceId instanceId, byte[] layerBinary);
 
         /// <summary>
