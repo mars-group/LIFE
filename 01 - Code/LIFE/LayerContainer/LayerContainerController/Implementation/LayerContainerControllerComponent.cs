@@ -1,15 +1,18 @@
-﻿using Hik.Communication.ScsServices.Service;
+﻿
 using LayerContainerController.Interfaces;
-using LCConnector;
-using LCConnector.TransportTypes;
+
 using NodeRegistry.Interface;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
+using LCConnector.TransportTypes;
+
 
 namespace LayerContainerController.Implementation {
+
+
     public class LayerContainerControllerComponent : ILayerContainerController  {
         
-        private ILayerContainerController _layerContainerControllerUseCase;
+        private readonly ILayerContainerController _layerContainerControllerUseCase;
 
         public LayerContainerControllerComponent(
             IPartitionManager partitionManager,
@@ -20,8 +23,8 @@ namespace LayerContainerController.Implementation {
         }
 
 
-        public void Instantiate(TLayerInstanceId instanceId) {
-            _layerContainerControllerUseCase.Instantiate(instanceId);
+        public void Instantiate(TLayerInstanceId instanceId, byte[] binaryData) {
+            _layerContainerControllerUseCase.Instantiate(instanceId, binaryData);
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {

@@ -67,8 +67,8 @@
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LCConnector\LCConnector.csproj">
-      <Project>{76bffba7-7bf3-439e-83d4-a340b1227461}</Project>
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
+      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">

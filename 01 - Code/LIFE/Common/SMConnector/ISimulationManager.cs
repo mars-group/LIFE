@@ -1,6 +1,4 @@
-﻿using System;
-using CommonTypes.TransportTypes;
-using SMConnector.TransportTypes;
+﻿using SMConnector.TransportTypes;
 
 namespace SMConnector
 {

@@ -2,11 +2,13 @@
 using LCConnector.TransportTypes;
 
 namespace LayerContainerFacade.Implementation {
+
+
     internal class LayerContainerFacadeImpl : ILayerContainerFacade {
 
 
 
-        public void Instantiate(TLayerInstanceId instanceId) {
+        public void Instantiate(TLayerInstanceId instanceId, byte[] binaryData) {
             throw new System.NotImplementedException();
         }
 

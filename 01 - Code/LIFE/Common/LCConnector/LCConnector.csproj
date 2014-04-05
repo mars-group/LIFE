@@ -48,7 +48,7 @@
     <Compile Include="TransportTypes\TLayerInstanceId.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\T-Components\Scs\Scs.csproj">
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
       <Project>{0dc81b09-3abf-4bb3-8c08-4e8ee4432bdc}</Project>
       <Name>Scs</Name>
     </ProjectReference>
