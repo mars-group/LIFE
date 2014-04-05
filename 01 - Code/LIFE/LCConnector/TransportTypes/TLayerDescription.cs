@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace LCConnector.TransportTypes {
+    [Serializable]
     public class TLayerDescription : IEquatable<TLayerDescription> {
         /// <summary>
         /// The layer's name.

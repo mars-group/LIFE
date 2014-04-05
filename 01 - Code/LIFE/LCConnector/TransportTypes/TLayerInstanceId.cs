@@ -2,6 +2,7 @@
 
 namespace LCConnector.TransportTypes
 {
+    [Serializable]
     public class TLayerInstanceId : IEquatable<TLayerInstanceId> {
         /// <summary>
         /// The layer's identity.

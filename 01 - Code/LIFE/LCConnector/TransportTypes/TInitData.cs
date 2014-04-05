@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LCConnector.TransportTypes
 {
+    [Serializable]
     public class TInitData
     {
     }
