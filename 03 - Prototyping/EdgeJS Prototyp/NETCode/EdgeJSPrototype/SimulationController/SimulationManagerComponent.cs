@@ -5,6 +5,12 @@
 
     public class SimulationManagerComponent
     {
+        private readonly int _realMEaningOflife;
+
+        public SimulationManagerComponent()
+        {
+            _realMEaningOflife  = 42;
+        }
 
         public async Task<object> GenerateMeaningOfLife(dynamic input)
         {
@@ -12,7 +18,7 @@
                 () =>
                 {
                     Thread.Sleep((int)input);
-                    return 42;
+                    return _realMEaningOflife;
                 });
         }
     }
