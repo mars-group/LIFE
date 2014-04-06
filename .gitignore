@@ -77,3 +77,6 @@ Documentation/WALK2.0.vpp~1
 #IntelliJ
 workspace.xml
 .gitattributes
+
+#Node.js
+node_modules/
