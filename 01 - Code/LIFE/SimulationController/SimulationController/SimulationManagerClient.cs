@@ -1,8 +1,5 @@
-﻿
-
-namespace SimulationController
+﻿namespace SimulationController
 {
-    using System;
     using System.Linq;
 
     using CommonTypes.Types;
@@ -47,11 +44,7 @@ namespace SimulationController
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
-            _simManager.SubscribeForStatusUpdate(this.OnStatusUpdateAvailable);
-        }
-
-        private void OnStatusUpdateAvailable(TStatusUpdate statusUpdate) {
-            throw new NotImplementedException();
+            _simManager.SubscribeForStatusUpdate(statusUpdateAvailable);
         }
     }
 }

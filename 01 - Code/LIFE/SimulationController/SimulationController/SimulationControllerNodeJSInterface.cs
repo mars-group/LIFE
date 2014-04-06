@@ -1,20 +1,20 @@
-﻿
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace SimulationController
+﻿namespace SimulationController
 {
     using SMConnector.TransportTypes;
+    using System.Threading.Tasks;
 
-    public class SimulationControllerNodeJSInterface
+    public class SimulationControllerNodeJsInterface
     {
+        private readonly SimulationManagerClient _simulationManagerClient;
+
+        public SimulationControllerNodeJsInterface() {
+            _simulationManagerClient = new SimulationManagerClient();
+        }
+
         public async Task<object> GetAllModels(dynamic input)
         {
             return await Task.Run(
-                () => {
-                    var modelDescriptions = new List<TModelDescription>();
-                    return modelDescriptions;
-                });
+                () => _simulationManagerClient.GetAllModels());
         }
 
         public async Task<object> StartSimulationWithModel(dynamic input)
@@ -22,7 +22,7 @@ namespace SimulationController
             return await Task.Run(
                 () =>
                 {
-                    // do stuff
+                    _simulationManagerClient.StartSimulationWithModel(input);
                     return 0;
                 });
         }
@@ -32,9 +32,13 @@ namespace SimulationController
             return await Task.Run(
                 () =>
                 {
-                 // do stuff   
+                    _simulationManagerClient.SubscribeForStatusUpdate(OnStatusUpdateAvailable);  
                     return 0;
                 });
+        }
+
+        private void OnStatusUpdateAvailable(TStatusUpdate update) {
+            throw new System.NotImplementedException();
         }
     }
 }
