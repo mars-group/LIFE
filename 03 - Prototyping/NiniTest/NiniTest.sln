@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiniTest", "NiniTest\NiniTest.csproj", "{E59C0DD9-5CC0-4CA2-AAB3-8EFCBFFE396B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationAdapter", "..\..\01 - Code\LIFE\Common\AppSettingsManager\ConfigurationAdapter.csproj", "{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E59C0DD9-5CC0-4CA2-AAB3-8EFCBFFE396B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E59C0DD9-5CC0-4CA2-AAB3-8EFCBFFE396B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E59C0DD9-5CC0-4CA2-AAB3-8EFCBFFE396B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E59C0DD9-5CC0-4CA2-AAB3-8EFCBFFE396B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

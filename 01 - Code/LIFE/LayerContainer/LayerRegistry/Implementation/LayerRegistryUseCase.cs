@@ -6,6 +6,8 @@ using System.Threading;
 using AppSettingsManager.Implementation;
 using AppSettingsManager.Interface;
 using CommonTypes.DataTypes;
+using ConfigurationAdapter.Implementation;
+using ConfigurationAdapter.Interface;
 using Daylight;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
