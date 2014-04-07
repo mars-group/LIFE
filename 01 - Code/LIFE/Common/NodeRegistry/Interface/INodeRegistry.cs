@@ -3,6 +3,9 @@ using CommonTypes.DataTypes;
 using CommonTypes.Types;
 
 namespace NodeRegistry.Interface {
+
+    //TODO update comments
+
     public interface INodeRegistry {
         /// <summary>
         ///     Start discovering nodes

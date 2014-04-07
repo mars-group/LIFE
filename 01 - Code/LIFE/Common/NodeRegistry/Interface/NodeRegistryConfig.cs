@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommonTypes.DataTypes;
 using CommonTypes.Types;
 
-namespace NodeRegistry.Implementation
+namespace NodeRegistry.Interface
 {
     [Serializable]
     public class NodeRegistryConfig

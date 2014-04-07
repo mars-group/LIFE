@@ -61,7 +61,7 @@
     <Compile Include="Implementation\Messages\NodeRegistryMessageFactory.cs" />
     <Compile Include="Implementation\Messages\NodeRegistryMessage.cs" />
     <Compile Include="Implementation\Messages\NodeRegistryMessageType.cs" />
-    <Compile Include="Implementation\NodeRegistryConfig.cs" />
+    <Compile Include="Interface\NodeRegistryConfig.cs" />
     <Compile Include="Implementation\NodeRegistryManager.cs" />
     <Compile Include="Interface\INodeRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

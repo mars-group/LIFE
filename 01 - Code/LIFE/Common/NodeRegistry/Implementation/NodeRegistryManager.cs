@@ -46,20 +46,14 @@ namespace NodeRegistry.Implementation
         {
             var path = "./" + typeof(NodeRegistryManager).Name + ".config";
 
-            if(!File.Exists(path))
-            {
-                this.config = new Configuration<NodeRegistryConfig>(new NodeRegistryConfig(), path);
-            }
-            else
-            {
-                this.config = new Configuration<NodeRegistryConfig>(path);
-            }
+            this.config = new Configuration<NodeRegistryConfig>(path);
 
             activeNodeList = new Dictionary<string, NodeInformationType>();
             localNodeInformation = ParseNodeInformationTypeFromConfig();
-
-
+            
             SetupNetworkAdapters();
+            //TODO start dicovery 
+
         }
         #endregion
 
@@ -92,6 +86,7 @@ namespace NodeRegistry.Implementation
             return config.Content.NodeType;
         }
 
+     
         private void AnswerMessage(NodeRegistryMessage nodeRegestryMessage)
         {
             switch (nodeRegestryMessage.messageType)
@@ -104,6 +99,7 @@ namespace NodeRegistry.Implementation
                     }
                     break;
                 case NodeRegistryMessageType.Join:
+                    //TODO dont add this node
                     clientAdapter.SendMessageToMulticastGroup(
                         NodeRegistryMessageFactory.GetAnswerMessage(localNodeInformation));
                     break;

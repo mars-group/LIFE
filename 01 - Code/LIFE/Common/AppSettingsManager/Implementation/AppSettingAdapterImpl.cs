@@ -20,7 +20,7 @@ namespace ConfigurationAdapter.Implementation
             if (key == null)
             {
                 throw new CantParseKeyFromConfigExceptions("Can't find an entry for the key " + key + " in your App.config." +
-                                                           "Pls make sure your ConfigurationFile has the requestest entry and it is located at the right place.");
+                                                           "Make sure your ConfigurationFile has the requestest entry and it is located at the right place.");
             }
         }
     }
