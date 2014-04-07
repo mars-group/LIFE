@@ -4,7 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AppSettingsManager.Interface;
+using AppSettingsManager.Interface.Exceptions;
+using ConfigurationAdapter.Interface;
+using ConfigurationAdapter.Implementation;
 using Nini.Config;
 
 namespace AppSettingsManager.Implementation
@@ -36,6 +38,15 @@ namespace AppSettingsManager.Implementation
         {
             return _config.Configs[_sectionName].Get(key);
         }
+        public override void ValidateKey(string key)
+        {
+            if (key == null)
+            {
+                throw new CantParseKeyFromConfigExceptions("Can't find an entry for the key " + key + " in your LifeConfig.xml." +
+                                                           "Pls make sure your ConfigurationFile has the requestest entry and has a copy in your start project.");
+            }
+        }
+
         
     }
 }
