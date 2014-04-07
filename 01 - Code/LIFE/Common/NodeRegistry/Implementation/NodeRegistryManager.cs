@@ -4,11 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using AppSettingsManager.Implementation;
-using AppSettingsManager.Interface;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using ConfigurationAdapter.Implementation;
-using ConfigurationAdapter.Interface;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages;
@@ -140,7 +137,9 @@ namespace NodeRegistry.Implementation
         }
 
 
-
+        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType) {
+            throw new NotImplementedException();
+        }
 
         public void LeaveCluster()
         {
@@ -157,18 +156,6 @@ namespace NodeRegistry.Implementation
             listenThread.Interrupt();
         }
 
-        public void StartDiscovery()
-        {
-            JoinCluster();
-        }
-
-        public void RestartDiscovery()
-        {
-            DropAllNodes();
-            LeaveCluster();
-            JoinCluster();
-        }
-
 
         //TODO testen  
         public void SubscribeForContainerType(SubscribeForNodeTypeDelegate subscribeForNodeTypeDelegate)
@@ -176,7 +163,7 @@ namespace NodeRegistry.Implementation
             subscribeForNodeTypeDelegate.DynamicInvoke();
         }
 
-        public List<NodeInformationType> GetAllNodes(bool includeMySelf = TODO)
+        public List<NodeInformationType> GetAllNodes(bool includeMySelf = false)
         {
             return activeNodeList.Values.Select(type => type).ToList();
         }
@@ -185,6 +172,11 @@ namespace NodeRegistry.Implementation
         {
             return GetAllNodes().Where(nodeInformationType => nodeInformationType.NodeType == nodeType).ToList();
         }
+
+        public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler) {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

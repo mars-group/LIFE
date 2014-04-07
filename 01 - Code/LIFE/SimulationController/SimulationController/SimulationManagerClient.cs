@@ -23,8 +23,6 @@
         public SimulationManagerClient() {
             _nodeRegistry = new NodeRegistryManager();
 
-            _nodeRegistry.StartDiscovery();
-
             var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).First();
 
             var simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
