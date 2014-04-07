@@ -20,8 +20,6 @@ namespace ModelContainer.Implementation {
         private XmlSerializer _modelSerializer;
 
         public ModelContainerUseCase() {
-            IConfigurationAdapter configuration = new AppSettingAdapterImpl();
-            _modelDirectory = configuration.GetValue("ModelDirectory");
 
             _layers = new Dictionary<TLayerDescription, byte[]>();
             _modelSerializer = new XmlSerializer(typeof(TLayerDescription));
@@ -36,16 +34,17 @@ namespace ModelContainer.Implementation {
             string[] folders = Directory.GetDirectories(_modelDirectory);
             foreach (var folder in folders) {
                 try {
-                    models.Add(ReadModel(_modelDirectory + folder));
                 }
                 catch (Exception exception) {
                     Logger.Error(string.Format("An error occurred while reading the model in '{0}'. Error: \n{1}", folder, exception));
                 }
             }
+
+            throw new NotImplementedException();
         }
 
         public TSimModel GetModel(int modelID) {
-            
+            throw new NotImplementedException();
         }
 
         public void AddModel(TModel model) {
