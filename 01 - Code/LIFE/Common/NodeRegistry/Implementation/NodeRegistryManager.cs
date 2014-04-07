@@ -18,90 +18,88 @@ namespace NodeRegistry.Implementation
     {
         //TODO clean
         #region Fields and Properties
-        private Dictionary<String, NodeInformationType> activeNodeList;
-        private readonly NodeInformationType localNodeInformation;
-        private IMulticastReciever reciever;
-        private IMulticastClientAdapter clientAdapter;
-        // private readonly IConfigurationAdapter configurationAdapter;
-        private Configuration<NodeRegistryConfig> config;
-        private Thread listenThread;
-        #endregion
-
-        #region delegates
-
-        public delegate void SubscribeForNodeTypeDelegate(NodeType nodeType);
+        private Dictionary<String, NodeInformationType> _activeNodeList;
+        private readonly NodeInformationType _localNodeInformation;
+        private IMulticastReciever _reciever;
+        private IMulticastClientAdapter _clientAdapter;
+        private readonly Configuration<NodeRegistryConfig> _config;
+        private Thread _listenThread;
         #endregion
 
         #region Constructors
         public NodeRegistryManager(NodeInformationType nodeInformation)
             : this()
         {
-            this.localNodeInformation = nodeInformation;
+            this._localNodeInformation = nodeInformation;
         }
 
         public NodeRegistryManager()
         {
             var path = "./" + typeof(NodeRegistryManager).Name + ".config";
 
-            this.config = new Configuration<NodeRegistryConfig>(path);
+            if(!File.Exists(path))
+            {
+                this._config = new Configuration<NodeRegistryConfig>(new NodeRegistryConfig(), path);
+            }
+            else
+            {
+                this._config = new Configuration<NodeRegistryConfig>(path);
+            }
 
-            activeNodeList = new Dictionary<string, NodeInformationType>();
-            localNodeInformation = ParseNodeInformationTypeFromConfig();
-            
+            _activeNodeList = new Dictionary<string, NodeInformationType>();
+            _localNodeInformation = ParseNodeInformationTypeFromConfig();
+
+
             SetupNetworkAdapters();
-            //TODO start dicovery 
-
         }
         #endregion
 
         #region private Methods
         private void SetupNetworkAdapters()
         {
-            reciever = new UDPMulticastReceiver();
-            clientAdapter = new UDPMulticastSender();
-            listenThread = new Thread(Listen);
+            _reciever = new UDPMulticastReceiver();
+            _clientAdapter = new UDPMulticastSender();
+            _listenThread = new Thread(Listen);
 
-            listenThread.Start();
+            _listenThread.Start();
         }
 
         private NodeInformationType ParseNodeInformationTypeFromConfig()
         {
             return new NodeInformationType(
                 ParseNodeTypeFromConfig(),
-                config.Content.NodeIdentifier,
+                _config.Content.NodeIdentifier,
                 ParseNodeEndpointFromConfig()
                 );
         }
 
         private NodeEndpoint ParseNodeEndpointFromConfig()
         {
-            return new NodeEndpoint(config.Content.NodeEndPointIP, config.Content.NodeEndPointPort);
+            return new NodeEndpoint(_config.Content.NodeEndPointIP, _config.Content.NodeEndPointPort);
         }
 
         private NodeType ParseNodeTypeFromConfig()
         {
-            return config.Content.NodeType;
+            return _config.Content.NodeType;
         }
 
-     
-        private void AnswerMessage(NodeRegistryMessage nodeRegestryMessage)
+        private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage)
         {
-            switch (nodeRegestryMessage.messageType)
+            switch (nodeRegistryMessage.messageType)
             {
                 case NodeRegistryMessageType.Answer:
-                    if (!activeNodeList.ContainsKey(nodeRegestryMessage.nodeInformationType.NodeIdentifier))
+                    if (!_activeNodeList.ContainsKey(nodeRegistryMessage.nodeInformationType.NodeIdentifier))
                     {
-                        activeNodeList.Add(nodeRegestryMessage.nodeInformationType.NodeIdentifier,
-                            nodeRegestryMessage.nodeInformationType);
+                        _activeNodeList.Add(nodeRegistryMessage.nodeInformationType.NodeIdentifier,
+                            nodeRegistryMessage.nodeInformationType);
                     }
                     break;
                 case NodeRegistryMessageType.Join:
-                    //TODO dont add this node
-                    clientAdapter.SendMessageToMulticastGroup(
-                        NodeRegistryMessageFactory.GetAnswerMessage(localNodeInformation));
+                    _clientAdapter.SendMessageToMulticastGroup(
+                        NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
                     break;
                 case NodeRegistryMessageType.Leave:
-                    activeNodeList.Remove(nodeRegestryMessage.nodeInformationType.NodeIdentifier);
+                    _activeNodeList.Remove(nodeRegistryMessage.nodeInformationType.NodeIdentifier);
                     break;
                 default:
                     break;
@@ -110,36 +108,36 @@ namespace NodeRegistry.Implementation
 
         private void JoinCluster()
         {
-            clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(localNodeInformation));
+            _clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation));
         }
 
-        #endregion
-
-        #region public Methods
-        public void DropAllNodes()
+        private void DropAllNodes()
         {
-            activeNodeList = new Dictionary<string, NodeInformationType>();
+            _activeNodeList = new Dictionary<string, NodeInformationType>();
         }
 
-        public void Listen()
+        private void Listen()
         {
             while (Thread.CurrentThread.IsAlive)
             {
-                byte[] msg = reciever.readMulticastGroupMessage();
+                byte[] msg = _reciever.readMulticastGroupMessage();
                 var stream = new MemoryStream(msg);
-                var nodeRegestryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
-                AnswerMessage(nodeRegestryMessage);
+                var nodeRegistryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
+                AnswerMessage(nodeRegistryMessage);
             }
         }
 
 
-        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType) {
-            throw new NotImplementedException();
-        }
+        #endregion
+
+        #region public Methods
+
+
+
 
         public void LeaveCluster()
         {
-            clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(localNodeInformation));
+            _clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(_localNodeInformation));
         }
 
 
@@ -147,21 +145,21 @@ namespace NodeRegistry.Implementation
         public void ShutDownNodeRegistry()
         {
             LeaveCluster();
-            reciever.CloseSocket();
-            clientAdapter.CloseSocket();
-            listenThread.Interrupt();
-        }
-
-
-        //TODO testen  
-        public void SubscribeForContainerType(SubscribeForNodeTypeDelegate subscribeForNodeTypeDelegate)
-        {
-            subscribeForNodeTypeDelegate.DynamicInvoke();
+            _reciever.CloseSocket();
+            _clientAdapter.CloseSocket();
+            _listenThread.Interrupt();
         }
 
         public List<NodeInformationType> GetAllNodes(bool includeMySelf = false)
         {
-            return activeNodeList.Values.Select(type => type).ToList();
+            if (includeMySelf) {
+                return _activeNodeList.Values
+                    .Select(type => type)
+                    .Where(type => type.Equals(ParseNodeInformationTypeFromConfig()))
+                    .ToList();
+            }
+                return _activeNodeList.Values.Select(type => type).ToList();
+
         }
 
         public List<NodeInformationType> GetAllNodesByType(NodeType nodeType)
@@ -170,6 +168,11 @@ namespace NodeRegistry.Implementation
         }
 
         public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler) {
+            throw new NotImplementedException();
+        }
+
+        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType)
+        {
             throw new NotImplementedException();
         }
 
