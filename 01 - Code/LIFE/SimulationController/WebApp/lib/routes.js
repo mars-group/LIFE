@@ -1,7 +1,6 @@
 'use strict';
 
-var api = require('./controllers/api'),
-    index = require('./controllers'),
+var index = require('./controllers'),
     users = require('./controllers/users'),
     session = require('./controllers/session'),
     marscontrol = require('./controllers/marscontrol');
@@ -14,9 +13,10 @@ var middleware = require('./middleware');
 module.exports = function(app) {
 
   // Server API Routes
-  app.get('/api/marscontrol/models', marscontrol.allModels);
+  app.get('/api/marscontrol/', marscontrol.allModels);
+  app.post('/api/marscontrol/', marscontrol.startSimWithModel);
 
-
+  // User specific API
   app.post('/api/users', users.create);
   app.put('/api/users', users.changePassword);
   app.get('/api/users/me', users.me);

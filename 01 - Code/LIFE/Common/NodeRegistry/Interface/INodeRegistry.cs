@@ -4,24 +4,16 @@ using CommonTypes.Types;
 
 namespace NodeRegistry.Interface {
 
-    //TODO update comments
+
+    public delegate void NewNodeConnected(NodeInformationType newNode);
 
     public interface INodeRegistry {
         /// <summary>
-        ///     Start discovering nodes
-        /// </summary>
-        void StartDiscovery();
-
-        /// <summary>
-        ///     Reset list of known nodes and restart discovery
-        /// </summary>
-        void RestartDiscovery();
-
-        /// <summary>
         ///     Get all NodeEndpoints currently discovered
         /// </summary>
+        /// <param name="includeMySelf"></param>
         /// <returns>List of INodeEndpoints, empty list if no discovered Nodes are found</returns>
-        List<NodeInformationType> GetAllNodes();
+        List<NodeInformationType> GetAllNodes(bool includeMySelf=false);
 
         /// <summary>
         ///     Get all NodeEndpoints of type
@@ -30,6 +22,19 @@ namespace NodeRegistry.Interface {
         /// <param name="nodeType"></param>
         /// <returns></returns>
         List<NodeInformationType> GetAllNodesByType(NodeType nodeType);
+
+        /// <summary>
+        /// Subscribe for the event that a new node of any type has connected
+        /// </summary>
+        /// <param name="newNodeConnectedHandler">The callback delegate to be called, when a new node connected</param>
+        void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler);
+
+        /// <summary>
+        /// Subscribe for the event that a new node of a specific type has connected.
+        /// </summary>
+        /// <param name="newNodeConnectedHandler">The callback delegate to be called, when a new node connected</param>
+        /// <param name="nodeType">The type of node which should be recognized</param>
+        void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType);
 
         /// <summary>
         ///     Leave the Current cluster

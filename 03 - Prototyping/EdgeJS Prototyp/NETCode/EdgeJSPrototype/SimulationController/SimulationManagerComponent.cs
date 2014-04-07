@@ -18,7 +18,10 @@
                 () =>
                 {
                     Thread.Sleep((int)input);
-                    return _realMEaningOflife;
+                    return new TStatusUpdate[] {
+                        new TStatusUpdate("test1"),
+                        new TStatusUpdate("test2")
+                    };
                 });
         }
     }

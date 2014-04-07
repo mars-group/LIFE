@@ -6,7 +6,7 @@ var meaningOfLife = edge.func({
     methodName: 'GenerateMeaningOfLife'
 });
 
-meaningOfLife(1000, function (error, result) {
+meaningOfLife(0, function (error, result) {
     if(error) throw error;
     console.log(result);
 })
