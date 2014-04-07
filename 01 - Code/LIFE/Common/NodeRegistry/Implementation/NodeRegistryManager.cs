@@ -25,7 +25,7 @@ namespace NodeRegistry.Implementation
         private NodeInformationType localNodeInformation;
         private IMulticastReciever reciever;
         private IMulticastClientAdapter clientAdapter;
-        private IConfigurationAdapter configurationAdapter; 
+        private IConfigurationAdapter configurationAdapter;
 
         private Thread listenThread;
 
@@ -33,14 +33,11 @@ namespace NodeRegistry.Implementation
 
         public NodeRegistryManager(NodeInformationType nodeInformation)
         {
-
             this.activeNodeList = new Dictionary<string, NodeInformationType>();
             this.localNodeInformation = nodeInformation;
             this.configurationAdapter = new AppSettingAdapterImpl();
 
-           
             SetupNetworkAdapters();
-
         }
 
         public NodeRegistryManager()
@@ -48,9 +45,8 @@ namespace NodeRegistry.Implementation
             this.configurationAdapter = new AppSettingAdapterImpl();
             this.activeNodeList = new Dictionary<string, NodeInformationType>();
             this.localNodeInformation = ParseNodeInformationTypeFromConfig();
-          
-            SetupNetworkAdapters();
 
+            SetupNetworkAdapters();
         }
 
         private void SetupNetworkAdapters()
@@ -75,7 +71,7 @@ namespace NodeRegistry.Implementation
         {
             return new NodeEndpoint(
                 configurationAdapter.GetValue("NodeEndPointIP"),
-               configurationAdapter.GetInt32("NodeEndPointPort")
+                configurationAdapter.GetInt32("NodeEndPointPort")
                 );
         }
 
@@ -83,7 +79,7 @@ namespace NodeRegistry.Implementation
         {
 
             var argument = configurationAdapter.GetInt32("NodeType");
-            return (NodeType) argument;
+            return (NodeType)argument;
 
         }
 

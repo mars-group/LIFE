@@ -12,7 +12,7 @@ namespace AppSettingsManager.Implementation
     public class NiniAdapterImpl : AbstractConfigAdapter
     {
 
-        private const String _XMLCONFIGSOURCE = "../../LifeConfig.xml";
+        public const String _XMLCONFIGSOURCE = "../../LifeConfig.xml";
 
         private IConfigSource _config;
         private string _sectionName;
@@ -22,7 +22,15 @@ namespace AppSettingsManager.Implementation
             _sectionName = sectionName;
             _config = new XmlConfigSource(_XMLCONFIGSOURCE);
 
+        }
+
+        public NiniAdapterImpl(string sectionName , string configSource)
+        {
+            _sectionName = sectionName;
+            _config = new XmlConfigSource(configSource);
+
         } 
+
 
         public override string GetValue(string key)
         {
