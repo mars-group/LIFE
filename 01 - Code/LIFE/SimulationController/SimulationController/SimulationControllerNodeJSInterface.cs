@@ -3,6 +3,12 @@
     using SMConnector.TransportTypes;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// This class provides access to the SimulationManager for Egde.js.
+    /// It therefore has the suffix 'Interface'
+    /// Each method in here has to be of type 'async Task<object>' and
+    /// must use object or dynamic parameter types
+    /// </summary>
     public class SimulationControllerNodeJsInterface
     {
         private readonly SimulationManagerClient _simulationManagerClient;
@@ -11,7 +17,7 @@
             _simulationManagerClient = new SimulationManagerClient();
         }
 
-        public async Task<object> GetAllModels(dynamic input)
+        public async Task<object> GetAllModels()
         {
             return await Task.Run(
                 () => _simulationManagerClient.GetAllModels());

@@ -3,7 +3,8 @@
 var api = require('./controllers/api'),
     index = require('./controllers'),
     users = require('./controllers/users'),
-    session = require('./controllers/session');
+    session = require('./controllers/session'),
+    marscontrol = require('./controllers/marscontrol');
 
 var middleware = require('./middleware');
 
@@ -13,8 +14,9 @@ var middleware = require('./middleware');
 module.exports = function(app) {
 
   // Server API Routes
-  app.get('/api/awesomeThings', api.awesomeThings);
-  
+  app.get('/api/marscontrol/models', marscontrol.allModels);
+
+
   app.post('/api/users', users.create);
   app.put('/api/users', users.changePassword);
   app.get('/api/users/me', users.me);

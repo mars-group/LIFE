@@ -9,7 +9,7 @@
 
         public SimulationManagerComponent()
         {
-            _realMEaningOflife  = 42;
+            _realMEaningOflife  = 50;
         }
 
         public async Task<object> GenerateMeaningOfLife(dynamic input)

@@ -3,8 +3,14 @@
 angular.module('marsmissionControlApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
-      'title': 'Home',
+      'title': 'Dashboard',
       'link': '/'
+    }, {
+      'title': 'MARS Control',
+      'link': '/marscontrol'
+    }, {
+      'title': 'MARS VIEW',
+      'link': '/marsview'
     }, {
       'title': 'Settings',
       'link': '/settings'
