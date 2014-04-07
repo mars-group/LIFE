@@ -23,6 +23,13 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public string FileName { get; protected set; }
 
+        public TLayerDescription(string name, int majorVersion, int minorVersion, string fileName) {
+            Name = name;
+            MajorVersion = majorVersion;
+            MinorVersion = minorVersion;
+            FileName = fileName;
+        }
+
         #region Object Contracts
 
         public bool Equals(TLayerDescription other) {
