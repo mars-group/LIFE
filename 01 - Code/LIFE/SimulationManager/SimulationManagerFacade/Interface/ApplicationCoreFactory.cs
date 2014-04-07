@@ -9,21 +9,16 @@ using SimulationManagerController.Implementation;
 using SimulationManagerController.Interfaces;
 using SimulationManagerFacade.Implementation;
 
-
-namespace SimulationManagerFacade.Interface
-{
+namespace SimulationManagerFacade.Interface {
     /// <summary>
-    /// This class can be used to obtain all versions of the application core, either for testing or
-    /// for production use. It works via the factory pattern.
+    ///     This class can be used to obtain all versions of the application core, either for testing or
+    ///     for production use. It works via the factory pattern.
     /// </summary>
-    public class ApplicationCoreFactory
-    {
+    public class ApplicationCoreFactory {
         private static IContainer container;
 
-        public static IApplicationCore GetProductionApplicationCore()
-        {
-            if (container == null)
-            {
+        public static IApplicationCore GetProductionApplicationCore() {
+            if (container == null) {
                 ContainerBuilder builder = new ContainerBuilder();
 
                 builder.RegisterType<ModelContainerComponent>()

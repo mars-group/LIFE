@@ -1,39 +1,29 @@
-﻿using CommonTypes.TransportTypes.SimulationControl;
+﻿using System;
 using LayerAPI.Interfaces;
+using LayerRegistry.Interfaces;
 using NodeRegistry.Interface;
 
-namespace LayerRegistry.Implementation
-{
-    using System;
-    using Interfaces;
-
-    public class LayerRegistryComponent : ILayerRegistry
-    {
+namespace LayerRegistry.Implementation {
+    public class LayerRegistryComponent : ILayerRegistry {
         private readonly ILayerRegistry _layerRegistryUseCase;
 
-        public LayerRegistryComponent(INodeRegistry nodeRegistry)
-        {
+        public LayerRegistryComponent(INodeRegistry nodeRegistry) {
             _layerRegistryUseCase = new LayerRegistryUseCase(nodeRegistry);
-
         }
 
-        public ILayer RemoveLayerInstance(Type layerType)
-        {
+        public ILayer RemoveLayerInstance(Type layerType) {
             return _layerRegistryUseCase.RemoveLayerInstance(layerType);
         }
 
-        public void ResetLayerRegistry()
-        {
+        public void ResetLayerRegistry() {
             _layerRegistryUseCase.ResetLayerRegistry();
         }
 
-        public ILayer GetRemoteLayerInstance(Type layerType)
-        {
+        public ILayer GetRemoteLayerInstance(Type layerType) {
             return _layerRegistryUseCase.GetRemoteLayerInstance(layerType);
         }
 
-        public void RegisterLayer(ILayer layer)
-        {
+        public void RegisterLayer(ILayer layer) {
             _layerRegistryUseCase.RegisterLayer(layer);
         }
     }

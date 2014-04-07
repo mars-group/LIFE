@@ -1,12 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CommonTypes.TransportTypes
-{
-    public class TSimModel
-    {
-    }
+﻿namespace CommonTypes.TransportTypes {
+    public class TSimModel {}
 }

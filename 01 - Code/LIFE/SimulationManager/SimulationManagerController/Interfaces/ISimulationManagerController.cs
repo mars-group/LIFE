@@ -1,6 +1,3 @@
-﻿namespace SimulationManagerController.Interfaces
-{
-    public interface ISimulationManagerController
-    {
-    }
+﻿namespace SimulationManagerController.Interfaces {
+    public interface ISimulationManagerController {}
 }

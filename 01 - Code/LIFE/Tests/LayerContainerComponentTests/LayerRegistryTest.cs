@@ -1,32 +1,26 @@
-﻿using NUnit.Framework;
-using System;
-using LayerRegistry.Interfaces;
+﻿using LayerAPI.Interfaces;
 using LayerRegistry.Implementation;
-using ExampleLayer;
-using LayerAPI.Interfaces;
+using LayerRegistry.Interfaces;
 using NodeRegistry.Implementation;
+using NUnit.Framework;
 
-namespace LayerContainerComponentTests
-{
-	[TestFixture ()]
-	public class LayerRegistryTest
-	{
+namespace LayerContainerComponentTests {
+    [TestFixture]
+    public class LayerRegistryTest {
+        private ILayerRegistry _layerRegistry;
 
-		private ILayerRegistry _layerRegistry;
+        private ISteppedLayer _layer;
 
-		ISteppedLayer _layer;
+        [SetUp]
+        public void Init() {
+            _layerRegistry = new LayerRegistryComponent(new NodeRegistryManager());
+            _layer = new ExampleLayer.ExampleLayer();
+        }
 
-		[SetUp]
-		public void Init(){
-			_layerRegistry = new LayerRegistryComponent(new NodeRegistryManager());
-			_layer = new ExampleLayer.ExampleLayer();
-		}
-
-		[Test ()]
-		public void TestRegister ()
-		{
-			_layerRegistry.RegisterLayer (_layer);
-			Assert.AreEqual(_layer, _layerRegistry.GetRemoteLayerInstance(_layer.GetType()));
-		}
-	}
+        [Test]
+        public void TestRegister() {
+            _layerRegistry.RegisterLayer(_layer);
+            Assert.AreEqual(_layer, _layerRegistry.GetRemoteLayerInstance(_layer.GetType()));
+        }
+    }
 }

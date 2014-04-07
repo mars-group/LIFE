@@ -1,9 +1,5 @@
-﻿
-
-namespace LayerAPI.Interfaces
-{
-    public interface ITickClient
-    {
+﻿namespace LayerAPI.Interfaces {
+    public interface ITickClient {
         void tick();
     }
 }

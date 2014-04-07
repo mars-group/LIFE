@@ -1,8 +1,5 @@
-﻿
-namespace LayerAPI.Interfaces
-{
-    public enum LayerStatus
-    {
+﻿namespace LayerAPI.Interfaces {
+    public enum LayerStatus {
         Running,
         Idle,
         Stopped,

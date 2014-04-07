@@ -1,17 +1,15 @@
-﻿namespace Hik.Communication.Scs.Communication
-{
+﻿namespace Hik.Communication.Scs.Communication {
     /// <summary>
-    /// Communication states.
+    ///     Communication states.
     /// </summary>
-    public enum CommunicationStates
-    {
+    public enum CommunicationStates {
         /// <summary>
-        /// Connected.
+        ///     Connected.
         /// </summary>
         Connected,
 
         /// <summary>
-        /// Disconnected.
+        ///     Disconnected.
         /// </summary>
         Disconnected
     }

@@ -1,21 +1,16 @@
-﻿
-using CommonTypes.TransportTypes.SimulationControl;
+﻿using System;
+using LayerAPI.Interfaces;
 
-namespace LayerRegistry.Interfaces
-{
-    using System;
-    using LayerAPI.Interfaces;
-
+namespace LayerRegistry.Interfaces {
     /// <summary>
-    /// The LayerRegistry. 
-    /// Takes care of resolving layer instances locally and remotely
+    ///     The LayerRegistry.
+    ///     Takes care of resolving layer instances locally and remotely
     /// </summary>
-    public interface ILayerRegistry
-    {
+    public interface ILayerRegistry {
         /// <summary>
-        /// Removes the layer with instance layerInstanceId.
-        /// CAUTION: Can not be undone! Use only in re-partitioning process
-        /// or if new simulation shall be startet.
+        ///     Removes the layer with instance layerInstanceId.
+        ///     CAUTION: Can not be undone! Use only in re-partitioning process
+        ///     or if new simulation shall be startet.
         /// </summary>
         /// <param name="layerType"></param>
         /// <param name="layerID"></param>
@@ -23,23 +18,23 @@ namespace LayerRegistry.Interfaces
         ILayer RemoveLayerInstance(Type layerType);
 
         /// <summary>
-        /// Resets the whole LayerRegistry, loosing all implementations, statets and
-        /// remote endpoints. 
-        /// CAUTION: This cannot be undone!
+        ///     Resets the whole LayerRegistry, loosing all implementations, statets and
+        ///     remote endpoints.
+        ///     CAUTION: This cannot be undone!
         /// </summary>
         void ResetLayerRegistry();
 
         /// <summary>
-        /// Returns an instance of parameterType either as local object or as a stub
+        ///     Returns an instance of parameterType either as local object or as a stub
         /// </summary>
         /// <param name="parameterType"></param>
         /// <returns></returns>
         ILayer GetRemoteLayerInstance(Type layerType);
 
         /// <summary>
-		/// Registers layer as being instantiated on this node.
-		/// Will store a reference for local usage, as well as
-		/// connection information in the DHT
+        ///     Registers layer as being instantiated on this node.
+        ///     Will store a reference for local usage, as well as
+        ///     connection information in the DHT
         /// </summary>
         /// <param name="layer"></param>
         void RegisterLayer(ILayer layer);

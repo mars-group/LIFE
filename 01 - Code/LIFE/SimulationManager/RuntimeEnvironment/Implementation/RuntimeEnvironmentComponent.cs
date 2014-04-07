@@ -1,8 +1,5 @@
 ﻿using RuntimeEnvironment.Interfaces;
 
-namespace RuntimeEnvironment.Implementation
-{
-    public class RuntimeEnvironmentComponent : IRuntimeEnvironment
-    {
-    }
+namespace RuntimeEnvironment.Implementation {
+    public class RuntimeEnvironmentComponent : IRuntimeEnvironment {}
 }

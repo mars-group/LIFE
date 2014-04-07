@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Threading;
 
-namespace Hik.Threading
-{
+namespace Hik.Threading {
     /// <summary>
-    /// This class is a timer that performs some tasks periodically.
+    ///     This class is a timer that performs some tasks periodically.
     /// </summary>
-    public class Timer
-    {
+    public class Timer {
         #region Public events
 
         /// <summary>
-        /// This event is raised periodically according to Period of Timer.
+        ///     This event is raised periodically according to Period of Timer.
         /// </summary>
         public event EventHandler Elapsed;
 
@@ -20,13 +18,13 @@ namespace Hik.Threading
         #region Public fields
 
         /// <summary>
-        /// Task period of timer (as milliseconds).
+        ///     Task period of timer (as milliseconds).
         /// </summary>
         public int Period { get; set; }
 
         /// <summary>
-        /// Indicates whether timer raises Elapsed event on Start method of Timer for once.
-        /// Default: False.
+        ///     Indicates whether timer raises Elapsed event on Start method of Timer for once.
+        ///     Default: False.
         /// </summary>
         public bool RunOnStart { get; set; }
 
@@ -35,18 +33,18 @@ namespace Hik.Threading
         #region Private fields
 
         /// <summary>
-        /// This timer is used to perfom the task at spesified intervals.
+        ///     This timer is used to perfom the task at spesified intervals.
         /// </summary>
         private readonly System.Threading.Timer _taskTimer;
 
         /// <summary>
-        /// Indicates that whether timer is running or stopped.
+        ///     Indicates that whether timer is running or stopped.
         /// </summary>
         private volatile bool _running;
 
         /// <summary>
-        /// Indicates that whether performing the task or _taskTimer is in sleep mode.
-        /// This field is used to wait executing tasks when stopping Timer.
+        ///     Indicates that whether performing the task or _taskTimer is in sleep mode.
+        ///     This field is used to wait executing tasks when stopping Timer.
         /// </summary>
         private volatile bool _performingTasks;
 
@@ -55,22 +53,18 @@ namespace Hik.Threading
         #region Constructors
 
         /// <summary>
-        /// Creates a new Timer.
+        ///     Creates a new Timer.
         /// </summary>
         /// <param name="period">Task period of timer (as milliseconds)</param>
         public Timer(int period)
-            : this(period, false)
-        {
-
-        }
+            : this(period, false) {}
 
         /// <summary>
-        /// Creates a new Timer.
+        ///     Creates a new Timer.
         /// </summary>
         /// <param name="period">Task period of timer (as milliseconds)</param>
         /// <param name="runOnStart">Indicates whether timer raises Elapsed event on Start method of Timer for once</param>
-        public Timer(int period, bool runOnStart)
-        {
+        public Timer(int period, bool runOnStart) {
             Period = period;
             RunOnStart = runOnStart;
             _taskTimer = new System.Threading.Timer(TimerCallBack, null, Timeout.Infinite, Timeout.Infinite);
@@ -81,35 +75,29 @@ namespace Hik.Threading
         #region Public methods
 
         /// <summary>
-        /// Starts the timer.
+        ///     Starts the timer.
         /// </summary>
-        public void Start()
-        {
+        public void Start() {
             _running = true;
             _taskTimer.Change(RunOnStart ? 0 : Period, Timeout.Infinite);
         }
 
         /// <summary>
-        /// Stops the timer.
+        ///     Stops the timer.
         /// </summary>
-        public void Stop()
-        {
-            lock (_taskTimer)
-            {
+        public void Stop() {
+            lock (_taskTimer) {
                 _running = false;
                 _taskTimer.Change(Timeout.Infinite, Timeout.Infinite);
             }
         }
 
         /// <summary>
-        /// Waits the service to stop.
+        ///     Waits the service to stop.
         /// </summary>
-        public void WaitToStop()
-        {
-            lock (_taskTimer)
-            {
-                while (_performingTasks)
-                {
+        public void WaitToStop() {
+            lock (_taskTimer) {
+                while (_performingTasks) {
                     Monitor.Wait(_taskTimer);
                 }
             }
@@ -120,42 +108,25 @@ namespace Hik.Threading
         #region Private methods
 
         /// <summary>
-        /// This method is called by _taskTimer.
+        ///     This method is called by _taskTimer.
         /// </summary>
         /// <param name="state">Not used argument</param>
-        private void TimerCallBack(object state)
-        {
-            lock (_taskTimer)
-            {
-                if (!_running || _performingTasks)
-                {
-                    return;
-                }
+        private void TimerCallBack(object state) {
+            lock (_taskTimer) {
+                if (!_running || _performingTasks) return;
 
                 _taskTimer.Change(Timeout.Infinite, Timeout.Infinite);
                 _performingTasks = true;
             }
 
-            try
-            {
-                if (Elapsed != null)
-                {
-                    Elapsed(this, new EventArgs());
-                }
+            try {
+                if (Elapsed != null) Elapsed(this, new EventArgs());
             }
-            catch
-            {
-
-            }
-            finally
-            {
-                lock (_taskTimer)
-                {
+            catch {}
+            finally {
+                lock (_taskTimer) {
                     _performingTasks = false;
-                    if (_running)
-                    {
-                        _taskTimer.Change(Period, Timeout.Infinite);
-                    }
+                    if (_running) _taskTimer.Change(Period, Timeout.Infinite);
 
                     Monitor.Pulse(_taskTimer);
                 }
