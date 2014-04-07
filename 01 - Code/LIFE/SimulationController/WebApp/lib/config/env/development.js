@@ -3,6 +3,6 @@
 module.exports = {
   env: 'development',
   mongo: {
-    uri: 'mongodb://localhost/fullstack-dev'
+    uri: 'mongodb://141.22.32.178/marsmissioncontrol-dev'
   }
 };

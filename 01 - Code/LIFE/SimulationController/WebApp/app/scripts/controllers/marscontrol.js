@@ -1,6 +1,6 @@
 'use strict';
 
 angular.module('marsmissionControlApp')
-  .controller('MainCtrl', function ($scope, $http) {
+  .controller('MarscontrolCtrl', function ($scope, $http) {
 
   });

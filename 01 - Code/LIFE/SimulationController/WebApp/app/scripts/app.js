@@ -25,6 +25,10 @@ angular.module('marsmissionControlApp', [
         controller: 'SettingsCtrl',
         authenticate: true
       })
+      .when('/marscontrol', {
+        templateUrl: 'partials/marscontrol',
+        controller: 'MarscontrolCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

@@ -1,15 +1,14 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  Thing = mongoose.model('Thing');
+  User = mongoose.model('User');
 
 /**
  * Populate database with sample application data
  */
 
 //Clear old things, then add things in
-Thing.find({}).remove(function() {
+/*Thing.find({}).remove(function() {
   Thing.create({
     name : 'HTML5 Boilerplate',
     info : 'HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.',
@@ -34,7 +33,7 @@ Thing.find({}).remove(function() {
       console.log('finished populating things');
     }
   );
-});
+});*/
 
 // Clear old users, then add a default user
 User.find({}).remove(function() {
