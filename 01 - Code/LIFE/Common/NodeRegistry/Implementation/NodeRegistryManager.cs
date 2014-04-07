@@ -176,7 +176,7 @@ namespace NodeRegistry.Implementation
             subscribeForNodeTypeDelegate.DynamicInvoke();
         }
 
-        public List<NodeInformationType> GetAllNodes()
+        public List<NodeInformationType> GetAllNodes(bool includeMySelf = TODO)
         {
             return activeNodeList.Values.Select(type => type).ToList();
         }

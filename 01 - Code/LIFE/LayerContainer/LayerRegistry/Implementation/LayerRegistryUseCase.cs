@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using AppSettingsManager.Implementation;
-using AppSettingsManager.Interface;
 using CommonTypes.DataTypes;
 using ConfigurationAdapter.Implementation;
 using ConfigurationAdapter.Interface;
@@ -49,7 +47,7 @@ namespace LayerRegistry.Implementation {
 
         public ILayer GetRemoteLayerInstance(Type layerType) {
             if (_localLayers.ContainsKey(layerType)) return _localLayers[layerType];
-            return GetRemoteLayerInstance(GetFromDHT(layerType), layerType);
+            return GetRemoteLayerInstance(GetFromDht(layerType), layerType);
         }
 
 
@@ -58,16 +56,16 @@ namespace LayerRegistry.Implementation {
             _localLayers.Add(layer.GetType(), layer);
 
             // store LayerRegistryEntry in DHT for remote usage
-            PutIntoDHT(layer.GetType());
+            PutIntoDht(layer.GetType());
         }
 
         #region Private Methods
 
-        private ICollection<string> GetFromDHT(Type layerType) {
+        private ICollection<string> GetFromDht(Type layerType) {
             return _kademliaNode.Get(ID.Hash(layerType.Name));
         }
 
-        private void PutIntoDHT(Type layerType) {
+        private void PutIntoDht(Type layerType) {
             var value = JsonConvert.SerializeObject(new LayerRegistryEntry(_ownIpAddress, _ownPort, layerType));
             _kademliaNode.Put(ID.Hash(layerType.ToString()), JsonConvert.SerializeObject(value));
         }
@@ -97,10 +95,8 @@ namespace LayerRegistry.Implementation {
             NodeInformationType otherNode = null;
 
             // loop and wait until any other node is up and running
-            while (otherNode == null) {
-                Thread.Sleep(100);
-                otherNode = _nodeRegistry.GetAllNodes().FirstOrDefault();
-            }
+            Thread.Sleep(100);
+            otherNode = _nodeRegistry.GetAllNodes().FirstOrDefault();
 
             _kademliaNode.Bootstrap(
                 new IPEndPoint(IPAddress.Parse(otherNode.NodeEndpoint.IpAddress),
