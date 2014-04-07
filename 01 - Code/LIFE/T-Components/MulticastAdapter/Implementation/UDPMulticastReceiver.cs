@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using AppSettingsManager.Implementation;
 using AppSettingsManager.Interface;
+using ConfigurationAdapter.Implementation;
+using ConfigurationAdapter.Interface;
 using MulticastAdapter.Interface;
 
 namespace MulticastAdapter.Implementation {

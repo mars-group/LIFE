@@ -16,7 +16,7 @@ namespace ConfigurationAdapter.Interface
         double GetDouble(string key);
 
         /// <summary>
-        /// Validate the given Key. If the key is null a CantParseKeyFromConfigExeption is thrown
+        /// Validate the given Key. If the key is null a CantParseKeyFromConfigExeption is thrown.
         /// </summary>
         void ValidateKey(string key);
 

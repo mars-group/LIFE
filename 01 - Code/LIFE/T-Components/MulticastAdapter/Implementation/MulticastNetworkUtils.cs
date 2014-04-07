@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using AppSettingsManager.Implementation;
+using ConfigurationAdapter.Implementation;
 
 namespace MulticastAdapter.Implementation {
     internal class MulticastNetworkUtils {
@@ -16,7 +17,7 @@ namespace MulticastAdapter.Implementation {
         /// <param name="name">name of the networkinterface</param>
         /// <returns></returns>
         public static NetworkInterface GetInterfaceByName(string name) {
-            foreach (var networkInterface in GetAllMulticastInterfaces()) {
+            foreach(var networkInterface in GetAllMulticastInterfaces()) {
                 if (networkInterface.Name.Equals(name)) return networkInterface;
             }
 
