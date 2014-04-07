@@ -37,14 +37,9 @@ namespace NodeRegistry.Implementation
         {
             var path = "./" + typeof(NodeRegistryManager).Name + ".config";
 
-            if(!File.Exists(path))
-            {
-                this._config = new Configuration<NodeRegistryConfig>(new NodeRegistryConfig(), path);
-            }
-            else
-            {
+          
                 this._config = new Configuration<NodeRegistryConfig>(path);
-            }
+           
 
             _activeNodeList = new Dictionary<string, NodeInformationType>();
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
