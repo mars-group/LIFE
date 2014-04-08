@@ -27,11 +27,11 @@ namespace DistributedKeyValueStore.Implementation
         }
 
         public void Put(string key, string value) {
-            throw new System.NotImplementedException();
+            _kademliaNode.Put(ID.Hash(key), value);
         }
 
         public IList<string> Get(string key) {
-            throw new System.NotImplementedException();
+            return _kademliaNode.Get(ID.Hash(key));
         }
 
         private void JoinKademliaDht()
@@ -48,13 +48,14 @@ namespace DistributedKeyValueStore.Implementation
                 // wait to fill bucket list
                 Thread.Sleep(50);
 
-                // join network
-                _kademliaNode.JoinNetwork();
+
             }
             else {
                 _kademliaNode.Bootstrap(_kademliaPort);
             }
 
+            // join network
+            _kademliaNode.JoinNetwork();
 
         }
     }
