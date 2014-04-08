@@ -51,7 +51,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\LCConnector\LCConnector.csproj">
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76bffba7-7bf3-439e-83d4-a340b1227461}</Project>
       <Name>LCConnector</Name>
     </ProjectReference>
