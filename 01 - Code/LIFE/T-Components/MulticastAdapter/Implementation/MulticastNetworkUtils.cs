@@ -3,11 +3,13 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using AppSettingsManager.Implementation;
-using ConfigurationAdapter.Implementation;
+using System.Runtime.Remoting.Messaging;
+using MulticastAdapter.Interface.Config.Types;
 
-namespace MulticastAdapter.Implementation {
-    internal class MulticastNetworkUtils {
+namespace MulticastAdapter.Implementation
+{
+    internal class MulticastNetworkUtils
+    {
         //TODO implement iterateOverAllNetworkInterfaces(delegate)
 
         /// <summary>
@@ -16,8 +18,10 @@ namespace MulticastAdapter.Implementation {
         /// </summary>
         /// <param name="name">name of the networkinterface</param>
         /// <returns></returns>
-        public static NetworkInterface GetInterfaceByName(string name) {
-            foreach(var networkInterface in GetAllMulticastInterfaces()) {
+        public static NetworkInterface GetInterfaceByName(string name)
+        {
+            foreach (var networkInterface in GetAllMulticastInterfaces())
+            {
                 if (networkInterface.Name.Equals(name)) return networkInterface;
             }
 
@@ -31,11 +35,14 @@ namespace MulticastAdapter.Implementation {
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public static NetworkInterface GetInterfaceByIP(IPAddress ip) {
+        public static NetworkInterface GetInterfaceByIP(IPAddress ip)
+        {
             var Networkinterfaces = GetAllMulticastInterfaces();
 
-            foreach (var networkinterface in Networkinterfaces) {
-                foreach (var unicastAddress in networkinterface.GetIPProperties().UnicastAddresses) {
+            foreach (var networkinterface in Networkinterfaces)
+            {
+                foreach (var unicastAddress in networkinterface.GetIPProperties().UnicastAddresses)
+                {
                     if (unicastAddress.Address.Equals(ip)) return networkinterface;
                 }
             }
@@ -43,7 +50,8 @@ namespace MulticastAdapter.Implementation {
             return null;
         }
 
-        public static List<NetworkInterface> GetAllMulticastInterfaces() {
+        public static List<NetworkInterface> GetAllMulticastInterfaces()
+        {
             return NetworkInterface.GetAllNetworkInterfaces().Where(
                 networkInterface => networkInterface.SupportsMulticast &&
                                     networkInterface.GetIPProperties().MulticastAddresses.Any() &&
@@ -56,11 +64,16 @@ namespace MulticastAdapter.Implementation {
         ///     Parse which IP Version should be used from the Appsettings.
         /// </summary>
         /// <returns>The AddressFamily of the IPversion</returns>
-        public static AddressFamily GetAddressFamily() {
-            var configAdapter = new AppSettingAdapterImpl();
-
-            if (configAdapter.GetValue("IpVersion").ToLower() == "ipv6") return AddressFamily.InterNetworkV6;
-            return AddressFamily.InterNetwork;
+        public static AddressFamily GetAddressFamily(IPVersionType ipVersion)
+        {
+            switch (ipVersion)
+            {
+                case IPVersionType.IPv6:
+                    return AddressFamily.InterNetworkV6;
+                default:
+                    return AddressFamily.InterNetwork;
+            }
+            
         }
     }
 }

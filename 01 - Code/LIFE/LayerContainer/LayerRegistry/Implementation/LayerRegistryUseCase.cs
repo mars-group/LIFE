@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading;
+using AppSettingsManager.Interface;
 using CommonTypes.DataTypes;
-using ConfigurationAdapter.Implementation;
-using ConfigurationAdapter.Interface;
 using Daylight;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
 using LayerAPI.Interfaces;
 using LayerRegistry.Interfaces;
+using LayerRegistry.Interfaces.Config;
 using Newtonsoft.Json;
 using NodeRegistry.Interface;
 
@@ -22,17 +23,20 @@ namespace LayerRegistry.Implementation {
         private readonly string _ownIpAddress;
         private readonly int _ownPort;
         private readonly IDictionary<Type, ILayer> _localLayers;
-        private IConfigurationAdapter _configurationAdapter;
+        private Configuration<LayerRegistryConfig> _layerRegisterConfig;
 
         public LayerRegistryUseCase(INodeRegistry nodeRegistry) {
-            _configurationAdapter = new AppSettingAdapterImpl();
+
+            var path = "./" + typeof(LayerRegistryConfig).Name + ".config";
+
+            _layerRegisterConfig = new Configuration<LayerRegistryConfig>(path);
             _nodeRegistry = nodeRegistry;
 
             _localLayers = new Dictionary<Type, ILayer>();
 
-            _kademliaPort = _configurationAdapter.GetInt32("KademliaPort");
-            _ownIpAddress = _configurationAdapter.GetValue("MainNetworkAddress");
-            _ownPort = _configurationAdapter.GetInt32("MainNetworkPort");
+            _kademliaPort = _layerRegisterConfig.Content.KademliaPort;
+            _ownIpAddress = _layerRegisterConfig.Content.MainNetworkAddress;
+            _ownPort = _layerRegisterConfig.Content.MainNetworkPort;
             _kademliaNode = new KademliaNode(_kademliaPort, ID.HostID());
             JoinKademliaDHT();
         }

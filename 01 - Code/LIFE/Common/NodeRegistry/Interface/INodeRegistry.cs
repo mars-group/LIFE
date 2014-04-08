@@ -41,6 +41,9 @@ namespace NodeRegistry.Interface {
         /// </summary>
         void LeaveCluster();
 
+        //Joins, in the configuration specified, multicastgroupe to connect to the node cluster and take part in a simulation.
+        void JoinCluster();
+
         /// <summary>
         ///     Leave the Current cluster and shut down all networksockets
         /// </summary>

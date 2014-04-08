@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using AppSettingsManager.Implementation;
-using ConfigurationAdapter.Implementation;
-using ConfigurationAdapter.Interface;
+using AppSettingsManager.Interface;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;
@@ -47,7 +45,7 @@ namespace MulticastAdapter.Implementation
             {
                 foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
                 {
-                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
+                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(generalSettings.Content.IpVersion))
                         recieverClient.JoinMulticastGroup(mcastAddress, unicastAddr.Address);
                 }
             }
@@ -80,7 +78,7 @@ namespace MulticastAdapter.Implementation
         {
             IPEndPoint sourceEndPoint;
             byte[] msg = { };
-            if (MulticastNetworkUtils.GetAddressFamily() == AddressFamily.InterNetworkV6)
+            if (MulticastNetworkUtils.GetAddressFamily(generalSettings.Content.IpVersion) == AddressFamily.InterNetworkV6)
                 sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, listenPort);
             else sourceEndPoint = new IPEndPoint(IPAddress.Any, listenPort);
 

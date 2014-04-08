@@ -5,7 +5,6 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-using AppSettingsManager.Implementation;
 using AppSettingsManager.Interface;
 using CommonTypes.TransportTypes;
 using LCConnector.TransportTypes;

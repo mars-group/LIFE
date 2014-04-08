@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace AppSettingsManager.Implementation
+namespace AppSettingsManager.Interface
 {
     public class Configuration<T>
     {
@@ -10,7 +10,7 @@ namespace AppSettingsManager.Implementation
 
         private FileStream file;
         
-
+        //TODO is (noch) nicht geil :-(
         /// <summary>
         /// This is the constructor to load an already existing configuration from the given filename.
         /// If the file, with the given filename does not exist a new file is writen from the default constructor of T. 
