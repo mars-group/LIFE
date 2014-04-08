@@ -1,27 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LayerRegistry.Interfaces.Config
+﻿namespace LayerRegistry.Interfaces.Config
 {
     class LayerRegistryConfig {
-        public string MainNetworkAddress;
-        public int MainNetworkPort;
-        public int KademliaPort;
+        public readonly string MainNetworkAddress;
+        public readonly int MainNetworkPort;
 
         public LayerRegistryConfig() {
             MainNetworkAddress = "10.0.0.7";
             MainNetworkPort = 8500;
-            KademliaPort = 8888;
         }
 
 
-        public LayerRegistryConfig(string mainNetworkAddress, int mainNetworkPort, int kademliaPort) {
+        public LayerRegistryConfig(string mainNetworkAddress, int mainNetworkPort) {
             MainNetworkAddress = mainNetworkAddress;
             MainNetworkPort = mainNetworkPort;
-            KademliaPort = kademliaPort;
         }
     }
 }

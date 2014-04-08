@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConfigurationAdapter.Interface;
+using System.Linq.Expressions;
+using System.Net;
+using System.Threading;
+using AppSettingsManager.Interface;
+using CommonTypes.DataTypes;
+using Daylight;
 using DistributedKeyValueStore.Interface;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
@@ -9,6 +14,7 @@ using LayerAPI.Interfaces;
 using LayerRegistry.Interfaces;
 using LayerRegistry.Interfaces.Config;
 using Newtonsoft.Json;
+using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
@@ -16,16 +22,35 @@ namespace LayerRegistry.Implementation {
         private readonly string _ownIpAddress;
         private readonly int _ownPort;
         private readonly IDictionary<Type, ILayer> _localLayers;
+<<<<<<< HEAD
+
+=======
+        private Configuration<LayerRegistryConfig> _layerRegisterConfig;
+
+        public LayerRegistryUseCase(INodeRegistry nodeRegistry) {
+
+            var path = "./" + typeof(LayerRegistryConfig).Name + ".config";
+
+            _layerRegisterConfig = new Configuration<LayerRegistryConfig>(path);
+            _nodeRegistry = nodeRegistry;
+>>>>>>> ee555257cd2c1de4a6f73b8d80bed00484f15220
 
         public LayerRegistryUseCase(IDistributedKeyValueStore distributedKeyValueStore) {
             _distributedKeyValueStore = distributedKeyValueStore;
-
-            var path = "./" + typeof(LayerRegistryConfig).Name + ".config";
-            var layerRegisterConfig = new Configuration<LayerRegistryConfig>(path);
             _localLayers = new Dictionary<Type, ILayer>();
 
-            _ownIpAddress = layerRegisterConfig.Content.MainNetworkAddress;
-            _ownPort = layerRegisterConfig.Content.MainNetworkPort;
+<<<<<<< HEAD
+            IConfigurationAdapter configurationAdapter = new AppSettingAdapterImpl();
+
+            _ownIpAddress = configurationAdapter.GetValue("MainNetworkAddress");
+            _ownPort = configurationAdapter.GetInt32("MainNetworkPort");
+=======
+            _kademliaPort = _layerRegisterConfig.Content.KademliaPort;
+            _ownIpAddress = _layerRegisterConfig.Content.MainNetworkAddress;
+            _ownPort = _layerRegisterConfig.Content.MainNetworkPort;
+            _kademliaNode = new KademliaNode(_kademliaPort, ID.HostID());
+            JoinKademliaDHT();
+>>>>>>> ee555257cd2c1de4a6f73b8d80bed00484f15220
         }
 
         public ILayer RemoveLayerInstance(Type layerType) {
@@ -38,8 +63,10 @@ namespace LayerRegistry.Implementation {
 
         public ILayer GetRemoteLayerInstance(Type layerType) {
             if (_localLayers.ContainsKey(layerType)) return _localLayers[layerType];
-            return GetRemoteLayerInstance(_distributedKeyValueStore.Get(layerType.ToString()), layerType);
+            return GetRemoteLayerInstance(_distributedKeyValueStore.Get(layerType.Name), layerType);
         }
+
+
 
 
         public void RegisterLayer(ILayer layer) {
@@ -73,6 +100,8 @@ namespace LayerRegistry.Implementation {
 
             return scsStub.ServiceProxy;
         }
+
+
 
         #endregion
     }

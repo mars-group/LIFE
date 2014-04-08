@@ -1,4 +1,5 @@
-﻿using LayerAPI.Interfaces;
+﻿using DistributedKeyValueStore.Implementation;
+using LayerAPI.Interfaces;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
 using NodeRegistry.Implementation;
@@ -13,7 +14,7 @@ namespace LayerContainerComponentTests {
 
         [SetUp]
         public void Init() {
-            _layerRegistry = new LayerRegistryComponent(new NodeRegistryManager());
+            _layerRegistry = new LayerRegistryComponent(new DistributedKeyValueStoreComponent(new NodeRegistryManager()));
             _layer = new ExampleLayer.ExampleLayer();
         }
 
