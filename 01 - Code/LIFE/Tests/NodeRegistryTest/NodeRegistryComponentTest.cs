@@ -1,5 +1,7 @@
 ﻿
 
+using CommonTypes.DataTypes;
+using CommonTypes.Types;
 using NodeRegistry.Implementation;
 using NUnit.Framework;
 
@@ -9,8 +11,10 @@ namespace NodeRegistryTest
     /// Summary description for NodeRegistryComponentTest
     /// </summary>
     [TestFixture]
-    public class NodeRegistryComponentTest
-    {
+    public class NodeRegistryComponentTest {
+
+        private NodeInformationType informationType; 
+
         public NodeRegistryComponentTest()
         {
 
@@ -38,7 +42,7 @@ namespace NodeRegistryTest
 
         [SetUp]
         public void Setup() {
-
+            informationType = new NodeInformationType(NodeType.LayerContainer, "IamSoMAAAAADRightNow^2",new NodeEndpoint("127.0.0.1", 55500));
         }
         
         [Test]
@@ -50,8 +54,15 @@ namespace NodeRegistryTest
         }
 
         [Test]
-        public void TestJoinCluster()
-        {
+        public void TestJoinCluster() {
+            var localNodeInfo = informationType;
+            var NodeRegistry = new NodeRegistryManager(localNodeInfo);
+            NodeRegistry.GetConfig().AddMySelfToActiveNodeList = true;
+
+            //check if local
+
+
+
 
         }
 

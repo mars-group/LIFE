@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using ConfigurationAdapter.Interface;
 
 namespace NodeRegistry.Interface {
 
@@ -48,5 +49,8 @@ namespace NodeRegistry.Interface {
         ///     Leave the Current cluster and shut down all networksockets
         /// </summary>
         void ShutDownNodeRegistry();
+
+        Configuration<NodeRegistryConfig> GetConfig();
+
     }
 }
