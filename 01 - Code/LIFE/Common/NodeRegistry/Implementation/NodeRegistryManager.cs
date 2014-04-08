@@ -26,6 +26,7 @@ namespace NodeRegistry.Implementation
         private Thread _listenThread;
         private NewNodeConnected _newNodeConnectedHandler;
         private NewNodeConnected _newNodeTypeConnectedHandler;
+        
         #endregion
 
         #region Constructors
@@ -56,7 +57,7 @@ namespace NodeRegistry.Implementation
         }
         #endregion
 
-       #region public Methods
+        #region public Methods
 
         public void JoinCluster()
         {
@@ -74,6 +75,11 @@ namespace NodeRegistry.Implementation
             _reciever.CloseSocket();
             _clientAdapter.CloseSocket();
             _listenThread.Interrupt();
+        }
+
+        public Configuration<NodeRegistryConfig> GetConfig()
+        {
+            return _config;
         }
 
         public List<NodeInformationType> GetAllNodes(bool includeMySelf = false)
@@ -94,13 +100,15 @@ namespace NodeRegistry.Implementation
             return GetAllNodes().Where(nodeInformationType => nodeInformationType.NodeType == nodeType).ToList();
         }
 
-        public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler) {
-            
+        public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler)
+        {
+
             _newNodeConnectedHandler += newNodeConnectedHandler;
-            
+
         }
 
-        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType) {
+        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType)
+        {
             _newNodeTypeConnectedHandler += newNodeConnectedHandler;
         }
 
@@ -147,9 +155,20 @@ namespace NodeRegistry.Implementation
                     }
                     break;
                 case NodeRegistryMessageType.Join:
-                    _clientAdapter.SendMessageToMulticastGroup(
-                        NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
-                    NotifyOnNodeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
+                    if (!_config.Content.AddMySelfToActiveNodeList &&
+                        nodeRegistryMessage.nodeInformationType.Equals(_localNodeInformation)) {
+                            _clientAdapter.SendMessageToMulticastGroup(
+                             NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation)); 
+
+
+                    }
+
+                    
+                    
+                    _activeNodeList.Add(nodeRegistryMessage.nodeInformationType.NodeIdentifier,
+                        nodeRegistryMessage.nodeInformationType);
+                    
+                        NotifyOnNodeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
                     NotifyOnNodeTypeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
                     break;
                 case NodeRegistryMessageType.Leave:
@@ -173,7 +192,7 @@ namespace NodeRegistry.Implementation
         {
             if (_newNodeTypeConnectedHandler != null)
             {
-             _newNodeTypeConnectedHandler.Invoke(nodeInformationType);   
+                _newNodeTypeConnectedHandler.Invoke(nodeInformationType);
             }
 
         }
