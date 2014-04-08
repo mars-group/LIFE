@@ -44,10 +44,6 @@
     <Compile Include="SimulationManagerClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\AppSettingsManager\ConfigurationAdapter.csproj">
-      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
-      <Name>ConfigurationAdapter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
@@ -64,12 +60,6 @@
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
       <Name>Scs</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Common\AppSettingsManager\App.config">
-      <Link>App.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
