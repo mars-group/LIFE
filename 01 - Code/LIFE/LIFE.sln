@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulation Manager", "Simulation Manager", "{060A5DF3-4C49-402B-9B3F-142A9ECD30B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuntimeEnvironment", "SimulationManager\RuntimeEnvironment\RuntimeEnvironment.csproj", "{CD379E3D-8606-4136-978A-2E1E7DD933A1}"
@@ -284,13 +282,11 @@ Global
 		{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{90C1EC56-21ED-4FB6-942D-A6A1EF41B3EB}.Release|x86.ActiveCfg = Release|Any CPU
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Any CPU.Build.0 = Debug|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|x86.ActiveCfg = Debug|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|x86.Build.0 = Debug|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Release|Any CPU.ActiveCfg = Release|x86
-		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Release|Any CPU.Build.0 = Release|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Release|Mixed Platforms.Build.0 = Release|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Release|x86.ActiveCfg = Release|x86

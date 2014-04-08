@@ -57,7 +57,7 @@ namespace NodeRegistryTest
         public void TestJoinCluster() {
             var localNodeInfo = informationType;
             var NodeRegistry = new NodeRegistryManager(localNodeInfo);
-            NodeRegistry.GetConfig().AddMySelfToActiveNodeList = true;
+            NodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
 
             //check if local
 
