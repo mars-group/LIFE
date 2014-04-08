@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using AppSettingsManager.Implementation;
 using AppSettingsManager.Interface;
 using AppSettingsManager.Interface.Exceptions;
-using ConfigurationAdapter.Implementation;
-using ConfigurationAdapter.Interface;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;
@@ -61,7 +58,7 @@ namespace MulticastAdapter.Implementation
                 {
                     foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
                     {
-                        if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily())
+                        if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(generalSettings.Content.IpVersion))
                         {
                             var updClient = new UdpClient(new IPEndPoint(unicastAddress.Address, sendingPort));
                             updClient.JoinMulticastGroup(mGrpAdr, unicastAddress.Address);
@@ -105,7 +102,7 @@ namespace MulticastAdapter.Implementation
 
             foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
             {
-                if (unicastAddress.Address.AddressFamily.Equals(MulticastNetworkUtils.GetAddressFamily()))
+                if (unicastAddress.Address.AddressFamily.Equals(MulticastNetworkUtils.GetAddressFamily(generalSettings.Content.IpVersion)))
                 {
                     ipAddress = unicastAddress.Address;
                     break;
