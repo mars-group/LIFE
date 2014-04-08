@@ -7,6 +7,7 @@ using CommonTypes.DataTypes;
 using ConfigurationAdapter.Implementation;
 using ConfigurationAdapter.Interface;
 using Daylight;
+using DistributedKeyValueStore.Interface;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
 using LayerAPI.Interfaces;
@@ -16,25 +17,20 @@ using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
-        private readonly INodeRegistry _nodeRegistry;
-        private readonly int _kademliaPort;
-        private readonly KademliaNode _kademliaNode;
+        private readonly IDistributedKeyValueStore _distributedKeyValueStore;
         private readonly string _ownIpAddress;
         private readonly int _ownPort;
         private readonly IDictionary<Type, ILayer> _localLayers;
-        private IConfigurationAdapter _configurationAdapter;
 
-        public LayerRegistryUseCase(INodeRegistry nodeRegistry) {
-            _configurationAdapter = new AppSettingAdapterImpl();
-            _nodeRegistry = nodeRegistry;
 
+        public LayerRegistryUseCase(IDistributedKeyValueStore distributedKeyValueStore) {
+            _distributedKeyValueStore = distributedKeyValueStore;
             _localLayers = new Dictionary<Type, ILayer>();
 
-            _kademliaPort = _configurationAdapter.GetInt32("KademliaPort");
-            _ownIpAddress = _configurationAdapter.GetValue("MainNetworkAddress");
-            _ownPort = _configurationAdapter.GetInt32("MainNetworkPort");
-            _kademliaNode = new KademliaNode(_kademliaPort, ID.HostID());
-            JoinKademliaDHT();
+            IConfigurationAdapter configurationAdapter = new AppSettingAdapterImpl();
+
+            _ownIpAddress = configurationAdapter.GetValue("MainNetworkAddress");
+            _ownPort = configurationAdapter.GetInt32("MainNetworkPort");
         }
 
         public ILayer RemoveLayerInstance(Type layerType) {
@@ -47,8 +43,10 @@ namespace LayerRegistry.Implementation {
 
         public ILayer GetRemoteLayerInstance(Type layerType) {
             if (_localLayers.ContainsKey(layerType)) return _localLayers[layerType];
-            return GetRemoteLayerInstance(GetFromDht(layerType), layerType);
+            return GetRemoteLayerInstance(_distributedKeyValueStore.Get(layerType.Name), layerType);
         }
+
+
 
 
         public void RegisterLayer(ILayer layer) {
@@ -56,19 +54,11 @@ namespace LayerRegistry.Implementation {
             _localLayers.Add(layer.GetType(), layer);
 
             // store LayerRegistryEntry in DHT for remote usage
-            PutIntoDht(layer.GetType());
+            var value = JsonConvert.SerializeObject(new LayerRegistryEntry(_ownIpAddress, _ownPort, layer.GetType()));
+            _distributedKeyValueStore.Put(layer.GetType().ToString(), JsonConvert.SerializeObject(value));
         }
 
         #region Private Methods
-
-        private ICollection<string> GetFromDht(Type layerType) {
-            return _kademliaNode.Get(ID.Hash(layerType.Name));
-        }
-
-        private void PutIntoDht(Type layerType) {
-            var value = JsonConvert.SerializeObject(new LayerRegistryEntry(_ownIpAddress, _ownPort, layerType));
-            _kademliaNode.Put(ID.Hash(layerType.ToString()), JsonConvert.SerializeObject(value));
-        }
 
         /// <summary>
         ///     Deserializes RegistryEntry, reflects generic method CreateClient from SCS Framework
@@ -91,24 +81,7 @@ namespace LayerRegistry.Implementation {
             return scsStub.ServiceProxy;
         }
 
-        private void JoinKademliaDHT() {
-            NodeInformationType otherNode = null;
 
-            // loop and wait until any other node is up and running
-            Thread.Sleep(100);
-            otherNode = _nodeRegistry.GetAllNodes().FirstOrDefault();
-
-            _kademliaNode.Bootstrap(
-                new IPEndPoint(IPAddress.Parse(otherNode.NodeEndpoint.IpAddress),
-                    otherNode.NodeEndpoint.Port)
-                );
-
-            // wait to fill bucket list
-            Thread.Sleep(50);
-
-            // join network
-            _kademliaNode.JoinNetwork();
-        }
 
         #endregion
     }

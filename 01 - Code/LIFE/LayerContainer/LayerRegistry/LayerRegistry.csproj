@@ -68,6 +68,10 @@
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\DistributedKeyValueStore\DistributedKeyValueStore.csproj">
+      <Project>{AD32517C-230C-435B-953D-BD96732927B8}</Project>
+      <Name>DistributedKeyValueStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>

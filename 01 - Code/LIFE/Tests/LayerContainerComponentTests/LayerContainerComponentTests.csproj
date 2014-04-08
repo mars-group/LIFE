@@ -75,6 +75,10 @@
   </Target>
   -->
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\DistributedKeyValueStore\DistributedKeyValueStore.csproj">
+      <Project>{AD32517C-230C-435B-953D-BD96732927B8}</Project>
+      <Name>DistributedKeyValueStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LayerContainer\LayerRegistry\LayerRegistry.csproj">
       <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
       <Name>LayerRegistry</Name>
