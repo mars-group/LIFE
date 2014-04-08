@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using AppSettingsManager.Interface;
+using ConfigurationAdapter.Interface;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;

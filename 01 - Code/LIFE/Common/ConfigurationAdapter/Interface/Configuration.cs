@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace AppSettingsManager.Interface
+namespace ConfigurationAdapter.Interface
 {
     public class Configuration<T>
     {

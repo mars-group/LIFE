@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppSettingsManager.Interface;
+using ConfigurationAdapter.Interface;
 using DistributedKeyValueStore.Interface;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;

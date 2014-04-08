@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Net;
 using System.Threading;
-using AppSettingsManager.Interface;
 using CommonTypes.DataTypes;
+using ConfigurationAdapter.Interface;
 using Daylight;
 using DistributedKeyValueStore.Interface;
 using DistributedKeyValueStore.Interface.Config;

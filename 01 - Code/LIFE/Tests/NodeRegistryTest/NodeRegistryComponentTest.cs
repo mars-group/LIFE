@@ -13,9 +13,9 @@ namespace NodeRegistryTest
     {
         public NodeRegistryComponentTest()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+
+
+
         }
 
         private TestContext testContextInstance;
@@ -36,11 +36,24 @@ namespace NodeRegistryTest
             }
         }
 
+        [SetUp]
+        public void Setup() {
 
+        }
+        
+        [Test]
+        public void TestInitialization()
+        {
+            //test if the NodeRegistryManager can be bootstrapped from a config entry
+            var nr = new NodeRegistryManager();
+            Assert.True(nr != null);
+        }
 
         [Test]
-        public void TestInitialization(){
-            var nr = new NodeRegistryManager();
+        public void TestJoinCluster()
+        {
+
         }
+
     }
 }
