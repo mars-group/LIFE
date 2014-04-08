@@ -14,7 +14,7 @@ namespace DistributedKeyValueStore.Implementation
     class DistributedKeyValueStoreUseCase : IDistributedKeyValueStore
     {
         private readonly INodeRegistry _nodeRegistry;
-        private readonly KademliaNode _kademliaNode;
+        private KademliaNode _kademliaNode;
         private readonly int _kademliaPort;
 
         public DistributedKeyValueStoreUseCase(INodeRegistry nodeRegistry) {
@@ -51,12 +51,27 @@ namespace DistributedKeyValueStore.Implementation
 
             }
             else {
+                // no other node present. We assume that we are alone and start the DHT ring on our own.
                 _kademliaNode.Bootstrap(_kademliaPort);
+                // subscribe for new node connected event.
+                _nodeRegistry.SubscribeForNewNodeConnected(OnNewNodeConnected);
             }
 
             // join network
             _kademliaNode.JoinNetwork();
 
+        }
+
+        private void OnNewNodeConnected(NodeInformationType newnode) {
+            
+            // wait a moment
+            Thread.Sleep(50);
+
+            // now check if we still are alone in the ring, if so, try to join the other node
+            // since it might have joined another ring
+            if (_kademliaNode.GetNodeCount() > 0) return;
+            _kademliaNode = new KademliaNode(_kademliaPort);
+            _kademliaNode.Bootstrap(new IPEndPoint(IPAddress.Parse(newnode.NodeEndpoint.IpAddress), newnode.NodeEndpoint.Port));
         }
     }
 }
