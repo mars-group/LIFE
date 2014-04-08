@@ -15,7 +15,6 @@ namespace ModelContainer.Implementation {
         private XmlSerializer _modelSerializer;
 
         public ModelContainerUseCase() {
-
             _layers = new Dictionary<TLayerDescription, byte[]>();
             _modelSerializer = new XmlSerializer(typeof(TLayerDescription));
         }
