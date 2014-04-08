@@ -2,7 +2,6 @@
 using DistributedKeyValueStore.Interface;
 using LayerAPI.Interfaces;
 using LayerRegistry.Interfaces;
-using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
     public class LayerRegistryComponent : ILayerRegistry {

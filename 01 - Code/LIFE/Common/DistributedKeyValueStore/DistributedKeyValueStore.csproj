@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Implementation\DistributedKeyValueStoreComponent.cs" />
     <Compile Include="Implementation\DistributedKeyValueStoreUseCase.cs" />
+    <Compile Include="Interface\Config\DistributedKeyValueStoreConfig.cs" />
     <Compile Include="Interface\IDistributedKeyValueStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

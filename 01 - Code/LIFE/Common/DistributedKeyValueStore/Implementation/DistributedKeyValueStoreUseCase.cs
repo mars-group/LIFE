@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Net;
 using System.Threading;
+using AppSettingsManager.Interface;
 using CommonTypes.DataTypes;
-using ConfigurationAdapter.Implementation;
-using ConfigurationAdapter.Interface;
 using Daylight;
 using DistributedKeyValueStore.Interface;
+using DistributedKeyValueStore.Interface.Config;
 using NodeRegistry.Interface;
 
 namespace DistributedKeyValueStore.Implementation
@@ -18,9 +18,10 @@ namespace DistributedKeyValueStore.Implementation
         private readonly int _kademliaPort;
 
         public DistributedKeyValueStoreUseCase(INodeRegistry nodeRegistry) {
-            IConfigurationAdapter configurationAdapter = new AppSettingAdapterImpl();
+            var path = "./" + typeof(DistributedKeyValueStoreConfig).Name + ".config";
+            var config = new Configuration<DistributedKeyValueStoreConfig>(path);
             _nodeRegistry = nodeRegistry;
-            _kademliaPort = configurationAdapter.GetInt32("KademliaPort");
+            _kademliaPort = config.Content.KademliaPort;
             _kademliaNode = new KademliaNode(_kademliaPort, ID.HostID());
             JoinKademliaDht();
         }
