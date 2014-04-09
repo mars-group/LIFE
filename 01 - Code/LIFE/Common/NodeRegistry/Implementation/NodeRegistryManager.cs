@@ -6,7 +6,6 @@ using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using ConfigurationAdapter.Interface;
-using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Interface;
@@ -25,12 +24,13 @@ namespace NodeRegistry.Implementation
         private readonly Configuration<NodeRegistryConfig> _config;
         private Thread _listenThread;
         private NewNodeConnected _newNodeConnectedHandler;
-        private NewNodeConnected _newNodeTypeConnectedHandler;
+        private NewNodeConnected _newLayerContainerConnectedHandler;
+        private NewNodeConnected _newSimulationManagerConnectedHandler;
+        private NewNodeConnected _newSimulationControllerConnectedHandler;
 
         #endregion
 
 
-        //TODO dependency inject MulticastAdapter
         #region Constructors
         public NodeRegistryManager(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter)
         {
@@ -111,7 +111,19 @@ namespace NodeRegistry.Implementation
 
         public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType)
         {
-            _newNodeTypeConnectedHandler += newNodeConnectedHandler;
+            switch (nodeType)
+            {
+                case NodeType.LayerContainer:
+                    _newLayerContainerConnectedHandler += newNodeConnectedHandler;
+                    break;
+                case NodeType.SimulationController:
+                    _newSimulationControllerConnectedHandler += newNodeConnectedHandler;
+                    break;
+                case NodeType.SimulationManager:
+                    _newSimulationManagerConnectedHandler += newNodeConnectedHandler;
+                    break;
+            }
+
         }
 
         #endregion
@@ -209,13 +221,29 @@ namespace NodeRegistry.Implementation
 
         }
 
-        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformationType)
+        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation)
         {
-            if (_newNodeTypeConnectedHandler != null)
+            switch (nodeInformation.NodeType)
             {
-                _newNodeTypeConnectedHandler.Invoke(nodeInformationType);
+                case NodeType.LayerContainer:
+                    if (_newLayerContainerConnectedHandler != null)
+                    {
+                        _newLayerContainerConnectedHandler.Invoke(nodeInformation);
+                    }
+                    break;
+                case NodeType.SimulationController:
+                    if (_newSimulationControllerConnectedHandler != null)
+                    {
+                        _newSimulationControllerConnectedHandler.Invoke(nodeInformation);
+                    }
+                    break;
+                case NodeType.SimulationManager:
+                    if (_newSimulationManagerConnectedHandler != null)
+                    {
+                        _newSimulationManagerConnectedHandler.Invoke(nodeInformation);
+                    }
+                    break;
             }
-
         }
 
 
@@ -234,8 +262,6 @@ namespace NodeRegistry.Implementation
                 AnswerMessage(nodeRegistryMessage);
             }
         }
-
-
         #endregion
 
     }

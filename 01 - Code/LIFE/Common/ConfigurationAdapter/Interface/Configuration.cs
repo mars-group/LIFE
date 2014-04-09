@@ -33,7 +33,7 @@ namespace ConfigurationAdapter.Interface
                 serializer = new XmlSerializer(typeof(T));
                 FileName = fileName;
                 Content = (T)typeof(T).GetConstructor(new Type[0]).Invoke(new object[0]);
-                file = new FileStream(FileName, FileMode.CreateNew);
+                file = new FileStream(FileName, FileMode.OpenOrCreate);
                 serializer.Serialize(file, Content);
                 file.Flush();
                 file.Close();
@@ -45,7 +45,7 @@ namespace ConfigurationAdapter.Interface
          serializer = new XmlSerializer(typeof(T));
             FileName = "./" + typeof (T).Name + ".config";
             Content = t;
-            file = new FileStream(FileName, FileMode.CreateNew);
+            file = new FileStream(FileName, FileMode.OpenOrCreate);
             serializer.Serialize(file, Content);
             file.Flush();
             file.Close();
