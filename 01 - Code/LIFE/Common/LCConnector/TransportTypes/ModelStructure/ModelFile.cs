@@ -16,7 +16,8 @@ namespace LCConnector.TransportTypes.ModelStructure {
         public byte[] Content { get; set; }
 
         public ModelFile(string name) {
-            Name = name;
+            string[] parts = name.Split(Path.DirectorySeparatorChar);
+            Name = parts[parts.Length - 1];
             Content = File.ReadAllBytes(name);
         }
 
