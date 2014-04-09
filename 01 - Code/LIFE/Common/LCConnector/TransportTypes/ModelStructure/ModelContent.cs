@@ -29,17 +29,18 @@ namespace LCConnector.TransportTypes.ModelStructure {
         private void Write(IModelDirectoryContent dirContent, string path) {
             if (dirContent.Type == ContentType.File) {
                 ModelFile file = dirContent as ModelFile;
-                FileStream stream = File.Open(path + file.Name, FileMode.Create);
+                FileStream stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create);
                 stream.WriteAsync(file.Content, 0, file.Content.Length);
             }
             else {
                 ModelFolder folder = dirContent as ModelFolder;
-                if (!Directory.Exists(path + dirContent.Name)) {
-                    Directory.CreateDirectory(path + dirContent.Name);
+                if (!Directory.Exists(path + Path.DirectorySeparatorChar + dirContent.Name))
+                {
+                    Directory.CreateDirectory(path + Path.DirectorySeparatorChar + dirContent.Name);
                 }
 
                 foreach (var content in folder.Contents) {
-                    Write(content, path + dirContent.Name);
+                    Write(content, path + Path.DirectorySeparatorChar + dirContent.Name);
                 }
             }
         }

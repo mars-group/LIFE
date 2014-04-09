@@ -3,45 +3,68 @@
 namespace LCConnector.TransportTypes {
     [Serializable]
     public class TLayerDescription : IEquatable<TLayerDescription> {
-        /// <summary>
-        /// The layer's name.
-        /// </summary>
-        public string Name { get; protected set; }
+        private string _name;
+        private int _majorVersion;
+        private int _minorVersion;
+        private string _fileName;
 
         /// <summary>
-        /// In a version xx.yyyyyy, this is the xx.
+        ///     The layer's name.
         /// </summary>
-        public int MajorVersion { get; protected set; }
-        
-        /// <summary>
-        /// /// In a version xx.yyyyyy, this is the yyyyyy.
-        /// </summary>
-        public int MinorVersion { get; protected set; }
+        public string Name {
+            get { return _name; }
+            set { }
+        }
 
         /// <summary>
-        /// The filename of the original dll holding the binary code.
+        ///     In a version xx.yyyyyy, this is the xx.
         /// </summary>
-        public string FileName { get; protected set; }
+        public int MajorVersion {
+            get { return _majorVersion; }
+            set { }
+        }
+
+        /// <summary>
+        ///     /// In a version xx.yyyyyy, this is the yyyyyy.
+        /// </summary>
+        public int MinorVersion {
+            get { return _minorVersion; }
+            set { }
+        }
+
+        /// <summary>
+        ///     The filename of the original dll holding the binary code.
+        /// </summary>
+        public string FileName {
+            get { return _fileName; }
+            set { }
+        }
 
         public TLayerDescription(string name, int majorVersion, int minorVersion, string fileName) {
-            Name = name;
-            MajorVersion = majorVersion;
-            MinorVersion = minorVersion;
-            FileName = fileName;
+            _name = name;
+            _majorVersion = majorVersion;
+            _minorVersion = minorVersion;
+            _fileName = fileName;
         }
 
         #region Object Contracts
 
+        /// <summary>
+        ///     Parameterless constructor for serialization. (DO NOT USE!)
+        /// </summary>
+        public TLayerDescription() {}
+
         public bool Equals(TLayerDescription other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return string.Equals(Name, other.Name) && MajorVersion == other.MajorVersion && MinorVersion == other.MinorVersion;
+            return string.Equals(Name, other.Name) && MajorVersion == other.MajorVersion &&
+                   MinorVersion == other.MinorVersion;
         }
 
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((TLayerDescription) obj);
         }
 

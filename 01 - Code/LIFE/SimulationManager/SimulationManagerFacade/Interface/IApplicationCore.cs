@@ -1,3 +1,6 @@
 ﻿namespace SimulationManagerFacade.Interface {
-    public interface IApplicationCore {}
+    public interface IApplicationCore
+    {
+        
+    }
 }

@@ -17,15 +17,16 @@ namespace LCConnector.TransportTypes.ModelStructure {
         public IList<IModelDirectoryContent> Contents { get; set; }
 
         public ModelFolder(string name) : this() {
-            Name = name;
+            string[] parts = name.Split(Path.DirectorySeparatorChar);
+            Name = parts[parts.Length - 1];
 
             IEnumerable<string> files = Directory.EnumerateFileSystemEntries(name);
 
             foreach (var file in files) {
                 FileAttributes attributes = File.GetAttributes(file);
-                string[] parts = file.Split(Path.DirectorySeparatorChar);
-                if (attributes == FileAttributes.Directory) Contents.Add(new ModelFolder(parts[parts.Length - 1]));
-                else Contents.Add(new ModelFile(file.Replace(name, parts[parts.Length - 1])));
+                
+                if (attributes == FileAttributes.Directory) Contents.Add(new ModelFolder(file));
+                else Contents.Add(new ModelFile(file));
             }
         }
 
