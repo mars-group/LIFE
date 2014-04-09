@@ -1,7 +1,9 @@
 ﻿
 
+using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using ConfigurationAdapter.Interface.Exceptions;
 using NodeRegistry.Implementation;
 using NUnit.Framework;
 
@@ -11,9 +13,10 @@ namespace NodeRegistryTest
     /// Summary description for NodeRegistryComponentTest
     /// </summary>
     [TestFixture]
-    public class NodeRegistryComponentTest {
+    public class NodeRegistryComponentTest
+    {
 
-        private NodeInformationType informationType; 
+        private NodeInformationType informationType;
 
         public NodeRegistryComponentTest()
         {
@@ -41,10 +44,11 @@ namespace NodeRegistryTest
         }
 
         [SetUp]
-        public void Setup() {
-            informationType = new NodeInformationType(NodeType.LayerContainer, "IamSoMAAAAADRightNow^2",new NodeEndpoint("127.0.0.1", 55500));
+        public void Setup()
+        {
+            informationType = new NodeInformationType(NodeType.LayerContainer, "IamSoMAAAAADRightNow^2", new NodeEndpoint("127.0.0.1", 55500));
         }
-        
+
         [Test]
         public void TestInitialization()
         {
@@ -54,17 +58,41 @@ namespace NodeRegistryTest
         }
 
         [Test]
-        public void TestJoinCluster() {
+        public void TestJoinClusterLocal()
+        {
             var localNodeInfo = informationType;
-            var NodeRegistry = new NodeRegistryManager(localNodeInfo);
-            NodeRegistry.GetConfig().AddMySelfToActiveNodeList = true;
+            var localNodeRegistry = new NodeRegistryManager(localNodeInfo);
+            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
+            
+            //Just to make sure 
+            localNodeRegistry.JoinCluster();
 
-            //check if local
+            Thread.Sleep(300);
 
+            Assert.True(localNodeRegistry.GetAllNodes().Contains(localNodeInfo));
+        }
 
+        [Test]
+        public void TestLeaveClusterLocal()
+        {
+            var localNodeInfo = informationType;
+            var localNodeRegistry = new NodeRegistryManager(localNodeInfo);
+            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
 
+            //Just to make sure 
+            localNodeRegistry.JoinCluster();
+            
+            Thread.Sleep(300);
+            //check if this node has joined the cluster
+            Assert.True(localNodeRegistry.GetAllNodes().Contains(localNodeInfo));
+            
+            localNodeRegistry.LeaveCluster();
+            
+            Assert.True(! localNodeRegistry.GetAllNodes().Contains(localNodeInfo));
 
         }
+
+
 
     }
 }

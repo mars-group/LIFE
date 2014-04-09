@@ -32,6 +32,7 @@ namespace CommonTypes.DataTypes {
                     .ToString();
         }
 
+        //TODO Equals auf id und type zurückführen (nicht auf ip/port)
         public override bool Equals(object obj) {
             if (obj is NodeInformationType) {
                 var nodeInfo = (NodeInformationType) obj;

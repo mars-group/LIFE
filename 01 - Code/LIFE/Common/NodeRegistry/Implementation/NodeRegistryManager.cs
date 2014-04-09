@@ -16,7 +16,7 @@ namespace NodeRegistry.Implementation
 {
     public class NodeRegistryManager : INodeRegistry
     {
-        //TODO clean
+        //TODO clean & comment
         #region Fields and Properties
         private Dictionary<String, NodeInformationType> _activeNodeList;
         private readonly NodeInformationType _localNodeInformation;
@@ -26,9 +26,11 @@ namespace NodeRegistry.Implementation
         private Thread _listenThread;
         private NewNodeConnected _newNodeConnectedHandler;
         private NewNodeConnected _newNodeTypeConnectedHandler;
-        
+
         #endregion
 
+
+        //TODO dependency inject MulticastAdapter
         #region Constructors
         public NodeRegistryManager(NodeInformationType nodeInformation)
         {
@@ -155,21 +157,7 @@ namespace NodeRegistry.Implementation
                     }
                     break;
                 case NodeRegistryMessageType.Join:
-                    if (!_config.Content.AddMySelfToActiveNodeList &&
-                        nodeRegistryMessage.nodeInformationType.Equals(_localNodeInformation)) {
-                            _clientAdapter.SendMessageToMulticastGroup(
-                             NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation)); 
-
-
-                    }
-
-                    
-                    
-                    _activeNodeList.Add(nodeRegistryMessage.nodeInformationType.NodeIdentifier,
-                        nodeRegistryMessage.nodeInformationType);
-                    
-                        NotifyOnNodeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
-                    NotifyOnNodeTypeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
+                    OnJoinMessage(nodeRegistryMessage);
                     break;
                 case NodeRegistryMessageType.Leave:
                     _activeNodeList.Remove(nodeRegistryMessage.nodeInformationType.NodeIdentifier);
@@ -177,6 +165,39 @@ namespace NodeRegistry.Implementation
                 default:
                     break;
             }
+        }
+
+        private void OnJoinMessage(NodeRegistryMessage nodeRegistryMessage)
+        {
+
+            // chekcs if the new node is the local node 
+            if (nodeRegistryMessage.nodeInformationType.NodeIdentifier.Equals(
+                _localNodeInformation.NodeIdentifier))
+            {
+                //check configured behavouir if true add local node information to list
+                if (_config.Content.AddMySelfToActiveNodeList)
+                {
+                    _clientAdapter.SendMessageToMulticastGroup(
+                        NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
+                }
+            }
+            //other node has joined the cluster
+            else
+            {
+                //add new node to list
+                _activeNodeList.Add(nodeRegistryMessage.nodeInformationType.NodeIdentifier,
+                    nodeRegistryMessage.nodeInformationType);
+
+                //notify all subsribers
+                NotifyOnNodeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
+                NotifyOnNodeTypeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
+
+                // send my information to the new node
+                _clientAdapter.SendMessageToMulticastGroup(
+                    NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
+            }
+
+
         }
 
         private void NotifyOnNodeJoinSubsribers(NodeInformationType nodeInformation)
