@@ -1,5 +1,13 @@
-﻿namespace MulticastAdapter.Interface {
-    public interface IMulticastClientAdapter {
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MulticastAdapter.Interface
+{
+    public interface IMulticastAdapter : IMulticastReciever, IMulticastSender
+    {
         /// <summary>
         ///     Close the underlying communication socket
         /// </summary>
@@ -12,10 +20,5 @@
         /// </summary>
         void ReopenSocket();
 
-        /// <summary>
-        ///     sends a message to the multicastgroup
-        /// </summary>
-        /// <param name="msg">the byte message</param>
-        void SendMessageToMulticastGroup(byte[] msg);
     }
 }

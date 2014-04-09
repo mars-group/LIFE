@@ -4,6 +4,7 @@ using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using ConfigurationAdapter.Interface.Exceptions;
+using MulticastAdapter.Implementation;
 using NodeRegistry.Implementation;
 using NUnit.Framework;
 
@@ -50,18 +51,21 @@ namespace NodeRegistryTest
         }
 
         [Test]
-        public void TestInitialization()
-        {
+        public void TestInitialization() {
+            var multicastAdapter = new MulticastAdapterComponent();
+
             //test if the NodeRegistryManager can be bootstrapped from a config entry
-            var nr = new NodeRegistryManager();
+            var nr = new NodeRegistryManager(multicastAdapter);
             Assert.True(nr != null);
         }
 
         [Test]
         public void TestJoinClusterLocal()
         {
+            var multicastAdapter = new MulticastAdapterComponent();
+
             var localNodeInfo = informationType;
-            var localNodeRegistry = new NodeRegistryManager(localNodeInfo);
+            var localNodeRegistry = new NodeRegistryManager(localNodeInfo, multicastAdapter);
             localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
             
             //Just to make sure 
@@ -75,8 +79,10 @@ namespace NodeRegistryTest
         [Test]
         public void TestLeaveClusterLocal()
         {
+            var multicastAdapter = new MulticastAdapterComponent();
+            
             var localNodeInfo = informationType;
-            var localNodeRegistry = new NodeRegistryManager(localNodeInfo);
+            var localNodeRegistry = new NodeRegistryManager(localNodeInfo, multicastAdapter);
             localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
 
             //Just to make sure 

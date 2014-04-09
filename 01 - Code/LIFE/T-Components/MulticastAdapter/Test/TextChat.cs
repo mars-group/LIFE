@@ -27,7 +27,7 @@ namespace MulticastAdapter.Test {
 
             List<NetworkInterface> multicastInterfaces = new List<NetworkInterface>();
 
-            IMulticastClientAdapter multicastClient = new UDPMulticastSender();
+            IMulticastSender multicastClient = new UDPMulticastSender();
             Console.WriteLine("<<Hello, willkommen zum super aufregenden Multicastchat");
             Console.WriteLine("<<Type 'quit' to Exit the chat. ");
 

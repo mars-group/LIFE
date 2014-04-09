@@ -12,6 +12,7 @@ using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Interface;
 using ProtoBuf;
 
+
 namespace NodeRegistry.Implementation
 {
     public class NodeRegistryManager : INodeRegistry
@@ -20,8 +21,7 @@ namespace NodeRegistry.Implementation
         #region Fields and Properties
         private Dictionary<String, NodeInformationType> _activeNodeList;
         private readonly NodeInformationType _localNodeInformation;
-        private IMulticastReciever _reciever;
-        private IMulticastClientAdapter _clientAdapter;
+        private IMulticastAdapter _multicastAdapter;
         private readonly Configuration<NodeRegistryConfig> _config;
         private Thread _listenThread;
         private NewNodeConnected _newNodeConnectedHandler;
@@ -32,7 +32,7 @@ namespace NodeRegistry.Implementation
 
         //TODO dependency inject MulticastAdapter
         #region Constructors
-        public NodeRegistryManager(NodeInformationType nodeInformation)
+        public NodeRegistryManager(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter)
         {
             this._localNodeInformation = nodeInformation;
             var path = "./" + typeof(NodeRegistryManager).Name + ".config";
@@ -41,11 +41,11 @@ namespace NodeRegistry.Implementation
 
             _activeNodeList = new Dictionary<string, NodeInformationType>();
 
-            SetupNetworkAdapters();
+            SetupNetworkAdapters(multicastAdapter);
             JoinCluster();
         }
 
-        public NodeRegistryManager()
+        public NodeRegistryManager(IMulticastAdapter multicastAdapter)
         {
             var path = "./" + typeof(NodeRegistryManager).Name + ".config";
 
@@ -54,7 +54,7 @@ namespace NodeRegistry.Implementation
             _activeNodeList = new Dictionary<string, NodeInformationType>();
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
 
-            SetupNetworkAdapters();
+            SetupNetworkAdapters(multicastAdapter);
             JoinCluster();
         }
         #endregion
@@ -63,20 +63,20 @@ namespace NodeRegistry.Implementation
 
         public void JoinCluster()
         {
-            _clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation));
+            _multicastAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation));
         }
 
         public void LeaveCluster()
         {
-            _clientAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(_localNodeInformation));
+            _multicastAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(_localNodeInformation));
         }
 
         public void ShutDownNodeRegistry()
         {
             LeaveCluster();
-            _reciever.CloseSocket();
-            _clientAdapter.CloseSocket();
             _listenThread.Interrupt();
+            _multicastAdapter.CloseSocket();
+
         }
 
         public Configuration<NodeRegistryConfig> GetConfig()
@@ -117,13 +117,13 @@ namespace NodeRegistry.Implementation
         #endregion
 
         #region private Methods
-        private void SetupNetworkAdapters()
+        private void SetupNetworkAdapters(IMulticastAdapter multicastAdapter)
         {
-            _reciever = new UDPMulticastReceiver();
-            _clientAdapter = new UDPMulticastSender();
-            _listenThread = new Thread(Listen);
 
+            _multicastAdapter = multicastAdapter;
+            _listenThread = new Thread(Listen);
             _listenThread.Start();
+
         }
 
         private NodeInformationType ParseNodeInformationTypeFromConfig()
@@ -177,7 +177,7 @@ namespace NodeRegistry.Implementation
                 //check configured behavouir if true add local node information to list
                 if (_config.Content.AddMySelfToActiveNodeList)
                 {
-                    _clientAdapter.SendMessageToMulticastGroup(
+                    _multicastAdapter.SendMessageToMulticastGroup(
                         NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
                 }
             }
@@ -193,7 +193,7 @@ namespace NodeRegistry.Implementation
                 NotifyOnNodeTypeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
 
                 // send my information to the new node
-                _clientAdapter.SendMessageToMulticastGroup(
+                _multicastAdapter.SendMessageToMulticastGroup(
                     NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
             }
 
@@ -228,7 +228,7 @@ namespace NodeRegistry.Implementation
         {
             while (Thread.CurrentThread.IsAlive)
             {
-                byte[] msg = _reciever.readMulticastGroupMessage();
+                byte[] msg = _multicastAdapter.readMulticastGroupMessage();
                 var stream = new MemoryStream(msg);
                 var nodeRegistryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
                 AnswerMessage(nodeRegistryMessage);

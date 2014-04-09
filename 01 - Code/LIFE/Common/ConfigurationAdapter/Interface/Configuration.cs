@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -9,7 +10,7 @@ namespace ConfigurationAdapter.Interface
         private readonly XmlSerializer serializer;
 
         private FileStream file;
-        
+
         //TODO is (noch) nicht geil :-(
         /// <summary>
         /// This is the constructor to load an already existing configuration from the given filename.
@@ -37,8 +38,17 @@ namespace ConfigurationAdapter.Interface
                 file.Flush();
                 file.Close();
             }
+        }
 
-
+        public Configuration(T t)
+        {
+         serializer = new XmlSerializer(typeof(T));
+            FileName = "./" + typeof (T).Name + ".config";
+            Content = t;
+            file = new FileStream(FileName, FileMode.CreateNew);
+            serializer.Serialize(file, Content);
+            file.Flush();
+            file.Close();
         }
 
         public string FileName { get; protected set; }
