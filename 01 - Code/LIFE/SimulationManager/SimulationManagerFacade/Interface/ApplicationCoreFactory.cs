@@ -1,10 +1,12 @@
 ﻿using Autofac;
+using ConfigurationAdapter.Interface;
 using ModelContainer.Implementation;
 using ModelContainer.Interfaces;
 using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation;
 using RuntimeEnvironment.Interfaces;
+using Shared;
 using SimulationManagerController.Implementation;
 using SimulationManagerController.Interfaces;
 using SimulationManagerFacade.Implementation;
@@ -40,6 +42,9 @@ namespace SimulationManagerFacade.Interface {
                 builder.RegisterType<ApplicationCoreComponent>()
                     .As<IApplicationCore>()
                     .InstancePerDependency();
+
+                // Make the configuration file available for all components
+                builder.RegisterInstance(new Configuration<SimulationManagerSettings>("config.xml"));
 
                 container = builder.Build();
             }

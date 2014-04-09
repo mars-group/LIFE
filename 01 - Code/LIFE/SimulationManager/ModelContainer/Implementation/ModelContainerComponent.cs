@@ -1,37 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonTypes.TransportTypes;
+using ConfigurationAdapter.Interface;
+using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
+using Shared;
+using SMConnector.TransportTypes;
 
 namespace ModelContainer.Implementation {
     public class ModelContainerComponent : IModelContainer {
         private readonly IModelContainer _modelContainerUseCase;
 
-        public ModelContainerComponent() {
-            _modelContainerUseCase = new ModelContainerUseCase();
+        public ModelContainerComponent(Configuration<SimulationManagerSettings> settings) {
+            _modelContainerUseCase = new ModelContainerUseCase(settings);
         }
 
-        public IList<TSimModel> GetAllModels() {
+        public void RegisterForModelListChange(Action callback) {
+            _modelContainerUseCase.RegisterForModelListChange(callback);
+        }
+
+        public ICollection<TModelDescription> GetAllModels() {
             return _modelContainerUseCase.GetAllModels();
         }
 
-        public TSimModel GetModel(int modelID) {
+        public ModelContent GetModel(TModelDescription modelID) {
             return _modelContainerUseCase.GetModel(modelID);
         }
 
-        public void AddModel(TModel model) {
-            _modelContainerUseCase.AddModel(model);
+        public TModelDescription AddModelFromDirectory(string filePath) {
+            return _modelContainerUseCase.AddModelFromDirectory(filePath);
         }
 
-        public void AddModelFromFile(string filePath) {
-            _modelContainerUseCase.AddModelFromFile(filePath);
-        }
-
-        public void DeleteModel(TModel model) {
+        public void DeleteModel(TModelDescription model) {
             _modelContainerUseCase.DeleteModel(model);
-        }
-
-        public void DeleteModel(int modelID) {
-            _modelContainerUseCase.DeleteModel(modelID);
         }
     }
 }

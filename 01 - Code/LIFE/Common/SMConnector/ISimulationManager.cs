@@ -1,32 +1,33 @@
-﻿using SMConnector.TransportTypes;
+﻿using System.Collections.Generic;
+using SMConnector.TransportTypes;
 
-namespace SMConnector
-{
+namespace SMConnector {
     public delegate void StatusUpdateAvailable(TStatusUpdate update);
 
     /// <summary>
-    /// Provides access to the SimulationManager's functions
+    ///     Provides access to the SimulationManager's functions
     /// </summary>
     public interface ISimulationManager {
-        
         /// <summary>
-        /// Returns an array of TModelDescriptions, describing all available models on the
-        /// SimulationManager node.
+        ///     Returns an array of TModelDescriptions, describing all available models on the
+        ///     SimulationManager node.
         /// </summary>
         /// <returns>A list of TModelDescriptions or an empty list if no models are present</returns>
-        TModelDescription[] GetAllModels();
+        IList<TModelDescription> GetAllModels();
 
         /// <summary>
-        /// Starts a simulation with the model derived from the provided TModelDescription. 
+        ///     Starts a simulation with the model derived from the provided TModelDescription.
         /// </summary>
         /// <param name="model">The chosen model</param>
         void StartSimulationWithModel(TModelDescription model);
 
         /// <summary>
-        /// Subscribe for StatusUpdates from the SimulationManager.
+        ///     Subscribe for StatusUpdates from the SimulationManager.
         /// </summary>
-        /// <param name="statusUpdateAvailable">The callback method, which will be called
-        /// , when an update is available.</param>
+        /// <param name="statusUpdateAvailable">
+        ///     The callback method, which will be called
+        ///     , when an update is available.
+        /// </param>
         void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable);
     }
 }

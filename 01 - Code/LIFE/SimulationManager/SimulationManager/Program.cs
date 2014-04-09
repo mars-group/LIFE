@@ -6,10 +6,10 @@ using SimulationManagerFacade.Interface;
 
 namespace SimulationManager {
     internal class Program {
-        private static readonly ILog logger = LogManager.GetLogger(typeof (Program));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
         private static void Main(string[] args) {
-            logger.Info("SimulationController trying to startup.");
+            Logger.Info("SimulationController trying to startup.");
 
             // Uncomment the next line to enable log4net internal debugging
             // log4net.Util.LogLog.InternalDebugging = true;
@@ -29,7 +29,7 @@ namespace SimulationManager {
                 info = Console.ReadKey();
             }
 
-            logger.Info("SimulationController trying to startup.");
+            Logger.Info("SimulationController trying to startup.");
 
             // This will shutdown the log4net system
             LogManager.Shutdown();

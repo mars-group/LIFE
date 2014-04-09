@@ -2,10 +2,10 @@
 
 namespace SimulationManagerController.Implementation {
     internal class SimulationInitializationUseCase {
-        private static readonly ILog logger = LogManager.GetLogger(typeof (SimulationInitializationUseCase));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (SimulationInitializationUseCase));
 
         public SimulationInitializationUseCase() {
-            logger.Debug("initialized.");
+            Logger.Debug("initialized.");
         }
     }
 }

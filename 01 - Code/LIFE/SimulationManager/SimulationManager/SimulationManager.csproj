@@ -58,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ModelContainer\ModelContainer.csproj">
+      <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
+      <Name>ModelContainer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimulationManagerFacade\SimulationManagerFacade.csproj">
       <Project>{58149ff0-0801-46f8-a9c6-571b6030dc1e}</Project>
       <Name>SimulationManagerFacade</Name>
