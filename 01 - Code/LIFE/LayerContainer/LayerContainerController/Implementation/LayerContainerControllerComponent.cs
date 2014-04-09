@@ -1,6 +1,6 @@
 ﻿
 using LayerContainerController.Interfaces;
-
+using LCConnector.TransportTypes.ModelStructure;
 using NodeRegistry.Interface;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
@@ -16,15 +16,16 @@ namespace LayerContainerController.Implementation {
 
         public LayerContainerControllerComponent(
             IPartitionManager partitionManager,
-            IRTEManager rteManager,
-            INodeRegistry nodeRegistry) {
-            _layerContainerControllerUseCase = new LayerContainerControllerUseCase(partitionManager, rteManager,
-                nodeRegistry);
+            IRTEManager rteManager) {
+            _layerContainerControllerUseCase = new LayerContainerControllerUseCase(partitionManager, rteManager);
         }
 
+        public void LoadModelContent(ModelContent content) {
+            _layerContainerControllerUseCase.LoadModelContent(content);
+        }
 
-        public void Instantiate(TLayerInstanceId instanceId, byte[] binaryData) {
-            _layerContainerControllerUseCase.Instantiate(instanceId, binaryData);
+        public void Instantiate(TLayerInstanceId instanceId) {
+            _layerContainerControllerUseCase.Instantiate(instanceId);
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {

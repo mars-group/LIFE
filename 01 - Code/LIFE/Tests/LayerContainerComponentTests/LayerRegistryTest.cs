@@ -23,7 +23,7 @@ namespace LayerContainerComponentTests {
         [Test]
         public void TestRegister() {
             _layerRegistry.RegisterLayer(_layer);
-            Assert.AreEqual(_layer, _layerRegistry.GetRemoteLayerInstance(_layer.GetType()));
+            Assert.AreEqual(_layer, _layerRegistry.GetLayerInstance(_layer.GetType()));
         }
     }
 }

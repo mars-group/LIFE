@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using LayerAPI.Interfaces;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
@@ -11,8 +11,8 @@ namespace LayerFactory.Implementation {
             _layerFactoryUseCase = new LayerFactoryUseCase(layerRegistry);
         }
 
-        public ILayer GetLayer<T>(Uri layerUri) where T : ILayer {
-            return _layerFactoryUseCase.GetLayer<T>(layerUri);
+        public ILayer GetLayer(string layerName) {
+            return _layerFactoryUseCase.GetLayer(layerName);
         }
     }
 }

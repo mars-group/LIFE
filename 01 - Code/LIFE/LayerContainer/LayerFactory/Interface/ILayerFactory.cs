@@ -12,8 +12,8 @@ namespace LayerFactory.Interface {
         ///     6. Returns the instance of ILayer
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="layerUri"></param>
+        /// <param name="binaryData"></param>
         /// <returns></returns>
-        ILayer GetLayer<T>(Uri layerUri) where T : ILayer;
+        ILayer GetLayer(string layerName);
     }
 }

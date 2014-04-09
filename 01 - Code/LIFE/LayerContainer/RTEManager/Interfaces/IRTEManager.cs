@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using LayerAPI.DataTypes;
 using LayerAPI.Interfaces;
+using LCConnector.TransportTypes;
 
 namespace RTEManager.Interfaces {
     /// <summary>
@@ -13,24 +14,24 @@ namespace RTEManager.Interfaces {
         ///     Hint: To retreive a layer instance, use the LayerRegistry-Component
         /// </summary>
         /// <param name="layer">The layer to register</param>
-        /// <param name="layerInitData"></param>
-        void RegisterLayer(ILayer layer, LayerInitData layerInitData);
+        void RegisterLayer(TLayerInstanceId instanceId, ILayer layer);
 
         /// <summary>
         ///     Un-registers a layer from the RTE.
         /// </summary>
         /// <param name="layer"></param>
-        void UnregisterLayer(ILayer layer);
+        /// <param name="layerInstanceId"></param>
+        void UnregisterLayer(TLayerInstanceId layerInstanceId);
 
-        void UnregisterTickClient(ILayer layer, ITickClient tickClient);
+        void UnregisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient);
 
-        void RegisterTickClient(ILayer layer, ITickClient tickClient);
+        void RegisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient);
 
-        void InitializeAllLayers();
+        void InitializeLayer(TLayerInstanceId instanceId, TInitData initData);
 
-        IEnumerable<ITickClient> GetAllTickClientsByLayer(ILayer layer);
+        IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer);
 
-        int AdvanceOneTick();
+        long AdvanceOneTick();
 
         // TODO: Information methods needed!
     }

@@ -1,4 +1,7 @@
-﻿using MulticastAdapter.Implementation;
+﻿using System.Collections;
+using System.Collections.Generic;
+using CommonTypes.TransportTypes;
+using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
 
 namespace SimulationController
@@ -38,7 +41,7 @@ namespace SimulationController
             _simManager = simManagerClient.ServiceProxy;
         }
 
-        public TModelDescription[] GetAllModels() {
+        public IList<TModelDescription> GetAllModels() {
             return _simManager.GetAllModels();
         }
 

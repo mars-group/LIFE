@@ -19,8 +19,8 @@ namespace LayerRegistry.Implementation {
             _layerRegistryUseCase.ResetLayerRegistry();
         }
 
-        public ILayer GetRemoteLayerInstance(Type layerType) {
-            return _layerRegistryUseCase.GetRemoteLayerInstance(layerType);
+        public ILayer GetLayerInstance(Type layerType) {
+            return _layerRegistryUseCase.GetLayerInstance(layerType);
         }
 
         public void RegisterLayer(ILayer layer) {

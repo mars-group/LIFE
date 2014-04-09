@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using SMConnector;
 
@@ -24,7 +27,7 @@ namespace SimulationController
         public async Task<object> GetAllModels(dynamic input)
         {
             return await Task.Run(
-                () => _simulationManagerClient.GetAllModels());
+                () => _simulationManagerClient.GetAllModels().ToArray());
         }
 
         public async Task<object> StartSimulationWithModel(dynamic input)
@@ -53,7 +56,7 @@ namespace SimulationController
     }
 
     public class SimulationManagerClientMock : ISimulationManager {
-        public TModelDescription[] GetAllModels() {
+        public IList<TModelDescription> GetAllModels() {
             return new TModelDescription[] {
                 new TModelDescription("Abdoulaye"),
                 new TModelDescription("Cheetahz"), 

@@ -57,6 +57,18 @@
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
+      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
+      <Name>LCConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LayerFactory\LayerFactory.csproj">
+      <Project>{A88C77DB-0DAC-46D5-8136-C27B3D72717F}</Project>
+      <Name>LayerFactory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LayerRegistry\LayerRegistry.csproj">
       <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
       <Name>LayerRegistry</Name>

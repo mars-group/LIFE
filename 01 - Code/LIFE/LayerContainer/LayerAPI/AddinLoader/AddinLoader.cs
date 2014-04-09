@@ -1,5 +1,6 @@
 ﻿using System;
 using LayerAPI.Interfaces;
+using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
 
 [assembly: AddinRoot("LayerContainer", "0.1")]
@@ -15,14 +16,15 @@ namespace LayerAPI.AddinLoader {
             AddinManager.Registry.Update();
         }
 
-        public TypeExtensionNode LoadLayer(Uri layerUri, Type layerType) {
-            // TODO:
-            // 1. download DLL from layerUri
-            // 2. copy to ./addinRegistry folder
+        public void LoadModelContent(ModelContent modelContent) {
+            modelContent.Write("./");
             UpdateAddinRegistry();
+        }
+
+        public TypeExtensionNode LoadLayer(string layerName) {
 
             foreach (TypeExtensionNode node in AddinManager.GetExtensionNodes(typeof (ISteppedLayer))) {
-                if (node.Type == layerType) return node;
+                if (node.Type.ToString() == layerName) return node;
             }
             return null;
         }

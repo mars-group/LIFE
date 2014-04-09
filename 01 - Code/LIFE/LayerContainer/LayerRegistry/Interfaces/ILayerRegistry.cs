@@ -29,7 +29,7 @@ namespace LayerRegistry.Interfaces {
         /// </summary>
         /// <param name="parameterType"></param>
         /// <returns></returns>
-        ILayer GetRemoteLayerInstance(Type layerType);
+        ILayer GetLayerInstance(Type layerType);
 
         /// <summary>
         ///     Registers layer as being instantiated on this node.

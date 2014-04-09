@@ -36,7 +36,7 @@ namespace LayerRegistry.Implementation {
             throw new NotImplementedException();
         }
 
-        public ILayer GetRemoteLayerInstance(Type layerType) {
+        public ILayer GetLayerInstance(Type layerType) {
             if (_localLayers.ContainsKey(layerType)) return _localLayers[layerType];
             return GetRemoteLayerInstance(_distributedKeyValueStore.Get(layerType.ToString()), layerType);
         }

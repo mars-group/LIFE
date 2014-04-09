@@ -15,12 +15,12 @@ namespace LayerFactory.Implementation {
             _addinLoader = new AddinLoader();
         }
 
-        public ILayer GetLayer<T>(Uri layerUri) where T : ILayer {
-            var typeExtensionNode = _addinLoader.LoadLayer(layerUri, typeof (T));
+        public ILayer GetLayer(string layerName) {
+            var typeExtensionNode = _addinLoader.LoadLayer(layerName);
             var constructors = typeExtensionNode.GetType().GetConstructors();
 
             // check if there is an empty constructor
-            if (constructors.Any(c => c.GetParameters().Length == 0)) return (T) typeExtensionNode.CreateInstance();
+            if (constructors.Any(c => c.GetParameters().Length == 0)) return (ILayer) typeExtensionNode.CreateInstance();
 
             // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
             var currentConstructor = constructors[0];
@@ -30,14 +30,16 @@ namespace LayerFactory.Implementation {
 
             var i = 0;
             foreach (var parameterInfo in neededParameters) {
-                actualParameters[i] = _layerRegistry.GetRemoteLayerInstance(parameterInfo.ParameterType);
+                actualParameters[i] = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
                 i++;
             }
-            var result = (T) currentConstructor.Invoke(actualParameters);
+            var result = (ILayer) currentConstructor.Invoke(actualParameters);
 
             _layerRegistry.RegisterLayer(result);
 
             return result;
         }
+
+
     }
 }
