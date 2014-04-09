@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.CodeDom;
 using System.Runtime.InteropServices;
 using System.Threading;
 using CommonTypes.DataTypes;
@@ -155,19 +156,56 @@ namespace NodeRegistryTest
                     newNodeOftypeSubscriberFired = true;
                 }
             }, nodeType);
-            
+
             var otherNodeRegistry = new NodeRegistryManager(otherNodeinfo, multicastAdapter);
-            
+
             Thread.Sleep(1000);
 
 
             Assert.True(newNodeSubscriberFired);
             Assert.True(newNodeOftypeSubscriberFired);
-           
+
 
             localNodeRegistry.ShutDownNodeRegistry();
         }
 
+        [Test]
+        public void GetNodesListFromNodeRegistry() {
+            var localNodeInformation = _informationType;
+
+            var localListenPort = _listenStartPortSeed;
+            _listenStartPortSeed += 1;
+
+            var localSendingPort = _sendingStartPortSeed;
+            _sendingStartPortSeed += 1;
+
+            var localMulticastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig("224.2.22.222", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
+
+            var localNodeRegistry = new NodeRegistryManager(localNodeInformation, localMulticastAdapter);
+            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
+            localNodeRegistry.JoinCluster();
+
+            Thread.Sleep(300);
+
+            var nodeList = localNodeRegistry.GetAllNodes();
+
+            Assert.True(nodeList.Contains(localNodeInformation));
+
+            localNodeRegistry.ShutDownNodeRegistry();
+            
+            localNodeRegistry = new NodeRegistryManager(localNodeInformation, localMulticastAdapter);
+            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = false;
+            localNodeRegistry.JoinCluster();
+
+            Thread.Sleep(300);
+
+            nodeList = localNodeRegistry.GetAllNodes();
+
+            Assert.True(! nodeList.Contains(localNodeInformation));
+
+            localNodeRegistry.ShutDownNodeRegistry();
+            
+        }
 
 
     }

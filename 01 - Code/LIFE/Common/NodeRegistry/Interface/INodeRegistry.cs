@@ -14,7 +14,7 @@ namespace NodeRegistry.Interface {
         /// </summary>
         /// <param name="includeMySelf"></param>
         /// <returns>List of INodeEndpoints, empty list if no discovered Nodes are found</returns>
-        List<NodeInformationType> GetAllNodes(bool includeMySelf=false);
+        List<NodeInformationType> GetAllNodes();
 
         /// <summary>
         ///     Get all NodeEndpoints of type

@@ -16,13 +16,33 @@ namespace NodeRegistry.Implementation
 {
     public class NodeRegistryManager : INodeRegistry
     {
-        //TODO clean & comment
         #region Fields and Properties
+        /// <summary>
+        /// A dictonary of all active Node in the cluster. The Key is the NodeIdentifier from the NodeInformationobject(Value) and the Value is the NodeInformation object
+        /// </summary>
         private Dictionary<String, NodeInformationType> _activeNodeList;
+        /// <summary>
+        ///Object that holds all relevant information about the NodeRegistry on this calculation unit.
+        /// </summary>
         private readonly NodeInformationType _localNodeInformation;
+
+        /// <summary>
+        /// Adapter that handels the network comunication.
+        /// </summary>
         private IMulticastAdapter _multicastAdapter;
+        /// <summary>
+        /// Configuration Object that changes the behaviour of this node Registry.
+        /// </summary>
         private readonly Configuration<NodeRegistryConfig> _config;
+
+        /// <summary>
+        /// Thread that waits for multicast messages.
+        /// </summary>
         private Thread _listenThread;
+
+        /// <summary>
+        /// delegates for different subscriber types.
+        /// </summary>
         private NewNodeConnected _newNodeConnectedHandler;
         private NewNodeConnected _newLayerContainerConnectedHandler;
         private NewNodeConnected _newSimulationManagerConnectedHandler;
@@ -61,16 +81,24 @@ namespace NodeRegistry.Implementation
 
         #region public Methods
 
+        /// <summary>
+        /// Send a "join message" to all nodes in the multicastgroupe/cluster
+        /// </summary>
         public void JoinCluster()
         {
             _multicastAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation));
         }
 
+
+        //sends a "leave message" to all nodes in the multicastgroupe/cluster
         public void LeaveCluster()
         {
             _multicastAdapter.SendMessageToMulticastGroup(NodeRegistryMessageFactory.GetLeaveMessage(_localNodeInformation));
         }
 
+        /// <summary>
+        /// Leaves the cluster by sending a "leave message" to the cluster. Also stop the listenThrad and shutsdown the multicast adapter.
+        /// </summary>
         public void ShutDownNodeRegistry()
         {
             LeaveCluster();
@@ -79,29 +107,38 @@ namespace NodeRegistry.Implementation
 
         }
 
+        /// <summary>
+        /// Returns the Configuration wrapper for this NodeRegistry
+        /// </summary>
+        /// <returns>Configuration<T> T should be a custom config object</returns>
         public Configuration<NodeRegistryConfig> GetConfig()
         {
             return _config;
         }
 
-        public List<NodeInformationType> GetAllNodes(bool includeMySelf = false)
+        /// <summary>
+        /// Returns a List of all known Nodes in the Cluster
+        /// </summary>
+        /// <returns>List of all known nodes. If Config.Content.myselfToActiveNodeList is true the return values contains the localNodeInformation as well</returns>
+        public List<NodeInformationType> GetAllNodes()
         {
-            if (includeMySelf)
-            {
-                return _activeNodeList.Values
-                    .Select(type => type)
-                    .Where(type => type.Equals(ParseNodeInformationTypeFromConfig()))
-                    .ToList();
-            }
             return _activeNodeList.Values.Select(type => type).ToList();
-
         }
 
+        /// <summary>
+        /// Returns a List of all known nodes from the given type
+        /// </summary>
+        /// <param name="nodeType">not null</param>
+        /// <returns></returns>
         public List<NodeInformationType> GetAllNodesByType(NodeType nodeType)
         {
             return GetAllNodes().Where(nodeInformationType => nodeInformationType.NodeType == nodeType).ToList();
         }
 
+        /// <summary>
+        /// The given delegate get invovked as soon as a new nodes joins the cluster that is not equal the NodeInformationtype of this instance.
+        /// </summary>
+        /// <param name="newNodeConnectedHandler">not null. Delegate with NewNodeConnected as parameter </param>
         public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler)
         {
 
@@ -109,6 +146,11 @@ namespace NodeRegistry.Implementation
 
         }
 
+        /// <summary>
+        /// The given delegate get invovked as soon as a new nodes joins the cluster that is not equal the NodeInformationtype of this instance and the NodeType matches the given NodeTyoe.
+        /// </summary>
+        /// <param name="newNodeConnectedHandler">not null. Delegate with NewNodeConnected as parameter </param>
+        /// <param name="nodeType">not null. The Type of the new node.</param>
         public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType)
         {
             switch (nodeType)
@@ -182,24 +224,19 @@ namespace NodeRegistry.Implementation
         private void OnJoinMessage(NodeRegistryMessage nodeRegistryMessage)
         {
 
-            // chekcs if the new node is the local node 
-            if (nodeRegistryMessage.nodeInformationType.NodeIdentifier.Equals(
-                _localNodeInformation.NodeIdentifier))
+            //check if the new node is this instance.
+            if (nodeRegistryMessage.nodeInformationType.Equals(_localNodeInformation))
             {
-                //check configured behavouir if true add local node information to list
                 if (_config.Content.AddMySelfToActiveNodeList)
                 {
-                    _multicastAdapter.SendMessageToMulticastGroup(
-                        NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
+                    //add self to list
+                    _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] = nodeRegistryMessage.nodeInformationType;
                 }
             }
-            //other node has joined the cluster
             else
             {
                 //add new node to list
-                _activeNodeList.Add(nodeRegistryMessage.nodeInformationType.NodeIdentifier,
-                    nodeRegistryMessage.nodeInformationType);
-
+                _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] = nodeRegistryMessage.nodeInformationType;
                 //notify all subsribers
                 NotifyOnNodeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
                 NotifyOnNodeTypeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
@@ -207,6 +244,7 @@ namespace NodeRegistry.Implementation
                 // send my information to the new node
                 _multicastAdapter.SendMessageToMulticastGroup(
                     NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
+
             }
 
 
