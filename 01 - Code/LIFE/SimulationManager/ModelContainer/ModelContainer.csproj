@@ -52,7 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\ModelContainerComponent.cs" />
-    <Compile Include="Implementation\ModelContainerUseCase.cs" />
+    <Compile Include="Implementation\ModelInstantionOrderingUseCase.cs" />
+    <Compile Include="Implementation\ModelManagementUseCase.cs" />
     <Compile Include="Interfaces\IModelContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

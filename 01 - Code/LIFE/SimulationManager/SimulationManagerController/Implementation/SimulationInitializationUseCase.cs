@@ -7,5 +7,7 @@ namespace SimulationManagerController.Implementation {
         public SimulationInitializationUseCase() {
             Logger.Debug("initialized.");
         }
+
+
     }
 }

@@ -9,14 +9,18 @@ using Shared;
 using SMConnector.TransportTypes;
 
 namespace ModelContainer.Implementation {
-    internal class ModelContainerUseCase : IModelContainer {
+    /// <summary>
+    /// This class implements all logic revolving around the immediate finding of models in the model folder,<br/>
+    /// watching for changes, serialization for transport and so on.
+    /// </summary>
+    internal class ModelManagementUseCase : IModelContainer {
         private readonly Configuration<SimulationManagerSettings> _settings;
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ModelContainerUseCase));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ModelManagementUseCase));
         private IDictionary<TModelDescription, string> _models;
         private FileSystemWatcher _systemWatcher;
         private ICollection<Action> _listeners;
 
-        public ModelContainerUseCase(Configuration<SimulationManagerSettings> settings) {
+        public ModelManagementUseCase(Configuration<SimulationManagerSettings> settings) {
             _settings = settings;
             _models = new Dictionary<TModelDescription, string>();
             _listeners = new LinkedList<Action>();
@@ -93,7 +97,5 @@ namespace ModelContainer.Implementation {
                 listener();
             }
         }
-
-
     }
 }

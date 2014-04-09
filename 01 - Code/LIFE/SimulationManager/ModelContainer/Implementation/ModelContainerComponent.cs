@@ -12,7 +12,7 @@ namespace ModelContainer.Implementation {
         private readonly IModelContainer _modelContainerUseCase;
 
         public ModelContainerComponent(Configuration<SimulationManagerSettings> settings) {
-            _modelContainerUseCase = new ModelContainerUseCase(settings);
+            _modelContainerUseCase = new ModelManagementUseCase(settings);
         }
 
         public void RegisterForModelListChange(Action callback) {
