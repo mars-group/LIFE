@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
-      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
+      <Project>{76bffba7-7bf3-439e-83d4-a340b1227461}</Project>
       <Name>LCConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">

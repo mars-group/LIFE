@@ -14,7 +14,8 @@ namespace SimulationManagerTest
     {
         [Test]
         public void TestModelContentCopy() {
-            Directory.Delete("./testOrdner");
+            if(Directory.Exists("./copiedOrdner")) Directory.Delete("./copiedOrdner");
+            if (!Directory.Exists("./testOrdner")) Directory.CreateDirectory("./testOrdner");
 
             ModelContent content = new ModelContent("./testOrdner");
 

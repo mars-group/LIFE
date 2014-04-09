@@ -21,7 +21,9 @@ namespace LCConnector.TransportTypes.ModelStructure {
         /// </summary>
         /// <param name="targetDirectory"></param>
         public void Write(string targetDirectory) {
-            Write(_root, targetDirectory);
+            foreach (var modelDirectoryContent in _root.Contents) {
+                Write(modelDirectoryContent, targetDirectory);
+            }
         }
 
         private void Write(IModelDirectoryContent dirContent, string path) {

@@ -236,6 +236,10 @@ namespace Daylight {
 
         #region Interface
 
+        public int GetNodeCount() {
+            return contactCache.GetCount();
+        }
+
         /// <summary>
         ///     Enables degugging output for the node.
         /// </summary>
