@@ -74,6 +74,10 @@
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
+      <Project>{20a316c2-8779-474d-98fb-a13dac9043ab}</Project>
+      <Name>MulticastAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

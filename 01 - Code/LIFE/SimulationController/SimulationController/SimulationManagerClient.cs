@@ -1,4 +1,7 @@
-﻿namespace SimulationController
+﻿using MulticastAdapter.Implementation;
+using MulticastAdapter.Interface;
+
+namespace SimulationController
 {
     using System.Linq;
 
@@ -21,7 +24,9 @@
         private INodeRegistry _nodeRegistry;
 
         public SimulationManagerClient() {
-            _nodeRegistry = new NodeRegistryManager();
+
+            var multiCastAdapter = new MulticastAdapterComponent();
+            _nodeRegistry = new NodeRegistryManager(multiCastAdapter);
 
             var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).First();
 

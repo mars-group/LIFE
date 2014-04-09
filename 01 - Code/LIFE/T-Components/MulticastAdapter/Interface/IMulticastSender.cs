@@ -1,13 +1,15 @@
 ﻿namespace MulticastAdapter.Interface
 {
-    public interface IMulticastReciever
+    public interface IMulticastSender
     {
 
+
         /// <summary>
-        /// Listen for new UDP-Multicast messages on the configured port. This Method is blocking.
+        ///     sends a message to the multicastgroup
         /// </summary>
-        /// <returns></returns>
-        byte[] readMulticastGroupMessage();
+        /// <param name="msg">the byte message</param>
+        void SendMessageToMulticastGroup(byte[] msg);
+
         /// <summary>
         ///     Close the underlying communication socket
         /// </summary>

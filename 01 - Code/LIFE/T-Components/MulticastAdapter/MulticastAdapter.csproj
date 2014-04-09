@@ -36,7 +36,7 @@
   <PropertyGroup />
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-client\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -48,13 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\MulticastAdapterComponent.cs" />
     <Compile Include="Implementation\MulticastNetworkUtils.cs" />
     <Compile Include="Implementation\UDPMulticastReceiver.cs" />
     <Compile Include="Implementation\UDPMulticastSender.cs" />
     <Compile Include="Interface\Config\MulticastSenderConfig.cs" />
     <Compile Include="Interface\Config\Types\BindingType.cs" />
     <Compile Include="Interface\Exceptions\InvalidConfigurationException.cs" />
-    <Compile Include="Interface\IMulticastClientAdapter.cs" />
+    <Compile Include="Interface\IMulticastAdapter.cs" />
+    <Compile Include="Interface\IMulticastSender.cs" />
     <Compile Include="Interface\IMulticastReciever.cs" />
     <Compile Include="Interface\Exceptions\MissingArgumentException.cs" />
     <Compile Include="Interface\Exceptions\NoInterfaceFoundException.cs" />

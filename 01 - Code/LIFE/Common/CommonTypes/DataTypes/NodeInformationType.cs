@@ -32,12 +32,18 @@ namespace CommonTypes.DataTypes {
                     .ToString();
         }
 
+       
         public override bool Equals(object obj) {
-            if (obj is NodeInformationType) {
-                var nodeInfo = (NodeInformationType) obj;
-                if (nodeInfo.NodeIdentifier.Equals(NodeIdentifier)) return true;
+            var type = obj as NodeInformationType;
+            if (type != null) {
+                var otherNodeInfo = type;
+                return (otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType));
             }
             return false;
+        }
+
+        public override int GetHashCode() {
+            return NodeIdentifier.GetHashCode() * NodeType.GetHashCode() *347;
         }
     }
 }

@@ -9,33 +9,42 @@ namespace MulticastAdapter.Implementation
 {
     public class UDPMulticastReceiver : IMulticastReciever
     {
-        private readonly IPAddress mcastAddress;
-        private readonly UdpClient recieverClient;
-        private readonly int listenPort;
-        private readonly Configuration<GeneralMulticastAdapterConfig> generalSettings;
+        private readonly IPAddress _mcastAddress;
+        private UdpClient _recieverClient;
+        private readonly int _listenPort;
+        private readonly Configuration<GeneralMulticastAdapterConfig> _generalSettings;
 
 
         public UDPMulticastReceiver()
         {
             var path = "./" + typeof(UDPMulticastReceiver).Name;
-            generalSettings = new Configuration<GeneralMulticastAdapterConfig>(path);
+            _generalSettings = new Configuration<GeneralMulticastAdapterConfig>(path);
 
 
-            mcastAddress = IPAddress.Parse(generalSettings.Content.MulticastGroupeIP);
-            listenPort = generalSettings.Content.ListenPort;
-            recieverClient = GetClient(listenPort);
+            _mcastAddress = IPAddress.Parse(_generalSettings.Content.MulticastGroupeIP);
+            _listenPort = _generalSettings.Content.ListenPort;
+            _recieverClient = GetClient(_listenPort);
             JoinMulticastGroupes();
         }
 
 
         public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort)
-            : this()
         {
 
-            mcastAddress = mCastAdr;
-            this.listenPort = listenPort;
+            _mcastAddress = mCastAdr;
+            this._listenPort = listenPort;
+            JoinMulticastGroupes();
 
+        }
 
+        public UDPMulticastReceiver(GeneralMulticastAdapterConfig generalSeConfig)
+        {
+            _generalSettings = new Configuration<GeneralMulticastAdapterConfig>(generalSeConfig);
+
+            _mcastAddress = IPAddress.Parse(_generalSettings.Content.MulticastGroupeIP);
+            _listenPort = _generalSettings.Content.ListenPort;
+            _recieverClient = GetClient(_listenPort);
+            JoinMulticastGroupes();
         }
 
 
@@ -45,8 +54,8 @@ namespace MulticastAdapter.Implementation
             {
                 foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
                 {
-                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(generalSettings.Content.IpVersion))
-                        recieverClient.JoinMulticastGroup(mcastAddress, unicastAddr.Address);
+                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(_generalSettings.Content.IpVersion))
+                        _recieverClient.JoinMulticastGroup(_mcastAddress, unicastAddr.Address);
                 }
             }
         }
@@ -55,7 +64,7 @@ namespace MulticastAdapter.Implementation
         {
             IPAddress listenAddress;
 
-            switch (generalSettings.Content.IpVersion)
+            switch (_generalSettings.Content.IpVersion)
             {
                 case IPVersionType.IPv6:
                     listenAddress = IPAddress.IPv6Any;
@@ -78,13 +87,13 @@ namespace MulticastAdapter.Implementation
         {
             IPEndPoint sourceEndPoint;
             byte[] msg = { };
-            if (MulticastNetworkUtils.GetAddressFamily(generalSettings.Content.IpVersion) == AddressFamily.InterNetworkV6)
-                sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, listenPort);
-            else sourceEndPoint = new IPEndPoint(IPAddress.Any, listenPort);
+            if (MulticastNetworkUtils.GetAddressFamily(_generalSettings.Content.IpVersion) == AddressFamily.InterNetworkV6)
+                sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, _listenPort);
+            else sourceEndPoint = new IPEndPoint(IPAddress.Any, _listenPort);
 
             try
             {
-                if (recieverClient.Client != null) msg = recieverClient.Receive(ref sourceEndPoint);
+                if (_recieverClient.Client != null) msg = _recieverClient.Receive(ref sourceEndPoint);
             }
             catch (SocketException ex)
             {
@@ -95,7 +104,12 @@ namespace MulticastAdapter.Implementation
 
         public void CloseSocket()
         {
-            recieverClient.Close();
+            _recieverClient.Close();
+        }
+
+        public void ReopenSocket()
+        {
+            _recieverClient = GetClient(_listenPort);
         }
     }
 }

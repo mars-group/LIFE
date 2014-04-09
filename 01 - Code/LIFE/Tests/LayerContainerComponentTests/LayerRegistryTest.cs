@@ -2,6 +2,7 @@
 using LayerAPI.Interfaces;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
+using MulticastAdapter.Implementation;
 using NodeRegistry.Implementation;
 using NUnit.Framework;
 
@@ -14,7 +15,8 @@ namespace LayerContainerComponentTests {
 
         [SetUp]
         public void Init() {
-            _layerRegistry = new LayerRegistryComponent(new DistributedKeyValueStoreComponent(new NodeRegistryManager()));
+
+            _layerRegistry = new LayerRegistryComponent(new DistributedKeyValueStoreComponent(new NodeRegistryManager(new MulticastAdapterComponent())));
             _layer = new ExampleLayer.ExampleLayer();
         }
 
