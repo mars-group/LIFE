@@ -1,11 +1,15 @@
 ﻿using Autofac;
-using LayerContainerController.Implementation;
-using LayerContainerController.Interfaces;
+using DistributedKeyValueStore.Implementation;
+using DistributedKeyValueStore.Interface;
 using LayerContainerFacade.Implementation;
 using LayerFactory.Implementation;
 using LayerFactory.Interface;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
+using MulticastAdapter.Implementation;
+using MulticastAdapter.Interface;
+using NodeRegistry.Implementation;
+using NodeRegistry.Interface;
 using PartitionManager.Implementation;
 using PartitionManager.Interfaces;
 using RTEManager.Implementation;
@@ -20,8 +24,16 @@ namespace LayerContainerFacade.Interfaces {
             if (_container == null) {
                 if (_containerBuilder == null) _containerBuilder = new ContainerBuilder();
 
-                _containerBuilder.RegisterType<LayerContainerControllerComponent>()
-                    .As<ILayerContainerController>()
+                _containerBuilder.RegisterType<DistributedKeyValueStoreComponent>()
+                    .As<IDistributedKeyValueStore>()
+                    .InstancePerLifetimeScope();
+
+                _containerBuilder.RegisterType<NodeRegistryComponent>()
+                    .As<INodeRegistry>()
+                    .InstancePerLifetimeScope();
+
+                _containerBuilder.RegisterType<MulticastAdapterComponent>()
+                    .As<IMulticastAdapter>()
                     .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<LayerRegistryComponent>()

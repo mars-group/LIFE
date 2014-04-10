@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using LayerAPI.DataTypes;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 

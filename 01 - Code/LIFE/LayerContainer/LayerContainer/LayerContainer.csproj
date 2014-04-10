@@ -73,10 +73,6 @@
       <Name>LayerAPI</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="..\LayerContainerController\LayerContainerController.csproj">
-      <Project>{EFF972E8-87D1-42F5-BD73-1314EC88CDD2}</Project>
-      <Name>LayerContainerController</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LayerContainerFacade\LayerContainerFacade.csproj">
       <Project>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</Project>
       <Name>LayerContainerFacade</Name>

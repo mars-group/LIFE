@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LayerAPI.DataTypes;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using RTEManager.Interfaces;

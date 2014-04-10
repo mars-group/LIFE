@@ -1,7 +1,7 @@
 ﻿
 namespace DistributedKeyValueStore.Interface.Config
 {
-    class DistributedKeyValueStoreConfig
+    public class DistributedKeyValueStoreConfig
     {
         public readonly int KademliaPort;
 

@@ -16,7 +16,7 @@ namespace LayerContainerComponentTests {
         [SetUp]
         public void Init() {
 
-            _layerRegistry = new LayerRegistryComponent(new DistributedKeyValueStoreComponent(new NodeRegistryManager(new MulticastAdapterComponent())));
+            _layerRegistry = new LayerRegistryComponent(new DistributedKeyValueStoreComponent(new NodeRegistryUseCase(new MulticastAdapterComponent())));
             _layer = new ExampleLayer.ExampleLayer();
         }
 

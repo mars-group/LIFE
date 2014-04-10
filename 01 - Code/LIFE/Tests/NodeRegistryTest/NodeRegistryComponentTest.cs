@@ -73,8 +73,8 @@ namespace NodeRegistryTest
 
             var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig("224.111.11.1", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
 
-            //test if the NodeRegistryManager can be bootstrapped from a config entry
-            var nr = new NodeRegistryManager(multicastAdapter);
+            //test if the NodeRegistryUseCase can be bootstrapped from a config entry
+            var nr = new NodeRegistryUseCase(multicastAdapter);
             Assert.True(nr != null);
 
             nr.ShutDownNodeRegistry();
@@ -96,7 +96,7 @@ namespace NodeRegistryTest
             var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig(localMulticastGrp, localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
 
             var localNodeInfo = _informationType;
-            var localNodeRegistry = new NodeRegistryManager(localNodeInfo, multicastAdapter);
+            var localNodeRegistry = new NodeRegistryUseCase(localNodeInfo, multicastAdapter);
             localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
 
             //Just to make sure 
@@ -137,7 +137,7 @@ namespace NodeRegistryTest
 
             var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig(localMulticastGrp, localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
 
-            var localNodeRegistry = new NodeRegistryManager(localNodeInfo, multicastAdapter);
+            var localNodeRegistry = new NodeRegistryUseCase(localNodeInfo, multicastAdapter);
             localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
 
             //subscribe for events
@@ -157,7 +157,7 @@ namespace NodeRegistryTest
                 }
             }, nodeType);
 
-            var otherNodeRegistry = new NodeRegistryManager(otherNodeinfo, multicastAdapter);
+            var otherNodeRegistry = new NodeRegistryUseCase(otherNodeinfo, multicastAdapter);
 
             Thread.Sleep(1000);
 
@@ -181,7 +181,7 @@ namespace NodeRegistryTest
 
             var localMulticastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig("224.2.22.222", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
 
-            var localNodeRegistry = new NodeRegistryManager(localNodeInformation, localMulticastAdapter);
+            var localNodeRegistry = new NodeRegistryUseCase(localNodeInformation, localMulticastAdapter);
             localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
             localNodeRegistry.JoinCluster();
 
@@ -193,7 +193,7 @@ namespace NodeRegistryTest
 
             localNodeRegistry.ShutDownNodeRegistry();
             
-            localNodeRegistry = new NodeRegistryManager(localNodeInformation, localMulticastAdapter);
+            localNodeRegistry = new NodeRegistryUseCase(localNodeInformation, localMulticastAdapter);
             localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = false;
             localNodeRegistry.JoinCluster();
 

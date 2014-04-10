@@ -1,5 +1,4 @@
-﻿using System;
-using LayerAPI.Interfaces;
+﻿using LayerAPI.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
 
@@ -12,12 +11,8 @@ namespace LayerAPI.AddinLoader {
             AddinManager.Registry.Update();
         }
 
-        public void UpdateAddinRegistry() {
-            AddinManager.Registry.Update();
-        }
-
         public void LoadModelContent(ModelContent modelContent) {
-            modelContent.Write("./");
+            modelContent.Write("./addinRegistry/addins");
             UpdateAddinRegistry();
         }
 
@@ -27,6 +22,11 @@ namespace LayerAPI.AddinLoader {
                 if (node.Type.ToString() == layerName) return node;
             }
             return null;
+        }
+
+        private void UpdateAddinRegistry()
+        {
+            AddinManager.Registry.Update();
         }
     }
 }

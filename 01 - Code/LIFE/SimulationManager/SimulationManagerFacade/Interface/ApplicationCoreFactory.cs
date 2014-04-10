@@ -35,7 +35,7 @@ namespace SimulationManagerFacade.Interface {
                     .As<ISimulationManagerController>()
                     .InstancePerLifetimeScope();
 
-                builder.RegisterType<NodeRegistryManager>()
+                builder.RegisterType<NodeRegistryUseCase>()
                     .As<INodeRegistry>()
                     .InstancePerLifetimeScope();
 

@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
-    <Compile Include="DataTypes\LayerInitData.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
     <Compile Include="Interfaces\ICustomLayer.cs" />
     <Compile Include="Interfaces\IEventDrivenLayer.cs" />
