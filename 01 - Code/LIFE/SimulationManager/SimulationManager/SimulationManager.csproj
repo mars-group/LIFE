@@ -58,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">
+      <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
+      <Name>SMConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelContainer\ModelContainer.csproj">
       <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
       <Name>ModelContainer</Name>
