@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Büro-Server">
+    <serverData>
+      <paths name="Büro-Server">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/simcontroller" local="$PROJECT_DIR$/dist" web="/simcontroller" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
+

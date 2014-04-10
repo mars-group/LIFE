@@ -1,6 +1,6 @@
 ﻿namespace LayerRegistry.Interfaces.Config
 {
-    class LayerRegistryConfig {
+    public class LayerRegistryConfig {
         public readonly string MainNetworkAddress;
         public readonly int MainNetworkPort;
 

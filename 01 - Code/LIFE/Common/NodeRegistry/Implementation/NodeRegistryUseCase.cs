@@ -14,7 +14,7 @@ using ProtoBuf;
 
 namespace NodeRegistry.Implementation
 {
-    public class NodeRegistryManager : INodeRegistry
+    public class NodeRegistryUseCase : INodeRegistry
     {
         #region Fields and Properties
         /// <summary>
@@ -52,10 +52,10 @@ namespace NodeRegistry.Implementation
 
 
         #region Constructors
-        public NodeRegistryManager(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter)
+        public NodeRegistryUseCase(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter)
         {
             this._localNodeInformation = nodeInformation;
-            var path = "./" + typeof(NodeRegistryManager).Name + ".config";
+            var path = "./" + typeof(NodeRegistryUseCase).Name + ".config";
 
             this._config = new Configuration<NodeRegistryConfig>(path);
 
@@ -65,9 +65,9 @@ namespace NodeRegistry.Implementation
             JoinCluster();
         }
 
-        public NodeRegistryManager(IMulticastAdapter multicastAdapter)
+        public NodeRegistryUseCase(IMulticastAdapter multicastAdapter)
         {
-            var path = "./" + typeof(NodeRegistryManager).Name + ".config";
+            var path = "./" + typeof(NodeRegistryUseCase).Name + ".config";
 
             this._config = new Configuration<NodeRegistryConfig>(path);
 

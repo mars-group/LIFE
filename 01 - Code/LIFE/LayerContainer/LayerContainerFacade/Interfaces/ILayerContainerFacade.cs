@@ -1,5 +1,5 @@
-﻿using LayerContainerController.Interfaces;
+﻿using LCConnector;
 
 namespace LayerContainerFacade.Interfaces {
-    public interface ILayerContainerFacade : ILayerContainerController {}
+    public interface ILayerContainerFacade : ILayerContainer {}
 }

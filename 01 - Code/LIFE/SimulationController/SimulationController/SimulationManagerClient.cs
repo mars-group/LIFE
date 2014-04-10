@@ -29,7 +29,7 @@ namespace SimulationController
         public SimulationManagerClient() {
 
             var multiCastAdapter = new MulticastAdapterComponent();
-            _nodeRegistry = new NodeRegistryManager(multiCastAdapter);
+            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter);
 
             var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).First();
 
