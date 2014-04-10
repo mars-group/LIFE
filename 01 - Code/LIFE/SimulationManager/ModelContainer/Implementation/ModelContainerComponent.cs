@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonTypes.TransportTypes;
 using ConfigurationAdapter.Interface;
+using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
 using Shared;
@@ -9,10 +9,12 @@ using SMConnector.TransportTypes;
 
 namespace ModelContainer.Implementation {
     public class ModelContainerComponent : IModelContainer {
-        private readonly IModelContainer _modelContainerUseCase;
+        private readonly ModelManagementUseCase _modelContainerUseCase;
+        private readonly ModelInstantionOrderingUseCase _modelInstantionOrderingUseCase;
 
         public ModelContainerComponent(Configuration<SimulationManagerSettings> settings) {
             _modelContainerUseCase = new ModelManagementUseCase(settings);
+            _modelInstantionOrderingUseCase = new ModelInstantionOrderingUseCase(settings);
         }
 
         public void RegisterForModelListChange(Action callback) {
@@ -33,6 +35,10 @@ namespace ModelContainer.Implementation {
 
         public void DeleteModel(TModelDescription model) {
             _modelContainerUseCase.DeleteModel(model);
+        }
+
+        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
+            return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);
         }
     }
 }

@@ -21,7 +21,6 @@ namespace SimulationController
 
     class SimulationManagerClient : ISimulationManager
     {
-
         private readonly ISimulationManager _simManager;
 
         private INodeRegistry _nodeRegistry;
@@ -47,6 +46,18 @@ namespace SimulationController
 
         public void StartSimulationWithModel(TModelDescription model) {
             _simManager.StartSimulationWithModel(model);
+        }
+
+        public void PauseSimulation(TModelDescription model) {
+            _simManager.PauseSimulation(model);
+        }
+
+        public void ResumeSimulation(TModelDescription model) {
+            _simManager.ResumeSimulation(model);
+        }
+
+        public void AbortSimulation(TModelDescription model) {
+            _simManager.AbortSimulation(model);
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {

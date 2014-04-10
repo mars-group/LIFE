@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ConfigurationAdapter.Interface;
-using LayerAPI.AddinLoader;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using log4net;
@@ -19,16 +19,15 @@ namespace ModelContainer.Implementation {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (ModelInstantionOrderingUseCase));
 
         private Configuration<SimulationManagerSettings> _settings;
-        private AddinLoader _addinLoader;
 
         public ModelInstantionOrderingUseCase(Configuration<SimulationManagerSettings> settings) {
             _settings = settings;
-            _addinLoader = new AddinLoader();
 
             Logger.Debug("instantiated.");
         }
 
-        private ModelStructure InitFromModel(TModelDescription description) {
+        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description)
+        {
             AddinManager.Initialize("./addinConfig", _settings.Content.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name);
             AddinManager.Registry.Update();
             var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
@@ -49,7 +48,7 @@ namespace ModelContainer.Implementation {
                 }
             }
 
-            return modelStructure;
+            return modelStructure.CalculateInstantiationOrder();
         }
     }
 }

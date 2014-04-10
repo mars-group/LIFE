@@ -69,6 +69,18 @@ namespace SimulationController
             Thread.Sleep(2500);
         }
 
+        public void PauseSimulation(TModelDescription model) {
+            throw new NotImplementedException();
+        }
+
+        public void ResumeSimulation(TModelDescription model) {
+            throw new NotImplementedException();
+        }
+
+        public void AbortSimulation(TModelDescription model) {
+            throw new NotImplementedException();
+        }
+
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
             //throw new System.NotImplementedException();
         }

@@ -7,8 +7,6 @@ using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation;
 using RuntimeEnvironment.Interfaces;
 using Shared;
-using SimulationManagerController.Implementation;
-using SimulationManagerController.Interfaces;
 using SimulationManagerFacade.Implementation;
 
 namespace SimulationManagerFacade.Interface {
@@ -29,10 +27,6 @@ namespace SimulationManagerFacade.Interface {
 
                 builder.RegisterType<RuntimeEnvironmentComponent>()
                     .As<IRuntimeEnvironment>()
-                    .InstancePerLifetimeScope();
-
-                builder.RegisterType<SimulationManagerControllerComponent>()
-                    .As<ISimulationManagerController>()
                     .InstancePerLifetimeScope();
 
                 builder.RegisterType<NodeRegistryUseCase>()

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestEntities\Zero.cs" />
     <Compile Include="TestModelContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,6 +52,10 @@
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76bffba7-7bf3-439e-83d4-a340b1227461}</Project>
       <Name>LCConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimulationManager\ModelContainer\ModelContainer.csproj">
+      <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
+      <Name>ModelContainer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

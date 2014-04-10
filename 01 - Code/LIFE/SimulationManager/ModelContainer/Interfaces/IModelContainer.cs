@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using SMConnector.TransportTypes;
 
@@ -22,7 +23,7 @@ namespace ModelContainer.Interfaces {
     /// </remarks>
     public interface IModelContainer {
         /// <summary>
-        /// Registers the callback. In the event, that the underlying filesystem has changed, callbacks are informed.
+        ///     Registers the callback. In the event, that the underlying filesystem has changed, callbacks are informed.
         /// </summary>
         /// <see cref="ModelDirectoryChanged" />
         void RegisterForModelListChange(Action callback);
@@ -51,5 +52,12 @@ namespace ModelContainer.Interfaces {
         /// </summary>
         /// <param name="model"></param>
         void DeleteModel(TModelDescription model);
+
+        /// <summary>
+        ///     Calculates a feasible instantion order for the layers the model consists of.
+        /// </summary>
+        /// <param name="model">not null</param>
+        /// <returns>empty, if no </returns>
+        IList<TLayerDescription> GetInstantiationOrder(TModelDescription model);
     }
 }

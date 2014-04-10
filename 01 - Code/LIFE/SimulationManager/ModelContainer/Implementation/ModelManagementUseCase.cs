@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ConfigurationAdapter.Interface;
+using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using log4net;
 using ModelContainer.Interfaces;
@@ -13,7 +14,7 @@ namespace ModelContainer.Implementation {
     /// This class implements all logic revolving around the immediate finding of models in the model folder,<br/>
     /// watching for changes, serialization for transport and so on.
     /// </summary>
-    internal class ModelManagementUseCase : IModelContainer {
+    internal class ModelManagementUseCase {
         private readonly Configuration<SimulationManagerSettings> _settings;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ModelManagementUseCase));
         private IDictionary<TModelDescription, string> _models;

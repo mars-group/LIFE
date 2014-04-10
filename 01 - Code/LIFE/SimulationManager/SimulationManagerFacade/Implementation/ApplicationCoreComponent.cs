@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using CommonTypes.TransportTypes;
 using Hik.Communication.ScsServices.Service;
+using LCConnector;
+using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
+using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
-using SimulationManagerController.Interfaces;
 using SimulationManagerFacade.Interface;
+using SMConnector;
 using SMConnector.TransportTypes;
 
 namespace SimulationManagerFacade.Implementation {
@@ -21,37 +22,83 @@ namespace SimulationManagerFacade.Implementation {
     ///     or access controls here. So far this is not yet implemented.
     /// </remarks>
     public class ApplicationCoreComponent : ScsService, IApplicationCore {
-        private readonly ISimulationManagerController _simulationManagerController;
         private readonly IRuntimeEnvironment _runtimeEnvironment;
         private readonly IModelContainer _modelContainer;
+        private readonly INodeRegistry _nodeRegistry;
 
-        public ApplicationCoreComponent(ISimulationManagerController simulationManagerController,
-            IRuntimeEnvironment runtimeEnvironment,
-            IModelContainer modelContainer) {
-            _simulationManagerController = simulationManagerController;
+        public ApplicationCoreComponent(IRuntimeEnvironment runtimeEnvironment,
+                                        IModelContainer modelContainer,
+                                        INodeRegistry nodeRegistry) {
             _runtimeEnvironment = runtimeEnvironment;
             _modelContainer = modelContainer;
+            _nodeRegistry = nodeRegistry;
+        }
+        
+        #region RuntimeEnvironment delegation
+
+        public void StartSimulationWithModel(TModelDescription model)
+        {
+            throw new NotImplementedException();
         }
 
+        public void PauseSimulation(TModelDescription model)
+        {
+            throw new NotImplementedException();
+        }
 
-        public void RegisterForModelListChange(Action callback) {
+        public void ResumeSimulation(TModelDescription model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AbortSimulation(TModelDescription model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region ModelContainer delegation
+
+        public void RegisterForModelListChange(Action callback)
+        {
             _modelContainer.RegisterForModelListChange(callback);
         }
 
-        public ICollection<TModelDescription> GetAllModels() {
+        public ICollection<TModelDescription> GetAllModels()
+        {
             return _modelContainer.GetAllModels();
         }
 
-        public ModelContent GetModel(TModelDescription modelID) {
+        IList<TModelDescription> ISimulationManager.GetAllModels()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ModelContent GetModel(TModelDescription modelID)
+        {
             return _modelContainer.GetModel(modelID);
         }
 
-        public TModelDescription AddModelFromDirectory(string filePath) {
+        public TModelDescription AddModelFromDirectory(string filePath)
+        {
             return _modelContainer.AddModelFromDirectory(filePath);
         }
 
-        public void DeleteModel(TModelDescription model) {
+        public void DeleteModel(TModelDescription model)
+        {
             _modelContainer.DeleteModel(model);
+        }
+
+        #endregion
+
+        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
+            return _modelContainer.GetInstantiationOrder(model);
         }
     }
 }
