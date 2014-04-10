@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using LCConnector.TransportTypes;
+
+namespace ModelContainer.Implementation.Entities {
+    /// <summary>
+    ///     This class is an internal representation of a model structure.
+    /// </summary>
+    /// <remarks>It is essentially a graph and used to examine possible instantiation orders for the model's</remarks>
+    internal class ModelStructure : IEnumerable<ModelNode> {
+        private readonly ISet<ModelNode> _nodes;
+
+        public ModelStructure() {
+            _nodes = new HashSet<ModelNode>();
+        }
+
+        public void AddLayer(TLayerDescription layerDescription, Type nodeType, params Type[] dependencies) {
+            ModelNode newNode = new ModelNode(layerDescription, nodeType, dependencies);
+            _nodes.Add(newNode);
+
+            foreach (var modelNode in _nodes) {
+                modelNode.UpdateEdges(newNode);
+                newNode.UpdateEdges(modelNode);
+            }
+        }
+
+        private IList<TLayerDescription> CalculateInstantiationOrder() {
+            /* This algorithm works backwards from nodes without any dependencies.
+             * It works iteratively outwards on the graph, parallely tracking all possibilities.
+             * For each iteration, we check if there is a node that depends on at least one of the previous ones.
+             * If all of this node's dependencies are satisfied from the nodes within the result list, we can add this one too,
+             * since it can now be instantiated. The algorithm ends, if there are no new dependent nodes found.
+             */
+
+            IList<HashSet<ModelNode>> result = new List<HashSet<ModelNode>>();
+
+            int i = 0;
+            HashSet<ModelNode> nodes = new HashSet<ModelNode>(_nodes.Where(n => n.Edges.Count < 1).ToArray());
+            while (nodes.Any()) {}
+
+            return null;
+        }
+
+        public IEnumerator<ModelNode> GetEnumerator() {
+            return _nodes.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return ((IEnumerable) _nodes).GetEnumerator();
+        }
+    }
+}

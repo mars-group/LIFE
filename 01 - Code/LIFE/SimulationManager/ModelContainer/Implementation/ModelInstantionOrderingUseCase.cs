@@ -1,47 +1,55 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConfigurationAdapter.Interface;
+using LayerAPI.AddinLoader;
+using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using log4net;
+using ModelContainer.Implementation.Entities;
 using Mono.Addins;
 using Shared;
 using SMConnector.TransportTypes;
 
-namespace ModelContainer.Implementation
-{
+namespace ModelContainer.Implementation {
     /// <summary>
-    /// This class reads one specific model and converts it into a manner representation that allows<br/>
-    /// for instantiation order analysis.
+    ///     This class reads one specific model and converts it into a representation that allows<br />
+    ///     for instantiation order analysis.
     /// </summary>
     internal class ModelInstantionOrderingUseCase {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ModelInstantionOrderingUseCase));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (ModelInstantionOrderingUseCase));
 
         private Configuration<SimulationManagerSettings> _settings;
+        private AddinLoader _addinLoader;
 
         public ModelInstantionOrderingUseCase(Configuration<SimulationManagerSettings> settings) {
             _settings = settings;
+            _addinLoader = new AddinLoader();
 
             Logger.Debug("instantiated.");
         }
 
-        TModelStructure InitFromModel(TModelDescription description) {
-            //AddinManager.
-        }
-    }
+        private ModelStructure InitFromModel(TModelDescription description) {
+            AddinManager.Initialize("./addinConfig", _settings.Content.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name);
+            AddinManager.Registry.Update();
+            var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
 
-    internal class TModelStructure : IEnumerable<TLayerDescription> {
+            var modelStructure = new ModelStructure();
 
+            foreach (var node in nodes) {
+                var type = node.GetType();
+                var constructors = type.GetConstructors();
+                var layerDescription = new TLayerDescription(type.Name, type.Assembly.GetName().Version.Major,
+                    type.Assembly.GetName().Version.Minor, type.Assembly.Location);
 
-        public IEnumerator<TLayerDescription> GetEnumerator() {
-            throw new NotImplementedException();
-        }
+                if (constructors.Any(c => c.GetParameters().Length == 0))
+                    modelStructure.AddLayer(layerDescription, type);
+                else {
+                    var paramList = constructors.First(c => c.GetParameters().Length > 0).GetParameters();
+                    modelStructure.AddLayer(layerDescription, type, paramList.Select(p => p.ParameterType).ToArray());
+                }
+            }
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
+            return modelStructure;
         }
     }
 }

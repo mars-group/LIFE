@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using LCConnector.TransportTypes.ModelStructure;
 using NUnit.Framework;
