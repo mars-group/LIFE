@@ -108,7 +108,7 @@ namespace Daylight
 		{
 			path = path.TrimEnd('/', '\\');
 			if(Directory.Exists(path)) {
-				return; // Base case
+				return;
 			} else {
 				if(Path.GetDirectoryName(path) != "") {
 					CreatePath(Path.GetDirectoryName(path)); // Make up to parent

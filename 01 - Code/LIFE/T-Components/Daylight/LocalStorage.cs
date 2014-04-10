@@ -62,7 +62,7 @@ namespace Daylight {
                               "\\" + assembly + "\\";
             }
 
-            Console.WriteLine("Storing data in " + storageRoot);
+            //Console.WriteLine("Storing data in " + storageRoot);
 
             // Set a filename for an index file.
             indexFilename = Path.Combine(storageRoot, "index" + INDEX_EXTENSION);
@@ -104,7 +104,9 @@ namespace Daylight {
         /// <param name="path"></param>
         private static void CreatePath(string path) {
             path = path.TrimEnd('/', '\\');
-            if (Directory.Exists(path)) {}
+            if (Directory.Exists(path)) {
+                return; 
+            }
             if (Path.GetDirectoryName(path) != "") CreatePath(Path.GetDirectoryName(path)); // Make up to parent
             Directory.CreateDirectory(path); // Make this one
         }
