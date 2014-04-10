@@ -22,7 +22,7 @@ namespace PartitionManager.Implementation {
         }
 
         public void LoadModelContent(ModelContent content) {
-            throw new System.NotImplementedException();
+            _layerFactory.LoadModelContent(content);
         }
     }
 }

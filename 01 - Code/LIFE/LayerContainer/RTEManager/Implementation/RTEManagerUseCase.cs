@@ -8,23 +8,20 @@ using RTEManager.Interfaces;
 
 namespace RTEManager.Implementation {
     internal class RTEManagerUseCase : IRTEManager {
-        private readonly IDictionary<TLayerInstanceId, ICollection<ITickClient>> tickClientsPerLayer;
+        private readonly IDictionary<ILayer, ICollection<ITickClient>> tickClientsPerLayer;
         private readonly IDictionary<TLayerInstanceId, ILayer> layers;
 
-        private readonly IDictionary<ILayer, LayerInitData> initDataPerLayer;
-
         public RTEManagerUseCase() {
-            initDataPerLayer = new Dictionary<ILayer, LayerInitData>();
-            tickClientsPerLayer = new Dictionary<TLayerInstanceId, ICollection<ITickClient>>();
+            tickClientsPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
             layers = new Dictionary<TLayerInstanceId, ILayer>();
         }
 
         #region Public Methods
 
         public void RegisterLayer(TLayerInstanceId layerInstanceId, ILayer layer) {
-            if (!tickClientsPerLayer.ContainsKey(layerInstanceId))
+            if (!tickClientsPerLayer.ContainsKey(layer))
             {
-                tickClientsPerLayer.Add(layerInstanceId, new LinkedList<ITickClient>());
+                tickClientsPerLayer.Add(layer, new LinkedList<ITickClient>());
             }
             if (!layers.ContainsKey(layerInstanceId))
             {
@@ -33,24 +30,24 @@ namespace RTEManager.Implementation {
         }
 
         public void UnregisterLayer(TLayerInstanceId layerInstanceId) {
-            tickClientsPerLayer.Remove(layerInstanceId);
+            tickClientsPerLayer.Remove(layers[layerInstanceId]);
             layers.Remove(layerInstanceId);
         }
 
-        public void UnregisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient) {
-            if (tickClientsPerLayer.ContainsKey(layerInstanceId)) tickClientsPerLayer[layerInstanceId].Remove(tickClient);
+        public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
+            if (tickClientsPerLayer.ContainsKey(layer)) tickClientsPerLayer[layer].Remove(tickClient);
         }
 
-        public void RegisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient) {
-            if (tickClientsPerLayer.ContainsKey(layerInstanceId)) tickClientsPerLayer[layerInstanceId].Add(tickClient);
+        public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
+            if (tickClientsPerLayer.ContainsKey(layer)) tickClientsPerLayer[layer].Add(tickClient);
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
-            
+            layers[instanceId].InitLayer<TInitData>(initData, RegisterTickClient, UnregisterTickClient);
         }
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
-            return tickClientsPerLayer[layer];
+            return tickClientsPerLayer[layers[layer]];
         }
 
         public long AdvanceOneTick() {

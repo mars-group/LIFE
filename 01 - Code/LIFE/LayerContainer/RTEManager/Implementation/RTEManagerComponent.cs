@@ -20,12 +20,12 @@ namespace RTEManager.Implementation {
             _rteManagerUseCase.UnregisterLayer(layerInstanceId);
         }
 
-        public void UnregisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient) {
-            _rteManagerUseCase.UnregisterTickClient(layerInstanceId, tickClient);
+        public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
+            _rteManagerUseCase.UnregisterTickClient(layer, tickClient);
         }
 
-        public void RegisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient) {
-            _rteManagerUseCase.RegisterTickClient(layerInstanceId, tickClient);
+        public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
+            _rteManagerUseCase.RegisterTickClient(layer, tickClient);
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {

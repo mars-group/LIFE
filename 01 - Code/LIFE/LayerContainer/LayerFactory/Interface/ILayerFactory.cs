@@ -1,5 +1,6 @@
 ﻿using System;
 using LayerAPI.Interfaces;
+using LCConnector.TransportTypes.ModelStructure;
 
 namespace LayerFactory.Interface {
     public interface ILayerFactory {
@@ -15,5 +16,7 @@ namespace LayerFactory.Interface {
         /// <param name="binaryData"></param>
         /// <returns></returns>
         ILayer GetLayer(string layerName);
+
+        void LoadModelContent(ModelContent content);
     }
 }

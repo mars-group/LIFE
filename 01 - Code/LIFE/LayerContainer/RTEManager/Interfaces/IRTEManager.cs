@@ -23,9 +23,9 @@ namespace RTEManager.Interfaces {
         /// <param name="layerInstanceId"></param>
         void UnregisterLayer(TLayerInstanceId layerInstanceId);
 
-        void UnregisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient);
+        void UnregisterTickClient(ILayer layer, ITickClient tickClient);
 
-        void RegisterTickClient(TLayerInstanceId layerInstanceId, ITickClient tickClient);
+        void RegisterTickClient(ILayer layer, ITickClient tickClient);
 
         void InitializeLayer(TLayerInstanceId instanceId, TInitData initData);
 

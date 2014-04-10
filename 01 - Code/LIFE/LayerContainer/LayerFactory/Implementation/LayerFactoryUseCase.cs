@@ -1,12 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using LayerAPI.AddinLoader;
 using LayerAPI.Interfaces;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
+using LCConnector.TransportTypes.ModelStructure;
 
 namespace LayerFactory.Implementation {
     internal class LayerFactoryUseCase : ILayerFactory {
+
         private readonly ILayerRegistry _layerRegistry;
         private readonly IAddinLoader _addinLoader;
 
@@ -40,6 +41,8 @@ namespace LayerFactory.Implementation {
             return result;
         }
 
-
+        public void LoadModelContent(ModelContent content) {
+            _addinLoader.LoadModelContent(content);
+        }
     }
 }
