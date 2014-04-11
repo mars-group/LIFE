@@ -34,7 +34,7 @@ namespace RuntimeEnvironment.Implementation
             List<NodeInformationType> lcNodes =_nodeRegistry.GetAllNodesByType(NodeType.LayerContainer);
 
             if (!_steppedSimulations.ContainsKey(model)) {
-                //_steppedSimulations
+                
             }
             
         }
