@@ -21,6 +21,7 @@ namespace RuntimeEnvironment.Implementation
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
+        private readonly ISet<NodeInformationType> busyNodes;
 
         public RuntimeEnvironmentUseCase(Configuration<SimulationManagerSettings> settings,
                                         IModelContainer modelContainer,
@@ -36,7 +37,9 @@ namespace RuntimeEnvironment.Implementation
 
             List<NodeInformationType> lcNodes =_nodeRegistry.GetAllNodesByType(NodeType.LayerContainer);
 
-            //if(!_steppedSimulations.ContainsKey(model))
+            if (!_steppedSimulations.ContainsKey(model)) {
+                //_steppedSimulations
+            }
             
         }
 

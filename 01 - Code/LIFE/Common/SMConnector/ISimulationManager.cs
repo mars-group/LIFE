@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Hik.Communication.ScsServices.Service;
 using SMConnector.TransportTypes;
 
@@ -10,6 +11,7 @@ namespace SMConnector {
     /// </summary>
     [ScsService(Version = "0.1")]
     public interface ISimulationManager {
+        
         /// <summary>
         ///     Returns a list of TModelDescriptions, describing all available models on the
         ///     SimulationManager node.
