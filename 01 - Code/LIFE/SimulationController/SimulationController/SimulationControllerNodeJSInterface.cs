@@ -18,20 +18,21 @@ namespace SimulationController
     /// </summary>
     public class SimulationControllerNodeJsInterface
     {
-        private readonly ISimulationManager _simulationManagerClient;
+        private readonly SimulationManagerClient _simulationManagerClient;
 
         public SimulationControllerNodeJsInterface() {
-            _simulationManagerClient = new SimulationManagerClientMock();//new SimulationManagerClient();
+            _simulationManagerClient = new SimulationManagerClient();//new SimulationManagerClientMock();//
         }
 
-        public async Task<object> GetAllModels(dynamic input)
-        {
+        public async Task<object> GetAllModels(dynamic input) {
+            if (!_simulationManagerClient.IsConnected) { return new object[0]; }
             return await Task.Run(
                 () => _simulationManagerClient.GetAllModels().ToArray());
         }
 
         public async Task<object> StartSimulationWithModel(dynamic input)
         {
+            if (!_simulationManagerClient.IsConnected) { return new object[0]; }
             return await Task.Run(
                 () =>
                 {
@@ -42,6 +43,7 @@ namespace SimulationController
 
         public async Task<object> SubscribeForStatusUpdate(dynamic input)
         {
+            if (!_simulationManagerClient.IsConnected) { return new object[0]; }
             return await Task.Run(
                 () =>
                 {
@@ -55,6 +57,9 @@ namespace SimulationController
         }
     }
 
+    /// <summary>
+    /// mock implementaion
+    /// </summary>
     public class SimulationManagerClientMock : ISimulationManager {
         public IList<TModelDescription> GetAllModels() {
             return new TModelDescription[] {
