@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalConfig.cs" />
     <Compile Include="Interface\Configuration.cs" />
     <Compile Include="Interface\Exceptions\CantParseKeyFromConfigExceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
