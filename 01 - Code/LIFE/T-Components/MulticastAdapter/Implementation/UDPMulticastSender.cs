@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using AppSettingsManager;
 using ConfigurationAdapter.Interface;
 using ConfigurationAdapter.Interface.Exceptions;
 using log4net;
@@ -19,47 +21,20 @@ namespace MulticastAdapter.Implementation
 
         private IList<UdpClient> _clients;
         private readonly IPAddress _mGrpAdr;
-        private readonly int _sendingPort;
+        private int _sendingPort;
         private readonly int _listenPort;
-        private readonly Configuration<GeneralMulticastAdapterConfig> _generalSettings;
+        private readonly Configuration<GlobalConfig> _generalSettings;
         private readonly Configuration<MulticastSenderConfig> _senderSettings;
-        
 
-
-        public UDPMulticastSender()
+   
+        public UDPMulticastSender(Configuration<GlobalConfig> generalConfig, Configuration<MulticastSenderConfig> senderConfig)
         {
-            var path = "./" + typeof(UDPMulticastSender).Name;
-            _generalSettings = new Configuration<GeneralMulticastAdapterConfig>(path + "General.config");
-            _senderSettings = new Configuration<MulticastSenderConfig>(path + "sender.config");
+            _generalSettings = generalConfig;
+            _senderSettings = senderConfig;
 
-            _mGrpAdr = IPAddress.Parse(_generalSettings.Content.MulticastGroupeIP);
-            _sendingPort = _generalSettings.Content.SendingPort;
-            _listenPort = _generalSettings.Content.ListenPort;
-            _clients = GetSendingInterfaces();
-        }
-
-        public UDPMulticastSender(IPAddress ipAddress, int sendingPort, int listenPort)
-            : this()
-        {
-            var path = "./" + typeof(UDPMulticastSender).Name;
-            _generalSettings = new Configuration<GeneralMulticastAdapterConfig>(path);
-            _senderSettings = new Configuration<MulticastSenderConfig>(path);
-
-            _mGrpAdr = ipAddress;
-            this._sendingPort = sendingPort;
-            this._listenPort = listenPort;
-
-            _clients = GetSendingInterfaces();
-        }
-
-        public UDPMulticastSender(GeneralMulticastAdapterConfig generalConfig, MulticastSenderConfig senderConfig)
-        {
-            _generalSettings = new Configuration<GeneralMulticastAdapterConfig>(generalConfig);
-            _senderSettings = new Configuration<MulticastSenderConfig>(senderConfig);
-
-            _mGrpAdr = IPAddress.Parse(_generalSettings.Content.MulticastGroupeIP);
-            _sendingPort = _generalSettings.Content.SendingPort;
-            _listenPort = _generalSettings.Content.ListenPort;
+            _mGrpAdr = IPAddress.Parse(_generalSettings.Instance.MulticastGroupIp);
+            _sendingPort = _generalSettings.Instance.MulticastGroupSendingStartPort;
+            _listenPort = _generalSettings.Instance.MulticastGroupListenPort;
             _clients = GetSendingInterfaces();
 
         }
@@ -68,16 +43,15 @@ namespace MulticastAdapter.Implementation
         {
             IList<UdpClient> resultList = new List<UdpClient>();
 
-            if (_senderSettings.Content.SendOnAllInterfaces)
+            if (_senderSettings.Instance.SendOnAllInterfaces)
             {
                 foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
                 {
                     foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
                     {
-                        if (unicastAddress.Address.AddressFamily ==
-                            MulticastNetworkUtils.GetAddressFamily(_generalSettings.Content.IpVersion))
+                        if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily( (IPVersionType)_generalSettings.Instance.IPVersion ))
                         {
-                            var updClient = new UdpClient(new IPEndPoint(unicastAddress.Address, _sendingPort));
+                            var updClient = SetupSocket(unicastAddress);
                             updClient.JoinMulticastGroup(_mGrpAdr, unicastAddress.Address);
                             resultList.Add(updClient);
                         }
@@ -87,7 +61,7 @@ namespace MulticastAdapter.Implementation
             else
             {
                 var updClient = new UdpClient(GetBindingEndpoint());
-                updClient.JoinMulticastGroup(_mGrpAdr, IPAddress.Parse(_senderSettings.Content.SendingInterfaceIP));
+                updClient.JoinMulticastGroup(_mGrpAdr, IPAddress.Parse(_senderSettings.Instance.SendingInterfaceIP));
                 resultList.Add(updClient);
             }
 
@@ -95,10 +69,35 @@ namespace MulticastAdapter.Implementation
             return resultList;
         }
 
+        private UdpClient SetupSocket(UnicastIPAddressInformation unicastAddress)
+        {
+            try
+            {
+                var updClient = SetupSocket(unicastAddress);
+                return updClient;
+            }
+            catch (SocketException socketException)
+            {
+                //if sending port is already in use increment port and try again.
+                if (socketException.ErrorCode == 10048)
+                {
+                    _sendingPort = _sendingPort + 1;
+                    return SetupSocket(unicastAddress);
+                }
+                throw;
+            }
+
+
+
+
+        }
+
+
+
 
         private IPEndPoint GetBindingEndpoint()
         {
-            switch (_senderSettings.Content.BindingType)
+            switch (_senderSettings.Instance.BindingType)
             {
                 case BindingType.IP:
                     return GetIPEndPointByIp();
@@ -115,13 +114,13 @@ namespace MulticastAdapter.Implementation
         private IPEndPoint GetIPEndPointByIp()
         {
             var networkInterface =
-                MulticastNetworkUtils.GetInterfaceByIP(IPAddress.Parse(_senderSettings.Content.SendingInterfaceIP));
+                MulticastNetworkUtils.GetInterfaceByIP(IPAddress.Parse(_senderSettings.Instance.SendingInterfaceIP));
             IPAddress ipAddress = null;
 
             foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
             {
                 if (unicastAddress.Address.AddressFamily.Equals(
-                        MulticastNetworkUtils.GetAddressFamily(_generalSettings.Content.IpVersion)))
+                        MulticastNetworkUtils.GetAddressFamily((IPVersionType) _generalSettings.Instance.IPVersion)))
                 {
                     ipAddress = unicastAddress.Address;
                     break;
@@ -137,15 +136,17 @@ namespace MulticastAdapter.Implementation
         {
             foreach (var client in _clients)
             {
-                try {
+                try
+                {
                     client.DropMulticastGroup(_mGrpAdr);
                     client.Client.Close();
                     client.Close();
                 }
-                catch (Exception e) {
-                    logger.Warn("Error from Type " + e.GetType() + " by shutting down multicast send service. Message is: " + e.Message );
+                catch (Exception e)
+                {
+                    logger.Warn("Error from Type " + e.GetType() + " by shutting down multicast send service. Message is: " + e.Message);
                 }
-              
+
             }
         }
 

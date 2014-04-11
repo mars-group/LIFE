@@ -24,8 +24,8 @@ namespace LayerRegistry.Implementation {
             var layerRegisterConfig = new Configuration<LayerRegistryConfig>(path);
             _localLayers = new Dictionary<Type, ILayer>();
 
-            _ownIpAddress = layerRegisterConfig.Content.MainNetworkAddress;
-            _ownPort = layerRegisterConfig.Content.MainNetworkPort;
+            _ownIpAddress = layerRegisterConfig.Instance.MainNetworkAddress;
+            _ownPort = layerRegisterConfig.Instance.MainNetworkPort;
         }
 
         public ILayer RemoveLayerInstance(Type layerType) {

@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommonModelTypes.Interface;
+using CommonModelTypes.Interface.AgentObjects;
+using CommonModelTypes.Interface.SimObjects;
 using ConfigurationAdapter.Interface;
 using ForestModel.Interface.Configuration;
 
 namespace ForestModel.Implementation.Agents
 {
-    class TreeAgent : AbstractAgent
+    public class TreeAgent : AbstractAgent
     {
         #region fields
         private float _diameter;
@@ -27,14 +29,14 @@ namespace ForestModel.Implementation.Agents
         #region constructors
         public TreeAgent(int id,  Vector3D position, float diameter, float height) : base(id, position)
         {
-            _config = new Configuration<TreeAgentConfiguration>(new TreeAgentConfiguration());
+            _config = new Configuration<TreeAgentConfiguration>();
 
             _diameter = diameter;
             _height = height;
             _fitness = 100;
-            _growthCoefficient = _config.Content.GrowthCoefficient;
-            _maxDiameter = _config.Content.MaxDiameter;
-            _maxHeight = _config.Content.MaxHeight;
+            _growthCoefficient = _config.Instance.GrowthCoefficient;
+            _maxDiameter = _config.Instance.MaxDiameter;
+            _maxHeight = _config.Instance.MaxHeight;
 
         }
         #endregion

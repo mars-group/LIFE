@@ -24,11 +24,11 @@ namespace ModelContainer.Implementation {
             _models = new Dictionary<TModelDescription, string>();
             _listeners = new LinkedList<Action>();
             try {
-                _systemWatcher = new FileSystemWatcher(_settings.Content.ModelDirectoryPath);
+                _systemWatcher = new FileSystemWatcher(_settings.Instance.ModelDirectoryPath);
             }
             catch {
-                Directory.CreateDirectory(_settings.Content.ModelDirectoryPath);
-                _systemWatcher = new FileSystemWatcher(_settings.Content.ModelDirectoryPath);
+                Directory.CreateDirectory(_settings.Instance.ModelDirectoryPath);
+                _systemWatcher = new FileSystemWatcher(_settings.Instance.ModelDirectoryPath);
             }
             
 
@@ -65,7 +65,7 @@ namespace ModelContainer.Implementation {
 
         public void DeleteModel(TModelDescription model) {
             Logger.Debug("DeleModel called");
-            string path = _settings.Content.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
+            string path = _settings.Instance.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
             if (!Directory.Exists(path)) {
                 Directory.Delete(path, true);
             }
@@ -78,13 +78,13 @@ namespace ModelContainer.Implementation {
         /// Recreates the _models list according to the contents in the specified model folder.
         /// </summary>
         private void UpdateModelList(object sender, FileSystemEventArgs fileSystemEventArgs) {
-            Logger.Debug("Model folder '" + _settings.Content.ModelDirectoryPath + "' was altered. Reimporting models.");
+            Logger.Debug("Model folder '" + _settings.Instance.ModelDirectoryPath + "' was altered. Reimporting models.");
 
             //remove old data
             _models.Clear();
 
             // search through all folders in the model directory and try loading the models.
-            string[] folders = Directory.GetDirectories(_settings.Content.ModelDirectoryPath);
+            string[] folders = Directory.GetDirectories(_settings.Instance.ModelDirectoryPath);
             foreach (var folder in folders)
             {
                 string[] path = folder.Split(Path.DirectorySeparatorChar);

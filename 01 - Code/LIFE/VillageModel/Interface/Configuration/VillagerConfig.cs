@@ -8,11 +8,11 @@ namespace VillageModel.Interface.Configuration
 {
     class VillagerConfig {
         public int DailyWoodUsage;
+        public float WayPointReachedDistance;
 
         public VillagerConfig() {
+            WayPointReachedDistance = 2.5f;
             DailyWoodUsage = 100;
         }
-
-
     }
 }

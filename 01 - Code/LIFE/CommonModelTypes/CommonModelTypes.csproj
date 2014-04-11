@@ -39,9 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interface\Vector3D.cs" />
-    <Compile Include="Interface\AbstractAgent.cs" />
-    <Compile Include="Interface\SimObject.cs" />
+    <Compile Include="Interface\AgentObjects\GoalForming\IPlan.cs" />
+    <Compile Include="Interface\AgentObjects\GoalForming\ITickAction.cs" />
+    <Compile Include="Interface\SimObjects\Vector3D.cs" />
+    <Compile Include="Interface\AgentObjects\AbstractAgent.cs" />
+    <Compile Include="Interface\SimObjects\SimObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

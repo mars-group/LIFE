@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommonModelTypes.Interface;
+using CommonModelTypes.Interface.SimObjects;
 
 namespace VillageModel.Implementaion
 {
-    class Village
+    public class Village : SimObject
     {
-        public Vector3D GetRandomLocationInsideVillageRadius() {
+        public Village(int id, Vector3D position) : base(id, position) { }
+
+        public Vector3D GetRandomLocationInsideVillageRadius()
+        {
             throw new NotImplementedException();
         }
     }

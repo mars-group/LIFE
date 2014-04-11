@@ -55,9 +55,9 @@ namespace NodeRegistry.Implementation
         public NodeRegistryUseCase(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter)
         {
             this._localNodeInformation = nodeInformation;
-            var path = "./" + typeof(NodeRegistryUseCase).Name + ".config";
+          
 
-            this._config = new Configuration<NodeRegistryConfig>(path);
+            this._config = new Configuration<NodeRegistryConfig>();
 
             _activeNodeList = new Dictionary<string, NodeInformationType>();
 
@@ -67,9 +67,8 @@ namespace NodeRegistry.Implementation
 
         public NodeRegistryUseCase(IMulticastAdapter multicastAdapter)
         {
-            var path = "./" + typeof(NodeRegistryUseCase).Name + ".config";
-
-            this._config = new Configuration<NodeRegistryConfig>(path);
+      
+            this._config = new Configuration<NodeRegistryConfig>();
 
             _activeNodeList = new Dictionary<string, NodeInformationType>();
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
@@ -119,7 +118,7 @@ namespace NodeRegistry.Implementation
         /// <summary>
         /// Returns a List of all known Nodes in the Cluster
         /// </summary>
-        /// <returns>List of all known nodes. If Config.Content.myselfToActiveNodeList is true the return values contains the localNodeInformation as well</returns>
+        /// <returns>List of all known nodes. If Config.Instance.myselfToActiveNodeList is true the return values contains the localNodeInformation as well</returns>
         public List<NodeInformationType> GetAllNodes()
         {
             return _activeNodeList.Values.Select(type => type).ToList();
@@ -184,19 +183,19 @@ namespace NodeRegistry.Implementation
         {
             return new NodeInformationType(
                 ParseNodeTypeFromConfig(),
-                _config.Content.NodeIdentifier,
+                _config.Instance.NodeIdentifier,
                 ParseNodeEndpointFromConfig()
                 );
         }
 
         private NodeEndpoint ParseNodeEndpointFromConfig()
         {
-            return new NodeEndpoint(_config.Content.NodeEndPointIP, _config.Content.NodeEndPointPort);
+            return new NodeEndpoint(_config.Instance.NodeEndPointIP, _config.Instance.NodeEndPointPort);
         }
 
         private NodeType ParseNodeTypeFromConfig()
         {
-            return _config.Content.NodeType;
+            return _config.Instance.NodeType;
         }
 
         private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage)
@@ -227,7 +226,7 @@ namespace NodeRegistry.Implementation
             //check if the new node is this instance.
             if (nodeRegistryMessage.nodeInformationType.Equals(_localNodeInformation))
             {
-                if (_config.Content.AddMySelfToActiveNodeList)
+                if (_config.Instance.AddMySelfToActiveNodeList)
                 {
                     //add self to list
                     _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] = nodeRegistryMessage.nodeInformationType;

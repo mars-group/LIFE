@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using ConfigurationAdapter.Interface;
 using ConfigurationAdapter.Interface.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticastAdapter.Implementation;
@@ -71,7 +72,10 @@ namespace NodeRegistryTest
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig("224.111.11.1", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
+
+            var globalConfig = new Configuration<GlobalSettings>();
+
+            var multicastAdapter = new MulticastAdapterComponent( ("224.111.11.1", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
 
             //test if the NodeRegistryUseCase can be bootstrapped from a config entry
             var nr = new NodeRegistryUseCase(multicastAdapter);
@@ -97,7 +101,7 @@ namespace NodeRegistryTest
 
             var localNodeInfo = _informationType;
             var localNodeRegistry = new NodeRegistryUseCase(localNodeInfo, multicastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
+            localNodeRegistry.GetConfig().Instance.AddMySelfToActiveNodeList = true;
 
             //Just to make sure 
             localNodeRegistry.JoinCluster();
@@ -138,7 +142,7 @@ namespace NodeRegistryTest
             var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig(localMulticastGrp, localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
 
             var localNodeRegistry = new NodeRegistryUseCase(localNodeInfo, multicastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
+            localNodeRegistry.GetConfig().Instance.AddMySelfToActiveNodeList = true;
 
             //subscribe for events
             localNodeRegistry.SubscribeForNewNodeConnected(delegate(NodeInformationType nodeInformation)
@@ -182,7 +186,7 @@ namespace NodeRegistryTest
             var localMulticastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig("224.2.22.222", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
 
             var localNodeRegistry = new NodeRegistryUseCase(localNodeInformation, localMulticastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
+            localNodeRegistry.GetConfig().Instance.AddMySelfToActiveNodeList = true;
             localNodeRegistry.JoinCluster();
 
             Thread.Sleep(300);
@@ -194,7 +198,7 @@ namespace NodeRegistryTest
             localNodeRegistry.ShutDownNodeRegistry();
             
             localNodeRegistry = new NodeRegistryUseCase(localNodeInformation, localMulticastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = false;
+            localNodeRegistry.GetConfig().Instance.AddMySelfToActiveNodeList = false;
             localNodeRegistry.JoinCluster();
 
             Thread.Sleep(300);

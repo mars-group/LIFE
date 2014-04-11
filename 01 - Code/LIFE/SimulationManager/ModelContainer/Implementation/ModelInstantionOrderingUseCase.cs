@@ -28,7 +28,7 @@ namespace ModelContainer.Implementation {
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description)
         {
-            AddinManager.Initialize("./addinConfig", _settings.Content.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name);
+            AddinManager.Initialize("./addinConfig", _settings.Instance.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name);
             AddinManager.Registry.Update();
             var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
 

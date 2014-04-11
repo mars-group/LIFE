@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using ConfigurationAdapter.Interface;
+
+
+
 
 namespace AppSettingsManager
 {
@@ -6,7 +11,7 @@ namespace AppSettingsManager
     /// The global configuration for all LIFE processes.
     /// </summary>
     [Serializable]
-    class GlobalConfig
+    public class GlobalConfig
     {
         /// <summary>
         /// The IP of the multicast group, through which auto-discovery of nodes will happen.
@@ -32,5 +37,23 @@ namespace AppSettingsManager
         /// 
         /// </summary>
         public int IPVersion { get; set; }
+
+        public GlobalConfig()
+        {
+            MulticastGroupIp = "244.10.99.1";
+            MulticastGroupListenPort = 50100;
+            MulticastGroupSendingStartPort = 50500;
+            DHTPort = 8500;
+            IPVersion = 4;
+        }
+
+        public GlobalConfig(string multicastGroupIp, int multicastGroupListenPort, int multicastGroupSendingStartPort, int ipVersion)
+        {
+            MulticastGroupIp = multicastGroupIp;
+            MulticastGroupListenPort = multicastGroupListenPort;
+            MulticastGroupSendingStartPort = multicastGroupSendingStartPort;
+            DHTPort = 8500;
+            IPVersion = ipVersion;
+        }
     }
 }

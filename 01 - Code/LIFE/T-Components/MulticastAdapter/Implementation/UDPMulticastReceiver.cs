@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using AppSettingsManager;
 using ConfigurationAdapter.Interface;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
@@ -12,22 +13,8 @@ namespace MulticastAdapter.Implementation
         private readonly IPAddress _mcastAddress;
         private UdpClient _recieverClient;
         private readonly int _listenPort;
-        private readonly Configuration<GeneralMulticastAdapterConfig> _generalSettings;
-
-
-        public UDPMulticastReceiver()
-        {
-            var path = "./" + typeof(UDPMulticastReceiver).Name;
-            _generalSettings = new Configuration<GeneralMulticastAdapterConfig>(path);
-
-
-            _mcastAddress = IPAddress.Parse(_generalSettings.Content.MulticastGroupeIP);
-            _listenPort = _generalSettings.Content.ListenPort;
-            _recieverClient = GetClient(_listenPort);
-            JoinMulticastGroupes();
-        }
-
-
+        private readonly Configuration<GlobalConfig> _generalSettings;
+        
         public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort)
         {
 
@@ -37,12 +24,11 @@ namespace MulticastAdapter.Implementation
 
         }
 
-        public UDPMulticastReceiver(GeneralMulticastAdapterConfig generalSeConfig)
-        {
-            _generalSettings = new Configuration<GeneralMulticastAdapterConfig>(generalSeConfig);
+        public UDPMulticastReceiver(Configuration<GlobalConfig> generalSeConfig) {
+            _generalSettings = generalSeConfig;
 
-            _mcastAddress = IPAddress.Parse(_generalSettings.Content.MulticastGroupeIP);
-            _listenPort = _generalSettings.Content.ListenPort;
+            _mcastAddress = IPAddress.Parse(_generalSettings.Instance.MulticastGroupIp);
+            _listenPort = _generalSettings.Instance.MulticastGroupListenPort;
             _recieverClient = GetClient(_listenPort);
             JoinMulticastGroupes();
         }
@@ -54,7 +40,7 @@ namespace MulticastAdapter.Implementation
             {
                 foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
                 {
-                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(_generalSettings.Content.IpVersion))
+                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily((IPVersionType)_generalSettings.Instance.IPVersion))
                         _recieverClient.JoinMulticastGroup(_mcastAddress, unicastAddr.Address);
                 }
             }
@@ -64,7 +50,7 @@ namespace MulticastAdapter.Implementation
         {
             IPAddress listenAddress;
 
-            switch (_generalSettings.Content.IpVersion)
+            switch ((IPVersionType)_generalSettings.Instance.IPVersion)
             {
                 case IPVersionType.IPv6:
                     listenAddress = IPAddress.IPv6Any;
@@ -87,7 +73,7 @@ namespace MulticastAdapter.Implementation
         {
             IPEndPoint sourceEndPoint;
             byte[] msg = { };
-            if (MulticastNetworkUtils.GetAddressFamily(_generalSettings.Content.IpVersion) == AddressFamily.InterNetworkV6)
+            if (MulticastNetworkUtils.GetAddressFamily((IPVersionType) _generalSettings.Instance.IPVersion) == AddressFamily.InterNetworkV6)
                 sourceEndPoint = new IPEndPoint(IPAddress.IPv6Any, _listenPort);
             else sourceEndPoint = new IPEndPoint(IPAddress.Any, _listenPort);
 
