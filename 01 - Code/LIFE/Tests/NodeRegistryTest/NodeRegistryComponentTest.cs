@@ -101,7 +101,7 @@ namespace NodeRegistryTest
 
 
 
-            var multicastAdapter = new MulticastAdapterComponent(new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4)), new MulticastSenderConfig());
+            var multicastAdapter = new MulticastAdapterComponent(new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4), new MulticastSenderConfig());
 
             var localNodeInfo = _informationType;
             var localNodeRegistry = new NodeRegistryUseCase(localNodeInfo, multicastAdapter);

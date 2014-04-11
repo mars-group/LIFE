@@ -65,10 +65,9 @@ namespace NodeRegistry.Implementation
             JoinCluster();
         }
 
-        public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, )
-        {
-      
-            this._config = new Configuration<NodeRegistryConfig>();
+        public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig) {
+
+            this._config = nodeRegistryConfig;
 
             _activeNodeList = new Dictionary<string, NodeInformationType>();
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
@@ -183,19 +182,19 @@ namespace NodeRegistry.Implementation
         {
             return new NodeInformationType(
                 ParseNodeTypeFromConfig(),
-                _config.Instance.NodeIdentifier,
+                _config.NodeIdentifier,
                 ParseNodeEndpointFromConfig()
                 );
         }
 
         private NodeEndpoint ParseNodeEndpointFromConfig()
         {
-            return new NodeEndpoint(_config.Instance.NodeEndPointIP, _config.Instance.NodeEndPointPort);
+            return new NodeEndpoint(_config.NodeEndPointIP, _config.NodeEndPointPort);
         }
 
         private NodeType ParseNodeTypeFromConfig()
         {
-            return _config.Instance.NodeType;
+            return _config.NodeType;
         }
 
         private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage)
@@ -226,7 +225,7 @@ namespace NodeRegistry.Implementation
             //check if the new node is this instance.
             if (nodeRegistryMessage.nodeInformationType.Equals(_localNodeInformation))
             {
-                if (_config.Instance.AddMySelfToActiveNodeList)
+                if (_config.AddMySelfToActiveNodeList)
                 {
                     //add self to list
                     _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] = nodeRegistryMessage.nodeInformationType;

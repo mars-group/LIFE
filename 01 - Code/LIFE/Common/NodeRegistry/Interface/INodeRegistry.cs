@@ -50,7 +50,7 @@ namespace NodeRegistry.Interface {
         /// </summary>
         void ShutDownNodeRegistry();
 
-        Configuration<NodeRegistryConfig> GetConfig();
+        NodeRegistryConfig GetConfig();
 
     }
 }
