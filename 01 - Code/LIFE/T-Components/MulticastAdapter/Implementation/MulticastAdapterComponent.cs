@@ -19,7 +19,7 @@ namespace MulticastAdapter.Implementation
         #region Constructors
        
 
-        public MulticastAdapterComponent(Configuration<GlobalConfig> globalConfiguration, Configuration<MulticastSenderConfig> senderConfiguration)
+        public MulticastAdapterComponent(GlobalConfig globalConfiguration, MulticastSenderConfig senderConfiguration)
         {
             _sender = new UDPMulticastSender(globalConfiguration, senderConfiguration);
             _reciever = new UDPMulticastReceiver(globalConfiguration);

@@ -33,7 +33,7 @@ namespace NodeRegistry.Implementation
         /// <summary>
         /// Configuration Object that changes the behaviour of this node Registry.
         /// </summary>
-        private readonly Configuration<NodeRegistryConfig> _config;
+        private readonly NodeRegistryConfig _config;
 
         /// <summary>
         /// Thread that waits for multicast messages.
@@ -52,12 +52,12 @@ namespace NodeRegistry.Implementation
 
 
         #region Constructors
-        public NodeRegistryUseCase(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter)
+        public NodeRegistryUseCase(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig)
         {
             this._localNodeInformation = nodeInformation;
-          
 
-            this._config = new Configuration<NodeRegistryConfig>();
+
+            this._config = nodeRegistryConfig;
 
             _activeNodeList = new Dictionary<string, NodeInformationType>();
 
@@ -110,7 +110,7 @@ namespace NodeRegistry.Implementation
         /// Returns the Configuration wrapper for this NodeRegistry
         /// </summary>
         /// <returns>Configuration<T> T should be a custom config object</returns>
-        public Configuration<NodeRegistryConfig> GetConfig()
+        public NodeRegistryConfig GetConfig()
         {
             return _config;
         }
