@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using CommonTypes.DataTypes;
 using CommonTypes.TransportTypes;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
+using MulticastAdapter.Interface.Config;
+using MulticastAdapter.Interface.Config.Types;
 
 namespace SimulationController
 {
@@ -21,23 +24,40 @@ namespace SimulationController
 
     class SimulationManagerClient : ISimulationManager
     {
-        private readonly ISimulationManager _simManager;
+        private ISimulationManager _simManager;
 
         private INodeRegistry _nodeRegistry;
+
+        public bool IsConnected { get; private set; }
 
         public SimulationManagerClient() {
 
             var multiCastAdapter = new MulticastAdapterComponent();
-            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter);
 
-            var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).First();
+            _nodeRegistry = new NodeRegistryComponent(multiCastAdapter);
 
+            IsConnected = false;
+
+            // wait for SimManager to come up.
+            _nodeRegistry.SubscribeForNewNodeConnectedByType(OnNewSimManagerConnected, NodeType.SimulationManager);
+        }
+
+        /// <summary>
+        /// Wait handle for SimManager connecting. Once a SimManager is connected
+        /// this method will continue intialization and execution
+        /// </summary>
+        /// <param name="newnode"></param>
+        private void OnNewSimManagerConnected(NodeInformationType newnode) {
+           
+            var simManagerNode = newnode;
+           
             var simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
                 new ScsTcpEndPoint(simManagerNode.NodeEndpoint.IpAddress, simManagerNode.NodeEndpoint.Port));
 
             simManagerClient.Connect();
 
             _simManager = simManagerClient.ServiceProxy;
+            IsConnected = true;
         }
 
         public IList<TModelDescription> GetAllModels() {

@@ -14,7 +14,7 @@ module.exports = function(app) {
 
   // Server API Routes
   app.get('/api/marscontrol/', marscontrol.allModels);
-  app.post('/api/marscontrol/', marscontrol.startSimWithModel);
+  //app.post('/api/marscontrol/', marscontrol.startSimWithModel);
 
   // User specific API
   app.post('/api/users', users.create);

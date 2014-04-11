@@ -20,7 +20,7 @@ namespace LayerContainer {
 
             Logger.Info("Initializing components and building application core...");
 
-            Console.WriteLine("SimulationManager up and running. Press 'q' to quit.");
+            Console.WriteLine("LayerContainer up and running. Press 'q' to quit.");
 
             ConsoleKeyInfo info = Console.ReadKey();
             while (info.Key != ConsoleKey.Q)
@@ -28,7 +28,7 @@ namespace LayerContainer {
                 info = Console.ReadKey();
             }
 
-            Logger.Info("SimulationController trying to startup.");
+            Logger.Info("LayerContainer shutting down.");
 
             // This will shutdown the log4net system
             LogManager.Shutdown();

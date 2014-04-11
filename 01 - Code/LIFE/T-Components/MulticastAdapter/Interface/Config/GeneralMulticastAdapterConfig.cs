@@ -20,7 +20,7 @@ namespace MulticastAdapter.Interface.Config
 
            public GeneralMulticastAdapterConfig()
         {
-            MulticastGroupeIP = "224.10.99.1";
+            MulticastGroupeIP = "224.111.11.1";
             ListenPort = 50100;
             SendingPort = 50500;
             IpVersion = IPVersionType.IPv4;
