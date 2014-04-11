@@ -4,14 +4,17 @@ using System;
 using System.CodeDom;
 using System.Runtime.InteropServices;
 using System.Threading;
+using AppSettingsManager;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using ConfigurationAdapter.Interface;
 using ConfigurationAdapter.Interface.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;
 using NodeRegistry.Implementation;
+using NodeRegistry.Interface;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 using TestContext = NUnit.Framework.TestContext;
@@ -58,7 +61,7 @@ namespace NodeRegistryTest
         [SetUp]
         public void Setup()
         {
-            _informationType = new NodeInformationType(NodeType.LayerContainer, "localNodeInfo", new NodeEndpoint("127.0.0.1", 55500));
+            _informationType = new NodeInformationType(NodeType.LayerContainer, "UnitTestNode", new NodeEndpoint("127.0.0.1", 55500));
         }
 
 
@@ -71,10 +74,14 @@ namespace NodeRegistryTest
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig("224.111.11.1", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
+
+            var globalConfig = new GlobalConfig("224.111.11.1", localListenPort, localSendingPort, 4);
+
+
+            var multicastAdapter = new MulticastAdapterComponent(globalConfig, new MulticastSenderConfig());
 
             //test if the NodeRegistryUseCase can be bootstrapped from a config entry
-            var nr = new NodeRegistryUseCase(multicastAdapter);
+            var nr = new NodeRegistryComponent(multicastAdapter, new NodeRegistryConfig());
             Assert.True(nr != null);
 
             nr.ShutDownNodeRegistry();
@@ -93,12 +100,13 @@ namespace NodeRegistryTest
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig(localMulticastGrp, localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
+
+
+            var multicastAdapter = new MulticastAdapterComponent(new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4), new MulticastSenderConfig());
 
             var localNodeInfo = _informationType;
-            var localNodeRegistry = new NodeRegistryUseCase(localNodeInfo, multicastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
-
+            var localNodeRegistry = new NodeRegistryComponent(multicastAdapter, new NodeRegistryConfig(localNodeInfo.NodeType, localNodeInfo.NodeIdentifier, localNodeInfo.NodeEndpoint.IpAddress, localNodeInfo.NodeEndpoint.Port, true));
+          
             //Just to make sure 
             localNodeRegistry.JoinCluster();
 
@@ -135,10 +143,9 @@ namespace NodeRegistryTest
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            var multicastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig(localMulticastGrp, localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
+            var multicastAdapter = new MulticastAdapterComponent(new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4), new MulticastSenderConfig());
 
-            var localNodeRegistry = new NodeRegistryUseCase(localNodeInfo, multicastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
+            var localNodeRegistry = new NodeRegistryComponent(multicastAdapter, new NodeRegistryConfig(localNodeInfo.NodeType, localNodeInfo.NodeIdentifier, localNodeInfo.NodeEndpoint.IpAddress, localNodeInfo.NodeEndpoint.Port, true));
 
             //subscribe for events
             localNodeRegistry.SubscribeForNewNodeConnected(delegate(NodeInformationType nodeInformation)
@@ -157,7 +164,7 @@ namespace NodeRegistryTest
                 }
             }, nodeType);
 
-            var otherNodeRegistry = new NodeRegistryUseCase(otherNodeinfo, multicastAdapter);
+            var otherNodeRegistry = new NodeRegistryComponent(multicastAdapter, new NodeRegistryConfig(otherNodeinfo.NodeType, otherNodeinfo.NodeIdentifier, otherNodeinfo.NodeEndpoint.IpAddress, otherNodeinfo.NodeEndpoint.Port, true));
 
             Thread.Sleep(1000);
 
@@ -170,7 +177,8 @@ namespace NodeRegistryTest
         }
 
         [Test]
-        public void GetNodesListFromNodeRegistry() {
+        public void GetNodesListFromNodeRegistry()
+        {
             var localNodeInformation = _informationType;
 
             var localListenPort = _listenStartPortSeed;
@@ -179,10 +187,10 @@ namespace NodeRegistryTest
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            var localMulticastAdapter = new MulticastAdapterComponent(new GeneralMulticastAdapterConfig("224.2.22.222", localListenPort, localSendingPort, IPVersionType.IPv4), new MulticastSenderConfig());
+            var localMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig("224.2.22.222", localListenPort, localSendingPort, 4), new MulticastSenderConfig());
 
-            var localNodeRegistry = new NodeRegistryUseCase(localNodeInformation, localMulticastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = true;
+            var localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation.NodeType, localNodeInformation.NodeIdentifier, localNodeInformation.NodeEndpoint.IpAddress, localNodeInformation.NodeEndpoint.Port, true));
+
             localNodeRegistry.JoinCluster();
 
             Thread.Sleep(300);
@@ -192,19 +200,18 @@ namespace NodeRegistryTest
             Assert.True(nodeList.Contains(localNodeInformation));
 
             localNodeRegistry.ShutDownNodeRegistry();
-            
-            localNodeRegistry = new NodeRegistryUseCase(localNodeInformation, localMulticastAdapter);
-            localNodeRegistry.GetConfig().Content.AddMySelfToActiveNodeList = false;
-            localNodeRegistry.JoinCluster();
+
+            localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation.NodeType, localNodeInformation.NodeIdentifier, localNodeInformation.NodeEndpoint.IpAddress, localNodeInformation.NodeEndpoint.Port, false));
+           localNodeRegistry.JoinCluster();
 
             Thread.Sleep(300);
 
             nodeList = localNodeRegistry.GetAllNodes();
 
-            Assert.True(! nodeList.Contains(localNodeInformation));
+            Assert.True(!nodeList.Contains(localNodeInformation));
 
             localNodeRegistry.ShutDownNodeRegistry();
-            
+
         }
 
 

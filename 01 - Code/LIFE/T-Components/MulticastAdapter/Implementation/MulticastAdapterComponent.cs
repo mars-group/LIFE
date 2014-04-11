@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿using System.Configuration;
+using System.Threading;
+using AppSettingsManager;
+using ConfigurationAdapter.Interface;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 
@@ -14,19 +17,17 @@ namespace MulticastAdapter.Implementation
         #endregion
 
         #region Constructors
-        public MulticastAdapterComponent()
+       
+
+        public MulticastAdapterComponent(GlobalConfig globalConfiguration, MulticastSenderConfig senderConfiguration)
         {
-            _sender = new UDPMulticastSender();
-            _reciever = new UDPMulticastReceiver();
+            _sender = new UDPMulticastSender(globalConfiguration, senderConfiguration);
+            _reciever = new UDPMulticastReceiver(globalConfiguration);
 
         }
 
-        public MulticastAdapterComponent(GeneralMulticastAdapterConfig generalConfig, MulticastSenderConfig senderConfig)
-        {
-            _sender = new UDPMulticastSender(generalConfig, senderConfig);
-            _reciever = new UDPMulticastReceiver(generalConfig);
+      
 
-        }
         #endregion
 
         public byte[] readMulticastGroupMessage()

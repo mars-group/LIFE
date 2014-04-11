@@ -1,4 +1,5 @@
 ﻿using System;
+using NodeRegistry.Interface;
 
 namespace Shared
 {
@@ -9,11 +10,17 @@ namespace Shared
     public class SimulationManagerSettings
     {
         public string ModelDirectoryPath { get; set; }
+        public NodeRegistryConfig NodeRegistryConfig { get; set; }
 
-        public SimulationManagerSettings(string modelDirectoryPath) {
+
+        public SimulationManagerSettings(string modelDirectoryPath, NodeRegistryConfig nodeRegistryConfig) {
             ModelDirectoryPath = modelDirectoryPath;
+            NodeRegistryConfig = nodeRegistryConfig;
         }
 
-        public SimulationManagerSettings() {}
+        //TODO: can this be internal?
+        public SimulationManagerSettings() {
+            
+        }
     }
 }

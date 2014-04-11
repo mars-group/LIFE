@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConfigurationAdapter.Interface;
 using MulticastAdapter.Interface.Config.Types;
 
 namespace MulticastAdapter.Interface.Config

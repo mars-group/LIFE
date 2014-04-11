@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using ConfigurationAdapter.Interface;
-using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using log4net;
-using ModelContainer.Interfaces;
 using Shared;
 using SMConnector.TransportTypes;
 
@@ -15,17 +13,24 @@ namespace ModelContainer.Implementation {
     /// watching for changes, serialization for transport and so on.
     /// </summary>
     internal class ModelManagementUseCase {
-        private readonly Configuration<SimulationManagerSettings> _settings;
+        private readonly SimulationManagerSettings _settings;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ModelManagementUseCase));
         private IDictionary<TModelDescription, string> _models;
         private FileSystemWatcher _systemWatcher;
         private ICollection<Action> _listeners;
 
-        public ModelManagementUseCase(Configuration<SimulationManagerSettings> settings) {
+        public ModelManagementUseCase(SimulationManagerSettings settings) {
             _settings = settings;
             _models = new Dictionary<TModelDescription, string>();
             _listeners = new LinkedList<Action>();
-            _systemWatcher = new FileSystemWatcher(_settings.Content.ModelDirectoryPath);
+            try {
+                _systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
+            }
+            catch {
+                Directory.CreateDirectory(_settings.ModelDirectoryPath);
+                _systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
+            }
+            
 
             //Reload model folder contents if file system has changed. (Also of course once, initially)
             _systemWatcher.Changed += UpdateModelList;
@@ -54,13 +59,13 @@ namespace ModelContainer.Implementation {
         public TModelDescription AddModelFromDirectory(string filePath) {
             ModelContent content = new ModelContent(filePath);
             var tmp = filePath.Split(Path.DirectorySeparatorChar);
-            content.Write(_settings.FileName + Path.DirectorySeparatorChar + tmp[tmp.Length-1]);
+            content.Write(_settings.ModelDirectoryPath + Path.DirectorySeparatorChar + tmp[tmp.Length-1]);
             return new TModelDescription(tmp[tmp.Length - 1]);
         }
 
         public void DeleteModel(TModelDescription model) {
             Logger.Debug("DeleModel called");
-            string path = _settings.Content.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
+            string path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
             if (!Directory.Exists(path)) {
                 Directory.Delete(path, true);
             }
@@ -73,13 +78,13 @@ namespace ModelContainer.Implementation {
         /// Recreates the _models list according to the contents in the specified model folder.
         /// </summary>
         private void UpdateModelList(object sender, FileSystemEventArgs fileSystemEventArgs) {
-            Logger.Debug("Model folder '" + _settings.Content.ModelDirectoryPath + "' was altered. Reimporting models.");
+            Logger.Debug("Model folder '" + _settings.ModelDirectoryPath + "' was altered. Reimporting models.");
 
             //remove old data
             _models.Clear();
 
             // search through all folders in the model directory and try loading the models.
-            string[] folders = Directory.GetDirectories(_settings.Content.ModelDirectoryPath);
+            string[] folders = Directory.GetDirectories(_settings.ModelDirectoryPath);
             foreach (var folder in folders)
             {
                 string[] path = folder.Split(Path.DirectorySeparatorChar);

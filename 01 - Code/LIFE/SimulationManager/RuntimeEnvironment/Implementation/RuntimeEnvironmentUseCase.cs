@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using ConfigurationAdapter.Interface;
-using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
@@ -17,13 +13,13 @@ namespace RuntimeEnvironment.Implementation
 {
     class RuntimeEnvironmentUseCase : IRuntimeEnvironment
     {
-        private readonly Configuration<SimulationManagerSettings> _settings;
+        private readonly SimulationManagerSettings _settings;
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
         private readonly ISet<NodeInformationType> busyNodes;
 
-        public RuntimeEnvironmentUseCase(Configuration<SimulationManagerSettings> settings,
+        public RuntimeEnvironmentUseCase(SimulationManagerSettings settings,
                                         IModelContainer modelContainer,
                                         INodeRegistry nodeRegistry) {
             _settings = settings;
@@ -38,7 +34,7 @@ namespace RuntimeEnvironment.Implementation
             List<NodeInformationType> lcNodes =_nodeRegistry.GetAllNodesByType(NodeType.LayerContainer);
 
             if (!_steppedSimulations.ContainsKey(model)) {
-                //_steppedSimulations
+                
             }
             
         }

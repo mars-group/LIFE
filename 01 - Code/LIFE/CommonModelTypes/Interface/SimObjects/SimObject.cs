@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommonModelTypes.Interface;
-
-namespace ForestModel.Implementation
+﻿namespace CommonModelTypes.Interface.SimObjects
 {
     public abstract class SimObject
     {

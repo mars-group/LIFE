@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ConfigurationAdapter.Interface;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
@@ -12,7 +11,7 @@ namespace ModelContainer.Implementation {
         private readonly ModelManagementUseCase _modelContainerUseCase;
         private readonly ModelInstantionOrderingUseCase _modelInstantionOrderingUseCase;
 
-        public ModelContainerComponent(Configuration<SimulationManagerSettings> settings) {
+        public ModelContainerComponent(SimulationManagerSettings settings) {
             _modelContainerUseCase = new ModelManagementUseCase(settings);
             _modelInstantionOrderingUseCase = new ModelInstantionOrderingUseCase(settings);
         }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ForestModel.Implementation;
+﻿using CommonModelTypes.Interface.SimObjects;
 using LayerAPI.Interfaces;
 
-namespace CommonModelTypes.Interface
+namespace CommonModelTypes.Interface.AgentObjects
 {
     public abstract class AbstractAgent : SimObject, IAgent
     {

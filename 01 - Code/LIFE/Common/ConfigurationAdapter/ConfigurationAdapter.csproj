@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Nini">
       <HintPath>..\..\Libraries\Nini Mono 1.1\Nini.dll</HintPath>
     </Reference>
@@ -45,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalConfig.cs" />
     <Compile Include="Interface\Configuration.cs" />
     <Compile Include="Interface\Exceptions\CantParseKeyFromConfigExceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

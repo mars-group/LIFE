@@ -1,0 +1,16 @@
+﻿using System;
+using ConfigurationAdapter.Interface;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using Shared;
+
+namespace ConfigurationAdapterTest
+{
+    public class TestConfiguration
+    {
+        [Test]
+        public void TestConfigurationCreation() {
+            Configuration.GetConfiguration<SimulationManagerSettings>();
+        }
+    }
+}

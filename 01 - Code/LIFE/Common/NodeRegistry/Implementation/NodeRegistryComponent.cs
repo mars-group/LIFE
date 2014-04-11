@@ -11,8 +11,8 @@ namespace NodeRegistry.Implementation
     {
         private readonly INodeRegistry _nodeRegistryUseCase;
 
-        public NodeRegistryComponent(IMulticastAdapter multicastAdapter) {
-            _nodeRegistryUseCase = new NodeRegistryUseCase(multicastAdapter);
+        public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config) {
+            _nodeRegistryUseCase = new NodeRegistryUseCase(multicastAdapter, config);
         }
 
         public List<NodeInformationType> GetAllNodes() {
@@ -43,7 +43,7 @@ namespace NodeRegistry.Implementation
             _nodeRegistryUseCase.ShutDownNodeRegistry();
         }
 
-        public Configuration<NodeRegistryConfig> GetConfig() {
+        public NodeRegistryConfig GetConfig() {
             return _nodeRegistryUseCase.GetConfig();
         }
     }

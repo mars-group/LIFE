@@ -21,7 +21,7 @@ namespace DistributedKeyValueStore.Implementation
             var path = "./" + typeof(DistributedKeyValueStoreConfig).Name + ".config";
             var config = new Configuration<DistributedKeyValueStoreConfig>(path);
             _nodeRegistry = nodeRegistry;
-            _kademliaPort = config.Content.KademliaPort;
+            _kademliaPort = config.Instance.KademliaPort;
             _kademliaNode = new KademliaNode(_kademliaPort, ID.HostID());
             JoinKademliaDht();
         }

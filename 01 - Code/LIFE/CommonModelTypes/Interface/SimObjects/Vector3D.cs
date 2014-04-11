@@ -1,4 +1,6 @@
-﻿namespace CommonModelTypes.Interface
+﻿using System;
+
+namespace CommonModelTypes.Interface.SimObjects
 {
     public class Vector3D
     {
@@ -6,7 +8,8 @@
         public int Y { get; set; }
         public int Z { get; set; }
 
-        public Vector3D(int X, int Y ) {
+        public Vector3D(int X, int Y)
+        {
             this.X = X;
             this.Y = Y;
             this.Z = 0;
@@ -17,5 +20,15 @@
             this.Y = Y;
             this.Z = Z;
         }
+
+        public float DistanceToWayPoint(Vector3D ownPostion)
+        {
+            //TODO distance berechnen
+            throw new NotImplementedException();
+        }
+
+
+
+
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using CommonTypes.DataTypes;
+using System.Configuration;
+using AppSettingsManager;
 using CommonTypes.TransportTypes;
+using ConfigurationAdapter.Interface;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
-using MulticastAdapter.Interface.Config.Types;
 
 namespace SimulationController
 {
@@ -24,40 +25,23 @@ namespace SimulationController
 
     class SimulationManagerClient : ISimulationManager
     {
-        private ISimulationManager _simManager;
+        private readonly ISimulationManager _simManager;
 
         private INodeRegistry _nodeRegistry;
 
-        public bool IsConnected { get; private set; }
+        public SimulationManagerClient(GlobalConfig globalConfiguration, NodeRegistryConfig nodeRegistryConfig, MulticastSenderConfig multicastSenderConfig) {
 
-        public SimulationManagerClient() {
+            var multiCastAdapter = new MulticastAdapterComponent(globalConfiguration, multicastSenderConfig);
+            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, nodeRegistryConfig);
 
-            var multiCastAdapter = new MulticastAdapterComponent();
+            var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).First();
 
-            _nodeRegistry = new NodeRegistryComponent(multiCastAdapter);
-
-            IsConnected = false;
-
-            // wait for SimManager to come up.
-            _nodeRegistry.SubscribeForNewNodeConnectedByType(OnNewSimManagerConnected, NodeType.SimulationManager);
-        }
-
-        /// <summary>
-        /// Wait handle for SimManager connecting. Once a SimManager is connected
-        /// this method will continue intialization and execution
-        /// </summary>
-        /// <param name="newnode"></param>
-        private void OnNewSimManagerConnected(NodeInformationType newnode) {
-           
-            var simManagerNode = newnode;
-           
             var simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
                 new ScsTcpEndPoint(simManagerNode.NodeEndpoint.IpAddress, simManagerNode.NodeEndpoint.Port));
 
             simManagerClient.Connect();
 
             _simManager = simManagerClient.ServiceProxy;
-            IsConnected = true;
         }
 
         public IList<TModelDescription> GetAllModels() {

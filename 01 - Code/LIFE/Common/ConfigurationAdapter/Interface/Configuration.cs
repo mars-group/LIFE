@@ -1,65 +1,64 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
+using log4net;
 
-namespace ConfigurationAdapter.Interface
-{
-    public class Configuration<T>
-    {
-        private readonly XmlSerializer serializer;
+[assembly: InternalsVisibleTo("MulticastAdapterTestProject")]
 
-        private FileStream file;
+namespace ConfigurationAdapter.Interface {
+    public static class Configuration {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Configuration));
 
-        //TODO is (noch) nicht geil :-(
         /// <summary>
-        /// This is the constructor to load an already existing configuration from the given filename.
-        /// If the file, with the given filename does not exist a new file is writen from the default constructor of T. 
+        ///     Grants access to a config file. If no file exists, it will be uatomatically created.
         /// </summary>
-        /// <param name="fileName">not null, must exist.</param>
-        public Configuration(string fileName)
-        {
+        /// <typeparam name="T"></typeparam>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static T GetConfiguration<T>(string fileName = null) {
+            string path = fileName ?? "./" + typeof (T).Name + ".config";
+            T result = default(T);
 
-            if (File.Exists(fileName))
-            {
-                FileName = fileName;
-                serializer = new XmlSerializer(typeof(T));
-                file = new FileStream(FileName, FileMode.Open);
-                Content = (T)serializer.Deserialize(file);
-                file.Close();
+            XmlSerializer serializer;
+            FileStream file = null;
+
+            try {
+                serializer = new XmlSerializer(typeof (T));
+                if (File.Exists(path)) {
+                    file = new FileStream(path, FileMode.Open);
+                    result = (T) serializer.Deserialize(file);
+                }
+                else {
+                    file = new FileStream(path, FileMode.OpenOrCreate);
+                    result = (T) typeof (T).GetConstructor(new Type[0]).Invoke(new object[0]);
+                    serializer.Serialize(file, result);
+                    file.Flush();
+                }
             }
-            else
-            {
-                serializer = new XmlSerializer(typeof(T));
-                FileName = fileName;
-                Content = (T)typeof(T).GetConstructor(new Type[0]).Invoke(new object[0]);
-                file = new FileStream(FileName, FileMode.OpenOrCreate);
-                serializer.Serialize(file, Content);
+            catch (Exception exception) {
+                Logger.Error(exception);
+            }
+            finally {
+                if (file != null) file.Close();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Saves a configuration. If one already existed witht hat name, it will be overwritten.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t"></param>
+        /// <param name="fileName"></param>
+        public static void Save<T>(T t, string fileName = null) {
+            string path = fileName ?? "./" + typeof (T).Name + ".config";
+            using (var file = new FileStream(path, FileMode.OpenOrCreate)) {
+                new XmlSerializer(typeof (T)).Serialize(file, t);
                 file.Flush();
                 file.Close();
             }
-        }
-
-        public Configuration(T t)
-        {
-         serializer = new XmlSerializer(typeof(T));
-            FileName = "./" + typeof (T).Name + ".config";
-            Content = t;
-            file = new FileStream(FileName, FileMode.OpenOrCreate);
-            serializer.Serialize(file, Content);
-            file.Flush();
-            file.Close();
-        }
-
-        public string FileName { get; protected set; }
-
-        public T Content { get; protected set; }
-
-        public void Save()
-        {
-            file = new FileStream(FileName, FileMode.Create);
-            serializer.Serialize(file, Content);
-            file.Flush();
         }
     }
 }

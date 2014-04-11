@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ConfigurationAdapter.Interface;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using log4net;
@@ -18,9 +17,9 @@ namespace ModelContainer.Implementation {
     internal class ModelInstantionOrderingUseCase {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (ModelInstantionOrderingUseCase));
 
-        private Configuration<SimulationManagerSettings> _settings;
+        private SimulationManagerSettings _settings;
 
-        public ModelInstantionOrderingUseCase(Configuration<SimulationManagerSettings> settings) {
+        public ModelInstantionOrderingUseCase(SimulationManagerSettings settings) {
             _settings = settings;
 
             Logger.Debug("instantiated.");
@@ -28,7 +27,7 @@ namespace ModelContainer.Implementation {
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description)
         {
-            AddinManager.Initialize("./addinConfig", _settings.Content.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name);
+            AddinManager.Initialize("./addinConfig", _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name);
             AddinManager.Registry.Update();
             var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
 

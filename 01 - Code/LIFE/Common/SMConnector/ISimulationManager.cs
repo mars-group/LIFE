@@ -20,10 +20,12 @@ namespace SMConnector {
         IList<TModelDescription> GetAllModels();
 
         /// <summary>
-        ///     Starts a simulation with the model derived from the provided TModelDescription.
+        /// Starts a simulation with the model derived from the provided TModelDescription.
         /// </summary>
-        /// <param name="model">The chosen model</param>
-        void StartSimulationWithModel(TModelDescription model);
+        /// <param name="model">not null</param>
+        /// <param name="layerContainers">The layer containers witht which </param>
+        /// <param name="nrOfTicks"></param>
+        void StartSimulationWithModel(TModelDescription model/*, ICollection<LayerContainerProxy> layerContainers, int? nrOfTicks = null*/);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.
