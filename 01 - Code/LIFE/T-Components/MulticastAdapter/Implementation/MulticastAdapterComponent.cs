@@ -25,6 +25,9 @@ namespace MulticastAdapter.Implementation
             _reciever = new UDPMulticastReceiver(globalConfiguration);
 
         }
+
+      
+
         #endregion
 
         public byte[] readMulticastGroupMessage()

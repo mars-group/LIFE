@@ -1,9 +1,14 @@
-﻿using DistributedKeyValueStore.Implementation;
+﻿using AppSettingsManager;
+using ConfigurationAdapter.Interface;
+using DistributedKeyValueStore.Implementation;
 using LayerAPI.Interfaces;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
+using LayerRegistry.Interfaces.Config;
 using MulticastAdapter.Implementation;
+using MulticastAdapter.Interface.Config;
 using NodeRegistry.Implementation;
+using NodeRegistry.Interface;
 using NUnit.Framework;
 
 namespace LayerContainerComponentTests {
@@ -16,7 +21,12 @@ namespace LayerContainerComponentTests {
         [SetUp]
         public void Init() {
 
-            _layerRegistry = new LayerRegistryComponent(new DistributedKeyValueStoreComponent(new NodeRegistryUseCase(new MulticastAdapterComponent())));
+            _layerRegistry = new LayerRegistryComponent(
+                new DistributedKeyValueStoreComponent(
+                    new NodeRegistryComponent(
+                        new MulticastAdapterComponent(new GlobalConfig(),new MulticastSenderConfig()), new NodeRegistryConfig())),
+                        new LayerRegistryConfig()
+                        );
             _layer = new ExampleLayer.ExampleLayer();
         }
 
