@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using ConfigurationAdapter.Interface;
@@ -19,6 +20,7 @@ namespace RuntimeEnvironment.Implementation
         private readonly Configuration<SimulationManagerSettings> _settings;
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
+        private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
 
         public RuntimeEnvironmentUseCase(Configuration<SimulationManagerSettings> settings,
                                         IModelContainer modelContainer,
@@ -26,18 +28,16 @@ namespace RuntimeEnvironment.Implementation
             _settings = settings;
             _modelContainer = modelContainer;
             _nodeRegistry = nodeRegistry;
+            _steppedSimulations = new Dictionary<TModelDescription, SteppedSimulationExecutionUseCase>();
         }
-
 
         public void StartSimulationWithModel(TModelDescription model) {
             IList<TLayerDescription> instantiationOrder = _modelContainer.GetInstantiationOrder(model);
 
             List<NodeInformationType> lcNodes =_nodeRegistry.GetAllNodesByType(NodeType.LayerContainer);
 
-            foreach (var nodeInformationType in lcNodes) {
-                nodeInformationType.
-
-            }
+            //if(!_steppedSimulations.ContainsKey(model))
+            
         }
 
         public void PauseSimulation(TModelDescription model) {

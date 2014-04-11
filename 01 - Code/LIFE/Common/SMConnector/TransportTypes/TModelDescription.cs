@@ -10,6 +10,8 @@ namespace SMConnector.TransportTypes
             Name = name;
         }
 
+        #region Object contracts
+
         public bool Equals(TModelDescription other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -26,5 +28,15 @@ namespace SMConnector.TransportTypes
         public override int GetHashCode() {
             return (Name != null ? Name.GetHashCode() : 0);
         }
+
+        public static bool operator ==(TModelDescription left, TModelDescription right) {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(TModelDescription left, TModelDescription right) {
+            return !Equals(left, right);
+        }
+
+        #endregion
     }
 }

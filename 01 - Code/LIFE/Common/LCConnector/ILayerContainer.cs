@@ -12,7 +12,7 @@ namespace LCConnector {
         void LoadModelContent(ModelContent content);
 
         /// <summary>
-        ///     Orders the LayerContainer to instantiate a version of the given layer id from the model content.
+        ///     Orders the LayerContainerClient to instantiate a version of the given layer id from the model content.
         ///     If there already was an instance of that type instantiated, it will be overwritten by the new one.
         /// </summary>
         /// <param name="instanceId">A simulation wide unique layer identification.</param>

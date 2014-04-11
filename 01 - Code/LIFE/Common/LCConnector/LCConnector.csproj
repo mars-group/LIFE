@@ -44,7 +44,6 @@
     <Compile Include="Exceptions\LayerNotInitializedException.cs" />
     <Compile Include="Exceptions\LayerNotInstantiatedException.cs" />
     <Compile Include="ILayerContainer.cs" />
-    <Compile Include="LayerContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransportTypes\ModelStructure\ContentType.cs" />
     <Compile Include="TransportTypes\ModelStructure\IModelDirectoryContent.cs" />
