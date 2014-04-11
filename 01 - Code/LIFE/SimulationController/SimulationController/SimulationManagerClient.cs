@@ -29,10 +29,10 @@ namespace SimulationController
 
         private INodeRegistry _nodeRegistry;
 
-        public SimulationManagerClient(GlobalConfig globalConfiguration, MulticastSenderConfig senderConfig) {
+        public SimulationManagerClient(GlobalConfig globalConfiguration, NodeRegistryConfig nodeRegistryConfig, MulticastSenderConfig multicastSenderConfig) {
 
-            var multiCastAdapter = new MulticastAdapterComponent(globalConfiguration, senderConfig);
-            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, senderConfig);
+            var multiCastAdapter = new MulticastAdapterComponent(globalConfiguration, multicastSenderConfig);
+            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, nodeRegistryConfig);
 
             var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).First();
 
