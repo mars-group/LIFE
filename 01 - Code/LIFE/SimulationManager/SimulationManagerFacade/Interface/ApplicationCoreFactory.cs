@@ -2,6 +2,8 @@
 using ConfigurationAdapter.Interface;
 using ModelContainer.Implementation;
 using ModelContainer.Interfaces;
+using MulticastAdapter.Implementation;
+using MulticastAdapter.Interface;
 using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation;
@@ -29,8 +31,12 @@ namespace SimulationManagerFacade.Interface {
                     .As<IRuntimeEnvironment>()
                     .InstancePerLifetimeScope();
 
-                builder.RegisterType<NodeRegistryUseCase>()
+                builder.RegisterType<NodeRegistryComponent>()
                     .As<INodeRegistry>()
+                    .InstancePerLifetimeScope();
+
+                builder.RegisterType<MulticastAdapterComponent>()
+                    .As<IMulticastAdapter>()
                     .InstancePerLifetimeScope();
 
                 builder.RegisterType<ApplicationCoreComponent>()
