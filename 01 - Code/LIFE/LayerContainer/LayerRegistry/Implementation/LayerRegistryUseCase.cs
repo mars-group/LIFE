@@ -13,19 +13,19 @@ using Newtonsoft.Json;
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
         private readonly IDistributedKeyValueStore _distributedKeyValueStore;
+        private readonly LayerRegistryConfig _layerRegistryConfig;
         private readonly string _ownIpAddress;
         private readonly int _ownPort;
         private readonly IDictionary<Type, ILayer> _localLayers;
 
-        public LayerRegistryUseCase(IDistributedKeyValueStore distributedKeyValueStore) {
+        public LayerRegistryUseCase(IDistributedKeyValueStore distributedKeyValueStore, LayerRegistryConfig layerRegistryConfig) {
             _distributedKeyValueStore = distributedKeyValueStore;
+            _layerRegistryConfig = layerRegistryConfig;
 
-            var path = "./" + typeof(LayerRegistryConfig).Name + ".config";
-            var layerRegisterConfig = new Configuration<LayerRegistryConfig>(path);
             _localLayers = new Dictionary<Type, ILayer>();
 
-            _ownIpAddress = layerRegisterConfig.Instance.MainNetworkAddress;
-            _ownPort = layerRegisterConfig.Instance.MainNetworkPort;
+            _ownIpAddress = _layerRegistryConfig.MainNetworkAddress;
+            _ownPort = _layerRegistryConfig.MainNetworkPort;
         }
 
         public ILayer RemoveLayerInstance(Type layerType) {
