@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using ConfigurationAdapter.Interface;
-using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using log4net;
-using ModelContainer.Interfaces;
 using Shared;
 using SMConnector.TransportTypes;
 
@@ -25,7 +23,14 @@ namespace ModelContainer.Implementation {
             _settings = settings;
             _models = new Dictionary<TModelDescription, string>();
             _listeners = new LinkedList<Action>();
-            _systemWatcher = new FileSystemWatcher(_settings.Content.ModelDirectoryPath);
+            try {
+                _systemWatcher = new FileSystemWatcher(_settings.Content.ModelDirectoryPath);
+            }
+            catch {
+                Directory.CreateDirectory(_settings.Content.ModelDirectoryPath);
+                _systemWatcher = new FileSystemWatcher(_settings.Content.ModelDirectoryPath);
+            }
+            
 
             //Reload model folder contents if file system has changed. (Also of course once, initially)
             _systemWatcher.Changed += UpdateModelList;
