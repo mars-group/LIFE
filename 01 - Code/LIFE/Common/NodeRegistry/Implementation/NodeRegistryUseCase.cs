@@ -65,7 +65,7 @@ namespace NodeRegistry.Implementation
             JoinCluster();
         }
 
-        public NodeRegistryUseCase(IMulticastAdapter multicastAdapter)
+        public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, )
         {
       
             this._config = new Configuration<NodeRegistryConfig>();
