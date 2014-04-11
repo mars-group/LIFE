@@ -36,10 +36,10 @@ namespace SimulationController
             IsConnected = false;
 
 
-            var multiCastAdapter = new MulticastAdapterComponent(Configuration.GetConfiguration<GlobalConfig>("SimManagerGlobalConfig.cfg"),
-                    Configuration.GetConfiguration<MulticastSenderConfig>("SimManagerMulticastSenderConfig.cfg"));
+            var multiCastAdapter = new MulticastAdapterComponent(Configuration.Load<GlobalConfig>("SimManagerGlobalConfig.cfg"),
+                    Configuration.Load<MulticastSenderConfig>("SimManagerMulticastSenderConfig.cfg"));
 
-            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, Configuration.GetConfiguration<NodeRegistryConfig>("SimManagerNodeRegistryConfig.cfg"));
+            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, Configuration.Load<NodeRegistryConfig>("SimManagerNodeRegistryConfig.cfg"));
 
             _nodeRegistry.SubscribeForNewNodeConnectedByType(OnNewSimManagerConnected, NodeType.SimulationManager);
 

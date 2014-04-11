@@ -9,7 +9,7 @@ namespace ConfigurationAdapterTest
     {
         [Test]
         public void TestConfigurationCreation() {
-            Configuration.GetConfiguration<SimulationManagerSettings>();
+            Configuration.Load<SimulationManagerSettings>();
         }
     }
 }

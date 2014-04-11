@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestEntities\Zero.cs" />
-    <Compile Include="TestModelContainer.cs" />
+    <Compile Include="ModelContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

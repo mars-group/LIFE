@@ -24,7 +24,7 @@ namespace VillageModel.Implementaion.Agents
         public Villiager(int id, Vector3D position, Village homeVillage)
             : base(id, position)
         {
-            _config = Configuration.GetConfiguration<VillagerConfig>();
+            _config = Configuration.Load<VillagerConfig>();
 
             _homeVillage = homeVillage;
             _woodStorage = 0;

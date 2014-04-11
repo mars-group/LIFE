@@ -44,7 +44,7 @@ namespace SimulationManagerFacade.Interface {
                     .InstancePerDependency();
 
                 // Make the configuration file available for all components
-                var config = Configuration.GetConfiguration<SimulationManagerSettings>();
+                var config = Configuration.Load<SimulationManagerSettings>();
                 builder.RegisterInstance(config);
                 builder.RegisterInstance(config.NodeRegistryConfig);
 

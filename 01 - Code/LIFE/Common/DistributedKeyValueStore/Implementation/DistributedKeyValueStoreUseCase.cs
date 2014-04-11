@@ -18,7 +18,7 @@ namespace DistributedKeyValueStore.Implementation
         private readonly int _kademliaPort;
 
         public DistributedKeyValueStoreUseCase(INodeRegistry nodeRegistry) {
-            var config = Configuration.GetConfiguration<DistributedKeyValueStoreConfig>();
+            var config = Configuration.Load<DistributedKeyValueStoreConfig>();
             _nodeRegistry = nodeRegistry;
             _kademliaPort = config.KademliaPort;
             _kademliaNode = new KademliaNode(_kademliaPort, ID.HostID());

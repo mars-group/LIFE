@@ -9,7 +9,7 @@ using SimulationManagerTest.TestEntities;
 
 namespace SimulationManagerTest {
     [TestFixture]
-    public class TestModelContainer {
+    public class ModelContainerTest {
         [Test]
         public void TestModelContentCopy() {
             if (Directory.Exists("./copiedOrdner")) Directory.Delete("./copiedOrdner", true);

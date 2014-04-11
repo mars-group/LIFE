@@ -29,7 +29,7 @@ namespace ForestModel.Implementation.Agents
         #region constructors
         public TreeAgent(int id,  Vector3D position, float diameter, float height) : base(id, position)
         {
-            _config = Configuration.GetConfiguration<TreeAgentConfiguration>();
+            _config = Configuration.Load<TreeAgentConfiguration>();
 
             _diameter = diameter;
             _height = height;
