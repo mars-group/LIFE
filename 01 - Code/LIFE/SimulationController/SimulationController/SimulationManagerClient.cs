@@ -6,6 +6,7 @@ using CommonTypes.TransportTypes;
 using ConfigurationAdapter.Interface;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
+using MulticastAdapter.Interface.Config;
 
 namespace SimulationController
 {
@@ -28,9 +29,9 @@ namespace SimulationController
 
         private INodeRegistry _nodeRegistry;
 
-        public SimulationManagerClient(Configuration<GlobalConfig> globalConfiguration) {
+        public SimulationManagerClient(GlobalConfig globalConfiguration, MulticastSenderConfig senderConfig) {
 
-            var multiCastAdapter = new MulticastAdapterComponent(globalConfiguration);
+            var multiCastAdapter = new MulticastAdapterComponent(globalConfiguration, senderConfig);
             _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter);
 
             var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).First();
