@@ -13,7 +13,7 @@ namespace RuntimeEnvironment.Implementation {
 
         private readonly RuntimeEnvironmentUseCase _runtimeEnvironmentUseCase;
 
-        public RuntimeEnvironmentComponent(Configuration<SimulationManagerSettings> settings,
+        public RuntimeEnvironmentComponent(SimulationManagerSettings settings,
                                             IModelContainer modelContainer,
                                             INodeRegistry layerRegistry)
         {

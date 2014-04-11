@@ -1,6 +1,5 @@
 ﻿using System;
 using ConfigurationAdapter.Interface;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Shared;
 
