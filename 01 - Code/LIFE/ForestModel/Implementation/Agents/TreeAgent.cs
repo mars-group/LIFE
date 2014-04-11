@@ -23,20 +23,20 @@ namespace ForestModel.Implementation.Agents
         private float _maxDiameter;
         private float _maxHeight;
         private int _age;
-        private Configuration<TreeAgentConfiguration> _config;
+        private TreeAgentConfiguration _config;
         #endregion
 
         #region constructors
         public TreeAgent(int id,  Vector3D position, float diameter, float height) : base(id, position)
         {
-            _config = new Configuration<TreeAgentConfiguration>();
+            _config = Configuration.GetConfiguration<TreeAgentConfiguration>();
 
             _diameter = diameter;
             _height = height;
             _fitness = 100;
-            _growthCoefficient = _config.Instance.GrowthCoefficient;
-            _maxDiameter = _config.Instance.MaxDiameter;
-            _maxHeight = _config.Instance.MaxHeight;
+            _growthCoefficient = _config.GrowthCoefficient;
+            _maxDiameter = _config.MaxDiameter;
+            _maxHeight = _config.MaxHeight;
 
         }
         #endregion
