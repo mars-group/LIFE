@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Hik.Communication.ScsServices.Service;
-using LCConnector;
-using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
@@ -36,29 +34,24 @@ namespace SimulationManagerFacade.Implementation {
         
         #region RuntimeEnvironment delegation
 
-        public void StartSimulationWithModel(TModelDescription model)
-        {
-            throw new NotImplementedException();
+        public void StartSimulationWithModel(TModelDescription model) {
+            _runtimeEnvironment.StartSimulationWithModel(model);
         }
 
-        public void PauseSimulation(TModelDescription model)
-        {
-            throw new NotImplementedException();
+        public void PauseSimulation(TModelDescription model) {
+            _runtimeEnvironment.PauseSimulation(model);
         }
 
-        public void ResumeSimulation(TModelDescription model)
-        {
-            throw new NotImplementedException();
+        public void ResumeSimulation(TModelDescription model) {
+            _runtimeEnvironment.ResumeSimulation(model);
         }
 
-        public void AbortSimulation(TModelDescription model)
-        {
-            throw new NotImplementedException();
+        public void AbortSimulation(TModelDescription model) {
+            _runtimeEnvironment.AbortSimulation(model);
         }
 
-        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable)
-        {
-            throw new NotImplementedException();
+        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
+            _runtimeEnvironment.SubscribeForStatusUpdate(statusUpdateAvailable);
         }
 
         #endregion
@@ -80,11 +73,6 @@ namespace SimulationManagerFacade.Implementation {
             throw new NotImplementedException();
         }
 
-        public ModelContent GetModel(TModelDescription modelID)
-        {
-            return _modelContainer.GetModel(modelID);
-        }
-
         public TModelDescription AddModelFromDirectory(string filePath)
         {
             return _modelContainer.AddModelFromDirectory(filePath);
@@ -96,9 +84,5 @@ namespace SimulationManagerFacade.Implementation {
         }
 
         #endregion
-
-        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
-            return _modelContainer.GetInstantiationOrder(model);
-        }
     }
 }

@@ -1,11 +1,11 @@
-﻿using ModelContainer.Interfaces;
-using SMConnector;
+﻿using SMConnector;
 
 namespace SimulationManagerFacade.Interface {
+    /// <summary>
+    /// TODO: comment
+    /// </summary>
     public interface IApplicationCore :
-                            IModelContainer,
                             ISimulationManager
-
     {
         
     }
