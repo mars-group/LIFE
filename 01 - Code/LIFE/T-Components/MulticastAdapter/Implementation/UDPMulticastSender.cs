@@ -4,8 +4,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using AppSettingsManager;
-using ConfigurationAdapter.Interface;
-using ConfigurationAdapter.Interface.Exceptions;
 using log4net;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
