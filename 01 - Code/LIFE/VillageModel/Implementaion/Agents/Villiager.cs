@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using CommonModelTypes.Interface;
 using CommonModelTypes.Interface.AgentObjects;
 using CommonModelTypes.Interface.SimObjects;
 using ConfigurationAdapter.Interface;
@@ -20,7 +14,7 @@ namespace VillageModel.Implementaion.Agents
         private Village _homeVillage;
         private int _woodStorage;
         private int _dailyWoodUsage;
-        private Configuration<VillagerConfig> _config;
+        private VillagerConfig _config;
         private Vector3D _nextWoodCuttingLocation;
         private ChuckWoodUseCase chuckWoodUseCase;
         private MoveToAction _pathHome;
@@ -30,11 +24,11 @@ namespace VillageModel.Implementaion.Agents
         public Villiager(int id, Vector3D position, Village homeVillage)
             : base(id, position)
         {
-            _config = new Configuration<VillagerConfig>();
+            _config = Configuration.GetConfiguration<VillagerConfig>();
 
             _homeVillage = homeVillage;
             _woodStorage = 0;
-            _dailyWoodUsage = _config.Instance.DailyWoodUsage;
+            _dailyWoodUsage = _config.DailyWoodUsage;
             _nextWoodCuttingLocation = GetRandomLocationInsideVillageRadius();
             _pathHome = new MoveToAction(_homeVillage.Position);
         }
@@ -70,7 +64,7 @@ namespace VillageModel.Implementaion.Agents
 
         private Boolean AtWayPoint(Vector3D destination)
         {
-            return ((destination.DistanceToWayPoint(Position) - _config.Instance.WayPointReachedDistance) <= 0);
+            return ((destination.DistanceToWayPoint(Position) - _config.WayPointReachedDistance) <= 0);
         }
 
         private Vector3D GetRandomLocationInsideVillageRadius()
