@@ -49,7 +49,7 @@ namespace MulticastAdapter.Implementation
                     {
                         if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily( (IPVersionType)_generalSettings.IPVersion ))
                         {
-                            var updClient = SetupSocket(unicastAddress);
+                            var updClient = SetupSocket(unicastAddress.Address);
                             updClient.JoinMulticastGroup(_mGrpAdr, unicastAddress.Address);
                             resultList.Add(updClient);
                         }
@@ -67,12 +67,11 @@ namespace MulticastAdapter.Implementation
             return resultList;
         }
 
-        private UdpClient SetupSocket(UnicastIPAddressInformation unicastAddress)
+        private UdpClient SetupSocket(IPAddress unicastAddress)
         {
             try
             {
-                var updClient = SetupSocket(unicastAddress);
-                return updClient;
+                return new UdpClient(new IPEndPoint(unicastAddress, _sendingPort));
             }
             catch (SocketException socketException)
             {

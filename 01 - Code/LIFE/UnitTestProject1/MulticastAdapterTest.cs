@@ -18,8 +18,7 @@ namespace MulticastAdapterTestProject
         public void TestPortIncrement() {
             var startListenPort = 50555;
 
-            var globalConfig =new GlobalConfig("255.7.77.7", 60543, startListenPort, 4);
-
+            var globalConfig = new GlobalConfig("224.10.100.1", 60543, startListenPort, 4);
             var senderConfig = new MulticastSenderConfig();
             
             //test if both adapter  can handle the same starting port

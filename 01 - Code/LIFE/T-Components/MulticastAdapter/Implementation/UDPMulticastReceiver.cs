@@ -60,7 +60,14 @@ namespace MulticastAdapter.Implementation
                     break;
             }
 
-            return new UdpClient(new IPEndPoint(listenAddress, listenPort));
+            var udpClient = new UdpClient();
+            udpClient.ExclusiveAddressUse = false;
+            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            udpClient.ExclusiveAddressUse = false;
+            udpClient.Client.Bind(new IPEndPoint(listenAddress, listenPort));
+
+
+            return udpClient;
         }
 
 
