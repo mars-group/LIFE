@@ -9,6 +9,7 @@ using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
 using Shared;
 using SMConnector;
+using SMConnector.Exceptions;
 using SMConnector.TransportTypes;
 
 namespace RuntimeEnvironment.Implementation {

@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace RuntimeEnvironment.Implementation {
+namespace SMConnector.Exceptions {
     internal class SimulationAlreadyRunningException : Exception {}
 }
