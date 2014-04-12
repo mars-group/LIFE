@@ -24,34 +24,17 @@ namespace SimulationController
 
     class SimulationManagerClient : ISimulationManager
     {
-        private ISimulationManager _simManager;
+        private readonly ISimulationManager _simManager;
 
-        private INodeRegistry _nodeRegistry;
-
-        public bool IsConnected { get; private set; }
-
-        public SimulationManagerClient() {
-            IsConnected = false;
-
-
-            var multiCastAdapter = new MulticastAdapterComponent(Configuration.Load<GlobalConfig>("SimManagerGlobalConfig.cfg"),
-                    Configuration.Load<MulticastSenderConfig>("SimManagerMulticastSenderConfig.cfg"));
-
-            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, Configuration.Load<NodeRegistryConfig>("SimManagerNodeRegistryConfig.cfg"));
-
-            _nodeRegistry.SubscribeForNewNodeConnectedByType(OnNewSimManagerConnected, NodeType.SimulationManager);
-
-
-        }
-
-        private void OnNewSimManagerConnected(NodeInformationType newnode) {
+        public SimulationManagerClient(NodeInformationType newnode)
+        {
             var simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
                 new ScsTcpEndPoint(newnode.NodeEndpoint.IpAddress, newnode.NodeEndpoint.Port));
 
             simManagerClient.Connect();
 
             _simManager = simManagerClient.ServiceProxy;
-            IsConnected = true;
+
 
         }
 

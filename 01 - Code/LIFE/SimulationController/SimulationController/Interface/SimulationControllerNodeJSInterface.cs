@@ -7,7 +7,20 @@ using SMConnector;
 
 namespace SimulationController
 {
+    using System.Configuration;
+
+    using AppSettingsManager;
+
     using CommonTypes.DataTypes;
+    using CommonTypes.Types;
+
+    using ConfigurationAdapter.Interface;
+
+    using MulticastAdapter.Implementation;
+    using MulticastAdapter.Interface.Config;
+
+    using NodeRegistry.Implementation;
+    using NodeRegistry.Interface;
 
     using SMConnector.TransportTypes;
     using System.Threading.Tasks;
@@ -20,12 +33,33 @@ namespace SimulationController
     /// </summary>
     public class SimulationControllerNodeJsInterface
     {
-        private readonly SimulationManagerClient _simulationManagerClient;
+        private SimulationManagerClientMock _simulationManagerClient;
+
+        private INodeRegistry _nodeRegistry;
+
+        private bool _isConnected;
 
         public SimulationControllerNodeJsInterface() {
-            _simulationManagerClient = new SimulationManagerClient();//new SimulationManagerClientMock();//
+            _isConnected = false;
+
+            var multiCastAdapter = new MulticastAdapterComponent(Configuration.Load<GlobalConfig>("SimControllerGlobalConfig.cfg"),
+                    Configuration.Load<MulticastSenderConfig>("SimControllerMulticastSenderConfig.cfg"));
+
+            var config = Configuration.Load<SimControllerConfig>("SimControllerConfig.cfg");
+
+            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, config.NodeRegistryConfig);
+
+            _nodeRegistry.SubscribeForNewNodeConnectedByType(OnNewSimManagerConnected, NodeType.SimulationManager);
+
+            _simulationManagerClient = new SimulationManagerClientMock();//new SimulationManagerClient();//
         }
 
+        private void OnNewSimManagerConnected(NodeInformationType newnode) {
+            //_simulationManagerClient = new SimulationManagerClientMock(newnode);//new SimulationManagerClient();//
+            _isConnected = true;
+        }
+
+        #region ISimulationManager Methods
         public async Task<object> GetAllModels(dynamic input) {
             if (!_simulationManagerClient.IsConnected) { return new object[0]; }
             return await Task.Run(
@@ -54,6 +88,34 @@ namespace SimulationController
                 });
         }
 
+        public async Task<object> PauseSimulation(dynamic input) {
+            if (!_simulationManagerClient.IsConnected) { return new object[0]; }
+            return await Task.Run(() => this._simulationManagerClient.PauseSimulation(input));
+        }
+
+        public async Task<object> ResumeSimulation(dynamic input)
+        {
+            if (!_simulationManagerClient.IsConnected) { return new object[0]; }
+            return await Task.Run(() => this._simulationManagerClient.ResumeSimulation(input));
+        }
+
+        public async Task<object> AbortSimulation(dynamic input)
+        {
+            if (!_simulationManagerClient.IsConnected) { return new object[0]; }
+            return await Task.Run(() => this._simulationManagerClient.AbortSimulation(input));
+        }
+
+        #endregion
+
+        #region StatusMethods
+
+        public async Task<object> GetConnectedNodes(dynamic input) {
+            return await Task.Run(
+                () => this._nodeRegistry.GetAllNodes());
+        }
+
+        #endregion
+
         private void OnStatusUpdateAvailable(TStatusUpdate update) {
             throw new System.NotImplementedException();
         }
@@ -63,6 +125,19 @@ namespace SimulationController
     /// mock implementaion
     /// </summary>
     public class SimulationManagerClientMock : ISimulationManager {
+        public SimulationManagerClientMock(NodeInformationType newnode) {
+
+        }
+
+        public SimulationManagerClientMock() {
+        }
+
+        public bool IsConnected {
+            get {
+                return true;
+            } 
+        }
+
         public IList<TModelDescription> GetAllModels() {
             return new TModelDescription[] {
                 new TModelDescription("Abdoulaye"),

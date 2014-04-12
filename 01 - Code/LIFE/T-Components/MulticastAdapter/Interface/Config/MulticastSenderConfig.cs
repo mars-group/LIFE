@@ -31,7 +31,7 @@ namespace MulticastAdapter.Interface.Config
 
         public MulticastSenderConfig()
         {
-            this.SendOnAllInterfaces = false;
+            this.SendOnAllInterfaces = true;
             SendingInterfaceName = "Ethernet";
             SendingInterfaceIP = "10.0.0.7";
             BindingType = BindingType.IP;
