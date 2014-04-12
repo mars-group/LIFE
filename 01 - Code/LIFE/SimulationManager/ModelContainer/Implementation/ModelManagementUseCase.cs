@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ConfigurationAdapter.Interface;
+
 using LCConnector.TransportTypes.ModelStructure;
 using log4net;
 using Shared;

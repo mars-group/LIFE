@@ -1,5 +1,5 @@
 ﻿using System;
-using AppSettingsManager;
+
 using ConfigurationAdapter.Interface;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 namespace MulticastAdapterTestProject
 {
+    using AppSettingsManager;
 
     public class MulticastAdapterTest
     {

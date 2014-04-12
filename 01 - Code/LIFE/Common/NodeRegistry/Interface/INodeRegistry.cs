@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using ConfigurationAdapter.Interface;
 
 namespace NodeRegistry.Interface {
 

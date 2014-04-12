@@ -231,10 +231,18 @@ namespace NodeRegistry.Implementation {
         }
 
         private void NotifyOnNodeJoinSubsribers(NodeInformationType nodeInformation) {
+            var str = "";
+            GetAllNodes().ForEach(node => str += node.ToString() + "\n");
+            Console.WriteLine(str);
             if (_newNodeConnectedHandler != null) _newNodeConnectedHandler.Invoke(nodeInformation);
         }
 
-        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation) {
+        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation)
+        {
+            var str = "";
+            GetAllNodes().ForEach(node => str += node.ToString() + "\n");
+            Console.WriteLine(str);
+
             switch (nodeInformation.NodeType) {
                 case NodeType.LayerContainer:
                     if (_newLayerContainerConnectedHandler != null)

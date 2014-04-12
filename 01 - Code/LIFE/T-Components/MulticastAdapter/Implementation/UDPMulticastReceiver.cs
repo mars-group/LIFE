@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using AppSettingsManager;
+
 using ConfigurationAdapter.Interface;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
@@ -8,6 +8,8 @@ using MulticastAdapter.Interface.Config.Types;
 
 namespace MulticastAdapter.Implementation
 {
+    using AppSettingsManager;
+
     public class UDPMulticastReceiver : IMulticastReciever
     {
         private readonly IPAddress _mcastAddress;

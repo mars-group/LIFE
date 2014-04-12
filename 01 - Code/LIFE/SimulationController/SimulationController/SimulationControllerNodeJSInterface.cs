@@ -7,6 +7,8 @@ using SMConnector;
 
 namespace SimulationController
 {
+    using CommonTypes.DataTypes;
+
     using SMConnector.TransportTypes;
     using System.Threading.Tasks;
 
@@ -36,7 +38,7 @@ namespace SimulationController
             return await Task.Run(
                 () =>
                 {
-                    _simulationManagerClient.StartSimulationWithModel(new TModelDescription(input.Name));
+                    _simulationManagerClient.StartSimulationWithModel(new TModelDescription(input.Name),new List<NodeInformationType>());
                     return 0;
                 });
         }
@@ -69,8 +71,8 @@ namespace SimulationController
             };
         }
 
-        public void StartSimulationWithModel(TModelDescription model) {
-            
+        public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {
+
             Thread.Sleep(2500);
         }
 
