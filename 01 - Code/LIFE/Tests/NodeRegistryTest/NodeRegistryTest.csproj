@@ -59,9 +59,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
       <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
       <Name>CommonTypes</Name>
@@ -78,6 +75,9 @@
       <Project>{20a316c2-8779-474d-98fb-a13dac9043ab}</Project>
       <Name>MulticastAdapter</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

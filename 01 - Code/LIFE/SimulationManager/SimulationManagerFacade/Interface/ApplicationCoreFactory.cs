@@ -1,9 +1,11 @@
-﻿using Autofac;
+﻿using AppSettingsManager;
+using Autofac;
 using ConfigurationAdapter.Interface;
 using ModelContainer.Implementation;
 using ModelContainer.Interfaces;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
+using MulticastAdapter.Interface.Config;
 using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation;
@@ -43,11 +45,15 @@ namespace SimulationManagerFacade.Interface {
                     .As<IApplicationCore>()
                     .InstancePerDependency();
 
-                // Make the configuration file available for all components
-                var config = Configuration.Load<SimulationManagerSettings>();
-                builder.RegisterInstance(config);
-                builder.RegisterInstance(config.NodeRegistryConfig);
+                // Make the configurations available for all components
+                var globalConfig = Configuration.Load<GlobalConfig>();
+                builder.RegisterInstance(globalConfig);
 
+                var localConfig = Configuration.Load<SimulationManagerSettings>();
+                builder.RegisterInstance(localConfig);
+                builder.RegisterInstance(localConfig.NodeRegistryConfig);
+                builder.RegisterInstance(localConfig.MulticastSenderConfig);
+                
                 container = builder.Build();
             }
 
