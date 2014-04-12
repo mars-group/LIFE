@@ -56,7 +56,7 @@ namespace SimulationController
 
         #region ISimulationManager Methods
         public async Task<object> GetAllModels(dynamic input) {
-            if (!_simulationManagerClient.IsConnected) { return new object[0]; }
+            if (!_isConnected) { return new object[0]; }
             return await Task.Run(
                 () => _simulationManagerClient.GetAllModels().ToArray());
         }
