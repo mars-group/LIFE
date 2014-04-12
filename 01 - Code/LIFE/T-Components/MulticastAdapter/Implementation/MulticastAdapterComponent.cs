@@ -1,6 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Net;
+using System.Threading;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
+using MulticastAdapter.Interface.Exceptions;
 
 namespace MulticastAdapter.Implementation
 {
@@ -16,7 +19,7 @@ namespace MulticastAdapter.Implementation
         #endregion
 
         #region Constructors
-       
+
 
         public MulticastAdapterComponent(GlobalConfig globalConfiguration, MulticastSenderConfig senderConfiguration)
         {
@@ -50,5 +53,18 @@ namespace MulticastAdapter.Implementation
             _reciever.ReopenSocket();
 
         }
+
+        private void validateMulticastGroup(GlobalConfig globalConfiguration)
+        {
+
+            if (IPAddress.Parse(globalConfiguration.MulticastGroupIp).IsIPv6Multicast || MulticastNetworkUtils.IsIPv4Multicast(globalConfiguration.MulticastGroupIp))
+            {
+             return; 
+            }
+            //TODO schauen wie ipv6 mcast ips ausschauen.
+            throw new InvalidConfigurationException("The configured ip is not a valid IPv4 or IPv6 MulticastIP.");
+        }
+
+
     }
 }

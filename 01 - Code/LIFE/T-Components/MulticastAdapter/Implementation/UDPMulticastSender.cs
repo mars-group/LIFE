@@ -116,6 +116,8 @@ namespace MulticastAdapter.Implementation
                 MulticastNetworkUtils.GetInterfaceByIP(IPAddress.Parse(_senderSettings.SendingInterfaceIP));
             IPAddress ipAddress = null;
 
+            if (networkInterface == null) throw new NoInterfaceFoundException("No networkinterface with the IP " + _senderSettings.SendingInterfaceIP + " was found. Please make sure that the IP is right and the interface up");
+
             foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
             {
                 if (unicastAddress.Address.AddressFamily.Equals(

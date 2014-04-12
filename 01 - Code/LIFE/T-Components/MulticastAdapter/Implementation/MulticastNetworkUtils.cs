@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -73,7 +74,18 @@ namespace MulticastAdapter.Implementation
                 default:
                     return AddressFamily.InterNetwork;
             }
-            
+
         }
+
+        public static bool IsIPv4Multicast(String ip)
+        {
+                var octet1 = Int32.Parse(ip.Split(new Char[] { '.' }, 4)[0]);
+                if ((octet1 >= 224) && (octet1 <= 239))
+                    return true;
+            
+            
+            return false;
+        }
+
     }
 }
