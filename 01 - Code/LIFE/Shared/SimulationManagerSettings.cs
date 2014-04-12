@@ -1,4 +1,5 @@
 ﻿using System;
+using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
 namespace Shared
@@ -11,7 +12,7 @@ namespace Shared
     {
         public string ModelDirectoryPath { get; set; }
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
-
+        public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
         public SimulationManagerSettings(string modelDirectoryPath, NodeRegistryConfig nodeRegistryConfig) {
             ModelDirectoryPath = modelDirectoryPath;
@@ -20,7 +21,9 @@ namespace Shared
 
         //TODO: can this be internal?
         public SimulationManagerSettings() {
-            
+            ModelDirectoryPath = "./Models";
+            NodeRegistryConfig = new NodeRegistryConfig();
+            MulticastSenderConfig = new MulticastSenderConfig();
         }
     }
 }
