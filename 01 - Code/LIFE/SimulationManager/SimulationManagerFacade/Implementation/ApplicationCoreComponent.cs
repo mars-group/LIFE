@@ -10,6 +10,8 @@ using SMConnector;
 using SMConnector.TransportTypes;
 
 namespace SimulationManagerFacade.Implementation {
+    using CommonTypes.DataTypes;
+
     /// <summary>
     ///     This class represents the implementation of the simulation manager's application core.
     /// </summary>
@@ -36,6 +38,10 @@ namespace SimulationManagerFacade.Implementation {
 
         public void StartSimulationWithModel(TModelDescription model, ICollection<int> layerContainers, int? nrOfTicks = null) {
             _runtimeEnvironment.StartSimulationWithModel(model, layerContainers, nrOfTicks);
+        }
+
+        public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {
+            throw new NotImplementedException();
         }
 
         public void PauseSimulation(TModelDescription model) {

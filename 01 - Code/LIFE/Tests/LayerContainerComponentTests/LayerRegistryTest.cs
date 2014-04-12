@@ -1,5 +1,4 @@
-﻿using AppSettingsManager;
-using ConfigurationAdapter.Interface;
+﻿using ConfigurationAdapter.Interface;
 using DistributedKeyValueStore.Implementation;
 using LayerAPI.Interfaces;
 using LayerRegistry.Implementation;
@@ -12,6 +11,8 @@ using NodeRegistry.Interface;
 using NUnit.Framework;
 
 namespace LayerContainerComponentTests {
+    using AppSettingsManager;
+
     [TestFixture]
     public class LayerRegistryTest {
         private ILayerRegistry _layerRegistry;

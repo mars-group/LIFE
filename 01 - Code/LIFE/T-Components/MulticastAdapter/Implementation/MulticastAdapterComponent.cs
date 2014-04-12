@@ -1,12 +1,11 @@
-﻿using System.Configuration;
-using System.Threading;
-using AppSettingsManager;
-using ConfigurationAdapter.Interface;
+﻿using System.Threading;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 
 namespace MulticastAdapter.Implementation
 {
+    using AppSettingsManager;
+
     public class MulticastAdapterComponent : IMulticastAdapter
     {
 
@@ -26,7 +25,6 @@ namespace MulticastAdapter.Implementation
 
         }
 
-      
 
         #endregion
 

@@ -4,7 +4,7 @@ using System;
 using System.CodeDom;
 using System.Runtime.InteropServices;
 using System.Threading;
-using AppSettingsManager;
+
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using ConfigurationAdapter.Interface;
@@ -21,6 +21,8 @@ using TestContext = NUnit.Framework.TestContext;
 
 namespace NodeRegistryTest
 {
+    using AppSettingsManager;
+
     /// <summary>
     /// Summary description for NodeRegistryComponentTest
     /// </summary>

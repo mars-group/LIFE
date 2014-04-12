@@ -1,6 +1,5 @@
 ﻿using System;
 using CommonTypes.Types;
-using ConfigurationAdapter.Interface.Exceptions;
 
 namespace NodeRegistry.Interface
 {

@@ -51,6 +51,10 @@ namespace RuntimeEnvironment.Implementation {
             }
         }
 
+        public void StartSimulationWithModel(TModelDescription model, ICollection<int> layerContainers, int? nrOfTicks = null) {
+            throw new NotImplementedException();
+        }
+
         public void PauseSimulation(TModelDescription model) {
             throw new NotImplementedException();
         }

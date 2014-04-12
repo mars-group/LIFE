@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Configuration;
-using AppSettingsManager;
+﻿using System.Collections.Generic;
+
 using CommonTypes.DataTypes;
-using CommonTypes.TransportTypes;
-using ConfigurationAdapter.Interface;
+
 using MulticastAdapter.Implementation;
-using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 
 namespace SimulationController
 {
-    using System.Linq;
+    using AppSettingsManager;
 
     using CommonTypes.Types;
+
+    using ConfigurationAdapter.Interface;
 
     using Hik.Communication.Scs.Communication.EndPoints.Tcp;
     using Hik.Communication.ScsServices.Client;
@@ -54,30 +52,31 @@ namespace SimulationController
 
             _simManager = simManagerClient.ServiceProxy;
             IsConnected = true;
+
         }
 
         public IList<TModelDescription> GetAllModels() {
-            return _simManager.GetAllModels();
+            return this._simManager.GetAllModels();
         }
 
-        public void StartSimulationWithModel(TModelDescription model) {
-            _simManager.StartSimulationWithModel(model);
+        public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {
+            this._simManager.StartSimulationWithModel(model, layerContainers, nrOfTicks);
         }
 
         public void PauseSimulation(TModelDescription model) {
-            _simManager.PauseSimulation(model);
+            this._simManager.PauseSimulation(model);
         }
 
         public void ResumeSimulation(TModelDescription model) {
-            _simManager.ResumeSimulation(model);
+            this._simManager.ResumeSimulation(model);
         }
 
         public void AbortSimulation(TModelDescription model) {
-            _simManager.AbortSimulation(model);
+            this._simManager.AbortSimulation(model);
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
-            _simManager.SubscribeForStatusUpdate(statusUpdateAvailable);
+            this._simManager.SubscribeForStatusUpdate(statusUpdateAvailable);
         }
     }
 }

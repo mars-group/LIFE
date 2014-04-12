@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using AppSettingsManager;
+
 using log4net;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
@@ -12,6 +12,8 @@ using MulticastAdapter.Interface.Exceptions;
 
 namespace MulticastAdapter.Implementation
 {
+    using AppSettingsManager;
+
     public class UDPMulticastSender : IMulticastSender
     {
 
