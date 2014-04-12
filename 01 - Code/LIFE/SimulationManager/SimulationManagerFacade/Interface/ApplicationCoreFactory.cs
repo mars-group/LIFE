@@ -45,12 +45,15 @@ namespace SimulationManagerFacade.Interface {
                     .As<IApplicationCore>()
                     .InstancePerDependency();
 
-                // Make the configuration file available for all components
+                // Make the configurations available for all components
+                var globalConfig = Configuration.Load<GlobalConfig>();
+                builder.RegisterInstance(globalConfig);
+
                 var localConfig = Configuration.Load<SimulationManagerSettings>();
                 builder.RegisterInstance(localConfig);
                 builder.RegisterInstance(localConfig.NodeRegistryConfig);
                 builder.RegisterInstance(localConfig.MulticastSenderConfig);
-
+                
                 container = builder.Build();
             }
 
