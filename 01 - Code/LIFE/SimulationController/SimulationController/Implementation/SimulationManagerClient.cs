@@ -2,22 +2,10 @@
 
 using CommonTypes.DataTypes;
 
-using MulticastAdapter.Implementation;
-using MulticastAdapter.Interface.Config;
-
 namespace SimulationController
 {
-    using AppSettingsManager;
-
-    using CommonTypes.Types;
-
-    using ConfigurationAdapter.Interface;
-
     using Hik.Communication.Scs.Communication.EndPoints.Tcp;
     using Hik.Communication.ScsServices.Client;
-
-    using NodeRegistry.Implementation;
-    using NodeRegistry.Interface;
 
     using SMConnector;
     using SMConnector.TransportTypes;
