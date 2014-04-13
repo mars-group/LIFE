@@ -11,6 +11,10 @@ using NodeRegistry.Interface;
 using ProtoBuf;
 
 namespace NodeRegistry.Implementation {
+    using System.Collections.Concurrent;
+
+    using Hik.Collections;
+
     public class NodeRegistryUseCase : INodeRegistry {
         #region Fields and Properties
 
@@ -18,7 +22,7 @@ namespace NodeRegistry.Implementation {
         ///     A dictonary of all active Node in the cluster. The Key is the NodeIdentifier from the NodeInformationobject(Value)
         ///     and the Value is the NodeInformation object
         /// </summary>
-        private Dictionary<String, NodeInformationType> _activeNodeList;
+        private ThreadSafeSortedList<String, NodeInformationType> _activeNodeList;
 
         /// <summary>
         ///     Object that holds all relevant information about the NodeRegistry on this calculation unit.
@@ -60,7 +64,7 @@ namespace NodeRegistry.Implementation {
 
             _config = nodeRegistryConfig;
 
-            _activeNodeList = new Dictionary<string, NodeInformationType>();
+            _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
 
             SetupNetworkAdapters(multicastAdapter);
             JoinCluster();
@@ -69,7 +73,7 @@ namespace NodeRegistry.Implementation {
         public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig) {
             _config = nodeRegistryConfig;
 
-            _activeNodeList = new Dictionary<string, NodeInformationType>();
+            _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
 
             SetupNetworkAdapters(multicastAdapter);
@@ -121,7 +125,7 @@ namespace NodeRegistry.Implementation {
         ///     localNodeInformation as well
         /// </returns>
         public List<NodeInformationType> GetAllNodes() {
-            return _activeNodeList.Values.Select(type => type).ToList();
+            return _activeNodeList.GetAllItems();
         }
 
         /// <summary>
@@ -192,8 +196,7 @@ namespace NodeRegistry.Implementation {
             switch (nodeRegistryMessage.messageType) {
                 case NodeRegistryMessageType.Answer:
                     if (!_activeNodeList.ContainsKey(nodeRegistryMessage.nodeInformationType.NodeIdentifier)) {
-                        _activeNodeList.Add(nodeRegistryMessage.nodeInformationType.NodeIdentifier,
-                            nodeRegistryMessage.nodeInformationType);
+                        _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] = nodeRegistryMessage.nodeInformationType;
                     }
                     break;
                 case NodeRegistryMessageType.Join:
@@ -254,7 +257,7 @@ namespace NodeRegistry.Implementation {
 
 
         private void DropAllNodes() {
-            _activeNodeList = new Dictionary<string, NodeInformationType>();
+            _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
         }
 
         private void Listen() {

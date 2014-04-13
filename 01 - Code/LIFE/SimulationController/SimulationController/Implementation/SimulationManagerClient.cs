@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-
-using CommonTypes.DataTypes;
-
-namespace SimulationController
+﻿namespace SimulationController.Implementation
 {
+    using System.Collections.Generic;
+
+    using CommonTypes.DataTypes;
+
     using Hik.Communication.Scs.Communication.EndPoints.Tcp;
     using Hik.Communication.ScsServices.Client;
 
@@ -21,12 +21,12 @@ namespace SimulationController
 
             simManagerClient.Connect();
 
-            _simManager = simManagerClient.ServiceProxy;
+            this._simManager = simManagerClient.ServiceProxy;
 
 
         }
 
-        public IList<TModelDescription> GetAllModels() {
+        public ICollection<TModelDescription> GetAllModels() {
             return this._simManager.GetAllModels();
         }
 

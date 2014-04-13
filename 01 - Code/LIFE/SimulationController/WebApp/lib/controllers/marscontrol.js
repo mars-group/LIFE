@@ -6,43 +6,43 @@ var edge = require('edge');
 
 var getAllModels = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'GetAllModels'
 });
 
 var startSimulationWithModel = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'StartSimulationWithModel'
 });
 
 var getConnectedNodes = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'GetConnectedNodes'
 });
 
 var resumeSimulation = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'ResumeSimulation'
 });
 
 var abortSimulation = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'AbortSimulation'
 });
 
 var pauseSimulation = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'PauseSimulation'
 });
 /*
 var subscribeForStatusUpdate = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'SubscribeForStatusUpdate'
 });
 */
