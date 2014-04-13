@@ -12,6 +12,10 @@ using ProtoBuf;
 using Timer = System.Timers.Timer;
 
 namespace NodeRegistry.Implementation {
+    using System.Collections.Concurrent;
+
+    using Hik.Collections;
+
     public class NodeRegistryUseCase : INodeRegistry {
         #region Fields and Properties
 
@@ -19,9 +23,8 @@ namespace NodeRegistry.Implementation {
         ///     A dictonary of all active Node in the cluster. The Key is the NodeIdentifier from the NodeInformationobject(Value)
         ///     and the Value is the NodeInformation object
         /// </summary>
+        private ThreadSafeSortedList<String, NodeInformationType> _activeNodeList;
         //TODO use list
-        private Dictionary<String, NodeInformationType> _activeNodeList;
-
         /// <summary>
         /// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a NodeInformationType is recied the timeEvent will fire
         ///  and delte this NodeInformationType from the active NodeList
@@ -84,7 +87,11 @@ namespace NodeRegistry.Implementation {
         public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig) {
             InitNodeRegistry(nodeRegistryConfig);
 
+<<<<<<< .mine
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
+=======
+            _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
+>>>>>>> .theirs
 
             SetupNetworkAdapters(multicastAdapter);
             JoinCluster();
@@ -98,7 +105,7 @@ namespace NodeRegistry.Implementation {
             _config = nodeRegistryConfig;
 
             _heartBeatTimers = new Dictionary<NodeInformationType, Timer>();
-            _activeNodeList = new Dictionary<string, NodeInformationType>();
+            _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
             _heartBeatInterval = _config.HeartBeatInterval;
         }
 
@@ -158,7 +165,7 @@ namespace NodeRegistry.Implementation {
         ///     localNodeInformation as well
         /// </returns>
         public List<NodeInformationType> GetAllNodes() {
-            return _activeNodeList.Values.Select(type => type).ToList();
+            return _activeNodeList.GetAllItems();
         }
 
         /// <summary>
@@ -261,7 +268,7 @@ namespace NodeRegistry.Implementation {
         private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage) {
             switch (nodeRegistryMessage.messageType) {
                 case NodeRegistryMessageType.Answer:
-                    OnAnswerMessage(nodeRegistryMessage);
+                OnAnswerMessage(nodeRegistryMessage);
                     break;
                 case NodeRegistryMessageType.Join:
                     OnJoinMessage(nodeRegistryMessage);

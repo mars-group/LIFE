@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using SMConnector;
-
-namespace SimulationController
+﻿namespace SimulationController.Interface
 {
-    using System.Runtime.Remoting.Messaging;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using AppSettingsManager;
 
     using CommonTypes.DataTypes;
-    using CommonTypes.TransportTypes;
     using CommonTypes.Types;
 
     using ConfigurationAdapter.Interface;
@@ -22,8 +18,10 @@ namespace SimulationController
     using NodeRegistry.Implementation;
     using NodeRegistry.Interface;
 
+    using SimulationController.Implementation;
+
+    using SMConnector;
     using SMConnector.TransportTypes;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// This class provides access to the SimulationManager for Egde.js.
@@ -33,65 +31,74 @@ namespace SimulationController
     /// </summary>
     public class SimulationControllerNodeJsInterface
     {
-        private SimulationManagerClientMock _simulationManagerClient;
+        private SimulationManagerClient _simulationManagerClient;
 
         private readonly INodeRegistry _nodeRegistry;
 
         private bool _isConnected;
 
         public SimulationControllerNodeJsInterface() {
-            _isConnected = false;
+            this._isConnected = false;
 
             var multiCastAdapter = new MulticastAdapterComponent(Configuration.Load<GlobalConfig>("SimControllerGlobalConfig.cfg"),
                     Configuration.Load<MulticastSenderConfig>("SimControllerMulticastSenderConfig.cfg"));
 
             var config = Configuration.Load<SimControllerConfig>("SimControllerConfig.cfg");
 
-            _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, config.NodeRegistryConfig);
+            this._nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, config.NodeRegistryConfig);
 
-            _nodeRegistry.SubscribeForNewNodeConnectedByType(OnNewSimManagerConnected, NodeType.SimulationManager);
+            var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
+            if (simManagerNode != null)
+            {
+                _isConnected = true;
+                _simulationManagerClient = new SimulationManagerClient(simManagerNode);
+            }
+            else {
+                this._nodeRegistry.SubscribeForNewNodeConnectedByType(this.OnNewSimManagerConnected, NodeType.SimulationManager);   
+            }
+
 
             // MOCK ONLY. REMOVE IF PRODUCTIVE
-            _simulationManagerClient = new SimulationManagerClientMock();
-            _isConnected = _simulationManagerClient.IsConnected;
+            //_simulationManagerClient = new SimulationManagerClientMock();
+            //_isConnected = _simulationManagerClient.IsConnected;
         }
 
         private void OnNewSimManagerConnected(NodeInformationType newnode) {
-            //_simulationManagerClient = new SimulationManagerClient(newnode);
-            _isConnected = true;
+            this._simulationManagerClient = new SimulationManagerClient(newnode);
+            this._isConnected = true;
         }
 
         #region ISimulationManager Methods
         public async Task<object> GetAllModels(dynamic input) {
-            if (!_isConnected) { return new object[0]; }
+            if (!this._isConnected) { return new object[0]; }
             return await Task.Run(
-                () => _simulationManagerClient.GetAllModels().ToArray());
+                () => this._simulationManagerClient.GetAllModels().ToArray());
         }
 
         public async Task<object> StartSimulationWithModel(dynamic input)
         {
-            if (!_isConnected) { return new object[0]; }
+            if (!this._isConnected) { return new object[0]; }
             return await Task.Run(
                 () =>
                 {
-                    _simulationManagerClient.StartSimulationWithModel(new TModelDescription(input.Name),new List<NodeInformationType>());
+                    this._simulationManagerClient.StartSimulationWithModel(new TModelDescription(input.Name),new List<NodeInformationType>());
                     return 0;
                 });
         }
 
         public async Task<object> SubscribeForStatusUpdate(dynamic input)
         {
-            if (!_isConnected) { return new object[0]; }
+            if (!this._isConnected) { return new object[0]; }
             return await Task.Run(
                 () =>
                 {
-                    _simulationManagerClient.SubscribeForStatusUpdate(OnStatusUpdateAvailable);  
+                    this._simulationManagerClient.SubscribeForStatusUpdate(this.OnStatusUpdateAvailable);  
                     return 0;
                 });
         }
 
         public async Task<object> PauseSimulation(dynamic input) {
-            if (!_isConnected) { return new object[0]; }
+            if (!this._isConnected) { return new object[0]; }
             return await Task.Run(
                 () => {
                     this._simulationManagerClient.PauseSimulation(new TModelDescription(input.Name, input.Description, input.Status.StatusMessage, input.Running));
@@ -101,7 +108,7 @@ namespace SimulationController
 
         public async Task<object> ResumeSimulation(dynamic input)
         {
-            if (!_isConnected) { return new object[0]; }
+            if (!this._isConnected) { return new object[0]; }
             return await Task.Run(
                 () => {
                     this._simulationManagerClient.ResumeSimulation(new TModelDescription(input.Name, input.Description, input.Status.StatusMessage, input.Running));
@@ -111,7 +118,7 @@ namespace SimulationController
 
         public async Task<object> AbortSimulation(dynamic input)
         {
-            if (!_isConnected) { return new object[0]; }
+            if (!this._isConnected) { return new object[0]; }
             return await Task.Run(
                 () => {
                     this._simulationManagerClient.AbortSimulation(new TModelDescription(input.Name, input.Description, input.Status.StatusMessage, input.Running));
@@ -152,7 +159,7 @@ namespace SimulationController
             } 
         }
 
-        public IList<TModelDescription> GetAllModels() {
+        public ICollection<TModelDescription> GetAllModels() {
             return new TModelDescription[] {
                 new TModelDescription("Abdoulaye", "4 Million Trees in Togo"),
                 new TModelDescription("Cheetahz", "200 Cheetahs hunting 150.000 Impalas"), 
