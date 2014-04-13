@@ -14,7 +14,7 @@ namespace VillageModel.Implementaion.Agents
 
     private MoveToAction _chuckingArea;
     private VillagerConfig _config;
-    private Villiager _villiager;
+    private Villager _villager;
     private TreeAgent[] _chuckingTargets;
     private bool _reachedArea;
 
@@ -53,7 +53,9 @@ namespace VillageModel.Implementaion.Agents
             //move to tree
             if (! treePostion.AtWayPoint()) return treePostion;
 
-            //at tree....CHUCK IT
+            //TODO: at tree....CHUCK IT
+
+            return null;
         }
 
 

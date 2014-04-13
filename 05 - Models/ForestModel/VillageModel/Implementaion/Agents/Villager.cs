@@ -7,7 +7,7 @@ using VillageModel.Interface.Configuration;
 
 namespace VillageModel.Implementaion.Agents
 {
-    public class Villiager : AbstractAgent
+    public class Villager : AbstractAgent
     {
 
         #region fields
@@ -20,7 +20,7 @@ namespace VillageModel.Implementaion.Agents
         #endregion
 
         #region constructors
-        public Villiager(int id, Vector3D position, Village homeVillage)
+        public Villager(int id, Vector3D position, Village homeVillage)
             : base(id, position)
         {
             _config = Configuration.Load<VillagerConfig>();
