@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppSettingsManager">
+      <HintPath>..\..\01 - Code\LIFE\Common\ConfigurationAdapter\bin\Debug\AppSettingsManager.dll</HintPath>
+    </Reference>
+    <Reference Include="LayerAPI">
+      <HintPath>..\..\01 - Code\LIFE\LayerContainer\LayerAPI\bin\Debug\LayerAPI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,13 +55,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
-      <Project>{46cd516a-50b3-4dd1-a0df-65e0be141e21}</Project>
-      <Name>ConfigurationAdapter</Name>
+    <ProjectReference Include="..\CommonModelTypes\CommonModelTypes.csproj">
+      <Project>{fdd44da5-db8b-4183-a808-dba17b6fc43d}</Project>
+      <Name>CommonModelTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LayerContainer\LayerAPI\LayerAPI.csproj">
-      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LayerAPI</Name>
+    <ProjectReference Include="..\ForestModel\ForestModel.csproj">
+      <Project>{562d0899-a821-4d69-ac37-970cba1d1afe}</Project>
+      <Name>ForestModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -64,7 +64,6 @@
     <Compile Include="Interface\Exceptions\MissingArgumentException.cs" />
     <Compile Include="Interface\Exceptions\NoInterfaceFoundException.cs" />
     <Compile Include="Interface\Config\Types\IPVersionType.cs" />
-    <Compile Include="Interface\Config\GeneralMulticastAdapterConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

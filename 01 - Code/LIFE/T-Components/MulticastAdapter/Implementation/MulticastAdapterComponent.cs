@@ -25,6 +25,7 @@ namespace MulticastAdapter.Implementation
         {
             _sender = new UDPMulticastSender(globalConfiguration, senderConfiguration);
             _reciever = new UDPMulticastReceiver(globalConfiguration);
+            validateMulticastGroup(globalConfiguration.MulticastGroupIp);
 
         }
 
@@ -54,15 +55,15 @@ namespace MulticastAdapter.Implementation
 
         }
 
-        private void validateMulticastGroup(GlobalConfig globalConfiguration)
-        {
+        private void validateMulticastGroup(string mcastIp ) {
 
-            if (IPAddress.Parse(globalConfiguration.MulticastGroupIp).IsIPv6Multicast || MulticastNetworkUtils.IsIPv4Multicast(globalConfiguration.MulticastGroupIp))
+
+            if (IPAddress.Parse(mcastIp).IsIPv6Multicast || MulticastNetworkUtils.IsIPv4Multicast(mcastIp))
             {
              return; 
             }
             //TODO schauen wie ipv6 mcast ips ausschauen.
-            throw new InvalidConfigurationException("The configured ip is not a valid IPv4 or IPv6 MulticastIP.");
+            throw new InvalidConfigurationException("The configured IP " + mcastIp + " is not a valid in this context. Use a IPv4 or IPv6 multicast IP.");
         }
 
 

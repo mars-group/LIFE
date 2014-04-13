@@ -1,6 +1,7 @@
 ﻿using CommonModelTypes.Interface.SimObjects;
 using LayerAPI.Interfaces;
 
+
 namespace CommonModelTypes.Interface.AgentObjects
 {
     public abstract class AbstractAgent : SimObject, IAgent
