@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
-using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
@@ -40,10 +38,8 @@ namespace SimulationManagerFacade.Implementation {
 
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
-            //Add Phone Book Service to service application
             _server.AddService<ISimulationManager, ApplicationCoreComponent>(this);
 
-            //Start server
             _server.Start();
         }
         

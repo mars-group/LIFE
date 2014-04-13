@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Odbc;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommonModelTypes.Interface;
+﻿using System.Linq;
 using CommonModelTypes.Interface.AgentObjects.GoalForming;
 using CommonModelTypes.Interface.SimObjects;
 using ForestModel.Implementation.Agents;
@@ -60,8 +54,6 @@ namespace VillageModel.Implementaion.Agents
             if (! treePostion.AtWayPoint()) return treePostion;
 
             //at tree....CHUCK IT
-            return 
-
         }
 
 

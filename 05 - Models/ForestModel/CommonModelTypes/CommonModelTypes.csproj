@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{17D440BE-4F39-4A54-B681-DC4FD0B10019}</ProjectGuid>
+    <ProjectGuid>{FDD44DA5-DB8B-4183-A808-DBA17B6FC43D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VillageModel</RootNamespace>
-    <AssemblyName>VillageModel</AssemblyName>
+    <RootNamespace>CommonModelTypes</RootNamespace>
+    <AssemblyName>CommonModelTypes</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,11 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AppSettingsManager">
-      <HintPath>..\..\01 - Code\LIFE\Common\ConfigurationAdapter\bin\Debug\AppSettingsManager.dll</HintPath>
-    </Reference>
     <Reference Include="LayerAPI">
-      <HintPath>..\..\01 - Code\LIFE\LayerContainer\LayerAPI\bin\Debug\LayerAPI.dll</HintPath>
+      <HintPath>..\..\..\01 - Code\LIFE\LayerContainer\LayerAPI\bin\Debug\LayerAPI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,25 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\ChuckAction.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\SearchForTreesAction.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\ChuckWoodPlan.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\MoveToAction.cs" />
-    <Compile Include="Implementaion\Agents\Villiager.cs" />
-    <Compile Include="Implementaion\Village.cs" />
-    <Compile Include="Interface\Configuration\VillagerConfig.cs" />
+    <Compile Include="Interface\AgentObjects\GoalForming\IPlan.cs" />
+    <Compile Include="Interface\AgentObjects\GoalForming\ITickAction.cs" />
+    <Compile Include="Interface\SimObjects\Vector3D.cs" />
+    <Compile Include="Interface\AgentObjects\AbstractAgent.cs" />
+    <Compile Include="Interface\SimObjects\SimObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\CommonModelTypes\CommonModelTypes.csproj">
-      <Project>{fdd44da5-db8b-4183-a808-dba17b6fc43d}</Project>
-      <Name>CommonModelTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ForestModel\ForestModel.csproj">
-      <Project>{562d0899-a821-4d69-ac37-970cba1d1afe}</Project>
-      <Name>ForestModel</Name>
-    </ProjectReference>
+    <Folder Include="Implementation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
