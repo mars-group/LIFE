@@ -38,7 +38,7 @@ namespace ForestModel.Implementation.Agents
 
 
 
-        public override void tick()
+        public override void Tick()
         {
             tickDiameter();
             tickHeight();
@@ -50,7 +50,7 @@ namespace ForestModel.Implementation.Agents
         /// </summary>
         /// <param name="damage">dmg dealt to the tree</param>
         /// <returns></returns>
-        public int chuck(int damage)
+        public int Chuck(int damage)
         {
             //TODO berechne holzwert aus größe und durchmesser.
             _fitness = _fitness - damage;

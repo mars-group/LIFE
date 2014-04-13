@@ -39,7 +39,7 @@ namespace VillageModel.Implementaion.Agents
 
             // at this point the agent has reached the chucking are.
 
-            //which trees to chuck, thats the question
+            //which trees to Chuck, thats the question
             if (_chuckingTargets.Length == 0)
             {
                 //Todo delegate?
@@ -47,7 +47,7 @@ namespace VillageModel.Implementaion.Agents
                 return new SearchForTreesAction(out _chuckingTargets);
             }
             var chukcingTree = _chuckingTargets.First();
-            //have spottet some trees to chuck
+            //have spottet some trees to Chuck
             var treePostion =  new MoveToAction(chukcingTree.Position);
             
             //move to tree

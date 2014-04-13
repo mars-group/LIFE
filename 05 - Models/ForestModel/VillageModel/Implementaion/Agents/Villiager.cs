@@ -33,7 +33,7 @@ namespace VillageModel.Implementaion.Agents
         #endregion
 
         #region public methods
-        public override void tick()
+        public override void Tick()
         {
             if (_woodStorage > 0)
             {
