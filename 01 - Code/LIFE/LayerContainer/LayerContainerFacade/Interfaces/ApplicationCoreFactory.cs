@@ -16,6 +16,10 @@ using RTEManager.Implementation;
 using RTEManager.Interfaces;
 
 namespace LayerContainerFacade.Interfaces {
+    using ConfigurationAdapter.Interface;
+
+    using Shared;
+
     public static class ApplicationCoreFactory {
         private static IContainer _container;
         private static ContainerBuilder _containerBuilder;
@@ -55,6 +59,14 @@ namespace LayerContainerFacade.Interfaces {
                 _containerBuilder.RegisterType<LayerContainerFacadeImpl>()
                     .As<ILayerContainerFacade>()
                     .InstancePerDependency();
+
+                // Make the configuration file available for all components
+                var config = Configuration.Load<LayerContainerSettings>();
+                _containerBuilder.RegisterInstance(config);
+                _containerBuilder.RegisterInstance(config.NodeRegistryConfig);
+                _containerBuilder.RegisterInstance(config.LayerRegistryConfig);
+                _containerBuilder.RegisterInstance(config.GlobalConfig);
+                _containerBuilder.RegisterInstance(config.MulticastSenderConfig);
 
                 _container = _containerBuilder.Build();
             }

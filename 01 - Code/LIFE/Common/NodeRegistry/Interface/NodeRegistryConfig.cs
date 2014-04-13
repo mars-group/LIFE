@@ -27,7 +27,7 @@ namespace NodeRegistry.Interface
         public NodeRegistryConfig()
         {
             NodeType = NodeType.LayerContainer;
-            NodeIdentifier = "IamSoMadRightNow";
+            NodeIdentifier = "LC-1";
             NodeEndPointIP = "141.22.11.254";
             NodeEndPointPort = 60100;
             AddMySelfToActiveNodeList = true;

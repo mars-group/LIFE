@@ -1,9 +1,60 @@
 <div ng-include="'partials/navbar'"></div>
 
-<div ng-repeat="m in models">
-    <h4>{{m.Name}}</h4>
-    <input type="button" value="Starten!" ng-click="startModel(m)">
 
-</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Model Name</th>
+        <th>Model Description</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody ng-repeat="m in models">
+    <tr>
+        <td>
+            {{m.Name}}
+        </td>
+        <td>
+
+        </td>
+        <td>
+            <input type="button" value="Starten!" ng-click="startModel(m)">
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
 
 {{modelResult}}
+
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Node Identifier</th>
+        <th>Node Type</th>
+        <th>IPAddress</th>
+        <th>Port</th>
+    </tr>
+    </thead>
+    <tbody ng-repeat="n in nodes">
+    <tr>
+        <td>
+            {{n.NodeIdentifier}}
+        </td>
+        <td>
+            {{n.NodeType}}
+        </td>
+        <td>
+            {{n.NodeEndpoint.IpAddress}}
+        </td>
+        <td>
+            {{n.NodeEndpoint.Port}}
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
