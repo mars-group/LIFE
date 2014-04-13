@@ -18,7 +18,7 @@ namespace SMConnector {
         ///     SimulationManager node.
         /// </summary>
         /// <returns>A list of TModelDescriptions or an empty list if no models are present</returns>
-        IList<TModelDescription> GetAllModels();
+        ICollection<TModelDescription> GetAllModels();
 
         /// <summary>
         /// Starts a simulation with the model derived from the provided TModelDescription.

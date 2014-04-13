@@ -70,11 +70,6 @@ namespace SimulationManagerFacade.Implementation {
             return _modelContainer.GetAllModels();
         }
 
-        IList<TModelDescription> ISimulationManager.GetAllModels()
-        {
-            throw new NotImplementedException();
-        }
-
         public TModelDescription AddModelFromDirectory(string filePath)
         {
             return _modelContainer.AddModelFromDirectory(filePath);
