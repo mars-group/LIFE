@@ -4,6 +4,7 @@ namespace LCConnector.TransportTypes
 {
     [Serializable]
     public class TLayerInstanceId : IEquatable<TLayerInstanceId> {
+        
         /// <summary>
         /// The layer's identity.
         /// </summary>
@@ -13,6 +14,16 @@ namespace LCConnector.TransportTypes
         /// The instance's unique number.
         /// </summary>
         public int InstanceNr { get; protected set; }
+
+        public TLayerInstanceId(TLayerDescription layerDescription, int instanceNr) {
+            LayerDescription = layerDescription;
+            InstanceNr = instanceNr;
+        }
+
+        /// <summary>
+        /// ONLY for serializeation
+        /// </summary>
+        public TLayerInstanceId() {}
 
         #region Object Contracts
 

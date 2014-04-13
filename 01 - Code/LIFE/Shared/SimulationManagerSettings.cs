@@ -14,9 +14,10 @@ namespace Shared
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
-        public SimulationManagerSettings(string modelDirectoryPath, NodeRegistryConfig nodeRegistryConfig) {
+        public SimulationManagerSettings(string modelDirectoryPath, NodeRegistryConfig nodeRegistryConfig, MulticastSenderConfig multicastSenderConfig) {
             ModelDirectoryPath = modelDirectoryPath;
             NodeRegistryConfig = nodeRegistryConfig;
+            MulticastSenderConfig = multicastSenderConfig;
         }
 
         //TODO: can this be internal?
