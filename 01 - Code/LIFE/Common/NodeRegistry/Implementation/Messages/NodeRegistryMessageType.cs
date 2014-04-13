@@ -3,5 +3,6 @@
         Join,
         Leave,
         Answer,
+        HeartBeat,
     }
 }

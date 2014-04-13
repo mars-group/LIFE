@@ -9,6 +9,7 @@ using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Interface;
 using ProtoBuf;
+using Timer = System.Timers.Timer;
 
 namespace NodeRegistry.Implementation {
     public class NodeRegistryUseCase : INodeRegistry {
@@ -18,7 +19,19 @@ namespace NodeRegistry.Implementation {
         ///     A dictonary of all active Node in the cluster. The Key is the NodeIdentifier from the NodeInformationobject(Value)
         ///     and the Value is the NodeInformation object
         /// </summary>
+        //TODO use list
         private Dictionary<String, NodeInformationType> _activeNodeList;
+
+        /// <summary>
+        /// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a NodeInformationType is recied the timeEvent will fire
+        ///  and delte this NodeInformationType from the active NodeList
+        /// </summary>
+        private Dictionary<NodeInformationType, Timer> _heartBeatTimers;
+
+        /// <summary>
+        /// Heartbeat send interval duration, in ms;
+        /// </summary>
+        private int _heartBeatInterval;
 
         /// <summary>
         ///     Object that holds all relevant information about the NodeRegistry on this calculation unit.
@@ -33,12 +46,17 @@ namespace NodeRegistry.Implementation {
         /// <summary>
         ///     Configuration Object that changes the behaviour of this node Registry.
         /// </summary>
-        private readonly NodeRegistryConfig _config;
+        private NodeRegistryConfig _config;
 
         /// <summary>
         ///     Thread that waits for multicast messages.
         /// </summary>
         private Thread _listenThread;
+
+        /// <summary>
+        /// Thread that is sending periodically HeartBeatMessages to the cluster.
+        /// </summary>
+        private Thread _heartBeatSenderThread;
 
         /// <summary>
         ///     delegates for different subscriber types.
@@ -55,25 +73,40 @@ namespace NodeRegistry.Implementation {
 
         public NodeRegistryUseCase(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter,
             NodeRegistryConfig nodeRegistryConfig) {
+            InitNodeRegistry(nodeRegistryConfig);
+
             _localNodeInformation = nodeInformation;
-
-
-            _config = nodeRegistryConfig;
-
-            _activeNodeList = new Dictionary<string, NodeInformationType>();
 
             SetupNetworkAdapters(multicastAdapter);
             JoinCluster();
         }
 
         public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig) {
-            _config = nodeRegistryConfig;
+            InitNodeRegistry(nodeRegistryConfig);
 
-            _activeNodeList = new Dictionary<string, NodeInformationType>();
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
 
             SetupNetworkAdapters(multicastAdapter);
             JoinCluster();
+
+            _heartBeatSenderThread = new Thread(this.HeartBeat);
+            _heartBeatSenderThread.Start();
+        }
+
+
+        private void InitNodeRegistry(NodeRegistryConfig nodeRegistryConfig) {
+            _config = nodeRegistryConfig;
+
+            _heartBeatTimers = new Dictionary<NodeInformationType, Timer>();
+            _activeNodeList = new Dictionary<string, NodeInformationType>();
+            _heartBeatInterval = _config.HeartBeatInterval;
+        }
+
+
+        private void SetupNetworkAdapters(IMulticastAdapter multicastAdapter) {
+            _multicastAdapter = multicastAdapter;
+            _listenThread = new Thread(Listen);
+            _listenThread.Start();
         }
 
         #endregion
@@ -86,6 +119,9 @@ namespace NodeRegistry.Implementation {
         public void JoinCluster() {
             _multicastAdapter.SendMessageToMulticastGroup(
                 NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation));
+
+            _heartBeatSenderThread = new Thread(this.HeartBeat);
+            _heartBeatSenderThread.Start();
         }
 
 
@@ -102,6 +138,7 @@ namespace NodeRegistry.Implementation {
         public void ShutDownNodeRegistry() {
             LeaveCluster();
             _listenThread.Interrupt();
+            _heartBeatSenderThread.Interrupt();
             _multicastAdapter.CloseSocket();
         }
 
@@ -166,12 +203,6 @@ namespace NodeRegistry.Implementation {
 
         #region private Methods
 
-        private void SetupNetworkAdapters(IMulticastAdapter multicastAdapter) {
-            _multicastAdapter = multicastAdapter;
-            _listenThread = new Thread(Listen);
-            _listenThread.Start();
-        }
-
         private NodeInformationType ParseNodeInformationTypeFromConfig() {
             return new NodeInformationType(
                 ParseNodeTypeFromConfig(),
@@ -188,54 +219,14 @@ namespace NodeRegistry.Implementation {
             return _config.NodeType;
         }
 
-        private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage) {
-            switch (nodeRegistryMessage.messageType) {
-                case NodeRegistryMessageType.Answer:
-                    if (!_activeNodeList.ContainsKey(nodeRegistryMessage.nodeInformationType.NodeIdentifier)) {
-                        _activeNodeList.Add(nodeRegistryMessage.nodeInformationType.NodeIdentifier,
-                            nodeRegistryMessage.nodeInformationType);
-                    }
-                    break;
-                case NodeRegistryMessageType.Join:
-                    OnJoinMessage(nodeRegistryMessage);
-                    break;
-                case NodeRegistryMessageType.Leave:
-                    _activeNodeList.Remove(nodeRegistryMessage.nodeInformationType.NodeIdentifier);
-                    break;
-                default:
-                    break;
-            }
-        }
 
-        private void OnJoinMessage(NodeRegistryMessage nodeRegistryMessage) {
-            //check if the new node is this instance.
-            if (nodeRegistryMessage.nodeInformationType.Equals(_localNodeInformation)) {
-                if (_config.AddMySelfToActiveNodeList) {
-                    //add self to list
-                    _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] =
-                        nodeRegistryMessage.nodeInformationType;
-                }
-            }
-            else {
-                //add new node to list
-                _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] =
-                    nodeRegistryMessage.nodeInformationType;
-                //notify all subsribers
-                NotifyOnNodeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
-                NotifyOnNodeTypeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
-
-                // send my information to the new node
-                _multicastAdapter.SendMessageToMulticastGroup(
-                    NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
-            }
-        }
+        private void _resetTimer(NodeInformationType nodeInformationType) {}
 
         private void NotifyOnNodeJoinSubsribers(NodeInformationType nodeInformation) {
             if (_newNodeConnectedHandler != null) _newNodeConnectedHandler.Invoke(nodeInformation);
         }
 
-        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation)
-        {
+        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation) {
             switch (nodeInformation.NodeType) {
                 case NodeType.LayerContainer:
                     if (_newLayerContainerConnectedHandler != null)
@@ -263,6 +254,71 @@ namespace NodeRegistry.Implementation {
                 var stream = new MemoryStream(msg);
                 var nodeRegistryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
                 AnswerMessage(nodeRegistryMessage);
+            }
+        }
+
+
+        private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage) {
+            switch (nodeRegistryMessage.messageType) {
+                case NodeRegistryMessageType.Answer:
+                    OnAnswerMessage(nodeRegistryMessage);
+                    break;
+                case NodeRegistryMessageType.Join:
+                    OnJoinMessage(nodeRegistryMessage);
+                    break;
+                case NodeRegistryMessageType.Leave:
+                    _activeNodeList.Remove(nodeRegistryMessage.nodeInformationType.NodeIdentifier);
+                    break;
+                case NodeRegistryMessageType.HeartBeat:
+                    _resetTimer(nodeRegistryMessage.nodeInformationType);
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void OnJoinMessage(NodeRegistryMessage nodeRegistryMessage)
+        {
+            //check if the new node is this instance.
+            if (nodeRegistryMessage.nodeInformationType.Equals(_localNodeInformation))
+            {
+                if (_config.AddMySelfToActiveNodeList)
+                {
+                    //add self to list
+                    _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] =
+                        nodeRegistryMessage.nodeInformationType;
+                }
+            }
+            else
+            {
+                //add new node to list
+                _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] =
+                    nodeRegistryMessage.nodeInformationType;
+                //notify all subsribers
+                NotifyOnNodeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
+                NotifyOnNodeTypeJoinSubsribers(nodeRegistryMessage.nodeInformationType);
+
+                // send my information to the new node
+                _multicastAdapter.SendMessageToMulticastGroup(
+                    NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
+            }
+        }
+
+
+        private void OnAnswerMessage(NodeRegistryMessage nodeRegistryMessage) {
+             //add answer node to list
+            _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] =
+                nodeRegistryMessage.nodeInformationType;
+            //start HeartbeatTimer for Node.
+        }
+
+        /// <summary>
+        /// check if all active nodes are still up. Hopefully that HartBeat wont bleed like Open SSL.
+        /// </summary>
+        private void HeartBeat() {
+            while (Thread.CurrentThread.IsAlive) {
+                Thread.Sleep(_heartBeatInterval);
+                _multicastAdapter.SendMessageToMulticastGroup(
+                    NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation));
             }
         }
 

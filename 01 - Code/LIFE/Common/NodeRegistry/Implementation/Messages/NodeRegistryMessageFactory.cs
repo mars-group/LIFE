@@ -24,5 +24,13 @@ namespace NodeRegistry.Implementation.Messages {
 
             return stream.ToArray();
         }
+
+        public static byte[] GetHeartBeatMessage(NodeInformationType informationType) {
+            var stream = new MemoryStream();
+            Serializer.Serialize(stream, new NodeRegistryMessage(NodeRegistryMessageType.HeartBeat, informationType));
+
+            return stream.ToArray();
+        }
+
     }
 }

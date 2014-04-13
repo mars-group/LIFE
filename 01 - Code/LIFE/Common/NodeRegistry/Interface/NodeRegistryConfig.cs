@@ -14,6 +14,7 @@ namespace NodeRegistry.Interface
         public string NodeEndPointIP { get; set; }
         public int NodeEndPointPort { get; set; }
         public bool AddMySelfToActiveNodeList { get; set; }
+        public int HeartBeatInterval { get; set; }
 
         public NodeRegistryConfig(NodeType nodeType, string nodeIdentifier, string nodeEndPointIP, int nodeEndPointPort, bool myselfToActiveNodeList)
         {
@@ -31,6 +32,7 @@ namespace NodeRegistry.Interface
             NodeEndPointIP = "141.22.11.254";
             NodeEndPointPort = 60100;
             AddMySelfToActiveNodeList = true;
+            HeartBeatInterval = 500;
         }
     }
 }
