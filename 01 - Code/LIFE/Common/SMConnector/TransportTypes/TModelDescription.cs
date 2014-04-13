@@ -5,10 +5,20 @@ namespace SMConnector.TransportTypes
     public class TModelDescription : IEquatable<TModelDescription> {
         public string Name { get; private set; }
 
+        public bool Running { get; private set; }
 
-        public TModelDescription(string name) {
+        public string Description { get; private set; }
+
+        public TStatusUpdate Status { get; set; }
+
+        public TModelDescription(string name, string description = "", string status = "Not Running", bool running = false) {
             Name = name;
+            Running = running;
+            this.Description = description;
+            this.Status = new TStatusUpdate(status);
         }
+
+
 
         #region Object contracts
 

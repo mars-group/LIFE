@@ -30,7 +30,7 @@ namespace SimulationController
     /// </summary>
     public class SimulationControllerNodeJsInterface
     {
-        private SimulationManagerClient _simulationManagerClient;
+        private SimulationManagerClientMock _simulationManagerClient;
 
         private readonly INodeRegistry _nodeRegistry;
 
@@ -47,10 +47,14 @@ namespace SimulationController
             _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, config.NodeRegistryConfig);
 
             _nodeRegistry.SubscribeForNewNodeConnectedByType(OnNewSimManagerConnected, NodeType.SimulationManager);
+
+            // MOCK ONLY. REMOVE IF PRODUCTIVE
+            _simulationManagerClient = new SimulationManagerClientMock();
+            _isConnected = _simulationManagerClient.IsConnected;
         }
 
         private void OnNewSimManagerConnected(NodeInformationType newnode) {
-            _simulationManagerClient = new SimulationManagerClient(newnode);
+            //_simulationManagerClient = new SimulationManagerClient(newnode);
             _isConnected = true;
         }
 
@@ -135,9 +139,9 @@ namespace SimulationController
 
         public IList<TModelDescription> GetAllModels() {
             return new TModelDescription[] {
-                new TModelDescription("Abdoulaye"),
-                new TModelDescription("Cheetahz"), 
-                new TModelDescription("Ökonomiezeugs"), 
+                new TModelDescription("Abdoulaye", "4 Million Trees in Togo"),
+                new TModelDescription("Cheetahz", "200 Cheetahs hunting 150.000 Impalas"), 
+                new TModelDescription("Ökonomiezeugs", "Bewohnersituation in HH"), 
             };
         }
 

@@ -6,6 +6,7 @@
     <tr>
         <th>Model Name</th>
         <th>Model Description</th>
+        <th>Status</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -15,10 +16,16 @@
             {{m.Name}}
         </td>
         <td>
-
+            {{m.Description}}
         </td>
         <td>
-            <input type="button" value="Starten!" ng-click="startModel(m)">
+            {{m.Status.StatusMessage}}
+        </td>
+        <td>
+            <input type="button" value="Start" ng-hide="m.Running"  ng-click="startModel(m)">
+            <input type="button" value="Pause" ng-hide="!m.Running" ng-click="startModel(m)">
+            <input type="button" value="Resume" ng-hide="!m.Running" ng-click="startModel(m)">
+            <input type="button" value="Abort" ng-hide="!m.Running" ng-click="startModel(m)">
         </td>
     </tr>
     </tbody>
