@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppSettingsManager">
+      <HintPath>..\..\01 - Code\LIFE\Common\ConfigurationAdapter\obj\Debug\AppSettingsManager.dll</HintPath>
+    </Reference>
+    <Reference Include="LayerAPI">
+      <HintPath>..\..\01 - Code\LIFE\LayerContainer\LayerAPI\bin\Debug\LayerAPI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,14 +56,6 @@
     <ProjectReference Include="..\CommonModelTypes\CommonModelTypes.csproj">
       <Project>{fdd44da5-db8b-4183-a808-dba17b6fc43d}</Project>
       <Name>CommonModelTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
-      <Project>{46cd516a-50b3-4dd1-a0df-65e0be141e21}</Project>
-      <Name>ConfigurationAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LayerContainer\LayerAPI\LayerAPI.csproj">
-      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
-      <Name>LayerAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -14,7 +14,7 @@ using VillageModel.Interface.Configuration;
 
 namespace VillageModel.Implementaion.Agents
 {
-    internal class ChuckWoodUseCase : IPlan
+    internal class ChuckWoodPlan : IPlan
 
 {
 
@@ -25,7 +25,7 @@ namespace VillageModel.Implementaion.Agents
         
 
 
-    private ChuckWoodUseCase(Vector3D chuckingAreaPosition, VillagerConfig config) {
+    private ChuckWoodPlan(Vector3D chuckingAreaPosition, VillagerConfig config) {
         this._chuckingArea = new MoveToAction(chuckingAreaPosition);
         _config = config;
         _chuckingTargets = new TreeAgent[0];

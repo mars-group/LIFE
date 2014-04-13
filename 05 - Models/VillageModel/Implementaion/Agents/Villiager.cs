@@ -16,7 +16,7 @@ namespace VillageModel.Implementaion.Agents
         private int _dailyWoodUsage;
         private VillagerConfig _config;
         private Vector3D _nextWoodCuttingLocation;
-        private ChuckWoodUseCase chuckWoodUseCase;
+        private ChuckWoodPlan _chuckWoodPlan;
         private MoveToAction _pathHome;
         #endregion
 
@@ -49,7 +49,7 @@ namespace VillageModel.Implementaion.Agents
             }
             else
             {
-                chuckWoodUseCase.GetNextAction().Execute();
+                _chuckWoodPlan.GetNextAction().Execute();
             }
 
         }
