@@ -49,7 +49,7 @@
     <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\SearchForTreesAction.cs" />
     <Compile Include="Implementaion\Agents\VillagerUseCase\ChuckWoodPlan.cs" />
     <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\MoveToAction.cs" />
-    <Compile Include="Implementaion\Agents\Villiager.cs" />
+    <Compile Include="Implementaion\Agents\Villager.cs" />
     <Compile Include="Implementaion\Village.cs" />
     <Compile Include="Interface\Configuration\VillagerConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

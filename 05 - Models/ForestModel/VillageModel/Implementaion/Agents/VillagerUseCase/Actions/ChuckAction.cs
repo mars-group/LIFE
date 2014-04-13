@@ -11,7 +11,7 @@ namespace VillageModel.Implementaion.Agents.VillagerUseCase.Actions
     class ChuckAction : ITickAction
     {
 
-        private Villiager _villager;
+        private Villager _villager;
         private TreeAgent _chuckingTarget;
         private int _swingsPerTick;
         private int _dmgPerSwing;
