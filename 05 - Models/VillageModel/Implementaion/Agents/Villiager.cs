@@ -15,7 +15,6 @@ namespace VillageModel.Implementaion.Agents
         private int _woodStorage;
         private int _dailyWoodUsage;
         private VillagerConfig _config;
-        private Vector3D _nextWoodCuttingLocation;
         private ChuckWoodPlan _chuckWoodPlan;
         private MoveToAction _pathHome;
         #endregion
@@ -29,7 +28,6 @@ namespace VillageModel.Implementaion.Agents
             _homeVillage = homeVillage;
             _woodStorage = 0;
             _dailyWoodUsage = _config.DailyWoodUsage;
-            _nextWoodCuttingLocation = GetRandomLocationInsideVillageRadius();
             _pathHome = new MoveToAction(_homeVillage.Position);
         }
         #endregion

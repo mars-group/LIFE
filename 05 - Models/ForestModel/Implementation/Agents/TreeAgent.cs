@@ -51,9 +51,20 @@ namespace ForestModel.Implementation.Agents
             tickHeight();
         }
 
-        public void chuck(int damage)
+
+        /// <summary>
+        /// Take a swing from another agent. Returns the amount of wood that was chucked.
+        /// </summary>
+        /// <param name="damage">dmg dealt to the tree</param>
+        /// <returns></returns>
+        public int chuck(int damage)
         {
+            //TODO berechne holzwert aus größe und durchmesser.
             _fitness = _fitness - damage;
+            return (_fitness > 0) ? 0 : 700;
+
+
+
         }
 
         public void SeedDispearsal()
@@ -74,10 +85,7 @@ namespace ForestModel.Implementation.Agents
             _height = _height + _growthCoefficient * (_maxHeight - _height);
         }
         #endregion
-
-        private void AmIDead() {
-            throw new NotImplementedException();
-        }
+        
 
     }
 }
