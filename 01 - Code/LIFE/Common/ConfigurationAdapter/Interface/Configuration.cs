@@ -30,7 +30,8 @@ namespace ConfigurationAdapter.Interface {
                     result = (T) serializer.Deserialize(file);
                 }
                 else {
-                    file = new FileStream(path, FileMode.OpenOrCreate);
+                    CreatePath("./config");
+                    file = new FileStream(path, FileMode.Create);
                     result = (T) typeof (T).GetConstructor(new Type[0]).Invoke(new object[0]);
                     serializer.Serialize(file, result);
                     file.Flush();
@@ -38,6 +39,7 @@ namespace ConfigurationAdapter.Interface {
             }
             catch (Exception exception) {
                 Logger.Error(exception);
+                throw exception;
             }
             finally {
                 if (file != null) file.Close();
@@ -53,12 +55,28 @@ namespace ConfigurationAdapter.Interface {
         /// <param name="t"></param>
         /// <param name="fileName"></param>
         public static void Save<T>(T t, string fileName = null) {
-            string path = fileName ?? "./" + typeof (T).Name + ".config";
+            string path = fileName ?? "./config/" + typeof (T).Name + ".cfg";
+            CreatePath("./config");
             using (var file = new FileStream(path, FileMode.OpenOrCreate)) {
                 new XmlSerializer(typeof (T)).Serialize(file, t);
                 file.Flush();
                 file.Close();
             }
+        }
+
+        /// <summary>
+        ///     Create all folders in a path, if missing.
+        /// </summary>
+        /// <param name="path"></param>
+        private static void CreatePath(string path)
+        {
+            path = path.TrimEnd('/', '\\');
+            if (Directory.Exists(path))
+            {
+                return;
+            }
+            if (Path.GetDirectoryName(path) != "") CreatePath(Path.GetDirectoryName(path)); // Make up to parent
+            Directory.CreateDirectory(path); // Make this one
         }
     }
 }

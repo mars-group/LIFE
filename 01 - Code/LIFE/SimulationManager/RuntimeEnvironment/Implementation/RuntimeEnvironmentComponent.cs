@@ -17,21 +17,21 @@ namespace RuntimeEnvironment.Implementation {
             _runtimeEnvironmentUseCase = new RuntimeEnvironmentUseCase(settings, modelContainer, layerRegistry);
         }
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers,
+        public void StartWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers,
             int? nrOfTicks = null) {
-            _runtimeEnvironmentUseCase.StartSimulationWithModel(model, layerContainers, nrOfTicks);
+            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainers, nrOfTicks);
         }
 
-        public void PauseSimulation(TModelDescription model) {
-            _runtimeEnvironmentUseCase.PauseSimulation(model);
+        public void Pause(TModelDescription model) {
+            _runtimeEnvironmentUseCase.Pause(model);
         }
 
-        public void ResumeSimulation(TModelDescription model) {
-            _runtimeEnvironmentUseCase.ResumeSimulation(model);
+        public void Resume(TModelDescription model) {
+            _runtimeEnvironmentUseCase.Resume(model);
         }
 
-        public void AbortSimulation(TModelDescription model) {
-            _runtimeEnvironmentUseCase.AbortSimulation(model);
+        public void Abort(TModelDescription model) {
+            _runtimeEnvironmentUseCase.Abort(model);
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {

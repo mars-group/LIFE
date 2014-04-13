@@ -11,8 +11,12 @@ using RuntimeEnvironment.Implementation.Entities;
 using SMConnector.TransportTypes;
 
 namespace RuntimeEnvironment.Implementation {
-    enum SimulationStatus { Running, Paused, Aborted}
-    
+    internal enum SimulationStatus {
+        Running,
+        Paused,
+        Aborted
+    }
+
     internal class SteppedSimulationExecutionUseCase {
         private readonly int? _nrOfTicks;
         private readonly IList<LayerContainerClient> _layerContainerClients;
@@ -26,13 +30,12 @@ namespace RuntimeEnvironment.Implementation {
             IList<TLayerDescription> instantiationOrder,
             ICollection<NodeInformationType> layerContainers,
             int? nrOfTicks) {
-
             _nrOfTicks = nrOfTicks;
 
             //connect to the layer containers and initialize layers
             ModelContent content = modelContainer.GetModel(modelDescription);
             _layerContainerClients = new LayerContainerClient[layerContainers.Count];
-            
+
             int i = 0;
             foreach (var nodeInformationType in layerContainers) {
                 _layerContainerClients.Add(
@@ -57,12 +60,11 @@ namespace RuntimeEnvironment.Implementation {
             lock (_layerContainerClients) {
                 if (tickExecutionTime > _maxExecutionTime) _maxExecutionTime = tickExecutionTime;
                 _containersLeft--;
-                if(_containersLeft <= 0) Monitor.PulseAll(this);
+                if (_containersLeft <= 0) Monitor.PulseAll(this);
             }
         }
 
         private void RunSimulation() {
-            
             for (int i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
                 _maxExecutionTime = 0;
                 _containersLeft = _layerContainerClients.Count;
@@ -73,10 +75,29 @@ namespace RuntimeEnvironment.Implementation {
                 }
 
                 Monitor.Wait(this);
-                if(_status == SimulationStatus.Aborted) break;
+                if (_status == SimulationStatus.Aborted) return;
+
+                while (_status == SimulationStatus.Paused) {
+                    Monitor.Wait(this);
+                }
 
                 Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
             }
+        }
+
+        public void PauseSimulation() {
+            _status = SimulationStatus.Paused;
+        }
+
+        internal void ResumeSimulation()
+        {
+            _status = SimulationStatus.Running;
+            Monitor.PulseAll(this);
+        }
+
+        public void Abort() {
+            _status = SimulationStatus.Aborted;
+            Monitor.PulseAll(this);
         }
     }
 }
