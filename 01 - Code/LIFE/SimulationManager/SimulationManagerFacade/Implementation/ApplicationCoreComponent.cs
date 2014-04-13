@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
+using Shared;
 using SimulationManagerFacade.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
@@ -25,13 +28,23 @@ namespace SimulationManagerFacade.Implementation {
         private readonly IRuntimeEnvironment _runtimeEnvironment;
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
+        private IScsServiceApplication _server;
 
-        public ApplicationCoreComponent(IRuntimeEnvironment runtimeEnvironment,
+        public ApplicationCoreComponent(SimulationManagerSettings settings,
+                                        IRuntimeEnvironment runtimeEnvironment,
                                         IModelContainer modelContainer,
                                         INodeRegistry nodeRegistry) {
             _runtimeEnvironment = runtimeEnvironment;
             _modelContainer = modelContainer;
             _nodeRegistry = nodeRegistry;
+
+            _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
+
+            //Add Phone Book Service to service application
+            _server.AddService<ISimulationManager, ApplicationCoreComponent>(this);
+
+            //Start server
+            _server.Start();
         }
         
         #region RuntimeEnvironment delegation

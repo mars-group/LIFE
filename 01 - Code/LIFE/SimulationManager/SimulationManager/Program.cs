@@ -21,7 +21,7 @@ namespace SimulationManager {
             Console.WriteLine("Initializing components and building application core...");
 
             IApplicationCore core = ApplicationCoreFactory.GetProductionApplicationCore();
-
+            
             Console.WriteLine("SimulationManager up and running. Press 'q' to quit.");
 
             ConsoleKeyInfo info = Console.ReadKey();
