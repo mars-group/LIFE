@@ -182,7 +182,7 @@ namespace NodeRegistryTest
         public void GetNodesListFromNodeRegistry()
         {
             var localNodeInformation = _informationType;
-
+         
             var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
 
@@ -215,6 +215,53 @@ namespace NodeRegistryTest
             localNodeRegistry.ShutDownNodeRegistry();
 
         }
+
+
+        //test if a node does not time out while sending heartbeats
+        [Test]
+        public void KeepNodeAliveTest() {
+            
+             var localNodeInformation = new NodeInformationType(NodeType.LayerContainer, "localNode", 
+                    new NodeEndpoint("127.0.0.1", 41000));
+
+
+            var otherNodeinfo = new NodeInformationType(NodeType.LayerContainer, "otherNodeInfo",
+                new NodeEndpoint("127.0.0.1", 40999));
+
+            var localListenPort = _listenStartPortSeed;
+            _listenStartPortSeed += 1;
+
+            var localSendingPort = _sendingStartPortSeed;
+            _sendingStartPortSeed += 1;
+
+            var otherSendingPort = _sendingStartPortSeed;
+            _sendingStartPortSeed += 1;
+
+            var mcastGrp = "224.3.33.3";
+            
+            var localMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig(mcastGrp, localListenPort, localSendingPort, 4), new MulticastSenderConfig());
+            var otherMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig(mcastGrp, localListenPort,  localSendingPort, 4), new MulticastSenderConfig() );
+
+            var timeout = 300;
+
+            var localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation, false, timeout));
+            var otherNodeRegistry = new NodeRegistryComponent(otherMulticastAdapter, new NodeRegistryConfig(otherNodeinfo, false, timeout));
+
+            Thread.Sleep(100);
+            //Check if Nodes have found eachother
+            Assert.True(localNodeRegistry.GetAllNodes().Contains(otherNodeinfo));
+
+            //wait for timeout to expire if it was not reset.
+            Thread.Sleep(timeout*20);
+
+            //check if node is still there.
+            Assert.True(localNodeRegistry.GetAllNodes().Contains(otherNodeinfo));
+
+
+
+        }
+
+
 
 
     }

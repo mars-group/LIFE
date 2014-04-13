@@ -5,7 +5,7 @@ using LCConnector.TransportTypes;
 namespace RTEManager.Interfaces {
     /// <summary>
     ///     The RunTimeEnvironment Manager manages the ressources available within this
-    ///     LayerContainer and triggers each layer's tick client according to the available ressources.
+    ///     LayerContainer and triggers each layer's Tick client according to the available ressources.
     /// </summary>
     public interface IRTEManager {
         /// <summary>

@@ -13,10 +13,10 @@ namespace LayerAPI.Interfaces {
         /// <summary>
         ///     Starts this layer at startTime or
         ///     immediatly if startTime is not specified.
-        ///     A pseudo tick duration may be provided to count a pseudo tick number
-        ///     for advancement tracking. This tick does NOT control execution!
+        ///     A pseudo Tick duration may be provided to count a pseudo Tick number
+        ///     for advancement tracking. This Tick does NOT control execution!
         /// </summary>
-        /// <param name="pseudoTickDuration">Duration of one pseudo tick, defaults to 0</param>
+        /// <param name="pseudoTickDuration">Duration of one pseudo Tick, defaults to 0</param>
         void StartLayer(long pseudoTickDuration = 0);
 
         /// <summary>

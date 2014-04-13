@@ -11,6 +11,6 @@ namespace CommonModelTypes.Interface.AgentObjects
             
         }
 
-        public abstract void tick();
+        public abstract void Tick();
     }
 }

@@ -38,7 +38,7 @@ namespace ForestModel.Implementation.Agents
 
 
 
-        public override void tick()
+        public override void Tick()
         {
             tickDiameter();
             tickHeight();

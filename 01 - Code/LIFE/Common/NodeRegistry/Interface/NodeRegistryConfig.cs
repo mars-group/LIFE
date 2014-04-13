@@ -1,14 +1,10 @@
 ﻿using System;
+using CommonTypes.DataTypes;
 using CommonTypes.Types;
 
-namespace NodeRegistry.Interface
-{
+namespace NodeRegistry.Interface {
     [Serializable]
-    public class NodeRegistryConfig
-    {
-
-
-
+    public class NodeRegistryConfig {
         public NodeType NodeType { get; set; }
         public string NodeIdentifier { get; set; }
         public string NodeEndPointIP { get; set; }
@@ -16,17 +12,26 @@ namespace NodeRegistry.Interface
         public bool AddMySelfToActiveNodeList { get; set; }
         public int HeartBeatInterval { get; set; }
 
-        public NodeRegistryConfig(NodeType nodeType, string nodeIdentifier, string nodeEndPointIP, int nodeEndPointPort, bool myselfToActiveNodeList)
-        {
+        public NodeRegistryConfig(NodeInformationType nodeinfo, bool addMyselfToActiveNodeList, int heartBeatInterval) {
+            this.NodeType = nodeinfo.NodeType;
+            NodeIdentifier = nodeinfo.NodeIdentifier;
+            NodeEndPointIP = nodeinfo.NodeEndpoint.IpAddress;
+            NodeEndPointPort = nodeinfo.NodeEndpoint.Port;
+            AddMySelfToActiveNodeList = addMyselfToActiveNodeList;
+            HeartBeatInterval = heartBeatInterval;
+        }
+
+        public NodeRegistryConfig(NodeType nodeType, string nodeIdentifier, string nodeEndPointIP, int nodeEndPointPort,
+            bool myselfToActiveNodeList, int heartBeatInterval = 500) {
             NodeType = nodeType;
             NodeIdentifier = nodeIdentifier;
             NodeEndPointPort = nodeEndPointPort;
             NodeEndPointIP = nodeEndPointIP;
             AddMySelfToActiveNodeList = myselfToActiveNodeList;
+            HeartBeatInterval = heartBeatInterval;
         }
 
-        public NodeRegistryConfig()
-        {
+        public NodeRegistryConfig() {
             NodeType = NodeType.LayerContainer;
             NodeIdentifier = "LC-1";
             NodeEndPointIP = "141.22.11.254";

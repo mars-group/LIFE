@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Timers;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using MulticastAdapter.Interface;
@@ -226,9 +227,7 @@ namespace NodeRegistry.Implementation {
             return _config.NodeType;
         }
 
-
-        private void _resetTimer(NodeInformationType nodeInformationType) {}
-
+        
         private void NotifyOnNodeJoinSubsribers(NodeInformationType nodeInformation) {
             if (_newNodeConnectedHandler != null) _newNodeConnectedHandler.Invoke(nodeInformation);
         }
@@ -277,7 +276,7 @@ namespace NodeRegistry.Implementation {
                     _activeNodeList.Remove(nodeRegistryMessage.nodeInformationType.NodeIdentifier);
                     break;
                 case NodeRegistryMessageType.HeartBeat:
-                    _resetTimer(nodeRegistryMessage.nodeInformationType);
+                    OnHeartBeatMessage(nodeRegistryMessage.nodeInformationType);
                     break;
                 default:
                     break;
@@ -316,6 +315,52 @@ namespace NodeRegistry.Implementation {
             _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] =
                 nodeRegistryMessage.nodeInformationType;
             //start HeartbeatTimer for Node.
+
+            var timer = GetNewTimerForNodeEntry(nodeRegistryMessage.nodeInformationType);
+
+            _heartBeatTimers[nodeRegistryMessage.nodeInformationType] = timer;
+
+            timer.Start();
+
+        }
+
+        private void OnHeartBeatMessage(NodeInformationType nodeInformationType) {
+            
+            if (_heartBeatTimers.ContainsKey(nodeInformationType)) {
+
+                var timer = _heartBeatTimers[nodeInformationType];
+                Console.WriteLine("reset timer");
+                timer.Stop();
+                timer.Interval = _heartBeatInterval*10;
+                timer.Start();
+                Console.WriteLine("reset done");
+             }
+            //unkown node add to list and start timer
+            else
+            {
+                _activeNodeList[nodeInformationType.NodeIdentifier] = nodeInformationType;
+                var timer = GetNewTimerForNodeEntry(nodeInformationType);
+                _heartBeatTimers[nodeInformationType] = timer;
+                timer.Start();
+                
+            }
+        }
+
+
+        private Timer GetNewTimerForNodeEntry(NodeInformationType nodeInformation) {
+            var timer = new Timer(_heartBeatInterval*10);
+            timer.AutoReset = false;
+            //add event to timer
+            timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args) {
+                Console.WriteLine("fire remove event");
+                _activeNodeList.Remove(nodeInformation.NodeIdentifier);
+                _heartBeatTimers.Remove(nodeInformation);
+
+            }
+                
+                );
+
+            return timer;
         }
 
         /// <summary>

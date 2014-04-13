@@ -55,7 +55,7 @@ namespace RTEManager.Implementation {
             Parallel.ForEach(
                 tickClientsPerLayer.Keys,
                 layer => Parallel.ForEach(tickClientsPerLayer[layer],
-                    client => client.tick()
+                    client => client.Tick()
                     )
                 );
 
