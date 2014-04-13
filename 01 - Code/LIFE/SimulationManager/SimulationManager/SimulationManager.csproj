@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="config.log4net" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

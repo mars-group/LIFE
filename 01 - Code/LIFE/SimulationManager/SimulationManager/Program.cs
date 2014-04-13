@@ -12,7 +12,7 @@ namespace SimulationManager {
             Logger.Info("SimulationController trying to startup.");
 
             // Uncomment the next line to enable log4net internal debugging
-            // log4net.Util.LogLog.InternalDebugging = true;
+            //log4net.Util.LogLog.InternalDebugging = true;
 
             // This will instruct log4net to look for a configuration file
             // called config.log4net in the root directory of the device
