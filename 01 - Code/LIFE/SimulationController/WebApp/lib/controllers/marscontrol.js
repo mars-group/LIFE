@@ -21,6 +21,24 @@ var getConnectedNodes = edge.func({
     typeName: 'SimulationController.SimulationControllerNodeJsInterface',
     methodName: 'GetConnectedNodes'
 });
+
+var resumeSimulation = edge.func({
+    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
+    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    methodName: 'ResumeSimulation'
+});
+
+var abortSimulation = edge.func({
+    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
+    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    methodName: 'AbortSimulation'
+});
+
+var pauseSimulation = edge.func({
+    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
+    typeName: 'SimulationController.SimulationControllerNodeJsInterface',
+    methodName: 'PauseSimulation'
+});
 /*
 var subscribeForStatusUpdate = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
@@ -38,6 +56,30 @@ exports.allModels = function(req, res) {
 
 exports.startSimWithModel = function(req, res) {
     startSimulationWithModel(req.body, function (error, result) {
+        if(error) return res.json(500,error);
+        res.json(result);
+    });
+};
+
+
+exports.resumeSimulation = function(req, res) {
+    resumeSimulation(req.body, function (error, result) {
+        if(error) return res.json(500,error);
+        res.json(result);
+    });
+};
+
+
+exports.abortSimulation = function(req, res) {
+    abortSimulation(req.body, function (error, result) {
+        if(error) return res.json(500,error);
+        res.json(result);
+    });
+};
+
+
+exports.pauseSimulation = function(req, res) {
+    pauseSimulation(req.body, function (error, result) {
         if(error) return res.json(500,error);
         res.json(result);
     });

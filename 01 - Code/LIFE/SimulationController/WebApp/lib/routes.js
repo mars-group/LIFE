@@ -14,8 +14,13 @@ module.exports = function(app) {
 
   // Server API Routes
   app.get('/api/marscontrol/', marscontrol.allModels);
-  app.post('/api/marscontrol/', marscontrol.startSimWithModel);
   app.get('/api/marscontrol/nodes', marscontrol.getConnectedNodes);
+
+  app.post('/api/marscontrol/startsim', marscontrol.startSimWithModel);
+  app.post('/api/marscontrol/pausesim', marscontrol.pauseSimulation);
+  app.post('/api/marscontrol/abortsim', marscontrol.abortSimulation);
+  app.post('/api/marscontrol/resumesim', marscontrol.resumeSimulation);
+
 
   // User specific API
   app.post('/api/users', users.create);

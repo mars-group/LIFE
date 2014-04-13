@@ -22,10 +22,10 @@
             {{m.Status.StatusMessage}}
         </td>
         <td>
-            <input type="button" value="Start" ng-hide="m.Running"  ng-click="startModel(m)">
-            <input type="button" value="Pause" ng-hide="!m.Running" ng-click="startModel(m)">
-            <input type="button" value="Resume" ng-hide="!m.Running" ng-click="startModel(m)">
-            <input type="button" value="Abort" ng-hide="!m.Running" ng-click="startModel(m)">
+            <button ng-hide="m.Running"  ng-click="startModel(m)">Start</button>
+            <button ng-hide="(m.Status.StatusMessage == 'Paused') || !(m.Running)" ng-click="pauseSim(m)">Pause</button>
+            <button ng-hide="(m.Status.StatusMessage == 'Resume') || (m.Status.StatusMessage == 'Running') || !(m.Running)" ng-click="resumeSim(m)">Resume</button>
+            <button ng-hide="(m.Status.StatusMessage == 'Aborted') || !(m.Running)" ng-click="abortSim(m)">Abort</button>
         </td>
     </tr>
     </tbody>

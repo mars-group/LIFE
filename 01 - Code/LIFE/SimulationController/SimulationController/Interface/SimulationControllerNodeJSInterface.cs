@@ -6,9 +6,12 @@ using SMConnector;
 
 namespace SimulationController
 {
+    using System.Runtime.Remoting.Messaging;
+
     using AppSettingsManager;
 
     using CommonTypes.DataTypes;
+    using CommonTypes.TransportTypes;
     using CommonTypes.Types;
 
     using ConfigurationAdapter.Interface;
@@ -89,19 +92,31 @@ namespace SimulationController
 
         public async Task<object> PauseSimulation(dynamic input) {
             if (!_isConnected) { return new object[0]; }
-            return await Task.Run(() => this._simulationManagerClient.PauseSimulation(input));
+            return await Task.Run(
+                () => {
+                    this._simulationManagerClient.PauseSimulation(new TModelDescription(input.Name, input.Description, input.Status.StatusMessage, input.Running));
+                    return 0;
+                });
         }
 
         public async Task<object> ResumeSimulation(dynamic input)
         {
             if (!_isConnected) { return new object[0]; }
-            return await Task.Run(() => this._simulationManagerClient.ResumeSimulation(input));
+            return await Task.Run(
+                () => {
+                    this._simulationManagerClient.ResumeSimulation(new TModelDescription(input.Name, input.Description, input.Status.StatusMessage, input.Running));
+                    return 0;
+                });
         }
 
         public async Task<object> AbortSimulation(dynamic input)
         {
             if (!_isConnected) { return new object[0]; }
-            return await Task.Run(() => this._simulationManagerClient.AbortSimulation(input));
+            return await Task.Run(
+                () => {
+                    this._simulationManagerClient.AbortSimulation(new TModelDescription(input.Name, input.Description, input.Status.StatusMessage, input.Running));
+                    return 0;
+                });
         }
 
         #endregion
@@ -147,19 +162,19 @@ namespace SimulationController
 
         public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {
 
-            Thread.Sleep(2500);
+            Thread.Sleep(100);
         }
 
         public void PauseSimulation(TModelDescription model) {
-            throw new NotImplementedException();
+            
         }
 
         public void ResumeSimulation(TModelDescription model) {
-            throw new NotImplementedException();
+           
         }
 
         public void AbortSimulation(TModelDescription model) {
-            throw new NotImplementedException();
+           
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
