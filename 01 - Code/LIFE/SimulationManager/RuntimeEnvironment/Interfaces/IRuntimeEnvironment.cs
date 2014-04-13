@@ -8,10 +8,10 @@ namespace RuntimeEnvironment.Interfaces {
     /// TODO: comment
     /// </summary>
     public interface IRuntimeEnvironment {
-        void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null);
-        void PauseSimulation(TModelDescription model);
-        void ResumeSimulation(TModelDescription model);
-        void AbortSimulation(TModelDescription model);
+        void StartWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null);
+        void Pause(TModelDescription model);
+        void Resume(TModelDescription model);
+        void Abort(TModelDescription model);
         void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable);
     }
 }
