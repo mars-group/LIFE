@@ -59,6 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{c07bbb5f-a159-41ad-933d-6b1f10913ed7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">
       <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
       <Name>SMConnector</Name>

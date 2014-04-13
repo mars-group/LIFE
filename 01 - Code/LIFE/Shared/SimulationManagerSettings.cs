@@ -2,6 +2,7 @@
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
+
 namespace Shared
 {
     /// <summary>

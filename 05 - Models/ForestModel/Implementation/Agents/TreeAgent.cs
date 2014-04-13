@@ -62,9 +62,6 @@ namespace ForestModel.Implementation.Agents
             //TODO berechne holzwert aus größe und durchmesser.
             _fitness = _fitness - damage;
             return (_fitness > 0) ? 0 : 700;
-
-
-
         }
 
         public void SeedDispearsal()

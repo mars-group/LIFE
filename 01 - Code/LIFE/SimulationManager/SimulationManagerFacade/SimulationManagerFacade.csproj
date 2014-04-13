@@ -70,7 +70,7 @@
       <Name>LCConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
-      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Project>{c07bbb5f-a159-41ad-933d-6b1f10913ed7}</Project>
       <Name>NodeRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">

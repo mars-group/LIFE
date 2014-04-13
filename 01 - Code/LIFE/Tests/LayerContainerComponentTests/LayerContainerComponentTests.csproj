@@ -85,6 +85,10 @@
       <Project>{AD32517C-230C-435B-953D-BD96732927B8}</Project>
       <Name>DistributedKeyValueStore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LayerContainer\LayerRegistry\LayerRegistry.csproj">
       <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
       <Name>LayerRegistry</Name>
@@ -96,10 +100,6 @@
     <ProjectReference Include="..\..\LayerContainer\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
-      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
-      <Name>NodeRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>

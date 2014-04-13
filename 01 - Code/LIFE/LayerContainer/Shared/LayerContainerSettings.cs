@@ -1,4 +1,5 @@
 ﻿using System;
+using NodeRegistry.Interface;
 
 namespace Shared
 {
@@ -8,7 +9,7 @@ namespace Shared
 
     using MulticastAdapter.Interface.Config;
 
-    using NodeRegistry.Interface;
+
 
     [Serializable]
     public class LayerContainerSettings

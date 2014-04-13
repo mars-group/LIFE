@@ -1,10 +1,12 @@
-﻿namespace SimulationController
+﻿using NodeRegistry.Interface;
+
+namespace SimulationController
 {
     using System;
 
     using CommonTypes.Types;
 
-    using NodeRegistry.Interface;
+
 
     [Serializable]
     public class SimControllerConfig

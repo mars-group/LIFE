@@ -87,11 +87,11 @@ namespace NodeRegistry.Implementation {
         public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig) {
             InitNodeRegistry(nodeRegistryConfig);
 
-<<<<<<< .mine
+
             _localNodeInformation = ParseNodeInformationTypeFromConfig();
-=======
+
             _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
->>>>>>> .theirs
+
 
             SetupNetworkAdapters(multicastAdapter);
             JoinCluster();
@@ -252,7 +252,7 @@ namespace NodeRegistry.Implementation {
 
 
         private void DropAllNodes() {
-            _activeNodeList = new Dictionary<string, NodeInformationType>();
+            _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
         }
 
         private void Listen() {

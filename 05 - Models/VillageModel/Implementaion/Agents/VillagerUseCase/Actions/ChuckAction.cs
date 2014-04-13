@@ -19,7 +19,10 @@ namespace VillageModel.Implementaion.Agents.VillagerUseCase.Actions
 
         public void Execute()
         {
-           for()
+            for (int i = 0; i < _swingsPerTick; i++)
+            {
+                
+            }
         }
     }
 }

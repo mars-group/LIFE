@@ -58,13 +58,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\UseCases\HeartBeatUseCase\HeartBeatClientUseCase.cs" />
-    <Compile Include="Implementation\UseCases\HeartBeatUseCase\HeartBeatServerUseCase.cs" />
     <Compile Include="Implementation\Messages\NodeRegistryMessageFactory.cs" />
     <Compile Include="Implementation\Messages\NodeRegistryMessage.cs" />
     <Compile Include="Implementation\Messages\NodeRegistryMessageType.cs" />
     <Compile Include="Implementation\NodeRegistryComponent.cs" />
-    <Compile Include="Implementation\UseCases\HeartBeatUseCase\IHeartBeatService.cs" />
     <Compile Include="Interface\NodeRegistryConfig.cs" />
     <Compile Include="Implementation\NodeRegistryUseCase.cs" />
     <Compile Include="Interface\INodeRegistry.cs" />
@@ -74,8 +71,13 @@
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20a316c2-8779-474d-98fb-a13dac9043ab}</Project>
       <Name>MulticastAdapter</Name>
-      <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
-     <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
+      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
+      <Name>Scs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\ConfigurationAdapter\ConfigurationAdapter.csproj">
@@ -86,7 +88,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

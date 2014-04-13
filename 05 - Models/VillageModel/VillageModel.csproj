@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\ChuckAction.cs" />
     <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\SearchForTreesAction.cs" />
     <Compile Include="Implementaion\Agents\VillagerUseCase\ChuckWoodPlan.cs" />
     <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\MoveToAction.cs" />
