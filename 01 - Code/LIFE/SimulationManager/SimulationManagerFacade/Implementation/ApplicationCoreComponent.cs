@@ -36,12 +36,8 @@ namespace SimulationManagerFacade.Implementation {
         
         #region RuntimeEnvironment delegation
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<int> layerContainers, int? nrOfTicks = null) {
-            _runtimeEnvironment.StartSimulationWithModel(model, layerContainers, nrOfTicks);
-        }
-
         public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {
-            throw new NotImplementedException();
+            _runtimeEnvironment.StartSimulationWithModel(model, layerContainers, nrOfTicks);
         }
 
         public void PauseSimulation(TModelDescription model) {

@@ -5,7 +5,6 @@ using ModelContainer.Implementation;
 using ModelContainer.Interfaces;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
-using MulticastAdapter.Interface.Config;
 using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation;

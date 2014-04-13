@@ -35,7 +35,7 @@
 
         public GlobalConfig()
         {
-            this.MulticastGroupIp = "244.10.99.1";
+            this.MulticastGroupIp = "224.10.99.1";
             this.MulticastGroupListenPort = 50100;
             this.MulticastGroupSendingStartPort = 50500;
             this.DHTPort = 8500;

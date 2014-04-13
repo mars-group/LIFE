@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommonTypes.DataTypes;
-using CommonTypes.Types;
 using LCConnector.TransportTypes;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
@@ -35,25 +34,18 @@ namespace RuntimeEnvironment.Implementation {
         public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers,
             int? nrOfTicks = null) {
             lock (this) {
-                if (!layerContainers.All(l => _idleLayerContainers.Any(c => c.Equals(l)))) {
+                if (!layerContainers.All(l => _idleLayerContainers.Any(c => c.Equals(l))))
                     throw new LayerContainerBusyException();
-                }
 
-                if (_steppedSimulations.ContainsKey(model)) {
-                    throw new SimulationAlreadyRunningException();
+                if (_steppedSimulations.ContainsKey(model)) throw new SimulationAlreadyRunningException();
+
+                IList<TLayerDescription> instantiationOrder = _modelContainer.GetInstantiationOrder(model);
+
+                foreach (var nodeInformationType in layerContainers) {
+                    _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(_modelContainer, model,
+                        instantiationOrder, layerContainers, nrOfTicks);
                 }
             }
-
-            IList<TLayerDescription> instantiationOrder = _modelContainer.GetInstantiationOrder(model);
-            List<NodeInformationType> lcNodes = _nodeRegistry.GetAllNodesByType(NodeType.LayerContainer);
-
-            foreach (var layerDescription in instantiationOrder) {
-                
-            }
-        }
-
-        public void StartSimulationWithModel(TModelDescription model, ICollection<int> layerContainers, int? nrOfTicks = null) {
-            throw new NotImplementedException();
         }
 
         public void PauseSimulation(TModelDescription model) {

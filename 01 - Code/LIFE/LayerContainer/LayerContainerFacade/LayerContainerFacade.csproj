@@ -53,6 +53,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\DistributedKeyValueStore\DistributedKeyValueStore.csproj">
       <Project>{AD32517C-230C-435B-953D-BD96732927B8}</Project>
       <Name>DistributedKeyValueStore</Name>
@@ -92,6 +96,10 @@
     <ProjectReference Include="..\RTEManager\RTEManager.csproj">
       <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
       <Name>RTEManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
+      <Name>Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
