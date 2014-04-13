@@ -26,6 +26,7 @@ namespace RuntimeEnvironment.Implementation {
             INodeRegistry nodeRegistry) {
             _settings = settings;
             _modelContainer = modelContainer;
+            _nodeRegistry = nodeRegistry;
 
             _steppedSimulations = new Dictionary<TModelDescription, SteppedSimulationExecutionUseCase>();
             _idleLayerContainers = new HashSet<NodeInformationType>();
