@@ -233,32 +233,29 @@ namespace NodeRegistryTest
 
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
-
-            var otherSendingPort = _sendingStartPortSeed;
-            _sendingStartPortSeed += 1;
-
+            
             var mcastGrp = "224.3.33.3";
             
             var localMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig(mcastGrp, localListenPort, localSendingPort, 4), new MulticastSenderConfig());
             var otherMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig(mcastGrp, localListenPort,  localSendingPort, 4), new MulticastSenderConfig() );
 
-            var timeout = 300;
+            var timeout = 500;
 
             var localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation, false, timeout));
             var otherNodeRegistry = new NodeRegistryComponent(otherMulticastAdapter, new NodeRegistryConfig(otherNodeinfo, false, timeout));
 
-            Thread.Sleep(100);
+            Thread.Sleep(150);
             //Check if Nodes have found eachother
             Assert.True(localNodeRegistry.GetAllNodes().Contains(otherNodeinfo));
+            Assert.True(otherNodeRegistry.GetAllNodes().Contains(localNodeInformation));
 
             //wait for timeout to expire if it was not reset.
-            Thread.Sleep(timeout*20);
+            Thread.Sleep(timeout*10);
 
             //check if node is still there.
             Assert.True(localNodeRegistry.GetAllNodes().Contains(otherNodeinfo));
-
-
-
+            Assert.True(otherNodeRegistry.GetAllNodes().Contains(localNodeInformation));
+            
         }
 
 

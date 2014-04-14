@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulation Manager", "Simulation Manager", "{060A5DF3-4C49-402B-9B3F-142A9ECD30B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuntimeEnvironment", "SimulationManager\RuntimeEnvironment\RuntimeEnvironment.csproj", "{CD379E3D-8606-4136-978A-2E1E7DD933A1}"
@@ -79,6 +81,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "LayerContainer\Shared\Shared.csproj", "{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeRegistry", "Common\NodeRegistry\NodeRegistry.csproj", "{C07BBB5F-A159-41AD-933D-6B1F10913ED7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MulticastAdapterTest", "Tests\MulticastAdapterTest\MulticastAdapterTest.csproj", "{0C2630C4-8E59-487C-A97D-0741F38DD71E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -372,6 +376,16 @@ Global
 		{C07BBB5F-A159-41AD-933D-6B1F10913ED7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C07BBB5F-A159-41AD-933D-6B1F10913ED7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C07BBB5F-A159-41AD-933D-6B1F10913ED7}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -404,6 +418,7 @@ Global
 		{0920A631-6703-41ED-B7F6-9F5096BB5AF5} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{13B79EC1-DE9C-4CD1-9255-5458505677DF} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{51DB320F-8864-44DB-92F7-C7B3FFC4D928} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
+		{0C2630C4-8E59-487C-A97D-0741F38DD71E} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{D012B06F-95E7-4973-9847-34AE2BDF4B44} = {62F1C796-A9FD-471E-80F3-5396CFE3BC5F}
 	EndGlobalSection
 EndGlobal

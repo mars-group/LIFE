@@ -60,8 +60,9 @@ namespace MulticastAdapter.Implementation
             }
             else
             {
+                var endPoint = GetBindingEndpoint();
                 var updClient = new UdpClient(GetBindingEndpoint());
-                updClient.JoinMulticastGroup(_mGrpAdr, IPAddress.Parse(_senderSettings.SendingInterfaceIP));
+                updClient.JoinMulticastGroup(_mGrpAdr, endPoint.Address);
                 resultList.Add(updClient);
             }
 
@@ -101,13 +102,35 @@ namespace MulticastAdapter.Implementation
                 case BindingType.IP:
                     return GetIPEndPointByIp();
                 case BindingType.Name:
-                    //TODO 
-                    throw new NotImplementedException();
+                    return GetIPEndPointByName();
+                   
                 default:
                     // this shut never happend
                     throw new NotImplementedException(
                         "The type by which the binding interface is determined is not implemented.");
             }
+        }
+
+        private IPEndPoint GetIPEndPointByName() {
+            var networkInterface =
+                MulticastNetworkUtils.GetInterfaceByName(_senderSettings.SendingInterfaceName);
+            IPAddress ipAddress = null;
+
+            if (networkInterface == null) throw new NoInterfaceFoundException("No networkinterface with the IP " + _senderSettings.SendingInterfaceIP + " was found. Please make sure that the IP is right and the interface up");
+
+            foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses) {
+                if (
+                    unicastAddress.Address.AddressFamily.Equals(
+                        MulticastNetworkUtils.GetAddressFamily((IPVersionType) _generalSettings.IPVersion))) {
+                    ipAddress = unicastAddress.Address;
+                    break;
+                }
+            }
+
+            if (ipAddress != null) return new IPEndPoint(ipAddress, _sendingPort);
+            throw new NoInterfaceFoundException("No interface with the given Name " + _senderSettings.SendingInterfaceName +
+                                                " was found. Please check if your interface description is right and the Interface is up.");
+
         }
 
         private IPEndPoint GetIPEndPointByIp()
@@ -130,7 +153,7 @@ namespace MulticastAdapter.Implementation
 
             if (ipAddress != null) return new IPEndPoint(ipAddress, _sendingPort);
             throw new NoInterfaceFoundException("No interface with the given IP " + ipAddress +
-                                                " was found. Please check if your interface description, in app.config, is right.");
+                                                " was found. Please check if your interface description is right and the Interface is up.");
         }
 
         public void CloseSocket()

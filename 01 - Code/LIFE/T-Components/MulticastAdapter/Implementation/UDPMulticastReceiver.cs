@@ -15,11 +15,12 @@ namespace MulticastAdapter.Implementation
         private readonly int _listenPort;
         private readonly GlobalConfig _generalSettings;
         
-        public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort)
+        public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort, int ipVersion = 4)
         {
-
+            _generalSettings = new GlobalConfig(mCastAdr.ToString(), _listenPort, 0, ipVersion);
             _mcastAddress = mCastAdr;
             this._listenPort = listenPort;
+            _recieverClient = GetClient(_listenPort);
             JoinMulticastGroupes();
 
         }
