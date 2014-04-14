@@ -24,6 +24,10 @@ namespace SimulationManager {
             
             Console.WriteLine("SimulationManager up and running. Press 'q' to quit.");
 
+            foreach (var modelDescription in core.GetAllModels()) {
+                Console.WriteLine(modelDescription.Name);
+            }
+
             ConsoleKeyInfo info = Console.ReadKey();
             while (info.Key != ConsoleKey.Q) {
                 info = Console.ReadKey();
