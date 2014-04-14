@@ -329,11 +329,11 @@ namespace NodeRegistry.Implementation {
             if (_heartBeatTimers.ContainsKey(nodeInformationType)) {
 
                 var timer = _heartBeatTimers[nodeInformationType];
-                Console.WriteLine("reset timer");
+
                 timer.Stop();
                 timer.Interval = _heartBeatInterval*10;
                 timer.Start();
-                Console.WriteLine("reset done");
+
              }
             //unkown node add to list and start timer
             else
