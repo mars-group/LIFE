@@ -4,58 +4,26 @@ var edge = require('edge');
 
 
 
-var getAllModels = edge.func({
+var createSimController = edge.func({
     assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
-    methodName: 'GetAllModels'
+    typeName: 'SimulationController.Interface.SimulationControllerNodeJSInterface',
+    methodName: 'GetSimController'
 });
 
-var startSimulationWithModel = edge.func({
-    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
-    methodName: 'StartSimulationWithModel'
-});
+var simController = createSimController('', true);
 
-var getConnectedNodes = edge.func({
-    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
-    methodName: 'GetConnectedNodes'
-});
-
-var resumeSimulation = edge.func({
-    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
-    methodName: 'ResumeSimulation'
-});
-
-var abortSimulation = edge.func({
-    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
-    methodName: 'AbortSimulation'
-});
-
-var pauseSimulation = edge.func({
-    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
-    methodName: 'PauseSimulation'
-});
-/*
-var subscribeForStatusUpdate = edge.func({
-    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
-    methodName: 'SubscribeForStatusUpdate'
-});
-*/
 
 exports.allModels = function(req, res) {
-    getAllModels('',function (error, result) {
+
+    simController.getAllModels('',function (error, result) {
         if(error) return res.json(500, error);
         res.json(result);
     });
+
 };
 
 exports.startSimWithModel = function(req, res) {
-    startSimulationWithModel(req.body, function (error, result) {
+    simController.startSimulationWithModel(req.body, function (error, result) {
         if(error) return res.json(500,error);
         res.json(result);
     });
@@ -63,7 +31,7 @@ exports.startSimWithModel = function(req, res) {
 
 
 exports.resumeSimulation = function(req, res) {
-    resumeSimulation(req.body, function (error, result) {
+    simController.resumeSimulation(req.body, function (error, result) {
         if(error) return res.json(500,error);
         res.json(result);
     });
@@ -71,7 +39,7 @@ exports.resumeSimulation = function(req, res) {
 
 
 exports.abortSimulation = function(req, res) {
-    abortSimulation(req.body, function (error, result) {
+    simController.abortSimulation(req.body, function (error, result) {
         if(error) return res.json(500,error);
         res.json(result);
     });
@@ -79,14 +47,14 @@ exports.abortSimulation = function(req, res) {
 
 
 exports.pauseSimulation = function(req, res) {
-    pauseSimulation(req.body, function (error, result) {
+    simController.pauseSimulation(req.body, function (error, result) {
         if(error) return res.json(500,error);
         res.json(result);
     });
 };
 
 exports.getConnectedNodes = function(req, res) {
-    getConnectedNodes('',function (error, result) {
+    simController.getConnectedNodes('',function (error, result) {
         if(error) return res.json(500, error);
         res.json(result);
     });

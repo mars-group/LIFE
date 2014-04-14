@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using CommonTypes.Types;
-
+﻿
 namespace SimulationController.Implementation
 {
     using System.Collections.Generic;

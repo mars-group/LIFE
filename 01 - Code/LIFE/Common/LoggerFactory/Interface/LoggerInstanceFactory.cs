@@ -45,7 +45,7 @@ namespace LoggerFactory.Interface
             }
 
             //Set Debug Level
-            hierarchy.Root.Level = Level.All;
+            hierarchy.Root.Level = Level.Off;
             hierarchy.Configured = true;
 
             Logger = LogManager.GetLogger(typeof(T));
