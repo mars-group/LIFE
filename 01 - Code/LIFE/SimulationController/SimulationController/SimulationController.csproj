@@ -50,6 +50,7 @@
     <Compile Include="Config\SimControllerConfig.cs" />
     <Compile Include="Implementation\SimulationControllerUseCase.cs" />
     <Compile Include="Implementation\SimulationManagerClient.cs" />
+    <Compile Include="Starter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
