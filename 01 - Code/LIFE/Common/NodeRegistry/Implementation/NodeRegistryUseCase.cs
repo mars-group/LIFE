@@ -7,23 +7,23 @@ using System.Timers;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using log4net;
+using LoggerFactory.Interface;
 using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Interface;
 using ProtoBuf;
 using Timer = System.Timers.Timer;
+using LoggerFactory;
 
 namespace NodeRegistry.Implementation
 {
-    using System.Collections.Concurrent;
-
     using Hik.Collections;
 
     public class NodeRegistryUseCase : INodeRegistry
     {
         #region Fields and Properties
 
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(NodeRegistryUseCase));
+        private static ILog Logger = LoggerInstanceFactory.GetLoggerInstance<NodeRegistryUseCase>();
 
         /// <summary>
         ///     A dictonary of all active Node in the cluster. The Key is the NodeIdentifier from the NodeInformationobject(Value)
@@ -35,7 +35,7 @@ namespace NodeRegistry.Implementation
         /// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a NodeInformationType is recied the timeEvent will fire
         ///  and delte this NodeInformationType from the active NodeList
         /// </summary>
-        private Dictionary<NodeInformationType, Timer> _heartBeatTimers;
+        private ThreadSafeSortedList<NodeInformationType, Timer> _heartBeatTimers;
 
         /// <summary>
         /// Heartbeat send interval duration, in ms;
@@ -113,7 +113,7 @@ namespace NodeRegistry.Implementation
         {
             _config = nodeRegistryConfig;
 
-            _heartBeatTimers = new Dictionary<NodeInformationType, Timer>();
+            _heartBeatTimers = new ThreadSafeSortedList<NodeInformationType, Timer>();
             _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
             _heartBeatInterval = _config.HeartBeatInterval;
         }
@@ -362,7 +362,7 @@ namespace NodeRegistry.Implementation
 
             if (_heartBeatTimers.ContainsKey(nodeInformationType))
             {
-
+                
                 var timer = _heartBeatTimers[nodeInformationType];
                 Logger.Debug("Got HeartbeatMsg for Node " + nodeInformationType + ". Reset Timer.");
                 timer.Stop();
