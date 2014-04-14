@@ -3,7 +3,7 @@ using CommonTypes.DataTypes;
 using ProtoBuf;
 
 namespace NodeRegistry.Implementation.Messages {
-    internal class NodeRegistryMessageFactory {
+    internal static class NodeRegistryMessageFactory {
         public static byte[] GetJoinMessage(NodeInformationType informationType) {
             var stream = new MemoryStream();
             Serializer.Serialize(stream, new NodeRegistryMessage(NodeRegistryMessageType.Join, informationType));

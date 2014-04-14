@@ -6,19 +6,24 @@ using System.Threading;
 using System.Timers;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using log4net;
 using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Interface;
 using ProtoBuf;
 using Timer = System.Timers.Timer;
 
-namespace NodeRegistry.Implementation {
+namespace NodeRegistry.Implementation
+{
     using System.Collections.Concurrent;
 
     using Hik.Collections;
 
-    public class NodeRegistryUseCase : INodeRegistry {
+    public class NodeRegistryUseCase : INodeRegistry
+    {
         #region Fields and Properties
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(NodeRegistryUseCase));
 
         /// <summary>
         ///     A dictonary of all active Node in the cluster. The Key is the NodeIdentifier from the NodeInformationobject(Value)
@@ -76,7 +81,8 @@ namespace NodeRegistry.Implementation {
         #region Constructors
 
         public NodeRegistryUseCase(NodeInformationType nodeInformation, IMulticastAdapter multicastAdapter,
-            NodeRegistryConfig nodeRegistryConfig) {
+            NodeRegistryConfig nodeRegistryConfig)
+        {
             InitNodeRegistry(nodeRegistryConfig);
 
             _localNodeInformation = nodeInformation;
@@ -85,7 +91,8 @@ namespace NodeRegistry.Implementation {
             JoinCluster();
         }
 
-        public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig) {
+        public NodeRegistryUseCase(IMulticastAdapter multicastAdapter, NodeRegistryConfig nodeRegistryConfig)
+        {
             InitNodeRegistry(nodeRegistryConfig);
 
 
@@ -102,7 +109,8 @@ namespace NodeRegistry.Implementation {
         }
 
 
-        private void InitNodeRegistry(NodeRegistryConfig nodeRegistryConfig) {
+        private void InitNodeRegistry(NodeRegistryConfig nodeRegistryConfig)
+        {
             _config = nodeRegistryConfig;
 
             _heartBeatTimers = new Dictionary<NodeInformationType, Timer>();
@@ -111,7 +119,8 @@ namespace NodeRegistry.Implementation {
         }
 
 
-        private void SetupNetworkAdapters(IMulticastAdapter multicastAdapter) {
+        private void SetupNetworkAdapters(IMulticastAdapter multicastAdapter)
+        {
             _multicastAdapter = multicastAdapter;
             _listenThread = new Thread(Listen);
             _listenThread.Start();
@@ -124,7 +133,8 @@ namespace NodeRegistry.Implementation {
         /// <summary>
         ///     Send a "join message" to all nodes in the multicastgroupe/cluster
         /// </summary>
-        public void JoinCluster() {
+        public void JoinCluster()
+        {
             _multicastAdapter.SendMessageToMulticastGroup(
                 NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation));
 
@@ -134,7 +144,8 @@ namespace NodeRegistry.Implementation {
 
 
         //sends a "leave message" to all nodes in the multicastgroupe/cluster
-        public void LeaveCluster() {
+        public void LeaveCluster()
+        {
             _multicastAdapter.SendMessageToMulticastGroup(
                 NodeRegistryMessageFactory.GetLeaveMessage(_localNodeInformation));
         }
@@ -143,7 +154,8 @@ namespace NodeRegistry.Implementation {
         ///     Leaves the cluster by sending a "leave message" to the cluster. Also stop the listenThrad and shutsdown the
         ///     multicast adapter.
         /// </summary>
-        public void ShutDownNodeRegistry() {
+        public void ShutDownNodeRegistry()
+        {
             LeaveCluster();
             _listenThread.Interrupt();
             _heartBeatSenderThread.Interrupt();
@@ -154,7 +166,8 @@ namespace NodeRegistry.Implementation {
         ///     Returns the Configuration wrapper for this NodeRegistry
         /// </summary>
         /// <returns>Configuration<T> T should be a custom config object</returns>
-        public NodeRegistryConfig GetConfig() {
+        public NodeRegistryConfig GetConfig()
+        {
             return _config;
         }
 
@@ -165,7 +178,8 @@ namespace NodeRegistry.Implementation {
         ///     List of all known nodes. If Config.Instance.myselfToActiveNodeList is true the return values contains the
         ///     localNodeInformation as well
         /// </returns>
-        public List<NodeInformationType> GetAllNodes() {
+        public List<NodeInformationType> GetAllNodes()
+        {
             return _activeNodeList.GetAllItems();
         }
 
@@ -174,7 +188,8 @@ namespace NodeRegistry.Implementation {
         /// </summary>
         /// <param name="nodeType">not null</param>
         /// <returns></returns>
-        public List<NodeInformationType> GetAllNodesByType(NodeType nodeType) {
+        public List<NodeInformationType> GetAllNodesByType(NodeType nodeType)
+        {
             return GetAllNodes().Where(nodeInformationType => nodeInformationType.NodeType == nodeType).ToList();
         }
 
@@ -183,7 +198,8 @@ namespace NodeRegistry.Implementation {
         ///     of this instance.
         /// </summary>
         /// <param name="newNodeConnectedHandler">not null. Delegate with NewNodeConnected as parameter </param>
-        public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler) {
+        public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler)
+        {
             _newNodeConnectedHandler += newNodeConnectedHandler;
         }
 
@@ -193,8 +209,10 @@ namespace NodeRegistry.Implementation {
         /// </summary>
         /// <param name="newNodeConnectedHandler">not null. Delegate with NewNodeConnected as parameter </param>
         /// <param name="nodeType">not null. The Type of the new node.</param>
-        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType) {
-            switch (nodeType) {
+        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType)
+        {
+            switch (nodeType)
+            {
                 case NodeType.LayerContainer:
                     _newLayerContainerConnectedHandler += newNodeConnectedHandler;
                     break;
@@ -211,7 +229,8 @@ namespace NodeRegistry.Implementation {
 
         #region private Methods
 
-        private NodeInformationType ParseNodeInformationTypeFromConfig() {
+        private NodeInformationType ParseNodeInformationTypeFromConfig()
+        {
             return new NodeInformationType(
                 ParseNodeTypeFromConfig(),
                 _config.NodeIdentifier,
@@ -219,21 +238,26 @@ namespace NodeRegistry.Implementation {
                 );
         }
 
-        private NodeEndpoint ParseNodeEndpointFromConfig() {
+        private NodeEndpoint ParseNodeEndpointFromConfig()
+        {
             return new NodeEndpoint(_config.NodeEndPointIP, _config.NodeEndPointPort);
         }
 
-        private NodeType ParseNodeTypeFromConfig() {
+        private NodeType ParseNodeTypeFromConfig()
+        {
             return _config.NodeType;
         }
 
-        
-        private void NotifyOnNodeJoinSubsribers(NodeInformationType nodeInformation) {
+
+        private void NotifyOnNodeJoinSubsribers(NodeInformationType nodeInformation)
+        {
             if (_newNodeConnectedHandler != null) _newNodeConnectedHandler.Invoke(nodeInformation);
         }
 
-        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation) {
-            switch (nodeInformation.NodeType) {
+        private void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation)
+        {
+            switch (nodeInformation.NodeType)
+            {
                 case NodeType.LayerContainer:
                     if (_newLayerContainerConnectedHandler != null)
                         _newLayerContainerConnectedHandler.Invoke(nodeInformation);
@@ -250,12 +274,15 @@ namespace NodeRegistry.Implementation {
         }
 
 
-        private void DropAllNodes() {
+        private void DropAllNodes()
+        {
             _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
         }
 
-        private void Listen() {
-            while (Thread.CurrentThread.IsAlive) {
+        private void Listen()
+        {
+            while (Thread.CurrentThread.IsAlive)
+            {
                 byte[] msg = _multicastAdapter.readMulticastGroupMessage();
                 var stream = new MemoryStream(msg);
                 var nodeRegistryMessage = Serializer.Deserialize<NodeRegistryMessage>(stream);
@@ -264,10 +291,12 @@ namespace NodeRegistry.Implementation {
         }
 
 
-        private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage) {
-            switch (nodeRegistryMessage.messageType) {
+        private void AnswerMessage(NodeRegistryMessage nodeRegistryMessage)
+        {
+            switch (nodeRegistryMessage.messageType)
+            {
                 case NodeRegistryMessageType.Answer:
-                OnAnswerMessage(nodeRegistryMessage);
+                    OnAnswerMessage(nodeRegistryMessage);
                     break;
                 case NodeRegistryMessageType.Join:
                     OnJoinMessage(nodeRegistryMessage);
@@ -310,8 +339,9 @@ namespace NodeRegistry.Implementation {
         }
 
 
-        private void OnAnswerMessage(NodeRegistryMessage nodeRegistryMessage) {
-             //add answer node to list
+        private void OnAnswerMessage(NodeRegistryMessage nodeRegistryMessage)
+        {
+            //add answer node to list
             _activeNodeList[nodeRegistryMessage.nodeInformationType.NodeIdentifier] =
                 nodeRegistryMessage.nodeInformationType;
             //start HeartbeatTimer for Node.
@@ -324,17 +354,19 @@ namespace NodeRegistry.Implementation {
 
         }
 
-        private void OnHeartBeatMessage(NodeInformationType nodeInformationType) {
-            
-            if (_heartBeatTimers.ContainsKey(nodeInformationType)) {
+        private void OnHeartBeatMessage(NodeInformationType nodeInformationType)
+        {
+
+            if (_heartBeatTimers.ContainsKey(nodeInformationType))
+            {
 
                 var timer = _heartBeatTimers[nodeInformationType];
-
+                Logger.Debug("Got HeartbeatMsg for Node " + nodeInformationType + ". Reset Timer.");
                 timer.Stop();
-                timer.Interval = _heartBeatInterval*10;
+                timer.Interval = _heartBeatInterval * 10;
                 timer.Start();
-
-             }
+                Logger.Debug(" Reset for " + nodeInformationType + " done.");
+            }
             //unkown node add to list and start timer
             else
             {
@@ -342,22 +374,24 @@ namespace NodeRegistry.Implementation {
                 var timer = GetNewTimerForNodeEntry(nodeInformationType);
                 _heartBeatTimers[nodeInformationType] = timer;
                 timer.Start();
-                
+
             }
         }
 
 
-        private Timer GetNewTimerForNodeEntry(NodeInformationType nodeInformation) {
-            var timer = new Timer(_heartBeatInterval*10);
+        private Timer GetNewTimerForNodeEntry(NodeInformationType nodeInformation)
+        {
+            var timer = new Timer(_heartBeatInterval * 10);
             timer.AutoReset = false;
             //add event to timer
-            timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args) {
-                Console.WriteLine("fire remove event");
+            timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args)
+            {
+                Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
                 _activeNodeList.Remove(nodeInformation.NodeIdentifier);
                 _heartBeatTimers.Remove(nodeInformation);
 
             }
-                
+
                 );
 
             return timer;
@@ -366,11 +400,23 @@ namespace NodeRegistry.Implementation {
         /// <summary>
         /// check if all active nodes are still up. Hopefully that HartBeat wont bleed like Open SSL.
         /// </summary>
-        private void HeartBeat() {
-            while (Thread.CurrentThread.IsAlive) {
-                Thread.Sleep(_heartBeatInterval);
-                _multicastAdapter.SendMessageToMulticastGroup(
-                    NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation));
+        private void HeartBeat()
+        {
+            while (Thread.CurrentThread.IsAlive)
+            {
+                try
+                {
+                    Thread.Sleep(_heartBeatInterval);
+                    _multicastAdapter.SendMessageToMulticastGroup(
+                        NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation)
+                        );
+                }
+                catch (ThreadInterruptedException exception)
+                {
+
+
+                }
+
             }
         }
 
