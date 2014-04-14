@@ -1,7 +1,5 @@
 ﻿namespace NodeRegistry.Implementation.Messages {
-    
-    
-    public enum NodeRegistryMessageType {
+     public enum NodeRegistryMessageType {
         Join,
         Leave,
         Answer,
