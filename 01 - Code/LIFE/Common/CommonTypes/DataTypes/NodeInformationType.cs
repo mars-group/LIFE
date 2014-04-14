@@ -1,10 +1,14 @@
-﻿using System.Text;
+﻿using System;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
 using CommonTypes.Types;
 using ProtoBuf;
 
-namespace CommonTypes.DataTypes {
+namespace CommonTypes.DataTypes
+{
     [ProtoContract]
-    public class NodeInformationType {
+    public class NodeInformationType : IComparable
+    {
         [ProtoMember(1)]
         public NodeType NodeType { get; private set; }
 
@@ -15,16 +19,18 @@ namespace CommonTypes.DataTypes {
         public NodeEndpoint NodeEndpoint { get; private set; }
 
 
-        private NodeInformationType() {}
+        private NodeInformationType() { }
 
-        public NodeInformationType(NodeType nodeType, string nodeIdentifier, NodeEndpoint nodeEndpoint) {
+        public NodeInformationType(NodeType nodeType, string nodeIdentifier, NodeEndpoint nodeEndpoint)
+        {
             NodeType = nodeType;
             NodeIdentifier = nodeIdentifier;
             NodeEndpoint = nodeEndpoint;
         }
 
 
-        public override string ToString() {
+        public override string ToString()
+        {
             var sb = new StringBuilder();
 
             return
@@ -32,18 +38,26 @@ namespace CommonTypes.DataTypes {
                     .ToString();
         }
 
-       
-        public override bool Equals(object obj) {
+
+        public override bool Equals(object obj)
+        {
             var type = obj as NodeInformationType;
-            if (type != null) {
+            if (type != null)
+            {
                 var otherNodeInfo = type;
                 return (otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType));
             }
             return false;
         }
 
-        public override int GetHashCode() {
-            return NodeIdentifier.GetHashCode() * NodeType.GetHashCode() *347;
+        public override int GetHashCode()
+        {
+            return NodeIdentifier.GetHashCode() * NodeType.GetHashCode() * 347;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return NodeIdentifier.CompareTo((obj as NodeInformationType).NodeIdentifier);
         }
     }
 }
