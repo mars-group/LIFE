@@ -364,10 +364,10 @@ namespace NodeRegistry.Implementation
             {
 
                 var timer = _heartBeatTimers[nodeInformationType];
-                Console.WriteLine("Got HeartbeatMsg for Node " + nodeInformationType + ". Reset Timer.");
+                Logger.Debug("Got HeartbeatMsg for Node " + nodeInformationType + ". Reset Timer.");
                 timer.Stop();
                 timer.Start();
-                Console.WriteLine(" Reset for " + nodeInformationType + " done.");
+                Logger.Debug(" Reset for " + nodeInformationType + " done.");
             }
             //unkown node add to list and start timer
             else
@@ -388,7 +388,7 @@ namespace NodeRegistry.Implementation
             //add event to timer
             timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args)
             {
-               Console.WriteLine("Timer for " + nodeInformation + " expired. Deleting node.");
+               Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
                 _activeNodeList.Remove(nodeInformation.NodeIdentifier);
                 _heartBeatTimers.Remove(nodeInformation);
 
