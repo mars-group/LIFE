@@ -1,7 +1,9 @@
 ﻿using System;
+using CommonTypes.TransportTypes;
 
 namespace SMConnector.TransportTypes
 {
+    [Serializable]
     public class TModelDescription : IEquatable<TModelDescription> {
         public string Name { get; private set; }
 
@@ -18,6 +20,7 @@ namespace SMConnector.TransportTypes
             this.Status = new TStatusUpdate(status);
         }
 
+        public TModelDescription() { }
 
 
         #region Object contracts

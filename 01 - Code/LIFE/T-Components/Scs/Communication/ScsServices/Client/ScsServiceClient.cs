@@ -60,7 +60,7 @@ namespace Hik.Communication.ScsServices.Client {
             get { return _requestReplyMessenger.Timeout; }
             set { _requestReplyMessenger.Timeout = value; }
         }
-
+        
         #endregion
 
         #region Private fields

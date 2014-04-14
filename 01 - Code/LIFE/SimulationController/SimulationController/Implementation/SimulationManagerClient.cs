@@ -1,4 +1,8 @@
-﻿namespace SimulationController.Implementation
+﻿using System;
+using System.Linq;
+using CommonTypes.Types;
+
+namespace SimulationController.Implementation
 {
     using System.Collections.Generic;
 
@@ -20,14 +24,15 @@
                 new ScsTcpEndPoint(newnode.NodeEndpoint.IpAddress, newnode.NodeEndpoint.Port));
 
             simManagerClient.Connect();
+            
 
-            this._simManager = simManagerClient.ServiceProxy;
+            _simManager = simManagerClient.ServiceProxy;
 
 
         }
 
         public ICollection<TModelDescription> GetAllModels() {
-            return this._simManager.GetAllModels();
+            return _simManager.GetAllModels();
         }
 
         public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {

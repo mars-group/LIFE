@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -270,7 +271,9 @@ namespace Hik.Communication.ScsServices.Service {
                         RemoteException = exception
                     });
             }
-            catch {}
+            catch (Exception ex) {
+                throw;
+            }
         }
 
         /// <summary>
@@ -404,6 +407,7 @@ namespace Hik.Communication.ScsServices.Service {
             /// <param name="sender"></param>
             /// <param name="e"></param>
             public static void CacheableObject_OnClientDisconnected(object sender, ServerClientEventArgs e) {
+                if (_clients == null) return;
                 if (_clients.ContainsKey(e.Client.ClientId)) _clients.Remove(e.Client.ClientId);
             }
 

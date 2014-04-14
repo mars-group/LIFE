@@ -6,9 +6,13 @@ angular.module('marsmissionControlApp')
   .controller('MarscontrolCtrl', function ($scope, $http, $timeout) {
 
 
-        $http.get('/api/marscontrol/').success(function(models) {
-            $scope.models = models;
-        });
+        $http.get('/api/marscontrol/')
+            .success(function(models) {
+                $scope.models = models;
+            })
+            .error(function(error){
+                $scope.error = error;
+            });
 
         (function refreshNodes() {
             $http.get('/api/marscontrol/nodes').success(function(nodes) {
