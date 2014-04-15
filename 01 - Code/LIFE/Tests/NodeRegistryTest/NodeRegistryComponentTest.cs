@@ -262,8 +262,42 @@ namespace NodeRegistryTest
         }
 
         [Test]
-        public void FireLeaveEventTest()
-        {
+        public void FireLeaveEventTest() {
+
+            var localListenPort = _listenStartPortSeed;
+            _listenStartPortSeed++;
+
+            var localSendPortStartSeed = _sendingStartPortSeed;
+            _sendingStartPortSeed++;
+
+            var otherNodeInfo = new NodeInformationType(NodeType.LayerContainer, "AllOfMyHate", new NodeEndpoint("1270.0.0.1", 34567));
+
+            var localMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig("224.111.11.99", localListenPort, _sendingStartPortSeed, 4), new MulticastSenderConfig());
+
+            var localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter,
+                new NodeRegistryConfig(
+                    new NodeInformationType(NodeType.LayerContainer, "motivationBurst",
+                        new NodeEndpoint("1270.0.0.1", 44567)), false, 400));
+
+            bool leaveEventFired = false;
+
+            localNodeRegistry.SubscribeForNodeDisconnected(delegate(NodeInformationType nodeInformation) {
+                leaveEventFired = true;
+                Console.WriteLine("leave event was fired");
+
+            }, otherNodeInfo);
+
+            var otherNodeReg = new NodeRegistryComponent(localMulticastAdapter,
+                new NodeRegistryConfig(otherNodeInfo, false, 300));
+
+            otherNodeReg.LeaveCluster();
+          
+
+            Thread.Sleep(300);
+
+            Assert.True( leaveEventFired);
+
+
 
         }
 
