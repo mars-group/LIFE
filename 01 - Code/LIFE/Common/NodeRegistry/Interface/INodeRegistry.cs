@@ -57,7 +57,6 @@ namespace NodeRegistry.Interface {
         /// </summary>
         void ShutDownNodeRegistry();
 
-        NodeRegistryConfig GetConfig();
 
     }
 }

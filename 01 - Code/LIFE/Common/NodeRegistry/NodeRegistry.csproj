@@ -58,12 +58,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\Messages\NodeRegistryMessageFactory.cs" />
-    <Compile Include="Implementation\Messages\NodeRegistryMessage.cs" />
+    <Compile Include="Implementation\Messages\AbstractNodeRegistryMessage.cs" />
+    <Compile Include="Implementation\Messages\NodeRegistryHeartBeatMessage.cs" />
+    <Compile Include="Implementation\Messages\Factory\NodeRegistryMessageFactory.cs" />
+    <Compile Include="Implementation\Messages\NodeRegistryConnectionInfoMessage.cs" />
     <Compile Include="Implementation\Messages\NodeRegistryMessageType.cs" />
     <Compile Include="Implementation\NodeRegistryComponent.cs" />
-    <Compile Include="Interface\NodeRegistryConfig.cs" />
-    <Compile Include="Implementation\NodeRegistryUseCase.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryEventHandlerUseCase.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryNodeManagerUseCase.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryHeartBeatUseCase.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryNetworkUseCase.cs" />
+    <Compile Include="Interface\Config\NodeRegistryConfig.cs" />
     <Compile Include="Interface\INodeRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

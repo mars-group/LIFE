@@ -1,54 +1,98 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom;
+using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-
+using Hik.Communication.ScsServices.Communication;
 using MulticastAdapter.Interface;
+using NodeRegistry.Implementation.UseCases;
 using NodeRegistry.Interface;
 
 namespace NodeRegistry.Implementation
 {
-    public class NodeRegistryComponent : INodeRegistry
-    {
-        private readonly INodeRegistry _nodeRegistryUseCase;
+    public class NodeRegistryComponent : INodeRegistry {
+
+        private NodeRegistryEventHandlerUseCase _eventHandlerUseCase;
+        private NodeRegistryHeartBeatUseCase _heartBeatUseCase;
+        private NodeRegistryNetworkUseCase _networkUseCase;
+        private NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
+        private IMulticastAdapter _multicastAdapter;
+
+        private NodeRegistryConfig _config;
+
+
 
         public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config) {
-            _nodeRegistryUseCase = new NodeRegistryUseCase(multicastAdapter, config);
+            _config = config;
+
+            NodeInformationType locaNodeInformation = ParseNodeInformationTypeFromConfig();
+
+            _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
+            _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
+            _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation, config.HeartBeatInterval, multicastAdapter );
+            _networkUseCase = new NodeRegistryNetworkUseCase(_nodeManagerUseCase, _heartBeatUseCase, locaNodeInformation, config.AddMySelfToActiveNodeList, multicastAdapter);
+          
+            _multicastAdapter = multicastAdapter;
+
+
+          
         }
 
         public List<NodeInformationType> GetAllNodes() {
-            return _nodeRegistryUseCase.GetAllNodes();
+            return _nodeManagerUseCase.GetAllNodes();
         }
 
         public List<NodeInformationType> GetAllNodesByType(NodeType nodeType) {
-            return _nodeRegistryUseCase.GetAllNodesByType(nodeType);
+            return _nodeManagerUseCase.GetAllNodesByType(nodeType);
         }
 
         public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler) {
-            _nodeRegistryUseCase.SubscribeForNewNodeConnected(newNodeConnectedHandler);
+            _eventHandlerUseCase.SubscribeForNewNodeConnected(newNodeConnectedHandler);
         }
 
         public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType) {
-            _nodeRegistryUseCase.SubscribeForNewNodeConnectedByType(newNodeConnectedHandler, nodeType);
+            _eventHandlerUseCase.SubscribeForNewNodeConnectedByType(newNodeConnectedHandler, nodeType);
         }
 
         public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node) {
-            _nodeRegistryUseCase.SubscribeForNodeDisconnected(nodeDisconnectedHandler, node);
+            _eventHandlerUseCase.SubscribeForNodeDisconnected(nodeDisconnectedHandler, node);
         }
 
         public void LeaveCluster() {
-            _nodeRegistryUseCase.LeaveCluster();
+            _networkUseCase.LeaveCluster();
         }
 
         public void JoinCluster() {
-            _nodeRegistryUseCase.JoinCluster();
+           _networkUseCase.JoinCluster();
         }
 
         public void ShutDownNodeRegistry() {
-            _nodeRegistryUseCase.ShutDownNodeRegistry();
+            _networkUseCase.Shutdown();
+            _heartBeatUseCase.Shutdow();
+            _multicastAdapter.CloseSocket();
         }
 
-        public NodeRegistryConfig GetConfig() {
-            return _nodeRegistryUseCase.GetConfig();
+     
+
+        private NodeInformationType ParseNodeInformationTypeFromConfig()
+        {
+            return new NodeInformationType(
+                ParseNodeTypeFromConfig(),
+                _config.NodeIdentifier,
+                ParseNodeEndpointFromConfig()
+                );
         }
+
+        private NodeEndpoint ParseNodeEndpointFromConfig()
+        {
+            return new NodeEndpoint(_config.NodeEndPointIP, _config.NodeEndPointPort);
+        }
+
+        private NodeType ParseNodeTypeFromConfig()
+        {
+            return _config.NodeType;
+        }
+
+
+
     }
 }

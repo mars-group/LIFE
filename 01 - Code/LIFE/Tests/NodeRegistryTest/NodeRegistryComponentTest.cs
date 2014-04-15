@@ -118,6 +118,8 @@ namespace NodeRegistryTest
 
             localNodeRegistry.LeaveCluster();
 
+            Thread.Sleep(200);         
+
             Assert.True(!localNodeRegistry.GetAllNodes().Contains(localNodeInfo));
 
             localNodeRegistry.ShutDownNodeRegistry();
@@ -192,20 +194,21 @@ namespace NodeRegistryTest
             var localMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig("224.2.22.222", localListenPort, localSendingPort, 4), new MulticastSenderConfig());
 
             var localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation.NodeType, localNodeInformation.NodeIdentifier, localNodeInformation.NodeEndpoint.IpAddress, localNodeInformation.NodeEndpoint.Port, true));
+            
 
-            localNodeRegistry.JoinCluster();
 
             Thread.Sleep(300);
 
             var nodeList = localNodeRegistry.GetAllNodes();
 
             Assert.True(nodeList.Contains(localNodeInformation));
-
+            
             localNodeRegistry.ShutDownNodeRegistry();
-
+            
+            
+            
             localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation.NodeType, localNodeInformation.NodeIdentifier, localNodeInformation.NodeEndpoint.IpAddress, localNodeInformation.NodeEndpoint.Port, false));
-           localNodeRegistry.JoinCluster();
-
+           
             Thread.Sleep(300);
 
             nodeList = localNodeRegistry.GetAllNodes();
@@ -213,7 +216,6 @@ namespace NodeRegistryTest
             Assert.True(!nodeList.Contains(localNodeInformation));
 
             localNodeRegistry.ShutDownNodeRegistry();
-
         }
 
 
