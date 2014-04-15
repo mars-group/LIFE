@@ -22,7 +22,7 @@
     using SMConnector.TransportTypes;
 
     public class SimulationControllerUseCase : ISimulationManager {
-        private ISimulationManager _simulationManagerClient;
+		private SimulationManagerClient _simulationManagerClient;
 
         private readonly INodeRegistry _nodeRegistry;
 
@@ -40,49 +40,86 @@
 
             _nodeRegistry = new NodeRegistryUseCase(multiCastAdapter, config.NodeRegistryConfig);
 
-            NodeInformationType simManagerNode = null;
-            while (simManagerNode == null) {
-                simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
-
-            }
-            _isConnected = true;
-            _simulationManagerClient = new SimulationManagerClient(simManagerNode);
-            /*else {
+			// check if a SimManager is already present, use it, or suspend usage if not present.
+			if (!SetupSimManagerNode()) {
                 _nodeRegistry.SubscribeForNewNodeConnectedByType(
                     OnNewSimManagerConnected,
                     NodeType.SimulationManager);
             }
-             * */
+            
         }
+
+		private bool SetupSimManagerNode(){
+			var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
+
+			if (simManagerNode != null) {
+				_isConnected = true;
+				_simulationManagerClient = new SimulationManagerClient(simManagerNode);
+				_nodeRegistry.SubscribeForNodeDisconnected (OnNodeDisconnected, simManagerNode);
+				return true;
+			}
+			return false;
+		}
 
         private void OnNewSimManagerConnected(NodeInformationType newnode) {
             _simulationManagerClient = new SimulationManagerClient(newnode);
             _isConnected = true;
         }
 
+		private void OnNodeDisconnected (NodeInformationType oldNode)
+		{
+			// disconnect and clean up current client
+			_simulationManagerClient.Dispose ();
+
+			// try to get new SimManagerNode
+			if (!SetupSimManagerNode ()) {
+				// didn't work, lets reset state variables :(
+				_isConnected = false;
+				_simulationManagerClient = null;
+			}
+		}
+
         #region ISimulationManager delegates
         public ICollection<TModelDescription> GetAllModels() {
+			if (!_isConnected) {
+				throw new NoSimulationManagerConnectedException ();
+			}
             return this._simulationManagerClient.GetAllModels();
         }
 
         public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {
-            this._simulationManagerClient.StartSimulationWithModel(model, layerContainers, nrOfTicks);
+			if (!_isConnected) {
+				throw new NoSimulationManagerConnectedException ();
+			}
+			this._simulationManagerClient.StartSimulationWithModel(model, layerContainers, nrOfTicks);
         }
 
         public void PauseSimulation(TModelDescription model) {
-            this._simulationManagerClient.PauseSimulation(model);
+			if (!_isConnected) {
+				throw new NoSimulationManagerConnectedException ();
+			}
+			this._simulationManagerClient.PauseSimulation(model);
         }
 
         public void ResumeSimulation(TModelDescription model) {
-            this._simulationManagerClient.ResumeSimulation(model);
+			if (!_isConnected) {
+				throw new NoSimulationManagerConnectedException ();
+			}
+			this._simulationManagerClient.ResumeSimulation(model);
         }
 
         public void AbortSimulation(TModelDescription model) {
-            this._simulationManagerClient.AbortSimulation(model);
+			if (!_isConnected) {
+				throw new NoSimulationManagerConnectedException ();
+			}
+			this._simulationManagerClient.AbortSimulation(model);
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
-            this._simulationManagerClient.SubscribeForStatusUpdate(statusUpdateAvailable);
+			if (!_isConnected) {
+				throw new NoSimulationManagerConnectedException ();
+			}
+			this._simulationManagerClient.SubscribeForStatusUpdate(statusUpdateAvailable);
         }
 
         #endregion

@@ -15,18 +15,25 @@ namespace SimulationController.Implementation
     {
         private readonly ISimulationManager _simManager;
 
+		private readonly IScsServiceClient<ISimulationManager> _simManagerClient;
+
         public SimulationManagerClient(NodeInformationType newnode)
         {
-            var simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
+			_simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
                 new ScsTcpEndPoint(newnode.NodeEndpoint.IpAddress, newnode.NodeEndpoint.Port));
 
-            simManagerClient.Connect();
+			_simManagerClient.Connect();
             
 
-            _simManager = simManagerClient.ServiceProxy;
+			_simManager = _simManagerClient.ServiceProxy;
 
 
         }
+
+		public void Dispose(){
+			_simManagerClient.Dispose ();
+			_simManagerClient.Disconnect();
+		}
 
         public ICollection<TModelDescription> GetAllModels() {
             return _simManager.GetAllModels();
