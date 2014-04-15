@@ -15,16 +15,22 @@ angular.module('marsmissionControlApp')
                 $scope.error = error;
             });
 
-       /* (function refreshNodes() {
+        (function refreshNodes() {
             $http.get('/api/marscontrol/nodes').success(function(nodes) {
                 $scope.nodes = nodes;
                 $scope.promise = $timeout(refreshNodes, 5000);
             });
-        })();*/
+        })();
 
 
         $scope.startModel = function(model){
-            $http.post('/api/marscontrol/startsim', model)
+            var startInformation = {
+                'model': model,
+                'layerContainers': selectedNodes,
+                'nrOfTicks': nrOfTicks
+            };
+
+            $http.post('/api/marscontrol/startsim', startInformation)
                 .success(function(result) {
                 if(result==0){
                     model.Running = true;
