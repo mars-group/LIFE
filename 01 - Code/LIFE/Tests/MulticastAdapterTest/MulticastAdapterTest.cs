@@ -33,7 +33,7 @@ namespace MulticastAdapterTestProject
             Assert.True(true);
 
         }
-
+        /*
         [Test]
         public void SendExcaltyOneMessageTest()
         {
@@ -86,8 +86,7 @@ namespace MulticastAdapterTestProject
 
 
         }
-
-
+*/
 
 
     }
