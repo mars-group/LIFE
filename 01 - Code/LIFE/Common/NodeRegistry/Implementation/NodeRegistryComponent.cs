@@ -31,6 +31,10 @@ namespace NodeRegistry.Implementation
             _nodeRegistryUseCase.SubscribeForNewNodeConnectedByType(newNodeConnectedHandler, nodeType);
         }
 
+        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node) {
+            _nodeRegistryUseCase.SubscribeForNodeDisconnected(nodeDisconnectedHandler, node);
+        }
+
         public void LeaveCluster() {
             _nodeRegistryUseCase.LeaveCluster();
         }

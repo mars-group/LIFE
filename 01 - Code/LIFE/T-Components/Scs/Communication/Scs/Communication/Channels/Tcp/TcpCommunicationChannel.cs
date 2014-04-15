@@ -168,8 +168,9 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
                 //Read more bytes if still running
                 if (_running) _clientSocket.BeginReceive(_buffer, 0, _buffer.Length, 0, ReceiveCallback, null);
             }
-            catch {
+            catch(Exception ex) {
                 Disconnect();
+                throw;
             }
         }
 

@@ -5,6 +5,7 @@
 angular.module('marsmissionControlApp')
   .controller('MarscontrolCtrl', function ($scope, $http, $timeout) {
 
+        $scope.nodes = [];
 
         $http.get('/api/marscontrol/')
             .success(function(models) {
@@ -14,12 +15,12 @@ angular.module('marsmissionControlApp')
                 $scope.error = error;
             });
 
-        (function refreshNodes() {
+       /* (function refreshNodes() {
             $http.get('/api/marscontrol/nodes').success(function(nodes) {
                 $scope.nodes = nodes;
                 $scope.promise = $timeout(refreshNodes, 5000);
             });
-        })();
+        })();*/
 
 
         $scope.startModel = function(model){

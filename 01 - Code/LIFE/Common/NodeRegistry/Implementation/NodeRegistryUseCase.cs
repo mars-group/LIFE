@@ -143,6 +143,11 @@ namespace NodeRegistry.Implementation
         }
 
 
+
+        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node) {
+            throw new NotImplementedException();
+        }
+
         //sends a "leave message" to all nodes in the multicastgroupe/cluster
         public void LeaveCluster()
         {
