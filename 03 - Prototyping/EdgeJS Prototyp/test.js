@@ -1,12 +1,17 @@
 var edge = require('edge');
 
-var meaningOfLife = edge.func({
-    assemblyFile: __dirname + '/NETCode/EdgeJSPrototype/SimulationController/bin/Debug/SimulationController.dll',
-    typeName: 'SimulationController.SimulationManagerComponent',
-    methodName: 'GenerateMeaningOfLife'
-});
 
-meaningOfLife(0, function (error, result) {
+
+var test = edge.func(function () {/*
+  async (input) => {
+        var waitEvent = new ManualResetEventSlim(false);
+        waitEvent.Wait(2500);
+        return 42;
+    }
+*/});
+
+
+test(0, function (error, result) {
     if(error) throw error;
     console.log(result);
-})
+});
