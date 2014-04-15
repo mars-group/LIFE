@@ -108,7 +108,7 @@ namespace NodeRegistryTest
 
             var localNodeInfo = _informationType;
             var localNodeRegistry = new NodeRegistryComponent(multicastAdapter, new NodeRegistryConfig(localNodeInfo.NodeType, localNodeInfo.NodeIdentifier, localNodeInfo.NodeEndpoint.IpAddress, localNodeInfo.NodeEndpoint.Port, true));
-          
+
             //Just to make sure 
             localNodeRegistry.JoinCluster();
 
@@ -118,7 +118,7 @@ namespace NodeRegistryTest
 
             localNodeRegistry.LeaveCluster();
 
-            Thread.Sleep(200);         
+            Thread.Sleep(200);
 
             Assert.True(!localNodeRegistry.GetAllNodes().Contains(localNodeInfo));
 
@@ -184,7 +184,7 @@ namespace NodeRegistryTest
         public void GetNodesListFromNodeRegistry()
         {
             var localNodeInformation = _informationType;
-         
+
             var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
 
@@ -194,7 +194,7 @@ namespace NodeRegistryTest
             var localMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig("224.2.22.222", localListenPort, localSendingPort, 4), new MulticastSenderConfig());
 
             var localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation.NodeType, localNodeInformation.NodeIdentifier, localNodeInformation.NodeEndpoint.IpAddress, localNodeInformation.NodeEndpoint.Port, true));
-            
+
 
 
             Thread.Sleep(300);
@@ -202,13 +202,13 @@ namespace NodeRegistryTest
             var nodeList = localNodeRegistry.GetAllNodes();
 
             Assert.True(nodeList.Contains(localNodeInformation));
-            
+
             localNodeRegistry.ShutDownNodeRegistry();
-            
-            
-            
+
+
+
             localNodeRegistry = new NodeRegistryComponent(localMulticastAdapter, new NodeRegistryConfig(localNodeInformation.NodeType, localNodeInformation.NodeIdentifier, localNodeInformation.NodeEndpoint.IpAddress, localNodeInformation.NodeEndpoint.Port, false));
-           
+
             Thread.Sleep(300);
 
             nodeList = localNodeRegistry.GetAllNodes();
@@ -221,10 +221,11 @@ namespace NodeRegistryTest
 
         //test if a node does not time out while sending heartbeats
         [Test]
-        public void KeepNodeAliveTest() {
-            
-             var localNodeInformation = new NodeInformationType(NodeType.LayerContainer, "localNode", 
-                    new NodeEndpoint("127.0.0.1", 41000));
+        public void KeepNodeAliveTest()
+        {
+
+            var localNodeInformation = new NodeInformationType(NodeType.LayerContainer, "localNode",
+                   new NodeEndpoint("127.0.0.1", 41000));
 
 
             var otherNodeinfo = new NodeInformationType(NodeType.LayerContainer, "otherNodeInfo",
@@ -235,11 +236,11 @@ namespace NodeRegistryTest
 
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
-            
+
             var mcastGrp = "224.3.33.3";
-            
+
             var localMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig(mcastGrp, localListenPort, localSendingPort, 4), new MulticastSenderConfig());
-            var otherMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig(mcastGrp, localListenPort,  localSendingPort, 4), new MulticastSenderConfig() );
+            var otherMulticastAdapter = new MulticastAdapterComponent(new GlobalConfig(mcastGrp, localListenPort, localSendingPort, 4), new MulticastSenderConfig());
 
             var timeout = 500;
 
@@ -252,16 +253,19 @@ namespace NodeRegistryTest
             Assert.True(otherNodeRegistry.GetAllNodes().Contains(localNodeInformation));
 
             //wait for timeout to expire if it was not reset.
-            Thread.Sleep(timeout*10);
+            Thread.Sleep(timeout * 10);
 
             //check if node is still there.
             Assert.True(localNodeRegistry.GetAllNodes().Contains(otherNodeinfo));
             Assert.True(otherNodeRegistry.GetAllNodes().Contains(localNodeInformation));
-            
+
         }
 
+        [Test]
+        public void FireLeaveEventTest()
+        {
 
-
+        }
 
     }
 }

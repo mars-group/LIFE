@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using Hik.Collections;
 using NodeRegistry.Interface;
 
 namespace NodeRegistry.Implementation.UseCases
@@ -22,10 +23,15 @@ namespace NodeRegistry.Implementation.UseCases
         private NewNodeConnected _newSimulationManagerConnectedHandler;
         private NewNodeConnected _newSimulationControllerConnectedHandler;
 
+        private ThreadSafeSortedList<NodeInformationType, NodeDisconnected> _disconnectedNodeEventHandlers;
 
-        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node)
-        {
-            throw new NotImplementedException();
+        public NodeRegistryEventHandlerUseCase() {
+            _disconnectedNodeEventHandlers = new ThreadSafeSortedList<NodeInformationType, NodeDisconnected>();
+        }
+
+
+        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node) {
+            _disconnectedNodeEventHandlers[node] += nodeDisconnectedHandler;
         }
 
         public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler)
@@ -74,7 +80,15 @@ namespace NodeRegistry.Implementation.UseCases
         }
 
         public void NotifyOnNodeLeaveSubsribers(NodeInformationType nodeInformation) {
-           //TODO
+
+            if (_disconnectedNodeEventHandlers.ContainsKey(nodeInformation)) {
+                if (_disconnectedNodeEventHandlers[nodeInformation] != null) {
+                    _disconnectedNodeEventHandlers[nodeInformation].Invoke(nodeInformation);
+                } 
+
+
+            }
+
         }
 
 
