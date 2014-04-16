@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Timers;
 using System.Threading;
@@ -15,9 +16,14 @@ using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Implementation.Messages.Factory;
 using Timer = System.Timers.Timer;
 
+
+[assembly: InternalsVisibleTo("NodeRegistryTest")]
+
 namespace NodeRegistry.Implementation.UseCases
 {
-    class NodeRegistryHeartBeatUseCase
+   
+
+    internal class NodeRegistryHeartBeatUseCase
     {
 
         private NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUseCase;
@@ -30,6 +36,8 @@ namespace NodeRegistry.Implementation.UseCases
 
         private int _heartBeatInterval;
 
+        private int _heartBeatTimeOutMultiplier;
+
         private IMulticastAdapter _multicastAdapter;
 
         private NodeInformationType _localNodeInformation;
@@ -40,11 +48,14 @@ namespace NodeRegistry.Implementation.UseCases
 
 
 
-        public NodeRegistryHeartBeatUseCase(NodeRegistryNodeManagerUseCase nodeRegistryNodeManagerUseCase, NodeInformationType localNodeInformation, int heartBeatInterval, IMulticastAdapter multicastAdapter) {
+        public NodeRegistryHeartBeatUseCase(NodeRegistryNodeManagerUseCase nodeRegistryNodeManagerUseCase, NodeInformationType localNodeInformation, IMulticastAdapter multicastAdapter,  int heartBeatInterval, int heartBeatTimeOutMultiplier = 3)
+        {
 
             Logger = LoggerInstanceFactory.GetLoggerInstance<NodeRegistryHeartBeatUseCase>();
             _nodeRegistryNodeManagerUseCase = nodeRegistryNodeManagerUseCase;
+            
             _heartBeatInterval = heartBeatInterval;
+            _heartBeatTimeOutMultiplier = heartBeatTimeOutMultiplier;
             _multicastAdapter = multicastAdapter;
             _localNodeInformation = localNodeInformation;
 
@@ -62,18 +73,19 @@ namespace NodeRegistry.Implementation.UseCases
 
         public void CreateAndStartTimerForNodeEntry(NodeInformationType nodeInformation)
         {
-            if (!_heartBeatTimers.ContainsKey(nodeInformation))
+            if (!_heartBeatTimers.ContainsKey(nodeInformation) && ! nodeInformation.Equals(_localNodeInformation))
             {
                 _nodeRegistryNodeManagerUseCase.AddNode(nodeInformation);
 
-                var timer = GetNewTimerForNodeEntry(nodeInformation);
+                var timer = CreateNewTimerForNodeEntry(nodeInformation);
                 _heartBeatTimers[nodeInformation] = timer;
                 timer.Start();
-            }           
+            }
         }
 
 
-        public void ResetTimer(String  nodeID, NodeType nodeType) {
+        public void ResetTimer(String nodeID, NodeType nodeType)
+        {
             var nodeInformationStub = new NodeInformationType(nodeType, nodeID, null);
 
             if (_heartBeatTimers.ContainsKey(nodeInformationStub))
@@ -89,10 +101,19 @@ namespace NodeRegistry.Implementation.UseCases
             _heartBeatSenderThread.Interrupt();
         }
 
+        public void DeleteTimerForNodeInformationType(NodeInformationType nodeInformation) {
+            if (_heartBeatTimers.ContainsKey(nodeInformation)) {
 
-        private Timer GetNewTimerForNodeEntry(NodeInformationType nodeInformation)
+                _heartBeatTimers[nodeInformation].Stop();
+                _heartBeatTimers.Remove(nodeInformation);
+            }
+
+        }
+
+
+        private Timer CreateNewTimerForNodeEntry(NodeInformationType nodeInformation)
         {
-            var timer = new Timer(_heartBeatInterval * 10) {AutoReset = false};
+            var timer = new Timer(_heartBeatInterval * _heartBeatTimeOutMultiplier) { AutoReset = false };
             //add event to timer
             timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args)
             {

@@ -38,16 +38,16 @@ namespace RuntimeEnvironment.Implementation {
 
             int i = 0;
             foreach (var nodeInformationType in layerContainers) {
-                _layerContainerClients.Add(
+                _layerContainerClients[i] =
                     new LayerContainerClient(
                         ScsServiceClientBuilder.CreateClient<ILayerContainer>(
-                            nodeInformationType.NodeEndpoint.IpAddress,
+                            nodeInformationType.NodeEndpoint.IpAddress + ":" +
                             nodeInformationType.NodeEndpoint.Port),
                         content,
                         instantiationOrder,
                         i,
-                        TickFinished)
-                    );
+                        TickFinished);
+                    
                 i++;
             }
 

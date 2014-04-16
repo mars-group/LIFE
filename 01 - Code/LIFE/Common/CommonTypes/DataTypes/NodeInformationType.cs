@@ -6,6 +6,7 @@ using ProtoBuf;
 namespace CommonTypes.DataTypes
 {
     [ProtoContract]
+    [Serializable]
     public class NodeInformationType : IComparable
     {
         [ProtoMember(1)]

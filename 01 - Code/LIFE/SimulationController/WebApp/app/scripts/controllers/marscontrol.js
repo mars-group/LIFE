@@ -24,10 +24,17 @@ angular.module('marsmissionControlApp')
 
 
         $scope.startModel = function(model){
+            var selectedNodes = [];
+            angular.forEach($scope.nodes, function(node){
+               if(node.NodeType == "LayerContainer"){
+                   selectedNodes.push(node);
+               }
+            });
+
             var startInformation = {
                 'model': model,
                 'layerContainers': selectedNodes,
-                'nrOfTicks': nrOfTicks
+                'nrOfTicks': null
             };
 
             $http.post('/api/marscontrol/startsim', startInformation)

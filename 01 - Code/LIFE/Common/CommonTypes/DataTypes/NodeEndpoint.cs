@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using ProtoBuf;
 
 namespace CommonTypes.DataTypes {
@@ -6,6 +7,7 @@ namespace CommonTypes.DataTypes {
     ///     The endpoint of a node participating in the LIFE system
     /// </summary>
     [ProtoContract]
+    [Serializable]
     public class NodeEndpoint {
         [ProtoMember(1)]
         public string IpAddress { get; private set; }

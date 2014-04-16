@@ -28,12 +28,10 @@ namespace NodeRegistry.Implementation
 
             _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
             _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
-            _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation, config.HeartBeatInterval, multicastAdapter );
+            _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation, multicastAdapter, config.HeartBeatInterval, config.HeartBeatTimeOutmultiplier);
             _networkUseCase = new NodeRegistryNetworkUseCase(_nodeManagerUseCase, _heartBeatUseCase, locaNodeInformation, config.AddMySelfToActiveNodeList, multicastAdapter);
           
             _multicastAdapter = multicastAdapter;
-
-
           
         }
 
