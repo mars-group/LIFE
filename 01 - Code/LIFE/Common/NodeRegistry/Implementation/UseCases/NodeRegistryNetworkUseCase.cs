@@ -28,10 +28,12 @@ namespace NodeRegistry.Implementation.UseCases
 
         private Thread _listenThread;
 
-        public NodeRegistryNetworkUseCase(NodeRegistryNodeManagerUseCase nodeManagerUseCase, NodeRegistryHeartBeatUseCase heartBeatUseCase, NodeInformationType localNodeInformation, bool addMySelfToActiveNodeList, IMulticastAdapter multicastAdapter)
+        public NodeRegistryNetworkUseCase(NodeRegistryNodeManagerUseCase nodeManagerUseCase, NodeRegistryHeartBeatUseCase heartBeatUseCase,
+            NodeInformationType localNodeInformation, bool addMySelfToActiveNodeList, IMulticastAdapter multicastAdapter)
         {
             _nodeRegistryNodeManagerUse = nodeManagerUseCase;
             _multicastAdapter = multicastAdapter;
+            _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
             _localNodeInformation = localNodeInformation;
             _addMySelfToActiveNodeList = addMySelfToActiveNodeList;
             _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
