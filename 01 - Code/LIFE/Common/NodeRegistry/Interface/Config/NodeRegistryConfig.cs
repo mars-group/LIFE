@@ -12,23 +12,28 @@ namespace NodeRegistry.Interface {
         public bool AddMySelfToActiveNodeList { get; set; }
         public int HeartBeatInterval { get; set; }
 
-        public NodeRegistryConfig(NodeInformationType nodeinfo, bool addMyselfToActiveNodeList, int heartBeatInterval) {
+        public int HeartBeatTimeOutmultiplier { get; set; }
+
+        public NodeRegistryConfig(NodeInformationType nodeinfo, bool addMyselfToActiveNodeList, int heartBeatInterval, int heartbeatTimeoutMultiplier = 3) {
             this.NodeType = nodeinfo.NodeType;
             NodeIdentifier = nodeinfo.NodeIdentifier;
             NodeEndPointIP = nodeinfo.NodeEndpoint.IpAddress;
             NodeEndPointPort = nodeinfo.NodeEndpoint.Port;
             AddMySelfToActiveNodeList = addMyselfToActiveNodeList;
             HeartBeatInterval = heartBeatInterval;
+            HeartBeatTimeOutmultiplier = heartbeatTimeoutMultiplier;
         }
 
         public NodeRegistryConfig(NodeType nodeType, string nodeIdentifier, string nodeEndPointIP, int nodeEndPointPort,
-            bool myselfToActiveNodeList, int heartBeatInterval = 500) {
+            bool myselfToActiveNodeList, int heartBeatInterval = 500, int heartbeatTimeoutMultiplier = 3)
+        {
             NodeType = nodeType;
             NodeIdentifier = nodeIdentifier;
             NodeEndPointPort = nodeEndPointPort;
             NodeEndPointIP = nodeEndPointIP;
             AddMySelfToActiveNodeList = myselfToActiveNodeList;
             HeartBeatInterval = heartBeatInterval;
+            HeartBeatTimeOutmultiplier = heartbeatTimeoutMultiplier;
         }
 
         public NodeRegistryConfig() {
@@ -38,6 +43,7 @@ namespace NodeRegistry.Interface {
             NodeEndPointPort = 60100;
             AddMySelfToActiveNodeList = true;
             HeartBeatInterval = 500;
+            HeartBeatTimeOutmultiplier = 3;
         }
     }
 }

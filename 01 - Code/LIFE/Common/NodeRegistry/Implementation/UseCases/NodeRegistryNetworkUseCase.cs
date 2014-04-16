@@ -26,13 +26,6 @@ namespace NodeRegistry.Implementation.UseCases
         private IMulticastAdapter _multicastAdapter;
         private Boolean _addMySelfToActiveNodeList;
 
-
-        /// <summary>
-        /// Thread that is sending periodically HeartBeatMessages to the cluster.
-        /// </summary>
-        //TODO send heartbeats
-        private Thread _heartBeatSenderThread;
-
         private Thread _listenThread;
 
         public NodeRegistryNetworkUseCase(NodeRegistryNodeManagerUseCase nodeManagerUseCase, NodeRegistryHeartBeatUseCase heartBeatUseCase,
@@ -43,13 +36,12 @@ namespace NodeRegistry.Implementation.UseCases
             _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
             _localNodeInformation = localNodeInformation;
             _addMySelfToActiveNodeList = addMySelfToActiveNodeList;
+            _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
 
             _listenThread = new Thread(Listen);
             _listenThread.Start();
 
             JoinCluster();
-
-
         }
 
         public void JoinCluster()
@@ -77,8 +69,13 @@ namespace NodeRegistry.Implementation.UseCases
                 {
                     byte[] msg = _multicastAdapter.readMulticastGroupMessage();
                     var stream = new MemoryStream(msg);
-                    var nodeRegistryMessage = Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
-                    ComputeMessage(nodeRegistryMessage);
+                    stream.Position = 0;
+
+                    if (stream.Length > 0)
+                    {
+                        var nodeRegistryMessage = Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
+                        ComputeMessage(nodeRegistryMessage);
+                    }
                 }
             }
             catch (ThreadInterruptedException exception)
@@ -107,7 +104,7 @@ namespace NodeRegistry.Implementation.UseCases
                     break;
             }
         }
-        
+
         private void OnJoinMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage)
         {
             //check if the new node is this instance.
@@ -133,6 +130,7 @@ namespace NodeRegistry.Implementation.UseCases
         private void OnLeaveMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage)
         {
             _nodeRegistryNodeManagerUse.RemoveNode(nodeRegistryConnectionInfoMessage.nodeInformationType);
+
         }
 
         private void OnAnswerMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage)
@@ -147,7 +145,7 @@ namespace NodeRegistry.Implementation.UseCases
         private void OnHeartBeatMessage(NodeRegistryHeartBeatMessage heartBeatMessage)
         {
             _nodeRegistryHeartBeatUseCase.ResetTimer(heartBeatMessage.NodeIdentifier, heartBeatMessage.NodeType);
-            
+
         }
 
 
