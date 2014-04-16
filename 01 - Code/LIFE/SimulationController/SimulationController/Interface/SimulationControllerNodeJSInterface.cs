@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using SimulationController.Implementation;
@@ -13,6 +14,8 @@ namespace SimulationController.Interface {
     /// </summary>
     public class SimulationControllerNodeJsInterface {
         public async Task<object> GetSimController(dynamic input) {
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
+
             // In .NET, JavaScript objects are represented as IDictionary<string,object>, 
             // JavaScript arrays as object[], and JavaScript Buffer as byte[]. 
             // Scalar JavaScript values have their corresponding .NET types (int, double, bool, string)
@@ -75,6 +78,19 @@ namespace SimulationController.Interface {
                     return 0;
                 })),
             };
+        }
+    }
+
+    public static class AssemblyResolverFix
+    {
+        //Looks up the assembly in the set of currently loaded assemblies,
+        //and returns it if the name matches. Else returns null.
+        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            foreach (var ass in AppDomain.CurrentDomain.GetAssemblies())
+                if (ass.FullName == args.Name)
+                    return ass;
+            return null;
         }
     }
 }
