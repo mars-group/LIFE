@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{17D440BE-4F39-4A54-B681-DC4FD0B10019}</ProjectGuid>
+    <ProjectGuid>{7AC48378-1CC0-4345-9663-4BE160DC588B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VillageModel</RootNamespace>
-    <AssemblyName>VillageModel</AssemblyName>
+    <RootNamespace>QuadTreeLayer</RootNamespace>
+    <AssemblyName>QuadTreeLayer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,11 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LayerAPI">
-      <HintPath>..\..\..\01 - Code\LIFE\LayerContainer\LayerAPI\bin\Debug\LayerAPI.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,32 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\ChuckAction.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\SearchForTreesAction.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\ChuckWoodPlan.cs" />
-    <Compile Include="Implementaion\Agents\Villager.cs" />
-    <Compile Include="Implementaion\Village.cs" />
-    <Compile Include="Interface\Configuration\VillagerConfig.cs" />
+    <Compile Include="Implementation\QuadTreeLayer.cs" />
+    <Compile Include="Implementation\QuadTreeLayerNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\..\01 - Code\LIFE\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
-      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
-      <Name>ConfigurationAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CommonModelTypes\CommonModelTypes.csproj">
-      <Project>{fdd44da5-db8b-4183-a808-dba17b6fc43d}</Project>
-      <Name>CommonModelTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ForestModel\ForestModel.csproj">
-      <Project>{562d0899-a821-4d69-ac37-970cba1d1afe}</Project>
-      <Name>ForestModel</Name>
+    <ProjectReference Include="..\..\..\01 - Code\LIFE\LayerContainer\LayerAPI\LayerAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LayerAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\QuadTreeLib\QuadTreeLib.csproj">
       <Project>{7e471417-3503-4a9d-8769-f5c535e21b2c}</Project>
       <Name>QuadTreeLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interface\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,13 +6,21 @@ using System.Threading.Tasks;
 
 namespace VillageModel.Interface.Configuration
 {
-    class VillagerConfig {
+    class VillagerConfig
+    {
         public int DailyWoodUsage;
-        public float WayPointReachedDistance;
+        public int ChuckingAreaSize;
 
-        public VillagerConfig() {
-            WayPointReachedDistance = 2.5f;
+        public VillagerConfig(int dailyWoodUsage, int chuckingAreaSize)
+        {
+            DailyWoodUsage = dailyWoodUsage;
+            ChuckingAreaSize = chuckingAreaSize;
+        }
+
+        public VillagerConfig()
+        {
             DailyWoodUsage = 100;
+            ChuckingAreaSize = 10;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using CommonModelTypes.Interface.AgentObjects.GoalForming;
+using CommonModelTypes.Interface.Datatypes;
 using CommonModelTypes.Interface.SimObjects;
 using ForestModel.Implementation.Agents;
+using ForestModel.Interface;
 using VillageModel.Implementaion.Agents.VillagerUseCase;
 using VillageModel.Implementaion.Agents.VillagerUseCase.Actions;
 using VillageModel.Interface.Configuration;
@@ -9,59 +11,35 @@ using VillageModel.Interface.Configuration;
 namespace VillageModel.Implementaion.Agents
 {
     internal class ChuckWoodPlan : IPlan
+    {
 
-{
-
-    private MoveToAction _chuckingArea;
-    private VillagerConfig _config;
-    private Villager _villager;
-    private TreeAgent[] _chuckingTargets;
-    private bool _reachedArea;
+        private Area _chuckingArea;
+        private VillagerConfig _config;
+        private Village _village;
+        private TreeAgent[] _chuckingTargets;
+        private ForestLayerContainer _forestLayer;
 
 
-    private ChuckWoodPlan(Vector3D chuckingAreaPosition, VillagerConfig config) {
-        this._chuckingArea = new MoveToAction(chuckingAreaPosition);
-        _config = config;
-        _chuckingTargets = new TreeAgent[0];
-        _reachedArea = false;
-    }
+
+        private ChuckWoodPlan(VillagerConfig config)
+        {
+            _config = config;
+            _chuckingTargets = new TreeAgent[0];
+        }
 
         private ITickAction ChuckWoodUseCasePlan()
         {
 
-            //if not at are move to move to it
-            if (! _chuckingArea.AtWayPoint() || ! _reachedArea)
-            {
-                //if i was once at the area set flag
-                _reachedArea = _chuckingArea.AtWayPoint();
-                return _chuckingArea;
-            }
 
-            // at this point the agent has reached the chucking are.
 
-            //which trees to Chuck, thats the question
-            if (_chuckingTargets.Length == 0)
-            {
-                //Todo delegate?
-                //find trees
-                return new SearchForTreesAction(out _chuckingTargets);
-            }
-            var chukcingTree = _chuckingTargets.First();
-            //have spottet some trees to Chuck
-            var treePostion =  new MoveToAction(chukcingTree.Position);
-            
-            //move to tree
-            if (! treePostion.AtWayPoint()) return treePostion;
 
-            //TODO: at tree....CHUCK IT
-
-            return null;
         }
 
 
 
 
-        public ITickAction GetNextAction() {
+        public ITickAction GetNextAction()
+        {
             return ChuckWoodUseCasePlan();
         }
     }

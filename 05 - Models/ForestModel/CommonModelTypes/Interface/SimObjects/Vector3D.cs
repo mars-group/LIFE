@@ -4,17 +4,17 @@ namespace CommonModelTypes.Interface.SimObjects
 {
     public class Vector3D
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
-        public Vector3D(int X, int Y)
+        public Vector3D(double X, double Y)
         {
             this.X = X;
             this.Y = Y;
             this.Z = 0;
         }
-        public Vector3D(int X, int Y, int Z)
+        public Vector3D(double X, double Y, double Z)
         {
             this.X = X;
             this.Y = Y;
