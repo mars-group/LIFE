@@ -1,14 +1,30 @@
-﻿namespace CommonModelTypes.Interface.SimObjects
+﻿using System.Drawing;
+using QuadTreeLib;
+
+namespace CommonModelTypes.Interface.SimObjects
 {
-    public abstract class SimObject
+    public abstract class SimObject : IHasRect
     {
         public int ID { get; private set; }
-        public Vector3D Position { get; set; }
+        private RectangleF _bounds;
 
-        public SimObject(int id, Vector3D position) {
+
+        public SimObject(int id, Point point, int size)
+        {
             ID = id;
-            Position = position;
+          _bounds = new RectangleF(point.X, point.Y, size, size);
         }
 
+        public SimObject(int id, Point point, int width, int height)
+        {
+            ID = id;
+            _bounds = new RectangleF(point.X, point.Y, width, height) ;
+        }
+
+        public RectangleF Rectangle
+        {
+            get { return _bounds; }
+            private set { }
+        }
     }
 }
