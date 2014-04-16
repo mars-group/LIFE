@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using CommonTypes.DataTypes;
+using CommonTypes.Types;
 using SimulationController.Implementation;
 using SMConnector.TransportTypes;
 
@@ -14,6 +15,9 @@ namespace SimulationController.Interface {
     /// </summary>
     public class SimulationControllerNodeJsInterface {
         public async Task<object> GetSimController(dynamic input) {
+
+            // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
+            // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
 
             // In .NET, JavaScript objects are represented as IDictionary<string,object>, 
@@ -36,18 +40,34 @@ namespace SimulationController.Interface {
                         var modelDescr = (IDictionary<string, dynamic>) payload["model"];
 
                         // object[] containing NodeInformationTypes
-                        var layerContainers = (dynamic[]) payload["layerContainers"];
+                        var layerContainers = (object[]) payload["layerContainers"];
 
-                        var containers = layerContainers.Select(
-                            elem => new NodeInformationType(elem.NodeType, elem.NodeIdentifier,
-                                new NodeEndpoint(elem.NodeEndpoint.IpAddress, elem.NodeEndpoint.IpAddress))
-                            ).ToList();
+                        var containers = new List<NodeInformationType>();
+
+                        foreach (IDictionary<string, dynamic> elem in layerContainers)
+                        {
+                            NodeType nodeType;
+                            NodeType.TryParse(elem["NodeType"], out nodeType);
+
+                            var endpointDict = (IDictionary<string, dynamic>) elem["NodeEndpoint"];
+                            var nodeEndpoint = new NodeEndpoint((string)endpointDict["IpAddress"], (int)endpointDict["Port"]);
+
+                            containers.Add(new NodeInformationType(nodeType, elem["NodeIdentifier"], nodeEndpoint));
+                        }
+
+                        int? ticks = null;
+                        if (payload["nrOfTicks"] != null) {
+                            ticks = (int)payload["nrOfTicks"];
+                        }
+
+                        var statusUpdatedict = (IDictionary<string, dynamic>) modelDescr["Status"];
 
                         simController.StartSimulationWithModel(
-                            new TModelDescription(modelDescr["Name"], modelDescr["Description"], modelDescr["Status"],
-                                modelDescr["Running"]),
+                            new TModelDescription(modelDescr["Name"], modelDescr["Description"], 
+                                statusUpdatedict["StatusMessage"],
+                                (bool)modelDescr["Running"]),
                             containers,
-                            i.nrOfTicks
+                            ticks
                             );
 
                         return 0;
