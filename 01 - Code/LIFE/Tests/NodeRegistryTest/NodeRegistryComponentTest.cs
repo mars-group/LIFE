@@ -315,6 +315,11 @@ namespace NodeRegistryTest {
             Thread.Sleep(timeout*4);
 
             Assert.True(! localNodeRegistry.GetAllNodes().Contains(otherNodeinfo));
+
+
+            otherNodeRegistry.ShutDownNodeRegistry();
+            localNodeRegistry.ShutDownNodeRegistry();
+
         }
 
         [Test]
@@ -364,6 +369,12 @@ namespace NodeRegistryTest {
             Thread.Sleep(300);
 
             Assert.True(leaveEventFired);
+            
+            localNodeRegistry.ShutDownNodeRegistry();
+            otherNodeReg.ShutDownNodeRegistry();
+            
+
+
         }
     }
 }
