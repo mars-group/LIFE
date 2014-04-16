@@ -21,9 +21,13 @@ namespace NodeRegistry.Implementation.Messages
         [ProtoMember(3)]
         public NodeRegistryMessageType MessageType;
 
-        public AbstractNodeRegistryMessage(){}
-        
-        protected AbstractNodeRegistryMessage(NodeRegistryMessageType messageType) {
+        public AbstractNodeRegistryMessage()
+        {
+            
+        }
+
+        protected AbstractNodeRegistryMessage(NodeRegistryMessageType messageType)
+        {
             MessageType = messageType;
         }
     }
