@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Interface\AgentObjects\GoalForming\IPlan.cs" />
     <Compile Include="Interface\AgentObjects\GoalForming\ITickAction.cs" />
+    <Compile Include="Interface\Datatypes\Area.cs" />
     <Compile Include="Interface\SimObjects\Vector3D.cs" />
     <Compile Include="Interface\AgentObjects\AbstractAgent.cs" />
     <Compile Include="Interface\SimObjects\SimObject.cs" />
@@ -53,6 +55,10 @@
     <ProjectReference Include="..\..\..\01 - Code\LIFE\LayerContainer\LayerAPI\LayerAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QuadTreeLib\QuadTreeLib.csproj">
+      <Project>{7e471417-3503-4a9d-8769-f5c535e21b2c}</Project>
+      <Name>QuadTreeLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

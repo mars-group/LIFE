@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AppSettingsManager">
-      <HintPath>..\..\01 - Code\LIFE\Common\ConfigurationAdapter\bin\Debug\AppSettingsManager.dll</HintPath>
-    </Reference>
     <Reference Include="LayerAPI">
       <HintPath>..\..\..\01 - Code\LIFE\LayerContainer\LayerAPI\bin\Debug\LayerAPI.dll</HintPath>
     </Reference>
@@ -48,7 +45,6 @@
     <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\ChuckAction.cs" />
     <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\SearchForTreesAction.cs" />
     <Compile Include="Implementaion\Agents\VillagerUseCase\ChuckWoodPlan.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\MoveToAction.cs" />
     <Compile Include="Implementaion\Agents\Villager.cs" />
     <Compile Include="Implementaion\Village.cs" />
     <Compile Include="Interface\Configuration\VillagerConfig.cs" />
@@ -67,6 +63,10 @@
     <ProjectReference Include="..\ForestModel\ForestModel.csproj">
       <Project>{562d0899-a821-4d69-ac37-970cba1d1afe}</Project>
       <Name>ForestModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QuadTreeLib\QuadTreeLib.csproj">
+      <Project>{7e471417-3503-4a9d-8769-f5c535e21b2c}</Project>
+      <Name>QuadTreeLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

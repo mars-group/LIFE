@@ -16,7 +16,7 @@ namespace VillageModel.Implementaion.Agents
         private int _dailyWoodUsage;
         private VillagerConfig _config;
         private ChuckWoodPlan _chuckWoodPlan;
-        private MoveToAction _pathHome;
+
         #endregion
 
         #region constructors
@@ -28,7 +28,7 @@ namespace VillageModel.Implementaion.Agents
             _homeVillage = homeVillage;
             _woodStorage = 0;
             _dailyWoodUsage = _config.DailyWoodUsage;
-            _pathHome = new MoveToAction(_homeVillage.Position);
+            _pathHome = new Area(_homeVillage.Position);
         }
         #endregion
 
@@ -37,11 +37,6 @@ namespace VillageModel.Implementaion.Agents
         {
             if (_woodStorage > 0)
             {
-                // if not at village go back to village
-                if (AtWayPoint(_homeVillage.Position))
-                {
-                    _pathHome.Execute();
-                }
                 //sit in the village and do stuff consume wood
                 _woodStorage = _woodStorage - _dailyWoodUsage;
             }
