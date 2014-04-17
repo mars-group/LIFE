@@ -13,8 +13,6 @@ namespace ForestModel.Implementation
     public class ForestPatch : QuadTreeNode<ForestPatch>, IHasRect
     {
 
-
-        private RectangleF _bounds;
         private List<TreeAgent> _trees;
 
         public List<TreeAgent> Trees
@@ -23,17 +21,22 @@ namespace ForestModel.Implementation
             set { _trees = value; }
         }
 
-
         public ForestPatch(PointF p, int size)
             : base(new RectangleF(p.X, p.Y, size, size))
         {
-            _bounds = new RectangleF(p.X, p.Y, size, size);
+          _trees = new List<TreeAgent>();
+        }
+
+        public ForestPatch(PointF p, int height, int witdh)
+            : base(new RectangleF(p.X, p.Y, height, witdh))
+        {
+          
             _trees = new List<TreeAgent>();
         }
-        
+
         public RectangleF Rectangle
         {
-            get { return _bounds; }
+            get { return base.Bounds; }
             private set { }
         }
 

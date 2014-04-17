@@ -33,27 +33,34 @@ namespace ForestModel.Interface
         }
 
         
-        public void AddTree(TreeAgent tree)
+        public void AddTreeAtPostion(RectangleF pos , TreeAgent tree)
         {
-            GetPatchForPosition(tree.Rectangle).addTreeToPatch(tree);
+            GetPatchForPosition(pos).addTreeToPatch(tree);
         }
 
         //TODO: es kann sein das mehr als ein Patch zurück kommt.
         public ForestPatch GetPatchForPosition(RectangleF patchPostion)
         {
             var patch =  _environment.Query(patchPostion).FirstOrDefault();
-
-            if (patch == null)
-            {
-                patch = new ForestPatch(new PointF(patchPostion.Location.X, patchPostion.Location.Y), _config.PatchHeight);
-
-            }
+            
+            return patch;
 
         }
 
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
+            
+            for (int i = 0; i <_config.WorldHeight; i += _config.PatchHeight)
+            {
+                for (int j = 0; j < _config.WorldWidth; j += _config.PatchWidth)
+                {
+                    _environment.Insert(new ForestPatch(new PointF(i, j), _config.PatchHeight, _config.PatchWidth));        
+                }
+            }
+
+
             throw new NotImplementedException();
+            
         }
     }
 }

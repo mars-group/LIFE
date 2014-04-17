@@ -20,7 +20,8 @@ namespace ForestModel.Implementation.Agents
         #endregion
 
         #region constructors
-        public TreeAgent(int id,  Vector3D position, float diameter, float height) : base(id, position)
+        public TreeAgent(int id, float diameter, float height)
+            : base(id)
         {
             _config = Configuration.Load<TreeAgentConfiguration>();
 
@@ -75,7 +76,7 @@ namespace ForestModel.Implementation.Agents
             _height = _height + _growthCoefficient * (_maxHeight - _height);
         }
         #endregion
-        
+
 
     }
 }

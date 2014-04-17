@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using CommonModelTypes.Interface;
 using CommonModelTypes.Interface.SimObjects;
 using ForestModel.Interface;
@@ -14,13 +16,15 @@ namespace VillageModel.Implementaion
     public class Village : SimObject
     {
 
+        //TODO auf quardtree anpassen
+
         public RectangleF InfluenceRadius { get; private set; }
         private VillagerConfig _config;
-        private ForestLayerContainer forestLayer;
+
 
 
         public Village(int id, RectangleF position, RectangleF influenceRadius)
-            : base(id, position)
+            : base(id)
         {
             InfluenceRadius = influenceRadius;
         }
@@ -28,15 +32,15 @@ namespace VillageModel.Implementaion
 
         public RectangleF GetRandomLocationInsideVillageRadius()
         {
-
+            //TODO brainen
             var rnd = new Random();
             
-            var x = InfluenceRadius.X;
-            var y = InfluenceRadius.Y;
-
-
+            var minX = InfluenceRadius.X;
+            var minY = InfluenceRadius.Y;
+            var maxX = InfluenceRadius.Right;
+            var maxY = InfluenceRadius.Top;
             
-
+            return new RectangleF(rnd.Next((int) minX, (int) maxX), rnd.Next((int) minY, (int ) maxY), 1,1);
         }
     }
 }

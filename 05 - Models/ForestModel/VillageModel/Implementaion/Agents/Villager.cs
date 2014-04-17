@@ -22,15 +22,16 @@ namespace VillageModel.Implementaion.Agents
         #endregion
 
         #region constructors
-        public Villager(int id, Vector3D position, Village homeVillage)
-            : base(id, position)
+        public Villager(int id,  Village homeVillage)
+            : base(id)
         {
             _config = Configuration.Load<VillagerConfig>();
 
             _homeVillage = homeVillage;
-            _woodStorage = 0;
-            _dailyWoodUsage = _config.DailyWoodUsage;
-            _pathHome = new Area(_homeVillage.Position);
+           _dailyWoodUsage = _config.DailyWoodUsage;
+           _woodStorage = new Random().Next(5) * _dailyWoodUsage;
+
+           
         }
         #endregion
 

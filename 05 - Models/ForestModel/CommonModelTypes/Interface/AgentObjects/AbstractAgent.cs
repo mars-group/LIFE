@@ -7,7 +7,7 @@ namespace CommonModelTypes.Interface.AgentObjects
     public abstract class AbstractAgent : SimObject, IAgent
     {
 
-        public AbstractAgent(int id, Vector3D position) : base(id , position) {
+        public AbstractAgent(int id) : base(id) {
             
         }
 
