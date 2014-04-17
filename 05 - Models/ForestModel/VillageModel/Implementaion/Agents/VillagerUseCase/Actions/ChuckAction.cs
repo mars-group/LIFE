@@ -5,24 +5,38 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonModelTypes.Interface.AgentObjects.GoalForming;
 using ForestModel.Implementation.Agents;
+using LayerAPI.Interfaces;
 
 namespace VillageModel.Implementaion.Agents.VillagerUseCase.Actions
 {
-    class ChuckAction : ITickAction
+    public class ChuckAction : ITickAction
     {
-
-        private Villager _villager;
-        private TreeAgent _chuckingTarget;
-        private int _swingsPerTick;
+        private List<TreeAgent> _chuckingTargets;
         private int _dmgPerSwing;
 
-
-        public void Execute()
+        public ChuckAction(List<TreeAgent> chuckingTargets, int dmgPerSwing)
         {
-            for (int i = 0; i < _swingsPerTick; i++)
+            _chuckingTargets = chuckingTargets;
+            _dmgPerSwing = dmgPerSwing;
+        }
+
+        public void Execute(IAgent target)
+        {
+            if (target is Villager)
             {
+                var villager = (Villager) target;
+
+                var chuckedWood = 0;
+
+                foreach (var chuckingTarget in _chuckingTargets)
+                {
+                    chuckedWood += chuckingTarget.Chuck(_dmgPerSwing);
+                }
+
+                villager.StoreWood(chuckedWood);
                 
             }
+            
         }
     }
 }

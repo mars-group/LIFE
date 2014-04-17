@@ -2,6 +2,7 @@
 using CommonModelTypes.Interface.AgentObjects;
 using CommonModelTypes.Interface.SimObjects;
 using ConfigurationAdapter.Interface;
+using ForestModel.Interface;
 using VillageModel.Implementaion.Agents.VillagerUseCase;
 using VillageModel.Interface.Configuration;
 
@@ -16,6 +17,7 @@ namespace VillageModel.Implementaion.Agents
         private int _dailyWoodUsage;
         private VillagerConfig _config;
         private ChuckWoodPlan _chuckWoodPlan;
+        private ForestLayerContainer _forestLayer;
 
         #endregion
 
@@ -42,28 +44,17 @@ namespace VillageModel.Implementaion.Agents
             }
             else
             {
-                _chuckWoodPlan.GetNextAction().Execute();
+                _chuckWoodPlan = new ChuckWoodPlan(_config.treesPerPlan, _homeVillage.GetRandomLocationInsideVillageRadius(), _forestLayer);
+                _chuckWoodPlan.GetNextAction().Execute(this);
             }
 
         }
 
-        public void StoreWood(int wood) {
+        public void StoreWood(int wood)
+        {
             _woodStorage = _woodStorage + wood;
         }
 
-        #endregion
-
-        #region private methods
-
-        private Boolean AtWayPoint(Vector3D destination)
-        {
-            return ((destination.DistanceToWayPoint(Position) - _config.WayPointReachedDistance) <= 0);
-        }
-
-        private Vector3D GetRandomLocationInsideVillageRadius()
-        {
-            return _homeVillage.GetRandomLocationInsideVillageRadius();
-        }
         #endregion
 
     }

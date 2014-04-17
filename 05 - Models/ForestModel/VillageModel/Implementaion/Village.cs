@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommonModelTypes.Interface;
-using CommonModelTypes.Interface.Datatypes;
 using CommonModelTypes.Interface.SimObjects;
+using ForestModel.Interface;
 using VillageModel.Interface.Configuration;
 
 namespace VillageModel.Implementaion
@@ -13,19 +14,29 @@ namespace VillageModel.Implementaion
     public class Village : SimObject
     {
 
-        public Area InfluenceRadius { get; private set; }
+        public RectangleF InfluenceRadius { get; private set; }
         private VillagerConfig _config;
+        private ForestLayerContainer forestLayer;
 
 
-        public Village(int id, Vector3D position, Area influenceRadius) : base(id, position)
+        public Village(int id, RectangleF position, RectangleF influenceRadius)
+            : base(id, position)
         {
             InfluenceRadius = influenceRadius;
         }
 
 
-        public Area GetRandomLocationInsideVillageRadius()
+        public RectangleF GetRandomLocationInsideVillageRadius()
         {
-            return new Area(InfluenceRadius.GetRnd2DPositinInsideArea(), _config.ChuckingAreaSize);
+
+            var rnd = new Random();
+            
+            var x = InfluenceRadius.X;
+            var y = InfluenceRadius.Y;
+
+
+            
+
         }
     }
 }

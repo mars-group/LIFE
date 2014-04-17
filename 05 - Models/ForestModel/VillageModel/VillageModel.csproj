@@ -35,6 +35,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,8 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\ChuckAction.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\Actions\SearchForTreesAction.cs" />
-    <Compile Include="Implementaion\Agents\VillagerUseCase\ChuckWoodPlan.cs" />
+    <Compile Include="Implementaion\Agents\VillagerUseCase\ChuckWoodPlanUseCase.cs" />
     <Compile Include="Implementaion\Agents\Villager.cs" />
     <Compile Include="Implementaion\Village.cs" />
     <Compile Include="Interface\Configuration\VillagerConfig.cs" />

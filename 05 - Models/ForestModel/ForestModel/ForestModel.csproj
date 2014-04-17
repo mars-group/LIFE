@@ -48,6 +48,7 @@
     <Compile Include="Implementation\Agents\TreeAgent.cs" />
     <Compile Include="Implementation\ForestPatch.cs" />
     <Compile Include="Implementation\Agents\TreeFactory.cs" />
+    <Compile Include="Interface\Configuration\EnvironmentConfig.cs" />
     <Compile Include="Interface\Configuration\TreeAgentConfiguration.cs" />
     <Compile Include="Interface\ForestLayerContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

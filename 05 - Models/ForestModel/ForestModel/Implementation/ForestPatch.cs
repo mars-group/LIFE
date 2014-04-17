@@ -10,27 +10,38 @@ using QuadTreeLib;
 
 namespace ForestModel.Implementation
 {
-    class ForestPatch : QuadTreeNode<ForestPatch>, IHasRect
+    public class ForestPatch : QuadTreeNode<ForestPatch>, IHasRect
     {
 
 
         private RectangleF _bounds;
-        private List<TreeAgent> _treesInsidePatch;
+        private List<TreeAgent> _trees;
 
-        public ForestPatch(Point p, int size)
-            : base(new RectangleF(p.X, p.Y, size, size))
+        public List<TreeAgent> Trees
         {
-            _bounds = new RectangleF(p.X, p.Y, size, size);
-            _treesInsidePatch = new List<TreeAgent>();
+            get { return _trees; }
+            set { _trees = value; }
         }
 
 
-
-
+        public ForestPatch(PointF p, int size)
+            : base(new RectangleF(p.X, p.Y, size, size))
+        {
+            _bounds = new RectangleF(p.X, p.Y, size, size);
+            _trees = new List<TreeAgent>();
+        }
+        
         public RectangleF Rectangle
         {
             get { return _bounds; }
             private set { }
+        }
+
+
+        public void addTreeToPatch(TreeAgent tree)
+        {
+            //TODO max Trees pro patch?
+            _trees.Add(tree);
         }
     }
 }

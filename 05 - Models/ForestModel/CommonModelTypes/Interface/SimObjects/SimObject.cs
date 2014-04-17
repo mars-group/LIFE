@@ -9,10 +9,18 @@ namespace CommonModelTypes.Interface.SimObjects
         private RectangleF _bounds;
 
 
+
+
         public SimObject(int id, Point point, int size)
         {
             ID = id;
           _bounds = new RectangleF(point.X, point.Y, size, size);
+        }
+
+        public SimObject(int id, RectangleF bounds)
+        {
+            _bounds = bounds;
+            ID = id;
         }
 
         public SimObject(int id, Point point, int width, int height)
