@@ -75,12 +75,24 @@ namespace NodeRegistry.Implementation.UseCases
                     {
                         var nodeRegistryMessage = Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
                         ComputeMessage(nodeRegistryMessage);
+
                     }
                 }
             }
-            catch (ThreadInterruptedException exception)
+            catch (Exception ex)
             {
-                throw;
+                if (ex is ThreadInterruptedException || ex is ProtoException)
+                {
+                    Logger.Debug("Message lost in local NodeRegistry. Reason was: \n" + ex );
+                }
+                else
+                {
+                    throw;
+                }
+
+
+
+
             }
         }
 

@@ -55,7 +55,7 @@ namespace MulticastAdapter.Implementation
 
         }
 
-        private void validateMulticastGroup(string mcastIp ) {
+        private void validateMulticastGroup(string mcastIp) {
 
 
             if (IPAddress.Parse(mcastIp).IsIPv6Multicast || MulticastNetworkUtils.IsIPv4Multicast(mcastIp))
