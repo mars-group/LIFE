@@ -333,7 +333,7 @@ namespace NodeRegistryTest {
             var otherNodeInfo = new NodeInformationType(
                 NodeType.LayerContainer,
                 "AllOfMyHate",
-                new NodeEndpoint("1270.0.0.1", 34567));
+                new NodeEndpoint("127.0.0.1", 34567));
 
             var localMulticastAdapter =
                 new MulticastAdapterComponent(
@@ -346,7 +346,7 @@ namespace NodeRegistryTest {
                     new NodeInformationType(
                         NodeType.LayerContainer,
                         "motivationBurst",
-                        new NodeEndpoint("1270.0.0.1", 44567)),
+                        new NodeEndpoint("127.0.0.1", 44567)),
                     false,
                     400));
 
@@ -363,10 +363,12 @@ namespace NodeRegistryTest {
                 localMulticastAdapter,
                 new NodeRegistryConfig(otherNodeInfo, false, 300));
 
+            Thread.Sleep(100);
+            
             otherNodeReg.LeaveCluster();
 
 
-            Thread.Sleep(300);
+            Thread.Sleep(1000);
 
             Assert.True(leaveEventFired);
             

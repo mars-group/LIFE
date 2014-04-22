@@ -33,7 +33,7 @@ namespace MulticastAdapterTestProject
             Assert.True(true);
 
         }
-        /*
+        
         [Test]
         public void SendExcaltyOneMessageTest()
         {
@@ -75,7 +75,7 @@ namespace MulticastAdapterTestProject
             public MessageCounter(UDPMulticastReceiver receiver)
             {
                 _receiver = receiver;
-                NumberOfmessages = 1;
+                NumberOfmessages = 0;
             }
 
 
@@ -86,7 +86,7 @@ namespace MulticastAdapterTestProject
 
 
         }
-*/
+
 
 
     }
