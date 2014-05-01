@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Primitive_Architecture.Dummies.Heating;
 using Primitive_Architecture.Interaction;
 using Primitive_Architecture.Perception;
 
@@ -16,8 +15,7 @@ namespace Primitive_Architecture.Agents.Heating {
     public double NominalTemp { get; set; }
 
 
-    public TempAgent(TempEnvironment room, HeaterAgent heaterAgent, List<Sensor> sensors)
-      : base("Contrl", sensors) {
+    public TempAgent(TempEnvironment room, HeaterAgent heaterAgent) : base("Contrl") {
       _room = room;
       _heaterAgent = heaterAgent;
       NominalTemp = 25;

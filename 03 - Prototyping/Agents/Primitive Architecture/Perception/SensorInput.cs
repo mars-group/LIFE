@@ -5,9 +5,13 @@
   /// </summary>
   internal abstract class SensorInput : Input {
 
-    public Sensor OriginSensor { get; private set; }
+    public Sensor OriginSensor { get; private set; } // The creator of this SensorInput.
 
-    public SensorInput(Sensor originSensor) {
+    /// <summary>
+    /// Create a new sensor input (called by more specific input types).
+    /// </summary>
+    /// <param name="originSensor">The creator of this sensor input.</param>
+    protected SensorInput(Sensor originSensor) {
       OriginSensor = originSensor;
     }
 

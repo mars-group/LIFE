@@ -1,40 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using Primitive_Architecture.Agents;
 using Primitive_Architecture.Agents.Heating;
-using Primitive_Architecture.Dummies.Heating;
 using Primitive_Architecture.Interfaces;
-using Primitive_Architecture.Perception;
 
 namespace Primitive_Architecture.Dummies {
+  
+  /// <summary>
+  ///   This is the execution environment, responsible for periodic triggering of all agents.
+  /// </summary>
   internal class Executor {
-    private readonly List<ITickClient> _clients;
+    private readonly List<ITickClient> _clients; // A list of all clients to execute.
 
-    private Executor() {
-      var environment = new TempEnvironment();
-      var heater = new HeaterAgent(environment);
-      var sensors1 = new List<Sensor> {
-        //TODO new HeaterSensor(environment), new TempSensor(environment), new WindowSensor(environment)
-      };
-      var contrl = new TempAgent(environment, heater, sensors1);
-      var smith = new AgentSmith(environment);
-      _clients = new List<ITickClient> {environment, contrl, heater, smith};
+    /// <summary>
+    ///   Instantiate a runtime.
+    /// <param name="clients">A list of executable (tickable) clients.</param>
+    /// </summary>
+    private Executor(List<ITickClient> clients) {
+      _clients = clients;
     }
 
 
+    /// <summary>
+    ///   Execution routine. All agents are ticked in a sequential order.
+    /// </summary>
     private void Run() {
       var input = "";
       while (input != "q") {
-        foreach (var client in _clients) {
-          client.Tick();
-        }
+        //TODO: Arbitrary execution or some user input handling would be nice.
+        foreach (var client in _clients) client.Tick();
         input = Console.ReadLine();
       }
     }
 
 
+    /// <summary>
+    ///   Program entry. Creates some agents and starts them.
+    /// </summary>
     public static void Main() {
-      //new Executor().Run();
-  
+      var agents = AgentBuilder.CreateHeatingScenarioAgents();
+      new Executor(agents).Run();
       Console.ReadLine();
     }
   }

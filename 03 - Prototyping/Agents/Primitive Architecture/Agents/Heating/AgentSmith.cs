@@ -1,5 +1,4 @@
 ﻿using System;
-using Primitive_Architecture.Dummies.Heating;
 using Primitive_Architecture.Interaction;
 
 namespace Primitive_Architecture.Agents.Heating {
@@ -11,7 +10,7 @@ namespace Primitive_Architecture.Agents.Heating {
     ///   An agent walks into a bar ...
     /// </summary>
     /// <param name="room"></param>
-    public AgentSmith(TempEnvironment room) : base("Smith ", null) {
+    public AgentSmith(TempEnvironment room) : base("Smith ") {
       _room = room;
     }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Primitive_Architecture.Dummies;
 using Primitive_Architecture.Interaction;
 using Primitive_Architecture.Interfaces;
@@ -20,11 +19,10 @@ namespace Primitive_Architecture.Agents {
     /// domain specific sensors, actions and reasoning, optionally extended by a knowledge base.  
     /// </summary>
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
-    /// <param name="sensors">List of sensors that are attached to the perception unit.</param>
-    protected Agent(string id, List<Sensor> sensors) {
+    protected Agent(string id) {
       Id = id;
       DebugEnabled = true;
-      _perceptionUnit = new PerceptionUnit(sensors);
+      _perceptionUnit = new PerceptionUnit();
     }
 
 
@@ -36,11 +34,11 @@ namespace Primitive_Architecture.Agents {
     public void Tick() {
       _perceptionUnit.SenseAll();     // Phase 1: Perception
       var plan = CreatePlan();        // Phase 2: Reasoning
-      plan.GetNextAction().Execute(); // Phase 3: Execution
+      //plan.GetNextAction().Execute(); // Phase 3: Execution
 
       // Print the runtime information for debug purposes. 
       if (DebugEnabled) {
-        _cycle++;  //TODO Checken, ob das toString() dieser Klasse aufgerufen wird, wenn kein anderes existiert.
+        _cycle++;
         Console.Write(ToString());
       }
     }
@@ -53,7 +51,10 @@ namespace Primitive_Architecture.Agents {
     protected abstract Plan CreatePlan();
  
 
-
+    /// <summary>
+    /// Default debug output. It may be overwritten by more concrete functions.
+    /// </summary>
+    /// <returns>Console output string.</returns>
     protected new virtual string ToString() {
       return "Agent: " + Id + "\t Cycle: " + _cycle;
     }

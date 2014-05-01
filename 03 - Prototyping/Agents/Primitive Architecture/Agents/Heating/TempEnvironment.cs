@@ -1,8 +1,9 @@
 ﻿using System;
 using Primitive_Architecture.Interfaces;
 using Primitive_Architecture.Perception;
+using Environment = Primitive_Architecture.Dummies.Environment;
 
-namespace Primitive_Architecture.Dummies.Heating {
+namespace Primitive_Architecture.Agents.Heating {
   internal class TempEnvironment : Environment, IGenericDataSource, ICallbackDataSource {
     
     private const double Temp1 = 15;

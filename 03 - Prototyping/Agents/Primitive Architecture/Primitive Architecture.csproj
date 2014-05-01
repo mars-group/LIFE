@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
-    <Compile Include="Agents\Heating\AgentBuilder.cs" />
+    <Compile Include="Agents\AgentBuilder.cs" />
     <Compile Include="Agents\Heating\AgentSmith.cs" />
     <Compile Include="Dummies\Vector3D.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
@@ -47,8 +47,10 @@
     <Compile Include="Perception\GenericSensor.cs" />
     <Compile Include="Perception\GenericSensorInput.cs" />
     <Compile Include="Perception\Heating\HeaterInput.cs" />
+    <Compile Include="Perception\Heating\HeaterSensor.cs" />
     <Compile Include="Perception\Heating\InformationTypes.cs" />
     <Compile Include="Perception\Heating\RoomInput.cs" />
+    <Compile Include="Perception\Heating\RoomSensor.cs" />
     <Compile Include="Perception\Input.cs" />
     <Compile Include="Perception\PerceptionUnit.cs" />
     <Compile Include="Interaction\Plan.cs" />
@@ -61,7 +63,7 @@
     <Compile Include="Interaction\Interaction.cs" />
     <Compile Include="Interfaces\ITickClient.cs" />
     <Compile Include="Agents\Heating\TempAgent.cs" />
-    <Compile Include="Dummies\Heating\TempEnvironment.cs" />
+    <Compile Include="Agents\Heating\TempEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

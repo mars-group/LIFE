@@ -12,6 +12,7 @@ namespace Primitive_Architecture.Perception {
     private SensorInput _lastInput;      // Container for the last retrieved sensor input.
     protected IGenericDataSource Source; // The data source (environment) to sense. 
     public int InformationType { get; private set; }  // Linkage to the data type to acquire.
+    //TODO: A sensor needs a halo and a position reference to transmit to the source.
 
 
     /// <summary>
