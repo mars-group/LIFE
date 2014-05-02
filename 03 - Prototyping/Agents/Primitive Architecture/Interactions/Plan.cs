@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Primitive_Architecture.Interaction {
+namespace Primitive_Architecture.Interactions {
   internal class Plan {
 
     private List<Interaction> _actions; // A sequential order of the actions to execute.

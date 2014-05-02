@@ -9,6 +9,7 @@ namespace Primitive_Architecture.Agents {
   /// </summary>
   static class AgentBuilder {
 
+
     /// <summary>
     /// Create some agents related to the heating scenario.
     /// </summary>
@@ -16,9 +17,10 @@ namespace Primitive_Architecture.Agents {
     public static List<ITickClient> CreateHeatingScenarioAgents() {
       var tempEnvironment = new TempEnvironment();
       var heater = new HeaterAgent(tempEnvironment);
+      var controller = new TempAgent(tempEnvironment, heater);
+      var smith = new AgentSmith(tempEnvironment);
 
-
-      return new List<ITickClient> {tempEnvironment, heater};
+      return new List<ITickClient> {tempEnvironment, controller, heater, smith};
     }
   }
 }

@@ -41,6 +41,13 @@
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Agents\AgentBuilder.cs" />
     <Compile Include="Agents\Heating\AgentSmith.cs" />
+    <Compile Include="Agents\Ice\Iceeater.cs" />
+    <Compile Include="Agents\Ice\Iceman.cs" />
+    <Compile Include="Interactions\Heating\AdjustSettingInteraction.cs" />
+    <Compile Include="Interactions\Heating\OpenWindowInteraction.cs" />
+    <Compile Include="Interactions\Heating\ThermalOutputInteraction.cs" />
+    <Compile Include="Interfaces\IAgentLogic.cs" />
+    <Compile Include="Reasoning\ReasoningComponent.cs" />
     <Compile Include="Dummies\Vector3D.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
     <Compile Include="Interfaces\IGenericDataSource.cs" />
@@ -53,14 +60,14 @@
     <Compile Include="Perception\Heating\RoomSensor.cs" />
     <Compile Include="Perception\Input.cs" />
     <Compile Include="Perception\PerceptionUnit.cs" />
-    <Compile Include="Interaction\Plan.cs" />
+    <Compile Include="Interactions\Plan.cs" />
     <Compile Include="Perception\Sensor.cs" />
     <Compile Include="Perception\SensorInput.cs" />
     <Compile Include="Dummies\Environment.cs" />
     <Compile Include="Dummies\Executor.cs" />
     <Compile Include="Agents\Heating\HeaterAgent.cs" />
-    <Compile Include="Interaction\IGenericAPI.cs" />
-    <Compile Include="Interaction\Interaction.cs" />
+    <Compile Include="Interactions\IGenericAPI.cs" />
+    <Compile Include="Interactions\Interaction.cs" />
     <Compile Include="Interfaces\ITickClient.cs" />
     <Compile Include="Agents\Heating\TempAgent.cs" />
     <Compile Include="Agents\Heating\TempEnvironment.cs" />
@@ -68,9 +75,7 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interaction\Heating\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

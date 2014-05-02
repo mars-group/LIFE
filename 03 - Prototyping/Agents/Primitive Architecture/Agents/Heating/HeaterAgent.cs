@@ -1,8 +1,15 @@
 ﻿using System;
-using Primitive_Architecture.Interaction;
+using Primitive_Architecture.Interactions;
+using Primitive_Architecture.Interactions.Heating;
+using Primitive_Architecture.Interfaces;
 
 namespace Primitive_Architecture.Agents.Heating {
-  internal class HeaterAgent : Agent {
+
+  /// <summary>
+  /// This agent represents a heater. It is a primitive reactive agent with no input.
+  /// </summary>
+  internal class HeaterAgent : Agent, IAgentLogic {
+
     private double _thermalOutput;  // Actual thermal output.
     private double _thermalNominal; // Scheduled output value.
     private double _thermalChange;  // Output changing rate.
@@ -24,14 +31,16 @@ namespace Primitive_Architecture.Agents.Heating {
       _room = room;
       CtrValue = 0;
       _thermalOutput = 0;
+      ReasoningComponent = this; // This simple agent has no external reasoning component!
     }
 
 
     /// <summary>
-    /// ...
+    /// A simple calculation of new output value and creation of interaction object.
     /// </summary>
-    /// <returns>A plan to execute.</returns>
-    protected override Plan CreatePlan() {
+    /// <returns>The heating interaction.</returns>
+    public Interaction Reason () {
+      
       // Set the current output and new nominal output (based on the new setting).
       _thermalOutput = _thermalOutput + _thermalChange;
       _thermalNominal = (ThermalMax/CtrMax)*CtrValue;
@@ -41,10 +50,7 @@ namespace Primitive_Architecture.Agents.Heating {
       if (_thermalChange < 0) _thermalChange *= CooldownCoefficient;
 
       // Set the output as thermal gain of the environment.
-      _room.TempGain = _thermalOutput;
-
-      var plan = new Plan();
-      return plan;
+      return new ThermalOutputInteraction("", _room, _thermalOutput);
     }
 
 
@@ -55,7 +61,8 @@ namespace Primitive_Architecture.Agents.Heating {
     protected override string ToString() {
       var control = (double) ((int) (CtrValue*10))/10 + " /" + CtrMax;
       var percent = (int) Math.Round(_thermalOutput/ThermalMax*100);
-      return "HeaterAgent: - Stellwert: " + control + " - Leistung: " + percent + " %";
+      return "Agent: "+Id+" - Stellwert: " + control + " - Leistung: " + percent 
+        + " % (Soll: "+((int)(CtrValue*100/CtrMax))+" %)";
     }
   }
 }

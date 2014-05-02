@@ -1,24 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using Primitive_Architecture.Interaction;
-using Primitive_Architecture.Perception;
+using Primitive_Architecture.Interactions;
+using Primitive_Architecture.Interactions.Heating;
+using Primitive_Architecture.Interfaces;
+using Primitive_Architecture.Perception.Heating;
 
 namespace Primitive_Architecture.Agents.Heating {
-  internal class TempAgent : Agent {
-    private readonly TempEnvironment _room; // The room to heat.
+
+  /// <summary>
+  /// A heater controlling instance. The governing process is not in the least intelligent ...
+  /// </summary>
+  internal class TempAgent : Agent, IAgentLogic {
+
     private readonly HeaterAgent _heaterAgent; // Heater used to set temperature.
-
-    private double _lastTemp;       // The last measured temperature. Not used!
-    private double _adjustment;     // Only used for status output.
-    private const double TransientValue = 0.5; // Coefficient for adjustment strength.
-
-    public double NominalTemp { get; set; }
+    private double _adjustment;                // Only used for status output.
+    private readonly double _transientValue;   // Coefficient for adjustment strength.
+    private readonly double _nominalTemp;      // The desired temperature.
 
 
+    /// <summary>
+    /// Create a new heater controller.
+    /// </summary>
+    /// <param name="room">The room to heat.</param>
+    /// <param name="heaterAgent">Heater used to set temperature.</param>
     public TempAgent(TempEnvironment room, HeaterAgent heaterAgent) : base("Contrl") {
-      _room = room;
       _heaterAgent = heaterAgent;
-      NominalTemp = 25;
+      _nominalTemp = 25;
+      _transientValue = 0.5;
+      ReasoningComponent = this;
+      PerceptionUnit.AddSensor(new RoomSensor(room));
+      PerceptionUnit.AddSensor(new HeaterSensor(heaterAgent));
     }
 
 
@@ -26,31 +36,30 @@ namespace Primitive_Architecture.Agents.Heating {
     /// This planning routine just evalutes the temperature offset and calculates a
     /// new heater setting. It's very simple and purely reactive ...
     /// </summary>
-    /// <returns>A primitive plan with just one action: The new heater setting.</returns>
-    protected override Plan CreatePlan() {
+    /// <returns>An action to adjust the heater setting.</returns>
+    public Interaction Reason() {
       
       // Get current temperature and calculate the deltas.
-      var temp = _room.Temperature;
-      var diffTemp = temp - _lastTemp;
-      var diffNominal = NominalTemp - temp;
+      var roomInput = (RoomInput) PerceptionUnit.InputMemory[(int) InformationType.RoomState];
+      var temp = roomInput.Temperature;
+      var windowOpen = roomInput.WindowOpened;
+      var diffNominal = _nominalTemp - temp;
+
+      // Get the heater settings.
+      var heaterInput = (HeaterInput) PerceptionUnit.InputMemory[(int) InformationType.HeaterSetting];
+      double maxValue = heaterInput.MaxValue;
+      double curValue = heaterInput.CurValue;
 
       // Here comes the black magic ...
-      var newCtrl = _heaterAgent.CtrValue/HeaterAgent.CtrMax; // Current setting.
-      newCtrl += (TransientValue*diffNominal/NominalTemp);    // Adjustment value.  
+      var newCtrl = curValue / maxValue;                      // Current setting.
+      newCtrl += (_transientValue*diffNominal/_nominalTemp);  // Adjustment value.  
       if (newCtrl > 1) newCtrl = 1;                           //| Correction to fit
       if (newCtrl < 0) newCtrl = 0;                           //| percentage scale.
-      if (_room.WindowOpen) newCtrl = 0;                      // Save the planet!
-      _adjustment = newCtrl - (_heaterAgent.CtrValue/HeaterAgent.CtrMax);
+      if (windowOpen) newCtrl = 0;                            // Save the planet!
+      _adjustment = newCtrl - (curValue / maxValue);
 
-      // Set heater control value and save temperature as reference for next run.
-      _heaterAgent.CtrValue = newCtrl*HeaterAgent.CtrMax;
-      _lastTemp = temp;
-      
-      var plan = new Plan();
-
-      // Print output (if requested) and return the plan!
-      if (DebugEnabled) Console.WriteLine(ToString());
-      return plan;
+      // Set heater control value.
+      return new AdjustSettingInteraction("", _heaterAgent, newCtrl*HeaterAgent.CtrMax); 
     }
 
 
@@ -59,7 +68,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// </summary>
     /// <returns>The formatted console output string.</returns>
     protected override string ToString() {
-      return "Agent: " + Id + " - Sollwert: " + String.Format("{0,4:00.0}", NominalTemp) + 
+      return "Agent: " + Id + " - Sollwert: " + String.Format("{0,4:00.0}", _nominalTemp) + 
              " °C - Änderung:" + String.Format("{0,5:0.0}", _adjustment*100) + " %.";
     }
   }

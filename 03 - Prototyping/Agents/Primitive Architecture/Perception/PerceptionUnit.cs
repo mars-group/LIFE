@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Primitive_Architecture.Perception {
 
@@ -9,14 +10,9 @@ namespace Primitive_Architecture.Perception {
   class PerceptionUnit {
 
     private readonly List<Sensor> _sensors; // All sensors available to the agent.
-    private readonly Dictionary<int, Input> _inputMemory; // R/O storage of (sensory) input.
+    private readonly Dictionary<int, Input> _inputMemory; // Storage of (sensory) input.
+    public IReadOnlyDictionary<int, Input> InputMemory;   // Read-only version of the memory. 
 
-    //TODO Idee: Schreibgeschützte Listenkopie für die Planungskomponente bereitstellen:
-    //TODO Somit braucht die Planung die PU nicht kennen und man spart sich den Umweg.
-    //TODO Diese Referenz kann öffentlich abrufbar sein, sie wird bei der Initialisierung 
-    //TODO der Planung übergeben: ...new ReasoningSystem (pu.InputMemory);
-
-    // Link auf RO-Collection: http://msdn.microsoft.com/en-us/library/ms132474.aspx
 
     /// <summary>
     /// Create a perception unit (initialized with no sensors).
@@ -24,6 +20,7 @@ namespace Primitive_Architecture.Perception {
     public PerceptionUnit() {
       _sensors = new List<Sensor>();
       _inputMemory = new Dictionary<int, Input>();
+      InputMemory = new ReadOnlyDictionary<int, Input>(_inputMemory);
     }
 
 

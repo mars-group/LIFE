@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
-namespace Primitive_Architecture.Interaction {
-  internal abstract class Interaction {
+namespace Primitive_Architecture.Interactions {
+  abstract internal class Interaction {
     
     private readonly string _id;
     protected readonly IGenericAPI Source;

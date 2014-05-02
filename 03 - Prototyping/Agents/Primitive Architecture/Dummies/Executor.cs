@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Primitive_Architecture.Agents;
-using Primitive_Architecture.Agents.Heating;
 using Primitive_Architecture.Interfaces;
 
 namespace Primitive_Architecture.Dummies {
@@ -10,7 +10,9 @@ namespace Primitive_Architecture.Dummies {
   ///   This is the execution environment, responsible for periodic triggering of all agents.
   /// </summary>
   internal class Executor {
+
     private readonly List<ITickClient> _clients; // A list of all clients to execute.
+
 
     /// <summary>
     ///   Instantiate a runtime.
@@ -24,13 +26,20 @@ namespace Primitive_Architecture.Dummies {
     /// <summary>
     ///   Execution routine. All agents are ticked in a sequential order.
     /// </summary>
-    private void Run() {
-      var input = "";
-      while (input != "q") {
+    /// <param name="delay">Thread delay (in ms), 0 for manual execution.</param>
+    private void Run(int delay) {
+      while (true) {
         //TODO: Arbitrary execution or some user input handling would be nice.
         foreach (var client in _clients) client.Tick();
-        input = Console.ReadLine();
+        
+        // Manual or automatic execution.
+        if (delay == 0) Console.ReadLine();
+        else {
+          Console.WriteLine();
+          Thread.Sleep(delay);
+        }
       }
+      // ReSharper disable once FunctionNeverReturns
     }
 
 
@@ -39,7 +48,7 @@ namespace Primitive_Architecture.Dummies {
     /// </summary>
     public static void Main() {
       var agents = AgentBuilder.CreateHeatingScenarioAgents();
-      new Executor(agents).Run();
+      new Executor(agents).Run(0);
       Console.ReadLine();
     }
   }
