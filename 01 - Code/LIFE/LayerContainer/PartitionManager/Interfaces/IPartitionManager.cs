@@ -1,9 +1,10 @@
-﻿namespace PartitionManager.Interfaces
-{
-    using System;
+﻿using System;
+using LCConnector.TransportTypes;
+using LCConnector.TransportTypes.ModelStructure;
 
-    public interface IPartitionManager
-    {
-        bool AddLayer(Uri layerUri, Guid layerID);
+namespace PartitionManager.Interfaces {
+    public interface IPartitionManager {
+        bool AddLayer(TLayerInstanceId instanceId);
+        void LoadModelContent(ModelContent content);
     }
 }

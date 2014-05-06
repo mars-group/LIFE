@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,8 +35,21 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,19 +58,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Messages\AbstractNodeRegistryMessage.cs" />
+    <Compile Include="Implementation\Messages\NodeRegistryHeartBeatMessage.cs" />
+    <Compile Include="Implementation\Messages\Factory\NodeRegistryMessageFactory.cs" />
+    <Compile Include="Implementation\Messages\NodeRegistryConnectionInfoMessage.cs" />
+    <Compile Include="Implementation\Messages\NodeRegistryMessageType.cs" />
+    <Compile Include="Implementation\NodeRegistryComponent.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryEventHandlerUseCase.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryNodeManagerUseCase.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryHeartBeatUseCase.cs" />
+    <Compile Include="Implementation\UseCases\NodeRegistryNetworkUseCase.cs" />
+    <Compile Include="Interface\Config\NodeRegistryConfig.cs" />
     <Compile Include="Interface\INodeRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
+      <Project>{20a316c2-8779-474d-98fb-a13dac9043ab}</Project>
+      <Name>MulticastAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
+      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
+      <Name>Scs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoggerFactory\LoggerFactory.csproj">
+      <Project>{f87e5894-0ab9-4ddc-8b96-d9abbad243ac}</Project>
+      <Name>LoggerFactory</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

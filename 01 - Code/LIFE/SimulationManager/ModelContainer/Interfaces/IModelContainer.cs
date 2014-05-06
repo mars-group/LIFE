@@ -1,22 +1,63 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using CommonTypes.TransportTypes;
+using LCConnector.TransportTypes;
+using LCConnector.TransportTypes.ModelStructure;
+using SMConnector.TransportTypes;
 
-namespace ModelContainer.Interfaces
-{
-    public interface IModelContainer
-    {
-        IList<TSimModel> GetAllModels();
+namespace ModelContainer.Interfaces {
+    /// <summary>
+    ///     The event that is raised, if the model directory has been altered and there might be new models available or old
+    ///     ones deleted.
+    /// </summary>
+    public delegate void ModelDirectoryChanged();
 
-        TSimModel GetModel(int modelID);
+    /// <summary>
+    ///     This is the interface for the model container component.
+    /// </summary>
+    /// <remarks>
+    ///     It does what one would expect from a manager:<br />
+    ///     * Getting a list of all available models,<br />
+    ///     * adding new models<br />
+    ///     * deleting models<br />
+    ///     * It also actively scans the model directory for changes and informs possible interested listeners.
+    /// </remarks>
+    public interface IModelContainer {
+        /// <summary>
+        ///     Registers the callback. In the event, that the underlying filesystem has changed, callbacks are informed.
+        /// </summary>
+        /// <see cref="ModelDirectoryChanged" />
+        void RegisterForModelListChange(Action callback);
 
-        void AddModel(TModel model);
+        /// <summary>
+        ///     Returns a list of all available models.
+        /// </summary>
+        /// <returns>empty, if none found</returns>
+        ICollection<TModelDescription> GetAllModels();
 
-        void AddModelFromFile(String filePath);
+        /// <summary>
+        ///     Returns the serialized contents of the given model.
+        /// </summary>
+        /// <param name="modelID">must not be null</param>
+        /// <returns>null, if model not found.</returns>
+        ModelContent GetModel(TModelDescription modelID);
 
-        void DeleteModel(TModel model);
+        /// <summary>
+        ///     Copies the contents of filePath into a folder into a model folder with the same name.
+        /// </summary>
+        /// <param name="filePath">not null</param>
+        TModelDescription AddModelFromDirectory(string filePath);
 
-        void DeleteModel(int modelID);
+        /// <summary>
+        ///     Deletes the model and the folder it is contained in from the model folder.
+        /// </summary>
+        /// <param name="model"></param>
+        void DeleteModel(TModelDescription model);
+
+        /// <summary>
+        ///     Calculates a feasible instantion order for the layers the model consists of.
+        /// </summary>
+        /// <param name="model">not null</param>
+        /// <returns>empty, if no </returns>
+        IList<TLayerDescription> GetInstantiationOrder(TModelDescription model);
     }
 }

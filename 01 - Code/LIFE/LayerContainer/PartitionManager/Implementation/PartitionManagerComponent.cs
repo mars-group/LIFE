@@ -1,29 +1,25 @@
-﻿using CommonTypes.DataTypes;
-using LayerRegistry.Interfaces;
+﻿using CommonTypes.TransportTypes.SimulationControl;
+using LayerFactory.Interface;
+using LCConnector.TransportTypes;
+using LCConnector.TransportTypes.ModelStructure;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
 
-namespace PartitionManager.Implementation
-{
-    using System;
-
-    public class PartitionManagerComponent : IPartitionManager
-    {
+namespace PartitionManager.Implementation {
+    public class PartitionManagerComponent : IPartitionManager {
         private readonly PartitionManagerUseCase _partitionManagerUseCase;
 
-        public PartitionManagerComponent(ILayerRegistry layerRegistry, IRTEManager rteManager)
-        {
-            _partitionManagerUseCase = new PartitionManagerUseCase(layerRegistry, rteManager);
+        public PartitionManagerComponent(ILayerFactory layerFactory, IRTEManager rteManager) {
+            _partitionManagerUseCase = new PartitionManagerUseCase(layerFactory, rteManager);
         }
 
-        public void Setup(DistributionInformation distributionInformation)
-        {
-            _partitionManagerUseCase.Setup(distributionInformation);
+
+        public bool AddLayer(TLayerInstanceId instanceId) {
+            return _partitionManagerUseCase.AddLayer(instanceId);
         }
 
-        public bool AddLayer(Uri layerUri, Guid layerID)
-        {
-            return _partitionManagerUseCase.AddLayer(layerUri, layerID);
+        public void LoadModelContent(ModelContent content) {
+            _partitionManagerUseCase.LoadModelContent(content);
         }
     }
 }

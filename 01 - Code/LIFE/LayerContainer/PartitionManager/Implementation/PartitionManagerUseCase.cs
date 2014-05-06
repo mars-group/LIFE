@@ -1,32 +1,28 @@
-﻿using CommonTypes.DataTypes;
-using LayerRegistry.Interfaces;
+﻿using LayerFactory.Interface;
+using LCConnector.TransportTypes;
+using LCConnector.TransportTypes.ModelStructure;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
 
-namespace PartitionManager.Implementation
-{
-    using System;
-
-    class PartitionManagerUseCase : IPartitionManager
-    {
-        private readonly ILayerRegistry _layerRegistry;
+namespace PartitionManager.Implementation {
+    internal class PartitionManagerUseCase : IPartitionManager {
+        private readonly ILayerFactory _layerFactory;
 
         private readonly IRTEManager _rteManager;
 
-        public PartitionManagerUseCase(ILayerRegistry layerRegistry, IRTEManager rteManager)
-        {
-            _layerRegistry = layerRegistry;
+        public PartitionManagerUseCase(ILayerFactory layerFactory, IRTEManager rteManager) {
+            _layerFactory = layerFactory;
             _rteManager = rteManager;
         }
 
-        public void Setup(DistributionInformation distributionInformation)
-        {
-            
+        public bool AddLayer(TLayerInstanceId instanceId) {
+            var layer = _layerFactory.GetLayer(instanceId.LayerDescription.Name);
+            _rteManager.RegisterLayer(instanceId, layer);
+            return true;
         }
 
-        public bool AddLayer(Uri layerUri, Guid layerId)
-        {
-            throw new NotImplementedException();
+        public void LoadModelContent(ModelContent content) {
+            _layerFactory.LoadModelContent(content);
         }
     }
 }

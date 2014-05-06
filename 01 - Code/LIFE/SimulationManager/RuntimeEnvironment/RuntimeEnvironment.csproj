@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +36,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,9 +48,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Entities\LayerContainerClient.cs" />
+    <Compile Include="Implementation\RuntimeEnvironmentComponent.cs" />
+    <Compile Include="Implementation\RuntimeEnvironmentUseCase.cs" />
+    <Compile Include="Implementation\SteppedSimulationExecutionUseCase.cs" />
+    <Compile Include="Interfaces\IRuntimeEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
+      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
+      <Name>LCConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{c07bbb5f-a159-41ad-933d-6b1f10913ed7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">
+      <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
+      <Name>SMConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LayerContainer\LayerRegistry\LayerRegistry.csproj">
+      <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
+      <Name>LayerRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\Shared.csproj">
+      <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
+      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
+      <Name>Scs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelContainer\ModelContainer.csproj">
+      <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
+      <Name>ModelContainer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

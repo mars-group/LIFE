@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hik.Communication.ScsServices.Service;
+﻿using Hik.Communication.ScsServices.Service;
 
 namespace PhoneBookCommonLib
 {
@@ -12,8 +7,11 @@ namespace PhoneBookCommonLib
     /// that can be called remotely by client applications.
     /// </summary>
     [ScsService(Version = "1.0.0.0")]
-    public interface IPhoneBookService
+    public interface IPhoneBookService : ICacheable
     {
+
+        string Title { get; set; }
+
         /// <summary>
         /// Adds a new person to phone book.
         /// </summary>
@@ -34,6 +32,7 @@ namespace PhoneBookCommonLib
         /// <param name="name">Name of person to search.
         /// Name might not fully match, it can be a part of person's name</param>
         /// <returns>Person informations if found, else null</returns>
+        
         PhoneBookRecord FindPerson(string name);
     }
 }

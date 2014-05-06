@@ -1,35 +1,27 @@
 ﻿using System;
-using LayerAPI.AbstractLayers;
-using LayerAPI.DataTypes;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 
-[assembly:Addin]
-[assembly:AddinDependency("LayerContainer", "0.1")]
-namespace ExampleLayer
-{
+[assembly: Addin]
+[assembly: AddinDependency("LayerContainer", "0.1")]
 
-    [Extension(typeof(ISteppedLayer))]
-    public class ExampleLayer : AbstractDistributedSteppedLayer
-    {
+namespace ExampleLayer {
+    [Extension(typeof (ISteppedLayer))]
+    public class ExampleLayer : ISteppedLayer {
         private readonly AgentSmith _agent;
 
-        public ExampleLayer() : base()
-        {
+        public ExampleLayer() {
             _agent = new AgentSmith();
         }
 
-        public override bool InitLayer(LayerInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
-        {
+        public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle,
+            UnregisterAgent unregisterAgentHandle) {
             registerAgentHandle.Invoke(this, _agent);
             return true;
         }
 
-        public override long GetCurrentTick()
-        {
+        public long GetCurrentTick() {
             throw new NotImplementedException();
         }
     }
-
-
 }

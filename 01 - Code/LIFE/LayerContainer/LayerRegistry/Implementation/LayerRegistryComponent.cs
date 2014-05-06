@@ -1,44 +1,31 @@
-﻿namespace LayerRegistry.Implementation
-{
-    using System;
-    using System.Collections.Generic;
-    using LayerAPI.AddinLoader;
-    using LayerAPI.Interfaces;
-    using LayerRegistry.Interfaces;
+﻿using System;
+using DistributedKeyValueStore.Interface;
+using LayerAPI.Interfaces;
+using LayerRegistry.Interfaces;
+using LayerRegistry.Interfaces.Config;
 
-    public class LayerRegistryComponent : ILayerRegistry
-    {
+namespace LayerRegistry.Implementation {
+    public class LayerRegistryComponent : ILayerRegistry {
         private readonly ILayerRegistry _layerRegistryUseCase;
 
-        public LayerRegistryComponent()
-        {
-            _layerRegistryUseCase = new LayerRegistryUseCase(new AddinLoader());
-
+        public LayerRegistryComponent(IDistributedKeyValueStore distributedKeyValueStore, LayerRegistryConfig layerRegistryConfig) {
+            _layerRegistryUseCase = new LayerRegistryUseCase(distributedKeyValueStore, layerRegistryConfig);
         }
 
-        public ILayer LoadLayer(Uri layerUri, Guid layerID)
-        {
-            return _layerRegistryUseCase.LoadLayer(layerUri, layerID);
+        public ILayer RemoveLayerInstance(Type layerType) {
+            return _layerRegistryUseCase.RemoveLayerInstance(layerType);
         }
 
-        public ILayer GetLayerByID(Guid layerID)
-        {
-            return _layerRegistryUseCase.GetLayerByID(layerID);
-        }
-
-        public IList<ILayer> GetAllLayers()
-        {
-            return _layerRegistryUseCase.GetAllLayers();
-        }
-
-        public ILayer RemoveLayerInstance(Guid layerID)
-        {
-            return _layerRegistryUseCase.RemoveLayerInstance(layerID);
-        }
-
-        public void ResetLayerRegistry()
-        {
+        public void ResetLayerRegistry() {
             _layerRegistryUseCase.ResetLayerRegistry();
+        }
+
+        public ILayer GetLayerInstance(Type layerType) {
+            return _layerRegistryUseCase.GetLayerInstance(layerType);
+        }
+
+        public void RegisterLayer(ILayer layer) {
+            _layerRegistryUseCase.RegisterLayer(layer);
         }
     }
 }

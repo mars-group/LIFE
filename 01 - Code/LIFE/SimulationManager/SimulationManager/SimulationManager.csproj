@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,6 +38,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,8 +55,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="config.log4net" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{c07bbb5f-a159-41ad-933d-6b1f10913ed7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">
+      <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
+      <Name>SMConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
+      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
+      <Name>Scs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelContainer\ModelContainer.csproj">
+      <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
+      <Name>ModelContainer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimulationManagerFacade\SimulationManagerFacade.csproj">
+      <Project>{58149ff0-0801-46f8-a9c6-571b6030dc1e}</Project>
+      <Name>SimulationManagerFacade</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

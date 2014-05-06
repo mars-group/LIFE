@@ -35,6 +35,9 @@
     <Reference Include="Autofac">
       <HintPath>..\..\packages\Autofac.3.3.0\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,15 +47,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationCoreFactory.cs" />
-    <Compile Include="Implementation\LayerContainerFacade.cs" />
+    <Compile Include="Implementation\LayerContainerFacadeImpl.cs" />
+    <Compile Include="Interfaces\ApplicationCoreFactory.cs" />
     <Compile Include="Interfaces\ILayerContainerFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayerContainerController\LayerContainerController.csproj">
-      <Project>{EFF972E8-87D1-42F5-BD73-1314EC88CDD2}</Project>
-      <Name>LayerContainerController</Name>
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\DistributedKeyValueStore\DistributedKeyValueStore.csproj">
+      <Project>{AD32517C-230C-435B-953D-BD96732927B8}</Project>
+      <Name>DistributedKeyValueStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
+      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
+      <Name>LCConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Name>NodeRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
+      <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
+      <Name>MulticastAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
+      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
+      <Name>Scs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LayerFactory\LayerFactory.csproj">
+      <Project>{a88c77db-0dac-46d5-8136-c27b3d72717f}</Project>
+      <Name>LayerFactory</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerRegistry\LayerRegistry.csproj">
       <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
@@ -65,6 +96,10 @@
     <ProjectReference Include="..\RTEManager\RTEManager.csproj">
       <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
       <Name>RTEManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
+      <Name>Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

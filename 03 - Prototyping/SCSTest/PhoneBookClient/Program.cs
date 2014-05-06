@@ -1,45 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Security.AccessControl;
 using System.Threading;
-using System.Threading.Tasks;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
-using Hik.Communication.ScsServices.Client;
 using PhoneBookCommonLib;
 
 namespace PhoneBookClient
 {
     class Program
     {
-        private const int ResetEventCount = 1;
-        private const int ItemCount = 100;
+        private const int ResetEventCount = 10;
+        private const int ItemCount = 10000;
 
         static void Main(string[] args)
         {
+            BenchmarkWriteAndRead();
+            BenchmarkWriteAndReadWithChanges();
+        }
 
-            
 
-            //Create a client to connect to phone book service on local server and
-            //10048 TCP port.
-            
-            var client = ScsServiceClientBuilder.CreateClient<IPhoneBookService>(
-                new ScsTcpEndPoint(IPAddress.IPv6Loopback.ToString(), 10048)
-                //new ScsTcpEndPoint("127.0.0.1", 10048)
-                );
+        private static void TestCacheUpdates()
+        {
+            var client1 = new Client(GuidProvider.GetIdenticalGuid());
+            var client2 = new Client(GuidProvider.GetIdenticalGuid());
 
-            //Console.WriteLine("Press enter to connect to phone book service...");
-            //Console.ReadLine();
+            client1.Title = "ErsterTitel";
 
-            //Connect to the server
-            client.Connect();
+            Console.WriteLine("Client1.Title = " + client1.Title);
+            Console.WriteLine("Client2.Title = " + client2.Title);
 
-            client.ServiceProxy.AddPerson(new PhoneBookRecord
+            client2.Title = "ZweiterTitel";
+
+            Console.WriteLine("Client1.Title = " + client1.Title);
+            Console.WriteLine("Client2.Title = " + client2.Title);
+
+            client1.Disconnect();
+            client2.Disconnect();
+
+            Console.ReadLine();
+        }
+        private static void BenchmarkWriteAndRead()
+        {
+            var client = new Client(GuidProvider.GetIdenticalGuid());
+
+
+            client.AddPerson(new PhoneBookRecord
             {
-                Name = "peter petersen",
+                Name = "Christian",
                 Phone = "1235"
             });
+            client.Title = "Titel0";
 
 
             var resetEventsLock = new object();
@@ -60,11 +69,14 @@ namespace PhoneBookClient
                     {
                         var g = new Guid();
                         var nr = new Guid();
-                        client.ServiceProxy.AddPerson(new PhoneBookRecord
+
+                        client.AddPerson(new PhoneBookRecord
                         {
                             Name = g.ToString(),
                             Phone = nr.ToString()
                         });
+                        
+                        client.Title = "Titel";
                     }
 
                     lock (resetEventsLock)
@@ -100,8 +112,8 @@ namespace PhoneBookClient
                     for (var i = 0; i <= ItemCount; i++)
                     {
                         //Search for a person
-                        var person = client.ServiceProxy.FindPerson("Christian");
-
+                        var person = client.FindPerson("Christian");
+                        var titel = client.Title;
                     }
 
                     lock (resetEventsLock)
@@ -117,20 +129,86 @@ namespace PhoneBookClient
 
             then = DateTime.Now;
             Console.WriteLine("READ:" + (then - now).TotalMilliseconds);
-            
 
-
-
-
-
-            Console.WriteLine();
-            Console.WriteLine("Press enter to disconnect from phone book service...");
             Console.ReadLine();
 
             //Disconnect from server
-            client.Disconnect();
+            client.Disconnect();    
         }
+        private static void BenchmarkWriteAndReadWithChanges()
+        {
 
 
+
+            var resetEventsLock = new object();
+            var resetEvents = new Dictionary<int, ManualResetEvent>();
+
+
+            for (var o = 0; o < ResetEventCount; o++)
+            {
+                int rootid;
+                if (o == 3 || o == 7)
+                {
+                    rootid = resetEvents.Count + 1;
+
+                    resetEvents.Add(rootid, new ManualResetEvent(false));
+
+                    var clientWrite = new Client(GuidProvider.GetIdenticalGuid());
+                    int rootid2 = rootid;
+                    ThreadPool.QueueUserWorkItem(delegate
+                    {
+
+                        for (var i = 0; i <= ItemCount; i++)
+                        {
+                            var title = "Titel" + i;
+
+                            clientWrite.Title = title;
+                            //Console.WriteLine("WRITTEN: " + title);
+
+                        }
+                        clientWrite.Disconnect();
+                        lock (resetEventsLock)
+                        {
+                            resetEvents[rootid2].Set();
+                        }
+                    }, rootid);
+
+                }
+
+                rootid = resetEvents.Count + 1;
+
+                resetEvents.Add(rootid, new ManualResetEvent(false));
+
+                var clientRead = new Client(GuidProvider.GetIdenticalGuid());
+                int rootid1 = rootid;
+                ThreadPool.QueueUserWorkItem(delegate
+                {
+
+                    for (var i = 0; i <= ItemCount; i++)
+                    {
+                        var title = clientRead.Title;
+                        //Console.WriteLine("READ: " + title);
+                    }
+                    clientRead.Disconnect();
+                    lock (resetEventsLock)
+                    {
+                        resetEvents[rootid1].Set();
+                    }
+
+                }, rootid);
+
+            }
+
+            var now = DateTime.Now;
+
+            WaitHandle.WaitAll(resetEvents.Values.ToArray());
+
+            var then = DateTime.Now;
+            Console.WriteLine("Time:" + (then - now).TotalMilliseconds);
+
+            Console.ReadLine();
+
+
+        }
     }
 }

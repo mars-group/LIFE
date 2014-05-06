@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using PhoneBookCommonLib;
@@ -21,23 +19,37 @@ namespace PhoneBookServer
         /// </summary>
         private readonly SortedList<string, PhoneBookRecord> _records;
 
-        private IScsServiceApplication server;
+        private readonly IScsServiceApplication _server;
+        private string _title;
 
         /// <summary>
         /// Creates a new PhoneBookService object.
         /// </summary>
-        public PhoneBookService()
+        /// <param name="id"></param>
+        public PhoneBookService(Guid id) : base(id.ToByteArray())
         {
             _records = new SortedList<string, PhoneBookRecord>();
             //Create a Scs Service application that runs on 10048 TCP port.
-            server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(10048));
+            _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(10048));
             
             //Add Phone Book Service to service application
-
-            server.AddService<IPhoneBookService, PhoneBookService>(this);
+            _server.AddService<IPhoneBookService, PhoneBookService>(this);
 
             //Start server
-            server.Start();
+            _server.Start();
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                if (value != Title)
+                {
+                    _title = value;
+                    //OnPropertyChanged("Title");
+                }
+            }
         }
 
         /// <summary>
@@ -101,7 +113,22 @@ namespace PhoneBookServer
 
         public void Stop()
         {
-            server.Stop();
+            _server.Stop();
         }
+
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

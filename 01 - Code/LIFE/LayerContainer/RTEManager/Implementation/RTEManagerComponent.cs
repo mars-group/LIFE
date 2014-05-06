@@ -1,55 +1,44 @@
-﻿namespace RTEManager.Implementation
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LayerAPI.Interfaces;
+using LCConnector.TransportTypes;
+using RTEManager.Interfaces;
 
-    using LayerAPI.DataTypes;
-    using LayerAPI.Interfaces;
+namespace RTEManager.Implementation {
+    public class RTEManagerComponent : IRTEManager {
+        private readonly IRTEManager _rteManagerUseCase;
 
-    using Interfaces;
+        public RTEManagerComponent() {
+            _rteManagerUseCase = new RTEManagerUseCase();
+        }
 
-    public class RTEManagerComponent : IRTEManager
-    {
-        private readonly RTEManagerUseCase _rteManagerUseCase;
+        public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {
+            _rteManagerUseCase.RegisterLayer(instanceId, layer);
+        }
 
-        public RTEManagerComponent()
-        {
-            this._rteManagerUseCase = new RTEManagerUseCase();
+        public void UnregisterLayer(TLayerInstanceId layerInstanceId) {
+            _rteManagerUseCase.UnregisterLayer(layerInstanceId);
+        }
+
+        public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
+            _rteManagerUseCase.UnregisterTickClient(layer, tickClient);
+        }
+
+        public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
+            _rteManagerUseCase.RegisterTickClient(layer, tickClient);
+        }
+
+        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+            _rteManagerUseCase.InitializeLayer(instanceId, initData);
         }
 
 
-        public void RegisterLayer(ILayer layer, LayerInitData layerInitData)
-        {
-            this._rteManagerUseCase.RegisterLayer(layer, layerInitData);
+        public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
+            return _rteManagerUseCase.GetAllTickClientsByLayer(layer);
         }
 
-        public void UnregisterLayer(ILayer layer)
-        {
-            this._rteManagerUseCase.UnregisterLayer(layer);
+        public long AdvanceOneTick() {
+            return _rteManagerUseCase.AdvanceOneTick();
         }
 
-        public void UnregisterTickClient(ILayer layer, ITickClient tickClient)
-        {
-            this._rteManagerUseCase.UnregisterTickClient(layer, tickClient);
-        }
-
-        public void RegisterTickClient(ILayer layer, ITickClient tickClient)
-        {
-            this._rteManagerUseCase.RegisterTickClient(layer, tickClient);
-        }
-
-        public void InitializeAllLayers()
-        {
-            this._rteManagerUseCase.InitializeAllLayers();
-        }
-
-        public IEnumerable<ITickClient> GetAllTickClientsByLayer(ILayer layer)
-        {
-            return this._rteManagerUseCase.GetAllTickClientsByLayer(layer);
-        }
-
-        public int AdvanceOneTick()
-        {
-            return this._rteManagerUseCase.AdvanceOneTick();
-        }
     }
 }

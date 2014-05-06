@@ -2,15 +2,13 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hik.Communication.Scs.Client.Tcp
-{
+namespace Hik.Communication.Scs.Client.Tcp {
     /// <summary>
-    /// This class is used to simplify TCP socket operations.
+    ///     This class is used to simplify TCP socket operations.
     /// </summary>
-    internal static class TcpHelper
-    {
+    internal static class TcpHelper {
         /// <summary>
-        /// This code is used to connect to a TCP socket with timeout option.
+        ///     This code is used to connect to a TCP socket with timeout option.
         /// </summary>
         /// <param name="endPoint">IP endpoint of remote server</param>
         /// <param name="timeoutMs">Timeout to wait until connect</param>

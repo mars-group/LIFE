@@ -1,41 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using LayerAPI.Interfaces;
+﻿using LayerAPI.Interfaces;
+using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
 
-[assembly:AddinRoot("LayerContainer", "0.1")]
-namespace LayerAPI.AddinLoader
-{
-    public class AddinLoader : IAddinLoader
-    {
-        private Dictionary<Type,ILayer> _layers;
+[assembly: AddinRoot("LayerContainer", "0.1")]
 
-        public AddinLoader()
-        {
-            _layers = new Dictionary<Type, ILayer>();
-        }
-
-        public void LoadAddins()
-        {
+namespace LayerAPI.AddinLoader {
+    public class AddinLoader : IAddinLoader {
+        public AddinLoader() {
             AddinManager.Initialize("./addinRegistry");
             AddinManager.Registry.Update();
-
-            foreach (var layer in AddinManager.GetExtensionObjects<IEventDrivenLayer>())
-            {
-                _layers.Add(typeof(IEventDrivenLayer), layer);
-            }
-
-            foreach (var layer in AddinManager.GetExtensionObjects<ISteppedLayer>())
-            {
-                _layers.Add(typeof(IEventDrivenLayer), layer);
-            }
         }
 
-        public IEnumerable<ILayer> GetAllLayers()
+        public void LoadModelContent(ModelContent modelContent) {
+            modelContent.Write("./addinRegistry/addins");
+            UpdateAddinRegistry();
+        }
+
+        public TypeExtensionNode LoadLayer(string layerName) {
+
+            foreach (TypeExtensionNode node in AddinManager.GetExtensionNodes(typeof (ISteppedLayer))) {
+                if (node.Type.ToString() == layerName) return node;
+            }
+            return null;
+        }
+
+        private void UpdateAddinRegistry()
         {
-            return new List<ILayer>(_layers.Values);
+            AddinManager.Registry.Update();
         }
-
-
     }
 }
