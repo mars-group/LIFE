@@ -1,36 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using Primitive_Architecture.Agents;
-using Primitive_Architecture.Interfaces;
 
 namespace Primitive_Architecture.Dummies {
   
   /// <summary>
-  ///   This is the execution environment, responsible for periodic triggering of all agents.
+  ///   This class periodicly triggers the environment and thereby all agents.
   /// </summary>
   internal class Executor {
 
-    private readonly List<ITickClient> _clients; // A list of all clients to execute.
+    private readonly Environment _environment; // The agent container.
 
 
     /// <summary>
     ///   Instantiate a runtime.
-    /// <param name="clients">A list of executable (tickable) clients.</param>
+    /// <param name="environment">The environment to execute.</param>
     /// </summary>
-    private Executor(List<ITickClient> clients) {
-      _clients = clients;
+    private Executor(Environment environment) {
+      _environment = environment;
     }
 
 
     /// <summary>
-    ///   Execution routine. All agents are ticked in a sequential order.
+    ///   Execution routine. Sends a tick to the environment container.
     /// </summary>
     /// <param name="delay">Thread delay (in ms), 0 for manual execution.</param>
     private void Run(int delay) {
       while (true) {
-        //TODO: Arbitrary execution or some user input handling would be nice.
-        foreach (var client in _clients) client.Tick();
+        _environment.Tick();
         
         // Manual or automatic execution.
         if (delay == 0) Console.ReadLine();
@@ -47,9 +44,10 @@ namespace Primitive_Architecture.Dummies {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var agents = AgentBuilder.CreateHeatingScenarioAgents();
-      new Executor(agents).Run(0);
-      Console.ReadLine();
+      var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
+      new Executor(environment).Run(0);    
+      Console.ReadLine();   
     }
   }
 }
+

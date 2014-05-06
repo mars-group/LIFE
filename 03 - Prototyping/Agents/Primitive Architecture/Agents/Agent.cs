@@ -1,7 +1,9 @@
 ﻿using System;
 using Primitive_Architecture.Dummies;
+using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interfaces;
 using Primitive_Architecture.Perception;
+using Environment = Primitive_Architecture.Dummies.Environment;
 
 namespace Primitive_Architecture.Agents {
 
@@ -11,12 +13,13 @@ namespace Primitive_Architecture.Agents {
   /// </summary>
   internal abstract class Agent : ITickClient {
 
-    private long _cycle;                              // The current execution cycle.
-    protected readonly string Id;                     // Unique identifier.
-    protected readonly PerceptionUnit PerceptionUnit; // Sensor container and input gathering. 
-    protected IAgentLogic ReasoningComponent;         // The agent's reasoning logic.
-    protected readonly bool DebugEnabled;             // Controls debug console output.
-    protected Vector3D Position;                      // The agent's center in a 3D environment. 
+    private long _cycle;                               // The current execution cycle.
+    protected readonly string Id;                      // Unique identifier.
+    protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
+    protected IAgentLogic ReasoningComponent;          // The agent's reasoning logic.
+    protected readonly bool DebugEnabled;              // Controls console debug output.
+    public readonly InteractionContainer Interactions; // Repertoire of all interactions.  
+    public Vector Position;                            // Position in an environment.
 
 
     /// <summary>
@@ -26,8 +29,10 @@ namespace Primitive_Architecture.Agents {
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
     protected Agent(string id) {
       Id = id;
-      DebugEnabled = true;
+      DebugEnabled = true; 
       PerceptionUnit = new PerceptionUnit();
+      if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;
+      Interactions = new InteractionContainer (this, Environment.IACLoader);  
     }
 
 
@@ -52,7 +57,9 @@ namespace Primitive_Architecture.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     protected new virtual string ToString() {
-      return "Agent: " + Id + "   Cycle: " + _cycle;
+      var pos = "";
+      if (Position != null) pos = " Position: "+Position;
+      return "Agent: " + Id + "   Cycle: " + _cycle + pos;
     }
   }
 }

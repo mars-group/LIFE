@@ -43,12 +43,23 @@
     <Compile Include="Agents\Heating\AgentSmith.cs" />
     <Compile Include="Agents\Ice\Iceeater.cs" />
     <Compile Include="Agents\Ice\Iceman.cs" />
+    <Compile Include="Agents\Wolves\Grass.cs" />
+    <Compile Include="Agents\Wolves\Grassland.cs" />
+    <Compile Include="Agents\Wolves\Sheep.cs" />
+    <Compile Include="Agents\Wolves\Wolf.cs" />
     <Compile Include="Interactions\Heating\AdjustSettingInteraction.cs" />
     <Compile Include="Interactions\Heating\OpenWindowInteraction.cs" />
     <Compile Include="Interactions\Heating\ThermalOutputInteraction.cs" />
+    <Compile Include="Interactions\InteractionContainer.cs" />
+    <Compile Include="Interactions\Wolves\EatInteraction.cs" />
+    <Compile Include="Interactions\Wolves\GrowInteraction.cs" />
+    <Compile Include="Interactions\Wolves\IACLoader_Wolves.cs" />
+    <Compile Include="Interactions\Wolves\MoveInteraction.cs" />
+    <Compile Include="Interactions\Wolves\ProcreateInteraction.cs" />
+    <Compile Include="Interfaces\IACLoader.cs" />
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Reasoning\ReasoningComponent.cs" />
-    <Compile Include="Dummies\Vector3D.cs" />
+    <Compile Include="Dummies\Vector.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
     <Compile Include="Interfaces\IGenericDataSource.cs" />
     <Compile Include="Perception\GenericSensor.cs" />
@@ -75,7 +86,12 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Perception\Wolves\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Interactions\Wolves\Wolves IA.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

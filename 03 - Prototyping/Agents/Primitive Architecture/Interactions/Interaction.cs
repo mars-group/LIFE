@@ -1,30 +1,17 @@
-﻿using System.Linq;
+﻿using Primitive_Architecture.Agents;
 
 namespace Primitive_Architecture.Interactions {
-  abstract internal class Interaction {
-    
-    private readonly string _id;
+  internal abstract class Interaction {
     protected readonly IGenericAPI Source;
-    protected readonly IGenericAPI[] Targets;
+    public Agent Target;
 
-    protected Interaction(string id, IGenericAPI source, IGenericAPI[] targets) {
-      _id = id;
+    protected Interaction(IGenericAPI source) {
       Source = source;
-      Targets = targets;
     }
 
 
-    public abstract bool IsExecutable();
+    public abstract bool CheckPreconditions();
+    public abstract bool CheckTrigger();
     public abstract void Execute();
-
-    public new string ToString() {
-      string targets;
-      if (Targets.Length == 1) targets = Targets[0].ToString();
-      else {
-        targets = Targets.Aggregate("[", (current, next) => current + (", " + next.ToString()));
-        targets += "]";
-      }
-      return "[Interaction] Source \"" + Source.ToString() + "\" executed \"" + _id + "\" on target \"" + targets + "\"";
-    }
   }
 }

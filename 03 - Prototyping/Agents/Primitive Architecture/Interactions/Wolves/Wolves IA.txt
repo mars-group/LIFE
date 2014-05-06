@@ -1,0 +1,65 @@
+﻿Interaktionen für das Wolf-Szenario (Notizen):
+**********************************************
+
+// Limitationen und Verhaltensregeln: 
+ - Wölfe und Schafe sind immer auf der Suche nach Nahrungsquellen
+   (keine Abbildung von Ausruh- oder anderen Phasen)
+-  Ißt ein Agent nicht genug, so stirbt er
+ - Die Bewegung, sofern kein Ziel erfaßt wurde, erfolgt zufällig
+ - Ist ein Ziel verfügbar, begibt sich der Agent direkt dorthin (und zieht nicht über Los ...)
+ - Die Umgebungsgrenzen können nicht überschritten werden, ebensowenig können zwei Agenten 
+   an derselben Position sein
+ - Zur Aktionsauswahl wird eine simple, reaktive Planung verwendet 
+
+
+- Essen ("Eat")
+  - Quellagenten: Schaf, Wolf 
+  - Zielagenten: Gras, Schaf
+  - Kardinalität: (1,1)
+  - Kombinationen: (Schaf → Gras), (Wolf → Schaf)
+     - Quellprimitive: Sterben(), NährwertAbrufen()
+	 - Zielprimitive: NährwertGutschreiben()
+
+- Bewegen ("Move")
+  - Quellagenten: Schaf, Wolf 
+  - Zielagenten: ---
+  - Kardinalität: (1,0)
+  - Kombinationen: ---
+    - Quellprimitive: PositionAbrufen(), PositionSetzen()
+	- Zielprimitive: ---
+
+- Wachsen ("Grow")
+  - Quellagenten: Gras
+  - Zielagenten: ---
+  - Kardinalität: (1,0)
+  - Kombinationen: ---
+    - Quellprimitive: NährwertErhöhen()
+	- Zielprimitive: ---
+
+- Vermehren ("Procreate")
+  - Quellagenten: Schaf, Wolf 
+  - Zielagenten: Schaf, Wolf
+  - Kardinalität: (1,1)
+  - Kombinationen: (Schaf → Schaf), (Wolf → Wolf)
+    - Quellprimitive: ---
+	- Zielprimitive: TrächtigWerden()
+
+
+// Was wir immer brauchen bei Interaktionen (1,+): 
+ - Quellprimitive: ZieltypAbfragen()
+ - Zielprimitive: TypZurückgeben()
+
+ - Kann Teil von CheckConditions() werden:
+   if (!source.getTargetTypes().Contains (target.GetType())) return false;
+   - Diese Überprüfung kann in einer Basisfunktion stattfinden, Einbindung weiterer durch Spez.
+ - Eltern-Schnittstelle der Primitiv-Schnittstellen schreibt diese beiden vor.
+ 
+  
+// Wie soll die Initialisierung ablaufen?
+ 1) IACLoader erstellt die Listen für Container
+ 2) Agent braucht AgentSensor (Umkreis)
+ 3) Tupelbildung anhand von Agentenliste
+ 4) Reaktive Bewertung der Handlungsmöglichkeiten, Auswahl der höchstpriorisierten Interaktion
+ 5) Ausführung derselbigen
+ 
+  
