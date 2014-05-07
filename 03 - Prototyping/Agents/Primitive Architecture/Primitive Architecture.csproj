@@ -58,6 +58,10 @@
     <Compile Include="Interactions\Wolves\ProcreateInteraction.cs" />
     <Compile Include="Interfaces\IACLoader.cs" />
     <Compile Include="Interfaces\IAgentLogic.cs" />
+    <Compile Include="Perception\AgentSensor.cs" />
+    <Compile Include="Perception\Halo.cs" />
+    <Compile Include="Perception\OmniHalo.cs" />
+    <Compile Include="Perception\RadialHalo.cs" />
     <Compile Include="Reasoning\ReasoningComponent.cs" />
     <Compile Include="Dummies\Vector.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
