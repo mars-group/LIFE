@@ -56,10 +56,19 @@
  
   
 // Wie soll die Initialisierung ablaufen?
- 1) IACLoader erstellt die Listen für Container
+ 1) IACLoader erstellt die Listen für Container  (fertig)
  2) Agent braucht AgentSensor (Umkreis)
  3) Tupelbildung anhand von Agentenliste
  4) Reaktive Bewertung der Handlungsmöglichkeiten, Auswahl der höchstpriorisierten Interaktion
  5) Ausführung derselbigen
+
+
+ Problem: AgentSensor
+ ********************
+ - soll der Sensor die Agentenliste durchgehen oder nur passende Agenten zurückbekommen?
+ - wie sieht der Rückgabetyp aus? Generisches Objekt dafür nutzen?
+ - Halo-Repräsentation erstellen
+ - Position durchreichen (Agent → PU → Sensor) ... geht das auch besser?
+
  
   

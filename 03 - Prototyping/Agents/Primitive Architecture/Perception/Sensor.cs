@@ -13,6 +13,7 @@ namespace Primitive_Architecture.Perception {
     protected IGenericDataSource Source; // The data source (environment) to sense. 
     public int InformationType { get; private set; }  // Linkage to the data type to acquire.
     //TODO: A sensor needs a halo and a position reference to transmit to the source.
+    //TODO: Maybe the halo contains the position reference ... (← in via constr.)
 
 
     /// <summary>

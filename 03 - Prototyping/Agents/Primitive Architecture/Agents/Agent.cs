@@ -14,11 +14,11 @@ namespace Primitive_Architecture.Agents {
   internal abstract class Agent : ITickClient {
 
     private long _cycle;                               // The current execution cycle.
-    protected readonly string Id;                      // Unique identifier.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected IAgentLogic ReasoningComponent;          // The agent's reasoning logic.
     protected readonly bool DebugEnabled;              // Controls console debug output.
     public readonly InteractionContainer Interactions; // Repertoire of all interactions.  
+    public readonly string Id;                         // Unique identifier.
     public Vector Position;                            // Position in an environment.
 
 
