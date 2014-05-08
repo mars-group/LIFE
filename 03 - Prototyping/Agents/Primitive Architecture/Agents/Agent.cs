@@ -13,7 +13,7 @@ namespace Primitive_Architecture.Agents {
   /// </summary>
   internal abstract class Agent : ITickClient {
 
-    private long _cycle;                               // The current execution cycle.
+    protected long Cycle;                              // The current execution cycle.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected IAgentLogic ReasoningComponent;          // The agent's reasoning logic.
     protected readonly bool DebugEnabled;              // Controls console debug output.
@@ -32,7 +32,9 @@ namespace Primitive_Architecture.Agents {
       DebugEnabled = true; 
       PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;
-      Interactions = new InteractionContainer (this, Environment.IACLoader);  
+      if (Environment.IACLoader != null) {
+        Interactions = new InteractionContainer (this, Environment.IACLoader);  
+      }     
     }
 
 
@@ -45,7 +47,7 @@ namespace Primitive_Architecture.Agents {
       PerceptionUnit.SenseAll();                // Phase 1: Perception
       var action = ReasoningComponent.Reason(); // Phase 2: Reasoning
       if (action != null) action.Execute();     // Phase 3: Execution
-      _cycle ++;
+      Cycle ++;
 
       // Print the runtime information for debug purposes. 
       if (DebugEnabled) Console.WriteLine(ToString());    
@@ -59,7 +61,7 @@ namespace Primitive_Architecture.Agents {
     protected new virtual string ToString() {
       var pos = "";
       if (Position != null) pos = " Position: "+Position;
-      return "Agent: " + Id + "   Cycle: " + _cycle + pos;
+      return "Agent: " + Id + "\t  Cycle: " + Cycle + pos;
     }
   }
 }

@@ -43,6 +43,7 @@
     <Compile Include="Agents\Heating\AgentSmith.cs" />
     <Compile Include="Agents\Ice\Iceeater.cs" />
     <Compile Include="Agents\Ice\Iceman.cs" />
+    <Compile Include="Agents\Ice\IceWorld.cs" />
     <Compile Include="Agents\Wolves\Grass.cs" />
     <Compile Include="Agents\Wolves\Grassland.cs" />
     <Compile Include="Agents\Wolves\Sheep.cs" />
@@ -60,6 +61,8 @@
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Perception\AgentSensor.cs" />
     <Compile Include="Perception\Halo.cs" />
+    <Compile Include="Perception\Ice\SunInput.cs" />
+    <Compile Include="Perception\Ice\SunSensor.cs" />
     <Compile Include="Perception\OmniHalo.cs" />
     <Compile Include="Perception\RadialHalo.cs" />
     <Compile Include="Reasoning\ReasoningComponent.cs" />

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Primitive_Architecture.Agents;
-using Primitive_Architecture.Interactions.Wolves;
 using Primitive_Architecture.Interfaces;
 
 namespace Primitive_Architecture.Dummies {
@@ -74,7 +73,7 @@ namespace Primitive_Architecture.Dummies {
     ///   Get all agents that are contained in this environment.
     /// </summary>
     /// <returns>A read-only list of all available agents.</returns>
-    public IReadOnlyList<Agent> GetAllAgents() {
+    public IEnumerable<Agent> GetAllAgents() {
       return new ReadOnlyCollection<Agent>(Agents);
     }
 

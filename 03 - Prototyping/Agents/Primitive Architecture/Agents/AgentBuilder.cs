@@ -1,4 +1,5 @@
 ﻿using Primitive_Architecture.Agents.Heating;
+using Primitive_Architecture.Agents.Ice;
 using Primitive_Architecture.Agents.Wolves;
 using Primitive_Architecture.Dummies;
 
@@ -37,6 +38,19 @@ namespace Primitive_Architecture.Agents {
       for (var i = 0; i < 8; i++) environment.AddAgent(new Grass("[Grass " +i+"]"));
       for (var i = 0; i < 4; i++) environment.AddAgent(new Sheep("[Sheep " +i+"]"));
       for (var i = 0; i < 2; i++) environment.AddAgent(new Wolf ("[Wolf  " +i+"]"));     
+      return environment;
+    }
+
+
+    /// <summary>
+    /// Builder for the iceworld scenario.
+    /// </summary>
+    /// <returns>The environment.</returns>
+    public static Environment CreateIceworldScenarioEnvironment() {
+      var environment = new IceWorld();
+      environment.AddAgent(new Iceeater(environment));
+      environment.AddAgent(new Iceman(environment));
+      environment.RandomExecution = true;
       return environment;
     }
   }

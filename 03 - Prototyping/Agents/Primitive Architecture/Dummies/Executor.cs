@@ -44,7 +44,7 @@ namespace Primitive_Architecture.Dummies {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
+      var environment = AgentBuilder.CreateIceworldScenarioEnvironment();
       new Executor(environment).Run(0);    
       Console.ReadLine();   
     }
