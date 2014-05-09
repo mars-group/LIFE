@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Common.Interfaces;
 using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interfaces;
 using Primitive_Architecture.Perception.Ice;
@@ -11,11 +11,11 @@ namespace Primitive_Architecture.Agents.Ice {
 
     public Iceman(IceWorld environment) : base("Iceman") {
       PerceptionUnit.AddSensor(new SunSensor(environment));
-      // ReasoningComponent = new Goap();
+      //ReasoningComponent = new Goap();
     }
 
     //TODO Dummy only!
-    public Interaction Reason() {
+    public IInteraction Reason() {
       var sunInput = PerceptionUnit.GetData<SunInput>();
       _sun = sunInput.GetSunshine();
       return null;

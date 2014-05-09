@@ -17,9 +17,7 @@ namespace GoapComponent {
         private GoapPlanner planner;
         private GoapKnowledgeProcessing knowledgeProcessing;
 
-        public Goap(List<GoapWorldState> currentWorldStates, List<GoapGoal> allAvailableGoals) {
-            this.allAvailableGoals = allAvailableGoals;
-
+        public Goap() {
             knowledgeProcessing = new GoapKnowledgeProcessing();
             planner = new GoapPlanner(knowledgeProcessing);
             ChooseGoal();

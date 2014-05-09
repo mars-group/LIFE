@@ -58,7 +58,6 @@
     <Compile Include="Interactions\Wolves\MoveInteraction.cs" />
     <Compile Include="Interactions\Wolves\ProcreateInteraction.cs" />
     <Compile Include="Interfaces\IACLoader.cs" />
-    <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Perception\AgentSensor.cs" />
     <Compile Include="Perception\Halo.cs" />
     <Compile Include="Perception\Ice\SunInput.cs" />
@@ -98,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Interactions\Wolves\Wolves IA.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{c057e43f-7542-47a9-98aa-ba583aab5d80}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

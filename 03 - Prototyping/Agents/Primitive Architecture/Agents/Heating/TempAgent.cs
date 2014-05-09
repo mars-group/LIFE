@@ -1,7 +1,7 @@
 ﻿using System;
+using Common.Interfaces;
 using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interactions.Heating;
-using Primitive_Architecture.Interfaces;
 using Primitive_Architecture.Perception.Heating;
 
 namespace Primitive_Architecture.Agents.Heating {
@@ -37,7 +37,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// new heater setting. It's very simple and purely reactive ...
     /// </summary>
     /// <returns>An action to adjust the heater setting.</returns>
-    public Interaction Reason() {
+    public IInteraction Reason() {
       
       // Get current temperature and calculate the deltas.
       var roomInput = PerceptionUnit.GetData<RoomInput>();

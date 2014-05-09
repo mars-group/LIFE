@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using GoapComponent.GoapKnowledgeProcessingComponent;
+using Common.Interfaces;
 
-namespace GoapComponent {
+namespace GoapComponent  {
     /// <summary>
     ///     goap actions define a transition to another worldstate
     /// </summary>
-    internal abstract class GoapAction : IEquatable<GoapAction> {
+    internal abstract class GoapAction : IEquatable<GoapAction>, IInteraction {
         protected List<GoapWorldState> preconditions;
         protected List<GoapWorldState> postconditions;
 
@@ -40,7 +41,11 @@ namespace GoapComponent {
             }
         }
 
-        public static bool operator ==(GoapAction left, GoapAction right) {
+      public void Execute() {
+        throw new NotImplementedException();
+      }
+
+      public static bool operator ==(GoapAction left, GoapAction right) {
             return Equals(left, right);
         }
 

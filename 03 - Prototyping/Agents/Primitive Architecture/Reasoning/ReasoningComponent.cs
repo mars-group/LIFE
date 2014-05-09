@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Primitive_Architecture.Interfaces;
+using Common.Interfaces;
 using Primitive_Architecture.Perception;
 using Primitive_Architecture.Interactions;
 
@@ -22,7 +22,7 @@ namespace Primitive_Architecture.Reasoning {
     /// phase. This is probably the most complex function in the entire program ...
     /// </summary>
     /// <returns>The interaction to execute. May be null if the agent stays idle.</returns>
-    public abstract Interaction Reason();
+    public abstract IInteraction Reason();
 
   }
 }

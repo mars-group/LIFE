@@ -1,7 +1,7 @@
 ﻿using System;
+using Common.Interfaces;
 using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interactions.Heating;
-using Primitive_Architecture.Interfaces;
 
 namespace Primitive_Architecture.Agents.Heating {
 
@@ -39,7 +39,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// A simple calculation of new output value and creation of interaction object.
     /// </summary>
     /// <returns>The heating interaction.</returns>
-    public Interaction Reason () {
+    public IInteraction Reason () {
       
       // Set the current output and new nominal output (based on the new setting).
       _thermalOutput = _thermalOutput + _thermalChange;

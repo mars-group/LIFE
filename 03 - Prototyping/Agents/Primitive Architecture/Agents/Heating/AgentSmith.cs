@@ -1,7 +1,7 @@
 ﻿using System;
 using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interactions.Heating;
-using Primitive_Architecture.Interfaces;
+using Common.Interfaces;
 
 namespace Primitive_Architecture.Agents.Heating {
   
@@ -26,7 +26,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// Just doing some random disturbance.
     /// </summary>
     /// <returns>A open-the-window interaction.</returns>
-    public Interaction Reason() {
+    public IInteraction Reason() {
 
       // Smith really likes a breeze of fresh air every now and then ...
       var random = new Random();
