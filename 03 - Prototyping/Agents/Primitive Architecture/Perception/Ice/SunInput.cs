@@ -1,9 +1,11 @@
-﻿namespace Primitive_Architecture.Perception.Ice {
+﻿using Common.Types;
+
+namespace Primitive_Architecture.Perception.Ice {
   
   /// <summary>
   ///   Storage object for sunshine sensor input.
   /// </summary>
-  internal class SunInput : SensorInput {
+  internal class SunInput : SensorInput, ISunInput {
 
     private readonly bool _sunshine;   // Flag for sunshine value.
 

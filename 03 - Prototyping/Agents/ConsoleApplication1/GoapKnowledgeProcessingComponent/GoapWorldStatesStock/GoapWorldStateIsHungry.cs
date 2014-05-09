@@ -1,7 +1,6 @@
 ﻿using System;
-using GoapComponent.GoapKnowledgeProcessingComponent;
 
-namespace GoapComponent.Implementation.GoapWorldStatesStock {
+namespace GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock {
     internal class GoapWorldStateIsHungry : GoapWorldState, IEquatable<GoapWorldStateIsHungry> {
         public GoapWorldStateIsHungry(bool startValue) : base(startValue) {}
 

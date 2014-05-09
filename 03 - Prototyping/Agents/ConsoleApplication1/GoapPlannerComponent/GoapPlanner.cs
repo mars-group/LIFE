@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using GoapComponent.GoapActionsStock;
 using GoapComponent.GoapKnowledgeProcessingComponent;
-using GoapComponent.Implementation.GoapActionsStock;
 
 namespace GoapComponent.GoapPlannerComponent {
     internal class GoapPlanner {

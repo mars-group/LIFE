@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Interfaces;
 
 namespace Primitive_Architecture.Perception {
   
@@ -7,7 +8,7 @@ namespace Primitive_Architecture.Perception {
   ///   The Perception Unit (PU) is a container responsible for querying the attached
   ///   sensors and storing the retrieved results for further usage in the planning phase.
   /// </summary>
-  internal class PerceptionUnit {
+  internal class PerceptionUnit : IPerception {
     
     private readonly List<Sensor> _sensors; // All sensors available to the agent.
     private readonly Dictionary<Type, Input> _inputMemory; // Storage of sensed input.

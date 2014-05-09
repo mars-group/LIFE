@@ -1,6 +1,6 @@
-﻿using GoapComponent.Implementation.GoapWorldStatesStock;
+﻿using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
 
-namespace GoapComponent.Implementation.GoapActionsStock {
+namespace GoapComponent.GoapActionsStock {
     internal class GoapActionEatIce : GoapAction {
         public GoapActionEatIce() {
             var preIsHungry = new GoapWorldStateIsHungry(true);
