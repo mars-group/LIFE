@@ -11,7 +11,7 @@ namespace SimulationController.Implementation {
 
         private readonly IScsServiceClient<ISimulationManager> _simManagerClient;
 
-        public SimulationManagerClient(NodeInformationType newnode) {
+        public SimulationManagerClient(TNodeInformation newnode) {
             _simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
                 new ScsTcpEndPoint(newnode.NodeEndpoint.IpAddress, newnode.NodeEndpoint.Port));
 
@@ -30,7 +30,7 @@ namespace SimulationController.Implementation {
             return _simManager.GetAllModels();
         }
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers,
+        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers,
             int? nrOfTicks = null) {
             _simManager.StartSimulationWithModel(model, layerContainers, nrOfTicks);
         }

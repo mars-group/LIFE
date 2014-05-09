@@ -19,7 +19,7 @@ namespace NodeRegistry.Implementation.UseCases
 
         private ILog Logger;
 
-        private NodeInformationType _localNodeInformation;
+        private TNodeInformation _localNodeInformation;
         private NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUse;
         private NodeRegistryHeartBeatUseCase _nodeRegistryHeartBeatUseCase;
 
@@ -29,7 +29,7 @@ namespace NodeRegistry.Implementation.UseCases
         private Thread _listenThread;
 
         public NodeRegistryNetworkUseCase(NodeRegistryNodeManagerUseCase nodeManagerUseCase, NodeRegistryHeartBeatUseCase heartBeatUseCase,
-            NodeInformationType localNodeInformation, bool addMySelfToActiveNodeList, IMulticastAdapter multicastAdapter)
+            TNodeInformation localNodeInformation, bool addMySelfToActiveNodeList, IMulticastAdapter multicastAdapter)
         {
             _nodeRegistryNodeManagerUse = nodeManagerUseCase;
             _multicastAdapter = multicastAdapter;
@@ -120,18 +120,18 @@ namespace NodeRegistry.Implementation.UseCases
         private void OnJoinMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage)
         {
             //check if the new node is this instance.
-            if (nodeRegistryConnectionInfoMessage.nodeInformationType.Equals(_localNodeInformation))
+            if (nodeRegistryConnectionInfoMessage.NodeInformation.Equals(_localNodeInformation))
             {
                 if (_addMySelfToActiveNodeList)
                 {
                     //add self to list
-                    _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.nodeInformationType);
+                    _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
                 }
             }
             else
             {
                 //add new node to list
-                _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.nodeInformationType);
+                _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
 
                 // send my information to the new node
                 _multicastAdapter.SendMessageToMulticastGroup(
@@ -141,16 +141,16 @@ namespace NodeRegistry.Implementation.UseCases
 
         private void OnLeaveMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage)
         {
-            _nodeRegistryNodeManagerUse.RemoveNode(nodeRegistryConnectionInfoMessage.nodeInformationType);
+            _nodeRegistryNodeManagerUse.RemoveNode(nodeRegistryConnectionInfoMessage.NodeInformation);
 
         }
 
         private void OnAnswerMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage)
         {
             //add answer node to list
-            _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.nodeInformationType);
+            _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
 
-            _nodeRegistryHeartBeatUseCase.CreateAndStartTimerForNodeEntry(nodeRegistryConnectionInfoMessage.nodeInformationType);
+            _nodeRegistryHeartBeatUseCase.CreateAndStartTimerForNodeEntry(nodeRegistryConnectionInfoMessage.NodeInformation);
 
         }
 

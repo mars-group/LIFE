@@ -13,18 +13,18 @@ namespace NodeRegistry.Implementation.Messages
 
 
         [ProtoMember(10)]
-        public NodeInformationType nodeInformationType { get; set; }
+        public TNodeInformation NodeInformation { get; set; }
 
         public NodeRegistryConnectionInfoMessage()
             : base()
         {
         }
 
-        public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, NodeInformationType informationType)
+        public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, TNodeInformation information)
             : base(messageType)
         {
 
-            nodeInformationType = informationType;
+            NodeInformation = information;
         }
     }
 }

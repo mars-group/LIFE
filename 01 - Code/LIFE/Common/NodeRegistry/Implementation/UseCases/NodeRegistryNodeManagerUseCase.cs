@@ -13,25 +13,25 @@ namespace NodeRegistry.Implementation.UseCases
 
         private NodeRegistryEventHandlerUseCase _nodeRegistryEventHandlerUseCase;
         
-        private ThreadSafeSortedList<String, NodeInformationType> _activeNodeList;
+        private ThreadSafeSortedList<String, TNodeInformation> _activeNodeList;
 
 
         public NodeRegistryNodeManagerUseCase(NodeRegistryEventHandlerUseCase nodeRegistryEventHandlerUseCase) {
             _nodeRegistryEventHandlerUseCase = nodeRegistryEventHandlerUseCase;
-            _activeNodeList = new ThreadSafeSortedList<string, NodeInformationType>();
+            _activeNodeList = new ThreadSafeSortedList<string, TNodeInformation>();
         }
 
-        public List<NodeInformationType> GetAllNodes()
+        public List<TNodeInformation> GetAllNodes()
         {
             return _activeNodeList.GetAllItems();
         }
 
-        public List<NodeInformationType> GetAllNodesByType(NodeType nodeType)
+        public List<TNodeInformation> GetAllNodesByType(NodeType nodeType)
         {
             return GetAllNodes().Where(nodeInformationType => nodeInformationType.NodeType == nodeType).ToList();
         }
 
-        public void AddNode(NodeInformationType nodeInformation) {
+        public void AddNode(TNodeInformation nodeInformation) {
             _activeNodeList[nodeInformation.NodeIdentifier] = nodeInformation;
 
             //notify all subsribers
@@ -40,7 +40,7 @@ namespace NodeRegistry.Implementation.UseCases
 
         }
 
-        public void RemoveNode(NodeInformationType nodeInformation) {
+        public void RemoveNode(TNodeInformation nodeInformation) {
             _activeNodeList.Remove(nodeInformation.NodeIdentifier);
        
             //notify leave subsribers
@@ -48,7 +48,7 @@ namespace NodeRegistry.Implementation.UseCases
 
         }
 
-        public bool ContainsNode(NodeInformationType nodeInformation) {
+        public bool ContainsNode(TNodeInformation nodeInformation) {
             return _activeNodeList.ContainsKey(nodeInformation.NodeIdentifier);
         }
 
