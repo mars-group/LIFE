@@ -4,6 +4,7 @@ using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interfaces;
 using Primitive_Architecture.Perception;
 using Environment = Primitive_Architecture.Dummies.Environment;
+using Common.Interfaces;
 
 namespace Primitive_Architecture.Agents {
 

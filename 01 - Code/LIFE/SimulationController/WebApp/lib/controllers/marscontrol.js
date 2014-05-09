@@ -5,7 +5,7 @@ var edge = require('edge');
 
 
 var createSimController = edge.func({
-    assemblyFile: __dirname + '../../../../SimulationController/bin/Debug/SimulationController.dll',
+    assemblyFile: __dirname + '../../../net_code/SimulationController.dll',
     typeName: 'SimulationController.Interface.SimulationControllerNodeJsInterface',
     methodName: 'GetSimController'
 });

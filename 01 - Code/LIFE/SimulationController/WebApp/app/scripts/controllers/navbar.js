@@ -12,6 +12,9 @@ angular.module('marsmissionControlApp')
       'title': 'MARS VIEW',
       'link': '/marsview'
     }, {
+       'title': 'MARSCom',
+       'link': '/marscom'
+    }, {
       'title': 'Settings',
       'link': '/settings'
     }];

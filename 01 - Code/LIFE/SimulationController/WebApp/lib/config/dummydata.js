@@ -36,6 +36,7 @@ var mongoose = require('mongoose'),
 });*/
 
 // Clear old users, then add a default user
+/*
 User.find({}).remove(function() {
   User.create({
     provider: 'local',
@@ -47,3 +48,4 @@ User.find({}).remove(function() {
     }
   );
 });
+*/

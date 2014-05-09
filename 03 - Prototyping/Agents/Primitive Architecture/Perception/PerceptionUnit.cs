@@ -1,31 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using Common.Interfaces;
 
 namespace Primitive_Architecture.Perception {
-
+  
   /// <summary>
-  /// The Perception Unit (PU) is a container responsible for querying the attached
-  /// sensors and storing the retrieved results for further usage in the planning phase. 
+  ///   The Perception Unit (PU) is a container responsible for querying the attached
+  ///   sensors and storing the retrieved results for further usage in the planning phase.
   /// </summary>
-  class PerceptionUnit {
-
+  internal class PerceptionUnit : IPerception {
+    
     private readonly List<Sensor> _sensors; // All sensors available to the agent.
-    private readonly Dictionary<int, Input> _inputMemory; // Storage of (sensory) input.
-    public IReadOnlyDictionary<int, Input> InputMemory;   // Read-only version of the memory. 
+    private readonly Dictionary<Type, Input> _inputMemory; // Storage of sensed input.
 
 
     /// <summary>
-    /// Create a perception unit (initialized with no sensors).
+    ///   Create a perception unit (initialized with no sensors).
     /// </summary>
     public PerceptionUnit() {
       _sensors = new List<Sensor>();
-      _inputMemory = new Dictionary<int, Input>();
-      InputMemory = new ReadOnlyDictionary<int, Input>(_inputMemory);
+      _inputMemory = new Dictionary<Type, Input>();
     }
 
 
     /// <summary>
-    /// Add a new sensor to the perception unit.
+    ///   Add a new sensor to the perception unit.
     /// </summary>
     /// <param name="sensor">The sensor to be added.</param>
     public void AddSensor(Sensor sensor) {
@@ -34,23 +33,25 @@ namespace Primitive_Architecture.Perception {
 
 
     /// <summary>
-    /// Request new sensor information from all attached sensors and store them in a map.
+    ///   Request new sensor information from all attached sensors and store them in a map.
     /// </summary>
     public void SenseAll() {
       foreach (var sensor in _sensors) {
-        _inputMemory [sensor.InformationType] = sensor.Sense();
-      }  
+        var input = sensor.Sense();
+        _inputMemory[input.GetType()] = input;
+      }
     }
 
 
     /// <summary>
-    /// GET-method to retrieve a piece of information. 
+    ///   GET-method to retrieve a piece of information.
     /// </summary>
-    /// <param name="inputType">The information type to query, specified by an enum.</param>
     /// <returns>An input object containing the desired information.</returns>
-    public Input GetData(int inputType) {
-      return _inputMemory[inputType];
+    public T GetData<T>() where T : class {
+      Input value;
+      var success = _inputMemory.TryGetValue(typeof (T), out value);
+      if (success) return (T) value;
+      return null;
     }
-
   }
 }
