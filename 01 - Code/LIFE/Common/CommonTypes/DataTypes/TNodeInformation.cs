@@ -7,7 +7,7 @@ namespace CommonTypes.DataTypes
 {
     [ProtoContract]
     [Serializable]
-    public class NodeInformationType : IComparable
+    public class TNodeInformation : IComparable
     {
         [ProtoMember(1)]
         public NodeType NodeType { get; private set; }
@@ -19,9 +19,9 @@ namespace CommonTypes.DataTypes
         public NodeEndpoint NodeEndpoint { get; private set; }
 
 
-        private NodeInformationType() { }
+        private TNodeInformation() { }
 
-        public NodeInformationType(NodeType nodeType, string nodeIdentifier, NodeEndpoint nodeEndpoint)
+        public TNodeInformation(NodeType nodeType, string nodeIdentifier, NodeEndpoint nodeEndpoint)
         {
             NodeType = nodeType;
             NodeIdentifier = nodeIdentifier;
@@ -41,7 +41,7 @@ namespace CommonTypes.DataTypes
 
         public override bool Equals(object obj)
         {
-            var type = obj as NodeInformationType;
+            var type = obj as TNodeInformation;
             if (type != null)
             {
                 var otherNodeInfo = type;
@@ -57,7 +57,7 @@ namespace CommonTypes.DataTypes
 
         public int CompareTo(object obj)
         {
-            return NodeIdentifier.CompareTo((obj as NodeInformationType).NodeIdentifier);
+            return NodeIdentifier.CompareTo((obj as TNodeInformation).NodeIdentifier);
         }
     }
 }

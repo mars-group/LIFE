@@ -14,7 +14,7 @@ namespace NodeRegistry.Interface {
 
         public int HeartBeatTimeOutmultiplier { get; set; }
 
-        public NodeRegistryConfig(NodeInformationType nodeinfo, bool addMyselfToActiveNodeList, int heartBeatInterval, int heartbeatTimeoutMultiplier = 3) {
+        public NodeRegistryConfig(TNodeInformation nodeinfo, bool addMyselfToActiveNodeList, int heartBeatInterval, int heartbeatTimeoutMultiplier = 3) {
             this.NodeType = nodeinfo.NodeType;
             NodeIdentifier = nodeinfo.NodeIdentifier;
             NodeEndPointIP = nodeinfo.NodeEndpoint.IpAddress;

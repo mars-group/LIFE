@@ -18,8 +18,8 @@ namespace RuntimeEnvironment.Implementation {
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
-        private readonly ISet<NodeInformationType> _idleLayerContainers;
-        private readonly ISet<NodeInformationType> _busyLayerContainers;
+        private readonly ISet<TNodeInformation> _idleLayerContainers;
+        private readonly ISet<TNodeInformation> _busyLayerContainers;
 
         public RuntimeEnvironmentUseCase(SimulationManagerSettings settings,
             IModelContainer modelContainer,
@@ -29,13 +29,13 @@ namespace RuntimeEnvironment.Implementation {
             _nodeRegistry = nodeRegistry;
 
             _steppedSimulations = new Dictionary<TModelDescription, SteppedSimulationExecutionUseCase>();
-            _idleLayerContainers = new HashSet<NodeInformationType>();
-            _busyLayerContainers = new HashSet<NodeInformationType>();
+            _idleLayerContainers = new HashSet<TNodeInformation>();
+            _busyLayerContainers = new HashSet<TNodeInformation>();
 
             _nodeRegistry.SubscribeForNewNodeConnectedByType(NewNode, NodeType.LayerContainer);
         }
 
-        public void StartWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers,
+        public void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers,
             int? nrOfTicks = null) {
             lock (this) {
                 if (!layerContainers.All(l => _idleLayerContainers.Any(c => c.Equals(l))))
@@ -82,7 +82,7 @@ namespace RuntimeEnvironment.Implementation {
             
         }
 
-        private void NewNode(NodeInformationType newnode)
+        private void NewNode(TNodeInformation newnode)
         {
             lock (this)
             {

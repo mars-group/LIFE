@@ -23,14 +23,14 @@ namespace NodeRegistry.Implementation.UseCases
         private NewNodeConnected _newSimulationManagerConnectedHandler;
         private NewNodeConnected _newSimulationControllerConnectedHandler;
 
-        private ThreadSafeSortedList<NodeInformationType, NodeDisconnected> _disconnectedNodeEventHandlers;
+        private ThreadSafeSortedList<TNodeInformation, NodeDisconnected> _disconnectedNodeEventHandlers;
 
         public NodeRegistryEventHandlerUseCase() {
-            _disconnectedNodeEventHandlers = new ThreadSafeSortedList<NodeInformationType, NodeDisconnected>();
+            _disconnectedNodeEventHandlers = new ThreadSafeSortedList<TNodeInformation, NodeDisconnected>();
         }
 
 
-        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node) {
+        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node) {
             _disconnectedNodeEventHandlers[node] += nodeDisconnectedHandler;
         }
 
@@ -55,12 +55,12 @@ namespace NodeRegistry.Implementation.UseCases
             }
         }
 
-        public void NotifyOnNodeJoinSubsribers(NodeInformationType nodeInformation)
+        public void NotifyOnNodeJoinSubsribers(TNodeInformation nodeInformation)
         {
             if (_newNodeConnectedHandler != null) _newNodeConnectedHandler.Invoke(nodeInformation);
         }
 
-        public void NotifyOnNodeTypeJoinSubsribers(NodeInformationType nodeInformation)
+        public void NotifyOnNodeTypeJoinSubsribers(TNodeInformation nodeInformation)
         {
             switch (nodeInformation.NodeType)
             {
@@ -79,7 +79,7 @@ namespace NodeRegistry.Implementation.UseCases
             }
         }
 
-        public void NotifyOnNodeLeaveSubsribers(NodeInformationType nodeInformation) {
+        public void NotifyOnNodeLeaveSubsribers(TNodeInformation nodeInformation) {
 
             if (_disconnectedNodeEventHandlers.ContainsKey(nodeInformation)) {
                 if (_disconnectedNodeEventHandlers[nodeInformation] != null) {

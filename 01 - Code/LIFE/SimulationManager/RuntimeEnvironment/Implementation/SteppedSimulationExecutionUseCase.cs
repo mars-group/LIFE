@@ -28,7 +28,7 @@ namespace RuntimeEnvironment.Implementation {
             IModelContainer modelContainer,
             TModelDescription modelDescription,
             IList<TLayerDescription> instantiationOrder,
-            ICollection<NodeInformationType> layerContainers,
+            ICollection<TNodeInformation> layerContainers,
             int? nrOfTicks) {
             _nrOfTicks = nrOfTicks;
 
