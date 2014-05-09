@@ -46,9 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MockComponents\ModelContainerMock.cs" />
-    <Compile Include="MockComponents\NodeRegistryMock.cs" />
-    <Compile Include="RuntimeEnvironmentTest.cs" />
-    <Compile Include="TestEntities\Zero.cs" />
+    <Compile Include="ModelContainerTest\Zero.cs" />
+    <Compile Include="RuntimeEnvironmentTest\RuntimeEnvironmentTest.cs" />
     <Compile Include="ModelContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -88,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestEntities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
