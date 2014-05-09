@@ -11,9 +11,5 @@ namespace GoapComponent.Implementation.GoapActionsStock {
             var postIsHungry = new GoapWorldStateIsHungry(false);
             postconditions.Add(postIsHungry);
         }
-
-
-
-
     }
 }

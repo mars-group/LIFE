@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Interfaces;
 using GoapComponent.GoapKnowledgeProcessingComponent;
+using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
 using GoapComponent.GoapPlannerComponent;
-using GoapComponent.Implementation.GoapWorldStatesStock;
 
 namespace GoapComponent {
     /// <summary>
     ///     Is the only access point for the whole GOAP functions from outside the GOAPComponent
     /// </summary>
-    public class Goap
-        //    : IAgentLogic
-    {
+    public class Goap : IAgentLogic {
         private GoapGoal currentGoal;
         private List<GoapGoal> allAvailableGoals;
         private GoapPlanner planner;
-        private GoapKnowledgeProcessing knowledgeProcessing;
+        private readonly GoapKnowledgeProcessing knowledgeProcessing;
 
-        public Goap() {
+        public Goap(List<GoapWorldState> currentWorldStates, List<GoapGoal> allAvailableGoals) {
+            this.allAvailableGoals = allAvailableGoals;
+
             knowledgeProcessing = new GoapKnowledgeProcessing();
             planner = new GoapPlanner(knowledgeProcessing);
             ChooseGoal();
@@ -31,18 +32,12 @@ namespace GoapComponent {
             throw new NotImplementedException();
         }
 
-        /** public Interaction Reason()
-        {
-            // TODO Interface bedienen können
-            return (Interaction)planner.GetNextAction();
-        }*/
+        public IInteraction Reason() {
+            throw new NotImplementedException();
+        }
 
         public void SenseAll() {
             knowledgeProcessing.SenseAll();
-        }
-
-        public void Tick() {
-            knowledgeProcessing.Tick();
         }
 
 
@@ -57,7 +52,7 @@ namespace GoapComponent {
             var worldStates2 = new List<GoapWorldState> {isfed2};
 
 
-            Console.WriteLine(Enumerable.All(worldStates2, worldStates1.Contains));
+            Console.WriteLine(worldStates2.All(worldStates1.Contains));
             Console.ReadLine();
         }
     }
