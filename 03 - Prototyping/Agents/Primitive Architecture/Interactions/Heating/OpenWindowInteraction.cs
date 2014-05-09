@@ -1,4 +1,5 @@
-﻿using Primitive_Architecture.Agents.Heating;
+﻿using System;
+using Primitive_Architecture.Agents.Heating;
 
 namespace Primitive_Architecture.Interactions.Heating {
   class OpenWindowInteraction : Interaction {
@@ -8,16 +9,19 @@ namespace Primitive_Architecture.Interactions.Heating {
 
 
     public OpenWindowInteraction(string id, TempEnvironment env, bool open)
-      : base(id, null, null) {
+      : base(null) {
       _environment = env;
       _open = open;
     }
 
 
-    public override bool IsExecutable() {
-      return true;
+    public override bool CheckPreconditions() {
+      throw new NotImplementedException();
     }
 
+    public override bool CheckTrigger() {
+      throw new NotImplementedException();
+    }
 
     public override void Execute() {
       _environment.WindowOpen = _open;

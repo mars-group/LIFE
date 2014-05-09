@@ -1,4 +1,5 @@
 ﻿using System;
+using Primitive_Architecture.Interactions.Wolves;
 using Primitive_Architecture.Interfaces;
 using Primitive_Architecture.Perception;
 using Environment = Primitive_Architecture.Dummies.Environment;
@@ -17,14 +18,14 @@ namespace Primitive_Architecture.Agents.Heating {
     public double Temperature { get; private set; }
 
 
-    public TempEnvironment() {
+    public TempEnvironment() : base (new IACLoaderWolves()) {
       Temperature = 15;
       WindowOpen = false;
       TempGain = 0;
     }
 
 
-    public override void Tick() {
+    protected override void AdvanceEnvironment() {
       // Thermal value corresponding to one degree Celsius.
       const double tempUnit = (Thermal2 - Thermal1)/(Temp2 - Temp1);
 
@@ -41,6 +42,10 @@ namespace Primitive_Architecture.Agents.Heating {
                         ") - Fenster: " + (WindowOpen ? "offen" : "geschlossen") + ".");
     }
 
+
+    public override double GetDistance(Agent x, Agent y) {
+      throw new NotImplementedException();
+    }
 
 
     //TODO 0=Temp, 1=HeaterAgent, 2=WindowState

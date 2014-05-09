@@ -11,8 +11,8 @@ namespace Primitive_Architecture.Perception {
     private bool _active;                // This boolean controls polling or callback mode.
     private SensorInput _lastInput;      // Container for the last retrieved sensor input.
     protected IGenericDataSource Source; // The data source (environment) to sense. 
+    protected readonly Halo Halo;        // The area this sensor can percept. 
     public int InformationType { get; private set; }  // Linkage to the data type to acquire.
-    //TODO: A sensor needs a halo and a position reference to transmit to the source.
 
 
     /// <summary>
@@ -21,6 +21,7 @@ namespace Primitive_Architecture.Perception {
     /// </summary>
     protected Sensor(int informationType) {
       InformationType = informationType;
+      Halo = new OmniHalo();
       Enabled = true;
       _active = true;
       _lastInput = null;

@@ -1,4 +1,5 @@
-﻿using Primitive_Architecture.Agents.Heating;
+﻿using System;
+using Primitive_Architecture.Agents.Heating;
 
 namespace Primitive_Architecture.Interactions.Heating {
   class ThermalOutputInteraction : Interaction {
@@ -8,16 +9,19 @@ namespace Primitive_Architecture.Interactions.Heating {
 
 
     public ThermalOutputInteraction(string id, TempEnvironment env, double thermalOutput)
-      : base(id, null, null) {
+      : base(null) {
       _environment = env;
       _thermalOutput = thermalOutput;
     }
 
 
-    public override bool IsExecutable() {
-      return true;     
+    public override bool CheckPreconditions() {
+      throw new NotImplementedException();
     }
 
+    public override bool CheckTrigger() {
+      throw new NotImplementedException();
+    }
 
     public override void Execute() {
       _environment.TempGain = _thermalOutput;

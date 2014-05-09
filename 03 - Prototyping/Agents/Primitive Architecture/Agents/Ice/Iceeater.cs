@@ -1,7 +1,29 @@
-﻿namespace Primitive_Architecture.Agents.Ice {
-  internal class Iceeater : Agent {
-    public Iceeater() : base("Iceeater") {
-      
+﻿using System;
+using Primitive_Architecture.Interactions;
+using Primitive_Architecture.Interfaces;
+using Primitive_Architecture.Perception.Ice;
+
+namespace Primitive_Architecture.Agents.Ice {
+
+  internal class Iceeater : Agent, IAgentLogic {
+
+    private bool _sun;
+
+    public Iceeater(IceWorld environment) : base("Iceeater") {
+      PerceptionUnit.AddSensor(new SunSensor(environment));
+      // ReasoningComponent = new Goap();
+    }
+
+    //TODO Dummy only!
+    public Interaction Reason() {
+      var sunInput = (SunInput) PerceptionUnit.GetData(0);
+      _sun = sunInput.GetSunshine();
+      return null;
+    }
+
+
+    protected override string ToString() {
+      return "[" + Cycle + "] [Iceeater] Sun shines" + (_sun ? "!" : " not. :-(");
     }
   }
 }

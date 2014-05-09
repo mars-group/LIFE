@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using Primitive_Architecture.Agents.Heating;
-using Primitive_Architecture.Interfaces;
+﻿using Primitive_Architecture.Agents.Heating;
+using Primitive_Architecture.Agents.Ice;
+using Primitive_Architecture.Agents.Wolves;
+using Primitive_Architecture.Dummies;
 
 namespace Primitive_Architecture.Agents {
 
@@ -11,16 +12,46 @@ namespace Primitive_Architecture.Agents {
 
 
     /// <summary>
-    /// Create some agents related to the heating scenario.
+    /// Create an environment and some agents related to the heating scenario.
     /// </summary>
-    /// <returns>A list of agents.</returns>
-    public static List<ITickClient> CreateHeatingScenarioAgents() {
+    /// <returns>The environment container.</returns>
+    public static Environment CreateHeatingScenarioEnvironment() {
       var tempEnvironment = new TempEnvironment();
       var heater = new HeaterAgent(tempEnvironment);
       var controller = new TempAgent(tempEnvironment, heater);
       var smith = new AgentSmith(tempEnvironment);
 
-      return new List<ITickClient> {tempEnvironment, controller, heater, smith};
+      tempEnvironment.AddAgent(heater);
+      tempEnvironment.AddAgent(controller);
+      tempEnvironment.AddAgent(smith);
+      return tempEnvironment;
+    }
+
+
+    /// <summary>
+    /// Builder for the wolves vs. sheeps scenario.
+    /// </summary>
+    /// <returns>The environment.</returns>
+    public static Environment CreateWolvesScenarioEnvironment() {
+      var environment = new Grassland();
+      environment.RandomExecution = true;
+      for (var i = 0; i < 8; i++) environment.AddAgent(new Grass("[Grass " +i+"]"));
+      for (var i = 0; i < 4; i++) environment.AddAgent(new Sheep("[Sheep " +i+"]"));
+      for (var i = 0; i < 2; i++) environment.AddAgent(new Wolf ("[Wolf  " +i+"]"));     
+      return environment;
+    }
+
+
+    /// <summary>
+    /// Builder for the iceworld scenario.
+    /// </summary>
+    /// <returns>The environment.</returns>
+    public static Environment CreateIceworldScenarioEnvironment() {
+      var environment = new IceWorld();
+      environment.AddAgent(new Iceeater(environment));
+      environment.AddAgent(new Iceman(environment));
+      environment.RandomExecution = true;
+      return environment;
     }
   }
 }
