@@ -40,13 +40,13 @@ namespace Primitive_Architecture.Agents.Heating {
     public Interaction Reason() {
       
       // Get current temperature and calculate the deltas.
-      var roomInput = (RoomInput) PerceptionUnit.InputMemory[(int) InformationType.RoomState];
+      var roomInput = PerceptionUnit.GetData<RoomInput>();
       var temp = roomInput.Temperature;
       var windowOpen = roomInput.WindowOpened;
       var diffNominal = _nominalTemp - temp;
 
       // Get the heater settings.
-      var heaterInput = (HeaterInput) PerceptionUnit.InputMemory[(int) InformationType.HeaterSetting];
+      var heaterInput = PerceptionUnit.GetData<HeaterInput>();
       double maxValue = heaterInput.MaxValue;
       double curValue = heaterInput.CurValue;
 

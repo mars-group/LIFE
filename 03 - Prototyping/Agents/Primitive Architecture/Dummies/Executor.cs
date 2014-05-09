@@ -8,13 +8,12 @@ namespace Primitive_Architecture.Dummies {
   ///   This class periodicly triggers the environment and thereby all agents.
   /// </summary>
   internal class Executor {
-
     private readonly Environment _environment; // The agent container.
 
 
     /// <summary>
     ///   Instantiate a runtime.
-    /// <param name="environment">The environment to execute.</param>
+    ///   <param name="environment">The environment to execute.</param>
     /// </summary>
     private Executor(Environment environment) {
       _environment = environment;
@@ -28,7 +27,7 @@ namespace Primitive_Architecture.Dummies {
     private void Run(int delay) {
       while (true) {
         _environment.Tick();
-        
+
         // Manual or automatic execution.
         if (delay == 0) Console.ReadLine();
         else {
@@ -45,10 +44,8 @@ namespace Primitive_Architecture.Dummies {
     /// </summary>
     public static void Main() {
       var environment = AgentBuilder.CreateIceworldScenarioEnvironment();
-      new Executor(environment).Run(0);    
-      Console.ReadLine();   
+      new Executor(environment).Run(0);
+      Console.ReadLine();
     }
   }
 }
-
-   

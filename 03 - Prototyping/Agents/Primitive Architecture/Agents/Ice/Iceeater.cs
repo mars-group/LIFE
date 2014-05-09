@@ -16,7 +16,7 @@ namespace Primitive_Architecture.Agents.Ice {
 
     //TODO Dummy only!
     public Interaction Reason() {
-      var sunInput = (SunInput) PerceptionUnit.GetData(0);
+      var sunInput = PerceptionUnit.GetData<SunInput>();
       _sun = sunInput.GetSunshine();
       return null;
     }
