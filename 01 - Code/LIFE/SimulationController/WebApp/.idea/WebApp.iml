@@ -6,6 +6,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="WebApp node_modules" level="project" />
     <orderEntry type="library" name="Node.js v0.10.25 Core Modules" level="application" />
+    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 
