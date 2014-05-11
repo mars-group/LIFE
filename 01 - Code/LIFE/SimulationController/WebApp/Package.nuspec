@@ -9,6 +9,6 @@
     <projectUrl>http://mars-group.org/</projectUrl>
   </metadata>
     <files>
-      <file src="dist\*.js"/>
+      <file src="dist/**"/>
     </files>
 </package>
