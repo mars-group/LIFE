@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>sample</id>
+    <version>0.0.1</version>
+    <authors>Christian Hüning, Florian Forsthuber, Mariusz Baldowski</authors>
+    <description>Sample exists only to show a sample .nuspec file.</description>
+    <language>en-US</language>
+    <projectUrl>http://mars-group.org/</projectUrl>
+  </metadata>
+    <files>
+      <file src="dist\*.js"/>
+    </files>
+</package>

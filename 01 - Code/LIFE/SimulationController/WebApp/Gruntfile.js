@@ -438,6 +438,22 @@ module.exports = function (grunt) {
       test: {
         NODE_ENV: 'test'
       }
+    },
+
+    nugetpack: {
+        dist: {
+            src: 'Package.nuspec',
+            dest: 'nugetDist/',
+            options: {
+                verbose: true
+            }
+        }
+    },
+
+    nugetpush: {
+        dist: {
+            src: 'dist/*.nupkg'
+        }
     }
   });
 
@@ -540,5 +556,9 @@ module.exports = function (grunt) {
     'newer:jshint',
     'test',
     'build'
+  ]);
+
+  grunt.registerTask('nuGetPack', [
+    'nugetpack'
   ]);
 };
