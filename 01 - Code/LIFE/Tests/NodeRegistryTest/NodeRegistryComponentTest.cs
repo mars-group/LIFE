@@ -21,7 +21,7 @@ namespace NodeRegistryTest {
 
         [SetUp]
         public void Setup() {
-            _informationType = new NodeInformationType(
+            _information = new TNodeInformation(
                 NodeType.LayerContainer,
                 "UnitTestNode",
                 new NodeEndpoint("127.0.0.1", 55500));
@@ -29,7 +29,7 @@ namespace NodeRegistryTest {
 
         #endregion
 
-        private NodeInformationType _informationType;
+        private TNodeInformation _information;
         private int _listenStartPortSeed = 50000;
         private int _sendingStartPortSeed = 52500;
 
@@ -60,7 +60,7 @@ namespace NodeRegistryTest {
             var localNodeReg = new NodeRegistryComponent(
                 localMulticastAdapter,
                 new NodeRegistryConfig(
-                    new NodeInformationType(
+                    new TNodeInformation(
                         NodeType.LayerContainer,
                         "allofmywhatever",
                         new NodeEndpoint("127.0.0.1", 47477)),
@@ -70,7 +70,7 @@ namespace NodeRegistryTest {
             var otherHeartBeatMock =
                 new NodeRegistryHeartBeatUseCase(
                     new NodeRegistryNodeManagerUseCase(new NodeRegistryEventHandlerUseCase()),
-                    new NodeInformationType(NodeType.LayerContainer, "mOck", new NodeEndpoint("127.0.0.1", 47878)),
+                    new TNodeInformation(NodeType.LayerContainer, "mOck", new NodeEndpoint("127.0.0.1", 47878)),
                     300,
                     localMulticastAdapter);
         }
@@ -112,7 +112,7 @@ namespace NodeRegistryTest {
                     new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4),
                     new MulticastSenderConfig());
 
-            var localNodeInfo = _informationType;
+            var localNodeInfo = _information;
             var localNodeRegistry = new NodeRegistryComponent(
                 multicastAdapter,
                 new NodeRegistryConfig(
@@ -142,11 +142,11 @@ namespace NodeRegistryTest {
         public void TestNewNodeSubscrition() {
             var localMulticastGrp = "224.1.11.112";
 
-            var localNodeInfo = _informationType;
+            var localNodeInfo = _information;
 
             var nodeType = localNodeInfo.NodeType;
 
-            var otherNodeinfo = new NodeInformationType(
+            var otherNodeinfo = new TNodeInformation(
                 localNodeInfo.NodeType,
                 "otherNodeInfo",
                 new NodeEndpoint("127.0.0.1", 90010));
@@ -175,12 +175,12 @@ namespace NodeRegistryTest {
 
             //subscribe for events
             localNodeRegistry.SubscribeForNewNodeConnected(
-                delegate(NodeInformationType nodeInformation) {
+                delegate(TNodeInformation nodeInformation) {
                     if (nodeInformation.Equals(otherNodeinfo)) newNodeSubscriberFired = true;
                 });
 
             localNodeRegistry.SubscribeForNewNodeConnectedByType(
-                delegate(NodeInformationType nodeInformation) {
+                delegate(TNodeInformation nodeInformation) {
                     if (nodeInformation.Equals(otherNodeinfo)) newNodeOftypeSubscriberFired = true;
                 },
                 nodeType);
@@ -206,7 +206,7 @@ namespace NodeRegistryTest {
 
         [Test]
         public void GetNodesListFromNodeRegistry() {
-            var localNodeInformation = _informationType;
+            var localNodeInformation = _information;
 
             var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
@@ -260,13 +260,13 @@ namespace NodeRegistryTest {
         //test if a node does not time out while sending heartbeats
         [Test]
         public void HeartBeatTest() {
-            var localNodeInformation = new NodeInformationType(
+            var localNodeInformation = new TNodeInformation(
                 NodeType.LayerContainer,
                 "localNode",
                 new NodeEndpoint("127.0.0.1", 41000));
 
 
-            var otherNodeinfo = new NodeInformationType(
+            var otherNodeinfo = new TNodeInformation(
                 NodeType.LayerContainer,
                 "otherNodeInfo",
                 new NodeEndpoint("127.0.0.1", 40999));
@@ -330,7 +330,7 @@ namespace NodeRegistryTest {
             var localSendPortStartSeed = _sendingStartPortSeed;
             _sendingStartPortSeed++;
 
-            var otherNodeInfo = new NodeInformationType(
+            var otherNodeInfo = new TNodeInformation(
                 NodeType.LayerContainer,
                 "AllOfMyHate",
                 new NodeEndpoint("127.0.0.1", 34567));
@@ -343,7 +343,7 @@ namespace NodeRegistryTest {
             var localNodeRegistry = new NodeRegistryComponent(
                 localMulticastAdapter,
                 new NodeRegistryConfig(
-                    new NodeInformationType(
+                    new TNodeInformation(
                         NodeType.LayerContainer,
                         "motivationBurst",
                         new NodeEndpoint("127.0.0.1", 44567)),
@@ -353,7 +353,7 @@ namespace NodeRegistryTest {
             bool leaveEventFired = false;
 
             localNodeRegistry.SubscribeForNodeDisconnected(
-                delegate(NodeInformationType nodeInformation) {
+                delegate(TNodeInformation nodeInformation) {
                     leaveEventFired = true;
                     Console.WriteLine("leave event was fired");
                 },

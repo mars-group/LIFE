@@ -12,6 +12,7 @@ namespace Primitive_Architecture.Perception {
 
     /// <summary>
     /// Create a new generic sensor input object. 
+    /// 
     /// </summary>
     /// <param name="originSensor">The sensor that created this input object.</param>
     public GenericSensorInput(Sensor originSensor) : base(originSensor) {

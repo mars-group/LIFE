@@ -1,7 +1,8 @@
 ﻿using Primitive_Architecture.Agents;
+using Common.Interfaces;
 
 namespace Primitive_Architecture.Interactions {
-  internal abstract class Interaction {
+  internal abstract class Interaction : IInteraction{
     protected readonly IGenericAPI Source;
     public Agent Target;
 

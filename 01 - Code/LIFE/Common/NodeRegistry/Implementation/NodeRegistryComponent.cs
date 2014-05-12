@@ -24,7 +24,7 @@ namespace NodeRegistry.Implementation
         public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config) {
             _config = config;
 
-            NodeInformationType locaNodeInformation = ParseNodeInformationTypeFromConfig();
+            TNodeInformation locaNodeInformation = ParseNodeInformationTypeFromConfig();
 
             _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
             _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
@@ -35,11 +35,11 @@ namespace NodeRegistry.Implementation
           
         }
 
-        public List<NodeInformationType> GetAllNodes() {
+        public List<TNodeInformation> GetAllNodes() {
             return _nodeManagerUseCase.GetAllNodes();
         }
 
-        public List<NodeInformationType> GetAllNodesByType(NodeType nodeType) {
+        public List<TNodeInformation> GetAllNodesByType(NodeType nodeType) {
             return _nodeManagerUseCase.GetAllNodesByType(nodeType);
         }
 
@@ -51,7 +51,7 @@ namespace NodeRegistry.Implementation
             _eventHandlerUseCase.SubscribeForNewNodeConnectedByType(newNodeConnectedHandler, nodeType);
         }
 
-        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node) {
+        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node) {
             _eventHandlerUseCase.SubscribeForNodeDisconnected(nodeDisconnectedHandler, node);
         }
 
@@ -71,9 +71,9 @@ namespace NodeRegistry.Implementation
 
      
 
-        private NodeInformationType ParseNodeInformationTypeFromConfig()
+        private TNodeInformation ParseNodeInformationTypeFromConfig()
         {
-            return new NodeInformationType(
+            return new TNodeInformation(
                 ParseNodeTypeFromConfig(),
                 _config.NodeIdentifier,
                 ParseNodeEndpointFromConfig()

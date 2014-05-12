@@ -42,7 +42,7 @@ namespace SimulationController.Interface {
                         // object[] containing NodeInformationTypes
                         var layerContainers = (object[]) payload["layerContainers"];
 
-                        var containers = new List<NodeInformationType>();
+                        var containers = new List<TNodeInformation>();
 
                         foreach (IDictionary<string, dynamic> elem in layerContainers)
                         {
@@ -52,7 +52,7 @@ namespace SimulationController.Interface {
                             var endpointDict = (IDictionary<string, dynamic>) elem["NodeEndpoint"];
                             var nodeEndpoint = new NodeEndpoint((string)endpointDict["IpAddress"], (int)endpointDict["Port"]);
 
-                            containers.Add(new NodeInformationType(nodeType, elem["NodeIdentifier"], nodeEndpoint));
+                            containers.Add(new TNodeInformation(nodeType, elem["NodeIdentifier"], nodeEndpoint));
                         }
 
                         int? ticks = null;

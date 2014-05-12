@@ -1,4 +1,5 @@
-﻿using Primitive_Architecture.Dummies;
+﻿using Common.Interfaces;
+using Primitive_Architecture.Dummies;
 using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interfaces;
 
@@ -8,7 +9,7 @@ namespace Primitive_Architecture.Agents.Wolves {
       Position = new Vector(-1, -1);
     }
 
-    public Interaction Reason() {
+    public IInteraction Reason() {
       return null;
     }
   }

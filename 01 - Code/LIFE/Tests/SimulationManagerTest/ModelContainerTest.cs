@@ -5,7 +5,6 @@ using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Implementation.Entities;
 using NUnit.Framework;
-using SimulationManagerTest.TestEntities;
 
 namespace SimulationManagerTest {
     [TestFixture]

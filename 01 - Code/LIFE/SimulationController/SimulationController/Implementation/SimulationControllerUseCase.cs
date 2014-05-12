@@ -51,12 +51,12 @@ namespace SimulationController.Implementation {
             return false;
         }
 
-        private void OnNewSimManagerConnected(NodeInformationType newnode) {
+        private void OnNewSimManagerConnected(TNodeInformation newnode) {
             _simulationManagerClient = new SimulationManagerClient(newnode);
             _isConnected = true;
         }
 
-        private void OnNodeDisconnected(NodeInformationType oldNode) {
+        private void OnNodeDisconnected(TNodeInformation oldNode) {
             // disconnect and clean up current client
             _simulationManagerClient.Dispose();
 
@@ -75,7 +75,7 @@ namespace SimulationController.Implementation {
             return _simulationManagerClient.GetAllModels();
         }
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers,
+        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers,
             int? nrOfTicks = null) {
             if (!_isConnected) throw new NoSimulationManagerConnectedException();
             _simulationManagerClient.StartSimulationWithModel(model, layerContainers, nrOfTicks);
@@ -105,7 +105,7 @@ namespace SimulationController.Implementation {
 
         #region INodeRegistry delegates
 
-        public List<NodeInformationType> GetConnectedNodes() {
+        public List<TNodeInformation> GetConnectedNodes() {
             return _nodeRegistry.GetAllNodes();
         }
 

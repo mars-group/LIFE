@@ -35,16 +35,13 @@ namespace ForestModel.Interface
         
         public void AddTreeAtPostion(RectangleF pos , TreeAgent tree)
         {
-            GetPatchForPosition(pos).addTreeToPatch(tree);
+            GetPatchForPosition(pos).FirstOrDefault().addTreeToPatch(tree);
         }
 
         //TODO: es kann sein das mehr als ein Patch zurück kommt.
-        public ForestPatch GetPatchForPosition(RectangleF patchPostion)
+        public ICollection<ForestPatch> GetPatchForPosition(RectangleF patchPostion)
         {
-            var patch =  _environment.Query(patchPostion).FirstOrDefault();
-            
-            return patch;
-
+            return _environment.Query(patchPostion);  
         }
 
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)

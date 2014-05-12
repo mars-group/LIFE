@@ -1,22 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Primitive_Architecture.Dummies;
+﻿using Primitive_Architecture.Dummies;
 
 namespace Primitive_Architecture.Perception {
-  abstract class Halo {
-
-    private Vector _position;
+  
+  /// <summary>
+  ///   An abstract halo representation. Each sensor has one object of it.
+  /// </summary>
+  internal abstract class Halo {
+    protected Vector Position; // The agent's centre.
     //private Geometry _form;
 
+
+    /// <summary>
+    ///   Create a new halo.
+    /// </summary>
+    /// <param name="position">The agent's centre.</param>
     protected Halo(Vector position) {
-      
+      Position = position;
     }
 
 
+    /// <summary>
+    ///   Check, if a given position is inside this perception range.
+    /// </summary>
+    /// <param name="position">The position to check.</param>
+    /// <returns>True, if position is in range, false otherwise.</returns>
     public abstract bool IsInRange(Vector position);
-
-
   }
 }
