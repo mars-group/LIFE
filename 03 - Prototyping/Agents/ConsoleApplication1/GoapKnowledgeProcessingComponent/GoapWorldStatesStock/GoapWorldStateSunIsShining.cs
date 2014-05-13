@@ -1,7 +1,9 @@
 ﻿using System;
 
 namespace GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock {
+
     internal class GoapWorldStateSunIsShining : GoapWorldState, IEquatable<GoapWorldStateSunIsShining> {
+
         public GoapWorldStateSunIsShining(bool startValue) : base(startValue) {}
 
         public override void CalculateIfWorldStateIsFullfilled() {

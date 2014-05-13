@@ -1,22 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GoapComponent.GoapKnowledgeProcessingComponent;
 
 namespace GoapComponent {
     /// <summary>
     /// </summary>
-    public class GoapGoal {
-        public List<GoapWorldState> targetWorldState;
+    public abstract class GoapGoal {
+
+        protected List<GoapWorldState> TargetWorldState;
+
+        protected GoapGoal() {}
 
 
-        public GoapGoal(List<GoapWorldState> targetWorldState) {
-            this.targetWorldState = targetWorldState;
+        public bool IsGoalFulfilled(List<GoapWorldState> comparingWorlState) {
+            return TargetWorldState.All(comparingWorlState.Contains);
         }
 
-        public bool isGoalFulfilled(List<GoapWorldState> comparingWorlState) {
-            /**
-             * TODO compare function neccessary - better is targetWorldState a subset of comparingWorldState
-             */
-            return false;
-        }
     }
 }

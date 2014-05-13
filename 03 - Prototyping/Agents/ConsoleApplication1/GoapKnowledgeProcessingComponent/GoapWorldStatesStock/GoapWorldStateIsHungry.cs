@@ -1,22 +1,38 @@
 ﻿using System;
 
 namespace GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock {
+
     internal class GoapWorldStateIsHungry : GoapWorldState, IEquatable<GoapWorldStateIsHungry> {
-        public GoapWorldStateIsHungry(bool startValue) : base(startValue) {}
+
+        internal GoapWorldStateIsHungry(bool startValue) : base(startValue) {
+            if (startValue) {
+                this._hungerValue = 0;
+            }
+        }
 
         private const int MaxHunger = 10;
         private const int MinHunger = 0;
-        private int _hungerValue = MinHunger;
+        private int _hungerValue = MaxHunger;
 
 
         public override void CalculateIfWorldStateIsFullfilled() {
             Tick();
             IsStateFulfilled = _hungerValue > 5;
-            if (IsStateFulfilled) Console.WriteLine("The Agent is HUNGRY");
+            Console.WriteLine(IsStateFulfilled ? "The Agent is HUNGRY" : "The Agent is not hungry");
         }
 
         public override void Tick() {
-            if (_hungerValue < MaxHunger) _hungerValue += 1;
+            if (_hungerValue < MaxHunger) {
+                _hungerValue += 1;
+                Console.WriteLine("Hunger is increasing by 1 and now at " + _hungerValue);
+            }
+        }
+
+        public void ReduceHunger(int minus) {
+            if (_hungerValue < minus) _hungerValue = MinHunger;
+            else _hungerValue -= minus;
+            Console.WriteLine("Hunger is reduced by minus and now at " + _hungerValue);
+            this.CalculateIfWorldStateIsFullfilled();
         }
 
         public override void PullDependingValues() {}

@@ -1,15 +1,26 @@
 ﻿using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
 
 namespace GoapComponent.GoapActionsStock {
-    internal class GoapActionEatIce : GoapAction {
+
+    class GoapActionEatIce : GoapAction {
+
+
         public GoapActionEatIce() {
+            this.AddTestData();
+        }
+        
+        private void AddTestData() {
             var preIsHungry = new GoapWorldStateIsHungry(true);
             var preSunIsShining = new GoapWorldStateSunIsShining(true);
-            preconditions.Add(preIsHungry);
-            preconditions.Add(preSunIsShining);
-
+            this.Preconditions.Add(preIsHungry);
+            this.Preconditions.Add(preSunIsShining);
+            
             var postIsHungry = new GoapWorldStateIsHungry(false);
-            postconditions.Add(postIsHungry);
+            this.Postconditions.Add(postIsHungry);
         }
+
+
     }
+
+    
 }
