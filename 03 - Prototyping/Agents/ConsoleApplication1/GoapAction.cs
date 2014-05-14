@@ -9,9 +9,17 @@ namespace GoapComponent {
     /// <summary>
     ///     goap actions define a transition to another worldstate
     /// </summary>
-    abstract class GoapAction : IEquatable<GoapAction>, IInteraction {
+    public abstract class GoapAction : IEquatable<GoapAction>, IInteraction {
         protected readonly List<GoapWorldState> Preconditions = new List<GoapWorldState>();
         protected readonly List<GoapWorldState> Postconditions = new List<GoapWorldState>();
+        protected Goap Goap;
+
+
+        protected GoapAction(Goap goap) {
+            this.Goap = goap;
+        }
+
+        
 
         /// <summary>
         ///     check if preconditions of action are subset of current world
@@ -36,8 +44,7 @@ namespace GoapComponent {
             // - woher weiß eine action wo sie werte ändern muß
             // - sollte die action nicht eher eine Anleitung darstellen mit der Agenten selbst ihre umwelt ändern
             // - wenn die action etwas ändern soll dann braucht sie mindestens die goap instanz als parameter
-
-            throw new NotImplementedException();
+            Goap.ExecuteAction(this);
         }
 
         public bool Equals(GoapAction other) {

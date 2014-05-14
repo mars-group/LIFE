@@ -8,5 +8,10 @@ namespace GoapComponent.GoapActionsStock
 {
     class GoapActionRelax : GoapAction
     {
+        public GoapActionRelax(Goap goap)
+            : base(goap)
+        {
+            
+        }
     }
 }

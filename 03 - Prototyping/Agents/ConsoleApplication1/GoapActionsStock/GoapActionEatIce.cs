@@ -1,11 +1,14 @@
-﻿using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
+﻿using GoapComponent.GoapKnowledgeProcessingComponent;
+using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
 
 namespace GoapComponent.GoapActionsStock {
 
     class GoapActionEatIce : GoapAction {
 
 
-        public GoapActionEatIce() {
+        public GoapActionEatIce(Goap goap)
+            : base(goap)
+        {
             this.AddTestData();
         }
         

@@ -21,7 +21,7 @@ namespace GoapComponent {
 
         public Goap(IPerception perception) {
             KnowledgeProcessing = new GoapKnowledgeProcessing(perception);
-            _planner = new GoapPlanner(KnowledgeProcessing);
+            _planner = new GoapPlanner(KnowledgeProcessing, this);
             ProtSetStartData();
         }
 
@@ -30,7 +30,7 @@ namespace GoapComponent {
         /// </summary>
         public Goap() {
             KnowledgeProcessing = new GoapKnowledgeProcessing();
-            _planner = new GoapPlanner(KnowledgeProcessing);
+            _planner = new GoapPlanner(KnowledgeProcessing, this);
             ProtSetStartData();
             ChooseGoal();
         }
@@ -62,5 +62,11 @@ namespace GoapComponent {
             _allAvailableGoals = new List<GoapGoal> { new GoapGoalBeCool(), new GoapGoalBeSated() };
         }
 
+        public void ExecuteAction(GoapAction goapAction) {
+            if (goapAction.IsExecutable(KnowledgeProcessing.AggregatedGoapWorldStates)) {
+                
+            }
+            
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GoapComponent.GoapKnowledgeProcessingComponent;
 using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
 
 namespace GoapComponent.GoapActionsStock
@@ -10,7 +11,10 @@ namespace GoapComponent.GoapActionsStock
     class GoapActionBuyIce :GoapAction
     {
 
-        public GoapActionBuyIce() {
+        public GoapActionBuyIce(Goap goap)
+            : base(goap)
+        {
+
 
             var preSunIsShining = new GoapWorldStateSunIsShining(true);
             var preGotIce = new GoapWorldStateGotIce(false);

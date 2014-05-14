@@ -7,10 +7,14 @@ namespace GoapComponent.GoapPlannerComponent {
         private GoapPlan _currentGoapPlan;
         private Stack<GoapAction> allAvailableActions;
         private GoapKnowledgeProcessing _knowledgeProcessing;
+        public Goap Goap;
 
-        public GoapPlanner(GoapKnowledgeProcessing knowledgeProcessing) {
+        public GoapPlanner(GoapKnowledgeProcessing knowledgeProcessing, Goap goap) {
             this._knowledgeProcessing = knowledgeProcessing;
+            this.Goap = goap;
         }
+
+      
 
         /// <summary>
         /// </summary>
@@ -26,8 +30,9 @@ namespace GoapComponent.GoapPlannerComponent {
         /// <returns></returns>
         private GoapPlan CreateGoapPlan() {
             var actionStack = new Stack<GoapAction>();
-            var actionEat = new GoapActionEatIce();
-            var actionBuy = new GoapActionBuyIce();
+
+            var actionEat = new GoapActionEatIce(Goap);
+            var actionBuy = new GoapActionBuyIce(Goap);
             actionStack.Push(actionEat);
 
             if (!_knowledgeProcessing.GotIce()) {
