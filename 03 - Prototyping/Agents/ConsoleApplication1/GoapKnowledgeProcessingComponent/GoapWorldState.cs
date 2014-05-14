@@ -1,4 +1,6 @@
-﻿namespace GoapComponent.GoapKnowledgeProcessingComponent {
+﻿using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
+
+namespace GoapComponent.GoapKnowledgeProcessingComponent {
 
     public abstract class GoapWorldState {
         protected bool IsStateFulfilled;
@@ -28,4 +30,6 @@
 
         // TODO check if equals in der abstakten klasse ausreichend wäre
     }
+
+   
 }

@@ -11,17 +11,16 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent {
         private GoapKnowledgeCache _knowledgeCache = new GoapKnowledgeCache();
 
         public GoapKnowledgeProcessing(IPerception perception) {
-            // create predefined states and fill into list of states
-            var worldStateIsHungry = new GoapWorldStateIsHungry(true);
-            var worldStateSunIsShining = new GoapWorldStateSunIsShining(true);
-
-            _aggregatedGoapWorldStates.Add(worldStateIsHungry);
-            _aggregatedGoapWorldStates.Add(worldStateSunIsShining);
         }
 
-        public GoapKnowledgeProcessing( )
-        {
-            
+        /// <summary>
+        /// only for test
+        /// </summary>
+        public GoapKnowledgeProcessing() {
+            // create predefined states and fill into list of states
+            _aggregatedGoapWorldStates.Add(new GoapWorldStateIsHungry(true));
+            _aggregatedGoapWorldStates.Add(new GoapWorldStateSunIsShining(true));
+            _aggregatedGoapWorldStates.Add(new GoapWorldStateGotIce(false));
         }
 
         internal void AddWorldState(GoapWorldState worldstate) {
@@ -34,7 +33,10 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent {
 
         internal bool IsHungry() {
             return _aggregatedGoapWorldStates.Any(aggregatedGoapWorldState => aggregatedGoapWorldState is GoapWorldStateIsHungry && aggregatedGoapWorldState.GetState() == true);
+        }
 
+        internal bool GotIce() {
+            return _aggregatedGoapWorldStates.Any(aggregatedGoapWorldState => aggregatedGoapWorldState is GoapWorldStateGotIce && aggregatedGoapWorldState.GetState() == true);
         }
 
 

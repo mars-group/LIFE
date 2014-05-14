@@ -6,15 +6,11 @@ namespace GoapComponent {
     /// <summary>
     /// </summary>
     public abstract class GoapGoal {
-
         protected List<GoapWorldState> TargetWorldState;
-
-        protected GoapGoal() {}
 
 
         public bool IsGoalFulfilled(List<GoapWorldState> comparingWorlState) {
             return TargetWorldState.All(comparingWorlState.Contains);
         }
-
     }
 }

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="UnitTestGoapAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTestGoapValidation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

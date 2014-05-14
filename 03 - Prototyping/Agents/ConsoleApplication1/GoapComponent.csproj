@@ -46,6 +46,8 @@
     <Compile Include="GoapActionsStock\GoapActionBuyIce.cs" />
     <Compile Include="GoapActionsStock\GoapActionRelax.cs" />
     <Compile Include="GoapGoal.cs" />
+    <Compile Include="GoapGoalsStock\GoapGoalBeSated.cs" />
+    <Compile Include="GoapGoalsStock\GoapGoalBeCool.cs" />
     <Compile Include="GoapKnowledgeProcessingComponent\GoapKnowledgeCache.cs" />
     <Compile Include="GoapKnowledgeProcessingComponent\GoapKnowledgeProcessing.cs" />
     <Compile Include="GoapKnowledgeProcessingComponent\GoapWorldStatesStock\GoapWorldStateGotIce.cs" />
@@ -62,9 +64,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GoapGoalsStock\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{c057e43f-7542-47a9-98aa-ba583aab5d80}</Project>

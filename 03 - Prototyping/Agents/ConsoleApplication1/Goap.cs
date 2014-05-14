@@ -8,12 +8,13 @@ using GoapComponent.GoapPlannerComponent;
 [assembly: InternalsVisibleTo("UnitTestGoap")]
 
 namespace GoapComponent {
+
     /// <summary>
     ///     Is the only access point for the whole GOAP functions from outside the GOAPComponent
     /// </summary>
     public class Goap : IAgentLogic {
-        internal GoapGoal CurrentGoal;
-        internal List<GoapGoal> allAvailableGoals;
+        private GoapGoal _currentGoal;
+        private List<GoapGoal> _allAvailableGoals;
         private readonly GoapPlanner _planner;
         public readonly GoapKnowledgeProcessing KnowledgeProcessing;
 
@@ -21,22 +22,32 @@ namespace GoapComponent {
         public Goap(IPerception perception) {
             KnowledgeProcessing = new GoapKnowledgeProcessing(perception);
             _planner = new GoapPlanner(KnowledgeProcessing);
-            ChooseGoal();
+            ProtSetStartData();
         }
 
-        /// <summary> only for testing
+        /// <summary> 
+        /// only for testing
         /// </summary>
         public Goap() {
             KnowledgeProcessing = new GoapKnowledgeProcessing();
             _planner = new GoapPlanner(KnowledgeProcessing);
-            allAvailableGoals = new List<GoapGoal> {new GoapGoalBeCool(), new GoapGoalBeSated()};
+            ProtSetStartData();
+            ChooseGoal();
+        }
+
+        public GoapGoal CurrentGoal {
+            get { return _currentGoal; }
+        }
+
+        public List<GoapGoal> AllAvailableGoals {
+            get { return _allAvailableGoals; }
         }
 
         private GoapGoal ChooseGoal() {
             if (KnowledgeProcessing.IsSunShining() && KnowledgeProcessing.IsHungry())
-                CurrentGoal = new GoapGoalBeSated();
-            else CurrentGoal = new GoapGoalBeCool();
-            return CurrentGoal;
+                _currentGoal = new GoapGoalBeSated();
+            else _currentGoal = new GoapGoalBeCool();
+            return _currentGoal;
         }
 
         public IInteraction Reason() {
@@ -47,6 +58,9 @@ namespace GoapComponent {
             KnowledgeProcessing.SenseAll();
         }
 
-        public static void Main(string[] args) {}
+        private void ProtSetStartData() {
+            _allAvailableGoals = new List<GoapGoal> { new GoapGoalBeCool(), new GoapGoalBeSated() };
+        }
+
     }
 }

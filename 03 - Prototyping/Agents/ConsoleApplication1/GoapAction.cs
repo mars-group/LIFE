@@ -32,6 +32,11 @@ namespace GoapComponent {
 //        }
 
         public void Execute() {
+            // TODO klären:
+            // - woher weiß eine action wo sie werte ändern muß
+            // - sollte die action nicht eher eine Anleitung darstellen mit der Agenten selbst ihre umwelt ändern
+            // - wenn die action etwas ändern soll dann braucht sie mindestens die goap instanz als parameter
+
             throw new NotImplementedException();
         }
 

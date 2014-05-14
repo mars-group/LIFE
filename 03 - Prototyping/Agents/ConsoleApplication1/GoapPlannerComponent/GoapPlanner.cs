@@ -27,7 +27,13 @@ namespace GoapComponent.GoapPlannerComponent {
         private GoapPlan CreateGoapPlan() {
             var actionStack = new Stack<GoapAction>();
             var actionEat = new GoapActionEatIce();
+            var actionBuy = new GoapActionBuyIce();
             actionStack.Push(actionEat);
+
+            if (!_knowledgeProcessing.GotIce()) {
+                actionStack.Push(actionBuy);
+            }
+
             var plan = new GoapPlan(actionStack);
             _currentGoapPlan = plan;
             return plan;
