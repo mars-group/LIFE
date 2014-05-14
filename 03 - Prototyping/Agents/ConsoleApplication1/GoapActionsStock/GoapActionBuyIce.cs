@@ -1,32 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GoapComponent.GoapKnowledgeProcessingComponent;
-using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
+﻿using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
 
-namespace GoapComponent.GoapActionsStock
-{
-    class GoapActionBuyIce :GoapAction
-    {
+namespace GoapComponent.GoapActionsStock {
 
-        public GoapActionBuyIce(Goap goap)
-            : base(goap)
-        {
+  internal class GoapActionBuyIce : GoapAction {
 
+    public GoapActionBuyIce(Goap goap)
+      : base(goap) {
+      Preconditions.Add(new GoapWorldStateSunIsShining(true));
+      Preconditions.Add(new GoapWorldStateGotIce(false));
 
-            var preSunIsShining = new GoapWorldStateSunIsShining(true);
-            var preGotIce = new GoapWorldStateGotIce(false);
-
-            this.Preconditions.Add(preSunIsShining);
-            this.Preconditions.Add(preGotIce);
-
-            var postGotIce = new GoapWorldStateGotIce(true);
-
-            this.Postconditions.Add(postGotIce);
-        }
+      Postconditions.Add(new GoapWorldStateGotIce(true));
     }
-
-    
+  }
 }

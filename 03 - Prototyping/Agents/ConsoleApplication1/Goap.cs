@@ -51,10 +51,11 @@ namespace GoapComponent {
         }
 
         public IInteraction Reason() {
+            SenseAll();
             return _planner.GetNextAction();
         }
 
-        public void SenseAll() {
+        private void SenseAll() {
             KnowledgeProcessing.SenseAll();
         }
 

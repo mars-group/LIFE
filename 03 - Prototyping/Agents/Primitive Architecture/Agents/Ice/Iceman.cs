@@ -1,6 +1,5 @@
 ﻿using Common.Interfaces;
-using Primitive_Architecture.Interactions;
-using Primitive_Architecture.Interfaces;
+using Common.Types;
 using Primitive_Architecture.Perception.Ice;
 
 namespace Primitive_Architecture.Agents.Ice {
@@ -14,8 +13,10 @@ namespace Primitive_Architecture.Agents.Ice {
       //ReasoningComponent = new Goap();
     }
 
+
     //TODO Dummy only!
     public IInteraction Reason() {
+      //TODO Interface-Typ übergeben.
       var sunInput = PerceptionUnit.GetData<SunInput>();
       _sun = sunInput.GetSunshine();
       return null;

@@ -15,15 +15,13 @@ namespace UnitTestGoap
         public void Action_IsExecutable_With_Valid_Preconditions()
         {
             var goap = new Goap();
-            var worldStateIsHungry = new GoapWorldStateIsHungry(true);
-            var worldStateSunIsShining = new GoapWorldStateSunIsShining(true);
-
-            goap.KnowledgeProcessing.AddWorldState(worldStateIsHungry);
-            goap.KnowledgeProcessing.AddWorldState(worldStateSunIsShining);
+            
+            goap.KnowledgeProcessing.AddWorldState(new GoapWorldStateIsHungry(true));
+            goap.KnowledgeProcessing.AddWorldState(new GoapWorldStateSunIsShining(true));
 
             List<GoapWorldState> status = goap.KnowledgeProcessing.AggregatedGoapWorldStates;
 
-            GoapAction eatIce = new GoapActionEatIce();
+            GoapAction eatIce = new GoapActionEatIce(goap);
 
             Assert.IsTrue(eatIce.IsExecutable(status));
         }
@@ -33,7 +31,7 @@ namespace UnitTestGoap
         public void Action_IsExecutable_With_Invalid_Preconditions()
         {
             Goap goap = new Goap();
-            GoapAction eatIce = new GoapActionEatIce();
+            GoapAction eatIce = new GoapActionEatIce(goap);
             List<GoapWorldState> status = goap.KnowledgeProcessing.AggregatedGoapWorldStates;
             Assert.IsFalse(eatIce.IsExecutable(status));
             }

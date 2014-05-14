@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Common.Interfaces;
+using Common.Types;
 using GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock;
 
 namespace GoapComponent.GoapKnowledgeProcessingComponent {
 
     public class GoapKnowledgeProcessing {
+      private readonly IPerception _perception;
 
-        private readonly List<GoapWorldState> _aggregatedGoapWorldStates = new List<GoapWorldState>();
+      private readonly List<GoapWorldState> _aggregatedGoapWorldStates = new List<GoapWorldState>();
         private GoapKnowledgeCache _knowledgeCache = new GoapKnowledgeCache();
 
         public GoapKnowledgeProcessing(IPerception perception) {
+          _perception = perception;
         }
 
-        /// <summary>
+      /// <summary>
         /// only for test
         /// </summary>
         public GoapKnowledgeProcessing() {
@@ -53,7 +56,10 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent {
 
 
         public void SenseAll() {
-            // TODO in  knowledgeCache die neuen Infos einbringen
+
+          var isSunShining = _perception.GetData<ISunInput>().GetSunshine();
+
+          // TODO in  knowledgeCache die neuen Infos einbringen
         }
 
         public void TriggerUpdateWorldStates() {

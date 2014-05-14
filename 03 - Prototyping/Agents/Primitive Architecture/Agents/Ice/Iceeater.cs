@@ -1,7 +1,4 @@
-﻿using System;
-using Common.Interfaces;
-using Primitive_Architecture.Interactions;
-using Primitive_Architecture.Interfaces;
+﻿using Common.Interfaces;
 using Primitive_Architecture.Perception.Ice;
 
 namespace Primitive_Architecture.Agents.Ice {

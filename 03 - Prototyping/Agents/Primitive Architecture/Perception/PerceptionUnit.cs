@@ -48,9 +48,13 @@ namespace Primitive_Architecture.Perception {
     /// </summary>
     /// <returns>An input object containing the desired information.</returns>
     public T GetData<T>() where T : class {
+      Type type = typeof (T);
+
+      //TODO Geht nicht für Interfaces!!!
+
       Input value;
-      var success = _inputMemory.TryGetValue(typeof (T), out value);
-      if (success) return (T) value;
+      var success = _inputMemory.TryGetValue(type, out value);
+      if (success) return (T) value;    
       return null;
     }
   }

@@ -13,13 +13,11 @@ namespace GoapComponent.GoapActionsStock {
         }
         
         private void AddTestData() {
-            var preIsHungry = new GoapWorldStateIsHungry(true);
-            var preSunIsShining = new GoapWorldStateSunIsShining(true);
-            this.Preconditions.Add(preIsHungry);
-            this.Preconditions.Add(preSunIsShining);
+            Preconditions.Add(new GoapWorldStateIsHungry(true));
+            Preconditions.Add(new GoapWorldStateSunIsShining(true));
             
             var postIsHungry = new GoapWorldStateIsHungry(false);
-            this.Postconditions.Add(postIsHungry);
+            Postconditions.Add(postIsHungry);
         }
 
 
