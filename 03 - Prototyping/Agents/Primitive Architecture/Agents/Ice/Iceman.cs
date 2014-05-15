@@ -17,8 +17,9 @@ namespace Primitive_Architecture.Agents.Ice {
     //TODO Dummy only!
     public IInteraction Reason() {
       //TODO Interface-Typ übergeben.
-      var sunInput = PerceptionUnit.GetData<SunInput>();
+      var sunInput = PerceptionUnit.GetData<ISunInput>();
       _sun = sunInput.GetSunshine();
+
       return null;
     }
 
