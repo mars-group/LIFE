@@ -40,6 +40,8 @@ namespace GoapComponent {
 //        }
 
         public void Execute() {
+
+            Console.WriteLine(ToString());
             // TODO klären:
             // - woher weiß eine action wo sie werte ändern muß
             // - sollte die action nicht eher eine Anleitung darstellen mit der Agenten selbst ihre umwelt ändern

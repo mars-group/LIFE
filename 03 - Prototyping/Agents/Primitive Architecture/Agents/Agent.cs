@@ -30,7 +30,7 @@ namespace Primitive_Architecture.Agents {
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
     protected Agent(string id) {
       Id = id;
-      DebugEnabled = true; 
+      DebugEnabled = false; 
       PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;
       if (Environment.IACLoader != null) {

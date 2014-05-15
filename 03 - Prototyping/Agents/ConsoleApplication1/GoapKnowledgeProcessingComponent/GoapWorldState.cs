@@ -28,6 +28,12 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent {
             return IsStateFulfilled;
         }
 
+        public void SetState(bool value) {
+            IsStateFulfilled = value;
+            CalculateIfWorldStateIsFullfilled();
+        }
+
+
         // TODO check if equals in der abstakten klasse ausreichend wäre
     }
 

@@ -11,5 +11,9 @@ namespace GoapComponent.GoapActionsStock {
 
       Postconditions.Add(new GoapWorldStateGotIce(true));
     }
+
+      public override string ToString() {
+          return "GoapActionBuyIce" ;
+      }
   }
 }

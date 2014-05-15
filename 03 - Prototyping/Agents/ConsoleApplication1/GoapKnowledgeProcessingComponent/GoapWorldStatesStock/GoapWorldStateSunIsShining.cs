@@ -7,7 +7,7 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock {
         public GoapWorldStateSunIsShining(bool startValue) : base(startValue) {}
 
         public override void CalculateIfWorldStateIsFullfilled() {
-            throw new NotImplementedException();
+            
         }
 
         public override void PullDependingValues() {

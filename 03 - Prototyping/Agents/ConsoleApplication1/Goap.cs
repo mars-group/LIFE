@@ -50,13 +50,14 @@ namespace GoapComponent {
         }
 
         public IInteraction Reason() {
-            SenseAll();
+            
+            KnowledgeProcessing.SenseAll();
             return _planner.GetNextAction();
         }
 
-        private void SenseAll() {
+        /*private void SenseAll() {
             KnowledgeProcessing.SenseAll();
-        }
+        }*/
 
         private void ProtSetStartData() {
             _allAvailableGoals = new List<GoapGoal> { new GoapGoalBeCool(), new GoapGoalBeSated() };
@@ -66,6 +67,10 @@ namespace GoapComponent {
             if (goapAction.IsExecutable(KnowledgeProcessing.AggregatedGoapWorldStates)) {
                 
             }
+            
+        }
+
+        public static void Main(string[] ar) {
             
         }
     }

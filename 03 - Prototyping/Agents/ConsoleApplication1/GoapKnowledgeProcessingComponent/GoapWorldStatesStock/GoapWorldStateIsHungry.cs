@@ -8,6 +8,7 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock {
             if (startValue) {
                 this._hungerValue = 0;
             }
+            
         }
 
         private const int MaxHunger = 10;

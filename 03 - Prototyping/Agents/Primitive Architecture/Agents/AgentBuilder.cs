@@ -49,8 +49,8 @@ namespace Primitive_Architecture.Agents {
     public static Environment CreateIceworldScenarioEnvironment() {
       var environment = new IceWorld();
       environment.AddAgent(new Iceeater(environment));
-      environment.AddAgent(new Iceman(environment));
-      environment.RandomExecution = true;
+      //environment.AddAgent(new Iceman(environment));
+      //environment.RandomExecution = true;
       return environment;
     }
   }

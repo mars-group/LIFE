@@ -13,5 +13,11 @@ namespace GoapComponent.GoapActionsStock
         {
             
         }
+
+        public override string ToString()
+        {
+            return "GoapActionRelax";
+        }
+
     }
 }
