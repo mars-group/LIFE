@@ -17,7 +17,6 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent.GoapWorldStatesStock {
 
 
         public override void CalculateIfWorldStateIsFullfilled() {
-            Tick();
             IsStateFulfilled = _hungerValue > 5;
             Console.WriteLine(IsStateFulfilled ? "The Agent is HUNGRY" : "The Agent is not hungry");
         }
