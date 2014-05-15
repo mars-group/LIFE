@@ -1,4 +1,6 @@
 ﻿using Common.Interfaces;
+using Common.Types;
+using GoapComponent;
 using Primitive_Architecture.Perception.Ice;
 
 namespace Primitive_Architecture.Agents.Ice {
@@ -9,12 +11,12 @@ namespace Primitive_Architecture.Agents.Ice {
 
     public Iceeater(IceWorld environment) : base("Iceeater") {
       PerceptionUnit.AddSensor(new SunSensor(environment));
-      // ReasoningComponent = new Goap();
+      ReasoningComponent = new Goap(PerceptionUnit);
     }
 
     //TODO Dummy only!
     public IInteraction Reason() {
-      var sunInput = PerceptionUnit.GetData<SunInput>();
+      var sunInput = PerceptionUnit.GetData<ISunInput>();
       _sun = sunInput.GetSunshine();
       return null;
     }

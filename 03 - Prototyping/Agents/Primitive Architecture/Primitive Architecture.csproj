@@ -103,6 +103,10 @@
       <Project>{c057e43f-7542-47a9-98aa-ba583aab5d80}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ConsoleApplication1\GoapComponent.csproj">
+      <Project>{78b6a497-2a23-45b4-99d8-4678aa89f5f8}</Project>
+      <Name>GoapComponent</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

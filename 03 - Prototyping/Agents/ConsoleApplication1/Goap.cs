@@ -18,7 +18,6 @@ namespace GoapComponent {
         private readonly GoapPlanner _planner;
         public readonly GoapKnowledgeProcessing KnowledgeProcessing;
 
-
         public Goap(IPerception perception) {
             KnowledgeProcessing = new GoapKnowledgeProcessing(perception);
             _planner = new GoapPlanner(KnowledgeProcessing, this);

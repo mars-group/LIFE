@@ -14,17 +14,21 @@ namespace GoapComponent.GoapKnowledgeProcessingComponent {
 
         public GoapKnowledgeProcessing(IPerception perception) {
           _perception = perception;
+          // create predefined states and fill into list of states
+          _aggregatedGoapWorldStates.Add(new GoapWorldStateIsHungry(true));
+          _aggregatedGoapWorldStates.Add(new GoapWorldStateSunIsShining(true));
+          _aggregatedGoapWorldStates.Add(new GoapWorldStateGotIce(false));
         }
 
-      /// <summary>
-        /// only for test
-        /// </summary>
-        public GoapKnowledgeProcessing() {
-            // create predefined states and fill into list of states
-            _aggregatedGoapWorldStates.Add(new GoapWorldStateIsHungry(true));
-            _aggregatedGoapWorldStates.Add(new GoapWorldStateSunIsShining(true));
-            _aggregatedGoapWorldStates.Add(new GoapWorldStateGotIce(false));
-        }
+        /// <summary>
+          /// only for test
+          /// </summary>
+          public GoapKnowledgeProcessing() {
+              // create predefined states and fill into list of states
+              _aggregatedGoapWorldStates.Add(new GoapWorldStateIsHungry(true));
+              _aggregatedGoapWorldStates.Add(new GoapWorldStateSunIsShining(true));
+              _aggregatedGoapWorldStates.Add(new GoapWorldStateGotIce(false));
+          }
 
         internal void AddWorldState(GoapWorldState worldstate) {
             this.AggregatedGoapWorldStates.Add(worldstate);
