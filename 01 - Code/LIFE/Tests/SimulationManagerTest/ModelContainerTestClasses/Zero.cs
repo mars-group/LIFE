@@ -1,4 +1,4 @@
-﻿namespace SimulationManagerTest.ModelContainerTest
+﻿namespace SimulationManagerTest.ModelContainerTestClasses
 {
     /* These are test classes that only exist to check the dependency injection. See the TestSimulationManagerPositive Test. */
 

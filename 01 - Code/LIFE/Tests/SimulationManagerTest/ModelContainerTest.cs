@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using LCConnector.TransportTypes;
-using LCConnector.TransportTypes.ModelStructure;
-using ModelContainer.Implementation.Entities;
-using NUnit.Framework;
+﻿namespace SimulationManagerTest {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
 
-namespace SimulationManagerTest {
+    using LCConnector.TransportTypes;
+    using LCConnector.TransportTypes.ModelStructure;
+
+    using ModelContainer.Implementation.Entities;
+
+    using NUnit.Framework;
+
+    using SimulationManagerTest.ModelContainerTestClasses;
+
     [TestFixture]
     public class ModelContainerTest {
         [Test]

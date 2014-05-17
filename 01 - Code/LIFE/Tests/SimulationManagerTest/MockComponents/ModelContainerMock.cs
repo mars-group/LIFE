@@ -5,7 +5,7 @@ using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
 using SMConnector.TransportTypes;
 
-namespace SimulationManagerTest.MockComponents {
+namespace SimulationManagerTestClasses.MockComponents {
     internal class ModelContainerMock : IModelContainer {
         public void RegisterForModelListChange(Action callback) {
             throw new NotImplementedException("Don't mock me, I'm only a mock :(");

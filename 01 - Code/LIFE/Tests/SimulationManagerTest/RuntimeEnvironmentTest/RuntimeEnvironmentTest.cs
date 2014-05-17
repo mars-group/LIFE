@@ -4,10 +4,10 @@ using ModelContainer.Interfaces;
 using NUnit.Framework;
 using RuntimeEnvironment.Implementation;
 using RuntimeEnvironment.Implementation.Entities;
-using SimulationManagerTest.MockComponents;
+using SimulationManagerTestClasses.MockComponents;
 using SMConnector.TransportTypes;
 
-namespace SimulationManagerTest.RuntimeEnvironmentTest {
+namespace SimulationManagerTestClasses.RuntimeEnvironmentTest {
     [TestFixture]
     internal class RuntimeEnvironmentTest {
         [Test]
@@ -15,7 +15,7 @@ namespace SimulationManagerTest.RuntimeEnvironmentTest {
             IModelContainer modelContainer = new ModelContainerMock();
             TModelDescription model = modelContainer.GetAllModels().FirstOrDefault();
             IList<LayerContainerClient> clients = new LayerContainerClient[] { };
-            SteppedSimulationExecutionUseCase steppedSimulation = new SteppedSimulationExecutionUseCase(50, 
+            SteppedSimulationExecutionUseCase steppedSimulation = new SteppedSimulationExecutionUseCase(50, clients);
         }
     }
 }
