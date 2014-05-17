@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Collections;
@@ -11,9 +9,9 @@ namespace NodeRegistry.Implementation.UseCases
 {
     class NodeRegistryNodeManagerUseCase {
 
-        private NodeRegistryEventHandlerUseCase _nodeRegistryEventHandlerUseCase;
+        private readonly NodeRegistryEventHandlerUseCase _nodeRegistryEventHandlerUseCase;
         
-        private ThreadSafeSortedList<String, TNodeInformation> _activeNodeList;
+        private readonly ThreadSafeSortedList<String, TNodeInformation> _activeNodeList;
 
 
         public NodeRegistryNodeManagerUseCase(NodeRegistryEventHandlerUseCase nodeRegistryEventHandlerUseCase) {
