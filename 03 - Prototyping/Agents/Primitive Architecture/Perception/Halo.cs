@@ -6,7 +6,7 @@ namespace Primitive_Architecture.Perception {
   ///   An abstract halo representation. Each sensor has one object of it.
   /// </summary>
   internal abstract class Halo {
-    protected Vector Position; // The agent's centre.
+    public Vector Position; // The agent's centre.
     //private Geometry _form;
 
 

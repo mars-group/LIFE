@@ -12,6 +12,8 @@ namespace Primitive_Architecture.Dummies {
   internal abstract class Environment : ITickClient {
 
     protected readonly List<Agent> Agents;     // The agents living in this environment.
+    protected long Cycle { get; private set; } // Counter for execution cycle.
+    public bool PrintInformation { get; set; } // Controls debug information output.
     public bool RandomExecution { get; set; }  // Flag to set random or sequential execution. 
     public static IIACLoader IACLoader { get; private set; } // Interaction loader reference. 
 
@@ -22,6 +24,7 @@ namespace Primitive_Architecture.Dummies {
     /// <param name="interactions">The domain specific interaction loader.</param>
     protected Environment(IIACLoader interactions) {
       Agents = new List<Agent>();
+      Cycle = 0;
       IACLoader = interactions;
     }
 
@@ -33,21 +36,28 @@ namespace Primitive_Architecture.Dummies {
       // First, we advance the environment.
       AdvanceEnvironment();
 
+      // This second list is needed for steadiness during execution (deletion resilience). 
+      var execList = new List<Agent>(Agents);
+
       // If a random execution is desired, we shuffle the agent list.
       if (RandomExecution) {
         var rnd = new Random();
         for (var i = 0; i < Agents.Count; i++) {
-          var j = rnd.Next(i, Agents.Count);
-          var temp = Agents[i];
-          Agents[i] = Agents[j];
-          Agents[j] = temp;
+          var j = rnd.Next(i, execList.Count);
+          var temp = execList[i];
+          execList[i] = execList[j];
+          execList[j] = temp;
         }
       }
 
       // Finally, the agents are executed.
-      foreach (var agent in Agents) {
+      foreach (var agent in execList) {
         agent.Tick();
       }
+
+      // Debug output wished? If so, print it now!
+      if (PrintInformation) PrintEnvironment();
+      Cycle ++;
     }
 
 
@@ -91,5 +101,11 @@ namespace Primitive_Architecture.Dummies {
     /// <param name="y">The second agent.</param>
     /// <returns>A value describing the distance between these two agents.</returns>
     public abstract double GetDistance(Agent x, Agent y);
+
+
+    /// <summary>
+    ///   Console output function. Prints the environment and all agent logs.
+    /// </summary>
+    protected virtual void PrintEnvironment() {}
   }
 }

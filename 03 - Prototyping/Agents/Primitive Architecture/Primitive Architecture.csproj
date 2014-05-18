@@ -64,6 +64,7 @@
     <Compile Include="Perception\Ice\SunSensor.cs" />
     <Compile Include="Perception\OmniHalo.cs" />
     <Compile Include="Perception\RadialHalo.cs" />
+    <Compile Include="Reasoning\CommonRCF.cs" />
     <Compile Include="Reasoning\ReasoningComponent.cs" />
     <Compile Include="Dummies\Vector.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />

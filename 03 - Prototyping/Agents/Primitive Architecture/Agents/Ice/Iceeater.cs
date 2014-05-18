@@ -22,7 +22,7 @@ namespace Primitive_Architecture.Agents.Ice {
     }
 
 
-    protected override string ToString() {
+    public override string ToString() {
       return "[" + Cycle + "] [Iceeater] Sun shines" + (_sun ? "!" : " not. :-(");
     }
   }

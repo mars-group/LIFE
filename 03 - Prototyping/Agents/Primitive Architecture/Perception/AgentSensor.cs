@@ -1,26 +1,37 @@
-﻿using System.Collections.Generic;
-using Primitive_Architecture.Agents;
-using Primitive_Architecture.Dummies;
+﻿using Environment = Primitive_Architecture.Dummies.Environment;
 
 namespace Primitive_Architecture.Perception {
+  
+  /// <summary>
+  ///   The agent sensor senses other agents.
+  /// </summary>
   internal class AgentSensor : Sensor {
 
-    private readonly Environment _environment;
+    private readonly Environment _environment;  // The data source to acquire agents from.
 
-    public AgentSensor(Environment environment) : base(0) {
+
+    /// <summary>
+    ///   Create a sensor that percepts nearby agents.
+    /// </summary>
+    /// <param name="environment">The data source to acquire agents from.</param>
+    /// <param name="halo">The halo to use. May be left blank for default omni halo.</param>
+    public AgentSensor(Environment environment, Halo halo = null) : base(0) {
       _environment = environment;
+      if (halo != null) Halo = halo;
     }
 
-    protected override SensorInput RetrieveData() {
-      var list = new List<Agent>(_environment.GetAllAgents());
-      foreach (var agent in list) {
-        //TODO Wenn nicht im Sichtbereich, rausschmeißen!
-        list.Remove(agent);
-      }
 
-      // Aggregate all spotted agents in an input object. 
+    /// <summary>
+    ///   Combine total agent set and halo perception. 
+    /// </summary>
+    /// <returns>A generic list with agent distances and references.</returns>
+    protected override SensorInput RetrieveData() {
       var gsi = new GenericSensorInput(this);
-      foreach (var agent in list) gsi.Values.Add(agent.Id, agent);
+      foreach (var agent in _environment.GetAllAgents()) {
+        if (Halo.IsInRange(agent.Position) && agent.Position != Halo.Position) {
+          gsi.Values.Add(agent.Id, agent);
+        }
+      }
       return gsi;
     }
   }

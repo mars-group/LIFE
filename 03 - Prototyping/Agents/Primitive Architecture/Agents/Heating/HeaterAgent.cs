@@ -58,7 +58,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// Print nominal setting and performance. 
     /// </summary>
     /// <returns>Console output string.</returns>
-    protected override string ToString() {
+    public override string ToString() {
       var control = (double) ((int) (CtrValue*10))/10 + " /" + CtrMax;
       var percent = (int) Math.Round(_thermalOutput/ThermalMax*100);
       return "Agent: "+Id+" - Stellwert: " + control + " - Leistung: " + percent 

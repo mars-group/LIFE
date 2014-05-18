@@ -27,7 +27,7 @@ namespace Primitive_Architecture.Perception {
     /// <param name="position">The position to check.</param>
     /// <returns>True, if position is in range, false otherwise.</returns>
     public override bool IsInRange(Vector position) {
-      return _radius <= Position.GetDistance(position);
+      return Position.GetDistance(position) <= _radius;
     }
   }
 }

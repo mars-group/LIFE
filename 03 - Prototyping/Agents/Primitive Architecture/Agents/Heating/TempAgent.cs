@@ -67,7 +67,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// Create a simple debug string containing the internal values of this agent.
     /// </summary>
     /// <returns>The formatted console output string.</returns>
-    protected override string ToString() {
+    public override string ToString() {
       return "Agent: " + Id + " - Sollwert: " + String.Format("{0,4:00.0}", _nominalTemp) + 
              " °C - Änderung:" + String.Format("{0,5:0.0}", _adjustment*100) + " %.";
     }

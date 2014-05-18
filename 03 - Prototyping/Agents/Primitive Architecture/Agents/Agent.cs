@@ -51,6 +51,7 @@ namespace Primitive_Architecture.Agents {
       Cycle ++;
 
       // Print the runtime information for debug purposes. 
+      //TODO Deprecated, this call should be made externally!
       if (DebugEnabled) Console.WriteLine(ToString());    
     }
  
@@ -59,7 +60,7 @@ namespace Primitive_Architecture.Agents {
     /// Default debug output. It may be overwritten by more concrete functions.
     /// </summary>
     /// <returns>Console output string.</returns>
-    protected new virtual string ToString() {
+    public new virtual string ToString() {
       var pos = "";
       if (Position != null) pos = " Position: "+Position;
       return "Agent: " + Id + "\t  Cycle: " + Cycle + pos;
