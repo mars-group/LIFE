@@ -93,6 +93,10 @@
       <Project>{CD379E3D-8606-4136-978A-2E1E7DD933A1}</Project>
       <Name>RuntimeEnvironment</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shared\SimulationManagerShared.csproj">
+      <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
+      <Name>SimulationManagerShared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

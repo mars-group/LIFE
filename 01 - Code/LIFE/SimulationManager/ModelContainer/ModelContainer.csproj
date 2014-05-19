@@ -78,6 +78,10 @@
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shared\SimulationManagerShared.csproj">
+      <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
+      <Name>SimulationManagerShared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

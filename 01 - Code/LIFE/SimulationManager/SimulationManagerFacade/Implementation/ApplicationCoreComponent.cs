@@ -5,10 +5,11 @@ using Hik.Communication.ScsServices.Service;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
-using Shared;
+
 using SimulationManagerFacade.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
+using SimulationManagerShared;
 
 namespace SimulationManagerFacade.Implementation {
     using CommonTypes.DataTypes;

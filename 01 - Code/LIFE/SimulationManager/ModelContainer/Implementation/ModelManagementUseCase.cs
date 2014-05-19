@@ -4,8 +4,8 @@ using System.IO;
 
 using LCConnector.TransportTypes.ModelStructure;
 using log4net;
-using Shared;
 using SMConnector.TransportTypes;
+using SimulationManagerShared;
 
 namespace ModelContainer.Implementation {
     /// <summary>

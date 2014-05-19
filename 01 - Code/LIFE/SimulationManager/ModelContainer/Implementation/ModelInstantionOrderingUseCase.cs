@@ -6,8 +6,9 @@ using LCConnector.TransportTypes;
 using log4net;
 using ModelContainer.Implementation.Entities;
 using Mono.Addins;
-using Shared;
+
 using SMConnector.TransportTypes;
+using SimulationManagerShared;
 
 namespace ModelContainer.Implementation {
     /// <summary>

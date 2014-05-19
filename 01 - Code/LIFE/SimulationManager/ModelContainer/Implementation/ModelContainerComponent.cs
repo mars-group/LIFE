@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
-using Shared;
 using SMConnector.TransportTypes;
+using SimulationManagerShared;
 
 namespace ModelContainer.Implementation {
     public class ModelContainerComponent : IModelContainer {

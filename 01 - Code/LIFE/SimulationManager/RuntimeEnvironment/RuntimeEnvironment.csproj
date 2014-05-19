@@ -89,6 +89,10 @@
       <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
       <Name>ModelContainer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shared\SimulationManagerShared.csproj">
+      <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
+      <Name>SimulationManagerShared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

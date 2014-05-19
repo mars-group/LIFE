@@ -1,6 +1,6 @@
 ﻿using ConfigurationAdapter.Interface;
 using NUnit.Framework;
-using Shared;
+using SimulationManagerShared;
 
 namespace ConfigurationAdapterTest
 {

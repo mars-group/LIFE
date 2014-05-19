@@ -9,8 +9,8 @@ using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation;
 using RuntimeEnvironment.Interfaces;
-using Shared;
 using SimulationManagerFacade.Implementation;
+using SimulationManagerShared;
 
 namespace SimulationManagerFacade.Interface {
     /// <summary>
