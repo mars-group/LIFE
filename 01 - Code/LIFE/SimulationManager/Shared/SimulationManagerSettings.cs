@@ -2,8 +2,7 @@
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
-
-namespace Shared
+namespace SimulationManagerShared
 {
     /// <summary>
     /// This class holds all local settings for the SimulationManager.
