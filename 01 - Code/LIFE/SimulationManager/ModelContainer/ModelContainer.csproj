@@ -11,8 +11,6 @@
     <AssemblyName>ModelContainer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -79,10 +77,6 @@
     <ProjectReference Include="..\..\LayerContainer\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\Shared.csproj">
-      <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
-      <Name>Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

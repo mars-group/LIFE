@@ -6,7 +6,9 @@ using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
-using Shared;
+using LayerContainerShared;
+
+
 
 namespace LayerContainerFacade.Implementation {
 

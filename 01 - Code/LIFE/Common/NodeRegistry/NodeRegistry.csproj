@@ -11,8 +11,6 @@
     <AssemblyName>NodeRegistry</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -34,9 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -74,7 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
-      <Project>{20a316c2-8779-474d-98fb-a13dac9043ab}</Project>
+      <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
       <Name>MulticastAdapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">

@@ -4,15 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13B79EC1-DE9C-4CD1-9255-5458505677DF}</ProjectGuid>
+    <ProjectGuid>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimulationManagerTest</RootNamespace>
-    <AssemblyName>SimulationManagerTest</AssemblyName>
+    <RootNamespace>Shared</RootNamespace>
+    <AssemblyName>Shared</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,55 +37,30 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MockComponents\ModelContainerMock.cs" />
-    <Compile Include="ModelContainerTestClasses\Zero.cs" />
-    <Compile Include="RuntimeEnvironmentTest\RuntimeEnvironmentTest.cs" />
-    <Compile Include="ModelContainerTest.cs" />
+    <Compile Include="LayerContainerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
-      <Name>CommonTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
-      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
-      <Name>LCConnector</Name>
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">
-      <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
-      <Name>SMConnector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimulationManager\ModelContainer\ModelContainer.csproj">
-      <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
-      <Name>ModelContainer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.csproj">
-      <Project>{CD379E3D-8606-4136-978A-2E1E7DD933A1}</Project>
-      <Name>RuntimeEnvironment</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
       <Name>MulticastAdapter</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TestEntities\" />
+    <ProjectReference Include="..\LayerRegistry\LayerRegistry.csproj">
+      <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
+      <Name>LayerRegistry</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

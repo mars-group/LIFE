@@ -1,16 +1,11 @@
 ﻿using System;
+using AppSettingsManager;
+using LayerRegistry.Interfaces.Config;
+using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
-namespace Shared
+namespace LayerContainerShared
 {
-    using AppSettingsManager;
-
-    using LayerRegistry.Interfaces.Config;
-
-    using MulticastAdapter.Interface.Config;
-
-
-
     [Serializable]
     public class LayerContainerSettings
     {

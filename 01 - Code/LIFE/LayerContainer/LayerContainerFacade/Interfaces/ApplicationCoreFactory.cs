@@ -14,11 +14,12 @@ using PartitionManager.Implementation;
 using PartitionManager.Interfaces;
 using RTEManager.Implementation;
 using RTEManager.Interfaces;
+using LayerContainerShared;
 
 namespace LayerContainerFacade.Interfaces {
     using ConfigurationAdapter.Interface;
 
-    using Shared;
+ 
 
     public static class ApplicationCoreFactory {
         private static IContainer _container;
