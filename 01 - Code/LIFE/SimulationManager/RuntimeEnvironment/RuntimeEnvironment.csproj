@@ -11,8 +11,6 @@
     <AssemblyName>RuntimeEnvironment</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -72,7 +70,7 @@
       <Name>LCConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
-      <Project>{c07bbb5f-a159-41ad-933d-6b1f10913ed7}</Project>
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">

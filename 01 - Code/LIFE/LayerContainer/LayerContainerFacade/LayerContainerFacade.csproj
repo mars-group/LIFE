@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -78,11 +78,11 @@
       <Name>Scs</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">
-      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerFactory\LayerFactory.csproj">
-      <Project>{a88c77db-0dac-46d5-8136-c27b3d72717f}</Project>
+      <Project>{A88C77DB-0DAC-46D5-8136-C27B3D72717F}</Project>
       <Name>LayerFactory</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerRegistry\LayerRegistry.csproj">
@@ -97,8 +97,8 @@
       <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
       <Name>RTEManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shared\Shared.csproj">
-      <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
+    <ProjectReference Include="..\..\Shared\Shared.csproj">
+      <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
       <Name>Shared</Name>
     </ProjectReference>
   </ItemGroup>
