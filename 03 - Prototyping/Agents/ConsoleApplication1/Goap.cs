@@ -9,6 +9,9 @@ using GoapComponent.GoapPlannerComponent;
 
 namespace GoapComponent {
 
+
+
+
     /// <summary>
     ///     Is the only access point for the whole GOAP functions from outside the GOAPComponent
     /// </summary>
