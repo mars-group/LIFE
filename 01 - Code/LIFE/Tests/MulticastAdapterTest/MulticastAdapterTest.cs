@@ -1,19 +1,15 @@
 ﻿using System;
-using System.CodeDom;
 using System.Net;
 using System.Threading;
-using ConfigurationAdapter.Interface;
+using AppSettingsManager;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;
 using NUnit.Framework;
 
-
-namespace MulticastAdapterTestProject
+namespace MulticastAdapterTest
 {
-    using AppSettingsManager;
-
-    public class MulticastAdapterTest
+  public class MulticastAdapterTest
     {
 
 

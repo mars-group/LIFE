@@ -81,10 +81,6 @@
       <Project>{0dc81b09-3abf-4bb3-8c08-4e8ee4432bdc}</Project>
       <Name>Scs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Tests\NodeRegistryTest\NodeRegistryTest.csproj">
-      <Project>{0920a631-6703-41ed-b7f6-9f5096bb5af5}</Project>
-      <Name>NodeRegistryTest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>

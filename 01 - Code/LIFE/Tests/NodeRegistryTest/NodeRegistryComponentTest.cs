@@ -6,8 +6,6 @@ using CommonTypes.Types;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Implementation;
-using NodeRegistry.Implementation.Messages;
-using NodeRegistry.Implementation.UseCases;
 using NodeRegistry.Interface;
 using NUnit.Framework;
 

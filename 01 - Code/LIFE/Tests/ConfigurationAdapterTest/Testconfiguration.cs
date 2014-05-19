@@ -1,5 +1,4 @@
-﻿using System;
-using ConfigurationAdapter.Interface;
+﻿using ConfigurationAdapter.Interface;
 using NUnit.Framework;
 using Shared;
 
