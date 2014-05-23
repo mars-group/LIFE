@@ -7,12 +7,12 @@ using Mono.Addins;
 namespace LayerAPI.AddinLoader {
     public class AddinLoader : IAddinLoader {
         public AddinLoader() {
-            AddinManager.Initialize("./addinRegistry");
+            AddinManager.Initialize("./layers");
             AddinManager.Registry.Update();
         }
 
         public void LoadModelContent(ModelContent modelContent) {
-            modelContent.Write("./addinRegistry/addins");
+            modelContent.Write("./layers/addins");
             UpdateAddinRegistry();
         }
 

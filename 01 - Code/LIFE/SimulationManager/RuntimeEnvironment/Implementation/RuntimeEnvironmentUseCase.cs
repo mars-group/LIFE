@@ -85,12 +85,12 @@ namespace RuntimeEnvironment.Implementation {
         private LayerContainerClient[] InitConnections
             (TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
-            ModelContent content = _modelContainer.GetModel(modelDescription);
-            LayerContainerClient[] _layerContainerClients = new LayerContainerClient[layerContainers.Count];
+            var content = _modelContainer.GetModel(modelDescription);
+            var _layerContainerClients = new LayerContainerClient[layerContainers.Count];
 
-            int i = 0;
+            var i = 0;
             foreach (TNodeInformation nodeInformationType in layerContainers) {
-                LayerContainerClient client = new LayerContainerClient
+                var client = new LayerContainerClient
                     (
                     ScsServiceClientBuilder.CreateClient<ILayerContainer>
                         (

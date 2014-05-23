@@ -52,7 +52,7 @@
     <Compile Include="Implementation\Entities\ModelNode.cs" />
     <Compile Include="Implementation\Entities\ModelStructure.cs" />
     <Compile Include="Implementation\ModelContainerComponent.cs" />
-    <Compile Include="Implementation\ModelInstantionOrderingUseCase.cs" />
+    <Compile Include="Implementation\ModelInstantiationOrderingUseCase.cs" />
     <Compile Include="Implementation\ModelManagementUseCase.cs" />
     <Compile Include="Interfaces\IModelContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

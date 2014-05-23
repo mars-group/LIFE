@@ -15,12 +15,12 @@ namespace ModelContainer.Implementation {
     ///     This class reads one specific model and converts it into a representation that allows<br />
     ///     for instantiation order analysis.
     /// </summary>
-    internal class ModelInstantionOrderingUseCase {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (ModelInstantionOrderingUseCase));
+    internal class ModelInstantiationOrderingUseCase {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (ModelInstantiationOrderingUseCase));
 
         private SimulationManagerSettings _settings;
 
-        public ModelInstantionOrderingUseCase(SimulationManagerSettings settings) {
+        public ModelInstantiationOrderingUseCase(SimulationManagerSettings settings) {
             _settings = settings;
 
             Logger.Debug("instantiated.");
@@ -28,7 +28,9 @@ namespace ModelContainer.Implementation {
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description)
         {
-            AddinManager.Initialize("./addinConfig", _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name);
+            //, _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name
+            AddinManager.Initialize(_settings.AddinLibraryDirectoryPath, "." +Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
+            // TODO: PATH correct, but ExtensionPoints not found
             AddinManager.Registry.Update();
             var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
 

@@ -46,7 +46,7 @@ namespace RuntimeEnvironment.Implementation {
                 switch (_status) {
                     case SimulationStatus.Paused:
                         // pause execution and wait to be signaled
-                        this._simulationExecutionSwitch.WaitOne();
+                        _simulationExecutionSwitch.WaitOne();
                         break;
 
                     case SimulationStatus.Aborted:
