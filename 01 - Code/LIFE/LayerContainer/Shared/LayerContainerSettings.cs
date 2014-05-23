@@ -6,6 +6,8 @@ using NodeRegistry.Interface;
 
 namespace LayerContainerShared
 {
+    using CommonTypes.Types;
+
     [Serializable]
     public class LayerContainerSettings
     {
@@ -16,7 +18,7 @@ namespace LayerContainerShared
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
         public LayerContainerSettings() {
-            NodeRegistryConfig = new NodeRegistryConfig();
+            NodeRegistryConfig = new NodeRegistryConfig(NodeType.LayerContainer, "LC-1", "127.0.0.1", 60100, true);
             LayerRegistryConfig = new LayerRegistryConfig();
             GlobalConfig = new GlobalConfig();
             MulticastSenderConfig = new MulticastSenderConfig();

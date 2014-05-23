@@ -43,6 +43,10 @@
     <Compile Include="SimulationManagerSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>

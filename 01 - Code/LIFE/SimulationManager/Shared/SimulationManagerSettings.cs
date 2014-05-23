@@ -4,6 +4,8 @@ using NodeRegistry.Interface;
 
 namespace SimulationManagerShared
 {
+    using CommonTypes.Types;
+
     /// <summary>
     /// This class holds all local settings for the SimulationManager.
     /// </summary>
@@ -23,7 +25,7 @@ namespace SimulationManagerShared
         //TODO: can this be internal?
         public SimulationManagerSettings() {
             ModelDirectoryPath = "./Models";
-            NodeRegistryConfig = new NodeRegistryConfig();
+            NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, "SM-1","127.0.0.1",44521, true);
             MulticastSenderConfig = new MulticastSenderConfig();
         }
     }

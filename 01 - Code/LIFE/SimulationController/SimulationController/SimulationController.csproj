@@ -46,7 +46,6 @@
     <Compile Include="Config\SimControllerConfig.cs" />
     <Compile Include="Implementation\SimulationControllerUseCase.cs" />
     <Compile Include="Implementation\SimulationManagerClient.cs" />
-    <Compile Include="Starter.cs" />
     <Compile Include="Exceptions\NoSimulationManagerConnectedException.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,7 +84,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

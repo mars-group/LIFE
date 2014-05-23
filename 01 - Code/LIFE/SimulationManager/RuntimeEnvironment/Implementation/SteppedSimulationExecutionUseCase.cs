@@ -7,7 +7,8 @@ using RuntimeEnvironment.Implementation.Entities;
 [assembly: InternalsVisibleTo("SimulationManagerTest")]
 
 namespace RuntimeEnvironment.Implementation {
-    
+    using System.Threading.Tasks;
+
     internal enum SimulationStatus {
         Running,
         Paused,
@@ -24,59 +25,75 @@ namespace RuntimeEnvironment.Implementation {
         private readonly IList<LayerContainerClient> _layerContainerClients;
         private long _maxExecutionTime;
         private SimulationStatus _status;
-        private int _containersLeft;
+
+        private readonly ManualResetEvent _simulationExecutionSwitch;
 
         public SteppedSimulationExecutionUseCase
             (int? nrOfTicks, IList<LayerContainerClient> layerContainerClients) {
             _nrOfTicks = nrOfTicks;
             _layerContainerClients = layerContainerClients;
             _status = SimulationStatus.Running;
+            _simulationExecutionSwitch = new ManualResetEvent(false);
 
-            new Thread(RunSimulation).Start();
+            // start simulation
+            Task.Run(() => this.RunSimulation());
         }
 
         private void RunSimulation() {
-            for (int i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
-                
-                Monitor.Wait(this);
-                while (_status == SimulationStatus.Paused)
-                {
-                    Monitor.Wait(this);
-                }
+            for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
 
-                if (_status == SimulationStatus.Aborted) return;
+                // check for status change
+                switch (_status) {
+                    case SimulationStatus.Paused:
+                        // pause execution and wait to be signaled
+                        this._simulationExecutionSwitch.WaitOne();
+                        break;
+
+                    case SimulationStatus.Aborted:
+                        // that's it..
+                        return;
+                }
 
                 _maxExecutionTime = 0;
-                _containersLeft = _layerContainerClients.Count;
 
-                foreach (LayerContainerClient layerContainerClient in _layerContainerClients) {
-                    ThreadPool.QueueUserWorkItem
-                        (delegate {
-                            long tickExecutionTime = layerContainerClient.Tick();
-                            lock (_layerContainerClients) {
-                                if (tickExecutionTime > _maxExecutionTime) _maxExecutionTime = tickExecutionTime;
-                                _containersLeft--;
-                                if (_containersLeft <= 0) Monitor.PulseAll(this);
+                // now for some .NET 4.5 magic: parallel execution of layerContainer.tick() while updating shared variable
+                Parallel.ForEach<LayerContainerClient, long> // elem, accu
+                    (
+                        _layerContainerClients, //source for elems
+                        () => 0, // intialization for accu
+                        (currentContainer, loop, lastExecutionTime) => { // currentElem, ParallelLoopState, lastAccu
+                            var currentExecutionTime = currentContainer.Tick(); // do actual simulation step
+                            return Math.Max(currentExecutionTime, lastExecutionTime); 
+                        },
+                        (finalResult) => { // finalResult = final result from inner partitioned loop
+                            // now read shared variable
+                            long localMax = Interlocked.Read(ref _maxExecutionTime); 
+                            // while finalResult is larger than _maxExecutionTime, update it, and try again
+                            while (finalResult > localMax) {
+                              Interlocked.CompareExchange(ref _maxExecutionTime, finalResult, localMax);
+                              localMax = Interlocked.Read(ref _maxExecutionTime);
                             }
                         });
-                }
+
 
                 Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
             }
         }
 
         public void PauseSimulation() {
+            // set switch to non-signaled in case it was signaled before
+            _simulationExecutionSwitch.Reset();
             _status = SimulationStatus.Paused;
         }
 
         internal void ResumeSimulation() {
             _status = SimulationStatus.Running;
-            Monitor.PulseAll(this);
+            // signal ManualResetEvent
+            this._simulationExecutionSwitch.Set();
         }
 
         public void Abort() {
             _status = SimulationStatus.Aborted;
-            Monitor.PulseAll(this);
         }
     }
 }
