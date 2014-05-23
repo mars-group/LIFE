@@ -12,7 +12,6 @@ namespace NodeRegistry.Interface {
         /// <summary>
         ///     Get all NodeEndpoints currently discovered
         /// </summary>
-        /// <param name="includeMySelf"></param>
         /// <returns>List of INodeEndpoints, empty list if no discovered Nodes are found</returns>
         List<TNodeInformation> GetAllNodes();
 
@@ -49,11 +48,13 @@ namespace NodeRegistry.Interface {
         /// </summary>
         void LeaveCluster();
 
-        //Joins, in the configuration specified, multicastgroupe to connect to the node cluster and take part in a simulation.
+        /// <summary>
+        /// Joins a multicastgroup specified in the configuration file
+        /// </summary>
         void JoinCluster();
 
         /// <summary>
-        ///     Leave the Current cluster and shut down all networksockets
+        /// Leave the Current cluster and shut down all networksockets
         /// </summary>
         void ShutDownNodeRegistry();
 

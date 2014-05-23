@@ -1,5 +1,4 @@
-﻿using System.Net;
-using CommonTypes.DataTypes;
+﻿using CommonTypes.DataTypes;
 using ProtoBuf;
 
 namespace NodeRegistry.Implementation.Messages

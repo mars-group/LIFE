@@ -22,7 +22,8 @@ namespace NodeRegistryTest {
             _information = new TNodeInformation(
                 NodeType.LayerContainer,
                 "UnitTestNode",
-                new NodeEndpoint("127.0.0.1", 55500));
+                new NodeEndpoint("127.0.0.1", 55500)
+                );
         }
 
         #endregion
@@ -81,9 +82,7 @@ namespace NodeRegistryTest {
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-
             var globalConfig = new GlobalConfig("224.111.11.1", localListenPort, localSendingPort, 4);
-
 
             var multicastAdapter = new MulticastAdapterComponent(globalConfig, new MulticastSenderConfig());
 

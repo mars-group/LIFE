@@ -4,6 +4,7 @@ using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Collections;
+using NodeRegistry.Interface;
 
 namespace NodeRegistry.Implementation.UseCases
 {
@@ -32,7 +33,7 @@ namespace NodeRegistry.Implementation.UseCases
         public void AddNode(TNodeInformation nodeInformation) {
             _activeNodeList[nodeInformation.NodeIdentifier] = nodeInformation;
 
-            //notify all subsribers
+            //notify all subscribers
             _nodeRegistryEventHandlerUseCase.NotifyOnNodeJoinSubsribers(nodeInformation);
             _nodeRegistryEventHandlerUseCase.NotifyOnNodeTypeJoinSubsribers(nodeInformation);
 

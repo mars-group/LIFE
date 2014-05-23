@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using log4net;
 using MulticastAdapter.Interface;
@@ -19,14 +15,14 @@ namespace NodeRegistry.Implementation.UseCases
 
         private ILog Logger;
 
-        private TNodeInformation _localNodeInformation;
-        private NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUse;
-        private NodeRegistryHeartBeatUseCase _nodeRegistryHeartBeatUseCase;
+        private readonly TNodeInformation _localNodeInformation;
+        private readonly NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUse;
+        private readonly NodeRegistryHeartBeatUseCase _nodeRegistryHeartBeatUseCase;
 
-        private IMulticastAdapter _multicastAdapter;
-        private Boolean _addMySelfToActiveNodeList;
+        private readonly IMulticastAdapter _multicastAdapter;
+        private readonly Boolean _addMySelfToActiveNodeList;
 
-        private Thread _listenThread;
+        private readonly Thread _listenThread;
 
         public NodeRegistryNetworkUseCase(NodeRegistryNodeManagerUseCase nodeManagerUseCase, NodeRegistryHeartBeatUseCase heartBeatUseCase,
             TNodeInformation localNodeInformation, bool addMySelfToActiveNodeList, IMulticastAdapter multicastAdapter)

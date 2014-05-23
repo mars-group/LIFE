@@ -1,8 +1,6 @@
-﻿using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using Hik.Communication.ScsServices.Communication;
 using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.UseCases;
 using NodeRegistry.Interface;
@@ -11,13 +9,13 @@ namespace NodeRegistry.Implementation
 {
     public class NodeRegistryComponent : INodeRegistry {
 
-        private NodeRegistryEventHandlerUseCase _eventHandlerUseCase;
-        private NodeRegistryHeartBeatUseCase _heartBeatUseCase;
-        private NodeRegistryNetworkUseCase _networkUseCase;
-        private NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
-        private IMulticastAdapter _multicastAdapter;
+        private readonly NodeRegistryEventHandlerUseCase _eventHandlerUseCase;
+        private readonly NodeRegistryHeartBeatUseCase _heartBeatUseCase;
+        private readonly NodeRegistryNetworkUseCase _networkUseCase;
+        private readonly NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
+        private readonly IMulticastAdapter _multicastAdapter;
 
-        private NodeRegistryConfig _config;
+        private readonly NodeRegistryConfig _config;
 
 
 
