@@ -13,6 +13,7 @@ namespace SimulationManagerShared
     public class SimulationManagerSettings
     {
         public string AddinLibraryDirectoryPath { get; set; }
+        public string AddinDirectoryPath { get; set; }
         public string ModelDirectoryPath { get; set; }
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
         public MulticastSenderConfig MulticastSenderConfig { get; set; }

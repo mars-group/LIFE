@@ -1,11 +1,11 @@
 ﻿using System;
 using LayerAPI.Interfaces;
 using Mono.Addins;
-
 [assembly:Addin]
 [assembly:AddinDependency("LayerContainer", "0.1")]
 namespace ExampleLayer
 {
+
 
     [Extension(typeof(ISteppedLayer))]
     public class ExampleLayer : ISteppedLayer

@@ -9,8 +9,10 @@ using Mono.Addins;
 
 using SMConnector.TransportTypes;
 using SimulationManagerShared;
-
+[assembly: AddinRoot("LayerContainer", "0.1")]
 namespace ModelContainer.Implementation {
+    using LayerAPI.AddinLoader;
+
     /// <summary>
     ///     This class reads one specific model and converts it into a representation that allows<br />
     ///     for instantiation order analysis.
@@ -26,14 +28,16 @@ namespace ModelContainer.Implementation {
             Logger.Debug("instantiated.");
         }
 
-        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description)
-        {
-            //, _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + description.Name
-            AddinManager.Initialize(_settings.AddinLibraryDirectoryPath, "." +Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
-            // TODO: PATH correct, but ExtensionPoints not found
-            AddinManager.Registry.Update();
-            var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
+        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description) {
+            var addinLoader = new AddinLoader
+                (
+                _settings.AddinLibraryDirectoryPath,
+                "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
+            //AddinManager.Initialize(_settings.AddinLibraryDirectoryPath, "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
 
+            //AddinManager.Registry.Update();
+            //var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
+            var nodes = addinLoader.LoadAllLayers();
             var modelStructure = new ModelStructure();
 
             foreach (var node in nodes) {

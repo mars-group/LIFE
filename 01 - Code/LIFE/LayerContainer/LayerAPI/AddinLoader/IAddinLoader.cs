@@ -2,6 +2,8 @@
 using Mono.Addins;
 
 namespace LayerAPI.AddinLoader {
+    using System.Collections.Generic;
+
     public interface IAddinLoader {
 
         /// <summary>
@@ -18,5 +20,8 @@ namespace LayerAPI.AddinLoader {
         /// <param name="layerName">The name of the layer. Must be the name of the implementing class.</param>
         /// <returns>A TypeExtensionNode object. May be used to directly instanciate the layer or to reflect its dependencies</returns>
         TypeExtensionNode LoadLayer(string layerName);
+
+
+        ExtensionNodeList LoadAllLayers();
     }
 }
