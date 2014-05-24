@@ -30,13 +30,9 @@ namespace ModelContainer.Implementation {
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description) {
             var addinLoader = new AddinLoader
-                (
-                _settings.AddinLibraryDirectoryPath,
+                (_settings.AddinLibraryDirectoryPath,
                 "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
-            //AddinManager.Initialize(_settings.AddinLibraryDirectoryPath, "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
 
-            //AddinManager.Registry.Update();
-            //var nodes = AddinManager.GetExtensionNodes(typeof (ILayer));
             var nodes = addinLoader.LoadAllLayers();
             var modelStructure = new ModelStructure();
 

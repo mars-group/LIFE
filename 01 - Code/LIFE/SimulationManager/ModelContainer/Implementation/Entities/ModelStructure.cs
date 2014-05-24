@@ -50,6 +50,7 @@ namespace ModelContainer.Implementation.Entities {
                 nodes = new HashSet<ModelNode>(dependentNodes);
                 i++;
                 setList[i] = nodes;
+
             }
 
             return setList.Aggregate(new List<TLayerDescription>(), (list, set) => {

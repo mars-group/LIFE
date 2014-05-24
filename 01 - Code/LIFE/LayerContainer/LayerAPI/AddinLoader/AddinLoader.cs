@@ -37,7 +37,7 @@ namespace LayerAPI.AddinLoader {
 
         public ExtensionNodeList LoadAllLayers() {
             this.UpdateAddinRegistry();
-            return AddinManager.GetExtensionNodes(typeof(ILayer));
+            return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));
         }
 
         private void UpdateAddinRegistry()
