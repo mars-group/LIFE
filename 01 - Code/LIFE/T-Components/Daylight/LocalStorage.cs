@@ -55,11 +55,11 @@ namespace Daylight {
                 // If that worked, our disk storage has to be in a temp directory
                 storageRoot = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             }
-            catch (Exception ex) {
+            catch {
                 // We get the real disk storage
                 mutex = new Mutex(true, mutexName);
-                storageRoot = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\" + libname +
-                              "\\" + assembly + "\\";
+				storageRoot = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + libname +
+					Path.DirectorySeparatorChar + assembly + Path.DirectorySeparatorChar;
             }
 
             //Console.WriteLine("Storing data in " + storageRoot);

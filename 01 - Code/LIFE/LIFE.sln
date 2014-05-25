@@ -432,7 +432,9 @@ Global
 		{D012B06F-95E7-4973-9847-34AE2BDF4B44} = {62F1C796-A9FD-471E-80F3-5396CFE3BC5F}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = LayerContainer\LayerContainer\LayerContainer.csproj
+		StartupItems = $0
+		$0.Item = SimulationManager\SimulationManager\SimulationManager.csproj
+		$0.Item = LayerContainer\LayerContainer\LayerContainer.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
