@@ -50,7 +50,25 @@ namespace MulticastAdapter.Implementation
         private UdpClient GetClient()
         {
 
-			return new UdpClient(_listenPort);
+            IPAddress listenAddress;
+
+            switch ((IPVersionType)_generalSettings.IPVersion)
+            {
+                case IPVersionType.IPv6:
+                    listenAddress = IPAddress.IPv6Any;
+                    break;
+                default:
+                    listenAddress = IPAddress.Any;
+                    break;
+            }
+
+            var udpClient = new UdpClient();
+            udpClient.ExclusiveAddressUse = false;
+            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            udpClient.ExclusiveAddressUse = false;
+            udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
+
+            return udpClient;
 
         }
 
