@@ -33,7 +33,7 @@ namespace MulticastAdapterTest
 
             var testListenPort = 60030;
             var testSendIngPortStartSeed = 60000;
-            var mcastAddress = "224.50.50.50";
+			var mcastAddress = "224.50.50.50";
 
             var reciever = new UDPMulticastReceiver(IPAddress.Parse(mcastAddress), testListenPort);
             var sender =
