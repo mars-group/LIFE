@@ -29,8 +29,8 @@ namespace NodeRegistry.Implementation.UseCases
         private NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUseCase;
 
         /// <summary>
-        /// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a TNodeInformation is recied the timeEvent will fire
-        ///  and delte this TNodeInformation from the active NodeList
+		/// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a TNodeInformation is received the timeEvent will fire
+		///  and delete this TNodeInformation from the active NodeList
         /// </summary>
         private ThreadSafeSortedList<TNodeInformation, Timer> _heartBeatTimers;
 
@@ -114,7 +114,7 @@ namespace NodeRegistry.Implementation.UseCases
         private Timer CreateNewTimerForNodeEntry(TNodeInformation nodeInformation)
         {
             var timer = new Timer(_heartBeatInterval * _heartBeatTimeOutMultiplier) { AutoReset = false };
-            //add event to timer
+			// add event to timer
             timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args)
             {
                 Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");

@@ -34,7 +34,8 @@ namespace LayerContainerComponentTests {
         [Test]
         public void TestRegister() {
             _layerRegistry.RegisterLayer(_layer);
-            Assert.AreEqual(_layer, _layerRegistry.GetLayerInstance(_layer.GetType()));
+			var retreivedLayer = _layerRegistry.GetLayerInstance (_layer.GetType ());
+			Assert.AreEqual(_layer, retreivedLayer);
         }
     }
 }

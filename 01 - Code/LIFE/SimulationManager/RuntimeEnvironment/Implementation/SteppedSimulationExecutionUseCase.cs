@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using RuntimeEnvironment.Implementation.Entities;
+using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("SimulationManagerTest")]
 
 namespace RuntimeEnvironment.Implementation {
-    using System.Threading.Tasks;
+
 
     internal enum SimulationStatus {
         Running,

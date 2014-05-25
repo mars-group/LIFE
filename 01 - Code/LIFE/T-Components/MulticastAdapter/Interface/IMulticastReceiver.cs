@@ -1,6 +1,6 @@
 ﻿namespace MulticastAdapter.Interface
 {
-    public interface IMulticastReciever
+    public interface IMulticastReceiver
     {
 
         /// <summary>

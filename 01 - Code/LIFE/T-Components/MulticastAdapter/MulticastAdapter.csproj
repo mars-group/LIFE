@@ -57,11 +57,11 @@
     <Compile Include="Interface\Exceptions\InvalidConfigurationException.cs" />
     <Compile Include="Interface\IMulticastAdapter.cs" />
     <Compile Include="Interface\IMulticastSender.cs" />
-    <Compile Include="Interface\IMulticastReciever.cs" />
     <Compile Include="Interface\Exceptions\MissingArgumentException.cs" />
     <Compile Include="Interface\Exceptions\NoInterfaceFoundException.cs" />
     <Compile Include="Interface\Config\Types\IPVersionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interface\IMulticastReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

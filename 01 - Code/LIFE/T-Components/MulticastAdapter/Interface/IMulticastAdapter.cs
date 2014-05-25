@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MulticastAdapter.Interface
 {
-    public interface IMulticastAdapter : IMulticastReciever, IMulticastSender
+    public interface IMulticastAdapter : IMulticastReceiver, IMulticastSender
     {
         /// <summary>
         ///     Close the underlying communication socket
@@ -16,7 +16,7 @@ namespace MulticastAdapter.Interface
 
         /// <summary>
         ///     Reopen the closed socket if it was closed before. If the method is called and the Socket is already open nothing
-        ///     happend.
+		///     happens.
         /// </summary>
         void ReopenSocket();
 

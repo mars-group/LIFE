@@ -21,12 +21,9 @@ namespace MulticastAdapterTest
             var globalConfig = new GlobalConfig("224.10.100.1", 60543, startListenPort, 4);
             var senderConfig = new MulticastSenderConfig();
 
-            //test if both adapter  can handle the same starting port
-            var adapter1 = new MulticastAdapterComponent(globalConfig, senderConfig);
-            var adapter2 = new MulticastAdapterComponent(globalConfig, senderConfig);
-
             // if no exceptions are thrown we are good to go
-            Assert.True(true);
+			Assert.DoesNotThrow (() => new MulticastAdapterComponent (globalConfig, senderConfig));
+			Assert.DoesNotThrow(() => new MulticastAdapterComponent(globalConfig, senderConfig));
 
         }
         
@@ -41,7 +38,7 @@ namespace MulticastAdapterTest
             var reciever = new UDPMulticastReceiver(IPAddress.Parse(mcastAddress), testListenPort);
             var sender =
                 new UDPMulticastSender(new GlobalConfig(mcastAddress, testListenPort, testSendIngPortStartSeed, 4),
-                    new MulticastSenderConfig(false, "Ethernet 2", "",  BindingType.Name));
+					new MulticastSenderConfig());
 
             var messageCounter  = new MessageCounter(reciever);
 
@@ -50,7 +47,7 @@ namespace MulticastAdapterTest
 
             sender.SendMessageToMulticastGroup(new byte[0]);
 
-            //wait for message to arraive.
+            //wait for message to arrive.
             Thread.Sleep(200);
 
             var msgNr = messageCounter.NumberOfmessages;

@@ -14,7 +14,7 @@ namespace MulticastAdapter.Implementation
 
         #region properties & fields
         private IMulticastSender _sender;
-        private IMulticastReciever _reciever;
+        private IMulticastReceiver _reciever;
         private Thread _listenThread;
         #endregion
 
