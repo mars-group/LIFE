@@ -26,7 +26,7 @@ namespace SMConnector {
         /// <param name="model">not null</param>
         /// <param name="layerContainers">The layer containers witht which </param>
         /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null);
+        void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.

@@ -3,9 +3,9 @@ using CommonTypes.DataTypes;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
-using Shared;
 using SMConnector;
 using SMConnector.TransportTypes;
+using SimulationManagerShared;
 
 namespace RuntimeEnvironment.Implementation {
     public class RuntimeEnvironmentComponent : IRuntimeEnvironment {
@@ -14,12 +14,12 @@ namespace RuntimeEnvironment.Implementation {
         public RuntimeEnvironmentComponent(SimulationManagerSettings settings,
             IModelContainer modelContainer,
             INodeRegistry layerRegistry) {
-            _runtimeEnvironmentUseCase = new RuntimeEnvironmentUseCase(settings, modelContainer, layerRegistry);
+            _runtimeEnvironmentUseCase = new RuntimeEnvironmentUseCase(modelContainer, layerRegistry);
         }
 
-        public void StartWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers,
+        public void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
             int? nrOfTicks = null) {
-            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainers, nrOfTicks);
+            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainerNodes, nrOfTicks);
         }
 
         public void Pause(TModelDescription model) {

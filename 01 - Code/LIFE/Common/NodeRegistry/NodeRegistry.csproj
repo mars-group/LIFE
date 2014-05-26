@@ -11,8 +11,6 @@
     <AssemblyName>NodeRegistry</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -35,15 +33,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
@@ -56,6 +48,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\Messages\AbstractNodeRegistryMessage.cs" />
@@ -74,7 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
-      <Project>{20a316c2-8779-474d-98fb-a13dac9043ab}</Project>
+      <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
       <Name>MulticastAdapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
@@ -90,7 +85,7 @@
       <Name>ConfigurationAdapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\LoggerFactory\LoggerFactory.csproj">
-      <Project>{f87e5894-0ab9-4ddc-8b96-d9abbad243ac}</Project>
+      <Project>{F87E5894-0AB9-4DDC-8B96-D9ABBAD243AC}</Project>
       <Name>LoggerFactory</Name>
     </ProjectReference>
   </ItemGroup>

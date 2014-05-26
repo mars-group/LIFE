@@ -39,6 +39,12 @@ namespace MulticastAdapter.Implementation
 
         }
 
+		/// <summary>
+		/// Gets the sending interfaces.
+		/// Either only creates a updClient for the configured interface
+		/// or selects all multicast enabled interfaces and creates udpClients for them
+		/// </summary>
+		/// <returns>The sending interfaces. Empty if none.</returns>
         private IList<UdpClient> GetSendingInterfaces()
         {
             IList<UdpClient> resultList = new List<UdpClient>();
@@ -91,9 +97,7 @@ namespace MulticastAdapter.Implementation
 
 
         }
-
-
-
+			
 
         private IPEndPoint GetBindingEndpoint()
         {
@@ -185,7 +189,7 @@ namespace MulticastAdapter.Implementation
         {
             foreach (var client in _clients)
             {
-                if (client.Client != null) client.Send(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort));
+				if (client.Client != null) client.Send(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort));
             }
         }
     }

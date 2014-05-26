@@ -26,7 +26,8 @@ namespace ModelContainer.Implementation.Entities {
         }
 
         /// <summary>
-        /// 
+        /// Checks whether this node depends on newNode
+        /// and adds an edge if true
         /// </summary>
         /// <param name="newNode"></param>
         public void UpdateEdges(ModelNode newNode)
@@ -36,27 +37,24 @@ namespace ModelContainer.Implementation.Entities {
             }
         }
 
-        #region Object contracts
-
         public bool Equals(ModelNode other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(LayerDescription, other.LayerDescription) && Equals(Layer, other.Layer) &&
-                   Equals(Edges, other.Edges);
+            return Equals(this.LayerDescription, other.LayerDescription) && Equals(this.Layer, other.Layer) && Equals(this._edges, other._edges);
         }
 
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
-            return Equals((ModelNode) obj);
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ModelNode)obj);
         }
 
         public override int GetHashCode() {
             unchecked {
-                int hashCode = (LayerDescription != null ? LayerDescription.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Layer != null ? Layer.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Edges != null ? Edges.GetHashCode() : 0);
+                int hashCode = (this.LayerDescription != null ? this.LayerDescription.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (this.Layer != null ? this.Layer.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (this._edges != null ? this._edges.GetHashCode() : 0);
                 return hashCode;
             }
         }
@@ -68,7 +66,5 @@ namespace ModelContainer.Implementation.Entities {
         public static bool operator !=(ModelNode left, ModelNode right) {
             return !Equals(left, right);
         }
-
-        #endregion
     }
 }

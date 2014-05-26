@@ -8,14 +8,15 @@ namespace Primitive_Architecture.Perception {
   /// </summary>
   internal class GenericSensorInput : SensorInput {
 
-    public Dictionary<string, object> Values { get; private set; } 
+    public Dictionary<object, object> Values { get; private set; } 
 
     /// <summary>
     /// Create a new generic sensor input object. 
+    /// 
     /// </summary>
     /// <param name="originSensor">The sensor that created this input object.</param>
     public GenericSensorInput(Sensor originSensor) : base(originSensor) {
-      Values = new Dictionary<string, object>();
+      Values = new Dictionary<object, object>();
     }
 
   }

@@ -42,7 +42,7 @@ namespace SimulationController.Interface {
                         // object[] containing NodeInformationTypes
                         var layerContainers = (object[]) payload["layerContainers"];
 
-                        var containers = new List<NodeInformationType>();
+                        var containers = new List<TNodeInformation>();
 
                         foreach (IDictionary<string, dynamic> elem in layerContainers)
                         {
@@ -52,7 +52,7 @@ namespace SimulationController.Interface {
                             var endpointDict = (IDictionary<string, dynamic>) elem["NodeEndpoint"];
                             var nodeEndpoint = new NodeEndpoint((string)endpointDict["IpAddress"], (int)endpointDict["Port"]);
 
-                            containers.Add(new NodeInformationType(nodeType, elem["NodeIdentifier"], nodeEndpoint));
+                            containers.Add(new TNodeInformation(nodeType, elem["NodeIdentifier"], nodeEndpoint));
                         }
 
                         int? ticks = null;
@@ -60,12 +60,8 @@ namespace SimulationController.Interface {
                             ticks = (int)payload["nrOfTicks"];
                         }
 
-                        var statusUpdatedict = (IDictionary<string, dynamic>) modelDescr["Status"];
-
                         simController.StartSimulationWithModel(
-                            new TModelDescription(modelDescr["Name"], modelDescr["Description"], 
-                                statusUpdatedict["StatusMessage"],
-                                (bool)modelDescr["Running"]),
+                            GetTModelDescription(modelDescr),
                             containers,
                             ticks
                             );
@@ -77,29 +73,39 @@ namespace SimulationController.Interface {
                     // TModelDescription
                     var modelDescr = (IDictionary<string, dynamic>) i;
                     simController.ResumeSimulation(
-                        new TModelDescription(modelDescr["Name"], modelDescr["Description"], modelDescr["Status"],
-                            modelDescr["Running"]));
+                        GetTModelDescription(modelDescr));
                     return 0;
                 })),
                 abortSimulation = (Func<object, Task<object>>) (async i => await Task.Run(() => {
                     // TModelDescription
                     var modelDescr = (IDictionary<string, dynamic>) i;
                     simController.AbortSimulation(
-                        new TModelDescription(modelDescr["Name"], modelDescr["Description"], modelDescr["Status"],
-                            modelDescr["Running"]));
+                        GetTModelDescription(modelDescr));
                     return 0;
                 })),
                 pauseSimulation = (Func<object, Task<object>>) (async i => await Task.Run(() => {
                     // TModelDescription
                     var modelDescr = (IDictionary<string, dynamic>) i;
                     simController.PauseSimulation(
-                        new TModelDescription(modelDescr["Name"], modelDescr["Description"], modelDescr["Status"],
-                            modelDescr["Running"]));
+                        GetTModelDescription(modelDescr));
                     return 0;
                 })),
             };
         }
+
+
+        private static TModelDescription GetTModelDescription(IDictionary<string, dynamic> modelDescr)
+        {
+            var statusUpdatedict = (IDictionary<string, dynamic>) modelDescr["Status"];
+            return new TModelDescription
+                (
+                modelDescr["Name"],
+                modelDescr["Description"],
+                statusUpdatedict["StatusMessage"],
+                (bool)modelDescr["Running"]);
+        }
     }
+
 
     public static class AssemblyResolverFix
     {

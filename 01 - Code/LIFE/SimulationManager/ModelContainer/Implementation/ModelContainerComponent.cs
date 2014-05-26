@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
-using Shared;
 using SMConnector.TransportTypes;
+using SimulationManagerShared;
 
 namespace ModelContainer.Implementation {
     public class ModelContainerComponent : IModelContainer {
         private readonly ModelManagementUseCase _modelContainerUseCase;
-        private readonly ModelInstantionOrderingUseCase _modelInstantionOrderingUseCase;
+        private readonly ModelInstantiationOrderingUseCase _modelInstantionOrderingUseCase;
 
         public ModelContainerComponent(SimulationManagerSettings settings) {
             _modelContainerUseCase = new ModelManagementUseCase(settings);
-            _modelInstantionOrderingUseCase = new ModelInstantionOrderingUseCase(settings);
+            _modelInstantionOrderingUseCase = new ModelInstantiationOrderingUseCase(settings);
         }
 
         public void RegisterForModelListChange(Action callback) {

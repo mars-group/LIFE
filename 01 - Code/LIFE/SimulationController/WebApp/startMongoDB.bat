@@ -1,1 +1,0 @@
-c:\mongodb\bin\mongod.exe --config="c:\mongodb\mongod.cfg"

@@ -11,8 +11,6 @@
     <AssemblyName>SimulationManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -26,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -60,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
-      <Project>{c07bbb5f-a159-41ad-933d-6b1f10913ed7}</Project>
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj">
@@ -76,7 +75,7 @@
       <Name>ModelContainer</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimulationManagerFacade\SimulationManagerFacade.csproj">
-      <Project>{58149ff0-0801-46f8-a9c6-571b6030dc1e}</Project>
+      <Project>{58149FF0-0801-46F8-A9C6-571B6030DC1E}</Project>
       <Name>SimulationManagerFacade</Name>
     </ProjectReference>
   </ItemGroup>

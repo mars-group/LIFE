@@ -6,13 +6,20 @@ using Environment = Primitive_Architecture.Dummies.Environment;
 
 namespace Primitive_Architecture.Agents.Wolves {
   internal class Grassland : Environment {
-    public static readonly Vector Boundary = new Vector(25, 20, 0);
+    public static readonly Vector Boundary = new Vector(30, 18, 0);
     private readonly Random _random;
     private int _idCounter;
 
-    public Grassland() : base(new IACLoaderWolves()) {
+    public Grassland(bool dbg) : base(new IACLoaderWolves()) {
       _random = new Random();
-      _idCounter = 8;
+      _idCounter = 0;
+      PrintInformation = dbg;
+
+      // Configure console window for debug information.
+      if (PrintInformation) {     
+        Console.SetBufferSize(100, 200);
+        Console.SetWindowSize(100,  32);
+      }
     }
 
 
@@ -22,9 +29,8 @@ namespace Primitive_Architecture.Agents.Wolves {
     /// </summary>
     protected override void AdvanceEnvironment() {
       var grassCount = Agents.OfType<Grass>().Count();
-      if (_random.Next(5 + grassCount) < 3) {
-        AddAgent(new Grass("[Grass " +_idCounter+"]"));
-        _idCounter++;
+      if (_random.Next(40+grassCount) < 20) {
+        AddAgent(new Grass(this, "#"+(_idCounter<10? " " : "")+_idCounter));
       }
     }
 
@@ -48,6 +54,7 @@ namespace Primitive_Architecture.Agents.Wolves {
         }
       } while (!unique);
       base.AddAgent(newAgent);
+      _idCounter++;
     }
 
 
@@ -59,6 +66,120 @@ namespace Primitive_Architecture.Agents.Wolves {
     /// <returns>A value describing the distance between these agents.</returns>
     public override double GetDistance(Agent x, Agent y) {
       return x.Position.GetDistance(y.Position);
+    }
+
+
+    /// <summary>
+    ///   Check, if a position can be acquired.
+    /// </summary>
+    /// <param name="position">The intended position</param>
+    /// <returns>True, if accessible, false, when not.</returns>
+    public bool CheckPosition(Vector position) {
+      if (position.X < 0 || position.X >= Boundary.X ||
+          position.Y < 0 || position.Y >= Boundary.Y) return false;
+      foreach (var agent in Agents) {
+        if (agent.Position.X == position.X &&
+            agent.Position.Y == position.Y) return false;
+      }
+      return true;
+    }
+
+
+    /// <summary>
+    ///   Console output function. Prints the 2D environment and all agent logs.
+    /// </summary>
+    protected override void PrintEnvironment() {
+      Console.Clear();
+
+      // Output scenario name and current cycle.
+      Console.SetCursorPosition(0, 0);
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.Write(" » WOLFSZENARIO");
+      Console.ForegroundColor = ConsoleColor.Gray;
+      Console.SetCursorPosition(0, 1);
+      Console.Write("   Zyklus: "+Cycle);          
+
+      // Paint the environmental borders.   // 191, 192, |179, -196, 217, 218
+      var str = "┌";
+      for (var i = 0; i < Boundary.X; i ++) str += "─";
+      str += "┐\n";
+      for (var y = 0; y < Boundary.Y; y ++) {
+        str += "│";
+        for (var x = 0; x < Boundary.X; x ++) str += " ";
+        str += "│\n";
+      }
+      str += "└";
+      for (var i = 0; i < Boundary.X; i ++) str += "─";
+      str += "┘";     
+      Console.SetCursorPosition(0, 2);
+      Console.WriteLine(str);
+
+      // Print the agents.
+      foreach (var agent in Agents) {
+        Console.SetCursorPosition(agent.Position.X+1, agent.Position.Y+3);
+        if (agent is Wolf) {
+          Console.ForegroundColor = ConsoleColor.Red;
+          Console.Write("W");
+        }
+        else if (agent is Sheep) {
+          Console.ForegroundColor = ConsoleColor.Blue;
+          Console.Write("S");
+        }
+        else if (agent is Grass) {
+          var g = (Grass) agent;
+          Console.ForegroundColor = ConsoleColor.Green;
+          if      (((double)g.Foodvalue / Grass.FoodvalueMax) > 0.66) Console.Write("▓");
+          else if (((double)g.Foodvalue / Grass.FoodvalueMax) > 0.33) Console.Write("▒");
+          else                                                        Console.Write("░");      
+        }
+      }
+      Console.ForegroundColor = ConsoleColor.Gray;
+
+      // Print the individual agent debug messages.
+      var xo = Boundary.X + 4;
+      Console.SetCursorPosition(xo, 0); Console.Write(" ID |  Typ  | Position | Energie | Hgr.| G/S/W | Distanz | Regel");            
+      Console.SetCursorPosition(xo, 1); Console.Write("────┼───────┼──────────┼─────────┼─────┼───────┼─────────┼───────");
+      var printed = 2;
+
+      foreach (var agent in Agents.OfType<Grass>()) {       
+        Console.SetCursorPosition(xo, printed);
+        Console.Write(agent.ToString()); 
+        printed ++;
+      }
+      if (Agents.OfType<Grass>().Any() && (Agents.OfType<Sheep>().Any() || Agents.OfType<Wolf>().Any())) {
+        Console.SetCursorPosition(xo, printed);
+        Console.Write("────┼───────┼──────────┼─────────┼─────┼───────┼─────────┼───────");
+        printed ++;
+      }
+     
+
+      foreach (var agent in Agents.OfType<Sheep>()) {
+        Console.SetCursorPosition(xo, printed);
+        Console.Write(agent.ToString()); 
+        printed ++; 
+      }
+      if (Agents.OfType<Sheep>().Any() && Agents.OfType<Wolf>().Any()) {
+        Console.SetCursorPosition(xo, printed);
+        Console.Write("────┼───────┼──────────┼─────────┼─────┼───────┼─────────┼───────");
+        printed ++;
+      }
+
+
+      foreach (var agent in Agents.OfType<Wolf>()) {
+        Console.SetCursorPosition(xo, printed);
+        Console.Write(agent.ToString()); 
+        printed ++;  
+      }
+
+
+      // Output the total agent counts.
+      Console.SetCursorPosition(0, Boundary.Y+4);
+      Console.Write(" Agenten-Gesamtanzahlen:\n"+
+                    "  - Gras  : "+Agents.OfType<Grass>().Count()+"\n"+
+                    "  - Schafe: "+Agents.OfType<Sheep>().Count()+"\n"+
+                    "  - Wölfe : "+Agents.OfType<Wolf>().Count());
+      
+      Console.SetCursorPosition(79, 0);
     }
   }
 }

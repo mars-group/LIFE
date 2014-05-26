@@ -4,7 +4,7 @@
   /// This listing contains all information types available to the heating scenario. 
   /// </summary>
   public enum InformationType {
-    RoomState,
+    RoomState = 1,
     HeaterSetting
   };
 }

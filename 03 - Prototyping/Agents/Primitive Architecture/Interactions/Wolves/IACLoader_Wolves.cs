@@ -10,7 +10,7 @@ namespace Primitive_Architecture.Interactions.Wolves {
     
     public List<Interaction> GetInteractions(Agent agent) {
       if (agent is Wolf || agent is Sheep) return new List<Interaction> {
-        new EatInteraction(this), new ProcreateInteraction(this)
+        new EatInteraction(null, null), new ProcreateInteraction(null)
       };
       return new List<Interaction>();
     }
@@ -18,10 +18,10 @@ namespace Primitive_Architecture.Interactions.Wolves {
 
     public List<Interaction> GetReflexiveActions(Agent agent) {
       if (agent is Wolf || agent is Sheep) return new List<Interaction> {
-        new MoveInteraction(this)
+        new MoveInteraction(null, null)
       };
       if (agent is Grass) return new List<Interaction> {
-        new GrowInteraction(this)
+        new GrowInteraction(null)
       };
       return new List<Interaction>();
     }

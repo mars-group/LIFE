@@ -1,7 +1,7 @@
 ﻿using System;
+using Common.Interfaces;
 using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interactions.Heating;
-using Primitive_Architecture.Interfaces;
 using Primitive_Architecture.Perception.Heating;
 
 namespace Primitive_Architecture.Agents.Heating {
@@ -37,16 +37,16 @@ namespace Primitive_Architecture.Agents.Heating {
     /// new heater setting. It's very simple and purely reactive ...
     /// </summary>
     /// <returns>An action to adjust the heater setting.</returns>
-    public Interaction Reason() {
+    public IInteraction Reason() {
       
       // Get current temperature and calculate the deltas.
-      var roomInput = (RoomInput) PerceptionUnit.InputMemory[(int) InformationType.RoomState];
+      var roomInput = PerceptionUnit.GetData<RoomInput>();
       var temp = roomInput.Temperature;
       var windowOpen = roomInput.WindowOpened;
       var diffNominal = _nominalTemp - temp;
 
       // Get the heater settings.
-      var heaterInput = (HeaterInput) PerceptionUnit.InputMemory[(int) InformationType.HeaterSetting];
+      var heaterInput = PerceptionUnit.GetData<HeaterInput>();
       double maxValue = heaterInput.MaxValue;
       double curValue = heaterInput.CurValue;
 
@@ -67,7 +67,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// Create a simple debug string containing the internal values of this agent.
     /// </summary>
     /// <returns>The formatted console output string.</returns>
-    protected override string ToString() {
+    public override string ToString() {
       return "Agent: " + Id + " - Sollwert: " + String.Format("{0,4:00.0}", _nominalTemp) + 
              " °C - Änderung:" + String.Format("{0,5:0.0}", _adjustment*100) + " %.";
     }

@@ -1,15 +1,12 @@
 ﻿using System;
+using AppSettingsManager;
+using LayerRegistry.Interfaces.Config;
+using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
-namespace Shared
+namespace LayerContainerShared
 {
-    using AppSettingsManager;
-
-    using LayerRegistry.Interfaces.Config;
-
-    using MulticastAdapter.Interface.Config;
-
-
+    using CommonTypes.Types;
 
     [Serializable]
     public class LayerContainerSettings
@@ -21,7 +18,7 @@ namespace Shared
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
         public LayerContainerSettings() {
-            NodeRegistryConfig = new NodeRegistryConfig();
+            NodeRegistryConfig = new NodeRegistryConfig(NodeType.LayerContainer, "LC-1", "127.0.0.1", 60100, true);
             LayerRegistryConfig = new LayerRegistryConfig();
             GlobalConfig = new GlobalConfig();
             MulticastSenderConfig = new MulticastSenderConfig();

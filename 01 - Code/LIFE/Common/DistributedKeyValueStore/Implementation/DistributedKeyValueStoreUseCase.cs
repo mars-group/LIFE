@@ -36,7 +36,7 @@ namespace DistributedKeyValueStore.Implementation {
         #endregion
 
         private void JoinKademliaDht() {
-            NodeInformationType otherNode = null;
+            TNodeInformation otherNode = null;
 
             // loop and wait until any other node is up and running
             otherNode = _nodeRegistry.GetAllNodes().FirstOrDefault();
@@ -61,7 +61,7 @@ namespace DistributedKeyValueStore.Implementation {
             _kademliaNode.JoinNetwork();
         }
 
-        private void OnNewNodeConnected(NodeInformationType newnode) {
+        private void OnNewNodeConnected(TNodeInformation newnode) {
             // wait a moment
             Thread.Sleep(50);
 

@@ -14,7 +14,7 @@ namespace NodeRegistry.Interface {
 
         public int HeartBeatTimeOutmultiplier { get; set; }
 
-        public NodeRegistryConfig(NodeInformationType nodeinfo, bool addMyselfToActiveNodeList, int heartBeatInterval, int heartbeatTimeoutMultiplier = 3) {
+        public NodeRegistryConfig(TNodeInformation nodeinfo, bool addMyselfToActiveNodeList, int heartBeatInterval, int heartbeatTimeoutMultiplier = 3) {
             this.NodeType = nodeinfo.NodeType;
             NodeIdentifier = nodeinfo.NodeIdentifier;
             NodeEndPointIP = nodeinfo.NodeEndpoint.IpAddress;
@@ -37,10 +37,13 @@ namespace NodeRegistry.Interface {
         }
 
         public NodeRegistryConfig() {
+            
+            /*
             NodeType = NodeType.LayerContainer;
             NodeIdentifier = "LC-1";
             NodeEndPointIP = "141.22.11.254";
             NodeEndPointPort = 60100;
+             */
             AddMySelfToActiveNodeList = true;
             HeartBeatInterval = 500;
             HeartBeatTimeOutmultiplier = 3;

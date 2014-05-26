@@ -29,10 +29,10 @@ namespace NodeRegistry.Implementation.UseCases
         private NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUseCase;
 
         /// <summary>
-        /// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a NodeInformationType is recied the timeEvent will fire
-        ///  and delte this NodeInformationType from the active NodeList
+		/// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a TNodeInformation is received the timeEvent will fire
+		///  and delete this TNodeInformation from the active NodeList
         /// </summary>
-        private ThreadSafeSortedList<NodeInformationType, Timer> _heartBeatTimers;
+        private ThreadSafeSortedList<TNodeInformation, Timer> _heartBeatTimers;
 
         private int _heartBeatInterval;
 
@@ -40,7 +40,7 @@ namespace NodeRegistry.Implementation.UseCases
 
         private IMulticastAdapter _multicastAdapter;
 
-        private NodeInformationType _localNodeInformation;
+        private TNodeInformation _localNodeInformation;
 
         private Thread _heartBeatSenderThread;
 
@@ -48,7 +48,7 @@ namespace NodeRegistry.Implementation.UseCases
 
 
 
-        public NodeRegistryHeartBeatUseCase(NodeRegistryNodeManagerUseCase nodeRegistryNodeManagerUseCase, NodeInformationType localNodeInformation, IMulticastAdapter multicastAdapter,  int heartBeatInterval, int heartBeatTimeOutMultiplier = 3)
+        public NodeRegistryHeartBeatUseCase(NodeRegistryNodeManagerUseCase nodeRegistryNodeManagerUseCase, TNodeInformation localNodeInformation, IMulticastAdapter multicastAdapter,  int heartBeatInterval, int heartBeatTimeOutMultiplier = 3)
         {
 
             Logger = LoggerInstanceFactory.GetLoggerInstance<NodeRegistryHeartBeatUseCase>();
@@ -59,7 +59,7 @@ namespace NodeRegistry.Implementation.UseCases
             _multicastAdapter = multicastAdapter;
             _localNodeInformation = localNodeInformation;
 
-            _heartBeatTimers = new ThreadSafeSortedList<NodeInformationType, Timer>();
+            _heartBeatTimers = new ThreadSafeSortedList<TNodeInformation, Timer>();
 
             StartSendingHeartBeats();
         }
@@ -71,7 +71,7 @@ namespace NodeRegistry.Implementation.UseCases
         }
 
 
-        public void CreateAndStartTimerForNodeEntry(NodeInformationType nodeInformation)
+        public void CreateAndStartTimerForNodeEntry(TNodeInformation nodeInformation)
         {
             if (!_heartBeatTimers.ContainsKey(nodeInformation) && ! nodeInformation.Equals(_localNodeInformation))
             {
@@ -86,7 +86,7 @@ namespace NodeRegistry.Implementation.UseCases
 
         public void ResetTimer(String nodeID, NodeType nodeType)
         {
-            var nodeInformationStub = new NodeInformationType(nodeType, nodeID, null);
+            var nodeInformationStub = new TNodeInformation(nodeType, nodeID, null);
 
             if (_heartBeatTimers.ContainsKey(nodeInformationStub))
             {
@@ -101,7 +101,7 @@ namespace NodeRegistry.Implementation.UseCases
             _heartBeatSenderThread.Interrupt();
         }
 
-        public void DeleteTimerForNodeInformationType(NodeInformationType nodeInformation) {
+        public void DeleteTimerForNodeInformationType(TNodeInformation nodeInformation) {
             if (_heartBeatTimers.ContainsKey(nodeInformation)) {
 
                 _heartBeatTimers[nodeInformation].Stop();
@@ -111,10 +111,10 @@ namespace NodeRegistry.Implementation.UseCases
         }
 
 
-        private Timer CreateNewTimerForNodeEntry(NodeInformationType nodeInformation)
+        private Timer CreateNewTimerForNodeEntry(TNodeInformation nodeInformation)
         {
             var timer = new Timer(_heartBeatInterval * _heartBeatTimeOutMultiplier) { AutoReset = false };
-            //add event to timer
+			// add event to timer
             timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args)
             {
                 Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");

@@ -11,16 +11,13 @@ namespace RuntimeEnvironment.Implementation.Entities
     internal class LayerContainerClient
     {
         private readonly IScsServiceClient<ILayerContainer> _layerContainer;
-        private readonly Action<long> _tickFinishedCallback;
 
         public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer,
             ModelContent content,
-            IList<TLayerDescription> instantiationOrder,
-            int nr,
-            Action<long> tickFinishedCallback)
+            IEnumerable<TLayerDescription> instantiationOrder,
+            int nr)
         {
             _layerContainer = layerContainer;
-            _tickFinishedCallback = tickFinishedCallback;
             _layerContainer.Connect();
 
             _layerContainer.ServiceProxy.LoadModelContent(content);
@@ -33,10 +30,9 @@ namespace RuntimeEnvironment.Implementation.Entities
             }
         }
 
-        public void Tick()
+        public long Tick()
         {
-            long tickDuration = _layerContainer.ServiceProxy.Tick();
-            _tickFinishedCallback(tickDuration);
+            return _layerContainer.ServiceProxy.Tick();
         }
     }
 }

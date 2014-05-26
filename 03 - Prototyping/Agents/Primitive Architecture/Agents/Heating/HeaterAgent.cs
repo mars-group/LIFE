@@ -1,7 +1,7 @@
 ﻿using System;
+using Common.Interfaces;
 using Primitive_Architecture.Interactions;
 using Primitive_Architecture.Interactions.Heating;
-using Primitive_Architecture.Interfaces;
 
 namespace Primitive_Architecture.Agents.Heating {
 
@@ -39,7 +39,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// A simple calculation of new output value and creation of interaction object.
     /// </summary>
     /// <returns>The heating interaction.</returns>
-    public Interaction Reason () {
+    public IInteraction Reason () {
       
       // Set the current output and new nominal output (based on the new setting).
       _thermalOutput = _thermalOutput + _thermalChange;
@@ -58,7 +58,7 @@ namespace Primitive_Architecture.Agents.Heating {
     /// Print nominal setting and performance. 
     /// </summary>
     /// <returns>Console output string.</returns>
-    protected override string ToString() {
+    public override string ToString() {
       var control = (double) ((int) (CtrValue*10))/10 + " /" + CtrMax;
       var percent = (int) Math.Round(_thermalOutput/ThermalMax*100);
       return "Agent: "+Id+" - Stellwert: " + control + " - Leistung: " + percent 

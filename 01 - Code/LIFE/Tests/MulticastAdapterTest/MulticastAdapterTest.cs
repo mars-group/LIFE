@@ -1,19 +1,15 @@
 ﻿using System;
-using System.CodeDom;
 using System.Net;
 using System.Threading;
-using ConfigurationAdapter.Interface;
+using AppSettingsManager;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;
 using NUnit.Framework;
 
-
-namespace MulticastAdapterTestProject
+namespace MulticastAdapterTest
 {
-    using AppSettingsManager;
-
-    public class MulticastAdapterTest
+  public class MulticastAdapterTest
     {
 
 
@@ -25,12 +21,9 @@ namespace MulticastAdapterTestProject
             var globalConfig = new GlobalConfig("224.10.100.1", 60543, startListenPort, 4);
             var senderConfig = new MulticastSenderConfig();
 
-            //test if both adapter  can handle the same starting port
-            var adapter1 = new MulticastAdapterComponent(globalConfig, senderConfig);
-            var adapter2 = new MulticastAdapterComponent(globalConfig, senderConfig);
-
             // if no exceptions are thrown we are good to go
-            Assert.True(true);
+			Assert.DoesNotThrow (() => new MulticastAdapterComponent (globalConfig, senderConfig));
+			Assert.DoesNotThrow(() => new MulticastAdapterComponent(globalConfig, senderConfig));
 
         }
         
@@ -40,12 +33,12 @@ namespace MulticastAdapterTestProject
 
             var testListenPort = 60030;
             var testSendIngPortStartSeed = 60000;
-            var mcastAddress = "224.50.50.50";
+			var mcastAddress = "224.50.50.50";
 
             var reciever = new UDPMulticastReceiver(IPAddress.Parse(mcastAddress), testListenPort);
             var sender =
                 new UDPMulticastSender(new GlobalConfig(mcastAddress, testListenPort, testSendIngPortStartSeed, 4),
-                    new MulticastSenderConfig(false, "Ethernet 2", "",  BindingType.Name));
+					new MulticastSenderConfig());
 
             var messageCounter  = new MessageCounter(reciever);
 
@@ -54,7 +47,7 @@ namespace MulticastAdapterTestProject
 
             sender.SendMessageToMulticastGroup(new byte[0]);
 
-            //wait for message to arraive.
+            //wait for message to arrive.
             Thread.Sleep(200);
 
             var msgNr = messageCounter.NumberOfmessages;

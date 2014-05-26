@@ -11,8 +11,6 @@
     <AssemblyName>ModelContainer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -54,7 +52,7 @@
     <Compile Include="Implementation\Entities\ModelNode.cs" />
     <Compile Include="Implementation\Entities\ModelStructure.cs" />
     <Compile Include="Implementation\ModelContainerComponent.cs" />
-    <Compile Include="Implementation\ModelInstantionOrderingUseCase.cs" />
+    <Compile Include="Implementation\ModelInstantiationOrderingUseCase.cs" />
     <Compile Include="Implementation\ModelManagementUseCase.cs" />
     <Compile Include="Interfaces\IModelContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,9 +78,9 @@
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Shared\Shared.csproj">
+    <ProjectReference Include="..\Shared\SimulationManagerShared.csproj">
       <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
-      <Name>Shared</Name>
+      <Name>SimulationManagerShared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

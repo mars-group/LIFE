@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using LCConnector.TransportTypes;
-using LCConnector.TransportTypes.ModelStructure;
-using ModelContainer.Implementation.Entities;
-using NUnit.Framework;
-using SimulationManagerTest.TestEntities;
+﻿namespace SimulationManagerTest {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
 
-namespace SimulationManagerTest {
+    using LCConnector.TransportTypes;
+    using LCConnector.TransportTypes.ModelStructure;
+
+    using ModelContainer.Implementation.Entities;
+
+    using NUnit.Framework;
+
+    using SimulationManagerTest.ModelContainerTestClasses;
+
     [TestFixture]
     public class ModelContainerTest {
         [Test]
@@ -33,6 +37,7 @@ namespace SimulationManagerTest {
         ///     Construct a graph as pictured in Tests/Visualization/TestInstantiationPositive.jpg.
         ///     Then expect no violation of the order rules.
         /// </summary>
+        [Test]
         public void TestInstantiationOrderPositive() {
             // build a relatively complex graph
             ModelStructure structure = new ModelStructure();

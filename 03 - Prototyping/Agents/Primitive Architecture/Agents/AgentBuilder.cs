@@ -1,4 +1,5 @@
 ﻿using Primitive_Architecture.Agents.Heating;
+using Primitive_Architecture.Agents.Ice;
 using Primitive_Architecture.Agents.Wolves;
 using Primitive_Architecture.Dummies;
 
@@ -32,11 +33,31 @@ namespace Primitive_Architecture.Agents {
     /// </summary>
     /// <returns>The environment.</returns>
     public static Environment CreateWolvesScenarioEnvironment() {
-      var environment = new Grassland();
-      environment.RandomExecution = true;
-      for (var i = 0; i < 8; i++) environment.AddAgent(new Grass("[Grass " +i+"]"));
-      for (var i = 0; i < 4; i++) environment.AddAgent(new Sheep("[Sheep " +i+"]"));
-      for (var i = 0; i < 2; i++) environment.AddAgent(new Wolf ("[Wolf  " +i+"]"));     
+
+      const int grass  = 12;
+      const int sheeps = 6;
+      const int wolves = 2;
+
+      var n1 = grass;
+      var n2 = n1 + sheeps;
+      var n3 = n2 + wolves;
+      var environment = new Grassland (true) {RandomExecution = true};
+      for (var i =  0; i < n1; i++) environment.AddAgent(new Grass(environment, "#"+(i<10? "0" : "")+i));
+      for (var i = n1; i < n2; i++) environment.AddAgent(new Sheep(environment, "#"+(i<10? "0" : "")+i));
+      for (var i = n2; i < n3; i++) environment.AddAgent(new Wolf (environment, "#"+(i<10? "0" : "")+i));     
+      return environment;
+    }
+
+
+    /// <summary>
+    /// Builder for the iceworld scenario.
+    /// </summary>
+    /// <returns>The environment.</returns>
+    public static Environment CreateIceworldScenarioEnvironment() {
+      var environment = new IceWorld();
+      environment.AddAgent(new Iceeater(environment));
+      //environment.AddAgent(new Iceman(environment));
+      //environment.RandomExecution = true;
       return environment;
     }
   }

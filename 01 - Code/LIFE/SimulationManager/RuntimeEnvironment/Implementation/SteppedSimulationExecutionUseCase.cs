@@ -1,103 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using CommonTypes.DataTypes;
-using Hik.Communication.ScsServices.Client;
-using LCConnector;
-using LCConnector.TransportTypes;
-using LCConnector.TransportTypes.ModelStructure;
-using ModelContainer.Interfaces;
 using RuntimeEnvironment.Implementation.Entities;
-using SMConnector.TransportTypes;
+using System.Threading.Tasks;
+
+[assembly: InternalsVisibleTo("SimulationManagerTest")]
 
 namespace RuntimeEnvironment.Implementation {
+
+
     internal enum SimulationStatus {
         Running,
         Paused,
         Aborted
     }
 
+    /// <summary>
+    /// This class implements simulation execution with parallel ticks on each layer container.<br/>
+    /// For each system tick, each layer container is ticked parallely and we wait until every container is finished
+    /// before the next system tick starts.
+    /// </summary>
     internal class SteppedSimulationExecutionUseCase {
         private readonly int? _nrOfTicks;
         private readonly IList<LayerContainerClient> _layerContainerClients;
         private long _maxExecutionTime;
         private SimulationStatus _status;
-        private int _containersLeft;
 
-        public SteppedSimulationExecutionUseCase(
-            IModelContainer modelContainer,
-            TModelDescription modelDescription,
-            IList<TLayerDescription> instantiationOrder,
-            ICollection<NodeInformationType> layerContainers,
-            int? nrOfTicks) {
+        private readonly ManualResetEvent _simulationExecutionSwitch;
+
+        public SteppedSimulationExecutionUseCase
+            (int? nrOfTicks, IList<LayerContainerClient> layerContainerClients) {
             _nrOfTicks = nrOfTicks;
-
-            //connect to the layer containers and initialize layers
-            ModelContent content = modelContainer.GetModel(modelDescription);
-            _layerContainerClients = new LayerContainerClient[layerContainers.Count];
-
-            int i = 0;
-            foreach (var nodeInformationType in layerContainers) {
-                _layerContainerClients[i] =
-                    new LayerContainerClient(
-                        ScsServiceClientBuilder.CreateClient<ILayerContainer>(
-                            nodeInformationType.NodeEndpoint.IpAddress + ":" +
-                            nodeInformationType.NodeEndpoint.Port),
-                        content,
-                        instantiationOrder,
-                        i,
-                        TickFinished);
-                    
-                i++;
-            }
-
+            _layerContainerClients = layerContainerClients;
             _status = SimulationStatus.Running;
+            _simulationExecutionSwitch = new ManualResetEvent(false);
 
-            new Thread(RunSimulation).Start();
-        }
-
-        private void TickFinished(long tickExecutionTime) {
-            lock (_layerContainerClients) {
-                if (tickExecutionTime > _maxExecutionTime) _maxExecutionTime = tickExecutionTime;
-                _containersLeft--;
-                if (_containersLeft <= 0) Monitor.PulseAll(this);
-            }
+            // start simulation
+            Task.Run(() => this.RunSimulation());
         }
 
         private void RunSimulation() {
-            for (int i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
+            for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
+
+                // check for status change
+                switch (_status) {
+                    case SimulationStatus.Paused:
+                        // pause execution and wait to be signaled
+                        _simulationExecutionSwitch.WaitOne();
+                        break;
+
+                    case SimulationStatus.Aborted:
+                        // that's it..
+                        return;
+                }
+
                 _maxExecutionTime = 0;
-                _containersLeft = _layerContainerClients.Count;
 
-                foreach (var layerContainerClient in _layerContainerClients) {
-                    Thread thread = new Thread(layerContainerClient.Tick);
-                    thread.Start();
-                }
+                // now for some .NET 4.5 magic: parallel execution of layerContainer.tick() while updating shared variable
+                Parallel.ForEach<LayerContainerClient, long> // elem, accu
+                    (
+                        _layerContainerClients, //source for elems
+                        () => 0, // intialization for accu
+                        (currentContainer, loop, lastExecutionTime) => { // currentElem, ParallelLoopState, lastAccu
+                            var currentExecutionTime = currentContainer.Tick(); // do actual simulation step
+                            return Math.Max(currentExecutionTime, lastExecutionTime); 
+                        },
+                        (finalResult) => { // finalResult = final result from inner partitioned loop
+                            // now read shared variable
+                            long localMax = Interlocked.Read(ref _maxExecutionTime); 
+                            // while finalResult is larger than _maxExecutionTime, update it, and try again
+                            while (finalResult > localMax) {
+                              Interlocked.CompareExchange(ref _maxExecutionTime, finalResult, localMax);
+                              localMax = Interlocked.Read(ref _maxExecutionTime);
+                            }
+                        });
 
-                Monitor.Wait(this);
-                if (_status == SimulationStatus.Aborted) return;
-
-                while (_status == SimulationStatus.Paused) {
-                    Monitor.Wait(this);
-                }
 
                 Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
             }
         }
 
         public void PauseSimulation() {
+            // set switch to non-signaled in case it was signaled before
+            _simulationExecutionSwitch.Reset();
             _status = SimulationStatus.Paused;
         }
 
-        internal void ResumeSimulation()
-        {
+        internal void ResumeSimulation() {
             _status = SimulationStatus.Running;
-            Monitor.PulseAll(this);
+            // signal ManualResetEvent
+            this._simulationExecutionSwitch.Set();
         }
 
         public void Abort() {
             _status = SimulationStatus.Aborted;
-            Monitor.PulseAll(this);
         }
     }
 }

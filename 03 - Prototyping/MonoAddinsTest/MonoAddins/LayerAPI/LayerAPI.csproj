@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Addins">
-      <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
+      <HintPath>..\..\Libs\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins.Setup">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.Setup.dll</HintPath>

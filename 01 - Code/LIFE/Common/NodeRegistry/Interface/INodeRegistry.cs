@@ -5,16 +5,15 @@ using CommonTypes.Types;
 namespace NodeRegistry.Interface {
 
 
-    public delegate void NewNodeConnected(NodeInformationType newNode);
-	public delegate void NodeDisconnected(NodeInformationType oldNode);
+    public delegate void NewNodeConnected(TNodeInformation newNode);
+	public delegate void NodeDisconnected(TNodeInformation oldNode);
 
     public interface INodeRegistry {
         /// <summary>
         ///     Get all NodeEndpoints currently discovered
         /// </summary>
-        /// <param name="includeMySelf"></param>
         /// <returns>List of INodeEndpoints, empty list if no discovered Nodes are found</returns>
-        List<NodeInformationType> GetAllNodes();
+        List<TNodeInformation> GetAllNodes();
 
         /// <summary>
         ///     Get all NodeEndpoints of type
@@ -22,7 +21,7 @@ namespace NodeRegistry.Interface {
         /// </summary>
         /// <param name="nodeType"></param>
         /// <returns></returns>
-        List<NodeInformationType> GetAllNodesByType(NodeType nodeType);
+        List<TNodeInformation> GetAllNodesByType(NodeType nodeType);
 
         /// <summary>
         /// Subscribe for the event that a new node of any type has connected
@@ -42,18 +41,20 @@ namespace NodeRegistry.Interface {
 		/// </summary>
 		/// <param name="nodeDisconnectedHandler">Node disconnected handler.</param>
 		/// <param name="node">Node which should be monitored</param>
-		void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node);
+		void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node);
 
         /// <summary>
         ///     Leave the Current cluster
         /// </summary>
         void LeaveCluster();
 
-        //Joins, in the configuration specified, multicastgroupe to connect to the node cluster and take part in a simulation.
+        /// <summary>
+        /// Joins a multicastgroup specified in the configuration file
+        /// </summary>
         void JoinCluster();
 
         /// <summary>
-        ///     Leave the Current cluster and shut down all networksockets
+        /// Leave the Current cluster and shut down all networksockets
         /// </summary>
         void ShutDownNodeRegistry();
 

@@ -1,8 +1,6 @@
-﻿using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using Hik.Communication.ScsServices.Communication;
 using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.UseCases;
 using NodeRegistry.Interface;
@@ -11,20 +9,20 @@ namespace NodeRegistry.Implementation
 {
     public class NodeRegistryComponent : INodeRegistry {
 
-        private NodeRegistryEventHandlerUseCase _eventHandlerUseCase;
-        private NodeRegistryHeartBeatUseCase _heartBeatUseCase;
-        private NodeRegistryNetworkUseCase _networkUseCase;
-        private NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
-        private IMulticastAdapter _multicastAdapter;
+        private readonly NodeRegistryEventHandlerUseCase _eventHandlerUseCase;
+        private readonly NodeRegistryHeartBeatUseCase _heartBeatUseCase;
+        private readonly NodeRegistryNetworkUseCase _networkUseCase;
+        private readonly NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
+        private readonly IMulticastAdapter _multicastAdapter;
 
-        private NodeRegistryConfig _config;
+        private readonly NodeRegistryConfig _config;
 
 
 
         public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config) {
             _config = config;
 
-            NodeInformationType locaNodeInformation = ParseNodeInformationTypeFromConfig();
+            TNodeInformation locaNodeInformation = ParseNodeInformationTypeFromConfig();
 
             _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
             _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
@@ -35,11 +33,11 @@ namespace NodeRegistry.Implementation
           
         }
 
-        public List<NodeInformationType> GetAllNodes() {
+        public List<TNodeInformation> GetAllNodes() {
             return _nodeManagerUseCase.GetAllNodes();
         }
 
-        public List<NodeInformationType> GetAllNodesByType(NodeType nodeType) {
+        public List<TNodeInformation> GetAllNodesByType(NodeType nodeType) {
             return _nodeManagerUseCase.GetAllNodesByType(nodeType);
         }
 
@@ -51,7 +49,7 @@ namespace NodeRegistry.Implementation
             _eventHandlerUseCase.SubscribeForNewNodeConnectedByType(newNodeConnectedHandler, nodeType);
         }
 
-        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, NodeInformationType node) {
+        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node) {
             _eventHandlerUseCase.SubscribeForNodeDisconnected(nodeDisconnectedHandler, node);
         }
 
@@ -71,9 +69,9 @@ namespace NodeRegistry.Implementation
 
      
 
-        private NodeInformationType ParseNodeInformationTypeFromConfig()
+        private TNodeInformation ParseNodeInformationTypeFromConfig()
         {
-            return new NodeInformationType(
+            return new TNodeInformation(
                 ParseNodeTypeFromConfig(),
                 _config.NodeIdentifier,
                 ParseNodeEndpointFromConfig()

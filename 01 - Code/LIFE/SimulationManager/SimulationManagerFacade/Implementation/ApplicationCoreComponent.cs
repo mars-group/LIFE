@@ -5,10 +5,11 @@ using Hik.Communication.ScsServices.Service;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
-using Shared;
+
 using SimulationManagerFacade.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
+using SimulationManagerShared;
 
 namespace SimulationManagerFacade.Implementation {
     using CommonTypes.DataTypes;
@@ -45,7 +46,7 @@ namespace SimulationManagerFacade.Implementation {
         
         #region RuntimeEnvironment delegation
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null) {
+        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
             _runtimeEnvironment.StartWithModel(model, layerContainers, nrOfTicks);
         }
 

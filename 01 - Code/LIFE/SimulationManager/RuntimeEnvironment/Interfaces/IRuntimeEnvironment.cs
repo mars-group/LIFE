@@ -8,7 +8,7 @@ namespace RuntimeEnvironment.Interfaces {
     /// TODO: comment
     /// </summary>
     public interface IRuntimeEnvironment {
-        void StartWithModel(TModelDescription model, ICollection<NodeInformationType> layerContainers, int? nrOfTicks = null);
+        void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null);
         void Pause(TModelDescription model);
         void Resume(TModelDescription model);
         void Abort(TModelDescription model);
