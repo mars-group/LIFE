@@ -30,7 +30,7 @@ namespace LayerAPI.AddinLoader {
             this.UpdateAddinRegistry();
 
             foreach (TypeExtensionNode node in AddinManager.GetExtensionNodes(typeof (ISteppedLayer))) {
-                if (node.Type.ToString() == layerName) return node;
+                if (node.Type.Name == layerName) return node;
             }
             return null;
         }
