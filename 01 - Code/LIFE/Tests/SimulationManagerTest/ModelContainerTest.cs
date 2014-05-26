@@ -37,6 +37,7 @@
         ///     Construct a graph as pictured in Tests/Visualization/TestInstantiationPositive.jpg.
         ///     Then expect no violation of the order rules.
         /// </summary>
+        [Test]
         public void TestInstantiationOrderPositive() {
             // build a relatively complex graph
             ModelStructure structure = new ModelStructure();

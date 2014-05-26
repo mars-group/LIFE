@@ -29,15 +29,17 @@ namespace ModelContainer.Implementation {
         }
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description) {
-            var addinLoader = new AddinLoader
+            // use AddinLoader from LIFEApi, because Mono.Addins may only load Plugins whose 
+            // Interfaces originate from the Assembly they are attempted to be loaded from
+            IAddinLoader addinLoader = new AddinLoader
                 (_settings.AddinLibraryDirectoryPath,
                 "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
 
             var nodes = addinLoader.LoadAllLayers();
             var modelStructure = new ModelStructure();
 
-            foreach (var node in nodes) {
-                var type = node.GetType();
+            foreach (TypeExtensionNode node in nodes) {
+                var type = node.Type;
                 var constructors = type.GetConstructors();
                 var layerDescription = new TLayerDescription(type.Name, type.Assembly.GetName().Version.Major,
                     type.Assembly.GetName().Version.Minor, type.Assembly.Location);

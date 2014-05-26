@@ -22,6 +22,7 @@ namespace ModelContainer.Implementation.Entities {
             ModelNode newNode = new ModelNode(layerDescription, nodeType, dependencies);
             _nodes.Add(newNode);
 
+            // update all dependencies
             foreach (var modelNode in _nodes) {
                 modelNode.UpdateEdges(newNode);
                 newNode.UpdateEdges(modelNode);
@@ -38,23 +39,26 @@ namespace ModelContainer.Implementation.Entities {
 
             IList<HashSet<ModelNode>> setList = new List<HashSet<ModelNode>>();
 
-            int i = 0;
-            HashSet<ModelNode> nodes = new HashSet<ModelNode>(_nodes.Where(n => n.Edges.Count < 1).ToArray());
-            while (nodes.Any()) {
+            while (_nodes.Any()) {
+                // get all satisfied nodes from _nodes
                 var dependentNodes = _nodes.Where(
                     n => n.Edges.All(
                         e => setList.Any(s => s.Contains(e))
                         )
                     ).ToArray();
 
-                nodes = new HashSet<ModelNode>(dependentNodes);
-                i++;
-                setList[i] = nodes;
+                // remove these from the _nodes collection
+                foreach (var dependentNode in dependentNodes) {
+                    _nodes.Remove(dependentNode);
+                }
 
+                // add nodes to final list
+                setList.Add(new HashSet<ModelNode>(dependentNodes));
             }
 
             return setList.Aggregate(new List<TLayerDescription>(), (list, set) => {
-                return set.Select(n => n.LayerDescription).ToList();
+                list.AddRange(set.Select(n => n.LayerDescription).ToList());
+                return list;
             });
         }
     }
