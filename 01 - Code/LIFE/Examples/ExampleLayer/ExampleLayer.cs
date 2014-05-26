@@ -6,17 +6,27 @@ using Mono.Addins;
 [assembly: AddinDependency("LayerContainer", "0.1")]
 
 namespace ExampleLayer {
+    using System.Collections.Generic;
+
     [Extension(typeof (ISteppedLayer))]
     public class ExampleLayer : ISteppedLayer {
-        private readonly AgentSmith _agent;
+        private readonly List<AgentSmith> _agents;
+
+        private const int agentCount = 10000;
 
         public ExampleLayer() {
-            _agent = new AgentSmith();
+            var _environment = new _2DEnvironment(100,100);
+            _agents = new List<AgentSmith>();
+            for (var i = 0; i < agentCount; i++) { _agents.Add(new AgentSmith(_environment)); }
+            _environment.RandomlyAddAgentsToFreeFields(_agents);
         }
 
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle,
             UnregisterAgent unregisterAgentHandle) {
-            registerAgentHandle.Invoke(this, _agent);
+            foreach (var agentSmith in _agents) {
+                registerAgentHandle.Invoke(this, agentSmith);  
+            }
+
             return true;
         }
 
