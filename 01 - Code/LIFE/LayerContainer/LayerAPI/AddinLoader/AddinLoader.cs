@@ -9,7 +9,7 @@ namespace LayerAPI.AddinLoader {
     public class AddinLoader : IAddinLoader {
         public AddinLoader() {
             AddinManager.Initialize("./layers");
-            AddinManager.Registry.Update();
+            //AddinManager.Registry.Update();
         }
 
         public AddinLoader(string configPath) {

@@ -21,16 +21,34 @@ namespace LCConnector.TransportTypes.ModelStructure {
         /// </summary>
         /// <param name="targetDirectory"></param>
         public void Write(string targetDirectory) {
+            EmptyDirecty(targetDirectory);
             foreach (var modelDirectoryContent in _root.Contents) {
                 Write(modelDirectoryContent, targetDirectory);
             }
+        }
+
+        private void EmptyDirecty(string targetDirectory) {
+
+
+            var dirInfo = new DirectoryInfo(targetDirectory);
+
+            foreach (var file in dirInfo.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (var dir in dirInfo.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
+
         }
 
         private void Write(IModelDirectoryContent dirContent, string path) {
             if (dirContent.Type == ContentType.File) {
                 ModelFile file = dirContent as ModelFile;
                 FileStream stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create);
-                stream.WriteAsync(file.Content, 0, file.Content.Length);
+                stream.Write(file.Content, 0, file.Content.Length);
             }
             else {
                 ModelFolder folder = dirContent as ModelFolder;
