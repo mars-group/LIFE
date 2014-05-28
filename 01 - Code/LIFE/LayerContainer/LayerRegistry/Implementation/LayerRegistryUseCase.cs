@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using DistributedKeyValueStore.Interface;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
@@ -10,7 +9,10 @@ using LayerRegistry.Interfaces;
 using LayerRegistry.Interfaces.Config;
 using Newtonsoft.Json;
 
+
 namespace LayerRegistry.Implementation {
+
+
     internal class LayerRegistryUseCase : ILayerRegistry {
         private readonly IDistributedKeyValueStore _distributedKeyValueStore;
         private readonly LayerRegistryConfig _layerRegistryConfig;
