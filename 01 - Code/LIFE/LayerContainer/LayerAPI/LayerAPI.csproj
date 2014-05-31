@@ -55,7 +55,6 @@
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
-    <Compile Include="Interfaces\ICustomLayer.cs" />
     <Compile Include="Interfaces\IEventDrivenLayer.cs" />
     <Compile Include="Interfaces\ILayer.cs" />
     <Compile Include="Interfaces\ISteppedLayer.cs" />
