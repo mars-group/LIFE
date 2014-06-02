@@ -51,13 +51,17 @@ namespace MulticastAdapter.Implementation
             return null;
         }
 
-        public static List<NetworkInterface> GetAllMulticastInterfaces()
-        {
-            return NetworkInterface.GetAllNetworkInterfaces().Where(
-                networkInterface => networkInterface.SupportsMulticast &&
-                                    networkInterface.GetIPProperties().MulticastAddresses.Any() &&
-                                    OperationalStatus.Up == networkInterface.OperationalStatus
-                ).ToList();
+        public static List<NetworkInterface> GetAllMulticastInterfaces() {
+            var t = Type.GetType("Mono.Runtime");
+            if (t == null) {
+                return NetworkInterface.GetAllNetworkInterfaces().Where
+                    (
+                        networkInterface => networkInterface.SupportsMulticast &&
+                                            networkInterface.GetIPProperties().MulticastAddresses.Any() &&
+                                            OperationalStatus.Up == networkInterface.OperationalStatus
+                    ).ToList();
+            }
+            return new List<NetworkInterface>(NetworkInterface.GetAllNetworkInterfaces());
         }
 
 
