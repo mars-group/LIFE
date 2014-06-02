@@ -43,13 +43,13 @@ namespace NodeRegistry.Implementation.UseCases
         public void JoinCluster()
         {
             _multicastAdapter.SendMessageToMulticastGroup(
-                NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation));
+                NodeRegistryMessageFactory.GetJoinMessage(_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress));
         }
 
         public void LeaveCluster()
         {
             _multicastAdapter.SendMessageToMulticastGroup(
-                NodeRegistryMessageFactory.GetLeaveMessage(_localNodeInformation));
+                NodeRegistryMessageFactory.GetLeaveMessage(_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress));
         }
 
         public void Shutdown()
@@ -85,15 +85,13 @@ namespace NodeRegistry.Implementation.UseCases
                 {
                     throw;
                 }
-
-
-
-
             }
         }
 
-        private void ComputeMessage(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage)
-        {
+        private void ComputeMessage(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {
+            // check for Reasonableness of incoming message
+            if (!CheckReasonableness(nodeRegistryConnectionInfoMessage)) return;
+
             switch (nodeRegistryConnectionInfoMessage.MessageType)
             {
                 case NodeRegistryMessageType.Answer:
@@ -111,6 +109,28 @@ namespace NodeRegistry.Implementation.UseCases
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Checks if the incoming message is reasonable to compute. 
+        /// </summary>
+        /// <param name="nodeRegistryConnectionInfoMessage"></param>
+        /// <returns>Returns false if and only if nodeRegistryConnectionInfoMessage does not originate from this host
+        /// and the nodeInformation Field contains a localhost Endpoint information. </returns>
+        private bool CheckReasonableness(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {
+            if (nodeRegistryConnectionInfoMessage.MessageType == NodeRegistryMessageType.Leave
+                || nodeRegistryConnectionInfoMessage.MessageType == NodeRegistryMessageType.HeartBeat) {
+                return true;
+            }
+            
+            var connectionInfoMessage = nodeRegistryConnectionInfoMessage as NodeRegistryConnectionInfoMessage;
+            if (connectionInfoMessage == null) 
+            {
+                return false; 
+            }
+
+            return connectionInfoMessage.OriginAddress.ToString() == _localNodeInformation.NodeEndpoint.IpAddress 
+                || connectionInfoMessage.NodeInformation.NodeEndpoint.IpAddress != "127.0.0.1";
         }
 
         private void OnJoinMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage)
@@ -131,7 +151,7 @@ namespace NodeRegistry.Implementation.UseCases
 
                 // send my information to the new node
                 _multicastAdapter.SendMessageToMulticastGroup(
-                    NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation));
+                    NodeRegistryMessageFactory.GetAnswerMessage(_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress));
             }
         }
 

@@ -40,11 +40,11 @@ namespace NodeRegistry.Implementation.UseCases
         }
 
         public void RemoveNode(TNodeInformation nodeInformation) {
+            if (!_activeNodeList.ContainsKey(nodeInformation.NodeIdentifier)) return;
             _activeNodeList.Remove(nodeInformation.NodeIdentifier);
-       
+
             //notify leave subsribers
             _nodeRegistryEventHandlerUseCase.NotifyOnNodeLeaveSubsribers(nodeInformation);
-
         }
 
         public bool ContainsNode(TNodeInformation nodeInformation) {
