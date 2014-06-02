@@ -7,7 +7,7 @@ namespace LCConnector.TransportTypes.ModelStructure {
     /// </summary>
     [Serializable]
     public class ModelContent {
-        private ModelFolder _root;
+        private readonly ModelFolder _root;
 
         public ModelContent(string modelPath) {
             _root = new ModelFolder(modelPath);
@@ -21,13 +21,17 @@ namespace LCConnector.TransportTypes.ModelStructure {
         /// </summary>
         /// <param name="targetDirectory"></param>
         public void Write(string targetDirectory) {
-            EmptyDirecty(targetDirectory);
+            if (!Directory.Exists(targetDirectory))
+            {
+                Directory.CreateDirectory(targetDirectory);
+            }
+            EmptyDirectory(targetDirectory);
             foreach (var modelDirectoryContent in _root.Contents) {
                 Write(modelDirectoryContent, targetDirectory);
             }
         }
 
-        private void EmptyDirecty(string targetDirectory) {
+        private static void EmptyDirectory(string targetDirectory) {
 
 
             var dirInfo = new DirectoryInfo(targetDirectory);
@@ -44,14 +48,14 @@ namespace LCConnector.TransportTypes.ModelStructure {
 
         }
 
-        private void Write(IModelDirectoryContent dirContent, string path) {
+        private static void Write(IModelDirectoryContent dirContent, string path) {
             if (dirContent.Type == ContentType.File) {
-                ModelFile file = dirContent as ModelFile;
-                FileStream stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create);
+                var file = dirContent as ModelFile;
+                var stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create);
                 stream.Write(file.Content, 0, file.Content.Length);
             }
             else {
-                ModelFolder folder = dirContent as ModelFolder;
+                var folder = dirContent as ModelFolder;
                 if (!Directory.Exists(path + Path.DirectorySeparatorChar + dirContent.Name))
                 {
                     Directory.CreateDirectory(path + Path.DirectorySeparatorChar + dirContent.Name);
