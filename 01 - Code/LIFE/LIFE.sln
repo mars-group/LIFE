@@ -479,7 +479,7 @@ Global
 		{00CBC4B4-49A5-4C51-901E-883B364F724F} = {E873F75D-2C07-4688-8635-075D60A32574}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Examples\AbdoulayeTestV1\AbdoulayeTestV1.csproj
+		StartupItem = T-Components\BroadcastAdapter\BroadcastAdapter.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
