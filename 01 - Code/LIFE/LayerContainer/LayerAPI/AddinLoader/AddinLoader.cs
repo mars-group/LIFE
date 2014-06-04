@@ -27,8 +27,6 @@ namespace LayerAPI.AddinLoader {
         }
 
         public TypeExtensionNode LoadLayer(string layerName) {
-            this.UpdateAddinRegistry();
-
             foreach (TypeExtensionNode node in AddinManager.GetExtensionNodes(typeof (ISteppedLayer))) {
                 if (node.Type.Name == layerName) return node;
             }
@@ -36,7 +34,6 @@ namespace LayerAPI.AddinLoader {
         }
 
         public ExtensionNodeList LoadAllLayers() {
-            this.UpdateAddinRegistry();
             return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));
         }
 
