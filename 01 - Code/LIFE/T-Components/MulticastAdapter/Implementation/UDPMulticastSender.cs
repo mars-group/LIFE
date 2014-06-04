@@ -49,7 +49,8 @@ namespace MulticastAdapter.Implementation
         {
             IList<UdpClient> resultList = new List<UdpClient>();
 
-            if (_senderSettings.SendOnAllInterfaces)
+
+			if (_senderSettings.SendOnAllInterfaces)
             {
                 foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
                 {
@@ -64,6 +65,7 @@ namespace MulticastAdapter.Implementation
                     }
                 }
             }
+
             else
             {
                 var endPoint = GetBindingEndpoint();
@@ -109,7 +111,7 @@ namespace MulticastAdapter.Implementation
                     return GetIPEndPointByName();
                    
                 default:
-                    // this shut never happend
+				// this should never happend
                     throw new NotImplementedException(
                         "The type by which the binding interface is determined is not implemented.");
             }

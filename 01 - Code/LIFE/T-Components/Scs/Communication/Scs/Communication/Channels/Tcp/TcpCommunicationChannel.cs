@@ -139,7 +139,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
 
         /// <summary>
         ///     This method is used as callback method in _clientSocket's BeginReceive method.
-        ///     It reveives bytes from socker.
+		///     It reveives bytes from socket.
         /// </summary>
         /// <param name="ar">Asyncronous call result</param>
         private void ReceiveCallback(IAsyncResult ar) {

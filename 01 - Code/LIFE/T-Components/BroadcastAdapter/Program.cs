@@ -13,7 +13,7 @@ namespace SimpleMCastTestProject
 	{
 		public static void Main (string[] args)
 		{
-			//DisplayTypeAndAddress ();
+			DisplayTypeAndAddress ();
 			var ifs = NetworkInterface.GetAllNetworkInterfaces ();
 			Parallel.ForEach (ifs, (inf) => {
 
@@ -76,6 +76,7 @@ namespace SimpleMCastTestProject
 					adapter.GetPhysicalAddress().ToString());
 				Console.WriteLine("  Is receive only.......................... : {0}", adapter.IsReceiveOnly);
 				Console.WriteLine("  Multicast................................ : {0}", adapter.SupportsMulticast);
+				Console.WriteLine("  OperationalStatus................................ : {0}", adapter.OperationalStatus);
 				Console.WriteLine();
 			}
 		}
