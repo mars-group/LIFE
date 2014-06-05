@@ -13,8 +13,40 @@ namespace SimpleMCastTestProject
 	{
 		public static void Main (string[] args)
 		{
+            int count = 0;
+
+            Console.WriteLine("Multicast Addresses");
+            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface adapter in adapters)
+            {
+                IPInterfaceProperties adapterProperties = adapter.GetIPProperties();
+                MulticastIPAddressInformationCollection multiCast = adapterProperties.MulticastAddresses;
+                if (multiCast.Count > 0)
+                {
+                    Console.WriteLine(adapter.Description);
+                    foreach (IPAddressInformation multi in multiCast)
+                    {
+                        Console.WriteLine("  Multicast Address ....................... : {0} {1} {2}",
+                            multi.Address,
+                            multi.IsTransient ? "Transient" : "",
+                            multi.IsDnsEligible ? "DNS Eligible" : ""
+                        );
+                        count++;
+                    }
+                    Console.WriteLine();
+                }
+            }
+            if (count == 0)
+            {
+                Console.WriteLine("  No multicast addressses were found.");
+                Console.WriteLine();
+            }
+
+
+
 			DisplayTypeAndAddress ();
 			var ifs = NetworkInterface.GetAllNetworkInterfaces ();
+            /*
 			Parallel.ForEach (ifs, (inf) => {
 
 				if (inf.SupportsMulticast) {
@@ -30,6 +62,7 @@ namespace SimpleMCastTestProject
 					Thread.Sleep(1000);
 				}
 			});
+             */
 
 
 
