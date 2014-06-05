@@ -9,6 +9,10 @@ using System.Net.NetworkInformation;
 
 namespace SimpleMCastTestProject
 {
+	internal enum MacOsInterfaceFlags {
+		IFF_MULTICAST = 0x8000,	
+	}
+
 	class MainClass
 	{
 		public static void Main (string[] args)
@@ -38,21 +42,14 @@ namespace SimpleMCastTestProject
             }
             if (count == 0)
             {
-                Console.WriteLine("  No multicast addressses were found.");
+                Console.WriteLine("  No multicast addresses were found.");
                 Console.WriteLine();
             }
 
 
 
+			/*
 			DisplayTypeAndAddress ();
-			var ifs = NetworkInterface.GetAllNetworkInterfaces ();
-            /*
-			Parallel.ForEach (ifs, (inf) => {
-
-				if (inf.SupportsMulticast) {
-					Console.WriteLine("Interface supports MCAST:" + inf.Name);
-				}
-			});
 
 			Task.Run (() => Receiver ());
 			Task.Run (() => {
@@ -62,7 +59,9 @@ namespace SimpleMCastTestProject
 					Thread.Sleep(1000);
 				}
 			});
+
              */
+
 
 
 
@@ -107,6 +106,14 @@ namespace SimpleMCastTestProject
 				Console.WriteLine("  Interface type .......................... : {0}", adapter.NetworkInterfaceType);
 				Console.WriteLine("  Physical Address ........................ : {0}", 
 					adapter.GetPhysicalAddress().ToString());
+				foreach (var addr in properties.UnicastAddresses) {
+					Console.WriteLine ("  IP Address ........................ : {0}", 
+						addr.Address.ToString());
+				}
+				foreach (var addr in properties.MulticastAddresses) {
+					Console.WriteLine("  MCast Addresses.......................... : {0}", addr.Address.ToString());
+				}
+
 				Console.WriteLine("  Is receive only.......................... : {0}", adapter.IsReceiveOnly);
 				Console.WriteLine("  Multicast................................ : {0}", adapter.SupportsMulticast);
 				Console.WriteLine("  OperationalStatus................................ : {0}", adapter.OperationalStatus);
