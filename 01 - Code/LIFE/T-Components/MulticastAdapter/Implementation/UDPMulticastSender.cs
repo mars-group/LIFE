@@ -47,7 +47,7 @@ namespace MulticastAdapter.Implementation
 		/// <returns>The sending interfaces. Empty if none.</returns>
         private IList<UdpClient> GetSendingInterfaces()
         {
-			IList<UdpClient> resultList = nqew List<UdpClient>();
+			IList<UdpClient> resultList = new List<UdpClient>();
 
 
 			if (_senderSettings.SendOnAllInterfaces)

@@ -111,12 +111,8 @@ namespace SimulationController.Interface {
     {
         //Looks up the assembly in the set of currently loaded assemblies,
         //and returns it if the name matches. Else returns null.
-        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            foreach (var ass in AppDomain.CurrentDomain.GetAssemblies())
-                if (ass.FullName == args.Name)
-                    return ass;
-            return null;
+        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args) {
+            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
         }
     }
 }
