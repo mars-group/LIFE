@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
@@ -6,19 +7,29 @@ using SMConnector;
 using SMConnector.TransportTypes;
 
 namespace SimulationController.Implementation {
-    internal class SimulationManagerClient : ISimulationManager {
-        private readonly ISimulationManager _simManager;
 
+    /// <summary>
+    /// The client which actually connects to the SimulationManager
+    /// </summary>
+    internal class SimulationManagerClient : ISimulationManager {
+
+        private readonly ISimulationManager _simManager;
         private readonly IScsServiceClient<ISimulationManager> _simManagerClient;
 
         public SimulationManagerClient(TNodeInformation newnode) {
             _simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
                 new ScsTcpEndPoint(newnode.NodeEndpoint.IpAddress, newnode.NodeEndpoint.Port));
 
+            _simManagerClient.Disconnected += SimManagerClientOnDisconnected;
+
             _simManagerClient.Connect();
 
 
             _simManager = _simManagerClient.ServiceProxy;
+        }
+
+        private void SimManagerClientOnDisconnected(object sender, EventArgs eventArgs) {
+            // do nothing for now. maybe later...
         }
 
         public void Dispose() {

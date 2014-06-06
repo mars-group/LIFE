@@ -4,7 +4,6 @@ using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
 using LCConnector;
-using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -37,15 +36,17 @@ namespace RuntimeEnvironment.Implementation {
 
         #region IRuntimeEnvironment Members
 
-        public void StartWithModel
-            (TModelDescription model,
+        public void StartWithModel(TModelDescription model,
                 ICollection<TNodeInformation> layerContainerNodes,
                 int? nrOfTicks = null) {
             lock (this) {
+                // if not all LayerContainers are idle throw exception
                 if (!layerContainerNodes.All(l => _idleLayerContainers.Any(c => c.Equals(l))))
                     throw new LayerContainerBusyException();
 
-                if (_steppedSimulations.ContainsKey(model)) throw new SimulationAlreadyRunningException();
+                // throw Exception if model is already running in this cluster
+                // TODO: Is that really intended?
+                //if (_steppedSimulations.ContainsKey(model)) throw new SimulationAlreadyRunningException();
 
                 IList<LayerContainerClient> clients = InitConnections(model, layerContainerNodes);
 
@@ -82,11 +83,10 @@ namespace RuntimeEnvironment.Implementation {
         /// <param name="modelDescription">not null</param>
         /// <param name="layerContainers">not null</param>
         /// <returns></returns>
-        private LayerContainerClient[] InitConnections
-            (TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
+        private LayerContainerClient[] InitConnections(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
             var content = _modelContainer.GetModel(modelDescription);
-            var _layerContainerClients = new LayerContainerClient[layerContainers.Count];
+            var layerContainerClients = new LayerContainerClient[layerContainers.Count];
 
             var i = 0;
             foreach (TNodeInformation nodeInformationType in layerContainers) {
@@ -99,11 +99,11 @@ namespace RuntimeEnvironment.Implementation {
                     content,
                     _modelContainer.GetInstantiationOrder(modelDescription),
                     i);
-                _layerContainerClients[i] = client;
+                layerContainerClients[i] = client;
                 i++;
             }
 
-            return _layerContainerClients;
+            return layerContainerClients;
         }
 
         private void NewNode(TNodeInformation newnode) {
