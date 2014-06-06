@@ -27,9 +27,11 @@ namespace ExampleLayer
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+
         public void ReleaseMyPosition(AgentSmith agent) {
-            _freePositions.Add(_positionsOfAgents[agent]);
+            lock (_freePositions) {
+                _freePositions.Add(_positionsOfAgents[agent]);
+            }
             _positionsOfAgents.Remove(agent);
         }
 
