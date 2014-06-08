@@ -58,7 +58,7 @@ namespace MulticastAdapter.Implementation
 					(networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
 						networkInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback) &&
 					OperationalStatus.Up == networkInterface.OperationalStatus && 
-					networkInterface.GetIPProperties().UnicastAddresses.Any
+					networkInterface.GetIPProperties().UnicastAddresses.Any()
                     ).ToList();
         }
 
