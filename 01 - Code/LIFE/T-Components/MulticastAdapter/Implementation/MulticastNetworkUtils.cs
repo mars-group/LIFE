@@ -55,10 +55,9 @@ namespace MulticastAdapter.Implementation
                 return NetworkInterface.GetAllNetworkInterfaces().Where
                     (
                         networkInterface => networkInterface.SupportsMulticast &&
-					(networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
-						networkInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback) &&
-					OperationalStatus.Up == networkInterface.OperationalStatus && 
-					networkInterface.GetIPProperties().UnicastAddresses.Any()
+						networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet  &&
+						OperationalStatus.Up == networkInterface.OperationalStatus && 
+						networkInterface.GetIPProperties().UnicastAddresses.Any()
                     ).ToList();
         }
 
