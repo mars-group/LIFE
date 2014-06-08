@@ -47,6 +47,7 @@
     <Compile Include="Implementation\SimulationControllerUseCase.cs" />
     <Compile Include="Implementation\SimulationManagerClient.cs" />
     <Compile Include="Exceptions\NoSimulationManagerConnectedException.cs" />
+    <Compile Include="Exceptions\SimControllerAlreadyPresentException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">

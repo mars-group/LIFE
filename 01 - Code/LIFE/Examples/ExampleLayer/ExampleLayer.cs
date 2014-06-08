@@ -10,8 +10,8 @@ namespace ExampleLayer {
 
     [Extension(typeof (ISteppedLayer))]
     public class ExampleLayer : ISteppedLayer {
-        private readonly List<AgentSmith> _agents;
 
+		private readonly List<AgentSmith> _agents;
         private const int agentCount = 10000;
 
         public ExampleLayer() {

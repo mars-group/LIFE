@@ -24,7 +24,6 @@ namespace SimulationController.Implementation {
 
             _simManagerClient.Connect();
 
-
             _simManager = _simManagerClient.ServiceProxy;
         }
 

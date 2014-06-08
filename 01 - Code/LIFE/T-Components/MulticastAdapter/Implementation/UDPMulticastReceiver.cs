@@ -63,9 +63,9 @@ namespace MulticastAdapter.Implementation
             }
 
             var udpClient = new UdpClient();
+
             udpClient.ExclusiveAddressUse = false;
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            udpClient.ExclusiveAddressUse = false;
             udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
 
             return udpClient;

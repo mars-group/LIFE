@@ -31,6 +31,9 @@ namespace SimulationController.Implementation {
 
             _nodeRegistry = new NodeRegistryComponent(multiCastAdapter, config.NodeRegistryConfig);
 
+			// check if a Simcontroller is already present, if so, exit
+			CheckIfSimControllerIsPresent();
+
             // check if a SimManager is already present, use it, or suspend usage if not present.
             if (!SetupSimManagerNode()) {
                 _nodeRegistry.SubscribeForNewNodeConnectedByType(
@@ -38,6 +41,17 @@ namespace SimulationController.Implementation {
                     NodeType.SimulationManager);
             }
         }
+
+		private void CheckIfSimControllerIsPresent ()
+		{
+			var simControllerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationController).FirstOrDefault();
+
+			if (simControllerNode != null) {
+				throw new SimControllerAlreadyPresentException (simControllerNode.NodeEndpoint.IpAddress);
+			}
+
+			return;
+		}
 
         private bool SetupSimManagerNode() {
             var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();

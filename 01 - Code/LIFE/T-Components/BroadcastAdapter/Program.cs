@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
+using System.Linq;
 
 namespace SimpleMCastTestProject
 {
@@ -48,9 +49,9 @@ namespace SimpleMCastTestProject
 
 
 
-			/*
-			DisplayTypeAndAddress ();
 
+			DisplayTypeAndAddress ();
+			/*
 			Task.Run (() => Receiver ());
 			Task.Run (() => {
 				while(true)
@@ -95,7 +96,13 @@ namespace SimpleMCastTestProject
 		public static void DisplayTypeAndAddress()
 		{
 			//IPGlobalProperties computerProperties = IPGlobalProperties.GetIPGlobalProperties();
-			NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+			NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces().Where(
+					networkInterface => networkInterface.SupportsMulticast &&
+					(networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || 
+						networkInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback) &&
+					OperationalStatus.Up == networkInterface.OperationalStatus &&
+					networkInterface.GetIPProperties().UnicastAddresses.Any()
+			).ToArray();
 			//Console.WriteLine("Interface information for {0}.{1}     ",
 			//	computerProperties.HostName, computerProperties.DomainName);
 			foreach (NetworkInterface adapter in nics)
