@@ -492,11 +492,13 @@ Global
 		{00CBC4B4-49A5-4C51-901E-883B364F724F} = {E873F75D-2C07-4688-8635-075D60A32574}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = LayerContainer\LayerContainer\LayerContainer.csproj
-		Policies = $0
-		$0.DotNetNamingPolicy = $1
-		$1.DirectoryNamespaceAssociation = None
-		$1.ResourceNamePolicy = FileFormatDefault
+		StartupItems = $0
+		$0.Item = SimulationManager\SimulationManager\SimulationManager.csproj
+		$0.Item = LayerContainer\LayerContainer\LayerContainer.csproj
+		Policies = $1
+		$1.DotNetNamingPolicy = $2
+		$2.DirectoryNamespaceAssociation = None
+		$2.ResourceNamePolicy = FileFormatDefault
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

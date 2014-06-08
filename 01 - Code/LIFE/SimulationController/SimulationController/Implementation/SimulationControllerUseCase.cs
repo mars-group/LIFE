@@ -10,6 +10,7 @@ using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
+using System;
 
 namespace SimulationController.Implementation {
     public class SimulationControllerUseCase : ISimulationManager {
@@ -44,13 +45,10 @@ namespace SimulationController.Implementation {
 
 		private void CheckIfSimControllerIsPresent ()
 		{
-			var simControllerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationController).FirstOrDefault();
-
-			if (simControllerNode != null) {
-				throw new SimControllerAlreadyPresentException (simControllerNode.NodeEndpoint.IpAddress);
+			if (_nodeRegistry.GetAllNodesByType(NodeType.SimulationController).Count > 1) {
+				throw new SimControllerAlreadyPresentException ();
 			}
-
-			return;
+		
 		}
 
         private bool SetupSimManagerNode() {

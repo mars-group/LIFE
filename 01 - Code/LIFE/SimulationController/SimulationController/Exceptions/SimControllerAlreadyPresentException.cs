@@ -15,8 +15,8 @@ namespace SimulationController.Implementation
 {
 	public class SimControllerAlreadyPresentException : System.Exception
 	{
-		public SimControllerAlreadyPresentException(string ipAddress) : 
-		base("There's already another SimController running on this network. Its IP Address is: " + ipAddress) {}
+		public SimControllerAlreadyPresentException() : 
+		base("There's already another SimController running on this network.") {}
 	}
 
 }
