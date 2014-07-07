@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C3031D1D-BD61-498F-816F-F6C2B7F06595}</ProjectGuid>
+    <ProjectGuid>{C9206FDB-F895-4F68-9422-5BD6B12E9727}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExampleLayer2</RootNamespace>
-    <AssemblyName>ExampleLayer2</AssemblyName>
+    <RootNamespace>ForestLayer</RootNamespace>
+    <AssemblyName>ForestLayer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\SimulationManager\SimulationManager\bin\Debug\addinConfig\addins\ExampleModel\</OutputPath>
+    <OutputPath>..\..\..\SimulationManager\SimulationManager\bin\Debug\addinConfig\addins\AWRModel\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Addins">
-      <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
+      <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,16 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="2DEnvironment.cs" />
-    <Compile Include="AgentSmith.cs" />
-    <Compile Include="ExampleLayer2.cs" />
-    <Compile Include="Position2D.cs" />
+    <Compile Include="Agents\Tree.cs" />
+    <Compile Include="Environment\2DEnvironment.cs" />
+    <Compile Include="Environment\Position2D.cs" />
+    <Compile Include="ForestLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransportTypes\TTree.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LayerContainer\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\..\LayerContainer\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\T-Components\Scs\Scs.csproj">
+      <Project>{0dc81b09-3abf-4bb3-8c08-4e8ee4432bdc}</Project>
+      <Name>Scs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

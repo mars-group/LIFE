@@ -24,11 +24,11 @@ namespace ExampleLayer {
                     Console.WriteLine("Killed someone!");
                 }
                 else {
-                    Console.WriteLine("No one left :(");
+                    //Console.WriteLine("No one left :(");
                 }
             }
             else {
-                Console.WriteLine("I'm dead.");
+                //Console.WriteLine("I'm dead.");
             }
             //Console.WriteLine("Tell me, Mr. Anderson, what good is a phone call when you are unable to speak?");
         }

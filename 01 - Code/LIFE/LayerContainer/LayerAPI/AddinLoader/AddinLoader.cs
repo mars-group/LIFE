@@ -12,16 +12,18 @@ namespace LayerAPI.AddinLoader {
 
         public AddinLoader() {
             AddinManager.Initialize("./layers");
-            //AddinManager.Registry.Update();
+            UpdateAddinRegistry();
         }
 
         public AddinLoader(string configPath) {
             AddinManager.Initialize(configPath);
+            UpdateAddinRegistry();
         }
 
         public AddinLoader(string configPath, string relativeAddinPath)
         {
             AddinManager.Initialize(configPath, relativeAddinPath);
+            UpdateAddinRegistry();
         }
 
         public void LoadModelContent(ModelContent modelContent) {

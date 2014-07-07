@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ExampleLayer
+namespace ForestLayer.Environment
 {
     class Position2D : IEquatable<Position2D> {
         public int X { get; set; }

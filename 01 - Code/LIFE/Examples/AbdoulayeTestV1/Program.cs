@@ -9,6 +9,10 @@ namespace AbdoulayeTestV1
 
     class MainClass
 	{
+        /// <summary>
+        /// This is just for test purposes to determine whether or not the AWR GeoJSON Import works.
+        /// </summary>
+        /// <param name="args"></param>
 		public static void Main (string[] args)
 		{
 			//var json = new WebClient().DownloadString ("http://gis.3ten.de/GROUND/resrc/GROUND/data/togo/awrTreesComplete.json");
