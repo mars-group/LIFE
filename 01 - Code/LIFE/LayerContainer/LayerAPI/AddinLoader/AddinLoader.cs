@@ -12,18 +12,15 @@ namespace LayerAPI.AddinLoader {
 
         public AddinLoader() {
             AddinManager.Initialize("./layers");
-            UpdateAddinRegistry();
         }
 
         public AddinLoader(string configPath) {
             AddinManager.Initialize(configPath);
-            UpdateAddinRegistry();
         }
 
         public AddinLoader(string configPath, string relativeAddinPath)
         {
             AddinManager.Initialize(configPath, relativeAddinPath);
-            UpdateAddinRegistry();
         }
 
         public void LoadModelContent(ModelContent modelContent) {
@@ -33,6 +30,7 @@ namespace LayerAPI.AddinLoader {
         }
 
         public TypeExtensionNode LoadLayer(string layerName) {
+            UpdateAddinRegistry();
             return _extensionNodes.Cast<TypeExtensionNode>().FirstOrDefault(node => node.Type.Name == layerName);
         }
 
@@ -40,7 +38,7 @@ namespace LayerAPI.AddinLoader {
             return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));
         }
 
-        private void UpdateAddinRegistry()
+        public void UpdateAddinRegistry()
         {
             AddinManager.Registry.Update();
         }

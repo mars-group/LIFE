@@ -34,6 +34,8 @@ namespace ModelContainer.Implementation {
             IAddinLoader addinLoader = new AddinLoader
                 (_settings.AddinLibraryDirectoryPath,
                 "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
+            
+            addinLoader.UpdateAddinRegistry();
 
             var nodes = addinLoader.LoadAllLayers();
             var modelStructure = new ModelStructure();

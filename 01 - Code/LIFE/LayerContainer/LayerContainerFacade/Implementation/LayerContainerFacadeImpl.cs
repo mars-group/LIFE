@@ -1,4 +1,5 @@
-﻿using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+﻿using System.IO;
+using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using LayerContainerFacade.Interfaces;
 using LCConnector;
@@ -22,6 +23,9 @@ namespace LayerContainerFacade.Implementation {
             _partitionManager = partitionManager;
             _rteManager = rteManager;
 
+            // empty layers folder
+            EmptyDirectory("./layers");
+
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
             _server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
@@ -44,6 +48,24 @@ namespace LayerContainerFacade.Implementation {
 
         public long Tick() {
             return _rteManager.AdvanceOneTick();
+        }
+
+        private static void EmptyDirectory(string targetDirectory)
+        {
+
+
+            var dirInfo = new DirectoryInfo(targetDirectory);
+
+            foreach (var file in dirInfo.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (var dir in dirInfo.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
+
         }
     }
 }

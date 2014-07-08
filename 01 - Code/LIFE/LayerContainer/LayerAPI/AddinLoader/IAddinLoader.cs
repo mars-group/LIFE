@@ -23,5 +23,7 @@ namespace LayerAPI.AddinLoader {
 
 
         ExtensionNodeList LoadAllLayers();
+
+        void UpdateAddinRegistry();
     }
 }

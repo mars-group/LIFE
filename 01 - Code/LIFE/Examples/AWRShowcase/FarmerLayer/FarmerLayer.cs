@@ -9,7 +9,7 @@ using Mono.Addins;
 [assembly: AddinDependency("LayerContainer", "0.1")]
 namespace AWRShowcase.FarmerLayer
 {
-
+    [Extension(typeof(ISteppedLayer))]
     public class FarmerLayer : ISteppedLayer {
         private const int FarmerCount = 100;
         private readonly ForestLayer _forestLayer;

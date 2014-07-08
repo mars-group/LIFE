@@ -54,7 +54,8 @@ namespace LCConnector.TransportTypes.ModelStructure {
                 var stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create);
                 stream.Write(file.Content, 0, file.Content.Length);
             }
-            else {
+            else 
+            {
                 var folder = dirContent as ModelFolder;
                 if (!Directory.Exists(path + Path.DirectorySeparatorChar + dirContent.Name))
                 {

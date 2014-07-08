@@ -11,6 +11,7 @@ using Mono.Addins;
 [assembly: AddinDependency("LayerContainer", "0.1")]
 namespace AWRShowcase
 {
+   [Extension(typeof(ISteppedLayer))]
     public class ForestLayer : ISteppedLayer {
         private const int TreeCount = 10000;
         private readonly ThreadSafeSortedList<Guid, Tree> _treeList;
@@ -23,7 +24,7 @@ namespace AWRShowcase
 
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             for (var i = 0; i < TreeCount; i++) {
-                var tree = new Tree(10, 5, 30, 10, "Aoerties");
+                var tree = new Tree(10, 5, 30, 10, "Aneogeisis Leiocarpa");
                 _treeList[tree.TreeId] = tree;
             }
             foreach (var tree in _treeList.GetAllItems()) {
