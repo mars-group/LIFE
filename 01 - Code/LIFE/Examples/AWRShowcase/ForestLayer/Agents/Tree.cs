@@ -25,7 +25,6 @@ namespace ForestLayer.Agents
         public void Tick() {
             // grow
             Height += 0.1f;
-            Console.WriteLine("Grew a tree");
         }
     }
 }

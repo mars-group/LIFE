@@ -19,10 +19,11 @@ namespace LayerFactory.Implementation {
         public ILayer GetLayer(string layerName) {
             ILayer result;
             var typeExtensionNode = _addinLoader.LoadLayer(layerName);
-            var constructors = typeExtensionNode.GetType().GetConstructors();
+            var constructors = typeExtensionNode.Type.GetConstructors();
 
             // check if there is an empty constructor
             if (constructors.Any(c => c.GetParameters().Length == 0)) {
+                
                 result = (ILayer) typeExtensionNode.CreateInstance();
             }
             else {

@@ -25,7 +25,7 @@ namespace LCConnector.TransportTypes.ModelStructure {
             {
                 Directory.CreateDirectory(targetDirectory);
             }
-            EmptyDirectory(targetDirectory);
+            //EmptyDirectory(targetDirectory);
             foreach (var modelDirectoryContent in _root.Contents) {
                 Write(modelDirectoryContent, targetDirectory);
             }
@@ -33,19 +33,60 @@ namespace LCConnector.TransportTypes.ModelStructure {
 
         private static void EmptyDirectory(string targetDirectory) {
 
-
             var dirInfo = new DirectoryInfo(targetDirectory);
 
-            foreach (var file in dirInfo.GetFiles())
-            {
+            foreach (var file in dirInfo.GetFiles()) {
+                WaitForFile(file.FullName);
                 file.Delete();
             }
+
             foreach (var dir in dirInfo.GetDirectories())
             {
+                WaitForFile(dir.FullName);
                 dir.Delete(true);
             }
 
+        }
 
+        /// <summary>
+        /// Blocks until the file is not locked any more.
+        /// </summary>
+        /// <param name="fullPath"></param>
+        private static bool WaitForFile(string fullPath)
+        {
+            int numTries = 0;
+            while (true)
+            {
+                ++numTries;
+                try
+                {
+                    // Attempt to open the file exclusively.
+                    using (FileStream fs = new FileStream(fullPath,
+                        FileMode.Open, FileAccess.ReadWrite,
+                        FileShare.None, 100))
+                    {
+                        fs.ReadByte();
+
+                        // If we got this far the file is ready
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+
+                    if (numTries > 10)
+                    {
+
+                        return false;
+                    }
+
+                    // Wait for the lock to be released
+                    System.Threading.Thread.Sleep(500);
+                }
+            }
+
+            return true;
         }
 
         private static void Write(IModelDirectoryContent dirContent, string path) {

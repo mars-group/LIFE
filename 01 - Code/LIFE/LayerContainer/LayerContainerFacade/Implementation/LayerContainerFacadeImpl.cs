@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using LayerContainerFacade.Interfaces;
@@ -24,7 +25,7 @@ namespace LayerContainerFacade.Implementation {
             _rteManager = rteManager;
 
             // empty layers folder
-            EmptyDirectory("./layers");
+            //EmptyDirectory("./layers");
 
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
@@ -56,16 +57,58 @@ namespace LayerContainerFacade.Implementation {
 
             var dirInfo = new DirectoryInfo(targetDirectory);
 
-            foreach (var file in dirInfo.GetFiles())
-            {
+            foreach (var file in dirInfo.GetFiles()) {
+                WaitForFile(file.FullName);
                 file.Delete();
             }
             foreach (var dir in dirInfo.GetDirectories())
             {
+                WaitForFile(dir.FullName);
                 dir.Delete(true);
             }
 
 
+        }
+
+        /// <summary>
+        /// Blocks until the file is not locked any more.
+        /// </summary>
+        /// <param name="fullPath"></param>
+        private static bool WaitForFile(string fullPath)
+        {
+            int numTries = 0;
+            while (true)
+            {
+                ++numTries;
+                try
+                {
+                    // Attempt to open the file exclusively.
+                    using (FileStream fs = new FileStream(fullPath,
+                        FileMode.Open, FileAccess.ReadWrite,
+                        FileShare.None, 100))
+                    {
+                        fs.ReadByte();
+
+                        // If we got this far the file is ready
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+
+                    if (numTries > 10)
+                    {
+
+                        return false;
+                    }
+
+                    // Wait for the lock to be released
+                    System.Threading.Thread.Sleep(500);
+                }
+            }
+
+            return true;
         }
     }
 }
