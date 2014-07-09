@@ -16,7 +16,7 @@ namespace AWRShowcase
 {
    [Extension(typeof(ISteppedLayer))]
     public class ForestLayer : ISteppedLayer {
-        private const int TreeCount = 10000;
+        private const int ScalingFactor = 100;
         private readonly ThreadSafeSortedList<Guid, Tree> _treeList;
         private readonly Random _rand;
 
@@ -47,9 +47,14 @@ namespace AWRShowcase
                 var lat = double.Parse(row["s_lat"].ToString());
                 var lon = double.Parse(row["s_lon"].ToString());
 
+                Parallel.For
+                    (0, ScalingFactor,
+                        delegate(int j) {
+                            var tree = new Tree(height, diameter, crownDiameter, 5, biomass);
+                            _treeList[tree.TreeId] = tree;       
+                        });
 
-                var tree = new Tree(height, diameter, crownDiameter, 5, biomass);
-                _treeList[tree.TreeId] = tree;
+
             });
 
             foreach (var tree in _treeList.GetAllItems()) {
