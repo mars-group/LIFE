@@ -13,10 +13,10 @@ namespace AWRShowcase.FarmerLayer.Agents
         }
         public void Tick() {
             TTree tree = _forestLayer.GetTree();
-            Console.WriteLine("The height of my tree is " + tree.Height);
-            if (tree.Height > 11.5) {
+            //Console.WriteLine("The height of my tree is " + tree.Height);
+            if (tree.Height > 500.0) {
                 var res = _forestLayer.CutTree(tree.TreeId);
-                if(res) {Console.WriteLine("Yeah, cutted a tree!");}
+                //if(res) {Console.WriteLine("Yeah, cutted a tree! The height of my tree is " + tree.Height);}
             }
         }
     }

@@ -9,21 +9,24 @@ namespace ForestLayer.TransportTypes
     public class TTree
     {
         public Guid TreeId { get; private set; }
-        public float Height { get; private set; }
-        public float Diameter { get; private set; }
-        public float CrownDiameter { get; private set; }
-        public float Age { get; private set; }
-        public string Species { get; private set; }
+        public double Height { get; private set; }
+        public double Diameter { get; private set; }
+        public double CrownDiameter { get; private set; }
+        public double Age { get; private set; }
 
+        public double Biomass { get; set; }
 
-        public TTree(Guid treeId, float height, float diameter, float crownDiameter, float age, string species) {
+        public TTree(Guid treeId, double height, double diameter, double crownDiameter, double age, double biomass)
+        {
             TreeId = treeId;
             Height = height;
             Diameter = diameter;
             CrownDiameter = crownDiameter;
             Age = age;
-            Species = species;
+            Biomass = biomass;
         }
+
+
 
         public TTree(Tree tree) {
             TreeId = tree.TreeId;
@@ -31,7 +34,7 @@ namespace ForestLayer.TransportTypes
             Diameter = tree.Diameter;
             CrownDiameter = tree.CrownDiameter;
             Age = tree.Age;
-            Species = tree.Species; 
+            Biomass = tree.Biomass;
         }
     }
 }

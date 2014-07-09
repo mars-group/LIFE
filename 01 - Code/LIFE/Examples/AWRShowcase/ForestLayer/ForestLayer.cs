@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Data;
 using System.Threading.Tasks;
 using ForestLayer.Agents;
 using ForestLayer.TransportTypes;
 using Hik.Collections;
 using LayerAPI.Interfaces;
+using mars.rock.service.client;
 using Mono.Addins;
+using System.Linq;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -23,15 +26,38 @@ namespace AWRShowcase
         }
 
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-            for (var i = 0; i < TreeCount; i++) {
-                var tree = new Tree(10, 5, 30, 10, "Aneogeisis Leiocarpa");
-                _treeList[tree.TreeId] = tree;
+            DataTable resultTable;
+            using (var rockServiceFact = new RockServiceFactory("http://141.22.32.178:10523/RockServiceSim"))
+            {
+                using (var rockService = rockServiceFact.CreateRockServiceClient()) {
+                    rockService.ConnectCube("awr");
+                    var dimensions = rockService.GetDimensions();
+                    var dimTree = dimensions.FirstOrDefault(dim => dim.Name == "tree");
+                    resultTable = rockService.GetData(dimTree);
+                }
             }
+
+            Parallel.For(0, resultTable.Rows.Count, delegate(int i)
+            {
+                var row = resultTable.Rows[i];
+                var biomass = double.Parse(row["t_biomass"].ToString());
+                var height = double.Parse(row["t_height"].ToString());
+                var diameter = double.Parse(row["t_diameter"].ToString());
+                var crownDiameter = double.Parse(row["t_crown"].ToString());
+                var lat = double.Parse(row["s_lat"].ToString());
+                var lon = double.Parse(row["s_lon"].ToString());
+
+
+                var tree = new Tree(height, diameter, crownDiameter, 5, biomass);
+                _treeList[tree.TreeId] = tree;
+            });
+
             foreach (var tree in _treeList.GetAllItems()) {
                 registerAgentHandle.Invoke(this, tree);
             }
+            Console.WriteLine("Initialized " + _treeList.Count + " trees!");
             return true;
-        }
+        }   
 
         public long GetCurrentTick() {
             throw new System.NotImplementedException();
