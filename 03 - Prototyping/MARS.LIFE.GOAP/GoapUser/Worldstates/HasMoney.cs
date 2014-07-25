@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommonTypes.Interfaces;
+using GoapCommon.Interfaces;
 
 namespace GoapUser.Worldstates {
     internal class HasMoney : IGoapWorldstate, IEquatable<HasMoney> {

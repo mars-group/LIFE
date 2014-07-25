@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using CommonTypes.Interfaces;
 
-namespace GoapGraphConnector {
+namespace GoapCommon.Interfaces {
     /// <summary>
     ///     the methods needed for the goap planner
     /// </summary>
@@ -10,10 +9,10 @@ namespace GoapGraphConnector {
         /// </summary>
         /// <param name="rootState"></param>
         /// <param name="targetState"></param>
-        /// <param name="allActions"></param>
         /// <param name="maximumGraphDept"></param>
         /// <returns>IGoapGraph</returns>
-        IGoapGraph CreateGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState, int maximumGraphDept = 0);
+        IGoapGraph CreateGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
+            int maximumGraphDept = 0);
 
         /// <summary>
         /// </summary>
@@ -41,8 +40,9 @@ namespace GoapGraphConnector {
         ///     create the children of the vertex in the graph
         /// </summary>
         /// <param name="vertex"></param>
+        /// <param name="outEdges"></param>
         /// <returns></returns>
-        List<IGoapVertex> ExpandVertex(IGoapVertex vertex,   );
+        List<IGoapVertex> ExpandVertex(IGoapVertex vertex, List<IGoapAction> outEdges );
 
         /// <summary>
         /// </summary>

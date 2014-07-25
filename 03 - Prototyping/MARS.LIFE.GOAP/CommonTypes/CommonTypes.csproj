@@ -57,7 +57,6 @@
     <Compile Include="Interfaces\IAction.cs" />
     <Compile Include="Interfaces\IActionSystem.cs" />
     <Compile Include="Interfaces\IFact.cs" />
-    <Compile Include="Interfaces\IGoapWorldstate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -70,7 +70,7 @@
     </ProjectReference>
     <ProjectReference Include="..\GoapActionSystem\GoapActionSystem.csproj">
       <Project>{bc0a6ae3-7d49-48d4-af9c-b67162d98d20}</Project>
-      <Name>GoapActionSystem</Name>
+      <Name>GoapActionSystem %28ActionSystem\GoapActionSystem\GoapActionSystem%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

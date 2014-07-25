@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommonTypes.Interfaces;
+using GoapCommon.Interfaces;
 
-namespace GoapGraphConnector.CustomQuickGraph
-{
-    public class GoapQuickGraphConnector : IGoapGraph
-    {
-       
-       public IGoapGraph CreateGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState, int maximumGraphDept = 0) {
+namespace GoapGraphConnector.CustomQuickGraph {
+    public class GoapQuickGraphConnector : IGoapGraph {
+        public IGoapGraph CreateGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
+            int maximumGraphDept = 0) {
             throw new NotImplementedException();
         }
 
@@ -30,7 +25,7 @@ namespace GoapGraphConnector.CustomQuickGraph
             throw new NotImplementedException();
         }
 
-        public bool ExpandVertex(IGoapVertex vertex) {
+        public List<IGoapVertex> ExpandVertex(IGoapVertex vertex, List<IGoapAction> outEdges) {
             throw new NotImplementedException();
         }
 
@@ -38,11 +33,9 @@ namespace GoapGraphConnector.CustomQuickGraph
             throw new NotImplementedException();
         }
 
-        public bool IsVertexTarget(IGoapVertex vertex)
-        {
+        public bool IsVertexTarget(IGoapVertex vertex) {
             throw new NotImplementedException();
         }
-      
-
+       
     }
 }

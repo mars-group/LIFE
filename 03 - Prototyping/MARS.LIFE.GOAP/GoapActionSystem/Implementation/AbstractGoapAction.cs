@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommonTypes.Interfaces;
+using GoapCommon.Interfaces;
 
 namespace GoapActionSystem.Implementation
 {
@@ -15,7 +16,7 @@ namespace GoapActionSystem.Implementation
     /// 
     ///     auch das graphensystem sollte nur die methoden der abtracten benutzen
     /// </summary>
-    public abstract class AbstractGoapAction : IAction
+    public abstract class AbstractGoapAction : IGoapAction
     {
         readonly List<IGoapWorldstate> _preConditions;
         readonly List<IGoapWorldstate> _effects;

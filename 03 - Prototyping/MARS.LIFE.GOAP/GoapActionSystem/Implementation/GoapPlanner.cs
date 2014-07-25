@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CommonTypes.Interfaces;
 using GoapActionSystem.Interfaces;
+using GoapCommon.Interfaces;
 using GoapGraphConnector;
 using GoapGraphConnector.CustomQuickGraph;
 
@@ -19,12 +20,12 @@ namespace GoapActionSystem.Implementation
             IGoapGraph graph = InitializeGraph(currentWorld, targetWorld);
 
 
-
+/*
             while (!graph.IsTargetFound() && !graph.IsOpenListEmpty()) {
 
                 IGoapVertex currentWorldStates = graph.GetNextVertexOnWhiteList();
                 List<AbstractGoapAction> outgoingGoapActions = GetOutgoinGoapActions(currentWorldStates);
-                graph.
+                graph.AddEdges(outgoingGoapActions);
                 graph.Step();
 
 
@@ -33,7 +34,7 @@ namespace GoapActionSystem.Implementation
                
                 
                 
-            }
+            }*/
 
 
             throw new NotImplementedException();
@@ -42,7 +43,8 @@ namespace GoapActionSystem.Implementation
         private IGoapGraph InitializeGraph(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld)
         {
             GoapQuickGraphConnector connector = new GoapQuickGraphConnector();
-            IGoapGraph startGraph = connector.CreateGoapGraph(currentWorld, targetWorld);
+            return connector.CreateGoapGraph(currentWorld, targetWorld);
+            
         }
 
         private List<AbstractGoapAction> GetOutgoinGoapActions(IGoapVertex currentWorldStates)

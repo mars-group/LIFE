@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommonTypes.Interfaces;
+using GoapCommon.Interfaces;
 
 namespace GoapActionSystem.Interfaces
 {

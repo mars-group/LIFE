@@ -78,7 +78,11 @@
     </ProjectReference>
     <ProjectReference Include="..\GoapActionSystem\GoapActionSystem.csproj">
       <Project>{bc0a6ae3-7d49-48d4-af9c-b67162d98d20}</Project>
-      <Name>GoapActionSystem</Name>
+      <Name>GoapActionSystem %28ActionSystem\GoapActionSystem\GoapActionSystem%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapCommon\GoapCommon.csproj">
+      <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
+      <Name>GoapCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GoapGraphConnector\GoapGraphConnector.csproj">
       <Project>{2871f5a0-1375-48ce-998f-b90d3d2d1a95}</Project>

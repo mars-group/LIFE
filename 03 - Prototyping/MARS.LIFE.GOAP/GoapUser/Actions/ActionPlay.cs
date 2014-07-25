@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using CommonTypes.Interfaces;
 using GoapActionSystem.Implementation;
+using GoapCommon.Interfaces;
 using GoapUser.Worldstates;
 
 namespace GoapUser.Actions {
-
     internal class ActionPlay : AbstractGoapAction {
         /// <summary>
         ///     the world state must be in this needed state before the action can be executet
@@ -44,7 +42,5 @@ namespace GoapUser.Actions {
         public override bool Execute() {
             throw new NotImplementedException();
         }
-
-        
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CommonTypes.Interfaces;
 using GoapActionSystem.Implementation;
+using GoapCommon.Interfaces;
 using GoapUser.Worldstates;
 
 namespace GoapUser.Actions {

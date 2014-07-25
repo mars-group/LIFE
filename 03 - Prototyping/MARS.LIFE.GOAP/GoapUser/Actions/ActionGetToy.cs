@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CommonTypes.Interfaces;
 using GoapActionSystem.Implementation;
+using GoapCommon.Interfaces;
 using GoapUser.Worldstates;
 
 namespace GoapUser.Actions {
@@ -9,7 +10,7 @@ namespace GoapUser.Actions {
     public class ActionGetToy : AbstractGoapAction {
 
         public ActionGetToy(List<IGoapWorldstate> preconditionWorldstates, List<IGoapWorldstate> effectWorldstates)
-            : base(preconditionWorldstates, effectWorldstates) {}
+            : base(preconditionWorldstates: preconditionWorldstates, effectWorldstates: effectWorldstates) {}
 
         public ActionGetToy()
             : base(new List<IGoapWorldstate> { new HasMoney(true, WorldStateEnums.HasMoney) },

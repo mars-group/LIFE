@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using CommonTypes.Interfaces;
 using GoapActionSystem.Implementation;
+using GoapCommon.Interfaces;
 using GoapGraphConnector;
 using GoapGraphConnector.CustomQuickGraph;
 using GoapUser.Actions;
