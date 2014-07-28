@@ -39,10 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IGoal.cs" />
     <Compile Include="Interfaces\IGoapAction.cs" />
     <Compile Include="Interfaces\IGoapGraph.cs" />
     <Compile Include="Interfaces\IGoapVertex.cs" />
     <Compile Include="Interfaces\IGoapWorldstate.cs" />
+    <Compile Include="Interfaces\IPlanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -60,8 +60,7 @@
     <Compile Include="Implementation\AbstractGoapAction.cs" />
     <Compile Include="Implementation\GoapManager.cs" />
     <Compile Include="Implementation\GoapPlanner.cs" />
-    <Compile Include="Interfaces\IGoal.cs" />
-    <Compile Include="Interfaces\IPlanner.cs" />
+    <Compile Include="Implementation\SurrogateAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

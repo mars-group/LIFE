@@ -4,12 +4,8 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomQuickGraph {
     public class GoapQuickGraphConnector : IGoapGraph {
-        public IGoapGraph CreateGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
-            int maximumGraphDept = 0) {
-            throw new NotImplementedException();
-        }
 
-        public bool HasCircles() {
+        public IGoapGraph CreateGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState, int maximumGraphDept = 0) {
             throw new NotImplementedException();
         }
 
@@ -17,25 +13,35 @@ namespace GoapGraphConnector.CustomQuickGraph {
             throw new NotImplementedException();
         }
 
-        public IGoapVertex GetNextVertexOnWhiteList() {
+        public IGoapVertex GetNextVertexFromOpenList() {
             throw new NotImplementedException();
         }
 
-        public bool HasNextVertex() {
+        public bool HasNextVertexOnOpenList()
+        {
             throw new NotImplementedException();
         }
 
-        public List<IGoapVertex> ExpandVertex(IGoapVertex vertex, List<IGoapAction> outEdges) {
+        public bool ExpandCurrentVertex(List<IGoapAction> outEdges)
+        {
             throw new NotImplementedException();
         }
 
-        public bool ExpandNextVertex() {
+        public bool IsCurrentVertexTarget()
+        {
             throw new NotImplementedException();
         }
 
-        public bool IsVertexTarget(IGoapVertex vertex) {
+        public bool AStarStep() {
             throw new NotImplementedException();
         }
-       
+
+        public int GetActualDepthFromRoot() {
+            throw new NotImplementedException();
+        }
+
+        public List<IGoapAction> GetShortestPath() {
+            throw new NotImplementedException();
+        }
     }
 }

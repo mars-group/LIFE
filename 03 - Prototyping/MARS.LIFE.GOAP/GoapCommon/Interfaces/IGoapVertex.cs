@@ -1,3 +1,12 @@
-﻿namespace GoapCommon.Interfaces {
-    public class IGoapVertex {}
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GoapCommon.Interfaces
+{
+    public interface IGoapVertex
+    {
+    }
 }

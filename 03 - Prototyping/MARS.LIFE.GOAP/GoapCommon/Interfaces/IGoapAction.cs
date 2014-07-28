@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CommonTypes.Interfaces;
 
-namespace GoapCommon.Interfaces
-{
+namespace GoapCommon.Interfaces {
     public interface IGoapAction : IAction {
-
         List<IGoapWorldstate> GetResultingWorldstate(List<IGoapWorldstate> sourceWorldState);
 
         bool IsExecutable(List<IGoapWorldstate> sourceWorldState);
@@ -16,6 +10,5 @@ namespace GoapCommon.Interfaces
         bool ValidateContextPreconditions();
 
         bool ExecuteContextEffects();
-
     }
 }
