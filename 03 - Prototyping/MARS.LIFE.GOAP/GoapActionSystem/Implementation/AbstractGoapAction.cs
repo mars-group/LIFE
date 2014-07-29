@@ -21,11 +21,13 @@ namespace GoapActionSystem.Implementation
         readonly List<IGoapWorldstate> _preConditions;
         readonly List<IGoapWorldstate> _effects;
 
-        public List<IGoapWorldstate> PreConditions{
+        public List<IGoapWorldstate> PreConditions
+        {
             get { return _preConditions; }
         }
 
-        public List<IGoapWorldstate> Effects{
+        public List<IGoapWorldstate> Effects
+        {
             get { return _effects; }
         }
 

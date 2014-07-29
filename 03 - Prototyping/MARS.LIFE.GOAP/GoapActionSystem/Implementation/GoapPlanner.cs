@@ -5,44 +5,57 @@ using CommonTypes.Interfaces;
 using GoapCommon.Interfaces;
 using GoapGraphConnector.CustomQuickGraph;
 
-namespace GoapActionSystem.Implementation {
-
+namespace GoapActionSystem.Implementation
+{
     /// <summary>
     ///     The goapplanner is responsible for the process of finding a valid plan from the actions, currentWorld and
     ///     targetWorld
     ///     given to him. The caller is responsible for giving well defined and corresponding actions and world states.
     /// </summary>
-    public class GoapPlanner : IPlanner {
-
+    public class GoapPlanner : IPlanner
+    {
         /// <summary>
-        /// needed for not running in an too huge graph / tree
+        ///     needed for not running in an too huge graph / tree
         /// </summary>
         private readonly int _maximuxSearchDepth = int.MaxValue;
 
         /// <summary>
-        /// save the current plan in class if available
+        ///     save the current plan in class if available
         /// </summary>
         private List<IGoapAction> _currentPlan;
-        private List<IGoapAction> _availableAction;
+
+        private List<IGoapAction> _availableActions;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="maximuxSearchDepth"></param>
-        /// <param name="availableAction"></param>
-        public GoapPlanner(int maximuxSearchDepth, List<IGoapAction> availableAction) {
+        /// <param name="availableActions"></param>
+        public GoapPlanner(int maximuxSearchDepth, List<IGoapAction> availableActions)
+        {
+            if (availableActions.Count == 0)
+            {
+                throw new ArgumentException("Planner may not be instanciated with empty list of actions");
+            }
             _maximuxSearchDepth = maximuxSearchDepth;
-            _availableAction = availableAction;
+            _availableActions = availableActions;
         }
 
-        public IAction GetNextChosenAction() {
-            return _currentPlan.First();
+        public IAction GetNextChosenAction()
+        {
+            if (HasPlan()) return _currentPlan.First();
+            return new SurrogateAction();
+        }
+
+        private bool HasPlan()
+        {
+            return (_currentPlan.Count > 0);
         }
 
         // TODO Die Map, die die Suche nach passendan Actions erleichtert
 
         public List<IGoapAction> GetPlan(List<IGoapWorldstate> currentWorld,
-            List<IGoapWorldstate> targetWorld) {
+            List<IGoapWorldstate> targetWorld)
+        {
             IGoapGraph graph = InitializeGraph(currentWorld, targetWorld);
 
             /*
@@ -65,22 +78,17 @@ namespace GoapActionSystem.Implementation {
        */
 
             while (!graph.IsCurrentVertexTarget() && graph.HasNextVertexOnOpenList() &&
-                   graph.GetActualDepthFromRoot() < _maximuxSearchDepth) {
+                   graph.GetActualDepthFromRoot() < _maximuxSearchDepth)
+            {
                 IGoapVertex current = graph.GetNextVertexFromOpenList();
                 List<IGoapAction> children = GetOutgoinGoapActions(current);
-
                 graph.ExpandCurrentVertex(children);
                 graph.AStarStep();
             }
 
-            if (graph.IsCurrentVertexTarget()) {
-                _currentPlan = graph.GetShortestPath();
-                
-            }
+            if (graph.IsCurrentVertexTarget()) _currentPlan = graph.GetShortestPath();
             if (graph.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graph.HasNextVertexOnOpenList())
-            {
-                _currentPlan = new List<IGoapAction> {new SurrogateAction()};
-            }
+                _currentPlan = new List<IGoapAction> { new SurrogateAction() };
 
             // TODO ist die leere action besser als eine leere liste
             return _currentPlan;
@@ -92,12 +100,14 @@ namespace GoapActionSystem.Implementation {
         /// <param name="currentWorld"></param>
         /// <param name="targetWorld"></param>
         /// <returns></returns>
-        private IGoapGraph InitializeGraph(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld) {
+        private IGoapGraph InitializeGraph(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld)
+        {
             GoapQuickGraphConnector connector = new GoapQuickGraphConnector();
             return connector.CreateGoapGraph(currentWorld, targetWorld);
         }
 
-        private List<IGoapAction> GetOutgoinGoapActions(IGoapVertex currentWorldStates) {
+        private List<IGoapAction> GetOutgoinGoapActions(IGoapVertex currentWorldStates)
+        {
             // TODO alle actions untersuchen ob sie anwendbar sind - mithilfe der effect -> Action hashmap
             // TODO ?? kann man irgendwie sinnvol die context effecte testen?
 

@@ -3,21 +3,25 @@ using CommonTypes.Interfaces;
 using GoapCommon.Interfaces;
 using QuickGraph;
 
-namespace GoapGraphConnector.CustomQuickGraph {
+namespace GoapGraphConnector.CustomQuickGraph
+{
 
-    internal class GoapEdge<TVertex> : Edge<TVertex> {
+    internal class GoapEdge<TVertex> : Edge<TVertex>
+    {
 
-        public GoapEdge(TVertex source, TVertex target, IAction action, int heuristic)
-            : base(source, target) {
+        public GoapEdge(TVertex source, TVertex target, IAction action, int cost)
+            : base(source, target)
+        {
             Action = action;
-            Heuristic = heuristic;
+            Cost = cost;
         }
 
         private IAction Action { get; set; }
-        private int Heuristic { get; set; }
+        private int Cost { get; set; }
 
-        public int GetHeuristic(List<IGoapWorldstate> targetWorldstates = null) {
-            return Heuristic;
+        public int GetHeuristic(List<IGoapWorldstate> targetWorldstates = null)
+        {
+            return Cost;
         }
     }
 }

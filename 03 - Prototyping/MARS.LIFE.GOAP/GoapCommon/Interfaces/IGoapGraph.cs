@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace GoapCommon.Interfaces {
+namespace GoapCommon.Interfaces
+{
     /// <summary>
     ///     the methods needed for the goap planner
     /// </summary>
-    public interface IGoapGraph {
+    public interface IGoapGraph
+    {
         /// <summary>
         /// </summary>
         /// <param name="rootState"></param>
