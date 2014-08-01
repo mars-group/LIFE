@@ -61,7 +61,7 @@
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>

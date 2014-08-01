@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LayerAPI.Interfaces;
+using LayerAPI.AddinLoader;
 using LCConnector.TransportTypes;
 using log4net;
 using ModelContainer.Implementation.Entities;
@@ -11,7 +11,7 @@ using SMConnector.TransportTypes;
 using SimulationManagerShared;
 [assembly: AddinRoot("LayerContainer", "0.1")]
 namespace ModelContainer.Implementation {
-    using LayerAPI.AddinLoader;
+
 
     /// <summary>
     ///     This class reads one specific model and converts it into a representation that allows<br />
