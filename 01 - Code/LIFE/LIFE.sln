@@ -104,6 +104,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIFE API", "LIFE API", "{21
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCPrototype", "LIFE Services\ECSTestLayer\ESCPrototype.csproj", "{A758654E-AEA9-45F5-8CA3-E09519379F53}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agents", "Agents", "{4BABE0E2-5DF9-4CFF-8130-C9372A261A45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericAgentArchitecture", "LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj", "{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -482,6 +486,16 @@ Global
 		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -524,6 +538,8 @@ Global
 		{2E445476-838F-4C1A-B0C5-9912C3F62A1A} = {7805E822-9DF6-41C1-B08C-6344B2D67E34}
 		{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81} = {21C88CD1-A41C-4908-B309-A33A2F23683B}
 		{A758654E-AEA9-45F5-8CA3-E09519379F53} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
+		{4BABE0E2-5DF9-4CFF-8130-C9372A261A45} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
+		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85} = {4BABE0E2-5DF9-4CFF-8130-C9372A261A45}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItems = $0
