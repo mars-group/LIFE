@@ -8,7 +8,7 @@ namespace GenericAgentArchitecture.Perception {
   ///   The Perception Unit (PU) is a container responsible for querying the attached
   ///   sensors and storing the retrieved results for further usage in the planning phase.
   /// </summary>
-  internal class PerceptionUnit : IPerception {
+  public class PerceptionUnit : IPerception {
     
     private readonly List<Sensor> _sensors; // All sensors available to the agent.
     private readonly Dictionary<Type, Input> _inputMemory; // Storage of sensed input.

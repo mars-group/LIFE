@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+using AgentTester.Wolves.Interactions;
+using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
-using GenericAgentArchitecture.Interactions.Wolves;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 
-namespace GenericAgentArchitecture.Agents.Wolves {
+namespace AgentTester.Wolves.Agents {
   internal class Grassland : Environment {
     public static readonly Vector Boundary = new Vector(30, 18, 0);
     private readonly Random _random;

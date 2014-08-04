@@ -1,4 +1,7 @@
-﻿namespace GenericAgentArchitecture.Interactions.Wolves {
+﻿using GenericAgentArchitecture.Interactions;
+using GenericAgentArchitecture.Interfaces;
+
+namespace AgentTester.Wolves.Interactions {
 
   internal class GrowInteraction : Interaction {
     

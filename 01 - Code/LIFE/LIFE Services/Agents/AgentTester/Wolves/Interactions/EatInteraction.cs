@@ -1,4 +1,6 @@
-﻿namespace GenericAgentArchitecture.Interactions.Wolves {
+﻿using GenericAgentArchitecture.Interactions;
+
+namespace AgentTester.Wolves.Interactions {
   
   /// <summary>
   ///   This is an eating interaction, where one agent eats another.

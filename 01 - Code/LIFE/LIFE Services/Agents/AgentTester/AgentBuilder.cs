@@ -1,7 +1,7 @@
-﻿using GenericAgentArchitecture.Agents.Wolves;
+﻿using AgentTester.Wolves.Agents;
 using GenericAgentArchitecture.Dummies;
 
-namespace GenericAgentArchitecture.Agents {
+namespace AgentTester {
 
   /// <summary>
   /// This builder provides a convenient creation of agents.

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using AgentTester.Wolves.Interactions;
+using AgentTester.Wolves.Reasoning;
+using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
-using GenericAgentArchitecture.Interactions.Wolves;
 using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
-using GenericAgentArchitecture.Reasoning;
 
-namespace GenericAgentArchitecture.Agents.Wolves {
+namespace AgentTester.Wolves.Agents {
   class Sheep : Agent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
 
     private int _energy = 50;
@@ -53,7 +54,7 @@ namespace GenericAgentArchitecture.Agents.Wolves {
         var nSheep = CommonRCF.GetNearestAgent(sheeps, Position);
         var nWolf  = CommonRCF.GetNearestAgent(wolves, Position);
         var dGrass = Position.GetDistance(nGrass.Position);
-        //var dWolf = Position.GetDistance(nWolf.Position);
+        //var dWolf  = Position.GetDistance(nWolf.Position);
         _states += String.Format("E: {0,4:0.00} | ", dGrass);
 
         // R1: Eat nearby grass.

@@ -1,13 +1,13 @@
-﻿using Environment = GenericAgentArchitecture.Dummies.Environment;
+﻿using GenericAgentArchitecture.Dummies;
 
 namespace GenericAgentArchitecture.Perception {
   
   /// <summary>
   ///   The agent sensor senses other agents.
   /// </summary>
-  internal class AgentSensor : Sensor {
+  public class AgentSensor : Sensor {
 
-    private readonly Dummies.Environment _environment;  // The data source to acquire agents from.
+    private readonly Environment _environment;  // The data source to acquire agents from.
 
 
     /// <summary>

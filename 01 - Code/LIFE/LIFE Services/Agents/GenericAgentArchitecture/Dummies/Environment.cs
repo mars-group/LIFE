@@ -9,7 +9,7 @@ namespace GenericAgentArchitecture.Dummies {
   /// <summary>
   ///   Base class for an environment. This is an agent container with several access options.
   /// </summary>
-  internal abstract class Environment : ITickClient {
+  public abstract class Environment : ITickClient {
 
     protected readonly List<Agent> Agents;     // The agents living in this environment.
     protected long Cycle { get; private set; } // Counter for execution cycle.

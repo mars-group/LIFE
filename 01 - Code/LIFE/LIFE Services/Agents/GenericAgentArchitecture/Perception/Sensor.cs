@@ -5,7 +5,7 @@ namespace GenericAgentArchitecture.Perception {
   /// <summary>
   ///   This sensor class provides an abstract base for custom implementations.
   /// </summary>
-  internal abstract class Sensor {
+  public abstract class Sensor {
  
     public bool Enabled { set; get; }    // Shows if sensor is operational or not.
     private bool _active;                // This boolean controls polling or callback mode.

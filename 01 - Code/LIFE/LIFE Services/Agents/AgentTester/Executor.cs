@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
-using GenericAgentArchitecture.Agents;
+using Environment = GenericAgentArchitecture.Dummies.Environment;
 
-namespace GenericAgentArchitecture.Dummies {
+namespace AgentTester {
   
   /// <summary>
   ///   This class periodicly triggers the environment and thereby all agents.

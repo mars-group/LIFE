@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using GenericAgentArchitecture.Interfaces;
-using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Perception;
 
 namespace GenericAgentArchitecture.Reasoning {

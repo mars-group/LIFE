@@ -5,7 +5,7 @@ namespace GenericAgentArchitecture.Perception {
   /// <summary>
   ///   An abstract halo representation. Each sensor has one object of it.
   /// </summary>
-  internal abstract class Halo {
+  public abstract class Halo {
     public Vector Position; // The agent's centre.
     //private Geometry _form;
 

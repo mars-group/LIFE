@@ -1,8 +1,8 @@
-﻿using GenericAgentArchitecture.Interfaces;
-using GenericAgentArchitecture.Agents;
+﻿using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Interfaces;
 
 namespace GenericAgentArchitecture.Interactions {
-  internal abstract class Interaction : IInteraction{
+  public abstract class Interaction : IInteraction{
     protected readonly IGenericAPI Source;
     public Agent Target;
 

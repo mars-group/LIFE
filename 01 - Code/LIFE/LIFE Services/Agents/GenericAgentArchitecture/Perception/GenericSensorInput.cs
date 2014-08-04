@@ -6,7 +6,7 @@ namespace GenericAgentArchitecture.Perception {
   /// The Generic Sensor Input (GSI) is merely a mapping structure to store arbitrary data. 
   /// It is based on the Input/SensorInput hierarchy to provide additional information.  
   /// </summary>
-  internal class GenericSensorInput : SensorInput {
+  public class GenericSensorInput : SensorInput {
 
     public Dictionary<object, object> Values { get; private set; } 
 

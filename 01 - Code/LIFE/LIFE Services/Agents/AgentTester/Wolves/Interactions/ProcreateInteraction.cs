@@ -1,6 +1,8 @@
 ﻿using System;
+using GenericAgentArchitecture.Interactions;
+using GenericAgentArchitecture.Interfaces;
 
-namespace GenericAgentArchitecture.Interactions.Wolves {
+namespace AgentTester.Wolves.Interactions {
   
   class ProcreateInteraction : Interaction {
     

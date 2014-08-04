@@ -1,7 +1,7 @@
 ﻿using GenericAgentArchitecture.Perception;
 
 namespace GenericAgentArchitecture.Interfaces {
-  internal interface IGenericDataSource {
+  public interface IGenericDataSource {
     SensorInput GetData(int dataType);
   }
 }

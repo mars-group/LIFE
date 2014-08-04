@@ -1,7 +1,8 @@
 ﻿using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
+using GenericAgentArchitecture.Interactions;
 
-namespace GenericAgentArchitecture.Interactions.Wolves {
+namespace AgentTester.Wolves.Interactions {
   
   /// <summary>
   ///   Perform the movement of an agent.

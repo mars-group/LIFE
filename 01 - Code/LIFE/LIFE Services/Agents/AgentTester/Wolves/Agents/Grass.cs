@@ -1,9 +1,10 @@
 ﻿using System;
+using AgentTester.Wolves.Interactions;
+using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
-using GenericAgentArchitecture.Interactions.Wolves;
 using GenericAgentArchitecture.Interfaces;
 
-namespace GenericAgentArchitecture.Agents.Wolves {
+namespace AgentTester.Wolves.Agents {
 
   internal class Grass : Agent, IAgentLogic, IEatInteractionTarget {
 

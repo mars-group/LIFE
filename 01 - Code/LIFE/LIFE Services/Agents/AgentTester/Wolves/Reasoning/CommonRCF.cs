@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericAgentArchitecture.Agents.Wolves;
-using GenericAgentArchitecture.Interactions.Wolves;
+using AgentTester.Wolves.Agents;
+using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
 
-namespace GenericAgentArchitecture.Reasoning {
+namespace AgentTester.Wolves.Reasoning {
 
   /// <summary>
   ///   Static class containing common methods used in the reasoning unit. 

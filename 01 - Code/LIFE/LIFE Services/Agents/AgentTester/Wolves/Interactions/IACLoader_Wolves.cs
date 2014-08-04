@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericAgentArchitecture.Agents.Wolves;
+using AgentTester.Wolves.Agents;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Interfaces;
 
-namespace GenericAgentArchitecture.Interactions.Wolves {
+namespace AgentTester.Wolves.Interactions {
   
   internal class IACLoaderWolves : IIacLoader {
     

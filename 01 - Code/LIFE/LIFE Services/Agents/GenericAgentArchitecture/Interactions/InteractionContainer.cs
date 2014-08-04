@@ -9,7 +9,7 @@ namespace GenericAgentArchitecture.Interactions {
   /// <summary>
   ///   The interaction container holds all interactions an agent can initiate.
   /// </summary>
-  internal class InteractionContainer {
+  public class InteractionContainer {
 
     private readonly Agent _agent;                    // Self-reference to the owner.
     private readonly List<Interaction> _actions;      // Reflexive (degenerate) interactions.

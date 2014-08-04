@@ -1,12 +1,11 @@
-﻿using System;
-using GenericAgentArchitecture.Dummies;
+﻿using GenericAgentArchitecture.Dummies;
 
 namespace GenericAgentArchitecture.Perception {
   
   /// <summary>
   ///   A halo capable of sensing in a circle around its position.
   /// </summary>
-  internal class RadialHalo : Halo {
+  public class RadialHalo : Halo {
 
     private readonly double _radius;  // The radius describing the range of this halo.
 

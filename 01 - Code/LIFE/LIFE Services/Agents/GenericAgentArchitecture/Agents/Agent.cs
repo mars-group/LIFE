@@ -5,17 +5,18 @@ using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 
+
 namespace GenericAgentArchitecture.Agents {
 
   /// <summary>
   /// The abstract agent. This is the most generic agent form, it specifies the main execution
   /// cycle and several extension points available for specialized agent implementations.
   /// </summary>
-  internal abstract class Agent : ITickClient {
+  public abstract class Agent : ITickClient {
 
     protected long Cycle;                              // The current execution cycle.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
-    protected IAgentLogic ReasoningComponent;          // The agent's reasoning logic.
+    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.
     protected readonly bool DebugEnabled;              // Controls console debug output.
     public readonly InteractionContainer Interactions; // Repertoire of all interactions.  
     public readonly string Id;                         // Unique identifier.

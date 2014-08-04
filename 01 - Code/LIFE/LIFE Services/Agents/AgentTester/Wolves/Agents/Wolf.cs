@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using AgentTester.Wolves.Interactions;
+using AgentTester.Wolves.Reasoning;
+using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
-using GenericAgentArchitecture.Interactions.Wolves;
 using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
-using GenericAgentArchitecture.Reasoning;
 
-namespace GenericAgentArchitecture.Agents.Wolves {
+namespace AgentTester.Wolves.Agents {
 
   internal class Wolf : Agent, IAgentLogic, IEatInteractionSource {
     private int _energy = 80;
