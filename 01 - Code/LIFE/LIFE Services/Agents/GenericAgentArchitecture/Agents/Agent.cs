@@ -14,13 +14,13 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class Agent : ITickClient {
 
-    protected long Cycle;                              // The current execution cycle.
-    protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
-    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.
-    protected readonly bool DebugEnabled;              // Controls console debug output.
-    public readonly InteractionContainer Interactions; // Repertoire of all interactions.  
+    protected long Cycle;                              // The current execution cycle.   
     public readonly string Id;                         // Unique identifier.
-    public Vector Position;                            // Position in an environment.
+    protected readonly bool DebugEnabled;              // Controls console debug output.
+    protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
+    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.  
+    public readonly InteractionContainer Interactions; // Repertoire of all interactions.     
+    public Position Position;                          // Position in an environment.
 
 
     /// <summary>
@@ -30,6 +30,7 @@ namespace GenericAgentArchitecture.Agents {
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
     protected Agent(string id) {
       Id = id;
+      Position = null;
       DebugEnabled = false; 
       PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;

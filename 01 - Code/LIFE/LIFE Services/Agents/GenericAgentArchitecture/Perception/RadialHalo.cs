@@ -15,7 +15,7 @@ namespace GenericAgentArchitecture.Perception {
     /// </summary>
     /// <param name="position">The agent's centre.</param>
     /// <param name="radius">The radius describing the range of this halo.</param>
-    public RadialHalo(Vector position, double radius) : base(position) {
+    public RadialHalo(Position position, double radius) : base(position) {
       _radius = radius;
     }
 
@@ -25,8 +25,8 @@ namespace GenericAgentArchitecture.Perception {
     /// </summary>
     /// <param name="position">The position to check.</param>
     /// <returns>True, if position is in range, false otherwise.</returns>
-    public override bool IsInRange(Vector position) {
-      return Position.GetDistance(position) <= _radius;
+    public override bool IsInRange(Float3 position) {
+      return Position.Center.GetDistance(position) <= _radius;
     }
   }
 }

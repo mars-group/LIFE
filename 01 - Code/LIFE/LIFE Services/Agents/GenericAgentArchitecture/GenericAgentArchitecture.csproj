@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Dummies\Environment.cs" />
-    <Compile Include="Dummies\Vector.cs" />
+    <Compile Include="Dummies\Position.cs" />
     <Compile Include="Interfaces\IGenericAPI.cs" />
     <Compile Include="Interactions\Interaction.cs" />
     <Compile Include="Interactions\InteractionContainer.cs" />

@@ -17,7 +17,7 @@ namespace AgentTester.Wolves.Agents {
     private string _states;
 
     public Wolf(Grassland environment, string id) : base(id) {
-      Position = new Vector(-1, -1); // We just need an object (coords set by env).
+      Position = new Position(-1, -1, 0, 0); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor(new AgentSensor(_environment, new RadialHalo(Position, 8)));
@@ -41,8 +41,7 @@ namespace AgentTester.Wolves.Agents {
       var wolves = agents.OfType<Wolf>().ToList();
       
       // Create status output.
-      _states = String.Format("{0,3:00}% |", hunger) + " "+
-        "- " +
+      _states = String.Format("{0,3:00}% |", hunger) + " - " +
         (sheeps.Count<10? sheeps.Count+"" : "+") + " " + 
         (wolves.Count<10? wolves.Count+"" : "+") + " │ ";
 
@@ -62,13 +61,13 @@ namespace AgentTester.Wolves.Agents {
         // R2: Sheep at distance max. 5 and hunger > 40%? Move towards it!
         if (distance <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position.Center);
         }
 
         // R3: Very hungry wolf. You better watch out ...
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position.Center);
         }
       }
 
@@ -87,7 +86,7 @@ namespace AgentTester.Wolves.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format(Id + " | Wolf  | ({0,2:00},{1,2:00})  | {2,3:0}/{3,3:0} |" + _states,
-        Position.X, Position.Y, _energy, EnergyMax);
+        Position.Center.X, Position.Center.Y, _energy, EnergyMax);
     }
 
 

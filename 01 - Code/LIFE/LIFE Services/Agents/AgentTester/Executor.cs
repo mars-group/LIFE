@@ -44,7 +44,7 @@ namespace AgentTester {
     /// </summary>
     public static void Main() {
       var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
-      new Executor(environment).Run(500);
+      new Executor(environment).Run(850);
       Console.ReadLine();
     }
   }

@@ -6,7 +6,7 @@ namespace GenericAgentArchitecture.Perception {
   ///   An abstract halo representation. Each sensor has one object of it.
   /// </summary>
   public abstract class Halo {
-    public Vector Position; // The agent's centre.
+    public Position Position; // The agent's centre.
     //private Geometry _form;
 
 
@@ -14,7 +14,7 @@ namespace GenericAgentArchitecture.Perception {
     ///   Create a new halo.
     /// </summary>
     /// <param name="position">The agent's centre.</param>
-    protected Halo(Vector position) {
+    protected Halo(Position position) {
       Position = position;
     }
 
@@ -24,6 +24,6 @@ namespace GenericAgentArchitecture.Perception {
     /// </summary>
     /// <param name="position">The position to check.</param>
     /// <returns>True, if position is in range, false otherwise.</returns>
-    public abstract bool IsInRange(Vector position);
+    public abstract bool IsInRange(Float3 position);
   }
 }

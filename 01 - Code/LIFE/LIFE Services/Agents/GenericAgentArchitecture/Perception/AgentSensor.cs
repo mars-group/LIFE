@@ -28,7 +28,8 @@ namespace GenericAgentArchitecture.Perception {
     protected override SensorInput RetrieveData() {
       var gsi = new GenericSensorInput(this);
       foreach (var agent in _environment.GetAllAgents()) {
-        if (Halo.IsInRange(agent.Position) && agent.Position != Halo.Position) {
+        if (Halo.IsInRange(agent.Position.Center) && 
+            agent.Position.GetDistance(Halo.Position) >= float.Epsilon) {
           gsi.Values.Add(agent.Id, agent);
         }
       }

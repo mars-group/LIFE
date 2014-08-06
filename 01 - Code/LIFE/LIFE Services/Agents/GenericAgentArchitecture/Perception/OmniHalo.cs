@@ -19,7 +19,7 @@ namespace GenericAgentArchitecture.Perception {
     /// </summary>
     /// <param name="position">The position to check.</param>
     /// <returns>Always true.</returns>
-    public override bool IsInRange(Vector position) {
+    public override bool IsInRange(Float3 position) {
       return true;
     }
   }

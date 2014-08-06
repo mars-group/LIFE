@@ -7,7 +7,7 @@ using Environment = GenericAgentArchitecture.Dummies.Environment;
 
 namespace AgentTester.Wolves.Agents {
   internal class Grassland : Environment {
-    public static readonly Vector Boundary = new Vector(30, 18, 0);
+    public static readonly Float3 Boundary = new Float3(30, 18, 0);
     private readonly Random _random;
     private int _idCounter;
 
@@ -43,12 +43,13 @@ namespace AgentTester.Wolves.Agents {
     public override void AddAgent(Agent newAgent) {
       bool unique;
       do {
-        newAgent.Position.X = _random.Next(Boundary.X);
-        newAgent.Position.Y = _random.Next(Boundary.Y);
+        var x = _random.Next((int)Boundary.X);
+        var y = _random.Next((int)Boundary.Y);
+        newAgent.Position.Center = new Float3 (x, y);
         unique = true;
         foreach (var agent in Agents) {
-          if (agent.Position.X == newAgent.Position.X &&
-              agent.Position.Y == newAgent.Position.Y) {
+          if (agent.Position.Center.X == newAgent.Position.Center.X &&
+              agent.Position.Center.Y == newAgent.Position.Center.Y) {
             unique = false;
             break;
           }
@@ -75,12 +76,12 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="position">The intended position</param>
     /// <returns>True, if accessible, false, when not.</returns>
-    public bool CheckPosition(Vector position) {
+    public bool CheckPosition(Float3 position) {
       if (position.X < 0 || position.X >= Boundary.X ||
           position.Y < 0 || position.Y >= Boundary.Y) return false;
       foreach (var agent in Agents) {
-        if (agent.Position.X == position.X &&
-            agent.Position.Y == position.Y) return false;
+        if (agent.Position.Center.X == position.X &&
+            agent.Position.Center.Y == position.Y) return false;
       }
       return true;
     }
@@ -117,7 +118,7 @@ namespace AgentTester.Wolves.Agents {
 
       // Print the agents.
       foreach (var agent in Agents) {
-        Console.SetCursorPosition(agent.Position.X+1, agent.Position.Y+3);
+        Console.SetCursorPosition((int)agent.Position.Center.X+1, (int)agent.Position.Center.Y+3);
         if (agent is Wolf) {
           Console.ForegroundColor = ConsoleColor.Red;
           Console.Write("W");
@@ -137,7 +138,7 @@ namespace AgentTester.Wolves.Agents {
       Console.ForegroundColor = ConsoleColor.Gray;
 
       // Print the individual agent debug messages.
-      var xo = Boundary.X + 4;
+      var xo = (int) Boundary.X + 4;
       Console.SetCursorPosition(xo, 0); Console.Write(" ID |  Typ  | Position | Energie | Hgr.| G/S/W | Distanz | Regel");            
       Console.SetCursorPosition(xo, 1); Console.Write("────┼───────┼──────────┼─────────┼─────┼───────┼─────────┼───────");
       var printed = 2;
@@ -174,7 +175,7 @@ namespace AgentTester.Wolves.Agents {
 
 
       // Output the total agent counts.
-      Console.SetCursorPosition(0, Boundary.Y+4);
+      Console.SetCursorPosition(0, (int)Boundary.Y+4);
       Console.Write(" Agenten-Gesamtanzahlen:\n"+
                     "  - Gras  : "+Agents.OfType<Grass>().Count()+"\n"+
                     "  - Schafe: "+Agents.OfType<Sheep>().Count()+"\n"+

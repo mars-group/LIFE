@@ -18,7 +18,7 @@ namespace AgentTester.Wolves.Agents {
 
 
     public Sheep(Grassland environment, string id) : base(id) {
-      Position = new Vector(-1, -1); // We just need an object (coords set by env).
+      Position = new Position(-1, -1, 0, 0); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int)DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor(new AgentSensor(_environment, new RadialHalo(Position, 8)));
@@ -40,7 +40,7 @@ namespace AgentTester.Wolves.Agents {
       var grass  = agents.OfType<Grass>().ToList();
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
-      
+
       // Create status output.
       _states = String.Format("{0,3:00}% |", hunger) + " "+
         (grass.Count <10? grass.Count +"" : "+") + " " +
@@ -52,8 +52,8 @@ namespace AgentTester.Wolves.Agents {
         // Get the nearest sheep and calculate the distance towards it.
         var nGrass = CommonRCF.GetNearestAgent(grass, Position);
         var nSheep = CommonRCF.GetNearestAgent(sheeps, Position);
-        var nWolf  = CommonRCF.GetNearestAgent(wolves, Position);
-        var dGrass = Position.GetDistance(nGrass.Position);
+        var nWolf  = CommonRCF.GetNearestAgent(wolves, Position);          
+        var dGrass = Position.GetDistance(nGrass.Position);  
         //var dWolf  = Position.GetDistance(nWolf.Position);
         _states += String.Format("E: {0,4:0.00} | ", dGrass);
 
@@ -66,13 +66,13 @@ namespace AgentTester.Wolves.Agents {
         // R2: Medium grass distance allowed.
         if (dGrass <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position.Center);
         }
 
         // R3: Move to the nearest grass, no matter the distance.
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position.Center);
         }
       }
 
@@ -91,7 +91,7 @@ namespace AgentTester.Wolves.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString () {
       return String.Format(Id+" | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |"+_states,
-               Position.X, Position.Y, _energy, EnergyMax);
+               Position.Center.X, Position.Center.Y, _energy, EnergyMax);
     }
 
 
