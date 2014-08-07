@@ -44,10 +44,12 @@ namespace GenericAgentArchitecture.Dummies {
     /// </summary>
     /// <returns>A three-dimensional float structure with the new position.</returns>
     public Float3 CalculateNewPosition() {
-      Float3 newPos = new Float3(Center.X, Center.Y, Center.Z);
-      newPos.X += (float) (Velocity*Math.Cos(Pitch)*Math.Cos(Yaw));
-      newPos.Y += (float) (Velocity*Math.Cos(Pitch)*Math.Sin(Yaw));
-      newPos.Z += (float) (Velocity*Math.Sin(Pitch));
+      var pitchRad = Pitch * 0.0174532925f;  // Deg -> Rad.
+      var yawRad   = Yaw   * 0.0174532925f;  
+      var newPos   = new Float3 (Center.X, Center.Y, Center.Z);
+      newPos.X += (float) (Velocity*Math.Cos(pitchRad)*Math.Cos(yawRad));
+      newPos.Y += (float) (Velocity*Math.Cos(pitchRad)*Math.Sin(yawRad));
+      newPos.Z += (float) (Velocity*Math.Sin(pitchRad));
       return newPos;
     }
 
@@ -120,7 +122,7 @@ namespace GenericAgentArchitecture.Dummies {
     /// Calculate point-to-point distance.
     /// </summary>
     /// <param name="pos">The target point.</param>
-    /// <returns>Distance value.</returns>
+    /// <returns>Euclidian distance value.</returns>
     public float GetDistance(Float3 pos) {
       return (float) Math.Sqrt((X - pos.X)*(X - pos.X) +
                                (Y - pos.Y)*(Y - pos.Y) +

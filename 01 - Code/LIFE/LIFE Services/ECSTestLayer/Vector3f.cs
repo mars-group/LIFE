@@ -65,5 +65,18 @@ namespace ESCTestLayer
         {
             return String.Format("({0}/{1}/{2})", X, Y, Z);
         }
+
+
+
+        /// <summary>
+        ///   Calculate point-to-point distance.
+        /// </summary>
+        /// <param name="pos">The target point.</param>
+        /// <returns>Euclidian distance value.</returns>
+        public float GetDistance(Vector3f pos) {
+          return (float) Math.Sqrt((X - pos.X)*(X - pos.X) +
+                                   (Y - pos.Y)*(Y - pos.Y) +
+                                   (Z - pos.Z)*(Z - pos.Z));      
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Interfaces;
+using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Dummies {
   

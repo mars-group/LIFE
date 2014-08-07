@@ -56,7 +56,6 @@
     <Compile Include="Interfaces\IGenericDataSource.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
     <Compile Include="Interfaces\IPerception.cs" />
-    <Compile Include="Interfaces\ITickClient.cs" />
     <Compile Include="Perception\AgentSensor.cs" />
     <Compile Include="Perception\GenericSensor.cs" />
     <Compile Include="Perception\GenericSensorInput.cs" />
@@ -72,6 +71,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ECSTestLayer\ESCPrototype.csproj">
       <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
       <Name>ESCPrototype</Name>

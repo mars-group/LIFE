@@ -49,6 +49,12 @@
     <Compile Include="Vector3f.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

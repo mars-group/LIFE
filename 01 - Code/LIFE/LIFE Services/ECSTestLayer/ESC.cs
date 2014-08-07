@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 
 
 namespace ESCTestLayer
@@ -19,6 +20,8 @@ namespace ESCTestLayer
         private readonly IDictionary<int, AxisAlignedBoundingInterval> xAxis;
         private readonly IDictionary<int, AxisAlignedBoundingInterval> yAxis;
         private readonly IDictionary<int, AxisAlignedBoundingInterval> zAxis;
+        private readonly Random _rnd = new Random();
+
 
         public ESC()
         {
@@ -40,6 +43,10 @@ namespace ESCTestLayer
             Console.WriteLine(String.Format("Register({0},{1})", agentId, dimension));
             dimensions.Add(agentId, dimension);
         }
+
+
+
+
 
         /// <summary>
         /// Tries to set the given position for agent. Only succeeds if no collision occurs. Returns old position if not.
@@ -72,6 +79,44 @@ namespace ESCTestLayer
 
             return position;
         }
+
+        //TODO Irgendwas paßt hier noch nicht!
+        // Bsp.: Ausgabe der Positionierung von 4 Agenten der Größe 1x1 in einem 5x5 Feld.
+        /*  
+        Register(1,(1/1/1))
+        Register(2,(1/1/1))
+        Register(3,(1/1/1))
+        Register(4,(1/1/1))
+        SetPosition(1,(1/0/0),(0/-1/0))
+        SetPosition() -> suceeded; save information
+        (1/0/0)
+        SetPosition(2,(3/3/0),(0/1/0))
+        SetPosition() -> suceeded; save information
+        (3/3/0)
+        SetPosition(3,(1/3/0),(0/-1/0))
+        SetPosition() -> suceeded; save information
+        (1/3/0)
+        SetPosition(4,(2/3/0),(-1/0/0))
+        SetPosition(4,(1/2/0),(1/0/0))
+        SetPosition(4,(4/3/0),(0/-1/0))
+        SetPosition(4,(3/3/0),(0/-1/0))
+        SetPosition(4,(2/1/0),(0/-1/0))
+        SetPosition(4,(1/0/0),(1/0/0))
+        SetPosition(4,(3/2/0),(0/-1/0))
+        SetPosition(4,(1/0/0),(0/1/0))
+        SetPosition(4,(1/1/0),(0/1/0))
+        SetPosition(4,(4/1/0),(0/-1/0))
+        SetPosition(4,(1/3/0),(0/1/0))
+        SetPosition(4,(1/2/0),(1/0/0))
+        SetPosition(4,(2/2/0),(0/1/0))
+        SetPosition(4,(3/3/0),(0/-1/0))
+        SetPosition(4,(3/3/0),(-1/0/0))
+        SetPosition(4,(0/3/0),(-1/0/0))
+        SetPosition(4,(0/1/0),(1/0/0))
+        SetPosition() -> suceeded; save information
+        (0/1/0)
+        */
+
 
         /// <summary>
         /// finds any collision with located agents (that one, which have used setPosition not only registered ones)
@@ -161,5 +206,73 @@ namespace ESCTestLayer
 
 
 
+      /// <summary>
+      ///   Set an agent to a randomly chosen, free position.
+      /// </summary>
+      /// <param name="agent">The ID of the agent to set.</param>
+      /// <param name="min">Minimum value (xMin, yMin, zMin). May be set to 'null' for a positive-only system.</param>
+      /// <param name="max">Maximum value (xMax, yMax, zMax). This position is excluded.</param>
+      /// <param name="integer">Tells, whether only integer ('true') or decimal ('false') values shall be generated.</param>
+      /// <returns>The successfully aquired position.</returns>
+      public Vector3f SetRandomPosition(int agent, Vector3f min, Vector3f max, bool integer) {
+        if (min == null) min = new Vector3f(0.0f, 0.0f, 0.0f);
+        var zUsed = (max.Z - min.Z > float.Epsilon);
+        Vector3f success, dir = null;
+
+        do {
+          
+          // Get a position in the interval containing only integer values.
+          var pos = new Vector3f (
+            (_rnd.Next((int) (max.X - min.X))) + min.X,
+            (_rnd.Next((int) (max.Y - min.Y))) + min.Y, zUsed?
+            (_rnd.Next((int) (max.Z - min.Z))) + min.Z : 0.0f
+          );
+
+          // When only integers are wished, position is finished. Next, create direction normal vector.
+          if (integer) {
+            switch (_rnd.Next(0, 4)) {                                   //         Z
+              case 0: dir = new Vector3f ( 0.0f,  1.0f, 0.0f);  break;  // right   ^   X
+              case 1: dir = new Vector3f ( 0.0f, -1.0f, 0.0f);  break;  // left    |  /
+              case 2: dir = new Vector3f ( 1.0f,  0.0f, 0.0f);  break;  // up      | /
+              case 3: dir = new Vector3f (-1.0f,  0.0f, 0.0f);  break;  // down    +--------->  Y
+            }            
+          } 
+          
+          // Otherwise we want floating point values. Randomize position, create normal vector and normalize it. 
+          else {
+            pos.X += (float) _rnd.NextDouble();
+            pos.Y += (float) _rnd.NextDouble();
+            if (zUsed) pos.Z += (float) _rnd.NextDouble();           
+            dir = new Vector3f (
+              (float) (_rnd.NextDouble() - 0.5),
+              (float) (_rnd.NextDouble() - 0.5), zUsed?
+              (float) (_rnd.NextDouble() - 0.5) : 0.0f
+            ).Normalize();
+          }
+
+          // Try to get this position.
+          success = SetPosition(agent, pos, dir);
+        } while (success == null);
+        
+        return success;
+      }
+
+
+ 
+      /// <summary>
+      ///   Return contained objects in a radius around a position.
+      /// </summary>
+      /// <param name="position">Center of agent.</param>
+      /// <param name="radius">Perception radius.</param>
+      /// <returns>The IDs of the contained objects.</returns>
+      public IEnumerable<int> ExploreRadius(Vector2f position, int radius) {
+        var ids = new List<int>();
+          
+        // Loop over all agent positions. If distance ≤ radius, add agent reference to return set.
+        foreach (var agent in positions.Keys) {
+          if (positions[agent].GetDistance(position) <= radius) ids.Add(agent);
+        }
+        return ids;
+      }
     }
 }

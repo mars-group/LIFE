@@ -3,6 +3,7 @@ using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
+using LayerAPI.Interfaces;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 
 
@@ -12,7 +13,7 @@ namespace GenericAgentArchitecture.Agents {
   /// The abstract agent. This is the most generic agent form, it specifies the main execution
   /// cycle and several extension points available for specialized agent implementations.
   /// </summary>
-  public abstract class Agent : ITickClient {
+  public abstract class Agent : IAgent {
 
     protected long Cycle;                              // The current execution cycle.   
     public readonly string Id;                         // Unique identifier.

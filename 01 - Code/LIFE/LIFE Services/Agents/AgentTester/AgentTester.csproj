@@ -45,6 +45,8 @@
     <Compile Include="AgentBuilder.cs" />
     <Compile Include="Executor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomMove_ESC\WalkerAgent.cs" />
+    <Compile Include="RandomMove_ESC\WalkerLayer.cs" />
     <Compile Include="Wolves\Agents\Grass.cs" />
     <Compile Include="Wolves\Agents\Grassland.cs" />
     <Compile Include="Wolves\Agents\Sheep.cs" />
@@ -63,6 +65,14 @@
     <Folder Include="Wolves\Perception\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECSTestLayer\ESCPrototype.csproj">
+      <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
+      <Name>ESCPrototype</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
       <Project>{e8e32f5e-7e31-41f3-9d49-9cb6dfbafc85}</Project>
       <Name>GenericAgentArchitecture</Name>
