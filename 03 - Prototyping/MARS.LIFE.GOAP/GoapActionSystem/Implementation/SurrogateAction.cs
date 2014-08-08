@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using GoapCommon.Interfaces;
 
 namespace GoapActionSystem.Implementation {
+    /// <summary>
+    /// null action class
+    /// </summary>
     internal class SurrogateAction : AbstractGoapAction {
-
         public SurrogateAction()
-            : base(new List<IGoapWorldstate>(), new List<IGoapWorldstate>()) { }
+            : base(new List<IGoapWorldstate>(), new List<IGoapWorldstate>()) {}
 
         public override bool ValidateContextPreconditions() {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override bool ExecuteContextEffects() {

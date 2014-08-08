@@ -65,7 +65,7 @@ namespace GoapUser
 
             Console.WriteLine(planner);
 
-
+            
             Console.ReadKey();
 
 

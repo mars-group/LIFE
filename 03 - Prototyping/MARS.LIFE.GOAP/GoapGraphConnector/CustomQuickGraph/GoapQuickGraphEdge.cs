@@ -6,10 +6,10 @@ using QuickGraph;
 namespace GoapGraphConnector.CustomQuickGraph
 {
 
-    internal class GoapEdge<TVertex> : Edge<TVertex>
+    internal class GoapQuickGraphEdge<TVertex> : Edge<TVertex>, IGoapEdge
     {
 
-        public GoapEdge(TVertex source, TVertex target, IAction action, int cost)
+        public GoapQuickGraphEdge(TVertex source, TVertex target, IAction action, int cost)
             : base(source, target)
         {
             Action = action;
@@ -19,9 +19,13 @@ namespace GoapGraphConnector.CustomQuickGraph
         private IAction Action { get; set; }
         private int Cost { get; set; }
 
-        public int GetHeuristic(List<IGoapWorldstate> targetWorldstates = null)
-        {
-            return Cost;
+
+        public IGoapVertex GetSource() {
+            throw new System.NotImplementedException();
+        }
+
+        public IGoapVertex GetTarget() {
+            throw new System.NotImplementedException();
         }
     }
 }

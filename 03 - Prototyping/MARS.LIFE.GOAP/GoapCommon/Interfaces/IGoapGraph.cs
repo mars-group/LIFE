@@ -5,20 +5,25 @@ namespace GoapCommon.Interfaces
     /// <summary>
     ///     the methods needed for the goap planner
     /// </summary>
-    public interface IGoapGraph
-    {
+    public interface IGoapGraph {
+
+
+
+
         /// <summary>
+        /// get the initial graph with one vertex (root)
         /// </summary>
         /// <param name="rootState"></param>
         /// <param name="targetState"></param>
         /// <param name="maximumGraphDept"></param>
-        /// <returns>IGoapGraph</returns>
-        IGoapGraph CreateGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
+        /// <returns></returns>
+        void InitializeGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
             int maximumGraphDept = 0);
 
         /// <summary>
+        /// empty graph is a graph without any vertex
         /// </summary>
-        /// <returns>bool</returns>
+        /// <returns></returns>
         bool IsGraphEmpty();
 
         /// <summary>
@@ -51,16 +56,14 @@ namespace GoapCommon.Interfaces
         /// <returns></returns>
         bool AStarStep();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        int GetActualDepthFromRoot();
+       
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         List<IGoapAction> GetShortestPath();
+
+        int GetActualDepthFromRoot();
     }
 }

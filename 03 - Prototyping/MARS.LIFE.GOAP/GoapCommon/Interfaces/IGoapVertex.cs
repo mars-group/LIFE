@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GoapCommon.Interfaces
 {
-    public interface IGoapVertex
-    {
+
+    public interface IGoapVertex {
+        int GetHeuristic(IGoapVertex target);
     }
 }

@@ -56,9 +56,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomGraph\AStarSteppable.cs" />
+    <Compile Include="CustomGraph\Edge.cs" />
+    <Compile Include="CustomGraph\GoapGraphConnector.cs" />
+    <Compile Include="CustomGraph\Graph.cs" />
+    <Compile Include="CustomGraph\Vertex.cs" />
     <Compile Include="CustomQuickGraph\AStarShortestPathSteppable.cs" />
-    <Compile Include="CustomQuickGraph\GoapEdge.cs" />
-    <Compile Include="CustomQuickGraph\GoapVertex.cs" />
+    <Compile Include="CustomQuickGraph\GoapQuickGraphEdge.cs" />
+    <Compile Include="CustomQuickGraph\GoapQuickGraphVertex.cs" />
     <Compile Include="CustomQuickGraph\GoapQuickGraphConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -75,6 +80,7 @@
       <Name>GoapCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

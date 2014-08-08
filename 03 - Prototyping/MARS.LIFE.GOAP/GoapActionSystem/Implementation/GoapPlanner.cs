@@ -102,8 +102,9 @@ namespace GoapActionSystem.Implementation
         /// <returns></returns>
         private IGoapGraph InitializeGraph(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld)
         {
-            GoapQuickGraphConnector connector = new GoapQuickGraphConnector();
-            return connector.CreateGoapGraph(currentWorld, targetWorld);
+            var connector = new GoapGraphConnector.CustomGraph.GoapGraphConnector();
+            connector.InitializeGoapGraph(currentWorld, targetWorld);
+            return connector;
         }
 
         private List<IGoapAction> GetOutgoinGoapActions(IGoapVertex currentWorldStates)
