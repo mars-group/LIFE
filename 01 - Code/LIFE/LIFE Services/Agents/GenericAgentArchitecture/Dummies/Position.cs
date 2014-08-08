@@ -118,8 +118,10 @@ namespace GenericAgentArchitecture.Dummies {
       Z = z;
     }
 
+
+
     /// <summary>
-    /// Calculate point-to-point distance.
+    ///   Calculate point-to-point distance.
     /// </summary>
     /// <param name="pos">The target point.</param>
     /// <returns>Euclidian distance value.</returns>
@@ -127,6 +129,46 @@ namespace GenericAgentArchitecture.Dummies {
       return (float) Math.Sqrt((X - pos.X)*(X - pos.X) +
                                (Y - pos.Y)*(Y - pos.Y) +
                                (Z - pos.Z)*(Z - pos.Z));      
+    }
+
+
+
+    /// <summary>
+    ///   Calculate the vector length.
+    /// </summary>
+    /// <returns>Length of this vector.</returns>
+    public float GetLength() {
+      return GetDistance(new Float3(0.0f, 0.0f, 0.0f));
+    }
+
+
+
+    /// <summary>
+    ///   Calculate the normalized vector.
+    /// </summary>
+    /// <returns>The normalized vector.</returns>
+    public Float3 GetNormalVector() {
+      var length = GetLength();
+      return new Float3(X/length, Y/length, Z/length);
+    }
+
+
+
+    /// <summary>
+    ///   Create normalized vectors orthogonal to this one.
+    /// </summary>
+    /// <param name="nY">Pointer for new y-axis normal vector.</param>
+    /// <param name="nZ">Same for z-axis (height) vector.</param>
+    public void GetPlanarOrthogonalVectors(out Float3 nY, out Float3 nZ) {
+      
+      // [Y-Axis]: Create orthogonal vector to new x-axis laying in plane (x, y): => Scalar product = 0.
+      nY = new Float3(-Y/X, 1.0f, 0.0f).GetNormalVector();
+
+      // [Z-Axis / Height]: Build orthogonal vector with cross-product.
+      var x3 = (Y * nY.Z  -  Z * nY.Y);  // x: a2b3 - a3b2
+      var y3 = (Z * nY.X  -  X * nY.Z);  // y: a3b1 - a1b3
+      var z3 = (X * nY.Y  -  Y * nY.X);  // z: a1b2 - a2b1
+      nZ = new Float3(x3, y3, z3).GetNormalVector();
     }
   };
 }

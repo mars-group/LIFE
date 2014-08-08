@@ -10,9 +10,16 @@ namespace ESCTestLayer
         private readonly float _min;
         private readonly float _max;
 
-        public AxisAlignedBoundingInterval(float min, float max) {
-            _min = min;
-            _max = max;
+        public AxisAlignedBoundingInterval(float val1, float val2) {
+          
+          // Set smaller value as minimum.
+          if (val1 < val2) {
+            _min = val1;
+            _max = val2;
+          } else {
+            _min = val2;
+            _max = val1;
+          }
         }
 
         public bool Collide(AxisAlignedBoundingInterval other)

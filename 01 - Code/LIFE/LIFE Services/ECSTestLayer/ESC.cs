@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 
@@ -64,7 +65,10 @@ namespace ESCTestLayer
             GetAxisAlignedBoundingIntervals(agentId, position, direction, out xInterval, out yInterval, out zInterval);
 
             var collision = FindCollisions(xInterval, yInterval, zInterval);
-            if (collision.Any())
+            Console.WriteLine ("["+collision.Count+"]: We have "+ (collision.Count == 3? "a" : "NO") +" collision at x:"+xInterval+", y:"+yInterval+", z:"+zInterval);
+        
+            // Here was Any(): This is wrong, because we only have a collision, if all three intervals overlap!
+            if (collision.Count == 3)
             {
                 if (!positions.ContainsKey(agentId)) return null;
                 return positions[agentId]; //old position
@@ -203,6 +207,39 @@ namespace ESCTestLayer
         }
 
 
+      /* Container for the x, y and z bounding intervals. */
+      struct AABB { public AxisAlignedBoundingInterval XIntv, YIntv, ZIntv; }
+
+
+      private AABB GetAABB(Vector3f position, Vector3f direction, Vector3f dimension) {
+
+        // Build axes for direction-local coordinate system.
+        Vector3f nr1 = direction.Normalize(), nr2, nr3;
+        nr1.GetPlanarOrthogonalVectors(out nr2, out nr3);
+
+        float xMin, xMax, yMin, yMax, zMin, zMax;
+        xMin = -dimension.X/2;
+        xMax =  dimension.X/2;
+        
+        //TODO So geht die Rücktransformation!
+        //TODO In 'ner Schleife oder so rübergehen, Punkte mit +-diff berechnen.
+        //TODO Könnte rechenintensiv werden!
+        /*
+        var p2x = p1.X*nr1.X + p1.X*nr2.X + p1.X*nr3.X;
+        var p2y = p1.Y*nr1.Y + p1.Y*nr2.Y + p1.Y*nr3.Y;
+        var p2z = p1.Z*nr1.Z + p1.Z*nr2.Z + p1.Z*nr3.Z;
+        */
+
+        float diffX = 0, diffY = 0, diffZ = 0;
+
+
+        // Create axis-aligned bounding box (AABB) and assign values.
+        return new AABB {
+          XIntv = new AxisAlignedBoundingInterval(position.X - diffX, position.X + diffX),
+          YIntv = new AxisAlignedBoundingInterval(position.Y - diffY, position.Y + diffX),
+          ZIntv = new AxisAlignedBoundingInterval(position.Z - diffZ, position.Z + diffZ)
+        };
+      }
 
 
 
@@ -230,7 +267,7 @@ namespace ESCTestLayer
 
           // When only integers are wished, position is finished. Next, create direction normal vector.
           if (integer) {
-            switch (_rnd.Next(0, 4)) {                                   //         Z
+            switch (_rnd.Next(0, 4)) {                                  //         Z
               case 0: dir = new Vector3f ( 0.0f,  1.0f, 0.0f);  break;  // right   ^   X
               case 1: dir = new Vector3f ( 0.0f, -1.0f, 0.0f);  break;  // left    |  /
               case 2: dir = new Vector3f ( 1.0f,  0.0f, 0.0f);  break;  // up      | /
