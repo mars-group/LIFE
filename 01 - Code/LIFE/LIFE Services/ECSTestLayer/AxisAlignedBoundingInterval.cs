@@ -22,15 +22,27 @@ namespace ESCTestLayer
           }
         }
 
-        public bool Collide(AxisAlignedBoundingInterval other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+        public bool Collide(AxisAlignedBoundingInterval other) {
+          if (ReferenceEquals(this, other)) return false;
+          if (_min <= other._max &&
+              other._min <= _max /*&&
+              !(Math.Abs(_max - other._min) <= float.Epsilon || // Exclude intervals with no overlappings
+                Math.Abs(other._max - _min) <= float.Epsilon) // (2.50 -> 3.50, 3.50 -> 4.50)    */
+            ) {
+            Console.WriteLine("Col. on "+ToString()+" und "+other.ToString());
+            return true;
+          }
+          return false;
+
+          /*
+          if (ReferenceEquals(null, other)) return false;
+          if (ReferenceEquals(this, other)) return false; //true; Skip own reference.
             if (this._min <= other._min) {
                 return this._max >= other._min;
             }
             // so this._min > other._min
             return this._min <= other._max;
+           */
         }
 
         public bool Equals(AxisAlignedBoundingInterval other)
@@ -65,7 +77,7 @@ namespace ESCTestLayer
 
         public override string ToString()
         {
-            return String.Format("({0}-{1})", _min,_max);
+            return String.Format("({0,6:0.00} →{1,6:0.00})", _min,_max);
         }
     }
 }

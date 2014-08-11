@@ -21,8 +21,9 @@ namespace ESCTestLayer
         private readonly IDictionary<int, AxisAlignedBoundingInterval> xAxis;
         private readonly IDictionary<int, AxisAlignedBoundingInterval> yAxis;
         private readonly IDictionary<int, AxisAlignedBoundingInterval> zAxis;
-        private readonly Random _rnd = new Random();
-
+      
+      private readonly Random _rnd;                  // Number generator for random positions.
+      private readonly Dictionary<int, AABB> _aabbs; // Stores the occupied intervals of all agents.
 
         public ESC()
         {
@@ -32,6 +33,10 @@ namespace ESCTestLayer
             yAxis = new ConcurrentDictionary<int, AxisAlignedBoundingInterval>();
             zAxis = new ConcurrentDictionary<int, AxisAlignedBoundingInterval>();
             zAxis = new ConcurrentDictionary<int, AxisAlignedBoundingInterval>();
+
+          _rnd = new Random();
+          _aabbs = new Dictionary<int, AABB>(); 
+
         }
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace ESCTestLayer
         /// <param name="dimension"></param>
         public void Register(int agentId, Vector3f dimension)
         {
-            Console.WriteLine(String.Format("Register({0},{1})", agentId, dimension));
+            //Console.WriteLine(String.Format("Register({0},{1})", agentId, dimension));
             dimensions.Add(agentId, dimension);
         }
 
@@ -57,32 +62,46 @@ namespace ESCTestLayer
         /// <param name="direction"></param>
         /// <returns>current position or null if initial position could not be set</returns>
         public Vector3f SetPosition(int agentId, Vector3f position, Vector3f direction)
-        {
-            Console.WriteLine(String.Format("SetPosition({0},{1},{2})", agentId, position, direction));
-            AxisAlignedBoundingInterval xInterval;
+        {     
+            Console.WriteLine(String.Format("\nSetPosition({0},{1},{2})", agentId, position, direction));
+         /* AxisAlignedBoundingInterval xInterval;
             AxisAlignedBoundingInterval yInterval;
             AxisAlignedBoundingInterval zInterval;
             GetAxisAlignedBoundingIntervals(agentId, position, direction, out xInterval, out yInterval, out zInterval);
-
             var collision = FindCollisions(xInterval, yInterval, zInterval);
             Console.WriteLine ("["+collision.Count+"]: We have "+ (collision.Count == 3? "a" : "NO") +" collision at x:"+xInterval+", y:"+yInterval+", z:"+zInterval);
-        
+         */
+
+
+          var aabb = GetAABB(position, direction, dimensions[agentId]);
+          
+          Console.WriteLine("X-Inv: "+aabb.XIntv.ToString());
+          Console.WriteLine("Y-Inv: "+aabb.YIntv.ToString());
+          Console.WriteLine("Z-Inv: "+aabb.ZIntv.ToString());
+
+          var collision = CheckForCollisions(_aabbs, aabb);// FindCollisions(aabb.XIntv, aabb.YIntv, aabb.ZIntv);       
+          //Console.WriteLine("Colli auf "+collision.Count+"\n");
+
             // Here was Any(): This is wrong, because we only have a collision, if all three intervals overlap!
-            if (collision.Count == 3)
-            {
-                if (!positions.ContainsKey(agentId)) return null;
-                return positions[agentId]; //old position
+            if (collision/*.Count == 3*/) {
+              Console.WriteLine("-- KOLLISION --");
+              if (!positions.ContainsKey(agentId)) return null;
+              return positions[agentId]; //old position
             }
 
             //otherwise update position and axis aligned bounding intervals for agent
             Console.WriteLine("SetPosition() -> suceeded; save information");
             positions.Add(agentId, position);
-            xAxis.Add(agentId, xInterval);
-            yAxis.Add(agentId, yInterval);
-            zAxis.Add(agentId, zInterval);
-
-            return position;
+            xAxis.Add(agentId, aabb.XIntv);
+            yAxis.Add(agentId, aabb.YIntv);
+            zAxis.Add(agentId, aabb.ZIntv);
+          
+          _aabbs[agentId] = aabb;
+          return position;
         }
+
+
+      #region ESC_old
 
         //TODO Irgendwas paßt hier noch nicht!
         // Bsp.: Ausgabe der Positionierung von 4 Agenten der Größe 1x1 in einem 5x5 Feld.
@@ -206,32 +225,61 @@ namespace ESCTestLayer
             zInterval = new AxisAlignedBoundingInterval(zMin, zMax);
         }
 
+      #endregion
+
+
+
+
+      /* Some extensions and rewrites of the ESC to work properly ;-) */
+      #region ESC_extended
+        
 
       /* Container for the x, y and z bounding intervals. */
-      struct AABB { public AxisAlignedBoundingInterval XIntv, YIntv, ZIntv; }
+      public struct AABB { public AxisAlignedBoundingInterval XIntv, YIntv, ZIntv; }
 
 
-      private AABB GetAABB(Vector3f position, Vector3f direction, Vector3f dimension) {
+      /// <summary>
+      ///   Create an axis-aligned bounding box around an agent.
+      /// </summary>
+      /// <param name="position">Position of the agent.</param>
+      /// <param name="direction">The current heading.</param>
+      /// <param name="dimension">The agent's dimension (related to direction (1,0,0)).</param>
+      /// <returns>AABB structure.</returns>
+      public static AABB GetAABB(Vector3f position, Vector3f direction, Vector3f dimension) {
+
+        // Create all vertices of the bounding box. Probably some of them will suffice ...
+        var points = new Vector3f [8];
+        points[0] = new Vector3f(-dimension.X/2, -dimension.Y/2, -dimension.Z/2);
+        points[1] = new Vector3f( dimension.X/2, -dimension.Y/2, -dimension.Z/2);
+        points[2] = new Vector3f(-dimension.X/2,  dimension.Y/2, -dimension.Z/2);
+        points[3] = new Vector3f( dimension.X/2,  dimension.Y/2, -dimension.Z/2);
+        points[4] = new Vector3f(-dimension.X/2, -dimension.Y/2,  dimension.Z/2);
+        points[5] = new Vector3f( dimension.X/2, -dimension.Y/2,  dimension.Z/2);
+        points[6] = new Vector3f(-dimension.X/2,  dimension.Y/2,  dimension.Z/2);
+        points[7] = new Vector3f( dimension.X/2,  dimension.Y/2,  dimension.Z/2);
 
         // Build axes for direction-local coordinate system.
         Vector3f nr1 = direction.Normalize(), nr2, nr3;
         nr1.GetPlanarOrthogonalVectors(out nr2, out nr3);
 
-        float xMin, xMax, yMin, yMax, zMin, zMax;
-        xMin = -dimension.X/2;
-        xMax =  dimension.X/2;
-        
-        //TODO So geht die Rücktransformation!
-        //TODO In 'ner Schleife oder so rübergehen, Punkte mit +-diff berechnen.
-        //TODO Könnte rechenintensiv werden!
-        /*
-        var p2x = p1.X*nr1.X + p1.X*nr2.X + p1.X*nr3.X;
-        var p2y = p1.Y*nr1.Y + p1.Y*nr2.Y + p1.Y*nr3.Y;
-        var p2z = p1.Z*nr1.Z + p1.Z*nr2.Z + p1.Z*nr3.Z;
-        */
+        // Transform the bounding box from local (direction-aligned) to the
+        // absolute coordinate system and get the maximum extent for each axis.
+        float diffX = 0, diffY = 0, diffZ = 0;        
+        foreach (var point in points) {               
+          var x = point.X*nr1.X + point.Y*nr1.Y + point.Z*nr1.Z;
+          var y = point.X*nr2.X + point.Y*nr2.Y + point.Z*nr2.Z;
+          var z = point.X*nr3.X + point.Y*nr3.Y + point.Z*nr3.Z;
+          //Console.Write(point);
+          point.X = x; point.Y = y; point.Z = z;    
+          //Console.WriteLine("   ==>   "+point);       
+          if (point.X > diffX) diffX = point.X;
+          if (point.Y > diffY) diffY = point.Y;
+          if (point.Z > diffZ) diffZ = point.Z;
+        }
 
-        float diffX = 0, diffY = 0, diffZ = 0;
-
+        //Console.WriteLine("\nDiff X: "+diffX);
+        //Console.WriteLine("Diff Y: "+diffY);
+        //Console.WriteLine("Diff Z: "+diffZ);
 
         // Create axis-aligned bounding box (AABB) and assign values.
         return new AABB {
@@ -239,6 +287,23 @@ namespace ESCTestLayer
           YIntv = new AxisAlignedBoundingInterval(position.Y - diffY, position.Y + diffX),
           ZIntv = new AxisAlignedBoundingInterval(position.Z - diffZ, position.Z + diffZ)
         };
+      }
+
+
+
+      /// <summary>
+      ///   A simple collision check. No candidates and stuff, just a boolean.
+      /// </summary>
+      /// <param name="blockedPositions">Currently occupied positions.</param>
+      /// <param name="newPosition">The position to check.</param>
+      /// <returns>True, if collision occures. False otherwise.</returns>
+      private bool CheckForCollisions(Dictionary<int, AABB> blockedPositions, AABB newPosition) {
+        foreach (var aabb in blockedPositions.Values) {
+          if (newPosition.XIntv.Collide(aabb.XIntv) && 
+              newPosition.YIntv.Collide(aabb.ZIntv) && 
+              newPosition.ZIntv.Collide(aabb.ZIntv)) return true;
+        }
+        return false;
       }
 
 
@@ -268,10 +333,10 @@ namespace ESCTestLayer
           // When only integers are wished, position is finished. Next, create direction normal vector.
           if (integer) {
             switch (_rnd.Next(0, 4)) {                                  //         Z
-              case 0: dir = new Vector3f ( 0.0f,  1.0f, 0.0f);  break;  // right   ^   X
+              case 0: dir = new Vector3f ( 0.0f,  1.0f, 0.0f);  break;  // right   ↑   X
               case 1: dir = new Vector3f ( 0.0f, -1.0f, 0.0f);  break;  // left    |  /
               case 2: dir = new Vector3f ( 1.0f,  0.0f, 0.0f);  break;  // up      | /
-              case 3: dir = new Vector3f (-1.0f,  0.0f, 0.0f);  break;  // down    +--------->  Y
+              case 3: dir = new Vector3f (-1.0f,  0.0f, 0.0f);  break;  // down    +--------→ Y
             }            
           } 
           
@@ -311,5 +376,7 @@ namespace ESCTestLayer
         }
         return ids;
       }
+
+      #endregion
     }
 }

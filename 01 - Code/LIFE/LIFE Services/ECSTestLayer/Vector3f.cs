@@ -63,7 +63,7 @@ namespace ESCTestLayer
 
         public override string ToString()
         {
-            return String.Format("({0}/{1}/{2})", X, Y, Z);
+            return String.Format("({0,5:0.0#} |{1,5:0.0#} |{2,5:0.0#})", X, Y, Z);
         }
 
 
@@ -89,13 +89,18 @@ namespace ESCTestLayer
         public void GetPlanarOrthogonalVectors(out Vector3f nY, out Vector3f nZ) {
       
           // [Y-Axis]: Create orthogonal vector to new x-axis laying in plane (x, y): => Scalar product = 0.
-          nY = new Vector3f(-Y/X, 1.0f, 0.0f).Normalize();
-
+          nY = (Math.Abs(X) <= float.Epsilon)? new Vector3f(1.0f, 0.0f, 0.0f).Normalize(): 
+                                               new Vector3f(-Y/X, 1.0f, 0.0f).Normalize();
+          
           // [Z-Axis / Height]: Build orthogonal vector with cross-product.
           var x3 = (Y * nY.Z  -  Z * nY.Y);  // x: a2b3 - a3b2
           var y3 = (Z * nY.X  -  X * nY.Z);  // y: a3b1 - a1b3
           var z3 = (X * nY.Y  -  Y * nY.X);  // z: a1b2 - a2b1
           nZ = new Vector3f(x3, y3, z3).Normalize();
+
+          //Console.WriteLine("GPO: NX: "+this.ToString());
+          //Console.WriteLine("GPO: NY: "+nY);
+          //Console.WriteLine("GPO: NZ: "+nZ+"\n");
         }
     }
 }
