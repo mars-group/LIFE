@@ -8,8 +8,7 @@ namespace GoapUser.Worldstates {
          private bool _isValid;
          private readonly Enum _stateSymbol;
 
-         internal HasMoney(bool valid, Enum stateSymbol)
-        {
+         internal HasMoney(bool valid, Enum stateSymbol){
             _isValid = valid;
              _stateSymbol = stateSymbol;
          }
@@ -37,7 +36,7 @@ namespace GoapUser.Worldstates {
 
         public override string ToString()
         {
-            return string.Format("IsValid: {0}, StateSymbol: {1}", _isValid, _stateSymbol);
+            return string.Format("|{0}:{1}|", _stateSymbol, _isValid);
         }
 
         public bool Equals(HasMoney other) {

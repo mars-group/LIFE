@@ -43,7 +43,7 @@ namespace GoapCommon.Interfaces
         /// </summary>
         /// <param name="outEdges"></param>
         /// <returns></returns>
-        bool ExpandCurrentVertex(List<IGoapAction> outEdges);
+        void ExpandCurrentVertex(List<IGoapAction> outEdges);
 
         /// <summary>
         /// </summary>
@@ -54,7 +54,7 @@ namespace GoapCommon.Interfaces
         ///     inspect the children of the current vertex
         /// </summary>
         /// <returns></returns>
-        bool AStarStep();
+        void AStarStep();
 
        
 

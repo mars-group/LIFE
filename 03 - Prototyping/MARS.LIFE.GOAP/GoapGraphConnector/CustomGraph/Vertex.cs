@@ -1,26 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GoapCommon.Interfaces;
 
-namespace GoapGraphConnector.CustomGraph
-{
-    class Vertex : IGoapVertex, IEquatable<Vertex> {
-        private List<IGoapWorldstate> _worldstate;
+namespace GoapGraphConnector.CustomGraph {
+    public class Vertex : IGoapVertex, IEquatable<Vertex> {
+        private readonly List<IGoapWorldstate> _worldstate;
+        private readonly string _name;
+        // for test----------
+        private readonly int _heuristic;
 
         public Vertex(List<IGoapWorldstate> worldstate) {
             _worldstate = worldstate;
         }
 
-        public int GetHeuristic(IGoapVertex target)
-        {
-            return 1;
+        
+        public Vertex(List<IGoapWorldstate> worldstate, int heuristic, string name) {
+            _worldstate = worldstate;
+            _heuristic = heuristic;
+            _name = name;
+        }
+
+       
+
+        // for test--------------
+
+        public int GetHeuristic(IGoapVertex target) {
+            return _heuristic;
         }
 
         public override string ToString() {
-            return string.Format("Vertex: |{0}|", _worldstate);
+            string states = _worldstate.Aggregate("", (current, state) => current + " " + state.ToString());
+
+            return string.Format("<Knoten {0} {1}>", _name, states);
         }
 
         public bool Equals(Vertex other) {
@@ -32,7 +44,7 @@ namespace GoapGraphConnector.CustomGraph
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Vertex) obj);
         }
 

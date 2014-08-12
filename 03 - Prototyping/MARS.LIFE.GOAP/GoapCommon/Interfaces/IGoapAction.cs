@@ -5,7 +5,7 @@ namespace GoapCommon.Interfaces {
     /// <summary>
     /// minimus requirements in formulating an action
     /// </summary>
-    public interface IGoapAction : IAction {
+    public interface IGoapAction : IAction  {
 
         /// <summary>
         /// calcutate the resulting list of world states by source world

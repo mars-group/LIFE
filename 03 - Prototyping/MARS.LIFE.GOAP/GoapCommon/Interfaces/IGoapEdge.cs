@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoapCommon.Interfaces
 {
-    public interface IGoapEdge {
+    public interface IGoapEdge  {
 
         IGoapVertex GetSource();
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommonTypes.Interfaces;
 using GoapCommon.Interfaces;
-using GoapGraphConnector.CustomQuickGraph;
+
 
 namespace GoapActionSystem.Implementation
 {
@@ -102,7 +102,7 @@ namespace GoapActionSystem.Implementation
         /// <returns></returns>
         private IGoapGraph InitializeGraph(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld)
         {
-            var connector = new GoapGraphConnector.CustomGraph.GoapGraphConnector();
+            var connector = new GoapGraphConnector.CustomGraph.GoapGraphService();
             connector.InitializeGoapGraph(currentWorld, targetWorld);
             return connector;
         }

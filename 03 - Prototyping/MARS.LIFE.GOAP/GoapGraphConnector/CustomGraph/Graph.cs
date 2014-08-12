@@ -9,7 +9,7 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph
 {
-    class Graph 
+    public class Graph 
     {
         private List<IGoapVertex> _vertices;
         private List<IGoapEdge> _edges;
@@ -34,6 +34,16 @@ namespace GoapGraphConnector.CustomGraph
         public bool IsEmpty() {
             if (_vertices == null) return true;
             return _vertices.Count == 0;
+        }
+
+        public override string ToString() {
+
+            var text = _vertices.Aggregate("", (current, vertex) => current + (vertex + System.Environment.NewLine));
+
+            text = text + _edges.Aggregate("", (current, edge) => current + (edge + System.Environment.NewLine));
+
+
+            return text;
         }
 
 
@@ -88,13 +98,28 @@ namespace GoapGraphConnector.CustomGraph
 
 
 
-        internal int GetWayCost(IGoapVertex current, IGoapVertex openVertex)
+        public int GetWayCost(IGoapVertex current, IGoapVertex openVertex)
         {
             if (_vertices.Contains(current) && _vertices.Contains(openVertex)) {
                 IGoapEdge bindingEdge = _edges.Find(e => e.GetSource().Equals(current) && e.GetTarget().Equals(openVertex));
                 return bindingEdge.GetCost();
             }
             throw new GraphException("questioned edge is available in graph");
+        }
+
+        public List<IGoapVertex> GetReachableAdjcentVertices(IGoapVertex vertex) {
+            List<IGoapEdge> outEdges = GetPositiveIncidentEdges(vertex);
+
+            return outEdges.Select(outEdge => outEdge.GetTarget()).ToList();
+        }
+
+        /// <summary>
+        /// get the positiv incident edges by vertex (source of edge is vertex)
+        /// </summary>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
+        private List<IGoapEdge> GetPositiveIncidentEdges(IGoapVertex vertex) {
+           return _edges.Where(edge => edge.GetSource().Equals(vertex)).ToList();
         }
     }
 }

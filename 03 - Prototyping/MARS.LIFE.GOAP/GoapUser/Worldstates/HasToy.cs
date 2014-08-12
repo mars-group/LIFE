@@ -38,7 +38,7 @@ namespace GoapUser.Worldstates {
 
         public override string ToString()
         {
-            return string.Format("IsValid: {0}, StateSymbol: {1}", _isValid, _stateSymbol);
+            return string.Format("|{0}:{1}|", _stateSymbol, _isValid);
         }
 
         public bool Equals(HasToy other) {

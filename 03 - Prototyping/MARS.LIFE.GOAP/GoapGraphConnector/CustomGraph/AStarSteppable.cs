@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GoapCommon.Exceptions;
+using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
     /// <summary>
@@ -16,19 +18,25 @@ namespace GoapGraphConnector.CustomGraph {
     ///     each reachable
     ///     create an entry forreachable
     /// </summary>
-    internal class AStarSteppable {
-        private Vertex _current;
-        private Dictionary<Vertex, List<Object>> _nodeTable;
-        private readonly Vertex _root;
-        private readonly Vertex _target;
+    public class AStarSteppable {
+        private IGoapVertex _current;
+        private Dictionary<IGoapVertex, object[]> _nodeTable;
+        private readonly IGoapVertex _root;
+        private readonly IGoapVertex _target;
         private readonly Graph _graph;
         private bool _targetFound = false;
+
+        public IGoapVertex Current {
+            get { return _current; }
+        }
 
         /// <summary>
         /// </summary>
         /// <param name="root"></param>
         /// <param name="target"></param>
-        public AStarSteppable(Vertex root, Vertex target, Graph graph) {
+        /// <param name="graph"></param>
+        public AStarSteppable(IGoapVertex root, IGoapVertex target, Graph graph)
+        {
             _root = root;
             _target = target;
             _graph = graph;
@@ -40,9 +48,10 @@ namespace GoapGraphConnector.CustomGraph {
         /// </summary>
         private void InitializeAStar() {
             if (_nodeTable == null) {
-                _nodeTable = new Dictionary<Vertex, List<Object>>();
+                _nodeTable = new Dictionary<IGoapVertex, object[]>();
                 var entry = CreateNodeEntry(_root, _root.GetHeuristic(_target), 0, _root.GetHeuristic(_target));
                 _nodeTable.Add(_root, entry);
+                _current = _root;
             }
         }
 
@@ -55,10 +64,10 @@ namespace GoapGraphConnector.CustomGraph {
         /// <param name="estimatedValueF"></param>
         /// <param name="onClosedList"></param>
         /// <returns></returns>
-        private List<Object> CreateNodeEntry(Vertex predecessor = null, int heuristic = int.MaxValue,
+        private object[] CreateNodeEntry(IGoapVertex predecessor = null, int heuristic = int.MaxValue,
             int travelDistanceG = int.MaxValue,
             int estimatedValueF = int.MaxValue, bool onClosedList = false) {
-            var entry = new List<object>();
+            object[] entry = new object[5];
             entry[0] = predecessor;
             entry[1] = heuristic;
             entry[2] = travelDistanceG;
@@ -71,14 +80,16 @@ namespace GoapGraphConnector.CustomGraph {
         /// <summary>
         ///     choose the next vertex from open list to handle
         /// </summary>
-        private void ChooseNextNodeFromOpenList() {
+        public IGoapVertex ChooseNextNodeFromOpenList() {
             int smallestF = int.MaxValue;
-            Vertex vertex = null;
+            IGoapVertex vertex = null;
 
             // TODO in welcher Reihenfolge werden die Elemente iteriert (ist vermutlich unterschiedlich bei dict) und führt das zu Fehlern?
-            foreach (KeyValuePair<Vertex, List<object>> keyValuePair in _nodeTable) {
+            foreach (KeyValuePair<IGoapVertex, object[]> keyValuePair in _nodeTable)
+            {
+                
                 // if not in closed list and estimated value smaller than actual smallestF
-                if ((bool) keyValuePair.Value[4] && (int) keyValuePair.Value[3] < smallestF) {
+                if (keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false && (int) keyValuePair.Value[3] < smallestF) {
                     smallestF = (int) keyValuePair.Value[3];
                     vertex = keyValuePair.Key;
                 }
@@ -86,13 +97,14 @@ namespace GoapGraphConnector.CustomGraph {
 
             if (vertex == null) throw new NoVertexFoundException("a* no node found in open list");
             _current = vertex;
+            return _current;
         }
 
         /// <summary>
         ///     compare current vertex to target vertex
         /// </summary>
         /// <returns></returns>
-        private bool CheckforTarget() {
+        public bool CheckforTarget() {
             return _current.Equals(_target);
         }
 
@@ -100,8 +112,9 @@ namespace GoapGraphConnector.CustomGraph {
         ///     manipulate entry for node in algorithm table - set status to in closed list
         /// </summary>
         /// <param name="vertex"></param>
-        private void SetOnClosedList(Vertex vertex) {
-            List<Object> entryForChange;
+        private void SetOnClosedList(IGoapVertex vertex)
+        {
+            object[] entryForChange;
             _nodeTable.TryGetValue(vertex, out entryForChange);
             if (entryForChange == null) {
                 throw new AlgorithmException("a* missing entry for predessor and so forth at node: " + vertex +
@@ -122,7 +135,8 @@ namespace GoapGraphConnector.CustomGraph {
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        private Vertex UpdateEntry(Vertex vertex) {
+        private IGoapVertex UpdateEntry(IGoapVertex vertex)
+        {
             throw new NotImplementedException();
         }
 
@@ -130,50 +144,77 @@ namespace GoapGraphConnector.CustomGraph {
         ///     add the new children of the current chosen
         /// </summary>
         /// <param name="vertices"></param>
-        public void AddVertices(List<Vertex> vertices) {
+        public void AddVertices(List<IGoapVertex> vertices)
+        {
             foreach (var vertex in vertices) {
                 if (_nodeTable.ContainsKey(vertex)) continue;
                 _nodeTable.Add(vertex, null);
             }
         }
 
-        private List<Edge> CreateResultList() {
+        public void AddVertex(IGoapVertex vertex) {
+            if (!_nodeTable.ContainsKey(vertex))_nodeTable.Add(vertex, null);
+        }
+
+        public List<IGoapEdge> CreateResultList() {
             throw new NotImplementedException();
         }
 
-        private void Calculate(Vertex current, List<Vertex> reachableVertices) {
+        public void Step() {
+            SetOnClosedList(_current);
+            Calculate(_current, _graph.GetReachableAdjcentVertices(_current));
+            ChooseNextNodeFromOpenList();
+
+        }
+
+        private void Calculate(IGoapVertex current, List<IGoapVertex> reachableVertices)
+        {
             // check if all are in the node list
             if (reachableVertices.Any(v => !_nodeTable.ContainsKey(v)))
-                throw new AlgorithmException("Inconsistence in nodelist. a reachable vertex is not in the nodelist");
+                throw new AlgorithmException("Inconsistence in node list. a reachable vertex is not in the nodelist");
 
-            List<Object> currentValue;
+            object[] currentValue;
             _nodeTable.TryGetValue(current, out currentValue);
             if (currentValue == null)
                 throw new AlgorithmException("Inconsistence current vertex: " + current + " has no entry in node table");
 
             // filter out the vertices on closed list
-            var reachableOnOpenList = new List<Vertex>();
+            var reachableOnOpenList = new List<IGoapVertex>();
             foreach (var v in reachableVertices) {
-                List<object> value;
+                object[] value;
                 _nodeTable.TryGetValue(v, out value);
                 if (value == null || (bool) value[4] == false) reachableOnOpenList.Add(v);
             }
 
-            foreach (Vertex openVertex in reachableOnOpenList) {
-                List<object> value;
+            foreach (IGoapVertex openVertex in reachableOnOpenList)
+            {
+                object[] value;
                 _nodeTable.TryGetValue(openVertex, out value);
 
                 // create the new values for comparison if predecessor would be current vertex
                 var heuristic = openVertex.GetHeuristic(_target);
-                var travelDistanceG = (int)currentValue[2] + _graph.GetWayCost(current, openVertex);
+                var travelDistanceG = (int) currentValue[2] + _graph.GetWayCost(current, openVertex);
                 var estimatedValueF = travelDistanceG + heuristic;
 
 
-                if (value != null && (int) value[3] <= estimatedValueF) continue;
-                var entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
-                _nodeTable.Add(openVertex, entry);
+                // check if the entry of the vertex must be updated because it was a cheaper way found
+                if (value == null ){
+                    var entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
+                    _nodeTable.Remove(openVertex);
+                    _nodeTable.Add(openVertex, entry);
+
+                }else if ((int)value[2] > travelDistanceG){
+                    var entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
+                    _nodeTable.Remove(openVertex);
+                    _nodeTable.Add(openVertex, entry);
+                }
+                
+                /*else if(value == null){
+                    var entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
+                    _nodeTable.Add(openVertex, entry);
+                }*/
             }
-            // check if entry must be updated (if there is a cheaper way) or if they need the first entry
+           
         }
     }
 }
