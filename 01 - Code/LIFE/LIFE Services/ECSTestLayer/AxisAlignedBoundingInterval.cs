@@ -23,16 +23,17 @@ namespace ESCTestLayer
         }
 
         public bool Collide(AxisAlignedBoundingInterval other) {
-          if (ReferenceEquals(this, other)) return false;
-          if (_min <= other._max &&
-              other._min <= _max /*&&
-              !(Math.Abs(_max - other._min) <= float.Epsilon || // Exclude intervals with no overlappings
-                Math.Abs(other._max - _min) <= float.Epsilon) // (2.50 -> 3.50, 3.50 -> 4.50)    */
-            ) {
-            Console.WriteLine("Col. on "+ToString()+" und "+other.ToString());
-            return true;
-          }
+          
+          /* In total, there are 12 possible cases of interval alignment.
+             Eight of them shall be classified as "overlap".              */
+          if (ReferenceEquals(this, other)) return false;    //| Overlap with ...  
+          if ((_min >= other._min && _min < other._max)  ||  //| 1) left interval
+              (other._min >= _min && other._min < _max)  ||  //| 2) right interval
+              (_min <= other._min && _max >= other._max) ||  //| 3) inner interval
+              (other._min <= _min && other._max >= _max))    //| 4) outer interval.
+                return true; // (). 
           return false;
+
 
           /*
           if (ReferenceEquals(null, other)) return false;

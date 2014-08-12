@@ -61,9 +61,8 @@ namespace ESCTestLayer
             return new Vector3f(X / length, Y / length, Z / length);
         }
 
-        public override string ToString()
-        {
-            return String.Format("({0,5:0.0#} |{1,5:0.0#} |{2,5:0.0#})", X, Y, Z);
+        public override string ToString() {
+            return String.Format("({0,5:0.00}|{1,5:0.00}|{2,5:0.00})", X, Y, Z);
         }
 
 

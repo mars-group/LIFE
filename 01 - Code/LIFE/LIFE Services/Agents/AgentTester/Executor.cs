@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using ESCTestLayer;
-using GenericAgentArchitecture.Dummies;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -47,6 +46,7 @@ namespace AgentTester {
     public static void Main() {
       //var environment = AgentBuilder.CreateRandomMovingAgents(2, 10, 10);//CreateWolvesScenarioEnvironment();
       //new Executor(environment).Run(850);
+      
       /*
       var esc       = new ESC();
       var position  = new Vector3f(2, 0, 0);
@@ -61,8 +61,8 @@ namespace AgentTester {
 
 
       var esc = new ESC();
-      var max = new Vector3f(2, 4, 0);
-      var itg = false;
+      var max = new Vector3f(4, 3, 0);
+      const bool itg = false;
 
       esc.Register(0, new Vector3f(1, 1, 0));
       esc.Register(1, new Vector3f(1, 1, 0));
