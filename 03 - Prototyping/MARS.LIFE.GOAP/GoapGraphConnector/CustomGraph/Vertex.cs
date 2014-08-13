@@ -29,6 +29,11 @@ namespace GoapGraphConnector.CustomGraph {
             return _heuristic;
         }
 
+        public string GetIdentifier() {
+            return _name;
+        }
+            
+
         public override string ToString() {
             string states = _worldstate.Aggregate("", (current, state) => current + " " + state.ToString());
 

@@ -34,7 +34,7 @@ namespace GoapActionSystem.Implementation
         {
             if (availableActions.Count == 0)
             {
-                throw new ArgumentException("Planner may not be instanciated with empty list of actions");
+                throw new ArgumentException("Planner may not be instanciated with an empty list of actions");
             }
             _maximuxSearchDepth = maximuxSearchDepth;
             _availableActions = availableActions;

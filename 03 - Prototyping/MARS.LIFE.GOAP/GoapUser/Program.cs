@@ -151,6 +151,7 @@ namespace GoapUser {
             Console.WriteLine(vertex3);
             Console.WriteLine(conn.IsCurrentVertexTarget());
            
+            
             // v4->v3, v4->v5, v4->v8
             conn.ExpandCurrentVertex(new List<IGoapEdge> { e11b, e13, e12 });
             conn.AStarStep();
@@ -158,13 +159,21 @@ namespace GoapUser {
             Console.WriteLine(vertex4);
             Console.WriteLine(conn.IsCurrentVertexTarget());
             
-
+            
             // v7->v6, v7->v2, v7->v5
             conn.ExpandCurrentVertex(new List<IGoapEdge> { e2b, e6b, e3 });
             conn.AStarStep();
             var vertex5 = conn.GetNextVertexFromOpenList();
             Console.WriteLine(vertex5);
             Console.WriteLine(conn.IsCurrentVertexTarget());
+            
+            
+            var edgesList = conn.GetEdgesList();
+            
+            foreach (var edge in edgesList) {
+                Console.WriteLine(edge.GetSource().GetIdentifier() + " -> " + edge.GetTarget().GetIdentifier());
+            }
+            
 
 
             Console.ReadKey();

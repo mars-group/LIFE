@@ -9,5 +9,7 @@ namespace GoapCommon.Interfaces
 
     public interface IGoapVertex {
         int GetHeuristic(IGoapVertex target);
+
+        string GetIdentifier();
     }
 }

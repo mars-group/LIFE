@@ -68,8 +68,22 @@ namespace GoapGraphConnector.CustomGraph {
 
         }
 
+        /// <summary>
+        /// Sorted list of edges, where the first edge is outgoing from the start state. 
+        /// List ends at the current Vertex.
+        /// </summary>
+        /// <returns></returns>
         public List<IGoapAction> GetShortestPath() {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Sorted list of edges, where the first edge is outgoing from the start state. 
+        /// List ends at the current Vertex.
+        /// </summary>
+        /// <returns></returns>
+        public List<IGoapEdge> GetEdgesList() {
+            return _aStar.CreateResultListToCurrent();
         }
 
         public int GetActualDepthFromRoot() {

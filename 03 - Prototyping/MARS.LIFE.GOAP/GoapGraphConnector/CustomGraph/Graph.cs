@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization.Formatters;
-using System.Text;
-using System.Threading.Tasks;
 using GoapCommon.Exceptions;
 using GoapCommon.Interfaces;
 
-namespace GoapGraphConnector.CustomGraph
-{
-    public class Graph 
-    {
-        private List<IGoapVertex> _vertices;
-        private List<IGoapEdge> _edges;
+namespace GoapGraphConnector.CustomGraph {
+    public class Graph {
+        private readonly List<IGoapVertex> _vertices;
+        private readonly List<IGoapEdge> _edges;
         /*
         private Dictionary<IGoapVertex, List<IGoapVertex>> _vertexToVertex = new Dictionary<IGoapVertex, List<IGoapVertex>>();
         private Dictionary<IGoapVertex, List<IGoapEdge>> _vertexOutEdges = new Dictionary<IGoapVertex, List<IGoapEdge>>(); 
         */
+
         public Graph(List<IGoapVertex> vertices, List<IGoapEdge> edges) {
             _vertices = vertices;
             _edges = edges;
@@ -24,7 +20,6 @@ namespace GoapGraphConnector.CustomGraph
 
         public void AddEdge(IGoapEdge edge) {
             _edges.Add(edge);
-            
         }
 
         public void AddVertex(IGoapVertex vertex) {
@@ -37,10 +32,9 @@ namespace GoapGraphConnector.CustomGraph
         }
 
         public override string ToString() {
+            var text = _vertices.Aggregate("", (current, vertex) => current + (vertex + Environment.NewLine));
 
-            var text = _vertices.Aggregate("", (current, vertex) => current + (vertex + System.Environment.NewLine));
-
-            text = text + _edges.Aggregate("", (current, edge) => current + (edge + System.Environment.NewLine));
+            text = text + _edges.Aggregate("", (current, edge) => current + (edge + Environment.NewLine));
 
 
             return text;
@@ -95,16 +89,20 @@ namespace GoapGraphConnector.CustomGraph
             }
         }*/
 
+        public IGoapEdge GetEdge(IGoapVertex source, IGoapVertex target) {
+            if (!_vertices.Contains(source) || !_vertices.Contains(target))
+                throw new GraphException("source or target of edge not available in graph");
+
+            IGoapEdge bindingEdge = _edges.Find(e => e.GetSource().Equals(source) && e.GetTarget().Equals(target));
+            if (bindingEdge == null)
+                throw new GraphException("Edge not found by target and source");
+            return bindingEdge;
+        }
 
 
-
-        public int GetWayCost(IGoapVertex current, IGoapVertex openVertex)
-        {
-            if (_vertices.Contains(current) && _vertices.Contains(openVertex)) {
-                IGoapEdge bindingEdge = _edges.Find(e => e.GetSource().Equals(current) && e.GetTarget().Equals(openVertex));
-                return bindingEdge.GetCost();
-            }
-            throw new GraphException("questioned edge is available in graph");
+        public int GetWayCost(IGoapVertex current, IGoapVertex openVertex) {
+            IGoapEdge edge = GetEdge(current, openVertex);
+            return edge.GetCost();
         }
 
         public List<IGoapVertex> GetReachableAdjcentVertices(IGoapVertex vertex) {
@@ -114,12 +112,12 @@ namespace GoapGraphConnector.CustomGraph
         }
 
         /// <summary>
-        /// get the positiv incident edges by vertex (source of edge is vertex)
+        ///     get the positiv incident edges by vertex (source of edge is vertex)
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
         private List<IGoapEdge> GetPositiveIncidentEdges(IGoapVertex vertex) {
-           return _edges.Where(edge => edge.GetSource().Equals(vertex)).ToList();
+            return _edges.Where(edge => edge.GetSource().Equals(vertex)).ToList();
         }
     }
 }
