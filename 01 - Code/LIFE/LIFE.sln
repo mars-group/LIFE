@@ -110,6 +110,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericAgentArchitecture", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentTester", "LIFE Services\Agents\AgentTester\AgentTester.csproj", "{69AB1421-4A50-4DA7-942F-99980080EA17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCTest", "Tests\ESCTest\ESCTest.csproj", "{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -508,6 +510,16 @@ Global
 		{69AB1421-4A50-4DA7-942F-99980080EA17}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{69AB1421-4A50-4DA7-942F-99980080EA17}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{69AB1421-4A50-4DA7-942F-99980080EA17}.Release|x86.ActiveCfg = Release|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -553,6 +565,7 @@ Global
 		{4BABE0E2-5DF9-4CFF-8130-C9372A261A45} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85} = {4BABE0E2-5DF9-4CFF-8130-C9372A261A45}
 		{69AB1421-4A50-4DA7-942F-99980080EA17} = {4BABE0E2-5DF9-4CFF-8130-C9372A261A45}
+		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItems = $0
