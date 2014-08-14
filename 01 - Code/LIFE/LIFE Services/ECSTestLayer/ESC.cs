@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ESCTestLayer {
   
@@ -53,7 +54,7 @@ namespace ESCTestLayer {
     /// <param name="direction"></param>
     /// <returns>current position or null if initial position could not be set</returns>
     public Vector3f SetPosition(int agentId, Vector3f position, Vector3f direction) {
-      Console.WriteLine("Setting agent " + agentId + " with direction " + direction + " on position " + position);
+      //Console.WriteLine("Setting agent " + agentId + " with direction " + direction + " on position " + position);
       /* AxisAlignedBoundingInterval xInterval;
          AxisAlignedBoundingInterval yInterval;
          AxisAlignedBoundingInterval zInterval;
@@ -68,12 +69,12 @@ namespace ESCTestLayer {
 
       // Here was Any(): This is wrong, because we only have a collision, if all three intervals overlap!
       if (CheckForCollisions(_aabbs, aabb)) {
-        Console.WriteLine("-- KOLLISION --");
+        //Console.WriteLine("-- KOLLISION --");
         return !_positions.ContainsKey(agentId) ? null : _positions[agentId];
       }
 
       //otherwise update position and axis aligned bounding intervals for agent
-      Console.WriteLine("SetPosition() -> succeeded; save information");
+      //Console.WriteLine("SetPosition() -> succeeded; save information");
       _positions.Add(agentId, position);
       //xAxis.Add(agentId, aabb.XIntv);
       //yAxis.Add(agentId, aabb.YIntv);
@@ -248,6 +249,21 @@ namespace ESCTestLayer {
       // Transform the bounding box from local (direction-aligned) to the
       // absolute coordinate system and get the maximum extent for each axis.
       float diffX = 0, diffY = 0, diffZ = 0;
+
+        Parallel.ForEach
+            (points,
+                point => {
+                    var x = point.X*nr1.X + point.Y*nr1.Y + point.Z*nr1.Z;
+                    var y = point.X*nr2.X + point.Y*nr2.Y + point.Z*nr2.Z;
+                    var z = point.X*nr3.X + point.Y*nr3.Y + point.Z*nr3.Z;
+                    point.X = x;
+                    point.Y = y;
+                    point.Z = z;
+                    if (point.X > diffX) diffX = point.X;
+                    if (point.Y > diffY) diffY = point.Y;
+                    if (point.Z > diffZ) diffZ = point.Z;
+                });
+/*
       foreach (var point in points) {
         var x = point.X*nr1.X + point.Y*nr1.Y + point.Z*nr1.Z;
         var y = point.X*nr2.X + point.Y*nr2.Y + point.Z*nr2.Z;
@@ -259,7 +275,7 @@ namespace ESCTestLayer {
         if (point.Y > diffY) diffY = point.Y;
         if (point.Z > diffZ) diffZ = point.Z;
       }
-
+        */
       // Create axis-aligned bounding box (AABB) and assign values.
       return new AABB {
         XIntv = new AxisAlignedBoundingInterval(position.X - diffX, position.X + diffX),
@@ -276,13 +292,34 @@ namespace ESCTestLayer {
     /// <param name="newPosition">The position to check.</param>
     /// <returns>True, if collision occures. False otherwise.</returns>
     private static bool CheckForCollisions(Dictionary<int, AABB> blockedPositions, AABB newPosition) {
-      foreach (var aabb in blockedPositions.Values) {
+        AABB[] valAry = new AABB[blockedPositions.Count];
+        blockedPositions.Values.CopyTo(valAry,0);
+
+        ParallelLoopResult result = Parallel.ForEach
+            (valAry,
+                (aabb, loop) => {
+                    if (newPosition.XIntv.Collide(aabb.XIntv) &&
+                        newPosition.YIntv.Collide(aabb.YIntv) &&
+                        newPosition.ZIntv.Collide(aabb.ZIntv))
+                    {
+                        loop.Stop();
+                    }
+
+                });
+        
+        if (!result.IsCompleted) {
+            return true;
+        }
+        return false;
+      
+        
+        foreach (var aabb in blockedPositions.Values) {
         if (newPosition.XIntv.Collide(aabb.XIntv) &&
             newPosition.YIntv.Collide(aabb.YIntv) &&
             newPosition.ZIntv.Collide(aabb.ZIntv))
           return true;
       }
-      return false;
+        return false;
     }
 
 

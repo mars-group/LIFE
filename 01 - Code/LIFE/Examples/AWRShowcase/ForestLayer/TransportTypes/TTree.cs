@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ForestLayer.Agents;
 
 namespace ForestLayer.TransportTypes
@@ -15,8 +12,10 @@ namespace ForestLayer.TransportTypes
         public double Age { get; private set; }
 
         public double Biomass { get; set; }
+        public double Lon { get; set; }
+        public double Lat { get; set; }
 
-        public TTree(Guid treeId, double height, double diameter, double crownDiameter, double age, double biomass)
+        public TTree(Guid treeId, double height, double diameter, double crownDiameter, double age, double biomass, double Lon, double Lat)
         {
             TreeId = treeId;
             Height = height;
@@ -24,6 +23,8 @@ namespace ForestLayer.TransportTypes
             CrownDiameter = crownDiameter;
             Age = age;
             Biomass = biomass;
+            this.Lon = Lon;
+            this.Lat = Lat;
         }
 
 
@@ -35,6 +36,8 @@ namespace ForestLayer.TransportTypes
             CrownDiameter = tree.CrownDiameter;
             Age = tree.Age;
             Biomass = tree.Biomass;
+            Lon = tree.Lon;
+            Lat = tree.Lat;
         }
     }
 }
