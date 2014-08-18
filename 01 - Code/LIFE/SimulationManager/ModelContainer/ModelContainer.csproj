@@ -74,7 +74,7 @@
       <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
       <Name>SMConnector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LayerContainer\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>

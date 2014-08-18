@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GenericAgentArchitecture</RootNamespace>
+    <AssemblyName>GAA</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Agents\Agent.cs" />
+    <Compile Include="Dummies\Environment.cs" />
+    <Compile Include="Dummies\Position.cs" />
+    <Compile Include="Interfaces\IGenericAPI.cs" />
+    <Compile Include="Interactions\Interaction.cs" />
+    <Compile Include="Interactions\InteractionContainer.cs" />
+    <Compile Include="Interactions\Plan.cs" />
+    <Compile Include="Interfaces\IIACLoader.cs" />
+    <Compile Include="Interfaces\IAgentLogic.cs" />
+    <Compile Include="Interfaces\ICallbackDataSource.cs" />
+    <Compile Include="Interfaces\IGenericDataSource.cs" />
+    <Compile Include="Interfaces\IInteraction.cs" />
+    <Compile Include="Interfaces\IPerception.cs" />
+    <Compile Include="Perception\AgentSensor.cs" />
+    <Compile Include="Perception\GenericSensor.cs" />
+    <Compile Include="Perception\GenericSensorInput.cs" />
+    <Compile Include="Perception\Halo.cs" />
+    <Compile Include="Perception\Input.cs" />
+    <Compile Include="Perception\OmniHalo.cs" />
+    <Compile Include="Perception\PerceptionUnit.cs" />
+    <Compile Include="Perception\RadialHalo.cs" />
+    <Compile Include="Perception\Sensor.cs" />
+    <Compile Include="Perception\SensorInput.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reasoning\ReasoningComponent.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECSTestLayer\ESCPrototype.csproj">
+      <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
+      <Name>ESCPrototype</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

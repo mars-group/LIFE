@@ -70,6 +70,10 @@
       <Project>{AD32517C-230C-435B-953D-BD96732927B8}</Project>
       <Name>DistributedKeyValueStore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\Daylight\Daylight.csproj">
       <Project>{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}</Project>
       <Name>Daylight</Name>
@@ -77,10 +81,6 @@
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
       <Name>Scs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LayerAPI\LayerAPI.csproj">
-      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LayerAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -49,7 +49,7 @@ namespace AWRShowcase
                 Parallel.For
                     (0, ScalingFactor,
                         delegate(int j) {
-                            var tree = new Tree(height, diameter, crownDiameter, 5, biomass);
+                            var tree = new Tree(height, diameter, crownDiameter, 5, biomass, lat, lon);
                             _treeList[tree.TreeId] = tree;       
                         });
 

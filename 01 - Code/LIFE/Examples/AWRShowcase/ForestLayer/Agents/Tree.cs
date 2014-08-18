@@ -16,10 +16,11 @@ namespace ForestLayer.Agents
         public double CrownDiameter { get; set; }
         public double Age { get; set; }
         public double Biomass { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
 
 
-
-        public Tree(double height, double diameter, double crownDiameter, double age, double biomass)
+        public Tree(double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon)
         {
             TreeId = Guid.NewGuid();
             Height = height;
@@ -27,6 +28,8 @@ namespace ForestLayer.Agents
             CrownDiameter = crownDiameter;
             Age = age;
             Biomass = biomass;
+            Lat = lat;
+            Lon = lon;
         }
 
         public void Tick() {
