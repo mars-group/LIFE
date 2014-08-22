@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using ESCTestLayer;
+using ESCTestLayer.Entities;
+using ESCTestLayer.Implementation;
+using ESCTestLayer.Interface;
 using NUnit.Framework;
 
 namespace ESCTest {
@@ -10,7 +11,7 @@ namespace ESCTest {
 
 
 
-    private ESC _esc;
+    private IESC _esc;
 
 
     #region Setup / Tear down

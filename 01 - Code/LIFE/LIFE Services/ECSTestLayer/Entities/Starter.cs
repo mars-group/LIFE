@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ESCTestLayer.Implementation;
 
-namespace ESCTestLayer
+namespace ESCTestLayer.Entities
 {
     internal class Starter
     {
@@ -43,11 +40,11 @@ namespace ESCTestLayer
 
         private void Register()
         {
-            _esc.Register(id, dimension);
+            _esc.Add(id, dimension);
         }
 
 
-        public Vector3f SetPosition(Vector2f position)
+        public bool SetPosition(Vector2f position)
         {
             return _esc.SetPosition(id, position, direction);
         }

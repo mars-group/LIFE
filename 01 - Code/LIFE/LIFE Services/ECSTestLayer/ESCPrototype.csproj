@@ -42,13 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CollidabelElement.cs" />
-    <Compile Include="ESC.cs" />
-    <Compile Include="AxisAlignedBoundingInterval.cs" />
-    <Compile Include="IESC.cs" />
-    <Compile Include="Starter.cs" />
-    <Compile Include="Vector2f.cs" />
-    <Compile Include="Vector3f.cs" />
+    <Compile Include="Entities\CollidabelElement.cs" />
+    <Compile Include="Implementation\ESC.cs" />
+    <Compile Include="Entities\AxisAlignedBoundingInterval.cs" />
+    <Compile Include="Interface\IESC.cs" />
+    <Compile Include="Entities\Starter.cs" />
+    <Compile Include="Entities\Vector2f.cs" />
+    <Compile Include="Entities\Vector3f.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ESCTestLayer.Entities;
 
-namespace ESCTestLayer
+namespace ESCTestLayer.Interface
 {
-    interface IESC
+    public interface IESC
     {
         /// <summary>
         ///   registers the element with give dimension

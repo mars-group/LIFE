@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using ESCTestLayer;
+using ESCTestLayer.Entities;
+using ESCTestLayer.Implementation;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -64,10 +66,10 @@ namespace AgentTester {
       var max = new Vector3f(4, 3, 0);
       const bool itg = false;
 
-      esc.Register(0, new Vector3f(1, 1, 0));
-      esc.Register(1, new Vector3f(1, 1, 0));
-      esc.Register(2, new Vector3f(1, 1, 0));
-      esc.Register(3, new Vector3f(1, 1, 0));
+      esc.Add(0, new Vector3f(1, 1, 0));
+      esc.Add(1, new Vector3f(1, 1, 0));
+      esc.Add(2, new Vector3f(1, 1, 0));
+      esc.Add(3, new Vector3f(1, 1, 0));
 
       esc.SetRandomPosition(0, null, max, itg);
       esc.SetRandomPosition(1, null, max, itg);

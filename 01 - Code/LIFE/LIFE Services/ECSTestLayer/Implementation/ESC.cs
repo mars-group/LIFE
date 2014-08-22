@@ -2,8 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ESCTestLayer.Entities;
+using ESCTestLayer.Interface;
 
-namespace ESCTestLayer
+namespace ESCTestLayer.Implementation
 {
 
     /// <summary>
