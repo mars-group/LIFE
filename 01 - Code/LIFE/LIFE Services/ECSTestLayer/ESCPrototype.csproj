@@ -42,8 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CollidabelElement.cs" />
     <Compile Include="ESC.cs" />
     <Compile Include="AxisAlignedBoundingInterval.cs" />
+    <Compile Include="IESC.cs" />
     <Compile Include="Starter.cs" />
     <Compile Include="Vector2f.cs" />
     <Compile Include="Vector3f.cs" />
