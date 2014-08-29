@@ -56,6 +56,11 @@
     <Compile Include="Interfaces\IGenericDataSource.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
     <Compile Include="Interfaces\IPerception.cs" />
+    <Compile Include="Movement\AgentMovement.cs" />
+    <Compile Include="Movement\ContinuousMovement.cs" />
+    <Compile Include="Movement\DirectMovement.cs" />
+    <Compile Include="Movement\GridMovement.cs" />
+    <Compile Include="Movement\Vector.cs" />
     <Compile Include="Perception\AgentSensor.cs" />
     <Compile Include="Perception\GenericSensor.cs" />
     <Compile Include="Perception\GenericSensorInput.cs" />
@@ -69,7 +74,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reasoning\ReasoningComponent.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Movement\Agentenbewegung.ncp" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>

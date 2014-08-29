@@ -7,7 +7,7 @@ namespace ESCTestLayer.Interface
     public interface IESC
     {
         /// <summary>
-        ///   registers the element with give dimension
+        ///   Registers the element with given dimension.
         /// </summary>
         /// <param name="elementId"></param>
         /// <param name="dimension"></param>
@@ -61,6 +61,6 @@ namespace ESCTestLayer.Interface
         /// <param name="position"></param>
         /// <param name="direction"></param>
         /// <returns></returns>
-        IEnumerable<CollidabelElement> Explore(int elementId, Vector3f position, Vector3f direction);
+        IEnumerable<CollidableElement> Explore(int elementId, Vector3f position, Vector3f direction);
     }
 }

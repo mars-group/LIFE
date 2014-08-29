@@ -16,10 +16,10 @@ namespace ESCTestLayer.Implementation
     public class ESC : IESC
     {
 
-        private readonly Random _rnd;                            // Number generator for random positions.
-        private readonly Dictionary<int, AABB> _aabbs;           // Stores the occupied intervals of all elementIds.
-        private readonly IDictionary<int, Vector3f> _dimensions; // All elements dimensions.
-        private readonly IDictionary<int, Vector3f> _positions;  // The positions (middlepoints).
+        private readonly Random _rnd;                             // Number generator for random positions.
+        private readonly Dictionary<int, AABB> _aabbs;            // Stores the occupied intervals of all elementIds.
+        private readonly IDictionary<int, Vector3f> _dimensions;  // All elements dimensions.
+        private readonly IDictionary<int, Vector3f> _positions;   // The positions (middlepoints).
         private readonly IDictionary<int, Vector3f> _directions;  // The positions (middlepoints).
 
         public ESC()
@@ -65,8 +65,8 @@ namespace ESCTestLayer.Implementation
             return true;
         }
 
-        public Boolean SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid)
-        {
+
+        public Boolean SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid) {
             if (min == null) min = new Vector3f(0.0f, 0.0f, 0.0f);
             var zUsed = (max.Z - min.Z > float.Epsilon);
             Vector3f dir = null;
@@ -79,20 +79,17 @@ namespace ESCTestLayer.Implementation
             );
 
             // When only grids are wished, position is finished. Next, create direction normal vector.
-            if (grid)
-            {
-                switch (_rnd.Next(0, 4))
-                {                               //         Z
-                    case 0: dir = new Vector3f(0.0f, 1.0f, 0.0f); break; // right   ↑   X
+            if (grid) {
+                switch (_rnd.Next(0, 4)) {                                //         Z
+                    case 0: dir = new Vector3f(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
                     case 1: dir = new Vector3f(0.0f, -1.0f, 0.0f); break; // left    |  /
-                    case 2: dir = new Vector3f(1.0f, 0.0f, 0.0f); break; // up      | /
+                    case 2: dir = new Vector3f(1.0f, 0.0f, 0.0f); break;  // up      | /
                     case 3: dir = new Vector3f(-1.0f, 0.0f, 0.0f); break; // down    +--------→ Y
                 }
             }
 
             // Otherwise we want floating point values. Randomize position, create normal vector and normalize it. 
-            else
-            {
+            else {
                 pos.X += (float)_rnd.NextDouble();
                 pos.Y += (float)_rnd.NextDouble();
                 if (zUsed) pos.Z += (float)_rnd.NextDouble();
@@ -104,8 +101,7 @@ namespace ESCTestLayer.Implementation
             }
 
             // Try to get this position.
-            if (!SetPosition(elementId, pos, dir))
-            {
+            if (!SetPosition(elementId, pos, dir)) {
                 // try one more time
                 //TOOD Abbruchkriterium?
                 return SetRandomPosition(elementId, min, max, grid);
@@ -118,7 +114,7 @@ namespace ESCTestLayer.Implementation
             throw new NotImplementedException();
         }
 
-        public IEnumerable<CollidabelElement> Explore(int elementId, Vector3f position, Vector3f direction)
+        public IEnumerable<CollidableElement> Explore(int elementId, Vector3f position, Vector3f direction)
         {
             throw new NotImplementedException();
         }

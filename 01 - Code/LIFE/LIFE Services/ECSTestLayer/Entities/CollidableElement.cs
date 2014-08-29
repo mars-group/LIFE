@@ -1,6 +1,6 @@
 ﻿namespace ESCTestLayer.Entities
 {
-    public class CollidabelElement
+    public class CollidableElement
     {
         public int Id { get; set; }
 

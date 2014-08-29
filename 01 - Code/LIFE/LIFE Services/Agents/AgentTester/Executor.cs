@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Threading;
-using ESCTestLayer;
-using ESCTestLayer.Entities;
-using ESCTestLayer.Implementation;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -46,22 +43,10 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      //var environment = AgentBuilder.CreateRandomMovingAgents(2, 10, 10);//CreateWolvesScenarioEnvironment();
-      //new Executor(environment).Run(850);
+      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(); //CreateRandomMovingAgents(2, 10, 10);//
+      new Executor(environment).Run(850);
       
       /*
-      var esc       = new ESC();
-      var position  = new Vector3f(2, 0, 0);
-      var direction = new Vector3f(1, 1, 1);
-      var dimension = new Vector3f(1, 1, 1);
-
-
-      var aabb = ESC.GetAABB(position, direction, dimension);
-      Console.WriteLine("\nX-Inv: "+aabb.XIntv.ToString());
-      Console.WriteLine("Y-Inv: "+aabb.YIntv.ToString());
-      Console.WriteLine("Z-Inv: "+aabb.ZIntv.ToString());  */
-
-
       var esc = new ESC();
       var max = new Vector3f(4, 3, 0);
       const bool itg = false;
@@ -76,9 +61,8 @@ namespace AgentTester {
       esc.SetRandomPosition(2, null, max, itg);
       esc.SetRandomPosition(3, null, max, itg);
 
-
-
       Console.ReadLine();
+      */
     }
   }
 }

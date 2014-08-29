@@ -18,29 +18,26 @@ namespace ESCTestLayer.Entities
           }
         }
 
-        public bool Collide(AxisAlignedBoundingInterval other) {
-          
-          /* In total, there are 12 possible cases of interval alignment.
-             Eight of them shall be classified as "overlap".              */
-          if (ReferenceEquals(this, other)) return false;    //| Overlap with ...  
-          if ((_min >= other._min && _min < other._max)  ||  //| 1) left interval
-              (other._min >= _min && other._min < _max)  ||  //| 2) right interval
-              (_min <= other._min && _max >= other._max) ||  //| 3) inner interval
-              (other._min <= _min && other._max >= _max))    //| 4) outer interval.
-                return true; // (). 
-          return false;
 
 
-          /*
-          if (ReferenceEquals(null, other)) return false;
-          if (ReferenceEquals(this, other)) return false; //true; Skip own reference.
-            if (this._min <= other._min) {
-                return this._max >= other._min;
-            }
-            // so this._min > other._min
-            return this._min <= other._max;
-           */
-        }
+      /// <summary>
+      ///   Checks for a collision of this and another axis interval.
+      ///   In total, there are 12 possible cases of interval alignment.
+      ///   Eight of them shall be classified as "overlap".
+      /// </summary>
+      /// <param name="other">The other interval to check.</param>
+      /// <returns>"True": collision, "false": no collision.</returns>
+      public bool Collide(AxisAlignedBoundingInterval other) {          
+        if (ReferenceEquals(this, other)) return false;    //| Overlap with ...  
+        if ((_min >= other._min && _min < other._max)  ||  //| 1) left interval
+            (other._min >= _min && other._min < _max)  ||  //| 2) right interval
+            (_min <= other._min && _max >= other._max) ||  //| 3) inner interval
+            (other._min <= _min && other._max >= _max))    //| 4) outer interval.
+              return true;
+        return false;
+      }
+
+
 
         public bool Equals(AxisAlignedBoundingInterval other)
         {

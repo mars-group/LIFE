@@ -1,0 +1,189 @@
+<Project>
+  <Name>Agentenbewegung</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Bew. 1</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>GridMovement</Name>
+        <Access>Public</Access>
+        <Location left="134" top="242" />
+        <Size width="162" height="139" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">int range</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>ContinuousMovement</Name>
+        <Access>Public</Access>
+        <Location left="330" top="242" />
+        <Size width="182" height="145" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected double Speed</Member>
+        <Member type="Field">protected double Yaw</Member>
+        <Member type="Field">protected double Pitch</Member>
+        <Member type="Method">public void Move()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>AgentMovement</Name>
+        <Access>Public</Access>
+        <Location left="279" top="12" />
+        <Size width="234" height="179" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private IESC esc</Member>
+        <Member type="Property">public Vector Position { get; protected set; }</Member>
+        <Member type="Property">public Vector Dimension { get; protected set; }</Member>
+        <Member type="Property">public Vector Direction { get; protected set; }</Member>
+        <Member type="Method">protected void SetPosition(Vector newPosition)</Member>
+        <Member type="Method">public abstract void Move()</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Abstrakte Basis mit Anbindung an den Agenten und die ESC.</Text>
+        <Location left="134" top="89" />
+        <Size width="126" height="64" />
+      </Entity>
+      <Entity type="Class">
+        <Name>Agent</Name>
+        <Access>Public</Access>
+        <Location left="37" top="25" />
+        <Size width="162" height="77" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Level 1:
+Die Geschwindigkeit und Ausrichtung sind auf dieser Ebene noch frei setzbar, die Zielposition ist gebunden.</Text>
+        <Location left="532" top="242" />
+        <Size width="142" height="100" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Level 2:
+Masse, Beschleunigung und Winkelgeschwindigkeiten kommen hinzu und bestimmen Geschwindigkeit und Ausrichtung</Text>
+        <Location left="532" top="440" />
+        <Size width="185" height="143" />
+      </Entity>
+      <Entity type="Class">
+        <Name>DirectMovement</Name>
+        <Access>Public</Access>
+        <Location left="584" top="77" />
+        <Size width="305" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void SetPosition(Vector newPosition, Vector direction)</Member>
+        <Member type="Method">public void Move()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Level 0:
+Direkte Positionsänderung möglich.</Text>
+        <Location left="698" top="12" />
+        <Size width="193" height="50" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Parameterdatei / Voreinstellung
+(XML?)</Text>
+        <Location left="795" top="398" />
+        <Size width="99" height="63" />
+      </Entity>
+      <Entity type="Class">
+        <Name>PresetLoader</Name>
+        <Access>Public</Access>
+        <Location left="730" top="287" />
+        <Size width="162" height="103" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public static void LoadPreset(File xml)</Member>
+        <Modifier>Static</Modifier>
+      </Entity>
+      <Entity type="Enum">
+        <Name>DIRECTION</Name>
+        <Access>Public</Access>
+        <Location left="54" top="401" />
+        <Size width="162" height="129" />
+        <Collapsed>False</Collapsed>
+        <Value>LEFT</Value>
+        <Value>RIGHT</Value>
+        <Value>UP</Value>
+        <Value>DOWN</Value>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Rasterbewegung. Nur vorgefertigte Richtungen und ganzzahlige Bereiche möglich. </Text>
+        <Location left="10" top="242" />
+        <Size width="110" height="94" />
+      </Entity>
+      <Entity type="Class">
+        <Name>PhysicalMovement</Name>
+        <Access>Public</Access>
+        <Location left="315" top="440" />
+        <Size width="198" height="179" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private double mass</Member>
+        <Member type="Field">double inertia</Member>
+        <Member type="Field">readonly int maxSpeed</Member>
+        <Member type="Method">public void Move()</Member>
+        <Member type="Property">public double Acceleration { get; set; }</Member>
+        <Member type="Property">public double SpinVelocity { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>//TODO
+Servicebibliothek für gerichtete Bewegungen.
+Muß außerhalb (für die Planungslogik zugreifbar).
+
+Bewegungsaktionen nutzen abstraktes Teil und brauchen nur Move() aufzurufen.
+
+Zugriffsrechte: Variablen sind alle protected und lesbar, die jeweilige Klasse hat Set-Methoden.</Text>
+        <Location left="730" top="495" />
+        <Size width="210" height="195" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Struktur:
+Bewegungsunterpaket mit Vektorklasse.</Text>
+        <Location left="532" top="606" />
+        <Size width="160" height="75" />
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Generalization" first="1" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="0" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>346</X>
+          <Y>216</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="4" second="2">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Generalization" first="7" second="2">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="0" second="11">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>248</X>
+          <Y>423</Y>
+        </BendPoint>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Generalization" first="13" second="1">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
