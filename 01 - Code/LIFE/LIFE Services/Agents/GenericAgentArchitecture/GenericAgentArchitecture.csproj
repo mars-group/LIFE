@@ -56,10 +56,11 @@
     <Compile Include="Interfaces\IGenericDataSource.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
     <Compile Include="Interfaces\IPerception.cs" />
-    <Compile Include="Movement\AgentMovement.cs" />
+    <Compile Include="Movement\ML0.cs" />
     <Compile Include="Movement\ContinuousMovement.cs" />
     <Compile Include="Movement\DirectMovement.cs" />
     <Compile Include="Movement\GridMovement.cs" />
+    <Compile Include="Movement\ML1.cs" />
     <Compile Include="Movement\Vector.cs" />
     <Compile Include="Perception\AgentSensor.cs" />
     <Compile Include="Perception\GenericSensor.cs" />

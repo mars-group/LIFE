@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading;
+using ESCTestLayer.Implementation;
+using ESCTestLayer.Interface;
+using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -43,26 +46,29 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(); //CreateRandomMovingAgents(2, 10, 10);//
-      new Executor(environment).Run(850);
+      //var environment = AgentBuilder.CreateWolvesScenarioEnvironment(); //CreateRandomMovingAgents(2, 10, 10);//
+      //new Executor(environment).Run(850);
       
-      /*
-      var esc = new ESC();
-      var max = new Vector3f(4, 3, 0);
-      const bool itg = false;
 
-      esc.Add(0, new Vector3f(1, 1, 0));
-      esc.Add(1, new Vector3f(1, 1, 0));
-      esc.Add(2, new Vector3f(1, 1, 0));
-      esc.Add(3, new Vector3f(1, 1, 0));
+      Console.WriteLine ("Testmethode für die Bewegungsklasse.");
 
-      esc.SetRandomPosition(0, null, max, itg);
-      esc.SetRandomPosition(1, null, max, itg);
-      esc.SetRandomPosition(2, null, max, itg);
-      esc.SetRandomPosition(3, null, max, itg);
+
+      var m = new ContinuousMovement (new ESC(), 0, new Vector(1, 1, 1));
+      
+      m.SetPitch(20);
+      m.SetYaw(45);
+      m.SetMovementSpeed(2);
+      
+      Console.WriteLine("[000] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
+
+      m.Move();
+      Console.WriteLine("[001] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
+
+      m.Move();
+      Console.WriteLine("[002] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
+
 
       Console.ReadLine();
-      */
     }
   }
 }

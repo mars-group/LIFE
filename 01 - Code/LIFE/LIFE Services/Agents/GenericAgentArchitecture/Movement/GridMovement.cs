@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace GenericAgentArchitecture.Movement {
 
-namespace GenericAgentArchitecture.Movement {
-  class GridMovement {
+  internal class GridMovement {
+
+    //TODO To be implemented ...
+
   }
 }
