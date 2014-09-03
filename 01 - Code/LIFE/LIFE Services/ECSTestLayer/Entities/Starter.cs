@@ -46,7 +46,7 @@ namespace ESCTestLayer.Entities
 
         public bool SetPosition(Vector2f position)
         {
-            return _esc.SetPosition(id, position, direction);
+            return position.Equals(_esc.SetPosition(id, position, direction));
         }
 
 
