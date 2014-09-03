@@ -54,7 +54,8 @@ namespace AgentTester {
 
 
       var m = new ContinuousMovement (new ESC(), 0, new Vector(1, 1, 1));
-      
+      m.Test1(new Vector(2, 2, 0));
+      /*
       m.SetPitch(20);
       m.SetYaw(45);
       m.SetMovementSpeed(2);
@@ -66,7 +67,7 @@ namespace AgentTester {
 
       m.Move();
       Console.WriteLine("[002] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
-
+      */
 
       Console.ReadLine();
     }

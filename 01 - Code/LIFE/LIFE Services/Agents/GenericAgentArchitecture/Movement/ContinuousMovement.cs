@@ -1,4 +1,5 @@
-﻿using ESCTestLayer.Interface;
+﻿using System;
+using ESCTestLayer.Interface;
 
 namespace GenericAgentArchitecture.Movement {
 
@@ -42,6 +43,37 @@ namespace GenericAgentArchitecture.Movement {
     public void SetYawSpeed(float yawSpeed) {
       YawAS = yawSpeed;
     }
+
+
+
+    public void Test1(Vector targetPos) {
+
+      targetPos = new Vector(-1, -1);
+
+      Console.WriteLine("Pos: "+Position);
+      Console.WriteLine("Tgt: "+targetPos);
+
+
+      // Check, if we are already there. No need to move anyway.
+      if (Math.Abs(Position.GetDistance(targetPos)) <= float.Epsilon) return;
+
+      // Radians to degree conversion: 180/π = 57.295
+      var yaw = Math.Atan((targetPos.X-Position.X) / (targetPos.Y-Position.Y)) * 57.295779f;
+      
+      
+      //if (yaw < 0f) yaw += 360f;
+      
+
+
+
+       
+  
+
+
+      Console.WriteLine("Yaw: "+yaw);
+
+    }
+
 
 
     // These functions are added for convenience. Actually, they do not belong here ...
