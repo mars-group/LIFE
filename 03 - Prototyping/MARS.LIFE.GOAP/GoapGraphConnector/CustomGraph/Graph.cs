@@ -8,10 +8,7 @@ namespace GoapGraphConnector.CustomGraph {
     public class Graph {
         private readonly List<IGoapVertex> _vertices;
         private readonly List<IGoapEdge> _edges;
-        /*
-        private Dictionary<IGoapVertex, List<IGoapVertex>> _vertexToVertex = new Dictionary<IGoapVertex, List<IGoapVertex>>();
-        private Dictionary<IGoapVertex, List<IGoapEdge>> _vertexOutEdges = new Dictionary<IGoapVertex, List<IGoapEdge>>(); 
-        */
+       
 
         public Graph(List<IGoapVertex> vertices, List<IGoapEdge> edges) {
             _vertices = vertices;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Interfaces;
 
-namespace GoapActionSystem.Implementation {
+namespace GoapCommon.Abstract {
     /// <summary>
     ///     nochmal überlegen welche Methoden auf den allgemeinen Objekten ausgeführt werden müssen
     ///     diese können allerdings auch per interface angeboten werden
@@ -79,5 +79,11 @@ namespace GoapActionSystem.Implementation {
         public abstract bool ExecuteContextEffects();
 
         public abstract bool Execute();
+
+        public abstract int ExecutionCosts();
+
+        public abstract int Precedence();
+
+
     }
 }

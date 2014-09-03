@@ -2,18 +2,21 @@
 using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
-    public class Edge : IGoapEdge {
+    public class Edge : IGoapEdge, IEquatable<Edge> {
         private readonly IGoapVertex _source;
         private readonly IGoapVertex _target;
-        private int _cost;
+        private readonly int _cost;
+        private readonly string _name;
 
-        public Edge(int cost, IGoapVertex source, IGoapVertex target) {
+
+        public Edge(int cost, IGoapVertex source, IGoapVertex target, string name = "NotNamedEdge") {
             _cost = cost;
             _source = source;
             _target = target;
+            _name = name;
         }
 
-       public IGoapVertex GetSource() {
+        public IGoapVertex GetSource() {
             return _source;
         }
 
@@ -25,6 +28,11 @@ namespace GoapGraphConnector.CustomGraph {
             return _cost;
         }
 
+        public string Name
+        {
+            get { return _name; }
+        }    
+
         public override string ToString() {
             return string.Format("Edge: |{0} -> {1}| ", _source, _target);
         }
@@ -32,20 +40,23 @@ namespace GoapGraphConnector.CustomGraph {
         public bool Equals(Edge other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(_source, other._source) && Equals(_target, other._target);
+            return Equals(_source, other._source) && Equals(_target, other._target) && _cost == other._cost && string.Equals(_name, other._name);
         }
 
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (obj.GetType() != this.GetType()) return false;
             return Equals((Edge) obj);
         }
 
         public override int GetHashCode() {
             unchecked {
-                return ((_source != null ? _source.GetHashCode() : 0)*397) ^
-                       (_target != null ? _target.GetHashCode() : 0);
+                int hashCode = (_source != null ? _source.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (_target != null ? _target.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ _cost;
+                hashCode = (hashCode*397) ^ (_name != null ? _name.GetHashCode() : 0);
+                return hashCode;
             }
         }
 

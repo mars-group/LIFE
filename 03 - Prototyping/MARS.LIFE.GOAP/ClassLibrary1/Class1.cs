@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoapUser.Worldstates
+namespace ClassLibrary1
 {
-    enum WorldStateEnums
+    public class Class1
     {
-        Happy, HasToy, HasMoney
-
     }
 }

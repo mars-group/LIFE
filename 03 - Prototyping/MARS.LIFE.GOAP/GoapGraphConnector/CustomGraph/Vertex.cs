@@ -7,23 +7,20 @@ namespace GoapGraphConnector.CustomGraph {
     public class Vertex : IGoapVertex, IEquatable<Vertex> {
         private readonly List<IGoapWorldstate> _worldstate;
         private readonly string _name;
-        // for test----------
         private readonly int _heuristic;
 
-        public Vertex(List<IGoapWorldstate> worldstate) {
+
+        public Vertex(List<IGoapWorldstate> worldstate, string name = "NotNamedVertex")
+        {
             _worldstate = worldstate;
+            _name = name;
         }
 
-        
-        public Vertex(List<IGoapWorldstate> worldstate, int heuristic, string name) {
+        public Vertex(List<IGoapWorldstate> worldstate, int heuristic, string name = "NotNamedVertex") {
             _worldstate = worldstate;
             _heuristic = heuristic;
             _name = name;
         }
-
-       
-
-        // for test--------------
 
         public int GetHeuristic(IGoapVertex target) {
             return _heuristic;
@@ -32,7 +29,6 @@ namespace GoapGraphConnector.CustomGraph {
         public string GetIdentifier() {
             return _name;
         }
-            
 
         public override string ToString() {
             string states = _worldstate.Aggregate("", (current, state) => current + " " + state.ToString());
@@ -43,13 +39,13 @@ namespace GoapGraphConnector.CustomGraph {
         public bool Equals(Vertex other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(_worldstate, other._worldstate);
+            return this._worldstate.SequenceEqual(other._worldstate);
         }
 
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (obj.GetType() != this.GetType()) return false;
             return Equals((Vertex) obj);
         }
 

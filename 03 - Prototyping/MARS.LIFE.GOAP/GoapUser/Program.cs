@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommonTypes.Interfaces;
+using GoapActionSystemFactory.Implementation;
 using GoapCommon.Interfaces;
-using GoapGraphConnector.CustomGraph;
-using GoapUser.Worldstates;
 using QuickGraph;
 
 namespace GoapUser {
@@ -39,24 +38,7 @@ namespace GoapUser {
     internal static class Program {
         private static void Main(string[] args) {
             /*
-            AbstractGoapAction clean = new ActionClean();
-            AbstractGoapAction getToy = new ActionGetToy();
-            AbstractGoapAction play = new ActionPlay();
-            var actionList = new List<IGoapAction> { clean, clean, play };
-
-            GoapPlanner planner = new GoapPlanner(10, actionList);
-
-            List<IGoapWorldstate> currentWorld = new List<IGoapWorldstate> { new HasToy(true, WorldStateEnums.HasToy) };
-            List<IGoapWorldstate> targetWorld = new List<IGoapWorldstate> {
-                new Happy(true, WorldStateEnums.Happy),
-                new HasToy(false, WorldStateEnums.HasToy)
-            };
-
-            planner.GetPlan(currentWorld, targetWorld);
-
-            Console.WriteLine(planner);
-
-            */
+            
             IGoapWorldstate moneytrue = new HasMoney(true, WorldStateEnums.HasMoney);
             IGoapWorldstate moneyfalse = new HasMoney(false, WorldStateEnums.HasMoney);
 
@@ -118,7 +100,7 @@ namespace GoapUser {
             var e13b = new Edge(6, v5, v4);
 
 
-            var conn = new GoapGraphService();
+            var conn = new GoapCustomGraphService();
             
             
             // ersten knoten eintragen mit zugehörigen werten und als aktuellen markieren
@@ -167,13 +149,44 @@ namespace GoapUser {
             Console.WriteLine(vertex5);
             Console.WriteLine(conn.IsCurrentVertexTarget());
             
+
+            // v2->v1, v2->v6, v2->v7, v2->v5, v2->v3
+            conn.ExpandCurrentVertex(new List<IGoapEdge> { e4b, e5b, e6, e9, e8b});
+            conn.AStarStep();
+            var vertex6 = conn.GetNextVertexFromOpenList();
+            Console.WriteLine(vertex6);
+            Console.WriteLine(conn.IsCurrentVertexTarget());
+
             
             var edgesList = conn.GetEdgesList();
             
             foreach (var edge in edgesList) {
                 Console.WriteLine(edge.GetSource().GetIdentifier() + " -> " + edge.GetTarget().GetIdentifier());
             }
-            
+
+
+          
+            var l1 = new Happy(true, WorldStateEnums.Happy);
+            var l2 = new Happy(true, WorldStateEnums.Happy);
+
+       
+            var l4 = new Vertex(new List<IGoapWorldstate> {new HasToy(true, WorldStateEnums.HasToy), new Happy(true, WorldStateEnums.Happy)});
+            var l5 = new Vertex(new List<IGoapWorldstate> {new Happy(true, WorldStateEnums.Happy),new HasToy(true, WorldStateEnums.HasToy)});
+
+            var l6 = new Vertex(new List<IGoapWorldstate>());
+            var l7 = new Vertex(new List<IGoapWorldstate>());
+         
+           Console.WriteLine(l4.Equals(l5));
+           Console.WriteLine(l6.Equals(l7));
+
+             */
+            Console.WriteLine("-----------------------------------");
+
+
+
+            IActionSystem goaActionSystem = GoapComponent.GetFullModelTestGoap();
+
+
 
 
             Console.ReadKey();

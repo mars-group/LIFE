@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
-    public class GoapGraphService : IGoapGraph {
+    public class GoapCustomGraphService : IGoapGraph {
         private IGoapVertex _root;
         private IGoapVertex _target;
         private Graph _graph;
@@ -14,8 +14,7 @@ namespace GoapGraphConnector.CustomGraph {
             int maximumGraphDept = 0) {
             _root = new Vertex(rootState);
             _target = new Vertex(targetState);
-            _graph = new Graph(new List<IGoapVertex> {_root}, new List<IGoapEdge>());
-            _aStar = new AStarSteppable(_root, _target, _graph);
+            InitializeGoapGraph(_root, _target, maximumGraphDept);
         }
 
         public void InitializeGoapGraph(IGoapVertex root, IGoapVertex target,

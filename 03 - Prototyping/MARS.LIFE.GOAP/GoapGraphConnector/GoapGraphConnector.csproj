@@ -77,7 +77,7 @@
   <ItemGroup>
     <Compile Include="CustomGraph\AStarSteppable.cs" />
     <Compile Include="CustomGraph\Edge.cs" />
-    <Compile Include="CustomGraph\GoapGraphService.cs" />
+    <Compile Include="CustomGraph\GoapCustomGraphService.cs" />
     <Compile Include="CustomGraph\Graph.cs" />
     <Compile Include="CustomGraph\Vertex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

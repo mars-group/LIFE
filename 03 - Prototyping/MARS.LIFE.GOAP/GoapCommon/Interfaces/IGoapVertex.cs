@@ -11,5 +11,6 @@ namespace GoapCommon.Interfaces
         int GetHeuristic(IGoapVertex target);
 
         string GetIdentifier();
+
     }
 }

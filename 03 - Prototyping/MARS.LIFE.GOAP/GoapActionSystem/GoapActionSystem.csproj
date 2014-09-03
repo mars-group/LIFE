@@ -76,7 +76,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\AbstractGoapAction.cs" />
     <Compile Include="Implementation\GoapManager.cs" />
     <Compile Include="Implementation\GoapPlanner.cs" />
     <Compile Include="Implementation\SurrogateAction.cs" />
@@ -87,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="GoapModelTest.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +101,10 @@
     <ProjectReference Include="..\GoapGraphConnector\GoapGraphConnector.csproj">
       <Project>{2871f5a0-1375-48ce-998f-b90d3d2d1a95}</Project>
       <Name>GoapGraphConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapModelTest\GoapModelTest.csproj">
+      <Project>{85340006-b073-47e6-9dbf-d0cb391a13aa}</Project>
+      <Name>GoapModelTest</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

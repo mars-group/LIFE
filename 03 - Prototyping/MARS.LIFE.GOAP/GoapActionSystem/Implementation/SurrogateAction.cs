@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
 namespace GoapActionSystem.Implementation {
@@ -20,6 +21,14 @@ namespace GoapActionSystem.Implementation {
 
         public override bool Execute() {
             return true;
+        }
+
+        public override int ExecutionCosts() {
+            throw new NotImplementedException();
+        }
+
+        public override int Precedence() {
+            throw new NotImplementedException();
         }
     }
 }

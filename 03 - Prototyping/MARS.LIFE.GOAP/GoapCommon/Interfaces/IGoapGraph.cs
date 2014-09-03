@@ -7,9 +7,6 @@ namespace GoapCommon.Interfaces
     /// </summary>
     public interface IGoapGraph {
 
-
-
-
         /// <summary>
         /// get the initial graph with one vertex (root)
         /// </summary>
@@ -55,8 +52,6 @@ namespace GoapCommon.Interfaces
         /// </summary>
         /// <returns></returns>
         void AStarStep();
-
-       
 
         /// <summary>
         /// 

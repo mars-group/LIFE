@@ -91,6 +91,14 @@
       <Project>{bc0a6ae3-7d49-48d4-af9c-b67162d98d20}</Project>
       <Name>GoapActionSystem %28ActionSystem\GoapActionSystem\GoapActionSystem%29</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GoapCommon\GoapCommon.csproj">
+      <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
+      <Name>GoapCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapModelTest\GoapModelTest.csproj">
+      <Project>{85340006-b073-47e6-9dbf-d0cb391a13aa}</Project>
+      <Name>GoapModelTest</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

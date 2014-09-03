@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonTypes.Interfaces;
-using GoapActionSystem.Implementation;
+using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
-using GoapUser.Worldstates;
+using GoapModelTest.Worldstates;
 
-namespace GoapUser.Actions {
+namespace GoapModelTest.Actions {
 
     public class ActionGetToy : AbstractGoapAction {
 
@@ -28,6 +27,14 @@ namespace GoapUser.Actions {
         }
 
         public override bool Execute() {
+            throw new NotImplementedException();
+        }
+
+        public override int ExecutionCosts() {
+            throw new NotImplementedException();
+        }
+
+        public override int Precedence() {
             throw new NotImplementedException();
         }
     }

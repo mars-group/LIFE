@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using GoapCommon.Exceptions;
 using GoapCommon.Interfaces;
 
@@ -16,7 +15,7 @@ namespace GoapGraphConnector.CustomGraph {
     ///     3. mark this as on closed list
     ///     4 inspect reachable nodes
     ///     each reachable
-    ///     create an entry forreachable
+    ///     create an entry for reachable
     /// </summary>
     public class AStarSteppable {
         private IGoapVertex _current;
@@ -24,7 +23,6 @@ namespace GoapGraphConnector.CustomGraph {
         private readonly IGoapVertex _root;
         private readonly IGoapVertex _target;
         private readonly Graph _graph;
-        private bool _targetFound = false;
 
         public IGoapVertex Current {
             get { return _current; }
@@ -82,7 +80,7 @@ namespace GoapGraphConnector.CustomGraph {
         public bool CheckforTarget() {
             return _current.Equals(_target);
         }
-        
+
         /// <summary>
         ///     create the new values for distance, estimated value and so forth
         ///     neccessary when the first way to a vertex is found or if a shorter way (new predeccessor) is found
@@ -109,7 +107,6 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         public List<IGoapEdge> CreateResultListToCurrent() {
-
             List<IGoapEdge> pathEdges = new List<IGoapEdge>();
             IGoapVertex actual = _current;
             IGoapVertex pre = GetPredecessor(actual);
@@ -119,6 +116,7 @@ namespace GoapGraphConnector.CustomGraph {
                 actual = pre;
                 pre = GetPredecessor(actual);
             }
+            pathEdges.Reverse();
             return pathEdges;
         }
 
@@ -129,11 +127,13 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
 
-        private IGoapVertex GetPredecessor(IGoapVertex vertex ) {
-            if(!_nodeTable.ContainsKey(vertex)) throw new AlgorithmException("vertex asked for predeseccor not in algoritm list");
+        private IGoapVertex GetPredecessor(IGoapVertex vertex) {
+            if (!_nodeTable.ContainsKey(vertex))
+                throw new AlgorithmException("vertex asked for predeseccor not in algoritm list");
 
             object[] value;
-            if (!_nodeTable.TryGetValue(vertex, out value)) throw new AlgorithmException("node tab not in algoritm list");
+            if (!_nodeTable.TryGetValue(vertex, out value))
+                throw new AlgorithmException("node tab not in algoritm list");
 
             return (IGoapVertex) value[0];
         }
@@ -186,17 +186,14 @@ namespace GoapGraphConnector.CustomGraph {
         ///     manipulate entry for node in algorithm table - set status to in closed list
         /// </summary>
         /// <param name="vertex"></param>
-        private void SetOnClosedList(IGoapVertex vertex)
-        {
+        private void SetOnClosedList(IGoapVertex vertex) {
             object[] entryForChange;
             _nodeTable.TryGetValue(vertex, out entryForChange);
-            if (entryForChange == null)
-            {
+            if (entryForChange == null) {
                 throw new AlgorithmException("a* missing entry for predessor and so forth at node: " + vertex +
                                              " in algorithm table");
             }
-            if ((bool)entryForChange[4])
-            {
+            if ((bool) entryForChange[4]) {
                 throw new AlgorithmException("a* vertex: " + vertex +
                                              " already on closed list was set to closed list again");
             }
@@ -214,8 +211,7 @@ namespace GoapGraphConnector.CustomGraph {
         /// <returns></returns>
         private object[] CreateNodeEntry(IGoapVertex predecessor = null, int heuristic = int.MaxValue,
             int travelDistanceG = int.MaxValue,
-            int estimatedValueF = int.MaxValue, bool onClosedList = false)
-        {
+            int estimatedValueF = int.MaxValue, bool onClosedList = false) {
             object[] entry = new object[5];
             entry[0] = predecessor;
             entry[1] = heuristic;

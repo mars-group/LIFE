@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{74920310-C851-4F25-9E2A-7CA1982059C3}</ProjectGuid>
+    <ProjectGuid>{991B901B-5CC7-4BEC-8288-711759C36FE4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GoapActionSystemTests</RootNamespace>
-    <AssemblyName>GoapActionSystemTests</AssemblyName>
+    <RootNamespace>GoapCustomGraphTests</RootNamespace>
+    <AssemblyName>GoapCustomGraphTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,7 +50,8 @@
       <HintPath>..\packages\NUnitTestAdapter.1.1\lib\nunit.util.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NUnit.VisualStudio.TestAdapter">
+    <Reference Include="NUnit.VisualStudio.TestAdapter, Version=1.1.0.0, Culture=neutral, PublicKeyToken=4cb40d35494691ac, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnitTestAdapter.1.1\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -69,8 +70,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="AStarSteppableTest.cs" />
+    <Compile Include="EdgeTest.cs" />
+    <Compile Include="GoapCustomGraphServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VertexTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -79,6 +83,10 @@
     <ProjectReference Include="..\GoapCommon\GoapCommon.csproj">
       <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
       <Name>GoapCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapGraphConnector\GoapGraphConnector.csproj">
+      <Project>{2871f5a0-1375-48ce-998f-b90d3d2d1a95}</Project>
+      <Name>GoapGraphConnector</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

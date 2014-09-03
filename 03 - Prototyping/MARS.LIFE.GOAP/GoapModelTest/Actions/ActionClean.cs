@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonTypes.Interfaces;
-using GoapActionSystem.Implementation;
+using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
-using GoapUser.Worldstates;
+using GoapModelTest.Worldstates;
 
-namespace GoapUser.Actions {
+namespace GoapModelTest.Actions {
 
-    internal class ActionClean : AbstractGoapAction {
+    public class ActionClean : AbstractGoapAction {
 
         public ActionClean(List<IGoapWorldstate> preconditionWorldstates, List<IGoapWorldstate> effectWorldstates)
             : base(preconditionWorldstates, effectWorldstates) {}
@@ -27,6 +26,14 @@ namespace GoapUser.Actions {
         }
 
         public override bool Execute() {
+            throw new NotImplementedException();
+        }
+
+        public override int ExecutionCosts() {
+            throw new NotImplementedException();
+        }
+
+        public override int Precedence() {
             throw new NotImplementedException();
         }
     }

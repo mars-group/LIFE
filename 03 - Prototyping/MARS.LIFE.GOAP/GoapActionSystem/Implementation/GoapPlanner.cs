@@ -9,8 +9,9 @@ namespace GoapActionSystem.Implementation
 {
     /// <summary>
     ///     The goapplanner is responsible for the process of finding a valid plan from the actions, currentWorld and
-    ///     targetWorld
-    ///     given to him. The caller is responsible for giving well defined and corresponding actions and world states.
+    ///     targetWorld given to him. He uses the grpah component for creating a new plan.
+    ///     the planner saves the plan and check it for validity depending on the events and state of simulation.  
+    ///     The caller is responsible for giving well defined and corresponding actions and world states.
     /// </summary>
     public class GoapPlanner : IPlanner
     {
@@ -102,7 +103,7 @@ namespace GoapActionSystem.Implementation
         /// <returns></returns>
         private IGoapGraph InitializeGraph(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld)
         {
-            var connector = new GoapGraphConnector.CustomGraph.GoapGraphService();
+            var connector = new GoapGraphConnector.CustomGraph.GoapCustomGraphService();
             connector.InitializeGoapGraph(currentWorld, targetWorld);
             return connector;
         }
