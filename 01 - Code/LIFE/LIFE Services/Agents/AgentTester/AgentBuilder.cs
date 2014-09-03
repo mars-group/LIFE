@@ -2,6 +2,7 @@
 using AgentTester.RandomMove_ESC;
 using AgentTester.Wolves.Agents;
 using ESCTestLayer;
+using ESCTestLayer.Implementation;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {

@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using ESCTestLayer;
+using ESCTestLayer.Entities;
+using ESCTestLayer.Implementation;
+using ESCTestLayer.Interface;
 using NUnit.Framework;
 
 namespace ESCTest {
@@ -10,7 +11,7 @@ namespace ESCTest {
 
 
 
-    private ESC _esc;
+    private IESC _esc;
 
 
     #region Setup / Tear down
@@ -32,25 +33,21 @@ namespace ESCTest {
     public void TestCorrectPlacement2D() {
 
       Vector3f dims = new Vector3f(1, 1, 0);
-      for (int i = 0; i < 4; i ++) _esc.Register(i, dims);
+      for (int i = 0; i < 4; i ++) _esc.Add(i, dims);
 
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 0);
-      ret = _esc.SetPosition(0, pos, new Vector3f(0, 1, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)));
 
       pos = new Vector3f(2, 1, 0);
-      ret = _esc.SetPosition(1, pos, new Vector3f(-1, 0, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(1, pos, new Vector3f(-1, 0, 0)));
 
       pos = new Vector3f(2, 0, 0);
-      ret = _esc.SetPosition(2, pos, new Vector3f(0, -1, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(2, pos, new Vector3f(0, -1, 0)));
 
       pos = new Vector3f(0, 2, 0);
-      ret = _esc.SetPosition(3, pos, new Vector3f(1, 0, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(3, pos, new Vector3f(1, 0, 0)));
     }
 
 
@@ -59,18 +56,16 @@ namespace ESCTest {
     public void TestOverlap2D() {
 
       Vector3f dims = new Vector3f(1, 1, 0);
-     _esc.Register(0, dims);
-     _esc.Register(1, dims);
+     _esc.Add(0, dims);
+     _esc.Add(1, dims);
 
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 0);
-      ret = _esc.SetPosition(0, pos, new Vector3f(0, 1, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)));
 
       pos = new Vector3f(1, 1, 0);
-      ret = _esc.SetPosition(1, pos, new Vector3f(-1, 0, 0));
-      Assert.Null(ret);
+      Assert.False(_esc.SetPosition(1, pos, new Vector3f(-1, 0, 0)));
     }
 
 
@@ -79,18 +74,16 @@ namespace ESCTest {
     public void TestApposite3D_floats() {
 
       Vector3f dims = new Vector3f(1, 1, 1);
-     _esc.Register(0, dims);
-     _esc.Register(1, dims);
+     _esc.Add(0, dims);
+     _esc.Add(1, dims);
 
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 1);
-      ret = _esc.SetPosition(0, pos, new Vector3f(0, 1, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)));
 
       pos = new Vector3f(1, 1, 0);  
-      ret = _esc.SetPosition(1, pos, new Vector3f(-1, 1, 0));
-       Assert.True(pos.Equals(ret));
+       Assert.True(_esc.SetPosition(1, pos, new Vector3f(-1, 1, 0)));
     }
 
 
@@ -99,22 +92,19 @@ namespace ESCTest {
     public void TestOverlap3D_floats() {
 
       Vector3f dims = new Vector3f(1, 1, 1);
-     _esc.Register(0, dims);
-     _esc.Register(1, dims);
+     _esc.Add(0, dims);
+     _esc.Add(1, dims);
 
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 1);
-      ret = _esc.SetPosition(0, pos, new Vector3f(0, 1, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)));
 
       pos = new Vector3f(1, 1, 0);  
-      ret = _esc.SetPosition(1, pos, new Vector3f(1, 1, 1));
-      Assert.Null(ret);
+      Assert.False(_esc.SetPosition(1, pos, new Vector3f(1, 1, 1)));
 
       pos = new Vector3f(1, 0, 1);  
-      ret = _esc.SetPosition(1, pos, new Vector3f(1, 0, 1));
-      Assert.Null(ret);
+      Assert.False(_esc.SetPosition(1, pos, new Vector3f(1, 0, 1)));
     }
 
 
@@ -123,21 +113,18 @@ namespace ESCTest {
     public void TestRegainOfOldPosition() {
 
       Vector3f dims = new Vector3f(1, 1, 1);
-     _esc.Register(0, dims);
-     _esc.Register(1, dims);
+     _esc.Add(0, dims);
+     _esc.Add(1, dims);
 
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 1);
-      ret = _esc.SetPosition(0, pos, new Vector3f(0, 1, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)));
 
       pos = new Vector3f(1, 1, 0);  
-      ret = _esc.SetPosition(1, pos, new Vector3f(1, -1, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(1, pos, new Vector3f(1, -1, 0)));
 
-      ret = _esc.SetPosition(1, new Vector3f(1, 1, 1), new Vector3f(1, 0, 0));
-      Assert.True(pos.Equals(ret));
+      Assert.True(_esc.SetPosition(1, new Vector3f(1, 1, 1), new Vector3f(1, 0, 0)));
     }
 
 
@@ -149,7 +136,7 @@ namespace ESCTest {
 
       var stopwatch = Stopwatch.StartNew();
       for (int i = 0; i < 50000; i++) {
-        _esc.Register(i, dims);
+        _esc.Add(i, dims);
         _esc.SetPosition(i, new Vector3f(i, 0, 0), dir);
       }
       // 36.4 sec für 50k agents.

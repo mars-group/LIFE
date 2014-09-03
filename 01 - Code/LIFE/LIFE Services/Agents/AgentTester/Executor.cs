@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
-using ESCTestLayer;
+using ESCTestLayer.Implementation;
+using ESCTestLayer.Interface;
+using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -44,37 +46,28 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      //var environment = AgentBuilder.CreateRandomMovingAgents(2, 10, 10);//CreateWolvesScenarioEnvironment();
+      //var environment = AgentBuilder.CreateWolvesScenarioEnvironment(); //CreateRandomMovingAgents(2, 10, 10);//
       //new Executor(environment).Run(850);
       
+
+      Console.WriteLine ("Testmethode für die Bewegungsklasse.");
+
+
+      var m = new ContinuousMovement (new ESC(), 0, new Vector(1, 1, 1));
+      m.Test1(new Vector(2, 2, 0));
       /*
-      var esc       = new ESC();
-      var position  = new Vector3f(2, 0, 0);
-      var direction = new Vector3f(1, 1, 1);
-      var dimension = new Vector3f(1, 1, 1);
+      m.SetPitch(20);
+      m.SetYaw(45);
+      m.SetMovementSpeed(2);
+      
+      Console.WriteLine("[000] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
 
+      m.Move();
+      Console.WriteLine("[001] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
 
-      var aabb = ESC.GetAABB(position, direction, dimension);
-      Console.WriteLine("\nX-Inv: "+aabb.XIntv.ToString());
-      Console.WriteLine("Y-Inv: "+aabb.YIntv.ToString());
-      Console.WriteLine("Z-Inv: "+aabb.ZIntv.ToString());  */
-
-
-      var esc = new ESC();
-      var max = new Vector3f(4, 3, 0);
-      const bool itg = false;
-
-      esc.Register(0, new Vector3f(1, 1, 0));
-      esc.Register(1, new Vector3f(1, 1, 0));
-      esc.Register(2, new Vector3f(1, 1, 0));
-      esc.Register(3, new Vector3f(1, 1, 0));
-
-      esc.SetRandomPosition(0, null, max, itg);
-      esc.SetRandomPosition(1, null, max, itg);
-      esc.SetRandomPosition(2, null, max, itg);
-      esc.SetRandomPosition(3, null, max, itg);
-
-
+      m.Move();
+      Console.WriteLine("[002] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
+      */
 
       Console.ReadLine();
     }

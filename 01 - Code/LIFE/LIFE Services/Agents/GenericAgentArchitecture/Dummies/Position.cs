@@ -7,7 +7,7 @@ namespace GenericAgentArchitecture.Dummies {
   /// </summary>
   public class Position {
 
-    private bool _is3D;                          // Dimension flag: false: 2D, true: 3D.
+    private bool _is3D;                          // dim flag: false: 2D, true: 3D.
     public Float3 Center  { get; set; }          // Center coordinates of the agent. 
     public float Pitch    { get; private set; }  // Direction (lateral axis).
     public float Yaw      { get; private set; }  // Direction (vertical axis).
@@ -53,7 +53,7 @@ namespace GenericAgentArchitecture.Dummies {
       return newPos;
     }
 
-
+    
     /// <summary>
     ///   Set the agent's orientation (compass heading, [0° ≤ yaw lt. 360°].
     /// </summary>
@@ -99,7 +99,7 @@ namespace GenericAgentArchitecture.Dummies {
     }
   }
 
-
+  
   /// <summary>
   ///   This structure holds x, y, and z values of a position.
   /// </summary>

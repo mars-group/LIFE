@@ -1,4 +1,5 @@
 ﻿using ESCTestLayer;
+using ESCTestLayer.Implementation;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interfaces;
