@@ -41,32 +41,33 @@ namespace ESCTestLayer.Implementation
             _dimensions.Remove(elementId);
         }
 
-        public bool Update(int elementId, Vector3f dimension)
+        public MovementResult Update(int elementId, Vector3f dimension)
         {
             _dimensions[elementId] = dimension;
             if (_positions.ContainsKey(elementId))
             {
                 return SetPosition(elementId, _positions[elementId], _directions[elementId]);
             }
-            return true;
+            return null;
         }
 
-        public Boolean SetPosition(int elementId, Vector3f position, Vector3f direction)
+        public MovementResult SetPosition(int elementId, Vector3f position, Vector3f direction)
         {
             var aabb = GetAABB(position, direction, _dimensions[elementId]);
             if (CheckForCollisions(aabb))
             {
-                return false;
+                return new MovementResult(_positions[elementId]);
             }
             //otherwise update position, direction and axis aligned bounding intervals for elementId
             _positions.Add(elementId, position);
             _directions.Add(elementId, direction);
             _aabbs[elementId] = aabb;
-            return true;
+            return new MovementResult(position);
         }
 
 
-        public Boolean SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid) {
+        public MovementResult SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid)
+        {
             if (min == null) min = new Vector3f(0.0f, 0.0f, 0.0f);
             var zUsed = (max.Z - min.Z > float.Epsilon);
             Vector3f dir = null;
@@ -101,12 +102,12 @@ namespace ESCTestLayer.Implementation
             }
 
             // Try to get this position.
-            if (!SetPosition(elementId, pos, dir)) {
+            if (SetPosition(elementId, pos, dir).Position == null) {
                 // try one more time
                 //TOOD Abbruchkriterium?
                 return SetRandomPosition(elementId, min, max, grid);
             }
-            return true;
+            return new MovementResult(pos);
         }
 
         public float GetDistance(int anElementId, int anotherElementId)
@@ -188,7 +189,6 @@ namespace ESCTestLayer.Implementation
         /// <summary>
         ///   A simple collision check. No candidates and stuff, just a boolean.
         /// </summary>
-        /// <param name="blockedPositions">Currently occupied positions.</param>
         /// <param name="newPosition">The position to check.</param>
         /// <returns>True, if collision occures. False otherwise.</returns>
         private bool CheckForCollisions(AABB newPosition)

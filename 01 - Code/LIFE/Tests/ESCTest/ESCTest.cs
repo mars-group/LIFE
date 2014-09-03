@@ -38,16 +38,16 @@ namespace ESCTest {
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 0);
-      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)).Position));
 
       pos = new Vector3f(2, 1, 0);
-      Assert.True(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(-1, 0, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(-1, 0, 0)).Position));
 
       pos = new Vector3f(2, 0, 0);
-      Assert.True(pos.Equals(_esc.SetPosition(2, pos, new Vector3f(0, -1, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(2, pos, new Vector3f(0, -1, 0)).Position));
 
       pos = new Vector3f(0, 2, 0);
-      Assert.True(pos.Equals(_esc.SetPosition(3, pos, new Vector3f(1, 0, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(3, pos, new Vector3f(1, 0, 0)).Position));
     }
 
 
@@ -61,10 +61,10 @@ namespace ESCTest {
       Vector3f pos;
 
       pos = new Vector3f(1, 1, 0);
-      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)).Position));
 
       pos = new Vector3f(1, 1, 0);
-      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(-1, 0, 0))));
+      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(-1, 0, 0)).Position));
     }
 
 
@@ -79,10 +79,10 @@ namespace ESCTest {
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 1);
-      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)).Position));
 
       pos = new Vector3f(1, 1, 0);  
-       Assert.True(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(-1, 1, 0))));
+       Assert.True(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(-1, 1, 0)).Position));
     }
 
 
@@ -97,13 +97,13 @@ namespace ESCTest {
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 1);
-      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)).Position));
 
       pos = new Vector3f(1, 1, 0);  
-      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(1, 1, 1))));
+      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(1, 1, 1)).Position));
 
       pos = new Vector3f(1, 0, 1);  
-      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(1, 0, 1))));
+      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(1, 0, 1)).Position));
     }
 
 
@@ -118,23 +118,23 @@ namespace ESCTest {
       Vector3f pos, ret;
 
       pos = new Vector3f(1, 1, 1);
-      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector3f(0, 1, 0)).Position));
 
       pos = new Vector3f(1, 1, 0);  
-      Assert.True(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(1, -1, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(1, pos, new Vector3f(1, -1, 0)).Position));
 
-      Assert.True(pos.Equals(_esc.SetPosition(1, new Vector3f(1, 1, 1), new Vector3f(1, 0, 0))));
+      Assert.True(pos.Equals(_esc.SetPosition(1, new Vector3f(1, 1, 1), new Vector3f(1, 0, 0)).Position));
     }
 
 
     [Test]
-    public void Test50000() {
+    public void Test500() {
 
       Vector3f dims = new Vector3f(1, 1, 1);
       Vector3f dir  = new Vector3f(1, 0, 0);
 
       var stopwatch = Stopwatch.StartNew();
-      for (int i = 0; i < 50000; i++) {
+      for (int i = 0; i < 500; i++) {
         _esc.Add(i, dims);
         _esc.SetPosition(i, new Vector3f(i, 0, 0), dir);
       }
