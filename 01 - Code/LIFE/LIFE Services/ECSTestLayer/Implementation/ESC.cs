@@ -59,8 +59,8 @@ namespace ESCTestLayer.Implementation
                 return new MovementResult(_positions[elementId]);
             }
             //otherwise update position, direction and axis aligned bounding intervals for elementId
-            _positions.Add(elementId, position);
-            _directions.Add(elementId, direction);
+            _positions[elementId] = position;
+            _directions[elementId] = direction;
             _aabbs[elementId] = aabb;
             return new MovementResult(position);
         }
@@ -124,9 +124,9 @@ namespace ESCTestLayer.Implementation
             var newPosition = GetAABB(position, direction, _dimensions[elementId]);
             var collisions = new List<CollidableElement>();
 
-            var result = Parallel.ForEach
+            Parallel.ForEach
                 (_aabbs,
-                    (keyValuePair) =>
+                    keyValuePair =>
                     {
                         if (newPosition.XIntv.Collide(keyValuePair.Value.XIntv) &&
                             newPosition.YIntv.Collide(keyValuePair.Value.YIntv) &&
