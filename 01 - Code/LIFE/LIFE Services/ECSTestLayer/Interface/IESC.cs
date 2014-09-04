@@ -24,7 +24,7 @@ namespace ESCTestLayer.Interface
         /// <param name="elementId"></param>
         /// <param name="dimension"></param>
         /// <returns>the current position; null if update did not succeed</returns>
-        Vector3f Update(int elementId, Vector3f dimension);
+        bool Update(int elementId, Vector3f dimension);
 
         /// <summary>
         /// tries to set the element to given position
@@ -33,7 +33,7 @@ namespace ESCTestLayer.Interface
         /// <param name="position"></param>
         /// <param name="direction"></param>
         /// <returns>the current position of element. equals give position parameter if no collision occured</returns>
-        Vector3f SetPosition(int elementId, Vector3f position, Vector3f direction);
+        bool SetPosition(int elementId, Vector3f position, Vector3f direction);
 
         /// <summary>
         /// tries to set the element randomly in given area that is describes by it's corners min and max
@@ -43,7 +43,7 @@ namespace ESCTestLayer.Interface
         /// <param name="max">Maximum value (xMax, yMax, zMax). This position is excluded.</param>
         /// <param name="grid">Tells, whether only integer ('true') or decimal ('false') values shall be generated.</param>
         /// <returns>the current position of element</returns>
-        Vector3f SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid);
+        bool SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid);
 
         /// <summary>
         /// get the distance between the both elemtents. takes the dimesion into consideration.

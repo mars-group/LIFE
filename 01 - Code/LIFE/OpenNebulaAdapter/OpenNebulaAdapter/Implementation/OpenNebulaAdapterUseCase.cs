@@ -52,7 +52,7 @@ namespace OpenNebulaAdapter.Implementation
         }
 
         public bool createVMsFromNodeConfig(NodeConfig nodeConfig) {
-            
+            return false;
         }
 
     }
