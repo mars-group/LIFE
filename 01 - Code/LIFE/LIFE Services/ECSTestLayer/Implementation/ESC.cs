@@ -41,33 +41,33 @@ namespace ESCTestLayer.Implementation
             _dimensions.Remove(elementId);
         }
 
-        public bool Update(int elementId, Vector3f dimension)
+        public MovementResult Update(int elementId, Vector3f dimension)
         {
             _dimensions[elementId] = dimension;
             if (_positions.ContainsKey(elementId))
             {
                 return SetPosition(elementId, _positions[elementId], _directions[elementId]);
             }
-            return true;
+            return null;
         }
 
-        public Boolean SetPosition(int elementId, Vector3f position, Vector3f direction)
+        public MovementResult SetPosition(int elementId, Vector3f position, Vector3f direction)
         {
             var aabb = GetAABB(position, direction, _dimensions[elementId]);
             if (CheckForCollisions(aabb))
             {
-                return false;
+                return new MovementResult(_positions[elementId]);
             }
-
-            // Otherwise update position, direction and axis aligned bounding intervals for element id.
-            _positions [elementId] = position;
+            //otherwise update position, direction and axis aligned bounding intervals for elementId
+            _positions[elementId] = position;
             _directions[elementId] = direction;
-            _aabbs     [elementId] = aabb;
-            return true;
+            _aabbs[elementId] = aabb;
+            return new MovementResult(position);
         }
 
 
-        public Boolean SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid) {
+        public MovementResult SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid)
+        {
             if (min == null) min = new Vector3f(0.0f, 0.0f, 0.0f);
             var zUsed = (max.Z - min.Z > float.Epsilon);
             Vector3f dir = null;
@@ -80,8 +80,10 @@ namespace ESCTestLayer.Implementation
             );
 
             // When only grids are wished, position is finished. Next, create direction normal vector.
-            if (grid) {
-                switch (_rnd.Next(0, 4)) {                                //         Z
+            if (grid)
+            {
+                switch (_rnd.Next(0, 4))
+                {                                //         Z
                     case 0: dir = new Vector3f(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
                     case 1: dir = new Vector3f(0.0f, -1.0f, 0.0f); break; // left    |  /
                     case 2: dir = new Vector3f(1.0f, 0.0f, 0.0f); break;  // up      | /
@@ -90,7 +92,8 @@ namespace ESCTestLayer.Implementation
             }
 
             // Otherwise we want floating point values. Randomize position, create normal vector and normalize it. 
-            else {
+            else
+            {
                 pos.X += (float)_rnd.NextDouble();
                 pos.Y += (float)_rnd.NextDouble();
                 if (zUsed) pos.Z += (float)_rnd.NextDouble();
@@ -102,28 +105,50 @@ namespace ESCTestLayer.Implementation
             }
 
             // Try to get this position.
-            if (!SetPosition(elementId, pos, dir)) {
+            if (SetPosition(elementId, pos, dir).Position == null)
+            {
                 // try one more time
                 //TOOD Abbruchkriterium?
                 return SetRandomPosition(elementId, min, max, grid);
             }
-            return true;
+            return new MovementResult(pos);
         }
 
         public float GetDistance(int anElementId, int anotherElementId)
         {
-            throw new NotImplementedException();
+            return _positions[anElementId].GetDistance(_positions[anElementId]);
         }
 
         public IEnumerable<CollidableElement> Explore(int elementId, Vector3f position, Vector3f direction)
         {
-            throw new NotImplementedException();
+            var newPosition = GetAABB(position, direction, _dimensions[elementId]);
+            var collisions = new List<CollidableElement>();
+
+            Parallel.ForEach
+                (_aabbs,
+                    keyValuePair =>
+                    {
+                        if (newPosition.XIntv.Collide(keyValuePair.Value.XIntv) &&
+                            newPosition.YIntv.Collide(keyValuePair.Value.YIntv) &&
+                            newPosition.ZIntv.Collide(keyValuePair.Value.ZIntv))
+                        {
+                            var elem = new CollidableElement();
+                            elem.Id = keyValuePair.Key;
+                            elem.Dimension = _dimensions[elem.Id];
+                            elem.Direction = _directions[elem.Id];
+                            elem.Position = _positions[elem.Id];
+                            collisions.Add(elem);
+                        }
+
+                    });
+
+            return collisions;
         }
 
         #region private_code
 
         /* Container for the x, y and z bounding intervals. */
-        public struct AABB
+        private struct AABB
         {
             public AxisAlignedBoundingInterval XIntv, YIntv, ZIntv;
             public override string ToString()
@@ -141,7 +166,6 @@ namespace ESCTestLayer.Implementation
         /// <returns>AABB structure.</returns>
         private static AABB GetAABB(Vector3f position, Vector3f direction, Vector3f dimension)
         {
-
             // Create all vertices of the bounding box. Probably some of them will suffice ...
             var points = new Vector3f[8];
             points[0] = new Vector3f(-dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
@@ -185,11 +209,9 @@ namespace ESCTestLayer.Implementation
             };
         }
 
-
         /// <summary>
         ///   A simple collision check. No candidates and stuff, just a boolean.
         /// </summary>
-        /// <param name="blockedPositions">Currently occupied positions.</param>
         /// <param name="newPosition">The position to check.</param>
         /// <returns>True, if collision occures. False otherwise.</returns>
         private bool CheckForCollisions(AABB newPosition)

@@ -72,7 +72,7 @@ namespace ESCTestLayer.Entities
         public float GetDistance(Vector3f pos) {
           return (float) Math.Sqrt((X - pos.X)*(X - pos.X) +
                                    (Y - pos.Y)*(Y - pos.Y) +
-                                   (Z - pos.Z)*(Z - pos.Z));      
+                                   (Z - pos.Z)*(Z - pos.Z));  
         }
 
 

@@ -24,7 +24,7 @@ namespace SMConnector {
         /// Starts a simulation with the model derived from the provided TModelDescription.
         /// </summary>
         /// <param name="model">not null</param>
-        /// <param name="layerContainers">The layer containers witht which </param>
+        /// <param name="layerContainers">The layer containers with which </param>
         /// <param name="nrOfTicks"></param>
         void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
 
