@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using OpenNebulaAdapter.Entities;
 using Terradue.OpenNebula;
 
@@ -21,25 +22,27 @@ namespace OpenNebulaAdapter.Implementation
 
             try {
                 foreach (var node in nodeConfig.Nodes) {
+                    var stb = new StringBuilder();
+                    stb.Append("NAME = \"" + node.NodeName + " Template\"\n");
+                    stb.Append("CONTEXT=[NETWORK=\"YES\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\"]\n");
+                    stb.Append("CPU=\"" + node.CpuCount + "\"\n");
+                    stb.Append("DISK=[\n");
+                    stb.Append("\tDRIVER=\"qcow2\",\n");
+                    stb.Append("\tIMAGE=\"UbuntuServer14\",\n");
+                    stb.Append("\tIMAGE_UNAME=\"christian\"]\n");
+                    stb.Append("DISK=[\n");
+                    stb.Append("\tSIZE=\"4096\",\n");
+                    stb.Append("\tTYPE=\"swap\"]\n");
+                    stb.Append("GRAPHICS=[\n");
+                    stb.Append("\tKEYMAP=\"de\",\n");
+                    stb.Append("\tLISTEN=\"0.0.0.0\",\n");
+                    stb.Append("\tTYPE=\"VNC\"]\n");
+                    stb.Append("MEMORY=\"" + (node.RamAmount * 1024) + "\"\n");
+                    stb.Append("NIC=[MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork\",NETWORK_UNAME=\"christian\"]\n");
+                    stb.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
+                    stb.Append("VCPU=\"" + node.CpuCount + "\"");
 
-                    var template = "NAME = \"" + node.NodeName + " Template\"\n"
-                                   + "CONTEXT=[NETWORK=\"YES\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\"]\n"
-                                   + "CPU=\"" + node.CpuCount + "\"\n"
-                                   + "DISK=[\n"
-                                   + "\tDRIVER=\"qcow2\",\n"
-                                   + "\tIMAGE=\"UbuntuServer14\",\n"
-                                   + "\tIMAGE_UNAME=\"christian\"]\n"
-                                   + "DISK=[\n"
-                                   + "\tSIZE=\"4096\",\n"
-                                   + "\tTYPE=\"swap\"]\n"
-                                   + "GRAPHICS=[\n"
-                                   + "\tKEYMAP=\"de\",\n"
-                                   + "\tLISTEN=\"0.0.0.0\",\n"
-                                   + "\tTYPE=\"VNC\"]\n"
-                                   + "MEMORY=\"" + (node.RamAmount * 1024) + "\"\n"
-                                   + "NIC=[MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork\",NETWORK_UNAME=\"christian\"]\n"
-                                   + "OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n"
-                                   + "VCPU=\"" + node.CpuCount + "\"";
+                    var template = stb.ToString();
 
                     var templateID = _one.TemplateAllocate(template);
 
