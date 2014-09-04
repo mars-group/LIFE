@@ -13,6 +13,7 @@ namespace OpenNebulaAdapter.Entities
         public NodeConfig(IDictionary<string,object> jsNodeConfig) {
             Name = (string)jsNodeConfig["name"];
             Owner = (string)jsNodeConfig["owner"];
+            Nodes = new List<Node>();
             foreach (IDictionary<string, dynamic> node in (object[])jsNodeConfig["nodes"])
             {
                 Nodes.Add(new Node(node));

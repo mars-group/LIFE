@@ -22,7 +22,7 @@ namespace OpenNebulaAdapter.Implementation
             try {
                 foreach (var node in nodeConfig.Nodes) {
 
-                    var template = "NAME = " + node.NodeName + " Template\n"
+                    var template = "NAME = \"" + node.NodeName + " Template\"\n"
                                    + "CONTEXT=[NETWORK=\"YES\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\"]\n"
                                    + "CPU=\"" + node.CpuCount + "\"\n"
                                    + "DISK=[\n"
@@ -36,7 +36,7 @@ namespace OpenNebulaAdapter.Implementation
                                    + "\tKEYMAP=\"de\",\n"
                                    + "\tLISTEN=\"0.0.0.0\",\n"
                                    + "\tTYPE=\"VNC\"]\n"
-                                   + "MEMORY=\"" + node.RamAmount + "\"\n"
+                                   + "MEMORY=\"" + (node.RamAmount * 1024) + "\"\n"
                                    + "NIC=[MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork\",NETWORK_UNAME=\"christian\"]\n"
                                    + "OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n"
                                    + "VCPU=\"" + node.CpuCount + "\"";
