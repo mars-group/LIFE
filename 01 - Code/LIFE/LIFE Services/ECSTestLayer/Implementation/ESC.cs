@@ -58,10 +58,11 @@ namespace ESCTestLayer.Implementation
             {
                 return false;
             }
-            //otherwise update position, direction and axis aligned bounding intervals for elementId
-            _positions.Add(elementId, position);
-            _directions.Add(elementId, direction);
-            _aabbs[elementId] = aabb;
+
+            // Otherwise update position, direction and axis aligned bounding intervals for element id.
+            _positions [elementId] = position;
+            _directions[elementId] = direction;
+            _aabbs     [elementId] = aabb;
             return true;
         }
 

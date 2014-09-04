@@ -51,23 +51,9 @@ namespace AgentTester {
       
 
       Console.WriteLine ("Testmethode für die Bewegungsklasse.");
-
-
-      var m = new ContinuousMovement (new ESC(), 0, new Vector(1, 1, 1));
-      m.Test1(new Vector(2, 2, 0));
-      /*
-      m.SetPitch(20);
-      m.SetYaw(45);
-      m.SetMovementSpeed(2);
       
-      Console.WriteLine("[000] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
-
-      m.Move();
-      Console.WriteLine("[001] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
-
-      m.Move();
-      Console.WriteLine("[002] Pitch: "+m.Pitch+", Yaw: "+m.Yaw+", Pos: "+m.Position+", Tgt: "+m.TargetPos);
-      */
+      var m = new ContinuousMovement (new ESC(), 0, new Vector(1, 1, 0));
+      for (var i = 0; i < 16; i ++) m.MoveToPosition(new Vector(9, 4), 1f);
 
       Console.ReadLine();
     }

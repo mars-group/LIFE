@@ -84,6 +84,9 @@ namespace GenericAgentArchitecture.Movement {
                           (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
                           (float) (Math.Sin(pitchRad)));      
 
+
+      Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
+
       _esc.SetPosition(_agentId, GetVector3F(TargetPos), GetVector3F(dv));
       //TODO Check result for success / failure and behave accordingly.
       //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.

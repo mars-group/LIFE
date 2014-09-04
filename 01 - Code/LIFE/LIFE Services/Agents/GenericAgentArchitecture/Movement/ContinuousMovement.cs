@@ -45,33 +45,53 @@ namespace GenericAgentArchitecture.Movement {
     }
 
 
+    /// <summary>
+    ///   This function automatically sets the yaw and pitch values to go to 
+    ///   the supplied point. It then executes movement with the given speed. 
+    /// </summary>
+    /// <param name="targetPos">A point the agent shall go to.</param>
+    /// <param name="speed">The agent's movement speed.</param>
+    public void MoveToPosition (Vector targetPos, float speed) {
 
-    public void Test1(Vector targetPos) {
+      // Check, if we are already there. Otherwise no need to move anyway.
+      var distance = Position.GetDistance(targetPos);
+      if (Math.Abs(distance) <= float.Epsilon) return;
 
-      targetPos = new Vector(-1, -1);
-
-      Console.WriteLine("Pos: "+Position);
-      Console.WriteLine("Tgt: "+targetPos);
-
-
-      // Check, if we are already there. No need to move anyway.
-      if (Math.Abs(Position.GetDistance(targetPos)) <= float.Epsilon) return;
-
-      // Radians to degree conversion: 180/π = 57.295
-      var yaw = Math.Atan((targetPos.X-Position.X) / (targetPos.Y-Position.Y)) * 57.295779f;
-      
-      
-      //if (yaw < 0f) yaw += 360f;
-      
+      // Pitch calculation.
+      var pitch = (float) Math.Asin((targetPos.Z-Position.Z) / distance) * 57.295779f;
 
 
+      // Yaw calculation. Radians to degree conversion: 180/π = 57.295
+      var yaw = Yaw;
+      var distX = targetPos.X - Position.X;
+      var distY = targetPos.Y - Position.Y;
 
-       
+      // Check 90° and 270° (arctan infinite) first.      
+      if (Math.Abs(distX) <= float.Epsilon) {
+        if      (distY > 0f) yaw =  90f;
+        else if (distY < 0f) yaw = 270f;
+      }
+
+      // Arctan argument fine? Calculate heading then.
+      else {
+        yaw = (float) Math.Atan(distY / distX) * 57.295779f;
+        if (distX < 0f) yaw += 180f;  // Range  90° to 270° correction. 
+        if (yaw   < 0f) yaw += 360f;  // Range 270° to 360° correction.        
+      }
+
+
+      // Check the speed. If we would go too far, reduce it accordingly.
+      if (distance < (speed*TickLength)) speed = distance/TickLength;
   
+      // Save calculated values to base class and set movement speed.
+      base.SetPitch(pitch);
+      base.SetYaw(yaw);
+      SetMovementSpeed(speed);
 
-
-      Console.WriteLine("Yaw: "+yaw);
-
+      // Disable turning speeds and execute movement.
+      PitchAS = 0f;
+      YawAS = 0f;
+      Move();
     }
 
 
