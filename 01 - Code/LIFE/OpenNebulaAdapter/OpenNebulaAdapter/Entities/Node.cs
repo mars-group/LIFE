@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 namespace OpenNebulaAdapter.Entities
 {
-    class Node {
-        protected string NodeName { get; private set; }
-        protected int CpuCount { get; private set; }
-        protected int RamAmount { get; private set; }
-        protected int PhysicalHost { get; private set; }
+    public class Node {
+        public string NodeName { get; private set; }
+        public int CpuCount { get; private set; }
+        public int RamAmount { get; private set; }
+        public int PhysicalHost { get; private set; }
 
         public Node(IDictionary<string, dynamic> node) {
             NodeName = node["nodeName"];

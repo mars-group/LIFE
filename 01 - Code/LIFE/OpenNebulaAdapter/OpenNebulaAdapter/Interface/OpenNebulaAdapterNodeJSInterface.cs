@@ -8,12 +8,8 @@ using OpenNebulaAdapter.Implementation;
 
 namespace OpenNebulaAdapter.Interface
 {
-    public class OpenNebulaAdapterNodeJSInterface
+    public class OpenNebulaAdapterNodeJsInterface
     {
-
-        public static void Main(String[] args) {
-
-        }
 
         public async Task<object> GetOneAdapter(dynamic input) {
             // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
@@ -28,21 +24,20 @@ namespace OpenNebulaAdapter.Interface
                 createVMsFromNodeConfig = (Func<dynamic, Task<object>>) (async i => await Task.Run(
                     () => {
                         var payload = (IDictionary<string, object>) i;
-                        return oneAdapter.createVMsFromNodeConfig(new NodeConfig(payload));
+                        return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
                     })
                     )
             };
         }
+    }
 
-
-        public static class AssemblyResolverFix
+    public static class AssemblyResolverFix
+    {
+        //Looks up the assembly in the set of currently loaded assemblies,
+        //and returns it if the name matches. Else returns null.
+        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
         {
-            //Looks up the assembly in the set of currently loaded assemblies,
-            //and returns it if the name matches. Else returns null.
-            public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
-            {
-                return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
-            }
+            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
         }
     }
 }

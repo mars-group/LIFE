@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace OpenNebulaAdapter.Entities
 {
-    class NodeConfig {
+    public class NodeConfig {
 
-        protected string Name { get; private set; }
-        protected string Owner { get; private set; }
-        protected List<Node> Nodes { get; private set; }
+        public string Name { get; private set; }
+        public string Owner { get; private set; }
+        public List<Node> Nodes { get; private set; }
 
         public NodeConfig(IDictionary<string,object> jsNodeConfig) {
             Name = (string)jsNodeConfig["name"];
