@@ -1,5 +1,10 @@
 ﻿using System;
-using Terradue.OpenNebula;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using OpenNebulaAdapter.Entities;
+using OpenNebulaAdapter.Implementation;
 
 namespace OpenNebulaAdapter.Interface
 {
@@ -7,24 +12,37 @@ namespace OpenNebulaAdapter.Interface
     {
 
         public static void Main(String[] args) {
-            // First create the client
-            const string proxyUrl = "http://141.22.29.2:2633/RPC2";
-            const string adminUser = "serveradmin"; //should be user with driver server_* to allow requests delegation
-            const string adminPwd = "80051ee6a7b403ae88cb1fa8e5d9d0877eddfbc0"; //SHA1 password
-            
-            var one = new OneClient(proxyUrl, adminUser, adminPwd);
-            
-            // Do a request as admin
-            USER_POOL pool = one.UserGetPoolInfo();
-            var templateInfo = one.TemplateGetInfo(15);
 
-            
-            // Do a request on behalf of a normal user
-            string targetUser = "christian";
-            one.StartDelegate(targetUser);
-            
-            int RemoteId = one.TemplateInstanciateVM(15, "TestVM", false, "");
-            one.EndDelegate();
+        }
+
+        public async Task<object> GetOneAdapter(dynamic input) {
+            // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
+            // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
+
+
+            var oneAdapter = new OpenNebulaAdapterUseCase();
+
+
+            return new {
+                createVMsFromNodeConfig = (Func<dynamic, Task<object>>) (async i => await Task.Run(
+                    () => {
+                        var payload = (IDictionary<string, object>) i;
+                        return oneAdapter.createVMsFromNodeConfig(new NodeConfig(payload));
+                    })
+                    )
+            };
+        }
+
+
+        public static class AssemblyResolverFix
+        {
+            //Looks up the assembly in the set of currently loaded assemblies,
+            //and returns it if the name matches. Else returns null.
+            public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
+            {
+                return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
+            }
         }
     }
 }
