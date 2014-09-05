@@ -12,10 +12,10 @@ namespace GoapModelTest.Actions {
             : base(preconditionWorldstates: preconditionWorldstates, effectWorldstates: effectWorldstates) {}
 
         public ActionGetToy()
-            : base(new List<IGoapWorldstate> { new HasMoney(true, WorldStateEnums.HasMoney) },
+            : base(new List<IGoapWorldstate> { new HasMoney(true) },
                 new List<IGoapWorldstate> {
-                    new HasMoney(false, WorldStateEnums.HasMoney),
-                    new HasToy(true, WorldStateEnums.HasToy)
+                    new HasMoney(false),
+                    new HasToy(true)
                 }) {}
 
         public override bool ValidateContextPreconditions() {

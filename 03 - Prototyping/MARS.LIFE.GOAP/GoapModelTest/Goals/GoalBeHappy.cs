@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GoapCommon.Interfaces;
+using GoapModelTest.Worldstates;
 
-namespace GoapModelTest.Goals
-{
+namespace GoapModelTest.Goals {
     public class GoalBeHappy : IGoapGoal {
+        /// <summary>
+        /// value may be in range from 1 to 10
+        /// </summary>
+        private int _relevancy = 5;
+        private readonly List<IGoapWorldstate> _fullfilledBy = new List<IGoapWorldstate> {new Happy(true)};
 
-        private int _relevancy;
-
-        public GoalBeHappy(List<IGoapWorldstate> startWorldstate) {
-            _relevancy = UpdateRelevancy(startWorldstate);
-        }
 
         public bool IsSatisfied(List<IGoapWorldstate> worldstate) {
-            throw new NotImplementedException();
+            return (_fullfilledBy.Where(x => worldstate.Contains(x)).Count() == _fullfilledBy.Count());
         }
 
         public int GetRelevancy() {
@@ -26,6 +24,16 @@ namespace GoapModelTest.Goals
         public int UpdateRelevancy(List<IGoapWorldstate> actualWorldstate) {
             _relevancy = actualWorldstate.Count;
             return GetRelevancy();
+        }
+
+        public ISet<Type> GetAffectingWorldstateTypes() {
+            var types = new HashSet<Type>();
+
+            foreach (var goapWorldstate in _fullfilledBy) {
+                types.Add(goapWorldstate.GetType());
+            }
+
+            return types;
         }
     }
 }

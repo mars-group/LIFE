@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Xml;
 using CommonTypes.Interfaces;
 using GoapActionSystemFactory.Implementation;
 using GoapCommon.Interfaces;
@@ -184,9 +186,14 @@ namespace GoapUser {
 
 
 
-            IActionSystem goaActionSystem = GoapComponent.GetFullModelTestGoap();
+           
+
+            IActionSystem goapActionSystem = GoapComponent.LoadAgentCombination("AgentConfig1", "GoapModelTest");
+
+           
 
 
+         
 
 
             Console.ReadKey();

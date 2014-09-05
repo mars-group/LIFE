@@ -5,12 +5,11 @@ namespace GoapModelTest.Worldstates {
     public class HasToy : IGoapWorldstate, IEquatable<HasToy> {
 
         private bool _isValid;
-        private readonly Enum _stateSymbol;
+        private readonly Enum _stateSymbol = WorldStateEnums.HasToy;
 
-        public HasToy(bool valid, Enum stateSymbol)
+        public HasToy(bool valid)
         {
             _isValid = valid;
-            _stateSymbol = stateSymbol;
         }
        
         public Enum GetWorldstateSymbol() {
@@ -31,7 +30,7 @@ namespace GoapModelTest.Worldstates {
 
         public IGoapWorldstate GetClone()
         {
-            return new HasToy(_isValid, _stateSymbol);
+            return new HasToy(_isValid);
         }
 
         public override string ToString()

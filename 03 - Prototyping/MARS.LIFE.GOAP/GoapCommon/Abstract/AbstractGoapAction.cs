@@ -36,6 +36,18 @@ namespace GoapCommon.Abstract {
             get { return _effects; }
         }
 
+        public ISet<Type> GetAffectingWorldstateTypes() {
+            var types = new HashSet<Type>();
+
+            foreach (var goapWorldstate in _effects) {
+                types.Add(goapWorldstate.GetType());
+            }
+            foreach (var goapWorldstate in _preConditions) {
+                types.Add(goapWorldstate.GetType());
+            }
+            return types;
+        }
+
         protected AbstractGoapAction(List<IGoapWorldstate> preconditionWorldstates,
             List<IGoapWorldstate> effectWorldstates) {
             _preConditions = preconditionWorldstates;

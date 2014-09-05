@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base>
+  <goap>
+    <config_value>111</config_value>
+    <config_test>t_1</config_test>
+
+    <goapworldstates>
+      <worldstate_name>Happy</worldstate_name>
+      <value>false</value>
+    </goapworldstates>
+    <goapworldstates>
+      <worldstate_name>HasMoney</worldstate_name>
+      <value>false</value>
+    </goapworldstates>
+    <goapworldstates>
+      <worldstate_name>HasMoney</worldstate_name>
+      <value>true</value>
+    </goapworldstates>
+    
+    
+    
+    
+  </goap>
+  
+  
+  <test_head>
+    <test5>t_5</test5>
+    <test6>t_6</test6>
+  </test_head>
+</base>

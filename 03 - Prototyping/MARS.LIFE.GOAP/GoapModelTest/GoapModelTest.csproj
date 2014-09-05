@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,12 +48,15 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Goals\GoalBeHappy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AgentConfig1.cs" />
     <Compile Include="Worldstates\Happy.cs" />
     <Compile Include="Worldstates\HasMoney.cs" />
     <Compile Include="Worldstates\HasToy.cs" />
     <Compile Include="Worldstates\WorldStateEnums.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="GoapModelTest.xml" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
       <Project>{4a1d955e-8135-4c44-a8ba-1edbe54512b7}</Project>
@@ -63,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

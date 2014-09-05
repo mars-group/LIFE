@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace GoapCommon.Interfaces
@@ -11,5 +12,6 @@ namespace GoapCommon.Interfaces
 
         int UpdateRelevancy(List<IGoapWorldstate> actualWorldstate);
 
+        ISet<Type> GetAffectingWorldstateTypes();
     }
 }

@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.core">
       <HintPath>..\packages\NUnitTestAdapter.1.1\lib\nunit.core.dll</HintPath>
       <Private>False</Private>
@@ -61,6 +64,7 @@
     <Compile Include="Abstract\AbstractGoapAction.cs" />
     <Compile Include="Exceptions\GraphException.cs" />
     <Compile Include="Exceptions\NoVertexFoundException.cs" />
+    <Compile Include="Interfaces\IAgentConfig.cs" />
     <Compile Include="Interfaces\IGoapGoal.cs" />
     <Compile Include="Interfaces\IGoapAction.cs" />
     <Compile Include="Interfaces\IGoapEdge.cs" />

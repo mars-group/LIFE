@@ -32,5 +32,7 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <returns></returns>
         bool ExecuteContextEffects();
+
+        
     }
 }

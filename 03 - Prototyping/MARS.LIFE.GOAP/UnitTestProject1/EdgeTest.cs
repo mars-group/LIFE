@@ -50,8 +50,6 @@ namespace GoapCustomGraphTests {
 
         [Test]
         public void EqualityOperatorTest() {
-            Assert.True(_e1 == _e1);
-            Assert.True(_e1 != _e3);
             Assert.True(_e1 != null);
             Assert.False(_e1 == _e3);
             Assert.False(_e2 == null);

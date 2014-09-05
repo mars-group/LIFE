@@ -12,9 +12,9 @@ namespace GoapModelTest.Actions {
             : base(preconditionWorldstates, effectWorldstates) {}
 
         public ActionClean()
-            : base(new List<IGoapWorldstate> {new Happy(true, WorldStateEnums.Happy)}, new List<IGoapWorldstate> {
-                new Happy(false, WorldStateEnums.Happy),
-                new HasMoney(true, WorldStateEnums.HasMoney)
+            : base(new List<IGoapWorldstate> {new Happy(true)}, new List<IGoapWorldstate> {
+                new Happy(false),
+                new HasMoney(true)
             }) {}
 
         public override bool ValidateContextPreconditions() {

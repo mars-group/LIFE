@@ -4,11 +4,10 @@ using GoapCommon.Interfaces;
 namespace GoapModelTest.Worldstates {
     public class HasMoney : IGoapWorldstate, IEquatable<HasMoney> {
          private bool _isValid;
-         private readonly Enum _stateSymbol;
+         private readonly Enum _stateSymbol = WorldStateEnums.HasMoney;
 
-        public HasMoney(bool valid, Enum stateSymbol){
+        public HasMoney(bool valid){
             _isValid = valid;
-             _stateSymbol = stateSymbol;
          }
        
         public Enum GetWorldstateSymbol() {
@@ -29,7 +28,7 @@ namespace GoapModelTest.Worldstates {
 
         public IGoapWorldstate GetClone()
         {
-            return new HasMoney(_isValid, _stateSymbol);
+            return new HasMoney(_isValid);
         }
 
         public override string ToString()
