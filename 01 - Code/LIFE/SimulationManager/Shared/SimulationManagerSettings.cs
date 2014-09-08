@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
@@ -27,9 +28,24 @@ namespace SimulationManagerShared
 
         //TODO: can this be internal?
         public SimulationManagerSettings() {
+            var ipAddress = "127.0.0.1";
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                {
+                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
+                    {
+                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            ipAddress = ip.Address.ToString();
+                        }
+                    }
+                }
+            }
+
             AddinLibraryDirectoryPath = "./addinConfig";
             ModelDirectoryPath = "./addinConfig/addins";
-            NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, "SM-1","127.0.0.1",44521, true);
+            NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, "SM-1", ipAddress, 44521, true);
             MulticastSenderConfig = new MulticastSenderConfig();
         }
     }

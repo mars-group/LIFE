@@ -15,7 +15,7 @@ namespace NodeRegistry.Implementation.UseCases
         
 
         /// <summary>
-        ///     delegates for different subscriber types.
+        ///     Delegates for different subscriber types.
         /// </summary>
         private NewNodeConnected _newNodeConnectedHandler;
 
@@ -23,7 +23,7 @@ namespace NodeRegistry.Implementation.UseCases
         private NewNodeConnected _newSimulationManagerConnectedHandler;
         private NewNodeConnected _newSimulationControllerConnectedHandler;
 
-        private ThreadSafeSortedList<TNodeInformation, NodeDisconnected> _disconnectedNodeEventHandlers;
+        private readonly ThreadSafeSortedList<TNodeInformation, NodeDisconnected> _disconnectedNodeEventHandlers;
 
         public NodeRegistryEventHandlerUseCase() {
             _disconnectedNodeEventHandlers = new ThreadSafeSortedList<TNodeInformation, NodeDisconnected>();
