@@ -12,5 +12,7 @@ namespace GoapCommon.Interfaces
 
         string GetIdentifier();
 
+        List<IGoapWorldstate> Worldstate();
+
     }
 }

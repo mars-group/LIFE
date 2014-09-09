@@ -45,7 +45,6 @@
     <Compile Include="Actions\ActionClean.cs" />
     <Compile Include="Actions\ActionGetToy.cs" />
     <Compile Include="Actions\ActionPlay.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Goals\GoalBeHappy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AgentConfig1.cs" />
@@ -53,9 +52,6 @@
     <Compile Include="Worldstates\HasMoney.cs" />
     <Compile Include="Worldstates\HasToy.cs" />
     <Compile Include="Worldstates\WorldStateEnums.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="GoapModelTest.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">

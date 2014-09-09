@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
@@ -8,7 +10,7 @@ namespace GoapGraphConnector.CustomGraph {
         private readonly int _cost;
         private readonly string _name;
 
-
+       
         public Edge(int cost, IGoapVertex source, IGoapVertex target, string name = "NotNamedEdge") {
             _cost = cost;
             _source = source;

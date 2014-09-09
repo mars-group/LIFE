@@ -53,7 +53,7 @@ namespace GoapActionSystemFactory.Implementation {
         /// <param name="nameOfConfigClass"></param>
         /// <param name="namespaceOfConfigClass"></param>
         /// <returns></returns>
-        public static IActionSystem LoadAgentCombination(string nameOfConfigClass, string namespaceOfConfigClass) {
+        public static IActionSystem LoadAgentConfiguration(string nameOfConfigClass, string namespaceOfConfigClass) {
             try {
                 Assembly assembly = Assembly.Load(namespaceOfConfigClass);
                 var configClass = (IAgentConfig)assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);

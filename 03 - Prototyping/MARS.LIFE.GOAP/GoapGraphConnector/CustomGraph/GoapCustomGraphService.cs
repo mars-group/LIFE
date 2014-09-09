@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
@@ -8,6 +9,10 @@ namespace GoapGraphConnector.CustomGraph {
         private IGoapVertex _target;
         private Graph _graph;
         private AStarSteppable _aStar;
+ 
+
+        private readonly Dictionary<IGoapEdge, AbstractGoapAction> _relationReminder =
+            new Dictionary<IGoapEdge, AbstractGoapAction>();
 
 
         public void InitializeGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
@@ -34,16 +39,18 @@ namespace GoapGraphConnector.CustomGraph {
             return _aStar.Current;
         }
 
-        public Graph Graph {
-            get { return _graph; }
-        }
-
         public bool HasNextVertexOnOpenList() {
-            throw new NotImplementedException();
+            return _aStar.HasVerticesOnOpenList();
         }
 
-        public void ExpandCurrentVertex(List<IGoapAction> outEdges) {
-            throw new NotImplementedException();
+        public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldstate> currentState) {
+            var edges = new List<IGoapEdge>();
+            foreach (var abstractGoapAction in outEdges) {
+                var newEdge = GetEdgeFromAbstractGoapAction(abstractGoapAction, currentState);
+                edges.Add(newEdge);
+                _relationReminder.Add(newEdge, abstractGoapAction);
+            }
+            ExpandCurrentVertex(edges);
         }
 
         public void ExpandCurrentVertex(List<IGoapEdge> outEdges) {
@@ -60,25 +67,28 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         public void AStarStep() {
-           
-           
             _aStar.Step();
-
-
         }
 
         /// <summary>
-        /// Sorted list of edges, where the first edge is outgoing from the start state. 
-        /// List ends at the current Vertex.
+        ///     Sorted list of actions starting at root
         /// </summary>
         /// <returns></returns>
-        public List<IGoapAction> GetShortestPath() {
-            throw new NotImplementedException();
+        List<AbstractGoapAction> IGoapGraph.GetShortestPath() {
+            List<IGoapEdge> edges = GetEdgesList();
+            List<AbstractGoapAction> actionList = new List<AbstractGoapAction>();
+
+            foreach (var goapEdge in edges) {
+                AbstractGoapAction action;
+                _relationReminder.TryGetValue(goapEdge, out action);
+                actionList.Add(action);
+            }
+            return actionList;
         }
 
         /// <summary>
-        /// Sorted list of edges, where the first edge is outgoing from the start state. 
-        /// List ends at the current Vertex.
+        ///     Sorted list of edges, where the first edge is outgoing from the start state.
+        ///     List ends at the current Vertex.
         /// </summary>
         /// <returns></returns>
         public List<IGoapEdge> GetEdgesList() {
@@ -86,7 +96,16 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         public int GetActualDepthFromRoot() {
-            throw new NotImplementedException();
+            var countOf = _aStar.CreateResultListToCurrent().Count;
+            Console.WriteLine(countOf);
+            return countOf;
+        }
+
+
+        public IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
+            var start = new Vertex(currentState);
+            var target = new Vertex(action.GetSourceWorldstate(currentState));
+            return new Edge(1, start, target);
         }
     }
 }

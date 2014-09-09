@@ -73,6 +73,10 @@ namespace GoapGraphConnector.CustomGraph {
             return _current;
         }
 
+        public bool HasVerticesOnOpenList() {
+            return _nodeTable.Any(keyValuePair => keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false);
+        }
+
         /// <summary>
         ///     compare current vertex to target vertex
         /// </summary>
@@ -125,7 +129,6 @@ namespace GoapGraphConnector.CustomGraph {
             Calculate(_current, _graph.GetReachableAdjcentVertices(_current));
             ChooseNextNodeFromOpenList();
         }
-
 
         private IGoapVertex GetPredecessor(IGoapVertex vertex) {
             if (!_nodeTable.ContainsKey(vertex))

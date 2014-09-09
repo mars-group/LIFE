@@ -59,7 +59,21 @@ namespace GoapCommon.Abstract {
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
         public bool IsExecutable(List<IGoapWorldstate> sourceWorldState) {
-            return (_preConditions.Where(x => sourceWorldState.Contains(x)).Count() == _preConditions.Count());
+            return IsSubset(_preConditions, sourceWorldState);
+        }
+
+        /// <summary>
+        ///     check if a state could be the resulting state after executing this action
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public bool IsEffectCorrespondingToState(List<IGoapWorldstate> state) {
+            return IsSubset(_effects, state);
+        }
+
+        private bool IsSubset(List<IGoapWorldstate> potentiallySubSet, List<IGoapWorldstate> enclosingSet) {
+            return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
+                    potentiallySubSet.Count());
         }
 
         /// <summary>
@@ -72,10 +86,27 @@ namespace GoapCommon.Abstract {
             List<IGoapWorldstate> resultingWorldStates =
                 (from worldstate in _effects select worldstate.GetClone()).ToList();
 
-            List<Type> typesInEffectList = (from worldstate in _effects select worldstate.GetType()).ToList();
+            List<Type> typesInEffectList =
+                (from worldstate in _effects select worldstate.GetType()).ToList();
 
             resultingWorldStates.AddRange(from worldState in sourceWorldState
                 where !typesInEffectList.Contains(worldState.GetType())
+                select worldState.GetClone());
+
+            return resultingWorldStates;
+        }
+
+        public List<IGoapWorldstate> GetSourceWorldstate(List<IGoapWorldstate> targetWorldstate) {
+            // get all preconditions at first
+            List<IGoapWorldstate> resultingWorldStates =
+                (from worldstate in _preConditions select worldstate.GetClone()).ToList();
+
+            List<Type> typesInPreconditionList =
+                (from worldstate in _preConditions select worldstate.GetType()).ToList();
+
+
+            resultingWorldStates.AddRange(from worldState in targetWorldstate
+                where !typesInPreconditionList.Contains(worldState.GetType())
                 select worldState.GetClone());
 
             return resultingWorldStates;
@@ -95,7 +126,5 @@ namespace GoapCommon.Abstract {
         public abstract int ExecutionCosts();
 
         public abstract int Precedence();
-
-
     }
 }

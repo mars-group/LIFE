@@ -13,5 +13,7 @@ namespace GoapCommon.Interfaces
         int UpdateRelevancy(List<IGoapWorldstate> actualWorldstate);
 
         ISet<Type> GetAffectingWorldstateTypes();
+
+        List<IGoapWorldstate> GetTargetWorldstates();
     }
 }

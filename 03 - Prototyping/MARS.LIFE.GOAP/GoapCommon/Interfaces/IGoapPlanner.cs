@@ -1,23 +1,18 @@
-﻿using System.Collections.Generic;
-using CommonTypes.Interfaces;
-using GoapCommon.Interfaces;
+﻿using GoapCommon.Abstract;
 
-namespace GoapCommon.Interfaces
-{
+namespace GoapCommon.Interfaces {
     // TODO der planner kann eigentlich ein noch allgemeineres element werden - er könnte auch einfach einen entscheidungsbaum nutzsen
     /// <summary>
-    /// The planner is responsible for the whole process of finding a valid plan from the actions, currentWorld and targetWorld
-    /// given to him. The caller is responsible for giving well defined and corresponding actions and world states. 
+    ///     The planner is responsible for the whole process of finding a valid plan from the actions, currentWorld and
+    ///     targetWorld
+    ///     given to him. The caller is responsible for giving well defined and corresponding actions and world states.
     /// </summary>
-    public interface IPlanner
-    {
-
+    public interface IGoapPlanner {
         /// <summary>
-        /// the minimum feature of a planner
+        ///     the minimum feature of a planner
         /// </summary>
         /// <returns></returns>
-        IAction GetNextChosenAction();
-
+        AbstractGoapAction GetNextChosenAction();
 
 
         /*

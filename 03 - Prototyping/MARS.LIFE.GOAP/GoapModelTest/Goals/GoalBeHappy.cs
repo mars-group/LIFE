@@ -35,5 +35,9 @@ namespace GoapModelTest.Goals {
 
             return types;
         }
+
+        public List<IGoapWorldstate> GetTargetWorldstates() {
+            return _fullfilledBy;
+        }
     }
 }

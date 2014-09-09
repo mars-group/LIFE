@@ -188,10 +188,10 @@ namespace GoapUser {
 
            
 
-            IActionSystem goapActionSystem = GoapComponent.LoadAgentCombination("AgentConfig1", "GoapModelTest");
+            IActionSystem goapActionSystem = GoapComponent.LoadAgentConfiguration("AgentConfig1", "GoapModelTest");
 
-           
 
+            Console.WriteLine(goapActionSystem.GetNextAction().GetType());
 
          
 

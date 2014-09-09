@@ -71,7 +71,7 @@
     <Compile Include="Interfaces\IGoapGraph.cs" />
     <Compile Include="Interfaces\IGoapVertex.cs" />
     <Compile Include="Interfaces\IGoapWorldstate.cs" />
-    <Compile Include="Interfaces\IPlanner.cs" />
+    <Compile Include="Interfaces\IGoapPlanner.cs" />
     <Compile Include="Exceptions\AlgorithmException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

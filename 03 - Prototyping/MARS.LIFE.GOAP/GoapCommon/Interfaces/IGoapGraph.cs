@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GoapCommon.Abstract;
 
 namespace GoapCommon.Interfaces
 {
@@ -39,8 +40,9 @@ namespace GoapCommon.Interfaces
         ///     create the children of the vertex in the graph
         /// </summary>
         /// <param name="outEdges"></param>
+        /// <param name="currentState"></param>
         /// <returns></returns>
-        void ExpandCurrentVertex(List<IGoapAction> outEdges);
+        void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldstate> currentState );
 
         /// <summary>
         /// </summary>
@@ -57,7 +59,7 @@ namespace GoapCommon.Interfaces
         /// 
         /// </summary>
         /// <returns></returns>
-        List<IGoapAction> GetShortestPath();
+        List<AbstractGoapAction> GetShortestPath();
 
         int GetActualDepthFromRoot();
     }

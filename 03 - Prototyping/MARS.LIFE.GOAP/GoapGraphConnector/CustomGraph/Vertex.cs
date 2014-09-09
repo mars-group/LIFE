@@ -6,6 +6,7 @@ using GoapCommon.Interfaces;
 namespace GoapGraphConnector.CustomGraph {
     public class Vertex : IGoapVertex, IEquatable<Vertex> {
         private readonly List<IGoapWorldstate> _worldstate;
+
         private readonly string _name;
         private readonly int _heuristic;
 
@@ -26,8 +27,13 @@ namespace GoapGraphConnector.CustomGraph {
             return _heuristic;
         }
 
-        public string GetIdentifier() {
+        public string GetIdentifier()
+        {
             return _name;
+        }
+
+        List<IGoapWorldstate> IGoapVertex.Worldstate() {
+            return _worldstate;
         }
 
         public override string ToString() {

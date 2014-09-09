@@ -38,54 +38,6 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
 
-        /*
-        public void AddVertexList(List<IGoapVertex> vertices) {
-            foreach (var newVertex in vertices) {
-                AddKeyToVertexToVertex(newVertex);
-                AddKeyToVertexOutEdges(newVertex);
-            }
-        }
-        
-        public Graph AddEdgeList(List<IGoapEdge> edges ) {
-            foreach (var newEdge in edges) {
-                if (!_vertexToVertex.ContainsKey(newEdge.GetSource())) {
-                    
-                }
-            }
-        }
-
-        private void AddKeyToVertexToVertex(IGoapVertex vertex) {
-            if (!_vertexToVertex.ContainsKey(vertex)){
-                _vertexToVertex.Add(vertex, new List<IGoapVertex>());
-            }
-        }
-
-        private void AddKeyToVertexOutEdges(IGoapVertex vertex) {
-            if (!_vertexOutEdges.ContainsKey(vertex)){
-                _vertexOutEdges.Add(vertex, new List<IGoapEdge>());
-            }
-        }
-
-        private void AddValueToVertexToVertex(IGoapVertex keyVertex, IGoapVertex valueVertex) {
-            AddKeyToVertexToVertex(keyVertex);
-            List<IGoapVertex> valueOfKeyVertex;
-            _vertexToVertex.TryGetValue(keyVertex, out valueOfKeyVertex);
-            if (valueOfKeyVertex != null && !valueOfKeyVertex.Contains(valueVertex)) {
-                valueOfKeyVertex.Add(valueVertex);
-                _vertexToVertex.Add(keyVertex, valueOfKeyVertex);
-            }
-        }
-
-        private void AddValueToVertexOutEdges(IGoapEdge edge) {
-            AddKeyToVertexOutEdges(edge.GetSource());
-            List<IGoapEdge> valueOfKeyVertex;
-            _vertexOutEdges.TryGetValue(edge.GetSource(), out valueOfKeyVertex);
-            if (valueOfKeyVertex != null && !valueOfKeyVertex.Contains(edge)) {
-                valueOfKeyVertex.Add(edge);
-                _vertexOutEdges.Add(edge.GetSource(), valueOfKeyVertex);
-            }
-        }*/
-
         public IGoapEdge GetEdge(IGoapVertex source, IGoapVertex target) {
             if (!_vertices.Contains(source) || !_vertices.Contains(target))
                 throw new GraphException("source or target of edge not available in graph");
