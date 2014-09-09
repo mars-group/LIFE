@@ -5,13 +5,13 @@ using GenericAgentArchitecture.Perception;
 namespace GenericAgentArchitecture.Reasoning {
   abstract class ReasoningComponent : IAgentLogic {
 
-    protected ReadOnlyDictionary<int, Input> Perception { get; private set; } // Perception.
+    protected ReadOnlyDictionary<int, SensorInput> Perception { get; private set; } // Perception.
 
     /// <summary>
     /// Constructor for the abstract reasoning component. 
     /// </summary>
     /// <param name="perception">Read-only access to the perception memory.</param>
-    protected ReasoningComponent(ReadOnlyDictionary<int, Input> perception) {
+    protected ReasoningComponent(ReadOnlyDictionary<int, SensorInput> perception) {
       Perception = perception;
     }
 

@@ -11,7 +11,7 @@ namespace GenericAgentArchitecture.Perception {
 
     protected readonly IGenericDataSource Source;    // The data source (environment) to sense. 
     public int InformationType { get; private set; } // Link to the data type to acquire.
-    protected Halo Halo;                             // The area this sensor can percept. 
+    protected readonly Halo Halo;                    // The area this sensor can percept. 
 
 
     /// <summary>
@@ -21,10 +21,12 @@ namespace GenericAgentArchitecture.Perception {
     /// <param name="agent">The agent who owns this sensor.</param>
     /// <param name="source">Reference to the queried data source.</param>
     /// <param name="dataType">The information type, this sensor listens at.</param>
-    public DataSensor(Agent agent, IGenericDataSource source, int dataType) : base (agent) {
+    /// <param name="halo">The halo represents the perception field for this sensor.</param>
+    public DataSensor(Agent agent, IGenericDataSource source, int dataType, Halo halo) 
+      : base (agent) {
       Source = source;
       InformationType = dataType;
-      Halo = new OmniHalo();
+      Halo = halo;
     }
 
 
@@ -35,7 +37,7 @@ namespace GenericAgentArchitecture.Perception {
     /// </summary>
     /// <returns>Sensor data object.</returns>
     protected override SensorInput RetrieveData() {
-      var result = Source.GetData(InformationType);
+      var result = Source.GetData(InformationType, Halo);
       return new SensorInput(this, result, InformationType, Agent.Cycle);
     }
 

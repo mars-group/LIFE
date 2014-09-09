@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
+using GenericAgentArchitecture.Interfaces;
+using GenericAgentArchitecture.Perception;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 
 namespace AgentTester.Wolves.Agents {
-  internal class Grassland : Environment {
+  internal class Grassland : Environment, IGenericDataSource {
     public static readonly Float3 Boundary = new Float3(30, 18, 0);
     private readonly Random _random;
     private int _idCounter;
@@ -182,6 +185,30 @@ namespace AgentTester.Wolves.Agents {
                     "  - Wölfe : "+Agents.OfType<Wolf>().Count());
       
       Console.SetCursorPosition(79, 0);
+    }
+
+
+
+    /* Data source functions: Information types and retrieval method. */
+
+    public enum InformationTypes { Agents }
+
+    public Object GetData(int informationType, Halo halo) {
+      switch ((InformationTypes) informationType) {
+        
+        case InformationTypes.Agents: {
+          var map = new Dictionary<string, Agent>();
+          foreach (var agent in GetAllAgents()) {
+            if (halo.IsInRange(agent.Position.Center) && 
+                agent.Position.GetDistance(halo.Position) > float.Epsilon) {
+              map[agent.Id] = agent;
+            }
+          }
+          return map;
+        }
+        
+        default: return null;
+      }
     }
   }
 }

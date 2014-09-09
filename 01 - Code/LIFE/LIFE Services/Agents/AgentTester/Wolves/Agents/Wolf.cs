@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
 using AgentTester.Wolves.Reasoning;
@@ -20,7 +21,12 @@ namespace AgentTester.Wolves.Agents {
       Position = new Position(-1, -1, 0, 0); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
-      PerceptionUnit.AddSensor(new AgentSensor(_environment, new RadialHalo(Position, 8)));
+      PerceptionUnit.AddSensor(new DataSensor(
+        this,
+        environment,
+        (int) Grassland.InformationTypes.Agents,
+        new RadialHalo(Position, 8))
+      );
     }
 
 
@@ -36,7 +42,8 @@ namespace AgentTester.Wolves.Agents {
 
       // Calculate hunger percentage, read-out nearby agents.
       var hunger = (int)(((double)(EnergyMax - _energy)/EnergyMax)*100);
-      var agents = PerceptionUnit.GetData<GenericSensorInput>().Values.Values;
+      var rawData = PerceptionUnit.GetData((int)Grassland.InformationTypes.Agents).Data;
+      var agents = ((Dictionary<string, Agent>) rawData).Values;
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
       

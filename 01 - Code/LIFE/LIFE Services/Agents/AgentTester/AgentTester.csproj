@@ -62,9 +62,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Wolves\Perception\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>

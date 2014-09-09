@@ -1,0 +1,38 @@
+﻿Notizendatei und Ablage 
+***********************
+
+- Wahrnehmung soweit klar.
+  - Com-Geschichte fehlt noch
+  - Nachrichtendienst als TickClient? (wegen reset on tick)?
+
+- Die ReasoningComponent scheint momentan recht sinnfrei zu sein ...
+
+- Das Halo muß der Datenquelle übergeben werden.
+  - Schnittstelle IHalo erstellen?
+
+- Position in den Müll! Bewegungsklasse stattdessen einsetzen.
+  (aber erst, wenn die Sensorik wieder geht!)
+
+
+Alte Agentenerfassung (ehem. AgentSensor): 
+Muß als Datenquelle in die Umwelt rein / später macht's die ESC. 
+
+    /// <summary>
+    ///   Combine total agent set and halo perception. 
+    /// </summary>
+    /// <returns>A generic list with agent distances and references.</returns>
+    protected override SensorInput RetrieveData() {
+      var gsi = new GenericSensorInput(this);
+      foreach (var agent in _environment.GetAllAgents()) {
+        if (Halo.IsInRange(agent.Position.Center) && 
+            agent.Position.GetDistance(Halo.Position) >= float.Epsilon) {
+          gsi.Values.Add(agent.Id, agent);
+        }
+      }
+      return gsi;
+    }
+
+
+
+Tipp: Dateien löschen reduziert gelegentlich die Fehlerzahl enorm^^
+

@@ -22,7 +22,7 @@ namespace GenericAgentArchitecture.Agents {
     protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.  
     public readonly InteractionContainer Interactions; // Repertoire of all interactions.     
     public Position Position;                          // Position in an environment.
-
+    //TODO Movement module usage here ?!
 
     /// <summary>
     /// Constructor for an abstract agent. It serves as a base class that is extended with
