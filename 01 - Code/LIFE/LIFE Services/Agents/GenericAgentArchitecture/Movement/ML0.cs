@@ -15,7 +15,6 @@ namespace GenericAgentArchitecture.Movement {
 
     public Vector Position   { get; private set;   }   // The agent's center (current position). 
     public Vector TargetPos  { get; protected set; }   // Target position. May be set or auto-calculated.
-    public Vector Dimension  { get; set;           }   // Agent's physical dimensions.
     public float  Pitch      { get; private set;   }   // Direction (lateral axis).
     public float  Yaw        { get; private set;   }   // Direction (vertical axis).
 
@@ -29,7 +28,6 @@ namespace GenericAgentArchitecture.Movement {
     protected ML0 (IESC esc, int agentId, Vector dim) {
       _esc = esc;
       _agentId = agentId;
-      Dimension = dim;
 
       // Initialization with zeros.
       Position = new Vector(0.0f, 0.0f, 0.0f);
@@ -87,9 +85,10 @@ namespace GenericAgentArchitecture.Movement {
 
       Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
 
-      _esc.SetPosition(_agentId, GetVector3F(TargetPos), GetVector3F(dv));
-      //TODO Check result for success / failure and behave accordingly.
+      var result = _esc.SetPosition(_agentId, GetVector3F(TargetPos), GetVector3F(dv));
+      Position = new Vector(result.Position.X, result.Position.Y, result.Position.Z);
       //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
+      //TODO Direktion auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
       Position = TargetPos;
     }
 

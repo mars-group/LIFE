@@ -15,7 +15,7 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class Agent : IAgent {
 
-    protected long Cycle;                              // The current execution cycle.   
+    public long Cycle { get; protected set; }          // The current execution cycle.   
     public readonly string Id;                         // Unique identifier.
     protected readonly bool DebugEnabled;              // Controls console debug output.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
