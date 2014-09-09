@@ -11,6 +11,12 @@ namespace OpenNebulaAdapter.Interface
     public class OpenNebulaAdapterNodeJsInterface
     {
 
+        /// <summary>
+        /// Returns the OpenNebulaAdapter to the JS caller
+        /// Makes sure states are being hold throughout subsequent calls from the WebUI.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<object> GetOneAdapter(dynamic input) {
             // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
             // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
@@ -19,14 +25,34 @@ namespace OpenNebulaAdapter.Interface
 
             var oneAdapter = new OpenNebulaAdapterUseCase();
 
-
+            // return anon object with interface methods
             return new {
+                // takes a NodeConfig as argument and instantiates these VMs if possible. Returns a list of VMs or an error message
                 createVMsFromNodeConfig = (Func<dynamic, Task<object>>) (async i => await Task.Run(
-                    () => {
-                        var payload = (IDictionary<string, object>) i;
-                        return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
+                    () => 
+                        {
+                            var payload = (IDictionary<string, object>) i;
+                            return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
+                        })
+                    ),
+                // takes an array of VM ids as argument and deletes them
+                deleteVMs = (Func<dynamic, Task<object>>)(async i => await Task.Run(
+                    () =>
+                        {
+                            var payload = (IDictionary<string, object>)i;
+                            oneAdapter.deleteVMs((int[]) payload["vmArray"]);
+                            return 0;
                     })
-                    )
+                    ),
+                // takes a VM ID as argument and returns a VM Object
+                getVMInfo = (Func<dynamic, Task<object>>)(async i => await Task.Run(
+                    () =>
+                    {
+                        var payload = (IDictionary<string, object>)i;
+                        oneAdapter.getVMInfo((int)payload["vmID"]);
+                        return 0;
+                    })
+                    ),
             };
         }
     }

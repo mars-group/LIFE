@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using OpenNebulaAdapter.Entities;
 using Terradue.OpenNebula;
@@ -7,7 +8,8 @@ namespace OpenNebulaAdapter.Implementation
 {
     public class OpenNebulaAdapterUseCase
     {
-        private OneClient _one;
+        private readonly OneClient _one;
+        private readonly List<int> _remoteIDs;
 
         public OpenNebulaAdapterUseCase() {
                         // First create the client
@@ -16,9 +18,10 @@ namespace OpenNebulaAdapter.Implementation
             const string adminPwd = "80051ee6a7b403ae88cb1fa8e5d9d0877eddfbc0"; //SHA1 password
             
             _one = new OneClient(proxyUrl, adminUser, adminPwd);
+            _remoteIDs = new List<int>();
         }
 
-        public bool CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
+        public int[] CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
 
             try {
                 foreach (var node in nodeConfig.Nodes) {
@@ -44,45 +47,68 @@ namespace OpenNebulaAdapter.Implementation
 
                     var templateID = _one.TemplateAllocate(stb.ToString());
 
-                    int RemoteId = _one.TemplateInstanciateVM(templateID, node.NodeName, false, "");
+                    _remoteIDs.Add(_one.TemplateInstanciateVM(templateID, node.NodeName, false, ""));
 
                     _one.TemplateDelete(templateID);
                 }
             }
             catch (Exception ex) {
-                return false;
+                // if anyone of these somehow fails, delete all created vms and return falsy
+                foreach (var remoteID in _remoteIDs) {
+                    _one.VMAction(remoteID, "delete");
+                }
+                throw;
             }
 
             // and one SimulationManager
+            int simManagerVMID = -1;
+            try {
+                var simManagerTemplate = new StringBuilder();
+                simManagerTemplate.Append("NAME = \"Temporary SimulationManager Template\"\n");
+                simManagerTemplate.Append("CONTEXT=[FILES_DS=\"$FILE[IMAGE_ID=50]\",HOSTNAME=\"$NAME\",NETWORK=\"YES\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\"]\n");
+                simManagerTemplate.Append("CPU=\"0.01\"\n");
+                simManagerTemplate.Append("DISK=[\n");
+                simManagerTemplate.Append("\tDRIVER=\"qcow2\",\n");
+                simManagerTemplate.Append("\tIMAGE=\"MARS SimulationManager\",\n");
+                simManagerTemplate.Append("\tIMAGE_UNAME=\"christian\"]\n");
+                simManagerTemplate.Append("DISK=[\n");
+                simManagerTemplate.Append("\tSIZE=\"4096\",\n");
+                simManagerTemplate.Append("\tTYPE=\"swap\"]\n");
+                simManagerTemplate.Append("GRAPHICS=[\n");
+                simManagerTemplate.Append("\tKEYMAP=\"de\",\n");
+                simManagerTemplate.Append("\tLISTEN=\"0.0.0.0\",\n");
+                simManagerTemplate.Append("\tTYPE=\"VNC\"]\n");
+                simManagerTemplate.Append("MEMORY=\"1024\"\n");
+                simManagerTemplate.Append("NIC=[MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork\",NETWORK_UNAME=\"christian\"]\n");
+                simManagerTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
+                simManagerTemplate.Append("VCPU=\"4\"");
 
-            var simManagerTemplate = new StringBuilder();
-            simManagerTemplate.Append("NAME = \"Temporary SimulationManager Template\"\n");
-            simManagerTemplate.Append("CONTEXT=[FILES_DS=\"$FILE[IMAGE_ID=50]\",HOSTNAME=\"$NAME\",NETWORK=\"YES\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\"]\n");
-            simManagerTemplate.Append("CPU=\"0.01\"\n");
-            simManagerTemplate.Append("DISK=[\n");
-            simManagerTemplate.Append("\tDRIVER=\"qcow2\",\n");
-            simManagerTemplate.Append("\tIMAGE=\"MARS SimulationManager\",\n");
-            simManagerTemplate.Append("\tIMAGE_UNAME=\"christian\"]\n");
-            simManagerTemplate.Append("DISK=[\n");
-            simManagerTemplate.Append("\tSIZE=\"4096\",\n");
-            simManagerTemplate.Append("\tTYPE=\"swap\"]\n");
-            simManagerTemplate.Append("GRAPHICS=[\n");
-            simManagerTemplate.Append("\tKEYMAP=\"de\",\n");
-            simManagerTemplate.Append("\tLISTEN=\"0.0.0.0\",\n");
-            simManagerTemplate.Append("\tTYPE=\"VNC\"]\n");
-            simManagerTemplate.Append("MEMORY=\"1024\"\n");
-            simManagerTemplate.Append("NIC=[MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork\",NETWORK_UNAME=\"christian\"]\n");
-            simManagerTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
-            simManagerTemplate.Append("VCPU=\"4\"");
+                var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
 
-            var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
+                simManagerVMID = _one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "");
 
-            int simManagerVMID = _one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "");
+                _one.TemplateDelete(simManagerTemplateID);
+            }
+            catch (Exception ex) {
+                // if anyone of these somehow fails, delete simManagerVM and return falsy
+                if (simManagerVMID > -1) { _one.VMAction(simManagerVMID, "delete"); }
+                throw;
+            }
 
-            _one.TemplateDelete(simManagerTemplateID);
-
-            return true;
+            // all is well, return no error
+            return _remoteIDs.ToArray();
         }
 
+        public void deleteVMs(int[] vmArray) {
+            foreach (var vmId in vmArray) {
+                _one.VMAction(vmId, "delete");    
+            }
+        }
+
+        public VM getVMInfo(int vmID) {
+
+            return _one.VMGetInfo(vmID);
+
+        }
     }
 }
