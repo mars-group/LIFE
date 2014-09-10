@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using OpenNebulaAdapter.Entities;
 using Terradue.OpenNebula;
@@ -9,7 +10,7 @@ namespace OpenNebulaAdapter.Implementation
     public class OpenNebulaAdapterUseCase
     {
         private readonly OneClient _one;
-        private readonly List<int> _remoteIDs;
+        private readonly Dictionary<string,List<int>> _remoteIDs;
 
         public OpenNebulaAdapterUseCase() {
             // First create the client
@@ -18,10 +19,10 @@ namespace OpenNebulaAdapter.Implementation
             const string adminPwd = "80051ee6a7b403ae88cb1fa8e5d9d0877eddfbc0"; //SHA1 password
             
             _one = new OneClient(proxyUrl, adminUser, adminPwd);
-            _remoteIDs = new List<int>();
+            _remoteIDs = new Dictionary<string, List<int>>();
         }
 
-        public int[] CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
+        public Dictionary<string, List<int>> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
 
             // first create our virtual router
 
@@ -43,12 +44,14 @@ namespace OpenNebulaAdapter.Implementation
 
             var vrID = _one.TemplateAllocate(vrRouterTemplate.ToString());
             
-            _remoteIDs.Add(_one.TemplateInstanciateVM(vrID, "VirtualRouter", false, ""));
+            _remoteIDs.Add("VirtualRouter",new List<int>(_one.TemplateInstanciateVM(vrID, "VirtualRouter", false, "")));
             _one.TemplateDelete(vrID);
 
             // now create all the nodes
 
             try {
+                var lcList = new List<int>();
+
                 foreach (var node in nodeConfig.Nodes) {
                     var stb = new StringBuilder();
                     stb.Append("NAME = \"Temporary " + node.NodeName + " Template\"\n");
@@ -72,16 +75,21 @@ namespace OpenNebulaAdapter.Implementation
 
                     var templateID = _one.TemplateAllocate(stb.ToString());
 
-                    _remoteIDs.Add(_one.TemplateInstanciateVM(templateID, node.NodeName, false, ""));
+                    lcList.Add(_one.TemplateInstanciateVM(templateID, node.NodeName, false, ""));
+
+
 
                     _one.TemplateDelete(templateID);
                 }
+
+                _remoteIDs.Add("LayerContainer", lcList);
             }
             catch (Exception ex) {
                 // if anyone of these somehow fails, delete all created vms and return falsy
-                foreach (var remoteID in _remoteIDs) {
+                foreach (var remoteID in _remoteIDs.SelectMany(remoteIDentry => remoteIDentry.Value)) {
                     _one.VMAction(remoteID, "delete");
                 }
+
                 throw;
             }
 
@@ -110,7 +118,7 @@ namespace OpenNebulaAdapter.Implementation
 
                 var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
 
-                _remoteIDs.Add(_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, ""));
+                _remoteIDs.Add("SimulationManager",new List<int>(_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "")));
 
                 _one.TemplateDelete(simManagerTemplateID);
             }
@@ -121,7 +129,7 @@ namespace OpenNebulaAdapter.Implementation
             }
 
             // all is well, return no error
-            return _remoteIDs.ToArray();
+            return _remoteIDs;
         }
 
         public void deleteVMs(int[] vmArray) {
