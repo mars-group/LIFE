@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using CommonTypes.DataTypes;
 using ESCTestLayer.Entities;
 using ESCTestLayer.Implementation;
 using ESCTestLayer.Interface;

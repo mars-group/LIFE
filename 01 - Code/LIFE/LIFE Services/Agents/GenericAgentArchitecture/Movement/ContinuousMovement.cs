@@ -1,4 +1,5 @@
 ﻿using System;
+using CommonTypes.DataTypes;
 using ESCTestLayer.Interface;
 
 namespace GenericAgentArchitecture.Movement {
@@ -15,7 +16,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    public ContinuousMovement(IESC esc, int agentId, Vector dim) : base(esc, agentId, dim) {}
+    public ContinuousMovement(IESC esc, int agentId, Vector3f dim) : base(esc, agentId, dim) { }
 
 
     /// <summary>
@@ -51,7 +52,7 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="targetPos">A point the agent shall go to.</param>
     /// <param name="speed">The agent's movement speed.</param>
-    public void MoveToPosition (Vector targetPos, float speed) {
+    public void MoveToPosition (Vector3f targetPos, float speed) {
 
       // Check, if we are already there. Otherwise no need to move anyway.
       var distance = Position.GetDistance(targetPos);

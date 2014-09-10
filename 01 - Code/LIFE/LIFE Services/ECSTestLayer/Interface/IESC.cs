@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CommonTypes.DataTypes;
 using ESCTestLayer.Entities;
 
 namespace ESCTestLayer.Interface

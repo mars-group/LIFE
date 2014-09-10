@@ -43,13 +43,14 @@ namespace ESCTestLayer.Entities
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return this._min == other._min && this._max == other._max;
+            return Math.Abs(_min - other._min) <= float.Epsilon
+                   && Math.Abs(_max - other._max) <= float.Epsilon;
         }
 
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((AxisAlignedBoundingInterval)obj);
         }
 

@@ -1,15 +1,16 @@
 ﻿using System;
+using CommonTypes.DataTypes;
 using ESCTestLayer.Implementation;
 
 namespace ESCTestLayer.Entities
 {
-    internal class Starter
+    static class Starter
     {
         public static void Main() {
             var esc = new ESC();
             var agent0 = new Agent2D(0, esc);
             var agent1 = new Agent2D(1, esc);
-            var agent2 = new Agent2D(2, esc);
+//            var agent2 = new Agent2D(2, esc);
 
             Console.WriteLine(agent0.SetPosition(new Vector2f(1, 1)));
             Console.WriteLine(agent1.SetPosition(new Vector2f(1, 1)));
@@ -24,29 +25,28 @@ namespace ESCTestLayer.Entities
     internal class Agent2D
     {
         private readonly ESC _esc;
-        public int id { get; set; }
-        public Vector2f dimension { get; set; }
-        public Vector2f direction { get; set; }
-        public Vector2f positio { get; set; }
+        private readonly int Id;
+        private readonly Vector2f Dimension;
+        private readonly Vector2f Direction;
 
         public Agent2D(int id, ESC esc)
         {
             _esc = esc;
-            this.id = id;
-            this.dimension = new Vector2f(1, 1);
-            this.direction = new Vector2f(0, 0);
+            Id = id;
+            Dimension = new Vector2f(1, 1);
+            Direction = new Vector2f(0, 0);
             Register();
         }
 
         private void Register()
         {
-            _esc.Add(id, dimension);
+            _esc.Add(Id, Dimension);
         }
 
 
         public bool SetPosition(Vector2f position)
         {
-            return position.Equals(_esc.SetPosition(id, position, direction));
+            return position.Equals(_esc.SetPosition(Id, position, Direction).Position);
         }
 
 
