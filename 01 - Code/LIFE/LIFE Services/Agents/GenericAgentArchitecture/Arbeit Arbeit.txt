@@ -36,3 +36,50 @@ Muß als Datenquelle in die Umwelt rein / später macht's die ESC.
 
 Tipp: Dateien löschen reduziert gelegentlich die Fehlerzahl enorm^^
 
+
+
+// Nachrichten-Synchronisation
+
+Agenten:
+- Nachrichten werden in Phase III gesendet (als Teil einer Aktionsausführung)
+- und in Phase I des nächsten Ticks empfangen (über Kommunikationssensor)
+
+Nachrichten-Plattform (NP):
+- hält die Nachrichten für einen Tick vor
+  - muß automatisch zu alte Nachrichten löschen
+    - unabhängig von Eingang und Abruf => selbständig
+  - nimmt Nachrichten an und gibt aktuelle zurück
+
+- zwei Pufferspeicher:
+  - verfügbar (im letzten Tick empfangen)
+  - eingegangen (werden im nächsten Tick verfügbar) 
+  // in jedem neuen Tick wird geschoben, eingegangen = 0
+  // Tick der NP muß vor der Agentenausführung erfolgen
+  - Struktur: Zuordnung Kanalnummer => Nachrichtenliste
+  // Dictionary<int,List<Message>> 
+
+- Einfüge-, Abruf- und Rücksetzfunktion:
+  void AddMessage(Message m) {
+    if (!received.ContainsKey(m.Channel))
+      received.Add(m.Channel, new List<Message>());
+    received[m.Channel].Add(m); 
+  }
+  List<Message> GetMessages(int channel) {
+    if (available.ContainsKey(channel))
+      return available[channel];
+    return new List<Message>(); 
+  }
+  void Tick() {
+    available = received;
+    received = new Dictionary<int, List<Message>>();
+  }
+
+- Nachrichtenklasse (Message):
+  - Kanalnummer
+  - Tick
+  - Absenderagent
+  - <Inhalt>
+  // alles public get; private set;
+
+// WIE WIRD DIE REFERENZ DEN AGENTEN VERFÜGBAR GEMACHT?
+// Einzelstück => statisch machen?
