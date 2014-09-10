@@ -8,7 +8,7 @@ namespace ContextServiceClient
 		{
 		}
 
-		public GazelleEvent (int id, double x, string y, bool energy)
+		public GazelleEvent (int id, int x, int y, int energy)
 		{
 			this.id = id;
 			this.x = x;
@@ -17,9 +17,9 @@ namespace ContextServiceClient
 		}
 
 		public int id {get;set;}
-		public double x {get;set;}
-		public string y {get;set;}
-		public bool energy {get;set;}
+		public int x {get;set;}
+		public int y {get;set;}
+		public int energy {get;set;}
 	}
 }
 

@@ -35,9 +35,17 @@
     <Compile Include="GazelleEvent.cs" />
     <Compile Include="GepardEvent.cs" />
     <Compile Include="ContextListener.cs" />
+    <Compile Include="EventProducer.cs" />
+    <Compile Include="KillEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="RabbitMQ.Client" />
     <Reference Include="Mono.Messaging.RabbitMQ" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

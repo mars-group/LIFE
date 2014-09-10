@@ -4,12 +4,16 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using System.Reflection;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ContextServiceClient
 {
-	public delegate void MethodDelegate();
+	public delegate void MethodDelegate(Dictionary<string, object> results);
 	class ContextServiceClient
 	{
+		private static ContextServiceClient instance;
+		private bool connected = false;
+
 		private IConnection connection;
 		private IModel rpcChannel;
 		private IModel eventChannel;
@@ -18,25 +22,47 @@ namespace ContextServiceClient
 		private ContextListener contextListener;
 		//public Hashtable contextDelegates = new Hashtable();
 
-		public ContextServiceClient()
+		private ContextServiceClient()
 		{
-			// Connection for RPC
-			var factory = new ConnectionFactory() { HostName = "localhost" };
-			connection = factory.CreateConnection();
-			rpcChannel = connection.CreateModel();
-			replyQueueName = rpcChannel.QueueDeclare();
-			consumer = new QueueingBasicConsumer(rpcChannel);
-			rpcChannel.BasicConsume(replyQueueName, null, consumer);
-
-			// Connection for outgoing Events
-			eventChannel = connection.CreateModel();
-			eventChannel.QueueDeclare("contextservice_in");
-
-			// Start Listener for incoming Events
-			contextListener = new ContextListener();
+			Host = "127.0.0.1";
+			Port = 5672;
 		}
 
-		public string Call(string message)
+		public string Host {get;set;}
+		public int Port {get;set;}
+
+		public static ContextServiceClient Instance
+		{
+			get 
+			{
+				if (instance == null)
+				{
+					instance = new ContextServiceClient();
+				}
+				return instance;
+			}
+		}
+
+		public void ConnectTo(string host, int port)
+		{
+			if (!connected)
+			{
+				// Connection for RPC
+				var factory = new ConnectionFactory() { HostName = host, Port = port };
+				connection = factory.CreateConnection();
+				rpcChannel = connection.CreateModel();
+				replyQueueName = rpcChannel.QueueDeclare();
+				consumer = new QueueingBasicConsumer(rpcChannel);
+				rpcChannel.BasicConsume(replyQueueName, null, consumer);
+
+				// Start Listener for incoming Events
+				contextListener = new ContextListener();
+
+				connected = true;
+			}
+		}
+
+		private string Call(string message)
 		{
 			var corrId = Guid.NewGuid().ToString();
 			var props = rpcChannel.CreateBasicProperties();
@@ -51,6 +77,7 @@ namespace ContextServiceClient
 				var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
 				if (ea.BasicProperties.CorrelationId == corrId)
 				{
+					rpcChannel.BasicAck (ea.DeliveryTag, false);
 					return Encoding.UTF8.GetString(ea.Body);
 				}
 			}
@@ -59,6 +86,15 @@ namespace ContextServiceClient
 		public void Close()
 		{
 			connection.Close();
+		}
+
+		public int RegisterNewEventProducer()
+		{
+			int registeredId = 0;
+
+			registeredId = Convert.ToInt32(this.Call ("3"));
+
+			return registeredId;
 		}
 
 		public void RegisterNewEventType(Object obj)
@@ -97,10 +133,12 @@ namespace ContextServiceClient
 			string ruleID = this.Call(message);
 			Console.WriteLine("Received ruleID: {0}", ruleID);
 			//contextListener.contextDelegates.Add (ruleID, method);
-			contextListener.contextRuleDictionary.Add (ruleID, method);
+			if(!ruleID.Equals("-1")){
+				contextListener.contextRuleDictionary.Add (ruleID, method);
+			}
 		}
 
-		public void SendEvent(Object obj)
+		private void SendEvent(Object obj)
 		{
 			int i = 1;
 			string newEventJSON = "";
