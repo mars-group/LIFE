@@ -25,27 +25,36 @@ namespace OpenNebulaAdapter.Implementation
         public Dictionary<string, List<int>> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
 
             // first create our virtual router
+            var vrID = -1;
+            try {
+                var vrRouterTemplate = new StringBuilder();
+                vrRouterTemplate.Append("NAME = \"Temporary MARS VirtualRouter Template\"\n");
+                vrRouterTemplate.Append
+                    ("CONTEXT=[DHCP=\"NO\",DNS=\"141.22.192.100 141.22.29.101\",FORWARDING=\"10.10.0.2:80\",NETWORK=\"YES\",NTP_SERVER=\"141.22.192.100\",PRIVNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"21\\\"]\",PUBNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"12\\\"]\",RADVD=\"NO\",ROOT_PASSWORD=\"JDEkYnVUV1dvT0gkenRoWDlWRTNyVWM5MHBqL0hsLktIMAo=\",SEARCH=\"local.domain\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\",TARGET=\"hdb\",TEMPLATE=\"$TEMPLATE\"]\n");
+                vrRouterTemplate.Append("CPU=\"0.01\"\n");
+                vrRouterTemplate.Append("DISK=[CACHE=\"none\",DEV_PREFIX=\"vd\",DRIVER=\"raw\",IMAGE=\"OpenNebula 4.8 Virtual Router\",IMAGE_UNAME=\"christian\"]\n");
+                vrRouterTemplate.Append("DISK=[FORMAT=\"swap\",SIZE=\"4096\",TYPE=\"swap\"]\n");
+                vrRouterTemplate.Append("FEATURES=[ACPI=\"yes\",APIC=\"yes\",LOCALTIME=\"yes\",PAE=\"yes\"]\n");
+                vrRouterTemplate.Append("GRAPHICS=[LISTEN=\"0.0.0.0\",TYPE=\"VNC\"]\n");
+                vrRouterTemplate.Append("LOGO=\"images/logos/linux.png\"\n");
+                vrRouterTemplate.Append("MEMORY=\"512\"\n");
+                vrRouterTemplate.Append("NIC=[IP=\"10.10.0.1\",MODEL=\"virtio\",NETWORK_ID=\"21\",NETWORK_UNAME=\"christian\"]\n");
+                vrRouterTemplate.Append("NIC=[IP=\"141.22.29.106\",MODEL=\"virtio\",NETWORK_ID=\"12\",NETWORK_UNAME=\"christian\"]\n");
+                vrRouterTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
+                vrRouterTemplate.Append("VCPU=\"2\"\n");
 
-            var vrRouterTemplate = new StringBuilder();
+                vrID = _one.TemplateAllocate(vrRouterTemplate.ToString());
+                var vrList = new List<int> {_one.TemplateInstanciateVM(vrID, "VirtualRouter", false, "")};
+                _remoteIDs.Add("VirtualRouter", vrList);
+                _one.TemplateDelete(vrID);
+            }
+            catch (Exception ex) {
+                if (vrID > -1) {
+                    _one.TemplateDelete(vrID);
+                }
+                throw;
+            }
 
-            vrRouterTemplate.Append
-                ("CONTEXT=[DHCP=\"NO\",DNS=\"141.22.192.100 141.22.29.101\",FORWARDING=\"10.10.0.2:80\",NETWORK=\"YES\",NTP_SERVER=\"141.22.192.100\",PRIVNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"21\\\"]\",PUBNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"12\\\"]\",RADVD=\"NO\",ROOT_PASSWORD=\"JDEkYnVUV1dvT0gkenRoWDlWRTNyVWM5MHBqL0hsLktIMAo=\",SEARCH=\"local.domain\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\",TARGET=\"hdb\",TEMPLATE=\"$TEMPLATE\"]");
-            vrRouterTemplate.Append("CPU=\"0.01\"");
-            vrRouterTemplate.Append("DISK=[CACHE=\"none\",DEV_PREFIX=\"vd\",DRIVER=\"raw\",IMAGE=\"OpenNebula 4.8 Virtual Router\",IMAGE_UNAME=\"christian\"]");
-            vrRouterTemplate.Append("DISK=[FORMAT=\"swap\",SIZE=\"4096\",TYPE=\"swap\"]");
-            vrRouterTemplate.Append("FEATURES=[ACPI=\"yes\",APIC=\"yes\",LOCALTIME=\"yes\",PAE=\"yes\"]");
-            vrRouterTemplate.Append("GRAPHICS=[LISTEN=\"0.0.0.0\",TYPE=\"VNC\"]");
-            vrRouterTemplate.Append("LOGO=\"images/logos/linux.png\"");
-            vrRouterTemplate.Append("MEMORY=\"512\"");
-            vrRouterTemplate.Append("NIC=[IP=\"10.10.0.1\",MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork ISO\",NETWORK_UNAME=\"christian\"]");
-            vrRouterTemplate.Append("NIC=[IP=\"141.22.29.106\",MODEL=\"virtio\",NETWORK=\"MARS Network\",NETWORK_UNAME=\"christian\"]");
-            vrRouterTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]");
-            vrRouterTemplate.Append("VCPU=\"2\"");
-
-            var vrID = _one.TemplateAllocate(vrRouterTemplate.ToString());
-            
-            _remoteIDs.Add("VirtualRouter",new List<int>(_one.TemplateInstanciateVM(vrID, "VirtualRouter", false, "")));
-            _one.TemplateDelete(vrID);
 
             // now create all the nodes
 
@@ -69,7 +78,7 @@ namespace OpenNebulaAdapter.Implementation
                     stb.Append("\tLISTEN=\"0.0.0.0\",\n");
                     stb.Append("\tTYPE=\"VNC\"]\n");
                     stb.Append("MEMORY=\"" + (node.RamAmount * 1024) + "\"\n");
-                    stb.Append("NIC=[MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork\",NETWORK_UNAME=\"christian\"]\n");
+                    stb.Append("NIC=[MODEL=\"virtio\",NETWORK_ID=\"21\",NETWORK_UNAME=\"christian\"]\n");
                     stb.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
                     stb.Append("VCPU=\"" + node.CpuCount + "\"");
 
@@ -112,13 +121,13 @@ namespace OpenNebulaAdapter.Implementation
                 simManagerTemplate.Append("\tLISTEN=\"0.0.0.0\",\n");
                 simManagerTemplate.Append("\tTYPE=\"VNC\"]\n");
                 simManagerTemplate.Append("MEMORY=\"1024\"\n");
-                simManagerTemplate.Append("NIC=[MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork\",NETWORK_UNAME=\"christian\"]\n");
+                simManagerTemplate.Append("NIC=[MODEL=\"virtio\",NETWORK_ID=\"21\",NETWORK_UNAME=\"christian\"]\n");
                 simManagerTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
                 simManagerTemplate.Append("VCPU=\"4\"");
 
                 var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
 
-                _remoteIDs.Add("SimulationManager",new List<int>(_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "")));
+                _remoteIDs.Add("SimulationManager",new List<int>{_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "")});
 
                 _one.TemplateDelete(simManagerTemplateID);
             }
