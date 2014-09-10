@@ -12,7 +12,7 @@ namespace OpenNebulaAdapter.Implementation
         private readonly List<int> _remoteIDs;
 
         public OpenNebulaAdapterUseCase() {
-                        // First create the client
+            // First create the client
             const string proxyUrl = "http://141.22.29.2:2633/RPC2";
             const string adminUser = "serveradmin"; //should be user with driver server_* to allow requests delegation
             const string adminPwd = "80051ee6a7b403ae88cb1fa8e5d9d0877eddfbc0"; //SHA1 password
@@ -22,6 +22,31 @@ namespace OpenNebulaAdapter.Implementation
         }
 
         public int[] CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
+
+            // first create our virtual router
+
+            var vrRouterTemplate = new StringBuilder();
+
+            vrRouterTemplate.Append
+                ("CONTEXT=[DHCP=\"NO\",DNS=\"141.22.192.100 141.22.29.101\",FORWARDING=\"10.10.0.2:80\",NETWORK=\"YES\",NTP_SERVER=\"141.22.192.100\",PRIVNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"21\\\"]\",PUBNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"12\\\"]\",RADVD=\"NO\",ROOT_PASSWORD=\"JDEkYnVUV1dvT0gkenRoWDlWRTNyVWM5MHBqL0hsLktIMAo=\",SEARCH=\"local.domain\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\",TARGET=\"hdb\",TEMPLATE=\"$TEMPLATE\"]");
+            vrRouterTemplate.Append("CPU=\"0.01\"");
+            vrRouterTemplate.Append("DISK=[CACHE=\"none\",DEV_PREFIX=\"vd\",DRIVER=\"raw\",IMAGE=\"OpenNebula 4.8 Virtual Router\",IMAGE_UNAME=\"christian\"]");
+            vrRouterTemplate.Append("DISK=[FORMAT=\"swap\",SIZE=\"4096\",TYPE=\"swap\"]");
+            vrRouterTemplate.Append("FEATURES=[ACPI=\"yes\",APIC=\"yes\",LOCALTIME=\"yes\",PAE=\"yes\"]");
+            vrRouterTemplate.Append("GRAPHICS=[LISTEN=\"0.0.0.0\",TYPE=\"VNC\"]");
+            vrRouterTemplate.Append("LOGO=\"images/logos/linux.png\"");
+            vrRouterTemplate.Append("MEMORY=\"512\"");
+            vrRouterTemplate.Append("NIC=[IP=\"10.10.0.1\",MODEL=\"virtio\",NETWORK=\"MARS SimulationNetwork ISO\",NETWORK_UNAME=\"christian\"]");
+            vrRouterTemplate.Append("NIC=[IP=\"141.22.29.106\",MODEL=\"virtio\",NETWORK=\"MARS Network\",NETWORK_UNAME=\"christian\"]");
+            vrRouterTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]");
+            vrRouterTemplate.Append("VCPU=\"2\"");
+
+            var vrID = _one.TemplateAllocate(vrRouterTemplate.ToString());
+            
+            _remoteIDs.Add(_one.TemplateInstanciateVM(vrID, "VirtualRouter", false, ""));
+            _one.TemplateDelete(vrID);
+
+            // now create all the nodes
 
             try {
                 foreach (var node in nodeConfig.Nodes) {
@@ -85,7 +110,7 @@ namespace OpenNebulaAdapter.Implementation
 
                 var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
 
-                simManagerVMID = _one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "");
+                _remoteIDs.Add(_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, ""));
 
                 _one.TemplateDelete(simManagerTemplateID);
             }
