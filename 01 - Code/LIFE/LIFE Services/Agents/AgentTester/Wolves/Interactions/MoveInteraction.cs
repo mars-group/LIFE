@@ -1,4 +1,5 @@
-﻿using GenericAgentArchitecture.Agents;
+﻿using CommonTypes.DataTypes;
+using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interactions;
 
@@ -9,7 +10,7 @@ namespace AgentTester.Wolves.Interactions {
   /// </summary>
   internal class MoveInteraction : Interaction {
     private readonly Agent _agent; // The agent to move.
-    private readonly Float3 _newPosition; // The new (valid!) position.
+    private readonly Vector2f _newPosition; // The new (valid!) position.
 
 
     /// <summary>
@@ -17,7 +18,9 @@ namespace AgentTester.Wolves.Interactions {
     /// </summary>
     /// <param name="agent">The agent to move.</param>
     /// <param name="newPosition">The new (valid!) position.</param>
-    public MoveInteraction(Agent agent, Float3 newPosition) : base(null) {
+    public MoveInteraction(Agent agent, Vector2f newPosition)
+        : base(null)
+    {
       _agent = agent;
       _newPosition = newPosition;
     }
@@ -32,7 +35,7 @@ namespace AgentTester.Wolves.Interactions {
     ///   Execute the action. Set new position values.
     /// </summary>
     public override void Execute() {
-      _agent.Position.Center = _newPosition;
+      _agent.Position = _newPosition;
     }
   }
 }

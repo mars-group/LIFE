@@ -90,6 +90,7 @@ namespace GenericAgentArchitecture.Movement {
       Position = new Vector3f(result.Position.X, result.Position.Y, result.Position.Z);
       //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
       //TODO Direktion auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
+      //TODO nur werte setzen, nicht position zu neuer Instanz zuordnen, wegen Halo
       Position = TargetPos;
     }
   }

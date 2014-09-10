@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using ESCTestLayer.Entities;
 using ESCTestLayer.Interface;
+using LayerAPI.Interfaces;
 
 namespace ESCTestLayer.Implementation
 {
@@ -14,7 +15,7 @@ namespace ESCTestLayer.Implementation
     ///   @see http://jitter-physics.com/wordpress/?tag=sweep-and-prune
     ///   @see http://www.philorwig.com/research/spatial/collision-detection-sweep-and-prune.html
     /// </summary>
-    public class ESC : IESC
+    public class ESC : IESC, IGenericDataSource
     {
 
         private readonly Random _rnd;                             // Number generator for random positions.
@@ -34,11 +35,12 @@ namespace ESCTestLayer.Implementation
 
         public void Add(int elementId, Vector3f dimension)
         {
-            _dimensions.Add(elementId, dimension);
+            _dimensions[elementId] = dimension;
         }
 
         public void Remove(int elementId)
         {
+            //TODO testen ob contains notwendig
             _dimensions.Remove(elementId);
         }
 
@@ -118,6 +120,13 @@ namespace ESCTestLayer.Implementation
         public float GetDistance(int anElementId, int anotherElementId)
         {
             return _positions[anElementId].GetDistance(_positions[anElementId]);
+        }
+
+        public object GetData(int informationType, IGeometry geometry) {
+            //TODO informationType als filter kriterium
+            const int elementId = -1;
+            Add(elementId, geometry.GetDimensionQuad());
+            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
         }
 
         public IEnumerable<CollidableElement> Explore(int elementId, Vector3f position, Vector3f direction)
@@ -240,5 +249,6 @@ namespace ESCTestLayer.Implementation
             return false;
         }
         #endregion
+
     }
 }

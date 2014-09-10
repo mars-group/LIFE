@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
 using AgentTester.Wolves.Reasoning;
+using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interfaces;
@@ -18,7 +19,7 @@ namespace AgentTester.Wolves.Agents {
     private string _states;
 
     public Wolf(Grassland environment, string id) : base(id) {
-      Position = new Position(-1, -1, 0, 0); // We just need an object (coords set by env).
+      Position = new Vector2f(-1, -1); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor(new DataSensor(
@@ -68,13 +69,13 @@ namespace AgentTester.Wolves.Agents {
         // R2: Sheep at distance max. 5 and hunger > 40%? Move towards it!
         if (distance <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position.Center);
+          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
         }
 
         // R3: Very hungry wolf. You better watch out ...
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position.Center);
+          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
         }
       }
 
@@ -93,7 +94,7 @@ namespace AgentTester.Wolves.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format(Id + " | Wolf  | ({0,2:00},{1,2:00})  | {2,3:0}/{3,3:0} |" + _states,
-        Position.Center.X, Position.Center.Y, _energy, EnergyMax);
+        Position.X, Position.Y, _energy, EnergyMax);
     }
 
 

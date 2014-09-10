@@ -5,6 +5,7 @@ namespace CommonTypes.DataTypes
     public class Vector3f : IEquatable<Vector3f>
     {
         public static readonly Vector3f UnitVectorXAxis = new Vector3f(1.0f, 0.0f, 0.0f).Normalize();
+        public static readonly Vector3f MaxVector = new Vector3f(float.MaxValue, float.MaxValue, float.MaxValue);
 
         public float X { get; set; }
 

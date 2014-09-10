@@ -1,4 +1,5 @@
 ﻿using System;
+using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Interfaces;
@@ -21,7 +22,7 @@ namespace GenericAgentArchitecture.Agents {
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.  
     public readonly InteractionContainer Interactions; // Repertoire of all interactions.     
-    public Position Position;                          // Position in an environment.
+    public Vector3f Position;                          // Position in an environment.
     //TODO Movement module usage here ?!
 
     /// <summary>

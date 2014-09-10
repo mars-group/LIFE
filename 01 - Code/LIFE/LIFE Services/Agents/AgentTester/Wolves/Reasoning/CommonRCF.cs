@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using AgentTester.Wolves.Agents;
 using AgentTester.Wolves.Interactions;
+using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Dummies;
 
 namespace AgentTester.Wolves.Reasoning {
 
@@ -22,16 +22,16 @@ namespace AgentTester.Wolves.Reasoning {
     /// <param name="env">The environment (needed to check if new position is valid).</param>
     /// <param name="agent">The agent that shall be moved.</param>
     /// <returns>A movement interaction (or null, if agent stays in place).</returns>
-    public static MoveInteraction GetRandomMoveInteraction(Grassland env, Agent agent) {     
-      Float3 curPos = agent.Position.Center;
-      Float3 newPos;
+    public static MoveInteraction GetRandomMoveInteraction(Grassland env, Agent agent) {
+      Vector3f curPos = agent.Position;
+      Vector2f newPos;
       do {
         var rnd = Random.Next(MoveRng);
         switch (rnd) {
-          case 0: newPos = new Float3(curPos.X, curPos.Y-1); break;
-          case 1: newPos = new Float3(curPos.X, curPos.Y+1); break;
-          case 2: newPos = new Float3(curPos.X-1, curPos.Y); break;
-          case 3: newPos = new Float3(curPos.X+1, curPos.Y); break;
+            case 0: newPos = new Vector2f(curPos.X, curPos.Y - 1); break;
+            case 1: newPos = new Vector2f(curPos.X, curPos.Y + 1); break;
+            case 2: newPos = new Vector2f(curPos.X - 1, curPos.Y); break;
+            case 3: newPos = new Vector2f(curPos.X + 1, curPos.Y); break;
           default: return null;
         }
       } while (!env.CheckPosition(newPos));
@@ -46,14 +46,14 @@ namespace AgentTester.Wolves.Reasoning {
     /// <param name="agent">Self reference to the calling agent.</param>
     /// <param name="targetPos">The position to go to.</param>
     /// <returns>A movement interaction (or null, if agent stays in place).</returns>
-    public static MoveInteraction MoveTowardsPosition(Grassland env, Agent agent, Float3 targetPos) {
-      Float3 newPos;
-      var curPos = agent.Position.Center;
-      var candidates = new List<Float3>();
-      newPos = new Float3(curPos.X, curPos.Y-1); if (env.CheckPosition(newPos)) candidates.Add(newPos);
-      newPos = new Float3(curPos.X, curPos.Y+1); if (env.CheckPosition(newPos)) candidates.Add(newPos);
-      newPos = new Float3(curPos.X-1, curPos.Y); if (env.CheckPosition(newPos)) candidates.Add(newPos);
-      newPos = new Float3(curPos.X+1, curPos.Y); if (env.CheckPosition(newPos)) candidates.Add(newPos);
+    public static MoveInteraction MoveTowardsPosition(Grassland env, Agent agent, Vector3f targetPos) {
+      Vector2f newPos;
+      var curPos = agent.Position;
+      var candidates = new List<Vector2f>();
+      newPos = new Vector2f(curPos.X, curPos.Y - 1); if (env.CheckPosition(newPos)) candidates.Add(newPos);
+      newPos = new Vector2f(curPos.X, curPos.Y + 1); if (env.CheckPosition(newPos)) candidates.Add(newPos);
+      newPos = new Vector2f(curPos.X - 1, curPos.Y); if (env.CheckPosition(newPos)) candidates.Add(newPos);
+      newPos = new Vector2f(curPos.X + 1, curPos.Y); if (env.CheckPosition(newPos)) candidates.Add(newPos);
       if (candidates.Count == 0 || curPos.GetDistance(targetPos) <= 1) return null;
 
       var bestPos = candidates[0];
@@ -75,7 +75,7 @@ namespace AgentTester.Wolves.Reasoning {
     /// <param name="agents">The list itself.</param>
     /// <param name="pos">The base position.</param>
     /// <returns>Reference of the nearest agent - or null, if list is empty.</returns>
-    public static T GetNearestAgent<T>(List<T> agents, Position pos) where T : Agent {
+    public static T GetNearestAgent<T>(List<T> agents, Vector3f pos) where T : Agent {
       if (agents.Count == 0) return null;
       Agent nearestAgent = agents[0];
       var minDistance = pos.GetDistance(nearestAgent.Position);
