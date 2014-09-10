@@ -1,4 +1,5 @@
-﻿using ESCTestLayer.Interface;
+﻿using CommonTypes.DataTypes;
+using ESCTestLayer.Interface;
 
 namespace GenericAgentArchitecture.Movement {
   
@@ -14,7 +15,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    public DirectMovement(IESC esc, int agentId, Vector dim) : base(esc, agentId, dim) {}
+    public DirectMovement(IESC esc, int agentId, Vector3f dim) : base(esc, agentId, dim) { }
 
 
     /// <summary>
@@ -37,7 +38,7 @@ namespace GenericAgentArchitecture.Movement {
     ///   Set a new target position.
     /// </summary>
     /// <param name="target">The position the agent shall try to gain.</param>
-    public void SetTargetPosition(Vector target) {
+    public void SetTargetPosition(Vector3f target) {
       TargetPos = target;
     }
   }
