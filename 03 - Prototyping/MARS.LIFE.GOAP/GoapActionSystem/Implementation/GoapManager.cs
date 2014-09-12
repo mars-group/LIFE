@@ -69,12 +69,12 @@ namespace GoapActionSystem.Implementation {
                 throw new Exception("goap agent owns no goals. ");
             }
         }
-        
+
         /// <summary>
         ///     get the needed types of all worldstates by the used goals and actions
         /// </summary>
         /// <returns></returns>
-        private HashSet<Type> GetNeededWorldstates() {
+        private IEnumerable<Type> GetNeededWorldstates() {
             var allTypes = new HashSet<Type>();
 
             foreach (var availableAction in _availableActions) {
@@ -86,9 +86,9 @@ namespace GoapActionSystem.Implementation {
             }
             return allTypes;
         }
-        
+
         private void CreateWorldstatesByNeeds() {
-            HashSet<Type> allTypes = GetNeededWorldstates();
+            IEnumerable<Type> allTypes = GetNeededWorldstates();
 
             _neccessaryWorldstates = new List<IGoapWorldstate>();
 

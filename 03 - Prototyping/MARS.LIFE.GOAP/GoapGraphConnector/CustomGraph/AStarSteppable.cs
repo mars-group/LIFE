@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Exceptions;
 using GoapCommon.Interfaces;
@@ -44,7 +43,6 @@ namespace GoapGraphConnector.CustomGraph {
         ///     initialize the data list for the astar and the first node (the root node)
         /// </summary>
         private void InitializeAStar() {
-            if (_nodeTable != null) return;
             _nodeTable = new Dictionary<IGoapVertex, object[]>();
             var entry = CreateNodeEntry(_root, _root.GetHeuristic(_target), 0, _root.GetHeuristic(_target));
             _nodeTable.Add(_root, entry);
@@ -86,16 +84,6 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         /// <summary>
-        ///     create the new values for distance, estimated value and so forth
-        ///     neccessary when the first way to a vertex is found or if a shorter way (new predeccessor) is found
-        /// </summary>
-        /// <param name="vertex"></param>
-        /// <returns></returns>
-        private IGoapVertex UpdateEntry(IGoapVertex vertex) {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         ///     add the new children of the current chosen
         /// </summary>
         /// <param name="vertices"></param>
@@ -110,7 +98,7 @@ namespace GoapGraphConnector.CustomGraph {
             if (!_nodeTable.ContainsKey(vertex)) _nodeTable.Add(vertex, null);
         }
 
-        public List<IGoapEdge> CreateResultListToCurrent() {
+        public List<IGoapEdge> CreatePathToCurrentAsEdgeList() {
             List<IGoapEdge> pathEdges = new List<IGoapEdge>();
             IGoapVertex actual = _current;
             IGoapVertex pre = GetPredecessor(actual);

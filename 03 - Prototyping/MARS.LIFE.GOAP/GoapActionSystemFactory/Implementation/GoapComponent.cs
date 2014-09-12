@@ -48,7 +48,7 @@ namespace GoapActionSystemFactory.Implementation {
         }
 
         /// <summary>
-        /// load the configuration of the agent by the config class
+        ///     load the configuration of the agent by the config class
         /// </summary>
         /// <param name="nameOfConfigClass"></param>
         /// <param name="namespaceOfConfigClass"></param>
@@ -56,17 +56,19 @@ namespace GoapActionSystemFactory.Implementation {
         public static IActionSystem LoadAgentConfiguration(string nameOfConfigClass, string namespaceOfConfigClass) {
             try {
                 Assembly assembly = Assembly.Load(namespaceOfConfigClass);
-                var configClass = (IAgentConfig)assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
+                var configClass =
+                    (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
 
                 return _goapManager =
-                        new GoapManager(configClass.GetAllActions(), configClass.GetAllGoals(),
-                            configClass.GetStartWorldstate());
+                    new GoapManager(configClass.GetAllActions(), configClass.GetAllGoals(),
+                        configClass.GetStartWorldstate());
             }
 
             catch (Exception e) {
-                Logger.Info( nameOfConfigClass + " Not Found");
+                Logger.Info(nameOfConfigClass + " Not Found");
                 Console.WriteLine(e.Message);
-                throw new ArgumentException("No config class with name " +  nameOfConfigClass + " or assembly with name " + namespaceOfConfigClass + " found");
+                throw new ArgumentException("No config class with name " + nameOfConfigClass + " or assembly with name " +
+                                            namespaceOfConfigClass + " found");
             }
         }
 

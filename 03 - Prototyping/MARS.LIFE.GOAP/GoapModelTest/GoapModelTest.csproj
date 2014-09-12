@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentTestConfig1.cs" />
+    <Compile Include="AgentTestConfig2.cs" />
     <Compile Include="Actions\ActionClean.cs" />
     <Compile Include="Actions\ActionGetToy.cs" />
     <Compile Include="Actions\ActionPlay.cs" />

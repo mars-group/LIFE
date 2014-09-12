@@ -8,21 +8,15 @@ using GoapGraphConnector.CustomGraph;
 namespace GoapActionSystem.Implementation {
     /// <summary>
     ///     The goapplanner is responsible for the process of finding a valid plan from the actions, currentWorld and
-    ///     targetWorld given to him. He uses the grpah component for creating a new plan.
+    ///     targetWorld given to him. He uses the graph component for creating a new plan.
     ///     the planner saves the plan and check it for validity depending on the events and state of simulation.
     ///     The caller is responsible for giving well defined and corresponding actions and world states.
+    ///     planner is responsible for the regressive search. the graph component knows nothing about that and the switched
+    ///     root and target.
     /// </summary>
     public class GoapPlanner : IGoapPlanner {
-        /// <summary>
-        ///     needed for not running in an too huge graph / tree
-        /// </summary>
         private readonly int _maximuxSearchDepth = int.MaxValue;
-
-        /// <summary>
-        ///     save the current plan in class if available
-        /// </summary>
         private List<AbstractGoapAction> _currentPlan;
-
         private readonly List<AbstractGoapAction> _availableActions;
 
         /// <summary>
@@ -36,24 +30,46 @@ namespace GoapActionSystem.Implementation {
             _availableActions = availableActions;
         }
 
-        public AbstractGoapAction GetNextChosenAction() {
-            if (HasPlan()) return _currentPlan.First();
-            return new SurrogateAction();
+        /// <summary>
+        ///     create the start graph, open list, closed list
+        ///     note regressive seach so root node will be the targeted worldstate
+        /// </summary>
+        /// <param name="graphRoot"></param>
+        /// <param name="graphTarget"></param>
+        /// <returns></returns>
+        private IGoapGraphService InitializeGraphService(List<IGoapWorldstate> graphRoot,
+            List<IGoapWorldstate> graphTarget) {
+            var graphService = new GoapCustomGraphService();
+            graphService.InitializeGoapGraph(graphRoot, graphTarget);
+            return graphService;
+        }
+
+        private bool IsCurrentVertexSubsetOfTarget(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld) {
+            return (currentWorld.Where(x => targetWorld.Contains(x)).Count() == currentWorld.Count());
+        }
+
+        private bool IsSearchDepthLimitExceeded(IGoapGraphService graphService) {
+            return graphService.GetActualDepthFromRoot() > _maximuxSearchDepth;
         }
 
         private bool HasPlan() {
             return (_currentPlan.Count > 0);
         }
 
-        // TODO Die Map, die die Suche nach passendan Actions erleichtert
+        public AbstractGoapAction GetNextChosenAction() {
+            if (HasPlan()) return _currentPlan.First();
+            return new SurrogateAction();
+        }
 
         public List<AbstractGoapAction> GetPlan(List<IGoapWorldstate> currentWorld,
             List<IGoapWorldstate> targetWorld) {
-            // !! only the planner needs to know that goap is running with regressive search!!!
-            IGoapGraph graph = InitializeGraph(targetWorld, currentWorld);
+            List<IGoapWorldstate> graphTarget = currentWorld;
+            List<IGoapWorldstate> graphRoot = targetWorld;
 
-            /*
-             1 grap erstellen (nur erster Knoten) und diesen in die open list
+            IGoapGraphService graphService = InitializeGraphService(graphRoot, graphTarget);
+
+
+            /* 1 grap erstellen (nur erster Knoten) und diesen in die open list
              2 step durch algorithmus : besten aus open list raussuchen und 
                  kostentabelle pflegen 
              
@@ -69,58 +85,40 @@ namespace GoapActionSystem.Implementation {
              goto 2
              
              wenn kein weg  mehr günstiger ist als der bisherige weg zum ziel fertig
-       */
+             */
+            IGoapVertex currentGoapVertex = graphService.GetNextVertexFromOpenList();
 
-            while (!IsTargetReached(targetWorld, graph.GetNextVertexFromOpenList().Worldstate()) &&
-                   !graph.IsCurrentVertexTarget() && graph.GetActualDepthFromRoot() < _maximuxSearchDepth) {
-                IGoapVertex current = graph.GetNextVertexFromOpenList();
-                List<AbstractGoapAction> children = GetIngoinGoapActions(current.Worldstate());
-                graph.ExpandCurrentVertex(children, current.Worldstate());
-                graph.AStarStep();
+            while (currentGoapVertex != null &&
+                   !IsCurrentVertexSubsetOfTarget(currentGoapVertex.Worldstate(), graphTarget) &&
+                   !IsSearchDepthLimitExceeded(graphService)) {
+                List<AbstractGoapAction> children = GetIngoingGoapActions(currentGoapVertex.Worldstate());
+                graphService.ExpandCurrentVertex(children, currentGoapVertex.Worldstate());
+                graphService.AStarStep();
+                currentGoapVertex = graphService.GetNextVertexFromOpenList();
             }
 
-            if (IsTargetReached(targetWorld, graph.GetNextVertexFromOpenList().Worldstate()))
-            {
-                _currentPlan = graph.GetShortestPath();
+            if (currentGoapVertex != null && IsCurrentVertexSubsetOfTarget(currentGoapVertex.Worldstate(), graphTarget)) {
+                _currentPlan = graphService.GetShortestPath();
                 _currentPlan.Reverse();
             }
-            if (graph.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graph.HasNextVertexOnOpenList())
+            if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
                 _currentPlan = new List<AbstractGoapAction> {new SurrogateAction()};
 
             // TODO ist die leere action besser als eine leere liste
+
+
             return _currentPlan;
         }
 
-        /// <summary>
-        ///     true if target is subset of current
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="current"></param>
-        /// <returns></returns>
-        private bool IsTargetReached(List<IGoapWorldstate> target, List<IGoapWorldstate> current) {
-            return target.Where(current.Contains).Count() == target.Count();
-        }
 
         /// <summary>
-        ///     create the start graph, open list, closed list
+        ///     search for actions that effects correxpond to the state
         /// </summary>
-        /// <param name="currentWorld"></param>
-        /// <param name="targetWorld"></param>
+        /// <param name="worldStates"></param>
         /// <returns></returns>
-        private IGoapGraph InitializeGraph(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld) {
-            var connector = new GoapCustomGraphService();
-            connector.InitializeGoapGraph(targetWorld, currentWorld);
-            return connector;
-        }
-
-        /// <summary>
-        ///     search for actions corresponding to worldstate
-        /// </summary>
-        /// <param name="worldState"></param>
-        /// <returns></returns>
-        private List<AbstractGoapAction> GetIngoinGoapActions(List<IGoapWorldstate> worldState) {
+        private List<AbstractGoapAction> GetIngoingGoapActions(List<IGoapWorldstate> worldStates) {
             // TODO alle actions untersuchen ob sie anwendbar sind - mithilfe der effect -> Action hashmap
-            return _availableActions.Where(action => action.IsEffectCorrespondingToState(worldState)).ToList();
+            return _availableActions.Where(action => action.IsSatisfyingStateByEffects(worldStates)).ToList();
         }
     }
 }

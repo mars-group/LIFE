@@ -11,7 +11,7 @@ namespace GoapCommon.Abstract {
     ///     wie den programmierern der actions somit arbeit abgenommen werden kann
     ///     auch das graphensystem sollte nur die methoden der abtracten benutzen
     /// </summary>
-    public abstract class AbstractGoapAction : IGoapAction {
+    public abstract class AbstractGoapAction : IGoapAction, IEquatable<AbstractGoapAction> {
         /// <summary>
         ///     partial state of the world must be fulfilled for execution
         /// </summary>
@@ -71,6 +71,10 @@ namespace GoapCommon.Abstract {
             return IsSubset(_effects, state);
         }
 
+        public bool IsSatisfyingStateByEffects(List<IGoapWorldstate> state) {
+            return IsSubset(state, _effects);
+        }
+
         private bool IsSubset(List<IGoapWorldstate> potentiallySubSet, List<IGoapWorldstate> enclosingSet) {
             return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
                     potentiallySubSet.Count());
@@ -114,6 +118,34 @@ namespace GoapCommon.Abstract {
 
         public override string ToString() {
             return string.Format("PreConditions: {0}, Effects: {1}", PreConditions, Effects);
+        }
+
+        public bool Equals(AbstractGoapAction other) {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return (GetType() == other.GetType()) && (_preConditions.All(i => other._preConditions.Contains(i)) &&
+                                                      (other._preConditions.All(i => _preConditions.Contains(i))));
+        }
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((AbstractGoapAction) obj);
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                return (_preConditions.GetHashCode()*397) ^ _effects.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(AbstractGoapAction left, AbstractGoapAction right) {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(AbstractGoapAction left, AbstractGoapAction right) {
+            return !Equals(left, right);
         }
 
 

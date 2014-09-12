@@ -5,14 +5,12 @@ using GoapCommon.Interfaces;
 using GoapModelTest.Worldstates;
 
 namespace GoapModelTest.Actions {
-
     public class ActionGetToy : AbstractGoapAction {
-
         public ActionGetToy(List<IGoapWorldstate> preconditionWorldstates, List<IGoapWorldstate> effectWorldstates)
-            : base(preconditionWorldstates: preconditionWorldstates, effectWorldstates: effectWorldstates) {}
+            : base(preconditionWorldstates, effectWorldstates) {}
 
         public ActionGetToy()
-            : base(new List<IGoapWorldstate> { new HasMoney(true) },
+            : base(new List<IGoapWorldstate> {new HasMoney(true)},
                 new List<IGoapWorldstate> {
                     new HasMoney(false),
                     new HasToy(true)

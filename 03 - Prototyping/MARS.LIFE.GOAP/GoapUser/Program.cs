@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Xml;
 using CommonTypes.Interfaces;
 using GoapActionSystemFactory.Implementation;
 using GoapCommon.Interfaces;
@@ -22,7 +20,6 @@ namespace GoapUser {
             return Heuristic;
         }
     }
-
 
     internal class MyVertex {
         private readonly string _name;
@@ -185,20 +182,12 @@ namespace GoapUser {
             Console.WriteLine("-----------------------------------");
 
 
-
-           
-
             IActionSystem goapActionSystem = GoapComponent.LoadAgentConfiguration("AgentConfig1", "GoapModelTest");
 
 
-            Console.WriteLine(goapActionSystem.GetNextAction().GetType());
-
-         
 
 
             Console.ReadKey();
-
-
         }
     }
 }

@@ -6,7 +6,7 @@ namespace GoapCommon.Interfaces
     /// <summary>
     ///     the methods needed for the goap planner
     /// </summary>
-    public interface IGoapGraph {
+    public interface IGoapGraphService {
 
         /// <summary>
         /// get the initial graph with one vertex (root)

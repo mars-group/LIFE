@@ -72,16 +72,28 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="GoapTestWithGoapModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
+      <Project>{4a1d955e-8135-4c44-a8ba-1edbe54512b7}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapActionSystemFactory\GoapActionSystemFactory.csproj">
+      <Project>{a36fc1f7-f7c1-4ffc-ba9f-9d864129f8df}</Project>
+      <Name>GoapActionSystemFactory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GoapCommon\GoapCommon.csproj">
       <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
       <Name>GoapCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapModelTest\GoapModelTest.csproj">
+      <Project>{85340006-b073-47e6-9dbf-d0cb391a13aa}</Project>
+      <Name>GoapModelTest</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
