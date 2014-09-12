@@ -10,7 +10,7 @@ namespace OpenNebulaAdapter.Entities
 
         public Node(IDictionary<string, dynamic> node) {
             NodeName = node["nodeName"];
-            CpuCount = node["cpuAmount"];
+            CpuCount = node["cpuCount"];
             RamAmount = node["ramAmount"];
             PhysicalHost = node["physicalHost"];
         }
