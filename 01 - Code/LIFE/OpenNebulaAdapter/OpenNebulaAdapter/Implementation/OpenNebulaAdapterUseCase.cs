@@ -10,7 +10,8 @@ namespace OpenNebulaAdapter.Implementation
     public class OpenNebulaAdapterUseCase
     {
         private readonly OneClient _one;
-        private readonly Dictionary<string,List<int>> _remoteIDs;
+
+        private readonly Dictionary<string, Dictionary<int, string>> _vmDictionary;
 
         public OpenNebulaAdapterUseCase() {
             // First create the client
@@ -19,10 +20,10 @@ namespace OpenNebulaAdapter.Implementation
             const string adminPwd = "80051ee6a7b403ae88cb1fa8e5d9d0877eddfbc0"; //SHA1 password
             
             _one = new OneClient(proxyUrl, adminUser, adminPwd);
-            _remoteIDs = new Dictionary<string, List<int>>();
+            _vmDictionary = new Dictionary<string, Dictionary<int, string>>();
         }
 
-        public Dictionary<string, List<int>> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
+        public Dictionary<string, Dictionary<int, string>> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
 
             // first create our virtual router
             var vrID = -1;
@@ -44,8 +45,10 @@ namespace OpenNebulaAdapter.Implementation
                 vrRouterTemplate.Append("VCPU=\"2\"\n");
 
                 vrID = _one.TemplateAllocate(vrRouterTemplate.ToString());
-                var vrList = new List<int> {_one.TemplateInstanciateVM(vrID, "VirtualRouter", false, "")};
-                _remoteIDs.Add("VirtualRouter", vrList);
+                var vrDict = new Dictionary<int, string> {
+                    {_one.TemplateInstanciateVM(vrID, "Virtual Router", false, ""), "PENDING"}
+                };
+                _vmDictionary.Add("VirtualRouter", vrDict);
                 _one.TemplateDelete(vrID);
             }
             catch (Exception ex) {
@@ -59,7 +62,7 @@ namespace OpenNebulaAdapter.Implementation
             // now create all the nodes
 
             try {
-                var lcList = new List<int>();
+                var lcDict = new Dictionary<int, string>();
 
                 foreach (var node in nodeConfig.Nodes) {
                     var stb = new StringBuilder();
@@ -84,18 +87,18 @@ namespace OpenNebulaAdapter.Implementation
 
                     var templateID = _one.TemplateAllocate(stb.ToString());
 
-                    lcList.Add(_one.TemplateInstanciateVM(templateID, node.NodeName, false, ""));
+                    lcDict.Add(_one.TemplateInstanciateVM(templateID, node.NodeName, false, ""), "PENDING");
 
 
 
                     _one.TemplateDelete(templateID);
                 }
 
-                _remoteIDs.Add("LayerContainer", lcList);
+                _vmDictionary.Add("LayerContainer", lcDict);
             }
             catch (Exception ex) {
                 // if anyone of these somehow fails, delete all created vms and return falsy
-                foreach (var remoteID in _remoteIDs.SelectMany(remoteIDentry => remoteIDentry.Value)) {
+                foreach (var remoteID in _vmDictionary.SelectMany(remoteIDentry => remoteIDentry.Value.Keys)) {
                     _one.VMAction(remoteID, "delete");
                 }
 
@@ -127,7 +130,7 @@ namespace OpenNebulaAdapter.Implementation
 
                 var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
 
-                _remoteIDs.Add("SimulationManager",new List<int>{_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "")});
+                _vmDictionary.Add("SimulationManager", new Dictionary<int, string> {{_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, ""),"PENDING"}});
 
                 _one.TemplateDelete(simManagerTemplateID);
             }
@@ -138,7 +141,7 @@ namespace OpenNebulaAdapter.Implementation
             }
 
             // all is well, return no error
-            return _remoteIDs;
+            return _vmDictionary;
         }
 
         public void deleteVMs(int[] vmArray) {
