@@ -150,9 +150,9 @@ namespace OpenNebulaAdapter.Implementation
             }
         }
 
-        public VM getVMInfo(int vmID) {
+        public string GetVmInfo(int vmID) {
 
-            return _one.VMGetInfo(vmID);
+            return _one.VMGetInfo(vmID).LCM_STATE;
 
         }
     }

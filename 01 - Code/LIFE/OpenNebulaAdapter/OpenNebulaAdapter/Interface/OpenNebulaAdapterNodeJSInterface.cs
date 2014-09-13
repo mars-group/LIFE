@@ -45,11 +45,11 @@ namespace OpenNebulaAdapter.Interface
                     })
                     ),
                 // takes a VM ID as argument and returns a VM Object
-                getVMInfo = (Func<dynamic, Task<object>>)(async i => await Task.Run(
+                getVMStatus = (Func<dynamic, Task<object>>)(async i => await Task.Run(
                     () =>
                     {
-                        var payload = (IDictionary<string, object>)i;
-                        oneAdapter.getVMInfo((int)payload["vmID"]);
+                        var payload = (string)i;
+                        oneAdapter.GetVmInfo(int.Parse(payload));
                         return 0;
                     })
                     ),
