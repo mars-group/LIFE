@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using OpenNebulaAdapter.Entities;
@@ -11,7 +12,7 @@ namespace OpenNebulaAdapter.Implementation
     {
         private readonly OneClient _one;
 
-        private readonly IDictionary<string, IDictionary<int, string>> _vmDictionary;
+        private readonly IDictionary<string, VMInfo[]> _vmDictionary;
 
         public OpenNebulaAdapterUseCase() {
             // First create the client
@@ -20,10 +21,10 @@ namespace OpenNebulaAdapter.Implementation
             const string adminPwd = "80051ee6a7b403ae88cb1fa8e5d9d0877eddfbc0"; //SHA1 password
             
             _one = new OneClient(proxyUrl, adminUser, adminPwd);
-            _vmDictionary = new Dictionary<string, IDictionary<int, string>>();
+            _vmDictionary = new Dictionary<string, VMInfo[]>();
         }
 
-        public IDictionary<string, IDictionary<int, string>> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
+        public IDictionary<string, VMInfo[]> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
 
             // first create our virtual router
             var vrID = -1;
@@ -45,10 +46,10 @@ namespace OpenNebulaAdapter.Implementation
                 vrRouterTemplate.Append("VCPU=\"2\"\n");
 
                 vrID = _one.TemplateAllocate(vrRouterTemplate.ToString());
-                var vrDict = new Dictionary<int, string> {
-                    {_one.TemplateInstanciateVM(vrID, "Virtual Router", false, ""), "PENDING"}
+                var vrDict = new VMInfo {
+                    id = _one.TemplateInstanciateVM(vrID, "Virtual Router", false, ""), vmStatus = "PENDING"
                 };
-                _vmDictionary.Add("VirtualRouter", vrDict);
+                _vmDictionary.Add("VirtualRouter", new VMInfo[]{vrDict});
                 _one.TemplateDelete(vrID);
             }
             catch (Exception ex) {
@@ -62,7 +63,7 @@ namespace OpenNebulaAdapter.Implementation
             // now create all the nodes
 
             try {
-                var lcDict = new Dictionary<int, string>();
+                var vmAry = new List<VMInfo>();
 
                 foreach (var node in nodeConfig.Nodes) {
                     var stb = new StringBuilder();
@@ -87,19 +88,19 @@ namespace OpenNebulaAdapter.Implementation
 
                     var templateID = _one.TemplateAllocate(stb.ToString());
 
-                    lcDict.Add(_one.TemplateInstanciateVM(templateID, node.NodeName, false, ""), "PENDING");
+                    vmAry.Add(new VMInfo { id = _one.TemplateInstanciateVM(templateID, node.NodeName, false, ""), vmStatus = "PENDING"});
 
 
 
                     _one.TemplateDelete(templateID);
                 }
 
-                _vmDictionary.Add("LayerContainer", lcDict);
+                _vmDictionary.Add("LayerContainer", vmAry.ToArray());
             }
             catch (Exception ex) {
                 // if anyone of these somehow fails, delete all created vms and return falsy
-                foreach (var remoteID in _vmDictionary.SelectMany(remoteIDentry => remoteIDentry.Value.Keys)) {
-                    _one.VMAction(remoteID, "delete");
+                foreach (var remoteID in _vmDictionary.SelectMany(remoteIDentry => remoteIDentry.Value)) {
+                    _one.VMAction(remoteID.id, "delete");
                 }
 
                 throw;
@@ -130,7 +131,7 @@ namespace OpenNebulaAdapter.Implementation
 
                 var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
 
-                _vmDictionary.Add("SimulationManager", new Dictionary<int, string> {{_one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, ""),"PENDING"}});
+                _vmDictionary.Add("SimulationManager", new VMInfo[] { new VMInfo {id = _one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, ""), vmStatus = "PENDING"}});
 
                 _one.TemplateDelete(simManagerTemplateID);
             }
@@ -151,9 +152,45 @@ namespace OpenNebulaAdapter.Implementation
         }
 
         public string GetVmInfo(int vmID) {
-
-            return _one.VMGetInfo(vmID).LCM_STATE;
-
+            LcmStates status;
+            LcmStates.TryParse(_one.VMGetInfo(vmID).LCM_STATE, out status);
+            return status.ToString();
         }
+    }
+
+    enum LcmStates {
+        LCM_INIT = 0,
+        PROLOG = 1,
+        BOOT = 2,
+        RUNNING = 3,
+        MIGRATE = 4,
+        SAVE_STOP = 5,
+        SAVE_SUSPEND = 6,
+        SAVE_MIGRATE = 7,
+        PROLOG_MIGRATE = 8,
+        PROLOG_RESUME = 9,
+        EPILOG_STOP = 10,
+        EPILOG = 11,
+        SHUTDOWN = 12,
+        CANCEL = 13,
+        FAILURE = 14,
+        CLEANUP_RESUBMIT = 15,
+        UNKNOWN = 16,
+        HOTPLUG = 17,
+        SHUTDOWN_POWEROFF = 18,
+        BOOT_UNKNOWN = 19,
+        BOOT_POWEROFF = 20,
+        BOOT_SUSPENDED = 21,
+        BOOT_STOPPED = 22,
+        CLEANUP_DELETE = 23,
+        HOTPLUG_SNAPSHOT = 24,
+        HOTPLUG_NIC = 25,
+        HOTPLUG_SAVEAS = 26,
+        HOTPLUG_SAVEAS_POWEROFF = 27,
+        HOTPLUG_SAVEAS_SUSPENDED = 28,
+        SHUTDOWN_UNDEPLOY = 29,
+        EPILOG_UNDEPLOY = 30,
+        PROLOG_UNDEPLOY = 31,
+        BOOT_UNDEPLOY = 32    
     }
 }

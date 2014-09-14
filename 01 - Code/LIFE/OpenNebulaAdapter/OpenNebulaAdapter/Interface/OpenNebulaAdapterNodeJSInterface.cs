@@ -32,11 +32,7 @@ namespace OpenNebulaAdapter.Interface
                     () => 
                         {
                             var payload = (IDictionary<string, object>) i;
-                            var res = new Dictionary<string, VMInfo>();
-                            res["VirtualRouter"] = new VMInfo {id = 340, status = "PENDING"};
-
-                            return res;
-                        //return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
+                            return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
                     })
                     ),
                 // takes an array of VM ids as argument and deletes them
@@ -53,17 +49,11 @@ namespace OpenNebulaAdapter.Interface
                     () =>
                     {
                         var payload = (string)i;
-                        oneAdapter.GetVmInfo(int.Parse(payload));
-                        return 0;
+                        return oneAdapter.GetVmInfo(int.Parse(payload));
                     })
                     ),
             };
         }
-    }
-
-    public class VMInfo {
-        public int id { get; set; }
-        public string status { get; set; }
     }
 
     public static class AssemblyResolverFix
