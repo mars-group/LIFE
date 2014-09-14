@@ -39,8 +39,9 @@ namespace OpenNebulaAdapter.Interface
                 deleteVMs = (Func<dynamic, Task<object>>)(async i => await Task.Run(
                     () =>
                         {
-                            var payload = (IDictionary<string, object>)i;
-                            oneAdapter.deleteVMs((int[]) payload["vmArray"]);
+                            var payload = (object[])i;
+
+                            oneAdapter.deleteVMs(payload.Cast<int>().ToArray());
                             return 0;
                     })
                     ),
