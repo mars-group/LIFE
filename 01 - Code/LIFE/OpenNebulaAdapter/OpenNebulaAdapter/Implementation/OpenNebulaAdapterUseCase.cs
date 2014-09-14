@@ -11,7 +11,7 @@ namespace OpenNebulaAdapter.Implementation
     {
         private readonly OneClient _one;
 
-        private readonly Dictionary<string, Dictionary<int, string>> _vmDictionary;
+        private readonly IDictionary<string, IDictionary<int, string>> _vmDictionary;
 
         public OpenNebulaAdapterUseCase() {
             // First create the client
@@ -20,10 +20,10 @@ namespace OpenNebulaAdapter.Implementation
             const string adminPwd = "80051ee6a7b403ae88cb1fa8e5d9d0877eddfbc0"; //SHA1 password
             
             _one = new OneClient(proxyUrl, adminUser, adminPwd);
-            _vmDictionary = new Dictionary<string, Dictionary<int, string>>();
+            _vmDictionary = new Dictionary<string, IDictionary<int, string>>();
         }
 
-        public Dictionary<string, Dictionary<int, string>> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
+        public IDictionary<string, IDictionary<int, string>> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
 
             // first create our virtual router
             var vrID = -1;

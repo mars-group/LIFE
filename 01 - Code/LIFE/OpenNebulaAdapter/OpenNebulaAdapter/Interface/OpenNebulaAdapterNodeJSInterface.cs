@@ -32,8 +32,12 @@ namespace OpenNebulaAdapter.Interface
                     () => 
                         {
                             var payload = (IDictionary<string, object>) i;
-                            return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
-                        })
+                            var res = new Dictionary<string, VMInfo>();
+                            res["VirtualRouter"] = new VMInfo {id = 340, status = "PENDING"};
+
+                            return res;
+                        //return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
+                    })
                     ),
                 // takes an array of VM ids as argument and deletes them
                 deleteVMs = (Func<dynamic, Task<object>>)(async i => await Task.Run(
@@ -55,6 +59,11 @@ namespace OpenNebulaAdapter.Interface
                     ),
             };
         }
+    }
+
+    public class VMInfo {
+        public int id { get; set; }
+        public string status { get; set; }
     }
 
     public static class AssemblyResolverFix
