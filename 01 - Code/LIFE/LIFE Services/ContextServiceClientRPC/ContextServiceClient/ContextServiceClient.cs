@@ -103,7 +103,7 @@ namespace ContextServiceClient
 			string newEventTypeJSON = "";
 			Type t = obj.GetType();
 			PropertyInfo[] pi = t.GetProperties();
-			Console.WriteLine("ClassName: {0} AttributesCount: {1}", t.Name, pi.Length);
+			//Console.WriteLine("ClassName: {0} AttributesCount: {1}", t.Name, pi.Length);
 			newEventTypeJSON = "{\"EventTypeName\":\"";
 			newEventTypeJSON += t.Name;
 			newEventTypeJSON += "\",\"AtributesCount\":\"";
@@ -122,16 +122,16 @@ namespace ContextServiceClient
 			}
 			newEventTypeJSON += "]}";
 			string message = string.Format ("0;{0}", newEventTypeJSON);
-			Console.WriteLine("{0}", message);
+			//Console.WriteLine("{0}", message);
 			this.Call (message);
 		}
 
 		public void RegisterNewContextRule(string contextRule, MethodDelegate method)
 		{
 			string message = string.Format ("1;{0}", contextRule);
-			Console.WriteLine("{0}", message);
+			//Console.WriteLine("{0}", message);
 			string ruleID = this.Call(message);
-			Console.WriteLine("Received ruleID: {0}", ruleID);
+			//Console.WriteLine("Received ruleID: {0}", ruleID);
 			//contextListener.contextDelegates.Add (ruleID, method);
 			if(!ruleID.Equals("-1")){
 				contextListener.contextRuleDictionary.Add (ruleID, method);
@@ -144,7 +144,7 @@ namespace ContextServiceClient
 			string newEventJSON = "";
 			Type t = obj.GetType();
 			PropertyInfo[] pi = t.GetProperties();
-			Console.WriteLine("ClassName: {0} AttributesCount: {1}", t.Name, pi.Length);
+			//Console.WriteLine("ClassName: {0} AttributesCount: {1}", t.Name, pi.Length);
 			newEventJSON = "{\"EventType\":\"";
 			newEventJSON += t.Name;
 			newEventJSON += "\",\"AttributesCount\":\"";
@@ -171,13 +171,13 @@ namespace ContextServiceClient
 			}
 			newEventJSON += "]}";
 			string message = string.Format ("0;{0}", newEventJSON);
-			Console.WriteLine("NewEventJSON: {0}", message);
+			//Console.WriteLine("NewEventJSON: {0}", message);
 			//this.Call (message);
 
 			var body = Encoding.UTF8.GetBytes(message);
 
 			eventChannel.BasicPublish("", "contextservice_in", null, body);
-			Console.WriteLine(" [x] Sent {0}", message);
+			//Console.WriteLine(" [x] Sent {0}", message);
 		}
 	}
 }

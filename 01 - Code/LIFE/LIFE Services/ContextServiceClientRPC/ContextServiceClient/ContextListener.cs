@@ -39,7 +39,7 @@ namespace ContextServiceClient
 			Thread thread = new Thread (ts);
 			thread.Start ();
 
-			Console.WriteLine (" [*] Waiting for messages.");
+			Console.WriteLine (" [*] Context Listener is waiting for messages.");
 		}
 
 		public void run() {
@@ -51,7 +51,7 @@ namespace ContextServiceClient
 				string message = Encoding.UTF8.GetString(body);
 				string[] result = message.Split (';');
 				channel.BasicAck (ea.DeliveryTag, false);
-				Console.WriteLine(" [x] Received {0}", message);
+				//Console.WriteLine(" [x] Received {0}", message);
 
 				if(contextRuleDictionary.ContainsKey(result[0]))
 				{

@@ -34,7 +34,7 @@ namespace ContextServiceClient
 			string newEventJSON = "";
 			Type t = obj.GetType();
 			PropertyInfo[] pi = t.GetProperties();
-			Console.WriteLine("ClassName: {0} AttributesCount: {1}", t.Name, pi.Length);
+			//Console.WriteLine("ClassName: {0} AttributesCount: {1}", t.Name, pi.Length);
 			newEventJSON = "{\"EventType\":\"";
 			newEventJSON += t.Name;
 			newEventJSON += "\",\"AttributesCount\":\"";
@@ -61,12 +61,12 @@ namespace ContextServiceClient
 			}
 			newEventJSON += "]}";
 			string message = string.Format ("0;{0}", newEventJSON);
-			Console.WriteLine("NewEventJSON: {0}", message);
+			//Console.WriteLine("NewEventJSON: {0}", message);
 
 			var body = Encoding.UTF8.GetBytes(message);
 
 			eventChannel.BasicPublish("", queueName, null, body);
-			Console.WriteLine(" [x] Sent {0}", message);
+			//Console.WriteLine(" [x] Sent {0}", message);
 		}
 	}
 }
