@@ -4,9 +4,6 @@ using System.Linq;
 using AgentTester.Wolves.Interactions;
 using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Dummies;
-using GenericAgentArchitecture.Interfaces;
-using GenericAgentArchitecture.Perception;
 using LayerAPI.Interfaces;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 

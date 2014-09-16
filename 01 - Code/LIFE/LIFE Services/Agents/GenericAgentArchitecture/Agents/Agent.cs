@@ -1,6 +1,5 @@
 ﻿using System;
 using CommonTypes.DataTypes;
-using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;

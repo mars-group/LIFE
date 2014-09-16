@@ -58,28 +58,9 @@ namespace GenericAgentArchitecture.Movement {
       var distance = Position.GetDistance(targetPos);
       if (Math.Abs(distance) <= float.Epsilon) return;
 
-      // Pitch calculation.
+      // Pitch and yaw calculation.
       var pitch = (float) Math.Asin((targetPos.Z-Position.Z) / distance) * 57.295779f;
-
-
-      // Yaw calculation. Radians to degree conversion: 180/π = 57.295
-      var yaw = Yaw;
-      var distX = targetPos.X - Position.X;
-      var distY = targetPos.Y - Position.Y;
-
-      // Check 90° and 270° (arctan infinite) first.      
-      if (Math.Abs(distX) <= float.Epsilon) {
-        if      (distY > 0f) yaw =  90f;
-        else if (distY < 0f) yaw = 270f;
-      }
-
-      // Arctan argument fine? Calculate heading then.
-      else {
-        yaw = (float) Math.Atan(distY / distX) * 57.295779f;
-        if (distX < 0f) yaw += 180f;  // Range  90° to 270° correction. 
-        if (yaw   < 0f) yaw += 360f;  // Range 270° to 360° correction.        
-      }
-
+      var yaw = CalculateYawToTarget(targetPos);
 
       // Check the speed. If we would go too far, reduce it accordingly.
       if (distance < (speed*TickLength)) speed = distance/TickLength;

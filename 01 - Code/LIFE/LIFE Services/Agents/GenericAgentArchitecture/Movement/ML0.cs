@@ -1,6 +1,5 @@
 ﻿using System;
 using CommonTypes.DataTypes;
-using ESCTestLayer.Entities;
 using ESCTestLayer.Interface;
 
 namespace GenericAgentArchitecture.Movement {
@@ -68,6 +67,32 @@ namespace GenericAgentArchitecture.Movement {
       yaw %= 360;
       if (yaw < 0) yaw += 360;
       Yaw = yaw;
+    }
+
+
+    /// <summary>
+    ///   Calculate the yaw to a given heading.
+    /// </summary>
+    /// <param name="target">The target to get orientation to.</param>
+    /// <returns>The yaw (corrected to 0 - lt. 360). </returns>
+    protected float CalculateYawToTarget(Vector3f target) {
+      var yaw = Yaw;
+      var distX = target.X - Position.X;
+      var distY = target.Y - Position.Y;
+
+      // Check 90° and 270° (arctan infinite) first.      
+      if (Math.Abs(distX) <= float.Epsilon) {
+        if      (distY > 0f) yaw =  90f;
+        else if (distY < 0f) yaw = 270f;
+      }
+
+      // Arctan argument fine? Calculate heading then.    
+      else { // Radians to degree conversion: 180/π = 57.295
+        yaw = (float) Math.Atan(distY / distX) * 57.295779f;
+        if (distX < 0f) yaw += 180f;  // Range  90° to 270° correction. 
+        if (yaw   < 0f) yaw += 360f;  // Range 270° to 360° correction.        
+      }
+      return yaw;
     }
 
 

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading;
+using CommonTypes.DataTypes;
+using ESCTestLayer.Implementation;
+using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -43,14 +46,14 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(); //CreateRandomMovingAgents(2, 10, 10);//
-      new Executor(environment).Run(850);
+      //var environment = AgentBuilder.CreateWolvesScenarioEnvironment(); //CreateRandomMovingAgents(2, 10, 10);//
+      //new Executor(environment).Run(850);
       
 
-      //Console.WriteLine ("Testmethode für die Bewegungsklasse.");      
-      //var m = new ContinuousMovement (new ESC(), 0, new Vector(1, 1, 0));
-      //for (var i = 0; i < 16; i ++) m.MoveToPosition(new Vector(9, 4), 1f);
-      //Console.ReadLine();
+      Console.WriteLine ("Testmethode für die Bewegungsklasse.");      
+      var m = new GridMovement (new ESC(), 0, new Vector3f(1, 1, 0));     
+      m.MoveToPosition(new Vector2f(2, 1), 2);
+      Console.ReadLine();
     }
   }
 }

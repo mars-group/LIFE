@@ -69,8 +69,7 @@ namespace ESCTestLayer.Implementation
         }
 
 
-        public MovementResult SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid)
-        {
+        public MovementResult SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid) {
             if (min == null) min = new Vector3f(0.0f, 0.0f, 0.0f);
             var zUsed = (max.Z - min.Z > float.Epsilon);
             Vector3f dir = null;
@@ -83,10 +82,8 @@ namespace ESCTestLayer.Implementation
             );
 
             // When only grids are wished, position is finished. Next, create direction normal vector.
-            if (grid)
-            {
-                switch (_rnd.Next(0, 4))
-                {                                //         Z
+            if (grid) {
+                switch (_rnd.Next(0, 4)) {                                //         Z
                     case 0: dir = new Vector3f(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
                     case 1: dir = new Vector3f(0.0f, -1.0f, 0.0f); break; // left    |  /
                     case 2: dir = new Vector3f(1.0f, 0.0f, 0.0f); break;  // up      | /
