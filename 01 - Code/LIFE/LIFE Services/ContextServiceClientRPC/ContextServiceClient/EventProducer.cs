@@ -25,7 +25,7 @@ namespace ContextServiceClient
 			// Declare new message queue for outgoing Events
 			eventChannel = connection.CreateModel();
 			queueName = string.Format ("queue{0}", ContextServiceClient.Instance.RegisterNewEventProducer());
-			eventChannel.QueueDeclare(queueName);
+			//eventChannel.QueueDeclare(queueName);
 		}
 
 		public void SendEvent(Object obj)
@@ -46,9 +46,14 @@ namespace ContextServiceClient
 				newEventJSON += "\",\"AttributeType\":\"";
 				newEventJSON += prop.PropertyType.Name;
 				newEventJSON += "\",\"AttributeValue\":\"";
-				if(prop.PropertyType.Name.Equals("Double")) {
-					double doubleValue = (double)prop.GetValue(obj, null);
-					newEventJSON += doubleValue.ToString(System.Globalization.CultureInfo.InvariantCulture);
+				if((prop.PropertyType.Name.Equals("Single")) || (prop.PropertyType.Name.Equals("Double"))) {
+					if (prop.PropertyType.Name.Equals ("Single")) {
+						float floatValue = (float)prop.GetValue(obj, null);
+						newEventJSON += floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture);
+					} else {
+						double doubleValue = (double)prop.GetValue(obj, null);
+						newEventJSON += doubleValue.ToString(System.Globalization.CultureInfo.InvariantCulture);
+					}
 				}
 				else {
 					newEventJSON += prop.GetValue(obj, null);
@@ -67,6 +72,11 @@ namespace ContextServiceClient
 
 			eventChannel.BasicPublish("", queueName, null, body);
 			//Console.WriteLine(" [x] Sent {0}", message);
+		}
+
+		public void Disconnect() {
+			eventChannel.Close();
+			connection.Close();
 		}
 	}
 }

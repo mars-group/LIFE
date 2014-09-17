@@ -25,7 +25,6 @@ namespace ContextServiceClient
 			csc.RegisterNewContextRule("select count(*) from pattern [every (timer:interval(20 sec) and not ([5] KillEvent))]", Listener.MethodThree);
 			csc.RegisterNewContextRule("select e1, e2 from pattern [every (e1=GazelleEvent -> e2=GazelleEvent(e1.x = e2.x, e1.y = e2.y)) where timer:within(5 sec)]", Listener.CollisionDetectionMethod);
 			//csc.RegisterNewContextRule("select * from GazelleEvent where id between 1 and 10", Listener.MethodTwo);
-			//csc.RegisterNewContextRule("select e1, e2 from pattern [every (e1=GazelleEvent(id < 30, x < 30) -> e2=GazelleEvent(id > 30, x > 30)) where timer:within(10 sec)]", Listener.MethodOne);
 
 			EventProducer eventProducer = new EventProducer();
 
@@ -57,7 +56,6 @@ namespace ContextServiceClient
 		public static void MethodTwo(Dictionary<string, object> results) {
 
 			Console.WriteLine("Received GazelleEvent from gazelle with id: {0} and energy: {1}", results["id"], results["energy"]);
-			//Console.WriteLine("Received GazelleEvent");
 			// Do something
 		}
 
