@@ -19,14 +19,23 @@ namespace GoapActionSystem.Implementation {
         private IGoapGoal _currentGoal;
 
 
-        public GoapManager() {}
-
+        /// <summary>
+        /// create the manager and add worldstates later from sensors or other source
+        /// </summary>
+        /// <param name="availableActions"></param>
+        /// <param name="availableGoals"></param>
         public GoapManager(List<AbstractGoapAction> availableActions, List<IGoapGoal> availableGoals) {
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             CreateWorldstatesByNeeds();
         }
 
+        /// <summary>
+        /// create  the manager inklusive the current worldstates
+        /// </summary>
+        /// <param name="availableActions"></param>
+        /// <param name="availableGoals"></param>
+        /// <param name="startStates"></param>
         public GoapManager(List<AbstractGoapAction> availableActions, List<IGoapGoal> availableGoals,
             List<IGoapWorldstate> startStates) {
             _availableActions = availableActions;
@@ -71,7 +80,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     get the needed types of all worldstates by the used goals and actions
+        ///     get the needed types of all worldstates by the used goals and actions - testing method
         /// </summary>
         /// <returns></returns>
         private IEnumerable<Type> GetNeededWorldstates() {

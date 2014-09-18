@@ -1,14 +1,18 @@
-﻿namespace WorkingMemory.Interfaces
+﻿using System;
+using CommonTypes.Interfaces;
+
+namespace WorkingMemory.Interfaces
 {
     interface IWorkingMemory {
-
+        /*
         bool AddFact(IFact fact);
 
 
 
 
-        bool HasFact(MemoryFactType factType);
+        bool HasFact(Type factType);
 
-        IFact GetFact(MemoryFactType factType);
+        IFact GetFact(Type factType);
+         * */
     }
 }

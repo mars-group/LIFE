@@ -69,7 +69,7 @@ namespace GoapActionSystem.Implementation {
             IGoapGraphService graphService = InitializeGraphService(graphRoot, graphTarget);
 
 
-            /* 1 grap erstellen (nur erster Knoten) und diesen in die open list
+            /* 1 graph erstellen (nur erster Knoten) und diesen in die open list
              2 step durch algorithmus : besten aus open list raussuchen und 
                  kostentabelle pflegen 
              
@@ -104,9 +104,8 @@ namespace GoapActionSystem.Implementation {
             if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
                 _currentPlan = new List<AbstractGoapAction> {new SurrogateAction()};
 
-            // TODO ist die leere action besser als eine leere liste
-
-
+            // TODO ist die leere action besser als eine leere liste ?
+            
             return _currentPlan;
         }
 

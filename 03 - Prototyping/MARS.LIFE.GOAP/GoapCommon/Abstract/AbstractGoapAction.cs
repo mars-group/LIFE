@@ -32,7 +32,7 @@ namespace GoapCommon.Abstract {
         /// <summary>
         ///     get the immutable list of effects
         /// </summary>
-        public List<IGoapWorldstate> Effects {
+        private List<IGoapWorldstate> Effects {
             get { return _effects; }
         }
 
@@ -155,8 +155,8 @@ namespace GoapCommon.Abstract {
 
         public abstract bool Execute();
 
-        public abstract int ExecutionCosts();
+        public abstract int GetExecutionCosts();
 
-        public abstract int Precedence();
+        public abstract int GetPriority();
     }
 }

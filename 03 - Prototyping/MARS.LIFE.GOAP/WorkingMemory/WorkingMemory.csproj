@@ -53,11 +53,17 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Interfaces\IWorkingMemory.cs" />
-    <Compile Include="Interfaces\IFact.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\" />
+    <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
+      <Project>{4a1d955e-8135-4c44-a8ba-1edbe54512b7}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapCommon\GoapCommon.csproj">
+      <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
+      <Name>GoapCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

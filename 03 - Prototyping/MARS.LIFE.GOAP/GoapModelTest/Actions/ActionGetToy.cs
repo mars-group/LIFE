@@ -28,11 +28,11 @@ namespace GoapModelTest.Actions {
             throw new NotImplementedException();
         }
 
-        public override int ExecutionCosts() {
+        public override int GetExecutionCosts() {
             throw new NotImplementedException();
         }
 
-        public override int Precedence() {
+        public override int GetPriority() {
             throw new NotImplementedException();
         }
     }

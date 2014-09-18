@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CommonTypes.Interfaces;
-using GoapActionSystemFactory.Implementation;
 using GoapCommon.Interfaces;
 using QuickGraph;
 
@@ -33,10 +31,10 @@ namespace GoapUser {
         }
     }
 
-
-    internal static class Program {
+    /*
+    internal static class GraphSnippets {
         private static void Main(string[] args) {
-            /*
+            
             
             IGoapWorldstate moneytrue = new HasMoney(true, WorldStateEnums.HasMoney);
             IGoapWorldstate moneyfalse = new HasMoney(false, WorldStateEnums.HasMoney);
@@ -178,16 +176,7 @@ namespace GoapUser {
            Console.WriteLine(l4.Equals(l5));
            Console.WriteLine(l6.Equals(l7));
 
-             */
-            Console.WriteLine("-----------------------------------");
-
-
-            IActionSystem goapActionSystem = GoapComponent.LoadAgentConfiguration("AgentConfig1", "GoapModelTest");
-
-
-
-
-            Console.ReadKey();
+            
         }
-    }
+    }*/
 }
