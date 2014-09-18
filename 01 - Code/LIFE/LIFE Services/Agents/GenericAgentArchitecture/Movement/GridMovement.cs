@@ -70,7 +70,7 @@ namespace GenericAgentArchitecture.Movement {
 
         // Calculate yaw to target position and create sorted list of movement options.
         var angle = CalculateYawToTarget(targetPos);
-        var list = new SortedDictionary<float, Direction>();
+        var list = new List<DirDiff>();
 
         // Add directions enum values and angular differences to list.
         // We loop over all options and calculate difference between desired and actual value.
@@ -85,11 +85,11 @@ namespace GenericAgentArchitecture.Movement {
           // Calculate angular difference to current option. If >180°, consider other semicircle.
           var diff = Math.Abs(angle - (offset + mod*90));
           if (diff > 180.0f) diff = 360.0f - diff;
-          list.Add(diff, (Direction) iEnum);
+          list.Add(new DirDiff {dir = (Direction) iEnum, diff = diff});
         }
 
         // Now we have a list of available movement options, ordered by efficiency.
-
+        list.Sort();
 
 
 
@@ -97,7 +97,7 @@ namespace GenericAgentArchitecture.Movement {
         var le = list.GetEnumerator();  
         Console.WriteLine("\n - Soll-Gierwert: "+angle+"°\n - Diagonalbew.: "+
                           diagonalEnabled+"\n - in Aufl.: "+list.Count+"\n");
-        while (le.MoveNext()) Console.WriteLine(le.Current.Key + "°  -  " + le.Current.Value);       
+        while (le.MoveNext()) Console.WriteLine(le.Current.diff + "°  -  " + le.Current.dir);       
         return;
 
 
