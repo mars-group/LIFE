@@ -12,7 +12,7 @@ namespace OpenNebulaAdapter.Implementation
     {
         private readonly OneClient _one;
 
-        private readonly IDictionary<string, VMInfo[]> _vmDictionary;
+        private IDictionary<string, VMInfo[]> _vmDictionary;
 
         public OpenNebulaAdapterUseCase() {
             // First create the client
@@ -25,6 +25,8 @@ namespace OpenNebulaAdapter.Implementation
         }
 
         public IDictionary<string, VMInfo[]> CreateVMsFromNodeConfig(NodeConfig nodeConfig) {
+            // re-initialize VM Dictionary, since each run requires a new one
+            _vmDictionary = new Dictionary<string, VMInfo[]>();
 
             // first create our virtual router
             var vrID = -1;
