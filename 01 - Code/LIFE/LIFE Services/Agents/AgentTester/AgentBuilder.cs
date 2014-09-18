@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using AgentTester.RandomMove_ESC;
 using AgentTester.Wolves.Agents;
-using ESCTestLayer;
 using ESCTestLayer.Implementation;
 using LayerAPI.Interfaces;
 
@@ -32,17 +30,5 @@ namespace AgentTester {
       return environment;
     }
 
-
-    /// <summary>
-    /// Builder for random walk agents layer.
-    /// </summary>
-    public static ITickClient CreateRandomMovingAgents(int nr, int dimX, int dimY) {        
-      var esc = new ESC();
-      var agents = new List<ITickClient>();
-      for (var i = 0; i < nr; i++) agents.Add(new WalkerAgent("WA-"+i, esc));      
-      var layer = new WalkerLayer(agents);
-      //layer.InitLayer<Object>(null, null, null);
-      return layer;
-    }
   }
 }

@@ -49,6 +49,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\ECSTestLayer\ESCPrototype.csproj">
       <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
       <Name>ESCPrototype</Name>

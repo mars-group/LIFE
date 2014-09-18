@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using AgentTester.Wolves.Agents;
+using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Interfaces;
 
@@ -20,7 +20,7 @@ namespace AgentTester.Wolves.Interactions {
 
     public List<Interaction> GetReflexiveActions(Agent agent) {
       if (agent is Wolf || agent is Sheep) return new List<Interaction> {
-        new MoveInteraction(null, new Float3(0, 0))
+        new MoveInteraction(null, new Vector2f(0, 0))
       };
       if (agent is Grass) return new List<Interaction> {
         new GrowInteraction(null)

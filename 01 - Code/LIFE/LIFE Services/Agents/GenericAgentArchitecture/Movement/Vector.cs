@@ -87,7 +87,7 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <returns>String with component-based notation.</returns>
     public override string ToString() {
-      return !_is3D ? String.Format("({0,5:0.00}|{1,5:0.00})",       X,Y)
+      return !_is3D ? String.Format("({0,5:0.00}|{1,5:0.00})",            X,Y)
                     : String.Format("({0,5:0.00}|{1,5:0.00}|{2,5:0.00})", X,Y,Z);
     }
   };

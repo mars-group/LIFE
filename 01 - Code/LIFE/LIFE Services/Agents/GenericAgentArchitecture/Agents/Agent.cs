@@ -1,5 +1,5 @@
 ﻿using System;
-using GenericAgentArchitecture.Dummies;
+using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
@@ -15,14 +15,14 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class Agent : IAgent {
 
-    protected long Cycle;                              // The current execution cycle.   
+    public long Cycle { get; protected set; }          // The current execution cycle.   
     public readonly string Id;                         // Unique identifier.
     protected readonly bool DebugEnabled;              // Controls console debug output.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.  
     public readonly InteractionContainer Interactions; // Repertoire of all interactions.     
-    public Position Position;                          // Position in an environment.
-
+    public Vector3f Position;                          // Position in an environment.
+    //TODO Movement module usage here ?!
 
     /// <summary>
     /// Constructor for an abstract agent. It serves as a base class that is extended with

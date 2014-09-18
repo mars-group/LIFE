@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Dummies\Environment.cs" />
-    <Compile Include="Dummies\Position.cs" />
+    <Compile Include="Dummies\MessageServer.cs" />
     <Compile Include="Interfaces\IGenericAPI.cs" />
     <Compile Include="Interactions\Interaction.cs" />
     <Compile Include="Interactions\InteractionContainer.cs" />
@@ -54,20 +54,16 @@
     <Compile Include="Interfaces\IIACLoader.cs" />
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
-    <Compile Include="Interfaces\IGenericDataSource.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
-    <Compile Include="Interfaces\IPerception.cs" />
     <Compile Include="Movement\ML0.cs" />
     <Compile Include="Movement\ContinuousMovement.cs" />
     <Compile Include="Movement\DirectMovement.cs" />
     <Compile Include="Movement\GridMovement.cs" />
     <Compile Include="Movement\ML1.cs" />
     <Compile Include="Movement\Vector.cs" />
-    <Compile Include="Perception\AgentSensor.cs" />
-    <Compile Include="Perception\GenericSensor.cs" />
-    <Compile Include="Perception\GenericSensorInput.cs" />
+    <Compile Include="Perception\CommunicationSensor.cs" />
+    <Compile Include="Perception\DataSensor.cs" />
     <Compile Include="Perception\Halo.cs" />
-    <Compile Include="Perception\Input.cs" />
     <Compile Include="Perception\OmniHalo.cs" />
     <Compile Include="Perception\PerceptionUnit.cs" />
     <Compile Include="Perception\RadialHalo.cs" />
@@ -80,6 +76,10 @@
     <None Include="Movement\Agentenbewegung.ncp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LayerAPI</Name>
@@ -90,6 +90,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Arbeit Arbeit.txt" />
     <Content Include="Movement\Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

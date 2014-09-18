@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
+using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Dummies;
+using LayerAPI.Interfaces;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 
 namespace AgentTester.Wolves.Agents {
-  internal class Grassland : Environment {
-    public static readonly Float3 Boundary = new Float3(30, 18, 0);
+  internal class Grassland : Environment, IGenericDataSource {
+      public static readonly Vector2f Boundary = new Vector2f(30, 18);
     private readonly Random _random;
     private int _idCounter;
 
@@ -45,11 +47,11 @@ namespace AgentTester.Wolves.Agents {
       do {
         var x = _random.Next((int)Boundary.X);
         var y = _random.Next((int)Boundary.Y);
-        newAgent.Position.Center = new Float3 (x, y);
+        newAgent.Position = new Vector2f(x, y);
         unique = true;
         foreach (var agent in Agents) {
-          if (agent.Position.Center.X == newAgent.Position.Center.X &&
-              agent.Position.Center.Y == newAgent.Position.Center.Y) {
+          if (agent.Position.X == newAgent.Position.X &&
+              agent.Position.Y == newAgent.Position.Y) {
             unique = false;
             break;
           }
@@ -76,12 +78,13 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="position">The intended position</param>
     /// <returns>True, if accessible, false, when not.</returns>
-    public bool CheckPosition(Float3 position) {
+    public bool CheckPosition(Vector2f position)
+    {
       if (position.X < 0 || position.X >= Boundary.X ||
           position.Y < 0 || position.Y >= Boundary.Y) return false;
       foreach (var agent in Agents) {
-        if (agent.Position.Center.X == position.X &&
-            agent.Position.Center.Y == position.Y) return false;
+        if (agent.Position.X == position.X &&
+            agent.Position.Y == position.Y) return false;
       }
       return true;
     }
@@ -118,7 +121,7 @@ namespace AgentTester.Wolves.Agents {
 
       // Print the agents.
       foreach (var agent in Agents) {
-        Console.SetCursorPosition((int)agent.Position.Center.X+1, (int)agent.Position.Center.Y+3);
+        Console.SetCursorPosition((int)agent.Position.X+1, (int)agent.Position.Y+3);
         if (agent is Wolf) {
           Console.ForegroundColor = ConsoleColor.Red;
           Console.Write("W");
@@ -183,5 +186,30 @@ namespace AgentTester.Wolves.Agents {
       
       Console.SetCursorPosition(79, 0);
     }
+
+
+
+    /* Data source functions: Information types and retrieval method. */
+
+    public enum InformationTypes { Agents }
+      
+      public object GetData(int informationType, IGeometry geometry) {
+      switch ((InformationTypes) informationType) {
+        
+        case InformationTypes.Agents: {
+          var map = new Dictionary<string, Agent>();
+          foreach (var agent in GetAllAgents()) {
+              if (geometry.IsInRange(agent.Position) &&
+                agent.Position.GetDistance(geometry.GetPosition()) > float.Epsilon) {
+              map[agent.Id] = agent;
+            }
+          }
+          return map;
+        }
+        
+        default: return null;
+      }
+    }
+
   }
 }

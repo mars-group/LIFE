@@ -2,8 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommonTypes.DataTypes;
 using ESCTestLayer.Entities;
 using ESCTestLayer.Interface;
+using LayerAPI.Interfaces;
 
 namespace ESCTestLayer.Implementation
 {
@@ -13,7 +15,7 @@ namespace ESCTestLayer.Implementation
     ///   @see http://jitter-physics.com/wordpress/?tag=sweep-and-prune
     ///   @see http://www.philorwig.com/research/spatial/collision-detection-sweep-and-prune.html
     /// </summary>
-    public class ESC : IESC
+    public class ESC : IESC, IGenericDataSource
     {
 
         private readonly Random _rnd;                             // Number generator for random positions.
@@ -33,11 +35,12 @@ namespace ESCTestLayer.Implementation
 
         public void Add(int elementId, Vector3f dimension)
         {
-            _dimensions.Add(elementId, dimension);
+            _dimensions[elementId] = dimension;
         }
 
         public void Remove(int elementId)
         {
+            //TODO testen ob contains notwendig
             _dimensions.Remove(elementId);
         }
 
@@ -66,8 +69,7 @@ namespace ESCTestLayer.Implementation
         }
 
 
-        public MovementResult SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid)
-        {
+        public MovementResult SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid) {
             if (min == null) min = new Vector3f(0.0f, 0.0f, 0.0f);
             var zUsed = (max.Z - min.Z > float.Epsilon);
             Vector3f dir = null;
@@ -80,10 +82,8 @@ namespace ESCTestLayer.Implementation
             );
 
             // When only grids are wished, position is finished. Next, create direction normal vector.
-            if (grid)
-            {
-                switch (_rnd.Next(0, 4))
-                {                                //         Z
+            if (grid) {
+                switch (_rnd.Next(0, 4)) {                                //         Z
                     case 0: dir = new Vector3f(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
                     case 1: dir = new Vector3f(0.0f, -1.0f, 0.0f); break; // left    |  /
                     case 2: dir = new Vector3f(1.0f, 0.0f, 0.0f); break;  // up      | /
@@ -117,6 +117,13 @@ namespace ESCTestLayer.Implementation
         public float GetDistance(int anElementId, int anotherElementId)
         {
             return _positions[anElementId].GetDistance(_positions[anElementId]);
+        }
+
+        public object GetData(int informationType, IGeometry geometry) {
+            //TODO informationType als filter kriterium
+            const int elementId = -1;
+            Add(elementId, geometry.GetDimensionQuad());
+            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
         }
 
         public IEnumerable<CollidableElement> Explore(int elementId, Vector3f position, Vector3f direction)
@@ -239,5 +246,6 @@ namespace ESCTestLayer.Implementation
             return false;
         }
         #endregion
+
     }
 }

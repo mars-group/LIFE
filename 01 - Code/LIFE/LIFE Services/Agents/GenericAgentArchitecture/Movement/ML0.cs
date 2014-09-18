@@ -1,5 +1,5 @@
 ﻿using System;
-using ESCTestLayer.Entities;
+using CommonTypes.DataTypes;
 using ESCTestLayer.Interface;
 
 namespace GenericAgentArchitecture.Movement {
@@ -13,11 +13,10 @@ namespace GenericAgentArchitecture.Movement {
     private readonly IESC _esc;     // Environment Service Component interface for collision detection.
     private readonly int _agentId;  // Agent identifier, needed for ESC registration.
 
-    public Vector Position   { get; private set;   }   // The agent's center (current position). 
-    public Vector TargetPos  { get; protected set; }   // Target position. May be set or auto-calculated.
-    public Vector Dimension  { get; set;           }   // Agent's physical dimensions.
-    public float  Pitch      { get; private set;   }   // Direction (lateral axis).
-    public float  Yaw        { get; private set;   }   // Direction (vertical axis).
+    public Vector3f Position  { get; private set;   }   // The agent's center (current position). 
+    public Vector3f TargetPos { get; protected set; }   // Target position. May be set or auto-calculated.
+    public float  Pitch       { get; private set;   }   // Direction (lateral axis).
+    public float  Yaw         { get; private set;   }   // Direction (vertical axis).
 
 
     /// <summary>
@@ -26,18 +25,17 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    protected ML0 (IESC esc, int agentId, Vector dim) {
+    protected ML0 (IESC esc, int agentId, Vector3f dim) {
       _esc = esc;
       _agentId = agentId;
-      Dimension = dim;
 
       // Initialization with zeros.
-      Position = new Vector(0.0f, 0.0f, 0.0f);
-      TargetPos = new Vector(0.0f, 0.0f, 0.0f);
+      Position = new Vector3f(0.0f, 0.0f, 0.0f);
+      TargetPos = new Vector3f(0.0f, 0.0f, 0.0f);
       Pitch = 0.0f;
       Yaw = 0.0f;
 
-      esc.Add (_agentId, GetVector3F(dim));
+      esc.Add (_agentId, dim);
     }
 
 
@@ -73,34 +71,52 @@ namespace GenericAgentArchitecture.Movement {
 
 
     /// <summary>
-    ///   [L0] Perform the movement action. Sends updated values to ESC and receives success or failure.
+    ///   Calculate the yaw to a given heading.
     /// </summary>
-    public void Move() {
+    /// <param name="target">The target to get orientation to.</param>
+    /// <returns>The yaw (corrected to 0 - lt. 360). </returns>
+    protected float CalculateYawToTarget(Vector3f target) {
+      var yaw = Yaw;
+      var distX = target.X - Position.X;
+      var distY = target.Y - Position.Y;
 
-      // ESC needs direction vector. So it shall get it. But not normalized ...
-      var pitchRad = Pitch * 0.0174532925f;  // Deg -> Rad.
-      var yawRad   = Yaw   * 0.0174532925f;      
-      var dv = new Vector((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
-                          (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
-                          (float) (Math.Sin(pitchRad)));      
+      // Check 90° and 270° (arctan infinite) first.      
+      if (Math.Abs(distX) <= float.Epsilon) {
+        if      (distY > 0f) yaw =  90f;
+        else if (distY < 0f) yaw = 270f;
+      }
 
-
-      Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
-
-      _esc.SetPosition(_agentId, GetVector3F(TargetPos), GetVector3F(dv));
-      //TODO Check result for success / failure and behave accordingly.
-      //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
-      Position = TargetPos;
+      // Arctan argument fine? Calculate heading then.    
+      else { // Radians to degree conversion: 180/π = 57.295
+        yaw = (float) Math.Atan(distY / distX) * 57.295779f;
+        if (distX < 0f) yaw += 180f;  // Range  90° to 270° correction. 
+        if (yaw   < 0f) yaw += 360f;  // Range 270° to 360° correction.        
+      }
+      return yaw;
     }
 
 
     /// <summary>
-    ///   Wrapper class that converts the internal vector representation to the ESC class.
+    ///   [L0] Perform the movement action. Sends updated values to ESC and receives success or failure.
     /// </summary>
-    /// <param name="vector">The input vector.</param>
-    /// <returns>Vector3f class used in ESC.</returns>
-    private static Vector3f GetVector3F (Vector vector) {
-      return new Vector3f(vector.X, vector.Y, vector.Z);
+    public void Move() {
+
+      // ESC needs direction vector. So it shall get it. 
+      var pitchRad = Pitch * 0.0174532925f;  // Deg -> Rad.
+      var yawRad   = Yaw   * 0.0174532925f;      
+      var dv = new Vector3f((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
+                            (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
+                            (float) (Math.Sin(pitchRad))).Normalize();      
+
+
+      Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
+
+      var result = _esc.SetPosition(_agentId, TargetPos, dv);
+      Position = new Vector3f(result.Position.X, result.Position.Y, result.Position.Z);
+      //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
+      //TODO Direktion auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
+      //TODO nur werte setzen, nicht position zu neuer Instanz zuordnen, wegen Halo
+      Position = TargetPos;
     }
   }
 }

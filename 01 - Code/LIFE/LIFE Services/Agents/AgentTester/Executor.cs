@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
+using CommonTypes.DataTypes;
 using ESCTestLayer.Implementation;
-using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
@@ -50,11 +50,9 @@ namespace AgentTester {
       //new Executor(environment).Run(850);
       
 
-      Console.WriteLine ("Testmethode für die Bewegungsklasse.");
-      
-      var m = new ContinuousMovement (new ESC(), 0, new Vector(1, 1, 0));
-      for (var i = 0; i < 16; i ++) m.MoveToPosition(new Vector(9, 4), 1f);
-
+      Console.WriteLine ("Testmethode für die Bewegungsklasse.");      
+      var m = new GridMovement (new ESC(), 0, new Vector3f(1, 1, 0));     
+      m.MoveToPosition(new Vector2f(2, 0), 2);
       Console.ReadLine();
     }
   }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
 using AgentTester.Wolves.Reasoning;
+using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
 
@@ -18,10 +19,15 @@ namespace AgentTester.Wolves.Agents {
 
 
     public Sheep(Grassland environment, string id) : base(id) {
-      Position = new Position(-1, -1, 0, 0); // We just need an object (coords set by env).
+      Position = new Vector2f(-1, -1); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int)DateTime.Now.Ticks);
       _environment = environment;
-      PerceptionUnit.AddSensor(new AgentSensor(_environment, new RadialHalo(Position, 8)));
+      PerceptionUnit.AddSensor(new DataSensor(
+        this,
+        environment,
+        (int) Grassland.InformationTypes.Agents,
+        new RadialHalo(Position, 8))
+      );
     }
 
 
@@ -36,7 +42,8 @@ namespace AgentTester.Wolves.Agents {
 
       // Calculate hunger percentage, read-out nearby agents.
       var hunger = (int)(((double)(EnergyMax - _energy)/EnergyMax)*100);
-      var agents = PerceptionUnit.GetData<GenericSensorInput>().Values.Values;
+      var rawData = PerceptionUnit.GetData((int)Grassland.InformationTypes.Agents).Data;
+      var agents = ((Dictionary<string, Agent>) rawData).Values;
       var grass  = agents.OfType<Grass>().ToList();
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
@@ -66,13 +73,13 @@ namespace AgentTester.Wolves.Agents {
         // R2: Medium grass distance allowed.
         if (dGrass <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position.Center);
+          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
         }
 
         // R3: Move to the nearest grass, no matter the distance.
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position.Center);
+          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
         }
       }
 
@@ -91,7 +98,7 @@ namespace AgentTester.Wolves.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString () {
       return String.Format(Id+" | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |"+_states,
-               Position.Center.X, Position.Center.Y, _energy, EnergyMax);
+               Position.X, Position.Y, _energy, EnergyMax);
     }
 
 
