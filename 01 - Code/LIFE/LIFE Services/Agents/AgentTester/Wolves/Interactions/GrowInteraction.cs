@@ -1,21 +1,13 @@
-﻿using GenericAgentArchitecture.Interactions;
-using GenericAgentArchitecture.Interfaces;
+﻿using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Interactions {
 
-  internal class GrowInteraction : Interaction {
+  internal class GrowInteraction : IInteraction {
     
-    public GrowInteraction(IGenericAPI source) : base(source) {}
-    
-    public override bool CheckPreconditions() {
-      throw new System.NotImplementedException();
-    }
 
-    public override bool CheckTrigger() {
-      throw new System.NotImplementedException();
-    }
+    //TODO Wachscode einfügen!
 
-    public override void Execute() {
+    public void Execute() {
       throw new System.NotImplementedException();
     }
   }

@@ -1,14 +1,13 @@
 ﻿using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Dummies;
-using GenericAgentArchitecture.Interactions;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Interactions {
   
   /// <summary>
   ///   Perform the movement of an agent.
   /// </summary>
-  internal class MoveInteraction : Interaction {
+  internal class MoveInteraction : IInteraction {
     private readonly Agent _agent; // The agent to move.
     private readonly Vector2f _newPosition; // The new (valid!) position.
 
@@ -18,23 +17,16 @@ namespace AgentTester.Wolves.Interactions {
     /// </summary>
     /// <param name="agent">The agent to move.</param>
     /// <param name="newPosition">The new (valid!) position.</param>
-    public MoveInteraction(Agent agent, Vector2f newPosition)
-        : base(null)
-    {
+    public MoveInteraction(Agent agent, Vector2f newPosition) {
       _agent = agent;
       _newPosition = newPosition;
     }
 
 
-    //TODO These are not needed here ... concept change advised.
-    public override bool CheckPreconditions() { return true; }
-    public override bool CheckTrigger()       { return true; }
-
-
     /// <summary>
     ///   Execute the action. Set new position values.
     /// </summary>
-    public override void Execute() {
+    public void Execute() {
       _agent.Position = _newPosition;
     }
   }

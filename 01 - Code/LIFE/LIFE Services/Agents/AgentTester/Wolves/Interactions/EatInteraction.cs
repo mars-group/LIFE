@@ -1,11 +1,11 @@
-﻿using GenericAgentArchitecture.Interactions;
+﻿using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Interactions {
   
   /// <summary>
   ///   This is an eating interaction, where one agent eats another.
   /// </summary>
-  internal class EatInteraction : Interaction {
+  internal class EatInteraction : IInteraction {
     private readonly IEatInteractionSource _predator; // The source agent.
     private readonly IEatInteractionTarget _prey; // The target agent.
 
@@ -15,21 +15,16 @@ namespace AgentTester.Wolves.Interactions {
     /// </summary>
     /// <param name="predator">The source agent.</param>
     /// <param name="prey">The target agent.</param>
-    public EatInteraction(IEatInteractionSource predator, IEatInteractionTarget prey) : base(null) {
+    public EatInteraction(IEatInteractionSource predator, IEatInteractionTarget prey) {
       _predator = predator;
       _prey = prey;
     }
 
 
-    //TODO These are not needed here ... concept change advised.
-    public override bool CheckPreconditions() { return true; }
-    public override bool CheckTrigger()       { return true; }
-
-
     /// <summary>
     ///   Execute the action. Remove the prey agent and reward the predator.
     /// </summary>
-    public override void Execute() {
+    public void Execute() {
       _predator.IncreaseEnergy(_prey.GetFoodValue());
       _prey.RemoveAgent();
     }

@@ -54,15 +54,30 @@ namespace ESCTestLayer.Implementation
             return null;
         }
 
-        public MovementResult SetPosition(int elementId, Vector3f position, Vector3f direction)
-        {
+      public MovementResult SetPosition(int elementId, Vector3f position, Vector3f direction) {
+        
+        //TODO [FEHLER] Der Agent steht schon an der Zielposition, bevor er sich bewegt.
+        // So wird auch im Fehlerfall / Kollision die neue Position zurückgegeben und 
+        // es sieht aus, als ob die Bewegungsaktion erfolgreich war! 
+
+        var en = _positions.Values.GetEnumerator();
+        en.MoveNext();
+        for (var i = 0; i < _positions.Count; i++) {
+          Console.WriteLine(i + ": " + en.Current);
+          en.MoveNext();
+        }
+
+
+            Console.Write("Agent "+elementId+" will go to "+position+": ");
             var aabb = GetAABB(position, direction, _dimensions[elementId]);
             if (CheckForCollisions(aabb))
             {
+              Console.WriteLine("failed!  It still is at "+_positions[elementId]);
                 return new MovementResult(_positions[elementId]);
             }
             //otherwise update position, direction and axis aligned bounding intervals for elementId
-            _positions[elementId] = position;
+          Console.WriteLine("okay!");  
+          _positions[elementId] = position;
             _directions[elementId] = direction;
             _aabbs[elementId] = aabb;
             return new MovementResult(position);

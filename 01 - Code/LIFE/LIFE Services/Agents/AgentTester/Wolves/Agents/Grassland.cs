@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AgentTester.Wolves.Interactions;
 using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
 using LayerAPI.Interfaces;
@@ -13,15 +12,15 @@ namespace AgentTester.Wolves.Agents {
     private readonly Random _random;
     private int _idCounter;
 
-    public Grassland(bool dbg) : base(new IACLoaderWolves()) {
+    public Grassland(bool dbg) {
       _random = new Random();
       _idCounter = 0;
       PrintInformation = dbg;
 
       // Configure console window for debug information.
       if (PrintInformation) {     
-        Console.SetBufferSize(100, 200);
         Console.SetWindowSize(100,  32);
+        Console.SetBufferSize(100, 200);       
       }
     }
 

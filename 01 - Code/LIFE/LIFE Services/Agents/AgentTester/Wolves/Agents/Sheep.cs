@@ -43,11 +43,11 @@ namespace AgentTester.Wolves.Agents {
 
       // Calculate hunger percentage, read-out nearby agents.
       int hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
-      object rawData = PerceptionUnit.GetData((int) Grassland.InformationTypes.Agents).Data;
-      Dictionary<string, Agent>.ValueCollection agents = ((Dictionary<string, Agent>) rawData).Values;
-      List<Grass> grass = agents.OfType<Grass>().ToList();
-      List<Sheep> sheeps = agents.OfType<Sheep>().ToList();
-      List<Wolf> wolves = agents.OfType<Wolf>().ToList();
+      var rawData = PerceptionUnit.GetData((int) Grassland.InformationTypes.Agents).Data;
+      var agents = ((Dictionary<string, Agent>) rawData).Values;
+      var grass = agents.OfType<Grass>().ToList();
+      var sheeps = agents.OfType<Sheep>().ToList();
+      var wolves = agents.OfType<Wolf>().ToList();
 
       // Create status output.
       _states = String.Format("{0,3:00}% |", hunger) + " " +
@@ -57,10 +57,10 @@ namespace AgentTester.Wolves.Agents {
 
       if (grass.Count > 0) {
         // Get the nearest sheep and calculate the distance towards it.
-        Grass nGrass = CommonRCF.GetNearestAgent(grass, Position);
-        Sheep nSheep = CommonRCF.GetNearestAgent(sheeps, Position);
-        Wolf nWolf = CommonRCF.GetNearestAgent(wolves, Position);
-        float dGrass = Position.GetDistance(nGrass.Position);
+        var nGrass = CommonRCF.GetNearestAgent(grass, Position);
+        //var nSheep = CommonRCF.GetNearestAgent(sheeps, Position);
+        //var nWolf = CommonRCF.GetNearestAgent(wolves, Position);
+        var dGrass = Position.GetDistance(nGrass.Position);
         //var dWolf  = Position.GetDistance(nWolf.Position);
         _states += String.Format("E: {0,4:0.00} | ", dGrass);
 

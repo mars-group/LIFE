@@ -36,6 +36,8 @@ namespace GenericAgentArchitecture.Movement {
       Yaw = 0.0f;
 
       esc.Add (_agentId, dim);
+      //TODO Der Krams hier soll irgendwie intelligenter erfolgen !!!
+      esc.SetPosition(_agentId, Position, new Vector3f(1, 0, 0));
     }
 
 
@@ -109,14 +111,15 @@ namespace GenericAgentArchitecture.Movement {
                             (float) (Math.Sin(pitchRad))).Normalize();      
 
 
-      Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
+      //Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
 
       var result = _esc.SetPosition(_agentId, TargetPos, dv);
       Position = new Vector3f(result.Position.X, result.Position.Y, result.Position.Z);
+      
       //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
       //TODO Direktion auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
       //TODO nur werte setzen, nicht position zu neuer Instanz zuordnen, wegen Halo
-      Position = TargetPos;
+      //Position = TargetPos;
     }
   }
 }

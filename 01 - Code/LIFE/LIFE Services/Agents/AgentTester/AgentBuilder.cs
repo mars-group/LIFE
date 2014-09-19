@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using AgentTester.Wolves.Agents;
-using ESCTestLayer.Implementation;
+﻿using AgentTester.Wolves.Agents;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {

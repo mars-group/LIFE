@@ -47,11 +47,7 @@
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Dummies\Environment.cs" />
     <Compile Include="Dummies\MessageServer.cs" />
-    <Compile Include="Interactions\Interaction.cs" />
-    <Compile Include="Interactions\InteractionContainer.cs" />
     <Compile Include="Interactions\Plan.cs" />
-    <Compile Include="Interfaces\IGenericAPI.cs" />
-    <Compile Include="Interfaces\IIACLoader.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
     <Compile Include="Movement\ML0.cs" />
     <Compile Include="Movement\ContinuousMovement.cs" />

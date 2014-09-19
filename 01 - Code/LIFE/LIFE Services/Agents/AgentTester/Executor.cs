@@ -46,14 +46,18 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(); //CreateRandomMovingAgents(2, 10, 10);//
-      new Executor(environment).Run(850);
+      //TODO ACHTUNG! Entfernungsangaben der Agenten fehlerhaft (Reichweite bis über 18 statt 8). Umwelt schuld?
+      //var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
+      //new Executor(environment).Run(850);
       
-      /*
+      
       Console.WriteLine ("Testmethode für die Bewegungsklasse.");      
-      var m = new GridMovement (new ESC(), 0, new Vector3f(1, 1, 0));     
-      m.MoveToPosition(new Vector2f(2, 0), 2);
-      Console.ReadLine();*/
+      var esc = new ESC();
+      esc.Add(1, new Vector3f(1, 1, 0));    
+      esc.SetPosition(1, new Vector2f(1, 4), new Vector2f(1, 0));      
+      var m = new GridMovement (esc, 11, new Vector2f(1, 1));     
+      m.MoveToPosition(new Vector2f(1, 4), 5);
+      Console.ReadLine();
     }
   }
 }

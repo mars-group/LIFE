@@ -1,22 +1,14 @@
 ﻿using System;
-using GenericAgentArchitecture.Interactions;
-using GenericAgentArchitecture.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Interactions {
   
-  class ProcreateInteraction : Interaction {
+  class ProcreateInteraction : IInteraction {
     
-    public ProcreateInteraction(IGenericAPI source) : base(source) {}
-    
-    public override bool CheckPreconditions() {
-      throw new NotImplementedException();
-    }
 
-    public override bool CheckTrigger() {
-      throw new NotImplementedException();
-    }
+    //TODO Konstr. und IA Code entwerfen!
 
-    public override void Execute() {
+    public void Execute() {
       throw new NotImplementedException();
     }
   }

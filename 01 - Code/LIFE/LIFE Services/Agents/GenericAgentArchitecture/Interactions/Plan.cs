@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace GenericAgentArchitecture.Interactions {
   internal class Plan {
 
-    private List<Interaction> _actions; // A sequential order of the actions to execute.
+    private List<IInteraction> _actions; // A sequential order of the actions to execute.
 
-    public Plan() {
-    
-    }
+    public Plan() {}
 
 
     /// <summary>
     /// Returns the next action to execute.
     /// </summary>
     /// <returns>The next action (top element in plan).</returns>
-    public Interaction GetNextAction() {
+    public IInteraction GetNextAction() {
       return _actions[0];
     }
   }

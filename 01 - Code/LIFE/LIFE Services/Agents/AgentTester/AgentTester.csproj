@@ -52,7 +52,6 @@
     <Compile Include="Wolves\Agents\Wolf.cs" />
     <Compile Include="Wolves\Interactions\EatInteraction.cs" />
     <Compile Include="Wolves\Interactions\GrowInteraction.cs" />
-    <Compile Include="Wolves\Interactions\IACLoader_Wolves.cs" />
     <Compile Include="Wolves\Interactions\MoveInteraction.cs" />
     <Compile Include="Wolves\Interactions\ProcreateInteraction.cs" />
     <Compile Include="Wolves\Reasoning\CommonRCF.cs" />

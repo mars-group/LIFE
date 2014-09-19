@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Interfaces;
 using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Dummies {
@@ -16,17 +15,14 @@ namespace GenericAgentArchitecture.Dummies {
     protected long Cycle { get; private set; } // Counter for execution cycle.
     public bool PrintInformation { get; set; } // Controls debug information output.
     public bool RandomExecution { get; set; }  // Flag to set random or sequential execution. 
-    public static IIacLoader IacLoader { get; private set; } // Interaction loader reference. 
 
 
     /// <summary>
     ///   Creation of base class. Initializes the agent list and sets sequential execution.
     /// </summary>
-    /// <param name="interactions">The domain specific interaction loader.</param>
-    protected Environment(IIacLoader interactions) {
+    protected Environment() {
       Agents = new List<Agent>();
       Cycle = 0;
-      IacLoader = interactions;
     }
 
 

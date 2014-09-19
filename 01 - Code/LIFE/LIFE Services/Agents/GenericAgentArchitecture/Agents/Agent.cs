@@ -1,10 +1,8 @@
 ﻿using System;
 using CommonTypes.DataTypes;
-using GenericAgentArchitecture.Interactions;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
-using Environment = GenericAgentArchitecture.Dummies.Environment;
 
 
 namespace GenericAgentArchitecture.Agents {
@@ -19,10 +17,10 @@ namespace GenericAgentArchitecture.Agents {
     public readonly string Id;                         // Unique identifier.
     protected readonly bool DebugEnabled;              // Controls console debug output.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
-    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.  
-    public readonly InteractionContainer Interactions; // Repertoire of all interactions.     
+    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.     
     public Vector3f Position;                          // Position in an environment.
     //TODO Movement module usage here ?!
+
 
     /// <summary>
     /// Constructor for an abstract agent. It serves as a base class that is extended with
@@ -34,10 +32,7 @@ namespace GenericAgentArchitecture.Agents {
       Position = null;
       DebugEnabled = false; 
       PerceptionUnit = new PerceptionUnit();
-      if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;
-      if (Environment.IacLoader != null) {
-        Interactions = new InteractionContainer (this, Environment.IacLoader);  
-      }     
+      if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;    
     }
 
 
