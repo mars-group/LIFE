@@ -4,18 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{758D86E3-E508-4F47-901A-8262F17AF2D3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{0D4F96A8-BB3B-4B81-81C3-9A0C508B79FF}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GoapUser</RootNamespace>
-    <AssemblyName>GoapUser</AssemblyName>
+    <RootNamespace>GoapTests</RootNamespace>
+    <AssemblyName>GoapTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,43 +32,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.core">
-      <HintPath>..\packages\NUnitTestAdapter.1.1\lib\nunit.core.dll</HintPath>
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\nunit.core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.core.interfaces">
-      <HintPath>..\packages\NUnitTestAdapter.1.1\lib\nunit.core.interfaces.dll</HintPath>
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\nunit.core.interfaces.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="nunit.util">
-      <HintPath>..\packages\NUnitTestAdapter.1.1\lib\nunit.util.dll</HintPath>
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\nunit.util.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="NUnit.VisualStudio.TestAdapter">
-      <HintPath>..\packages\NUnitTestAdapter.1.1\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="QuickGraph">
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Data">
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Graphviz">
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Graphviz.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Serialization.dll</HintPath>
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,28 +60,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GoapTrigger.cs" />
+    <Compile Include="CustomGraphEdgeTest.cs" />
+    <Compile Include="GoapModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomGaphVertexTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoapSystem\GoapActionSystemFactory\GoapActionSystemFactory.csproj">
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapModelTest\GoapModelTest.csproj">
+      <Project>{85340006-b073-47e6-9dbf-d0cb391a13aa}</Project>
+      <Name>GoapModelTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapActionSystemFactory\GoapActionSystemFactory.csproj">
       <Project>{a36fc1f7-f7c1-4ffc-ba9f-9d864129f8df}</Project>
       <Name>GoapActionSystemFactory</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoapSystem\GoapCommon\GoapCommon.csproj">
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapCommon\GoapCommon.csproj">
       <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
       <Name>GoapCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapGraphConnector\GoapGraphConnector.csproj">
+      <Project>{2871f5a0-1375-48ce-998f-b90d3d2d1a95}</Project>
+      <Name>GoapGraphConnector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -100,10 +100,6 @@
       <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
       <Name>GoapCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoapModelTest\GoapModelTest.csproj">
-      <Project>{85340006-b073-47e6-9dbf-d0cb391a13aa}</Project>
-      <Name>GoapModelTest</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

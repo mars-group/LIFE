@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using GenericAgentArchitectureCommon.Interfaces;
 using GoapActionSystemFactory.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
@@ -15,7 +14,6 @@ namespace GoapUser {
 
             Console.WriteLine(goapActionSystem.GetNextAction().GetType());
 
-            
 
             //return new GoapManager(configClass.GetAllActions(), configClass.GetAllGoals(),configClass.GetStartWorldstate());
 
@@ -33,13 +31,13 @@ namespace GoapUser {
 
 
             Assembly assembly = Assembly.Load(namespaceOfConfigClass);
-            var configClass =
+            IAgentConfig configClass =
                 (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
         }
 
         private static void ShowAvailableAssemblies() {
-            var ass = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly1 in ass) {
+            Assembly[] ass = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly assembly1 in ass) {
                 Console.WriteLine(assembly1.FullName);
             }
         }

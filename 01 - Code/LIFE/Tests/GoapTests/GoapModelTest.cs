@@ -1,27 +1,31 @@
-﻿using CommonTypes.Interfaces;
-using GoapActionSystemFactory.Implementation;
+﻿using GoapActionSystemFactory.Implementation;
+using GoapCommon.Abstract;
 using GoapModelTest.Actions;
 using NUnit.Framework;
 
-namespace GoapActionSystemTests {
+namespace GoapTests {
     [TestFixture]
-    public class GoapTestWithGoapModelTest {
-        private IActionSystem _goapActionSystem1;
-        private IActionSystem _goapActionSystem2;
+    public class GoapModelTest {
+        #region Setup/Teardown
 
-        private readonly IAction _actionClean = new ActionClean();
-        private readonly IAction _actionGetToy = new ActionGetToy();
-        private readonly IAction _actionPlay = new ActionPlay();
+        [SetUp]
+        protected void SetUp() {
+            CreateGoapActionSystems();
+        }
+
+        #endregion
+
+        private AbstractGoapSystem _goapActionSystem1;
+        private AbstractGoapSystem _goapActionSystem2;
+
+        private readonly AbstractGoapAction _actionClean = new ActionClean();
+        private readonly AbstractGoapAction _actionGetToy = new ActionGetToy();
+        private readonly AbstractGoapAction _actionPlay = new ActionPlay();
 
 
         private void CreateGoapActionSystems() {
             _goapActionSystem1 = GoapComponent.LoadAgentConfiguration("AgentTestConfig1", "GoapModelTest");
             _goapActionSystem2 = GoapComponent.LoadAgentConfiguration("AgentTestConfig2", "GoapModelTest");
-        }
-
-        [SetUp]
-        protected void SetUp() {
-            CreateGoapActionSystems();
         }
 
         [Test]

@@ -3,17 +3,10 @@ using GoapCommon.Interfaces;
 using GoapGraphConnector.CustomGraph;
 using NUnit.Framework;
 
-namespace GoapCustomGraphTests {
+namespace GoapTests {
     [TestFixture]
-    internal class EdgeTest {
-        private Edge _e1;
-        private Edge _e2;
-        private Edge _e3;
-
-        private Vertex _v1;
-        private Vertex _v2;
-        private Vertex _v3;
-        private Vertex _v4;
+    internal class CustomGraphEdgeTest {
+        #region Setup/Teardown
 
         [SetUp]
         protected void SetUp() {
@@ -28,11 +21,21 @@ namespace GoapCustomGraphTests {
             _e3 = new Edge(3, _v2, _v4);
         }
 
+        #endregion
+
+        private Edge _e1;
+        private Edge _e2;
+        private Edge _e3;
+
+        private Vertex _v1;
+        private Vertex _v2;
+        private Vertex _v3;
+        private Vertex _v4;
+
         [Test]
         public void SourceVertexTest() {
             Assert.True(_e1.GetSource().Equals(_v1));
             Assert.True(_e1.GetSource().GetIdentifier() == "V1");
-
         }
 
         [Test]
