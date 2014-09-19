@@ -23,6 +23,10 @@ namespace SimulationManagerTestClasses.MockComponents {
             return new[] {new TLayerDescription("TestLayer", 0, 1, "TestLayer.dll") };
         }
 
+        public void AddModelFromURL(string sourceUrl) {
+            throw new NotImplementedException();
+        }
+
         public void DeleteModel(TModelDescription model) {
             throw new NotImplementedException("Don't mock me, I'm only a mock :(");
         }

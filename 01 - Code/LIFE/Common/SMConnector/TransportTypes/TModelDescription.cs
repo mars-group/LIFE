@@ -5,6 +5,7 @@ namespace SMConnector.TransportTypes
 {
     [Serializable]
     public class TModelDescription : IEquatable<TModelDescription> {
+        public string SourceURL { get; private set; }
         public string Name { get; private set; }
 
         public bool Running { get; private set; }
@@ -13,11 +14,13 @@ namespace SMConnector.TransportTypes
 
         public TStatusUpdate Status { get; set; }
 
-        public TModelDescription(string name, string description = "", string status = "Not Running", bool running = false) {
+        public TModelDescription(string name, string description = "", string status = "Not Running", bool running = false, string sourceURL = "")
+        {
             Name = name;
             Running = running;
             this.Description = description;
             this.Status = new TStatusUpdate(status);
+            SourceURL = sourceURL;
         }
 
         public TModelDescription() { }
