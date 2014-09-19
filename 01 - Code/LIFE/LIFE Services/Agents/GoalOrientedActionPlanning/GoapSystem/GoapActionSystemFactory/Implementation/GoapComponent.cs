@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using GenericAgentArchitectureCommon.Interfaces;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
@@ -19,21 +18,21 @@ namespace GoapActionSystemFactory.Implementation {
         public static AbstractGoapSystem LoadAgentConfiguration(string nameOfConfigClass, string namespaceOfConfigClass) {
             try {
                 //Assembly assembly = Assembly.LoadFrom("../../../" + namespaceOfConfigClass + "/bin/release/" + namespaceOfConfigClass + ".dll");
-                
-                
+
+
                 Assembly assembly = Assembly.Load(namespaceOfConfigClass);
                 var configClass =
                     (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
 
-                return new GoapManager(configClass.GetAllActions(), configClass.GetAllGoals(),
-                    configClass.GetStartWorldstate());
-                 
+                return new GoapManager (configClass.GetAllActions(),configClass.GetAllGoals(),
+                        configClass.GetStartWorldstate());
+
             }
 
             catch (Exception e) {
                 Console.WriteLine(e.Message);
-                throw new ArgumentException("No config class with name " + nameOfConfigClass + " or assembly with name " +
-                                            namespaceOfConfigClass + " found. " + e.Message);
+                throw new ArgumentException ("No config class with name " + nameOfConfigClass + " or assembly with name " +
+                     namespaceOfConfigClass + " found. " + e.Message);
             }
         }
     }
