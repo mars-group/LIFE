@@ -1,5 +1,6 @@
 ﻿using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace GenericAgentArchitecture.Interactions {
   public abstract class Interaction : IInteraction{

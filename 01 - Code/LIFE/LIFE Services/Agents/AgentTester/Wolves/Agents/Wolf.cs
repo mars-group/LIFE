@@ -8,6 +8,7 @@ using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Dummies;
 using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
+using GenericAgentArchitectureCommon.Interfaces;
+using GenericAgentArchitecture.Interfaces;
 
 namespace GenericAgentArchitecture.Reasoning {
   abstract class ReasoningComponent : IAgentLogic {

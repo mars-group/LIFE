@@ -74,6 +74,10 @@
       <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
       <Name>ESCPrototype</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Name>GenericAgentArchitectureCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
       <Project>{e8e32f5e-7e31-41f3-9d49-9cb6dfbafc85}</Project>
       <Name>GenericAgentArchitecture</Name>

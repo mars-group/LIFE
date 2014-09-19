@@ -1,8 +1,8 @@
 ﻿using System;
 using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Interactions;
-using GenericAgentArchitecture.Interfaces;
 using GenericAgentArchitecture.Perception;
+using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 
