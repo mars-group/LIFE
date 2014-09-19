@@ -39,8 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IAction.cs" />
-    <Compile Include="Interfaces\IActionSystem.cs" />
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Interfaces\IFact.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />

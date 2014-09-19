@@ -19,8 +19,7 @@ namespace GoapActionSystem.Implementation {
             return true;
         }
 
-        public override bool Execute() {
-            return true;
+        public override void Execute() {
         }
 
         public override int GetExecutionCosts() {

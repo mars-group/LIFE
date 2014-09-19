@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommonTypes.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
@@ -9,7 +9,7 @@ namespace GoapActionSystem.Implementation {
     /// <summary>
     ///     concrete class offering the neccessary methods
     /// </summary>
-    public class GoapManager : IActionSystem {
+    public class GoapManager : AbstractGoapSystem {
         private readonly List<AbstractGoapAction> _availableActions;
         private readonly List<IGoapGoal> _availableGoals;
         private List<IGoapWorldstate> _neccessaryWorldstates;
@@ -47,7 +47,7 @@ namespace GoapActionSystem.Implementation {
         ///     entry point for user of goap services and main method
         /// </summary>
         /// <returns></returns>
-        public IAction GetNextAction() {
+        public override IGoapAction GetNextAction() {
             if (_currentPlan == null || _currentPlan.Count == 0) {
                 var planner = new GoapPlanner(20, _availableActions);
                 _currentPlan = planner.GetPlan(_currentWorldstates, GetGoal().GetTargetWorldstates());

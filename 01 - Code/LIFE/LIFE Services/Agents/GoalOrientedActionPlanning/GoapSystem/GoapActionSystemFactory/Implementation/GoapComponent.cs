@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using CommonTypes.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 using GoapActionSystem.Implementation;
+using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
 namespace GoapActionSystemFactory.Implementation {
@@ -15,7 +16,7 @@ namespace GoapActionSystemFactory.Implementation {
         /// <param name="nameOfConfigClass"></param>
         /// <param name="namespaceOfConfigClass"></param>
         /// <returns></returns>
-        public static IActionSystem LoadAgentConfiguration(string nameOfConfigClass, string namespaceOfConfigClass) {
+        public static AbstractGoapSystem LoadAgentConfiguration(string nameOfConfigClass, string namespaceOfConfigClass) {
             try {
                 //Assembly assembly = Assembly.LoadFrom("../../../" + namespaceOfConfigClass + "/bin/release/" + namespaceOfConfigClass + ".dll");
                 

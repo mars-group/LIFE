@@ -25,7 +25,7 @@ namespace GoapModelTest.Actions {
             throw new NotImplementedException();
         }
 
-        public override bool Execute() {
+        public override void Execute() {
             throw new NotImplementedException();
         }
 

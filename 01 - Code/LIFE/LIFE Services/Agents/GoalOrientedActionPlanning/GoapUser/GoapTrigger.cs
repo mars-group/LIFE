@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using CommonTypes.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 using GoapActionSystemFactory.Implementation;
+using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
 namespace GoapUser {
@@ -10,7 +11,7 @@ namespace GoapUser {
             Console.WriteLine("-----------------------------------");
 
 
-            IActionSystem goapActionSystem = GoapComponent.LoadAgentConfiguration("AgentConfig1", "GoapModelTest");
+            AbstractGoapSystem goapActionSystem = GoapComponent.LoadAgentConfiguration("AgentConfig1", "GoapModelTest");
 
             Console.WriteLine(goapActionSystem.GetNextAction().GetType());
 

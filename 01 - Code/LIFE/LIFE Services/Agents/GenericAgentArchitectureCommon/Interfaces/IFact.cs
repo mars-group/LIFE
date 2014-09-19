@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CommonTypes.Interfaces
+namespace GenericAgentArchitectureCommon.Interfaces
 {
     public interface IFact {
 

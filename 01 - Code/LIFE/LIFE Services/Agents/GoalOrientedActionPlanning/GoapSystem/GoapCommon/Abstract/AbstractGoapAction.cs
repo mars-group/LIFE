@@ -153,7 +153,7 @@ namespace GoapCommon.Abstract {
 
         public abstract bool ExecuteContextEffects();
 
-        public abstract bool Execute();
+        public abstract void Execute();
 
         public abstract int GetExecutionCosts();
 

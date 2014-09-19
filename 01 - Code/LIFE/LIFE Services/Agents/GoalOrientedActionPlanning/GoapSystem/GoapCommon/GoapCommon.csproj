@@ -66,6 +66,7 @@
     <Compile Include="Abstract\AbstractGoapAction.cs" />
     <Compile Include="Exceptions\GraphException.cs" />
     <Compile Include="Exceptions\NoVertexFoundException.cs" />
+    <Compile Include="Abstract\AbstractGoapSystem.cs" />
     <Compile Include="Interfaces\IAgentConfig.cs" />
     <Compile Include="Interfaces\IGoapGoal.cs" />
     <Compile Include="Interfaces\IGoapAction.cs" />
