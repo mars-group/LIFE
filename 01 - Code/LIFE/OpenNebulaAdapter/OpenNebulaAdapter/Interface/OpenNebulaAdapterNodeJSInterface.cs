@@ -33,24 +33,24 @@ namespace OpenNebulaAdapter.Interface
                         {
                             var payload = (IDictionary<string, object>) i;
                             return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
-                        })
+                    })
                     ),
                 // takes an array of VM ids as argument and deletes them
                 deleteVMs = (Func<dynamic, Task<object>>)(async i => await Task.Run(
                     () =>
                         {
-                            var payload = (IDictionary<string, object>)i;
-                            oneAdapter.deleteVMs((int[]) payload["vmArray"]);
+                            var payload = (object[])i;
+
+                            oneAdapter.deleteVMs(payload.Cast<int>().ToArray());
                             return 0;
                     })
                     ),
                 // takes a VM ID as argument and returns a VM Object
-                getVMInfo = (Func<dynamic, Task<object>>)(async i => await Task.Run(
+                getVMStatus = (Func<dynamic, Task<object>>)(async i => await Task.Run(
                     () =>
                     {
-                        var payload = (IDictionary<string, object>)i;
-                        oneAdapter.getVMInfo((int)payload["vmID"]);
-                        return 0;
+                        var payload = (string)i;
+                        return oneAdapter.GetVmInfo(int.Parse(payload));
                     })
                     ),
             };
