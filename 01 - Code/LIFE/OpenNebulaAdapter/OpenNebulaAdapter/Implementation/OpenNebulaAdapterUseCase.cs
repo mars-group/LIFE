@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Xml;
 using OpenNebulaAdapter.Entities;
 using Terradue.OpenNebula;
 
@@ -13,6 +15,8 @@ namespace OpenNebulaAdapter.Implementation
         private readonly OneClient _one;
 
         private IDictionary<string, VMInfo[]> _vmDictionary;
+
+        private const int MARS_NETWORK_ID = 21;
 
         public OpenNebulaAdapterUseCase() {
             // First create the client
@@ -28,13 +32,75 @@ namespace OpenNebulaAdapter.Implementation
             // re-initialize VM Dictionary, since each run requires a new one
             _vmDictionary = new Dictionary<string, VMInfo[]>();
 
-            // first create our virtual router
+            // first create one SimulationManager
+            int simManagerVMID = -1;
+            IPAddress simManagerVMIp = null;
+            const int simManagerVMPort = 44521;
+            try
+            {
+                var simManagerTemplate = new StringBuilder();
+                simManagerTemplate.Append("NAME = \"Temporary SimulationManager Template\"\n");
+                simManagerTemplate.Append("CONTEXT=[FILES_DS=\"$FILE[IMAGE_ID=50]\",HOSTNAME=\"$NAME\",NETWORK=\"YES\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\"]\n");
+                simManagerTemplate.Append("CPU=\"0.01\"\n");
+                simManagerTemplate.Append("DISK=[\n");
+                simManagerTemplate.Append("\tDRIVER=\"qcow2\",\n");
+                simManagerTemplate.Append("\tIMAGE=\"MARS SimulationManager\",\n");
+                simManagerTemplate.Append("\tIMAGE_UNAME=\"christian\"]\n");
+                simManagerTemplate.Append("DISK=[\n");
+                simManagerTemplate.Append("\tSIZE=\"4096\",\n");
+                simManagerTemplate.Append("\tTYPE=\"swap\"]\n");
+                simManagerTemplate.Append("GRAPHICS=[\n");
+                simManagerTemplate.Append("\tKEYMAP=\"de\",\n");
+                simManagerTemplate.Append("\tLISTEN=\"0.0.0.0\",\n");
+                simManagerTemplate.Append("\tTYPE=\"VNC\"]\n");
+                simManagerTemplate.Append("MEMORY=\"1024\"\n");
+                simManagerTemplate.Append("NIC=[MODEL=\"virtio\",NETWORK_ID=\""+ MARS_NETWORK_ID +"\",NETWORK_UNAME=\"christian\"]\n");
+                simManagerTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
+                simManagerTemplate.Append("VCPU=\"4\"");
+
+                var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
+                simManagerVMID = _one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, "");
+                _vmDictionary.Add("SimulationManager", new VMInfo[] { new VMInfo { id = simManagerVMID, vmStatus = "PENDING" } });
+
+                _one.TemplateDelete(simManagerTemplateID);
+            }
+            catch (Exception ex)
+            {
+                // if anyone of these somehow fails, delete simManagerVM and return falsy
+                if (simManagerVMID > -1) { _one.VMAction(simManagerVMID, "delete"); }
+                throw;
+            }
+
+            // TODO: WAIT until SimManager got IP!
+
+            // now create our virtual router and use the SimManagers IP in the forwarding table
+
+            // first retrieve SimManagers IP:
+            var template = (XmlNode[])_one.VMGetInfo(simManagerVMID).TEMPLATE;
+            var vmDetails = template.First(entry => entry.Name == "NIC").ChildNodes;
+            var ienum = vmDetails.GetEnumerator();
+
+            while (ienum.MoveNext())
+            {
+                var curr = (XmlNode)ienum.Current;
+                if (curr.Name == "IP")
+                {
+                    simManagerVMIp = IPAddress.Parse(curr.InnerText);
+                }
+            }
+
+            if (simManagerVMIp == null) {
+                throw new SimulationManagerGotNoIPAddressException();
+            }
+
+            // create Virtual Router
+
             var vrID = -1;
             try {
                 var vrRouterTemplate = new StringBuilder();
                 vrRouterTemplate.Append("NAME = \"Temporary MARS VirtualRouter Template\"\n");
                 vrRouterTemplate.Append
-                    ("CONTEXT=[DHCP=\"NO\",DNS=\"141.22.192.100 141.22.29.101\",FORWARDING=\"10.10.0.2:80\",NETWORK=\"YES\",NTP_SERVER=\"141.22.192.100\",PRIVNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"21\\\"]\",PUBNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"12\\\"]\",RADVD=\"NO\",ROOT_PASSWORD=\"JDEkYnVUV1dvT0gkenRoWDlWRTNyVWM5MHBqL0hsLktIMAo=\",SEARCH=\"local.domain\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\",TARGET=\"hdb\",TEMPLATE=\"$TEMPLATE\"]\n");
+                    ("CONTEXT=[DHCP=\"NO\",DNS=\"141.22.192.100 141.22.29.101\",FORWARDING=\"" + simManagerVMIp + ":"+ simManagerVMPort +"\",NETWORK=\"YES\",NTP_SERVER=\"141.22.192.100\",PRIVNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"21\\\"]\",PUBNET=\"$NETWORK[TEMPLATE, NETWORK_ID=\\\"12\\\"]\",RADVD=\"NO\",ROOT_PASSWORD=\"JDEkYnVUV1dvT0gkenRoWDlWRTNyVWM5MHBqL0hsLktIMAo=\",SEARCH=\"local.domain\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\",TARGET=\"hdb\",TEMPLATE=\"$TEMPLATE\"]\n");
                 vrRouterTemplate.Append("CPU=\"0.01\"\n");
                 vrRouterTemplate.Append("DISK=[CACHE=\"none\",DEV_PREFIX=\"vd\",DRIVER=\"raw\",IMAGE=\"OpenNebula 4.8 Virtual Router\",IMAGE_UNAME=\"christian\"]\n");
                 vrRouterTemplate.Append("DISK=[FORMAT=\"swap\",SIZE=\"4096\",TYPE=\"swap\"]\n");
@@ -108,44 +174,13 @@ namespace OpenNebulaAdapter.Implementation
                 throw;
             }
 
-            // and one SimulationManager
-            int simManagerVMID = -1;
-            try {
-                var simManagerTemplate = new StringBuilder();
-                simManagerTemplate.Append("NAME = \"Temporary SimulationManager Template\"\n");
-                simManagerTemplate.Append("CONTEXT=[FILES_DS=\"$FILE[IMAGE_ID=50]\",HOSTNAME=\"$NAME\",NETWORK=\"YES\",SSH_PUBLIC_KEY=\"$USER[SSH_PUBLIC_KEY]\"]\n");
-                simManagerTemplate.Append("CPU=\"0.01\"\n");
-                simManagerTemplate.Append("DISK=[\n");
-                simManagerTemplate.Append("\tDRIVER=\"qcow2\",\n");
-                simManagerTemplate.Append("\tIMAGE=\"MARS SimulationManager\",\n");
-                simManagerTemplate.Append("\tIMAGE_UNAME=\"christian\"]\n");
-                simManagerTemplate.Append("DISK=[\n");
-                simManagerTemplate.Append("\tSIZE=\"4096\",\n");
-                simManagerTemplate.Append("\tTYPE=\"swap\"]\n");
-                simManagerTemplate.Append("GRAPHICS=[\n");
-                simManagerTemplate.Append("\tKEYMAP=\"de\",\n");
-                simManagerTemplate.Append("\tLISTEN=\"0.0.0.0\",\n");
-                simManagerTemplate.Append("\tTYPE=\"VNC\"]\n");
-                simManagerTemplate.Append("MEMORY=\"1024\"\n");
-                simManagerTemplate.Append("NIC=[MODEL=\"virtio\",NETWORK_ID=\"21\",NETWORK_UNAME=\"christian\"]\n");
-                simManagerTemplate.Append("OS=[ARCH=\"x86_64\",BOOT=\"hd\"]\n");
-                simManagerTemplate.Append("VCPU=\"4\"");
 
-                var simManagerTemplateID = _one.TemplateAllocate(simManagerTemplate.ToString());
-
-                _vmDictionary.Add("SimulationManager", new VMInfo[] { new VMInfo {id = _one.TemplateInstanciateVM(simManagerTemplateID, "SimulationManager", false, ""), vmStatus = "PENDING"}});
-
-                _one.TemplateDelete(simManagerTemplateID);
-            }
-            catch (Exception ex) {
-                // if anyone of these somehow fails, delete simManagerVM and return falsy
-                if (simManagerVMID > -1) { _one.VMAction(simManagerVMID, "delete"); }
-                throw;
-            }
 
             // all is well, return no error
             return _vmDictionary;
         }
+
+
 
         public void deleteVMs(int[] vmArray) {
             foreach (var vmId in vmArray) {
@@ -159,6 +194,8 @@ namespace OpenNebulaAdapter.Implementation
             return status.ToString();
         }
     }
+
+    public class SimulationManagerGotNoIPAddressException : Exception {}
 
     enum LcmStates {
         LCM_INIT = 0,
