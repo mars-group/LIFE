@@ -39,5 +39,9 @@ namespace ModelContainer.Implementation {
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
             return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);
         }
+
+        public void AddModelFromURL(string sourceUrl) {
+            _modelContainerUseCase.AddModelFromURL(sourceUrl);
+        }
     }
 }

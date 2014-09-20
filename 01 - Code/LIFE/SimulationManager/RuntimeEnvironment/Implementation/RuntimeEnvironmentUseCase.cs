@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
@@ -47,6 +48,11 @@ namespace RuntimeEnvironment.Implementation {
                 // throw Exception if model is already running in this cluster
                 // TODO: Is that really intended?
                 //if (_steppedSimulations.ContainsKey(model)) throw new SimulationAlreadyRunningException();
+
+                // download Model ZIP file from MARS WebSuite, extract and add it to the model repo
+                if (model.SourceURL != String.Empty) {
+                    _modelContainer.AddModelFromURL(model.SourceURL);
+                }
 
                 IList<LayerContainerClient> clients = InitConnections(model, layerContainerNodes);
 

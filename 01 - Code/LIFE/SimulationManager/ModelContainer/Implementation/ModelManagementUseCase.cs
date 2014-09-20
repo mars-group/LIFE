@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Net;
+using Ionic.Zip;
 using LCConnector.TransportTypes.ModelStructure;
 using log4net;
 using SMConnector.TransportTypes;
@@ -48,9 +49,10 @@ namespace ModelContainer.Implementation {
             return _models.Keys;
         }
 
-        public ModelContent GetModel(TModelDescription modelID) {
-            if (_models.ContainsKey(modelID)) {
-                return new ModelContent(_models[modelID]);
+        public ModelContent GetModel(TModelDescription modelDesc) {
+            if (_models.ContainsKey(modelDesc))
+            {
+                return new ModelContent(_models[modelDesc]);
             }
             
             return null;
@@ -63,8 +65,17 @@ namespace ModelContainer.Implementation {
             return new TModelDescription(tmp[tmp.Length - 1]);
         }
 
+        public void AddModelFromURL(string sourceUrl)
+        {
+            WebClient webClient = new WebClient();
+            var targetFileName = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + "tmp.zip";
+            webClient.DownloadFile(sourceUrl, targetFileName);
+            var zip = new ZipFile(targetFileName);
+            zip.ExtractAll(".");
+        }
+
         public void DeleteModel(TModelDescription model) {
-            Logger.Debug("DeleModel called");
+            Logger.Debug("DeleteModel called");
             string path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
             if (!Directory.Exists(path)) {
                 Directory.Delete(path, true);
@@ -103,5 +114,7 @@ namespace ModelContainer.Implementation {
                 listener();
             }
         }
+
+
     }
 }
