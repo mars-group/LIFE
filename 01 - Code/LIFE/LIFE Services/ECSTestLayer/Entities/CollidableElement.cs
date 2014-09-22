@@ -7,11 +7,11 @@ namespace ESCTestLayer.Entities
 
         public int Type;
 
-        public Vector3f Dimension;
+        public Vector Dimension;
 
-        public Vector3f Position;
+        public Vector Position;
 
-        public Vector3f Direction;
+        public Vector Direction;
 
     }
 }

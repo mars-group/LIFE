@@ -8,16 +8,16 @@ namespace GenericAgentArchitecture.Perception {
         /// <summary>
         ///     Create a halo that is capable of sensing everything.
         /// </summary>
-        public OmniHalo() : base(null) {}
+        public OmniHalo() : base(Vector.Null) { }
 
 
-        public override Vector3f GetDirectionOfQuad() {
-            return Vector3f.UnitVectorXAxis;
+        public override Vector GetDirectionOfQuad() {
+            return Vector.UnitVectorXAxis;
         }
 
 
-        public override Vector3f GetDimensionQuad() {
-            return Vector3f.MaxVector;
+        public override Vector GetDimensionQuad() {
+            return Vector.MaxVector;
         }
 
 
@@ -26,7 +26,7 @@ namespace GenericAgentArchitecture.Perception {
         /// </summary>
         /// <param name="position">The position to check.</param>
         /// <returns>Always true.</returns>
-        public override bool IsInRange(Vector3f position)
+        public override bool IsInRange(Vector position)
         {
             return true;
         }

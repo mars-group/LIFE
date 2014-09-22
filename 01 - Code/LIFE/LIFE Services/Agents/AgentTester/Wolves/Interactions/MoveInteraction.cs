@@ -9,7 +9,7 @@ namespace AgentTester.Wolves.Interactions {
   /// </summary>
   internal class MoveInteraction : IInteraction {
     private readonly Agent _agent; // The agent to move.
-    private readonly Vector2f _newPosition; // The new (valid!) position.
+    private readonly Vector _newPosition; // The new (valid!) position.
 
 
     /// <summary>
@@ -17,7 +17,7 @@ namespace AgentTester.Wolves.Interactions {
     /// </summary>
     /// <param name="agent">The agent to move.</param>
     /// <param name="newPosition">The new (valid!) position.</param>
-    public MoveInteraction(Agent agent, Vector2f newPosition) {
+    public MoveInteraction(Agent agent, Vector newPosition) {
       _agent = agent;
       _newPosition = newPosition;
     }

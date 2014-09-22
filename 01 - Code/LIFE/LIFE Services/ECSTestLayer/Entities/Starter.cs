@@ -12,10 +12,10 @@ namespace ESCTestLayer.Entities
             var agent1 = new Agent2D(1, esc);
 //            var agent2 = new Agent2D(2, esc);
 
-            Console.WriteLine(agent0.SetPosition(new Vector2f(1, 1)));
-            Console.WriteLine(agent1.SetPosition(new Vector2f(1, 1)));
-            Console.WriteLine(agent1.SetPosition(new Vector2f(2.1f, 2.1f)));
-            Console.WriteLine(agent1.SetPosition(new Vector2f(1, 1)));
+            Console.WriteLine(agent0.SetPosition(new Vector(1, 1)));
+            Console.WriteLine(agent1.SetPosition(new Vector(1, 1)));
+            Console.WriteLine(agent1.SetPosition(new Vector(2.1f, 2.1f)));
+            Console.WriteLine(agent1.SetPosition(new Vector(1, 1)));
 
             Console.WriteLine("Game Over");
             Console.ReadLine();
@@ -26,15 +26,15 @@ namespace ESCTestLayer.Entities
     {
         private readonly ESC _esc;
         private readonly int Id;
-        private readonly Vector2f Dimension;
-        private readonly Vector2f Direction;
+        private readonly Vector Dimension;
+        private readonly Vector Direction;
 
         public Agent2D(int id, ESC esc)
         {
             _esc = esc;
             Id = id;
-            Dimension = new Vector2f(1, 1);
-            Direction = new Vector2f(0, 0);
+            Dimension = new Vector(1, 1);
+            Direction = new Vector(0, 0);
             Register();
         }
 
@@ -44,7 +44,7 @@ namespace ESCTestLayer.Entities
         }
 
 
-        public bool SetPosition(Vector2f position)
+        public bool SetPosition(Vector position)
         {
             return position.Equals(_esc.SetPosition(Id, position, Direction).Position);
         }

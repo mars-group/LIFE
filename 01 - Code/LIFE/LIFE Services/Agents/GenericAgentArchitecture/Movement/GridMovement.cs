@@ -20,7 +20,7 @@ namespace GenericAgentArchitecture.Movement {
     private readonly bool _diagonalEnabled;
     private readonly bool _failureCostEnabled;
 
-    public GridMovement(IESC esc, int agentId, Vector3f dim) : base(esc, agentId, dim) {
+    public GridMovement(IESC esc, int agentId, Vector dim) : base(esc, agentId, dim) {
       _diagonalEnabled = true;
       _failureCostEnabled = true;
     }
@@ -32,14 +32,14 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="direction">The direction to move (enumeration value).</param>
     public void Move(Direction direction) {
       switch (direction) {
-        case Direction.Up       :                 TargetPos.X ++;  SetYaw(  0);  break;
-        case Direction.Down     :                 TargetPos.X --;  SetYaw(180);  break;
-        case Direction.Left     : TargetPos.Y --;                  SetYaw(270);  break;  
-        case Direction.Right    : TargetPos.Y ++;                  SetYaw( 90);  break; 
-        case Direction.UpLeft   : TargetPos.Y --; TargetPos.X ++;  SetYaw(  0);  break;  //315 | Diagonal 
-        case Direction.UpRight  : TargetPos.Y ++; TargetPos.X ++;  SetYaw(  0);  break;  //45  | placement
-        case Direction.DownLeft : TargetPos.Y --; TargetPos.X --;  SetYaw(180);  break;  //225 | causes
-        case Direction.DownRight: TargetPos.Y ++; TargetPos.X --;  SetYaw(180);  break;  //135 | overlapping!   
+        case Direction.Up       : TargetPos = new Vector(TargetPos.X+1, TargetPos.Y);   SetYaw(  0); break;
+        case Direction.Down     : TargetPos = new Vector(TargetPos.X-1, TargetPos.Y);   SetYaw(180); break;
+        case Direction.Left     : TargetPos = new Vector(TargetPos.X, TargetPos.Y-1);   SetYaw(270); break;
+        case Direction.Right    : TargetPos = new Vector(TargetPos.X, TargetPos.Y+1);   SetYaw( 90); break;
+        case Direction.UpLeft   : TargetPos = new Vector(TargetPos.X+1, TargetPos.Y-1); SetYaw(  0); break;  //315 | Diagonal 
+        case Direction.UpRight  : TargetPos = new Vector(TargetPos.X+1, TargetPos.Y+1); SetYaw(  0); break;  //45  | placement
+        case Direction.DownLeft : TargetPos = new Vector(TargetPos.X-1, TargetPos.Y-1); SetYaw(180); break;  //225 | causes
+        case Direction.DownRight: TargetPos = new Vector(TargetPos.X-1, TargetPos.Y+1); SetYaw(180); break;  //135 | overlapping!   
       }
       Move();  // Execute movement (call to L0-Move()).
     }
@@ -59,7 +59,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="targetPos">The target position to move to.</param>
     /// <param name="movementPoints">The distance the agent is allowed to travel.
     /// Similar to the speed in continuous environments.</param>
-    public void MoveToPosition(Vector2f targetPos, float movementPoints) {
+    public void MoveToPosition(Vector targetPos, float movementPoints) {
 
       // Repeat function as long as movement is possible (minimal cost: 1).
       while (movementPoints >= 1) {

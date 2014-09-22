@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using ESCTestLayer.Entities;
@@ -17,25 +18,29 @@ namespace ESCTestLayer.Implementation
     /// </summary>
     public class ESC : IESC, IGenericDataSource
     {
+        //TODO boundaries einführen, vermutlich als polygon. 
+        // was passiert, wenn Agenten Grenzen erreichen?
+        // TODO gibt indexOutOfBounds mit zurück
 
         private readonly Random _rnd;                             // Number generator for random positions.
         private readonly Dictionary<int, AABB> _aabbs;            // Stores the occupied intervals of all elementIds.
-        private readonly IDictionary<int, Vector3f> _dimensions;  // All elements dimensions.
-        private readonly IDictionary<int, Vector3f> _positions;   // The positions (middlepoints).
-        private readonly IDictionary<int, Vector3f> _directions;  // The positions (middlepoints).
+        private readonly IDictionary<int, Vector> _dimensions;  // All elements dimensions.
+        private readonly IDictionary<int, Vector> _positions;   // The positions (middlepoints).
+        private readonly IDictionary<int, Vector> _directions;  // The positions (middlepoints).
 
         public ESC()
         {
             _rnd = new Random();
             _aabbs = new Dictionary<int, AABB>();
-            _dimensions = new ConcurrentDictionary<int, Vector3f>();
-            _positions = new ConcurrentDictionary<int, Vector3f>();
-            _directions = new ConcurrentDictionary<int, Vector3f>();
+            _dimensions = new ConcurrentDictionary<int, Vector>();
+            _positions = new ConcurrentDictionary<int, Vector>();
+            _directions = new ConcurrentDictionary<int, Vector>();
         }
 
-        public void Add(int elementId, Vector3f dimension)
+        public void Add(int elementId, Vector dimension)
         {
             _dimensions[elementId] = dimension;
+            _positions[elementId] = Vector.Null;
         }
 
         public void Remove(int elementId)
@@ -44,7 +49,7 @@ namespace ESCTestLayer.Implementation
             _dimensions.Remove(elementId);
         }
 
-        public MovementResult Update(int elementId, Vector3f dimension)
+        public MovementResult Update(int elementId, Vector dimension)
         {
             _dimensions[elementId] = dimension;
             if (_positions.ContainsKey(elementId))
@@ -54,43 +59,27 @@ namespace ESCTestLayer.Implementation
             return null;
         }
 
-      public MovementResult SetPosition(int elementId, Vector3f position, Vector3f direction) {
-        
-        //TODO [FEHLER] Der Agent steht schon an der Zielposition, bevor er sich bewegt.
-        // So wird auch im Fehlerfall / Kollision die neue Position zurückgegeben und 
-        // es sieht aus, als ob die Bewegungsaktion erfolgreich war! 
+      public MovementResult SetPosition(int elementId, Vector position, Vector direction) {
+          var aabb = GetAABB(position, direction, _dimensions[elementId]);
+          if (CheckForCollisions(aabb)) {
+              return new MovementResult(_positions[elementId]);
+          }
 
-        var en = _positions.Values.GetEnumerator();
-        en.MoveNext();
-        for (var i = 0; i < _positions.Count; i++) {
-          Console.WriteLine(i + ": " + en.Current);
-          en.MoveNext();
-        }
-
-
-            Console.Write("Agent "+elementId+" will go to "+position+": ");
-            var aabb = GetAABB(position, direction, _dimensions[elementId]);
-            if (CheckForCollisions(aabb))
-            {
-              Console.WriteLine("failed!  It still is at "+_positions[elementId]);
-                return new MovementResult(_positions[elementId]);
-            }
             //otherwise update position, direction and axis aligned bounding intervals for elementId
-          Console.WriteLine("okay!");  
-          _positions[elementId] = position;
+            _positions[elementId] =  position;
             _directions[elementId] = direction;
             _aabbs[elementId] = aabb;
+
             return new MovementResult(position);
         }
 
 
-        public MovementResult SetRandomPosition(int elementId, Vector3f min, Vector3f max, bool grid) {
-            if (min == null) min = new Vector3f(0.0f, 0.0f, 0.0f);
+        public MovementResult SetRandomPosition(int elementId, Vector min, Vector max, bool grid) {
             var zUsed = (max.Z - min.Z > float.Epsilon);
-            Vector3f dir = null;
+            Vector dir = Vector.Null;
 
             // Get a position in the interval containing only grid values.
-            var pos = new Vector3f(
+            var pos = new Vector(
               (_rnd.Next((int)(max.X - min.X))) + min.X,
               (_rnd.Next((int)(max.Y - min.Y))) + min.Y,
               zUsed ? (_rnd.Next((int)(max.Z - min.Z))) + min.Z : 0.0f
@@ -98,11 +87,12 @@ namespace ESCTestLayer.Implementation
 
             // When only grids are wished, position is finished. Next, create direction normal vector.
             if (grid) {
-                switch (_rnd.Next(0, 4)) {                                //         Z
-                    case 0: dir = new Vector3f(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
-                    case 1: dir = new Vector3f(0.0f, -1.0f, 0.0f); break; // left    |  /
-                    case 2: dir = new Vector3f(1.0f, 0.0f, 0.0f); break;  // up      | /
-                    case 3: dir = new Vector3f(-1.0f, 0.0f, 0.0f); break; // down    +--------→ Y
+                switch (_rnd.Next(0, 4))
+                {                              //         Z
+                    case 0: dir = new Vector(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
+                    case 1: dir = new Vector(0.0f, -1.0f, 0.0f); break; // left    |  /
+                    case 2: dir = new Vector(1.0f, 0.0f, 0.0f); break;  // up      | /
+                    case 3: dir = new Vector(-1.0f, 0.0f, 0.0f); break; // down    +--------→ Y
                 }
             }
 
@@ -112,7 +102,7 @@ namespace ESCTestLayer.Implementation
                 pos.X += (float)_rnd.NextDouble();
                 pos.Y += (float)_rnd.NextDouble();
                 if (zUsed) pos.Z += (float)_rnd.NextDouble();
-                dir = new Vector3f(
+                dir = new Vector(
                   (float)(_rnd.NextDouble() - 0.5),
                   (float)(_rnd.NextDouble() - 0.5),
                   zUsed ? (float)(_rnd.NextDouble() - 0.5) : 0.0f
@@ -141,7 +131,7 @@ namespace ESCTestLayer.Implementation
             return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
         }
 
-        public IEnumerable<CollidableElement> Explore(int elementId, Vector3f position, Vector3f direction)
+        public IEnumerable<CollidableElement> Explore(int elementId, Vector position, Vector direction)
         {
             var newPosition = GetAABB(position, direction, _dimensions[elementId]);
             var collisions = new List<CollidableElement>();
@@ -186,21 +176,21 @@ namespace ESCTestLayer.Implementation
         /// <param name="direction">The current heading.</param>
         /// <param name="dimension">The elementId's dimension (related to direction (1,0,0)).</param>
         /// <returns>AABB structure.</returns>
-        private static AABB GetAABB(Vector3f position, Vector3f direction, Vector3f dimension)
+        private static AABB GetAABB(Vector position, Vector direction, Vector dimension)
         {
             // Create all vertices of the bounding box. Probably some of them will suffice ...
-            var points = new Vector3f[8];
-            points[0] = new Vector3f(-dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
-            points[1] = new Vector3f(dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
-            points[2] = new Vector3f(-dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
-            points[3] = new Vector3f(dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
-            points[4] = new Vector3f(-dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
-            points[5] = new Vector3f(dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
-            points[6] = new Vector3f(-dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
-            points[7] = new Vector3f(dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
+            var points = new Vector[8];
+            points[0] = new Vector(-dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
+            points[1] = new Vector(dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
+            points[2] = new Vector(-dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
+            points[3] = new Vector(dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
+            points[4] = new Vector(-dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
+            points[5] = new Vector(dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
+            points[6] = new Vector(-dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
+            points[7] = new Vector(dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
 
             // Build axes for direction-local coordinate system.
-            Vector3f nr1 = direction.Normalize(), nr2, nr3;
+            Vector nr1 = direction.Normalize(), nr2, nr3;
             nr1.GetPlanarOrthogonalVectors(out nr2, out nr3);
 
             // Transform the bounding box from local (direction-aligned) to the

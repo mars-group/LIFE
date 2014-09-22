@@ -21,7 +21,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    protected ML1(IESC esc, int agentId, Vector3f dim) : base(esc, agentId, dim) {
+    protected ML1(IESC esc, int agentId, Vector dim) : base(esc, agentId, dim) {
       Speed = 0;
       PitchAS = 0;
       YawAS = 0;
@@ -42,7 +42,7 @@ namespace GenericAgentArchitecture.Movement {
       var pitchRad = Pitch*0.0174532925f; // Deg -> Rad.
       var yawRad = Yaw*0.0174532925f;
       var factor = Speed*TickLength;
-      var targetPos = new Vector3f(Position.X, Position.Y, Position.Z);
+      var targetPos = new Vector(Position.X, Position.Y, Position.Z);
       targetPos.X += (float) (factor * Math.Cos(pitchRad) * Math.Cos(yawRad));
       targetPos.Y += (float) (factor * Math.Cos(pitchRad) * Math.Sin(yawRad));
       targetPos.Z += (float) (factor * Math.Sin(pitchRad));

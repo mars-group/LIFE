@@ -8,7 +8,7 @@ using Environment = GenericAgentArchitecture.Dummies.Environment;
 
 namespace AgentTester.Wolves.Agents {
   internal class Grassland : Environment, IGenericDataSource {
-      public static readonly Vector2f Boundary = new Vector2f(30, 18);
+    private static readonly Vector Boundary = new Vector(30, 18);
     private readonly Random _random;
     private int _idCounter;
 
@@ -46,7 +46,7 @@ namespace AgentTester.Wolves.Agents {
       do {
         var x = _random.Next((int)Boundary.X);
         var y = _random.Next((int)Boundary.Y);
-        newAgent.Position = new Vector2f(x, y);
+        newAgent.Position = new Vector(x, y);
         unique = true;
         foreach (var agent in Agents) {
           if (agent.Position.X == newAgent.Position.X &&
@@ -77,13 +77,11 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="position">The intended position</param>
     /// <returns>True, if accessible, false, when not.</returns>
-    public bool CheckPosition(Vector2f position)
-    {
+    public bool CheckPosition(Vector position) {
       if (position.X < 0 || position.X >= Boundary.X ||
           position.Y < 0 || position.Y >= Boundary.Y) return false;
       foreach (var agent in Agents) {
-        if (agent.Position.X == position.X &&
-            agent.Position.Y == position.Y) return false;
+        if (agent.Position.Equals(position)) return false;
       }
       return true;
     }

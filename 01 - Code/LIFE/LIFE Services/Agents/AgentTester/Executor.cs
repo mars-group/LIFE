@@ -53,10 +53,10 @@ namespace AgentTester {
       
       Console.WriteLine ("Testmethode für die Bewegungsklasse.");      
       var esc = new ESC();
-      esc.Add(1, new Vector3f(1, 1, 0));    
-      esc.SetPosition(1, new Vector2f(1, 4), new Vector2f(1, 0));      
-      var m = new GridMovement (esc, 11, new Vector2f(1, 1));     
-      m.MoveToPosition(new Vector2f(1, 4), 5);
+      esc.Add(1, new Vector(1, 1, 0));
+      esc.SetPosition(1, new Vector(1, 4), new Vector(1, 0));
+      var m = new GridMovement(esc, 11, new Vector(1, 1));
+      m.MoveToPosition(new Vector(1, 4), 5);
       Console.ReadLine();
     }
   }

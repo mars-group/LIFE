@@ -18,7 +18,7 @@ namespace AgentTester.Wolves.Agents {
     private string _states;
 
     public Wolf(Grassland environment, string id) : base(id) {
-      Position = new Vector2f(-1, -1); // We just need an object (coords set by env).
+      Position = new Vector(-1, -1); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor(new DataSensor(

@@ -13,8 +13,8 @@ namespace GenericAgentArchitecture.Movement {
     private readonly IESC _esc;     // Environment Service Component interface for collision detection.
     private readonly int _agentId;  // Agent identifier, needed for ESC registration.
 
-    public Vector3f Position  { get; private set;   }   // The agent's center (current position). 
-    public Vector3f TargetPos { get; protected set; }   // Target position. May be set or auto-calculated.
+    public Vector Position  { get; private set;   }   // The agent's center (current position). 
+    public Vector TargetPos { get; protected set; }   // Target position. May be set or auto-calculated.
     public float  Pitch       { get; private set;   }   // Direction (lateral axis).
     public float  Yaw         { get; private set;   }   // Direction (vertical axis).
 
@@ -25,19 +25,19 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    protected ML0 (IESC esc, int agentId, Vector3f dim) {
+    protected ML0 (IESC esc, int agentId, Vector dim) {
       _esc = esc;
       _agentId = agentId;
 
       // Initialization with zeros.
-      Position = new Vector3f(0.0f, 0.0f, 0.0f);
-      TargetPos = new Vector3f(0.0f, 0.0f, 0.0f);
+      Position = new Vector(0.0f, 0.0f, 0.0f);
+      TargetPos = new Vector(0.0f, 0.0f, 0.0f);
       Pitch = 0.0f;
       Yaw = 0.0f;
 
       esc.Add (_agentId, dim);
       //TODO Der Krams hier soll irgendwie intelligenter erfolgen !!!
-      esc.SetPosition(_agentId, Position, new Vector3f(1, 0, 0));
+      esc.SetPosition(_agentId, Position, new Vector(1, 0, 0));
     }
 
 
@@ -77,7 +77,7 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="target">The target to get orientation to.</param>
     /// <returns>The yaw (corrected to 0 - lt. 360). </returns>
-    protected float CalculateYawToTarget(Vector3f target) {
+    protected float CalculateYawToTarget(Vector target) {
       var yaw = Yaw;
       var distX = target.X - Position.X;
       var distY = target.Y - Position.Y;
@@ -106,7 +106,7 @@ namespace GenericAgentArchitecture.Movement {
       // ESC needs direction vector. So it shall get it. 
       var pitchRad = Pitch * 0.0174532925f;  // Deg -> Rad.
       var yawRad   = Yaw   * 0.0174532925f;      
-      var dv = new Vector3f((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
+      var dv = new Vector((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
                             (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
                             (float) (Math.Sin(pitchRad))).Normalize();      
 
@@ -114,7 +114,7 @@ namespace GenericAgentArchitecture.Movement {
       //Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
 
       var result = _esc.SetPosition(_agentId, TargetPos, dv);
-      Position = new Vector3f(result.Position.X, result.Position.Y, result.Position.Z);
+      Position = new Vector(result.Position.X, result.Position.Y, result.Position.Z);
       
       //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
       //TODO Direktion auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
