@@ -44,6 +44,11 @@ namespace SimulationManagerFacade.Implementation {
             _server.Start();
         }
         
+		//local option for simulation start - connected layer containers unknown. Use all and use standard implementation.
+		public void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null) {
+			_runtimeEnvironment.StartWithModel(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks);
+		}
+
         #region RuntimeEnvironment delegation
 
         public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {

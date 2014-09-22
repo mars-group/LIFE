@@ -56,23 +56,23 @@
   <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GoapModelTest\GoapModelTest.csproj">
-      <Project>{85340006-b073-47e6-9dbf-d0cb391a13aa}</Project>
+      <Project>{85340006-B073-47E6-9DBF-D0CB391A13AA}</Project>
       <Name>GoapModelTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\GoapSystem\GoapActionSystemFactory\GoapActionSystemFactory.csproj">
-      <Project>{a36fc1f7-f7c1-4ffc-ba9f-9d864129f8df}</Project>
+      <Project>{A36FC1F7-F7C1-4FFC-BA9F-9D864129F8DF}</Project>
       <Name>GoapActionSystemFactory</Name>
     </ProjectReference>
     <ProjectReference Include="..\GoapSystem\GoapCommon\GoapCommon.csproj">
-      <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
+      <Project>{846C7C43-FC1B-4709-8A43-B2EE8213F63F}</Project>
       <Name>GoapCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GoapSystem\GoapGraphConnector\GoapGraphConnector.csproj">
-      <Project>{2871f5a0-1375-48ce-998f-b90d3d2d1a95}</Project>
+      <Project>{2871F5A0-1375-48CE-998F-B90D3D2D1A95}</Project>
       <Name>GoapGraphConnector</Name>
     </ProjectReference>
   </ItemGroup>

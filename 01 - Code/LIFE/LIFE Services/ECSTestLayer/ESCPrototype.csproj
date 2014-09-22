@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,9 +29,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,11 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
-      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
   </ItemGroup>

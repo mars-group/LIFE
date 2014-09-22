@@ -56,11 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GoapSystem\GoapCommon\GoapCommon.csproj">
-      <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
+      <Project>{846C7C43-FC1B-4709-8A43-B2EE8213F63F}</Project>
       <Name>GoapCommon</Name>
     </ProjectReference>
   </ItemGroup>

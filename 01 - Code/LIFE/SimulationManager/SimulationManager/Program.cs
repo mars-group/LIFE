@@ -3,6 +3,7 @@ using System.IO;
 using log4net;
 using log4net.Config;
 using SimulationManagerFacade.Interface;
+using System.Linq;
 
 namespace SimulationManager {
     internal class Program {
@@ -24,9 +25,25 @@ namespace SimulationManager {
             
             Console.WriteLine("SimulationManager up and running. Press 'q' to quit.");
 
-            foreach (var modelDescription in core.GetAllModels()) {
-                Console.WriteLine(modelDescription.Name);
-            }
+			if(args.Any (x => x.Equals ("-cli"))) {
+				//Console input requested
+				Console.WriteLine ("Please input the number before the model that will be run.");
+
+				// listing all available models
+				var i = 1;
+				foreach (var modelDescription in core.GetAllModels()) {
+					Console.Write (i + ": ");
+					Console.WriteLine(modelDescription.Name);
+					i++;
+				}
+
+				// read selected model number from console and start it
+				int nr = int.Parse (Console.ReadLine ()) - 1;
+				Console.WriteLine ("For how many steps is the simukation supposed to run?");
+				int ticks = int.Parse (Console.ReadLine ());
+				core.StartSimulationWithModel (core.GetAllModels ().ToList ()[nr], ticks);
+			}
+
 
             ConsoleKeyInfo info = Console.ReadKey();
             while (info.Key != ConsoleKey.Q) {

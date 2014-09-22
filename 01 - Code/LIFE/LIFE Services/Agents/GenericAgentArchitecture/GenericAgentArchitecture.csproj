@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,10 +29,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -75,15 +71,15 @@
       <Name>CommonTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
-      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ECSTestLayer\ESCPrototype.csproj">
-      <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
+      <Project>{A758654E-AEA9-45F5-8CA3-E09519379F53}</Project>
       <Name>ESCPrototype</Name>
     </ProjectReference>
     <ProjectReference Include="..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
   </ItemGroup>

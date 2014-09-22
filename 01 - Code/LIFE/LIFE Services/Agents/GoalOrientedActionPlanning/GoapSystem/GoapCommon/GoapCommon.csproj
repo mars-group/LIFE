@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
   </ItemGroup>
