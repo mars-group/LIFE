@@ -9,7 +9,7 @@ namespace GoapGraphConnector.CustomGraph {
         private Graph _graph;
         private AStarSteppable _aStar;
 
-        private readonly Dictionary<IGoapEdge, AbstractGoapAction> _relationReminder =
+        private readonly Dictionary<IGoapEdge, AbstractGoapAction> _mapEdgeToAction =
             new Dictionary<IGoapEdge, AbstractGoapAction>();
 
         // TODO Konstruktoren aufräumen ...sind noch zwei nötig?
@@ -46,7 +46,7 @@ namespace GoapGraphConnector.CustomGraph {
             foreach (var abstractGoapAction in outEdges) {
                 var newEdge = GetEdgeFromPreconditions(abstractGoapAction, currentState);
                 edges.Add(newEdge);
-                _relationReminder.Add(newEdge, abstractGoapAction);
+                _mapEdgeToAction.Add(newEdge, abstractGoapAction);
             }
             ExpandCurrentVertex(edges);
         }
@@ -77,7 +77,7 @@ namespace GoapGraphConnector.CustomGraph {
 
             foreach (var goapEdge in edges) {
                 AbstractGoapAction action;
-                _relationReminder.TryGetValue(goapEdge, out action);
+                _mapEdgeToAction.TryGetValue(goapEdge, out action);
                 actionList.Add(action);
             }
             return actionList;
