@@ -2,6 +2,7 @@
 
 namespace CommonTypes.DataTypes {
     public struct Vector : IEquatable<Vector> {
+        public static readonly Vector Origin = new Vector(0.0f, 0.0f, 0.0f);
         public static readonly Vector Null = new Vector(0.0f, 0.0f, 0.0f, true);
         public static readonly Vector UnitVectorXAxis = new Vector(1.0f, 0.0f, 0.0f).Normalize();
         public static readonly Vector MaxVector = new Vector(float.MaxValue, float.MaxValue, float.MaxValue);

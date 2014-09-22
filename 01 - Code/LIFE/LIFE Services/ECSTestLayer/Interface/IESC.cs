@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
 using CommonTypes.DataTypes;
 using ESCTestLayer.Entities;
+using LayerAPI.Interfaces;
 
 namespace ESCTestLayer.Interface
 {
-    public interface IESC {
+    public interface IESC : IGenericDataSource {
         /// <summary>
         ///   Registers the element with given dimension.
         /// </summary>

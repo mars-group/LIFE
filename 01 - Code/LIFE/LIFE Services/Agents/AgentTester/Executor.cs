@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Threading;
-using CommonTypes.DataTypes;
-using ESCTestLayer.Implementation;
-using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -47,17 +44,8 @@ namespace AgentTester {
     /// </summary>
     public static void Main() {
       //TODO ACHTUNG! Entfernungsangaben der Agenten fehlerhaft (Reichweite bis über 18 statt 8). Umwelt schuld?
-      //var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
-      //new Executor(environment).Run(850);
-      
-      
-      Console.WriteLine ("Testmethode für die Bewegungsklasse.");      
-      var esc = new ESC();
-      esc.Add(1, new Vector(1, 1, 0));
-      esc.SetPosition(1, new Vector(1, 4), new Vector(1, 0));
-      var m = new GridMovement(esc, 11, new Vector(1, 1));
-      m.MoveToPosition(new Vector(1, 4), 5);
-      Console.ReadLine();
+      var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
+      new Executor(environment).Run(850);
     }
   }
 }

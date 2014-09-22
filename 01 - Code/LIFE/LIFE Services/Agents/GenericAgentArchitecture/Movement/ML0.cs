@@ -24,20 +24,20 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
+    /// <param name="pos">Agent's initial position.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    protected ML0 (IESC esc, int agentId, Vector dim) {
+    protected ML0 (IESC esc, int agentId, Vector pos, Vector dim) {
       _esc = esc;
       _agentId = agentId;
 
       // Initialization with zeros.
-      Position = new Vector(0.0f, 0.0f, 0.0f);
+      Position = pos;
       TargetPos = new Vector(0.0f, 0.0f, 0.0f);
       Pitch = 0.0f;
       Yaw = 0.0f;
 
       esc.Add (_agentId, dim);
-      //TODO Der Krams hier soll irgendwie intelligenter erfolgen !!!
-      esc.SetPosition(_agentId, Position, new Vector(1, 0, 0));
+      esc.SetPosition(_agentId, Position, Vector.UnitVectorXAxis);
     }
 
 
