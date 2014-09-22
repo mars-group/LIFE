@@ -79,22 +79,45 @@ namespace ESCTest {
       Assert.True(pos.Equals(_esc.SetPosition(1, pos, Vector.UnitVectorXAxis).Position));
     }
 
+
     [Test]
-    public void TestOverlap3D_floats() {
-      var dims = new Vector(1, 1, 1);
-     _esc.Add(0, dims);
-     _esc.Add(1, dims);
+    public void TestOverlap3D_floats()
+    {
+        var dims = new Vector(1, 1, 1);
+        _esc.Add(0, dims);
+        _esc.Add(1, dims);
 
-      Vector pos, ret;
+        Vector pos, ret;
 
-      pos = new Vector(1, 1, 1);
-      Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector(0, 1, 0)).Position));
+        pos = new Vector(1, 1, 1);
+        Assert.True(pos.Equals(_esc.SetPosition(0, pos, new Vector(0, 1, 0)).Position));
 
-      pos = new Vector(1, 1, 0);  
-      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector(1, 1, 1)).Position));
+        pos = new Vector(1, 1, 0);
+        Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector(1, 1, 1)).Position));
 
-      pos = new Vector(1, 0, 1);  
-      Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector(1, 0, 1)).Position));
+        pos = new Vector(1, 0, 1);
+        Assert.False(pos.Equals(_esc.SetPosition(1, pos, new Vector(1, 0, 1)).Position));
+    }
+
+    [Test]
+    public void TestOverlap2DTo3D()
+    {
+        var dimension1 = new Vector(10, 10, 10);
+        var dimension2 = new Vector(1, 1, 0);
+        _esc.Add(0, dimension1);
+        _esc.Add(1, dimension2);
+
+        Vector pos = Vector.Origin;
+        Assert.True(pos.Equals(_esc.SetPosition(0, pos, Vector.UnitVectorXAxis).Position));
+
+        pos = new Vector(5, 5, 5);
+        Assert.True(Vector.Null.Equals(_esc.SetPosition(1, pos, Vector.UnitVectorXAxis).Position));
+     
+        pos = new Vector(11,11,11);
+        Assert.True(pos.Equals(_esc.SetPosition(1, pos, Vector.UnitVectorXAxis).Position));
+
+        pos = new Vector(5, 5, 5);
+        Assert.False(pos.Equals(_esc.SetPosition(1, pos, Vector.UnitVectorXAxis).Position));
     }
 
 

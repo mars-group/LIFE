@@ -15,8 +15,9 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
+    /// <param name="pos">Agent's initial position.</param> 
     /// <param name="dim">Agent's physical dimension.</param>
-    public ContinuousMovement(IESC esc, int agentId, Vector dim) : base(esc, agentId, dim) { }
+    public ContinuousMovement(IESC esc, int agentId, Vector pos, Vector dim) : base(esc, agentId, pos, dim) { }
 
 
     /// <summary>

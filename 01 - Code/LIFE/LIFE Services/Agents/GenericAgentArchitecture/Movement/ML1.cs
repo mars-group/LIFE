@@ -20,8 +20,9 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="esc">IESC implemenation reference.</param>
     /// <param name="agentId">The ID of the linked agent.</param>
+    /// <param name="pos">Agent's initial position.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    protected ML1(IESC esc, int agentId, Vector dim) : base(esc, agentId, dim) {
+    protected ML1(IESC esc, int agentId, Vector pos, Vector dim) : base(esc, agentId, pos, dim) {
       Speed = 0;
       PitchAS = 0;
       YawAS = 0;

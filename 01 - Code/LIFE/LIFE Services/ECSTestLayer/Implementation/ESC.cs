@@ -16,7 +16,7 @@ namespace ESCTestLayer.Implementation
     ///   @see http://jitter-physics.com/wordpress/?tag=sweep-and-prune
     ///   @see http://www.philorwig.com/research/spatial/collision-detection-sweep-and-prune.html
     /// </summary>
-    public class ESC : IESC, IGenericDataSource
+    public class ESC : IESC
     {
         //TODO boundaries einführen, vermutlich als polygon. 
         // was passiert, wenn Agenten Grenzen erreichen?
