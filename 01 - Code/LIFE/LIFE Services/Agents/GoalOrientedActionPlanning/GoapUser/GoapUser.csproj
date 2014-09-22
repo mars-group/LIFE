@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="GoapTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Snippets.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -69,6 +70,10 @@
     <ProjectReference Include="..\GoapSystem\GoapCommon\GoapCommon.csproj">
       <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
       <Name>GoapCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoapSystem\GoapGraphConnector\GoapGraphConnector.csproj">
+      <Project>{2871f5a0-1375-48ce-998f-b90d3d2d1a95}</Project>
+      <Name>GoapGraphConnector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -45,7 +45,9 @@ namespace GoapGraphConnector.CustomGraph {
         public bool Equals(Vertex other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return this._worldstate.SequenceEqual(other._worldstate);
+            return ((_worldstate.Where(x => other._worldstate.Contains(x)).Count() == _worldstate.Count()) &&
+                    (other._worldstate.Where(x => _worldstate.Contains(x)).Count() == other._worldstate.Count()));
+
         }
 
         public override bool Equals(object obj) {
