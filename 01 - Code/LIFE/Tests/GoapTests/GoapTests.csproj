@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomGraphEdgeTest.cs" />
+    <Compile Include="CustomGraphGraphTest.cs" />
     <Compile Include="CustomGraphServiceTest.cs" />
     <Compile Include="GoapModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

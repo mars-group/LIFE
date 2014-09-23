@@ -6,56 +6,45 @@ using NUnit.Framework;
 namespace GoapTests {
     [TestFixture]
     internal class CustomGraphEdgeTest {
-        #region Setup/Teardown
+     
+        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate>(), 2, "V1");
+        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate>(), 2, "V2");
+        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate>(), 2, "V3");
+        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate>(), 2, "V4");
 
-        [SetUp]
-        protected void SetUp() {
-            _v1 = new Vertex(new List<IGoapWorldstate>(), 2, "V1");
-            _v2 = new Vertex(new List<IGoapWorldstate>(), 2, "V2");
-            _v3 = new Vertex(new List<IGoapWorldstate>(), 2, "V3");
-            _v4 = new Vertex(new List<IGoapWorldstate>(), 2, "V4");
-
-
-            _e1 = new Edge(1, _v1, _v2);
-            _e2 = new Edge(2, _v2, _v3);
-            _e3 = new Edge(3, _v2, _v4);
-        }
-
-        #endregion
-
-        private Edge _e1;
-        private Edge _e2;
-        private Edge _e3;
-
-        private Vertex _v1;
-        private Vertex _v2;
-        private Vertex _v3;
-        private Vertex _v4;
-
+        private static readonly Edge E1 = new Edge(1, V1, V2);
+        private static readonly Edge E2 = new Edge(2, V2, V3);
+        private static readonly Edge E3 = new Edge(3, V2, V4);
+        
         [Test]
         public void SourceVertexTest() {
-            Assert.True(_e1.GetSource().Equals(_v1));
-            Assert.True(_e1.GetSource().GetIdentifier() == "V1");
+            Assert.AreEqual(E1.GetSource(),V1);
+            Assert.True(E1.GetSource().GetIdentifier() == "V1");
         }
 
         [Test]
         public void TargetVertexTest() {
-            Assert.True(_e1.GetTarget().Equals(_v2));
-            Assert.True(_e1.GetTarget().GetIdentifier() == "V2");
+            Assert.AreEqual(E1.GetTarget(),V2);
+            Assert.True(E1.GetTarget().GetIdentifier() == "V2");
         }
 
         [Test]
         public void EqualityTest() {
-            Assert.True(_e1.Equals(_e1));
-            Assert.False(_e1.Equals(_e2));
-            Assert.False(_e1.Equals(null));
+            Assert.AreEqual(E1,E1);
+        }
+
+        [Test]
+        public void NoEqualityTest() {
+            Assert.AreNotEqual(E1,E2);
+            Assert.AreNotEqual(E2,E3);
+            Assert.AreNotEqual(E2,null);
         }
 
         [Test]
         public void EqualityOperatorTest() {
-            Assert.True(_e1 != null);
-            Assert.False(_e1 == _e3);
-            Assert.False(_e2 == null);
+            Assert.True(E1 != null);
+            Assert.False(E1 == E3);
+            Assert.False(E2 == null);
         }
     }
 }
