@@ -60,7 +60,7 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         public bool IsCurrentVertexTarget() {
-            return _aStar.CheckforTarget();
+            return _aStar.CheckforTargetStatesAreSatisfied();
         }
 
         public void AStarStep() {

@@ -42,6 +42,11 @@ namespace GoapGraphConnector.CustomGraph {
             return string.Format("<Knoten {0} {1}>", _name, states);
         }
 
+        /// <summary>
+        /// equality depens on the set of worldstate symbols a vertex represents
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(Vertex other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

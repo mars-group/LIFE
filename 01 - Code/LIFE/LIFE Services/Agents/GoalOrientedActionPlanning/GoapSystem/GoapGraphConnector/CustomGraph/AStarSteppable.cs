@@ -65,11 +65,11 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         /// <summary>
-        ///     compare current vertex to target vertex
+        ///     is target subset of current
         /// </summary>
         /// <returns></returns>
-        public bool CheckforTarget() {
-            return _current.Equals(_target);
+        public bool CheckforTargetStatesAreSatisfied() {
+            return (_target.Worldstate().Count(x => _current.Worldstate().Contains(x)) == _target.Worldstate().Count());
         }
 
         public void AddVertex(IGoapVertex vertex) {
@@ -83,7 +83,7 @@ namespace GoapGraphConnector.CustomGraph {
             IGoapVertex pre = GetPredecessor(actual);
 
             while (actual != null && !actual.Equals(pre)) {
-                pathEdges.Add(_graph.GetEdgeBySourceAndTarget(pre, actual));
+                pathEdges.Add(_graph.GetCheapestEdgeBySourceAndTarget(pre, actual));
                 actual = pre;
                 pre = GetPredecessor(actual);
             }
@@ -133,7 +133,7 @@ namespace GoapGraphConnector.CustomGraph {
 
                 // create the new values for comparison if predecessor would be current vertex
                 int heuristic = openVertex.GetHeuristic(_target);
-                int travelDistanceG = (int) currentValue[2] + _graph.GetWayCost(current, openVertex);
+                int travelDistanceG = (int) currentValue[2] + _graph.GetcheapestWayCost(current, openVertex);
                 int estimatedValueF = travelDistanceG + heuristic;
 
 

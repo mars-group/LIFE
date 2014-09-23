@@ -39,6 +39,6 @@ namespace GoapGraphConnector.CustomGraph {
             return string.Format("Edge: |{0} -> {1}| ", _source, _target);
         }
 
-       
+      
     }
 }
