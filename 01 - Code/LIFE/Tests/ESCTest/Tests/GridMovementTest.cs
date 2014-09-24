@@ -4,11 +4,9 @@ using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Movement;
 using NUnit.Framework;
 
-namespace ESCTest {
+namespace ESCTest.Tests {
     public class GridMovementTest {
-        private IESC _esc;
-        private int agentId1, agentId2;
-        private Vector dimension, startPosition;
+        private const int InformationType = 1;
 
         #region Setup / Tear down
 
@@ -18,7 +16,7 @@ namespace ESCTest {
             agentId1 = 1;
             agentId2 = 2;
             dimension = new Vector(1, 1);
-            startPosition =  Vector.Origin;
+            startPosition = Vector.Origin;
         }
 
 
@@ -27,11 +25,15 @@ namespace ESCTest {
 
         #endregion
 
+        private IESC _esc;
+        private int agentId1, agentId2;
+        private Vector dimension, startPosition;
+
         [Test]
         public void TestGridMovementSimple() {
-            var m = new GridMovement(_esc, agentId2,startPosition, dimension);
+            GridMovement m = new GridMovement(_esc, agentId2, startPosition, dimension);
             const int movementPoints = 10;
-            var destination = new Vector(1, 3);
+            Vector destination = new Vector(1, 3);
             m.MoveToPosition(destination, movementPoints);
             Assert.True(destination.Equals(m.Position));
         }
@@ -47,7 +49,7 @@ namespace ESCTest {
 
         [Test]
         public void TestGridMovementHindrance() {
-            _esc.Add(agentId1, dimension);
+            _esc.Add(agentId1, InformationType, true, dimension);
             _esc.SetPosition(agentId1, new Vector(1, 4), new Vector(1, 0));
 
             var m = new GridMovement(_esc, agentId2, startPosition, dimension);
