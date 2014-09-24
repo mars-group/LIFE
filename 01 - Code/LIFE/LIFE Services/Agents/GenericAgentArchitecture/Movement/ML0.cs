@@ -36,7 +36,11 @@ namespace GenericAgentArchitecture.Movement {
       Pitch = 0.0f;
       Yaw = 0.0f;
 
-      esc.Add (_agentId, dim);
+      //TODO Da muß man nochmal beigehen !!!!!!!
+      // Nicht alles durchreichen, sondern ESC-Init-Objekt (Transporttyp). STRUCT hier drinne.
+      // Wolf : ICollidable (Marker-IF), MovableAgent 
+      // MovableAgent: hat ML0-Ref, macht im Konstr. Test: if (this is ICollidable) // flag setzen im Transporttyp. 
+      esc.Add (_agentId, 0, true, dim);
       esc.SetPosition(_agentId, Position, Vector.UnitVectorXAxis);
     }
 
