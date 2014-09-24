@@ -13,7 +13,7 @@ namespace AgentTester.Wolves.Agents {
     private readonly Random _random;
     private readonly Grassland _environment;
 
-    public Grass(Grassland environment, string id) : base(id) {
+    public Grass(Grassland environment, string id) : base(id, 0) {
       Position = new Vector(-1, -1, 0);
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;

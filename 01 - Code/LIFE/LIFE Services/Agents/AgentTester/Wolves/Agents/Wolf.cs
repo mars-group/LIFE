@@ -17,7 +17,7 @@ namespace AgentTester.Wolves.Agents {
     private readonly Grassland _environment;
     private string _states;
 
-    public Wolf(Grassland environment, string id) : base(id) {
+    public Wolf(Grassland environment, string id) : base(id, 2) {
       Position = new Vector(-1, -1); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
@@ -47,6 +47,11 @@ namespace AgentTester.Wolves.Agents {
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
       
+      Console.WriteLine("Wolf perception around "+Position+":");
+      foreach (var sheep in sheeps) Console.WriteLine("Sheep at "+sheep.Position+" (Dist.: "+Position.GetDistance(sheep.Position)+")");
+      Console.ReadLine();
+
+
       // Create status output.
       _states = String.Format("{0,3:00}% |", hunger) + " - " +
         (sheeps.Count<10? sheeps.Count+"" : "+") + " " + 
