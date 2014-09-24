@@ -10,8 +10,10 @@ namespace ESCTestLayer.Interface
         ///   Registers the element with given dimension.
         /// </summary>
         /// <param name="elementId"></param>
+        /// <param name="informationType"></param>
+        /// <param name="collidable"></param>
         /// <param name="dimension"></param>
-        void Add(int elementId, Vector dimension);
+        void Add(int elementId, int informationType, bool collidable, Vector dimension);
 
         /// <summary>
         /// unregisters the element if existent

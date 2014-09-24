@@ -37,7 +37,7 @@ namespace ESCTestLayer.Implementation
             _directions = new ConcurrentDictionary<int, Vector>();
         }
 
-        public void Add(int elementId, Vector dimension)
+        public void Add(int elementId, int informationType, bool collidable, Vector dimension)
         {
             _dimensions[elementId] = dimension;
             _positions[elementId] = Vector.Null;
@@ -127,7 +127,7 @@ namespace ESCTestLayer.Implementation
         public object GetData(int informationType, IGeometry geometry) {
             //TODO informationType als filter kriterium
             const int elementId = -1;
-            Add(elementId, geometry.GetDimensionQuad());
+            Add(elementId, -1, false, geometry.GetDimensionQuad());
             return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
         }
 
