@@ -10,7 +10,7 @@ using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
 
-  internal class Wolf : Agent, IAgentLogic, IEatInteractionSource {
+  internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
     private int _energy = 80;
     private const int EnergyMax = 100;
     private readonly Random _random;
@@ -19,7 +19,7 @@ namespace AgentTester.Wolves.Agents {
 
     public Wolf(Grassland environment, string id) : base(id) {
       Position = new Vector(-1, -1); // We just need an object (coords set by env).
-      _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
+      _random = new Random(ID.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor(new DataSensor(
         this,
@@ -92,7 +92,7 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public override string ToString() {
-      return String.Format(Id + " | Wolf  | ({0,2:00},{1,2:00})  | {2,3:0}/{3,3:0} |" + _states,
+      return String.Format(ID + " | Wolf  | ({0,2:00},{1,2:00})  | {2,3:0}/{3,3:0} |" + _states,
         Position.X, Position.Y, _energy, EnergyMax);
     }
 

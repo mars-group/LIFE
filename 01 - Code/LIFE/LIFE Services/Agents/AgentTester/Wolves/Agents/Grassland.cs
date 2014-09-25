@@ -198,7 +198,7 @@ namespace AgentTester.Wolves.Agents {
           foreach (var agent in GetAllAgents()) {
               if (geometry.IsInRange(agent.Position) &&
                 agent.Position.GetDistance(geometry.GetPosition()) > float.Epsilon) {
-              map[agent.Id] = agent;
+              map[agent.ID] = agent;
             }
           }
           return map;

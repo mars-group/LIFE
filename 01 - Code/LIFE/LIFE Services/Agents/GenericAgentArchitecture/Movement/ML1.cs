@@ -1,6 +1,6 @@
 ﻿using System;
-using CommonTypes.DataTypes;
 using ESCTestLayer.Interface;
+using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
   
@@ -19,10 +19,10 @@ namespace GenericAgentArchitecture.Movement {
     ///   L1 class, specializes basic module with speeds and position calculation.
     /// </summary>
     /// <param name="esc">IESC implemenation reference.</param>
-    /// <param name="agentId">The ID of the linked agent.</param>
+    /// <param name="escInit">Initialization data needed by ESC.</param>
     /// <param name="pos">Agent's initial position.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    protected ML1(IESC esc, int agentId, Vector pos, Vector dim) : base(esc, agentId, pos, dim) {
+    protected ML1(IESC esc, ESCInitData escInit, TVector pos, TVector dim) : base(esc, escInit, pos, dim) {
       Speed = 0;
       PitchAS = 0;
       YawAS = 0;

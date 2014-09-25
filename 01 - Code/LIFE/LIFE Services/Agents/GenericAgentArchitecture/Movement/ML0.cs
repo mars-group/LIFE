@@ -1,6 +1,6 @@
 ﻿using System;
-using CommonTypes.DataTypes;
 using ESCTestLayer.Interface;
+using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
 
@@ -15,33 +15,30 @@ namespace GenericAgentArchitecture.Movement {
 
     public Vector Position  { get; private set;   }   // The agent's center (current position). 
     public Vector TargetPos { get; protected set; }   // Target position. May be set or auto-calculated.
-    public float  Pitch       { get; private set;   }   // Direction (lateral axis).
-    public float  Yaw         { get; private set;   }   // Direction (vertical axis).
+    public float  Pitch     { get; private set;   }   // Direction (lateral axis).
+    public float  Yaw       { get; private set;   }   // Direction (vertical axis).
 
 
     /// <summary>
     ///   Instantiate a new base L0 class. Only available for specializations.
     /// </summary>
     /// <param name="esc">IESC implemenation reference.</param>
-    /// <param name="agentId">The ID of the linked agent.</param>
+    /// <param name="escInit">Initialization data needed by ESC.</param>
     /// <param name="pos">Agent's initial position.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    protected ML0 (IESC esc, int agentId, Vector pos, Vector dim) {
+    protected ML0 (IESC esc, ESCInitData escInit, TVector pos, TVector dim) {
       _esc = esc;
-      _agentId = agentId;
+      _agentId = escInit.AgentID;
 
-      // Initialization with zeros.
-      Position = pos;
-      TargetPos = new Vector(0.0f, 0.0f, 0.0f);
+      // Initialization with original position, facing northbound.
+      Position  = new Vector(pos.X, pos.Y, pos.Z);
+      TargetPos = new Vector(pos.X, pos.Y, pos.Z);
       Pitch = 0.0f;
       Yaw = 0.0f;
 
-      //TODO Da muß man nochmal beigehen !!!!!!!
-      // Nicht alles durchreichen, sondern ESC-Init-Objekt (Transporttyp). STRUCT hier drinne.
-      // Wolf : ICollidable (Marker-IF), MovableAgent 
-      // MovableAgent: hat ML0-Ref, macht im Konstr. Test: if (this is ICollidable) // flag setzen im Transporttyp. 
-      esc.Add (_agentId, 0, true, dim);
-      esc.SetPosition(_agentId, Position, Vector.UnitVectorXAxis);
+      // Enlist the agent and place it at its current position. 
+      esc.Add (_agentId, escInit.AgentType, escInit.IsCollidable, dim);
+      esc.SetPosition(_agentId, VectorToStruct(Position), TVector.UnitVectorXAxis);
     }
 
 
@@ -81,7 +78,7 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="target">The target to get orientation to.</param>
     /// <returns>The yaw (corrected to 0 - lt. 360). </returns>
-    protected float CalculateYawToTarget(Vector target) {
+    protected float CalculateYawToTarget(TVector target) {
       var yaw = Yaw;
       var distX = target.X - Position.X;
       var distY = target.Y - Position.Y;
@@ -110,20 +107,40 @@ namespace GenericAgentArchitecture.Movement {
       // ESC needs direction vector. So it shall get it. 
       var pitchRad = Pitch * 0.0174532925f;  // Deg -> Rad.
       var yawRad   = Yaw   * 0.0174532925f;      
-      var dv = new Vector((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
-                            (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
-                            (float) (Math.Sin(pitchRad))).Normalize();      
+      var dv = new TVector((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
+                           (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
+                           (float) (Math.Sin(pitchRad))).Normalize();      
+
+      // Call ESC movement update and apply returning objects.
+      var result = _esc.SetPosition(_agentId, VectorToStruct(TargetPos), dv);
+      Position.X = result.Position.X;
+      Position.Y = result.Position.Y;
+      Position.Z = result.Position.Z;
+      //TODO Richtung auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
+    }
 
 
-      //Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
-
-      var result = _esc.SetPosition(_agentId, TargetPos, dv);
-      Position = new Vector(result.Position.X, result.Position.Y, result.Position.Z);
-      
-      //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
-      //TODO Direktion auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
-      //TODO nur werte setzen, nicht position zu neuer Instanz zuordnen, wegen Halo
-      //Position = TargetPos;
+    /// <summary>
+    ///   Transform internal vector class to common structure (for transportation).
+    /// </summary>
+    /// <param name="vector">The vector to send.</param>
+    /// <returns>Vector structure. Apart from call-by-value it's identical.</returns>
+    protected static TVector VectorToStruct(Vector vector) {
+      return new TVector(vector.X, vector.Y, vector.Z);
     }
   }
+
+
+
+
+
+  /// <summary>
+  ///   This structure holds all agent relevant data for registration at the ESC.
+  ///   It is passed through from movement module creation down to ML0.
+  /// </summary>
+  public struct ESCInitData {
+    public int AgentID;
+    public int AgentType;
+    public bool IsCollidable;
+  };
 }

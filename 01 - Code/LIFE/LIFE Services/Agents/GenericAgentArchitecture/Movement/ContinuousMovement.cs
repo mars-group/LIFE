@@ -1,6 +1,6 @@
 ﻿using System;
-using CommonTypes.DataTypes;
 using ESCTestLayer.Interface;
+using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
 
@@ -14,10 +14,10 @@ namespace GenericAgentArchitecture.Movement {
     ///   Create a class for movement in a continuous environment.
     /// </summary>
     /// <param name="esc">IESC implemenation reference.</param>
-    /// <param name="agentId">The ID of the linked agent.</param>
+    /// <param name="escInit">Initialization data needed by ESC.</param>
     /// <param name="pos">Agent's initial position.</param> 
     /// <param name="dim">Agent's physical dimension.</param>
-    public ContinuousMovement(IESC esc, int agentId, Vector pos, Vector dim) : base(esc, agentId, pos, dim) { }
+    public ContinuousMovement(IESC esc, ESCInitData escInit, TVector pos, TVector dim) : base(esc, escInit, pos, dim) { }
 
 
     /// <summary>
@@ -53,10 +53,10 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="targetPos">A point the agent shall go to.</param>
     /// <param name="speed">The agent's movement speed.</param>
-    public void MoveToPosition (Vector targetPos, float speed) {
+    public void MoveToPosition (TVector targetPos, float speed) {
 
       // Check, if we are already there. Otherwise no need to move anyway.
-      var distance = Position.GetDistance(targetPos);
+      var distance = VectorToStruct(Position).GetDistance(targetPos);
       if (Math.Abs(distance) <= float.Epsilon) return;
 
       // Pitch and yaw calculation.

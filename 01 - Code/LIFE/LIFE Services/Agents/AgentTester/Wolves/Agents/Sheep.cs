@@ -9,7 +9,7 @@ using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
-  internal class Sheep : Agent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
+  internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
     private const int EnergyMax = 80;
     private readonly Random _random;
     private readonly Grassland _environment;
@@ -19,7 +19,7 @@ namespace AgentTester.Wolves.Agents {
 
     public Sheep(Grassland environment, string id) : base(id) {
       Position = new Vector(-1, -1); // We just need an object (coords set by env).
-      _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
+      _random = new Random(ID.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor
         (new DataSensor
@@ -135,7 +135,7 @@ namespace AgentTester.Wolves.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format
-        (Id + " | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |" + _states,
+        (ID + " | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |" + _states,
           Position.X,
           Position.Y,
           _energy,

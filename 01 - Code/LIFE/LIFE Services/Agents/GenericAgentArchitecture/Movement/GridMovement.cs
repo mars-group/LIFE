@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonTypes.DataTypes;
 using ESCTestLayer.Interface;
+using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
 
@@ -25,10 +25,10 @@ namespace GenericAgentArchitecture.Movement {
     ///   Create a class for grid movement.
     /// </summary>
     /// <param name="esc">IESC implemenation reference.</param>
-    /// <param name="agentId">The ID of the linked agent.</param>
+    /// <param name="escInit">Initialization data needed by ESC.</param>
     /// <param name="pos">Agent's initial position.</param>
     /// <param name="dim">Agent's physical dimension.</param>
-    public GridMovement(IESC esc, int agentId, Vector pos, Vector dim) : base(esc, agentId, pos, dim) {
+    public GridMovement(IESC esc, ESCInitData escInit, TVector pos, TVector dim) : base(esc, escInit, pos, dim) {
       _diagonalEnabled = true;
       _failureCostEnabled = true;
     }
@@ -40,14 +40,14 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="direction">The direction to move (enumeration value).</param>
     public void Move(Direction direction) {
       switch (direction) {
-        case Direction.Up       : TargetPos = new Vector(TargetPos.X+1, TargetPos.Y);   SetYaw(  0); break;
-        case Direction.Down     : TargetPos = new Vector(TargetPos.X-1, TargetPos.Y);   SetYaw(180); break;
-        case Direction.Left     : TargetPos = new Vector(TargetPos.X, TargetPos.Y-1);   SetYaw(270); break;
-        case Direction.Right    : TargetPos = new Vector(TargetPos.X, TargetPos.Y+1);   SetYaw( 90); break;
-        case Direction.UpLeft   : TargetPos = new Vector(TargetPos.X+1, TargetPos.Y-1); SetYaw(  0); break;  //315 | Diagonal 
-        case Direction.UpRight  : TargetPos = new Vector(TargetPos.X+1, TargetPos.Y+1); SetYaw(  0); break;  //45  | placement
-        case Direction.DownLeft : TargetPos = new Vector(TargetPos.X-1, TargetPos.Y-1); SetYaw(180); break;  //225 | causes
-        case Direction.DownRight: TargetPos = new Vector(TargetPos.X-1, TargetPos.Y+1); SetYaw(180); break;  //135 | overlapping!   
+        case Direction.Up       : TargetPos.X ++;                  SetYaw(  0);  break;
+        case Direction.Down     : TargetPos.X --;                  SetYaw(180);  break;
+        case Direction.Left     :                 TargetPos.Y --;  SetYaw(270);  break;
+        case Direction.Right    :                 TargetPos.Y ++;  SetYaw( 90);  break;
+        case Direction.UpLeft   : TargetPos.X ++; TargetPos.Y --;  SetYaw(  0);  break;  //315 | Diagonal 
+        case Direction.UpRight  : TargetPos.X ++; TargetPos.Y ++;  SetYaw(  0);  break;  //45  | placement
+        case Direction.DownLeft : TargetPos.X --; TargetPos.Y --;  SetYaw(180);  break;  //225 | causes
+        case Direction.DownRight: TargetPos.X --; TargetPos.Y ++;  SetYaw(180);  break;  //135 | overlapping!   
       }
       Move();  // Execute movement (call to L0-Move()).
     }
@@ -67,7 +67,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="targetPos">The target position to move to.</param>
     /// <param name="movementPoints">The distance the agent is allowed to travel.
     /// Similar to the speed in continuous environments.</param>
-    public void MoveToPosition(Vector targetPos, float movementPoints) {
+    public void MoveToPosition(TVector targetPos, float movementPoints) {
 
       // Repeat function as long as movement is possible (minimal cost: 1).
       while (movementPoints >= 1) {
@@ -127,21 +127,11 @@ namespace GenericAgentArchitecture.Movement {
           // We're still at the same position. Retry with alternative option. 
           Console.WriteLine("Movement failed. MP left: "+movementPoints);
 
-          if (TargetPos == targetPos) return;        // If final destination is blocked, abort pathfinding.
-          
-          TargetPos = new Vector(oldPosX, oldPosY);  // Reset target origin.
-          if (movementPoints < Sqrt2) break;         // Break, if no options left.
+          if (VectorToStruct(TargetPos) == targetPos) return; // If final destination is blocked, abort pathfinding.      
+          TargetPos = new Vector(oldPosX, oldPosY);           // Reset target origin.
+          if (movementPoints < Sqrt2) break;                  // Break, if no options left.
           //TODO Schrägbewegung wäre noch möglich !!
         }
-
-        /*
-        //TODO Entwicklungsstand / Abbruchspunkt!
-        var le = list.GetEnumerator();  
-        Console.WriteLine("\n - Soll-Gierwert: "+angle+"°\n - Diagonalbew.: "+
-                          diagonalEnabled+"\n - in Aufl.: "+list.Count+"\n");
-        while (le.MoveNext()) Console.WriteLine(le.Current.diff + "°  -  " + le.Current.dir);       
-        return;
-        */
       }
     }
 
@@ -156,8 +146,7 @@ namespace GenericAgentArchitecture.Movement {
       public int CompareTo(Object obj) {
         var other = (DirDiff) obj;
         if (Diff < other.Diff) return -1;
-        if (Diff > other.Diff) return  1;
-        return 0;
+        return Diff > other.Diff ? 1 : 0;
       }
     }
   }

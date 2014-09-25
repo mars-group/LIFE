@@ -6,7 +6,7 @@ using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
 
-  internal class Grass : Agent, IAgentLogic, IEatInteractionTarget {
+  internal class Grass : SpatialAgent, IAgentLogic, IEatInteractionTarget {
 
     public int Foodvalue = 2;
     public const int FoodvalueMax = 60;
@@ -15,7 +15,7 @@ namespace AgentTester.Wolves.Agents {
 
     public Grass(Grassland environment, string id) : base(id) {
       Position = new Vector(-1, -1, 0);
-      _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
+      _random = new Random(ID.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
     }
 
@@ -36,7 +36,7 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public override string ToString() {
-      return String.Format(Id + " | Gras  | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |     |       |         |",
+      return String.Format(ID + " | Gras  | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |     |       |         |",
         Position.X, Position.Y, Foodvalue, FoodvalueMax);
     }
 
