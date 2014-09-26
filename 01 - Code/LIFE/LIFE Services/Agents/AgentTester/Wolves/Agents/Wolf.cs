@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
-using AgentTester.Wolves.Reasoning;
 using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Perception;
@@ -19,7 +18,7 @@ namespace AgentTester.Wolves.Agents {
 
     public Wolf(Grassland environment, string id) : base(id) {
       Position = new Vector(-1, -1); // We just need an object (coords set by env).
-      _random = new Random(ID.GetHashCode() + (int) DateTime.Now.Ticks);
+      _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor(new DataSensor(
         this,
@@ -92,8 +91,8 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public override string ToString() {
-      return String.Format(ID + " | Wolf  | ({0,2:00},{1,2:00})  | {2,3:0}/{3,3:0} |" + _states,
-        Position.X, Position.Y, _energy, EnergyMax);
+      return String.Format(Id + " | Wolf  | ({0,2:00},{1,2:00})  | {2,3:0}/{3,3:0} |" + _states,
+        Data.Position.X, Data.Position.Y, _energy, EnergyMax);
     }
 
 

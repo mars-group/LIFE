@@ -43,7 +43,6 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      //TODO ACHTUNG! Entfernungsangaben der Agenten fehlerhaft (Reichweite bis über 18 statt 8). Umwelt schuld?
       var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
       new Executor(environment).Run(850);
     }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 using Environment = GenericAgentArchitecture.Dummies.Environment;
 
@@ -198,7 +198,7 @@ namespace AgentTester.Wolves.Agents {
           foreach (var agent in GetAllAgents()) {
               if (geometry.IsInRange(agent.Position) &&
                 agent.Position.GetDistance(geometry.GetPosition()) > float.Epsilon) {
-              map[agent.ID] = agent;
+              map[agent.Id] = agent;
             }
           }
           return map;

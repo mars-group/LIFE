@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
-using AgentTester.Wolves.Reasoning;
 using CommonTypes.DataTypes;
+using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
+using TVector = CommonTypes.DataTypes.Vector;
+
 
 namespace AgentTester.Wolves.Agents {
+  
   internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
+    
     private const int EnergyMax = 80;
     private readonly Random _random;
     private readonly Grassland _environment;
@@ -17,9 +21,9 @@ namespace AgentTester.Wolves.Agents {
     private string _states;
 
 
-    public Sheep(Grassland environment, string id) : base(id) {
+    public Sheep(long id, IESC esc, Grassland environment) : base(id, esc, null, new TVector(1,1), 2) {
       Position = new Vector(-1, -1); // We just need an object (coords set by env).
-      _random = new Random(ID.GetHashCode() + (int) DateTime.Now.Ticks);
+      _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;
       PerceptionUnit.AddSensor
         (new DataSensor
@@ -31,7 +35,6 @@ namespace AgentTester.Wolves.Agents {
         );
     }
 
-    #region IAgentLogic Members
 
     public IInteraction Reason() {
       // Energy substraction is made first. 
@@ -91,12 +94,20 @@ namespace AgentTester.Wolves.Agents {
       return CommonRCF.GetRandomMoveInteraction(_environment, this);
     }
 
-    #endregion
+
+    /// <summary>
+    ///   Print this sheep's ID, position and its internal states.
+    /// </summary>
+    /// <returns>Console output string.</returns>
+    public override string ToString() {
+      return String.Format(Id + " | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |" + _states,
+          Data.Position.X, Data.Position.Y, _energy, EnergyMax);
+    }
+
 
     //_____________________________________________________________________________________________
     // Implementation of interaction primitives. 
 
-    #region IEatInteractionSource Members
 
     /// <summary>
     ///   Increase the hitpoints of this agent.
@@ -107,9 +118,6 @@ namespace AgentTester.Wolves.Agents {
       if (_energy > EnergyMax) _energy = EnergyMax;
     }
 
-    #endregion
-
-    #region IEatInteractionTarget Members
 
     /// <summary>
     ///   Return the food value of this agent.
@@ -125,21 +133,6 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     public void RemoveAgent() {
       _environment.RemoveAgent(this);
-    }
-
-    #endregion
-
-    /// <summary>
-    ///   Print this sheep's ID, position and its internal states.
-    /// </summary>
-    /// <returns>Console output string.</returns>
-    public override string ToString() {
-      return String.Format
-        (ID + " | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |" + _states,
-          Position.X,
-          Position.Y,
-          _energy,
-          EnergyMax);
     }
   }
 }

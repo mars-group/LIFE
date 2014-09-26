@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\TestAgent2D.cs" />
-    <Compile Include="Tests\GridMovementTest.cs" />
     <Compile Include="Tests\ESCTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -11,8 +11,9 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class SpatialAgent : Agent {
 
-    protected readonly IESC Environment;   // IESC implementation for collision detection.
-    protected readonly MData Position;     // Container for position, direction and speeds.
+    private readonly IESC _environment;  // IESC implementation for collision detection.
+    protected readonly MData Data;       // Container for position, direction and speeds.
+    protected readonly AgentMover Mover; // Class for agent movement. 
 
 
     /// <summary>
@@ -25,12 +26,13 @@ namespace GenericAgentArchitecture.Agents {
     /// <param name="type">Type of agent. Needed for ESC reconnaissance.</param>
     /// <param name="phys">'True' if the agent is collidable.</param>
     protected SpatialAgent(long id, IESC esc, TVector pos, TVector dim, int type, bool phys = true) : base(id) {
-      Environment = esc;
-      Position = new MData(pos);
+      _environment = esc;
+      Data = new MData(pos);
+      Mover = null;
 
       // Enlist the agent and place it at its current position. 
-      Environment.Add((int) id, type, phys, dim);
-      Environment.SetPosition((int) id, pos, TVector.UnitVectorXAxis);
+      _environment.Add((int) id, type, phys, dim);
+      _environment.SetPosition((int) id, pos, TVector.UnitVectorXAxis);
     }
 
 
@@ -38,7 +40,16 @@ namespace GenericAgentArchitecture.Agents {
     ///   When the agent is destroyed, it is no longer physically present. Remove it from ESC!
     /// </summary>
     ~SpatialAgent () {
-      if (Environment != null) Environment.Remove((int) ID);
+      if (_environment != null) _environment.Remove((int) Id);
+    }
+
+
+    /// <summary>
+    ///   Returns the position of the agent.
+    /// </summary>
+    /// <returns>A position vector.</returns>
+    public Vector GetPosition() {
+      return new Vector(Data.Position.X, Data.Position.Y, Data.Position.Z);
     }
   }
 }

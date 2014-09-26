@@ -1,5 +1,4 @@
 ﻿using CommonTypes.DataTypes;
-using GenericAgentArchitecture.Dummies;
 using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Perception {

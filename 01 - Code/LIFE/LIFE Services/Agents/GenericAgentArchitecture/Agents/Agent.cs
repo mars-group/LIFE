@@ -11,7 +11,7 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class Agent : IAgent {
 
-    public readonly long ID;                           // Unique identifier.
+    public readonly long Id;                           // Unique identifier.
     public long Cycle { get; protected set; }          // The current execution cycle.   
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.     
@@ -23,7 +23,7 @@ namespace GenericAgentArchitecture.Agents {
     /// </summary>
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
     protected Agent(long id) {
-      ID = id;
+      Id = id;
       PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;    
     }
@@ -47,7 +47,7 @@ namespace GenericAgentArchitecture.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public new virtual string ToString() {
-      return "Agent: " + ID + "\t  Cycle: " + Cycle;
+      return "Agent: " + Id + "\t  Cycle: " + Cycle;
     }
   }
 }
