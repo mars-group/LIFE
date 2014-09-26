@@ -4,6 +4,7 @@
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=AS/@EntryIndexedValue">AS</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=ESC/@EntryIndexedValue">ESC</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=IAC/@EntryIndexedValue">IAC</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=MA/@EntryIndexedValue">MA</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=ML/@EntryIndexedValue">ML</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=RCF/@EntryIndexedValue">RCF</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=F82E3B6809F43941BC1F1980F4DDE110/AbsolutePath/@EntryValue">E:\SoftwareProjekte\LIFE\01 - Code\LIFE\MARS.DotSettings</s:String>

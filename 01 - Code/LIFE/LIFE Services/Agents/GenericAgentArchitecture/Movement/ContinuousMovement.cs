@@ -1,5 +1,5 @@
 ﻿using System;
-using ESCTestLayer.Interface;
+using GenericAgentArchitectureCommon.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
@@ -7,97 +7,42 @@ namespace GenericAgentArchitecture.Movement {
   /// <summary>
   ///   This class allows to set movement and turning speeds to control the agent.
   /// </summary>
-  public class ContinuousMovement : ML1 {
+  public class ContinuousMovement : AbstractMovement, IInteraction {
 
 
     /// <summary>
-    ///   Create a class for movement in a continuous environment.
-    /// </summary>
-    /// <param name="esc">IESC implemenation reference.</param>
-    /// <param name="escInit">Initialization data needed by ESC.</param>
-    /// <param name="pos">Agent's initial position.</param> 
-    /// <param name="dim">Agent's physical dimension.</param>
-    public ContinuousMovement(IESC esc, ESCInitData escInit, TVector pos, TVector dim) : base(esc, escInit, pos, dim) { }
-
-
-    /// <summary>
-    ///   Set a new movement speed.
+    ///   Create a movement action for continuous environments.
     /// </summary>
     /// <param name="speed">The new movement speed.</param>
-    public void SetMovementSpeed(float speed) {
-      Speed = speed;
+    /// <param name="pitch">New pitch [or vertical turning speed].</param>
+    /// <param name="yaw">New yaw [or horizontal turning speed].</param>
+    /// <param name="angSpd">If set, the pitch/yaw values are speeds (def.: false).</param>
+    public ContinuousMovement(float speed, float pitch, float yaw, bool angSpd = false) {     
+      if (angSpd) { // Calculate pitch and yaw (in case AS'es are not used, nothing happens here).
+        pitch = Data.Pitch + pitch*TickLength;
+        yaw = Data.Yaw + yaw*TickLength;
+      }      
+      Data.SetPitch(pitch);
+      Data.SetYaw(yaw);
+      Data.Speed = speed;
     }
 
 
-    /// <summary>
-    ///   Set a new vertical turning speed.
-    /// </summary>
-    /// <param name="pitchSpeed">The new lateral turning speed.</param>
-    public void SetPitchSpeed(float pitchSpeed) {
-      PitchAS = pitchSpeed;
-    }
 
+    public void Execute() {
 
-    /// <summary>
-    ///   Set a new horizontal turning speed.
-    /// </summary>
-    /// <param name="yawSpeed">The new rotary speed.</param>
-    public void SetYawSpeed(float yawSpeed) {
-      YawAS = yawSpeed;
-    }
+      // Determine target position based on calculated values.
+      var pitchRad = Data.Pitch*MovementServices.Deg2Rad;
+      var yawRad = Data.Yaw*MovementServices.Deg2Rad;
+      var factor = Data.Speed*TickLength;
+      var targetPos = new Vector(Data.Position.X, Data.Position.Y, Data.Position.Z);
+      targetPos.X += (float) (factor * Math.Cos(pitchRad) * Math.Cos(yawRad));
+      targetPos.Y += (float) (factor * Math.Cos(pitchRad) * Math.Sin(yawRad));
+      targetPos.Z += (float) (factor * Math.Sin(pitchRad));
+      TargetPos = targetPos;
 
-
-    /// <summary>
-    ///   This function automatically sets the yaw and pitch values to go to 
-    ///   the supplied point. It then executes movement with the given speed. 
-    /// </summary>
-    /// <param name="targetPos">A point the agent shall go to.</param>
-    /// <param name="speed">The agent's movement speed.</param>
-    public void MoveToPosition (TVector targetPos, float speed) {
-
-      // Check, if we are already there. Otherwise no need to move anyway.
-      var distance = VectorToStruct(Position).GetDistance(targetPos);
-      if (Math.Abs(distance) <= float.Epsilon) return;
-
-      // Pitch and yaw calculation.
-      var pitch = (float) Math.Asin((targetPos.Z-Position.Z) / distance) * 57.295779f;
-      var yaw = CalculateYawToTarget(targetPos);
-
-      // Check the speed. If we would go too far, reduce it accordingly.
-      if (distance < (speed*TickLength)) speed = distance/TickLength;
-  
-      // Save calculated values to base class and set movement speed.
-      base.SetPitch(pitch);
-      base.SetYaw(yaw);
-      SetMovementSpeed(speed);
-
-      // Disable turning speeds and execute movement.
-      PitchAS = 0f;
-      YawAS = 0f;
+      // Execute L0 call. 
       Move();
     }
-
-
-
-    // These functions are added for convenience. Actually, they do not belong here ...
-    #region 
-
-    /// <summary>
-    ///   Set the agent's pitch value [-90° ≤ pitch ≤ 90°].
-    /// </summary>
-    /// <param name="pitch">New pitch value.</param>
-    public new void SetPitch(float pitch) {
-      base.SetPitch(pitch);
-    }
-
-    /// <summary>
-    ///   Set the agent's orientation (compass heading, [0° ≤ yaw lt. 360°].
-    /// </summary>
-    /// <param name="yaw">New heading.</param>
-    public new void SetYaw(float yaw) {
-      base.SetYaw(yaw);
-    }
-
-    #endregion
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESCTestLayer.Interface;
+using GenericAgentArchitectureCommon.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
@@ -14,7 +15,7 @@ namespace GenericAgentArchitecture.Movement {
   /// <summary>
   ///   This class enables grid-style movement.
   /// </summary>
-  public class GridMovement : ML0 {
+  public class GridMovement : AbstractMovement, IInteraction {
     
     private const float Sqrt2 = 1.4142f;        // The square root of 2.
     private readonly bool _diagonalEnabled;     // This flag enables diagonal movement. 
@@ -148,6 +149,10 @@ namespace GenericAgentArchitecture.Movement {
         if (Diff < other.Diff) return -1;
         return Diff > other.Diff ? 1 : 0;
       }
+    }
+
+    public void Execute() {
+      throw new NotImplementedException();
     }
   }
 }

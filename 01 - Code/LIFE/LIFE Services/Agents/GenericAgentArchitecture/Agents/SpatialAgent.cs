@@ -11,10 +11,8 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class SpatialAgent : Agent {
 
-    public readonly IESC Environment;               // IESC implementation for collision detection.
-    public Vector Position { get; protected set; }  // The agent's center (current position). 
-    public float  Pitch    { get; protected set; }  // Direction (lateral axis).
-    public float  Yaw      { get; protected set; }  // Direction (vertical axis).
+    protected readonly IESC Environment;   // IESC implementation for collision detection.
+    protected readonly MData Position;     // Container for position, direction and speeds.
 
 
     /// <summary>
@@ -26,15 +24,13 @@ namespace GenericAgentArchitecture.Agents {
     /// <param name="dim">Agent's physical dimension.</param>
     /// <param name="type">Type of agent. Needed for ESC reconnaissance.</param>
     /// <param name="phys">'True' if the agent is collidable.</param>
-    protected SpatialAgent(long id, IESC esc, Float3 pos, Float3 dim, int type, bool phys = true) : base(id) {
+    protected SpatialAgent(long id, IESC esc, TVector pos, TVector dim, int type, bool phys = true) : base(id) {
       Environment = esc;
-      Position = new Vector(pos.X, pos.Y, pos.Z);
-      Pitch = 0.0f;  // Default facing is straight line northbound. 
-      Yaw = 0.0f;    // May be overwritten in specific constructor.
+      Position = new MData(pos);
 
       // Enlist the agent and place it at its current position. 
-      Environment.Add((int) id, type, phys, new TVector(dim.X, dim.Y, dim.Z));
-      Environment.SetPosition((int) id, new TVector(pos.X, pos.Y, pos.Z), TVector.UnitVectorXAxis);
+      Environment.Add((int) id, type, phys, dim);
+      Environment.SetPosition((int) id, pos, TVector.UnitVectorXAxis);
     }
 
 
@@ -44,13 +40,5 @@ namespace GenericAgentArchitecture.Agents {
     ~SpatialAgent () {
       if (Environment != null) Environment.Remove((int) ID);
     }
-  }
-
-
-  /// <summary>
-  ///   This structure just holds three floats.
-  /// </summary>
-  public struct Float3 {
-    public float X, Y, Z;
   }
 }

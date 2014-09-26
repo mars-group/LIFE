@@ -47,11 +47,13 @@
     <Compile Include="Interactions\Plan.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
     <Compile Include="Movement\AbstractMovement.cs" />
+    <Compile Include="Movement\MovementServices.cs" />
     <Compile Include="Movement\ML0.cs" />
     <Compile Include="Movement\ContinuousMovement.cs" />
     <Compile Include="Movement\DirectMovement.cs" />
     <Compile Include="Movement\GridMovement.cs" />
     <Compile Include="Movement\ML1.cs" />
+    <Compile Include="Movement\MData.cs" />
     <Compile Include="Movement\Vector.cs" />
     <Compile Include="Perception\CommunicationSensor.cs" />
     <Compile Include="Perception\DataSensor.cs" />

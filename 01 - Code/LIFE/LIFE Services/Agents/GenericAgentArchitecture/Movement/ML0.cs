@@ -28,7 +28,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="dim">Agent's physical dimension.</param>
     protected ML0 (IESC esc, ESCInitData escInit, TVector pos, TVector dim) {
       _esc = esc;
-      _agentId = escInit.AgentID;
+      _agentId = escInit.AgentId;
 
       // Initialization with original position, facing northbound.
       Position  = new Vector(pos.X, pos.Y, pos.Z);
@@ -139,7 +139,7 @@ namespace GenericAgentArchitecture.Movement {
   ///   It is passed through from movement module creation down to ML0.
   /// </summary>
   public struct ESCInitData {
-    public int AgentID;
+    public int AgentId;
     public int AgentType;
     public bool IsCollidable;
   };
