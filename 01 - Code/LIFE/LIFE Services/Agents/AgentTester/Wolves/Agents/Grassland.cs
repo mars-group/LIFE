@@ -4,7 +4,7 @@ using System.Linq;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
-using Environment = GenericAgentArchitecture.Dummies.Environment;
+using Environment = GenericAgentArchitecture.Movement.Environment;
 
 namespace AgentTester.Wolves.Agents {
   internal class Grassland : Environment, IGenericDataSource {

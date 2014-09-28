@@ -42,18 +42,20 @@
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Agents\SpatialAgent.cs" />
-    <Compile Include="Dummies\Environment.cs" />
-    <Compile Include="Dummies\MessageServer.cs" />
+    <Compile Include="Movement\Environment.cs" />
+    <Compile Include="Interactions\MessageServer.cs" />
     <Compile Include="Interactions\Plan.cs" />
     <Compile Include="Interfaces\ICallbackDataSource.cs" />
     <Compile Include="Movement\AgentMover.cs" />
     <Compile Include="Movement\ContinuousMover.cs" />
     <Compile Include="Movement\Direction.cs" />
     <Compile Include="Movement\DirectMover.cs" />
+    <Compile Include="Movement\ESCAdapter.cs" />
     <Compile Include="Movement\GridMover.cs" />
     <Compile Include="Movement\ContinuousMovementAction.cs" />
     <Compile Include="Movement\DirectMovementAction.cs" />
     <Compile Include="Movement\GridMovementAction.cs" />
+    <Compile Include="Movement\IEnvironment.cs" />
     <Compile Include="Movement\MData.cs" />
     <Compile Include="Movement\Vector.cs" />
     <Compile Include="Perception\CommunicationSensor.cs" />

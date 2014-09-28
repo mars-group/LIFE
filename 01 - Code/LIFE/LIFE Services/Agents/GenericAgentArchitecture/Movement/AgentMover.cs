@@ -16,8 +16,8 @@ namespace GenericAgentArchitecture.Movement {
     protected Vector TargetPos;    // Target position to acquire. May be set or calculated.
     protected Direction TargetDir; // Desired heading.
 
-    public const float Sqrt2   = 1.4142f;        // The square root of 2.
-    public static float TickLength = 1.0f;       // Timelength of a simulation tick.
+    public const float Sqrt2   = 1.4142f;    // The square root of 2.
+    public static float TickLength = 1.0f;   // Timelength of a simulation tick.
 
 
     /// <summary>

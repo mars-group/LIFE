@@ -8,9 +8,9 @@ namespace GenericAgentArchitecture.Movement {
   public class MData {
     
     public readonly Vector Position;       // The agent's current position.
+    public readonly Vector Dimension;      // The physical dimension.
     public readonly Direction Direction;   // Pitch and yaw values.
-
-
+    
     /// <summary>
     ///   Create a new spatial data set.
     /// </summary>

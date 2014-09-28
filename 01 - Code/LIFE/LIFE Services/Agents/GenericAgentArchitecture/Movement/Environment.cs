@@ -4,17 +4,17 @@ using System.Collections.ObjectModel;
 using GenericAgentArchitecture.Agents;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Dummies {
+namespace GenericAgentArchitecture.Movement {
   
   /// <summary>
   ///   Base class for an environment. This is an agent container with several access options.
   /// </summary>
   public abstract class Environment : ITickClient {
 
-    protected readonly List<Agent> Agents;     // The agents living in this environment.
-    protected long Cycle { get; private set; } // Counter for execution cycle.
-    public bool PrintInformation { get; set; } // Controls debug information output.
-    public bool RandomExecution { get; set; }  // Flag to set random or sequential execution. 
+    protected readonly List<Agent> Agents;      // The agents living in this environment.
+    protected long Cycle { get; private set; }  // Counter for execution cycle.
+    public bool PrintInformation { get; set; }  // Controls debug information output.
+    public bool RandomExecution  { get; set; }  // Flag to set random or sequential execution. 
 
 
     /// <summary>

@@ -1,5 +1,4 @@
-﻿using ESCTestLayer.Interface;
-using GenericAgentArchitecture.Movement;
+﻿using GenericAgentArchitecture.Movement;
 using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Agents {
@@ -11,7 +10,7 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class SpatialAgent : Agent {
 
-    private readonly IESC _environment;  // IESC implementation for collision detection.
+    private readonly IEnvironment _env;  // IESC implementation for collision detection.
     protected readonly MData Data;       // Container for position, direction and speeds.
     protected readonly AgentMover Mover; // Class for agent movement. 
 
@@ -20,19 +19,16 @@ namespace GenericAgentArchitecture.Agents {
     ///   Instantiate a new agent with spatial data. Only available for specializations.
     /// </summary>
     /// <param name="id">Unique agent identifier.</param>
-    /// <param name="esc">IESC implemenation reference.</param>
+    /// <param name="esc">Environment implementation reference.</param>
     /// <param name="pos">The initial position.</param>
     /// <param name="dim">Agent's physical dimension.</param>
     /// <param name="type">Type of agent. Needed for ESC reconnaissance.</param>
     /// <param name="phys">'True' if the agent is collidable.</param>
-    protected SpatialAgent(long id, IESC esc, TVector pos, TVector dim, int type, bool phys = true) : base(id) {
-      _environment = esc;
+    protected SpatialAgent(long id, IEnvironment esc, TVector pos, TVector dim, int type, bool phys = true) : base(id) {
+      _env = esc;
       Data = new MData(pos);
-      Mover = null;
-
-      // Enlist the agent and place it at its current position. 
-      _environment.Add((int) id, type, phys, dim);
-      _environment.SetPosition((int) id, pos, TVector.UnitVectorXAxis);
+      Mover = null;   
+      _env.AddAgent(this, Data); // Enlist the agent in environment.
     }
 
 
@@ -40,7 +36,7 @@ namespace GenericAgentArchitecture.Agents {
     ///   When the agent is destroyed, it is no longer physically present. Remove it from ESC!
     /// </summary>
     ~SpatialAgent () {
-      if (_environment != null) _environment.Remove((int) Id);
+      if (_env != null) _env.RemoveAgent(this);
     }
 
 
@@ -50,6 +46,24 @@ namespace GenericAgentArchitecture.Agents {
     /// <returns>A position vector.</returns>
     public Vector GetPosition() {
       return new Vector(Data.Position.X, Data.Position.Y, Data.Position.Z);
+    }
+
+
+    /// <summary>
+    ///   Returns the agent's heading.
+    /// </summary>
+    /// <returns>A direction vector.</returns>
+    public Vector GetDirection() {
+      return Data.Direction.GetDirectionalVector();
+    }
+
+
+    /// <summary>
+    ///   Returns the dimension of an agent.
+    /// </summary>
+    /// <returns>A vector representing the bounding box around an agent.</returns>
+    public Vector GetDimension() {
+      return new Vector(Data.Dimension.X, Data.Dimension.Y, Data.Dimension.Z);
     }
   }
 }
