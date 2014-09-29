@@ -9,9 +9,9 @@ namespace GenericAgentArchitecture.Movement {
   /// </summary>
   public abstract class AgentMover {
 
-    private readonly IESC _esc;    // ESC interface for collision detection.
-    private readonly int _id;      // Agent identifier, needed for ESC registration.
-    protected readonly MData Data; // The agent's movement data container.
+    private readonly IEnvironment _env; // Environment interaction interface.
+    private readonly int _id;           // Agent identifier, needed for ESC registration.
+    protected readonly MData Data;      // The agent's movement data container.
     
     protected Vector TargetPos;    // Target position to acquire. May be set or calculated.
     protected Direction TargetDir; // Desired heading.
@@ -23,11 +23,11 @@ namespace GenericAgentArchitecture.Movement {
     /// <summary>
     ///   Instantiate a new base L0 class. Only available for specializations.
     /// </summary>
-    /// <param name="esc">IESC implemenation reference.</param>
+    /// <param name="env">Environment interaction interface.</param>
     /// <param name="id">Agent identifier, needed by ESC.</param>
     /// <param name="data">Container with spatial base data.</param>
-    protected AgentMover(IESC esc, int id, MData data) {
-      _esc = esc;
+    protected AgentMover(IEnvironment env, int id, MData data) {
+      _env = env;
       _id = id;
       Data = data;
     }

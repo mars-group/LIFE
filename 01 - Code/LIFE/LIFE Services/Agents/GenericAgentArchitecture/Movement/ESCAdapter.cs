@@ -66,6 +66,8 @@ namespace GenericAgentArchitecture.Movement {
       _agents[agent].Position.Y = ret.Position.Y;
       _agents[agent].Position.Z = ret.Position.Z;
       //TODO Direction und Wahrnehmungsobjekt übernehmen!!
+      _agents[agent].Direction.SetPitch(direction.Pitch);
+      _agents[agent].Direction.SetYaw(direction.Yaw);
     }
   }
 }
