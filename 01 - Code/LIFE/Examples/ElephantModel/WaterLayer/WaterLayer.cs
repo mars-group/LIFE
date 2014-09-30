@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaterLayer
 {
-    public class Class1
+    class WaterLayer
     {
     }
 }

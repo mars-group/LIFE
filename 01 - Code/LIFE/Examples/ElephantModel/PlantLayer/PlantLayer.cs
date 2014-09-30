@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElephantLayer
+namespace PlantLayer
 {
-    public class Class1
+    class PlantLayer
     {
     }
 }
