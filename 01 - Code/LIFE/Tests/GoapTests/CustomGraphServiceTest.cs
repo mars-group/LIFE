@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using GoapCommon.Abstract;
+﻿using System.Collections.Generic;
 using GoapCommon.Interfaces;
 using GoapGraphConnector.CustomGraph;
-using GoapModelTest.Actions;
 using GoapModelTest.Worldstates;
 using NUnit.Framework;
 
 namespace GoapTests {
     [TestFixture]
     internal class CustomGraphServiceTest {
-
         #region Setup/Teardown
 
         [SetUp]
         protected void SetUp() {
-            _graph = new Graph(new List<IGoapVertex> {V5}, new List<IGoapEdge>());
+            _graph = new Graph(new List<IGoapNode> {V5}, new List<IGoapEdge>());
             _graphService = new GoapCustomGraphService();
-         }
+        }
 
         #endregion
 
@@ -36,8 +32,8 @@ namespace GoapTests {
         private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate> {ToyTrue}, 1, "v4_toy_true");
         private static readonly Vertex V5 = new Vertex(new List<IGoapWorldstate> {ToyFalse}, 1, "v5_toy_false");
 
-     
-       [Test]
+
+        [Test]
         public void ParallelEdgesTest() {
             Edge e1 = new Edge(1, V5, V2);
             Edge e2 = new Edge(1, V5, V2);
@@ -46,7 +42,7 @@ namespace GoapTests {
             _graph.AddEdge(e2);
 
             List<IGoapEdge> edges = _graph.GetEdges();
-            
+
             Assert.AreNotSame(edges[0], edges[1]);
             Assert.True(edges[0].GetSource().Equals(edges[1].GetSource()));
             Assert.True(edges[0].GetTarget().Equals(edges[1].GetTarget()));
@@ -61,12 +57,12 @@ namespace GoapTests {
             _graph.AddEdge(e2);
 
             List<IGoapEdge> edges = _graph.GetEdges();
-            
+
             Assert.AreNotSame(edges[0], edges[1]);
             Assert.True(edges[0].GetSource().Equals(edges[1].GetTarget()));
             Assert.True(edges[0].GetTarget().Equals(edges[1].GetSource()));
         }
-        
+
         [Test]
         public void RealizeVertexEqualityTest() {
             Edge e1 = new Edge(1, V5, V2);
@@ -75,14 +71,14 @@ namespace GoapTests {
             _graph.AddEdge(e1);
             _graph.AddEdge(e2);
 
-            List<IGoapVertex> nodes = _graph.GetVertices();
+            List<IGoapNode> nodes = _graph.GetVertices();
             Assert.True(V2.Equals(V3));
             Assert.True(nodes.Count == 2);
         }
 
         [Test]
         public void IsGraphEmptyTest() {
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>() );
+            _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>());
             Assert.False(_graphService.IsGraphEmpty());
         }
 
@@ -91,8 +87,9 @@ namespace GoapTests {
             _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>());
             Assert.AreEqual(new Vertex(new List<IGoapWorldstate>()), _graphService.GetNextVertexFromOpenList());
 
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate>{HappyFalse1}, new List<IGoapWorldstate>());
-            Assert.AreEqual(new Vertex(new List<IGoapWorldstate> { HappyFalse1 }), _graphService.GetNextVertexFromOpenList());
+            _graphService.InitializeGoapGraph(new List<IGoapWorldstate> {HappyFalse1}, new List<IGoapWorldstate>());
+            Assert.AreEqual
+                (new Vertex(new List<IGoapWorldstate> {HappyFalse1}), _graphService.GetNextVertexFromOpenList());
         }
 
         [Test]
@@ -106,15 +103,19 @@ namespace GoapTests {
             _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>());
             Assert.True(_graphService.IsCurrentVertexTarget());
 
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate> { HappyFalse1 }, new List<IGoapWorldstate> { HappyFalse1 });
+            _graphService.InitializeGoapGraph
+                (new List<IGoapWorldstate> {HappyFalse1}, new List<IGoapWorldstate> {HappyFalse1});
             Assert.True(_graphService.IsCurrentVertexTarget());
 
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate> { HappyFalse2 }, new List<IGoapWorldstate> { HappyFalse1 });
+            _graphService.InitializeGoapGraph
+                (new List<IGoapWorldstate> {HappyFalse2}, new List<IGoapWorldstate> {HappyFalse1});
             Assert.True(_graphService.IsCurrentVertexTarget());
 
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate> { HappyFalse2, ToyTrue }, new List<IGoapWorldstate> { HappyFalse2 });
+            _graphService.InitializeGoapGraph
+                (new List<IGoapWorldstate> {HappyFalse2, ToyTrue}, new List<IGoapWorldstate> {HappyFalse2});
             Assert.True(_graphService.IsCurrentVertexTarget());
         }
+
         /*
         [Test]
         public void GetShortestPathTest() {
@@ -132,7 +133,7 @@ namespace GoapTests {
         }*/
 
         [Test]
-        public void GetEdgeFromAbstractGoapActionTest(){
+        public void GetEdgeFromAbstractGoapActionTest() {
             /*
             IGoapEdge e1 = _graphService.GetEdgeFromAbstractGoapAction(new ActionPlay(), V1.Worldstate());
             Assert.AreEqual(e1.GetSource(),V1);
@@ -146,11 +147,11 @@ namespace GoapTests {
             Assert.AreEqual(e3.GetSource(), V3);
             Assert.AreNotSame(e3.GetSource(), V3);
             */
-        } 
-        
+        }
+
         [Test]
         public void GetEdgeFromPreconditionsTest() {
-           /*
+            /*
             AbstractGoapAction a1 = new ActionPlay();
             AbstractGoapAction a2 = new ActionGetToy();
             AbstractGoapAction a3 = new ActionClean();
@@ -163,7 +164,5 @@ namespace GoapTests {
             return new Edge(action.GetExecutionCosts(), start, target);
             */
         }
-        
-        
     }
 }

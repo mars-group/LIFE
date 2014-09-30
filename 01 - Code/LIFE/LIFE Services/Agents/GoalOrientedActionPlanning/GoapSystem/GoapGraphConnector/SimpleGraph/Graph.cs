@@ -4,7 +4,7 @@ using System.Linq;
 using GoapCommon.Exceptions;
 using GoapCommon.Interfaces;
 
-namespace GoapGraphConnector.CustomGraph {
+namespace GoapGraphConnector.SimpleGraph {
     public class Graph {
         private List<IGoapNode> _vertices;
         private List<IGoapEdge> _edges;

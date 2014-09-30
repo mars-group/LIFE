@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using GoapCommon.Abstract;
-using GoapCommon.Interfaces;
+﻿using GoapCommon.Interfaces;
 
-namespace GoapGraphConnector.CustomGraph {
+namespace GoapGraphConnector.SimpleGraph {
     public class Edge : IGoapEdge {
         private readonly IGoapNode _source;
         private readonly IGoapNode _target;

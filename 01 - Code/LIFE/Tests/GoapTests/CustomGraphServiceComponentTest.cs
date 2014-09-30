@@ -1,6 +1,5 @@
 ﻿using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
-using GoapGraphConnector.CustomGraph;
 using GoapModelTest.Actions;
 using GoapModelTest.Goals;
 using GoapModelTest.Worldstates;

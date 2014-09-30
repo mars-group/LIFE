@@ -3,7 +3,7 @@ using System.Linq;
 using GoapCommon.Exceptions;
 using GoapCommon.Interfaces;
 
-namespace GoapGraphConnector.CustomGraph {
+namespace GoapGraphConnector.SimpleGraph {
     /// <summary>
     ///     tasks are creating the management table of vertices, recalculating the entrys, add vertices to list, check for
     ///     reaching target. Condition for correct work is a graph with positiv edge weights.

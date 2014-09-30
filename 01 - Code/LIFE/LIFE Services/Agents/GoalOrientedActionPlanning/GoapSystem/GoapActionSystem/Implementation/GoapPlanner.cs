@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
-using GoapGraphConnector.CustomGraph;
+using GoapGraphConnector.SimpleGraph;
 
 namespace GoapActionSystem.Implementation {
     /// <summary>
@@ -39,7 +39,8 @@ namespace GoapActionSystem.Implementation {
         /// <returns></returns>
         private IGoapGraphService InitializeGraphService(List<IGoapWorldstate> graphRoot,
             List<IGoapWorldstate> graphTarget) {
-            var graphService = new GoapCustomGraphService();
+            //var graphService = new GoapCustomGraphService();
+            var graphService = new GoapSimpleGraphService();
             graphService.InitializeGoapGraph(graphRoot, graphTarget);
             return graphService;
         }
@@ -86,7 +87,7 @@ namespace GoapActionSystem.Implementation {
              
              wenn kein weg  mehr günstiger ist als der bisherige weg zum ziel fertig
              */
-            IGoapVertex currentGoapVertex = graphService.GetNextVertexFromOpenList();
+            IGoapNode currentGoapVertex = graphService.GetNextVertexFromOpenList();
 
             while (currentGoapVertex != null &&
                    !IsCurrentVertexSubsetOfTarget(currentGoapVertex.Worldstate(), graphTarget) &&

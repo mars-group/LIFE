@@ -28,7 +28,7 @@ namespace GoapCommon.Interfaces
         ///     get the next Vertex, which will be inspected by the algorithm
         /// </summary>
         /// <returns>IGoapVertex</returns>
-        IGoapVertex GetNextVertexFromOpenList();
+        IGoapNode GetNextVertexFromOpenList();
 
         /// <summary>
         ///     check if there is a vertex in white list
