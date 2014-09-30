@@ -13,6 +13,12 @@ namespace WaterLayer
 {
     class WaterLayer : ISteppedLayer
     {
+        public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+            throw new NotImplementedException();
+        }
 
+        public long GetCurrentTick() {
+            throw new NotImplementedException();
+        }
     }
 }

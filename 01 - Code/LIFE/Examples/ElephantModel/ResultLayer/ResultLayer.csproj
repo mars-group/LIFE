@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSharpQuadTree">
+      <HintPath>..\..\..\Libraries\CSharpQuadTree\CSharpQuadTree.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
@@ -40,6 +43,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

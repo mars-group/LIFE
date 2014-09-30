@@ -27,6 +27,11 @@ namespace PlantLayer
             var x = new QuadTree<Plant>(new Size(5, 5), 2);
             return true;
         }
+
+        public long GetCurrentTick() {
+            throw new NotImplementedException();
+        }
+
         void stomp (int x, int y, double force)
         {
 

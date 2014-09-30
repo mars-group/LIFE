@@ -1,7 +1,6 @@
 ﻿using CSharpQuadTree;
 using LayerAPI.Interfaces;
 using Mono.Addins;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +15,26 @@ namespace PlantLayer.Agents
         {
             Health = 100;
         }
-        public int getHealth()
+        public int GetHealth()
         {
             return Health;
+        }
+
+        public void SubHealth(int x) 
+        {
+            
         }
         public void Tick()
         {
 
         }
+
+
+        public System.Windows.Rect Bounds
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public event System.EventHandler BoundsChanged;
     }
 }
