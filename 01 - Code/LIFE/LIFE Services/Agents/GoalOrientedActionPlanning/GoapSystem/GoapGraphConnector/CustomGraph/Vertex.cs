@@ -32,7 +32,7 @@ namespace GoapGraphConnector.CustomGraph {
             return _name;
         }
 
-        List<IGoapWorldstate> IGoapVertex.Worldstate() {
+        public List<IGoapWorldstate> Worldstate() {
             return _worldstate;
         }
 

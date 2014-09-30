@@ -62,5 +62,9 @@ namespace GoapCommon.Interfaces
         List<AbstractGoapAction> GetShortestPath();
 
         int GetActualDepthFromRoot();
+
+        IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldstate> currentState);
+
+        IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldstate> currentState);
     }
 }

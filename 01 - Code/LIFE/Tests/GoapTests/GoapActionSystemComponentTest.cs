@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace GoapTests {
     [TestFixture]
-    public class GoapModelTest {
+    public class GoapActionSystemComponentTest {
         #region Setup/Teardown
 
         [SetUp]

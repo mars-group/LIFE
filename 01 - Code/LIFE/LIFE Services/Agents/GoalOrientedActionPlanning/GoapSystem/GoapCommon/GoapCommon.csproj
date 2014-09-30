@@ -49,7 +49,7 @@
     <Compile Include="Interfaces\IGoapGoal.cs" />
     <Compile Include="Interfaces\IGoapAction.cs" />
     <Compile Include="Interfaces\IGoapEdge.cs" />
-    <Compile Include="Interfaces\IGoapGraph.cs" />
+    <Compile Include="Interfaces\IGoapGraphService.cs" />
     <Compile Include="Interfaces\IGoapVertex.cs" />
     <Compile Include="Interfaces\IGoapWorldstate.cs" />
     <Compile Include="Interfaces\IGoapPlanner.cs" />

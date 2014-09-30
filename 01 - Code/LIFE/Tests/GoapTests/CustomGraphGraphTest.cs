@@ -108,6 +108,10 @@ namespace GoapTests {
             Assert.Contains(e3, edgeList);
             Assert.Contains(e4, edgeList);
 
+            edgeList = _emptyGraph.GetEdgesBySourceAndTarget(V5, V4);
+            Assert.IsEmpty(edgeList);
+
+
             Assert.AreEqual(e3, _emptyGraph.GetCheapestEdgeBySourceAndTarget(V1, V4));
         }
 
