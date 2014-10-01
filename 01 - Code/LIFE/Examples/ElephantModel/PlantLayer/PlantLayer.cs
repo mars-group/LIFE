@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace PlantLayer
 {
-    class PlantLayer : ISteppedLayer
+    public class PlantLayer : ISteppedLayer
     {
 		private ITwoDimEnvironment<Plant> environment;
 		private List<Plant> _plants;

@@ -6,16 +6,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Size = System.Windows.Size;
+using PlantLayer;
+using WaterLayer;
+using ElephantLayer;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
 
 namespace ResultLayer
 {
-    class ResultLayer : ISteppedLayer
+    public class ResultLayer : ISteppedLayer
     {
+		private ElephantLayer _elephantLayer;
+		private PlantLayer _plantLayer;
+		private WaterLayer _waterLayer;
+
+		public ResultLayer(ElephantLayer elephantLayer, PlantLayer plantLayer, WaterLayer waterlayer){
+			_elephantLayer = elephantLayer;
+			_plantLayer = plantLayer;
+			_waterLayer = waterlayer;
+		}
+
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-            throw new NotImplementedException();
+            
         }
 
         public long GetCurrentTick() {

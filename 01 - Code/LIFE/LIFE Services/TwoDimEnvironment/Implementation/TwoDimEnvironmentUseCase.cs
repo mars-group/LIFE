@@ -15,11 +15,6 @@ namespace TwoDimEnvironment
 			_quadTree = new QuadTree<T> (new Size (25, 25), 1);
 		}
 
-		public TwoDimEnvironmentUseCase ()
-		{
-			_quadTree = new QuadTree<T> (new Size (25, 25), 1);
-		}
-
 		#region ITwoDimEnvironment implementation
 
 		public void Add (T item)

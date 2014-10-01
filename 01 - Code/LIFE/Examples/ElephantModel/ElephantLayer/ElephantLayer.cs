@@ -7,7 +7,7 @@ using Mono.Addins;
 
 namespace ElephantLayer
 {
-    class ElephantLayer : ISteppedLayer
+    public class ElephantLayer : ISteppedLayer
     {
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             throw new NotImplementedException();
