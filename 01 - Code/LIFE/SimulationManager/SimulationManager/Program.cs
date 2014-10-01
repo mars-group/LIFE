@@ -28,18 +28,26 @@ namespace SimulationManager {
 			Console.WriteLine("Please input the number before the model that will be run.");
 
 			// listing all available models
-			var i = 1;
+			var i = 0;
 			foreach (var modelDescription in core.GetAllModels()) {
+                i++;
 				Console.Write(i + ": ");
 				Console.WriteLine(modelDescription.Name);
-				i++;
-			}
+	        }
 
+		    int nr = 0;
 			// read selected model number from console and start it
-			int nr = int.Parse(Console.ReadLine()) - 1;
-			Console.WriteLine("For how many steps is the simukation supposed to run?");
-			int ticks = int.Parse(Console.ReadLine());
-			core.StartSimulationWithModel(core.GetAllModels().ToList()[nr], ticks);
+			nr = int.Parse(Console.ReadLine()) - 1;
+
+            while (!Enumerable.Range(0,i).Contains(nr)){
+		        Console.WriteLine("Please input an existing model number.");
+                nr = int.Parse(Console.ReadLine()) - 1;
+		    }
+            
+            Console.WriteLine("For how many steps is the simukation supposed to run?");
+                int ticks = int.Parse(Console.ReadLine());
+                core.StartSimulationWithModel(core.GetAllModels().ToList()[nr], ticks);
+            
 		}
 
 		/// <summary>
