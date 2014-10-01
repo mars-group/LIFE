@@ -41,11 +41,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WaterLayer.cs" />
     <Compile Include="Agents\Waterhole.cs" />
+    <Compile Include="TransportTypes\TWaterhole.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
@@ -71,5 +73,6 @@
   -->
   <ItemGroup>
     <Folder Include="Agents\" />
+    <Folder Include="TransportTypes\" />
   </ItemGroup>
 </Project>

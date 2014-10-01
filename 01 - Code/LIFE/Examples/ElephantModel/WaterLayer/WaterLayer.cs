@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwoDimEnvironment;
-using System.Drawing;
+using System.Windows;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -30,6 +30,22 @@ namespace WaterLayer
 
 			return true;
         }
+
+		List<TWaterhole> getAllWaterholes()
+		{
+			var allWaterholes = environment.GetAll ();
+			var result = new List<TWaterhole> ();
+			allWaterholes.ForEach (w => result.Add(new TWaterhole(w)));
+			return result;
+		}
+
+		List<Rect> Probe(double x, double y, double distance){
+			var holes = environment.Find(new Rect(x,y,distance,distance));
+			var result = new List<TWaterhole> ();
+			holes.ForEach (h => result.Add (new TWaterhole(h)));
+			return result;
+		}
+
 
         public long GetCurrentTick() {
             throw new NotImplementedException();

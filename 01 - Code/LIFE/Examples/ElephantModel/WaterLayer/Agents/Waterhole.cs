@@ -1,6 +1,7 @@
 ﻿using System;
 using CSharpQuadTree;
 using LayerAPI.Interfaces;
+using System.Windows;
 
 namespace WaterLayer
 {
@@ -8,9 +9,12 @@ namespace WaterLayer
 	{
 		private double _capacity;
 
-		public Waterhole ()
+		public Waterhole (double x, double y, Size size)
 		{
 			_capacity = 100.0;
+			Bounds.X = x;
+			Bounds.Y = y;
+			Bounds.Size = size;
 		}
 
 		public double Capacity { get { return _capacity; } }
@@ -32,6 +36,17 @@ namespace WaterLayer
 		{
 			// just reset for now, infinite waterhole
 			_capacity = 100;
+		}
+
+		#endregion
+
+		#region IQuadObject implementation
+
+		public event EventHandler BoundsChanged;
+
+		public System.Windows.Rect Bounds {
+			get ;
+			private set;
 		}
 
 		#endregion
