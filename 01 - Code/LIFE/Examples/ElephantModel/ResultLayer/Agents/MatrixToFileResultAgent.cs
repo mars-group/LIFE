@@ -1,16 +1,20 @@
 ﻿using System;
 using LayerAPI.Interfaces;
 using System.IO;
+using PlantLayer;
+using WaterLayer;
+using ElephantLayer;
+using System.Text;
 
 namespace ResultLayer
 {
 	public class MatrixToFileResultAgent  : IAgent
 	{
-		private ElephantLayer _elephantLayer;
-		private PlantLayer _plantLayer;
-		private WaterLayer _waterLayer;
+		private ElephantLayerImpl _elephantLayer;
+		private PlantLayerImpl _plantLayer;
+		private WaterLayerImpl _waterLayer;
 
-		public MatrixToFileResultAgent(ElephantLayer elephantLayer, PlantLayer plantLayer, WaterLayer waterlayer){
+		public MatrixToFileResultAgent(ElephantLayerImpl elephantLayer, PlantLayerImpl plantLayer, WaterLayerImpl waterlayer){
 			_elephantLayer = elephantLayer;
 			_plantLayer = plantLayer;
 			_waterLayer = waterlayer;
@@ -20,7 +24,14 @@ namespace ResultLayer
 
 		public void Tick ()
 		{
+			// WriteOut Matrix for plant layer
+			var plants = _plantLayer.GetAllPlants();
 
+			var stb = new StringBuilder ();
+
+			plants.ForEach(plant => {
+				stb.Append(plant.GetHealth);
+			});
 		}
 
 		#endregion

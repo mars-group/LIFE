@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace WaterLayer
 {
-    public class WaterLayer : ISteppedLayer
+    public class WaterLayerImpl : ISteppedLayer
     {
 		private ITwoDimEnvironment<Waterhole> environment;
 
@@ -31,7 +31,7 @@ namespace WaterLayer
 			return true;
         }
 
-		List<TWaterhole> getAllWaterholes()
+		public List<TWaterhole> getAllWaterholes()
 		{
 			var allWaterholes = environment.GetAll ();
 			var result = new List<TWaterhole> ();
@@ -39,7 +39,7 @@ namespace WaterLayer
 			return result;
 		}
 
-		List<Rect> Probe(double x, double y, double distance){
+		public List<TWaterhole> Probe(double x, double y, double distance){
 			var holes = environment.Find(new Rect(x,y,distance,distance));
 			var result = new List<TWaterhole> ();
 			holes.ForEach (h => result.Add (new TWaterhole(h)));

@@ -12,9 +12,7 @@ namespace WaterLayer
 		public Waterhole (double x, double y, Size size)
 		{
 			_capacity = 100.0;
-			Bounds.X = x;
-			Bounds.Y = y;
-			Bounds.Size = size;
+			Bounds = new Rect (x, y, size.Width, size.Height);
 		}
 
 		public double Capacity { get { return _capacity; } }
@@ -46,7 +44,7 @@ namespace WaterLayer
 
 		public System.Windows.Rect Bounds {
 			get ;
-			private set;
+			set;
 		}
 
 		#endregion

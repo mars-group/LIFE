@@ -14,12 +14,12 @@ using System.Windows;
 
 namespace PlantLayer
 {
-    public class PlantLayer : ISteppedLayer
+    public class PlantLayerImpl : ISteppedLayer
     {
 		private ITwoDimEnvironment<Plant> environment;
 		private List<Plant> _plants;
 
-        public PlantLayer()
+        public PlantLayerImpl()
         {
 
         }
@@ -58,7 +58,7 @@ namespace PlantLayer
 			}
         }
 
-        List<TPlant> getAllPlants()
+        public List<TPlant> GetAllPlants()
         {
 			var allPlants = environment.GetAll ();
 			var result = new List<TPlant> ();

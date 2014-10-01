@@ -14,8 +14,8 @@ namespace WaterLayer
 			_bounds = w.Bounds;
 		}
 
-		public double Capacity { get; }
-		public Rect Bounds { get; }
+		public double Capacity { get; private set; }
+		public Rect Bounds { get; private set;}
 	}
 }
 

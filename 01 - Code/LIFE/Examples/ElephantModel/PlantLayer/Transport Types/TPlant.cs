@@ -10,7 +10,7 @@ namespace PlantLayer
 {
     public class TPlant
     {
-		private float _health;
+		private double _health;
 		private Rect _bounds;
 
         public TPlant(Plant p)
@@ -19,7 +19,7 @@ namespace PlantLayer
 			_bounds = p.Bounds;
         }
 
-		public float GetHealth(){
+		public double GetHealth(){
 			return _health;
 		}
 

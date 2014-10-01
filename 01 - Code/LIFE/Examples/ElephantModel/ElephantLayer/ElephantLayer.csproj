@@ -42,8 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ElephantLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ElephantLayerImpl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
