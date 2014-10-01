@@ -6,10 +6,10 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
     public class Graph {
-        private List<IGoapVertex> _vertices;
+        private List<IGoapNode> _vertices;
         private List<IGoapEdge> _edges;
 
-        public List<IGoapVertex> GetVertices() {
+        public List<IGoapNode> GetVertices() {
             return _vertices;
         }
 
@@ -17,17 +17,31 @@ namespace GoapGraphConnector.CustomGraph {
             return _edges;
         }
 
-        public Graph(List<IGoapVertex> vertices, List<IGoapEdge> edges) {
+        public Graph(List<IGoapNode> vertices, List<IGoapEdge> edges) {
             _vertices = vertices;
             _edges = edges;
         }
 
         public void AddEdge(IGoapEdge edge) {
+            MaintainConsistence(edge);
             _edges.Add(edge);
         }
 
-        public void AddVertex(IGoapVertex vertex) {
+        private void MaintainConsistence(IGoapEdge addedEdge) {
+            if (!ContainsVertex(addedEdge.GetSource())) {
+                AddVertex(addedEdge.GetSource());
+            }
+            if (!ContainsVertex(addedEdge.GetTarget())) {
+                AddVertex(addedEdge.GetTarget());
+            }
+        }
+
+        public void AddVertex(IGoapNode vertex) {
             if(!_vertices.Contains(vertex))_vertices.Add(vertex);
+        }
+
+        public bool ContainsVertex(IGoapNode vertex){
+            return _vertices.Contains(vertex);
         }
 
         public bool IsEmpty() {
@@ -44,23 +58,28 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
 
-        public IGoapEdge GetEdgeBySourceAndTarget(IGoapVertex source, IGoapVertex target) {
-            if (!_vertices.Contains(source) || !_vertices.Contains(target))
+        public List<IGoapEdge> GetEdgesBySourceAndTarget(IGoapNode source, IGoapNode target) {
+            if (!ContainsVertex(source) || !ContainsVertex(target))
                 throw new GraphException("source or target of edge not available in graph");
 
-            IGoapEdge bindingEdge = _edges.Find(e => e.GetSource().Equals(source) && e.GetTarget().Equals(target));
+            List<IGoapEdge> bindingEdge = _edges.FindAll(e => e.GetSource().Equals(source) && e.GetTarget().Equals(target));
             if (bindingEdge == null)
                 throw new GraphException("Edge not found by target and source");
             return bindingEdge;
         }
 
+        public IGoapEdge GetCheapestEdgeBySourceAndTarget(IGoapNode source, IGoapNode target) {
+            var query = GetEdgesBySourceAndTarget(source, target).OrderBy(e => e.GetCost());
+            return query.First();
+        }
 
-        public int GetWayCost(IGoapVertex sourceVertex, IGoapVertex targetVertex) {
-            IGoapEdge edge = GetEdgeBySourceAndTarget(sourceVertex, targetVertex);
+
+        public int GetcheapestWayCost(IGoapNode sourceVertex, IGoapNode targetVertex) {
+            IGoapEdge edge = GetCheapestEdgeBySourceAndTarget(sourceVertex, targetVertex);
             return edge.GetCost();
         }
 
-        public List<IGoapVertex> GetReachableAdjcentVertices(IGoapVertex vertex) {
+        public List<IGoapNode> GetReachableAdjcentVertices(IGoapNode vertex) {
             List<IGoapEdge> outEdges = GetEdgesBySourceVertex(vertex);
 
             return outEdges.Select(outEdge => outEdge.GetTarget()).ToList();
@@ -71,7 +90,7 @@ namespace GoapGraphConnector.CustomGraph {
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        private List<IGoapEdge> GetEdgesBySourceVertex(IGoapVertex vertex) {
+        public List<IGoapEdge> GetEdgesBySourceVertex(IGoapNode vertex) {
             return _edges.Where(edge => edge.GetSource().Equals(vertex)).ToList();
         }
     }

@@ -4,8 +4,8 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
     public class GoapCustomGraphService : IGoapGraphService {
-        private IGoapVertex _root;
-        private IGoapVertex _target;
+        private IGoapNode _root;
+        private IGoapNode _target;
         private Graph _graph;
         private AStarSteppable _aStar;
 
@@ -20,11 +20,11 @@ namespace GoapGraphConnector.CustomGraph {
             InitializeGoapGraph(_root, _target, maximumGraphDept);
         }
 
-        private void InitializeGoapGraph(IGoapVertex root, IGoapVertex target,
+        private void InitializeGoapGraph(IGoapNode root, IGoapNode target,
             int maximumGraphDept = 0) {
             _root = root;
             _target = target;
-            _graph = new Graph(new List<IGoapVertex> {_root}, new List<IGoapEdge>());
+            _graph = new Graph(new List<IGoapNode> {_root}, new List<IGoapEdge>());
             _aStar = new AStarSteppable(_root, _target, _graph);
         }
 
@@ -33,7 +33,7 @@ namespace GoapGraphConnector.CustomGraph {
             return _graph.IsEmpty();
         }
 
-        public IGoapVertex GetNextVertexFromOpenList() {
+        public IGoapNode GetNextVertexFromOpenList() {
             return _aStar.Current;
         }
 
@@ -44,7 +44,7 @@ namespace GoapGraphConnector.CustomGraph {
         public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldstate> currentState) {
             var edges = new List<IGoapEdge>();
             foreach (var abstractGoapAction in outEdges) {
-                var newEdge = GetEdgeFromPreconditions(abstractGoapAction, currentState);
+                var newEdge = GetEdgeFromActionPreconditionsToCurrent(abstractGoapAction, currentState);
                 edges.Add(newEdge);
                 _mapEdgeToAction.Add(newEdge, abstractGoapAction);
             }
@@ -60,7 +60,7 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         public bool IsCurrentVertexTarget() {
-            return _aStar.CheckforTarget();
+            return _aStar.CheckforTargetStatesAreSatisfied();
         }
 
         public void AStarStep() {
@@ -88,20 +88,17 @@ namespace GoapGraphConnector.CustomGraph {
         /// </summary>
         /// <returns></returns>
         public int GetActualDepthFromRoot() {
-            var countOf = _aStar.CreatePathToCurrentAsEdgeList().Count;
-            return countOf;
+            return _aStar.CreatePathToCurrentAsEdgeList().Count;
         }
 
         public IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
-            var start = new Vertex(currentState);
-            var target = new Vertex(action.GetSourceWorldstate(currentState));
-            return new Edge(1, start, target);
+            throw new System.NotImplementedException();
         }
 
-        private IGoapEdge GetEdgeFromPreconditions(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
+        public IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
             var start = new Vertex(currentState);
             var target = new Vertex(action.PreConditions);
-            return new Edge(1, start, target);
+            return new Edge(action.GetExecutionCosts(), start, target);
         }
     }
 }

@@ -61,8 +61,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomGraphEdgeTest.cs" />
+    <Compile Include="CustomGraphGraphTest.cs" />
+    <Compile Include="CustomGraphServiceComponentTest.cs" />
     <Compile Include="CustomGraphServiceTest.cs" />
-    <Compile Include="GoapModelTest.cs" />
+    <Compile Include="GoapActionSystemComponentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomGaphVertexTest.cs" />
   </ItemGroup>

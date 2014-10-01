@@ -4,7 +4,7 @@ using System.Linq;
 using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
-    public class Vertex : IGoapVertex, IEquatable<Vertex> {
+    public class Vertex : IGoapNode, IEquatable<Vertex> {
         private readonly List<IGoapWorldstate> _worldstate;
 
         private readonly string _name;
@@ -23,7 +23,7 @@ namespace GoapGraphConnector.CustomGraph {
             _name = name;
         }
 
-        public int GetHeuristic(IGoapVertex target) {
+        public int GetHeuristic(IGoapNode target) {
             return _heuristic;
         }
 
@@ -32,7 +32,7 @@ namespace GoapGraphConnector.CustomGraph {
             return _name;
         }
 
-        List<IGoapWorldstate> IGoapVertex.Worldstate() {
+        public List<IGoapWorldstate> Worldstate() {
             return _worldstate;
         }
 
@@ -42,6 +42,11 @@ namespace GoapGraphConnector.CustomGraph {
             return string.Format("<Knoten {0} {1}>", _name, states);
         }
 
+        /// <summary>
+        /// equality depens on the set of worldstate symbols a vertex represents
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(Vertex other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

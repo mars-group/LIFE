@@ -6,9 +6,6 @@ using GoapModelTest.Worldstates;
 
 namespace GoapModelTest.Actions {
     public class ActionGetToy : AbstractGoapAction {
-        public ActionGetToy(List<IGoapWorldstate> preconditionWorldstates, List<IGoapWorldstate> effectWorldstates)
-            : base(preconditionWorldstates, effectWorldstates) {}
-
         public ActionGetToy()
             : base(new List<IGoapWorldstate> {new HasMoney(true)},
                 new List<IGoapWorldstate> {
@@ -17,7 +14,7 @@ namespace GoapModelTest.Actions {
                 }) {}
 
         public override bool ValidateContextPreconditions() {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override bool ExecuteContextEffects() {
@@ -29,7 +26,7 @@ namespace GoapModelTest.Actions {
         }
 
         public override int GetExecutionCosts() {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public override int GetPriority() {

@@ -17,7 +17,7 @@ namespace AgentTester.Wolves.Agents {
     private string _states;
 
 
-    public Sheep(Grassland environment, string id) : base(id) {
+    public Sheep(Grassland environment, string id) : base(id, 1) {
       Position = new Vector(-1, -1); // We just need an object (coords set by env).
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = environment;

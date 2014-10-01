@@ -100,22 +100,6 @@ namespace GoapCommon.Abstract {
             return resultingWorldStates;
         }
 
-        public List<IGoapWorldstate> GetSourceWorldstate(List<IGoapWorldstate> targetWorldstate) {
-            // get all preconditions at first
-            List<IGoapWorldstate> resultingWorldStates =
-                (from worldstate in _preConditions select worldstate.GetClone()).ToList();
-
-            List<Type> typesInPreconditionList =
-                (from worldstate in _preConditions select worldstate.GetType()).ToList();
-
-
-            resultingWorldStates.AddRange(from worldState in targetWorldstate
-                where !typesInPreconditionList.Contains(worldState.GetType())
-                select worldState.GetClone());
-
-            return resultingWorldStates;
-        }
-
         public override string ToString() {
             return string.Format("PreConditions: {0}, Effects: {1}", PreConditions, Effects);
         }
