@@ -12,15 +12,18 @@ using LayerContainerShared;
 
 
 
-namespace LayerContainerFacade.Implementation {
+namespace LayerContainerFacade.Implementation
+{
 
 
-    internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
+    internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade
+    {
         private readonly IPartitionManager _partitionManager;
         private readonly IRTEManager _rteManager;
         private IScsServiceApplication _server;
 
-        public LayerContainerFacadeImpl(LayerContainerSettings settings, IPartitionManager partitionManager, IRTEManager rteManager) {
+        public LayerContainerFacadeImpl(LayerContainerSettings settings, IPartitionManager partitionManager, IRTEManager rteManager)
+        {
             _partitionManager = partitionManager;
             _rteManager = rteManager;
 
@@ -35,35 +38,40 @@ namespace LayerContainerFacade.Implementation {
             _server.Start();
         }
 
-        public void LoadModelContent(ModelContent content) {
+        public void LoadModelContent(ModelContent content)
+        {
             _partitionManager.LoadModelContent(content);
         }
 
-        public void Instantiate(TLayerInstanceId instanceId) {
+        public void Instantiate(TLayerInstanceId instanceId)
+        {
             _partitionManager.AddLayer(instanceId);
         }
 
-        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData)
+        {
             _rteManager.InitializeLayer(instanceId, initData);
         }
 
-        public long Tick() {
+        public long Tick()
+        {
             return _rteManager.AdvanceOneTick();
         }
 
         private static void EmptyDirectory(string targetDirectory)
         {
-
-
             var dirInfo = new DirectoryInfo(targetDirectory);
 
-            foreach (var file in dirInfo.GetFiles()) {
-                WaitForFile(file.FullName);
+            foreach (var file in dirInfo.GetFiles())
+            {
+                if (!WaitForFile(file.FullName))
+                    throw new IOException(string.Format("Could not delete {0} because it is used by someone else.", file.FullName));
                 file.Delete();
             }
             foreach (var dir in dirInfo.GetDirectories())
             {
-                WaitForFile(dir.FullName);
+                if (!WaitForFile(dir.FullName))
+                    throw new IOException(string.Format("Could not delete {0} because it is used by someone else.", file.FullName));
                 dir.Delete(true);
             }
 
