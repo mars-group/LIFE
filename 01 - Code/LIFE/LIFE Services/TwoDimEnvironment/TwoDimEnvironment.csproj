@@ -35,7 +35,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interface\ITwoDimEnvironment.cs" />
     <Compile Include="Interface\ISimObject2D.cs" />
-    <Compile Include="Implementation\Position.cs" />
     <Compile Include="Implementation\TwoDimEnvironmentUseCase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

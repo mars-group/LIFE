@@ -59,6 +59,10 @@
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\TwoDimEnvironment\TwoDimEnvironment.csproj">
+      <Project>{D7383AA1-FB90-4632-BB47-9388778C6D46}</Project>
+      <Name>TwoDimEnvironment</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

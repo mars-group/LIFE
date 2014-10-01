@@ -13,12 +13,14 @@ namespace TwoDimEnvironment
 		void Add(T item);
 
 		/// <summary>
-		/// Move the specified item to targetPosition.
-		/// The items' center point is set to targetPosition
+		/// Move the specified item to X,Y.
+		/// The items' center point is set to X,Y
 		/// </summary>
 		/// <param name="item">The item to move</param>
-		/// <param name="targetPosition">The target position to move to</param>
-		void Move(T item, Position targetPosition);
+		/// <param name="X">The target position's X coordinate</param>
+		/// <param name="Y">The target position's Y coordinate</param>
+		/// <returns>The updated item with ne Bounds and Position</returns>
+		T Move(T item, int X, int Y);
 
 		/// <summary>
 		/// Find objects which are covered by the specified area.

@@ -1,16 +1,20 @@
-﻿using CSharpQuadTree;
-using LayerAPI.Interfaces;
+﻿using LayerAPI.Interfaces;
 using Mono.Addins;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwoDimEnvironment;
+using System.Windows;
 
 namespace PlantLayer.Agents
 {
-    public class Plant : IAgent, IQuadObject
+	public class Plant : IAgent, ISimObject2D
     {
         private int Health;
+
+		private Rect _bounds;
+
         public Plant()
         {
             Health = 100;
@@ -30,9 +34,9 @@ namespace PlantLayer.Agents
         }
 
 
-        public System.Windows.Rect Bounds
+        public Rect Bounds
         {
-            get { throw new System.NotImplementedException(); }
+			get { return _bounds; }
         }
 
         public event System.EventHandler BoundsChanged;

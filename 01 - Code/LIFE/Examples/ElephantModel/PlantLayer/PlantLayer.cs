@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CSharpQuadTree;
-using Size = System.Windows.Size;
 using PlantLayer.Agents;
+using TwoDimEnvironment;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -16,7 +15,7 @@ namespace PlantLayer
 {
     class PlantLayer : ISteppedLayer
     {
-        private QuadTree<Plant> quadTree;
+		private ITwoDimEnvironment<Plant> quadTree;
         public PlantLayer()
         {
 
@@ -24,7 +23,10 @@ namespace PlantLayer
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle,
             UnregisterAgent unregisterAgentHandle)
         {
-            var x = new QuadTree<Plant>(new Size(5, 5), 2);
+			var x = new TwoDimEnvironmentUseCase<Plant>();
+			var a = new Plant () {
+				Bounds = new System.Windows.Rect (){ }
+			};
             return true;
         }
 
@@ -36,6 +38,7 @@ namespace PlantLayer
         {
 
         }
+
         List<TPlant> getAllPlants()
         {
             return null;
