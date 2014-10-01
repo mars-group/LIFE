@@ -53,6 +53,9 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\packages\Mono.Options.1.1\content\Mono.Options\Options.cs.pp">
+      <Link>Options.cs.pp</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
