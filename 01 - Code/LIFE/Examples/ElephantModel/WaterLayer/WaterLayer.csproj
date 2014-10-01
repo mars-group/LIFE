@@ -40,15 +40,25 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WaterLayer.cs" />
+    <Compile Include="Agents\Waterhole.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\TwoDimEnvironment\TwoDimEnvironment.csproj">
+      <Project>{D7383AA1-FB90-4632-BB47-9388778C6D46}</Project>
+      <Name>TwoDimEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
+      <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>
+      <Name>CSharpQuadTree</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -59,4 +69,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Agents\" />
+  </ItemGroup>
 </Project>
