@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TwoDimEnvironment;
 using System.Windows;
+using CSharpQuadTree;
 
 namespace PlantLayer.Agents
 {
-	public class Plant : IAgent, ISimObject2D
+	public class Plant : IAgent, IQuadObject
     {
         private int Health;
 
@@ -37,6 +38,7 @@ namespace PlantLayer.Agents
         public Rect Bounds
         {
 			get { return _bounds; }
+			set { _bounds = value; }
         }
 
         public event System.EventHandler BoundsChanged;

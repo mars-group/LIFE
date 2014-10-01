@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Collections.Generic;
+using CSharpQuadTree;
 
 namespace TwoDimEnvironment
 {
-	public interface ITwoDimEnvironment<T> where T : class, ISimObject2D
+	public interface ITwoDimEnvironment<T> where T : class, IQuadObject
 	{
 		/// <summary>
 		/// Add the specified item into the Environment

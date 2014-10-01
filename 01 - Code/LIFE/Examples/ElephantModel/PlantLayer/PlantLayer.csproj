@@ -63,6 +63,10 @@
       <Project>{D7383AA1-FB90-4632-BB47-9388778C6D46}</Project>
       <Name>TwoDimEnvironment</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
+      <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>
+      <Name>CSharpQuadTree</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

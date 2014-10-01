@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace TwoDimEnvironment
 {
-	public class TwoDimEnvironmentUseCase<T> : ITwoDimEnvironment<T> where T : class, ISimObject2D
+	public class TwoDimEnvironmentUseCase<T> : ITwoDimEnvironment<T> where T : class, IQuadObject
 	{
 
 		private QuadTree<T> _quadTree;
