@@ -12,26 +12,33 @@ namespace PlantLayer.Agents
 {
 	public class Plant : IAgent, IQuadObject
     {
-        private int Health;
+        private double _health;
 
 		private Rect _bounds;
 
-        public Plant()
+		public Plant(float x, float y, Size size)
         {
-            Health = 100;
-        }
-        public int GetHealth()
-        {
-            return Health;
+			_bounds.X = x;
+			_bounds.Y = y;
+			_bounds.Size = size;
+			_health = 100;
         }
 
-        public void SubHealth(int x) 
+        public double GetHealth()
+        {
+			return _health;
+        }
+
+        public void SubHealth(double x) 
         {
             
         }
+
         public void Tick()
         {
-
+			if(!_health==0)
+			// regenerate a tiny bit
+			_health += _health * 0.0001;
         }
 
 

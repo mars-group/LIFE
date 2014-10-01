@@ -24,6 +24,12 @@ namespace TwoDimEnvironment
 		T Move(T item, int X, int Y);
 
 		/// <summary>
+		/// Update the specified item.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		void Update(T item);
+
+		/// <summary>
 		/// Find objects which are covered by the specified area.
 		/// </summary>
 		/// <param name="area">Area.</param>
@@ -38,6 +44,12 @@ namespace TwoDimEnvironment
 		/// <param name="distance">Distance to look at</param>
 		/// <returns>>A list of found objects, an empty list if no objects where found</returns>
 		List<T> Find(T centerItem, int distance);
+
+		/// <summary>
+		/// Gets all items in the environment
+		/// </summary>
+		/// <returns>A list with all object or an empty list if there are none.</returns>
+		List<T> GetAll();
 	}
 }
 

@@ -15,6 +15,11 @@ namespace TwoDimEnvironment
 			_quadTree = new QuadTree<T> (new Size (25, 25), 1);
 		}
 
+		public TwoDimEnvironmentUseCase ()
+		{
+			_quadTree = new QuadTree<T> (new Size (25, 25), 1);
+		}
+
 		#region ITwoDimEnvironment implementation
 
 		public void Add (T item)
@@ -56,6 +61,17 @@ namespace TwoDimEnvironment
 			);
 		}
 
+
+		public void Update (T item)
+		{
+			_quadTree.Remove (item);
+			_quadTree.Insert (item);
+		}
+
+		public List<T> GetAll ()
+		{
+			return _quadTree.Query(_quadTree.Root.Bounds);
+		}
 		#endregion
 	}
 }
