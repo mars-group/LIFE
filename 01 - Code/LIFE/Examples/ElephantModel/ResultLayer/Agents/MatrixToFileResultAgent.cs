@@ -16,11 +16,14 @@ namespace ResultLayer
 
 		private int _tickCount;
 
+		private DateTime _simrunDateTime;
+
 		public MatrixToFileResultAgent(ElephantLayerImpl elephantLayer, PlantLayerImpl plantLayer, WaterLayerImpl waterlayer){
 			_elephantLayer = elephantLayer;
 			_plantLayer = plantLayer;
 			_waterLayer = waterlayer;
 			_tickCount = 0;
+			_simrunDateTime = DateTime.Now;
 		}
 
 		#region ITickClient implementation
@@ -36,10 +39,10 @@ namespace ResultLayer
 			var x = 0.0;
 			plants.ForEach(plant => {
 				if(plant.GetBounds().X > x) {
-					stb.Append("\r\n" + plant.GetHealth());
+					stb.Append("\r\n" + plant.GetHealth() + " ");
 					x = plant.GetBounds().X;
 				} else {
-					stb.Append(plant.GetHealth());
+					stb.Append(plant.GetHealth() + " ");
 				}
 			});
 
@@ -49,17 +52,15 @@ namespace ResultLayer
 
 		#endregion
 
-		private void WriteMatrixToFile(string layerName, string matrix, string filename){
+		private void WriteMatrixToFile(string layerName, string matrix, string filename)
+		{
 			// Write the string to a file.
-			var path = "." + "/" + layerName + "MatrixOutputs" + "/" + filename;
-			try {
-				StreamWriter file = new StreamWriter(path);
-				File.WriteAllText(path,matrix);
-				file.Close();
-			} catch (Exception ex) {
-				throw;
+			var dirpath = "." + "/" + layerName + "MatrixOutputsFrom" + _simrunDateTime + "/";
+			if (!Directory.Exists (dirpath)) {
+				Directory.CreateDirectory (dirpath);
 			}
-
+			var filepath = Path.Combine (dirpath, filename);
+			File.WriteAllText(filepath, matrix);
 		}
 	}
 }
