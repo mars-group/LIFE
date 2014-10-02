@@ -36,7 +36,7 @@ namespace PlantLayer.Agents
 
         public void Tick()
         {
-			if (_health != 0) {
+			if (_health > 0.0) {
 				// regenerate a tiny bit
 				_health += _health * 0.0001;
 			}

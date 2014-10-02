@@ -43,7 +43,7 @@ namespace ResultLayer
 				}
 			});
 
-			WriteMatrixToFile(_plantLayer.GetType ().ToString (), stb.ToString (), "Tick-" + _tickCount);
+			WriteMatrixToFile ("plantlayer", stb.ToString (), "Tick-" + _tickCount + ".asc");
 			_tickCount++;
 		}
 
@@ -51,9 +51,15 @@ namespace ResultLayer
 
 		private void WriteMatrixToFile(string layerName, string matrix, string filename){
 			// Write the string to a file.
-			System.IO.StreamWriter file = new System.IO.StreamWriter("." + Path.PathSeparator + layerName + "MatrixOutputs" + Path.PathSeparator + filename);
-			file.WriteLine(matrix);
-			file.Close();
+			var path = "." + "/" + layerName + "MatrixOutputs" + "/" + filename;
+			try {
+				StreamWriter file = new StreamWriter(path);
+				File.WriteAllText(path,matrix);
+				file.Close();
+			} catch (Exception ex) {
+				throw;
+			}
+
 		}
 	}
 }

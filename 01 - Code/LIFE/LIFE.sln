@@ -801,7 +801,7 @@ Global
 		{B7C20AF5-5107-4E4E-B196-890EC2DA6030} = {B488B2F7-D268-41D3-B31D-CC0DF03F9F34}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = SimulationManager\SimulationManager\SimulationManager.csproj
+		StartupItem = LayerContainer\LayerContainer\LayerContainer.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None
