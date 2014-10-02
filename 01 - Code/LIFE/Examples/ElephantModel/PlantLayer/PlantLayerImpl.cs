@@ -48,16 +48,21 @@ namespace PlantLayer
             throw new NotImplementedException();
         }
 
-        public void Stomp (double x, double y, double force)
+		public void Stomp (double x, double y, Size size, double force)
         {
 			// check if something is there
-			var p = environment.Find(new Rect(x,y,1.0,1.0));
+			var p = environment.Find(new Rect(x,y, size.Width, size.Height));
 			// for everything found, stomp upon it and save it back to environment
 			foreach (var plant in p) {
 				plant.SubHealth(force);
 				environment.Update(plant);
 			}
         }
+
+		public void Stomp(Rect bounds, double force)
+		{
+			Stomp(bounds.X, bounds.Y, bounds.Size, force);
+		}
 
         public List<TPlant> GetAllPlants()
         {
