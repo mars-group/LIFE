@@ -2,8 +2,8 @@
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
-namespace GoapGraphConnector.CustomGraph {
-    public class GoapCustomGraphService : IGoapGraphService {
+namespace GoapGraphConnector.SimpleGraph {
+    public class GoapSimpleGraphService : IGoapGraphService {
         private IGoapNode _root;
         private IGoapNode _target;
         private Graph _graph;
@@ -15,8 +15,8 @@ namespace GoapGraphConnector.CustomGraph {
         // TODO Konstruktoren aufräumen ...sind noch zwei nötig?
         public void InitializeGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
             int maximumGraphDept = 0) {
-            _root = new Vertex(rootState);
-            _target = new Vertex(targetState);
+            _root = new Node(rootState);
+            _target = new Node(targetState);
             InitializeGoapGraph(_root, _target, maximumGraphDept);
         }
 
@@ -96,8 +96,8 @@ namespace GoapGraphConnector.CustomGraph {
         }
 
         public IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
-            var start = new Vertex(currentState);
-            var target = new Vertex(action.PreConditions);
+            var start = new Node(currentState);
+            var target = new Node(action.PreConditions);
             return new Edge(action.GetExecutionCosts(), start, target);
         }
     }

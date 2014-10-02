@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace GoapTests {
     [TestFixture]
     internal class CustomGraphEdgeTest {
-     
+
         private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate>(), 2, "V1");
         private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate>(), 2, "V2");
         private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate>(), 2, "V3");

@@ -28,7 +28,7 @@ namespace GoapCommon.Interfaces
         ///     get the next Vertex, which will be inspected by the algorithm
         /// </summary>
         /// <returns>IGoapVertex</returns>
-        IGoapVertex GetNextVertexFromOpenList();
+        IGoapNode GetNextVertexFromOpenList();
 
         /// <summary>
         ///     check if there is a vertex in white list
@@ -62,5 +62,9 @@ namespace GoapCommon.Interfaces
         List<AbstractGoapAction> GetShortestPath();
 
         int GetActualDepthFromRoot();
+
+        IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldstate> currentState);
+
+        IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldstate> currentState);
     }
 }

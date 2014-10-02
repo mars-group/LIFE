@@ -4,6 +4,7 @@ using GoapGraphConnector.CustomGraph;
 using GoapModelTest.Worldstates;
 using NUnit.Framework;
 
+
 namespace GoapTests {
     [TestFixture]
     internal class CustomGraphGraphTest {
@@ -11,8 +12,8 @@ namespace GoapTests {
 
         [SetUp]
         protected void SetUp() {
-            _graph = new Graph(new List<IGoapVertex> {V5}, new List<IGoapEdge>());
-            _emptyGraph = new Graph(new List<IGoapVertex>(), new List<IGoapEdge>());
+            _graph = new Graph(new List<IGoapNode> {V5}, new List<IGoapEdge>());
+            _emptyGraph = new Graph(new List<IGoapNode>(), new List<IGoapEdge>());
         }
 
         #endregion
@@ -26,13 +27,13 @@ namespace GoapTests {
         private Graph _graph;
         private Graph _emptyGraph;
 
-        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate> {HappyTrue}, 1, "v1_happy_true");
-        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate> {HappyFalse1}, 1, "v2_happy_false");
-        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate> {HappyFalse2}, 1, "v3_happy_false");
-        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate> {ToyTrue}, 1, "v4_toy_true");
-        private static readonly Vertex V5 = new Vertex(new List<IGoapWorldstate> {ToyFalse}, 1, "v5_toy_false");
+        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate> { HappyTrue }, 1, "v1_happy_true");
+        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate> { HappyFalse1 }, 1, "v2_happy_false");
+        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate> { HappyFalse2 }, 1, "v3_happy_false");
+        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate> { ToyTrue }, 1, "v4_toy_true");
+        private static readonly Vertex V5 = new Vertex(new List<IGoapWorldstate> { ToyFalse }, 1, "v5_toy_false");
 
-        private static readonly Vertex V6 = new Vertex(new List<IGoapWorldstate> {ToyFalse}, 1, "v5_toy_false");
+        private static readonly Vertex V6 = new Vertex(new List<IGoapWorldstate> { ToyFalse }, 1, "v5_toy_false");
 
         [Test]
         public void AddVertexTest() {
@@ -108,6 +109,10 @@ namespace GoapTests {
             Assert.Contains(e3, edgeList);
             Assert.Contains(e4, edgeList);
 
+            edgeList = _emptyGraph.GetEdgesBySourceAndTarget(V5, V4);
+            Assert.IsEmpty(edgeList);
+
+
             Assert.AreEqual(e3, _emptyGraph.GetCheapestEdgeBySourceAndTarget(V1, V4));
         }
 
@@ -132,7 +137,7 @@ namespace GoapTests {
             _emptyGraph.AddEdge(e3);
             _emptyGraph.AddEdge(e4);
 
-            List<IGoapVertex> vertices = _emptyGraph.GetReachableAdjcentVertices(V1);
+            List<IGoapNode> vertices = _emptyGraph.GetReachableAdjcentVertices(V1);
             Assert.Contains(V4, vertices);
             Assert.Contains(V5, vertices);
             Assert.False(vertices.Contains(V2));

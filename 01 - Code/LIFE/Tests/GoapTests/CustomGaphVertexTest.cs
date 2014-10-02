@@ -14,11 +14,11 @@ namespace GoapTests {
         private static readonly IGoapWorldstate ToyTrue = new HasToy(true);
         private static readonly IGoapWorldstate ToyFalse = new HasToy(false);
 
-        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate> {HappyTrue}, 1, "v1_happy_true");
-        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate> {HappyFalse1}, 1, "v2_happy_false");
-        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate> {HappyFalse2}, 1, "v3_happy_false");
-        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate> {ToyTrue}, 1, "v4_toy_true");
-        private static readonly Vertex V5 = new Vertex(new List<IGoapWorldstate> {ToyFalse}, 1, "v5_toy_false");
+        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate> { HappyTrue }, 1, "v1_happy_true");
+        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate> { HappyFalse1 }, 1, "v2_happy_false");
+        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate> { HappyFalse2 }, 1, "v3_happy_false");
+        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate> { ToyTrue }, 1, "v4_toy_true");
+        private static readonly Vertex V5 = new Vertex(new List<IGoapWorldstate> { ToyFalse }, 1, "v5_toy_false");
 
         private static readonly Vertex V6 = new Vertex(new List<IGoapWorldstate>());
         private static readonly Vertex V7 = new Vertex(new List<IGoapWorldstate>());
