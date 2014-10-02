@@ -31,14 +31,14 @@ namespace PlantLayer.Agents
 
         public void SubHealth(double x) 
         {
-            
+			_health -= x;
         }
 
         public void Tick()
         {
 			if (_health > 0.0) {
 				// regenerate a tiny bit
-				_health += _health * 0.0001;
+				//_health += _health * 0.0001;
 			}
         }
 

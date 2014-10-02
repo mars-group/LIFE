@@ -29,12 +29,15 @@ namespace ModelContainer.Implementation {
         }
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description) {
+			// Delete the addinDB
+			Directory.Delete (_settings.AddinLibraryDirectoryPath + Path.DirectorySeparatorChar + "addin-db-001", true);
+
             // use AddinLoader from LIFEApi, because Mono.Addins may only load Plugins whose 
             // Interfaces originate from the Assembly they are attempted to be loaded from
             IAddinLoader addinLoader = new AddinLoader
                 (_settings.AddinLibraryDirectoryPath,
                 "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
-            
+
             addinLoader.UpdateAddinRegistry();
 
             var nodes = addinLoader.LoadAllLayers();

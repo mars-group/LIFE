@@ -66,7 +66,7 @@ namespace PlantLayer
 
         public List<TPlant> GetAllPlants()
         {
-			var allPlants = environment.GetAll ();
+			var allPlants = environment.GetAll();
 			var result = new List<TPlant> ();
 			allPlants.ForEach (p => result.Add(new TPlant(p)));
 			return result;

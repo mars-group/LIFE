@@ -9,7 +9,7 @@ namespace ElephantLayer.TransportTypes
 {
 
 
-    class TElephant
+    public class TElephant
     {
         private static int totalElephants = 0;
 
@@ -26,6 +26,7 @@ namespace ElephantLayer.TransportTypes
         private ITwoDimEnvironment<Elephant> twoDimEnv;
         private double maxTurningRadius = Math.PI / 3;
         private double idealSeperation = 20;
+
         public TElephant(Elephant elephant) {
             this.rank = elephant.getRank();
             _bounds = elephant.Get_bounds();
@@ -55,7 +56,7 @@ namespace ElephantLayer.TransportTypes
             return isThirsty;
         }
 
-        public Rect Get_bounds()
+        public Rect GetBounds()
         {
             return _bounds;
         }

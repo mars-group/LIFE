@@ -41,6 +41,7 @@ namespace RuntimeEnvironment.Implementation {
         }
 
         private void RunSimulation() {
+			var now = DateTime.Now;
             for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
 
                 // check for status change
@@ -77,8 +78,10 @@ namespace RuntimeEnvironment.Implementation {
                         });
 
 
-                Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
+                //Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
             }
+			var then = DateTime.Now;
+			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + (then-now).TotalSeconds);
         }
 
         public void PauseSimulation() {

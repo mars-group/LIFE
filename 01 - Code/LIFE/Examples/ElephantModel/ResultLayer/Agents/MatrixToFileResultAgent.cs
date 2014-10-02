@@ -30,7 +30,7 @@ namespace ResultLayer
 
 		public void Tick ()
 		{
-			Console.WriteLine("MatrixWriter reportin' in!");
+			//Console.WriteLine("MatrixWriter reportin' in!");
 			// WriteOut Matrix for plant layer
 			var plants = _plantLayer.GetAllPlants();
 
@@ -47,6 +47,22 @@ namespace ResultLayer
 			});
 
 			WriteMatrixToFile ("plantlayer", stb.ToString (), "Tick-" + _tickCount + ".asc");
+
+			var elephants = _elephantLayer.GetAllElephants();
+
+			var stbEle = new StringBuilder ();
+
+			x = 0.0;
+			elephants.ForEach(elephant => {
+				if(elephant.GetBounds().X > x) {
+					stbEle.Append("\r\n" + elephant.Center.X + "/" + elephant.Center.Y + " ");
+					x = elephant.GetBounds().X;
+				} else {
+					stbEle.Append(elephant.Center.X + "/" + elephant.Center.Y + " ");
+				}
+			});
+
+			WriteMatrixToFile ("elephantLayer", stbEle.ToString (), "Tick-" + _tickCount + ".asc");
 			_tickCount++;
 		}
 
