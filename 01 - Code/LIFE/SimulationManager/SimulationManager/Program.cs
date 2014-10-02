@@ -178,6 +178,7 @@ namespace SimulationManager
             catch (Exception exception)
             {
                 Logger.Fatal("SimulationManager crashed fatally. Exception:\n {0}", exception);
+				throw;
             }
 
 

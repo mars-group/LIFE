@@ -7,10 +7,12 @@ using Mono.Addins;
 
 namespace ElephantLayer
 {
+	[Extension(typeof (ISteppedLayer))]
     public class ElephantLayerImpl : ISteppedLayer
     {
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-            throw new NotImplementedException();
+			return true;
+			//throw new NotImplementedException();
         }
 
         public long GetCurrentTick() {

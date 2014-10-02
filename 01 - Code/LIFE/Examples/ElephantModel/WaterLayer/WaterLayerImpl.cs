@@ -13,6 +13,7 @@ using System.Windows;
 
 namespace WaterLayer
 {
+	[Extension(typeof (ISteppedLayer))]
     public class WaterLayerImpl : ISteppedLayer
     {
 		private ITwoDimEnvironment<Waterhole> environment;

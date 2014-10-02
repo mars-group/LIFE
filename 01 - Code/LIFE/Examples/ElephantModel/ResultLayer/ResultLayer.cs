@@ -16,6 +16,7 @@ using WaterLayer;
 
 namespace ResultLayer
 {
+	[Extension(typeof (ISteppedLayer))]
     public class ResultLayer : ISteppedLayer
     {
 		private ElephantLayerImpl _elephantLayer;

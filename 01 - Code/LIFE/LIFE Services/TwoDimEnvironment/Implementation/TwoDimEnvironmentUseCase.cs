@@ -10,6 +10,11 @@ namespace TwoDimEnvironment
 
 		private QuadTree<T> _quadTree;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TwoDimEnvironment.TwoDimEnvironmentUseCase`1"/> class.
+		/// This implementation will guarantuee the order of objects. Every query will return the objects in the same
+		/// order you inserted them.
+		/// </summary>
 		public TwoDimEnvironmentUseCase ()
 		{
 			_quadTree = new QuadTree<T> (new Size (25, 25), 1, true);

@@ -14,6 +14,7 @@ using System.Windows;
 
 namespace PlantLayer
 {
+	[Extension(typeof (ISteppedLayer))]
     public class PlantLayerImpl : ISteppedLayer
     {
 		private ITwoDimEnvironment<Plant> environment;
@@ -39,7 +40,7 @@ namespace PlantLayer
 					}
 				}
 			}
-
+			Console.WriteLine ("PlantLayer just finished initializing!");
             return true;
         }
 
