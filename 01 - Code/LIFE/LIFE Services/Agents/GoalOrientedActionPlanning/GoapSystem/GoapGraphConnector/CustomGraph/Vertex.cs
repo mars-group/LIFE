@@ -5,19 +5,19 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
     public class Vertex : IGoapNode, IEquatable<Vertex> {
-        private readonly List<IGoapWorldstate> _worldstate;
+        private readonly List<IGoapWorldProperty> _worldstate;
 
         private readonly string _name;
         private readonly int _heuristic;
 
 
-        public Vertex(List<IGoapWorldstate> worldstate, string name = "NotNamedVertex")
+        public Vertex(List<IGoapWorldProperty> worldstate, string name = "NotNamedVertex")
         {
             _worldstate = worldstate;
             _name = name;
         }
 
-        public Vertex(List<IGoapWorldstate> worldstate, int heuristic, string name = "NotNamedVertex") {
+        public Vertex(List<IGoapWorldProperty> worldstate, int heuristic, string name = "NotNamedVertex") {
             _worldstate = worldstate;
             _heuristic = heuristic;
             _name = name;
@@ -32,7 +32,7 @@ namespace GoapGraphConnector.CustomGraph {
             return _name;
         }
 
-        public List<IGoapWorldstate> Worldstate() {
+        public List<IGoapWorldProperty> Worldstate() {
             return _worldstate;
         }
 

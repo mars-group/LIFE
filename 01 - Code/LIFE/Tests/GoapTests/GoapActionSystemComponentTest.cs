@@ -2,6 +2,7 @@
 using GoapCommon.Abstract;
 using GoapModelTest.Actions;
 using NUnit.Framework;
+using TypeSafeBlackboard;
 
 namespace GoapTests {
     [TestFixture]
@@ -24,8 +25,8 @@ namespace GoapTests {
 
 
         private void CreateGoapActionSystems() {
-            _goapActionSystem1 = GoapComponent.LoadAgentConfiguration("AgentTestConfig1", "GoapModelTest");
-            _goapActionSystem2 = GoapComponent.LoadAgentConfiguration("AgentTestConfig2", "GoapModelTest");
+            _goapActionSystem1 = GoapComponent.LoadGoapConfiguration("AgentTestConfig1", "GoapModelTest", new Blackboard());
+            _goapActionSystem2 = GoapComponent.LoadGoapConfiguration("AgentTestConfig2", "GoapModelTest", new Blackboard());
         }
 
         [Test]

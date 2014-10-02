@@ -3,33 +3,48 @@ using System.Reflection;
 using GoapActionSystemFactory.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
+using TypeSafeBlackboard;
 
 namespace GoapUser {
     internal static class GoapTrigger {
         private static void Main(string[] args) {
             Console.WriteLine("-----------------------------------");
 
+            Blackboard blackboard = new Blackboard();
+            AbstractGoapSystem goapActionSystem = GoapComponent.LoadGoapConfiguration("AgentConfig1", "GoapModelTest", blackboard);
 
-            AbstractGoapSystem goapActionSystem = GoapComponent.LoadAgentConfiguration("AgentConfig1", "GoapModelTest");
+            
 
-            Console.WriteLine(goapActionSystem.GetNextAction().GetType());
+            Console.WriteLine("Agent loaded. Write n for next action");
+            char cha = ' ';
+
+            while (cha != 'e') {
+                cha = char.Parse(Console.ReadLine());
+                if (cha == 'n') {
+                    var a = goapActionSystem.GetNextAction();
+                    ExecuteAction(a,blackboard);
 
 
-            //return new GoapManager(configClass.GetAllActions(), configClass.GetAllGoals(),configClass.GetStartWorldstate());
-
-            //System.Configuration.ConfigurationManager.AppSettings[]
-
-
+                }
+            }
+            Console.WriteLine("press any key to leave");
             Console.ReadKey();
+
+
         }
+
+        private static void ExecuteAction(AbstractGoapAction action, Blackboard blackboard) {
+            Console.WriteLine(action.GetType() + " is now executed");
+            var curr = blackboard.Get(AbstractGoapSystem.Worldstate);
+            var result =  action.GetResultingWorldstate(curr);
+            blackboard.Set(AbstractGoapSystem.Worldstate, result);
+        }
+
+
 
         private static void GetAssemblyAndConfigClass() {
             const string namespaceOfConfigClass = "GoapModelTest";
-
-
             const string nameOfConfigClass = "AgentConfig1";
-
-
             Assembly assembly = Assembly.Load(namespaceOfConfigClass);
             IAgentConfig configClass =
                 (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);

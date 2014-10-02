@@ -15,7 +15,7 @@ namespace GoapCommon.Interfaces
         /// <param name="targetState"></param>
         /// <param name="maximumGraphDept"></param>
         /// <returns></returns>
-        void InitializeGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
+        void InitializeGoapGraph(List<IGoapWorldProperty> rootState, List<IGoapWorldProperty> targetState,
             int maximumGraphDept = 0);
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace GoapCommon.Interfaces
         /// <param name="outEdges"></param>
         /// <param name="currentState"></param>
         /// <returns></returns>
-        void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldstate> currentState );
+        void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldProperty> currentState );
 
         /// <summary>
         /// </summary>
@@ -63,8 +63,8 @@ namespace GoapCommon.Interfaces
 
         int GetActualDepthFromRoot();
 
-        IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldstate> currentState);
+        IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldProperty> currentState);
 
-        IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldstate> currentState);
+        IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldProperty> currentState);
     }
 }

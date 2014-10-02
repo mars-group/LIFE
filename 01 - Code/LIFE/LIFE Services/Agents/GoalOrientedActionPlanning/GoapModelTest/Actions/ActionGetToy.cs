@@ -7,8 +7,8 @@ using GoapModelTest.Worldstates;
 namespace GoapModelTest.Actions {
     public class ActionGetToy : AbstractGoapAction {
         public ActionGetToy()
-            : base(new List<IGoapWorldstate> {new HasMoney(true)},
-                new List<IGoapWorldstate> {
+            : base(new List<IGoapWorldProperty> {new HasMoney(true)},
+                new List<IGoapWorldProperty> {
                     new HasMoney(false),
                     new HasToy(true)
                 }) {}

@@ -37,15 +37,15 @@ namespace GoapActionSystem.Implementation {
         /// <param name="graphRoot"></param>
         /// <param name="graphTarget"></param>
         /// <returns></returns>
-        private IGoapGraphService InitializeGraphService(List<IGoapWorldstate> graphRoot,
-            List<IGoapWorldstate> graphTarget) {
+        private IGoapGraphService InitializeGraphService(List<IGoapWorldProperty> graphRoot,
+            List<IGoapWorldProperty> graphTarget) {
             //var graphService = new GoapCustomGraphService();
             var graphService = new GoapSimpleGraphService();
             graphService.InitializeGoapGraph(graphRoot, graphTarget);
             return graphService;
         }
 
-        private bool IsCurrentVertexSubsetOfTarget(List<IGoapWorldstate> currentWorld, List<IGoapWorldstate> targetWorld) {
+        private bool IsCurrentVertexSubsetOfTarget(List<IGoapWorldProperty> currentWorld, List<IGoapWorldProperty> targetWorld) {
             return (currentWorld.Where(x => targetWorld.Contains(x)).Count() == currentWorld.Count());
         }
 
@@ -62,10 +62,10 @@ namespace GoapActionSystem.Implementation {
             return new SurrogateAction();
         }
 
-        public List<AbstractGoapAction> GetPlan(List<IGoapWorldstate> currentWorld,
-            List<IGoapWorldstate> targetWorld) {
-            List<IGoapWorldstate> graphTarget = currentWorld;
-            List<IGoapWorldstate> graphRoot = targetWorld;
+        public List<AbstractGoapAction> GetPlan(List<IGoapWorldProperty> currentWorld,
+            List<IGoapWorldProperty> targetWorld) {
+            List<IGoapWorldProperty> graphTarget = currentWorld;
+            List<IGoapWorldProperty> graphRoot = targetWorld;
 
             IGoapGraphService graphService = InitializeGraphService(graphRoot, graphTarget);
 
@@ -87,18 +87,18 @@ namespace GoapActionSystem.Implementation {
              
              wenn kein weg  mehr günstiger ist als der bisherige weg zum ziel fertig
              */
-            IGoapNode currentGoapVertex = graphService.GetNextVertexFromOpenList();
+            IGoapNode currentGoapNode = graphService.GetNextVertexFromOpenList();
 
-            while (currentGoapVertex != null &&
-                   !IsCurrentVertexSubsetOfTarget(currentGoapVertex.Worldstate(), graphTarget) &&
+            while (currentGoapNode != null &&
+                   !IsCurrentVertexSubsetOfTarget(currentGoapNode.Worldstate(), graphTarget) &&
                    !IsSearchDepthLimitExceeded(graphService)) {
-                List<AbstractGoapAction> children = GetIngoingGoapActions(currentGoapVertex.Worldstate());
-                graphService.ExpandCurrentVertex(children, currentGoapVertex.Worldstate());
+                List<AbstractGoapAction> children = GetIngoingGoapActions(currentGoapNode.Worldstate());
+                graphService.ExpandCurrentVertex(children, currentGoapNode.Worldstate());
                 graphService.AStarStep();
-                currentGoapVertex = graphService.GetNextVertexFromOpenList();
+                currentGoapNode = graphService.GetNextVertexFromOpenList();
             }
 
-            if (currentGoapVertex != null && IsCurrentVertexSubsetOfTarget(currentGoapVertex.Worldstate(), graphTarget)) {
+            if (currentGoapNode != null && IsCurrentVertexSubsetOfTarget(currentGoapNode.Worldstate(), graphTarget)) {
                 _currentPlan = graphService.GetShortestPath();
                 _currentPlan.Reverse();
             }
@@ -116,7 +116,7 @@ namespace GoapActionSystem.Implementation {
         /// </summary>
         /// <param name="worldStates"></param>
         /// <returns></returns>
-        private List<AbstractGoapAction> GetIngoingGoapActions(List<IGoapWorldstate> worldStates) {
+        private List<AbstractGoapAction> GetIngoingGoapActions(List<IGoapWorldProperty> worldStates) {
             // TODO alle actions untersuchen ob sie anwendbar sind - mithilfe der effect -> Action hashmap
             return _availableActions.Where(action => action.IsSatisfyingStateByEffects(worldStates)).ToList();
         }

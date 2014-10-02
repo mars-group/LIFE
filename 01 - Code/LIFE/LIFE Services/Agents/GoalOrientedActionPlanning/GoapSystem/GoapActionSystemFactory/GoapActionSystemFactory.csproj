@@ -50,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
+      <Project>{d1feb7b4-55cd-47d7-8828-5ee7b4c2db95}</Project>
+      <Name>TypeSafeBlackboard</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
       <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>

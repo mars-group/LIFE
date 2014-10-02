@@ -13,7 +13,7 @@ namespace GoapGraphConnector.SimpleGraph {
             new Dictionary<IGoapEdge, AbstractGoapAction>();
 
         // TODO Konstruktoren aufräumen ...sind noch zwei nötig?
-        public void InitializeGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
+        public void InitializeGoapGraph(List<IGoapWorldProperty> rootState, List<IGoapWorldProperty> targetState,
             int maximumGraphDept = 0) {
             _root = new Node(rootState);
             _target = new Node(targetState);
@@ -41,7 +41,7 @@ namespace GoapGraphConnector.SimpleGraph {
             return _aStar.HasVerticesOnOpenList();
         }
 
-        public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldstate> currentState) {
+        public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldProperty> currentState) {
             var edges = new List<IGoapEdge>();
             foreach (var abstractGoapAction in outEdges) {
                 var newEdge = GetEdgeFromActionPreconditionsToCurrent(abstractGoapAction, currentState);
@@ -91,11 +91,11 @@ namespace GoapGraphConnector.SimpleGraph {
             return _aStar.CreatePathToCurrentAsEdgeList().Count;
         }
 
-        public IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
+        public IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldProperty> currentState) {
             throw new System.NotImplementedException();
         }
 
-        public IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
+        public IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldProperty> currentState) {
             var start = new Node(currentState);
             var target = new Node(action.PreConditions);
             return new Edge(action.GetExecutionCosts(), start, target);

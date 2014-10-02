@@ -17,20 +17,20 @@ namespace GoapTests {
 
         #endregion
 
-        private static readonly IGoapWorldstate HappyTrue = new Happy(true);
-        private static readonly IGoapWorldstate HappyFalse1 = new Happy(false);
-        private static readonly IGoapWorldstate HappyFalse2 = new Happy(false);
-        private static readonly IGoapWorldstate ToyTrue = new HasToy(true);
-        private static readonly IGoapWorldstate ToyFalse = new HasToy(false);
+        private static readonly IGoapWorldProperty HappyTrue = new Happy(true);
+        private static readonly IGoapWorldProperty HappyFalse1 = new Happy(false);
+        private static readonly IGoapWorldProperty HappyFalse2 = new Happy(false);
+        private static readonly IGoapWorldProperty ToyTrue = new HasToy(true);
+        private static readonly IGoapWorldProperty ToyFalse = new HasToy(false);
 
         private Graph _graph;
         private IGoapGraphService _graphService;
 
-        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate> {HappyTrue}, 1, "v1_happy_true");
-        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate> {HappyFalse1}, 1, "v2_happy_false");
-        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate> {HappyFalse2}, 1, "v3_happy_false");
-        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate> {ToyTrue}, 1, "v4_toy_true");
-        private static readonly Vertex V5 = new Vertex(new List<IGoapWorldstate> {ToyFalse}, 1, "v5_toy_false");
+        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldProperty> {HappyTrue}, 1, "v1_happy_true");
+        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldProperty> {HappyFalse1}, 1, "v2_happy_false");
+        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldProperty> {HappyFalse2}, 1, "v3_happy_false");
+        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldProperty> {ToyTrue}, 1, "v4_toy_true");
+        private static readonly Vertex V5 = new Vertex(new List<IGoapWorldProperty> {ToyFalse}, 1, "v5_toy_false");
 
 
         [Test]
@@ -78,41 +78,41 @@ namespace GoapTests {
 
         [Test]
         public void IsGraphEmptyTest() {
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>());
+            _graphService.InitializeGoapGraph(new List<IGoapWorldProperty>(), new List<IGoapWorldProperty>());
             Assert.False(_graphService.IsGraphEmpty());
         }
 
         [Test]
         public void GetNextVertexFromOpenListTest() {
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>());
-            Assert.AreEqual(new Vertex(new List<IGoapWorldstate>()), _graphService.GetNextVertexFromOpenList());
+            _graphService.InitializeGoapGraph(new List<IGoapWorldProperty>(), new List<IGoapWorldProperty>());
+            Assert.AreEqual(new Vertex(new List<IGoapWorldProperty>()), _graphService.GetNextVertexFromOpenList());
 
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate> {HappyFalse1}, new List<IGoapWorldstate>());
+            _graphService.InitializeGoapGraph(new List<IGoapWorldProperty> {HappyFalse1}, new List<IGoapWorldProperty>());
             Assert.AreEqual
-                (new Vertex(new List<IGoapWorldstate> {HappyFalse1}), _graphService.GetNextVertexFromOpenList());
+                (new Vertex(new List<IGoapWorldProperty> {HappyFalse1}), _graphService.GetNextVertexFromOpenList());
         }
 
         [Test]
         public void HasNextVertexOnOpenListTest() {
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>());
+            _graphService.InitializeGoapGraph(new List<IGoapWorldProperty>(), new List<IGoapWorldProperty>());
             Assert.True(_graphService.HasNextVertexOnOpenList());
         }
 
         [Test]
         public void IsCurrentVertexTargetTest() {
-            _graphService.InitializeGoapGraph(new List<IGoapWorldstate>(), new List<IGoapWorldstate>());
+            _graphService.InitializeGoapGraph(new List<IGoapWorldProperty>(), new List<IGoapWorldProperty>());
             Assert.True(_graphService.IsCurrentVertexTarget());
 
             _graphService.InitializeGoapGraph
-                (new List<IGoapWorldstate> {HappyFalse1}, new List<IGoapWorldstate> {HappyFalse1});
+                (new List<IGoapWorldProperty> {HappyFalse1}, new List<IGoapWorldProperty> {HappyFalse1});
             Assert.True(_graphService.IsCurrentVertexTarget());
 
             _graphService.InitializeGoapGraph
-                (new List<IGoapWorldstate> {HappyFalse2}, new List<IGoapWorldstate> {HappyFalse1});
+                (new List<IGoapWorldProperty> {HappyFalse2}, new List<IGoapWorldProperty> {HappyFalse1});
             Assert.True(_graphService.IsCurrentVertexTarget());
 
             _graphService.InitializeGoapGraph
-                (new List<IGoapWorldstate> {HappyFalse2, ToyTrue}, new List<IGoapWorldstate> {HappyFalse2});
+                (new List<IGoapWorldProperty> {HappyFalse2, ToyTrue}, new List<IGoapWorldProperty> {HappyFalse2});
             Assert.True(_graphService.IsCurrentVertexTarget());
         }
 

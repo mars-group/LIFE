@@ -9,7 +9,7 @@ namespace GoapActionSystem.Implementation {
     /// </summary>
     internal class SurrogateAction : AbstractGoapAction {
         public SurrogateAction()
-            : base(new List<IGoapWorldstate>(), new List<IGoapWorldstate>()) {}
+            : base(new List<IGoapWorldProperty>(), new List<IGoapWorldProperty>()) {}
 
         public override bool ValidateContextPreconditions() {
             return true;

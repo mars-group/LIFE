@@ -7,10 +7,10 @@ namespace GoapTests {
     [TestFixture]
     internal class CustomGraphEdgeTest {
 
-        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldstate>(), 2, "V1");
-        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldstate>(), 2, "V2");
-        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldstate>(), 2, "V3");
-        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldstate>(), 2, "V4");
+        private static readonly Vertex V1 = new Vertex(new List<IGoapWorldProperty>(), 2, "V1");
+        private static readonly Vertex V2 = new Vertex(new List<IGoapWorldProperty>(), 2, "V2");
+        private static readonly Vertex V3 = new Vertex(new List<IGoapWorldProperty>(), 2, "V3");
+        private static readonly Vertex V4 = new Vertex(new List<IGoapWorldProperty>(), 2, "V4");
 
         private static readonly Edge E1 = new Edge(1, V1, V2);
         private static readonly Edge E2 = new Edge(2, V2, V3);

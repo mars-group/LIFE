@@ -14,12 +14,12 @@ namespace GoapTests {
 
         private IGoapGoal _happyGoal = new GoalBeHappy();
 
-        private IGoapWorldstate _happyTrue = new Happy(true);
-        private IGoapWorldstate _happyFalse = new Happy(false);
-        private IGoapWorldstate _hasMoneyTrue = new HasMoney(true);
-        private IGoapWorldstate _hasMoneyFalse = new HasMoney(false);
-        private IGoapWorldstate _hasToyTrue = new HasToy(true);
-        private IGoapWorldstate _hasToyFalse = new HasToy(false);
+        private IGoapWorldProperty _happyTrue = new Happy(true);
+        private IGoapWorldProperty _happyFalse = new Happy(false);
+        private IGoapWorldProperty _hasMoneyTrue = new HasMoney(true);
+        private IGoapWorldProperty _hasMoneyFalse = new HasMoney(false);
+        private IGoapWorldProperty _hasToyTrue = new HasToy(true);
+        private IGoapWorldProperty _hasToyFalse = new HasToy(false);
 
         [Test]
         public void GetShortestPathSuccessfulTest() {

@@ -2,7 +2,7 @@
 using GoapCommon.Interfaces;
 
 namespace GoapModelTest.Worldstates {
-    public class Happy : IGoapWorldstate, IEquatable<Happy> {
+    public class Happy : IGoapWorldProperty, IEquatable<Happy> {
 
         private bool _isValid;
         private readonly Enum _stateSymbol = WorldStateEnums.Happy;
@@ -12,10 +12,10 @@ namespace GoapModelTest.Worldstates {
             _isValid = valid;
         }
 
-        public Enum GetWorldstateSymbol() {
+        public Enum GetPropertyKey() {
             return _stateSymbol;
         }
-
+        
         public bool IsValid() {
             return _isValid;
         }
@@ -28,7 +28,7 @@ namespace GoapModelTest.Worldstates {
             SetIsValid(this._isValid != true);
         }
 
-        public IGoapWorldstate GetClone() {
+        public IGoapWorldProperty GetClone() {
             return new Happy(_isValid);
         }
 

@@ -7,8 +7,8 @@ using GoapModelTest.Worldstates;
 namespace GoapModelTest.Actions {
     public class ActionClean : AbstractGoapAction {
         public ActionClean()
-            : base(new List<IGoapWorldstate> {new Happy(true)},
-                new List<IGoapWorldstate> {
+            : base(new List<IGoapWorldProperty> {new Happy(true)},
+                new List<IGoapWorldProperty> {
                     new Happy(false),
                     new HasMoney(true)
                 }) {}
@@ -17,14 +17,14 @@ namespace GoapModelTest.Actions {
             return true;
         }
 
+        public override void Execute() {
+           
+        }
+
         public override bool ExecuteContextEffects() {
             throw new NotImplementedException();
         }
-
-        public override void Execute() {
-            throw new NotImplementedException();
-        }
-
+        
         public override int GetExecutionCosts() {
             return 1;
         }
