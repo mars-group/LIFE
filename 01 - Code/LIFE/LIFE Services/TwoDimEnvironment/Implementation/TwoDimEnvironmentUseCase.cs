@@ -27,7 +27,7 @@ namespace TwoDimEnvironment
 			_quadTree.Insert (item);
 		}
 
-		public T Move (T item, int X, int Y)
+		public Rect Move (T item, double X, double Y)
 		{
 			_quadTree.Remove (item);
 
@@ -41,7 +41,7 @@ namespace TwoDimEnvironment
 			);
 
 			_quadTree.Insert (item);
-			return item;
+			return item.Bounds;
 		}
 
 		public List<T> Find (Rect area)

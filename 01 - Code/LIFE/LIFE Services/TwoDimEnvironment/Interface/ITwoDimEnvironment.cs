@@ -21,7 +21,7 @@ namespace TwoDimEnvironment
 		/// <param name="X">The target position's X coordinate</param>
 		/// <param name="Y">The target position's Y coordinate</param>
 		/// <returns>The updated item with ne Bounds and Position</returns>
-		T Move(T item, int X, int Y);
+		Rect Move(T item, double X, double Y);
 
 		/// <summary>
 		/// Update the specified item.
