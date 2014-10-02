@@ -30,7 +30,7 @@ namespace ResultLayer
 			var stb = new StringBuilder ();
 
 			plants.ForEach(plant => {
-				stb.Append(plant.GetHealth);
+				stb.Append(plant.GetHealth());
 			});
 		}
 
