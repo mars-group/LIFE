@@ -24,7 +24,7 @@ namespace WaterLayer
 				return amount;
 			} else {
 				_capacity = 0;
-				return amount - res;
+				return amount + res;
 			}
 		}
 
