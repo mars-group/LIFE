@@ -27,6 +27,13 @@ namespace AWRShowcase
             _rand = new Random();
         }
 
+		/// <summary>
+		/// Inits the forest layer from data placed in the MARS ROCK db.
+		/// </summary>
+		/// <returns><c>true</c>, if layer was inited, <c>false</c> otherwise.</returns>
+		/// <param name="layerInitData">Layer init data.</param>
+		/// <param name="registerAgentHandle">Register agent handle.</param>
+		/// <param name="unregisterAgentHandle">Unregister agent handle.</param>
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
             Drill.InitializeConnection("rock.mars.haw-hamburg.de", "mars", "rock");
