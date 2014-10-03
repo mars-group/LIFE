@@ -92,7 +92,7 @@
       <Project>{2871F5A0-1375-48CE-998F-B90D3D2D1A95}</Project>
       <Name>GoapGraphConnector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
+    <ProjectReference Include="..\..\LIFE Services\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
       <Project>{d1feb7b4-55cd-47d7-8828-5ee7b4c2db95}</Project>
       <Name>TypeSafeBlackboard</Name>
     </ProjectReference>

@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CSharpQuadTree">
-      <HintPath>..\..\..\T-Components\CSharpQuadTree\obj\Debug\CSharpQuadTree.dll</HintPath>
+      <HintPath>..\..\..\T-Components\CSharpQuadTree\bin\Debug\CSharpQuadTree.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
