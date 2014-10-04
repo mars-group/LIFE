@@ -5,54 +5,61 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.SimpleGraph {
     public class Node : IGoapNode, IEquatable<Node> {
-        private readonly List<IGoapWorldProperty> _worldstate;
-
-        private readonly string _name;
+        
         private readonly int _heuristic;
+        private readonly List<IGoapWorldProperty> _goalValues;
+        private readonly List<IGoapWorldProperty> _currValues;
+        private readonly List<IGoapWorldProperty> _unsatisfiedGoalValues;
 
-
-        public Node(List<IGoapWorldProperty> worldstate, string name = "NotNamedVertex")
+        public List<IGoapWorldProperty> GetUnsatisfiedGoalValues()
         {
-            _worldstate = worldstate;
-            _name = name;
+            return _unsatisfiedGoalValues;
         }
 
-        public Node(List<IGoapWorldProperty> worldstate, int heuristic, string name = "NotNamedVertex") {
-            _worldstate = worldstate;
-            _heuristic = heuristic;
-            _name = name;
+        public List<IGoapWorldProperty> GetCurrValues() {
+            return _currValues;
         }
 
-        public int GetHeuristic(IGoapNode target) {
+        public List<IGoapWorldProperty> GetGoalValues() {
+            return _goalValues;
+        }
+
+        public int GetHeuristic() {
             return _heuristic;
         }
 
-        public string GetIdentifier()
-        {
-            return _name;
+        public Node(List<IGoapWorldProperty> goalValues, List<IGoapWorldProperty> currentValues, int heuristik) {
+            _goalValues = goalValues;
+            _currValues = currentValues;
+            _heuristic = heuristik;
+            _unsatisfiedGoalValues = CalculateUnsatisfiedConditions();
+        }
+        
+        public List<IGoapWorldProperty> CalculateUnsatisfiedConditions() {
+            List<IGoapWorldProperty> unsatisfied = new List<IGoapWorldProperty>();
+            foreach (var goalValue in _goalValues) {
+                if (!_currValues.Contains(goalValue)) unsatisfied.Add(goalValue);
+            }
+            return unsatisfied;
         }
 
-        public List<IGoapWorldProperty> Worldstate() {
-            return _worldstate;
+      
+        public List<IGoapWorldProperty> GetSatisfiedGoalValues(){
+            List<IGoapWorldProperty> satisfied = new List<IGoapWorldProperty>();
+            foreach (var goalValue in _goalValues){
+                if (_currValues.Contains(goalValue)) satisfied.Add(goalValue);
+            }
+            return satisfied;
         }
 
-        public override string ToString() {
-            string states = _worldstate.Aggregate("", (current, state) => current + " " + state.ToString());
-
-            return string.Format("<Knoten {0} {1}>", _name, states);
+        public bool HasUnsatisfiedProperties() {
+            return _unsatisfiedGoalValues.Count > 0;
         }
 
-        /// <summary>
-        /// equality depens on the set of worldstate symbols a vertex represents
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(Node other) {
+       public bool Equals(Node other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return ((_worldstate.Where(x => other._worldstate.Contains(x)).Count() == _worldstate.Count()) &&
-                    (other._worldstate.Where(x => _worldstate.Contains(x)).Count() == other._worldstate.Count()));
-
+            return _heuristic == other._heuristic && Equals(_goalValues, other._goalValues) && Equals(_currValues, other._currValues) && Equals(_unsatisfiedGoalValues, other._unsatisfiedGoalValues);
         }
 
         public override bool Equals(object obj) {
@@ -63,7 +70,13 @@ namespace GoapGraphConnector.SimpleGraph {
         }
 
         public override int GetHashCode() {
-            return (_worldstate != null ? _worldstate.GetHashCode() : 0);
+            unchecked {
+                int hashCode = _heuristic;
+                hashCode = (hashCode*397) ^ (_goalValues != null ? _goalValues.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (_currValues != null ? _currValues.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (_unsatisfiedGoalValues != null ? _unsatisfiedGoalValues.GetHashCode() : 0);
+                return hashCode;
+            }
         }
 
         public static bool operator ==(Node left, Node right) {

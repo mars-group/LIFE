@@ -5,24 +5,24 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
     public class Edge : IGoapEdge {
-        private readonly IGoapNode _source;
-        private readonly IGoapNode _target;
+        private readonly IGoapVertex _source;
+        private readonly IGoapVertex _target;
         private readonly int _cost;
         private readonly string _name;
 
        
-        public Edge(int cost, IGoapNode source, IGoapNode target, string name = "NotNamedEdge") {
+        public Edge(int cost, IGoapVertex source, IGoapVertex target, string name = "NotNamedEdge") {
             _cost = cost;
             _source = source;
             _target = target;
             _name = name;
         }
 
-        public IGoapNode GetSource() {
+        public IGoapVertex GetSource() {
             return _source;
         }
 
-        public IGoapNode GetTarget() {
+        public IGoapVertex GetTarget() {
             return _target;
         }
 

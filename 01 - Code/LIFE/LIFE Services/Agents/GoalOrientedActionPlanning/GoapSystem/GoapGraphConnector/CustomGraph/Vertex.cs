@@ -4,7 +4,7 @@ using System.Linq;
 using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
-    public class Vertex : IGoapNode, IEquatable<Vertex> {
+    public class Vertex : IGoapVertex, IEquatable<Vertex> {
         private readonly List<IGoapWorldProperty> _worldstate;
 
         private readonly string _name;
@@ -23,7 +23,7 @@ namespace GoapGraphConnector.CustomGraph {
             _name = name;
         }
 
-        public int GetHeuristic(IGoapNode target) {
+        public int GetHeuristic(IGoapVertex target) {
             return _heuristic;
         }
 

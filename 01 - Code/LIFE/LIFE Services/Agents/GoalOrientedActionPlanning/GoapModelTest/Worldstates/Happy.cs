@@ -12,6 +12,10 @@ namespace GoapModelTest.Worldstates {
             _isValid = valid;
         }
 
+        public IGoapWorldProperty GetNegative() {
+            return new Happy(false);
+        }
+
         public Enum GetPropertyKey() {
             return _stateSymbol;
         }

@@ -11,7 +11,7 @@ namespace GoapTests {
 
         [SetUp]
         protected void SetUp() {
-            _graph = new Graph(new List<IGoapNode> {V5}, new List<IGoapEdge>());
+            _graph = new Graph(new List<IGoapVertex> {V5}, new List<IGoapEdge>());
             _graphService = new GoapCustomGraphService();
         }
 
@@ -71,7 +71,7 @@ namespace GoapTests {
             _graph.AddEdge(e1);
             _graph.AddEdge(e2);
 
-            List<IGoapNode> nodes = _graph.GetVertices();
+            List<IGoapVertex> nodes = _graph.GetVertices();
             Assert.True(V2.Equals(V3));
             Assert.True(nodes.Count == 2);
         }

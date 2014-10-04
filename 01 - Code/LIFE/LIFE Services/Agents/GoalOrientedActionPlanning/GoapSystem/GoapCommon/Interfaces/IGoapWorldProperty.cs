@@ -26,6 +26,8 @@ namespace GoapCommon.Interfaces {
         /// <returns></returns>
         IGoapWorldProperty GetClone();
 
-       
+        IGoapWorldProperty GetNegative();
+
+
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using GoapGraphConnector.SimpleGraph;
+using TypeSafeBlackboard;
 
 namespace GoapActionSystem.Implementation {
     /// <summary>
@@ -18,33 +19,30 @@ namespace GoapActionSystem.Implementation {
         private readonly int _maximuxSearchDepth = int.MaxValue;
         private List<AbstractGoapAction> _currentPlan;
         private readonly List<AbstractGoapAction> _availableActions;
+        private Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> _effectToAction;
+        private Blackboard _blackboard;
 
         /// <summary>
         /// </summary>
         /// <param name="maximuxSearchDepth"></param>
         /// <param name="availableActions"></param>
-        public GoapPlanner(int maximuxSearchDepth, List<AbstractGoapAction> availableActions) {
+        /// <param name="effectToAction"></param>
+        public GoapPlanner(int maximuxSearchDepth, List<AbstractGoapAction> availableActions, Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> effectToAction, Blackboard blackboard)
+        {
             if (availableActions.Count == 0)
                 throw new ArgumentException("Planner may not be instanciated with an empty list of actions");
+            _effectToAction = effectToAction;
+            _blackboard = blackboard;
             _maximuxSearchDepth = maximuxSearchDepth;
             _availableActions = availableActions;
         }
 
-        /// <summary>
-        ///     create the start graph, open list, closed list
-        ///     note regressive seach so root node will be the targeted worldstate
-        /// </summary>
-        /// <param name="graphRoot"></param>
-        /// <param name="graphTarget"></param>
-        /// <returns></returns>
-        private IGoapGraphService InitializeGraphService(List<IGoapWorldProperty> graphRoot,
-            List<IGoapWorldProperty> graphTarget) {
-            //var graphService = new GoapCustomGraphService();
+        private IGoapGraphService InitializeGraphService(List<IGoapWorldProperty> graphRoot){
             var graphService = new GoapSimpleGraphService();
-            graphService.InitializeGoapGraph(graphRoot, graphTarget);
+            graphService.InitializeGoapGraph(graphRoot);
             return graphService;
         }
-
+        
         private bool IsCurrentVertexSubsetOfTarget(List<IGoapWorldProperty> currentWorld, List<IGoapWorldProperty> targetWorld) {
             return (currentWorld.Where(x => targetWorld.Contains(x)).Count() == currentWorld.Count());
         }
@@ -62,55 +60,43 @@ namespace GoapActionSystem.Implementation {
             return new SurrogateAction();
         }
 
-        public List<AbstractGoapAction> GetPlan(List<IGoapWorldProperty> currentWorld,
-            List<IGoapWorldProperty> targetWorld) {
-            List<IGoapWorldProperty> graphTarget = currentWorld;
-            List<IGoapWorldProperty> graphRoot = targetWorld;
+        public List<AbstractGoapAction> GetPlan(IGoapGoal goal) {
+            List<IGoapWorldProperty> graphRoot = goal.GetTargetWorldstates();
 
-            IGoapGraphService graphService = InitializeGraphService(graphRoot, graphTarget);
+            IGoapGraphService graphService = InitializeGraphService(graphRoot);
+
+            IGoapNode currentNode = graphService.GetNextVertexFromOpenList();
+
+            while (!IsSearchDepthLimitExceeded(graphService) && currentNode.HasUnsatisfiedProperties()) {
+
+                List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties(currentNode.GetUnsatisfiedGoalValues());
+                List<AbstractGoapAction> filtered = FilterActionsByContextPreconditions(satisfyingActions);
+
+                
+
+                graphService.ExpandCurrentVertex(filtered);
 
 
-            /* 1 graph erstellen (nur erster Knoten) und diesen in die open list
-             2 step durch algorithmus : besten aus open list raussuchen und 
-                 kostentabelle pflegen 
-             
-                 knotenname
-                 Vorgänger
-                 h (bisherige Wegsumme + heuristischer Wert für den knoten)
-                 g (bisherige Wegsumme)
-                 f (heuristischer Wert für den knoten)
-                 CL flag ob Knoten in closed list
-             
-             3 kinder: anfordern durch planner 
-             4 falls neue kinder dazu kamen - tabelle erweitern
-             goto 2
-             
-             wenn kein weg  mehr günstiger ist als der bisherige weg zum ziel fertig
-             */
-            IGoapNode currentGoapNode = graphService.GetNextVertexFromOpenList();
 
-            while (currentGoapNode != null &&
-                   !IsCurrentVertexSubsetOfTarget(currentGoapNode.Worldstate(), graphTarget) &&
-                   !IsSearchDepthLimitExceeded(graphService)) {
-                List<AbstractGoapAction> children = GetIngoingGoapActions(currentGoapNode.Worldstate());
-                graphService.ExpandCurrentVertex(children, currentGoapNode.Worldstate());
                 graphService.AStarStep();
-                currentGoapNode = graphService.GetNextVertexFromOpenList();
-            }
+                currentNode = graphService.GetNextVertexFromOpenList();
+              }
 
-            if (currentGoapNode != null && IsCurrentVertexSubsetOfTarget(currentGoapNode.Worldstate(), graphTarget)) {
-                _currentPlan = graphService.GetShortestPath();
-                _currentPlan.Reverse();
-            }
-            if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
-                _currentPlan = new List<AbstractGoapAction> {new SurrogateAction()};
+            if (currentNode != null && !currentNode.HasUnsatisfiedProperties()){
+                    _currentPlan = graphService.GetShortestPath();
+                    _currentPlan.Reverse();
+                }
+                if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
+                    _currentPlan = new List<AbstractGoapAction> { new SurrogateAction() };
 
-            // TODO ist die leere action besser als eine leere liste ?
-            
-            return _currentPlan;
+                // TODO ist die leere action besser als eine leere liste ?
+
+                return _currentPlan;
+
+
         }
 
-
+       
         /// <summary>
         ///     search for actions that effects correxpond to the state
         /// </summary>
@@ -120,5 +106,19 @@ namespace GoapActionSystem.Implementation {
             // TODO alle actions untersuchen ob sie anwendbar sind - mithilfe der effect -> Action hashmap
             return _availableActions.Where(action => action.IsSatisfyingStateByEffects(worldStates)).ToList();
         }
+
+        private List<AbstractGoapAction> GetActionsByUnsatisfiedProperties(List<IGoapWorldProperty> unsatisfied) {
+            HashSet<AbstractGoapAction> relevantActions = new HashSet<AbstractGoapAction>();
+            foreach (var property in unsatisfied) {
+                _effectToAction[property].ForEach(x => relevantActions.Add(x));
+            }
+            return relevantActions.ToList();
+        }
+
+        private List<AbstractGoapAction> FilterActionsByContextPreconditions(List<AbstractGoapAction> actionsToFilter) {
+            return actionsToFilter.Where(action => action.ValidateContextPreconditions()).ToList();
+        } 
+
+
     }
 }

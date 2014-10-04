@@ -7,9 +7,12 @@ namespace GoapModelTest.Worldstates {
         private bool _isValid;
         private readonly Enum _stateSymbol = WorldStateEnums.HasToy;
 
-        public HasToy(bool valid)
-        {
+        public HasToy(bool valid){
             _isValid = valid;
+        }
+
+        public IGoapWorldProperty GetNegative(){
+            return new HasToy(false);
         }
        
         public Enum GetPropertyKey() {

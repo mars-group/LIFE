@@ -23,11 +23,11 @@ namespace GoapActionSystem.Implementation {
         }
 
         public override int GetExecutionCosts() {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public override int GetPriority() {
-            throw new NotImplementedException();
+            return 0;
         }
     }
 }

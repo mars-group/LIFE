@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GoapCommon.Interfaces
-{
-
+namespace GoapCommon.Interfaces {
     public interface IGoapNode {
-        int GetHeuristic(IGoapNode target);
 
-        string GetIdentifier();
+        List<IGoapWorldProperty> GetUnsatisfiedGoalValues();
 
-        List<IGoapWorldProperty> Worldstate();
+        List<IGoapWorldProperty> GetSatisfiedGoalValues();
+        
+        List<IGoapWorldProperty> GetCurrValues();
+        
+        List<IGoapWorldProperty> GetGoalValues();
+        
+        int GetHeuristic();
 
+        bool HasUnsatisfiedProperties();
+        
     }
+
 }

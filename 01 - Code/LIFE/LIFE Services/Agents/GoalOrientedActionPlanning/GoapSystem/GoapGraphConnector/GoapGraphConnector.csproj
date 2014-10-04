@@ -41,16 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomGraph\AStarSteppable.cs" />
-    <Compile Include="CustomGraph\Edge.cs" />
-    <Compile Include="CustomGraph\GoapCustomGraphService.cs" />
-    <Compile Include="CustomGraph\Graph.cs" />
-    <Compile Include="CustomGraph\Vertex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleGraph\AStarSteppable.cs" />
     <Compile Include="SimpleGraph\Edge.cs" />
     <Compile Include="SimpleGraph\GoapSimpleGraphService.cs" />
-    <Compile Include="SimpleGraph\Graph.cs" />
+    <Compile Include="SimpleGraph\Map.cs" />
     <Compile Include="SimpleGraph\Node.cs" />
   </ItemGroup>
   <ItemGroup>

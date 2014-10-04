@@ -11,8 +11,7 @@ namespace GoapGraphConnector.SimpleGraph {
     public class AStarSteppable {
         public IGoapNode Current { get { return _current; } }
         private readonly IGoapNode _root;
-        private readonly IGoapNode _target;
-        private readonly Graph _graph;
+        private readonly Map _graph;
         private IGoapNode _current;
         private Dictionary<IGoapNode, object[]> _nodeTable;
 
@@ -21,9 +20,8 @@ namespace GoapGraphConnector.SimpleGraph {
         /// <param name="root"></param>
         /// <param name="target"></param>
         /// <param name="graph"></param>
-        public AStarSteppable(IGoapNode root, IGoapNode target, Graph graph) {
+        public AStarSteppable(IGoapNode root,  Map graph){
             _root = root;
-            _target = target;
             _graph = graph;
             InitializeAStar();
         }
@@ -33,7 +31,7 @@ namespace GoapGraphConnector.SimpleGraph {
         /// </summary>
         private void InitializeAStar() {
             _nodeTable = new Dictionary<IGoapNode, object[]>();
-            object[] entry = CreateNodeEntry(_root, _root.GetHeuristic(_target), 0, _root.GetHeuristic(_target));
+            object[] entry = CreateNodeEntry(_root, _root.GetHeuristic(), 0, _root.GetHeuristic());
             _nodeTable.Add(_root, entry);
             _current = _root;
         }
@@ -46,7 +44,8 @@ namespace GoapGraphConnector.SimpleGraph {
             IGoapNode vertex = null;
 
             // TODO in welcher Reihenfolge werden die Elemente iteriert (ist vermutlich unterschiedlich bei dict) und führt das zu Fehlern?
-            foreach (KeyValuePair<IGoapNode, object[]> keyValuePair in _nodeTable) {
+            foreach (KeyValuePair<IGoapNode, object[]> keyValuePair in _nodeTable)
+            {
                 // if not in closed list and estimated value smaller than actual smallestF
                 if (keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false &&
                     (int) keyValuePair.Value[3] < smallestF) {
@@ -69,7 +68,7 @@ namespace GoapGraphConnector.SimpleGraph {
         /// </summary>
         /// <returns></returns>
         public bool CheckforTargetStatesAreSatisfied() {
-            return (_target.Worldstate().Count(x => _current.Worldstate().Contains(x)) == _target.Worldstate().Count());
+            return _current.HasUnsatisfiedProperties() == false;
         }
 
         public void AddVertex(IGoapNode vertex) {
@@ -97,7 +96,7 @@ namespace GoapGraphConnector.SimpleGraph {
             ChooseNextNodeFromOpenList();
         }
 
-        private IGoapNode GetPredecessor(IGoapNode vertex) {
+        private IGoapNode GetPredecessor(IGoapNode vertex){
             if (!_nodeTable.ContainsKey(vertex))
                 throw new AlgorithmException("vertex asked for predeseccor not in algoritm list");
 
@@ -105,11 +104,12 @@ namespace GoapGraphConnector.SimpleGraph {
             if (!_nodeTable.TryGetValue(vertex, out value))
                 throw new AlgorithmException("node tab not in algoritm list");
 
-            return (IGoapNode) value[0];
+            return (IGoapNode)value[0];
         }
 
 
-        private void Calculate(IGoapNode current, List<IGoapNode> reachableVertices) {
+        private void Calculate(IGoapNode current, List<IGoapNode> reachableVertices)
+        {
             // check if all are in the node list
             if (reachableVertices.Any(v => !_nodeTable.ContainsKey(v)))
                 throw new AlgorithmException("Inconsistence in node list. a reachable vertex is not in the nodelist");
@@ -121,18 +121,20 @@ namespace GoapGraphConnector.SimpleGraph {
 
             // filter out the vertices on closed list
             List<IGoapNode> reachableOnOpenList = new List<IGoapNode>();
-            foreach (IGoapNode v in reachableVertices) {
+            foreach (IGoapNode v in reachableVertices)
+            {
                 object[] value;
                 _nodeTable.TryGetValue(v, out value);
                 if (value == null || (bool) value[4] == false) reachableOnOpenList.Add(v);
             }
 
-            foreach (IGoapNode openVertex in reachableOnOpenList) {
+            foreach (IGoapNode openVertex in reachableOnOpenList)
+            {
                 object[] value;
                 _nodeTable.TryGetValue(openVertex, out value);
 
                 // create the new values for comparison if predecessor would be current vertex
-                int heuristic = openVertex.GetHeuristic(_target);
+                int heuristic = openVertex.GetHeuristic();
                 int travelDistanceG = (int) currentValue[2] + _graph.GetcheapestWayCost(current, openVertex);
                 int estimatedValueF = travelDistanceG + heuristic;
 
@@ -156,7 +158,8 @@ namespace GoapGraphConnector.SimpleGraph {
         ///     manipulate entry for node in algorithm table - set status to in closed list
         /// </summary>
         /// <param name="vertex"></param>
-        private void SetOnClosedList(IGoapNode vertex) {
+        private void SetOnClosedList(IGoapNode vertex)
+        {
             object[] entryForChange;
             _nodeTable.TryGetValue(vertex, out entryForChange);
             if (entryForChange == null) {

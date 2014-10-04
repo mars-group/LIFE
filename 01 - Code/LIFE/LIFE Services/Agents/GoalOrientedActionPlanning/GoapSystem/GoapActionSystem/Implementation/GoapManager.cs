@@ -6,6 +6,7 @@ using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using TypeSafeBlackboard;
 
+
 namespace GoapActionSystem.Implementation {
     public class GoapManager : AbstractGoapSystem {
         private readonly List<AbstractGoapAction> _availableActions;
@@ -31,7 +32,8 @@ namespace GoapActionSystem.Implementation {
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
-            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals))throw new ArgumentException("GoapManager: Goap manager cannot start with empty goal or action list");
+            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals))
+                throw new ArgumentException("GoapManager: Goap manager cannot start with empty goal or action list");
             CreateWorldstatesByNeeds();
             CreateEffectActionHashTable();
             ChooseNewGoal();
@@ -49,7 +51,8 @@ namespace GoapActionSystem.Implementation {
                 List<IGoapGoal> availableGoals,
                 Blackboard blackboard,
                 List<IGoapWorldProperty> startStates) {
-            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals))throw new ArgumentException("GoapManager: Goap manager cannot start with empty goal or action list");
+            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals))
+                throw new ArgumentException("GoapManager: Goap manager cannot start with empty goal or action list");
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
@@ -67,13 +70,12 @@ namespace GoapActionSystem.Implementation {
         /// </summary>
         /// <returns></returns>
         public override AbstractGoapAction GetNextAction() {
-
             if (GoalIsReached()) {
                 Console.WriteLine("Goal " + _currentGoal.GetType() + " is reached.");
                 ChooseNewGoal();
                 CreateNewPlan();
-
-            }else if (!IsPlanValid()) {
+            }
+            else if (!IsPlanValid()) {
                 ChooseNewGoal();
                 CreateNewPlan();
             }
@@ -89,8 +91,8 @@ namespace GoapActionSystem.Implementation {
         }
 
         private void CreateNewPlan() {
-            GoapPlanner planner = new GoapPlanner(maximuxSearchDepth: 20, availableActions: _availableActions);
-            _currentPlan = planner.GetPlan(_internalBlackboard.Get(Worldstate), _currentGoal.GetTargetWorldstates());
+            GoapPlanner planner = new GoapPlanner( 20, _availableActions, _effectToAction, _internalBlackboard);
+           _currentPlan = planner.GetPlan(_currentGoal);
         }
 
         private bool GoalIsReached() {

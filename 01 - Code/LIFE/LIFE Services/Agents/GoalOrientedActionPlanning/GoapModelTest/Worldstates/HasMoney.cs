@@ -9,6 +9,10 @@ namespace GoapModelTest.Worldstates {
         public HasMoney(bool valid){
             _isValid = valid;
          }
+
+        public IGoapWorldProperty GetNegative(){
+            return new HasMoney(false);
+        }
        
         public Enum GetPropertyKey() {
             return _stateSymbol;

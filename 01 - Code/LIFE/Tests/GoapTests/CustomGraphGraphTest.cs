@@ -12,8 +12,8 @@ namespace GoapTests {
 
         [SetUp]
         protected void SetUp() {
-            _graph = new Graph(new List<IGoapNode> {V5}, new List<IGoapEdge>());
-            _emptyGraph = new Graph(new List<IGoapNode>(), new List<IGoapEdge>());
+            _graph = new Graph(new List<IGoapVertex> {V5}, new List<IGoapEdge>());
+            _emptyGraph = new Graph(new List<IGoapVertex>(), new List<IGoapEdge>());
         }
 
         #endregion
@@ -137,7 +137,7 @@ namespace GoapTests {
             _emptyGraph.AddEdge(e3);
             _emptyGraph.AddEdge(e4);
 
-            List<IGoapNode> vertices = _emptyGraph.GetReachableAdjcentVertices(V1);
+            List<IGoapVertex> vertices = _emptyGraph.GetReachableAdjcentVertices(V1);
             Assert.Contains(V4, vertices);
             Assert.Contains(V5, vertices);
             Assert.False(vertices.Contains(V2));

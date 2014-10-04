@@ -4,8 +4,8 @@ using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.CustomGraph {
     public class GoapCustomGraphService : IGoapGraphService {
-        private IGoapNode _root;
-        private IGoapNode _target;
+        private IGoapVertex _root;
+        private IGoapVertex _target;
         private Graph _graph;
         private AStarSteppable _aStar;
 
@@ -20,11 +20,11 @@ namespace GoapGraphConnector.CustomGraph {
             InitializeGoapGraph(_root, _target, maximumGraphDept);
         }
 
-        private void InitializeGoapGraph(IGoapNode root, IGoapNode target,
+        private void InitializeGoapGraph(IGoapVertex root, IGoapVertex target,
             int maximumGraphDept = 0) {
             _root = root;
             _target = target;
-            _graph = new Graph(new List<IGoapNode> {_root}, new List<IGoapEdge>());
+            _graph = new Graph(new List<IGoapVertex> {_root}, new List<IGoapEdge>());
             _aStar = new AStarSteppable(_root, _target, _graph);
         }
 
@@ -33,7 +33,7 @@ namespace GoapGraphConnector.CustomGraph {
             return _graph.IsEmpty();
         }
 
-        public IGoapNode GetNextVertexFromOpenList() {
+        public IGoapVertex GetNextVertexFromOpenList() {
             return _aStar.Current;
         }
 
