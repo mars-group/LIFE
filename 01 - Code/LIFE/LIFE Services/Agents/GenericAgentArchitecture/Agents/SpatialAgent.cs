@@ -12,33 +12,33 @@ namespace GenericAgentArchitecture.Agents {
 
     private readonly IEnvironment _env;  // IESC implementation for collision detection.
     protected readonly MData Data;       // Container for position, direction and speeds.
-    protected readonly AgentMover Mover; // Class for agent movement. 
+    protected AgentMover Mover;          // Class for agent movement. 
 
 
     /// <summary>
     ///   Instantiate a new agent with spatial data. Only available for specializations.
     /// </summary>
     /// <param name="id">Unique agent identifier.</param>
-    /// <param name="esc">Environment implementation reference.</param>
-    /// <param name="pos">The initial position.</param>
-    /// <param name="dim">Agent's physical dimension.</param>
-    /// <param name="type">Type of agent. Needed for ESC reconnaissance.</param>
-    /// <param name="phys">'True' if the agent is collidable.</param>
-    protected SpatialAgent(long id, IEnvironment esc, TVector pos, TVector dim, int type, bool phys = true) : base(id) {
-      _env = esc;
-      Data = new MData(pos);
-      Mover = null;   
+    /// <param name="env">Environment implementation reference.</param>
+    /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
+    protected SpatialAgent(long id, IEnvironment env, TVector pos) : base(id) {
+      _env = env;
+      Data = new MData(pos);  
       _env.AddAgent(this, Data); // Enlist the agent in environment.
     }
 
 
     /// <summary>
-    ///   When the agent is destroyed, it is no longer physically present. Remove it from ESC!
+    ///   When the agent is destroyed, it is no longer physically present. 
+    ///   Remove it from the environment!
     /// </summary>
     ~SpatialAgent () {
       if (_env != null) _env.RemoveAgent(this);
     }
 
+
+    //-------------------------------------------------------------------------
+    // GET methods. The latter two are probably not used.
 
     /// <summary>
     ///   Returns the position of the agent.

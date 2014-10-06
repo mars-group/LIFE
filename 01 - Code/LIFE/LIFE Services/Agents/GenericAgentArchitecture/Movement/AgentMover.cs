@@ -1,5 +1,4 @@
-﻿using ESCTestLayer.Interface;
-using TVector = CommonTypes.DataTypes.Vector;
+﻿using GenericAgentArchitecture.Agents;
 
 namespace GenericAgentArchitecture.Movement {
 
@@ -9,9 +8,9 @@ namespace GenericAgentArchitecture.Movement {
   /// </summary>
   public abstract class AgentMover {
 
-    private readonly IEnvironment _env; // Environment interaction interface.
-    private readonly int _id;           // Agent identifier, needed for ESC registration.
-    protected readonly MData Data;      // The agent's movement data container.
+    private readonly IEnvironment _env;   // Environment interaction interface.
+    private readonly SpatialAgent _agent; // Agent reference, needed for movement execution.
+    protected readonly MData Data;        // The agent's movement data container.
     
     protected Vector TargetPos;    // Target position to acquire. May be set or calculated.
     protected Direction TargetDir; // Desired heading.
@@ -24,33 +23,21 @@ namespace GenericAgentArchitecture.Movement {
     ///   Instantiate a new base L0 class. Only available for specializations.
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
-    /// <param name="id">Agent identifier, needed by ESC.</param>
+    /// <param name="agent">Agent reference, needed for movement execution.</param>
     /// <param name="data">Container with spatial base data.</param>
-    protected AgentMover(IEnvironment env, int id, MData data) {
+    protected AgentMover(IEnvironment env, SpatialAgent agent, MData data) {
       _env = env;
-      _id = id;
+      _agent = agent;
       Data = data;
     }
 
 
     /// <summary>
-    ///   [L0] Perform the movement action. Sends updated values to ESC and receives success or failure.
+    ///   [L0] Perform the movement action. Call environment interface with updated values.
+    ///   The adapter is responsible to set the checked (returned) data.
     /// </summary>
     protected void Move() {
-      var dv = TargetDir.GetDirectionalVector();
-      var dt = new TVector(dv.X, dv.Y, dv.Z);
-      var pt = new TVector(TargetPos.X, TargetPos.Y, TargetPos.Z);
-
-      // Call ESC movement update and apply returning objects.
-      var result = _esc.SetPosition(_id, pt, dt);
-      Data.Position.X = result.Position.X;
-      Data.Position.Y = result.Position.Y;
-      Data.Position.Z = result.Position.Z;
-      //TODO Richtung auch übernehmen. Gibt die ESC noch nicht her!
-      //Data.Direction.SetDirectionalVector(result ...);
-      Data.Direction.SetPitch(TargetDir.Pitch);
-      Data.Direction.SetYaw(TargetDir.Yaw);
-      //TODO Parameterliste durchreichen an Wahrnehmungsspeicher.
+      _env.ChangePosition(_agent, TargetPos, TargetDir);
     }
 
 

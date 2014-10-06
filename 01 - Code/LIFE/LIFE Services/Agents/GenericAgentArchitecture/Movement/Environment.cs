@@ -62,7 +62,7 @@ namespace GenericAgentArchitecture.Movement {
     ///   Add an agent to the execution list.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    public virtual void AddAgent(Agent agent) {
+    public void AddAgent(Agent agent) {
       Agents.Add(agent);
     }
 
@@ -89,15 +89,6 @@ namespace GenericAgentArchitecture.Movement {
     ///   This function allows execution of environment-specific code.
     /// </summary>
     protected abstract void AdvanceEnvironment();
-
-
-    /// <summary>
-    ///   Calculate a distance between two agents. This can be an arbitrary metric.
-    /// </summary>
-    /// <param name="x">The first agent.</param>
-    /// <param name="y">The second agent.</param>
-    /// <returns>A value describing the distance between these two agents.</returns>
-    public abstract double GetDistance(Agent x, Agent y);
 
 
     /// <summary>

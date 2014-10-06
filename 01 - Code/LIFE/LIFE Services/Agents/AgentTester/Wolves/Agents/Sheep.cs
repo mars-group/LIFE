@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
-using CommonTypes.DataTypes;
-using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
@@ -21,18 +20,25 @@ namespace AgentTester.Wolves.Agents {
     private string _states;
 
 
-    public Sheep(long id, IESC esc, Grassland environment) : base(id, esc, null, new TVector(1,1), 2) {
-      Position = new Vector(-1, -1); // We just need an object (coords set by env).
+    /// <summary>
+    ///   Create a new sheep agent.
+    /// </summary>
+    /// <param name="id">The agent identifier.</param>
+    /// <param name="env">Grassland reference.</param>
+    /// <param name="pos">The initial position.</param>
+    public Sheep(long id, Grassland env, TVector pos) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
-      _environment = environment;
-      PerceptionUnit.AddSensor
-        (new DataSensor
-          (
-          this,
-          environment,
-          (int) Grassland.InformationTypes.Agents,
-          new RadialHalo(Position, 8))
-        );
+      _environment = env;
+      
+      // Add perception sensor.
+      PerceptionUnit.AddSensor(new DataSensor(
+        this, env,
+        (int) Grassland.InformationTypes.Agents,
+        new RadialHalo(Data.Position, 8))
+      );
+
+      // Add movement module.
+      Mover = new GridMover(env, this, Data);
     }
 
 
@@ -59,30 +65,34 @@ namespace AgentTester.Wolves.Agents {
                 (wolves.Count < 10 ? wolves.Count + "" : "+") + " │ ";
 
       if (grass.Count > 0) {
-        // Get the nearest sheep and calculate the distance towards it.
-        var nGrass = CommonRCF.GetNearestAgent(grass, Position);
-        //var nSheep = CommonRCF.GetNearestAgent(sheeps, Position);
-        //var nWolf = CommonRCF.GetNearestAgent(wolves, Position);
-        var dGrass = Position.GetDistance(nGrass.Position);
-        //var dWolf  = Position.GetDistance(nWolf.Position);
-        _states += String.Format("E: {0,4:0.00} | ", dGrass);
+
+        // Get the nearest grass agent and calculate the distance towards it.
+        var grs = grass[0];
+        var dist = Data.Position.GetDistance(grs.GetPosition());
+        foreach (var g in grass) {
+          if (Data.Position.GetDistance(g.GetPosition()) < dist) {
+            grs = g;
+            dist = Data.Position.GetDistance(grs.GetPosition());
+          }
+        }
+        _states += String.Format("E: {0,4:0.00} | ", dist);
 
         // R1: Eat nearby grass.
-        if (dGrass <= 1 && hunger > 20) {
+        if (dist <= 1 && hunger > 20) {
           _states += "R1";
-          return new EatInteraction(this, nGrass);
+          return new EatInteraction(this, grs);
         }
 
         // R2: Medium grass distance allowed.
-        if (dGrass <= 5 && hunger > 40) {
+        if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, grs.GetPosition());
         }
 
         // R3: Move to the nearest grass, no matter the distance.
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, grs.GetPosition());
         }
       }
 

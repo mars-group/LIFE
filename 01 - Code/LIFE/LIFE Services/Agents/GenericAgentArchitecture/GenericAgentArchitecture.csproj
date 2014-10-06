@@ -50,6 +50,7 @@
     <Compile Include="Movement\ContinuousMover.cs" />
     <Compile Include="Movement\Direction.cs" />
     <Compile Include="Movement\DirectMover.cs" />
+    <Compile Include="Movement\Environment2D.cs" />
     <Compile Include="Movement\ESCAdapter.cs" />
     <Compile Include="Movement\GridMover.cs" />
     <Compile Include="Movement\ContinuousMovementAction.cs" />

@@ -1,22 +1,27 @@
 ﻿using System;
 using AgentTester.Wolves.Interactions;
-using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitectureCommon.Interfaces;
+using TVector = CommonTypes.DataTypes.Vector;
 
 namespace AgentTester.Wolves.Agents {
 
   internal class Grass : SpatialAgent, IAgentLogic, IEatInteractionTarget {
 
-    public int Foodvalue = 2;
-    public const int FoodvalueMax = 60;
-    private readonly Random _random;
-    private readonly Grassland _environment;
+    private int _foodValue = 2;          // Nutrition value (energy).
+    public const int FoodvalueMax = 60;  // Maximum food value.
+    private readonly Random _random;     // Random number generator for unequal growing.
+    private readonly Grassland _env;     // Grassland reference (for removal).
 
-    public Grass(Grassland environment, string id) : base(id) {
-      Position = new Vector(-1, -1, 0);
-      _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
-      _environment = environment;
+    /// <summary>
+    ///   Create a new grass agent.
+    /// </summary>
+    /// <param name="id">The agent identifier.</param>
+    /// <param name="env">Grassland reference.</param>
+    /// <param name="pos">The position.</param>
+    public Grass(long id, Grassland env, TVector pos) : base(id, env, pos) {
+      _random = new Random(Id.GetHashCode());
+      _env = env;
     }
 
 
@@ -25,8 +30,8 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>Nothing yet, later an interaction to execute.</returns>
     public IInteraction Reason() {
-      Foodvalue += _random.Next(4);
-      if (Foodvalue > FoodvalueMax) Foodvalue = FoodvalueMax;
+      _foodValue += _random.Next(4);
+      if (_foodValue > FoodvalueMax) _foodValue = FoodvalueMax;
       return null; //TODO Put code in external IA class! 
     }
 
@@ -37,7 +42,7 @@ namespace AgentTester.Wolves.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format(Id + " | Gras  | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |     |       |         |",
-        Data.Position.X, Data.Position.Y, Foodvalue, FoodvalueMax);
+        Data.Position.X, Data.Position.Y, _foodValue, FoodvalueMax);
     }
 
 
@@ -50,7 +55,7 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>The food value.</returns>
     public int GetFoodValue() {
-      return Foodvalue;
+      return _foodValue;
     }
 
 
@@ -58,7 +63,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      _environment.RemoveAgent(this);
+      _env.RemoveAgent(this);
     }
   }
 }

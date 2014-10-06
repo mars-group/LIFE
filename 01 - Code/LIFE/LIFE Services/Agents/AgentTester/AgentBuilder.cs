@@ -21,12 +21,11 @@ namespace AgentTester {
       var n1 = grass;
       var n2 = n1 + sheeps;
       var n3 = n2 + wolves;
-      var environment = new Grassland (true) {RandomExecution = true};
-      for (var i =  0; i < n1; i++) environment.AddAgent(new Grass(environment, "#"+(i<10? "0" : "")+i));
-      for (var i = n1; i < n2; i++) environment.AddAgent(new Sheep(environment, "#"+(i<10? "0" : "")+i));
-      for (var i = n2; i < n3; i++) environment.AddAgent(new Wolf (environment, "#"+(i<10? "0" : "")+i));     
+      var environment = new Grassland {RandomExecution = true};
+      for (var i =  0; i < n1; i++) new Grass(i, environment, environment.GetRandomPosition());
+      for (var i = n1; i < n2; i++) new Sheep(i, environment, environment.GetRandomPosition());
+      for (var i = n2; i < n3; i++) new Wolf (i, environment, environment.GetRandomPosition());     
       return environment;
     }
-
   }
 }

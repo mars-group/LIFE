@@ -2,30 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
-using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
+using TVector = CommonTypes.DataTypes.Vector;
 
 namespace AgentTester.Wolves.Agents {
 
   internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
+    
     private int _energy = 80;
     private const int EnergyMax = 100;
     private readonly Random _random;
     private readonly Grassland _environment;
     private string _states;
 
-    public Wolf(Grassland environment, string id) : base(id) {
-      Position = new Vector(-1, -1); // We just need an object (coords set by env).
+
+    /// <summary>
+    ///   Create a new wolf agent.
+    /// </summary>
+    /// <param name="id">The agent identifier.</param>
+    /// <param name="env">Grassland reference.</param>
+    /// <param name="pos">The initial position.</param>
+    public Wolf(long id, Grassland env, TVector pos) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
-      _environment = environment;
+      _environment = env;
+      
+      // Add perception sensor.
       PerceptionUnit.AddSensor(new DataSensor(
-        this,
-        environment,
+        this, env,
         (int) Grassland.InformationTypes.Agents,
-        new RadialHalo(Position, 8))
+        new RadialHalo(Data.Position, 8))
       );
+
+      // Add movement module.
+      Mover = new GridMover(env, this, Data);
     }
 
 
@@ -54,26 +66,32 @@ namespace AgentTester.Wolves.Agents {
       if (sheeps.Count > 0) {
 
         // Get the nearest sheep and calculate the distance towards it.
-        var sheep = CommonRCF.GetNearestAgent(sheeps, Position);
-        var distance = Position.GetDistance(sheep.Position);
-        _states += String.Format("E: {0,4:0.00} | ", distance);
+        var sheep = sheeps[0];
+        var dist = Data.Position.GetDistance(sheep.GetPosition());
+        foreach (var shp in sheeps) {
+          if (Data.Position.GetDistance(shp.GetPosition()) < dist) {
+            sheep = shp;
+            dist = Data.Position.GetDistance(sheep.GetPosition());
+          }
+        }
+        _states += String.Format("E: {0,4:0.00} | ", dist);
 
         // R1: If there is a sheep directly ahead and hunger > 20%, eat it!
-        if (distance <= 1 && hunger >= 20) {
+        if (dist <= 1 && hunger >= 20) {
           _states += "R1";
           return new EatInteraction(this, sheep);
         }
 
         // R2: Sheep at distance max. 5 and hunger > 40%? Move towards it!
-        if (distance <= 5 && hunger > 40) {
+        if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.GetPosition());
         }
 
         // R3: Very hungry wolf. You better watch out ...
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
+          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.GetPosition());
         }
       }
 

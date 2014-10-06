@@ -1,5 +1,5 @@
 ﻿using System;
-using ESCTestLayer.Interface;
+using GenericAgentArchitecture.Agents;
 using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
@@ -17,10 +17,10 @@ namespace GenericAgentArchitecture.Movement {
     /// <summary>
     ///   Create an agent mover for continuous environments.
     /// </summary>
-    /// <param name="esc">IESC implemenation reference.</param>
-    /// <param name="id">Agent identifier, needed by ESC.</param>
+    /// <param name="env">Environment interaction interface.</param>
+    /// <param name="agent">Agent reference, needed for movement execution.</param>
     /// <param name="data">Container with spatial base data.</param>
-    public ContinuousMover(IESC esc, int id, MData data) : base(esc, id, data) {}
+    public ContinuousMover(IEnvironment env, SpatialAgent agent, MData data) : base(env, agent, data) {}
 
 
     /// <summary>

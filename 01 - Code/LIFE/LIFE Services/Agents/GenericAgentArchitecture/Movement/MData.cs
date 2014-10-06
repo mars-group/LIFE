@@ -1,4 +1,5 @@
-﻿using TVector = CommonTypes.DataTypes.Vector;
+﻿using System;
+using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
   
@@ -16,8 +17,10 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="pos">The initial position (common transport vector).</param>
     public MData(TVector pos) {
+      if (pos == null) throw new Exception("[MData] Error on initialization: Position is 'null'!");
       Position = new Vector(pos.X, pos.Y, pos.Z);
-      Direction = new Direction();  // Default facing is straight line northbound.
+      Direction = new Direction();         // Default facing is straight line northbound.
+      Dimension = new Vector(1f, 1f, 1f);  // Default hitbox is cube with size 1.
     }
   }
 }
