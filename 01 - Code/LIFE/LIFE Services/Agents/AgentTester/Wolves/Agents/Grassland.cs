@@ -142,7 +142,7 @@ namespace AgentTester.Wolves.Agents {
 
     public enum InformationTypes { Agents }
       
-    public object GetData(int informationType, IGeometry geometry) {
+    public override object GetData(int informationType, IGeometry geometry) {
       switch ((InformationTypes) informationType) {      
         case InformationTypes.Agents: {
           

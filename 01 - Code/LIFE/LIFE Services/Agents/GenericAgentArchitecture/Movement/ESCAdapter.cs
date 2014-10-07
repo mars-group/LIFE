@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
+using LayerAPI.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
@@ -35,8 +36,6 @@ namespace GenericAgentArchitecture.Movement {
       _esc.Add((int) agent.Id, 0, true, new TVector(dim.X, dim.Y, dim.Z));
       var position = data.Position;
       var direction = data.Direction;
-      //TODO if (position == null) position = _esc.s  random stuff here.
-      if (direction == null) direction = new Direction(); 
       ChangePosition(agent, position, direction);
     }
 
@@ -68,6 +67,18 @@ namespace GenericAgentArchitecture.Movement {
       //TODO Direction und Wahrnehmungsobjekt übernehmen!!
       _agents[agent].Direction.SetPitch(direction.Pitch);
       _agents[agent].Direction.SetYaw(direction.Yaw);
+    }
+
+
+    /// <summary>
+    ///   This function is used by sensors to gather data from this environment.
+    ///   In this case, the adapter redirects to the ESC implementation.
+    /// </summary>
+    /// <param name="informationType">The type of information to sense.</param>
+    /// <param name="geometry">The perception range.</param>
+    /// <returns>An object representing the percepted information.</returns>
+    public object GetData(int informationType, IGeometry geometry) {
+      return _esc.GetData(informationType, geometry);
     }
   }
 }

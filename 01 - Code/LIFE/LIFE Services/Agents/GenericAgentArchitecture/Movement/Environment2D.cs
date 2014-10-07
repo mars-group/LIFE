@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GenericAgentArchitecture.Agents;
+using LayerAPI.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
@@ -111,5 +112,14 @@ namespace GenericAgentArchitecture.Movement {
       }
       return true;
     }
+
+
+    /// <summary>
+    ///   This function is used by sensors to gather data from this environment.
+    /// </summary>
+    /// <param name="informationType">The type of information to sense.</param>
+    /// <param name="geometry">The perception range.</param>
+    /// <returns>An object representing the percepted information.</returns>
+    public abstract object GetData(int informationType, IGeometry geometry);
   }
 }

@@ -1,4 +1,5 @@
 ﻿using GenericAgentArchitecture.Agents;
+using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Movement {
   
@@ -6,7 +7,7 @@ namespace GenericAgentArchitecture.Movement {
   ///   This interface declares functions needed for  movement services.
   ///   It thereby enables abstraction from ESC specific methods.
   /// </summary>
-  public interface IEnvironment {
+  public interface IEnvironment : IGenericDataSource {
 
 
     /// <summary>

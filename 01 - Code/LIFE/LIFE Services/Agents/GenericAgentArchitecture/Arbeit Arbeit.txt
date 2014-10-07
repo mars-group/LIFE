@@ -17,3 +17,8 @@
              Aktionscode umschieben -> Interaction
 
 [Konsole]: Agenten-Ausgabereihenfolge stimmt noch nicht (Entf. immer 1 Tick verzögert)
+           Von der Umwelt separieren!
+
+[ESC]: Einbindung im Bau: 
+       Zufallsposition!
+       Ausgabe!

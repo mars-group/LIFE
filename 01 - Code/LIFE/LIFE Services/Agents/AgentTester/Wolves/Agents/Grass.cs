@@ -1,6 +1,7 @@
 ﻿using System;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
@@ -11,15 +12,15 @@ namespace AgentTester.Wolves.Agents {
     private int _foodValue = 2;          // Nutrition value (energy).
     public const int FoodvalueMax = 60;  // Maximum food value.
     private readonly Random _random;     // Random number generator for unequal growing.
-    private readonly Grassland _env;     // Grassland reference (for removal).
+    private readonly IEnvironment _env;  // Grassland reference (for removal).
 
     /// <summary>
     ///   Create a new grass agent.
     /// </summary>
     /// <param name="id">The agent identifier.</param>
-    /// <param name="env">Grassland reference.</param>
+    /// <param name="env">Environment reference.</param>
     /// <param name="pos">The position.</param>
-    public Grass(long id, Grassland env, TVector pos) : base(id, env, pos) {
+    public Grass(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode());
       _env = env;
     }

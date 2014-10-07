@@ -15,7 +15,7 @@ namespace AgentTester.Wolves.Agents {
     private int _energy = 80;
     private const int EnergyMax = 100;
     private readonly Random _random;
-    private readonly Grassland _environment;
+    private readonly IEnvironment _environment;
     private string _states;
 
 
@@ -23,9 +23,9 @@ namespace AgentTester.Wolves.Agents {
     ///   Create a new wolf agent.
     /// </summary>
     /// <param name="id">The agent identifier.</param>
-    /// <param name="env">Grassland reference.</param>
+    /// <param name="env">Environment reference.</param>
     /// <param name="pos">The initial position.</param>
-    public Wolf(long id, Grassland env, TVector pos) : base(id, env, pos) {
+    public Wolf(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
@@ -102,8 +102,12 @@ namespace AgentTester.Wolves.Agents {
 
       // R4: Perform random movement.
       _states += "R4";
-      var pos = _environment.GetRandomPosition();
-      ((GridMover)Mover).MoveToPosition(new Vector(pos.X, pos.Y, pos.Z), 1f);
+      if (_environment is Environment2D) {
+        var pos = ((Environment2D) _environment).GetRandomPosition();
+        ((GridMover) Mover).MoveToPosition(new Vector(pos.X, pos.Y, pos.Z), 1f);
+      }
+      
+      //TODO Build something for ESC case.  
       return null;
     }
 
