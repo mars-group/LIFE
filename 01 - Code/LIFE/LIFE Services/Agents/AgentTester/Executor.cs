@@ -43,7 +43,7 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var environment = AgentBuilder.CreateWolvesScenarioEnvironment();
+      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(10, 5, 2);
       new Executor(environment).Run(850);
     }
   }

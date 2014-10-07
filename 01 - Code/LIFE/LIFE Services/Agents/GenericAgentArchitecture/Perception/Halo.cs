@@ -1,13 +1,14 @@
 ﻿using GenericAgentArchitecture.Movement;
+using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Perception {
   
   /// <summary>
   ///   An abstract halo representation. Each sensor has one object of it.
   /// </summary>
-  public abstract class Halo {
+  public abstract class Halo : IGeometry {
     
-    protected readonly Vector Position; // The agent's centre.
+    public readonly Vector Position; // The agent's centre.
 
 
     /// <summary>
@@ -25,5 +26,10 @@ namespace GenericAgentArchitecture.Perception {
     /// <param name="position">The position to check.</param>
     /// <returns>True, if position is in range, false otherwise.</returns>
     public abstract bool IsInRange(Vector position);
+
+    public abstract CommonTypes.DataTypes.Vector GetPosition();
+    public abstract CommonTypes.DataTypes.Vector GetDimensionQuad();
+    public abstract CommonTypes.DataTypes.Vector GetDirectionOfQuad();
+    public abstract bool IsInRange(CommonTypes.DataTypes.Vector position);
   }
 }

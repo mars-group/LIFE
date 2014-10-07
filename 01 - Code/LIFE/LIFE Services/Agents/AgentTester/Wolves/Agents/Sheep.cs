@@ -53,7 +53,7 @@ namespace AgentTester.Wolves.Agents {
       // Calculate hunger percentage, read-out nearby agents.
       int hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
       var rawData = PerceptionUnit.GetData((int) Grassland.InformationTypes.Agents).Data;
-      var agents = ((Dictionary<string, Agent>) rawData).Values;
+      var agents = ((Dictionary<long, SpatialAgent>) rawData).Values;
       var grass = agents.OfType<Grass>().ToList();
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
@@ -86,13 +86,15 @@ namespace AgentTester.Wolves.Agents {
         // R2: Medium grass distance allowed.
         if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, grs.GetPosition());
+          ((GridMover)Mover).MoveToPosition(grs.GetPosition(), 1f);
+          return null;
         }
 
         // R3: Move to the nearest grass, no matter the distance.
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, grs.GetPosition());
+          ((GridMover)Mover).MoveToPosition(grs.GetPosition(), 1f);
+          return null;
         }
       }
 
@@ -101,7 +103,9 @@ namespace AgentTester.Wolves.Agents {
 
       // R4: Perform random movement.
       _states += "R4";
-      return CommonRCF.GetRandomMoveInteraction(_environment, this);
+      var pos = _environment.GetRandomPosition();
+      ((GridMover)Mover).MoveToPosition(new Vector(pos.X, pos.Y, pos.Z), 1f);
+      return null;
     }
 
 
@@ -110,8 +114,8 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public override string ToString() {
-      return String.Format(Id + " | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |" + _states,
-          Data.Position.X, Data.Position.Y, _energy, EnergyMax);
+      return String.Format("{0,3:00} | Schaf | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |" + _states,
+          Id, Data.Position.X, Data.Position.Y, _energy, EnergyMax);
     }
 
 

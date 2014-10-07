@@ -28,5 +28,23 @@ namespace GenericAgentArchitecture.Perception {
     public override bool IsInRange(Vector position) {
       return Position.GetDistance(position) <= _radius;
     }
+
+
+
+    public override CommonTypes.DataTypes.Vector GetPosition() {
+      throw new System.NotImplementedException();
+    }
+
+    public override CommonTypes.DataTypes.Vector GetDimensionQuad() {
+      throw new System.NotImplementedException();
+    }
+
+    public override CommonTypes.DataTypes.Vector GetDirectionOfQuad() {
+      throw new System.NotImplementedException();
+    }
+
+    public override bool IsInRange(CommonTypes.DataTypes.Vector position) {
+      throw new System.NotImplementedException();
+    }
   }
 }

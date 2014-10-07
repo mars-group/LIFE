@@ -41,8 +41,8 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public override string ToString() {
-      return String.Format(Id + " | Gras  | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |     |       |         |",
-        Data.Position.X, Data.Position.Y, _foodValue, FoodvalueMax);
+      return String.Format("{0,3:00} | Gras  | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |     |       |         |",
+        Id, Data.Position.X, Data.Position.Y, _foodValue, FoodvalueMax);
     }
 
 

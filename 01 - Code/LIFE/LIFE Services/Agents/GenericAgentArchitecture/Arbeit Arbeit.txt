@@ -8,7 +8,12 @@
 
 - Reihenfolge bei Grassland / Konsolenfenstergröße
 
+[Env2D]: Kollisionserkennung / Stub
+
 [Halo]: Zurückbauen, Spezialfall für ESC bauen.
         MData-Referenz verwenden.
 
+[GridMover]: Schrägbewegung bei MoveToPosition()
+             Aktionscode umschieben -> Interaction
 
+[Konsole]: Agenten-Ausgabereihenfolge stimmt noch nicht (Entf. immer 1 Tick verzögert)

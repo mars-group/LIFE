@@ -5,12 +5,14 @@ using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
   
+  /// <summary>
+  ///   This environment adds movement support to the generic one and contains SpatialAgents. 
+  /// </summary>
   public abstract class Environment2D : Environment, IEnvironment {
 
     protected readonly Vector Boundaries;    // Env. extent, ranging from (0,0) to this point.
-    private readonly Dictionary<SpatialAgent, MData> _agents;  // Agent-to-movement data mapping.
-    protected readonly Random Random;                          // Random number generator.
-    public bool IsGrid { get; private set; }                   // Grid-based or continuous?
+    protected readonly Dictionary<SpatialAgent, MData> Agents;  // Agent-to-movement data mapping.
+    public bool IsGrid { get; private set; }                    // Grid-based or continuous?
 
 
     /// <summary>
@@ -20,8 +22,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="isGrid">Selects, if this environment is grid-based or continuous.</param>
     public Environment2D(Vector boundaries, bool isGrid = true) {
       Boundaries = boundaries;
-      Random = new Random();
-      _agents = new Dictionary<SpatialAgent, MData>();
+      Agents = new Dictionary<SpatialAgent, MData>();
       IsGrid = isGrid;
       if (!isGrid) throw new NotImplementedException();
     }
@@ -33,7 +34,7 @@ namespace GenericAgentArchitecture.Movement {
     /// <param name="agent">The agent to add.</param>
     /// <param name="data">It's movement data.</param>
     public void AddAgent(SpatialAgent agent, MData data) {
-      _agents.Add(agent, data);
+      Agents.Add(agent, data);
       AddAgent(agent);
     }
 
@@ -43,7 +44,7 @@ namespace GenericAgentArchitecture.Movement {
     /// </summary>
     /// <param name="agent">The agent to remove.</param>
     public void RemoveAgent(SpatialAgent agent) {
-      _agents.Remove(agent);
+      Agents.Remove(agent);
       base.RemoveAgent(agent);
     }
 
@@ -51,12 +52,20 @@ namespace GenericAgentArchitecture.Movement {
     /// <summary>
     ///   Set a new position and direction of an agent.
     /// </summary>
-    /// <param name="agent"></param>
-    /// <param name="position"></param>
-    /// <param name="direction"></param>
+    /// <param name="agent">The moving agent.</param>
+    /// <param name="position">New position to acquire.</param>
+    /// <param name="direction">New heading.</param>
     public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
-      //TODO Fehlt halt noch! Kollisionsvermeidung (für Wölfe benötigt).
-      throw new NotImplementedException();
+      
+      // Return, if position is already blocked.
+      if (! CheckPosition(position)) return;
+      
+      // Set the values.
+      Agents[agent].Position.X = position.X;
+      Agents[agent].Position.Y = position.Y;
+      Agents[agent].Position.Z = position.Z;
+      Agents[agent].Direction.SetPitch(direction.Pitch);
+      Agents[agent].Direction.SetYaw(direction.Yaw);
     }
 
 
@@ -73,7 +82,7 @@ namespace GenericAgentArchitecture.Movement {
           var y = Random.Next((int)Boundaries.Y);
           position = new TVector(x, y);
           unique = true;
-          foreach (var md in _agents.Values) {
+          foreach (var md in Agents.Values) {
             if (md.Position.Equals(position)) {
               unique = false;
               break;              
@@ -97,7 +106,7 @@ namespace GenericAgentArchitecture.Movement {
       if (position.X < 0 || position.X >= Boundaries.X ||
           position.Y < 0 || position.Y >= Boundaries.Y) return false;
       //TODO Dimensional checks needed!
-      foreach (var md in _agents.Values) {
+      foreach (var md in Agents.Values) {
         if (md.Position.Equals(position)) return false;
       }
       return true;

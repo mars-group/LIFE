@@ -98,7 +98,7 @@ namespace GenericAgentArchitecture.Movement {
           var oldPosY = (int) Data.Position.Y;
           var dir = list[option].Dir;
           
-          Console.WriteLine("\nTrying to move from "+Data.Position+" in direction "+dir+": ");
+          //Console.WriteLine("\nTrying to move from "+Data.Position+" in direction "+dir+": ");
           Move(dir);
           var success = !((int) Data.Position.X == oldPosX && (int) Data.Position.Y == oldPosY);
 
@@ -110,12 +110,12 @@ namespace GenericAgentArchitecture.Movement {
 
           // Did it work? Then go back to main movement function loop.
           if (success) {         
-            Console.WriteLine("Movement succeeded.");
+            //Console.WriteLine("Movement succeeded.");
             break;
           }
           
           // We're still at the same position. Retry with alternative option. 
-          Console.WriteLine("Movement failed. MP left: "+movementPoints);
+          //Console.WriteLine("Movement failed. MP left: "+movementPoints);
 
           if (TargetPos.Equals(targetPos)) return;   // If final destination is blocked, abort pathfinding.      
           TargetPos = new Vector(oldPosX, oldPosY);  // Reset target origin.
