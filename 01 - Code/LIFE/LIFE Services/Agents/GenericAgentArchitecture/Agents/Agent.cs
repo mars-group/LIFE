@@ -18,7 +18,8 @@ namespace GenericAgentArchitecture.Agents {
     protected readonly bool DebugEnabled;              // Controls console debug output.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.     
-    public Vector Position;                          // Position in an environment.
+    protected int AgentType;                           // The type of this agent (set in specific class).
+    public Vector Position;                            // Position in an environment.
     //TODO Movement module usage here ?!
 
 
@@ -27,8 +28,9 @@ namespace GenericAgentArchitecture.Agents {
     /// domain specific sensors, actions and reasoning, optionally containing a knowledge base.  
     /// </summary>
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
-    protected Agent(string id) {
+    protected Agent(string id, int agentType) {
       Id = id;
+      AgentType = agentType;
       DebugEnabled = false; 
       PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;    

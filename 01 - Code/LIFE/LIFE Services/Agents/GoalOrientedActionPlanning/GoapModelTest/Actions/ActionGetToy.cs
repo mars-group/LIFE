@@ -6,18 +6,15 @@ using GoapModelTest.Worldstates;
 
 namespace GoapModelTest.Actions {
     public class ActionGetToy : AbstractGoapAction {
-        public ActionGetToy(List<IGoapWorldstate> preconditionWorldstates, List<IGoapWorldstate> effectWorldstates)
-            : base(preconditionWorldstates, effectWorldstates) {}
-
         public ActionGetToy()
-            : base(new List<IGoapWorldstate> {new HasMoney(true)},
-                new List<IGoapWorldstate> {
+            : base(new List<IGoapWorldProperty> {new HasMoney(true)},
+                new List<IGoapWorldProperty> {
                     new HasMoney(false),
                     new HasToy(true)
                 }) {}
 
         public override bool ValidateContextPreconditions() {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override bool ExecuteContextEffects() {
@@ -29,7 +26,7 @@ namespace GoapModelTest.Actions {
         }
 
         public override int GetExecutionCosts() {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public override int GetPriority() {

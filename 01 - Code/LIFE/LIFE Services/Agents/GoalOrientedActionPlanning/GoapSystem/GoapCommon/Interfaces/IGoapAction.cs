@@ -12,14 +12,14 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        List<IGoapWorldstate> GetResultingWorldstate(List<IGoapWorldstate> sourceWorldState);
+        List<IGoapWorldProperty> GetResultingWorldstate(List<IGoapWorldProperty> sourceWorldState);
 
         /// <summary>
         ///     check if the preconditions are subset of source world state
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        bool IsExecutable(List<IGoapWorldstate> sourceWorldState);
+        bool IsExecutable(List<IGoapWorldProperty> sourceWorldState);
 
         /// <summary>
         ///     check the context preconditions on

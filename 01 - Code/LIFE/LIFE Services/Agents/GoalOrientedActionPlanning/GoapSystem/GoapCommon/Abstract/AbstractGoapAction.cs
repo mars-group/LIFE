@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Interfaces;
+using TypeSafeBlackboard;
 
 namespace GoapCommon.Abstract {
     /// <summary>
@@ -15,24 +16,24 @@ namespace GoapCommon.Abstract {
         /// <summary>
         ///     partial state of the world must be fulfilled for execution
         /// </summary>
-        private readonly List<IGoapWorldstate> _preConditions;
+        private readonly List<IGoapWorldProperty> _preConditions;
 
         /// <summary>
         ///     partial changes of the world state by execution
         /// </summary>
-        private readonly List<IGoapWorldstate> _effects;
+        private readonly List<IGoapWorldProperty> _effects;
 
         /// <summary>
         ///     get the immutable list of preconditions
         /// </summary>
-        public List<IGoapWorldstate> PreConditions {
+        public List<IGoapWorldProperty> PreConditions {
             get { return _preConditions; }
         }
 
         /// <summary>
         ///     get the immutable list of effects
         /// </summary>
-        private List<IGoapWorldstate> Effects {
+        public List<IGoapWorldProperty> Effects {
             get { return _effects; }
         }
 
@@ -48,8 +49,8 @@ namespace GoapCommon.Abstract {
             return types;
         }
 
-        protected AbstractGoapAction(List<IGoapWorldstate> preconditionWorldstates,
-            List<IGoapWorldstate> effectWorldstates) {
+        protected AbstractGoapAction(List<IGoapWorldProperty> preconditionWorldstates,
+            List<IGoapWorldProperty> effectWorldstates) {
             _preConditions = preconditionWorldstates;
             _effects = effectWorldstates;
         }
@@ -58,7 +59,7 @@ namespace GoapCommon.Abstract {
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        public bool IsExecutable(List<IGoapWorldstate> sourceWorldState) {
+        public bool IsExecutable(List<IGoapWorldProperty> sourceWorldState) {
             return IsSubset(_preConditions, sourceWorldState);
         }
 
@@ -67,15 +68,15 @@ namespace GoapCommon.Abstract {
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        public bool IsEffectCorrespondingToState(List<IGoapWorldstate> state) {
+        public bool IsEffectCorrespondingToState(List<IGoapWorldProperty> state) {
             return IsSubset(_effects, state);
         }
 
-        public bool IsSatisfyingStateByEffects(List<IGoapWorldstate> state) {
+        public bool IsSatisfyingStateByEffects(List<IGoapWorldProperty> state) {
             return IsSubset(state, _effects);
         }
 
-        private bool IsSubset(List<IGoapWorldstate> potentiallySubSet, List<IGoapWorldstate> enclosingSet) {
+        private bool IsSubset(List<IGoapWorldProperty> potentiallySubSet, List<IGoapWorldProperty> enclosingSet) {
             return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
                     potentiallySubSet.Count());
         }
@@ -86,8 +87,8 @@ namespace GoapCommon.Abstract {
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        public List<IGoapWorldstate> GetResultingWorldstate(List<IGoapWorldstate> sourceWorldState) {
-            List<IGoapWorldstate> resultingWorldStates =
+        public List<IGoapWorldProperty> GetResultingWorldstate(List<IGoapWorldProperty> sourceWorldState) {
+            List<IGoapWorldProperty> resultingWorldStates =
                 (from worldstate in _effects select worldstate.GetClone()).ToList();
 
             List<Type> typesInEffectList =
@@ -95,22 +96,6 @@ namespace GoapCommon.Abstract {
 
             resultingWorldStates.AddRange(from worldState in sourceWorldState
                 where !typesInEffectList.Contains(worldState.GetType())
-                select worldState.GetClone());
-
-            return resultingWorldStates;
-        }
-
-        public List<IGoapWorldstate> GetSourceWorldstate(List<IGoapWorldstate> targetWorldstate) {
-            // get all preconditions at first
-            List<IGoapWorldstate> resultingWorldStates =
-                (from worldstate in _preConditions select worldstate.GetClone()).ToList();
-
-            List<Type> typesInPreconditionList =
-                (from worldstate in _preConditions select worldstate.GetType()).ToList();
-
-
-            resultingWorldStates.AddRange(from worldState in targetWorldstate
-                where !typesInPreconditionList.Contains(worldState.GetType())
                 select worldState.GetClone());
 
             return resultingWorldStates;

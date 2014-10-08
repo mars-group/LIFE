@@ -13,7 +13,7 @@ namespace GoapGraphConnector.CustomGraph {
             new Dictionary<IGoapEdge, AbstractGoapAction>();
 
         // TODO Konstruktoren aufräumen ...sind noch zwei nötig?
-        public void InitializeGoapGraph(List<IGoapWorldstate> rootState, List<IGoapWorldstate> targetState,
+        public void InitializeGoapGraph(List<IGoapWorldProperty> rootState, List<IGoapWorldProperty> targetState,
             int maximumGraphDept = 0) {
             _root = new Vertex(rootState);
             _target = new Vertex(targetState);
@@ -41,10 +41,10 @@ namespace GoapGraphConnector.CustomGraph {
             return _aStar.HasVerticesOnOpenList();
         }
 
-        public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldstate> currentState) {
+        public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges, List<IGoapWorldProperty> currentState) {
             var edges = new List<IGoapEdge>();
             foreach (var abstractGoapAction in outEdges) {
-                var newEdge = GetEdgeFromPreconditions(abstractGoapAction, currentState);
+                var newEdge = GetEdgeFromActionPreconditionsToCurrent(abstractGoapAction, currentState);
                 edges.Add(newEdge);
                 _mapEdgeToAction.Add(newEdge, abstractGoapAction);
             }
@@ -88,20 +88,17 @@ namespace GoapGraphConnector.CustomGraph {
         /// </summary>
         /// <returns></returns>
         public int GetActualDepthFromRoot() {
-            var countOf = _aStar.CreatePathToCurrentAsEdgeList().Count;
-            return countOf;
+            return _aStar.CreatePathToCurrentAsEdgeList().Count;
         }
 
-        public IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
-            var start = new Vertex(currentState);
-            var target = new Vertex(action.GetSourceWorldstate(currentState));
-            return new Edge(1, start, target);
+        public IGoapEdge GetEdgeFromAbstractGoapAction(AbstractGoapAction action, List<IGoapWorldProperty> currentState) {
+            throw new System.NotImplementedException();
         }
 
-        private IGoapEdge GetEdgeFromPreconditions(AbstractGoapAction action, List<IGoapWorldstate> currentState) {
+        public IGoapEdge GetEdgeFromActionPreconditionsToCurrent(AbstractGoapAction action, List<IGoapWorldProperty> currentState) {
             var start = new Vertex(currentState);
             var target = new Vertex(action.PreConditions);
-            return new Edge(1, start, target);
+            return new Edge(action.GetExecutionCosts(), start, target);
         }
     }
 }

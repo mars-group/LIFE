@@ -81,7 +81,8 @@ namespace AgentTester.Wolves.Agents {
       if (position.X < 0 || position.X >= Boundary.X ||
           position.Y < 0 || position.Y >= Boundary.Y) return false;
       foreach (var agent in Agents) {
-        if (agent.Position.Equals(position)) return false;
+        if (agent.Position.X == position.X &&
+            agent.Position.Y == position.Y) return false;
       }
       return true;
     }

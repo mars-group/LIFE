@@ -32,8 +32,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\..\..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="GeoAPI">
-      <HintPath>..\..\..\packages\GeoAPI.1.7.2\lib\net403-client\GeoAPI.dll</HintPath>
+      <HintPath>..\..\..\packages\GeoAPI.1.7.3.1\lib\net45\GeoAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Mars.Rock.Common">
+      <HintPath>..\..\..\packages\Mars.Rock.Common.0.0.5387.25999\lib\net45\Mars.Rock.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Mars.Rock.Drill">
+      <HintPath>..\..\..\packages\Mars.Rock.Drill.0.0.5387.26000\lib\net45\Mars.Rock.Drill.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
@@ -41,14 +56,17 @@
     <Reference Include="NetTopologySuite">
       <HintPath>..\..\..\packages\NetTopologySuite.1.13.2\lib\net403-client\NetTopologySuite.dll</HintPath>
     </Reference>
+    <Reference Include="NetTopologySuite.IO.GeoJSON">
+      <HintPath>..\..\..\packages\NetTopologySuite.IO.GeoJSON.1.13.2\lib\net403-client\NetTopologySuite.IO.GeoJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\..\packages\NHibernate.4.0.1.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="PowerCollections">
       <HintPath>..\..\..\packages\NetTopologySuite.1.13.2\lib\net403-client\PowerCollections.dll</HintPath>
-    </Reference>
-    <Reference Include="RockServiceClient">
-      <HintPath>..\..\..\packages\RockServiceClient.1.0.5302.27471\lib\net45\RockServiceClient.dll</HintPath>
-    </Reference>
-    <Reference Include="RockServiceContract">
-      <HintPath>..\..\..\packages\RockServiceContract.1.0.5302.27470\lib\net45\RockServiceContract.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,6 +75,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\..\packages\MySql.Data.6.9.3\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agents\Tree.cs" />
@@ -77,6 +98,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

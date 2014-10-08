@@ -15,8 +15,8 @@ namespace GenericAgentArchitecture.Movement {
 
     public Vector Position  { get; private set;   }   // The agent's center (current position). 
     public Vector TargetPos { get; protected set; }   // Target position. May be set or auto-calculated.
-    public float  Pitch       { get; private set;   }   // Direction (lateral axis).
-    public float  Yaw         { get; private set;   }   // Direction (vertical axis).
+    public float  Pitch     { get; private set;   }   // Direction (lateral axis).
+    public float  Yaw       { get; private set;   }   // Direction (vertical axis).
 
 
     /// <summary>
@@ -111,8 +111,8 @@ namespace GenericAgentArchitecture.Movement {
       var pitchRad = Pitch * 0.0174532925f;  // Deg -> Rad.
       var yawRad   = Yaw   * 0.0174532925f;      
       var dv = new Vector((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
-                            (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
-                            (float) (Math.Sin(pitchRad))).Normalize();      
+                          (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
+                          (float) (Math.Sin(pitchRad))).Normalize();      
 
 
       //Console.WriteLine("[L0] Pos: "+Position+", Tgt: "+TargetPos+"  |  RV: "+dv+", Pitch: "+(int)Pitch+", Yaw: "+(int)Yaw);
@@ -123,7 +123,6 @@ namespace GenericAgentArchitecture.Movement {
       //TODO Aktualisierung der Ausgangsposition mit Rückgabe. Vorerst direkte Wertübernahme.
       //TODO Direktion auch übernehmen, Parameterliste durchreichen an Wahrnehmungsspeicher.
       //TODO nur werte setzen, nicht position zu neuer Instanz zuordnen, wegen Halo
-      //Position = TargetPos;
     }
   }
 }
