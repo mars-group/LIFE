@@ -12,8 +12,8 @@ namespace GoapModelTest {
     /// </summary>
     public class AgentConfig1 : IAgentConfig {
 
-        public List<IGoapWorldstate> GetStartWorldstate() {
-            return new List<IGoapWorldstate> {new Happy(false), new HasMoney(true), new HasToy(false)};
+        public List<IGoapWorldProperty> GetStartWorldstate() {
+            return new List<IGoapWorldProperty> {new IsHappy(false), new HasMoney(true), new HasToy(false)};
         }
 
         public List<AbstractGoapAction> GetAllActions() {

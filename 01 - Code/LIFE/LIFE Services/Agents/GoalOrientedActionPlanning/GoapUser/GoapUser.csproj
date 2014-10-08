@@ -55,6 +55,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
+      <Project>{D1FEB7B4-55CD-47D7-8828-5EE7B4C2DB95}</Project>
+      <Name>TypeSafeBlackboard</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
       <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>

@@ -3,6 +3,7 @@ using System.Reflection;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
+using TypeSafeBlackboard;
 
 namespace GoapActionSystemFactory.Implementation {
     /// <summary>
@@ -14,9 +15,10 @@ namespace GoapActionSystemFactory.Implementation {
         /// </summary>
         /// <param name="nameOfConfigClass"></param>
         /// <param name="namespaceOfConfigClass"></param>
+        /// <param name="blackboard"></param>
         /// <returns></returns>
-        public static AbstractGoapSystem LoadAgentConfiguration(string nameOfConfigClass, string namespaceOfConfigClass) {
-            try {
+        public static AbstractGoapSystem LoadGoapConfiguration(string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard ) {
+          
                 //Assembly assembly = Assembly.LoadFrom("../../../" + namespaceOfConfigClass + "/bin/release/" + namespaceOfConfigClass + ".dll");
 
 
@@ -24,16 +26,11 @@ namespace GoapActionSystemFactory.Implementation {
                 var configClass =
                     (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
 
-                return new GoapManager (configClass.GetAllActions(),configClass.GetAllGoals(),
+                return new GoapManager
+                    (configClass.GetAllActions(), configClass.GetAllGoals(), blackboard,
                         configClass.GetStartWorldstate());
 
-            }
-
-            catch (Exception e) {
-                Console.WriteLine(e.Message);
-                throw new ArgumentException ("No config class with name " + nameOfConfigClass + " or assembly with name " +
-                     namespaceOfConfigClass + " found. " + e.Message);
-            }
+            
         }
     }
 }

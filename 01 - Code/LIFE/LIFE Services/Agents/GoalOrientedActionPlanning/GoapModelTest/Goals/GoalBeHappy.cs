@@ -10,10 +10,10 @@ namespace GoapModelTest.Goals {
         /// value may be in range from 1 to 10
         /// </summary>
         private int _relevancy = 5;
-        private readonly List<IGoapWorldstate> _fullfilledBy = new List<IGoapWorldstate> {new Happy(true)};
+        private readonly List<IGoapWorldProperty> _fullfilledBy = new List<IGoapWorldProperty> {new IsHappy(true)};
 
 
-        public bool IsSatisfied(List<IGoapWorldstate> worldstate) {
+        public bool IsSatisfied(List<IGoapWorldProperty> worldstate) {
             return (_fullfilledBy.Where(x => worldstate.Contains(x)).Count() == _fullfilledBy.Count());
         }
 
@@ -21,9 +21,8 @@ namespace GoapModelTest.Goals {
             return _relevancy;
         }
 
-        public int UpdateRelevancy(List<IGoapWorldstate> actualWorldstate) {
-            _relevancy = actualWorldstate.Count;
-            return GetRelevancy();
+        public int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate) {
+            return 5;
         }
 
         public ISet<Type> GetAffectingWorldstateTypes() {
@@ -36,7 +35,7 @@ namespace GoapModelTest.Goals {
             return types;
         }
 
-        public List<IGoapWorldstate> GetTargetWorldstates() {
+        public List<IGoapWorldProperty> GetTargetWorldstates() {
             return _fullfilledBy;
         }
     }

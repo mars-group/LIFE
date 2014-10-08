@@ -9,9 +9,9 @@ namespace GoapCommon.Interfaces
 {
     public interface IGoapEdge  {
 
-        IGoapVertex GetSource();
+        IGoapNode GetSource();
 
-        IGoapVertex GetTarget();
+        IGoapNode GetTarget();
 
         int GetCost();
 

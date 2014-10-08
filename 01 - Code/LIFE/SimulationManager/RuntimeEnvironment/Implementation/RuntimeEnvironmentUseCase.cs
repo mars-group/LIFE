@@ -20,7 +20,7 @@ namespace RuntimeEnvironment.Implementation {
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
         private readonly ISet<TNodeInformation> _idleLayerContainers;
         private readonly ISet<TNodeInformation> _busyLayerContainers;
-
+      
         public RuntimeEnvironmentUseCase
             (
             IModelContainer modelContainer,

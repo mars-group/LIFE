@@ -17,7 +17,7 @@ namespace GoapCommon.Interfaces
         /// start assignment of world
         /// </summary>
         /// <returns></returns>
-        List<IGoapWorldstate> GetStartWorldstate();
+        List<IGoapWorldProperty> GetStartWorldstate();
 
         /// <summary>
         /// all action that the agent can use

@@ -11,21 +11,25 @@ namespace LayerContainer {
 
         private static void Main(string[] args) {
             Logger.Info("LayerContainer trying to startup.");
-            var _facade = ApplicationCoreFactory.GetLayerContainerFacade();
+            try {
 
-            // This will instruct log4net to look for a configuration file
-            // called config.log4net in the root directory of the device
-            XmlConfigurator.Configure(new FileInfo(@"\config.log4net"));
+                Logger.Info("Initializing components and building application core...");
 
+                var _facade = ApplicationCoreFactory.GetLayerContainerFacade();
 
-            Logger.Info("Initializing components and building application core...");
+                Logger.Info("LayerContainer successfully started.");
 
-            Console.WriteLine("LayerContainer up and running. Press 'q' to quit.");
+                Console.WriteLine("LayerContainer up and running. Press 'q' to quit.");
 
-            ConsoleKeyInfo info = Console.ReadKey();
-            while (info.Key != ConsoleKey.Q)
+                ConsoleKeyInfo info = Console.ReadKey();
+                while (info.Key != ConsoleKey.Q)
+                {
+                    info = Console.ReadKey();
+                }
+            }
+            catch (Exception exception)
             {
-                info = Console.ReadKey();
+                Logger.Fatal("LayerContainer crashed fatally. Exception:\n {0}", exception);
             }
 
             Logger.Info("LayerContainer shutting down.");

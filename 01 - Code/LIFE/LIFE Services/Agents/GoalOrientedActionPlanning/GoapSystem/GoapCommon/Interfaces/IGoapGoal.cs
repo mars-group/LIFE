@@ -6,14 +6,14 @@ namespace GoapCommon.Interfaces
 {
     public interface IGoapGoal {
 
-        bool IsSatisfied(List<IGoapWorldstate> worldstate);
+        bool IsSatisfied(List<IGoapWorldProperty> worldstate);
 
         int GetRelevancy();
 
-        int UpdateRelevancy(List<IGoapWorldstate> actualWorldstate);
+        int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate);
 
         ISet<Type> GetAffectingWorldstateTypes();
 
-        List<IGoapWorldstate> GetTargetWorldstates();
+        List<IGoapWorldProperty> GetTargetWorldstates();
     }
 }
