@@ -10,7 +10,7 @@ namespace GoapModelTest.Goals {
         /// value may be in range from 1 to 10
         /// </summary>
         private int _relevancy = 5;
-        private readonly List<IGoapWorldProperty> _fullfilledBy = new List<IGoapWorldProperty> {new Happy(true)};
+        private readonly List<IGoapWorldProperty> _fullfilledBy = new List<IGoapWorldProperty> {new IsHappy(true)};
 
 
         public bool IsSatisfied(List<IGoapWorldProperty> worldstate) {

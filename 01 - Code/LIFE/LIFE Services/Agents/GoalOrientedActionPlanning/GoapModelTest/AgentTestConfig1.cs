@@ -8,7 +8,7 @@ using GoapModelTest.Worldstates;
 namespace GoapModelTest {
     public class AgentTestConfig1 : IAgentConfig {
         public List<IGoapWorldProperty> GetStartWorldstate() {
-            return new List<IGoapWorldProperty> {new Happy(false), new HasMoney(true), new HasToy(false)};
+            return new List<IGoapWorldProperty> {new IsHappy(false), new HasMoney(true), new HasToy(false)};
         }
 
         public List<AbstractGoapAction> GetAllActions() {

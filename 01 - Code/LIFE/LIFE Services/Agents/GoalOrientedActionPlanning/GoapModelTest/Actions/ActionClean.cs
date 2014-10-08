@@ -7,9 +7,9 @@ using GoapModelTest.Worldstates;
 namespace GoapModelTest.Actions {
     public class ActionClean : AbstractGoapAction {
         public ActionClean()
-            : base(new List<IGoapWorldProperty> {new Happy(true)},
+            : base(new List<IGoapWorldProperty> {new IsHappy(true)},
                 new List<IGoapWorldProperty> {
-                    new Happy(false),
+                    new IsHappy(false),
                     new HasMoney(true)
                 }) {}
 

@@ -41,6 +41,7 @@ namespace GoapGraphConnector.SimpleGraph {
 
         public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges) {
             var edges = new List<IGoapEdge>();
+
             foreach (var abstractGoapAction in outEdges) {
 
                 var newNode = GetChildNodeByActionAndParent(abstractGoapAction, _aStar.Current);
@@ -95,6 +96,7 @@ namespace GoapGraphConnector.SimpleGraph {
             HashSet<IGoapWorldProperty> goalValues = new HashSet<IGoapWorldProperty>();
             HashSet<IGoapWorldProperty> currValues = new HashSet<IGoapWorldProperty>();
 
+
             // add goal conditions from parent to goal
             parent.GetGoalValues().ForEach(x => goalValues.Add(x));
             // add preconditions from action to goal
@@ -103,20 +105,26 @@ namespace GoapGraphConnector.SimpleGraph {
             // add the already satisfied properties from parent to child
             parent.GetSatisfiedGoalValues().ForEach(x => currValues.Add(x));
 
-            var tempnode = new Node(goalValues.ToList(), currValues.ToList(), 1);
+            // TODO dieser Ablauf muss noch validiert werden
 
-            var finalCurrentValues = new HashSet<IGoapWorldProperty>(); 
+
+
+            var tempnode = new Node(goalValues.ToList(), currValues.ToList(), 0);
+            var tempCurrentValues = new HashSet<IGoapWorldProperty>(); 
+            
             // now care about the maybe unsatisfied
-            foreach (var value in tempnode.GetUnsatisfiedGoalValues()) {
-                if (action.Effects.Contains(value)) {
-                    finalCurrentValues.Add(value);
+            foreach (var unsatisfiedGoalValue in tempnode.GetUnsatisfiedGoalValues()) {
+                if (action.Effects.Contains(unsatisfiedGoalValue)) {
+                    
+
+                    tempCurrentValues.Add(unsatisfiedGoalValue);
                 }
-                else {
-                    finalCurrentValues.Add(value.GetNegative());
+                
                 }
-                }
-            return new Node(goalValues.ToList(), finalCurrentValues.ToList(), 1);
+            return new Node(goalValues.ToList(), tempCurrentValues.ToList(), 1);
        
         }
+
+        
     }
 }

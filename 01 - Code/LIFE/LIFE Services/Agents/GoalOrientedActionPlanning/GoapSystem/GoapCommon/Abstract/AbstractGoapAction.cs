@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Interfaces;
+using TypeSafeBlackboard;
 
 namespace GoapCommon.Abstract {
     /// <summary>

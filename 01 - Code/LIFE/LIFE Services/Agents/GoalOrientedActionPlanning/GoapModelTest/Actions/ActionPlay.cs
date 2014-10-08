@@ -9,7 +9,7 @@ namespace GoapModelTest.Actions {
         public ActionPlay()
             : base(new List<IGoapWorldProperty> {new HasToy(true)},
                 new List<IGoapWorldProperty> {
-                    new Happy(true),
+                    new IsHappy(true),
                     new HasToy(false)
                 }) {}
 

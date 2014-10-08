@@ -70,14 +70,10 @@ namespace GoapActionSystem.Implementation {
             while (!IsSearchDepthLimitExceeded(graphService) && currentNode.HasUnsatisfiedProperties()) {
 
                 List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties(currentNode.GetUnsatisfiedGoalValues());
-                List<AbstractGoapAction> filtered = FilterActionsByContextPreconditions(satisfyingActions);
+                List<AbstractGoapAction> applicableActions = FilterActionsByContextPreconditions(satisfyingActions);
 
+                graphService.ExpandCurrentVertex(applicableActions);
                 
-
-                graphService.ExpandCurrentVertex(filtered);
-
-
-
                 graphService.AStarStep();
                 currentNode = graphService.GetNextVertexFromOpenList();
               }
@@ -107,6 +103,11 @@ namespace GoapActionSystem.Implementation {
             return _availableActions.Where(action => action.IsSatisfyingStateByEffects(worldStates)).ToList();
         }
 
+        /// <summary>
+        /// get the actions that could satisfy the current needed states. this is done by inspect the effectToAction map.
+        /// </summary>
+        /// <param name="unsatisfied"></param>
+        /// <returns></returns>
         private List<AbstractGoapAction> GetActionsByUnsatisfiedProperties(List<IGoapWorldProperty> unsatisfied) {
             HashSet<AbstractGoapAction> relevantActions = new HashSet<AbstractGoapAction>();
             foreach (var property in unsatisfied) {
