@@ -1,8 +1,9 @@
 ﻿using System;
 using GenericAgentArchitecture.Agents;
-using TVector = CommonTypes.DataTypes.Vector;
+using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Movement.Actions;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Movement.Movers {
   
   /// <summary>
   ///   L1 class: Specializes basic module with speeds and position calculation.

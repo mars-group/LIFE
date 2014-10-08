@@ -1,7 +1,8 @@
 ﻿using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Environments {
   
   /// <summary>
   ///   This interface declares functions needed for  movement services.

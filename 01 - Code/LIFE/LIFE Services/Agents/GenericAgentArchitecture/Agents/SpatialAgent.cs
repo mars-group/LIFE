@@ -1,4 +1,6 @@
-﻿using GenericAgentArchitecture.Movement;
+﻿using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Movement;
+using GenericAgentArchitecture.Movement.Movers;
 using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Agents {

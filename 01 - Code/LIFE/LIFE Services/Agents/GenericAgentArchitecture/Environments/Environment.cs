@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using GenericAgentArchitecture.Agents;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Environments {
   
   /// <summary>
   ///   Base class for an environment. This is an agent container with several access options.

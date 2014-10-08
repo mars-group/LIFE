@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Environments;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Movement.Movers {
 
   /// <summary>
   ///   Direction enumeration for grid movement.

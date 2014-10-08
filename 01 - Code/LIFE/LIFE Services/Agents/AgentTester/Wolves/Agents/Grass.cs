@@ -1,6 +1,7 @@
 ﻿using System;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;

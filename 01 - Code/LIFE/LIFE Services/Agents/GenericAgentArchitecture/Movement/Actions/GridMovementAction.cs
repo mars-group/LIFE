@@ -1,8 +1,8 @@
 ﻿using System;
+using GenericAgentArchitecture.Movement.Movers;
 using GenericAgentArchitectureCommon.Interfaces;
-using TVector = CommonTypes.DataTypes.Vector;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Movement.Actions {
 
   /// <summary>
   ///   This class enables grid-style movement.

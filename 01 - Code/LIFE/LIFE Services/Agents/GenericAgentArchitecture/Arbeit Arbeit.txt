@@ -12,9 +12,14 @@
 
 [Halo]: Zurückbauen, Spezialfall für ESC bauen.
         MData-Referenz verwenden.
+		ACHTUNG: Agent kennt ESC, andersherum nicht! 
+		ESC weiß also nichts von Halos, nur von gemeinsamen Typen!
 
 [GridMover]: Schrägbewegung bei MoveToPosition()
-             Aktionscode umschieben -> Interaction
+             Diese Funktion ist eigentlich Planung -> deaktivieren / rauskopieren!
+			 Move in eine Richtung gibt GridMovementAction zurück ?
+			 - ist eigentlich auch verkehrt!
+			 - CommonRCF reaktivieren?  // wäre dann aber statisch
 
 [Konsole]: Agenten-Ausgabereihenfolge stimmt noch nicht (Entf. immer 1 Tick verzögert)
            Von der Umwelt separieren!

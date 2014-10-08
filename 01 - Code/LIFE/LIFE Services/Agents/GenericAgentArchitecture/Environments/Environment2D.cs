@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Environments {
   
   /// <summary>
   ///   This environment adds movement support to the generic one and contains SpatialAgents. 

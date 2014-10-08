@@ -1,6 +1,7 @@
 ﻿using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Environments;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Movement.Movers {
 
   /// <summary>
   ///   This abstract class serves as a base for agent movement.

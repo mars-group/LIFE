@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Perception;
 using LayerAPI.Interfaces;
@@ -12,7 +13,7 @@ namespace AgentTester.Wolves.Agents {
   /// <summary>
   ///   This grassland is home to sheeps and wolves ... and yes, 'grass'.
   /// </summary>
-  internal class Grassland : Environment2D, IGenericDataSource {
+  internal class Grassland : Environment2D {
     
     /// <summary>
     ///   Create a new grassland.

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using ESCTestLayer.Implementation;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -44,8 +43,9 @@ namespace AgentTester {
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(10, 5, 2, new ESC());
-      new Executor(environment).Run(850);
+      //var environment = AgentBuilder.CreateWolvesScenarioEnvironment(10, 5, 2);
+      //new Executor(environment).Run(850);
+      new ConsoleView();
     }
   }
 }

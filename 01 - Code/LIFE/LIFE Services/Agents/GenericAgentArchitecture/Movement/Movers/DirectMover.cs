@@ -1,6 +1,7 @@
 ﻿using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Environments;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Movement.Movers {
 
   /// <summary>
   ///   L0 class: Enables basic agent movement by direct placement.

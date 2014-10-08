@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
-namespace GenericAgentArchitecture.Movement {
+namespace GenericAgentArchitecture.Environments {
   
   /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
