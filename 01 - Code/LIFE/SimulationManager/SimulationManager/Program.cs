@@ -5,6 +5,7 @@ using log4net.Config;
 using SimulationManagerFacade.Interface;
 using System.Linq;
 using Mono.Options;
+using SMConnector.TransportTypes;
 
 namespace SimulationManager
 {
@@ -30,7 +31,10 @@ namespace SimulationManager
         {
 
             //Console input requested
-            Console.WriteLine("Please input the number before the model that will be run.");
+            Console.WriteLine("Please input the number of the model you'd like to run:");
+
+            // list special option
+            Console.Write("0 : ElephantModel via Download (EXPERIMENTAL)");
 
             // listing all available models
             var i = 0;
@@ -41,19 +45,35 @@ namespace SimulationManager
                 Console.WriteLine(modelDescription.Name);
             }
 
+
             int nr = 0;
             // read selected model number from console and start it
             nr = int.Parse(Console.ReadLine()) - 1;
 
-            while (!Enumerable.Range(0, i).Contains(nr))
-            {
-                Console.WriteLine("Please input an existing model number.");
-                nr = int.Parse(Console.ReadLine()) - 1;
+            if (nr != -1) { 
+                while (!Enumerable.Range(0, i).Contains(nr))
+                {
+                    Console.WriteLine("Please input an existing model number.");
+                    nr = int.Parse(Console.ReadLine()) - 1;
+                }
             }
 
             Console.WriteLine("For how many steps is the simulation supposed to run?");
             int ticks = int.Parse(Console.ReadLine());
-            core.StartSimulationWithModel(core.GetAllModels().ToList()[nr], ticks);
+            if (nr == -1) {
+                core.StartSimulationWithModel
+                    (new TModelDescription
+                        ("ElephantModel",
+                            "",
+                            "Not Running",
+                            false,
+                            "http://mc.mars.haw-hamburg.de/modeluploads/test@test.com/ElephantModel.zip"),
+                        ticks);
+            }
+            else {
+                core.StartSimulationWithModel(core.GetAllModels().ToList()[nr], ticks);
+            }
+
         }
 
         /// <summary>
