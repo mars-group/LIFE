@@ -9,9 +9,9 @@ using SMConnector.TransportTypes;
 
 namespace SimulationManager
 {
-    internal class Program
+    internal class SimulationManagerStarter
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(SimulationManagerStarter));
 
         private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
         {

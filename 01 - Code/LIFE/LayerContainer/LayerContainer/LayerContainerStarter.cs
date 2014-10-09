@@ -5,9 +5,9 @@ using log4net;
 using log4net.Config;
 
 namespace LayerContainer {
-    public class Program {
+    public class LayerContainerStarter {
 
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(LayerContainerStarter));
 
         private static void Main(string[] args) {
             Logger.Info("LayerContainer trying to startup.");
