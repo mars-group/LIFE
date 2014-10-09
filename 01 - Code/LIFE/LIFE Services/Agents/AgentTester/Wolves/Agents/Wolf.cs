@@ -19,6 +19,7 @@ namespace AgentTester.Wolves.Agents {
     private readonly Random _random;
     private readonly IEnvironment _environment;
     private string _states;
+    private readonly GridMover _mover;
 
 
     /// <summary>
@@ -40,6 +41,7 @@ namespace AgentTester.Wolves.Agents {
 
       // Add movement module.
       Mover = new GridMover(env, this, Data);
+      _mover = (GridMover) Mover;  // Re-declaration to save casts.
     }
 
 
@@ -87,15 +89,15 @@ namespace AgentTester.Wolves.Agents {
         // R2: Sheep at distance max. 5 and hunger > 40%? Move towards it!
         if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          ((GridMover)Mover).MoveToPosition(sheep.GetPosition(), 1f);
-          return null;
+          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
 
         // R3: Very hungry wolf. You better watch out ...
         if (hunger > 60) {
           _states += "R3";
-          ((GridMover)Mover).MoveToPosition(sheep.GetPosition(), 1f);
-          return null;
+          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
       }
 
@@ -106,7 +108,8 @@ namespace AgentTester.Wolves.Agents {
       _states += "R4";
       if (_environment is Environment2D) {
         var pos = ((Environment2D) _environment).GetRandomPosition();
-        ((GridMover) Mover).MoveToPosition(new Vector(pos.X, pos.Y, pos.Z), 1f);
+        var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
+        return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
       }
       
       //TODO Build something for ESC case.  

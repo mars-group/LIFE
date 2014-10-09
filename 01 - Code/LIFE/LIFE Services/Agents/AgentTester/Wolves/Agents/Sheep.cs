@@ -20,6 +20,7 @@ namespace AgentTester.Wolves.Agents {
     private readonly IEnvironment _environment;
     private int _energy = 50;
     private string _states;
+    private readonly GridMover _mover;
 
 
     /// <summary>
@@ -41,6 +42,7 @@ namespace AgentTester.Wolves.Agents {
 
       // Add movement module.
       Mover = new GridMover(env, this, Data);
+      _mover = (GridMover) Mover;  // Re-declaration to save casts.
     }
 
 
@@ -88,15 +90,15 @@ namespace AgentTester.Wolves.Agents {
         // R2: Medium grass distance allowed.
         if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          ((GridMover)Mover).MoveToPosition(grs.GetPosition(), 1f);
-          return null;
+          var options = _mover.GetMovementOptions(grs.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
 
         // R3: Move to the nearest grass, no matter the distance.
         if (hunger > 60) {
           _states += "R3";
-          ((GridMover)Mover).MoveToPosition(grs.GetPosition(), 1f);
-          return null;
+          var options = _mover.GetMovementOptions(grs.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
       }
 
@@ -107,7 +109,8 @@ namespace AgentTester.Wolves.Agents {
       _states += "R4";
       if (_environment is Environment2D) {
         var pos = ((Environment2D) _environment).GetRandomPosition();
-        ((GridMover) Mover).MoveToPosition(new Vector(pos.X, pos.Y, pos.Z), 1f);
+        var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
+        return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
       }
       
       //TODO Build something for ESC case.  
