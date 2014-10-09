@@ -21,8 +21,7 @@
 			 - ist eigentlich auch verkehrt!
 			 - CommonRCF reaktivieren?  // wäre dann aber statisch
 
-[Konsole]: Agenten-Ausgabereihenfolge stimmt noch nicht (Entf. immer 1 Tick verzögert)
-           Von der Umwelt separieren!
+[Konsole]:  Von der Umwelt separieren!
 
 [ESC]: Einbindung im Bau: 
        Zufallsposition!

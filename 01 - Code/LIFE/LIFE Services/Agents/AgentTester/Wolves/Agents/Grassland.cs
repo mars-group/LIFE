@@ -79,7 +79,7 @@ namespace AgentTester.Wolves.Agents {
         else if (agent is Sheep) {
           Console.ForegroundColor = ConsoleColor.Blue;
           Console.Write("S");
-        }
+        } 
         else if (agent is Grass) {
           var g = (Grass) agent;
           Console.ForegroundColor = ConsoleColor.Green;
@@ -164,6 +164,5 @@ namespace AgentTester.Wolves.Agents {
         default: return null;
       }
     }
-
   }
 }

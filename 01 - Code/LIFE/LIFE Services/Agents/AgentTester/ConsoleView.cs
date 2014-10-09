@@ -16,7 +16,7 @@ namespace AgentTester {
     public ConsoleView() {
       _messages = new List<string>();
 
-      _width = 78;
+      _width = 82;
 
       BuildHeaderStrings();
       _messages.Add("Dies ist ein Test!");
