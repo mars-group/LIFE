@@ -7,8 +7,6 @@ namespace GoapGraphConnector.SimpleGraph {
         private readonly IGoapNode _source;
         private readonly IGoapNode _target;
         private readonly AbstractGoapAction _action;
-        private readonly string _name;
-
 
         public Edge(AbstractGoapAction action,  IGoapNode source, IGoapNode target){
             _action = action;
@@ -24,13 +22,15 @@ namespace GoapGraphConnector.SimpleGraph {
             return _target;
         }
 
+        public AbstractGoapAction GetAction() {
+            return _action;
+        }
+
         public int GetCost() {
             return _action.GetExecutionCosts();
         }
 
-        public override string ToString() {
-            return string.Format("Edge: |{0} -> {1}| ", _source, _target);
-        }
+   
 
       
     }

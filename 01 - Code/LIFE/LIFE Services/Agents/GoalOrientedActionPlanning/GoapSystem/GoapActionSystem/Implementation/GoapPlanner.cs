@@ -4,7 +4,6 @@ using System.Linq;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using GoapGraphConnector.SimpleGraph;
-using TypeSafeBlackboard;
 
 namespace GoapActionSystem.Implementation {
     /// <summary>
@@ -17,33 +16,47 @@ namespace GoapActionSystem.Implementation {
     /// </summary>
     public class GoapPlanner : IGoapPlanner {
         private readonly int _maximuxSearchDepth = int.MaxValue;
-        private List<AbstractGoapAction> _currentPlan;
         private readonly List<AbstractGoapAction> _availableActions;
-        private Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> _effectToAction;
-        private Blackboard _blackboard;
+        private readonly Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> _effectToAction;
+        private readonly List<IGoapWorldProperty> _startState;
+        private List<AbstractGoapAction> _currentPlan;
 
         /// <summary>
         /// </summary>
         /// <param name="maximuxSearchDepth"></param>
         /// <param name="availableActions"></param>
         /// <param name="effectToAction"></param>
-        public GoapPlanner(int maximuxSearchDepth, List<AbstractGoapAction> availableActions, Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> effectToAction, Blackboard blackboard)
-        {
+        /// <param name="startState"></param>
+        public GoapPlanner
+            (int maximuxSearchDepth,
+                List<AbstractGoapAction> availableActions,
+                Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> effectToAction,
+                List<IGoapWorldProperty> startState) {
             if (availableActions.Count == 0)
                 throw new ArgumentException("Planner may not be instanciated with an empty list of actions");
             _effectToAction = effectToAction;
-            _blackboard = blackboard;
+            _startState = startState;
             _maximuxSearchDepth = maximuxSearchDepth;
             _availableActions = availableActions;
         }
 
-        private IGoapGraphService InitializeGraphService(List<IGoapWorldProperty> graphRoot){
-            var graphService = new GoapSimpleGraphService();
+        #region IGoapPlanner Members
+
+        public AbstractGoapAction GetNextChosenAction() {
+            if (HasPlan()) return _currentPlan.First();
+            return new SurrogateAction();
+        }
+
+        #endregion
+
+        private IGoapGraphService InitializeGraphService(List<IGoapWorldProperty> graphRoot) {
+            GoapSimpleGraphService graphService = new GoapSimpleGraphService();
             graphService.InitializeGoapGraph(graphRoot);
             return graphService;
         }
-        
-        private bool IsCurrentVertexSubsetOfTarget(List<IGoapWorldProperty> currentWorld, List<IGoapWorldProperty> targetWorld) {
+
+        private bool IsCurrentVertexSubsetOfTarget
+            (List<IGoapWorldProperty> currentWorld, List<IGoapWorldProperty> targetWorld) {
             return (currentWorld.Where(x => targetWorld.Contains(x)).Count() == currentWorld.Count());
         }
 
@@ -55,11 +68,6 @@ namespace GoapActionSystem.Implementation {
             return (_currentPlan.Count > 0);
         }
 
-        public AbstractGoapAction GetNextChosenAction() {
-            if (HasPlan()) return _currentPlan.First();
-            return new SurrogateAction();
-        }
-
         public List<AbstractGoapAction> GetPlan(IGoapGoal goal) {
             List<IGoapWorldProperty> graphRoot = goal.GetTargetWorldstates();
 
@@ -67,32 +75,32 @@ namespace GoapActionSystem.Implementation {
 
             IGoapNode currentNode = graphService.GetNextVertexFromOpenList();
 
-            while (!IsSearchDepthLimitExceeded(graphService) && currentNode.HasUnsatisfiedProperties()) {
-
-                List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties(currentNode.GetUnsatisfiedGoalValues());
+            while (!IsSearchDepthLimitExceeded(graphService)
+                   && (currentNode.HasUnsatisfiedProperties() && !currentNode.CanBeSatisfiedByStartState(_startState))) {
+                List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties
+                    (currentNode.GetUnsatisfiedGoalValues());
                 List<AbstractGoapAction> applicableActions = FilterActionsByContextPreconditions(satisfyingActions);
 
                 graphService.ExpandCurrentVertex(applicableActions);
-                
+
                 graphService.AStarStep();
                 currentNode = graphService.GetNextVertexFromOpenList();
-              }
+            }
 
-            if (currentNode != null && !currentNode.HasUnsatisfiedProperties()){
-                    _currentPlan = graphService.GetShortestPath();
-                    _currentPlan.Reverse();
-                }
-                if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
-                    _currentPlan = new List<AbstractGoapAction> { new SurrogateAction() };
+            if (currentNode != null
+                && (!currentNode.HasUnsatisfiedProperties() || currentNode.CanBeSatisfiedByStartState(_startState))) {
+                _currentPlan = graphService.GetShortestPath();
+                _currentPlan.Reverse();
+            }
+            if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
+                _currentPlan = new List<AbstractGoapAction> {new SurrogateAction()};
 
-                // TODO ist die leere action besser als eine leere liste ?
+            // TODO ist die leere action besser als eine leere liste ?
 
-                return _currentPlan;
-
-
+            return _currentPlan;
         }
 
-       
+
         /// <summary>
         ///     search for actions that effects correxpond to the state
         /// </summary>
@@ -104,13 +112,13 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        /// get the actions that could satisfy the current needed states. this is done by inspect the effectToAction map.
+        ///     get the actions that could satisfy the current needed states. this is done by inspect the effectToAction map.
         /// </summary>
         /// <param name="unsatisfied"></param>
         /// <returns></returns>
         private List<AbstractGoapAction> GetActionsByUnsatisfiedProperties(List<IGoapWorldProperty> unsatisfied) {
             HashSet<AbstractGoapAction> relevantActions = new HashSet<AbstractGoapAction>();
-            foreach (var property in unsatisfied) {
+            foreach (IGoapWorldProperty property in unsatisfied) {
                 _effectToAction[property].ForEach(x => relevantActions.Add(x));
             }
             return relevantActions.ToList();
@@ -118,8 +126,6 @@ namespace GoapActionSystem.Implementation {
 
         private List<AbstractGoapAction> FilterActionsByContextPreconditions(List<AbstractGoapAction> actionsToFilter) {
             return actionsToFilter.Where(action => action.ValidateContextPreconditions()).ToList();
-        } 
-
-
+        }
     }
 }

@@ -12,7 +12,6 @@ namespace GoapUser {
 
             Blackboard blackboard = new Blackboard();
             AbstractGoapSystem goapActionSystem = GoapComponent.LoadGoapConfiguration("AgentConfig1", "GoapModelTest", blackboard);
-
             
 
             Console.WriteLine("Agent loaded. Write n for next action");

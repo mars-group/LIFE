@@ -6,6 +6,8 @@ namespace GoapCommon.Interfaces {
 
         List<IGoapWorldProperty> GetUnsatisfiedGoalValues();
 
+        bool CanBeSatisfiedByStartState(List<IGoapWorldProperty> startState);
+
         List<IGoapWorldProperty> GetSatisfiedGoalValues();
         
         List<IGoapWorldProperty> GetCurrValues();
@@ -15,7 +17,11 @@ namespace GoapCommon.Interfaces {
         int GetHeuristic();
 
         bool HasUnsatisfiedProperties();
+
         
+
+
+
     }
 
 }

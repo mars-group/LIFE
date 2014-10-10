@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85340006-B073-47E6-9DBF-D0CB391A13AA}</ProjectGuid>
+    <ProjectGuid>{0D4F96A8-BB3B-4B81-81C3-9A0C508B79FF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GoapModelTest</RootNamespace>
-    <AssemblyName>GoapModelTest</AssemblyName>
+    <RootNamespace>GoapTests</RootNamespace>
+    <AssemblyName>GoapTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,6 +32,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.core">
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\nunit.core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.core.interfaces">
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\nunit.core.interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.util">
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\nunit.util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NUnit.VisualStudio.TestAdapter">
+      <HintPath>..\..\packages\NUnitTestAdapter.1.1\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,31 +60,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgentTestConfig1.cs" />
-    <Compile Include="AgentTestConfig2.cs" />
-    <Compile Include="Actions\ActionClean.cs" />
-    <Compile Include="Actions\ActionGetToy.cs" />
-    <Compile Include="Actions\ActionPlay.cs" />
-    <Compile Include="Goals\GoalBeHappy.cs" />
+    <Compile Include="CustomGraphEdgeTest.cs" />
+    <Compile Include="CustomGraphGraphTest.cs" />
+    <Compile Include="CustomGraphServiceTest.cs" />
+    <Compile Include="GoapActionSystemComponentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AgentConfig1.cs" />
-    <Compile Include="Worldstates\IsHappy.cs" />
-    <Compile Include="Worldstates\HasMoney.cs" />
-    <Compile Include="Worldstates\HasToy.cs" />
-    <Compile Include="Worldstates\WorldStateEnums.cs" />
+    <Compile Include="CustomGaphVertexTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
       <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoapSystem\GoapCommon\GoapCommon.csproj">
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapModelTest\GoapModelTest.csproj">
+      <Project>{85340006-B073-47E6-9DBF-D0CB391A13AA}</Project>
+      <Name>GoapModelTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapActionSystemFactory\GoapActionSystemFactory.csproj">
+      <Project>{A36FC1F7-F7C1-4FFC-BA9F-9D864129F8DF}</Project>
+      <Name>GoapActionSystemFactory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapCommon\GoapCommon.csproj">
       <Project>{846C7C43-FC1B-4709-8A43-B2EE8213F63F}</Project>
       <Name>GoapCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapGraphConnector\GoapGraphConnector.csproj">
+      <Project>{2871F5A0-1375-48CE-998F-B90D3D2D1A95}</Project>
+      <Name>GoapGraphConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
+      <Project>{D1FEB7B4-55CD-47D7-8828-5EE7B4C2DB95}</Project>
+      <Name>TypeSafeBlackboard</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

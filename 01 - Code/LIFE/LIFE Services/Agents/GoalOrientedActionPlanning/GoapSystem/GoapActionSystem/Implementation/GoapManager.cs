@@ -6,7 +6,6 @@ using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using TypeSafeBlackboard;
 
-
 namespace GoapActionSystem.Implementation {
     public class GoapManager : AbstractGoapSystem {
         private readonly List<AbstractGoapAction> _availableActions;
@@ -91,8 +90,8 @@ namespace GoapActionSystem.Implementation {
         }
 
         private void CreateNewPlan() {
-            GoapPlanner planner = new GoapPlanner( 20, _availableActions, _effectToAction, _internalBlackboard);
-           _currentPlan = planner.GetPlan(_currentGoal);
+            GoapPlanner planner = new GoapPlanner(20, _availableActions, _effectToAction, _internalBlackboard.Get(Worldstate));
+            _currentPlan = planner.GetPlan(_currentGoal);
         }
 
         private bool GoalIsReached() {
