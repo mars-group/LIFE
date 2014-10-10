@@ -31,7 +31,7 @@ namespace ContextServiceClient
 			channel = connection.CreateModel ();
 
 			consumer = new QueueingBasicConsumer (channel);
-			channel.BasicConsume ("contextservice_out", null, consumer);
+			channel.BasicConsume("contextservice_out", false, consumer);
 
 			ThreadStart ts = new ThreadStart (run);
 			Thread thread = new Thread (ts);

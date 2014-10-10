@@ -148,6 +148,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenNebulaAdapter", "OpenNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNebulaAdapter", "OpenNebulaAdapter\OpenNebulaAdapter\OpenNebulaAdapter.csproj", "{B7C20AF5-5107-4E4E-B196-890EC2DA6030}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContextServiceClient", "LIFE Services\ContextServiceClient\ContextServiceClient.csproj", "{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -698,6 +700,16 @@ Global
 		{B7C20AF5-5107-4E4E-B196-890EC2DA6030}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B7C20AF5-5107-4E4E-B196-890EC2DA6030}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B7C20AF5-5107-4E4E-B196-890EC2DA6030}.Release|x86.ActiveCfg = Release|Any CPU
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|x86.ActiveCfg = Debug|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|x86.Build.0 = Debug|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Release|Any CPU.ActiveCfg = Release|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Release|Mixed Platforms.Build.0 = Release|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Release|x86.ActiveCfg = Release|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -761,6 +773,7 @@ Global
 		{D1FEB7B4-55CD-47D7-8828-5EE7B4C2DB95} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 		{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81} = {21C88CD1-A41C-4908-B309-A33A2F23683B}
 		{B7C20AF5-5107-4E4E-B196-890EC2DA6030} = {B488B2F7-D268-41D3-B31D-CC0DF03F9F34}
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SimulationManager\SimulationManager\SimulationManager.csproj

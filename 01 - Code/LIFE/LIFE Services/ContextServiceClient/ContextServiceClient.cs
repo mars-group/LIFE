@@ -49,9 +49,9 @@ namespace ContextServiceClient
 				var factory = new ConnectionFactory() { HostName = host, Port = port };
 				connection = factory.CreateConnection();
 				rpcChannel = connection.CreateModel();
-				replyQueueName = rpcChannel.QueueDeclare("rpc_reply_queue");
+				replyQueueName = rpcChannel.QueueDeclare("rpc_reply_queue", true, false, false, null);
 				consumer = new QueueingBasicConsumer(rpcChannel);
-				rpcChannel.BasicConsume(replyQueueName, null, consumer);
+				rpcChannel.BasicConsume(replyQueueName, false, consumer);
 
 				// Start Listener for incoming Events
 				contextListener = new ContextListener();
