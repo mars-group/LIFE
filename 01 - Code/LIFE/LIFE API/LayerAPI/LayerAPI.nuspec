@@ -12,4 +12,7 @@
     <copyright>Copyright 2014 - MARS Group</copyright>
     <tags>mars layerapi</tags>
   </metadata>
+  <files>
+    <file src="..\..\Libraries\MonoAddins\Mono.Addins.dll" target="lib\net45\" />
+  </files>
 </package>
