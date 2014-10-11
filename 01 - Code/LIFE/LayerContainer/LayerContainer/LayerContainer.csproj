@@ -40,9 +40,6 @@
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Addins">
-      <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -73,6 +70,10 @@
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Mono.Addins\Mono.Addins.csproj">
+      <Project>{91dd5a2d-9fe3-4c3c-9253-876141874dad}</Project>
+      <Name>Mono.Addins</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerContainerFacade\LayerContainerFacade.csproj">
       <Project>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</Project>
