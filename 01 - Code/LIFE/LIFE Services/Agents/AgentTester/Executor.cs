@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using ESCTestLayer.Implementation;
+using AgentTester.Wolves.Agents;
+using CommonTypes.DataTypes;
+using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Environments;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -10,14 +15,17 @@ namespace AgentTester {
   /// </summary>
   internal class Executor {
     private readonly ITickClient _environment; // The agent container.
+    private readonly ConsoleView _view;        // The console view module.
 
 
     /// <summary>
     ///   Instantiate a runtime.
     ///   <param name="environment">The environment to execute.</param>
+    ///   <param name="view">The console view module.</param>
     /// </summary>
-    private Executor(ITickClient environment) {
+    private Executor(ITickClient environment, ConsoleView view) {
       _environment = environment;
+      _view = view;
     }
 
 
@@ -28,6 +36,7 @@ namespace AgentTester {
     private void Run(int delay) {
       while (true) {
         _environment.Tick();
+        if (_view != null) _view.Print();
 
         // Manual or automatic execution.
         if (delay == 0) Console.ReadLine();
@@ -39,14 +48,25 @@ namespace AgentTester {
       // ReSharper disable once FunctionNeverReturns
     }
 
-
+    
     /// <summary>
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(10, 5, 2);
-      new Executor(environment).Run(850);
-      //new ConsoleView();
+      var environment = AgentBuilder.CreateWolvesScenarioEnvironment(20, 10, 5);
+      var view = AgentBuilder.CreateWolvesView((Grassland) environment);
+      new Executor(environment, view).Run(0);
     }
   }
 }
+
+
+/* Delegate-Zuweisungsarten:
+ * 1) Statische Funktion machen, Zeiger = Funktionsname: 
+ *    public static ConsoleColor Fkt (SpatialAgent agt) { ... }
+ *    GetColor = new GetColor(Fkt)
+ *    GetColor = Fkt   // kürzer!
+ * 
+ * 2) Anonyme Funktion erstellen:
+ *    GetColor = delegate(SpatialAgent agt) { ... }
+ */

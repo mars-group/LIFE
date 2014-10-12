@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
@@ -68,6 +69,15 @@ namespace GenericAgentArchitecture.Environments {
       Agents[agent].Position.Z = position.Z;
       Agents[agent].Direction.SetPitch(direction.Pitch);
       Agents[agent].Direction.SetYaw(direction.Yaw);
+    }
+
+
+    /// <summary>
+    ///   Retrieve all agents of this environment.
+    /// </summary>
+    /// <returns>A list of all spatial agents.</returns>
+    public new List<SpatialAgent> GetAllAgents() {
+      return base.GetAllAgents().Cast<SpatialAgent>().ToList();
     }
 
 

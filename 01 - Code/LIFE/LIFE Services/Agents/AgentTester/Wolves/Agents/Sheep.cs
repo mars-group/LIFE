@@ -50,7 +50,8 @@ namespace AgentTester.Wolves.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        _environment.RemoveAgent(this);
+        ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        Remove();
         return null;
       }
 
@@ -155,7 +156,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      _environment.RemoveAgent(this);
+      Remove();
     }
   }
 }

@@ -50,7 +50,8 @@ namespace AgentTester.Wolves.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        _environment.RemoveAgent(this);
+        ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        Remove();
         return null;
       }
 
@@ -83,6 +84,7 @@ namespace AgentTester.Wolves.Agents {
         // R1: If there is a sheep directly ahead and hunger > 20%, eat it!
         if (dist <= 1 && hunger >= 20) {
           _states += "R1";
+          ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Red);
           return new EatInteraction(this, sheep);
         }
 
