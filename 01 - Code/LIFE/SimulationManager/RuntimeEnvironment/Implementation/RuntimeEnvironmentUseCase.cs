@@ -41,7 +41,7 @@ namespace RuntimeEnvironment.Implementation {
                 ICollection<TNodeInformation> layerContainerNodes,
                 int? nrOfTicks = null) {
             lock (this) {
-				if(layerContainerNodes.Count <= 0){
+				if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
 					throw new NoLayerContainersArePresentException ();
 				}
                 // if not all LayerContainers are idle throw exception
