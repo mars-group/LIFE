@@ -41,9 +41,13 @@ namespace RuntimeEnvironment.Implementation {
                 ICollection<TNodeInformation> layerContainerNodes,
                 int? nrOfTicks = null) {
             lock (this) {
+				if(layerContainerNodes.Count <= 0){
+					throw new NoLayerContainersArePresentException ();
+				}
                 // if not all LayerContainers are idle throw exception
-                if (!layerContainerNodes.All(l => _idleLayerContainers.Any(c => c.Equals(l))))
-                    throw new LayerContainerBusyException();
+				if (!layerContainerNodes.All (l => _idleLayerContainers.Any (c => c.Equals (l)))) {
+					throw new LayerContainerBusyException ();
+				}
 
                 // throw Exception if model is already running in this cluster
                 // TODO: Is that really intended?
