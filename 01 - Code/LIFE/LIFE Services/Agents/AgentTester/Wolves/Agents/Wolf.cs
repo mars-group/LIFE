@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Auxiliary;
 using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;
@@ -19,6 +20,7 @@ namespace AgentTester.Wolves.Agents {
     private readonly Random _random;
     private readonly IEnvironment _environment;
     private string _states;
+    private readonly GridMover _mover;
 
 
     /// <summary>
@@ -40,6 +42,7 @@ namespace AgentTester.Wolves.Agents {
 
       // Add movement module.
       Mover = new GridMover(env, this, Data);
+      _mover = (GridMover) Mover;  // Re-declaration to save casts.
     }
 
 
@@ -48,7 +51,8 @@ namespace AgentTester.Wolves.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        _environment.RemoveAgent(this);
+        ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        Remove();
         return null;
       }
 
@@ -81,21 +85,22 @@ namespace AgentTester.Wolves.Agents {
         // R1: If there is a sheep directly ahead and hunger > 20%, eat it!
         if (dist <= 1 && hunger >= 20) {
           _states += "R1";
+          ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Red);
           return new EatInteraction(this, sheep);
         }
 
         // R2: Sheep at distance max. 5 and hunger > 40%? Move towards it!
         if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          ((GridMover)Mover).MoveToPosition(sheep.GetPosition(), 1f);
-          return null;
+          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
 
         // R3: Very hungry wolf. You better watch out ...
         if (hunger > 60) {
           _states += "R3";
-          ((GridMover)Mover).MoveToPosition(sheep.GetPosition(), 1f);
-          return null;
+          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
       }
 
@@ -106,7 +111,8 @@ namespace AgentTester.Wolves.Agents {
       _states += "R4";
       if (_environment is Environment2D) {
         var pos = ((Environment2D) _environment).GetRandomPosition();
-        ((GridMover) Mover).MoveToPosition(new Vector(pos.X, pos.Y, pos.Z), 1f);
+        var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
+        return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
       }
       
       //TODO Build something for ESC case.  

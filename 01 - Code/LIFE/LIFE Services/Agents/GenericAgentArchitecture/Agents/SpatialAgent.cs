@@ -31,12 +31,12 @@ namespace GenericAgentArchitecture.Agents {
 
 
     /// <summary>
-    ///   When the agent is destroyed, it is no longer physically present. 
-    ///   Remove it from the environment!
+    ///   This function unbinds the agent from the environment.
+    ///   It is intended to be called by an interaction method.
     /// </summary>
-    ~SpatialAgent () {
-      if (_env != null) _env.RemoveAgent(this);
-    }
+    protected void Remove() {
+      _env.RemoveAgent(this);
+    } 
 
 
     //-------------------------------------------------------------------------

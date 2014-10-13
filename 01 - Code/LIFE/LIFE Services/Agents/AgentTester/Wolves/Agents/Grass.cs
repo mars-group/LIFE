@@ -2,7 +2,6 @@
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 using TVector = CommonTypes.DataTypes.Vector;
 
@@ -13,7 +12,6 @@ namespace AgentTester.Wolves.Agents {
     private int _foodValue = 2;          // Nutrition value (energy).
     public const int FoodvalueMax = 60;  // Maximum food value.
     private readonly Random _random;     // Random number generator for unequal growing.
-    private readonly IEnvironment _env;  // Grassland reference (for removal).
 
     /// <summary>
     ///   Create a new grass agent.
@@ -23,7 +21,6 @@ namespace AgentTester.Wolves.Agents {
     /// <param name="pos">The position.</param>
     public Grass(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode());
-      _env = env;
     }
 
 
@@ -65,7 +62,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      _env.RemoveAgent(this);
+      Remove();
     }
   }
 }

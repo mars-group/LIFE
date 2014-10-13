@@ -1,11 +1,12 @@
-﻿using GenericAgentArchitecture.Agents;
+﻿using System.Collections.Generic;
+using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Environments {
   
   /// <summary>
-  ///   This interface declares functions needed for  movement services.
+  ///   This interface declares functions needed for movement services.
   ///   It thereby enables abstraction from ESC specific methods.
   /// </summary>
   public interface IEnvironment : IGenericDataSource {
@@ -34,5 +35,14 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="position">New position.</param>
     /// <param name="direction">New heading.</param>
     void ChangePosition(SpatialAgent agent, Vector position, Direction direction);
+
+
+    /// <summary>
+    ///   Retrieve all agents of this environment.
+    /// </summary>
+    /// <returns>A list of all spatial agents.</returns>
+    List<SpatialAgent> GetAllAgents();
+    //TODO Later, we should generalize this method to entities. 
+    // It is most likely that not everything in the environment is an agent!
   }
 }

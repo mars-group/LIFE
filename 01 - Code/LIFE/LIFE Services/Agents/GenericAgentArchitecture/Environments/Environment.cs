@@ -55,9 +55,6 @@ namespace GenericAgentArchitecture.Environments {
       for (_execCounter = 0; _execCounter < _agents.Count; _execCounter++) {
         _execList[_execCounter].Tick();
       }
-
-      // Debug output wished? If so, print it now!
-      if (PrintInformation) PrintEnvironment();
       Cycle ++;
     }
 
@@ -105,11 +102,5 @@ namespace GenericAgentArchitecture.Environments {
     ///   This function allows execution of environment-specific code.
     /// </summary>
     protected abstract void AdvanceEnvironment();
-
-
-    /// <summary>
-    ///   Console output function. Prints the environment and all agent logs.
-    /// </summary>
-    protected virtual void PrintEnvironment() {}
   }
 }

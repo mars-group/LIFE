@@ -72,6 +72,15 @@ namespace GenericAgentArchitecture.Environments {
 
 
     /// <summary>
+    ///   Retrieve all agents of this environment.
+    /// </summary>
+    /// <returns>A list of all spatial agents.</returns>
+    public List<SpatialAgent> GetAllAgents() {
+      throw new System.NotImplementedException();
+    }
+
+
+    /// <summary>
     ///   This function is used by sensors to gather data from this environment.
     ///   In this case, the adapter redirects to the ESC implementation.
     /// </summary>
