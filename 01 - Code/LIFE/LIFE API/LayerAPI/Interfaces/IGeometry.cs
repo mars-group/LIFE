@@ -16,5 +16,8 @@ namespace LayerAPI.Interfaces
         /// <param name="position">The position to check.</param>
         /// <returns>True, if position is in range, false otherwise.</returns>
         bool IsInRange(Vector position);
+
+        //TODO vergleich mit Rect und intersectWith(Rect)
+//        bool instersectWith(IGeometry other);
     }
 }

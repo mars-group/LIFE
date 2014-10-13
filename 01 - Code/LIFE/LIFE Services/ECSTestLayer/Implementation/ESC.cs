@@ -18,7 +18,7 @@ namespace ESCTestLayer.Implementation
     /// </summary>
     public class ESC : IESC
     {
-        //TODO boundaries einführen, vermutlich als polygon. 
+        //TODO boundaries einführen, vermutlich als polygon(IGeometry). zunächst als Vector siehe Environment2D
         // was passiert, wenn Agenten Grenzen erreichen?
         // TODO gibt indexOutOfBounds mit zurück
 
@@ -38,7 +38,8 @@ namespace ESCTestLayer.Implementation
         }
 
         public void Add(int elementId, int informationType, bool collidable, Vector dimension)
-        {
+        {//TODO umstellen auf einstufigen Anmeldeprozess inkl. Positionierung. Wahrnehmungsobjekte nicht speichern.
+            //TODO parameter in klasse kapseln
             _dimensions[elementId] = dimension;
             _positions[elementId] = Vector.Null;
         }
@@ -110,7 +111,7 @@ namespace ESCTestLayer.Implementation
             }
 
             // Try to get this position.
-            if (SetPosition(elementId, pos, dir).Position == null)
+            if (SetPosition(elementId, pos, dir).Position.IsNull())
             {
                 // try one more time
                 //TOOD Abbruchkriterium?

@@ -118,5 +118,9 @@ namespace CommonTypes.DataTypes {
             //Console.WriteLine("GPO: NY: "+nY);
             //Console.WriteLine("GPO: NZ: "+nZ+"\n");
         }
+
+        public bool IsNull() {
+            return _isNull;
+        } 
     }
 }
