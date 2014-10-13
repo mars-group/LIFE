@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
@@ -24,13 +26,14 @@ namespace LayerAPI.AddinLoader {
         }
 
         public void LoadModelContent(ModelContent modelContent) {
+            while (!AddinManager.IsInitialized) { }
             modelContent.Write("./layers/addins");
             UpdateAddinRegistry();
             _extensionNodes = AddinManager.GetExtensionNodes(typeof (ISteppedLayer));
         }
 
         public TypeExtensionNode LoadLayer(string layerName) {
-            UpdateAddinRegistry();
+            //UpdateAddinRegistry();
             return _extensionNodes.Cast<TypeExtensionNode>().First(node => node.Type.Name == layerName);
         }
 

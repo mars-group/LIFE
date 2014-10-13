@@ -29,7 +29,7 @@ namespace LCConnector.TransportTypes.ModelStructure
             {
                 Directory.CreateDirectory(targetDirectory);
             }
-            //EmptyDirectory(targetDirectory);
+            EmptyDirectory(targetDirectory);
             foreach (var modelDirectoryContent in _root.Contents)
             {
                 Write(modelDirectoryContent, targetDirectory);
@@ -103,10 +103,12 @@ namespace LCConnector.TransportTypes.ModelStructure
             if (dirContent.Type == ContentType.File)
             {
                 var file = dirContent as ModelFile;
-                using (var stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create))
-                {
-                    stream.Write(file.Content, 0, file.Content.Length);
-                }
+                var stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create);
+                
+                stream.Write(file.Content, 0, file.Content.Length);
+
+                stream.Close();
+                
             }
             else
             {
