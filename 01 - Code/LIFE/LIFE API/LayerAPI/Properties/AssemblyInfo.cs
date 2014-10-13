@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 
 [assembly: AssemblyTitle("LayerAPI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("The LayerAPI")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Christian Huening")]
 [assembly: AssemblyProduct("LayerAPI")]

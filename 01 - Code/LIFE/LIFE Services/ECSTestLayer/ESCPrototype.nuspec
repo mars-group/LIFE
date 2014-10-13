@@ -1,19 +1,15 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>LayerAPI</id>
+    <id>ESC</id>
     <version>0.1</version>
-    <title>LayerAPI</title>
-    <authors>Christian Huening</authors>
-    <owners>Christian Huening</owners>
+    <title>ESC</title>
+    <authors>Florian Ocker, Jan Dalski</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The API needed to create new layers and agents</description>
+    <description>A 3D Environment implementation, merely a prototype</description>
     <releaseNotes>Initial Release</releaseNotes>
     <copyright>Copyright 2014 - MARS Group</copyright>
-    <tags>mars layerapi</tags>
-    <dependencies>
-        <dependency id="log4net" version="2.0.3" />
-    </dependencies>
+    <tags>mars environment</tags>
   </metadata>
   <files>
     <file src="bin\Release\*.dll" target="lib\net45\"/>
