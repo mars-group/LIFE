@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Auxiliary;
 using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GenericAgentArchitecture.Agents;
 
-namespace GenericAgentArchitecture.Interactions {
+namespace GenericAgentArchitecture.Auxiliary {
 
   /// <summary>
   ///   This class provides really simple functions for channel-based communication.

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
 
-namespace AgentTester {
+namespace GenericAgentArchitecture.Auxiliary {
   
   /// <summary>
   ///   This class offers a simple agent/environment view in a console window.
   ///   It is suitable for grid-based 2D environments and agents based on the GAA. 
   /// </summary>
-  class ConsoleView {
+  public class ConsoleView {
     
     private ConsoleInitData _cid;   // Initialization data object.
     private IEnvironment _env;      // The environmental reference.
@@ -86,7 +86,7 @@ namespace AgentTester {
     }
 
 
-    //TODO
+    //TODO   ↓↓↓  Hier geht's weiter!  ↓↓↓
     private void PrintInfo () {}
  
     
@@ -333,7 +333,7 @@ namespace AgentTester {
   ///   The CID container holds initialization data like header strings,
   ///   environmental extents and configuration parameters.  
   /// </summary>
-  struct ConsoleInitData {  
+  public struct ConsoleInitData {  
     public string Scenario;
     public string [] AgentsHeader;
     public int MessageLines;

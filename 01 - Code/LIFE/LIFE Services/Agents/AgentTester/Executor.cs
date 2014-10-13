@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using AgentTester.Wolves.Agents;
-using CommonTypes.DataTypes;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Auxiliary;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {

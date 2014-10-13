@@ -1,5 +1,4 @@
-﻿using System;
-using GenericAgentArchitectureCommon.Interfaces;
+﻿using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Interactions {
   

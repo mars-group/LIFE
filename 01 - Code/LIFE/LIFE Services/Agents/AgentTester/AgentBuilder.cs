@@ -1,11 +1,9 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
-using ESCTestLayer.Implementation;
 using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Auxiliary;
 using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Movement.Movers;
 using LayerAPI.Interfaces;
 
 namespace AgentTester {
@@ -56,7 +54,7 @@ namespace AgentTester {
 
         // Header strings, map size and options. 
         Scenario = "Wolfszenario", MapX = 30, MapY = 18, MessageLines = 5,
-        AgentsHeader = new[] {" ID ","  Typ  "," Position "," Energie "," Hgr."," G/S/W "," Distanz "," Regel "},
+        AgentsHeader = new [] {" ID ","  Typ  "," Position "," Energie "," Hgr."," G/S/W "," Distanz ", " Regel "},
         AgtListMax = 25,
         
         // Agent color definitions.

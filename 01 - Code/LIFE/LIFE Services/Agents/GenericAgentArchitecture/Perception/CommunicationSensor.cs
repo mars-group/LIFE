@@ -1,5 +1,5 @@
 ﻿using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Interactions;
+using GenericAgentArchitecture.Auxiliary;
 
 namespace GenericAgentArchitecture.Perception {
 
