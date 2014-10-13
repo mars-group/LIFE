@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LayerAPI.Interfaces;
@@ -26,8 +27,18 @@ namespace LayerAPI.AddinLoader {
         }
 
         public void LoadModelContent(ModelContent modelContent) {
+            var done = false;
+            while (!done) {
+                try {
+                    modelContent.Write("./layers/addins");
+                    done = true;
+                }
+                catch (Exception ex) {
+                    
+                }
+            }
+
             while (!AddinManager.IsInitialized) { }
-            modelContent.Write("./layers/addins");
             UpdateAddinRegistry();
             _extensionNodes = AddinManager.GetExtensionNodes(typeof (ISteppedLayer));
         }
