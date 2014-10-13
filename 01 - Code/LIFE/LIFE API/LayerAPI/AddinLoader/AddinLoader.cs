@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace LayerAPI.AddinLoader {
         private ExtensionNodeList _extensionNodes;
 
         public AddinLoader() {
+            EmptyDirectory("./layers");
             AddinManager.Initialize("./layers");
         }
 
@@ -27,18 +29,7 @@ namespace LayerAPI.AddinLoader {
         }
 
         public void LoadModelContent(ModelContent modelContent) {
-            var done = false;
-            while (!done) {
-                try {
-                    modelContent.Write("./layers/addins");
-                    done = true;
-                }
-                catch (Exception ex) {
-                    
-                }
-            }
-
-            while (!AddinManager.IsInitialized) { }
+            modelContent.Write("./layers/addins");
             UpdateAddinRegistry();
             _extensionNodes = AddinManager.GetExtensionNodes(typeof (ISteppedLayer));
         }
@@ -55,6 +46,23 @@ namespace LayerAPI.AddinLoader {
         public void UpdateAddinRegistry()
         {
             AddinManager.Registry.Update();
+        }
+
+        private static void EmptyDirectory(string targetDirectory)
+        {
+
+            var dirInfo = new DirectoryInfo(targetDirectory);
+
+            foreach (var file in dirInfo.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (var dir in dirInfo.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
         }
     }
 }
