@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulation Manager", "Simulation Manager", "{060A5DF3-4C49-402B-9B3F-142A9ECD30B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuntimeEnvironment", "SimulationManager\RuntimeEnvironment\RuntimeEnvironment.csproj", "{CD379E3D-8606-4136-978A-2E1E7DD933A1}"
@@ -115,6 +117,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIFE Services", "LIFE Services", "{5BF046F2-CC5D-47DD-AAC9-AD021E984031}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCPrototype", "LIFE Services\ECSTestLayer\ESCPrototype.csproj", "{A758654E-AEA9-45F5-8CA3-E09519379F53}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86} = {FDADF460-19A7-443A-AEA6-EF24580DAF86}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agents", "Agents", "{4BABE0E2-5DF9-4CFF-8130-C9372A261A45}"
 EndProject

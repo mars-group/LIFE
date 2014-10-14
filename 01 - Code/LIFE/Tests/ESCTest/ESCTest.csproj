@@ -52,8 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\SphereSpatialEntity.cs" />
     <Compile Include="Entities\TestAgent2D.cs" />
-    <Compile Include="Tests\DBGeometryTest.cs" />
+    <Compile Include="Tests\Sharp3DTest.cs" />
     <Compile Include="Tests\ESCTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

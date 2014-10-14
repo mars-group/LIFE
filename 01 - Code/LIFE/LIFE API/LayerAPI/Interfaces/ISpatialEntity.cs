@@ -3,7 +3,7 @@
 
     public interface ISpatialEntity  {
 
-        Vector GetDimension();
+        IGeometry GetBounds();
 
     }
 }

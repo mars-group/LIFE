@@ -3,11 +3,12 @@ using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
 using GenericAgentArchitectureCommon.Interfaces;
-using TVector = CommonTypes.DataTypes.Vector;
 
 namespace AgentTester.Wolves.Agents {
+    using CommonTypes.DataTypes;
+    using CommonTypes.TransportTypes;
 
-  internal class Grass : SpatialAgent, IAgentLogic, IEatInteractionTarget {
+    internal class Grass : SpatialAgent, IAgentLogic, IEatInteractionTarget {
 
     private int _foodValue = 2;          // Nutrition value (energy).
     public const int FoodvalueMax = 60;  // Maximum food value.

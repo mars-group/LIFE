@@ -9,12 +9,13 @@ using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
-using TVector = CommonTypes.DataTypes.Vector;
 
 
 namespace AgentTester.Wolves.Agents {
-  
-  internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
+    using CommonTypes.DataTypes;
+    using CommonTypes.TransportTypes;
+
+    internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
     
     private const int EnergyMax = 80;
     private readonly Random _random;

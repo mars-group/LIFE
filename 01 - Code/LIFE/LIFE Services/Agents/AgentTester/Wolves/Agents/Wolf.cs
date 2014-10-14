@@ -9,11 +9,12 @@ using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
-using TVector = CommonTypes.DataTypes.Vector;
 
 namespace AgentTester.Wolves.Agents {
+    using CommonTypes.DataTypes;
+    using CommonTypes.TransportTypes;
 
-  internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
+    internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
     
     private int _energy = 80;
     private const int EnergyMax = 100;

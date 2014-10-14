@@ -1,35 +1,30 @@
-﻿using GenericAgentArchitecture.Movement;
+﻿using CommonTypes.TransportTypes;
 using LayerAPI.Interfaces;
+using GenericAgentArchitecture.Movement;
 
 namespace GenericAgentArchitecture.Perception {
-  
-  /// <summary>
-  ///   An abstract halo representation. Each sensor has one object of it.
-  /// </summary>
-  public abstract class Halo : IGeometry {
-    
-    public readonly Vector Position; // The agent's centre.
-
 
     /// <summary>
-    ///   Create a new halo.
+    ///     An abstract halo representation. Each sensor has one object of it.
     /// </summary>
-    /// <param name="position">The agent's centre.</param>
-    protected Halo(Vector position) {
-      Position = position;
+    public abstract class Halo : IGeometry {
+        
+        public readonly Vector Position; // The agent's centre.
+
+        /// <summary>
+        ///     Create a new halo.
+        /// </summary>
+        /// <param name="position">The agent's centre.</param>
+        protected Halo(Vector position) {
+            Position = position;
+        }
+
+        public TVector GetPosition() {
+            return Position.GetTVector();
+        }
+
+        public abstract AABB GetAABB();
+
+        public abstract bool IsInRange(TVector position);
     }
-
-
-    /// <summary>
-    ///   Check, if a given position is inside this perception range.
-    /// </summary>
-    /// <param name="position">The position to check.</param>
-    /// <returns>True, if position is in range, false otherwise.</returns>
-    public abstract bool IsInRange(Vector position);
-
-    public abstract CommonTypes.DataTypes.Vector GetPosition();
-    public abstract CommonTypes.DataTypes.Vector GetDimensionQuad();
-    public abstract CommonTypes.DataTypes.Vector GetDirectionOfQuad();
-    public abstract bool IsInRange(CommonTypes.DataTypes.Vector position);
-  }
 }

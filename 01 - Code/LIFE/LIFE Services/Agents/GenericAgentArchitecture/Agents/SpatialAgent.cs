@@ -1,11 +1,12 @@
 ﻿using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;
-using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Agents {
-  
-  /// <summary>
+    using CommonTypes.DataTypes;
+    using CommonTypes.TransportTypes;
+
+    /// <summary>
   ///   This agent is part of a spatial world. It has a position and is registered at an 
   ///   Environment Service Component (ESC) to provide collision detection. 
   ///   Per default it is immobile but it can be equipped with a movement module.

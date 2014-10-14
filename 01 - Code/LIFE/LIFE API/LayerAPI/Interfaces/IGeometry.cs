@@ -1,23 +1,28 @@
-﻿using CommonTypes.DataTypes;
+﻿namespace LayerAPI.Interfaces {
+    #region Namespace imports
 
-namespace LayerAPI.Interfaces
-{
+    using CommonTypes.TransportTypes;
+
+    #endregion
+
     public interface IGeometry {
-
-        Vector GetPosition();
-
-        Vector GetDimensionQuad();
-
-        Vector GetDirectionOfQuad();
+        /// <summary>
+        ///     The center position of this geometry.
+        /// </summary>
+        /// <returns>The center position as transport vector.</returns>
+        TVector GetPosition();
 
         /// <summary>
-        ///   Check, if a given position is inside this perception range.
+        ///     The axis-aligned-bounding-box for this geometry.
+        /// </summary>
+        /// <returns>The corresponding AABB object.</returns>
+        AABB GetAABB();
+  
+        /// <summary>
+        ///     Check, if a given position is inside this perception range.
         /// </summary>
         /// <param name="position">The position to check.</param>
         /// <returns>True, if position is in range, false otherwise.</returns>
-        bool IsInRange(Vector position);
-
-        //TODO vergleich mit Rect und intersectWith(Rect)
-//        bool instersectWith(IGeometry other);
+        bool IsInRange(TVector position);
     }
 }

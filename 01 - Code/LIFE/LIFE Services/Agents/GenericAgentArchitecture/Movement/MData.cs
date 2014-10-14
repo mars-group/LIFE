@@ -1,9 +1,10 @@
 ﻿using System;
-using TVector = CommonTypes.DataTypes.Vector;
 
 namespace GenericAgentArchitecture.Movement {
-  
-  /// <summary>
+    using CommonTypes.DataTypes;
+    using CommonTypes.TransportTypes;
+
+    /// <summary>
   ///   This class holds all spatial data for an agent.
   /// </summary>
   public class MData {

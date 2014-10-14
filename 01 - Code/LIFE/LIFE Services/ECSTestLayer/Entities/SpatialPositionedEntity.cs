@@ -2,14 +2,16 @@
 
 namespace ESCTestLayer.Entities
 {
+    using CommonTypes.TransportTypes;
     using LayerAPI.Interfaces;
 
     public struct SpatialPositionedEntity {
 
         public ISpatialEntity Entity;
 
-        public Vector Position;
+        public TVector Position;
 
-        public Vector Direction;
+        public TVector Direction;
+       
     }
 }

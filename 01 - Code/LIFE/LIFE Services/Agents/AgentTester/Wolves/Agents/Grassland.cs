@@ -40,7 +40,7 @@ namespace AgentTester.Wolves.Agents {
           var map = new Dictionary<long, SpatialAgent>();
           var halo = (Halo) geometry;
           foreach (var agent in GetAllAgents()) {
-            if (halo.IsInRange(agent.GetPosition()) &&
+            if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
                 halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon) {
               map[agent.Id] = agent;
             }
