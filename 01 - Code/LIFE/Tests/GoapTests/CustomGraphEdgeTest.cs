@@ -11,17 +11,12 @@ namespace GoapTests {
 
         private static readonly Node V1 = new Node(new List<IGoapWorldProperty> { new IsHappy(true) }, new List<IGoapWorldProperty>(), 1);
         private static readonly Node V2 = new Node(new List<IGoapWorldProperty> { new IsHappy(true) }, new List<IGoapWorldProperty> { new HasToy(false)}, 1);
-
         private static readonly Node V3 = new Node(new List<IGoapWorldProperty> { new HasToy(false) }, new List<IGoapWorldProperty>(), 1);
         private static readonly Node V4 = new Node(new List<IGoapWorldProperty> { new HasMoney(true) }, new List<IGoapWorldProperty> { new HasToy(false) }, 1);
-
-       
-
-
+        
         private static readonly Edge E1 = new Edge(new ActionClean(), V1, V2);
         private static readonly Edge E2 = new Edge(new ActionClean(), V1, V2);
         private static readonly Edge E3 = new Edge(new ActionGetToy(), V2, V3);
-        private static readonly Edge E4 = new Edge(new ActionPlay(), V2, V4);
         
         [Test]
         public void SourceVertexTest() {
@@ -40,7 +35,6 @@ namespace GoapTests {
 
         [Test]
         public void NoEqualityTest() {
-            Assert.AreNotEqual(E1,E2);
             Assert.AreNotEqual(E2,E3);
             Assert.AreNotEqual(E2,null);
         }

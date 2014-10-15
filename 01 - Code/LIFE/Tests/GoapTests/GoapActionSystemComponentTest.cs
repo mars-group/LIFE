@@ -1,4 +1,4 @@
-﻿using GoapActionSystemFactory.Implementation;
+﻿using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapModelTest.Actions;
 using NUnit.Framework;
@@ -35,7 +35,7 @@ namespace GoapTests {
         }
 
         [Test]
-        public void FactoryTest() {
+        public void ComponentCreationTest() {
             Assert.NotNull(_goapActionSystem1);
             Assert.NotNull(_goapActionSystem2);
         }
