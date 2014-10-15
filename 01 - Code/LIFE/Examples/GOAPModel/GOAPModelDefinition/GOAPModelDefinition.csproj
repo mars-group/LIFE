@@ -44,6 +44,7 @@
     <Compile Include="Actions\ActionPlay.cs" />
     <Compile Include="AgentConfig1.cs" />
     <Compile Include="Goals\GoalBeHappy.cs" />
+    <Compile Include="Goals\GoalGetRich.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Worldstates\HasMoney.cs" />
     <Compile Include="Worldstates\HasToy.cs" />

@@ -21,7 +21,7 @@ namespace GOAPModelDefinition {
         }
 
         public List<IGoapGoal> GetAllGoals() {
-            return new List<IGoapGoal> {new GoalBeHappy()};
+            return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
     }
 }

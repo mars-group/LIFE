@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\AbstractGoapAction.cs" />
+    <Compile Include="Abstract\AbstractGoapGoal.cs" />
     <Compile Include="Exceptions\GraphException.cs" />
     <Compile Include="Exceptions\NoVertexFoundException.cs" />
     <Compile Include="Abstract\AbstractGoapSystem.cs" />
