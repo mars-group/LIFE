@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
@@ -15,7 +12,7 @@ namespace LayerAPI.AddinLoader {
         private ExtensionNodeList _extensionNodes;
 
         public AddinLoader() {
-            EmptyDirectory("./layers");
+            //EmptyDirectory("./layers");
             AddinManager.Initialize("./layers");
         }
 
