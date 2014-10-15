@@ -26,7 +26,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="availableActions"></param>
         /// <param name="availableGoals"></param>
         /// <param name="blackboard"></param>
-        public GoapManager
+        internal GoapManager
             (List<AbstractGoapAction> availableActions, List<IGoapGoal> availableGoals, Blackboard blackboard) {
             _availableActions = availableActions;
             _availableGoals = availableGoals;
@@ -45,7 +45,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="availableGoals"></param>
         /// <param name="startStates"></param>
         /// <param name="blackboard"></param>
-        public GoapManager
+        internal GoapManager
             (List<AbstractGoapAction> availableActions,
                 List<IGoapGoal> availableGoals,
                 Blackboard blackboard,

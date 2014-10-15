@@ -67,9 +67,9 @@
       <Project>{85340006-B073-47E6-9DBF-D0CB391A13AA}</Project>
       <Name>GoapModelTest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoapSystem\GoapActionSystemFactory\GoapActionSystemFactory.csproj">
-      <Project>{A36FC1F7-F7C1-4FFC-BA9F-9D864129F8DF}</Project>
-      <Name>GoapActionSystemFactory</Name>
+    <ProjectReference Include="..\GoapSystem\GoapActionSystem\GoapActionSystem.csproj">
+      <Project>{62773ab7-47e9-42ad-96ae-d4241618199e}</Project>
+      <Name>GoapActionSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\GoapSystem\GoapCommon\GoapCommon.csproj">
       <Project>{846C7C43-FC1B-4709-8A43-B2EE8213F63F}</Project>

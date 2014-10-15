@@ -1,11 +1,9 @@
-﻿using System;
-using System.Reflection;
-using GoapActionSystem.Implementation;
+﻿using System.Reflection;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using TypeSafeBlackboard;
 
-namespace GoapActionSystemFactory.Implementation {
+namespace GoapActionSystem.Implementation {
     /// <summary>
     ///     main access to create an instance of the goap component
     /// </summary>

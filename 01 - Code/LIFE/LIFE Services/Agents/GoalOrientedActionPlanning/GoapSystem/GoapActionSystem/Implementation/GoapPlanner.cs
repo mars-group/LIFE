@@ -6,15 +6,16 @@ using GoapCommon.Interfaces;
 using GoapGraphConnector.SimpleGraph;
 
 namespace GoapActionSystem.Implementation {
+
     /// <summary>
     ///     The goapplanner is responsible for the process of finding a valid plan from the actions, currentWorld and
     ///     targetWorld given to him. He uses the graph component for creating a new plan.
     ///     the planner saves the plan and check it for validity depending on the events and state of simulation.
     ///     The caller is responsible for giving well defined and corresponding actions and world states.
     ///     planner is responsible for the regressive search. the graph component knows nothing about that and the switched
-    ///     root and target.
+    ///     root and target.  
     /// </summary>
-    public class GoapPlanner : IGoapPlanner {
+    internal class GoapPlanner  {
         private readonly int _maximuxSearchDepth = int.MaxValue;
         private readonly List<AbstractGoapAction> _availableActions;
         private readonly Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> _effectToAction;
@@ -27,7 +28,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="availableActions"></param>
         /// <param name="effectToAction"></param>
         /// <param name="startState"></param>
-        public GoapPlanner
+        internal GoapPlanner
             (int maximuxSearchDepth,
                 List<AbstractGoapAction> availableActions,
                 Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> effectToAction,

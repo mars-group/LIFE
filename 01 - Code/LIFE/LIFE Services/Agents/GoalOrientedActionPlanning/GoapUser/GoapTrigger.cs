@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using GoapActionSystemFactory.Implementation;
+using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using TypeSafeBlackboard;
