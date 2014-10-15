@@ -111,8 +111,19 @@ namespace GoapActionSystem.Implementation {
 
         private IGoapGoal ChooseNewGoal() {
             UpdateRelevancyOfGoals();
-            IGoapGoal highestRelevancyGoal = _availableGoals.OrderByDescending(x => x.GetRelevancy()).ToList().First();
-            if (_currentGoal != null && _currentGoal.Equals(highestRelevancyGoal)) return _currentGoal;
+
+            List<IGoapGoal> goalSortedByRelevancy = _availableGoals.OrderByDescending(x => x.GetRelevancy()).ToList();
+
+            IGoapGoal highestRelevancyGoal = null;
+            
+            foreach (var goapGoal in goalSortedByRelevancy) {
+                if (highestRelevancyGoal == null && !goapGoal.IsSatisfied(_internalBlackboard.Get(Worldstate))) {
+                    highestRelevancyGoal = goapGoal;
+                }
+            }
+
+            if (_currentGoal != null && !_currentGoal.Equals(highestRelevancyGoal)) {Console.WriteLine("Goal has changed. New is " + highestRelevancyGoal.GetType());}
+            ;
 
             return _currentGoal = highestRelevancyGoal;
         }
