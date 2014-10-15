@@ -6,7 +6,6 @@ using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
 
 [assembly: AddinRoot("LayerContainer", "0.1")]
-
 namespace LayerAPI.AddinLoader {
 
     public class AddinLoader : IAddinLoader {
@@ -41,6 +40,7 @@ namespace LayerAPI.AddinLoader {
 
         public ExtensionNodeList LoadAllLayers() {
             WaitForAddinManagerToBeInitialized();
+            UpdateAddinRegistry();
             return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));
         }
 

@@ -42,7 +42,6 @@ namespace ModelContainer.Implementation {
                 "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
 
             addinLoader.UpdateAddinRegistry();
-
             var nodes = addinLoader.LoadAllLayers();
             var modelStructure = new ModelStructure();
 
