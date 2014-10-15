@@ -13,10 +13,6 @@ namespace GoapGraphConnector.SimpleGraph {
         private Map _map;
         private AStarSteppable _aStar;
 
-        private readonly Dictionary<IGoapEdge, AbstractGoapAction> _mapEdgeToAction =
-            new Dictionary<IGoapEdge, AbstractGoapAction>();
-
-        
         public void InitializeGoapGraph(List<IGoapWorldProperty> rootNode, int maximumGraphDept = 0) {
             _root = new Node(rootNode, new List<IGoapWorldProperty>(),rootNode.Count);
             InitializeGoapGraph(_root, maximumGraphDept);
@@ -52,7 +48,6 @@ namespace GoapGraphConnector.SimpleGraph {
                 var newNode = GetChildNodeByActionAndParent(goapAction, _aStar.Current);
                 var newEdge = new Edge(goapAction, _aStar.Current, newNode);
                 
-                _mapEdgeToAction.Add(newEdge, goapAction);
                 edges.Add(newEdge);
             }
             ExpandCurrentVertex(edges);
@@ -80,14 +75,8 @@ namespace GoapGraphConnector.SimpleGraph {
         /// <returns></returns>
         List<AbstractGoapAction> IGoapGraphService.GetShortestPath() {
             List<IGoapEdge> edges = _aStar.CreatePathToCurrentAsEdgeList();
-            List<AbstractGoapAction> actionList = new List<AbstractGoapAction>();
 
-            foreach (var goapEdge in edges) {
-                AbstractGoapAction action;
-                _mapEdgeToAction.TryGetValue(goapEdge, out action);
-                actionList.Add(action);
-            }
-            return actionList;
+            return edges.Select(goapEdge => goapEdge.GetAction()).ToList();
         }
 
         /// <summary>
@@ -138,14 +127,7 @@ namespace GoapGraphConnector.SimpleGraph {
 
             return actionKeys.Any(actionKey => nodeKeys.Contains(actionKey));
         }
-
-
-
-
-
-
-
-
+        
 
         
     }

@@ -18,7 +18,6 @@ namespace GoapGraphConnector.SimpleGraph {
         /// <summary>
         /// </summary>
         /// <param name="root"></param>
-        /// <param name="target"></param>
         /// <param name="graph"></param>
         public AStarSteppable(IGoapNode root,  Map graph){
             _root = root;
@@ -39,7 +38,7 @@ namespace GoapGraphConnector.SimpleGraph {
         /// <summary>
         ///     Select the vertex from the open list with the best estimate
         /// </summary>
-        public IGoapNode ChooseNextNodeFromOpenList() {
+        private IGoapNode ChooseNextNodeFromOpenList() {
             int smallestF = int.MaxValue;
             IGoapNode vertex = null;
 
@@ -63,17 +62,10 @@ namespace GoapGraphConnector.SimpleGraph {
             return _nodeTable.Any(keyValuePair => keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false);
         }
 
-        /// <summary>
-        ///     is target subset of current
-        /// </summary>
-        /// <returns></returns>
-        public bool CheckforTargetStatesAreSatisfied() {
-            return _current.HasUnsatisfiedProperties() == false;
-        }
-
         public void AddVertex(IGoapNode vertex) {
-            if (!_nodeTable.ContainsKey(vertex)) _nodeTable.Add(vertex, null);
-            // TODO kantenkosten etc mitgeben um einen vergleich machen zu können ob der weg günstiger wird
+            if (!_nodeTable.ContainsKey(vertex)) {
+                _nodeTable.Add(vertex, null);
+            }
         }
 
         public List<IGoapEdge> CreatePathToCurrentAsEdgeList() {
@@ -152,7 +144,6 @@ namespace GoapGraphConnector.SimpleGraph {
                 }
             }
         }
-
 
         /// <summary>
         ///     manipulate entry for node in algorithm table - set status to in closed list

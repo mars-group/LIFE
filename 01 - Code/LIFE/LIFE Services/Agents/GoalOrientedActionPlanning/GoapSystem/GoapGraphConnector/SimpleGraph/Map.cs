@@ -38,13 +38,11 @@ namespace GoapGraphConnector.SimpleGraph {
             }
         }
 
-        public void AddVertex(IGoapNode vertex)
-        {
+        public void AddVertex(IGoapNode vertex){
             if(!_vertices.Contains(vertex))_vertices.Add(vertex);
         }
 
-        public bool ContainsVertex(IGoapNode vertex)
-        {
+        public bool ContainsVertex(IGoapNode vertex){
             return _vertices.Contains(vertex);
         }
 

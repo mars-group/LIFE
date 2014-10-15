@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace GoapTests {
     [TestFixture]
-    public class CustomGaphVertexTest {
+    public class CustomGaphNodeTest {
 
         private static readonly IGoapWorldProperty HappyTrue = new IsHappy(true);
         private static readonly IGoapWorldProperty HappyFalse1 = new IsHappy(false);

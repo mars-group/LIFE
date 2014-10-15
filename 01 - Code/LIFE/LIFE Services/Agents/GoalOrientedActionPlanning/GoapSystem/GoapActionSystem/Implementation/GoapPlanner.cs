@@ -95,12 +95,9 @@ namespace GoapActionSystem.Implementation {
             if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
                 _currentPlan = new List<AbstractGoapAction> {new SurrogateAction()};
 
-            // TODO ist die leere action besser als eine leere liste ?
-
             return _currentPlan;
         }
-
-
+        
         /// <summary>
         ///     search for actions that effects correxpond to the state
         /// </summary>
