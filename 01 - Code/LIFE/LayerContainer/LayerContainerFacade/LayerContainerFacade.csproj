@@ -77,6 +77,10 @@
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
       <Name>Scs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LayerContainerShared\LayerContainerShared.csproj">
+      <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
+      <Name>LayerContainerShared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LayerFactory\LayerFactory.csproj">
       <Project>{A88C77DB-0DAC-46D5-8136-C27B3D72717F}</Project>
       <Name>LayerFactory</Name>
@@ -92,10 +96,6 @@
     <ProjectReference Include="..\RTEManager\RTEManager.csproj">
       <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
       <Name>RTEManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shared\LayerContainerShared.csproj">
-      <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
-      <Name>LayerContainerShared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
