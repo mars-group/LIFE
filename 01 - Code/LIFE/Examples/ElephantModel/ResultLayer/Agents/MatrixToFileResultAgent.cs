@@ -16,14 +16,14 @@ namespace ResultLayer
 
 		private int _tickCount;
 
-		private DateTime _simrunDateTime;
+		private string _simrunDateTime;
 
 		public MatrixToFileResultAgent(ElephantLayerImpl elephantLayer, PlantLayerImpl plantLayer, WaterLayerImpl waterlayer){
 			_elephantLayer = elephantLayer;
 			_plantLayer = plantLayer;
 			_waterLayer = waterlayer;
 			_tickCount = 0;
-			_simrunDateTime = DateTime.Now;
+			_simrunDateTime = DateTime.Now.ToString("HH:mm:ss tt zzz");
 		}
 
 		#region ITickClient implementation
@@ -71,7 +71,7 @@ namespace ResultLayer
 		private void WriteMatrixToFile(string layerName, string matrix, string filename)
 		{
 			// Write the string to a file.
-			var dirpath = "." + "/" + layerName + "MatrixOutputsFrom" + _simrunDateTime + "/";
+			var dirpath = "." + "/" + layerName + "MatrixOutputsFrom" + "/";
 			if (!Directory.Exists (dirpath)) {
 				Directory.CreateDirectory (dirpath);
 			}
