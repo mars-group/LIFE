@@ -35,7 +35,7 @@ namespace LayerAPI.AddinLoader {
         }
 
         public TypeExtensionNode LoadLayer(string layerName) {
-            //UpdateAddinRegistry();
+            UpdateAddinRegistry();
             return _extensionNodes.Cast<TypeExtensionNode>().First(node => node.Type.Name == layerName);
         }
 
