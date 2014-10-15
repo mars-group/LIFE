@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
@@ -12,7 +13,7 @@ namespace LayerAPI.AddinLoader {
         private ExtensionNodeList _extensionNodes;
 
         public AddinLoader() {
-            //EmptyDirectory("./layers");
+            EmptyDirectory("./layers");
             AddinManager.Initialize("./layers");
         }
 
@@ -26,23 +27,34 @@ namespace LayerAPI.AddinLoader {
         }
 
         public void LoadModelContent(ModelContent modelContent) {
+            WaitForAddinManagerToBeInitialized();
             modelContent.Write("./layers/addins");
             UpdateAddinRegistry();
             _extensionNodes = AddinManager.GetExtensionNodes(typeof (ISteppedLayer));
         }
 
         public TypeExtensionNode LoadLayer(string layerName) {
+            WaitForAddinManagerToBeInitialized();
             UpdateAddinRegistry();
             return _extensionNodes.Cast<TypeExtensionNode>().First(node => node.Type.Name == layerName);
         }
 
         public ExtensionNodeList LoadAllLayers() {
+            WaitForAddinManagerToBeInitialized();
             return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));
         }
 
         public void UpdateAddinRegistry()
         {
+            WaitForAddinManagerToBeInitialized();
             AddinManager.Registry.Update();
+        }
+
+        private void WaitForAddinManagerToBeInitialized() {
+            while (!AddinManager.IsInitialized)
+            {
+                Thread.Sleep(50);
+            }
         }
 
         private static void EmptyDirectory(string targetDirectory)
