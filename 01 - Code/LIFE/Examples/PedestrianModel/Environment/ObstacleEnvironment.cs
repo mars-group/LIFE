@@ -1,4 +1,6 @@
-﻿using GenericAgentArchitecture.Environments;
+﻿using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Perception;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +15,54 @@ namespace PedestrianModel
     internal class ObstacleEnvironment : Environment2D
     {
 
+        /* Data source functions: Information types and retrieval method. */
         public enum InformationTypes { Obstacles, Pedestrians }
 
         public override object GetData(int informationType, LayerAPI.Interfaces.IGeometry geometry)
         {
-            throw new NotImplementedException();
+            switch ((InformationTypes)informationType)
+            {
+                case InformationTypes.Pedestrians:
+                    {
+                        var map = new Dictionary<long, SpatialAgent>();
+                        var halo = (Halo)geometry;
+                        foreach (var agent in GetAllAgents())
+                        {
+                            if (agent is Pedestrian)
+                            {
+                                if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
+                                halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon)
+                                {
+                                    map[agent.Id] = agent;
+                                }
+                            }                            
+                        }
+                        return map;
+                    }
+                case InformationTypes.Obstacles:
+                    {
+                        var map = new Dictionary<long, SpatialAgent>();
+                        var halo = (Halo)geometry;
+                        foreach (var agent in GetAllAgents())
+                        {
+                            if (agent is Obstacle)
+                            {
+                                if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
+                                halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon)
+                                {
+                                    map[agent.Id] = agent;
+                                }
+                            }
+                        }
+                        return map;
+                    }
+                default: return null;
+            }
         }
 
         protected override void AdvanceEnvironment()
         {
-            throw new NotImplementedException();
+            // Nothing to do here in this case.
         }
     }
 }
