@@ -2,7 +2,7 @@
 <package >
   <metadata>  
     <version>0.1</version>
-		<id>Generic Agent Architecture</id>
+	<id>GenericAgentArchitecture</id>
     <title>Generic Agent Architecture</title>
     <authors>Jan Dalski</authors>
     <owners>MARS Group</owners>
