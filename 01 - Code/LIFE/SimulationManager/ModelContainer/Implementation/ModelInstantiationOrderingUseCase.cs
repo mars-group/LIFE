@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LayerAPI.AddinLoader;
@@ -37,11 +38,8 @@ namespace ModelContainer.Implementation {
 
             // use AddinLoader from LIFEApi, because Mono.Addins may only load Plugins whose 
             // Interfaces originate from the Assembly they are attempted to be loaded from
-            IAddinLoader addinLoader = new AddinLoader
-                (_settings.AddinLibraryDirectoryPath,
-                "." + Path.DirectorySeparatorChar + "addins" + Path.DirectorySeparatorChar + description.Name);
+            IAddinLoader addinLoader = AddinLoader.Instance;
 
-            addinLoader.UpdateAddinRegistry();
             var nodes = addinLoader.LoadAllLayers();
             var modelStructure = new ModelStructure();
 
