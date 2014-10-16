@@ -10,7 +10,7 @@ namespace GOAPModelDefinition {
     /// <summary>
     ///     determines the configuration of agent 1
     /// </summary>
-    public class AgentConfig1 : IAgentConfig {
+    public class AgentConfig1 : IGoapAgentConfig {
 
         public List<IGoapWorldProperty> GetStartWorldstate() {
             return new List<IGoapWorldProperty> {new IsHappy(false), new HasMoney(true), new HasToy(false)};

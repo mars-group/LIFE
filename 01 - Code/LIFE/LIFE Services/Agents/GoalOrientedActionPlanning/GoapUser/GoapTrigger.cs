@@ -45,8 +45,8 @@ namespace GoapUser {
             const string namespaceOfConfigClass = "GoapModelTest";
             const string nameOfConfigClass = "AgentConfig1";
             Assembly assembly = Assembly.Load(namespaceOfConfigClass);
-            IAgentConfig configClass =
-                (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
+            IGoapAgentConfig configClass =
+                (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
         }
 
         private static void ShowAvailableAssemblies() {
