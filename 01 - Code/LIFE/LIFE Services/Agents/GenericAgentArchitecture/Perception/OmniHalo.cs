@@ -1,34 +1,26 @@
-﻿using CommonTypes.DataTypes;
+﻿using GenericAgentArchitecture.Movement;
+using CommonTypes.TransportTypes;
+using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Perception {
+    
+  /// <summary>
+  ///   A dummy halo. May be used as a stub for sensors with no perception limitation.
+  /// </summary>
+  public class OmniHalo : Halo {
+    
+
     /// <summary>
-    ///     A dummy halo. May be used as a stub for sensors with no perception limitation.
+    ///   Create a halo that is capable of sensing everything.
     /// </summary>
-    internal class OmniHalo : Halo {
-        /// <summary>
-        ///     Create a halo that is capable of sensing everything.
-        /// </summary>
-        public OmniHalo() : base(Vector.Null) { }
+    public OmniHalo() : base(new Vector(TVector.Origin.X, TVector.Origin.Y, TVector.Origin.Z)) { }
 
-
-        public override Vector GetDirectionOfQuad() {
-            return Vector.UnitVectorXAxis;
-        }
-
-
-        public override Vector GetDimensionQuad() {
-            return Vector.MaxVector;
-        }
-
-
-        /// <summary>
-        ///     Check, if a given position is inside this perception range.
-        /// </summary>
-        /// <param name="position">The position to check.</param>
-        /// <returns>Always true.</returns>
-        public override bool IsInRange(Vector position)
-        {
-            return true;
-        }
+    public override AABB GetAABB() {
+      return AABB.Omni;
     }
+
+    public override bool IsInRange(TVector position) {
+      return true;
+    }
+  }
 }

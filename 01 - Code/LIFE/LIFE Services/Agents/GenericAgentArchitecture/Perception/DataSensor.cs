@@ -1,5 +1,4 @@
 ﻿using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Interfaces;
 using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Perception {

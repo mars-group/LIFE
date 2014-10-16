@@ -1,6 +1,4 @@
-﻿using GenericAgentArchitecture.Perception;
-
-namespace GenericAgentArchitecture.Interfaces {
+﻿namespace GenericAgentArchitecture.Perception {
   public interface ICallbackDataSource {
     void SetCallbackMode(bool enabled, SensorInput inputStorage);
   }
