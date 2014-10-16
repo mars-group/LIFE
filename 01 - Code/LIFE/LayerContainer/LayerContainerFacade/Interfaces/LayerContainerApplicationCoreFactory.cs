@@ -21,7 +21,7 @@ namespace LayerContainerFacade.Interfaces {
 
  
 
-    public static class ApplicationCoreFactory {
+    public static class LayerContainerApplicationCoreFactory {
         private static IContainer _container;
         private static ContainerBuilder _containerBuilder;
 

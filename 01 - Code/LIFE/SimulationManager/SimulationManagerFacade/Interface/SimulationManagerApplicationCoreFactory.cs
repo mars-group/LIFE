@@ -17,10 +17,10 @@ namespace SimulationManagerFacade.Interface {
     ///     This class can be used to obtain all versions of the application core, either for testing or
     ///     for production use. It works via the factory pattern.
     /// </summary>
-    public class ApplicationCoreFactory {
+    public class SimulationManagerApplicationCoreFactory {
         private static IContainer container;
 
-        public static IApplicationCore GetProductionApplicationCore() {
+        public static ISimulationManagerApplicationCore GetProductionApplicationCore() {
             if (container == null) {
                 ContainerBuilder builder = new ContainerBuilder();
 
@@ -40,8 +40,8 @@ namespace SimulationManagerFacade.Interface {
                     .As<IMulticastAdapter>()
                     .InstancePerLifetimeScope();
 
-                builder.RegisterType<ApplicationCoreComponent>()
-                    .As<IApplicationCore>()
+                builder.RegisterType<SimulationManagerApplicationCoreComponent>()
+                    .As<ISimulationManagerApplicationCore>()
                     .InstancePerDependency();
 
                 // Make the configurations available for all components
@@ -56,7 +56,7 @@ namespace SimulationManagerFacade.Interface {
                 container = builder.Build();
             }
 
-            return container.Resolve<IApplicationCore>();
+            return container.Resolve<ISimulationManagerApplicationCore>();
         }
     }
 }

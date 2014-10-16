@@ -23,13 +23,13 @@ namespace SimulationManagerFacade.Implementation {
     ///     (If it is allowed to access them from the outside). Also one would find something like transaction-<br />
     ///     or access controls here. So far this is not yet implemented.
     /// </remarks>
-    public class ApplicationCoreComponent : ScsService, IApplicationCore {
+    public class SimulationManagerApplicationCoreComponent : ScsService, ISimulationManagerApplicationCore {
         private readonly IRuntimeEnvironment _runtimeEnvironment;
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
         private IScsServiceApplication _server;
 
-        public ApplicationCoreComponent(SimulationManagerSettings settings,
+        public SimulationManagerApplicationCoreComponent(SimulationManagerSettings settings,
                                         IRuntimeEnvironment runtimeEnvironment,
                                         IModelContainer modelContainer,
                                         INodeRegistry nodeRegistry) {
@@ -39,7 +39,7 @@ namespace SimulationManagerFacade.Implementation {
 
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
-            _server.AddService<ISimulationManager, ApplicationCoreComponent>(this);
+            _server.AddService<ISimulationManager, SimulationManagerApplicationCoreComponent>(this);
 
             _server.Start();
         }

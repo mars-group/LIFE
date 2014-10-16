@@ -47,9 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\ApplicationCoreComponent.cs" />
-    <Compile Include="Interface\ApplicationCoreFactory.cs" />
-    <Compile Include="Interface\IApplicationCore.cs" />
+    <Compile Include="Implementation\SimulationManagerApplicationCoreComponent.cs" />
+    <Compile Include="Interface\SimulationManagerApplicationCoreFactory.cs" />
+    <Compile Include="Interface\ISimulationManagerApplicationCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

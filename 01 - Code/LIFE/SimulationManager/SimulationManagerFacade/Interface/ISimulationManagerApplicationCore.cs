@@ -7,7 +7,7 @@ namespace SimulationManagerFacade.Interface {
     /// <summary>
     /// TODO: comment
     /// </summary>
-    public interface IApplicationCore :
+    public interface ISimulationManagerApplicationCore :
                             ISimulationManager
     {
 		/// <summary>

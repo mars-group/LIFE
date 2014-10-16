@@ -59,9 +59,8 @@ namespace LayerAPI.AddinLoader {
 
         private static void EmptyDirectory(string targetDirectory)
         {
-
             var dirInfo = new DirectoryInfo(targetDirectory);
-
+            if (!dirInfo.Exists) return;
             foreach (var file in dirInfo.GetFiles())
             {
                 file.Delete();
@@ -71,7 +70,6 @@ namespace LayerAPI.AddinLoader {
             {
                 dir.Delete(true);
             }
-
         }
     }
 }
