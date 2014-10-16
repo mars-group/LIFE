@@ -14,7 +14,7 @@ namespace GenericAgentArchitecture.Environments {
   public abstract class Environment2D : Environment, IEnvironment {
 
     protected readonly Vector Boundaries;    // Env. extent, ranging from (0,0) to this point.
-    protected readonly Dictionary<SpatialAgent, MData> Agents;  // Agent-to-movement data mapping.
+    protected readonly Dictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
     public bool IsGrid { get; private set; }                    // Grid-based or continuous?
 
 
@@ -25,7 +25,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="isGrid">Selects, if this environment is grid-based or continuous.</param>
     public Environment2D(Vector boundaries, bool isGrid = true) {
       Boundaries = boundaries;
-      Agents = new Dictionary<SpatialAgent, MData>();
+      Agents = new Dictionary<SpatialAgent, MovementData>();
       IsGrid = isGrid;
       if (!isGrid) throw new NotImplementedException();
     }
@@ -36,7 +36,7 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="data">It's movement data.</param>
-    public void AddAgent(SpatialAgent agent, MData data) {
+    public void AddAgent(SpatialAgent agent, MovementData data) {
       Agents.Add(agent, data);
       AddAgent(agent);
     }

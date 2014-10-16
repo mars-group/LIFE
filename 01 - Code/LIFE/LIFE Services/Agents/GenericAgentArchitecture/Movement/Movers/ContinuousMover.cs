@@ -21,7 +21,7 @@ namespace GenericAgentArchitecture.Movement.Movers {
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
     /// <param name="data">Container with spatial base data.</param>
-    public ContinuousMover(IEnvironment env, SpatialAgent agent, MData data) : base(env, agent, data) {}
+    public ContinuousMover(IEnvironment env, SpatialAgent agent, MovementData data) : base(env, agent, data) {}
 
 
     /// <summary>

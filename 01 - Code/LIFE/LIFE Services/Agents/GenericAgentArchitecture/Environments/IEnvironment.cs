@@ -17,7 +17,7 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="data">Container with movement data.</param>
-    void AddAgent(SpatialAgent agent, MData data);
+    void AddAgent(SpatialAgent agent, MovementData data);
 
 
     /// <summary>

@@ -11,7 +11,7 @@ namespace GenericAgentArchitecture.Movement.Movers {
 
     private readonly IEnvironment _env;   // Environment interaction interface.
     private readonly SpatialAgent _agent; // Agent reference, needed for movement execution.
-    protected readonly MData Data;        // The agent's movement data container.
+    protected readonly MovementData Data; // The agent's movement data container.
     
     protected Vector TargetPos;    // Target position to acquire. May be set or calculated.
     protected Direction TargetDir; // Desired heading.
@@ -26,7 +26,7 @@ namespace GenericAgentArchitecture.Movement.Movers {
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
     /// <param name="data">Container with spatial base data.</param>
-    protected AgentMover(IEnvironment env, SpatialAgent agent, MData data) {
+    protected AgentMover(IEnvironment env, SpatialAgent agent, MovementData data) {
       _env = env;
       _agent = agent;
       Data = data;

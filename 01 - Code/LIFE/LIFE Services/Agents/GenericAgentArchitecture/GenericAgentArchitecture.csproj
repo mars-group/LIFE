@@ -58,7 +58,7 @@
     <Compile Include="Movement\Actions\DirectMovementAction.cs" />
     <Compile Include="Movement\Actions\GridMovementAction.cs" />
     <Compile Include="Environments\IEnvironment.cs" />
-    <Compile Include="Movement\MData.cs" />
+    <Compile Include="Movement\MovementData.cs" />
     <Compile Include="Movement\Vector.cs" />
     <Compile Include="Perception\CommunicationSensor.cs" />
     <Compile Include="Perception\DataSensor.cs" />
