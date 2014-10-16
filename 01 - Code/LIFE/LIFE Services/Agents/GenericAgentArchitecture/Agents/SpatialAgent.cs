@@ -12,9 +12,9 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class SpatialAgent : Agent {
 
-    private readonly IEnvironment _env;  // IESC implementation for collision detection.
-    protected readonly MData Data;       // Container for position, direction and speeds.
-    protected AgentMover Mover;          // Class for agent movement. 
+    private readonly IEnvironment _env;    // IESC implementation for collision detection.
+    protected readonly MovementData Data;  // Container for position, direction and speeds.
+    protected AgentMover Mover;            // Class for agent movement. 
 
 
     /// <summary>
@@ -25,7 +25,7 @@ namespace GenericAgentArchitecture.Agents {
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
     protected SpatialAgent(long id, IEnvironment env, TVector pos) : base(id) {
       _env = env;
-      Data = new MData(pos);  
+      Data = new MovementData(pos);  
       _env.AddAgent(this, Data); // Enlist the agent in environment.
     }
 

@@ -13,7 +13,7 @@ namespace GenericAgentArchitecture.Environments {
   public class ESCAdapter : IEnvironment {
 
     private readonly IESC _esc;  // Environment Service Component (ESC) implementation.
-    private readonly Dictionary<SpatialAgent, MData> _agents; // All registered agents.
+    private readonly Dictionary<SpatialAgent, MovementData> _agents; // All registered agents.
 
 
     /// <summary>
@@ -22,7 +22,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="esc">The ESC reference.</param>
     public ESCAdapter(IESC esc) {
       _esc = esc;
-      _agents = new Dictionary<SpatialAgent, MData>();
+      _agents = new Dictionary<SpatialAgent, MovementData>();
     }
 
 
@@ -31,7 +31,7 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="data">Container with movement data.</param>
-    public void AddAgent(SpatialAgent agent, MData data) {
+    public void AddAgent(SpatialAgent agent, MovementData data) {
       var dim = data.Dimension;
       _agents.Add(agent, data);
       _esc.Add((int) agent.Id, 0, true, new TVector(dim.X, dim.Y, dim.Z));

@@ -27,7 +27,7 @@ namespace GenericAgentArchitecture.Movement.Movers {
     /// <param name="data">Container with spatial base data.</param>
     /// <param name="diagonal">'True': diagonal movement enabled (default value). 
     /// On 'false', only up, down, left and right are available.</param>
-    public GridMover(IEnvironment env, SpatialAgent agent, MData data, bool diagonal = true) : base(env, agent, data) {
+    public GridMover(IEnvironment env, SpatialAgent agent, MovementData data, bool diagonal = true) : base(env, agent, data) {
       _diagonalEnabled = diagonal;
     }
 
