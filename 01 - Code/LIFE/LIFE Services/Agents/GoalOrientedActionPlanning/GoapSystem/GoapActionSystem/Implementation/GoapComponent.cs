@@ -19,7 +19,7 @@ namespace GoapActionSystem.Implementation {
           
                 Assembly assembly = Assembly.Load(namespaceOfConfigClass);
                 var configClass =
-                    (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
+                    (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
 
                 return new GoapManager
                     (configClass.GetAllActions(), configClass.GetAllGoals(), blackboard,
