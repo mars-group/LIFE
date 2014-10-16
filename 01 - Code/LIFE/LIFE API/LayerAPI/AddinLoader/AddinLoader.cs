@@ -14,7 +14,7 @@ namespace LayerAPI.AddinLoader {
         static readonly AddinLoader _instance = new AddinLoader();
 
         private AddinLoader() {
-            if (Directory.Exists("./layers/addins/currentModel")) { Directory.Delete("./layers/addins/tmp", true); }
+            if (Directory.Exists("./layers/addins/tmp")) { Directory.Delete("./layers/addins/tmp", true); }
             AddinManager.Initialize("./layers");
         }
 
