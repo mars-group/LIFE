@@ -46,10 +46,11 @@
       <HintPath>..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Mars.Rock.Common">
-      <HintPath>..\..\..\packages\Mars.Rock.Common.0.0.5387.25999\lib\net45\Mars.Rock.Common.dll</HintPath>
+      <HintPath>..\..\..\packages\Mars.Rock.Common.0.0.5401.26962\lib\net45\Mars.Rock.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Mars.Rock.Drill">
-      <HintPath>..\..\..\packages\Mars.Rock.Drill.0.0.5387.26000\lib\net45\Mars.Rock.Drill.dll</HintPath>
+    <Reference Include="Mars.Rock.Drill, Version=0.0.5387.26000, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Mars.Rock.Drill.0.0.5401.26963\lib\net45\Mars.Rock.Drill.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
