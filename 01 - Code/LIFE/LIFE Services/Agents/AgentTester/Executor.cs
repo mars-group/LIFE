@@ -10,6 +10,7 @@ namespace AgentTester {
   ///   This class periodicly triggers the environment and thereby all agents.
   /// </summary>
   internal class Executor {
+    
     private readonly ITickClient _environment; // The agent container.
     private readonly ConsoleView _view;        // The console view module.
 

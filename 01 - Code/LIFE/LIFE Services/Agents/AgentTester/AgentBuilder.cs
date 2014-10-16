@@ -12,6 +12,7 @@ namespace AgentTester {
   /// This builder provides a convenient creation of agents.
   /// </summary>
   internal static class AgentBuilder {
+
     /// <summary>
     /// Builder for the wolves vs. sheeps scenario.
     /// </summary>

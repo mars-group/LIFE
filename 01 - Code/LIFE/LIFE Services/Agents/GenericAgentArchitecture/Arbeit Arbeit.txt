@@ -8,21 +8,18 @@
 
 [Env2D]: Kollisionserkennung / Stub
 
-[Halo]: Zurückbauen, Spezialfall für ESC bauen.
-        MData-Referenz verwenden.
-		ACHTUNG: Agent kennt ESC, andersherum nicht! 
-		ESC weiß also nichts von Halos, nur von gemeinsamen Typen!
+[Halo]: Rückbau / Reparatur:
+        Besitzt MData-Referenz (für Bewegungsdaten) und IGeometry-Objekt herum.
+		(muß aber immer noch IGeometry impl., da GetData sowas braucht)
+		Implementiert Schnittstelle und delegiert die IF-Aufrufe auf eingebettetes Objekt.
+		- Omni-Halo: Beides null.
+		- IsInRange(): Sollte eher "Contains(point)" heißen.
 
 [GridMover]: Funktion der ehemaligen kombinierten Bewegung unten
              Planungsrelevante Teile extrahieren 
 
-[Konsole]:  Von der Umwelt separieren!
-            Schnittstelle für Grafikausgabe entwerfen
-			Benötigt dann Rahmendaten (Initialisierung) und Referenz auf anzuzeigende Daten 
-
-[ESC]: Einbindung im Bau: 
-       Zufallsposition!
-       Ausgabe!
+[ESC]: Schnittstellenimplementation ausstehend!
+       Zufallsposition vermutlich nicht möglich.
 
 [Bewegungsplanung]: Separate Klasse, die Teil einer Planungslogik werden kann
                     Flexible Struktur (Plugin-Komponenten) für das IAgentLogic gebraucht!
@@ -33,7 +30,9 @@
 
 
 
-
+- Vektor herausziehen, gemeinsames Paket
+- Struktur optimieren
+- ICallbackDataSource in GAA-Commons
 
 
 

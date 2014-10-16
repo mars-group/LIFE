@@ -46,7 +46,7 @@
     <Compile Include="Environments\Environment.cs" />
     <Compile Include="Auxiliary\MessageServer.cs" />
     <Compile Include="Reasoning\Plan.cs" />
-    <Compile Include="Interfaces\ICallbackDataSource.cs" />
+    <Compile Include="Perception\ICallbackDataSource.cs" />
     <Compile Include="Movement\Movers\AgentMover.cs" />
     <Compile Include="Movement\Movers\ContinuousMover.cs" />
     <Compile Include="Movement\Direction.cs" />

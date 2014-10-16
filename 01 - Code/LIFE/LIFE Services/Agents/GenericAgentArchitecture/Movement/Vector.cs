@@ -1,10 +1,9 @@
 ﻿using System;
+using CommonTypes.TransportTypes;
 
 namespace GenericAgentArchitecture.Movement {
-    using CommonTypes.DataTypes;
-    using CommonTypes.TransportTypes;
-
-    /// <summary>
+    
+  /// <summary>
   ///   This class serves as a representation of a vector or vertex.
   /// </summary>
   public class Vector : IEquatable<Vector>, IEquatable<TVector> {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Auxiliary;
@@ -12,9 +13,7 @@ using GenericAgentArchitectureCommon.Interfaces;
 
 
 namespace AgentTester.Wolves.Agents {
-    using CommonTypes.DataTypes;
-    using CommonTypes.TransportTypes;
-
+  
     internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
     
     private const int EnergyMax = 80;

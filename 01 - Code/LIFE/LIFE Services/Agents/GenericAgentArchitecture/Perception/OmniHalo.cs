@@ -1,13 +1,13 @@
 ﻿using GenericAgentArchitecture.Movement;
 using CommonTypes.TransportTypes;
+using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Perception {
-    using LayerAPI.Interfaces;
-
-    /// <summary>
+    
+  /// <summary>
   ///   A dummy halo. May be used as a stub for sensors with no perception limitation.
   /// </summary>
-  internal class OmniHalo : Halo {
+  public class OmniHalo : Halo {
     
 
     /// <summary>

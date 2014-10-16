@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using CommonTypes.TransportTypes;
+using System.Collections.Generic;
 using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Environments {
-    using CommonTypes.DataTypes;
-    using CommonTypes.TransportTypes;
-
-    /// <summary>
+    
+  /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
   /// </summary>
   public class ESCAdapter : IEnvironment {

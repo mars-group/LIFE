@@ -1,10 +1,9 @@
 ﻿using System;
+using CommonTypes.TransportTypes;
 
 namespace GenericAgentArchitecture.Movement {
-    using CommonTypes.DataTypes;
-    using CommonTypes.TransportTypes;
-
-    /// <summary>
+    
+  /// <summary>
   ///   This class holds all spatial data for an agent.
   /// </summary>
   public class MData {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Auxiliary;
@@ -11,9 +12,7 @@ using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
-    using CommonTypes.DataTypes;
-    using CommonTypes.TransportTypes;
-
+ 
     internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
     
     private int _energy = 80;
