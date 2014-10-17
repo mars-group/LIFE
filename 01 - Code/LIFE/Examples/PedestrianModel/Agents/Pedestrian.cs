@@ -21,7 +21,6 @@ namespace PedestrianModel
     {
 
         private String _name;               // Name or ID of agent
-        private TVector _bounds;             // Size (x, y, z) of agent
         private TVector _targetPosition;     // Position agent tries to reach
         private float _maxVelocity;         // Maximum movement velocity of agent
 
@@ -35,18 +34,26 @@ namespace PedestrianModel
         /// <param name="id">Agent identifier.</param>
         /// <param name="env">Environment reference.</param>
         /// <param name="pos">Initial position.</param>
-        public Pedestrian(long id, IEnvironment env, TVector pos, TVector bounds, TVector targetPosition, String name = "pedestrian")
-            : base(id, env, pos)
+        public Pedestrian(long id, IEnvironment environment, TVector position, TVector dimension, Direction direction, TVector targetPosition, String name = "pedestrian")
+            : base(id, environment, position)
         {
-            _environment = env;
+            _environment = environment;
 
             _name = name;
-            _bounds = bounds;
             _targetPosition = targetPosition;
+
+            Data.Dimension.X = dimension.X;
+            Data.Dimension.Y = dimension.Y;
+            Data.Dimension.Z = dimension.Z;
+
+            // Up/Down
+            Data.Direction.SetPitch(direction.Pitch);
+            // Left/Right
+            Data.Direction.SetYaw(direction.Yaw);
 
             // Add perception sensor for obstacles.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, env,
+              this, environment,
               (int)ObstacleEnvironment.InformationTypes.Obstacles,
               //new RadialHalo(Data.Position, 8))
               new OmniHalo())
@@ -54,14 +61,14 @@ namespace PedestrianModel
 
             // Add perception sensor for pedestrians.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, env,
+              this, environment,
               (int)ObstacleEnvironment.InformationTypes.Pedestrians,
               //new RadialHalo(Data.Position, 8))
               new OmniHalo())
             );
 
             // Add movement module.
-            Mover = new DirectMover(env, this, Data);
+            Mover = new DirectMover(environment, this, Data);
             _mover = (DirectMover)Mover;  // Re-declaration to save casts.
 
             //Mover = new ContinuousMover(env, this, Data);

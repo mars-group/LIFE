@@ -1,6 +1,7 @@
 ﻿using CommonTypes.TransportTypes;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,18 +17,23 @@ namespace PedestrianModel
     internal class Obstacle : SpatialAgent, IAgentLogic
     {
 
-        private TVector _bounds;             // Size (x, y, z) of agent
-
         /// <summary>
         ///   Create a new obstacle agent.
         /// </summary>
         /// <param name="id">Agent identifier.</param>
         /// <param name="env">Environment reference.</param>
         /// <param name="pos">Initial position.</param>
-        public Obstacle(long id, IEnvironment env, TVector pos, TVector bounds)
-            : base(id, env, pos)
+        public Obstacle(long id, IEnvironment environment, TVector position, TVector dimension, Direction direction)
+            : base(id, environment, position)
         {
-            _bounds = bounds;
+            Data.Dimension.X = dimension.X;
+            Data.Dimension.Y = dimension.Y;
+            Data.Dimension.Z = dimension.Z;
+
+            // Up/Down
+            Data.Direction.SetPitch(direction.Pitch);
+            // Left/Right
+            Data.Direction.SetYaw(direction.Yaw);
         }
 
         public IInteraction Reason()
