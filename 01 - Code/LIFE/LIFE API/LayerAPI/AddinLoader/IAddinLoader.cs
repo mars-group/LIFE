@@ -23,5 +23,7 @@ namespace LayerAPI.AddinLoader {
 
 
         ExtensionNodeList LoadAllLayers();
+
+        ExtensionNodeList LoadAllLayers(string modelName);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using LayerAPI.Interfaces;
@@ -31,8 +32,15 @@ namespace LayerAPI.AddinLoader {
 
         public void LoadModelContent(ModelContent modelContent) {
             // shutdown AddinManager to make sure it is not sitting on top of the files
-            if(AddinManager.IsInitialized) {AddinManager.Shutdown();}
-
+            try {
+                if (AddinManager.IsInitialized) {
+                    AddinManager.Shutdown();
+                }
+            }
+            catch (InvalidOperationException ex) {
+                // ignore this case. It's stupid...
+            }
+            
             //write files
             modelContent.Write("./layers/addins/tmp");
 
@@ -52,6 +60,15 @@ namespace LayerAPI.AddinLoader {
         }
 
         public ExtensionNodeList LoadAllLayers() {
+            WaitForAddinManagerToBeInitialized();
+            UpdateAddinRegistry();
+            return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));
+        }
+
+        public ExtensionNodeList LoadAllLayers(string modelName)
+        {
+            if (AddinManager.IsInitialized) { AddinManager.Shutdown(); }
+            AddinManager.Initialize("./layers", "./addins/" + modelName);
             WaitForAddinManagerToBeInitialized();
             UpdateAddinRegistry();
             return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));

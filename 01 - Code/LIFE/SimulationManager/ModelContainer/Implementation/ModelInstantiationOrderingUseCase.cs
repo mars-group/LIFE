@@ -40,7 +40,8 @@ namespace ModelContainer.Implementation {
             // Interfaces originate from the Assembly they are attempted to be loaded from
             IAddinLoader addinLoader = AddinLoader.Instance;
 
-            var nodes = addinLoader.LoadAllLayers();
+            var nodes = addinLoader.LoadAllLayers(description.Name);
+            
             var modelStructure = new ModelStructure();
 
             foreach (TypeExtensionNode node in nodes) {
