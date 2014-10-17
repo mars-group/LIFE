@@ -81,10 +81,6 @@ namespace PedestrianModel
         }
         else env = obstacleEnvironment;
 
-        // TODO:
-        // - Randomly distribute pedestrians in an area
-        // - Place walls
-
         var random = new Random();
         var max = 10f;
         var pedDimension = new TVector(1f, 1f);
