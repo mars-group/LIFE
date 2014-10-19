@@ -50,7 +50,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Wayfinding + Avoidance Behavior.txt" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
       <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
