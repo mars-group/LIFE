@@ -52,7 +52,7 @@ namespace AgentTester {
     public static void Main() {
       var environment = AgentBuilder.CreateWolvesScenarioEnvironment(20, 10, 5);
       var view = AgentBuilder.CreateWolvesView((Grassland) environment);
-      new Executor(environment, view).Run(0);
+      new Executor(environment, view).Run(1000);
     }
   }
 }

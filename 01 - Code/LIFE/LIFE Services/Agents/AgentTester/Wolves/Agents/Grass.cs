@@ -5,14 +5,17 @@ using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
 using GenericAgentArchitectureCommon.Interfaces;
 
-
 namespace AgentTester.Wolves.Agents {
 
+  /// <summary>
+  ///   Grass is also represented by an agent.
+  /// </summary>
   internal class Grass : SpatialAgent, IAgentLogic, IEatInteractionTarget {
 
-    private int _foodValue = 2;          // Nutrition value (energy).
-    public const int FoodvalueMax = 60;  // Maximum food value.
-    private readonly Random _random;     // Random number generator for unequal growing.
+    private int _foodValue = 2;           // Nutrition value (energy).
+    private const int FoodvalueMax = 60;  // Maximum food value.
+    private readonly Random _random;      // Random number generator for unequal growing.
+
 
     /// <summary>
     ///   Create a new grass agent.

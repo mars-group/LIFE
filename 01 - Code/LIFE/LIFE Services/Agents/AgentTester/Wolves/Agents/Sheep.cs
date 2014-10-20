@@ -11,17 +11,20 @@ using GenericAgentArchitecture.Movement.Movers;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
-
 namespace AgentTester.Wolves.Agents {
   
-    internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
+  /// <summary>
+  ///   The poor prey animal in the wolves vs. sheeps scenario. 
+  ///   But hey, at least it can kill grass agent!
+  /// </summary>
+  internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
     
-    private const int EnergyMax = 80;
-    private readonly Random _random;
-    private readonly IEnvironment _environment;
-    private int _energy = 50;
-    private string _states;
-    private readonly GridMover _mover;
+    private int _energy = 50;                    // Current energy (with initial value).
+    private const int EnergyMax = 80;            // Maximum health.
+    private readonly Random _random;             // Random number generator for energy loss.
+    private readonly IEnvironment _environment;  // Environment reference for random movement.   
+    private string _states;                      // Output string for console.
+    private readonly GridMover _mover;           // Specific agent mover reference (to avoid casts).
 
 
     /// <summary>
@@ -47,7 +50,12 @@ namespace AgentTester.Wolves.Agents {
     }
 
 
+    /// <summary>
+    ///   The sheeps brain.
+    /// </summary>
+    /// <returns>The interaction to execute.</returns>
     public IInteraction Reason() {
+
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
@@ -55,6 +63,7 @@ namespace AgentTester.Wolves.Agents {
         Remove();
         return null;
       }
+
 
       // Calculate hunger percentage, read-out nearby agents.
       int hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);

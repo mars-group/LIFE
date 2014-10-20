@@ -56,7 +56,7 @@ namespace AgentTester {
         // Header strings, map size and options. 
         Scenario = "Wolfszenario", MapX = 30, MapY = 18, MessageLines = 5,
         AgentsHeader = new [] {" ID ","  Typ  "," Position "," Energie "," Hgr."," G/S/W "," Distanz ", " Regel "},
-        AgtListMax = 25,
+        AgtListMin = 25, AgtListMax = 25,
         
         // Agent color definitions.
         GetColor = delegate(SpatialAgent agt) {
