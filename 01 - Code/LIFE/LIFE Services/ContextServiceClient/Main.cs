@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ContextServiceClient
 {
@@ -10,12 +13,11 @@ namespace ContextServiceClient
 		public static void Main(string[] args)
 		{
 			ContextServiceClient csc = ContextServiceClient.Instance;
-			csc.ConnectTo("127.0.0.1", 5672);
+			csc.ConnectTo("141.22.29.51", 5672, "GGSimulation");
 
 			csc.RegisterNewEventType(new GazelleEvent());
 			csc.RegisterNewEventType(new GepardEvent());
 			csc.RegisterNewEventType(new KillEvent());
-
 
 			csc.RegisterNewContextRule("select e1, e2 from pattern [every (e1=KillEvent(x < 30, y < 30) -> e2=KillEvent(x > 30, y > 30)) where timer:within(10 sec)]", Listener.MethodOne);
 			csc.RegisterNewContextRule("select id, energy from GazelleEvent", Listener.MethodTwo);

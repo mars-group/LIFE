@@ -31,7 +31,7 @@ namespace ContextServiceClient
 			channel = connection.CreateModel ();
 
 			consumer = new QueueingBasicConsumer (channel);
-			channel.BasicConsume("contextservice_out", false, consumer);
+			channel.BasicConsume ("contextservice_out", false, consumer);
 
 			ThreadStart ts = new ThreadStart (run);
 			Thread thread = new Thread (ts);
@@ -48,10 +48,12 @@ namespace ContextServiceClient
 				var body = ea.Body;
 				string message = Encoding.UTF8.GetString(body);
 				string[] result = message.Split (';');
-				channel.BasicAck (ea.DeliveryTag, false);
+
 
 				if(contextRuleDictionary.ContainsKey(result[0]))
 				{
+					channel.BasicAck (ea.DeliveryTag, false);
+
 					Dictionary<string, object> results = JsonConvert.DeserializeObject<Dictionary<string, object>>(result[1]);
 				
 					contextRuleDictionary[result[0]].Invoke(results);
