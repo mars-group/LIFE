@@ -8,10 +8,12 @@ using RTEManager.Interfaces;
 namespace RTEManager.Implementation {
     internal class RTEManagerUseCase : IRTEManager {
         private readonly IDictionary<ILayer, ICollection<ITickClient>> tickClientsPerLayer;
+        private IDictionary<ILayer, ICollection<ITickClient>> tickClientsMarkedForDeletionPerLayer;
         private readonly IDictionary<TLayerInstanceId, ILayer> layers;
 
         public RTEManagerUseCase() {
             tickClientsPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
+            tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
             layers = new Dictionary<TLayerInstanceId, ILayer>();
         }
 
@@ -34,7 +36,10 @@ namespace RTEManager.Implementation {
         }
 
         public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
-            if (tickClientsPerLayer.ContainsKey(layer)) tickClientsPerLayer[layer].Remove(tickClient);
+            if (tickClientsPerLayer.ContainsKey(layer)) {
+                tickClientsMarkedForDeletionPerLayer[layer].Add(tickClient);
+                //tickClientsPerLayer[layer].Remove(tickClient);
+            }
         }
 
         public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
@@ -60,6 +65,15 @@ namespace RTEManager.Implementation {
                 );
 
             var then = DateTime.Now;
+
+            // clean up all deleted tickClients
+            Parallel.ForEach
+                (
+                tickClientsMarkedForDeletionPerLayer.Keys,
+                layer => Parallel.ForEach(tickClientsMarkedForDeletionPerLayer[layer],
+                    tickClientToBeRemoved => tickClientsPerLayer[layer].Remove(tickClientToBeRemoved))
+                );
+
             return then.Millisecond - now.Millisecond;
         }
 
