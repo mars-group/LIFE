@@ -1,65 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Hik.Threading;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using RTEManager.Interfaces;
 
 namespace RTEManager.Implementation {
     internal class RTEManagerUseCase : IRTEManager {
-        private readonly IDictionary<ILayer, ICollection<ITickClient>> tickClientsPerLayer;
-        private IDictionary<ILayer, ICollection<ITickClient>> tickClientsMarkedForDeletionPerLayer;
-        private readonly IDictionary<TLayerInstanceId, ILayer> layers;
+        private readonly IDictionary<ILayer, ICollection<ITickClient>> _tickClientsPerLayer;
+        private IDictionary<ILayer, ICollection<ITickClient>> _tickClientsMarkedForDeletionPerLayer;
+        private readonly IDictionary<TLayerInstanceId, ILayer> _layers;
 
         public RTEManagerUseCase() {
-            tickClientsPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
-            tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
-            layers = new Dictionary<TLayerInstanceId, ILayer>();
+            _tickClientsPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
+            _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
+            _layers = new Dictionary<TLayerInstanceId, ILayer>();
         }
 
         #region Public Methods
 
         public void RegisterLayer(TLayerInstanceId layerInstanceId, ILayer layer) {
-            if (!tickClientsPerLayer.ContainsKey(layer))
+            if (!_tickClientsPerLayer.ContainsKey(layer))
             {
-                tickClientsPerLayer.Add(layer, new LinkedList<ITickClient>());
+                _tickClientsPerLayer.Add(layer, new ThreadSafeList<ITickClient>());
+                _tickClientsMarkedForDeletionPerLayer.Add(layer, new LinkedList<ITickClient>());
             }
-            if (!layers.ContainsKey(layerInstanceId))
+            if (!_layers.ContainsKey(layerInstanceId))
             {
-                layers.Add(layerInstanceId, layer);
+                _layers.Add(layerInstanceId, layer);
             }
         }
 
         public void UnregisterLayer(TLayerInstanceId layerInstanceId) {
-            tickClientsPerLayer.Remove(layers[layerInstanceId]);
-            layers.Remove(layerInstanceId);
+            _tickClientsPerLayer.Remove(_layers[layerInstanceId]);
+            _layers.Remove(layerInstanceId);
         }
 
         public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
-            if (tickClientsPerLayer.ContainsKey(layer)) {
-                tickClientsMarkedForDeletionPerLayer[layer].Add(tickClient);
+            if (_tickClientsMarkedForDeletionPerLayer.ContainsKey(layer))
+            {
+                _tickClientsMarkedForDeletionPerLayer[layer].Add(tickClient);
                 //tickClientsPerLayer[layer].Remove(tickClient);
             }
         }
 
         public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
-            if (tickClientsPerLayer.ContainsKey(layer)) tickClientsPerLayer[layer].Add(tickClient);
+            if (_tickClientsPerLayer.ContainsKey(layer)) _tickClientsPerLayer[layer].Add(tickClient);
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
-            layers[instanceId].InitLayer<TInitData>(initData, RegisterTickClient, UnregisterTickClient);
+            _layers[instanceId].InitLayer<TInitData>(initData, RegisterTickClient, UnregisterTickClient);
         }
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
-            return tickClientsPerLayer[layers[layer]];
+            return _tickClientsPerLayer[_layers[layer]];
         }
 
         public long AdvanceOneTick() {
             var now = DateTime.Now;
 
             Parallel.ForEach(
-                tickClientsPerLayer.Keys,
-                layer => Parallel.ForEach(tickClientsPerLayer[layer],
+                _tickClientsPerLayer.Keys,
+                layer => Parallel.ForEach(_tickClientsPerLayer[layer],
                     client => client.Tick()
                     )
                 );
@@ -69,12 +72,12 @@ namespace RTEManager.Implementation {
             // clean up all deleted tickClients
             Parallel.ForEach
                 (
-                tickClientsMarkedForDeletionPerLayer.Keys,
-                layer => Parallel.ForEach(tickClientsMarkedForDeletionPerLayer[layer],
-                    tickClientToBeRemoved => tickClientsPerLayer[layer].Remove(tickClientToBeRemoved))
+                _tickClientsMarkedForDeletionPerLayer.Keys,
+                layer => Parallel.ForEach(_tickClientsMarkedForDeletionPerLayer[layer],
+                    tickClientToBeRemoved => _tickClientsPerLayer[layer].Remove(tickClientToBeRemoved))
                 );
 
-            tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
+            _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
             return then.Millisecond - now.Millisecond;
         }
 
