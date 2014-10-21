@@ -74,6 +74,7 @@ namespace RTEManager.Implementation {
                     tickClientToBeRemoved => tickClientsPerLayer[layer].Remove(tickClientToBeRemoved))
                 );
 
+            tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
             return then.Millisecond - now.Millisecond;
         }
 
