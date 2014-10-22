@@ -1,17 +1,17 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
-using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Auxiliary;
-using GenericAgentArchitecture.Environments;
-using LayerAPI.Interfaces;
+using Environment = GenericAgentArchitecture.Environments.Environment;
 
-namespace AgentTester {
-
+namespace AgentTester.Wolves {
+  
   /// <summary>
-  /// This builder provides a convenient creation of agents.
+  ///   A local starter that uses the sequential executor. 
+  ///   On this level, another starter for MARS system is planned.
   /// </summary>
-  internal static class AgentBuilder {
+  static class WolvesLocalStart {
+
 
     /// <summary>
     /// Builder for the wolves vs. sheeps scenario.
@@ -22,26 +22,16 @@ namespace AgentTester {
     /// <param name="esc">ESC reference (per default: null).  
     /// If not set, internal position management will be used.</param>
     /// <returns>A grassland with the agents.</returns>
-    public static ITickClient CreateWolvesScenarioEnvironment(int grass, int sheeps, int wolves, IESC esc = null) {
-
-      var grassland = new Grassland {RandomExecution = false};
-      IEnvironment env;
-
-      // If ESC exists, create adapter and use it as position manager. Otherwise use internal.
-      if (esc != null) {
-        var adapter = new ESCAdapter(esc);
-        env = adapter;
-      }
-      else env = grassland;
+    public static Environment CreateWolvesScenarioEnvironment(int grass, int sheeps, int wolves) {
+      var env = new Grassland {RandomExecution = false};
 
       var n1 = grass;
       var n2 = n1 + sheeps;
       var n3 = n2 + wolves;
-      for (var i =  0; i < n1; i++) new Grass(grassland.GetNewID(), env, grassland.GetRandomPosition());
-      for (var i = n1; i < n2; i++) new Sheep(grassland.GetNewID(), env, grassland.GetRandomPosition());
-      for (var i = n2; i < n3; i++) new Wolf (grassland.GetNewID(), env, grassland.GetRandomPosition());
-      
-      return grassland;
+      for (var i =  0; i < n1; i++) new Grass(env.GetNewID(), env, env.GetRandomPosition());
+      for (var i = n1; i < n2; i++) new Sheep(env.GetNewID(), env, env.GetRandomPosition());
+      for (var i = n2; i < n3; i++) new Wolf (env.GetNewID(), env, env.GetRandomPosition());     
+      return env;
     }
 
 
@@ -78,6 +68,16 @@ namespace AgentTester {
           return '█';
         },
       }, env);
+    }
+
+
+    /// <summary>
+    ///   Start the executor!
+    /// </summary>
+    public static void Main() {
+      var environment = CreateWolvesScenarioEnvironment(20, 10, 5);
+      var view = CreateWolvesView((Grassland) environment);
+      new Executor(environment, view).Run(1000);      
     }
   }
 }

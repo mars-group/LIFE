@@ -43,6 +43,7 @@
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Agents\SpatialAgent.cs" />
     <Compile Include="Auxiliary\ConsoleView.cs" />
+    <Compile Include="Auxiliary\Executor.cs" />
     <Compile Include="Environments\Environment.cs" />
     <Compile Include="Auxiliary\MessageServer.cs" />
     <Compile Include="Reasoning\Plan.cs" />
