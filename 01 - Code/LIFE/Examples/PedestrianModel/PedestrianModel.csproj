@@ -41,6 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Astar\AStarNode.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Astar\AStarPathfinder.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\IPathfinder.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\IPathNode.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\ISearchGraph.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Potential\Emitter\CuboidEmitter.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Potential\Emitter\PointEmitter.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Potential\PotentialEmitter.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Potential\PotentialField.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Potential\PotentialFieldCollection.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Potential\SimplePotentialField.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Raytracing\RaytracingGraph.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Raytracing\RaytracingPathNode.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\Raytracing\RayUtil.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />
     <Compile Include="Program.cs" />

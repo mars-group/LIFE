@@ -1,0 +1,40 @@
+﻿using System.Collections.Generic;
+
+namespace de.haw.walk.agent.util.pathfinding.potential
+{
+
+	/// <summary>
+	/// @author Christian Thiel
+	/// 
+	/// </summary>
+	public interface PotentialField
+	{
+
+		/// <summary>
+		/// Adds an emitter to the field.
+		/// </summary>
+		/// <param name="emitter"> the emitter to add </param>
+		void addEmitter(PotentialEmitter emitter);
+
+		/// <summary>
+		/// Returns all potential emitters of this potential field.
+		/// </summary>
+		/// <returns> a collection of all potential emitters of this potential field </returns>
+		ICollection<PotentialEmitter> Emitters {get;}
+
+		/// <summary>
+		/// Clears the whole potential field.
+		/// </summary>
+		void clearAll();
+
+		/// <summary>
+		/// Calculates the potential of this potential field at the position <code>position</code> by adding the
+		/// potentials of all <seealso cref="PotentialEmitter"/>s at this position.
+		/// </summary>
+		/// <param name="position"> the position of the potential </param>
+		/// <returns> the potential at this position </returns>
+		double calculatePotential(Vector3D position);
+
+	}
+
+}
