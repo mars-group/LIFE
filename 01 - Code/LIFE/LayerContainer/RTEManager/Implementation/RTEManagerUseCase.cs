@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Hik.Threading;
@@ -9,12 +10,12 @@ using RTEManager.Interfaces;
 namespace RTEManager.Implementation {
     internal class RTEManagerUseCase : IRTEManager {
         private readonly IDictionary<ILayer, ICollection<ITickClient>> _tickClientsPerLayer;
-        private IDictionary<ILayer, ICollection<ITickClient>> _tickClientsMarkedForDeletionPerLayer;
+        private IDictionary<ILayer, ConcurrentBag<ITickClient>> _tickClientsMarkedForDeletionPerLayer;
         private readonly IDictionary<TLayerInstanceId, ILayer> _layers;
 
         public RTEManagerUseCase() {
             _tickClientsPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
-            _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
+            _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
         }
 
@@ -24,7 +25,7 @@ namespace RTEManager.Implementation {
             if (!_tickClientsPerLayer.ContainsKey(layer))
             {
                 _tickClientsPerLayer.Add(layer, new ThreadSafeList<ITickClient>());
-                _tickClientsMarkedForDeletionPerLayer.Add(layer, new LinkedList<ITickClient>());
+                _tickClientsMarkedForDeletionPerLayer.Add(layer, new ConcurrentBag<ITickClient>());
             }
             if (!_layers.ContainsKey(layerInstanceId))
             {
@@ -77,7 +78,11 @@ namespace RTEManager.Implementation {
                     tickClientToBeRemoved => _tickClientsPerLayer[layer].Remove(tickClientToBeRemoved))
                 );
 
-            _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ICollection<ITickClient>>();
+            Parallel.ForEach
+                (
+                    _tickClientsPerLayer.Keys,
+                    layer => _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentBag<ITickClient>()
+                );
             return then.Millisecond - now.Millisecond;
         }
 
