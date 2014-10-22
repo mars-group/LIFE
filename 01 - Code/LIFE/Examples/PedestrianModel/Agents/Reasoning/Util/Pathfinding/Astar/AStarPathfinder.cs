@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace de.haw.walk.agent.util.pathfinding.astar
 {
@@ -41,7 +42,9 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 
 			while (openList.Count > 0)
 			{
-				bestNode = openList.pollFirst();
+				//bestNode = openList.pollFirst();
+                bestNode = openList.First();
+                openList.Remove(bestNode);
 
 				if (toNode.Equals(bestNode))
 				{
