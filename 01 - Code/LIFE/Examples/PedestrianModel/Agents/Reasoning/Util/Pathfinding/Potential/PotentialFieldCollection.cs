@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media.Media3D;
 
 namespace de.haw.walk.agent.util.pathfinding.potential
 {
@@ -9,8 +10,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 	/// </summary>
 	public class PotentialFieldCollection : HashSet<PotentialField>, PotentialField
 	{
-
-		/// 
+ 
 		private const long serialVersionUID = 1L;
 
 		/// <summary>
@@ -33,19 +33,19 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 		/// </summary>
 		/// <param name="position"> the position to calculate the potential for </param>
 		/// <returns> the sum of all potentials </returns>
-		public double calculatePotential(Vector3D position)
+		public double CalculatePotential(Vector3D position)
 		{
 			double potentialSum = 0.0;
 
 			foreach (PotentialField field in this)
 			{
-				potentialSum += field.calculatePotential(position);
+				potentialSum += field.CalculatePotential(position);
 			}
 
 			return potentialSum;
 		}
 
-		public void addEmitter(PotentialEmitter emitter)
+		public void AddEmitter(PotentialEmitter emitter)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 			}
 		}
 
-		public void clearAll()
+		public void ClearAll()
 		{
 			this.Clear();
 		}

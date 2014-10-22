@@ -25,7 +25,7 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 			this.graph = graph;
 		}
 
-		public IList<E> findPath(IPathNode<E> from, IPathNode<E> to)
+		public IList<E> FindPath(IPathNode<E> from, IPathNode<E> to)
 		{
 
 			AStarNode<E> fromNode = new AStarNode<E>(from, graph);
@@ -45,7 +45,7 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 
 				if (toNode.Equals(bestNode))
 				{
-					return buildPath(bestNode);
+					return BuildPath(bestNode);
 				}
 				else
 				{
@@ -95,7 +95,7 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 
 			public int Compare(AStarNode<E> o1, AStarNode<E> o2)
 			{
-				int compare = o1.CostFromStart + o1.getCostToGoal(toNode).CompareTo(o2.CostFromStart + o2.getCostToGoal(toNode));
+				int compare = o1.CostFromStart + o1.GetCostToGoal(toNode).CompareTo(o2.CostFromStart + o2.GetCostToGoal(toNode));
 
 				if (compare == 0)
 				{
@@ -111,7 +111,7 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 		/// </summary>
 		/// <param name="bestNode"> the end node of the path </param>
 		/// <returns> the path to the given node </returns>
-		private IList<E> buildPath(AStarNode<E> bestNode)
+		private IList<E> BuildPath(AStarNode<E> bestNode)
 		{
 			IList<E> backtracingPath = new List<E>();
 			IList<E> path = new List<E>();

@@ -63,7 +63,7 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 					}
 					else
 					{
-						costFromStart = predecessor.CostFromStart + graph.distance(predecessor.externalNode, externalNode);
+						costFromStart = predecessor.CostFromStart + graph.Distance(predecessor.externalNode, externalNode);
 					}
 				}
     
@@ -76,11 +76,11 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 		/// </summary>
 		/// <param name="goalNode"> the goal node </param>
 		/// <returns> the costToGoal </returns>
-		public double? getCostToGoal(AStarNode<E> goalNode)
+		public double? GetCostToGoal(AStarNode<E> goalNode)
 		{
 			if (costToGoal == null)
 			{
-				costToGoal = graph.getHeuristic(externalNode, goalNode.externalNode);
+				costToGoal = graph.GetHeuristic(externalNode, goalNode.externalNode);
 			}
 			return costToGoal;
 		}
@@ -114,7 +114,7 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 			{
 				ICollection<AStarNode<E>> result = new HashSet<AStarNode<E>>();
     
-				ICollection<IPathNode<E>> neighbors = graph.getNeighbors(externalNode);
+				ICollection<IPathNode<E>> neighbors = graph.GetNeighbors(externalNode);
     
 				foreach (IPathNode<E> n in neighbors)
 				{

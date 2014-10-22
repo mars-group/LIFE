@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media.Media3D;
 
 namespace de.haw.walk.agent.util.pathfinding.potential
 {
@@ -24,7 +25,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 
 		}
 
-		public void addEmitter(PotentialEmitter emitter)
+		public void AddEmitter(PotentialEmitter emitter)
 		{
 			this.potentialEmitters.Add(emitter);
 		}
@@ -37,18 +38,18 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 			}
 		}
 
-		public void clearAll()
+		public void ClearAll()
 		{
 			this.potentialEmitters.Clear();
 		}
 
-		public double calculatePotential(Vector3D position)
+		public double CalculatePotential(Vector3D position)
 		{
 			double result = 0.0;
 
 			foreach (PotentialEmitter emitter in potentialEmitters)
 			{
-				result += emitter.getPotential(position);
+				result += emitter.GetPotential(position);
 			}
 
 			return result;

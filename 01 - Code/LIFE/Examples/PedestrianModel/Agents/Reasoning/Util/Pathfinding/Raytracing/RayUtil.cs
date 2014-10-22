@@ -28,14 +28,14 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="direction"> the direction of the ray </param>
 		/// <param name="objects"> the objects to search intersects with </param>
 		/// <returns> the intersecting object or null </returns>
-		public static SimulationObject pickRay(Vector3D orign, Vector3D direction, ICollection<SimulationObject> objects)
+		public static SimulationObject PickRay(Vector3D orign, Vector3D direction, ICollection<SimulationObject> objects)
 		{
 			SimulationObject result = null;
 			double minDistance = double.MaxValue;
 
 			foreach (SimulationObject so in objects)
 			{
-				Vector3D intersect = getIntersect(orign, direction, so);
+				Vector3D intersect = GetIntersect(orign, direction, so);
 				if (!intersect.NaN)
 				{
 					double distance = orign.distance(intersect);
@@ -58,12 +58,12 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="direction"> the ray direction </param>
 		/// <param name="so"> the object to intersect </param>
 		/// <returns> the intersection point or NaN </returns>
-		public static Vector3D getIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
+		public static Vector3D GetIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
 		{
 			Vector3D position = so.Position;
 			Vector3D bounds = so.Bounds;
 
-			return getIntersectWithBox(orign, direction, position.add(-0.5, bounds), position.add(0.5, bounds));
+			return GetIntersectWithBox(orign, direction, position.add(-0.5, bounds), position.add(0.5, bounds));
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="boxMin"> the lower corner of the AABB </param>
 		/// <param name="boxMax"> the upper corner of the AABB </param>
 		/// <returns> the intersection point or NaN </returns>
-		public static Vector3D getIntersectWithBox(Vector3D rayOrign, Vector3D rayDirection, Vector3D boxMin, Vector3D boxMax)
+		public static Vector3D GetIntersectWithBox(Vector3D rayOrign, Vector3D rayDirection, Vector3D boxMin, Vector3D boxMax)
 		{
 			double tNear = double.NegativeInfinity;
 			double tFar = double.PositiveInfinity;
@@ -178,7 +178,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="target"> the target point </param>
 		/// <param name="obstacles"> the obstacles </param>
 		/// <returns> true if the points are visible to each other, othervise false </returns>
-		public static bool isVisible(Vector3D orign, Vector3D target, IList<SimulationObject> obstacles)
+		public static bool IsVisible(Vector3D orign, Vector3D target, IList<SimulationObject> obstacles)
 		{
 			double minDistance = double.MaxValue;
 
@@ -186,7 +186,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 
 			foreach (SimulationObject so in obstacles)
 			{
-				Vector3D intersect = getIntersect(orign, direction, so);
+				Vector3D intersect = GetIntersect(orign, direction, so);
 				if (!intersect.NaN)
 				{
 					double distance = orign.distance(intersect);

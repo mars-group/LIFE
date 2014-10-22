@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media.Media3D;
 
 namespace de.haw.walk.agent.util.pathfinding.potential
 {
@@ -14,7 +15,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 		/// Adds an emitter to the field.
 		/// </summary>
 		/// <param name="emitter"> the emitter to add </param>
-		void addEmitter(PotentialEmitter emitter);
+		void AddEmitter(PotentialEmitter emitter);
 
 		/// <summary>
 		/// Returns all potential emitters of this potential field.
@@ -25,7 +26,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 		/// <summary>
 		/// Clears the whole potential field.
 		/// </summary>
-		void clearAll();
+		void ClearAll();
 
 		/// <summary>
 		/// Calculates the potential of this potential field at the position <code>position</code> by adding the
@@ -33,7 +34,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 		/// </summary>
 		/// <param name="position"> the position of the potential </param>
 		/// <returns> the potential at this position </returns>
-		double calculatePotential(Vector3D position);
+		double CalculatePotential(Vector3D position);
 
 	}
 

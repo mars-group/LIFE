@@ -37,12 +37,12 @@ namespace de.haw.walk.agent.util.pathfinding.potential.emitter
 			this.function = function;
 		}
 
-		public double getPotential(Vector3D referringPosition)
+		public double GetPotential(Vector3D referringPosition)
 		{
 			double x = position.X - referringPosition.X;
 			double z = position.Z - referringPosition.Z;
 
-			return this.function.value(Math.Sqrt(x * x + z * z));
+			return this.function.Value(Math.Sqrt(x * x + z * z));
 		}
 
 		/// <returns> the position </returns>

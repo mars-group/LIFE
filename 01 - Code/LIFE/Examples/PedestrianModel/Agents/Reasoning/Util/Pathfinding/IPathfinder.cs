@@ -17,7 +17,7 @@ namespace de.haw.walk.agent.util.pathfinding
 		/// <param name="from"> the start node </param>
 		/// <param name="to"> the target node </param>
 		/// <returns> a list of by the node adapted objects. </returns>
-		IList<E> findPath(IPathNode<E> from, IPathNode<E> to);
+		IList<E> FindPath(IPathNode<E> from, IPathNode<E> to);
 
 		/// <summary>
 		/// Returns the used search graph.

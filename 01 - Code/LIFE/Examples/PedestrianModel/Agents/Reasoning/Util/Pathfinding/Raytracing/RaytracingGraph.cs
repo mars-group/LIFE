@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media.Media3D;
 
 namespace de.haw.walk.agent.util.pathfinding.raytracing
 {
@@ -56,7 +57,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 					// calculate all static waypoints
 					foreach (SimulationObject so in obstacles)
 					{
-						edgePoints.AddRange(getEdgePoints(so, yValue, waypointEdgeDistance));
+						edgePoints.AddRange(GetEdgePoints(so, yValue, waypointEdgeDistance));
 					}
 
 					for (int i = 0; i < edgePoints.Count; i++)
@@ -73,7 +74,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 							Vector3D target = edgePoints[j];
 
 							// point is visible, add it to both neighbor sets
-							if (RayUtil.isVisible(orign, target, obstacles))
+							if (RayUtil.IsVisible(orign, target, obstacles))
 							{
 								nodeNeighbors[orign].Add(target);
 								nodeNeighbors[target].Add(orign);
@@ -91,7 +92,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="yValue"> the height of the edge points </param>
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
 		/// <returns> a list of the edges </returns>
-		public static IList<Vector3D> getEdgePoints(SimulationObject obstacle, double yValue, double waypointEdgeDistance)
+		public static IList<Vector3D> GetEdgePoints(SimulationObject obstacle, double yValue, double waypointEdgeDistance)
 		{
 			IList<Vector3D> edgePoints = new List<Vector3D>();
 
@@ -113,7 +114,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			return edgePoints;
 		}
 
-		public ICollection<IPathNode<Vector3D>> getNeighbors(IPathNode<Vector3D> node)
+		public ICollection<IPathNode<Vector3D>> GetNeighbors(IPathNode<Vector3D> node)
 		{
 			ICollection<IPathNode<Vector3D>> result = new HashSet<IPathNode<Vector3D>>();
 
@@ -128,14 +129,14 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			{
 				foreach (Vector3D waypoint in nodeNeighbors.Keys)
 				{
-					if (RayUtil.isVisible(node.AdaptedObject, waypoint, obstacles))
+					if (RayUtil.IsVisible(node.AdaptedObject, waypoint, obstacles))
 					{
 						result.Add(new RaytracingPathNode(waypoint));
 					}
 				}
 			}
 
-			if (RayUtil.isVisible(node.AdaptedObject, targetPosition, obstacles))
+			if (RayUtil.IsVisible(node.AdaptedObject, targetPosition, obstacles))
 			{
 				result.Add(new RaytracingPathNode(targetPosition));
 			}
@@ -143,12 +144,12 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			return result;
 		}
 
-		public double distance(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
+		public double Distance(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
 		{
 			return from.AdaptedObject.distance(to.AdaptedObject);
 		}
 
-		public double getHeuristic(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
+		public double GetHeuristic(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
 		{
 			return from.AdaptedObject.distance(to.AdaptedObject);
 		}

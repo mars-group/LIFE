@@ -20,7 +20,7 @@ namespace de.haw.walk.agent.util.pathfinding
 		/// <param name="to"> the target node </param>
 		/// <returns> the estimated cost from start to target </returns>
 		/// <exception cref="IllegalArgumentException"> if one of the nodes is not in the graph </exception>
-		double getHeuristic(IPathNode<E> from, IPathNode<E> to);
+		double GetHeuristic(IPathNode<E> from, IPathNode<E> to);
 
 		/// <summary>
 		/// Returns a collection of all reachable neighbors of the given node.
@@ -28,7 +28,7 @@ namespace de.haw.walk.agent.util.pathfinding
 		/// <param name="node"> the node to get the neighbors from </param>
 		/// <returns> all neighbors of the given node </returns>
 		/// <exception cref="IllegalArgumentException"> if the given node is not in the graph </exception>
-		ICollection<IPathNode<E>> getNeighbors(IPathNode<E> node);
+		ICollection<IPathNode<E>> GetNeighbors(IPathNode<E> node);
 
 		/// <summary>
 		/// Calculates the distance between two adjacent nodes. The distance describes the cost to reach the target
@@ -38,7 +38,7 @@ namespace de.haw.walk.agent.util.pathfinding
 		/// <param name="to"> the target node </param>
 		/// <returns> the distance </returns>
 		/// <exception cref="IllegalArgumentException"> if one of the nodes is not in the graph or the nodes are not adjacent </exception>
-		double distance(IPathNode<E> from, IPathNode<E> to);
+		double Distance(IPathNode<E> from, IPathNode<E> to);
 	}
 
 }

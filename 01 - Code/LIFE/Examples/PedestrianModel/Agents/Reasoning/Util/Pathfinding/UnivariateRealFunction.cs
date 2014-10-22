@@ -8,7 +8,7 @@ namespace PedestrianModel.Agents.Reasoning.Util.Pathfinding
 {
     public interface UnivariateRealFunction
     {
-        double value(double x);
+        double Value(double x);
 
     }
 }

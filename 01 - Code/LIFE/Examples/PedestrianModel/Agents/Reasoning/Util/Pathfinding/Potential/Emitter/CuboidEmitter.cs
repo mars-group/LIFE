@@ -39,12 +39,13 @@ namespace de.haw.walk.agent.util.pathfinding.potential.emitter
 		/// <param name="function"> the function to calculate the potential with </param>
 		public CuboidEmitter(Vector3D startPoint, Vector3D size, UnivariateRealFunction function)
 		{
-			this.start = startPoint.subtract(1.0 / 2.0, size);
+			//this.start = startPoint.subtract(1.0 / 2.0, size);
+            this.start = Vector3D.Subtract(startPoint, Vector3D.Divide(size, 2d));
 			this.size = size;
 			this.function = function;
 		}
 
-		public double getPotential(Vector3D @ref)
+		public double GetPotential(Vector3D @ref)
 		{
 			double distance = 0;
 
@@ -62,12 +63,12 @@ namespace de.haw.walk.agent.util.pathfinding.potential.emitter
 				if (refZ < minZ)
 				{
 					// left below the emitter
-					distance = distance(minX, minZ, refX, refZ);
+					distance = Distance(minX, minZ, refX, refZ);
 				}
 				else if (refZ > maxZ)
 				{
 					// left above the emitter
-					distance = distance(minX, maxZ, refX, refZ);
+					distance = Distance(minX, maxZ, refX, refZ);
 				}
 				else
 				{
@@ -81,12 +82,12 @@ namespace de.haw.walk.agent.util.pathfinding.potential.emitter
 				if (refZ < minZ)
 				{
 					// right below the emitter
-					distance = distance(maxX, minZ, refX, refZ);
+					distance = Distance(maxX, minZ, refX, refZ);
 				}
 				else if (refZ > maxZ)
 				{
 					// right above the emitter
-					distance = distance(maxX, maxZ, refX, refZ);
+					distance = Distance(maxX, maxZ, refX, refZ);
 				}
 				else
 				{
@@ -113,7 +114,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential.emitter
 				}
 			}
 
-			return function.value(distance);
+			return function.Value(distance);
 		}
 
 		/// <summary>
@@ -124,7 +125,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential.emitter
 		/// <param name="qX"> qX </param>
 		/// <param name="qZ"> qZ </param>
 		/// <returns> the euklid distance </returns>
-		private double distance(double pX, double pZ, double qX, double qZ)
+		private double Distance(double pX, double pZ, double qX, double qZ)
 		{
 			double x = pX - qX;
 			double z = pZ - qZ;
