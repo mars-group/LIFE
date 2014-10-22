@@ -67,8 +67,8 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 						{
 							continue;
 						}
-
-						closedMap.Remove(newNode);
+                        #warning Old "WALK" code seems to be incorrect here!
+						//closedMap.Remove(newNode); -> this should have no effect, because an AStarNode CANNOT be a key, only IPathNodes CAN
 						openList.Add(newNode);
 						openMap[newNode.ExternalNode] = newNode;
 					}
@@ -95,11 +95,11 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 
 			public int Compare(AStarNode<E> o1, AStarNode<E> o2)
 			{
-				int compare = o1.CostFromStart + o1.GetCostToGoal(toNode).CompareTo(o2.CostFromStart + o2.GetCostToGoal(toNode));
+				int compare = (o1.CostFromStart + o1.GetCostToGoal(toNode)).CompareTo(o2.CostFromStart + o2.GetCostToGoal(toNode));
 
 				if (compare == 0)
 				{
-					compare = (new int?(o1.GetHashCode())).compareTo(o2.GetHashCode());
+					compare = (o1.GetHashCode()).CompareTo(o2.GetHashCode());
 				}
 
 				return compare;

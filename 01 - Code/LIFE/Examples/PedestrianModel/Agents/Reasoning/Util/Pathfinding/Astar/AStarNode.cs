@@ -51,11 +51,11 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 		/// Returns the complete costs from the start value of this node path to this node.
 		/// </summary>
 		/// <returns> the costFromStart </returns>
-		public double? CostFromStart
+		public double CostFromStart
 		{
 			get
 			{
-				if (costFromStart == null)
+                if (costFromStart == null)
 				{
 					if (predecessor == null)
 					{
@@ -66,8 +66,9 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 						costFromStart = predecessor.CostFromStart + graph.Distance(predecessor.externalNode, externalNode);
 					}
 				}
-    
-				return costFromStart;
+
+                //return costFromStart;
+				return costFromStart.Value;
 			}
 		}
 
@@ -76,13 +77,14 @@ namespace de.haw.walk.agent.util.pathfinding.astar
 		/// </summary>
 		/// <param name="goalNode"> the goal node </param>
 		/// <returns> the costToGoal </returns>
-		public double? GetCostToGoal(AStarNode<E> goalNode)
+		public double GetCostToGoal(AStarNode<E> goalNode)
 		{
-			if (costToGoal == null)
+            if (costToGoal == null)
 			{
 				costToGoal = graph.GetHeuristic(externalNode, goalNode.externalNode);
 			}
-			return costToGoal;
+            // return costToGoal;
+			return costToGoal.Value;
 		}
 
 		/// <summary>
