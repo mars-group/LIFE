@@ -18,7 +18,7 @@ namespace BugReproductionModel
 		public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle,
 			UnregisterAgent unregisterAgentHandle) {
 
-			for (int i = 0; i < 500000; i++) {
+			for (int i = 0; i < 50000; i++) {
 				registerAgentHandle.Invoke(this, new SuicideAgent(i, this, unregisterAgentHandle));
 			}
 				

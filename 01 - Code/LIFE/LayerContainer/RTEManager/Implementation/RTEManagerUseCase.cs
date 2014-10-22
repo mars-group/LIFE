@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Hik.Threading;
 using LayerAPI.Interfaces;
@@ -59,7 +60,8 @@ namespace RTEManager.Implementation {
         }
 
         public long AdvanceOneTick() {
-            var now = DateTime.Now;
+            var stopWatch = Stopwatch.StartNew();
+
 
             Parallel.ForEach(
                 _tickClientsPerLayer.Keys,
@@ -68,7 +70,8 @@ namespace RTEManager.Implementation {
                     )
                 );
 
-            var then = DateTime.Now;
+
+            stopWatch.Stop();
 
             // clean up all deleted tickClients
             Parallel.ForEach
@@ -83,7 +86,8 @@ namespace RTEManager.Implementation {
                     _tickClientsPerLayer.Keys,
                     layer => _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentBag<ITickClient>()
                 );
-            return then.Millisecond - now.Millisecond;
+
+            return stopWatch.ElapsedMilliseconds;
         }
 
         #endregion
