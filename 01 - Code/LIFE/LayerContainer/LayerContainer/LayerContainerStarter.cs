@@ -15,7 +15,7 @@ namespace LayerContainer {
 
                 Logger.Info("Initializing components and building application core...");
 
-                var _facade = ApplicationCoreFactory.GetLayerContainerFacade();
+                var _facade = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
 
                 Logger.Info("LayerContainer successfully started.");
 

@@ -1,6 +1,4 @@
-﻿using System;
-using CommonTypes.DataTypes;
-using GenericAgentArchitecture.Perception;
+﻿using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 
@@ -13,14 +11,10 @@ namespace GenericAgentArchitecture.Agents {
   /// </summary>
   public abstract class Agent : IAgent {
 
+    public readonly long Id;                           // Unique identifier.
     public long Cycle { get; protected set; }          // The current execution cycle.   
-    public readonly string Id;                         // Unique identifier.
-    protected readonly bool DebugEnabled;              // Controls console debug output.
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.     
-    protected int AgentType;                           // The type of this agent (set in specific class).
-    public Vector Position;                            // Position in an environment.
-    //TODO Movement module usage here ?!
 
 
     /// <summary>
@@ -28,10 +22,8 @@ namespace GenericAgentArchitecture.Agents {
     /// domain specific sensors, actions and reasoning, optionally containing a knowledge base.  
     /// </summary>
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
-    protected Agent(string id, int agentType) {
+    protected Agent(long id) {
       Id = id;
-      AgentType = agentType;
-      DebugEnabled = false; 
       PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;    
     }
@@ -46,11 +38,7 @@ namespace GenericAgentArchitecture.Agents {
       PerceptionUnit.SenseAll();                // Phase 1: Perception
       var action = ReasoningComponent.Reason(); // Phase 2: Reasoning
       if (action != null) action.Execute();     // Phase 3: Execution
-      Cycle ++;
-
-      // Print the runtime information for debug purposes. 
-      //TODO Deprecated, this call should be made externally!
-      if (DebugEnabled) Console.WriteLine(ToString());    
+      Cycle ++;  
     }
  
 
@@ -59,9 +47,7 @@ namespace GenericAgentArchitecture.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public new virtual string ToString() {
-      var pos = "";
-      if (Position != null) pos = " Position: "+Position;
-      return "Agent: " + Id + "\t  Cycle: " + Cycle + pos;
+      return "Agent: " + Id + "\t  Cycle: " + Cycle;
     }
   }
 }

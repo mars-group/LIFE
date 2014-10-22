@@ -1,10 +1,4 @@
 ﻿using LayerAPI.Interfaces;
-using Mono.Addins;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TwoDimEnvironment;
 using System.Windows;
 using CSharpQuadTree;
 

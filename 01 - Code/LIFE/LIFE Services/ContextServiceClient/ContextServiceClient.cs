@@ -28,6 +28,7 @@ namespace ContextServiceClient
 
 		public string Host {get;set;}
 		public int Port {get;set;}
+		public string SimulationAndLayerContainerID {get;set;}
 
 		public static ContextServiceClient Instance
 		{
@@ -41,7 +42,7 @@ namespace ContextServiceClient
 			}
 		}
 
-		public void ConnectTo(string host, int port)
+		public void ConnectTo(string host, int port, string simAndContId)
 		{
 			if (!connected)
 			{
@@ -49,15 +50,16 @@ namespace ContextServiceClient
 				var factory = new ConnectionFactory() { HostName = host, Port = port };
 				connection = factory.CreateConnection();
 				rpcChannel = connection.CreateModel();
-				replyQueueName = rpcChannel.QueueDeclare("rpc_reply_queue", true, false, false, null);
+                replyQueueName = rpcChannel.QueueDeclare("rpc_reply_queue", true, false, false, null);
 				consumer = new QueueingBasicConsumer(rpcChannel);
 				rpcChannel.BasicConsume(replyQueueName, false, consumer);
 
+				this.Host = host;
+				this.Port = port;
+				this.SimulationAndLayerContainerID = simAndContId;
+
 				// Start Listener for incoming Events
 				contextListener = new ContextListener();
-
-				// Initialize Context Server
-				this.Call ("4");
 
 				connected = true;
 			}
@@ -128,7 +130,7 @@ namespace ContextServiceClient
 
 		public void RegisterNewContextRule(string contextRule, MethodDelegate method)
 		{
-			string message = string.Format ("1;{0}", contextRule);
+			string message = string.Format ("1;{0};{1}", contextRule, this.SimulationAndLayerContainerID);
 			string ruleID = this.Call(message);
 			if(!ruleID.Equals("-1")){
 				contextListener.contextRuleDictionary.Add (ruleID, method);

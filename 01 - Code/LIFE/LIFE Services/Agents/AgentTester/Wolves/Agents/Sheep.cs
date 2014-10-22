@@ -1,50 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
-using AgentTester.Wolves.Reasoning;
-using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Auxiliary;
+using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Movement;
+using GenericAgentArchitecture.Movement.Movers;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
+
 namespace AgentTester.Wolves.Agents {
-  internal class Sheep : Agent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
+  
+    internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
+    
     private const int EnergyMax = 80;
     private readonly Random _random;
-    private readonly Grassland _environment;
+    private readonly IEnvironment _environment;
     private int _energy = 50;
     private string _states;
+    private readonly GridMover _mover;
 
 
-    public Sheep(Grassland environment, string id) : base(id, 1) {
-      Position = new Vector(-1, -1); // We just need an object (coords set by env).
+    /// <summary>
+    ///   Create a new sheep agent.
+    /// </summary>
+    /// <param name="id">The agent identifier.</param>
+    /// <param name="env">Environment reference.</param>
+    /// <param name="pos">The initial position.</param>
+    public Sheep(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
-      _environment = environment;
-      PerceptionUnit.AddSensor
-        (new DataSensor
-          (
-          this,
-          environment,
-          (int) Grassland.InformationTypes.Agents,
-          new RadialHalo(Position, 8))
-        );
+      _environment = env;
+      
+      // Add perception sensor.
+      PerceptionUnit.AddSensor(new DataSensor(
+        this, env,
+        (int) Grassland.InformationTypes.Agents,
+        new RadialHalo(Data.Position, 8))
+      );
+
+      // Add movement module.
+      Mover = new GridMover(env, this, Data);
+      _mover = (GridMover) Mover;  // Re-declaration to save casts.
     }
 
-    #region IAgentLogic Members
 
     public IInteraction Reason() {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        _environment.RemoveAgent(this);
+        ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        Remove();
         return null;
       }
 
       // Calculate hunger percentage, read-out nearby agents.
       int hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
       var rawData = PerceptionUnit.GetData((int) Grassland.InformationTypes.Agents).Data;
-      var agents = ((Dictionary<string, Agent>) rawData).Values;
+      var agents = ((Dictionary<long, SpatialAgent>) rawData).Values;
       var grass = agents.OfType<Grass>().ToList();
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
@@ -56,30 +71,36 @@ namespace AgentTester.Wolves.Agents {
                 (wolves.Count < 10 ? wolves.Count + "" : "+") + " │ ";
 
       if (grass.Count > 0) {
-        // Get the nearest sheep and calculate the distance towards it.
-        var nGrass = CommonRCF.GetNearestAgent(grass, Position);
-        //var nSheep = CommonRCF.GetNearestAgent(sheeps, Position);
-        //var nWolf = CommonRCF.GetNearestAgent(wolves, Position);
-        var dGrass = Position.GetDistance(nGrass.Position);
-        //var dWolf  = Position.GetDistance(nWolf.Position);
-        _states += String.Format("E: {0,4:0.00} | ", dGrass);
+
+        // Get the nearest grass agent and calculate the distance towards it.
+        var grs = grass[0];
+        var dist = Data.Position.GetDistance(grs.GetPosition());
+        foreach (var g in grass) {
+          if (Data.Position.GetDistance(g.GetPosition()) < dist) {
+            grs = g;
+            dist = Data.Position.GetDistance(grs.GetPosition());
+          }
+        }
+        _states += String.Format("E: {0,4:0.00} | ", dist);
 
         // R1: Eat nearby grass.
-        if (dGrass <= 1 && hunger > 20) {
+        if (dist <= 1 && hunger > 20) {
           _states += "R1";
-          return new EatInteraction(this, nGrass);
+          return new EatInteraction(this, grs);
         }
 
         // R2: Medium grass distance allowed.
-        if (dGrass <= 5 && hunger > 40) {
+        if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
+          var options = _mover.GetMovementOptions(grs.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
 
         // R3: Move to the nearest grass, no matter the distance.
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, nGrass.Position);
+          var options = _mover.GetMovementOptions(grs.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
       }
 
@@ -88,15 +109,30 @@ namespace AgentTester.Wolves.Agents {
 
       // R4: Perform random movement.
       _states += "R4";
-      return CommonRCF.GetRandomMoveInteraction(_environment, this);
+      if (_environment is Environment2D) {
+        var pos = ((Environment2D) _environment).GetRandomPosition();
+        var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
+        return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
+      }
+      
+      //TODO Build something for ESC case.  
+      return null;
     }
 
-    #endregion
+
+    /// <summary>
+    ///   Print this sheep's ID, position and its internal states.
+    /// </summary>
+    /// <returns>Console output string.</returns>
+    public override string ToString() {
+      return String.Format("{0,3:00} | Schaf | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |" + _states,
+          Id, Data.Position.X, Data.Position.Y, _energy, EnergyMax);
+    }
+
 
     //_____________________________________________________________________________________________
     // Implementation of interaction primitives. 
 
-    #region IEatInteractionSource Members
 
     /// <summary>
     ///   Increase the hitpoints of this agent.
@@ -107,9 +143,6 @@ namespace AgentTester.Wolves.Agents {
       if (_energy > EnergyMax) _energy = EnergyMax;
     }
 
-    #endregion
-
-    #region IEatInteractionTarget Members
 
     /// <summary>
     ///   Return the food value of this agent.
@@ -124,22 +157,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      _environment.RemoveAgent(this);
-    }
-
-    #endregion
-
-    /// <summary>
-    ///   Print this sheep's ID, position and its internal states.
-    /// </summary>
-    /// <returns>Console output string.</returns>
-    public override string ToString() {
-      return String.Format
-        (Id + " | Schaf | ({0,2:00},{1,2:00})  |  {2,2:0}/{3,2:00}  |" + _states,
-          Position.X,
-          Position.Y,
-          _energy,
-          EnergyMax);
+      Remove();
     }
   }
 }

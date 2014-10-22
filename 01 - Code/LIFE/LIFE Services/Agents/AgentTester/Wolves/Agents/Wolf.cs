@@ -1,32 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
-using AgentTester.Wolves.Reasoning;
-using CommonTypes.DataTypes;
 using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Auxiliary;
+using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Movement;
+using GenericAgentArchitecture.Movement.Movers;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
-
-  internal class Wolf : Agent, IAgentLogic, IEatInteractionSource {
+ 
+    internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
+    
     private int _energy = 80;
     private const int EnergyMax = 100;
     private readonly Random _random;
-    private readonly Grassland _environment;
+    private readonly IEnvironment _environment;
     private string _states;
+    private readonly GridMover _mover;
 
-    public Wolf(Grassland environment, string id) : base(id, 2) {
-      Position = new Vector(-1, -1); // We just need an object (coords set by env).
+
+    /// <summary>
+    ///   Create a new wolf agent.
+    /// </summary>
+    /// <param name="id">The agent identifier.</param>
+    /// <param name="env">Environment reference.</param>
+    /// <param name="pos">The initial position.</param>
+    public Wolf(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
-      _environment = environment;
+      _environment = env;
+      
+      // Add perception sensor.
       PerceptionUnit.AddSensor(new DataSensor(
-        this,
-        environment,
+        this, env,
         (int) Grassland.InformationTypes.Agents,
-        new RadialHalo(Position, 8))
+        new RadialHalo(Data.Position, 8))
       );
+
+      // Add movement module.
+      Mover = new GridMover(env, this, Data);
+      _mover = (GridMover) Mover;  // Re-declaration to save casts.
     }
 
 
@@ -35,7 +51,8 @@ namespace AgentTester.Wolves.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        _environment.RemoveAgent(this);
+        ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        Remove();
         return null;
       }
 
@@ -43,15 +60,10 @@ namespace AgentTester.Wolves.Agents {
       // Calculate hunger percentage, read-out nearby agents.
       var hunger = (int)(((double)(EnergyMax - _energy)/EnergyMax)*100);
       var rawData = PerceptionUnit.GetData((int)Grassland.InformationTypes.Agents).Data;
-      var agents = ((Dictionary<string, Agent>) rawData).Values;
+      var agents = ((Dictionary<long, SpatialAgent>) rawData).Values;
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
       
-      Console.WriteLine("Wolf perception around "+Position+":");
-      foreach (var sheep in sheeps) Console.WriteLine("Sheep at "+sheep.Position+" (Dist.: "+Position.GetDistance(sheep.Position)+")");
-      Console.ReadLine();
-
-
       // Create status output.
       _states = String.Format("{0,3:00}% |", hunger) + " - " +
         (sheeps.Count<10? sheeps.Count+"" : "+") + " " + 
@@ -60,26 +72,35 @@ namespace AgentTester.Wolves.Agents {
       if (sheeps.Count > 0) {
 
         // Get the nearest sheep and calculate the distance towards it.
-        var sheep = CommonRCF.GetNearestAgent(sheeps, Position);
-        var distance = Position.GetDistance(sheep.Position);
-        _states += String.Format("E: {0,4:0.00} | ", distance);
+        var sheep = sheeps[0];
+        var dist = Data.Position.GetDistance(sheep.GetPosition());
+        foreach (var shp in sheeps) {
+          if (Data.Position.GetDistance(shp.GetPosition()) < dist) {
+            sheep = shp;
+            dist = Data.Position.GetDistance(sheep.GetPosition());
+          }
+        }
+        _states += String.Format("E: {0,4:0.00} | ", dist);
 
         // R1: If there is a sheep directly ahead and hunger > 20%, eat it!
-        if (distance <= 1 && hunger >= 20) {
+        if (dist <= 1 && hunger >= 20) {
           _states += "R1";
+          ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Red);
           return new EatInteraction(this, sheep);
         }
 
         // R2: Sheep at distance max. 5 and hunger > 40%? Move towards it!
-        if (distance <= 5 && hunger > 40) {
+        if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
+          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
 
         // R3: Very hungry wolf. You better watch out ...
         if (hunger > 60) {
           _states += "R3";
-          return CommonRCF.MoveTowardsPosition(_environment, this, sheep.Position);
+          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
       }
 
@@ -88,7 +109,14 @@ namespace AgentTester.Wolves.Agents {
 
       // R4: Perform random movement.
       _states += "R4";
-      return CommonRCF.GetRandomMoveInteraction(_environment, this);
+      if (_environment is Environment2D) {
+        var pos = ((Environment2D) _environment).GetRandomPosition();
+        var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
+        return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
+      }
+      
+      //TODO Build something for ESC case.  
+      return null;
     }
 
 
@@ -97,8 +125,8 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public override string ToString() {
-      return String.Format(Id + " | Wolf  | ({0,2:00},{1,2:00})  | {2,3:0}/{3,3:0} |" + _states,
-        Position.X, Position.Y, _energy, EnergyMax);
+      return String.Format("{0,3:00} | Wolf  | ({1,2:00},{2,2:00})  | {3,3:0}/{4,3:0} |" + _states,
+        Id, Data.Position.X, Data.Position.Y, _energy, EnergyMax);
     }
 
 

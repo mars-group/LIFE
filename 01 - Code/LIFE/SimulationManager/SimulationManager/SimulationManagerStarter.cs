@@ -27,7 +27,7 @@ namespace SimulationManager
         /// Shows interactive shell for choosing a model.
         /// </summary>
         /// <param name="core">Core.</param>
-        private static void InteractiveModelChoosing(IApplicationCore core)
+        private static void InteractiveModelChoosing(ISimulationManagerApplicationCore core)
         {
 
             //Console input requested
@@ -86,7 +86,7 @@ namespace SimulationManager
         /// </summary>
         /// <param name="args">Arguments.</param>
         /// <param name="core">Core.</param>
-        private static void ParseArgsAndStart(string[] args, IApplicationCore core)
+        private static void ParseArgsAndStart(string[] args, ISimulationManagerApplicationCore core)
         {
             bool help = false;
             bool listModels = false;
@@ -181,7 +181,7 @@ namespace SimulationManager
             {
                 Console.WriteLine("Initializing components and building application core...");
 
-                IApplicationCore core = ApplicationCoreFactory.GetProductionApplicationCore();
+                ISimulationManagerApplicationCore core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
 
                 Logger.Info("SimulationManager successfully started.");
 

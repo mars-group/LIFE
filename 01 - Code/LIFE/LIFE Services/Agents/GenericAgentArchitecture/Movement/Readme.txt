@@ -1,5 +1,5 @@
-﻿Notes about this movement module
-********************************
+﻿Notes about the movement usage and structure
+********************************************
 
 Axis definitions:
 
@@ -9,6 +9,12 @@ Axis definitions:
 
   The x and y axis form a plane. The z axis represents the height and is used 
   for 3D scenarios.
+
+
+To facilitate agent movement, the abstract base 'Agent' is inherited by the 'SpatialAgent'. 
+... tbc ... 
+
+
 
 
 

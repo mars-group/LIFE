@@ -52,14 +52,14 @@
     <Compile Include="Wolves\Agents\Wolf.cs" />
     <Compile Include="Wolves\Interactions\EatInteraction.cs" />
     <Compile Include="Wolves\Interactions\GrowInteraction.cs" />
-    <Compile Include="Wolves\Interactions\MoveInteraction.cs" />
     <Compile Include="Wolves\Interactions\ProcreateInteraction.cs" />
-    <Compile Include="Wolves\Reasoning\CommonRCF.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Wolves\Reasoning\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\CommonTypes\CommonTypes.csproj">
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
