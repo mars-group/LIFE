@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,6 +56,7 @@
     <Compile Include="Agents\Reasoning\Util\Pathfinding\Raytracing\RaytracingGraph.cs" />
     <Compile Include="Agents\Reasoning\Util\Pathfinding\Raytracing\RaytracingPathNode.cs" />
     <Compile Include="Agents\Reasoning\Util\Pathfinding\Raytracing\RayUtil.cs" />
+    <Compile Include="Agents\Reasoning\Util\Pathfinding\UnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />
     <Compile Include="Program.cs" />

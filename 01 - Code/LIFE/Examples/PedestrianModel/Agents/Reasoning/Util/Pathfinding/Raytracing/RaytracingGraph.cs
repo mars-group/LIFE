@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-/// 
 namespace de.haw.walk.agent.util.pathfinding.raytracing
 {
 
