@@ -4,6 +4,7 @@ using LayerAPI.Interfaces;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
+using Mono.Addins;
 
 namespace LayerFactory.Implementation {
     internal class LayerFactoryUseCase : ILayerFactory {
@@ -13,12 +14,14 @@ namespace LayerFactory.Implementation {
 
         public LayerFactoryUseCase(ILayerRegistry layerRegistry) {
             _layerRegistry = layerRegistry;
-            _addinLoader = new AddinLoader();
+            _addinLoader = AddinLoader.Instance;
         }
 
         public ILayer GetLayer(string layerName) {
             ILayer result;
+
             var typeExtensionNode = _addinLoader.LoadLayer(layerName);
+
             var constructors = typeExtensionNode.Type.GetConstructors();
 
             // check if there is an empty constructor
@@ -27,7 +30,6 @@ namespace LayerFactory.Implementation {
                 result = (ILayer) typeExtensionNode.CreateInstance();
             }
             else {
-
                 // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
                 var currentConstructor = constructors[0];
                 var neededParameters = currentConstructor.GetParameters();
@@ -42,7 +44,6 @@ namespace LayerFactory.Implementation {
                 result = (ILayer) currentConstructor.Invoke(actualParameters);
             }
             _layerRegistry.RegisterLayer(result);
-
             return result;
         }
 

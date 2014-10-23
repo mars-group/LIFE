@@ -46,6 +46,7 @@
     <Compile Include="Auxiliary\Executor.cs" />
     <Compile Include="Environments\Environment.cs" />
     <Compile Include="Auxiliary\MessageServer.cs" />
+    <Compile Include="Environments\LayerEnvironment.cs" />
     <Compile Include="Reasoning\Plan.cs" />
     <Compile Include="Perception\ICallbackDataSource.cs" />
     <Compile Include="Movement\Movers\AgentMover.cs" />
