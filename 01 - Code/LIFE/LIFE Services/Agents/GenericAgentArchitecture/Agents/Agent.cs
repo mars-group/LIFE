@@ -2,7 +2,6 @@
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 
-
 namespace GenericAgentArchitecture.Agents {
 
   /// <summary>

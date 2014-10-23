@@ -29,7 +29,6 @@
 					 - Kann später auch Terraindaten halten (Wände, Steigung, Klippen, ...)
 
 
-
 - Vektor herausziehen, gemeinsames Paket
 - Struktur optimieren
 - ICallbackDataSource in GAA-Commons
@@ -37,10 +36,7 @@
 
 
 
-
-
 ----------------------------------- ALTE RASTERBEWEGUNGSAKTION (KOMBINIERT) -----------------------------------
-
 
 
     private readonly bool _diagonalEnabled;     // This flag enables diagonal movement. 
@@ -122,12 +118,11 @@ R         if (iEnum == 4) {
 
 
 
-/* Delegate-Zuweisungsarten:
- * 1) Statische Funktion machen, Zeiger = Funktionsname: 
- *    public static ConsoleColor Fkt (SpatialAgent agt) { ... }
- *    GetColor = new GetColor(Fkt)
- *    GetColor = Fkt   // kürzer!
- * 
- * 2) Anonyme Funktion erstellen:
- *    GetColor = delegate(SpatialAgent agt) { ... }
- */
+Delegate-Zuweisungsarten:
+ 1) Statische Funktion machen, Zeiger = Funktionsname: 
+    public static ConsoleColor Fkt (SpatialAgent agt) { ... }
+    GetColor = new GetColor(Fkt)
+    GetColor = Fkt   // kürzer!
+ 
+ 2) Anonyme Funktion erstellen:
+    GetColor = delegate(SpatialAgent agt) { ... }
