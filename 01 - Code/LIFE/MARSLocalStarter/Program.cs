@@ -176,9 +176,6 @@ namespace MARSLocalStarter
         private static void Main(string[] args)
         {
 
-
-
-            try {
                 Console.WriteLine("Initializing components and building application core...");
 
 
@@ -201,14 +198,6 @@ namespace MARSLocalStarter
                 {
                     info = Console.ReadKey();
                 }
-            }
-            catch (Exception exception)
-            {
-
-				throw;
-            }
-
-
         }
     }
 }
