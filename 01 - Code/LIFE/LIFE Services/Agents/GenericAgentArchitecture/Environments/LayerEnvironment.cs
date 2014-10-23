@@ -12,10 +12,10 @@ namespace GenericAgentArchitecture.Environments {
   /// </summary>
   public class LayerEnvironment : IEnvironment {
 
-    private readonly ESCAdapter _esc;    // Adapter for the ESC.
-    private RegisterAgent _regFkt;       // Agent registration function pointer.
-    private UnregisterAgent _unregFkt;   // Delegate for unregistration function.
-    private ILayer _layerImpl;           // Layer reference needed for delegate calls.
+    private readonly ESCAdapter _esc;           // Adapter for the ESC.
+    private readonly RegisterAgent _regFkt;     // Agent registration function pointer.
+    private readonly UnregisterAgent _unregFkt; // Delegate for unregistration function.
+    private readonly ILayer _layerImpl;         // Layer reference needed for delegate calls.
 
 
     /// <summary>
@@ -37,10 +37,12 @@ namespace GenericAgentArchitecture.Environments {
     ///   Adds an agent to the layer. It is registered for execution and added to the ESC. 
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">Its spatial data container.</param>
-    public void AddAgent(SpatialAgent agent, MovementData data) {
-      _esc.AddAgent(agent, data);
-      _regFkt(_layerImpl, agent);     
+    /// <param name="pos">The agent's initial position.</param>
+    /// <returns>A movement data container with the initial position set.</returns>
+    public MovementData AddAgent(SpatialAgent agent, Vector pos) {
+      var mdata = _esc.AddAgent(agent, pos);
+      _regFkt(_layerImpl, agent);
+      return mdata;
     }
 
 
@@ -78,11 +80,11 @@ namespace GenericAgentArchitecture.Environments {
 
 
     /// <summary>
-    ///   Query all agents. Currently not in use!
+    ///   Retrieve all agents of this environment.
     /// </summary>
-    /// <returns>[Exception]</returns>
+    /// <returns>A list of all spatial agents.</returns>
     public List<SpatialAgent> GetAllAgents() {
-      throw new System.NotImplementedException();
+      return _esc.GetAllAgents();
     }
   }
 }

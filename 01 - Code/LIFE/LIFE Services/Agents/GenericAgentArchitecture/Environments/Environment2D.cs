@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommonTypes.TransportTypes;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
@@ -15,7 +14,7 @@ namespace GenericAgentArchitecture.Environments {
 
     protected readonly Vector Boundaries;    // Env. extent, ranging from (0,0) to this point.
     protected readonly Dictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
-    public bool IsGrid { get; private set; }                    // Grid-based or continuous?
+    public bool IsGrid { get; private set; }                           // Grid-based or continuous?
 
 
     /// <summary>
@@ -35,10 +34,14 @@ namespace GenericAgentArchitecture.Environments {
     ///   Add an agent to the environment.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">It's movement data.</param>
-    public void AddAgent(SpatialAgent agent, MovementData data) {
-      Agents.Add(agent, data);
+    /// <param name="pos">The agent's initial position.</param>
+    /// <returns>A movement data container with the initial position set.</returns>
+    public MovementData AddAgent(SpatialAgent agent, Vector pos) {
+      if (pos == null) pos = GetRandomPosition();
+      MovementData mdata = new MovementData(pos);
+      Agents.Add(agent, mdata);
       AddAgent(agent);
+      return mdata;
     }
 
 
@@ -85,14 +88,14 @@ namespace GenericAgentArchitecture.Environments {
     ///   Returns a random position.
     /// </summary>
     /// <returns>A free position.</returns>
-    public TVector GetRandomPosition() {
+    public Vector GetRandomPosition() {
       if (IsGrid) {
         bool unique;
-        TVector position;
+        Vector position;
         do {
           var x = Random.Next((int)Boundaries.X);
           var y = Random.Next((int)Boundaries.Y);
-          position = new TVector(x, y);
+          position = new Vector(x, y);
           unique = true;
           foreach (var md in Agents.Values) {
             if (md.Position.Equals(position)) {

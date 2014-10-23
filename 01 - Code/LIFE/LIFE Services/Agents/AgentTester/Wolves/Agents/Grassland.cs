@@ -26,7 +26,7 @@ namespace AgentTester.Wolves.Agents {
     protected override void AdvanceEnvironment() {
       var grassCount = Agents.Keys.OfType<Grass>().Count();
       if (Random.Next(40+grassCount) < 20) {
-        new Grass(GetNewID(), this, GetRandomPosition());
+        new Grass(IDCounter, this, GetRandomPosition());
       }
     }
 

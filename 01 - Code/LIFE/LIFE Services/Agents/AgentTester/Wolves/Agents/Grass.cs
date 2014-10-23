@@ -1,8 +1,8 @@
 ﻿using System;
-using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -22,8 +22,8 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="id">The agent identifier.</param>
     /// <param name="env">Environment reference.</param>
-    /// <param name="pos">The position.</param>
-    public Grass(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
+    /// <param name="pos">The initial position.</param>
+    public Grass(long id, IEnvironment env, Vector pos = null) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode());
     }
 

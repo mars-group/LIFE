@@ -187,7 +187,7 @@ namespace MARSLocalStarter
 
 
 
-				var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+				        var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
 
 
 
@@ -202,10 +202,9 @@ namespace MARSLocalStarter
                     info = Console.ReadKey();
                 }
             }
-            catch (Exception exception)
-            {
+            catch {
 
-				throw;
+              throw;
             }
 
 

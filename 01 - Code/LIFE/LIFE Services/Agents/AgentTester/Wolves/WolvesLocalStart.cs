@@ -1,7 +1,9 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
+using ESCTestLayer.Implementation;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Auxiliary;
+using GenericAgentArchitecture.Environments;
 using Environment = GenericAgentArchitecture.Environments.Environment;
 
 namespace AgentTester.Wolves {
@@ -11,26 +13,30 @@ namespace AgentTester.Wolves {
   ///   On this level, another starter for MARS system is planned.
   /// </summary>
   static class WolvesLocalStart {
-
-
+    
+    
     /// <summary>
     /// Builder for the wolves vs. sheeps scenario.
     /// </summary>
     /// <param name="grass">Number of grass agents.</param>
     /// <param name="sheeps">Number of sheeps.</param>
     /// <param name="wolves">Number of wolves.</param>
-    /// <param name="esc">ESC reference (per default: null).  
-    /// If not set, internal position management will be used.</param>
+    /// <param name="esc">'True': ESC instance created. 
+    /// 'False': Own environment with collision prevention.</param>
     /// <returns>A grassland with the agents.</returns>
-    public static Environment CreateWolvesScenarioEnvironment(int grass, int sheeps, int wolves) {
-      var env = new Grassland {RandomExecution = false};
-
+    private static IEnvironment CreateWolvesScenarioEnvironment(int grass, int sheeps, int wolves, bool esc) {
+      IEnvironment env;
+      if (!esc) env = new Grassland {RandomExecution = true};
+      else env = new ESCAdapter(new ESC());
+      
+      long ids = 0;
       var n1 = grass;
       var n2 = n1 + sheeps;
       var n3 = n2 + wolves;
-      for (var i =  0; i < n1; i++) new Grass(env.GetNewID(), env, env.GetRandomPosition());
-      for (var i = n1; i < n2; i++) new Sheep(env.GetNewID(), env, env.GetRandomPosition());
-      for (var i = n2; i < n3; i++) new Wolf (env.GetNewID(), env, env.GetRandomPosition());     
+      
+      for (var i =  0; i < n1; i++) new Grass(ids++, env);
+      for (var i = n1; i < n2; i++) new Sheep(ids++, env);
+      for (var i = n2; i < n3; i++) new Wolf (ids++, env);      
       return env;
     }
 
@@ -40,7 +46,7 @@ namespace AgentTester.Wolves {
     /// </summary>
     /// <param name="env">The grassland reference.</param>
     /// <returns>The console view.</returns>
-    public static ConsoleView CreateWolvesView(Grassland env) {
+    private static ConsoleView CreateWolvesView(IEnvironment env) {
       return new ConsoleView(new ConsoleInitData{
 
         // Header strings, map size and options. 
@@ -75,9 +81,9 @@ namespace AgentTester.Wolves {
     ///   Start the executor!
     /// </summary>
     public static void Main() {
-      var environment = CreateWolvesScenarioEnvironment(20, 10, 5);
-      var view = CreateWolvesView((Grassland) environment);
-      new Executor(environment, view).Run(1000);      
+      var environment = CreateWolvesScenarioEnvironment(10, 5, 0, false);
+      var view = CreateWolvesView(environment);
+      new Executor((Environment) environment, view).Run(750);      
     }
   }
 }

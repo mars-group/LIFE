@@ -1,4 +1,5 @@
-﻿using CommonTypes.TransportTypes;
+﻿using System.Linq;
+using CommonTypes.TransportTypes;
 using System.Collections.Generic;
 using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
@@ -10,17 +11,17 @@ namespace GenericAgentArchitecture.Environments {
   /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
   /// </summary>
-  public class ESCAdapter : IEnvironment {
+  //TODO [ESC bypass] Drop Env2D, remove :base and all "new"'s and "override". 
+  public class ESCAdapter : Environment2D, IEnvironment {
 
     private readonly IESC _esc;  // Environment Service Component (ESC) implementation.
     private readonly Dictionary<SpatialAgent, MovementData> _agents; // All registered agents.
-
 
     /// <summary>
     ///   Create a new ESC adapter.
     /// </summary>
     /// <param name="esc">The ESC reference.</param>
-    public ESCAdapter(IESC esc) {
+    public ESCAdapter(IESC esc) : base(new Vector(30,20)) {
       _esc = esc;
       _agents = new Dictionary<SpatialAgent, MovementData>();
     }
@@ -30,14 +31,15 @@ namespace GenericAgentArchitecture.Environments {
     ///   Add a new agent to the environment.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">Container with movement data.</param>
-    public void AddAgent(SpatialAgent agent, MovementData data) {
-      var dim = data.Dimension;
-      _agents.Add(agent, data);
+    /// <param name="pos">The agent's initial position.</param>
+    /// <returns>A movement data container with the initial position set.</returns>
+    public new MovementData AddAgent(SpatialAgent agent, Vector pos) {
+      var mdata = base.AddAgent(agent, pos); 
+      _agents.Add(agent, mdata);
+      var dim = mdata.Dimension;
       _esc.Add((int) agent.Id, 0, true, new TVector(dim.X, dim.Y, dim.Z));
-      var position = data.Position;
-      var direction = data.Direction;
-      ChangePosition(agent, position, direction);
+      ChangePosition(agent, mdata.Position, mdata.Direction);
+      return mdata;
     }
 
 
@@ -45,7 +47,8 @@ namespace GenericAgentArchitecture.Environments {
     ///   Remove an agent from the environment.
     /// </summary>
     /// <param name="agent">The agent to delete.</param>
-    public void RemoveAgent(SpatialAgent agent) {
+    public new void RemoveAgent(SpatialAgent agent) {
+      base.RemoveAgent(agent);
       _esc.Remove((int) agent.Id);
       _agents.Remove(agent);
     }
@@ -58,7 +61,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="agent">The agent to move.</param>
     /// <param name="position">New position.</param>
     /// <param name="direction">New heading.</param>
-    public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
+    public new void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
       var pos = new TVector(position.X, position.Y, position.Z);
       var dir = direction.GetDirectionalVector();
       var ret = _esc.SetPosition((int) agent.Id, pos, new TVector(dir.X, dir.Y, dir.Z));
@@ -68,6 +71,7 @@ namespace GenericAgentArchitecture.Environments {
       //TODO Direction und Wahrnehmungsobjekt übernehmen!!
       _agents[agent].Direction.SetPitch(direction.Pitch);
       _agents[agent].Direction.SetYaw(direction.Yaw);
+      base.ChangePosition(agent, _agents[agent].Position, _agents[agent].Direction);
     }
 
 
@@ -75,9 +79,14 @@ namespace GenericAgentArchitecture.Environments {
     ///   Retrieve all agents of this environment.
     /// </summary>
     /// <returns>A list of all spatial agents.</returns>
-    public List<SpatialAgent> GetAllAgents() {
-      throw new System.NotImplementedException();
+    public new List<SpatialAgent> GetAllAgents() {
+      //TODO This functionality should be implemented by the ESC.
+      return _agents.Keys.ToList();
     }
+
+
+    //TODO [ESC bypass] Throw away later, when Env2D is dropped! 
+    protected override void AdvanceEnvironment() {}
 
 
     /// <summary>
@@ -87,7 +96,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="informationType">The type of information to sense.</param>
     /// <param name="geometry">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public object GetData(int informationType, IGeometry geometry) {
+    public override object GetData(int informationType, IGeometry geometry) {
       return _esc.GetData(informationType, geometry);
     }
   }

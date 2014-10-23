@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Auxiliary;
@@ -33,7 +32,7 @@ namespace AgentTester.Wolves.Agents {
     /// <param name="id">The agent identifier.</param>
     /// <param name="env">Environment reference.</param>
     /// <param name="pos">The initial position.</param>
-    public Wolf(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
+    public Wolf(long id, IEnvironment env, Vector pos = null) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
