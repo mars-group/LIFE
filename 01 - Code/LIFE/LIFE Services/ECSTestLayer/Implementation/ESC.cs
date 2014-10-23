@@ -10,6 +10,7 @@ using LayerAPI.Interfaces;
 
 namespace ESCTestLayer.Implementation
 {
+    using CommonTypes.TransportTypes;
 
     /// <summary>
     ///   implements 3-axis sweep and prune model
@@ -18,29 +19,30 @@ namespace ESCTestLayer.Implementation
     /// </summary>
     public class ESC : IESC
     {
-        //TODO boundaries einführen, vermutlich als polygon. 
+        //TODO boundaries einführen, vermutlich als polygon(IGeometry). zunächst als Vector siehe Environment2D
         // was passiert, wenn Agenten Grenzen erreichen?
         // TODO gibt indexOutOfBounds mit zurück
 
         private readonly Random _rnd;                             // Number generator for random positions.
         private readonly Dictionary<int, AABB> _aabbs;            // Stores the occupied intervals of all elementIds.
-        private readonly IDictionary<int, Vector> _dimensions;  // All elements dimensions.
-        private readonly IDictionary<int, Vector> _positions;   // The positions (middlepoints).
-        private readonly IDictionary<int, Vector> _directions;  // The positions (middlepoints).
+        private readonly IDictionary<int, TVector> _dimensions;  // All elements dimensions.
+        private readonly IDictionary<int, TVector> _positions;   // The positions (middlepoints).
+        private readonly IDictionary<int, TVector> _directions;  // The positions (middlepoints).
 
         public ESC()
         {
             _rnd = new Random();
             _aabbs = new Dictionary<int, AABB>();
-            _dimensions = new ConcurrentDictionary<int, Vector>();
-            _positions = new ConcurrentDictionary<int, Vector>();
-            _directions = new ConcurrentDictionary<int, Vector>();
+            _dimensions = new ConcurrentDictionary<int, TVector>();
+            _positions = new ConcurrentDictionary<int, TVector>();
+            _directions = new ConcurrentDictionary<int, TVector>();
         }
 
-        public void Add(int elementId, Vector dimension)
-        {
+        public void Add(int elementId, int informationType, bool collidable, TVector dimension)
+        {//TODO umstellen auf einstufigen Anmeldeprozess inkl. Positionierung. Wahrnehmungsobjekte nicht speichern.
+            //TODO parameter in klasse kapseln
             _dimensions[elementId] = dimension;
-            _positions[elementId] = Vector.Null;
+            _positions[elementId] = TVector.Null;
         }
 
         public void Remove(int elementId)
@@ -49,7 +51,7 @@ namespace ESCTestLayer.Implementation
             _dimensions.Remove(elementId);
         }
 
-        public MovementResult Update(int elementId, Vector dimension)
+        public MovementResult Update(int elementId, TVector dimension)
         {
             _dimensions[elementId] = dimension;
             if (_positions.ContainsKey(elementId))
@@ -59,7 +61,7 @@ namespace ESCTestLayer.Implementation
             return null;
         }
 
-      public MovementResult SetPosition(int elementId, Vector position, Vector direction) {
+      public MovementResult SetPosition(int elementId, TVector position, TVector direction) {
           var aabb = GetAABB(position, direction, _dimensions[elementId]);
           if (CheckForCollisions(aabb)) {
               return new MovementResult(_positions[elementId]);
@@ -74,49 +76,50 @@ namespace ESCTestLayer.Implementation
         }
 
 
-        public MovementResult SetRandomPosition(int elementId, Vector min, Vector max, bool grid) {
-            var zUsed = (max.Z - min.Z > float.Epsilon);
-            Vector dir = Vector.Null;
-
-            // Get a position in the interval containing only grid values.
-            var pos = new Vector(
-              (_rnd.Next((int)(max.X - min.X))) + min.X,
-              (_rnd.Next((int)(max.Y - min.Y))) + min.Y,
-              zUsed ? (_rnd.Next((int)(max.Z - min.Z))) + min.Z : 0.0f
-            );
-
-            // When only grids are wished, position is finished. Next, create direction normal vector.
-            if (grid) {
-                switch (_rnd.Next(0, 4))
-                {                              //         Z
-                    case 0: dir = new Vector(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
-                    case 1: dir = new Vector(0.0f, -1.0f, 0.0f); break; // left    |  /
-                    case 2: dir = new Vector(1.0f, 0.0f, 0.0f); break;  // up      | /
-                    case 3: dir = new Vector(-1.0f, 0.0f, 0.0f); break; // down    +--------→ Y
-                }
-            }
-
-            // Otherwise we want floating point values. Randomize position, create normal vector and normalize it. 
-            else
-            {
-                pos.X += (float)_rnd.NextDouble();
-                pos.Y += (float)_rnd.NextDouble();
-                if (zUsed) pos.Z += (float)_rnd.NextDouble();
-                dir = new Vector(
-                  (float)(_rnd.NextDouble() - 0.5),
-                  (float)(_rnd.NextDouble() - 0.5),
-                  zUsed ? (float)(_rnd.NextDouble() - 0.5) : 0.0f
-                ).Normalize();
-            }
-
-            // Try to get this position.
-            if (SetPosition(elementId, pos, dir).Position == null)
-            {
-                // try one more time
-                //TOOD Abbruchkriterium?
-                return SetRandomPosition(elementId, min, max, grid);
-            }
-            return new MovementResult(pos);
+        public MovementResult SetRandomPosition(int elementId, TVector min, TVector max, bool grid) {
+//            var zUsed = (max.Z - min.Z > float.Epsilon);
+//            TVector dir = TVector.Null;
+//
+//            // Get a position in the interval containing only grid values.
+//            var pos = new TVector(
+//              (_rnd.Next((int)(max.X - min.X))) + min.X,
+//              (_rnd.Next((int)(max.Y - min.Y))) + min.Y,
+//              zUsed ? (_rnd.Next((int)(max.Z - min.Z))) + min.Z : 0.0f
+//            );
+//
+//            // When only grids are wished, position is finished. Next, create direction normal vector.
+//            if (grid) {
+//                switch (_rnd.Next(0, 4))
+//                {                              //         Z
+//                    case 0: dir = new TVector(0.0f, 1.0f, 0.0f); break;  // right   ↑   X
+//                    case 1: dir = new TVector(0.0f, -1.0f, 0.0f); break; // left    |  /
+//                    case 2: dir = new TVector(1.0f, 0.0f, 0.0f); break;  // up      | /
+//                    case 3: dir = new TVector(-1.0f, 0.0f, 0.0f); break; // down    +--------→ Y
+//                }
+//            }
+//
+//            // Otherwise we want floating point values. Randomize position, create normal vector and normalize it. 
+//            else
+//            {
+//                pos.X += (float)_rnd.NextDouble();
+//                pos.Y += (float)_rnd.NextDouble();
+//                if (zUsed) pos.Z += (float)_rnd.NextDouble();
+//                dir = new TVector(
+//                  (float)(_rnd.NextDouble() - 0.5),
+//                  (float)(_rnd.NextDouble() - 0.5),
+//                  zUsed ? (float)(_rnd.NextDouble() - 0.5) : 0.0f
+//                ).Normalize();
+//            }
+//
+//            // Try to get this position.
+//            if (SetPosition(elementId, pos, dir).Position.IsNull())
+//            {
+//                // try one more time
+//                //TOOD Abbruchkriterium?
+//                return SetRandomPosition(elementId, min, max, grid);
+//            }
+//            return new MovementResult(pos);
+            throw new NotImplementedException();
         }
 
         public float GetDistance(int anElementId, int anotherElementId)
@@ -126,12 +129,13 @@ namespace ESCTestLayer.Implementation
 
         public object GetData(int informationType, IGeometry geometry) {
             //TODO informationType als filter kriterium
-            const int elementId = -1;
-            Add(elementId, geometry.GetDimensionQuad());
-            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
+//            const int elementId = -1;
+//            Add(elementId, -1, false, geometry.GetDimensionQuad());
+//            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<CollidableElement> Explore(int elementId, Vector position, Vector direction)
+        public IEnumerable<CollidableElement> Explore(int elementId, TVector position, TVector direction)
         {
             var newPosition = GetAABB(position, direction, _dimensions[elementId]);
             var collisions = new List<CollidableElement>();
@@ -176,21 +180,21 @@ namespace ESCTestLayer.Implementation
         /// <param name="direction">The current heading.</param>
         /// <param name="dimension">The elementId's dimension (related to direction (1,0,0)).</param>
         /// <returns>AABB structure.</returns>
-        private static AABB GetAABB(Vector position, Vector direction, Vector dimension)
+        private static AABB GetAABB(TVector position, TVector direction, TVector dimension)
         {
             // Create all vertices of the bounding box. Probably some of them will suffice ...
-            var points = new Vector[8];
-            points[0] = new Vector(-dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
-            points[1] = new Vector(dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
-            points[2] = new Vector(-dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
-            points[3] = new Vector(dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
-            points[4] = new Vector(-dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
-            points[5] = new Vector(dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
-            points[6] = new Vector(-dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
-            points[7] = new Vector(dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
+            var points = new TVector[8];
+            points[0] = new TVector(-dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
+            points[1] = new TVector(dimension.X / 2, -dimension.Y / 2, -dimension.Z / 2);
+            points[2] = new TVector(-dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
+            points[3] = new TVector(dimension.X / 2, dimension.Y / 2, -dimension.Z / 2);
+            points[4] = new TVector(-dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
+            points[5] = new TVector(dimension.X / 2, -dimension.Y / 2, dimension.Z / 2);
+            points[6] = new TVector(-dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
+            points[7] = new TVector(dimension.X / 2, dimension.Y / 2, dimension.Z / 2);
 
             // Build axes for direction-local coordinate system.
-            Vector nr1 = direction.Normalize(), nr2, nr3;
+            TVector nr1 = direction.Normalize(), nr2, nr3;
             nr1.GetPlanarOrthogonalVectors(out nr2, out nr3);
 
             // Transform the bounding box from local (direction-aligned) to the
@@ -204,12 +208,10 @@ namespace ESCTestLayer.Implementation
                         var x = point.X * nr1.X + point.Y * nr1.Y + point.Z * nr1.Z;
                         var y = point.X * nr2.X + point.Y * nr2.Y + point.Z * nr2.Z;
                         var z = point.X * nr3.X + point.Y * nr3.Y + point.Z * nr3.Z;
-                        point.X = x;
-                        point.Y = y;
-                        point.Z = z;
-                        if (point.X > diffX) diffX = point.X;
-                        if (point.Y > diffY) diffY = point.Y;
-                        if (point.Z > diffZ) diffZ = point.Z;
+                        var temp = new TVector(x, y, z);
+                        if (temp.X > diffX) diffX = temp.X;
+                        if (temp.Y > diffY) diffY = temp.Y;
+                        if (temp.Z > diffZ) diffZ = temp.Z;
                     });
 
             // Create axis-aligned bounding box (AABB) and assign values.

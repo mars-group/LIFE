@@ -43,8 +43,10 @@ namespace SimulationManagerShared
                 }
             }
 
-            AddinLibraryDirectoryPath = "./addinConfig";
-            ModelDirectoryPath = "./addinConfig/addins";
+            //AddinLibraryDirectoryPath = "./addinConfig";
+            //ModelDirectoryPath = "./addinConfig/addins";
+            AddinLibraryDirectoryPath = "./layers";
+            ModelDirectoryPath = "./layers/addins";
             NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, "SM-1", ipAddress, 44521, true);
             MulticastSenderConfig = new MulticastSenderConfig();
         }

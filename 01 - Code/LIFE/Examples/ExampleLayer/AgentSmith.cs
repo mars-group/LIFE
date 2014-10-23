@@ -6,12 +6,16 @@ namespace ExampleLayer {
 
     internal class AgentSmith : IAgent, IEquatable<AgentSmith> {
         private readonly _2DEnvironment _2DEnvironment;
+        private readonly UnregisterAgent _unregisterAgentHandle;
+        private readonly ExampleLayer _thislayer;
 
         private Guid AgentID;
 
-        public AgentSmith(_2DEnvironment _2DEnvironment) {
+        public AgentSmith(_2DEnvironment _2DEnvironment, UnregisterAgent unregisterAgentHandle, ExampleLayer thislayer) {
             this._2DEnvironment = _2DEnvironment;
-            this.AgentID = Guid.NewGuid();
+            _unregisterAgentHandle = unregisterAgentHandle;
+            _thislayer = thislayer;
+            AgentID = Guid.NewGuid();
             Dead = false;
         }
 
@@ -29,6 +33,7 @@ namespace ExampleLayer {
             }
             else {
                 //Console.WriteLine("I'm dead.");
+                _unregisterAgentHandle(_thislayer, this);
             }
             //Console.WriteLine("Tell me, Mr. Anderson, what good is a phone call when you are unable to speak?");
         }

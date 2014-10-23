@@ -5,7 +5,7 @@ namespace CSharpQuadTree
 {
     public interface IQuadObject
     {
-		Rect Bounds { get; set; }
+        Rect Bounds { get; set; } //IntersectsWith, X, Y, Width, Height
         event EventHandler BoundsChanged;
     }
 }

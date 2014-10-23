@@ -1,6 +1,7 @@
 ﻿
 
 using System.Runtime.CompilerServices;
+using System.Security.Permissions;
 
 namespace ExampleLayer
 {
@@ -47,6 +48,9 @@ namespace ExampleLayer
         }
 
         public IEnumerable<AgentSmith> ExploreRadius(AgentSmith agent) {
+            if (agent.Dead) {
+                return new List<AgentSmith>(); 
+            }
             var agentPosition = _positionsOfAgents[agent];
             var result = new List<AgentSmith>();
 

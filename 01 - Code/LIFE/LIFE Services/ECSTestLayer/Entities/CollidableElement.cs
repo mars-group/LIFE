@@ -2,16 +2,18 @@
 
 namespace ESCTestLayer.Entities
 {
+    using CommonTypes.TransportTypes;
+
     public class CollidableElement {
         public int Id;
 
         public int Type;
 
-        public Vector Dimension;
+        public TVector Dimension;
 
-        public Vector Position;
+        public TVector Position;
 
-        public Vector Direction;
+        public TVector Direction;
 
     }
 }

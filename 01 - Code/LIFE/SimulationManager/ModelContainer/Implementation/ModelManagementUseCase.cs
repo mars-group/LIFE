@@ -24,6 +24,13 @@ namespace ModelContainer.Implementation {
             _settings = settings;
             _models = new Dictionary<TModelDescription, string>();
             _listeners = new LinkedList<Action>();
+            if (!Directory.Exists(_settings.ModelDirectoryPath)) {
+                Directory.CreateDirectory(_settings.ModelDirectoryPath);
+            }
+            // delete possible remains from old run
+            if (Directory.Exists("./layers/addins/tmp")) { Directory.Delete("./layers/addins/tmp", true); }
+
+            
             try {
                 _systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
             }
