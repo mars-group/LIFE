@@ -3,7 +3,6 @@ using System.Linq;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Perception;
 using LayerAPI.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -31,22 +30,23 @@ namespace AgentTester.Wolves.Agents {
     }
 
 
-    /* Data source functions: Information types and retrieval method. */
-    public enum InformationTypes { Agents }     
-
+    /// <summary>
+    ///   Retrieve information from a data source.
+    ///   Overrides GetData to provide additional "Grass" agent queries.
+    /// </summary>
+    /// <param name="informationType">The information type to query.</param>
+    /// <param name="geometry">The perceptable area.</param>
+    /// <returns>An arbitrary object. In this case, an agent listing.</returns>
     public override object GetData(int informationType, IGeometry geometry) {
       switch ((InformationTypes) informationType) {      
-        case InformationTypes.Agents: {
-          var map = new Dictionary<long, SpatialAgent>();
-          var halo = (Halo) geometry;
-          foreach (var agent in GetAllAgents()) {
-            if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
-                halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon) {
-              map[agent.Id] = agent;
-            }
-          }
-          return map;
-        }       
+        case InformationTypes.AllAgents:
+          return base.GetData(0, geometry);
+
+        case InformationTypes.Grass: {
+          var list = (List<SpatialAgent>) base.GetData(0, geometry);
+          return list.OfType<Grass>().ToList();
+        }
+
         default: return null;
       }
     }

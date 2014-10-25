@@ -12,6 +12,12 @@ using Mono.Addins;
 namespace AgentTester.Wolves {
 
   /// <summary>
+  ///   Data query information types.
+  /// </summary>
+  public enum InformationTypes { AllAgents, Grass, Sheeps, Wolves }     
+
+
+  /// <summary>
   ///   This layer implementation contains a predator-prey simulation (wolves vs. sheeps vs. grass).
   ///   It uses the Generic Agent Architecture and serves as an example for other agent models.
   /// </summary>
@@ -35,13 +41,13 @@ namespace AgentTester.Wolves {
       _tick = 0;
       _idCounter = 0;
       _random = new Random();
-      _env = new LayerEnvironment(new ESC(), registerAgentHandle, unregisterAgentHandle, this);
+      _env = new LayerEnvironment(null, registerAgentHandle, unregisterAgentHandle, this);
 
       // Create some initial agents.
       for (var i = 0; i < 12; i ++) new Grass(_idCounter++, _env);
       for (var i = 0; i <  6; i ++) new Sheep(_idCounter++, _env);
       for (var i = 0; i <  2; i ++) new Wolf (_idCounter++, _env);
-     
+
       // Register the layer itself for execution. The agents are registered by themselves.
       registerAgentHandle.Invoke(this, this);
       return true;
@@ -57,6 +63,7 @@ namespace AgentTester.Wolves {
       var create = _random.Next(40 + grassCount) < 20;
       if (create) new Grass(_idCounter++, _env);   
       _tick ++;
+      //TODO Output function needed!
     }
 
 

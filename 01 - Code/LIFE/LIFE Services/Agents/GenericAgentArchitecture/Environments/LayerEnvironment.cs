@@ -12,7 +12,7 @@ namespace GenericAgentArchitecture.Environments {
   /// </summary>
   public class LayerEnvironment : IEnvironment {
 
-    private readonly ESCAdapter _esc;           // Adapter for the ESC.
+    private readonly IEnvironment _env;         // ESC adapter (or own environment).
     private readonly RegisterAgent _regFkt;     // Agent registration function pointer.
     private readonly UnregisterAgent _unregFkt; // Delegate for unregistration function.
     private readonly ILayer _layerImpl;         // Layer reference needed for delegate calls.
@@ -21,12 +21,13 @@ namespace GenericAgentArchitecture.Environments {
     /// <summary>
     ///   Create a new environment class for use with MARS layers.
     /// </summary>
-    /// <param name="esc">The environment service component for collision detection.</param>
+    /// <param name="esc">The ESC for collision detection. May be set to null for own environment.</param>
     /// <param name="regFkt">Delegate for agent registration function.</param>
     /// <param name="unregFkt">Delegate for agent unregistration function.</param>
     /// <param name="layer">Layer reference needed for delegate calls.</param>
     public LayerEnvironment(IESC esc, RegisterAgent regFkt, UnregisterAgent unregFkt, ILayer layer) {
-      _esc = new ESCAdapter(esc);
+      if (esc == null) _env = new Environment2D(new Vector(30, 20));
+      else _env = new ESCAdapter(esc);
       _regFkt = regFkt;
       _unregFkt = unregFkt;
       _layerImpl = layer;
@@ -40,7 +41,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="pos">The agent's initial position.</param>
     /// <returns>A movement data container with the initial position set.</returns>
     public MovementData AddAgent(SpatialAgent agent, Vector pos) {
-      var mdata = _esc.AddAgent(agent, pos);
+      var mdata = _env.AddAgent(agent, pos);
       _regFkt(_layerImpl, agent);
       return mdata;
     }
@@ -52,7 +53,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="agent">The agent to remove.</param>
     public void RemoveAgent(SpatialAgent agent) {
       _unregFkt(_layerImpl, agent);
-      _esc.RemoveAgent(agent);
+      _env.RemoveAgent(agent);
     }
 
 
@@ -63,7 +64,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="position">New position.</param>
     /// <param name="direction">New heading.</param>
     public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
-      _esc.ChangePosition(agent, position, direction);
+      _env.ChangePosition(agent, position, direction);
     }
 
 
@@ -75,7 +76,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="geometry">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
     public object GetData(int informationType, IGeometry geometry) {
-      return _esc.GetData(informationType, geometry);
+      return _env.GetData(informationType, geometry);
     }
 
 
@@ -84,7 +85,7 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <returns>A list of all spatial agents.</returns>
     public List<SpatialAgent> GetAllAgents() {
-      return _esc.GetAllAgents();
+      return _env.GetAllAgents();
     }
   }
 }

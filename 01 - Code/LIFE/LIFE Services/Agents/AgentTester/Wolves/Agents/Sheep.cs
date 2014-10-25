@@ -38,8 +38,7 @@ namespace AgentTester.Wolves.Agents {
       
       // Add perception sensor.
       PerceptionUnit.AddSensor(new DataSensor(
-        this, env,
-        (int) Grassland.InformationTypes.Agents,
+        this, env, (int) InformationTypes.AllAgents,
         new RadialHalo(Data.Position, 8))
       );
 
@@ -66,8 +65,8 @@ namespace AgentTester.Wolves.Agents {
 
       // Calculate hunger percentage, read-out nearby agents.
       int hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
-      var rawData = PerceptionUnit.GetData((int) Grassland.InformationTypes.Agents).Data;
-      var agents = ((Dictionary<long, SpatialAgent>) rawData).Values;
+      var rawData = PerceptionUnit.GetData((int) InformationTypes.AllAgents).Data;
+      var agents = ((List<SpatialAgent>) rawData);
       var grass = agents.OfType<Grass>().ToList();
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
