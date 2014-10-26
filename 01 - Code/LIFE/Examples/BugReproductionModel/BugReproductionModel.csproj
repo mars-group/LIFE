@@ -30,33 +30,34 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="CommonTypes">
-      <HintPath>..\..\packages\LayerAPI.0.1.161\lib\net45\CommonTypes.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.162\lib\net45\CommonTypes.dll</HintPath>
     </Reference>
     <Reference Include="LayerAPI">
-      <HintPath>..\..\packages\LayerAPI.0.1.161\lib\net45\LayerAPI.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.162\lib\net45\LayerAPI.dll</HintPath>
     </Reference>
     <Reference Include="LCConnector">
-      <HintPath>..\..\packages\LayerAPI.0.1.161\lib\net45\LCConnector.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.162\lib\net45\LCConnector.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\packages\LayerAPI.0.1.161\lib\net45\log4net.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.162\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
-      <HintPath>..\..\packages\LayerAPI.0.1.161\lib\net45\Mono.Addins.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.162\lib\net45\Mono.Addins.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
-      <HintPath>..\..\packages\LayerAPI.0.1.161\lib\net45\protobuf-net.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.162\lib\net45\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="Scs">
-      <HintPath>..\..\packages\LayerAPI.0.1.161\lib\net45\Scs.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.162\lib\net45\Scs.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExampleLayer.cs" />
     <Compile Include="SuicideAgent.cs" />
+    <Compile Include="BreedAgent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

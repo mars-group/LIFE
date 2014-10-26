@@ -176,9 +176,6 @@ namespace MARSLocalStarter
         private static void Main(string[] args)
         {
 
-
-
-            try {
                 Console.WriteLine("Initializing components and building application core...");
 
 
@@ -187,7 +184,7 @@ namespace MARSLocalStarter
 
 
 
-				        var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+				var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
 
 
 
@@ -201,13 +198,6 @@ namespace MARSLocalStarter
                 {
                     info = Console.ReadKey();
                 }
-            }
-            catch {
-
-              throw;
-            }
-
-
         }
     }
 }

@@ -18,8 +18,12 @@ namespace BugReproductionModel
 		public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle,
 			UnregisterAgent unregisterAgentHandle) {
 
-			for (int i = 0; i < 50000; i++) {
+			for (int i = 0; i < 50; i++) {
 				registerAgentHandle.Invoke(this, new SuicideAgent(i, this, unregisterAgentHandle));
+			}
+
+			for (int i = 0; i < 25; i++) {
+				registerAgentHandle.Invoke(this, new BreedAgent(this, registerAgentHandle, unregisterAgentHandle));
 			}
 				
 			Console.WriteLine ("Layer with equals initialized");
