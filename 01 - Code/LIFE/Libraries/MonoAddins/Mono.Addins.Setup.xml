@@ -1,13 +1,24 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>/home/lluis/work/mono-addins/bin/Mono.Addins.Setup</name>
+        <name>Mono.Addins.Setup</name>
     </assembly>
     <members>
         <member name="T:Mono.Addins.Setup.AddinHeader">
             <summary>
             Basic add-in information
             </summary>
+        </member>
+        <member name="M:Mono.Addins.Setup.AddinHeader.CompareVersionTo(Mono.Addins.Setup.AddinHeader)">
+            <summary>
+            Compares the versions of two add-ins
+            </summary>
+            <param name="other">
+            Another add-in
+            </param>
+            <returns>
+            Result of comparison
+            </returns>
         </member>
         <member name="P:Mono.Addins.Setup.AddinHeader.Id">
             <summary>
@@ -74,21 +85,81 @@
             Custom properties specified in the add-in header
             </summary>
         </member>
-        <member name="M:Mono.Addins.Setup.AddinHeader.CompareVersionTo(Mono.Addins.Setup.AddinHeader)">
+        <member name="T:Mono.Addins.Setup.Package">
             <summary>
-            Compares the versions of two add-ins
+            An add-in package
             </summary>
-            <param name="other">
-            Another add-in
+        </member>
+        <member name="M:Mono.Addins.Setup.Package.FromRepository(Mono.Addins.Setup.AddinRepositoryEntry)">
+            <summary>
+            Creates a package object for an add-in available in an on-line repository
+            </summary>
+            <param name="repAddin">
+            An add-in reference
             </param>
             <returns>
-            Result of comparison
+            The package
             </returns>
+        </member>
+        <member name="M:Mono.Addins.Setup.Package.FromFile(System.String)">
+            <summary>
+            Creates a package object for a local package file
+            </summary>
+            <param name="file">
+            Package file path
+            </param>
+            <returns>
+            The package
+            </returns>
+        </member>
+        <member name="P:Mono.Addins.Setup.Package.Name">
+            <summary>
+            Name of the package
+            </summary>
+        </member>
+        <member name="P:Mono.Addins.Setup.Package.SharedInstall">
+            <summary>
+            Returns true if the package will be installed in the shared directory, 
+            false if it will be installed in the user directory.
+            </summary>
         </member>
         <member name="T:Mono.Addins.Setup.AddinRepositoryEntry">
             <summary>
             A reference to an add-in available in an on-line repository
             </summary>
+        </member>
+        <member name="M:Mono.Addins.Setup.AddinRepositoryEntry.BeginDownloadSupportFile(System.String,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins downloading a support file
+            </summary>
+            <returns>
+            Result of the asynchronous operation, to be used when calling EndDownloadSupportFile to
+            get the download result.
+            </returns>
+            <param name='name'>
+            Name of the file.
+            </param>
+            <param name='cb'>
+            Callback to be called when the download operation ends.
+            </param>
+            <param name='state'>
+            Custom state object provided by the caller.
+            </param>
+            <remarks>
+            This method can be used to get the contents of a support file of an add-in.
+            A support file is a file referenced in the custom properties of an add-in.
+            </remarks>
+        </member>
+        <member name="M:Mono.Addins.Setup.AddinRepositoryEntry.EndDownloadSupportFile(System.IAsyncResult)">
+            <summary>
+            Gets the result of the asynchronous download of a file
+            </summary>
+            <returns>
+            The downloaded file.
+            </returns>
+            <param name='ares'>
+            The async result object returned by BeginDownloadSupportFile.
+            </param>
         </member>
         <member name="P:Mono.Addins.Setup.AddinRepositoryEntry.Addin">
             <summary>
@@ -109,39 +180,6 @@
             <summary>
             Name of the repository
             </summary>
-        </member>
-        <member name="M:Mono.Addins.Setup.AddinRepositoryEntry.BeginDownloadSupportFile(System.String,System.AsyncCallback,System.Object)">
-            <summary>
-            Begins downloading a support file
-            </summary>
-            <returns>
-            Result of the asynchronous operation, to be used when calling EndDownloadSupportFile to
-            get the download result.
-            </returns>
-            <param name="name">
-            Name of the file.
-            </param>
-            <param name="cb">
-            Callback to be called when the download operation ends.
-            </param>
-            <param name="state">
-            Custom state object provided by the caller.
-            </param>
-            <remarks>
-            This method can be used to get the contents of a support file of an add-in.
-            A support file is a file referenced in the custom properties of an add-in.
-            </remarks>
-        </member>
-        <member name="M:Mono.Addins.Setup.AddinRepositoryEntry.EndDownloadSupportFile(System.IAsyncResult)">
-            <summary>
-            Gets the result of the asynchronous download of a file
-            </summary>
-            <returns>
-            The downloaded file.
-            </returns>
-            <param name="ares">
-            The async result object returned by BeginDownloadSupportFile.
-            </param>
         </member>
         <member name="T:Mono.Addins.Setup.InstallException">
             <summary>
@@ -167,44 +205,6 @@
             Inner exception
             </param>
         </member>
-        <member name="T:Mono.Addins.Setup.Package">
-            <summary>
-            An add-in package
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.Package.Name">
-            <summary>
-            Name of the package
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.Package.SharedInstall">
-            <summary>
-            Returns true if the package will be installed in the shared directory,
-            false if it will be installed in the user directory.
-            </summary>
-        </member>
-        <member name="M:Mono.Addins.Setup.Package.FromRepository(Mono.Addins.Setup.AddinRepositoryEntry)">
-            <summary>
-            Creates a package object for an add-in available in an on-line repository
-            </summary>
-            <param name="repAddin">
-            An add-in reference
-            </param>
-            <returns>
-            The package
-            </returns>
-        </member>
-        <member name="M:Mono.Addins.Setup.Package.FromFile(System.String)">
-            <summary>
-            Creates a package object for a local package file
-            </summary>
-            <param name="file">
-            Package file path
-            </param>
-            <returns>
-            The package
-            </returns>
-        </member>
         <member name="T:Mono.Addins.Setup.PackageCollection">
             <summary>
             A collection of packages
@@ -212,7 +212,7 @@
         </member>
         <member name="M:Mono.Addins.Setup.PackageCollection.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Mono.Addins.Setup.PackageCollection" /> class.
+            Initializes a new instance of the <see cref="T:Mono.Addins.Setup.PackageCollection"/> class.
             </summary>
         </member>
         <member name="M:Mono.Addins.Setup.PackageCollection.#ctor(System.Collections.ICollection)">
@@ -221,14 +221,6 @@
             </summary>
             <param name="col">
             Collection where to copy from
-            </param>
-        </member>
-        <member name="P:Mono.Addins.Setup.PackageCollection.Item(System.Int32)">
-            <summary>
-            Gets a package
-            </summary>
-            <param name="n">
-            Package index
             </param>
         </member>
         <member name="M:Mono.Addins.Setup.PackageCollection.Add(Mono.Addins.Setup.Package)">
@@ -256,6 +248,14 @@
             </summary>
             <param name="col">
             The list of packages to add
+            </param>
+        </member>
+        <member name="P:Mono.Addins.Setup.PackageCollection.Item(System.Int32)">
+            <summary>
+            Gets a package
+            </summary>
+            <param name="n">
+            Package index
             </param>
         </member>
         <member name="T:Mono.Addins.Setup.AddinRepository">
@@ -290,10 +290,10 @@
         </member>
         <member name="P:Mono.Addins.Setup.AddinRepository.Enabled">
             <summary>
-            Gets a value indicating whether this <see cref="T:Mono.Addins.Setup.AddinRepository" /> is enabled.
+            Gets a value indicating whether this <see cref="T:Mono.Addins.Setup.AddinRepository"/> is enabled.
             </summary>
             <value>
-                <c>true</c> if enabled; otherwise, <c>false</c>.
+            <c>true</c> if enabled; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:Mono.Addins.Setup.SetupTool">
@@ -311,27 +311,6 @@
             <param name="registry">
             Add-in registry to manage.
             </param>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupTool.ApplicationName">
-            <summary>
-            Display name of the host application
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupTool.ApplicationNamespace">
-            <summary>
-            Default add-in namespace of the application (optional). If set, only add-ins that belong to that namespace
-            will be shown in add-in lists.
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupTool.VerboseOutput">
-            <summary>
-            Enables or disables verbose output
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupTool.VerboseOutputLevel">
-            <summary>
-            Sets or gets the verbose output level (0: normal output, 1:verbose, 2+:extra verbose)
-            </summary>
         </member>
         <member name="M:Mono.Addins.Setup.SetupTool.Run(System.String[],System.Int32)">
             <summary>
@@ -358,7 +337,7 @@
             0 if it succeeds. != 0 otherwise
             </returns>
         </member>
-        <!--FIXME: Invalid documentation markup was found for member M:Mono.Addins.Setup.SetupTool.AddCommand(System.String,System.String,System.String,System.String,System.String,System.String,Mono.Addins.Setup.SetupCommandHandler)-->
+        <!-- Badly formed XML comment ignored for member "M:Mono.Addins.Setup.SetupTool.AddCommand(System.String,System.String,System.String,System.String,System.String,System.String,Mono.Addins.Setup.SetupCommandHandler)" -->
         <member name="M:Mono.Addins.Setup.SetupTool.PrintHelp(System.String[])">
             <summary>
             Prints help about the add-in management tool, or about a specific command
@@ -366,6 +345,27 @@
             <param name="parms">
             Optional command name and arguments
             </param>
+        </member>
+        <member name="P:Mono.Addins.Setup.SetupTool.ApplicationName">
+            <summary>
+            Display name of the host application
+            </summary>
+        </member>
+        <member name="P:Mono.Addins.Setup.SetupTool.ApplicationNamespace">
+            <summary>
+            Default add-in namespace of the application (optional). If set, only add-ins that belong to that namespace
+            will be shown in add-in lists.
+            </summary>
+        </member>
+        <member name="P:Mono.Addins.Setup.SetupTool.VerboseOutput">
+            <summary>
+            Enables or disables verbose output
+            </summary>
+        </member>
+        <member name="P:Mono.Addins.Setup.SetupTool.VerboseOutputLevel">
+            <summary>
+            Sets or gets the verbose output level (0: normal output, 1:verbose, 2+:extra verbose)
+            </summary>
         </member>
         <member name="T:Mono.Addins.Setup.SetupCommandHandler">
             <summary>
@@ -427,10 +427,10 @@
             <summary>
             Enables or disables a repository
             </summary>
-            <param name="url">
+            <param name='url'>
             URL of the repository
             </param>
-            <param name="enabled">
+            <param name='enabled'>
             'true' if the repository has to be enabled.
             </param>
             <remarks>
@@ -547,7 +547,7 @@
             <param name="id">
             Identifier of the add-in.
             </param>
-            <param name="flags">
+            <param name='flags'>
             Search flags.
             </param>
             <returns>
@@ -590,7 +590,7 @@
             <param name="id">
             Identifier of the add-in.
             </param>
-            <param name="flags">
+            <param name='flags'>
             Search flags.
             </param>
             <returns>
@@ -623,7 +623,7 @@
             <returns>
             The available addins.
             </returns>
-            <param name="flags">
+            <param name='flags'>
             Search flags.
             </param>
             <remarks>
@@ -655,7 +655,7 @@
             <param name="repositoryUrl">
             A repository URL
             </param>
-            <param name="flags">
+            <param name='flags'>
             Search flags.
             </param>
             <returns>
@@ -744,28 +744,6 @@
             <param name="registry">
             Add-in registry to manage
             </param>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupService.Registry">
-            <summary>
-            The add-in registry being managed
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupService.ApplicationNamespace">
-            <summary>
-            Default add-in namespace of the application (optional). If set, only add-ins that belong to that namespace
-            will be shown in add-in lists.
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupService.InstallDirectory">
-            <summary>
-            Directory where to install add-ins. If not specified, the 'addins' subdirectory of the
-            registry location is used.
-            </summary>
-        </member>
-        <member name="P:Mono.Addins.Setup.SetupService.Repositories">
-            <summary>
-            Returns a RepositoryRegistry which can be used to manage on-line repository references
-            </summary>
         </member>
         <member name="M:Mono.Addins.Setup.SetupService.ResolveDependencies(Mono.Addins.IProgressStatus,Mono.Addins.Setup.AddinRepositoryEntry[],Mono.Addins.Setup.PackageCollection@,Mono.Addins.Setup.PackageCollection@,Mono.Addins.Description.DependencyCollection@)">
             <summary>
@@ -882,10 +860,10 @@
             <summary>
             Uninstalls a set of add-ins
             </summary>
-            <param name="statusMonitor">
+            <param name='statusMonitor'>
             Progress monitor where to show progress status
             </param>
-            <param name="ids">
+            <param name='ids'>
             Full identifiers of the add-ins to uninstall.
             </param>
         </member>
@@ -997,6 +975,28 @@
             A list of applications.
             </returns>
         </member>
+        <member name="P:Mono.Addins.Setup.SetupService.Registry">
+            <summary>
+            The add-in registry being managed
+            </summary>
+        </member>
+        <member name="P:Mono.Addins.Setup.SetupService.ApplicationNamespace">
+            <summary>
+            Default add-in namespace of the application (optional). If set, only add-ins that belong to that namespace
+            will be shown in add-in lists.
+            </summary>
+        </member>
+        <member name="P:Mono.Addins.Setup.SetupService.InstallDirectory">
+            <summary>
+            Directory where to install add-ins. If not specified, the 'addins' subdirectory of the
+            registry location is used.
+            </summary>
+        </member>
+        <member name="P:Mono.Addins.Setup.SetupService.Repositories">
+            <summary>
+            Returns a RepositoryRegistry which can be used to manage on-line repository references
+            </summary>
+        </member>
         <member name="T:Mono.Addins.Setup.Application">
             <summary>
             A registered extensible application
@@ -1049,7 +1049,7 @@
         </member>
         <member name="M:Mono.Addins.Setup.ConsoleAddinInstaller.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Mono.Addins.Setup.ConsoleAddinInstaller" /> class.
+            Initializes a new instance of the <see cref="T:Mono.Addins.Setup.ConsoleAddinInstaller"/> class.
             </summary>
         </member>
         <member name="P:Mono.Addins.Setup.ConsoleAddinInstaller.UserPrompt">
@@ -1060,6 +1060,50 @@
         <member name="P:Mono.Addins.Setup.ConsoleAddinInstaller.LogLevel">
             <summary>
             Log level (0:normal, 1+:verbose);
+            </summary>
+        </member>
+        <member name="T:Mono.Addins.Setup.WebRequestHelper">
+            <summary>
+            Helper for making web requests with support for authenticated proxies.
+            </summary>
+        </member>
+        <member name="M:Mono.Addins.Setup.WebRequestHelper.SetRequestHandler(System.Func{System.Func{System.Net.HttpWebRequest},System.Action{System.Net.HttpWebRequest},System.Threading.CancellationToken,System.Net.HttpWebResponse})">
+            <summary>
+            Sets a custom request handler that can handle requests for authenticated proxy servers.
+            </summary>
+            <param name="handler">The custom request handler.</param>
+        </member>
+        <member name="M:Mono.Addins.Setup.WebRequestHelper.GetResponseAsync(System.Func{System.Net.HttpWebRequest},System.Action{System.Net.HttpWebRequest},System.Threading.CancellationToken)">
+            <summary>
+            Gets the web response, using the request handler to handle proxy authentication
+            if necessary.
+            </summary>
+            <returns>The response.</returns>
+            <param name="createRequest">Callback for creating the request.</param>
+            <param name="prepareRequest">Callback for preparing the request, e.g. writing the request stream.</param>
+            <param name="token">Cancellation token.</param>
+            <remarks>
+            Keeps sending requests until a response code that doesn't require authentication happens or if the request
+            requires authentication and the user has stopped trying to enter them (i.e. they hit cancel when they are prompted).
+            </remarks>
+        </member>
+        <member name="M:Mono.Addins.Setup.WebRequestHelper.GetResponse(System.Func{System.Net.HttpWebRequest},System.Action{System.Net.HttpWebRequest},System.Threading.CancellationToken)">
+            <summary>
+            Gets the web response, using the request handler to handle proxy authentication
+            if necessary.
+            </summary>
+            <returns>The response.</returns>
+            <param name="createRequest">Callback for creating the request.</param>
+            <param name="prepareRequest">Callback for preparing the request, e.g. writing the request stream.</param>
+            <param name="token">Cancellation token.</param>
+            <remarks>
+            Keeps sending requests until a response code that doesn't require authentication happens or if the request
+            requires authentication and the user has stopped trying to enter them (i.e. they hit cancel when they are prompted).
+            </remarks>
+        </member>
+        <member name="M:Mono.Addins.Setup.WebRequestHelper.IsCannotReachInternetError(System.Net.WebExceptionStatus)">
+            <summary>
+            Determines whether an error code is likely to have been caused by internet reachability problems.
             </summary>
         </member>
     </members>

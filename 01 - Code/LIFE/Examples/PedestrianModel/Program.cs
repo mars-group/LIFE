@@ -83,27 +83,29 @@ namespace PedestrianModel
 
         var random = new Random();
         var max = 10f;
-        var pedDimension = new TVector(1f, 1f);
+        var pedDimension = new Vector(1f, 1f);
         var pedDirection = new Direction();
         pedDirection.SetPitch(0f);
         pedDirection.SetYaw(0f);
 
+        long idCounter = 0;
+
         for (var i = 0; i <= pedestrianCount; i++)
         {            
             // Random position between (0,0) and (10,10).
-            var startPos = new TVector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
-            var targetPos = new TVector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
-            new Pedestrian(obstacleEnvironment.GetNewID(), env, startPos, pedDimension, pedDirection, targetPos);
+            var startPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
+            var targetPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
+            new Pedestrian(idCounter++, env, startPos, pedDimension, pedDirection, targetPos);
         }
 
         // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
-        var obsPosition = new TVector(5f, 5f);
-        var obsDimension = new TVector(1f, 10f);
+        var obsPosition = new Vector(5f, 5f);
+        var obsDimension = new Vector(1f, 10f);
         var obsDirection = new Direction();
         obsDirection.SetPitch(0f);
         obsDirection.SetYaw(0f);
 
-        new Obstacle(obstacleEnvironment.GetNewID(), env, obsPosition, obsDimension, obsDirection);
+        new Obstacle(idCounter++, env, obsPosition, obsDimension, obsDirection);
         
 
         return obstacleEnvironment;

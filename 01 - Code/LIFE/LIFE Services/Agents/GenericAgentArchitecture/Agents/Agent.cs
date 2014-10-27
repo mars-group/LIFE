@@ -1,7 +1,7 @@
-﻿using GenericAgentArchitecture.Perception;
+﻿using System;
+using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
-
 
 namespace GenericAgentArchitecture.Agents {
 
@@ -40,9 +40,9 @@ namespace GenericAgentArchitecture.Agents {
       if (action != null) action.Execute();     // Phase 3: Execution
       Cycle ++;  
     }
- 
 
-    /// <summary>
+
+      /// <summary>
     /// Default debug output. It may be overwritten by more concrete functions.
     /// </summary>
     /// <returns>Console output string.</returns>

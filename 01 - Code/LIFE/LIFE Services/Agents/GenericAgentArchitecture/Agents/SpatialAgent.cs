@@ -1,5 +1,4 @@
-﻿using CommonTypes.TransportTypes;
-using GenericAgentArchitecture.Environments;
+﻿using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;
 
@@ -23,10 +22,9 @@ namespace GenericAgentArchitecture.Agents {
     /// <param name="id">Unique agent identifier.</param>
     /// <param name="env">Environment implementation reference.</param>
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
-    protected SpatialAgent(long id, IEnvironment env, TVector pos) : base(id) {
+    protected SpatialAgent(long id, IEnvironment env, Vector pos) : base(id) {
       _env = env;
-      Data = new MovementData(pos);  
-      _env.AddAgent(this, Data); // Enlist the agent in environment.
+      Data = _env.AddAgent(this, pos); // Enlist the agent in environment.
     }
 
 

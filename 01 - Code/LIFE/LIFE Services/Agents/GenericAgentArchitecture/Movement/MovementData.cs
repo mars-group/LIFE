@@ -1,5 +1,4 @@
 ﻿using System;
-using CommonTypes.TransportTypes;
 
 namespace GenericAgentArchitecture.Movement {
     
@@ -16,7 +15,7 @@ namespace GenericAgentArchitecture.Movement {
     ///   Create a new spatial data set.
     /// </summary>
     /// <param name="pos">The initial position (common transport vector).</param>
-    public MovementData(TVector pos) {
+    public MovementData(Vector pos) {
       if (pos == null) throw new Exception("[MovementData] Error on initialization: Position is 'null'!");
       Position = new Vector(pos.X, pos.Y, pos.Z);
       Direction = new Direction();         // Default facing is straight line northbound.

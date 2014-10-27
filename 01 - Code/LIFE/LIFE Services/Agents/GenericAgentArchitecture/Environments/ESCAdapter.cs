@@ -1,4 +1,5 @@
-﻿using CommonTypes.TransportTypes;
+﻿using System.Linq;
+using CommonTypes.TransportTypes;
 using System.Collections.Generic;
 using ESCTestLayer.Interface;
 using GenericAgentArchitecture.Agents;
@@ -9,12 +10,11 @@ namespace GenericAgentArchitecture.Environments {
     
   /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
-  /// </summary>
+  /// </summary> 
   public class ESCAdapter : IEnvironment {
 
     private readonly IESC _esc;  // Environment Service Component (ESC) implementation.
     private readonly Dictionary<SpatialAgent, MovementData> _agents; // All registered agents.
-
 
     /// <summary>
     ///   Create a new ESC adapter.
@@ -30,14 +30,15 @@ namespace GenericAgentArchitecture.Environments {
     ///   Add a new agent to the environment.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">Container with movement data.</param>
-    public void AddAgent(SpatialAgent agent, MovementData data) {
-      var dim = data.Dimension;
-      _agents.Add(agent, data);
+    /// <param name="pos">The agent's initial position.</param>
+    /// <returns>A movement data container with the initial position set.</returns>
+    public MovementData AddAgent(SpatialAgent agent, Vector pos) {
+      var mdata = new MovementData(pos); 
+      _agents.Add(agent, mdata);
+      var dim = mdata.Dimension;
       _esc.Add((int) agent.Id, 0, true, new TVector(dim.X, dim.Y, dim.Z));
-      var position = data.Position;
-      var direction = data.Direction;
-      ChangePosition(agent, position, direction);
+      ChangePosition(agent, mdata.Position, mdata.Direction);
+      return mdata;
     }
 
 
@@ -76,7 +77,8 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <returns>A list of all spatial agents.</returns>
     public List<SpatialAgent> GetAllAgents() {
-      throw new System.NotImplementedException();
+      //TODO This functionality should be implemented by the ESC.
+      return _agents.Keys.ToList();
     }
 
 

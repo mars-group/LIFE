@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommonTypes.TransportTypes;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Movement;
+using GenericAgentArchitecture.Perception;
 using LayerAPI.Interfaces;
 
 namespace GenericAgentArchitecture.Environments {
@@ -11,11 +11,11 @@ namespace GenericAgentArchitecture.Environments {
   /// <summary>
   ///   This environment adds movement support to the generic one and contains SpatialAgents. 
   /// </summary>
-  public abstract class Environment2D : Environment, IEnvironment {
+  public class Environment2D : Environment, IEnvironment {
 
     protected readonly Vector Boundaries;    // Env. extent, ranging from (0,0) to this point.
     protected readonly Dictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
-    public bool IsGrid { get; private set; }                    // Grid-based or continuous?
+    public bool IsGrid { get; private set; }                           // Grid-based or continuous?
 
 
     /// <summary>
@@ -35,10 +35,14 @@ namespace GenericAgentArchitecture.Environments {
     ///   Add an agent to the environment.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">It's movement data.</param>
-    public void AddAgent(SpatialAgent agent, MovementData data) {
-      Agents.Add(agent, data);
+    /// <param name="pos">The agent's initial position.</param>
+    /// <returns>A movement data container with the initial position set.</returns>
+    public MovementData AddAgent(SpatialAgent agent, Vector pos) {
+      if (pos == null) pos = GetRandomPosition();
+      MovementData mdata = new MovementData(pos);
+      Agents.Add(agent, mdata);
       AddAgent(agent);
+      return mdata;
     }
 
 
@@ -82,17 +86,24 @@ namespace GenericAgentArchitecture.Environments {
 
 
     /// <summary>
+    ///   This function allows execution of environment-specific code.
+    ///   The generic 2D environment does not use it. Later override possible.
+    /// </summary>
+    protected override void AdvanceEnvironment() {}
+
+
+    /// <summary>
     ///   Returns a random position.
     /// </summary>
     /// <returns>A free position.</returns>
-    public TVector GetRandomPosition() {
+    public Vector GetRandomPosition() {
       if (IsGrid) {
         bool unique;
-        TVector position;
+        Vector position;
         do {
           var x = Random.Next((int)Boundaries.X);
           var y = Random.Next((int)Boundaries.Y);
-          position = new TVector(x, y);
+          position = new Vector(x, y);
           unique = true;
           foreach (var md in Agents.Values) {
             if (md.Position.Equals(position)) {
@@ -127,10 +138,31 @@ namespace GenericAgentArchitecture.Environments {
 
     /// <summary>
     ///   This function is used by sensors to gather data from this environment.
+    ///   It contains a function for "0: Get all perceptible agents". Further refinement 
+    ///   can be made by specific environments overriding this function. 
     /// </summary>
     /// <param name="informationType">The type of information to sense.</param>
     /// <param name="geometry">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public abstract object GetData(int informationType, IGeometry geometry);
+    public virtual object GetData(int informationType, IGeometry geometry) {
+      switch (informationType) {
+        case 0: { // Zero stands here for "all agents". Enum avoided, check it elsewhere!
+          var list = new List<SpatialAgent>();
+          var halo = (Halo) geometry;
+          foreach (var agent in GetAllAgents()) {
+            if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
+                halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon) {
+              list.Add(agent); // Return value is a list of all perceptible agents.
+            }
+          }
+          return list;
+        }
+
+        // Throw exception, if wrong argument was supplied.
+        default: throw new Exception(
+          "[Environment2D] Error on GetData call. Queried '"+informationType+"', though "+
+          "only '0' is valid. Please make sure to override function in specific environment!");
+      }
+    }
   }
 }

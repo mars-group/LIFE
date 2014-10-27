@@ -23,7 +23,7 @@ namespace PedestrianModel
         /// <param name="id">Agent identifier.</param>
         /// <param name="env">Environment reference.</param>
         /// <param name="pos">Initial position.</param>
-        public Obstacle(long id, IEnvironment environment, TVector position, TVector dimension, Direction direction)
+        public Obstacle(long id, IEnvironment environment, Vector position, Vector dimension, Direction direction)
             : base(id, environment, position)
         {
             Data.Dimension.X = dimension.X;

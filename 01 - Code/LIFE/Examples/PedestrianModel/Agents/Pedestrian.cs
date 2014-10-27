@@ -21,7 +21,7 @@ namespace PedestrianModel
     {
 
         private String _name;               // Name or ID of agent
-        private TVector _targetPosition;     // Position agent tries to reach
+        private Vector _targetPosition;     // Position agent tries to reach
         private float _maxVelocity;         // Maximum movement velocity of agent
 
         private readonly IEnvironment _environment;
@@ -34,7 +34,7 @@ namespace PedestrianModel
         /// <param name="id">Agent identifier.</param>
         /// <param name="env">Environment reference.</param>
         /// <param name="pos">Initial position.</param>
-        public Pedestrian(long id, IEnvironment environment, TVector position, TVector dimension, Direction direction, TVector targetPosition, String name = "pedestrian")
+        public Pedestrian(long id, IEnvironment environment, Vector position, Vector dimension, Direction direction, Vector targetPosition, String name = "pedestrian")
             : base(id, environment, position)
         {
             _environment = environment;

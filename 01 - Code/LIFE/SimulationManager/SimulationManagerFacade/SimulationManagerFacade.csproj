@@ -48,9 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\ApplicationCoreComponent.cs" />
-    <Compile Include="Interface\ApplicationCoreFactory.cs" />
-    <Compile Include="Interface\IApplicationCore.cs" />
+    <Compile Include="Implementation\SimulationManagerApplicationCoreComponent.cs" />
+    <Compile Include="Interface\SimulationManagerApplicationCoreFactory.cs" />
+    <Compile Include="Interface\ISimulationManagerApplicationCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -94,7 +94,7 @@
       <Project>{CD379E3D-8606-4136-978A-2E1E7DD933A1}</Project>
       <Name>RuntimeEnvironment</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shared\SimulationManagerShared.csproj">
+    <ProjectReference Include="..\SimulationManagerShared\SimulationManagerShared.csproj">
       <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
       <Name>SimulationManagerShared</Name>
     </ProjectReference>

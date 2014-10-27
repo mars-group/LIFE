@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
 using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Auxiliary;
@@ -13,14 +12,18 @@ using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
  
-    internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
+  /// <summary>
+  ///   The wolf is the predator in the wolves vs. sheeps scenario. 
+  ///   It exists for a single purpose: Killing sheeps!
+  /// </summary>
+  internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
     
-    private int _energy = 80;
-    private const int EnergyMax = 100;
-    private readonly Random _random;
-    private readonly IEnvironment _environment;
-    private string _states;
-    private readonly GridMover _mover;
+    private int _energy = 80;                    // Current energy (with initial value).
+    private const int EnergyMax = 100;           // Maximum health.
+    private readonly Random _random;             // Random number generator for energy loss.
+    private readonly IEnvironment _environment;  // Environment reference for random movement.
+    private string _states;                      // Output string for console.
+    private readonly GridMover _mover;           // Specific agent mover reference (to avoid casts).
 
 
     /// <summary>
@@ -29,14 +32,14 @@ namespace AgentTester.Wolves.Agents {
     /// <param name="id">The agent identifier.</param>
     /// <param name="env">Environment reference.</param>
     /// <param name="pos">The initial position.</param>
-    public Wolf(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
+    public Wolf(long id, IEnvironment env, Vector pos = null) : base(id, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
       // Add perception sensor.
       PerceptionUnit.AddSensor(new DataSensor(
         this, env,
-        (int) Grassland.InformationTypes.Agents,
+        (int) InformationTypes.AllAgents,
         new RadialHalo(Data.Position, 8))
       );
 
@@ -46,6 +49,10 @@ namespace AgentTester.Wolves.Agents {
     }
 
 
+    /// <summary>
+    ///   The wolf reasoning logic.
+    /// </summary>
+    /// <returns>The interaction to execute.</returns>
     public IInteraction Reason() {
       
       // Energy substraction is made first. 
@@ -59,8 +66,8 @@ namespace AgentTester.Wolves.Agents {
 
       // Calculate hunger percentage, read-out nearby agents.
       var hunger = (int)(((double)(EnergyMax - _energy)/EnergyMax)*100);
-      var rawData = PerceptionUnit.GetData((int)Grassland.InformationTypes.Agents).Data;
-      var agents = ((Dictionary<long, SpatialAgent>) rawData).Values;
+      var rawData = PerceptionUnit.GetData((int)InformationTypes.AllAgents).Data;
+      var agents = ((List<SpatialAgent>) rawData);
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
       

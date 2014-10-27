@@ -10,15 +10,14 @@ namespace GenericAgentArchitecture.Environments {
   ///   Base class for an environment. This is an agent container with several access options.
   /// </summary>
   public abstract class Environment : ITickClient {
-
-    private long _idCounter;                    // This counter is needed for agent ID distribution.
+   
     private int _execCounter;                   // Pointer to the selected agent during execution.
     private List<Agent> _execList;              // Execution schedule (list optionally shuffled).
     private readonly List<Agent> _agents;       // The agents living in this environment.
     protected readonly Random Random;           // Random number generator.
     protected long Cycle { get; private set; }  // Counter for execution cycle.
-    public bool PrintInformation { get; set; }  // Controls debug information output.
     public bool RandomExecution  { get; set; }  // Flag to set random or sequential execution. 
+    public long IDCounter { get; private set; } // This counter is needed for agent ID distribution.
 
 
     /// <summary>
@@ -29,7 +28,7 @@ namespace GenericAgentArchitecture.Environments {
       _execList = new List<Agent>();
       Random = new Random();
       Cycle = 0;
-      _idCounter = 0;
+      IDCounter = 0;
     }
 
 
@@ -66,6 +65,7 @@ namespace GenericAgentArchitecture.Environments {
     protected void AddAgent(Agent agent) {
       _agents.Add(agent);
       _execList.Add(agent);
+      IDCounter ++;
     }
 
 
@@ -86,15 +86,6 @@ namespace GenericAgentArchitecture.Environments {
     /// <returns>A read-only list of all available agents.</returns>
     protected IEnumerable<Agent> GetAllAgents() {
       return new ReadOnlyCollection<Agent>(_agents);
-    }
-
-
-    /// <summary>
-    ///   Get a new agent ID and increase the counter.
-    /// </summary>
-    /// <returns>A unused ID.</returns>
-    public long GetNewID() {
-      return _idCounter++;
     }
 
 
