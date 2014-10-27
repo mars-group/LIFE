@@ -17,7 +17,7 @@ namespace PedestrianModel
   /// <summary>
   ///   This class periodicly triggers the environment and thereby all agents.
   /// </summary>
-  internal class Program {
+  internal class LocalStarter {
     
     private readonly ITickClient _environment; // The agent container.
     private readonly ConsoleView _view;        // The console view module.
@@ -28,7 +28,7 @@ namespace PedestrianModel
     ///   <param name="environment">The environment to execute.</param>
     ///   <param name="view">The console view module.</param>
     /// </summary>
-    private Program(ITickClient environment, ConsoleView view) {
+    private LocalStarter(ITickClient environment, ConsoleView view) {
       _environment = environment;
       _view = view;
     }
@@ -60,7 +60,7 @@ namespace PedestrianModel
       //var environment = CreateScenarioEnvironment(10, new ESC());
       var environment = CreateScenarioEnvironment(10);
       var view = CreateConsoleView((ObstacleEnvironment) environment);
-      new Program(environment, view).Run(0);
+      new LocalStarter(environment, view).Run(0);
     }
 
     private static ConsoleView CreateConsoleView(ObstacleEnvironment environment)
@@ -90,7 +90,7 @@ namespace PedestrianModel
 
         long idCounter = 0;
 
-        for (var i = 0; i <= pedestrianCount; i++)
+        for (var i = 0; i < pedestrianCount; i++)
         {            
             // Random position between (0,0) and (10,10).
             var startPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
