@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentLayerImpl.cs" />
     <Compile Include="Agents\Reasoning\Util\Pathfinding\Astar\AStarNode.cs" />
     <Compile Include="Agents\Reasoning\Util\Pathfinding\Astar\AStarPathfinder.cs" />
     <Compile Include="Agents\Reasoning\Util\Pathfinding\IPathfinder.cs" />
@@ -59,7 +60,7 @@
     <Compile Include="Agents\Reasoning\Util\Pathfinding\UnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="LocalStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Agents\Obstacle.cs" />
   </ItemGroup>
