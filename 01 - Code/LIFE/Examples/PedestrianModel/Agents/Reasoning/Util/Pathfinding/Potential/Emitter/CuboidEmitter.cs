@@ -44,7 +44,7 @@ namespace de.haw.walk.agent.util.pathfinding.potential.emitter
 		public CuboidEmitter(Vector3D startPoint, Vector3D size, UnivariateRealFunction function)
 		{
 			//this.start = startPoint.subtract(1.0 / 2.0, size);
-            this.start = Vector3D.Subtract(startPoint, Vector3D.Divide(size, 2d));
+            this.start = Vector3D.Subtract(startPoint, Vector3D.Multiply(0.5, size));
 			this.size = size;
 			this.function = function;
 		}

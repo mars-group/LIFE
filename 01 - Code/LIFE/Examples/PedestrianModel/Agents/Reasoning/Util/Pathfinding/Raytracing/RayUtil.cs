@@ -38,10 +38,13 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 
 			foreach (SimulationObject so in objects)
 			{
-				Vector3D intersect = GetIntersect(orign, direction, so);
-				if (!intersect.NaN)
+				//Vector3D intersect = GetIntersect(orign, direction, so);
+                Vector3D? intersect = GetIntersect(orign, direction, so);
+				//if (!intersect.NaN)
+                if (intersect.HasValue)
 				{
-					double distance = orign.distance(intersect);
+                    //double distance = orign.distance(intersect);
+                    double distance = Distance(orign, intersect.Value);
 					if (distance < minDistance)
 					{
 						result = so;
@@ -61,12 +64,14 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="direction"> the ray direction </param>
 		/// <param name="so"> the object to intersect </param>
 		/// <returns> the intersection point or NaN </returns>
-		public static Vector3D GetIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
+		//public static Vector3D GetIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
+        public static Vector3D? GetIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
 		{
 			Vector3D position = so.Position;
 			Vector3D bounds = so.Bounds;
 
-			return GetIntersectWithBox(orign, direction, position.add(-0.5, bounds), position.add(0.5, bounds));
+			//return GetIntersectWithBox(orign, direction, position.add(-0.5, bounds), position.add(0.5, bounds));
+            return GetIntersectWithBox(orign, direction, Vector3D.Add(position, Vector3D.Multiply(-0.5, bounds)), Vector3D.Add(position, Vector3D.Multiply(0.5, bounds)));
 		}
 
 		/// <summary>
@@ -78,7 +83,8 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="boxMin"> the lower corner of the AABB </param>
 		/// <param name="boxMax"> the upper corner of the AABB </param>
 		/// <returns> the intersection point or NaN </returns>
-		public static Vector3D GetIntersectWithBox(Vector3D rayOrign, Vector3D rayDirection, Vector3D boxMin, Vector3D boxMax)
+		//public static Vector3D GetIntersectWithBox(Vector3D rayOrign, Vector3D rayDirection, Vector3D boxMin, Vector3D boxMax)
+        public static Vector3D? GetIntersectWithBox(Vector3D rayOrign, Vector3D rayDirection, Vector3D boxMin, Vector3D boxMax)
 		{
 			double tNear = double.NegativeInfinity;
 			double tFar = double.PositiveInfinity;
@@ -88,21 +94,24 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			{
 				if (!(boxMin.X < rayOrign.X && rayOrign.X < boxMax.X))
 				{
-					return Vector3D.NaN;
+					//return Vector3D.NaN;
+                    return null;
 				}
 			}
 			if (rayDirection.Y == 0)
 			{
 				if (!(boxMin.Y < rayOrign.Y && rayOrign.Y < boxMax.Y))
 				{
-					return Vector3D.NaN;
+					//return Vector3D.NaN;
+                    return null;
 				}
 			}
 			if (rayDirection.Z == 0)
 			{
 				if (!(boxMin.Z < rayOrign.Z && rayOrign.Z < boxMax.Z))
 				{
-					return Vector3D.NaN;
+					//return Vector3D.NaN;
+                    return null;
 				}
 			}
 
@@ -119,7 +128,8 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			// the ray starts after the object
 			if (tXFar < 0)
 			{
-				return Vector3D.NaN;
+				//return Vector3D.NaN;
+                return null;
 			}
 			tNear = tXNear;
 			tFar = tXFar;
@@ -137,12 +147,14 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			// the ray starts after the object
 			if (tYFar < 0)
 			{
-				return Vector3D.NaN;
+				//return Vector3D.NaN;
+                return null;
 			}
 			// intersections of single plains don't overlap, so no intersection at all
 			if (tNear > tYFar || tYNear > tFar)
 			{
-				return Vector3D.NaN;
+				//return Vector3D.NaN;
+                return null;
 			}
 			tNear = Math.Max(tNear, tYNear);
 			tFar = Math.Min(tFar, tYFar);
@@ -160,17 +172,20 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			// the ray starts after the object
 			if (tZFar < 0)
 			{
-				return Vector3D.NaN;
+				//return Vector3D.NaN;
+                return null;
 			}
 			// intersections of single plains don't overlap, so no intersection at all
 			if (tNear > tZFar || tZNear > tFar)
 			{
-				return Vector3D.NaN;
+				//return Vector3D.NaN;
+                return null;
 			}
 			tNear = Math.Max(tNear, tZNear);
 			tFar = Math.Min(tFar, tZFar);
 
-			return rayOrign.add(tNear, rayDirection);
+			//return rayOrign.add(tNear, rayDirection);
+            return Vector3D.Add(rayOrign, Vector3D.Multiply(tNear, rayDirection));
 		}
 
 		/// <summary>
@@ -185,14 +200,18 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		{
 			double minDistance = double.MaxValue;
 
-			Vector3D direction = target.subtract(orign);
+			//Vector3D direction = target.subtract(orign);
+            Vector3D direction = Vector3D.Subtract(target, orign);
 
 			foreach (SimulationObject so in obstacles)
 			{
-				Vector3D intersect = GetIntersect(orign, direction, so);
-				if (!intersect.NaN)
+				//Vector3D intersect = GetIntersect(orign, direction, so);
+                Vector3D? intersect = GetIntersect(orign, direction, so);
+				//if (!intersect.NaN)
+                if (intersect.HasValue)
 				{
-					double distance = orign.distance(intersect);
+					//double distance = orign.distance(intersect);
+                    double distance = Distance(orign, intersect.value);
 					if (distance < minDistance)
 					{
 						minDistance = distance;
@@ -200,8 +219,17 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 				}
 			}
 
-			return orign.distance(target) < minDistance;
+			//return orign.distance(target) < minDistance;
+            return Distance(orign, target) < minDistance;
 		}
+
+        public static double Distance(Vector3D from, Vector3D to)
+        {
+            double dx = to.X - from.X;
+            double dy = to.Y - from.Y;
+            double dz = to.Z - from.Z;
+            return Math.Sqrt(dx * dx + dy * dy + dz * dz);
+        }
 	}
 
 }
