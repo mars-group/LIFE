@@ -44,7 +44,8 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
 		public RaytracingGraph(string simulationId, IList<SimulationObject> obstacles, double yValue, double waypointEdgeDistance)
 		{
-			IList<Vector3D> edgePoints = new List<Vector3D>();
+			//IList<Vector3D> edgePoints = new List<Vector3D>();
+            List<Vector3D> edgePoints = new List<Vector3D>();
 			this.obstacles = obstacles;
 
 			lock (GLOBAL_GRAPH_CACHE)
@@ -101,7 +102,8 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 			IList<Vector3D> edgePoints = new List<Vector3D>();
 
 			Vector3D position = obstacle.Position;
-			Vector3D boundsHalf = ((Vector3D) obstacle.Bounds).scalarMultiply(0.5);
+			//Vector3D boundsHalf = ((Vector3D) obstacle.Bounds).scalarMultiply(0.5);
+            Vector3D boundsHalf = Vector3D.Multiply(0.5, obstacle.Bounds);
 
 			// if the yValue is lower or higher than the obstacle, there are no edge points
 			if (position.Y - boundsHalf.Y - waypointEdgeDistance > yValue || position.Y + boundsHalf.Y + waypointEdgeDistance < yValue)
@@ -150,12 +152,14 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 
 		public double Distance(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
 		{
-			return from.AdaptedObject.distance(to.AdaptedObject);
+			//return from.AdaptedObject.distance(to.AdaptedObject);
+            return RayUtil.Distance(from.AdaptedObject, to.AdaptedObject);
 		}
 
 		public double GetHeuristic(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
 		{
-			return from.AdaptedObject.distance(to.AdaptedObject);
+			//return from.AdaptedObject.distance(to.AdaptedObject);
+            return RayUtil.Distance(from.AdaptedObject, to.AdaptedObject);
 		}
 
 		/// <returns> the targetPosition </returns>
