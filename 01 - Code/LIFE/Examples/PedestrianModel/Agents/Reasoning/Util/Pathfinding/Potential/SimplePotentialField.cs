@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,8 @@ namespace de.haw.walk.agent.util.pathfinding.potential
 		{
 			get
 			{
-				return Collections.unmodifiableSet(potentialEmitters);
+				//return Collections.unmodifiableSet(potentialEmitters);
+                return potentialEmitters.ToList<PotentialEmitter>().AsReadOnly();
 			}
 		}
 

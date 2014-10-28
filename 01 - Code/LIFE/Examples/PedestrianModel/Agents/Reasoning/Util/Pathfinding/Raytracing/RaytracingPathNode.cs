@@ -57,9 +57,12 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 
 		public sealed override int GetHashCode()
 		{
-			long x = Math.Round(obj.X * 100);
-			long y = Math.Round(obj.Y * 100);
-			long z = Math.Round(obj.Z * 100);
+			//long x = Math.Round(obj.X * 100);
+			//long y = Math.Round(obj.Y * 100);
+			//long z = Math.Round(obj.Z * 100);
+            long x = (long)Math.Round(obj.X * 100);
+            long y = (long)Math.Round(obj.Y * 100);
+            long z = (long)Math.Round(obj.Z * 100);
 
 			const int prime = 31;
 			int result = 1;
