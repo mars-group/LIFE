@@ -81,7 +81,7 @@ namespace AgentTester.Wolves {
     ///   Start the executor!
     /// </summary>
     public static void Main() {
-      var environment = CreateWolvesScenarioEnvironment(10, 5, 0, false);
+      var environment = CreateWolvesScenarioEnvironment(10, 5, 2, false);
       var view = CreateWolvesView(environment);
       new Executor((Environment) environment, view).Run(750);      
     }

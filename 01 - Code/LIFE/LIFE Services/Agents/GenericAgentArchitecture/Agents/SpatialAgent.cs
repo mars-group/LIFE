@@ -1,5 +1,4 @@
-﻿using System;
-using GenericAgentArchitecture.Environments;
+﻿using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;
 
@@ -35,9 +34,7 @@ namespace GenericAgentArchitecture.Agents {
     /// </summary>
     protected override void Remove() {
       _env.RemoveAgent(this);
-      Console.ForegroundColor = ConsoleColor.Red;
-      Console.WriteLine("["+Cycle+"] Agent "+Id+" was removed.");
-      Console.ForegroundColor = ConsoleColor.Gray;      
+      //ConsoleView.AddMessage("["+Cycle+"] Agent "+Id+" was removed.", ConsoleColor.Red);
     }
 
 

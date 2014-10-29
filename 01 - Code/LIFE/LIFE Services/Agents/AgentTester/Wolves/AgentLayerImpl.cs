@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Agents;
-using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Auxiliary;
 using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Perception;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 
@@ -46,8 +44,8 @@ namespace AgentTester.Wolves {
       _env = new LayerEnvironment(null, registerAgentHandle, unregisterAgentHandle, this);
 
       // Create some initial agents.
-      for (var i = 0; i < 14; i ++) new Grass(_idCounter++, _env);
-      for (var i = 0; i < 10; i ++) new Sheep(_idCounter++, _env);
+      for (var i = 0; i < 10; i ++) new Grass(_idCounter++, _env);
+      for (var i = 0; i <  5; i ++) new Sheep(_idCounter++, _env);
       for (var i = 0; i <  2; i ++) new Wolf (_idCounter++, _env);
 
       // Register the layer itself for execution. The agents are registered by themselves.
@@ -62,20 +60,13 @@ namespace AgentTester.Wolves {
     /// </summary>
     public void Tick() {
       var grassCount = _env.GetAllAgents().OfType<Grass>().Count();
-      var create = _random.Next(40 + grassCount) < 18;
-      if (create) new Grass(_idCounter++, _env);
+      var create = _random.Next(50 + grassCount) < 15;
+      if (create) {
+        var g = new Grass(_idCounter++, _env);
+        ConsoleView.AddMessage("["+_tick+"] Neues Gras (ID "+(_idCounter-1)+") wächst auf "+g.GetPosition()+".", 
+          ConsoleColor.Cyan);
+      }
       _tick ++;  
-    }
-
-
-    /// <summary>
-    ///   Print a list of all agents to console window.
-    /// </summary>
-    private void PrintAgents() {
-      Console.WriteLine("\nTotal agent output:");
-      Console.WriteLine("-------------------");
-      var agts = (List<SpatialAgent>)_env.GetData(0, new OmniHalo());
-      foreach (var a in agts) Console.WriteLine(a.ToString());      
     }
 
 

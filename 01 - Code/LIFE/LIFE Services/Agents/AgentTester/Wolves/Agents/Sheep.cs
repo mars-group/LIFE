@@ -93,6 +93,7 @@ namespace AgentTester.Wolves.Agents {
         // R1: Eat nearby grass.
         if (dist <= 1.4143 && hunger > 20) {
           _states += "R1";
+          ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" frißt Gras "+grs.Id+"!", ConsoleColor.Green);
           return new EatInteraction(this, grs);
         }
 

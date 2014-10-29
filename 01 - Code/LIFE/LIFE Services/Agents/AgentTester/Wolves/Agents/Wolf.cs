@@ -92,8 +92,7 @@ namespace AgentTester.Wolves.Agents {
         // R1: If there is a sheep directly ahead and hunger > 20%, eat it!
         if (dist <= 1 && hunger >= 20) {
           _states += "R1";
-          //ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Red);
-          Console.WriteLine("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!");
+          ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Blue);
           return new EatInteraction(this, sheep);
         }
 
@@ -118,7 +117,7 @@ namespace AgentTester.Wolves.Agents {
       // R4: Perform random movement.
       _states += "R4";
       if (_environment is Environment2D) {
-        var pos = ((Environment2D) _environment).GetRandomPosition();
+        var pos = ((Environment2D) _environment).GetRandomPosition();     
         var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
         return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
       }

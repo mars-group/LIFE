@@ -72,8 +72,7 @@ namespace GenericAgentArchitecture.Environments {
     public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
       
       // Return, if position is already blocked.
-      if (! CheckPosition(position) || Agents.ContainsKey(agent)) return;
-      
+      if (! CheckPosition(position) || !Agents.ContainsKey(agent)) return;
       // Set the values.
       Agents[agent].Position.X = position.X;
       Agents[agent].Position.Y = position.Y;
