@@ -6,13 +6,14 @@ using GenericAgentArchitecture.Movement.Actions;
 using GenericAgentArchitecture.Movement.Movers;
 using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
+using PedestrianModel.Environment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PedestrianModel
+namespace PedestrianModel.Agents
 {
     /// <summary>
     ///   A pedestrian agent which moves to a target position using wayfinding and collision avoidance.

@@ -5,6 +5,8 @@ using GenericAgentArchitecture.Auxiliary;
 using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
+using PedestrianModel.Agents;
+using PedestrianModel.Environment;
 using System;
 using System.Collections.Generic;
 using System.Linq;

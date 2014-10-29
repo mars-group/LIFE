@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
-namespace de.haw.walk.agent.util.pathfinding.potential
+namespace PedestrianModel.Agents.Reasoning.Util.Pathfinding.Potential
 {
 
 	/// 

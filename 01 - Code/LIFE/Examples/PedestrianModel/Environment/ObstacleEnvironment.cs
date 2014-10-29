@@ -2,13 +2,14 @@
 using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Perception;
+using PedestrianModel.Agents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PedestrianModel
+namespace PedestrianModel.Environment
 {
     /// <summary>
     ///   An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.

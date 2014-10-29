@@ -5,6 +5,7 @@ using GenericAgentArchitecture.Environments;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 using GenericAgentArchitecture.Movement;
+using PedestrianModel.Agents;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]

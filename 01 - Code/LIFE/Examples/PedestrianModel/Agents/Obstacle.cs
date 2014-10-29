@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PedestrianModel
+namespace PedestrianModel.Agents
 {
     /// <summary>
     ///   A passive obstacle agent which is used to create obstacles like walls.
