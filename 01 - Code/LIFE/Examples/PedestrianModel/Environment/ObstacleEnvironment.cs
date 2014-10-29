@@ -1,5 +1,6 @@
 ﻿using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Perception;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,11 @@ namespace PedestrianModel
     /// </summary>
     internal class ObstacleEnvironment : Environment2D
     {
+
+        /// <summary>
+        ///   Create a new environment.
+        /// </summary>
+        public ObstacleEnvironment() : base(new Vector(1000, 1000), false) { }
 
         /* Data source functions: Information types and retrieval method. */
         public enum InformationTypes { Obstacles, Pedestrians }

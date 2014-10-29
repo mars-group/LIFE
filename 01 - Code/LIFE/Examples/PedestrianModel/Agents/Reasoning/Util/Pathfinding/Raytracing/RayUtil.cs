@@ -218,7 +218,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
                 if (intersect.HasValue)
 				{
 					//double distance = orign.distance(intersect);
-                    double distance = Distance(orign, intersect.value);
+                    double distance = Distance(orign, intersect.Value);
 					if (distance < minDistance)
 					{
 						minDistance = distance;
