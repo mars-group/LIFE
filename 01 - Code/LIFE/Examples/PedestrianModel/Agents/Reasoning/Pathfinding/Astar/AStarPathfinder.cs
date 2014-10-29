@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PedestrianModel.Agents.Reasoning.Util.Pathfinding.Astar
+namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar
 {
 
 	/// 
@@ -91,9 +91,9 @@ namespace PedestrianModel.Agents.Reasoning.Util.Pathfinding.Astar
 		{
 			private readonly AStarPathfinder<E> outerInstance;
 
-            private PedestrianModel.Agents.Reasoning.Util.Pathfinding.Astar.AStarNode<E> toNode;
+            private PedestrianModel.Agents.Reasoning.Pathfinding.Astar.AStarNode<E> toNode;
 
-            public ComparatorAnonymousInnerClassHelper(AStarPathfinder<E> outerInstance, PedestrianModel.Agents.Reasoning.Util.Pathfinding.Astar.AStarNode<E> toNode)
+            public ComparatorAnonymousInnerClassHelper(AStarPathfinder<E> outerInstance, PedestrianModel.Agents.Reasoning.Pathfinding.Astar.AStarNode<E> toNode)
 			{
 				this.outerInstance = outerInstance;
 				this.toNode = toNode;

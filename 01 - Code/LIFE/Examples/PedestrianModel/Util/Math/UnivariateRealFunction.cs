@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PedestrianModel.Agents.Reasoning.Util.Pathfinding
+namespace PedestrianModel.Util.Math
 {
     public interface UnivariateRealFunction
     {

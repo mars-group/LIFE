@@ -1,4 +1,4 @@
-﻿using PedestrianModel.Agents.Reasoning.Util.Pathfinding;
+﻿using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
-namespace PedestrianModel.Agents.Reasoning.Util.Pathfinding.Potential.Emitter
+namespace PedestrianModel.Agents.Reasoning.Pathfinding.Potential.Emitter
 {
 
 	/// <summary>

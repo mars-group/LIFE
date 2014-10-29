@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
-namespace PedestrianModel.Agents.Reasoning.Util.Pathfinding.Raytracing
+namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 {
 
 	/// <summary>
