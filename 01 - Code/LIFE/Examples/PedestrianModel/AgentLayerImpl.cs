@@ -5,12 +5,11 @@ using GenericAgentArchitecture.Environments;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 using GenericAgentArchitecture.Movement;
-using PedestrianModel;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
 
-namespace AgentTester.Wolves
+namespace PedestrianModel
 {
 
     /// <summary>
