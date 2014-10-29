@@ -58,7 +58,7 @@ namespace AgentTester.Wolves.Agents {
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
         ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
-        Remove();
+        IsAlive = false;
         return null;
       }
 
@@ -164,7 +164,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      Remove();
+      IsAlive = false;
     }
   }
 }

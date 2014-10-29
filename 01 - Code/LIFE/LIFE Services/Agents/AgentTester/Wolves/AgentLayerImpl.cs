@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Agents;
-using ESCTestLayer.Implementation;
+using GenericAgentArchitecture.Agents;
 using GenericAgentArchitecture.Environments;
+using GenericAgentArchitecture.Perception;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 
@@ -16,11 +18,11 @@ namespace AgentTester.Wolves {
   /// </summary>
   public enum InformationTypes { AllAgents, Grass, Sheeps, Wolves }     
 
-
   /// <summary>
   ///   This layer implementation contains a predator-prey simulation (wolves vs. sheeps vs. grass).
   ///   It uses the Generic Agent Architecture and serves as an example for other agent models.
   /// </summary>
+  [Extension(typeof (ISteppedLayer))]
   public class AgentLayerImpl : ISteppedLayer, ITickClient {
 
     private long _tick;            // Counter of current tick.    
@@ -44,8 +46,8 @@ namespace AgentTester.Wolves {
       _env = new LayerEnvironment(null, registerAgentHandle, unregisterAgentHandle, this);
 
       // Create some initial agents.
-      for (var i = 0; i < 12; i ++) new Grass(_idCounter++, _env);
-      for (var i = 0; i <  6; i ++) new Sheep(_idCounter++, _env);
+      for (var i = 0; i < 14; i ++) new Grass(_idCounter++, _env);
+      for (var i = 0; i < 10; i ++) new Sheep(_idCounter++, _env);
       for (var i = 0; i <  2; i ++) new Wolf (_idCounter++, _env);
 
       // Register the layer itself for execution. The agents are registered by themselves.
@@ -60,10 +62,20 @@ namespace AgentTester.Wolves {
     /// </summary>
     public void Tick() {
       var grassCount = _env.GetAllAgents().OfType<Grass>().Count();
-      var create = _random.Next(40 + grassCount) < 20;
-      if (create) new Grass(_idCounter++, _env);   
-      _tick ++;
-      //TODO Output function needed!
+      var create = _random.Next(40 + grassCount) < 18;
+      if (create) new Grass(_idCounter++, _env);
+      _tick ++;  
+    }
+
+
+    /// <summary>
+    ///   Print a list of all agents to console window.
+    /// </summary>
+    private void PrintAgents() {
+      Console.WriteLine("\nTotal agent output:");
+      Console.WriteLine("-------------------");
+      var agts = (List<SpatialAgent>)_env.GetData(0, new OmniHalo());
+      foreach (var a in agts) Console.WriteLine(a.ToString());      
     }
 
 

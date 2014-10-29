@@ -17,8 +17,8 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="pos">The agent's initial position.</param>
-    /// <returns>A movement data container with the initial position set.</returns>
-    MovementData AddAgent(SpatialAgent agent, Vector pos);
+    /// <param name="mdata">The movement data container reference.</param>
+    void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata);
 
 
     /// <summary>

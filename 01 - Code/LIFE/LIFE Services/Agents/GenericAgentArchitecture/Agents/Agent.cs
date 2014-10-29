@@ -1,5 +1,4 @@
-﻿using System;
-using GenericAgentArchitecture.Perception;
+﻿using GenericAgentArchitecture.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 
@@ -15,6 +14,7 @@ namespace GenericAgentArchitecture.Agents {
     public long Cycle { get; protected set; }          // The current execution cycle.   
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
     protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.     
+    protected bool IsAlive;                            // Alive flag for execution and deletion checks.
 
 
     /// <summary>
@@ -24,6 +24,7 @@ namespace GenericAgentArchitecture.Agents {
     /// <param name="id">A unique identifier, shall be used for log and communication.</param>
     protected Agent(long id) {
       Id = id;
+      IsAlive = true;
       PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;    
     }
@@ -35,19 +36,26 @@ namespace GenericAgentArchitecture.Agents {
     /// The execution is governed by some external runtime manager. 
     /// </summary>
     public void Tick() {
-      PerceptionUnit.SenseAll();                // Phase 1: Perception
-      var action = ReasoningComponent.Reason(); // Phase 2: Reasoning
-      if (action != null) action.Execute();     // Phase 3: Execution
+      PerceptionUnit.SenseAll();                       // Phase 1: Perception
+      var action = ReasoningComponent.Reason();        // Phase 2: Reasoning      
+      if (IsAlive && action != null) action.Execute(); // Phase 3: Execution
+      else if (!IsAlive) Remove();                     // Agent deletion.      
       Cycle ++;  
     }
 
 
-      /// <summary>
+    /// <summary>
     /// Default debug output. It may be overwritten by more concrete functions.
     /// </summary>
     /// <returns>Console output string.</returns>
     public new virtual string ToString() {
       return "Agent: " + Id + "\t  Cycle: " + Cycle;
     }
+
+
+    /// <summary>
+    ///   Empty hull for override methods called on deletion. 
+    /// </summary>
+    protected virtual void Remove () {}
   }
 }

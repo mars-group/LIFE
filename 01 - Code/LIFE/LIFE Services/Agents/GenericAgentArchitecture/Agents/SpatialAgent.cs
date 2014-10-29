@@ -1,4 +1,5 @@
-﻿using GenericAgentArchitecture.Environments;
+﻿using System;
+using GenericAgentArchitecture.Environments;
 using GenericAgentArchitecture.Movement;
 using GenericAgentArchitecture.Movement.Movers;
 
@@ -14,7 +15,7 @@ namespace GenericAgentArchitecture.Agents {
     private readonly IEnvironment _env;    // IESC implementation for collision detection.
     protected readonly MovementData Data;  // Container for position, direction and speeds.
     protected AgentMover Mover;            // Class for agent movement. 
-
+    
 
     /// <summary>
     ///   Instantiate a new agent with spatial data. Only available for specializations.
@@ -24,17 +25,20 @@ namespace GenericAgentArchitecture.Agents {
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
     protected SpatialAgent(long id, IEnvironment env, Vector pos) : base(id) {
       _env = env;
-      Data = _env.AddAgent(this, pos); // Enlist the agent in environment.
+      _env.AddAgent(this, pos, out Data); // Enlist the agent in environment.
     }
 
 
     /// <summary>
     ///   This function unbinds the agent from the environment.
-    ///   It is intended to be called by an interaction method.
+    ///   It is triggered by the base agent, when alive flag on 'false'.
     /// </summary>
-    protected void Remove() {
+    protected override void Remove() {
       _env.RemoveAgent(this);
-    } 
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("["+Cycle+"] Agent "+Id+" was removed.");
+      Console.ForegroundColor = ConsoleColor.Gray;      
+    }
 
 
     //-------------------------------------------------------------------------

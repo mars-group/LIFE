@@ -31,14 +31,13 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="pos">The agent's initial position.</param>
-    /// <returns>A movement data container with the initial position set.</returns>
-    public MovementData AddAgent(SpatialAgent agent, Vector pos) {
-      var mdata = new MovementData(pos); 
+    /// <param name="mdata">The movement data container reference.</param>
+    public void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata) {
+      mdata = new MovementData(pos); 
       _agents.Add(agent, mdata);
       var dim = mdata.Dimension;
       _esc.Add((int) agent.Id, 0, true, new TVector(dim.X, dim.Y, dim.Z));
       ChangePosition(agent, mdata.Position, mdata.Direction);
-      return mdata;
     }
 
 

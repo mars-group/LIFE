@@ -66,7 +66,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      Remove();
+      IsAlive = false;
     }
   }
 }
