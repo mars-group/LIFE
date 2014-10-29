@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,12 +33,13 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="direction"> the direction of the ray </param>
 		/// <param name="objects"> the objects to search intersects with </param>
 		/// <returns> the intersecting object or null </returns>
-		public static SimulationObject PickRay(Vector3D orign, Vector3D direction, ICollection<SimulationObject> objects)
+		//public static SimulationObject PickRay(Vector3D orign, Vector3D direction, ICollection<SimulationObject> objects)
+        public static SpatialAgent PickRay(Vector3D orign, Vector3D direction, ICollection<SpatialAgent> objects)
 		{
-			SimulationObject result = null;
+			SpatialAgent result = null;
 			double minDistance = double.MaxValue;
 
-			foreach (SimulationObject so in objects)
+			foreach (SpatialAgent so in objects)
 			{
 				//Vector3D intersect = GetIntersect(orign, direction, so);
                 Vector3D? intersect = GetIntersect(orign, direction, so);
@@ -65,10 +68,14 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="so"> the object to intersect </param>
 		/// <returns> the intersection point or NaN </returns>
 		//public static Vector3D GetIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
-        public static Vector3D? GetIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
+        public static Vector3D? GetIntersect(Vector3D orign, Vector3D direction, SpatialAgent so)
 		{
-			Vector3D position = so.Position;
-			Vector3D bounds = so.Bounds;
+			//Vector3D position = so.Position;
+            Vector tempPosition = so.GetPosition();
+            Vector3D position = new Vector3D(tempPosition.X, tempPosition.Y, tempPosition.Z);
+			//Vector3D bounds = so.Bounds;
+            Vector tempBounds = so.GetDimension();
+            Vector3D bounds = new Vector3D(tempBounds.X, tempBounds.Y, tempBounds.Z);
 
 			//return GetIntersectWithBox(orign, direction, position.add(-0.5, bounds), position.add(0.5, bounds));
             return GetIntersectWithBox(orign, direction, Vector3D.Add(position, Vector3D.Multiply(-0.5, bounds)), Vector3D.Add(position, Vector3D.Multiply(0.5, bounds)));
@@ -196,14 +203,14 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="target"> the target point </param>
 		/// <param name="obstacles"> the obstacles </param>
 		/// <returns> true if the points are visible to each other, othervise false </returns>
-		public static bool IsVisible(Vector3D orign, Vector3D target, IList<SimulationObject> obstacles)
+		public static bool IsVisible(Vector3D orign, Vector3D target, IList<SpatialAgent> obstacles)
 		{
 			double minDistance = double.MaxValue;
 
 			//Vector3D direction = target.subtract(orign);
             Vector3D direction = Vector3D.Subtract(target, orign);
 
-			foreach (SimulationObject so in obstacles)
+			foreach (SpatialAgent so in obstacles)
 			{
 				//Vector3D intersect = GetIntersect(orign, direction, so);
                 Vector3D? intersect = GetIntersect(orign, direction, so);

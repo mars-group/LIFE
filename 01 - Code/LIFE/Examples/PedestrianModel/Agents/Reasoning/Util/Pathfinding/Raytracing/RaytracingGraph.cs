@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GenericAgentArchitecture.Agents;
+using GenericAgentArchitecture.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +30,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <summary>
 		/// All obstacles in the graph.
 		/// </summary>
-		private readonly IList<SimulationObject> obstacles;
+		private readonly IList<SpatialAgent> obstacles;
 
 		/// <summary>
 		/// The target position for the graph.
@@ -42,7 +44,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="obstacles"> a collection of all obstacles </param>
 		/// <param name="yValue"> the height of all graph points </param>
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
-		public RaytracingGraph(string simulationId, IList<SimulationObject> obstacles, double yValue, double waypointEdgeDistance)
+		public RaytracingGraph(string simulationId, IList<SpatialAgent> obstacles, double yValue, double waypointEdgeDistance)
 		{
 			//IList<Vector3D> edgePoints = new List<Vector3D>();
             List<Vector3D> edgePoints = new List<Vector3D>();
@@ -60,7 +62,7 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 					GLOBAL_GRAPH_CACHE[simulationId] = nodeNeighbors;
 
 					// calculate all static waypoints
-					foreach (SimulationObject so in obstacles)
+					foreach (SpatialAgent so in obstacles)
 					{
 						edgePoints.AddRange(GetEdgePoints(so, yValue, waypointEdgeDistance));
 					}
@@ -97,13 +99,17 @@ namespace de.haw.walk.agent.util.pathfinding.raytracing
 		/// <param name="yValue"> the height of the edge points </param>
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
 		/// <returns> a list of the edges </returns>
-		public static IList<Vector3D> GetEdgePoints(SimulationObject obstacle, double yValue, double waypointEdgeDistance)
+		public static IList<Vector3D> GetEdgePoints(SpatialAgent obstacle, double yValue, double waypointEdgeDistance)
 		{
 			IList<Vector3D> edgePoints = new List<Vector3D>();
 
-			Vector3D position = obstacle.Position;
+			//Vector3D position = obstacle.Position;
+            Vector tempPosition = obstacle.GetPosition();
+            Vector3D position = new Vector3D(tempPosition.X, tempPosition.Y, tempPosition.Z);
 			//Vector3D boundsHalf = ((Vector3D) obstacle.Bounds).scalarMultiply(0.5);
-            Vector3D boundsHalf = Vector3D.Multiply(0.5, obstacle.Bounds);
+            Vector tempBounds = obstacle.GetDimension();
+            Vector3D bounds = new Vector3D(tempBounds.X, tempBounds.Y, tempBounds.Z);
+            Vector3D boundsHalf = Vector3D.Multiply(0.5, bounds);
 
 			// if the yValue is lower or higher than the obstacle, there are no edge points
 			if (position.Y - boundsHalf.Y - waypointEdgeDistance > yValue || position.Y + boundsHalf.Y + waypointEdgeDistance < yValue)
