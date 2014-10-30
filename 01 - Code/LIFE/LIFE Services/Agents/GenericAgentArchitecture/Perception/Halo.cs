@@ -1,8 +1,8 @@
 ﻿using CommonTypes.TransportTypes;
+using DalskiAgent.Movement;
 using LayerAPI.Interfaces;
-using GenericAgentArchitecture.Movement;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
 
   /// <summary>
   ///   An abstract halo representation. Each sensor has one object of it.

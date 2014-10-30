@@ -1,7 +1,7 @@
-﻿using GenericAgentArchitecture.Agents;
+﻿using DalskiAgent.Agents;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
   
   /// <summary>
   ///   A universal sensor, suitable for primitive information retrieval. 

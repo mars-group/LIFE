@@ -11,9 +11,8 @@ namespace GoapCommon.Abstract {
 
         public static BlackboardProperty<AbstractGoapAction> ActionForExecution = new BlackboardProperty<AbstractGoapAction>();
         public static readonly BlackboardProperty<List<IGoapWorldProperty>> Worldstate = new BlackboardProperty<List<IGoapWorldProperty>>();
-
-      
-      /// <summary>
+        
+        /// <summary>
         ///     get next valid action
         /// </summary>
         /// <returns>IGoapAction</returns>

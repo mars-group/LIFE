@@ -1,7 +1,7 @@
 ﻿using CommonTypes.TransportTypes;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 using System;
 using System.Collections.Generic;

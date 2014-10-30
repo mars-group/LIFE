@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Auxiliary;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Movement.Movers;
-using GenericAgentArchitecture.Perception;
+using DalskiAgent.Agents;
+using DalskiAgent.Auxiliary;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
+using DalskiAgent.Movement.Movers;
+using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -59,7 +59,7 @@ namespace AgentTester.Wolves.Agents {
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
         ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
-        Remove();
+        IsAlive = false;
         return null;
       }
 
@@ -92,7 +92,7 @@ namespace AgentTester.Wolves.Agents {
         // R1: If there is a sheep directly ahead and hunger > 20%, eat it!
         if (dist <= 1 && hunger >= 20) {
           _states += "R1";
-          ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Red);
+          ConsoleView.AddMessage("["+Cycle+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Blue);
           return new EatInteraction(this, sheep);
         }
 
@@ -117,7 +117,7 @@ namespace AgentTester.Wolves.Agents {
       // R4: Perform random movement.
       _states += "R4";
       if (_environment is Environment2D) {
-        var pos = ((Environment2D) _environment).GetRandomPosition();
+        var pos = ((Environment2D) _environment).GetRandomPosition();     
         var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
         return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
       }

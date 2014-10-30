@@ -1,10 +1,10 @@
 ﻿using CommonTypes.TransportTypes;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Movement.Actions;
-using GenericAgentArchitecture.Movement.Movers;
-using GenericAgentArchitecture.Perception;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
+using DalskiAgent.Movement.Actions;
+using DalskiAgent.Movement.Movers;
+using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Environment;
 using System;

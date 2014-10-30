@@ -1,6 +1,6 @@
-﻿using GenericAgentArchitecture.Agents;
+﻿using DalskiAgent.Agents;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
   
   /// <summary>
   ///   This sensor class provides an abstract base for custom implementations.

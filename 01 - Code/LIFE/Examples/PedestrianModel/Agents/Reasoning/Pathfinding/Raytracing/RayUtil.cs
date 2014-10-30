@@ -1,5 +1,5 @@
-﻿using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
+﻿using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

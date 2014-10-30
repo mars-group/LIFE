@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
   
   /// <summary>
   ///   This interface declares functions needed for movement services.
@@ -17,8 +17,8 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="pos">The agent's initial position.</param>
-    /// <returns>A movement data container with the initial position set.</returns>
-    MovementData AddAgent(SpatialAgent agent, Vector pos);
+    /// <param name="mdata">The movement data container reference.</param>
+    void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata);
 
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
   
   /// <summary>
   ///   The Perception Unit (PU) is a container responsible for querying the attached

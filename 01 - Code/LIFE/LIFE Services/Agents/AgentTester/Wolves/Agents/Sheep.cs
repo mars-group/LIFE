@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Interactions;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Auxiliary;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Movement.Movers;
-using GenericAgentArchitecture.Perception;
+using DalskiAgent.Agents;
+using DalskiAgent.Auxiliary;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
+using DalskiAgent.Movement.Movers;
+using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -58,7 +58,7 @@ namespace AgentTester.Wolves.Agents {
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
         ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
-        Remove();
+        IsAlive = false;
         return null;
       }
 
@@ -93,6 +93,7 @@ namespace AgentTester.Wolves.Agents {
         // R1: Eat nearby grass.
         if (dist <= 1.4143 && hunger > 20) {
           _states += "R1";
+          ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" frißt Gras "+grs.Id+"!", ConsoleColor.Green);
           return new EatInteraction(this, grs);
         }
 
@@ -164,7 +165,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      Remove();
+      IsAlive = false;
     }
   }
 }

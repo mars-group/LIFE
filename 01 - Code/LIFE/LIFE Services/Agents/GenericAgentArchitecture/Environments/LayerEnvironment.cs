@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
   
   /// <summary>
   ///   An environment implementation for the spatial agents to use.
@@ -39,11 +39,10 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="pos">The agent's initial position.</param>
-    /// <returns>A movement data container with the initial position set.</returns>
-    public MovementData AddAgent(SpatialAgent agent, Vector pos) {
-      var mdata = _env.AddAgent(agent, pos);
+    /// <param name="mdata">The movement data container reference.</param>
+    public void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata) {
+      _env.AddAgent(agent, pos, out mdata);
       _regFkt(_layerImpl, agent);
-      return mdata;
     }
 
 

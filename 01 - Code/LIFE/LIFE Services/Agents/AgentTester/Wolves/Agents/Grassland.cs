@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
 using LayerAPI.Interfaces;
 
 namespace AgentTester.Wolves.Agents {

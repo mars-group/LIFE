@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using ESCTestLayer.Implementation;
-using GenericAgentArchitecture.Environments;
 using LayerAPI.Interfaces;
 using Mono.Addins;
-using GenericAgentArchitecture.Movement;
 using PedestrianModel.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]

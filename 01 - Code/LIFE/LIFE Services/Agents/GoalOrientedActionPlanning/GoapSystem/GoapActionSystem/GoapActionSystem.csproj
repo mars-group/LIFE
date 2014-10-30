@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\GoapComponent.cs" />
     <Compile Include="Implementation\GoapManager.cs" />
     <Compile Include="Implementation\GoapPlanner.cs" />
     <Compile Include="Implementation\SurrogateAction.cs" />

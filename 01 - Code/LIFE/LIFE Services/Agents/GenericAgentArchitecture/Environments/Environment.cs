@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using GenericAgentArchitecture.Agents;
+using DalskiAgent.Agents;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
   
   /// <summary>
   ///   Base class for an environment. This is an agent container with several access options.

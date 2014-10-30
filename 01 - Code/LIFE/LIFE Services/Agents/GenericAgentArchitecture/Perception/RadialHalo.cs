@@ -1,8 +1,8 @@
 ﻿using CommonTypes.TransportTypes;
+using DalskiAgent.Movement;
 using LayerAPI.Interfaces;
-using GenericAgentArchitecture.Movement;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
 
   /// <summary>
   ///   A halo capable of sensing in a circle around its position.

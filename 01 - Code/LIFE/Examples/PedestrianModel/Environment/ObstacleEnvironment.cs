@@ -1,7 +1,7 @@
-﻿using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Perception;
+﻿using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
+using DalskiAgent.Perception;
 using PedestrianModel.Agents;
 using System;
 using System.Collections.Generic;

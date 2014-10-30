@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Perception;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
+using DalskiAgent.Perception;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
  
   /// <summary>
   ///   This environment adds movement support to the generic one and contains SpatialAgents. 
@@ -14,7 +15,7 @@ namespace GenericAgentArchitecture.Environments {
   public class Environment2D : Environment, IEnvironment {
 
     protected readonly Vector Boundaries;    // Env. extent, ranging from (0,0) to this point.
-    protected readonly Dictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
+    protected readonly ConcurrentDictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
     public bool IsGrid { get; private set; }                           // Grid-based or continuous?
 
 
@@ -25,7 +26,7 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="isGrid">Selects, if this environment is grid-based or continuous.</param>
     public Environment2D(Vector boundaries, bool isGrid = true) {
       Boundaries = boundaries;
-      Agents = new Dictionary<SpatialAgent, MovementData>();
+      Agents = new ConcurrentDictionary<SpatialAgent, MovementData>();
       IsGrid = isGrid;
       if (!isGrid) throw new NotImplementedException();
     }
@@ -36,14 +37,19 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to add.</param>
     /// <param name="pos">The agent's initial position.</param>
-    /// <returns>A movement data container with the initial position set.</returns>
-    public MovementData AddAgent(SpatialAgent agent, Vector pos) {
+    /// <param name="mdata">The movement data container reference.</param>
+    public void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata) {
       if (pos == null) pos = GetRandomPosition();
-      MovementData mdata = new MovementData(pos);
-      Agents.Add(agent, mdata);
+      mdata = new MovementData(pos);
+      Agents[agent] = mdata;
       AddAgent(agent);
-      return mdata;
     }
+
+/*
+- Agenten-Positionsabfrage nur über Umwelt. Keine GETs() mehr?
+- Abfragemethode, kann internes mdata nutzen.
+- "Bulk"-GetData: Liefert readonly MData mit. 
+*/
 
 
     /// <summary>
@@ -51,7 +57,8 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to remove.</param>
     public void RemoveAgent(SpatialAgent agent) {
-      Agents.Remove(agent);
+      MovementData m;
+      Agents.TryRemove(agent, out m);
       base.RemoveAgent(agent);
     }
 
@@ -65,8 +72,7 @@ namespace GenericAgentArchitecture.Environments {
     public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
       
       // Return, if position is already blocked.
-      if (! CheckPosition(position)) return;
-      
+      if (! CheckPosition(position) || !Agents.ContainsKey(agent)) return;
       // Set the values.
       Agents[agent].Position.X = position.X;
       Agents[agent].Position.Y = position.Y;
@@ -81,7 +87,7 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <returns>A list of all spatial agents.</returns>
     public new List<SpatialAgent> GetAllAgents() {
-      return base.GetAllAgents().Cast<SpatialAgent>().ToList();
+      return new List<SpatialAgent>(Agents.Keys);
     }
 
 
@@ -147,15 +153,10 @@ namespace GenericAgentArchitecture.Environments {
     public virtual object GetData(int informationType, IGeometry geometry) {
       switch (informationType) {
         case 0: { // Zero stands here for "all agents". Enum avoided, check it elsewhere!
-          var list = new List<SpatialAgent>();
           var halo = (Halo) geometry;
-          foreach (var agent in GetAllAgents()) {
-            if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
-                halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon) {
-              list.Add(agent); // Return value is a list of all perceptible agents.
-            }
-          }
-          return list;
+          return GetAllAgents().Where(agent => 
+            halo.IsInRange(agent.GetPosition().GetTVector()) && 
+            halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon).ToList();
         }
 
         // Throw exception, if wrong argument was supplied.

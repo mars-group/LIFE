@@ -1,8 +1,8 @@
 ﻿using System;
 using AgentTester.Wolves.Interactions;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -66,7 +66,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      Remove();
+      IsAlive = false;
     }
   }
 }

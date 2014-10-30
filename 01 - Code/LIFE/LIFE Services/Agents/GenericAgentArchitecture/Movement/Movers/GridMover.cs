@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement.Actions;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement.Actions;
 
-namespace GenericAgentArchitecture.Movement.Movers {
+namespace DalskiAgent.Movement.Movers {
 
   /// <summary>
   ///   Direction enumeration for grid movement.

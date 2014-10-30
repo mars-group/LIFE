@@ -1,10 +1,10 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
 using ESCTestLayer.Implementation;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Auxiliary;
-using GenericAgentArchitecture.Environments;
-using Environment = GenericAgentArchitecture.Environments.Environment;
+using DalskiAgent.Agents;
+using DalskiAgent.Auxiliary;
+using DalskiAgent.Environments;
+using Environment = DalskiAgent.Environments.Environment;
 
 namespace AgentTester.Wolves {
   
@@ -81,7 +81,7 @@ namespace AgentTester.Wolves {
     ///   Start the executor!
     /// </summary>
     public static void Main() {
-      var environment = CreateWolvesScenarioEnvironment(10, 5, 0, false);
+      var environment = CreateWolvesScenarioEnvironment(10, 5, 2, false);
       var view = CreateWolvesView(environment);
       new Executor((Environment) environment, view).Run(750);      
     }

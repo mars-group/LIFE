@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("GoapActionSystemFactory")]
+[assembly: AssemblyTitle("GOAPModelDefinition")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GoapActionSystemFactory")]
+[assembly: AssemblyProduct("GOAPModelDefinition")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("d62eb9b2-4a14-47af-9e33-543302216059")]
+[assembly: Guid("432874d9-1cb8-4731-b2f5-7eaf6f17c726")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //
