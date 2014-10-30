@@ -1,9 +1,9 @@
 ﻿using System;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement.Actions;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement.Actions;
 
-namespace GenericAgentArchitecture.Movement.Movers {
+namespace DalskiAgent.Movement.Movers {
   
   /// <summary>
   ///   L1 class: Specializes basic module with speeds and position calculation.

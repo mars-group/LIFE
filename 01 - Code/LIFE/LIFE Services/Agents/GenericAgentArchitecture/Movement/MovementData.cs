@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GenericAgentArchitecture.Movement {
+namespace DalskiAgent.Movement {
     
   /// <summary>
   ///   This class holds all spatial data for an agent.

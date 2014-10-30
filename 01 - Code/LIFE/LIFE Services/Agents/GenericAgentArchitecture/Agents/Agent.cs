@@ -1,8 +1,8 @@
-﻿using GenericAgentArchitecture.Perception;
+﻿using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Agents {
+namespace DalskiAgent.Agents {
 
   /// <summary>
   /// The abstract agent. This is the most generic agent form, it specifies the main execution

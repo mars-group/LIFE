@@ -1,8 +1,8 @@
 ﻿using System;
-using GenericAgentArchitecture.Movement.Movers;
+using DalskiAgent.Movement.Movers;
 using GenericAgentArchitectureCommon.Interfaces;
 
-namespace GenericAgentArchitecture.Movement.Actions {
+namespace DalskiAgent.Movement.Actions {
 
   /// <summary>
   ///   This class allows to set movement and turning speeds to control the agent.

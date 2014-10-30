@@ -1,7 +1,7 @@
-﻿using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Auxiliary;
+﻿using DalskiAgent.Agents;
+using DalskiAgent.Auxiliary;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
 
   /// <summary>
   ///   This sensor listens on a channel and returns all messages to the PU. 

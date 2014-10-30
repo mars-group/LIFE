@@ -1,10 +1,10 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
 using ESCTestLayer.Implementation;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Auxiliary;
-using GenericAgentArchitecture.Environments;
-using Environment = GenericAgentArchitecture.Environments.Environment;
+using DalskiAgent.Agents;
+using DalskiAgent.Auxiliary;
+using DalskiAgent.Environments;
+using Environment = DalskiAgent.Environments.Environment;
 
 namespace AgentTester.Wolves {
   

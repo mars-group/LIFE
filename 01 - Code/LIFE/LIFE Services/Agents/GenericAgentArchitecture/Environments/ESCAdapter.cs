@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using CommonTypes.TransportTypes;
 using System.Collections.Generic;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
     
   /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 

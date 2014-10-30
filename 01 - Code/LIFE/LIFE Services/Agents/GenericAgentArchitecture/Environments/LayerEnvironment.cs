@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
   
   /// <summary>
   ///   An environment implementation for the spatial agents to use.

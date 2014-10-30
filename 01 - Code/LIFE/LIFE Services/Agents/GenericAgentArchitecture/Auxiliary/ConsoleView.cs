@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
 
-namespace GenericAgentArchitecture.Auxiliary {
+namespace DalskiAgent.Auxiliary {
   
   /// <summary>
   ///   This class offers a simple agent/environment view in a console window.

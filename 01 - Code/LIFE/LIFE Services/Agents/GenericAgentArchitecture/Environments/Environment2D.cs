@@ -2,12 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Perception;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
+using DalskiAgent.Perception;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
  
   /// <summary>
   ///   This environment adds movement support to the generic one and contains SpatialAgents. 

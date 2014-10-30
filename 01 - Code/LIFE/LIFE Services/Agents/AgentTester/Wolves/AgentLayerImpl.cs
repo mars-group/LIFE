@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using AgentTester.Wolves.Agents;
-using GenericAgentArchitecture.Auxiliary;
-using GenericAgentArchitecture.Environments;
+using DalskiAgent.Auxiliary;
+using DalskiAgent.Environments;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 

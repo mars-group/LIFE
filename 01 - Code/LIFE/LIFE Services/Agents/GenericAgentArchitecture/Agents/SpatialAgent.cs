@@ -1,8 +1,8 @@
-﻿using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Movement.Movers;
+﻿using DalskiAgent.Environments;
+using DalskiAgent.Movement;
+using DalskiAgent.Movement.Movers;
 
-namespace GenericAgentArchitecture.Agents {
+namespace DalskiAgent.Agents {
 
   /// <summary>
   ///   This agent is part of a spatial world. It has a position and 

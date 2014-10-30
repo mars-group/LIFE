@@ -1,8 +1,8 @@
-﻿using GenericAgentArchitecture.Movement;
-using CommonTypes.TransportTypes;
+﻿using CommonTypes.TransportTypes;
+using DalskiAgent.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
     
   /// <summary>
   ///   A dummy halo. May be used as a stub for sensors with no perception limitation.

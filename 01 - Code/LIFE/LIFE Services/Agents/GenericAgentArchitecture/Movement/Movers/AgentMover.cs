@@ -1,7 +1,7 @@
-﻿using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
+﻿using DalskiAgent.Agents;
+using DalskiAgent.Environments;
 
-namespace GenericAgentArchitecture.Movement.Movers {
+namespace DalskiAgent.Movement.Movers {
 
   /// <summary>
   ///   This abstract class serves as a base for agent movement.

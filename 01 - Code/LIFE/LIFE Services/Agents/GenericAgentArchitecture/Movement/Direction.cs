@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GenericAgentArchitecture.Movement {
+namespace DalskiAgent.Movement {
   
   /// <summary>
   ///   Direction class, holds pitch and yaw value and provides some conversions. 

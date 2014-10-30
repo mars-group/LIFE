@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading;
-using Environment = GenericAgentArchitecture.Environments.Environment;
 
-namespace GenericAgentArchitecture.Auxiliary {
+namespace DalskiAgent.Auxiliary {
   
   /// <summary>
   ///   This class periodicly triggers the environment and thereby all agents.
@@ -10,7 +9,7 @@ namespace GenericAgentArchitecture.Auxiliary {
   /// </summary>
   public class Executor {
     
-    private readonly Environment _environment; // The agent container.
+    private readonly Environments.Environment _environment; // The agent container.
     private readonly ConsoleView _view;        // The console view module.
 
 
@@ -19,7 +18,7 @@ namespace GenericAgentArchitecture.Auxiliary {
     ///   <param name="environment">The environment to execute.</param>
     ///   <param name="view">The console view module.</param>
     /// </summary>
-    public Executor(Environment environment, ConsoleView view) {
+    public Executor(Environments.Environment environment, ConsoleView view) {
       _environment = environment;
       _view = view;
     }

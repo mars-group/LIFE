@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
 
   /// <summary>
   ///   The SensorInput is a container class for raw sensory data with additional meta 
