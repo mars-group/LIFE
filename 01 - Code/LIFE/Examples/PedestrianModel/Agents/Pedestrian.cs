@@ -68,6 +68,14 @@ namespace PedestrianModel.Agents
               new OmniHalo())
             );
 
+            // Add perception sensor for everything.
+            PerceptionUnit.AddSensor(new DataSensor(
+              this, environment,
+              (int)ObstacleEnvironment.InformationTypes.AllAgents,
+                //new RadialHalo(Data.Position, 8))
+              new OmniHalo())
+            );
+
             // Add movement module.
             Mover = new DirectMover(environment, this, Data);
             _mover = (DirectMover)Mover;  // Re-declaration to save casts.

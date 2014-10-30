@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
-namespace PedestrianModel.Agents.Reasoning.Pathfinding.Potential.Emitter
+namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 {
 
 	/// <summary>

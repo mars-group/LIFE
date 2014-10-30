@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
-namespace PedestrianModel.Agents.Reasoning.Pathfinding.Potential
+namespace PedestrianModel.Agents.Reasoning.Movement.Potential
 {
 
 	/// <summary>

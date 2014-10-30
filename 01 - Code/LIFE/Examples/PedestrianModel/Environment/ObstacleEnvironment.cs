@@ -23,7 +23,7 @@ namespace PedestrianModel.Environment
         public ObstacleEnvironment() : base(new Vector(1000, 1000), false) { }
 
         /* Data source functions: Information types and retrieval method. */
-        public enum InformationTypes { Obstacles, Pedestrians }
+        public enum InformationTypes { AllAgents, Obstacles, Pedestrians }
 
         public override object GetData(int informationType, LayerAPI.Interfaces.IGeometry geometry)
         {
@@ -60,6 +60,20 @@ namespace PedestrianModel.Environment
                                     map[agent.Id] = agent;
                                 }
                             }
+                        }
+                        return map;
+                    }
+                case InformationTypes.AllAgents:
+                    {
+                        var map = new Dictionary<long, SpatialAgent>();
+                        var halo = (Halo)geometry;
+                        foreach (var agent in GetAllAgents())
+                        {
+                            if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
+                            halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon)
+                            {
+                                 map[agent.Id] = agent;
+                            }                            
                         }
                         return map;
                     }
