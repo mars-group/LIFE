@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
-using GoapModelTest.Actions;
-using GoapModelTest.Goals;
-using GoapModelTest.Worldstates;
+using GOAPModelDefinition.Actions;
+using GOAPModelDefinition.Goals;
+using GOAPModelDefinition.Worldstates;
 
-namespace GoapModelTest {
-    public class AgentTestConfig1 : IGoapAgentConfig {
+namespace GOAPModelDefinition {
+
+    /// <summary>
+    ///     determines the configuration of agent 1
+    /// </summary>
+    public class AgentConfig1 : IGoapAgentConfig {
+
         public List<IGoapWorldProperty> GetStartWorldstate() {
             return new List<IGoapWorldProperty> {new IsHappy(false), new HasMoney(true), new HasToy(false)};
         }
@@ -16,7 +21,7 @@ namespace GoapModelTest {
         }
 
         public List<IGoapGoal> GetAllGoals() {
-            return new List<IGoapGoal> {new GoalBeHappy()};
+            return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
     }
 }

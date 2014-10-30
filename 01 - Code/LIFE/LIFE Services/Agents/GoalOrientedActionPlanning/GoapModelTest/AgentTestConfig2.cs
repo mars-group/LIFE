@@ -6,7 +6,7 @@ using GoapModelTest.Goals;
 using GoapModelTest.Worldstates;
 
 namespace GoapModelTest {
-    public class AgentTestConfig2 : IAgentConfig
+    public class AgentTestConfig2 : IGoapAgentConfig
     {
         public List<IGoapWorldProperty> GetStartWorldstate() {
             return new List<IGoapWorldProperty> {new IsHappy(false), new HasMoney(false), new HasToy(true)};

@@ -11,7 +11,7 @@ namespace GoapCommon.Interfaces
     /// determines the configuration of an agent
     /// by convertion name of implementing classes must be "AgentConfig" + unique number per assembly
     /// </summary>
-    public interface IAgentConfig {
+    public interface IGoapAgentConfig {
 
         /// <summary>
         /// start assignment of world

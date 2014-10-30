@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using GoapActionSystemFactory.Implementation;
+using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using TypeSafeBlackboard;
@@ -12,7 +12,6 @@ namespace GoapUser {
 
             Blackboard blackboard = new Blackboard();
             AbstractGoapSystem goapActionSystem = GoapComponent.LoadGoapConfiguration("AgentConfig1", "GoapModelTest", blackboard);
-
             
 
             Console.WriteLine("Agent loaded. Write n for next action");
@@ -46,8 +45,8 @@ namespace GoapUser {
             const string namespaceOfConfigClass = "GoapModelTest";
             const string nameOfConfigClass = "AgentConfig1";
             Assembly assembly = Assembly.Load(namespaceOfConfigClass);
-            IAgentConfig configClass =
-                (IAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
+            IGoapAgentConfig configClass =
+                (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
         }
 
         private static void ShowAvailableAssemblies() {
