@@ -25,7 +25,7 @@ namespace DalskiAgent.Perception {
     /// </summary>
     /// <returns>Sensor input object with list of new messages.</returns>
     protected override SensorInput RetrieveData() {
-      return new SensorInput(this, MessageServer.GetMessages(Channel), Channel, Agent.Cycle);
+      return new SensorInput(this, MessageServer.GetMessages(Channel), Channel, Agent.GetTick());
     }
   }
 }

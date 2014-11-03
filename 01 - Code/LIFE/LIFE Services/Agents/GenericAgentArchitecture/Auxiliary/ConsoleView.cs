@@ -32,7 +32,7 @@ namespace DalskiAgent.Auxiliary {
     private static int _msgLines;               // Lines of messages to display.
     private static List<string> _msgTexts;      // Message text list.
     private static List<int> _msgColors;        // Message color code list.
-    private static bool _lcRedirect = true;     // Output redirection in case of LC use.
+    public static bool LcRedirect = true;       // Output redirection in case of LC use.
     private static readonly object Obj = new object();     // Lock object for LC output.
 
 
@@ -50,7 +50,6 @@ namespace DalskiAgent.Auxiliary {
       _msgLines = cid.MessageLines;
       _cid = cid;
       _env = env;
-      if (! (_env is LayerEnvironment)) _lcRedirect = false;
       _agtListMin = _cid.AgtListMin;
       _agtListMax = _cid.AgtListMax;
       if (_agtListMin < _cid.MapY+1) _agtListMin = _cid.MapY+1;
@@ -151,7 +150,7 @@ namespace DalskiAgent.Auxiliary {
     /// <param name="color">The message color (default: gray).</param>
     /// </summary>
     public static void AddMessage(string message, ConsoleColor color = ConsoleColor.Gray) {
-      if (!_lcRedirect) {
+      if (!LcRedirect) {
         if (_msgLines == 0) return;
         if (_msgTexts.Count == _msgLines) {
           _msgTexts.RemoveAt(0); // If full, remove oldest

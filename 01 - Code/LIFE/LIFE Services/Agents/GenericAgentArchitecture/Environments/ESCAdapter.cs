@@ -13,7 +13,7 @@ namespace DalskiAgent.Environments {
   /// </summary> 
   public class ESCAdapter : IEnvironment {
 
-    private readonly IESC _esc;  // Environment Service Component (ESC) implementation.
+    private readonly IESC _esc;              // Environment Service Component (ESC) implementation.
     private readonly Dictionary<SpatialAgent, MovementData> _agents; // All registered agents.
 
     /// <summary>
@@ -79,6 +79,12 @@ namespace DalskiAgent.Environments {
       //TODO This functionality should be implemented by the ESC.
       return _agents.Keys.ToList();
     }
+
+
+    /// <summary>
+    ///   Environment-related functions. Not needed in the ESC (at least, not now)!
+    /// </summary>
+    public void AdvanceEnvironment () {}
 
 
     /// <summary>

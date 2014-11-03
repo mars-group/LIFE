@@ -12,11 +12,12 @@ namespace DalskiAgent.Environments {
   /// <summary>
   ///   This environment adds movement support to the generic one and contains SpatialAgents. 
   /// </summary>
-  public class Environment2D : Environment, IEnvironment {
-
-    protected readonly Vector Boundaries;    // Env. extent, ranging from (0,0) to this point.
+  public class Environment2D : IEnvironment {
+    
+    private readonly Vector _boundaries;    // Env. extent, ranging from (0,0) to this point.
+    private readonly bool _isGrid;          // Grid-based or continuous environment?    
+    private readonly Random _random;        // Number generator for random placement.
     protected readonly ConcurrentDictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
-    public bool IsGrid { get; private set; }                           // Grid-based or continuous?
 
 
     /// <summary>
@@ -25,9 +26,10 @@ namespace DalskiAgent.Environments {
     /// <param name="boundaries">Boundaries for the environment.</param>
     /// <param name="isGrid">Selects, if this environment is grid-based or continuous.</param>
     public Environment2D(Vector boundaries, bool isGrid = true) {
-      Boundaries = boundaries;
+      _boundaries = boundaries;
+      _random = new Random();
       Agents = new ConcurrentDictionary<SpatialAgent, MovementData>();
-      IsGrid = isGrid;
+      _isGrid = isGrid;
       if (!isGrid) throw new NotImplementedException();
     }
 
@@ -42,14 +44,7 @@ namespace DalskiAgent.Environments {
       if (pos == null) pos = GetRandomPosition();
       mdata = new MovementData(pos);
       Agents[agent] = mdata;
-      AddAgent(agent);
     }
-
-/*
-- Agenten-Positionsabfrage nur über Umwelt. Keine GETs() mehr?
-- Abfragemethode, kann internes mdata nutzen.
-- "Bulk"-GetData: Liefert readonly MData mit. 
-*/
 
 
     /// <summary>
@@ -58,8 +53,7 @@ namespace DalskiAgent.Environments {
     /// <param name="agent">The agent to remove.</param>
     public void RemoveAgent(SpatialAgent agent) {
       MovementData m;
-      Agents.TryRemove(agent, out m);
-      base.RemoveAgent(agent);
+      Agents.TryRemove(agent, out m);     
     }
 
 
@@ -83,19 +77,19 @@ namespace DalskiAgent.Environments {
 
 
     /// <summary>
-    ///   Retrieve all agents of this environment.
-    /// </summary>
-    /// <returns>A list of all spatial agents.</returns>
-    public new List<SpatialAgent> GetAllAgents() {
-      return new List<SpatialAgent>(Agents.Keys);
-    }
-
-
-    /// <summary>
     ///   This function allows execution of environment-specific code.
     ///   The generic 2D environment does not use it. Later override possible.
     /// </summary>
-    protected override void AdvanceEnvironment() {}
+    public virtual void AdvanceEnvironment() {}
+
+
+    /// <summary>
+    ///   Retrieve all agents of this environment.
+    /// </summary>
+    /// <returns>A list of all spatial agents.</returns>
+    public List<SpatialAgent> GetAllAgents() {
+      return new List<SpatialAgent>(Agents.Keys);
+    }
 
 
     /// <summary>
@@ -103,12 +97,12 @@ namespace DalskiAgent.Environments {
     /// </summary>
     /// <returns>A free position.</returns>
     public Vector GetRandomPosition() {
-      if (IsGrid) {
+      if (_isGrid) {
         bool unique;
         Vector position;
         do {
-          var x = Random.Next((int)Boundaries.X);
-          var y = Random.Next((int)Boundaries.Y);
+          var x = _random.Next((int)_boundaries.X);
+          var y = _random.Next((int)_boundaries.Y);
           position = new Vector(x, y);
           unique = true;
           foreach (var md in Agents.Values) {
@@ -132,8 +126,8 @@ namespace DalskiAgent.Environments {
     /// <param name="position">The intended position</param>
     /// <returns>True, if accessible, false, when not.</returns>
     public bool CheckPosition(Vector position) {
-      if (position.X < 0 || position.X >= Boundaries.X ||
-          position.Y < 0 || position.Y >= Boundaries.Y) return false;
+      if (position.X < 0 || position.X >= _boundaries.X ||
+          position.Y < 0 || position.Y >= _boundaries.Y) return false;
       //TODO Dimensional checks needed!
       foreach (var md in Agents.Values) {
         if (md.Position.Equals(position)) return false;
