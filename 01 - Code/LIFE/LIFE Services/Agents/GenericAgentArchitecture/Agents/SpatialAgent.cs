@@ -1,4 +1,5 @@
 ﻿using DalskiAgent.Environments;
+using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
 
@@ -14,17 +15,26 @@ namespace DalskiAgent.Agents {
     private readonly IEnvironment _env;    // IESC implementation for collision detection.
     protected readonly MovementData Data;  // Container for position, direction and speeds.
     protected AgentMover Mover;            // Class for agent movement. 
-    
+
 
     /// <summary>
     ///   Instantiate a new agent with spatial data. Only available for specializations.
     /// </summary>
-    /// <param name="id">Unique agent identifier.</param>
+    /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Environment implementation reference.</param>
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
-    protected SpatialAgent(long id, IEnvironment env, Vector pos) : base(id) {
+    protected SpatialAgent(IExecution exec, IEnvironment env, Vector pos) : base(exec) {
       _env = env;
       _env.AddAgent(this, pos, out Data); // Enlist the agent in environment.
+    }
+
+
+    /// <summary>
+    ///   Initialization function (post-constructor). In this case, 
+    ///   it just calls the base init method for execution registration.
+    /// </summary>
+    protected new void Init() {
+      base.Init();
     }
 
 
@@ -33,8 +43,8 @@ namespace DalskiAgent.Agents {
     ///   It is triggered by the base agent, when alive flag on 'false'.
     /// </summary>
     protected override void Remove() {
+      base.Remove();
       _env.RemoveAgent(this);
-      //ConsoleView.AddMessage("["+Cycle+"] Agent "+Id+" was removed.", ConsoleColor.Red);
     }
 
 

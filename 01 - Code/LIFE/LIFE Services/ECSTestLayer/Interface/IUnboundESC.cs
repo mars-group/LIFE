@@ -6,7 +6,7 @@ namespace ESCTestLayer.Interface
 {
     using CommonTypes.TransportTypes;
 
-    public interface IOctreeESC : IGenericDataSource
+    public interface IUnboundESC : IGenericDataSource
     {
         MovementResult Add(ISpatialEntity entity, TVector position, TVector direction);
 
@@ -18,7 +18,7 @@ namespace ESCTestLayer.Interface
 
         MovementResult Move(ISpatialEntity entity, TVector position, TVector direction);
         
-        IEnumerable<SpatialPositionedEntity> Explore(TVector dimension, TVector position, TVector direction);
+        IEnumerable<SpatialPositionedEntity> Explore(IGeometry geometry, TVector position, TVector direction);
 
         IEnumerable<SpatialPositionedEntity> ExploreAll();
     }

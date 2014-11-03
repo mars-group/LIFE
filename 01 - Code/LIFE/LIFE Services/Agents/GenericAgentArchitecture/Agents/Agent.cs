@@ -1,4 +1,5 @@
-﻿using DalskiAgent.Perception;
+﻿using DalskiAgent.Execution;
+using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 
@@ -10,23 +11,23 @@ namespace DalskiAgent.Agents {
   /// </summary>
   public abstract class Agent : IAgent {
 
-    public readonly long Id;                           // Unique identifier.
-    public long Cycle { get; protected set; }          // The current execution cycle.   
+    private readonly IExecution _execution;            // Execution reference for add/remove and queries.     
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
-    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.     
+    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.         
     protected bool IsAlive;                            // Alive flag for execution and deletion checks.
-
+    public readonly long Id;                           // Unique identifier. 
 
     /// <summary>
     /// Constructor for an abstract agent. It serves as a base class that is extended with
     /// domain specific sensors, actions and reasoning, optionally containing a knowledge base.  
     /// </summary>
-    /// <param name="id">A unique identifier, shall be used for log and communication.</param>
-    protected Agent(long id) {
-      Id = id;
+    /// <param name="exec">Execution container reference.</param>
+    protected Agent(IExecution exec) {
+      _execution = exec;
+      Id = exec.GetNewID();
       IsAlive = true;
       PerceptionUnit = new PerceptionUnit();
-      if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;    
+      if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;       
     }
 
 
@@ -40,7 +41,34 @@ namespace DalskiAgent.Agents {
       var action = ReasoningComponent.Reason();        // Phase 2: Reasoning      
       if (IsAlive && action != null) action.Execute(); // Phase 3: Execution
       else if (!IsAlive) Remove();                     // Agent deletion.      
-      Cycle ++;  
+    }
+
+
+    /// <summary>
+    ///   This function registers the agent at the execution component. Later functions
+    ///   may add more instructions. This function has to be called manually as last  
+    ///   statement in the specific agent constructor. 
+    /// </summary>
+    protected void Init() {
+      _execution.AddAgent(this);
+    }
+
+
+    /// <summary>
+    ///   The removal method stops external triggering of the agent. It is designed
+    ///   to be overridden by more specific methods calling down to this via 'base'. 
+    /// </summary>
+    protected virtual void Remove() {
+      _execution.RemoveAgent(this);
+    }
+
+
+    /// <summary>
+    ///   Returns the current simulation tick.
+    /// </summary>
+    /// <returns>Execution tick counter value.</returns>
+    public long GetTick() {
+      return _execution.GetCurrentTick();
     }
 
 
@@ -49,13 +77,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public new virtual string ToString() {
-      return "Agent: " + Id + "\t  Cycle: " + Cycle;
+      return "Agent: " + Id + "\t  Cycle: " + GetTick();
     }
-
-
-    /// <summary>
-    ///   Empty hull for override methods called on deletion. 
-    /// </summary>
-    protected virtual void Remove () {}
   }
 }
