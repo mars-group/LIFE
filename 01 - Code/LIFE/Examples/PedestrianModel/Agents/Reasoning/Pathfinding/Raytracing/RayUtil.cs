@@ -1,5 +1,5 @@
 ﻿using DalskiAgent.Agents;
-using DalskiAgent.Movement;
+using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +47,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
                 if (intersect.HasValue)
 				{
                     //double distance = orign.distance(intersect);
-                    double distance = Distance(orign, intersect.Value);
+                    double distance = Vector3DHelper.Distance(orign, intersect.Value);
 					if (distance < minDistance)
 					{
 						result = so;
@@ -71,11 +71,9 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
         public static Vector3D? GetIntersect(Vector3D orign, Vector3D direction, SpatialAgent so)
 		{
 			//Vector3D position = so.Position;
-            Vector tempPosition = so.GetPosition();
-            Vector3D position = new Vector3D(tempPosition.X, tempPosition.Y, tempPosition.Z);
+            Vector3D position = Vector3DHelper.FromDalskiVector(so.GetPosition());
 			//Vector3D bounds = so.Bounds;
-            Vector tempBounds = so.GetDimension();
-            Vector3D bounds = new Vector3D(tempBounds.X, tempBounds.Y, tempBounds.Z);
+            Vector3D bounds = Vector3DHelper.FromDalskiVector(so.GetDimension());
 
 			//return GetIntersectWithBox(orign, direction, position.add(-0.5, bounds), position.add(0.5, bounds));
             return GetIntersectWithBox(orign, direction, Vector3D.Add(position, Vector3D.Multiply(-0.5, bounds)), Vector3D.Add(position, Vector3D.Multiply(0.5, bounds)));
@@ -218,7 +216,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
                 if (intersect.HasValue)
 				{
 					//double distance = orign.distance(intersect);
-                    double distance = Distance(orign, intersect.Value);
+                    double distance = Vector3DHelper.Distance(orign, intersect.Value);
 					if (distance < minDistance)
 					{
 						minDistance = distance;
@@ -227,16 +225,8 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			}
 
 			//return orign.distance(target) < minDistance;
-            return Distance(orign, target) < minDistance;
-		}
-
-        public static double Distance(Vector3D from, Vector3D to)
-        {
-            double dx = to.X - from.X;
-            double dy = to.Y - from.Y;
-            double dz = to.Z - from.Z;
-            return Math.Sqrt(dx * dx + dy * dy + dz * dz);
-        }
+            return Vector3DHelper.Distance(orign, target) < minDistance;
+		}        
 	}
 
 }

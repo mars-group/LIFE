@@ -1,5 +1,5 @@
 ﻿using DalskiAgent.Agents;
-using DalskiAgent.Movement;
+using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,11 +104,9 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			IList<Vector3D> edgePoints = new List<Vector3D>();
 
 			//Vector3D position = obstacle.Position;
-            Vector tempPosition = obstacle.GetPosition();
-            Vector3D position = new Vector3D(tempPosition.X, tempPosition.Y, tempPosition.Z);
+            Vector3D position = Vector3DHelper.FromDalskiVector(obstacle.GetPosition());
 			//Vector3D boundsHalf = ((Vector3D) obstacle.Bounds).scalarMultiply(0.5);
-            Vector tempBounds = obstacle.GetDimension();
-            Vector3D bounds = new Vector3D(tempBounds.X, tempBounds.Y, tempBounds.Z);
+            Vector3D bounds = Vector3DHelper.FromDalskiVector(obstacle.GetDimension());
             Vector3D boundsHalf = Vector3D.Multiply(0.5, bounds);
 
 			// if the yValue is lower or higher than the obstacle, there are no edge points
@@ -159,13 +157,13 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		public double Distance(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
 		{
 			//return from.AdaptedObject.distance(to.AdaptedObject);
-            return RayUtil.Distance(from.AdaptedObject, to.AdaptedObject);
+            return Vector3DHelper.Distance(from.AdaptedObject, to.AdaptedObject);
 		}
 
 		public double GetHeuristic(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
 		{
 			//return from.AdaptedObject.distance(to.AdaptedObject);
-            return RayUtil.Distance(from.AdaptedObject, to.AdaptedObject);
+            return Vector3DHelper.Distance(from.AdaptedObject, to.AdaptedObject);
 		}
 
 		/// <returns> the targetPosition </returns>

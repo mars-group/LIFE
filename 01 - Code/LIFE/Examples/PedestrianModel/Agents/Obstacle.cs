@@ -14,7 +14,7 @@ namespace PedestrianModel.Agents
     /// <summary>
     ///   A passive obstacle agent which is used to create obstacles like walls.
     /// </summary>
-    internal class Obstacle : SpatialAgent, IAgentLogic
+    public class Obstacle : SpatialAgent, IAgentLogic
     {
 
         /// <summary>

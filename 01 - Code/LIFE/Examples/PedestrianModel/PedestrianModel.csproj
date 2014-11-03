@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentLayerImpl.cs" />
+    <Compile Include="Agents\Action\MoveAction.cs" />
     <Compile Include="Agents\Reasoning\Movement\ObstacleAvoidanceBehavior.cs" />
     <Compile Include="Agents\Reasoning\Movement\ReactiveBehaviorPipeline.cs" />
     <Compile Include="Agents\Reasoning\Movement\ReactiveMovingBehavior.cs" />
@@ -63,18 +64,17 @@
     <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RaytracingGraph.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RaytracingPathNode.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RayUtil.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\TargetListType.cs" />
     <Compile Include="Util\Math\UnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />
     <Compile Include="LocalStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Agents\Obstacle.cs" />
+    <Compile Include="Util\Math\Vector3DHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Wayfinding + Avoidance Behavior.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">

@@ -1,5 +1,4 @@
 ﻿using DalskiAgent.Agents;
-using DalskiAgent.Movement;
 using DalskiAgent.Perception;
 using PedestrianModel.Agents.Reasoning.Movement.Potential;
 using PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter;
@@ -131,10 +130,8 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 				//{
 					//obstacleField.addEmitter(new CuboidEmitter(obstacle.Position, (Vector3D) obstacle.Bounds, OBSTACLE_DISTANCE_POTENTIAL_FUNCTION));
 				//}
-                Vector tempPosition = obstacle.GetPosition();
-                Vector3D position = new Vector3D(tempPosition.X, tempPosition.Y, tempPosition.Z);
-                Vector tempBounds = obstacle.GetDimension();
-                Vector3D bounds = new Vector3D(tempBounds.X, tempBounds.Y, tempBounds.Z);
+                Vector3D position = Vector3DHelper.FromDalskiVector(obstacle.GetPosition());
+                Vector3D bounds = Vector3DHelper.FromDalskiVector(obstacle.GetDimension());
                 obstacleField.AddEmitter(new CuboidEmitter(position, bounds, OBSTACLE_DISTANCE_POTENTIAL_FUNCTION));
 			}
 		}
@@ -154,8 +151,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 				{
 					//agentField.addEmitter(new PointEmitter(so.calcCurrentPosition(agent.Environment.CurrentSimulationTime + 20), AGENT_DISTANCE_POTENTIAL_FUNCTION));
                     #warning Old "WALK" code seems looking at the future positions of agents here!
-                    Vector tempPosition = ped.GetPosition();
-                    Vector3D position = new Vector3D(tempPosition.X, tempPosition.Y, tempPosition.Z);
+                    Vector3D position = Vector3DHelper.FromDalskiVector(ped.GetPosition());
                     agentField.AddEmitter(new PointEmitter(position, AGENT_DISTANCE_POTENTIAL_FUNCTION));
 				}
 			}
@@ -166,8 +162,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 			potentialFieldCollection.Add(agentField);
 
 			//Vector3D currentPosition = agent.Environment.CurrentPosition;
-            Vector tempCurrentPosition = agent.GetPosition();
-            Vector3D currentPosition = new Vector3D(tempCurrentPosition.X, tempCurrentPosition.Y, tempCurrentPosition.Z);
+            Vector3D currentPosition = Vector3DHelper.FromDalskiVector(agent.GetPosition());
 
 			Vector3D bestDirection = currentPipelineVector;
 			double lastPotential = double.NegativeInfinity;

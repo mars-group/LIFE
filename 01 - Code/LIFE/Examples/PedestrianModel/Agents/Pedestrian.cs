@@ -6,6 +6,7 @@ using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
+using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Environment;
 using System;
 using System.Collections.Generic;
@@ -18,16 +19,18 @@ namespace PedestrianModel.Agents
     /// <summary>
     ///   A pedestrian agent which moves to a target position using wayfinding and collision avoidance.
     /// </summary>
-    internal class Pedestrian : SpatialAgent, IAgentLogic
+    public class Pedestrian : SpatialAgent, IAgentLogic
     {
 
-        private String _name;               // Name or ID of agent
-        private Vector _targetPosition;     // Position agent tries to reach
-        private float _maxVelocity;         // Maximum movement velocity of agent
+        private String name;               // Name or ID of agent        
+        private Vector targetPosition;     // Position agent tries to reach        
+        private float maxVelocity;         // Maximum movement velocity of agent        
 
-        private readonly IEnvironment _environment;
-        private readonly DirectMover _mover;
-        //private readonly ContinuousMover _mover;
+        private readonly IEnvironment environment;
+        private readonly DirectMover mover;
+        //private readonly ContinuousMover mover;
+
+        private readonly ReactiveBehaviorPipeline movementPipeline = new ReactiveBehaviorPipeline();
 
         /// <summary>
         ///   Create a new pedestrian agent.
@@ -38,10 +41,10 @@ namespace PedestrianModel.Agents
         public Pedestrian(long id, IEnvironment environment, Vector position, Vector dimension, Direction direction, Vector targetPosition, String name = "pedestrian")
             : base(id, environment, position)
         {
-            _environment = environment;
+            this.environment = environment;
 
-            _name = name;
-            _targetPosition = targetPosition;
+            this.name = name;
+            this.targetPosition = targetPosition;
 
             Data.Dimension.X = dimension.X;
             Data.Dimension.Y = dimension.Y;
@@ -78,7 +81,7 @@ namespace PedestrianModel.Agents
 
             // Add movement module.
             Mover = new DirectMover(environment, this, Data);
-            _mover = (DirectMover)Mover;  // Re-declaration to save casts.
+            this.mover = (DirectMover)Mover;  // Re-declaration to save casts.
 
             //Mover = new ContinuousMover(env, this, Data);
             //_mover = (ContinuousMover)Mover;  // Re-declaration to save casts.
@@ -119,7 +122,34 @@ namespace PedestrianModel.Agents
             // if collision occurs old position is kept
 
             var nextPosition = new Vector(GetPosition().X + 1, GetPosition().Y + 1);
-            return new DirectMovementAction(_mover, nextPosition);
+            return new DirectMovementAction(mover, nextPosition);
         }
+
+        public String Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public Vector TargetPosition
+        {
+            get { return targetPosition; }
+            set { targetPosition = value; }
+        }
+
+        public float MaxVelocity
+        {
+            get { return maxVelocity; }
+            set { maxVelocity = value; }
+        }
+
+        public ReactiveBehaviorPipeline MovementPipeline
+        {
+            get
+            {
+                return movementPipeline;
+            }
+        }
+
     }
 }

@@ -14,7 +14,7 @@ namespace PedestrianModel.Environment
     /// <summary>
     ///   An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.
     /// </summary>
-    internal class ObstacleEnvironment : Environment2D
+    public class ObstacleEnvironment : Environment2D
     {
 
         /// <summary>
