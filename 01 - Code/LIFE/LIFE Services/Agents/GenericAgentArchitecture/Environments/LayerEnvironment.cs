@@ -25,7 +25,7 @@ namespace DalskiAgent.Environments {
     /// <param name="regFkt">Delegate for agent registration function.</param>
     /// <param name="unregFkt">Delegate for agent unregistration function.</param>
     /// <param name="layer">Layer reference needed for delegate calls.</param>
-    public LayerEnvironment(IESC esc, RegisterAgent regFkt, UnregisterAgent unregFkt, ILayer layer) {
+    public LayerEnvironment(IDeprecatedESC esc, RegisterAgent regFkt, UnregisterAgent unregFkt, ILayer layer) {
       if (esc == null) _env = new Environment2D(new Vector(30, 20));
       else _env = new ESCAdapter(esc);
       _regFkt = regFkt;

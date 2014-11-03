@@ -13,14 +13,14 @@ namespace DalskiAgent.Environments {
   /// </summary> 
   public class ESCAdapter : IEnvironment {
 
-    private readonly IESC _esc;  // Environment Service Component (ESC) implementation.
+    private readonly IDeprecatedESC _esc;  // Environment Service Component (ESC) implementation.
     private readonly Dictionary<SpatialAgent, MovementData> _agents; // All registered agents.
 
     /// <summary>
     ///   Create a new ESC adapter.
     /// </summary>
     /// <param name="esc">The ESC reference.</param>
-    public ESCAdapter(IESC esc) {
+    public ESCAdapter(IDeprecatedESC esc) {
       _esc = esc;
       _agents = new Dictionary<SpatialAgent, MovementData>();
     }
