@@ -82,6 +82,12 @@ namespace DalskiAgent.Environments {
 
 
     /// <summary>
+    ///   Environment-related functions. Not needed in the ESC (at least, not now)!
+    /// </summary>
+    public void AdvanceEnvironment() { }
+
+
+    /// <summary>
     ///   This function is used by sensors to gather data from this environment.
     ///   In this case, the adapter redirects to the ESC implementation.
     /// </summary>

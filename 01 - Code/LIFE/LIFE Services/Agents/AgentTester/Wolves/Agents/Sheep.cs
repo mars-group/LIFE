@@ -5,6 +5,7 @@ using AgentTester.Wolves.Interactions;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
+using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
@@ -29,10 +30,10 @@ namespace AgentTester.Wolves.Agents {
     /// <summary>
     ///   Create a new sheep agent.
     /// </summary>
-    /// <param name="id">The agent identifier.</param>
+    /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Environment reference.</param>
     /// <param name="pos">The initial position.</param>
-    public Sheep(long id, IEnvironment env, Vector pos = null) : base(id, env, pos) {
+    public Sheep(IExecution exec, IEnvironment env, Vector pos = null) : base(exec, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
@@ -45,6 +46,7 @@ namespace AgentTester.Wolves.Agents {
       // Add movement module.
       Mover = new GridMover(env, this, Data);
       _mover = (GridMover) Mover;  // Re-declaration to save casts.
+      Init();
     }
 
 
@@ -57,7 +59,7 @@ namespace AgentTester.Wolves.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        ConsoleView.AddMessage("["+GetTick()+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
         IsAlive = false;
         return null;
       }
@@ -93,7 +95,7 @@ namespace AgentTester.Wolves.Agents {
         // R1: Eat nearby grass.
         if (dist <= 1.4143 && hunger > 20) {
           _states += "R1";
-          ConsoleView.AddMessage("["+Cycle+"] Schaf "+Id+" frißt Gras "+grs.Id+"!", ConsoleColor.Green);
+          ConsoleView.AddMessage("["+GetTick()+"] Schaf "+Id+" frißt Gras "+grs.Id+"!", ConsoleColor.Green);
           return new EatInteraction(this, grs);
         }
 

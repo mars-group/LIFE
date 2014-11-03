@@ -3,6 +3,8 @@ using System.Linq;
 using AgentTester.Wolves.Agents;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
+using DalskiAgent.Execution;
+using DalskiAgent.Movement;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 
@@ -23,11 +25,10 @@ namespace AgentTester.Wolves {
   [Extension(typeof (ISteppedLayer))]
   public class AgentLayerImpl : ISteppedLayer, ITickClient {
 
-    private long _tick;            // Counter of current tick.    
-    private Random _random;        // Random number generator.
-    private long _idCounter;       // Agent ID counter. Auto-incremented on each Add() call.    
-    private LayerEnvironment _env; // Environment object for spatial agents. 
-
+    private long _tick;         // Counter of current tick.    
+    private Random _random;     // Random number generator.   
+    private IEnvironment _env;  // Environment object for spatial agents. 
+    private IExecution _exec;   // Agent execution container reference.
 
     /// <summary>
     ///   Initializes this layer.
@@ -39,14 +40,14 @@ namespace AgentTester.Wolves {
     /// <returns></returns>
     public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
       _tick = 0;
-      _idCounter = 0;
       _random = new Random();
-      _env = new LayerEnvironment(null, registerAgentHandle, unregisterAgentHandle, this);
-
+      _env = new Environment2D(new Vector(30, 20));
+      _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);      
+        
       // Create some initial agents.
-      for (var i = 0; i < 10; i ++) new Grass(_idCounter++, _env);
-      for (var i = 0; i <  5; i ++) new Sheep(_idCounter++, _env);
-      for (var i = 0; i <  2; i ++) new Wolf (_idCounter++, _env);
+      for (var i = 0; i < 18; i ++) new Grass(_exec, _env);
+      for (var i = 0; i <  6; i ++) new Sheep(_exec, _env);
+      for (var i = 0; i <  2; i ++) new Wolf (_exec, _env);
 
       // Register the layer itself for execution. The agents are registered by themselves.
       registerAgentHandle.Invoke(this, this);
@@ -60,11 +61,10 @@ namespace AgentTester.Wolves {
     /// </summary>
     public void Tick() {
       var grassCount = _env.GetAllAgents().OfType<Grass>().Count();
-      var create = _random.Next(50 + grassCount) < 15;
+      var create = _random.Next(50 + grassCount) < 20;
       if (create) {
-        var g = new Grass(_idCounter++, _env);
-        ConsoleView.AddMessage("["+_tick+"] Neues Gras (ID "+(_idCounter-1)+") wächst auf "+g.GetPosition()+".", 
-          ConsoleColor.Cyan);
+        var g = new Grass(_exec, _env);
+        ConsoleView.AddMessage("["+_tick+"] Neues Gras wächst auf "+g.GetPosition()+".", ConsoleColor.Cyan);
       }
       _tick ++;  
     }
