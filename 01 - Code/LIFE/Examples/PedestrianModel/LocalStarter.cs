@@ -97,7 +97,7 @@ namespace PedestrianModel
             // Random position between (0,0) and (10,10).
             var startPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
             var targetPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
-            new Pedestrian(idCounter++, env, startPos, pedDimension, pedDirection, targetPos);
+            new Pedestrian("sim0", idCounter++, env, startPos, pedDimension, pedDirection, targetPos);
         }
 
         // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
