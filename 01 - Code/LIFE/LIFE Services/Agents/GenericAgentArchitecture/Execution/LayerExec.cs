@@ -10,10 +10,9 @@ namespace DalskiAgent.Execution {
 
     private readonly RegisterAgent _regFkt;     // Agent registration function pointer.
     private readonly UnregisterAgent _unregFkt; // Delegate for unregistration function.
-    private readonly ILayer _layerImpl;         // Layer reference needed for delegate calls.
-    private readonly object _lock;              // Synchronization flag.
-    private long _idCounter;                    // Counter for agent ID distribution.
-
+    private readonly ILayer _layerImpl;         // Layer reference needed for delegate calls.    
+    private static long _idCounter;             // Counter for agent ID distribution.
+    private static readonly object Lock = new object();  // ID access synchronization flag.
 
     /// <summary>
     ///   Create a new execution class for use with MARS layers.
@@ -25,8 +24,6 @@ namespace DalskiAgent.Execution {
       _regFkt = regFkt;
       _unregFkt = unregFkt;
       _layerImpl = layer;
-      _lock = new object();
-      _idCounter = 0;
     }
     
 
@@ -53,7 +50,7 @@ namespace DalskiAgent.Execution {
     /// </summary>
     /// <returns>A unique identifier.</returns>
     public long GetNewID() {
-      lock (_lock) {
+      lock (Lock) {
         return _idCounter++;
       }
     }

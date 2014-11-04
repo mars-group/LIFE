@@ -24,10 +24,6 @@ namespace DalskiAgent.Execution {
     private long _idCounter;                 // This counter is needed for agent ID distribution.
 
 
-    //TODO ID automatisch erhöhen! (Braucht nicht mehr von außen geschehen!)
-    // Macht Agent im Konstruktor per Abfrage von hier.
-
-
     /// <summary>
     ///   Instantiate a sequential agent executor.
     /// </summary>
