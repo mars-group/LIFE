@@ -1,26 +1,26 @@
-﻿using CommonTypes.TransportTypes;
+﻿using System.Linq;
+using CommonTypes.TransportTypes;
 using System.Collections.Generic;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
     
   /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
-  /// </summary>
+  /// </summary> 
   public class ESCAdapter : IEnvironment {
 
-    private readonly IESC _esc;  // Environment Service Component (ESC) implementation.
+    private readonly IDeprecatedESC _esc;  // Environment Service Component (ESC) implementation.
     private readonly Dictionary<SpatialAgent, MovementData> _agents; // All registered agents.
-
 
     /// <summary>
     ///   Create a new ESC adapter.
     /// </summary>
     /// <param name="esc">The ESC reference.</param>
-    public ESCAdapter(IESC esc) {
+    public ESCAdapter(IDeprecatedESC esc) {
       _esc = esc;
       _agents = new Dictionary<SpatialAgent, MovementData>();
     }
@@ -30,14 +30,14 @@ namespace GenericAgentArchitecture.Environments {
     ///   Add a new agent to the environment.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">Container with movement data.</param>
-    public void AddAgent(SpatialAgent agent, MovementData data) {
-      var dim = data.Dimension;
-      _agents.Add(agent, data);
+    /// <param name="pos">The agent's initial position.</param>
+    /// <param name="mdata">The movement data container reference.</param>
+    public void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata) {
+      mdata = new MovementData(pos); 
+      _agents.Add(agent, mdata);
+      var dim = mdata.Dimension;
       _esc.Add((int) agent.Id, 0, true, new TVector(dim.X, dim.Y, dim.Z));
-      var position = data.Position;
-      var direction = data.Direction;
-      ChangePosition(agent, position, direction);
+      ChangePosition(agent, mdata.Position, mdata.Direction);
     }
 
 
@@ -76,8 +76,15 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <returns>A list of all spatial agents.</returns>
     public List<SpatialAgent> GetAllAgents() {
-      throw new System.NotImplementedException();
+      //TODO This functionality should be implemented by the ESC.
+      return _agents.Keys.ToList();
     }
+
+
+    /// <summary>
+    ///   Environment-related functions. Not needed in the ESC (at least, not now)!
+    /// </summary>
+    public void AdvanceEnvironment() { }
 
 
     /// <summary>

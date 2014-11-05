@@ -42,17 +42,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\AbstractGoapAction.cs" />
+    <Compile Include="Abstract\AbstractGoapGoal.cs" />
     <Compile Include="Exceptions\GraphException.cs" />
     <Compile Include="Exceptions\NoVertexFoundException.cs" />
     <Compile Include="Abstract\AbstractGoapSystem.cs" />
-    <Compile Include="Interfaces\IAgentConfig.cs" />
+    <Compile Include="Interfaces\IGoapAgentConfig.cs" />
     <Compile Include="Interfaces\IGoapGoal.cs" />
     <Compile Include="Interfaces\IGoapAction.cs" />
     <Compile Include="Interfaces\IGoapEdge.cs" />
     <Compile Include="Interfaces\IGoapGraphService.cs" />
     <Compile Include="Interfaces\IGoapNode.cs" />
     <Compile Include="Interfaces\IGoapWorldProperty.cs" />
-    <Compile Include="Interfaces\IGoapPlanner.cs" />
     <Compile Include="Exceptions\AlgorithmException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

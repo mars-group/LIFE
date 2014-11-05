@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
 
-namespace GenericAgentArchitecture.Auxiliary {
+namespace DalskiAgent.Auxiliary {
   
   /// <summary>
   ///   This class offers a simple agent/environment view in a console window.
@@ -32,6 +32,8 @@ namespace GenericAgentArchitecture.Auxiliary {
     private static int _msgLines;               // Lines of messages to display.
     private static List<string> _msgTexts;      // Message text list.
     private static List<int> _msgColors;        // Message color code list.
+    public static bool LcRedirect = true;       // Output redirection in case of LC use.
+    private static readonly object Obj = new object();     // Lock object for LC output.
 
 
     /// <summary>
@@ -148,14 +150,25 @@ namespace GenericAgentArchitecture.Auxiliary {
     /// <param name="color">The message color (default: gray).</param>
     /// </summary>
     public static void AddMessage(string message, ConsoleColor color = ConsoleColor.Gray) {
-      if (_msgLines == 0) return;
-      if (_msgTexts.Count == _msgLines) {
-        _msgTexts.RemoveAt(0);    // If full, remove oldest
-        _msgColors.RemoveAt(0);   // element before inserting new.
+      if (!LcRedirect) {
+        if (_msgLines == 0) return;
+        if (_msgTexts.Count == _msgLines) {
+          _msgTexts.RemoveAt(0); // If full, remove oldest
+          _msgColors.RemoveAt(0); // element before inserting new.
+        }
+        _msgTexts.Add(message);
+        _msgColors.Add((int) color);
+        _msgChanged = true;
       }
-      _msgTexts.Add(message);
-      _msgColors.Add((int) color);
-      _msgChanged = true;
+      
+      // When a LayerContainer is used, print output directly to console!
+      else {
+        lock(Obj) {
+          Console.ForegroundColor = color;
+          Console.WriteLine(message);
+          Console.ForegroundColor = ConsoleColor.Gray;          
+        }
+      }
     }
 
 

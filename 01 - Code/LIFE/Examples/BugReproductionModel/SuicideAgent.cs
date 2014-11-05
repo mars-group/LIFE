@@ -12,7 +12,7 @@ namespace BugReproductionModel
 
 		private int _id;
 
-        private ILayer _layer = null;
+		private ILayer _layer = null;
 
 		private UnregisterAgent _unregister = null;
 
@@ -31,11 +31,11 @@ namespace BugReproductionModel
 		{
 			_lifeTime--;
 			_tickNr++;
-            //if (_id == 0) { Console.WriteLine("TickCount:" + _tickNr);}
+
 			if (_lifeTime < 0) {
 				_unregister.Invoke (_layer, this);
 
-				//Console.WriteLine ("Agent with equals & Co. " + _id + " commited suicide at tick " + _tickNr);
+				Console.WriteLine ("Agent with equals & Co. " + _id + " commited suicide at tick " + _tickNr);
 			}
 		}
 

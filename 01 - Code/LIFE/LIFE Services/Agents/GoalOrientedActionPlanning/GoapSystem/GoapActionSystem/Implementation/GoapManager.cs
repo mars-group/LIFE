@@ -6,7 +6,6 @@ using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 using TypeSafeBlackboard;
 
-
 namespace GoapActionSystem.Implementation {
     public class GoapManager : AbstractGoapSystem {
         private readonly List<AbstractGoapAction> _availableActions;
@@ -27,7 +26,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="availableActions"></param>
         /// <param name="availableGoals"></param>
         /// <param name="blackboard"></param>
-        public GoapManager
+        internal GoapManager
             (List<AbstractGoapAction> availableActions, List<IGoapGoal> availableGoals, Blackboard blackboard) {
             _availableActions = availableActions;
             _availableGoals = availableGoals;
@@ -46,7 +45,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="availableGoals"></param>
         /// <param name="startStates"></param>
         /// <param name="blackboard"></param>
-        public GoapManager
+        internal GoapManager
             (List<AbstractGoapAction> availableActions,
                 List<IGoapGoal> availableGoals,
                 Blackboard blackboard,
@@ -91,8 +90,8 @@ namespace GoapActionSystem.Implementation {
         }
 
         private void CreateNewPlan() {
-            GoapPlanner planner = new GoapPlanner( 20, _availableActions, _effectToAction, _internalBlackboard);
-           _currentPlan = planner.GetPlan(_currentGoal);
+            GoapPlanner planner = new GoapPlanner(20, _availableActions, _effectToAction, _internalBlackboard.Get(Worldstate));
+            _currentPlan = planner.GetPlan(_currentGoal);
         }
 
         private bool GoalIsReached() {
@@ -112,8 +111,19 @@ namespace GoapActionSystem.Implementation {
 
         private IGoapGoal ChooseNewGoal() {
             UpdateRelevancyOfGoals();
-            IGoapGoal highestRelevancyGoal = _availableGoals.OrderByDescending(x => x.GetRelevancy()).ToList().First();
-            if (_currentGoal != null && _currentGoal.Equals(highestRelevancyGoal)) return _currentGoal;
+
+            List<IGoapGoal> goalSortedByRelevancy = _availableGoals.OrderByDescending(x => x.GetRelevancy()).ToList();
+
+            IGoapGoal highestRelevancyGoal = null;
+            
+            foreach (var goapGoal in goalSortedByRelevancy) {
+                if (highestRelevancyGoal == null && !goapGoal.IsSatisfied(_internalBlackboard.Get(Worldstate))) {
+                    highestRelevancyGoal = goapGoal;
+                }
+            }
+
+            if (_currentGoal != null && !_currentGoal.Equals(highestRelevancyGoal)) {Console.WriteLine("Goal has changed. New is " + highestRelevancyGoal.GetType());}
+            ;
 
             return _currentGoal = highestRelevancyGoal;
         }

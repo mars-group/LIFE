@@ -17,7 +17,7 @@ namespace ESCTestLayer.Implementation
     ///   @see http://jitter-physics.com/wordpress/?tag=sweep-and-prune
     ///   @see http://www.philorwig.com/research/spatial/collision-detection-sweep-and-prune.html
     /// </summary>
-    public class ESC : IESC
+    public class ESC : IDeprecatedESC
     {
         //TODO boundaries einführen, vermutlich als polygon(IGeometry). zunächst als Vector siehe Environment2D
         // was passiert, wenn Agenten Grenzen erreichen?
@@ -40,6 +40,7 @@ namespace ESCTestLayer.Implementation
 
         public void Add(int elementId, int informationType, bool collidable, TVector dimension)
         {//TODO umstellen auf einstufigen Anmeldeprozess inkl. Positionierung. Wahrnehmungsobjekte nicht speichern.
+            //TODO Threadsafe? Gleichzeitig Add und GetData?
             //TODO parameter in klasse kapseln
             _dimensions[elementId] = dimension;
             _positions[elementId] = TVector.Null;

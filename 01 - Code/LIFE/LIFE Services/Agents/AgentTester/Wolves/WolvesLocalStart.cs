@@ -1,47 +1,43 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
-using ESCTestLayer.Interface;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Auxiliary;
-using GenericAgentArchitecture.Environments;
-using LayerAPI.Interfaces;
+using DalskiAgent.Execution;
+using ESCTestLayer.Implementation;
+using DalskiAgent.Agents;
+using DalskiAgent.Auxiliary;
+using DalskiAgent.Environments;
 
-namespace AgentTester {
-
+namespace AgentTester.Wolves {
+  
   /// <summary>
-  /// This builder provides a convenient creation of agents.
+  ///   A local starter that uses the sequential executor. 
+  ///   On this level, another starter for MARS system is planned.
   /// </summary>
-  internal static class AgentBuilder {
-
+  static class WolvesLocalStart {
+      
     /// <summary>
     /// Builder for the wolves vs. sheeps scenario.
     /// </summary>
+    /// <param name="exec">Sequential execution class.</param>
     /// <param name="grass">Number of grass agents.</param>
     /// <param name="sheeps">Number of sheeps.</param>
     /// <param name="wolves">Number of wolves.</param>
-    /// <param name="esc">ESC reference (per default: null).  
-    /// If not set, internal position management will be used.</param>
+    /// <param name="esc">'True': ESC instance created. 
+    /// 'False': Own environment with collision prevention.</param>
     /// <returns>A grassland with the agents.</returns>
-    public static ITickClient CreateWolvesScenarioEnvironment(int grass, int sheeps, int wolves, IESC esc = null) {
-
-      var grassland = new Grassland {RandomExecution = false};
+    private static IEnvironment CreateWolvesScenario(SeqExec exec, int grass, int sheeps, int wolves, bool esc) {
+      
       IEnvironment env;
-
-      // If ESC exists, create adapter and use it as position manager. Otherwise use internal.
-      if (esc != null) {
-        var adapter = new ESCAdapter(esc);
-        env = adapter;
-      }
-      else env = grassland;
-
+      if (!esc) env = new Grassland (exec);
+      else env = new ESCAdapter(new ESC());
+      
       var n1 = grass;
       var n2 = n1 + sheeps;
       var n3 = n2 + wolves;
-      for (var i =  0; i < n1; i++) new Grass(grassland.GetNewID(), env, grassland.GetRandomPosition());
-      for (var i = n1; i < n2; i++) new Sheep(grassland.GetNewID(), env, grassland.GetRandomPosition());
-      for (var i = n2; i < n3; i++) new Wolf (grassland.GetNewID(), env, grassland.GetRandomPosition());
       
-      return grassland;
+      for (var i =  0; i < n1; i++) new Grass(exec, env);
+      for (var i = n1; i < n2; i++) new Sheep(exec, env);
+      for (var i = n2; i < n3; i++) new Wolf (exec, env);      
+      return env;
     }
 
 
@@ -50,13 +46,13 @@ namespace AgentTester {
     /// </summary>
     /// <param name="env">The grassland reference.</param>
     /// <returns>The console view.</returns>
-    public static ConsoleView CreateWolvesView(Grassland env) {
+    private static ConsoleView CreateWolvesView(IEnvironment env) {
       return new ConsoleView(new ConsoleInitData{
 
         // Header strings, map size and options. 
-        Scenario = "Wolfszenario", MapX = 30, MapY = 18, MessageLines = 5,
+        Scenario = "Wolfszenario", MapX = 30, MapY = 20, MessageLines = 5,
         AgentsHeader = new [] {" ID ","  Typ  "," Position "," Energie "," Hgr."," G/S/W "," Distanz ", " Regel "},
-        AgtListMax = 25,
+        AgtListMin = 27, AgtListMax = 27,
         
         // Agent color definitions.
         GetColor = delegate(SpatialAgent agt) {
@@ -78,6 +74,18 @@ namespace AgentTester {
           return '█';
         },
       }, env);
+    }
+
+
+    /// <summary>
+    ///   Start the executor!
+    /// </summary>
+    public static void Main() {
+      var exec = new SeqExec(true);
+      var env = CreateWolvesScenario(exec, 18, 6, 2, false);
+      var view = CreateWolvesView(env);
+      ConsoleView.LcRedirect = false;
+      exec.Run(750, view);
     }
   }
 }

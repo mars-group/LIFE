@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using GenericAgentArchitecture.Perception;
+using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
-namespace GenericAgentArchitecture.Reasoning {
+namespace DalskiAgent.Reasoning {
   abstract class ReasoningComponent : IAgentLogic {
 
     protected ReadOnlyDictionary<int, SensorInput> Perception { get; private set; } // Perception.

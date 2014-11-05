@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Cryptography.X509Certificates;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
 
@@ -11,12 +13,8 @@ namespace GoapGraphConnector.SimpleGraph {
         private Map _map;
         private AStarSteppable _aStar;
 
-        private readonly Dictionary<IGoapEdge, AbstractGoapAction> _mapEdgeToAction =
-            new Dictionary<IGoapEdge, AbstractGoapAction>();
-
-        
         public void InitializeGoapGraph(List<IGoapWorldProperty> rootNode, int maximumGraphDept = 0) {
-            _root = new Node(rootNode, new List<IGoapWorldProperty>(),1);
+            _root = new Node(rootNode, new List<IGoapWorldProperty>(),rootNode.Count);
             InitializeGoapGraph(_root, maximumGraphDept);
         }
 
@@ -42,12 +40,15 @@ namespace GoapGraphConnector.SimpleGraph {
         public void ExpandCurrentVertex(List<AbstractGoapAction> outEdges) {
             var edges = new List<IGoapEdge>();
 
-            foreach (var abstractGoapAction in outEdges) {
+            foreach (var goapAction in outEdges) {
 
-                var newNode = GetChildNodeByActionAndParent(abstractGoapAction, _aStar.Current);
-                var newEdge = new Edge(abstractGoapAction, _aStar.Current, newNode);
+                if (HasConverseEffect(_aStar.Current, goapAction)) { continue; }
+                if (IsCreatingDuplicatedGoalValueKeys(_aStar.Current, goapAction)) {continue;}
                 
-                _mapEdgeToAction.Add(newEdge, abstractGoapAction);
+                var newNode = GetChildNodeByActionAndParent(goapAction, _aStar.Current);
+                var newEdge = new Edge(goapAction, _aStar.Current, newNode);
+                
+                edges.Add(newEdge);
             }
             ExpandCurrentVertex(edges);
         }
@@ -74,14 +75,8 @@ namespace GoapGraphConnector.SimpleGraph {
         /// <returns></returns>
         List<AbstractGoapAction> IGoapGraphService.GetShortestPath() {
             List<IGoapEdge> edges = _aStar.CreatePathToCurrentAsEdgeList();
-            List<AbstractGoapAction> actionList = new List<AbstractGoapAction>();
 
-            foreach (var goapEdge in edges) {
-                AbstractGoapAction action;
-                _mapEdgeToAction.TryGetValue(goapEdge, out action);
-                actionList.Add(action);
-            }
-            return actionList;
+            return edges.Select(goapEdge => goapEdge.GetAction()).ToList();
         }
 
         /// <summary>
@@ -93,37 +88,46 @@ namespace GoapGraphConnector.SimpleGraph {
         }
 
         public IGoapNode GetChildNodeByActionAndParent(AbstractGoapAction action, IGoapNode parent) {
-            HashSet<IGoapWorldProperty> goalValues = new HashSet<IGoapWorldProperty>();
-            HashSet<IGoapWorldProperty> currValues = new HashSet<IGoapWorldProperty>();
-
-
-            // add goal conditions from parent to goal
-            parent.GetGoalValues().ForEach(x => goalValues.Add(x));
-            // add preconditions from action to goal
-            action.PreConditions.ForEach(x => goalValues.Add(x));
-
-            // add the already satisfied properties from parent to child
-            parent.GetSatisfiedGoalValues().ForEach(x => currValues.Add(x));
-
-            // TODO dieser Ablauf muss noch validiert werden
-
-
-
-            var tempnode = new Node(goalValues.ToList(), currValues.ToList(), 0);
-            var tempCurrentValues = new HashSet<IGoapWorldProperty>(); 
             
-            // now care about the maybe unsatisfied
-            foreach (var unsatisfiedGoalValue in tempnode.GetUnsatisfiedGoalValues()) {
-                if (action.Effects.Contains(unsatisfiedGoalValue)) {
-                    
+            List<IGoapWorldProperty> goalValues = new List<IGoapWorldProperty>();
+            List<IGoapWorldProperty> currValues = new List<IGoapWorldProperty>();
 
-                    tempCurrentValues.Add(unsatisfiedGoalValue);
-                }
-                
-                }
-            return new Node(goalValues.ToList(), tempCurrentValues.ToList(), 1);
-       
+            // step 1 add unsatisfied goal values 
+            goalValues.AddRange(parent.GetUnsatisfiedGoalValues());
+
+            // step 2 find satisfying effects and add to current values
+            currValues.AddRange(goalValues.Where(goalValue => action.Effects.Contains(goalValue)).ToList());
+
+            // step 3 check if effects have satisfied goal values
+            if (!(goalValues.Intersect(currValues).Count() > 0)) throw new ArgumentException("an unproductive action was chosen for expanding a node");
+
+            // step 4
+            var additionalGoals = action.PreConditions.Where(precondition => !goalValues.Contains(precondition)).ToList();
+            goalValues.AddRange(additionalGoals);
+
+            // simple heuristik by counting not reached goal states
+            int heuristic = goalValues.Except(currValues).Count();
+
+            return new Node(goalValues.ToList(), currValues.ToList(), heuristic);
         }
+
+        private bool HasConverseEffect(IGoapNode parent, AbstractGoapAction action) {
+            foreach (var goalValue in parent.GetUnsatisfiedGoalValues()) {
+                if (action.Effects.Any(effect => effect.GetPropertyKey().Equals(goalValue.GetPropertyKey())
+                                                 && effect.IsValid() != goalValue.IsValid())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsCreatingDuplicatedGoalValueKeys(IGoapNode current, AbstractGoapAction goapAction){
+            List<Enum> nodeKeys = current.GetUnsatisfiedGoalValues().Select(unsatisfiedGoalValue => unsatisfiedGoalValue.GetPropertyKey()).ToList();
+            List<Enum> actionKeys = goapAction.PreConditions.Select(precondition => precondition.GetPropertyKey()).ToList();
+
+            return actionKeys.Any(actionKey => nodeKeys.Contains(actionKey));
+        }
+        
 
         
     }

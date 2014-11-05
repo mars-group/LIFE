@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GenericAgentArchitectureCommon.Interfaces;
 
-namespace GenericAgentArchitecture.Reasoning {
+namespace DalskiAgent.Reasoning {
   internal class Plan {
 
     private List<IInteraction> _actions; // A sequential order of the actions to execute.

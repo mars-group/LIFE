@@ -7,7 +7,7 @@ namespace ESCTestLayer.Interface
 {
     using CommonTypes.TransportTypes;
 
-    public interface IESC : IGenericDataSource {
+    public interface IDeprecatedESC : IGenericDataSource {
         /// <summary>
         ///   Registers the element with given dimension.
         /// </summary>

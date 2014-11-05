@@ -1,9 +1,9 @@
-﻿using CommonTypes.TransportTypes;
-using GenericAgentArchitecture.Environments;
-using GenericAgentArchitecture.Movement;
-using GenericAgentArchitecture.Movement.Movers;
+﻿using DalskiAgent.Environments;
+using DalskiAgent.Execution;
+using DalskiAgent.Movement;
+using DalskiAgent.Movement.Movers;
 
-namespace GenericAgentArchitecture.Agents {
+namespace DalskiAgent.Agents {
 
   /// <summary>
   ///   This agent is part of a spatial world. It has a position and 
@@ -20,23 +20,32 @@ namespace GenericAgentArchitecture.Agents {
     /// <summary>
     ///   Instantiate a new agent with spatial data. Only available for specializations.
     /// </summary>
-    /// <param name="id">Unique agent identifier.</param>
+    /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Environment implementation reference.</param>
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
-    protected SpatialAgent(long id, IEnvironment env, TVector pos) : base(id) {
+    protected SpatialAgent(IExecution exec, IEnvironment env, Vector pos) : base(exec) {
       _env = env;
-      Data = new MovementData(pos);  
-      _env.AddAgent(this, Data); // Enlist the agent in environment.
+      _env.AddAgent(this, pos, out Data); // Enlist the agent in environment.
+    }
+
+
+    /// <summary>
+    ///   Initialization function (post-constructor). In this case, 
+    ///   it just calls the base init method for execution registration.
+    /// </summary>
+    protected new void Init() {
+      base.Init();
     }
 
 
     /// <summary>
     ///   This function unbinds the agent from the environment.
-    ///   It is intended to be called by an interaction method.
+    ///   It is triggered by the base agent, when alive flag on 'false'.
     /// </summary>
-    protected void Remove() {
+    protected override void Remove() {
+      base.Remove();
       _env.RemoveAgent(this);
-    } 
+    }
 
 
     //-------------------------------------------------------------------------

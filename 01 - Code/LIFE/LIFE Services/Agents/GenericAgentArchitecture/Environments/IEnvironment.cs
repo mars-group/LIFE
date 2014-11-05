@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using LayerAPI.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
   
   /// <summary>
   ///   This interface declares functions needed for movement services.
@@ -16,8 +16,9 @@ namespace GenericAgentArchitecture.Environments {
     ///   Add a new agent to the environment.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">Container with movement data.</param>
-    void AddAgent(SpatialAgent agent, MovementData data);
+    /// <param name="pos">The agent's initial position.</param>
+    /// <param name="mdata">The movement data container reference.</param>
+    void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata);
 
 
     /// <summary>
@@ -44,5 +45,13 @@ namespace GenericAgentArchitecture.Environments {
     List<SpatialAgent> GetAllAgents();
     //TODO Later, we should generalize this method to entities. 
     // It is most likely that not everything in the environment is an agent!
+
+
+    /// <summary>
+    ///   This method allows execution of environment related code. 
+    ///   It is only useful in sequential mode and is executed before any agent.
+    ///   For layer execution, inherit layer from ITickClient and register at itself!
+    /// </summary>
+    void AdvanceEnvironment();
   }
 }

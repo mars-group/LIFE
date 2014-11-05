@@ -1,27 +1,32 @@
 ﻿using System;
-using CommonTypes.TransportTypes;
 using AgentTester.Wolves.Interactions;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Environments;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Execution;
+using DalskiAgent.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
-
 
 namespace AgentTester.Wolves.Agents {
 
+  /// <summary>
+  ///   Grass is also represented by an agent.
+  /// </summary>
   internal class Grass : SpatialAgent, IAgentLogic, IEatInteractionTarget {
 
-    private int _foodValue = 2;          // Nutrition value (energy).
-    public const int FoodvalueMax = 60;  // Maximum food value.
-    private readonly Random _random;     // Random number generator for unequal growing.
+    private int _foodValue = 2;           // Nutrition value (energy).
+    private const int FoodvalueMax = 60;  // Maximum food value.
+    private readonly Random _random;      // Random number generator for unequal growing.
+
 
     /// <summary>
     ///   Create a new grass agent.
     /// </summary>
-    /// <param name="id">The agent identifier.</param>
+    /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Environment reference.</param>
-    /// <param name="pos">The position.</param>
-    public Grass(long id, IEnvironment env, TVector pos) : base(id, env, pos) {
+    /// <param name="pos">The initial position.</param>
+    public Grass(IExecution exec, IEnvironment env, Vector pos = null) : base(exec, env, pos) {
       _random = new Random(Id.GetHashCode());
+      Init();
     }
 
 
@@ -63,7 +68,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      Remove();
+      IsAlive = false;
     }
   }
 }

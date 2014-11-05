@@ -1,7 +1,7 @@
-﻿using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Auxiliary;
+﻿using DalskiAgent.Agents;
+using DalskiAgent.Auxiliary;
 
-namespace GenericAgentArchitecture.Perception {
+namespace DalskiAgent.Perception {
 
   /// <summary>
   ///   This sensor listens on a channel and returns all messages to the PU. 
@@ -25,7 +25,7 @@ namespace GenericAgentArchitecture.Perception {
     /// </summary>
     /// <returns>Sensor input object with list of new messages.</returns>
     protected override SensorInput RetrieveData() {
-      return new SensorInput(this, MessageServer.GetMessages(Channel), Channel, Agent.Cycle);
+      return new SensorInput(this, MessageServer.GetMessages(Channel), Channel, Agent.GetTick());
     }
   }
 }
