@@ -65,6 +65,7 @@
     <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RaytracingPathNode.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RayUtil.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\TargetListType.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Util\Math\UnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />

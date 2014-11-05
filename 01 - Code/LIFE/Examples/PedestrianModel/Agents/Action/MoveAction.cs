@@ -1,4 +1,6 @@
-﻿using PedestrianModel.Util.Math;
+﻿using DalskiAgent.Movement.Actions;
+using DalskiAgent.Movement.Movers;
+using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +57,7 @@ namespace PedestrianModel.Agents.Action
 		}
 
 		//public override void PerformAction(EGOAPAgent agent)
-        public void PerformAction(Pedestrian agent)
+        public DirectMovementAction PerformAction(Pedestrian agent, AgentMover mover)
 		{
 			//double? maxMovingSpeed = agent.getStartParameter("movingSpeed");
             double maxMovingSpeed = agent.MaxVelocity;
@@ -84,10 +86,10 @@ namespace PedestrianModel.Agents.Action
                 //de.haw.walk.agentplatform.action.actions.MoveAction action = new de.haw.walk.agentplatform.action.actions.MoveAction(direction, moveDuration);
 
                 //agent.Environment.executeAction(action);
-                #warning This function has to return a DalskiAgent.Movement.Actions.DirectMoveAction or similar
-                // TODO: Add MoveAction return value.
-                // Vector3D nextPosition = Vector3D.Add(agentPos, Vector3D.Multiply(lengthOfTimestepInMilliseconds/1000d, direction));
-                // return new DirectMoveAction(Vector3DHelper.ToDalskiVector(nextPosition));
+                #warning This function has to return a DalskiAgent.Movement.Actions.DirectMovementAction or similar
+
+                Vector3D nextPosition = Vector3D.Add(agentPos, Vector3D.Multiply(Config.lengthOfTimestepsInMilliseconds/1000d, direction));
+                return new DirectMovementAction(mover, Vector3DHelper.ToDalskiVector(nextPosition));
             }
 			else
 			{
@@ -95,8 +97,8 @@ namespace PedestrianModel.Agents.Action
 
                 //agent.Environment.executeAction(action);
 
-                #warning This function has to return a DalskiAgent.Movement.Actions.DirectMoveAction or similar
-                // TODO: Add MoveAction return value.
+                #warning This function has to return a DalskiAgent.Movement.Actions.DirectMovementAction or similar
+                return new DirectMovementAction(mover, agent.GetPosition());
 			}
 		}
 

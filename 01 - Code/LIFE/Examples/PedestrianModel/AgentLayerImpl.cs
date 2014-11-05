@@ -47,6 +47,16 @@ namespace PedestrianModel
             _random = new Random();
             _env = new LayerEnvironment(null, registerAgentHandle, unregisterAgentHandle, this);
 
+            // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
+            var obsPosition = new Vector(5f, 5f);
+            var obsDimension = new Vector(1f, 10f);
+            var obsDirection = new Direction();
+            obsDirection.SetPitch(0f);
+            obsDirection.SetYaw(0f);
+
+            // OBSTACLES HAVE TO BE CREATED BEFORE THE AGENTS!
+            new Obstacle(_idCounter++, _env, obsPosition, obsDimension, obsDirection);
+
             // Create some initial agents.
             var max = 10f;
             var pedDimension = new Vector(1f, 1f);
@@ -62,16 +72,7 @@ namespace PedestrianModel
                 var startPos = new Vector((float)_random.NextDouble() * max, (float)_random.NextDouble() * max);
                 var targetPos = new Vector((float)_random.NextDouble() * max, (float)_random.NextDouble() * max);
                 new Pedestrian("sim0", _idCounter++, _env, startPos, pedDimension, pedDirection, targetPos);
-            }
-
-            // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
-            var obsPosition = new Vector(5f, 5f);
-            var obsDimension = new Vector(1f, 10f);
-            var obsDirection = new Direction();
-            obsDirection.SetPitch(0f);
-            obsDirection.SetYaw(0f);
-
-            new Obstacle(_idCounter++, _env, obsPosition, obsDimension, obsDirection);
+            }            
 
             // Register the layer itself for execution. The agents are registered by themselves.
             registerAgentHandle.Invoke(this, this);

@@ -50,10 +50,7 @@ namespace PedestrianModel.Agents
         private IPathfinder<Vector3D> pathfinder;
         private readonly ReactiveBehaviorPipeline movementPipeline = new ReactiveBehaviorPipeline();
         private readonly IList<MoveAction> actions = new List<MoveAction>();
-
-        private readonly bool walkLoops = false; // if reached target, teleport to start position and start again
-        private readonly TargetListType targetListType = TargetListType.Sequential; // how to process the target positions
-        private readonly double targetReachedDistance = 0.25; // at what distance I have reached the target position
+        
         private int targetPositionIndex = 0; // if target list type is Sequential, this is the current index
 
         /// <summary>
@@ -119,44 +116,17 @@ namespace PedestrianModel.Agents
             this.targetPositions.Add(Vector3DHelper.FromDalskiVector(targetPosition));
 
             this.startPosition = Vector3DHelper.FromDalskiVector(position);
+
+            Start();
         }
 
         public IInteraction Reason()
         {
-            // - Wayfinding
-            // - Collision avoidance
-            // - Position logging
-
-            var rawObstaclesData = PerceptionUnit.GetData((int)ObstacleEnvironment.InformationTypes.Obstacles).Data;
-            var obstacles = ((Dictionary<long, Obstacle>)rawObstaclesData).Values;
-
-            Console.WriteLine("Obstacles:");
-            foreach (Obstacle obstacle in obstacles) {
-                Console.WriteLine(obstacle);
-            }
-            Console.WriteLine("---");
-
-            var rawPedestriansData = PerceptionUnit.GetData((int)ObstacleEnvironment.InformationTypes.Pedestrians).Data;
-            var pedestrians = ((Dictionary<long, Pedestrian>)rawPedestriansData).Values;
-
-            Console.WriteLine("Pedestrians:");
-            foreach (Pedestrian pedestrian in pedestrians)
-            {
-                Console.WriteLine(pedestrian);
-            }
-            Console.WriteLine("---");
-
-            
-
             // TODO:
-            // - Some kind of starter (create a scenario, run it)
-            // - Reasoning logic
+            // - agent logging
+            // - simulation visualization
 
-            // decide where to move in the next step
-            // if collision occurs old position is kept
-
-            var nextPosition = new Vector(GetPosition().X + 1, GetPosition().Y + 1);
-            return new DirectMovementAction(mover, nextPosition);
+            return Act();
         }
 
         public String Name
@@ -205,7 +175,7 @@ namespace PedestrianModel.Agents
 			//pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
             var rawObstaclesData = PerceptionUnit.GetData((int)ObstacleEnvironment.InformationTypes.Obstacles).Data;
             IList<SpatialAgent> obstacles = ((Dictionary<long, Obstacle>)rawObstaclesData).Values.ToList<SpatialAgent>();
-            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
+            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0.43, Math.Max(Config.targetReachedDistance * 2.0, 0.28));
 			pathfinder = new AStarPathfinder<Vector3D>(pathfindingSearchGraph);
 
 			CreateAndExecuteMovePlan(targetPositions);
@@ -221,8 +191,10 @@ namespace PedestrianModel.Agents
 		/// <code>walkLoops = true</code> parameter, the agent executes a <seealso cref="TeleportAction"/> to it#s start
 		/// position and starts the movement to the target position again.
 		/// </summary>
-		private void Act()
+		private DirectMovementAction Act()
 		{
+            DirectMovementAction directMovementAction;
+
 			// save current position in track-list
 			if (GotStuck())
 			{
@@ -236,19 +208,7 @@ namespace PedestrianModel.Agents
 				if (actions[0].IsFinished(this))
 				{
 					//LOGGER.trace("Agent " + Id + ": finished action " + actions.Remove(0));
-
-					// collect move actions to create path
-					// ok, this is quite a hack, but this agent will not be improved anyway... :)
-					IList<Vector3D> waypoints = new List<Vector3D>();
-					//foreach (EGOAPAction action in actions)
-                    foreach (MoveAction action in actions)
-					{
-						//if (action is MoveAction)
-						//{
-							//waypoints.Add(((MoveAction) action).TargetPosition);
-						//}
-                        waypoints.Add(action.TargetPosition);
-					}
+                    actions.RemoveAt(0);					
 				}
 				else
 				{
@@ -259,32 +219,46 @@ namespace PedestrianModel.Agents
 			if (actions.Count > 0)
 			{
                 #warning Don't perform the action, yet. Just return it here, so it can be returned in Reason().
-				actions[0].PerformAction(this);
+                //actions[0].PerformAction(this);
+				directMovementAction = actions[0].PerformAction(this, Mover);
 			}
 			else
 			{
-				if (this.targetListType == TargetListType.SequentialLoop || (this.targetListType == TargetListType.Sequential && this.targetPositionIndex + 1 < this.targetPositions.Count))
+                // code only executed if looped or more than 1 target!
+				if (Config.targetListType == TargetListType.SequentialLoop || (Config.targetListType == TargetListType.Sequential && this.targetPositionIndex + 1 < this.targetPositions.Count))
 				{
 					// walk to the next position in the list
 					this.targetPositionIndex = (this.targetPositionIndex + 1) % this.targetPositions.Count;
 					CreateAndExecuteMovePlan(targetPositions);
+
+                    #warning Correct to return DirectMovementAction here?
+                    directMovementAction = actions[0].PerformAction(this, Mover);
 				}
-				else if (walkLoops)
+                // code only executed if looped
+				else if (Config.walkLoops)
 				{
 					// last target reached, get back to start...
 					// kind of a hack, should be replaced some time and be done in the environment...
 					//TeleportAction action = new TeleportAction(startPosition);
 					//Environment.executeAction(action);
                     #warning Return a direct move action which puts the agent back to startPosition (if there's space)
+                    directMovementAction = new DirectMovementAction(mover, Vector3DHelper.ToDalskiVector(startPosition));
+                    // Allowed to already execute this here to immediately change position and have the right agent position for creation of move plan?
+                    // Will be executed twice, but shouldn't have any negative effect.
+                    directMovementAction.Execute();
 
 					CreateAndExecuteMovePlan(targetPositions);
 				}
 				else
 				{
 					//Environment.executeAction(new SuicideAction());
-                    #warning Remove agents from the evironment here or return an Action which removes the agent later.
+                    #warning Remove agents from the evironment here.
+                    // Don't change position. Agent should remove itself in the next Reason().
+                    IsAlive = false;
+                    directMovementAction = new DirectMovementAction(mover, GetPosition());
 				}
 			}
+            return directMovementAction;
 		}
 
 		/// <summary>
@@ -296,7 +270,7 @@ namespace PedestrianModel.Agents
 		{
 			IList<Vector3D> shortestPath = null;
 
-			if (targetListType == TargetListType.Parallel)
+			if (Config.targetListType == TargetListType.Parallel)
 			{
 				double shortestPathLength = double.MaxValue;
 				foreach (Vector3D target in targetPositions)
@@ -338,7 +312,7 @@ namespace PedestrianModel.Agents
 			{
 				foreach (Vector3D waypoint in shortestPath)
 				{
-					this.actions.Add(new MoveAction(waypoint, targetReachedDistance));
+					this.actions.Add(new MoveAction(waypoint, Config.targetReachedDistance));
 				}
 			}
 		}

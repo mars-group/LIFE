@@ -35,6 +35,10 @@ namespace PedestrianModel
       _view = view;
     }
 
+    private LocalStarter(ITickClient environment)
+    {
+        _environment = environment;
+    }
 
     /// <summary>
     ///   Execution routine. Sends a tick to the environment container.
@@ -61,8 +65,9 @@ namespace PedestrianModel
     public static void Main() {
       //var environment = CreateScenarioEnvironment(10, new ESC());
       var environment = CreateScenarioEnvironment(10);
-      var view = CreateConsoleView((ObstacleEnvironment) environment);
-      new LocalStarter(environment, view).Run(0);
+      //var view = CreateConsoleView((ObstacleEnvironment) environment);
+      //new LocalStarter(environment, view).Run(0);
+      new LocalStarter(environment).Run(0);
     }
 
     private static ConsoleView CreateConsoleView(ObstacleEnvironment environment)
@@ -83,22 +88,7 @@ namespace PedestrianModel
         }
         else env = obstacleEnvironment;
 
-        var random = new Random();
-        var max = 10f;
-        var pedDimension = new Vector(1f, 1f);
-        var pedDirection = new Direction();
-        pedDirection.SetPitch(0f);
-        pedDirection.SetYaw(0f);
-
         long idCounter = 0;
-
-        for (var i = 0; i < pedestrianCount; i++)
-        {            
-            // Random position between (0,0) and (10,10).
-            var startPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
-            var targetPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
-            new Pedestrian("sim0", idCounter++, env, startPos, pedDimension, pedDirection, targetPos);
-        }
 
         // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
         var obsPosition = new Vector(5f, 5f);
@@ -107,8 +97,23 @@ namespace PedestrianModel
         obsDirection.SetPitch(0f);
         obsDirection.SetYaw(0f);
 
+        // OBSTACLES HAVE TO BE CREATED BEFORE THE AGENTS!
         new Obstacle(idCounter++, env, obsPosition, obsDimension, obsDirection);
-        
+
+        var random = new Random();
+        var max = 10f;
+        var pedDimension = new Vector(1f, 1f);
+        var pedDirection = new Direction();
+        pedDirection.SetPitch(0f);
+        pedDirection.SetYaw(0f);        
+
+        for (var i = 0; i < pedestrianCount; i++)
+        {
+            // Random position between (0,0) and (10,10).
+            var startPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
+            var targetPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
+            new Pedestrian("sim0", idCounter++, env, startPos, pedDimension, pedDirection, targetPos);
+        }        
 
         return obstacleEnvironment;
     }
