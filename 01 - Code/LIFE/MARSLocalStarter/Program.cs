@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Linq;
 using LayerContainerFacade.Interfaces;
+using log4net;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 
 namespace MARSLocalStarter
 {
-    public class Program
+    public static class Program
     {
-
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
         {
@@ -70,7 +71,8 @@ namespace MARSLocalStarter
                             "http://mc.mars.haw-hamburg.de/modeluploads/test@test.com/ElephantModel.zip"),
                         ticks);
             }
-            else {
+            else
+            {
                 var models = core.GetAllModels().ToList();
                 core.StartSimulationWithModel(models[nr], ticks);
             }
@@ -175,29 +177,24 @@ namespace MARSLocalStarter
 
         private static void Main(string[] args)
         {
+            Log.Info("Initializing components and building application core...");
 
-                Console.WriteLine("Initializing components and building application core...");
 
-
-                var core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
-
+            var core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
 
 
 
-				var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+
+            var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
 
 
 
-                Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
+            Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
 
-				// parse for any given parameters and act accordingly
-                ParseArgsAndStart(args, core);
+            // parse for any given parameters and act accordingly
+            ParseArgsAndStart(args, core);
 
-                ConsoleKeyInfo info = Console.ReadKey();
-                while (info.Key != ConsoleKey.Q)
-                {
-                    info = Console.ReadKey();
-                }
+            while (Console.ReadKey().Key != ConsoleKey.Q) { }
         }
     }
 }
