@@ -5,6 +5,7 @@ using Mono.Addins;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
+
 namespace GOAPLayer
 {
     [Extension(typeof(ISteppedLayer))]

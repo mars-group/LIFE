@@ -17,7 +17,7 @@
       </layout>
     </appender>
     <root>
-      <level value="DEBUG" />
+      <level value="ALL" />
       <appender-ref ref="ConsoleAppender" />
       <appender-ref ref="UdpAppender" />
     </root>
