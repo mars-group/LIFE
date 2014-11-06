@@ -40,9 +40,12 @@ namespace CellLayer {
 
         #endregion
 
-        internal const int CellCountHorizontal = 20;
-        internal const int CellCountVertical = 20;
+        internal const int CellCountXAxis = 20;
+        internal const int CellCountYAxis = 20;
         private const int CellSideLength = 25;
+        internal const int SmallestXCoordinate = 1;
+        internal const int SmallestYCoordinate = 1;
+
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static readonly Dictionary<CellType, Color> CellColors = new Dictionary<CellType, Color> {
@@ -117,7 +120,7 @@ namespace CellLayer {
         private void StartVisualisation(Dictionary<int, object[]> viewData) {
             ThreadStart threadStart = new ThreadStart
                 (delegate {
-                    _viewForm = new SimPanForm(CellCountHorizontal, CellCountVertical, CellSideLength, viewData);
+                    _viewForm = new SimPanForm(CellCountXAxis, CellCountYAxis, CellSideLength, viewData);
                     _viewForm.ShowDialog();
                 });
             _visualizationThread = new Thread(threadStart);
@@ -132,12 +135,13 @@ namespace CellLayer {
             Dictionary<int, Cell> cellDict = new Dictionary<int, Cell>();
             Dictionary<int, object[]> dataDict = new Dictionary<int, object[]>();
 
-            for (int posHorizontal = 1; posHorizontal <= CellCountHorizontal; posHorizontal++) {
-                for (int posVertical = 1; posVertical <= CellCountVertical; posVertical++) {
-                    int cellIid = (posHorizontal - 1)*CellCountHorizontal + posVertical;
-                    cellDict.Add(cellIid, new Cell(cellIid, posVertical, posHorizontal, CellType.Neutral));
+            for (int posX = 1; posX <= CellCountXAxis; posX++) {
+                for (int posY = 1; posY <= CellCountYAxis; posY++) {
 
-                    object[] data = {posVertical, posHorizontal, CellColors[CellType.Neutral]};
+                    int cellIid = (posX - 1)*CellCountXAxis + posY;
+                    cellDict.Add(cellIid, new Cell(cellIid, posY, posX, CellType.Neutral));
+
+                    object[] data = {posY, posX, CellColors[CellType.Neutral]};
                     if (_obstacleCells.Contains(cellIid)) data[2] = CellColors[CellType.Obstacle];
                     dataDict.Add(cellIid, data);
                 }
@@ -159,7 +163,7 @@ namespace CellLayer {
             if (!_cellField.ContainsKey(cellNumber)) return;
             Cell cell = _cellField[cellNumber];
             cell.ChangeStateTo(type);
-            object[] newViewData = {cell.PosVertical, cell.Poshorizontal, CellColors[cell.CellType]};
+            object[] newViewData = {cell.YCoordinate, cell.XCoordinate, CellColors[cell.CellType]};
             _viewForm.ChangeCell(cellNumber, newViewData);
         }
 
@@ -172,7 +176,7 @@ namespace CellLayer {
                 foreach (var cellNum in cellNumbers) {
                     Cell cell = _cellField[cellNum];
                     cell.ChangeStateTo(type);
-                    object[] newViewData = {cell.PosVertical, cell.Poshorizontal, CellColors[cell.CellType]};
+                    object[] newViewData = { cell.YCoordinate, cell.XCoordinate, CellColors[cell.CellType] };
                     cellViewData[cellNum] = newViewData;
                 }
                 _viewForm.ChangeCells(cellViewData);
