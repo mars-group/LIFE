@@ -120,7 +120,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 
 			// creating the static obstacle field
 			//IList<SimulationObject> obstacles = ((VisionSensor) agent.Environment.VisionSensor).ObstaclesAsObjectList;
-            var rawObstacleData = perceptionUnit.GetData((int)ObstacleEnvironment.InformationTypes.Obstacles).Data;
+            var rawObstacleData = perceptionUnit.GetData((int)InformationTypes.Obstacles).Data;
             var obstacles = ((Dictionary<long, Obstacle>)rawObstacleData).Values;
 
 			//foreach (SimulationObject obstacle in obstacles)
@@ -141,7 +141,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 			PotentialField agentField = new SimplePotentialField();
 
 			//IList<SimulationObject> perceptedAgents = ((VisionSensor) agent.Environment.VisionSensor).AgentsAsObjectList;
-            var rawPedestrianData = perceptionUnit.GetData((int)ObstacleEnvironment.InformationTypes.Pedestrians).Data;
+            var rawPedestrianData = perceptionUnit.GetData((int)InformationTypes.Pedestrians).Data;
             var pedestrians = ((Dictionary<long, Pedestrian>)rawPedestrianData).Values;
 
 			//foreach (SimulationObject so in perceptedAgents)

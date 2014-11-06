@@ -1,6 +1,7 @@
 ﻿using CommonTypes.TransportTypes;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
+using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
 using System;
@@ -23,8 +24,8 @@ namespace PedestrianModel.Agents
         /// <param name="id">Agent identifier.</param>
         /// <param name="env">Environment reference.</param>
         /// <param name="pos">Initial position.</param>
-        public Obstacle(long id, IEnvironment environment, Vector position, Vector dimension, Direction direction)
-            : base(id, environment, position)
+        public Obstacle(IExecution exec, IEnvironment env, Vector position, Vector dimension, Direction direction)
+            : base(exec, env, position)
         {
             Data.Dimension.X = dimension.X;
             Data.Dimension.Y = dimension.Y;
@@ -34,6 +35,8 @@ namespace PedestrianModel.Agents
             Data.Direction.SetPitch(direction.Pitch);
             // Left/Right
             Data.Direction.SetYaw(direction.Yaw);
+
+            Init();
         }
 
         public IInteraction Reason()

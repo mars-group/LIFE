@@ -1,6 +1,7 @@
 ﻿using CommonTypes.TransportTypes;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
+using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using ESCTestLayer.Implementation;
 using ESCTestLayer.Interface;
@@ -23,72 +24,21 @@ namespace PedestrianModel
     
     private readonly ITickClient _environment; // The agent container.
     private readonly ConsoleView _view;        // The console view module.
-
-
-    /// <summary>
-    ///   Instantiate a runtime.
-    ///   <param name="environment">The environment to execute.</param>
-    ///   <param name="view">The console view module.</param>
-    /// </summary>
-    private LocalStarter(ITickClient environment, ConsoleView view) {
-      _environment = environment;
-      _view = view;
-    }
-
-    private LocalStarter(ITickClient environment)
-    {
-        _environment = environment;
-    }
-
-    /// <summary>
-    ///   Execution routine. Sends a tick to the environment container.
-    /// </summary>
-    /// <param name="delay">Thread delay (in ms), 0 for manual execution.</param>
-    private void Run(int delay) {
-      while (true) {
-        _environment.Tick();
-        if (_view != null) _view.Print();
-
-        // Manual or automatic execution.
-        if (delay == 0) Console.ReadLine();
-        else {
-          Console.WriteLine();
-          Thread.Sleep(delay);
-        }
-      }
-    }
-
     
     /// <summary>
     ///   Program entry. Creates some agents and starts them.
     /// </summary>
     public static void Main() {
-      //var environment = CreateScenarioEnvironment(10, new ESC());
-      var environment = CreateScenarioEnvironment(10);
-      //var view = CreateConsoleView((ObstacleEnvironment) environment);
-      //new LocalStarter(environment, view).Run(0);
-      new LocalStarter(environment).Run(0);
+        var exec = new SeqExec(true);
+        var env = CreateScenarioEnvironment(exec, false, 10);
+        exec.Run(1000, null);
     }
 
-    private static ConsoleView CreateConsoleView(ObstacleEnvironment environment)
+    private static IEnvironment CreateScenarioEnvironment(SeqExec exec, bool esc, int pedestrianCount)
     {
-        throw new NotImplementedException();
-    }
-
-    private static ITickClient CreateScenarioEnvironment(int pedestrianCount, IESC esc = null)
-    {
-        var obstacleEnvironment = new ObstacleEnvironment { RandomExecution = false };
         IEnvironment env;
-
-        // If ESC exists, create adapter and use it as position manager. Otherwise use internal.
-        if (esc != null)
-        {
-            var adapter = new ESCAdapter(esc);
-            env = adapter;
-        }
-        else env = obstacleEnvironment;
-
-        long idCounter = 0;
+        if (!esc) env = new ObstacleEnvironment(exec);
+        else env = new ESCAdapter(new ESC());
 
         // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
         var obsPosition = new Vector(5f, 5f);
@@ -98,7 +48,7 @@ namespace PedestrianModel
         obsDirection.SetYaw(0f);
 
         // OBSTACLES HAVE TO BE CREATED BEFORE THE AGENTS!
-        new Obstacle(idCounter++, env, obsPosition, obsDimension, obsDirection);
+        new Obstacle(exec, env, obsPosition, obsDimension, obsDirection);
 
         var random = new Random();
         var max = 10f;
@@ -112,10 +62,10 @@ namespace PedestrianModel
             // Random position between (0,0) and (10,10).
             var startPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
             var targetPos = new Vector((float)random.NextDouble() * max, (float)random.NextDouble() * max);
-            new Pedestrian("sim0", idCounter++, env, startPos, pedDimension, pedDirection, targetPos);
+            new Pedestrian(exec, env, "sim0", startPos, pedDimension, pedDirection, targetPos);
         }        
 
-        return obstacleEnvironment;
+        return env;
     }
   }
 }

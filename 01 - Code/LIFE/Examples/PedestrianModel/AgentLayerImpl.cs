@@ -6,6 +6,7 @@ using Mono.Addins;
 using PedestrianModel.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Movement;
+using DalskiAgent.Execution;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -26,11 +27,10 @@ namespace PedestrianModel
     public class AgentLayerImpl : ISteppedLayer, ITickClient
     {
 
-        private long _tick;            // Counter of current tick.    
-        private Random _random;        // Random number generator.
-        private long _idCounter;       // Agent ID counter. Auto-incremented on each Add() call.    
-        private LayerEnvironment _env; // Environment object for spatial agents. 
-
+        private long _tick;         // Counter of current tick.    
+        private Random _random;     // Random number generator.   
+        private IEnvironment _env;  // Environment object for spatial agents. 
+        private IExecution _exec;   // Agent execution container reference.
 
         /// <summary>
         ///   Initializes this layer.
@@ -43,9 +43,9 @@ namespace PedestrianModel
         public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
             _tick = 0;
-            _idCounter = 0;
             _random = new Random();
-            _env = new LayerEnvironment(null, registerAgentHandle, unregisterAgentHandle, this);
+            _env = new Environment2D(new Vector(1000, 1000));
+            _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);  
 
             // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
             var obsPosition = new Vector(5f, 5f);
@@ -55,7 +55,7 @@ namespace PedestrianModel
             obsDirection.SetYaw(0f);
 
             // OBSTACLES HAVE TO BE CREATED BEFORE THE AGENTS!
-            new Obstacle(_idCounter++, _env, obsPosition, obsDimension, obsDirection);
+            new Obstacle(_exec, _env, obsPosition, obsDimension, obsDirection);
 
             // Create some initial agents.
             var max = 10f;
@@ -71,7 +71,7 @@ namespace PedestrianModel
                 // Random position between (0,0) and (10,10).
                 var startPos = new Vector((float)_random.NextDouble() * max, (float)_random.NextDouble() * max);
                 var targetPos = new Vector((float)_random.NextDouble() * max, (float)_random.NextDouble() * max);
-                new Pedestrian("sim0", _idCounter++, _env, startPos, pedDimension, pedDirection, targetPos);
+                new Pedestrian(_exec, _env, "sim0", startPos, pedDimension, pedDirection, targetPos);
             }            
 
             // Register the layer itself for execution. The agents are registered by themselves.

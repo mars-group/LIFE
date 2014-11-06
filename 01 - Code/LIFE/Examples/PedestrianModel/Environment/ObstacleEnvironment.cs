@@ -1,5 +1,6 @@
 ﻿using DalskiAgent.Agents;
 using DalskiAgent.Environments;
+using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Perception;
 using PedestrianModel.Agents;
@@ -16,72 +17,38 @@ namespace PedestrianModel.Environment
     /// </summary>
     public class ObstacleEnvironment : Environment2D
     {
+        private readonly IExecution _exec;  // Agent execution container reference.
 
         /// <summary>
         ///   Create a new environment.
         /// </summary>
-        public ObstacleEnvironment() : base(new Vector(1000, 1000), false) { }
-
-        /* Data source functions: Information types and retrieval method. */
-        public enum InformationTypes { AllAgents, Obstacles, Pedestrians }
+        public ObstacleEnvironment(SeqExec exec) : base(new Vector(1000, 1000)) {
+            _exec = exec;
+            exec.SetEnvironment(this);        
+        }
 
         public override object GetData(int informationType, LayerAPI.Interfaces.IGeometry geometry)
         {
             switch ((InformationTypes)informationType)
             {
-                case InformationTypes.Pedestrians:
-                    {
-                        var map = new Dictionary<long, SpatialAgent>();
-                        var halo = (Halo)geometry;
-                        foreach (var agent in GetAllAgents())
-                        {
-                            if (agent is Pedestrian)
-                            {
-                                if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
-                                halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon)
-                                {
-                                    map[agent.Id] = agent;
-                                }
-                            }                            
-                        }
-                        return map;
-                    }
+                case InformationTypes.AllAgents:
+                    return base.GetData(0, geometry);
+
                 case InformationTypes.Obstacles:
                     {
-                        var map = new Dictionary<long, SpatialAgent>();
-                        var halo = (Halo)geometry;
-                        foreach (var agent in GetAllAgents())
-                        {
-                            if (agent is Obstacle)
-                            {
-                                if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
-                                halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon)
-                                {
-                                    map[agent.Id] = agent;
-                                }
-                            }
-                        }
-                        return map;
+                        var list = (List<SpatialAgent>)base.GetData(0, geometry);
+                        return list.OfType<Obstacle>().ToList();
                     }
-                case InformationTypes.AllAgents:
+                case InformationTypes.Pedestrians:
                     {
-                        var map = new Dictionary<long, SpatialAgent>();
-                        var halo = (Halo)geometry;
-                        foreach (var agent in GetAllAgents())
-                        {
-                            if (halo.IsInRange(agent.GetPosition().GetTVector()) &&
-                            halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon)
-                            {
-                                 map[agent.Id] = agent;
-                            }                            
-                        }
-                        return map;
+                        var list = (List<SpatialAgent>)base.GetData(0, geometry);
+                        return list.OfType<Pedestrian>().ToList();
                     }
                 default: return null;
             }
         }
 
-        protected override void AdvanceEnvironment()
+        public override void AdvanceEnvironment()
         {
             // Nothing to do here in this case.
         }
