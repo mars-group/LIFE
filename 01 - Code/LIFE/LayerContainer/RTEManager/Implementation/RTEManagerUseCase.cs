@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Hik.Threading;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using RTEManager.Interfaces;
@@ -90,9 +88,6 @@ namespace RTEManager.Implementation {
                     client => client.Key.Tick()
                     )
                 );
-
-
-
 
             // clean up all deleted tickClients
             Parallel.ForEach
