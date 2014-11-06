@@ -45,5 +45,13 @@ namespace DalskiAgent.Environments {
     List<SpatialAgent> GetAllAgents();
     //TODO Later, we should generalize this method to entities. 
     // It is most likely that not everything in the environment is an agent!
+
+
+    /// <summary>
+    ///   This method allows execution of environment related code. 
+    ///   It is only useful in sequential mode and is executed before any agent.
+    ///   For layer execution, inherit layer from ITickClient and register at itself!
+    /// </summary>
+    void AdvanceEnvironment();
   }
 }

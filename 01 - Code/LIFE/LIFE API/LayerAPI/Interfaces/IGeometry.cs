@@ -1,10 +1,9 @@
 ﻿namespace LayerAPI.Interfaces {
-    #region Namespace imports
-
     using CommonTypes.TransportTypes;
 
-    #endregion
-
+    /// <summary>
+    ///     Geometry solely holds the shape and extent of the figure. No position or orientation / direction should be hold.
+    /// </summary>
     public interface IGeometry {
         /// <summary>
         ///     The center position of this geometry.
@@ -17,7 +16,7 @@
         /// </summary>
         /// <returns>The corresponding AABB object.</returns>
         AABB GetAABB();
-  
+
         /// <summary>
         ///     Check, if a given position is inside this perception range.
         /// </summary>

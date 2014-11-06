@@ -38,7 +38,7 @@ namespace DalskiAgent.Perception {
     /// <returns>Sensor data object.</returns>
     protected override SensorInput RetrieveData() {
       var result = Source.GetData(InformationType, Halo);
-      return new SensorInput(this, result, InformationType, Agent.Cycle);
+      return new SensorInput(this, result, InformationType, Agent.GetTick());
     }
 
 
