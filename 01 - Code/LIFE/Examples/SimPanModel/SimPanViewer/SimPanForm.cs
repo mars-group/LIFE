@@ -12,23 +12,23 @@ namespace SimPanViewer {
 
         private readonly int _cellSideLength;
         private readonly Dictionary<int, object[]> _cellData;
-        private int CellCountHorizontal;
-        private int CellCountVertical;
+        private int CellCountXAxis;
+        private int CellCountYAxis;
         public Dictionary<int, object[]> _pointData = new Dictionary<int, object[]>();
 
 
         public SimPanForm
-            (int cellCountHorizontal, int cellCountVertical, int cellSideLength, Dictionary<int, object[]> cellData) {
-            CellCountHorizontal = cellCountHorizontal;
-            CellCountVertical = cellCountVertical;
+            (int cellCountXAxis, int cellCountYAxis, int cellSideLength, Dictionary<int, object[]> cellData) {
+            CellCountXAxis = cellCountXAxis;
+            CellCountYAxis = cellCountYAxis;
             _cellSideLength = cellSideLength;
             _cellData = cellData;
 
             InitializeComponent();
 
             ClientSize = new Size
-                (CellCountHorizontal*_cellSideLength + 2*_cellSideLength,
-                    CellCountVertical*_cellSideLength + 2*_cellSideLength);
+                (CellCountXAxis*_cellSideLength + 2*_cellSideLength,
+                    CellCountYAxis*_cellSideLength + 2*_cellSideLength);
         }
 
         private void SimPanForm_Paint(object sender, PaintEventArgs e) {

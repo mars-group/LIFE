@@ -138,10 +138,10 @@ namespace CellLayer {
             for (int posX = 1; posX <= CellCountXAxis; posX++) {
                 for (int posY = 1; posY <= CellCountYAxis; posY++) {
 
-                    int cellIid = (posX - 1)*CellCountXAxis + posY;
-                    cellDict.Add(cellIid, new Cell(cellIid, posY, posX, CellType.Neutral));
+                    int cellIid = (posY - 1)*CellCountXAxis + posX;
+                    cellDict.Add(cellIid, new Cell(cellIid, posX, posY, CellType.Neutral));
 
-                    object[] data = {posY, posX, CellColors[CellType.Neutral]};
+                    object[] data = { posX, posY, CellColors[CellType.Neutral] };
                     if (_obstacleCells.Contains(cellIid)) data[2] = CellColors[CellType.Obstacle];
                     dataDict.Add(cellIid, data);
                 }
@@ -156,14 +156,13 @@ namespace CellLayer {
                 var neighbourIds = _cellField[cellNumber].GetNeighbourIdsInRange(chaosRange);
                 SetCellsStatus(neighbourIds, CellType.Chaos);
             }
-            
         }
 
         public void SetCellStatus(int cellNumber, CellType type) {
             if (!_cellField.ContainsKey(cellNumber)) return;
             Cell cell = _cellField[cellNumber];
-            cell.ChangeStateTo(type);
-            object[] newViewData = {cell.YCoordinate, cell.XCoordinate, CellColors[cell.CellType]};
+            if (!cell.ChangeStateTo(type)) return;
+            object[] newViewData = {cell.XCoordinate, cell.YCoordinate, CellColors[cell.CellType]};
             _viewForm.ChangeCell(cellNumber, newViewData);
         }
 
@@ -175,8 +174,8 @@ namespace CellLayer {
 
                 foreach (var cellNum in cellNumbers) {
                     Cell cell = _cellField[cellNum];
-                    cell.ChangeStateTo(type);
-                    object[] newViewData = { cell.YCoordinate, cell.XCoordinate, CellColors[cell.CellType] };
+                    if (!cell.ChangeStateTo(type)) continue;
+                    object[] newViewData = {cell.XCoordinate, cell.YCoordinate, CellColors[cell.CellType]};
                     cellViewData[cellNum] = newViewData;
                 }
                 _viewForm.ChangeCells(cellViewData);

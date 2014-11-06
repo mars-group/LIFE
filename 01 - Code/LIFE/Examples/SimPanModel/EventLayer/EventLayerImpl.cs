@@ -17,7 +17,11 @@ namespace EventLayer {
     public class EventLayerImpl : ISteppedLayer {
 
         internal static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        internal static readonly Dictionary<int, int> PanicTime = new Dictionary<int, int> {{0, 68}, {3, 5}, {5, 200}};
+       // internal static readonly List<List<int>> PanicTime
+
+
+        internal static readonly Dictionary<int, List<int>> PanicTime = 
+            new Dictionary<int, List<int>> { { 0, new List<int>{68,2} }, { 3, new List<int>{25,4} }, { 5, new List<int>{200,3} } };
         private readonly CellLayerImpl _cellLayer;
 
         public EventLayerImpl(CellLayerImpl cellLayer) {

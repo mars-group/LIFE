@@ -16,7 +16,11 @@ namespace EventLayer.Agents {
         public void Tick() {
             Thread.Sleep(1000);
             if (EventLayerImpl.PanicTime.ContainsKey(_tickAccu)) {
-                _cellLayer.SetCellToPanik(EventLayerImpl.PanicTime[_tickAccu],2);
+
+                var regardingCell = EventLayerImpl.PanicTime[_tickAccu][0];
+                var range = EventLayerImpl.PanicTime[_tickAccu][1];
+
+                _cellLayer.SetCellToPanik(regardingCell, range);
                 EventLayerImpl.log.Info("Panic Time! at tick: " + _tickAccu + " !");
                 //EventLayerImpl.log.InfoFormat();
             }
