@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agents\Human.cs" />
     <Compile Include="HumanLayerImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,6 +58,10 @@
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CellLayer\CellLayer.csproj">
+      <Project>{a5715b79-3cf8-445e-847d-23def12dbfa3}</Project>
+      <Name>CellLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

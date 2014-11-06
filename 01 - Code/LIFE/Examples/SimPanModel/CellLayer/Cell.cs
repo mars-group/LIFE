@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,7 @@ namespace CellLayer {
         public readonly int XCoordinate;
         public readonly int YCoordinate;
         public CellLayerImpl.CellType CellType;
-        public int AgentOnCell = 0;
+        public Guid AgentOnCell = Guid.Empty;
 
 
         public Cell(int cellIid, int xCoordinate, int yCoordinate, CellLayerImpl.CellType cellType) {
@@ -30,12 +31,12 @@ namespace CellLayer {
         /// SC = agent diend on cell
         /// 
         /// transitions:
-        /// NC = {ALL}
-        /// OC = {NC; PC, CC}
+        /// NC => {ALL}
+        /// OC => {NC; PC, CC}
         /// 
-        /// PC = none
-        /// CC = none
-        /// SC = none
+        /// PC => none
+        /// CC => none
+        /// SC => none
         /// </summary>
         /// <param name="state"></param>
         public bool ChangeStateTo(CellLayerImpl.CellType state) {

@@ -1,10 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using CellLayer;
 using LayerAPI.Interfaces;
 
 namespace EventLayer.Agents {
-    internal class Event : IAgent {
+    public class Event : IAgent {
         private readonly CellLayerImpl _cellLayer;
+        public readonly Guid ID = Guid.NewGuid();
         private int _tickAccu = 0;
 
         public Event(CellLayerImpl cellLayer) {
@@ -16,12 +18,11 @@ namespace EventLayer.Agents {
         public void Tick() {
             Thread.Sleep(1000);
             if (EventLayerImpl.PanicTime.ContainsKey(_tickAccu)) {
-
-                var regardingCell = EventLayerImpl.PanicTime[_tickAccu][0];
-                var range = EventLayerImpl.PanicTime[_tickAccu][1];
+                int regardingCell = EventLayerImpl.PanicTime[_tickAccu][0];
+                int range = EventLayerImpl.PanicTime[_tickAccu][1];
 
                 _cellLayer.SetCellToPanik(regardingCell, range);
-                EventLayerImpl.log.Info("Panic Time! at tick: " + _tickAccu + " !");
+                EventLayerImpl.Log.Info("Panic Time! at tick: " + _tickAccu + " !");
                 //EventLayerImpl.log.InfoFormat();
             }
             IncrTick();

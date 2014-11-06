@@ -15,7 +15,6 @@ using SimPanViewer;
 [assembly: AddinDependency("LayerContainer", "0.1")]
 
 namespace CellLayer {
-
     [Extension(typeof (ISteppedLayer))]
     public class CellLayerImpl : ISteppedLayer {
         #region CellType enum
@@ -30,9 +29,9 @@ namespace CellLayer {
 
         #endregion
 
-        #region AgentType enum
+        #region BehaviourType enum
 
-        public enum AgentType {
+        public enum BehaviourType {
             Reactive,
             Deliberative,
             Reflective
@@ -40,13 +39,13 @@ namespace CellLayer {
 
         #endregion
 
-        internal const int CellCountXAxis = 20;
-        internal const int CellCountYAxis = 20;
+        public const int CellCountXAxis = 20;
+        public const int CellCountYAxis = 20;
         private const int CellSideLength = 25;
-        internal const int SmallestXCoordinate = 1;
-        internal const int SmallestYCoordinate = 1;
+        public const int SmallestXCoordinate = 1;
+        public const int SmallestYCoordinate = 1;
 
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static readonly Dictionary<CellType, Color> CellColors = new Dictionary<CellType, Color> {
             {CellType.Neutral, Color.WhiteSmoke},
@@ -56,13 +55,13 @@ namespace CellLayer {
             {CellType.Sacrifice, Color.Purple}
         };
 
-        private static readonly Dictionary<AgentType, Color> AgentColors = new Dictionary<AgentType, Color> {
-            {AgentType.Reactive, Color.Red},
-            {AgentType.Deliberative, Color.Blue},
-            {AgentType.Reflective, Color.Green},
+        private static readonly Dictionary<BehaviourType, Color> AgentColors = new Dictionary<BehaviourType, Color> {
+            {BehaviourType.Reactive, Color.Red},
+            {BehaviourType.Deliberative, Color.Blue},
+            {BehaviourType.Reflective, Color.Green},
         };
 
-        private readonly List<int> _obstacleCells = new List<int> {
+        private static readonly List<int> ObstacleCells = new List<int> {
             54,
             55,
             56,
@@ -101,12 +100,12 @@ namespace CellLayer {
             CreateCellData(out viewData);
             StartVisualisation(viewData);
 
-            log.Info("I'm going to log right this time...");
-            log.Debug("Application Starting");
-            log.DebugFormat("It is {0}.", DateTime.Now);
-            log.Warn("There will be an error soooon....");
-            log.Error("Now I just got bored...");
-            log.Fatal("WTF!?");
+            Log.Info("I'm going to log right this time...");
+            Log.Debug("Application Starting");
+            Log.DebugFormat("It is {0}.", DateTime.Now);
+            Log.Warn("There will be an error soooon....");
+            Log.Error("Now I just got bored...");
+            Log.Fatal("WTF!?");
 
             return true;
         }
@@ -137,12 +136,11 @@ namespace CellLayer {
 
             for (int posX = 1; posX <= CellCountXAxis; posX++) {
                 for (int posY = 1; posY <= CellCountYAxis; posY++) {
-
-                    int cellIid = (posY - 1)*CellCountXAxis + posX;
+                    int cellIid = CalcCellId(posX, posY);
                     cellDict.Add(cellIid, new Cell(cellIid, posX, posY, CellType.Neutral));
 
-                    object[] data = { posX, posY, CellColors[CellType.Neutral] };
-                    if (_obstacleCells.Contains(cellIid)) data[2] = CellColors[CellType.Obstacle];
+                    object[] data = {posX, posY, CellColors[CellType.Neutral]};
+                    if (ObstacleCells.Contains(cellIid)) data[2] = CellColors[CellType.Obstacle];
                     dataDict.Add(cellIid, data);
                 }
             }
@@ -150,10 +148,14 @@ namespace CellLayer {
             viewData = dataDict;
         }
 
+        private int CalcCellId(int posX, int posY) {
+            return (posY - 1)*CellCountXAxis + posX;
+        }
+
         public void SetCellToPanik(int cellNumber, int chaosRange = 0) {
             SetCellStatus(cellNumber, CellType.Panic);
             if (chaosRange > 0) {
-                var neighbourIds = _cellField[cellNumber].GetNeighbourIdsInRange(chaosRange);
+                List<int> neighbourIds = _cellField[cellNumber].GetNeighbourIdsInRange(chaosRange);
                 SetCellsStatus(neighbourIds, CellType.Chaos);
             }
         }
@@ -167,12 +169,10 @@ namespace CellLayer {
         }
 
         public void SetCellsStatus(List<int> cellNumbers, CellType type) {
-
             if (cellNumbers.All(_cellField.ContainsKey)) {
+                Dictionary<int, object[]> cellViewData = new Dictionary<int, object[]>();
 
-                var cellViewData = new Dictionary<int, object[]>();
-
-                foreach (var cellNum in cellNumbers) {
+                foreach (int cellNum in cellNumbers) {
                     Cell cell = _cellField[cellNum];
                     if (!cell.ChangeStateTo(type)) continue;
                     object[] newViewData = {cell.XCoordinate, cell.YCoordinate, CellColors[cell.CellType]};
@@ -182,7 +182,7 @@ namespace CellLayer {
             }
         }
 
-        public void AddAgent(int Id, float posX, float posY, AgentType type) {
+        public void AddAgent(int Id, float posX, float posY, BehaviourType type) {
             object[] data = {posX, posY, 5f, AgentColors[type]};
             _viewForm.AddPoint(Id, data);
         }
@@ -192,7 +192,7 @@ namespace CellLayer {
             _viewForm.UpdatePoint(Id, data);
         }
 
-        public void UpdateAgentStatus(int Id, AgentType type) {
+        public void UpdateAgentStatus(int Id, BehaviourType type) {
             object[] pointData = _viewForm._pointData[Id];
             UpdateAgent(Id, (float) pointData[0], (float) pointData[1], AgentColors[type]);
         }
@@ -200,6 +200,25 @@ namespace CellLayer {
         public void UpdateAgentPosition(int Id, float posX, float posY) {
             object[] pointData = _viewForm._pointData[Id];
             UpdateAgent(Id, posX, posY, (Color) pointData[3]);
+        }
+
+        public bool GiveAndSetToRandomPosition(Guid iD, float drawingDiameter, out int posX, out int posY) {
+            Random r = new Random();
+            List<int> celIds = _cellField.Keys.ToList();
+            IOrderedEnumerable<int> mergedIdList = celIds.OrderBy(item => r.Next());
+
+            foreach (int cellId in mergedIdList) {
+                if (!_cellField[cellId].AgentOnCell.Equals(Guid.Empty)) continue;
+                Cell freeCell = _cellField[cellId];
+                posX = freeCell.XCoordinate;
+                posY = freeCell.YCoordinate;
+
+                freeCell.AgentOnCell = iD;
+                return true;
+            }
+            posX = 0;
+            posY = 0;
+            return false;
         }
     }
 }
