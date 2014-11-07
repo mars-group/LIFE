@@ -21,7 +21,7 @@ namespace LayerContainerFacade.Implementation
         private readonly IVisualizationAdapterPublic _visualizationAdapter;
         private IScsServiceApplication _server;
 
-        public LayerContainerFacadeImpl(LayerContainerSettings settings, IPartitionManager partitionManager, IRTEManager rteManager, IVisualizationAdapterPublic visualizationAdapter)
+        public LayerContainerFacadeImpl(LayerContainerSettings settings, IPartitionManager partitionManager, IRTEManager rteManager, IVisualizationAdapterInternal visualizationAdapter)
         {
             _partitionManager = partitionManager;
             _rteManager = rteManager;

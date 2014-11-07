@@ -57,7 +57,7 @@ namespace LayerContainerFacade.Interfaces {
 
                 _containerBuilder.RegisterType<VisualizationAdapterComponent>()
                     .As<IVisualizationAdapterInternal>()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<LayerFactoryComponent>()
                     .As<ILayerFactory>()

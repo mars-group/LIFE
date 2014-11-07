@@ -34,5 +34,7 @@ namespace RuntimeEnvironment.Implementation.Entities
         {
             return _layerContainer.ServiceProxy.Tick();
         }
+
+        public ILayerContainer Proxy { get { return _layerContainer.ServiceProxy; } }
     }
 }

@@ -38,7 +38,7 @@ namespace ExampleLayer {
         }
 
         public List<BasicVisualizationMessage> GetVisData() {
-            throw new NotImplementedException();
+            return new List<BasicVisualizationMessage>();
         }
 
         public List<BasicVisualizationMessage> GetVisData(IGeometry geometry) {
