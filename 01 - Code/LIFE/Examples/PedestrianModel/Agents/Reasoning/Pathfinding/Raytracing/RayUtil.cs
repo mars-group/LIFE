@@ -201,7 +201,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="target"> the target point </param>
 		/// <param name="obstacles"> the obstacles </param>
 		/// <returns> true if the points are visible to each other, othervise false </returns>
-		public static bool IsVisible(Vector3D orign, Vector3D target, IList<SpatialAgent> obstacles)
+		public static bool IsVisible(Vector3D orign, Vector3D target, IList<Obstacle> obstacles)
 		{
 			double minDistance = double.MaxValue;
 

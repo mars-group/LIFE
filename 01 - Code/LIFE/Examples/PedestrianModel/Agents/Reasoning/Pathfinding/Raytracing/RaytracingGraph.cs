@@ -30,7 +30,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <summary>
 		/// All obstacles in the graph.
 		/// </summary>
-		private readonly IList<SpatialAgent> obstacles;
+		private readonly IList<Obstacle> obstacles;
 
 		/// <summary>
 		/// The target position for the graph.
@@ -44,7 +44,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="obstacles"> a collection of all obstacles </param>
 		/// <param name="yValue"> the height of all graph points </param>
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
-		public RaytracingGraph(string simulationId, IList<SpatialAgent> obstacles, double yValue, double waypointEdgeDistance)
+		public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, double yValue, double waypointEdgeDistance)
 		{
 			//IList<Vector3D> edgePoints = new List<Vector3D>();
             List<Vector3D> edgePoints = new List<Vector3D>();

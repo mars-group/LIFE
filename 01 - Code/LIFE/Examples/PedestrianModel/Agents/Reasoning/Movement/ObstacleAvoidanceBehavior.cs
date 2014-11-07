@@ -121,7 +121,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 			// creating the static obstacle field
 			//IList<SimulationObject> obstacles = ((VisionSensor) agent.Environment.VisionSensor).ObstaclesAsObjectList;
             var rawObstacleData = perceptionUnit.GetData((int)InformationTypes.Obstacles).Data;
-            var obstacles = ((Dictionary<long, Obstacle>)rawObstacleData).Values;
+            var obstacles = (List<Obstacle>)rawObstacleData;
 
 			//foreach (SimulationObject obstacle in obstacles)
             foreach (Obstacle obstacle in obstacles)

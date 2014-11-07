@@ -22,9 +22,6 @@ namespace PedestrianModel
   /// </summary>
   internal class LocalStarter {
     
-    private readonly ITickClient _environment; // The agent container.
-    private readonly ConsoleView _view;        // The console view module.
-    
     /// <summary>
     ///   Program entry. Creates some agents and starts them.
     /// </summary>

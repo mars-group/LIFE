@@ -28,6 +28,7 @@ namespace PedestrianModel.Agents
     /// </summary>
     public class Pedestrian : SpatialAgent, IAgentLogic
     {
+        private bool startComplete = false;
 
         private String name;               // Name or ID of agent      
         private float maxVelocity;         // Maximum movement velocity of agent        
@@ -119,11 +120,16 @@ namespace PedestrianModel.Agents
             this.startPosition = Vector3DHelper.FromDalskiVector(position);
                         
             Init();
-            Start();
         }
 
         public IInteraction Reason()
         {
+            if (!startComplete)
+            {
+                Start();
+                startComplete = true;
+            }
+
             // TODO:
             // - agent logging
             // - simulation visualization
@@ -176,7 +182,7 @@ namespace PedestrianModel.Agents
 			// - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
 			//pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
             var rawObstaclesData = PerceptionUnit.GetData((int)InformationTypes.Obstacles).Data;
-            IList<SpatialAgent> obstacles = ((Dictionary<long, Obstacle>)rawObstaclesData).Values.ToList<SpatialAgent>();
+            IList<Obstacle> obstacles = (List<Obstacle>)rawObstaclesData;
             pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0.43, Math.Max(Config.targetReachedDistance * 2.0, 0.28));
 			pathfinder = new AStarPathfinder<Vector3D>(pathfindingSearchGraph);
 
