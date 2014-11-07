@@ -1,4 +1,5 @@
 ﻿using System;
+using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 
@@ -9,7 +10,7 @@ namespace ExampleLayer {
     using System.Collections.Generic;
 
     [Extension(typeof (ISteppedLayer))]
-    public class ExampleLayer : ISteppedLayer {
+    public class ExampleLayer : ISteppedLayer, IVisualizable {
 
 		private List<AgentSmith> _agents;
         private const int agentCount = 10000;
@@ -33,6 +34,14 @@ namespace ExampleLayer {
         }
 
         public long GetCurrentTick() {
+            throw new NotImplementedException();
+        }
+
+        public List<BasicVisualizationMessage> GetVisData() {
+            throw new NotImplementedException();
+        }
+
+        public List<BasicVisualizationMessage> GetVisData(IGeometry geometry) {
             throw new NotImplementedException();
         }
     }

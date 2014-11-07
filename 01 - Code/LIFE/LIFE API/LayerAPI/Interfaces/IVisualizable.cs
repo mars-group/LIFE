@@ -3,6 +3,9 @@ using GeoAPI.Geometries;
 
 namespace LayerAPI.Interfaces
 {
+    /// <summary>
+    /// Implement this interface if you want your Layer to be visualized after each tick
+    /// </summary>
 	public interface IVisualizable {
         /// <summary>
         /// Returns every entity in the whole environment

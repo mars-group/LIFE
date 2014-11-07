@@ -15,6 +15,8 @@ using PartitionManager.Interfaces;
 using RTEManager.Implementation;
 using RTEManager.Interfaces;
 using LayerContainerShared;
+using VisualizationAdapter.Implementation;
+using VisualizationAdapter.Interface;
 
 namespace LayerContainerFacade.Interfaces {
     using ConfigurationAdapter.Interface;
@@ -52,6 +54,10 @@ namespace LayerContainerFacade.Interfaces {
                 _containerBuilder.RegisterType<RTEManagerComponent>()
                     .As<IRTEManager>()
                     .InstancePerLifetimeScope();
+
+                _containerBuilder.RegisterType<VisualizationAdapterComponent>()
+                    .As<IVisualizationAdapterInternal>()
+                    .InstancePerDependency();
 
                 _containerBuilder.RegisterType<LayerFactoryComponent>()
                     .As<ILayerFactory>()

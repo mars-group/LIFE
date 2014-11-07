@@ -6,11 +6,11 @@ using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation
 {
-    internal class VisualizationAdapterInternalUseCase : IVisualizationAdapterInternal {
+    internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
         private readonly List<IVisualizable> _visualizables;
         private bool _isRunning;
 
-        public VisualizationAdapterInternalUseCase() {
+        public VisualizationAdapterUseCase() {
             _visualizables = new List<IVisualizable>();
             _isRunning = false;
         }
@@ -18,6 +18,8 @@ namespace VisualizationAdapter.Implementation
         public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         public void VisualizeTick() {
+            if (!_isRunning) return;
+
             Parallel.ForEach(_visualizables,
                 vis => {
                     // Get data from Layers
@@ -27,7 +29,7 @@ namespace VisualizationAdapter.Implementation
                     OnRaiseVisualizationUpdated(visMessages);
 
                     // Send via Queue if possible
-                    
+                    // TODO: Send via Queue
                 });
         }
 
@@ -55,10 +57,10 @@ namespace VisualizationAdapter.Implementation
         }
 
         public void StopVisualization() {
-            throw new NotImplementedException();
+            this._isRunning = false;
         }
 
-        public void ChangeVisualizationView() {
+        public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
             throw new NotImplementedException();
         }
 

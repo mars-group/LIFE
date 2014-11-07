@@ -2,7 +2,7 @@
 
 namespace VisualizationAdapter.Interface
 {
-    interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {
+    public interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {
         void RegisterVisualizable(IVisualizable visualizable);
         void VisualizeTick();
     }

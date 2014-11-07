@@ -50,8 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\VisualizationAdapterInternalComponent.cs" />
-    <Compile Include="Implementation\VIsualizationAdapterInternalUseCase.cs" />
+    <Compile Include="Implementation\VisualizationAdapterComponent.cs" />
+    <Compile Include="Implementation\VisualizationAdapterUseCase.cs" />
     <Compile Include="Interface\IVisualizationAdapterInternal.cs" />
     <Compile Include="Interface\IVisualizationAdapterPublic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

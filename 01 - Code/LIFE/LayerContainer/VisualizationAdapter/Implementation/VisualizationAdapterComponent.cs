@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using LayerAPI.Interfaces;
+using NetTopologySuite.Geometries;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation
 {
-    class VisualizationAdapterInternalComponent : IVisualizationAdapterInternal
+    public class VisualizationAdapterComponent : IVisualizationAdapterInternal
     {
         private readonly IVisualizationAdapterInternal _visualizationAdapterInternalUseCase;
 
-        public VisualizationAdapterInternalComponent() {
-            _visualizationAdapterInternalUseCase = new VisualizationAdapterInternalUseCase();
+        public VisualizationAdapterComponent() {
+            _visualizationAdapterInternalUseCase = new VisualizationAdapterUseCase();
         }
 
 
@@ -24,8 +25,8 @@ namespace VisualizationAdapter.Implementation
             _visualizationAdapterInternalUseCase.StopVisualization();
         }
 
-        public void ChangeVisualizationView() {
-            _visualizationAdapterInternalUseCase.ChangeVisualizationView();
+        public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
+            _visualizationAdapterInternalUseCase.ChangeVisualizationView(topLeft, topRight, bottomLeft, bottomRight);
         }
 
         public void RegisterVisualizable(IVisualizable visualizable) {

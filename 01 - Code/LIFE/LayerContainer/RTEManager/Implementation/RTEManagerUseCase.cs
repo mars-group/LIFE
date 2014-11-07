@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using RTEManager.Interfaces;
+using VisualizationAdapter.Interface;
 
 namespace RTEManager.Implementation {
     internal class RTEManagerUseCase : IRTEManager {
+        private readonly IVisualizationAdapterInternal _visualizationAdapter;
 
         // the tickClients being executed per Layer
         private readonly IDictionary<ILayer, ConcurrentDictionary<ITickClient, byte>> _tickClientsPerLayer;
@@ -24,8 +26,9 @@ namespace RTEManager.Implementation {
         // indicator whether this Layercontainer ist currently executing a Tick
         private bool _isRunning;
 
-        public RTEManagerUseCase() {
-            
+        public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter) {
+            _visualizationAdapter = visualizationAdapter;
+
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
             _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _tickClientsMarkedForRegistrationPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
@@ -45,6 +48,12 @@ namespace RTEManager.Implementation {
             if (!_layers.ContainsKey(layerInstanceId))
             {
                 _layers.Add(layerInstanceId, layer);
+            }
+
+            // check layer for visualizability and if true register it with the adapter
+            var visualizableLayer = layer as IVisualizable;
+            if (visualizableLayer != null) {
+                _visualizationAdapter.RegisterVisualizable(visualizableLayer);
             }
         }
 
@@ -117,6 +126,9 @@ namespace RTEManager.Implementation {
                         _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentBag<ITickClient>();
                     }
                 );
+
+            // visualize all visualizable layers
+            _visualizationAdapter.VisualizeTick();
 
             stopWatch.Stop();
             _isRunning = false;

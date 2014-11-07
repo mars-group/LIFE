@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
+using NetTopologySuite.Geometries;
 
 namespace VisualizationAdapter.Interface
 {
@@ -12,7 +13,7 @@ namespace VisualizationAdapter.Interface
         void StartVisualization();
 
         void StopVisualization();
-
-        void ChangeVisualizationView();
+        
+        void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight);
     }
 }

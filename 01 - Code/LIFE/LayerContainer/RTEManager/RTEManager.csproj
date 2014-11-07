@@ -66,6 +66,10 @@
       <Project>{0dc81b09-3abf-4bb3-8c08-4e8ee4432bdc}</Project>
       <Name>Scs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisualizationAdapter\VisualizationAdapter.csproj">
+      <Project>{F6626674-3A9A-460B-A98B-A66B561FD811}</Project>
+      <Name>VisualizationAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
