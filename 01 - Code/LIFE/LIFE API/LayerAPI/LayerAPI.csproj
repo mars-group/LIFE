@@ -34,11 +34,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GeoAPI">
+      <HintPath>..\..\packages\GeoAPI.1.7.3\lib\net45-client\GeoAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite">
+      <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\NetTopologySuite.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections">
+      <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,14 +61,12 @@
   <ItemGroup>
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
-    <Compile Include="Interfaces\AABB.cs" />
+    <Compile Include="Interfaces\BasicVisualizationMessage.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
-    <Compile Include="Interfaces\IGenericDataSource.cs" />
-    <Compile Include="Interfaces\IGeometry.cs" />
     <Compile Include="Interfaces\ILayer.cs" />
-    <Compile Include="Interfaces\ISpatialEntity.cs" />
     <Compile Include="Interfaces\ISteppedLayer.cs" />
     <Compile Include="Interfaces\ITickClient.cs" />
+    <Compile Include="Interfaces\IVisualizable.cs" />
     <Compile Include="Interfaces\LayerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
