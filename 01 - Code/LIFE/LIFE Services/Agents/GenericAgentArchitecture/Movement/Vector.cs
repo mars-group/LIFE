@@ -93,22 +93,124 @@ namespace DalskiAgent.Movement {
     }
 
 
-    #region Comparison methods
+    /// <summary>
+    ///   Compare this with another Vector object for equality.
+    /// </summary>
+    /// <param name="vector">Comparison vector.</param>
+    /// <returns>Equals boolean.</returns>
     public bool Equals(Vector vector) {
       return (Math.Abs(X - vector.X) <= float.Epsilon &&
               Math.Abs(Y - vector.Y) <= float.Epsilon &&
               Math.Abs(Z - vector.Z) <= float.Epsilon);
     }
 
+
+    /// <summary>
+    ///   Compare this with another TVector object for equality.
+    /// </summary>
+    /// <param name="tvector">Comparison vector.</param>
+    /// <returns>Equals boolean.</returns>
     public bool Equals(TVector tvector) {
       return (Math.Abs(X - tvector.X) <= float.Epsilon &&
               Math.Abs(Y - tvector.Y) <= float.Epsilon &&
               Math.Abs(Z - tvector.Z) <= float.Epsilon);
     }
-    #endregion
-      
+
+
+    /// <summary>
+    ///   Casts this Vector to a TVector object.
+    /// </summary>
+    /// <returns>TVector equivalent.</returns>
     public TVector GetTVector() {
-       return new TVector(X,Y,Z);
+      return new TVector(X,Y,Z);
     }
-    };
+
+
+    /// <summary>
+    ///   Calculate the dot (scalar) product of two vectors.
+    /// </summary>
+    /// <param name="a">First vector.</param>
+    /// <param name="b">Second vector.</param>
+    /// <returns>The scalar [inner] product.</returns>
+    public static float DotProduct(Vector a, Vector b) {
+      return a.X*b.X + a.Y*b.Y + a.Z*b.Z;
+    }
+
+
+    /// <summary>
+    ///   Calcute the cross product of two vectors.
+    /// </summary>
+    /// <param name="a">First vector.</param>
+    /// <param name="b">Second vector.</param>
+    /// <returns>The cross [outer] product.</returns>
+    public static Vector CrossProduct(Vector a, Vector b) {
+      return new Vector(a.Y*b.Z - a.Z*b.Y, a.Z*b.X - a.X*b.Z, a.X*b.Y - a.Y*b.X);
+    }
+
+
+    /// <summary>
+    ///   Addition of two vectors.
+    /// </summary>
+    /// <param name="left">First (left) vector.</param>
+    /// <param name="right">Second (right) vector.</param>
+    /// <returns>Sum of both vectors.</returns>
+    public static Vector operator +(Vector left, Vector right) {
+      return new Vector(left.X+right.X, left.Y+right.Y, left.Z+right.Z);
+    }
+
+
+    /// <summary>
+    ///   Inverse (* -1) of a vector.
+    /// </summary>
+    /// <param name="right">Inversed vector.</param>
+    /// <returns>Vector *(-1).</returns>
+    public static Vector operator -(Vector right) {
+      return new Vector(-right.X, -right.Y, -right.Z);
+    }
+
+
+    /// <summary>
+    ///   Substraction of two vectors.
+    /// </summary>
+    /// <param name="left">First (left) vector.</param>
+    /// <param name="right">Second (right) vector.</param>
+    /// <returns>Difference of both vectors.</returns>    
+    public static Vector operator -(Vector left, Vector right) {
+      return new Vector(left.X-right.X, left.Y-right.Y, left.Z-right.Z);
+    }
+
+
+    /// <summary>
+    ///   Multiply a vector with a scalar.
+    /// </summary>
+    /// <param name="vec">Vector to scale.</param>
+    /// <param name="factor">Scaling factor.</param>
+    /// <returns>The scaled vector.</returns> 
+    public static Vector operator *(Vector vec, float factor) {
+      return new Vector(vec.X*factor, vec.Y*factor, vec.Z*factor);
+    }
+
+
+    /// <summary>
+    ///   Multiply a vector with a scalar.
+    /// </summary>
+    /// <param name="factor">Scaling factor.</param>
+    /// <param name="vec">Vector to scale.</param>
+    /// <returns>The scaled vector.</returns> 
+    public static Vector operator *(float factor, Vector vec) {
+      return new Vector(vec.X*factor, vec.Y*factor, vec.Z*factor);
+    }
+
+    
+    /// <summary>
+    ///   Divides a vector with a scalar.
+    ///   (Multiplication with inversed divisor.) 
+    /// </summary>
+    /// <param name="vec">Vector to scale.</param>
+    /// <param name="div">Divisor scalar.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector operator /(Vector vec, float div) {
+      return vec*(1.0f/div);
+    }
+  };
 }

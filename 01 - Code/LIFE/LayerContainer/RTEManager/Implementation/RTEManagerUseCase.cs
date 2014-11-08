@@ -83,7 +83,7 @@ namespace RTEManager.Implementation {
             _isRunning = true;
             var stopWatch = Stopwatch.StartNew();
 
-
+            // tick all tickClients
             Parallel.ForEach(
                 _tickClientsPerLayer.Keys,
                 layer => Parallel.ForEach(_tickClientsPerLayer[layer],
