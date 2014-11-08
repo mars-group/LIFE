@@ -1,11 +1,11 @@
 ﻿using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 {
@@ -34,7 +34,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="objects"> the objects to search intersects with </param>
 		/// <returns> the intersecting object or null </returns>
 		//public static SimulationObject PickRay(Vector3D orign, Vector3D direction, ICollection<SimulationObject> objects)
-        public static SpatialAgent PickRay(Vector3D orign, Vector3D direction, ICollection<SpatialAgent> objects)
+        public static SpatialAgent PickRay(Vector orign, Vector direction, ICollection<SpatialAgent> objects)
 		{
 			SpatialAgent result = null;
 			double minDistance = double.MaxValue;
@@ -42,12 +42,12 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			foreach (SpatialAgent so in objects)
 			{
 				//Vector3D intersect = GetIntersect(orign, direction, so);
-                Vector3D? intersect = GetIntersect(orign, direction, so);
+                Vector intersect = GetIntersect(orign, direction, so);
 				//if (!intersect.NaN)
-                if (intersect.HasValue)
+                if (intersect != null)
 				{
                     //double distance = orign.distance(intersect);
-                    double distance = Vector3DHelper.Distance(orign, intersect.Value);
+                    double distance = orign.GetDistance(intersect);
 					if (distance < minDistance)
 					{
 						result = so;
@@ -68,15 +68,15 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="so"> the object to intersect </param>
 		/// <returns> the intersection point or NaN </returns>
 		//public static Vector3D GetIntersect(Vector3D orign, Vector3D direction, SimulationObject so)
-        public static Vector3D? GetIntersect(Vector3D orign, Vector3D direction, SpatialAgent so)
+        public static Vector GetIntersect(Vector orign, Vector direction, SpatialAgent so)
 		{
 			//Vector3D position = so.Position;
-            Vector3D position = Vector3DHelper.FromDalskiVector(so.GetPosition());
+            Vector position = so.GetPosition();
 			//Vector3D bounds = so.Bounds;
-            Vector3D bounds = Vector3DHelper.FromDalskiVector(so.GetDimension());
+            Vector bounds = so.GetDimension();
 
 			//return GetIntersectWithBox(orign, direction, position.add(-0.5, bounds), position.add(0.5, bounds));
-            return GetIntersectWithBox(orign, direction, Vector3D.Add(position, Vector3D.Multiply(-0.5, bounds)), Vector3D.Add(position, Vector3D.Multiply(0.5, bounds)));
+            return GetIntersectWithBox(orign, direction, position + (-0.5f * bounds), position + (0.5f * bounds));
 		}
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="boxMax"> the upper corner of the AABB </param>
 		/// <returns> the intersection point or NaN </returns>
 		//public static Vector3D GetIntersectWithBox(Vector3D rayOrign, Vector3D rayDirection, Vector3D boxMin, Vector3D boxMax)
-        public static Vector3D? GetIntersectWithBox(Vector3D rayOrign, Vector3D rayDirection, Vector3D boxMin, Vector3D boxMax)
+        public static Vector GetIntersectWithBox(Vector rayOrign, Vector rayDirection, Vector boxMin, Vector boxMax)
 		{
 			double tNear = double.NegativeInfinity;
 			double tFar = double.PositiveInfinity;
@@ -190,7 +190,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			tFar = Math.Min(tFar, tZFar);
 
 			//return rayOrign.add(tNear, rayDirection);
-            return Vector3D.Add(rayOrign, Vector3D.Multiply(tNear, rayDirection));
+            return rayOrign + ((float)tNear * rayDirection);
 		}
 
 		/// <summary>
@@ -201,22 +201,22 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="target"> the target point </param>
 		/// <param name="obstacles"> the obstacles </param>
 		/// <returns> true if the points are visible to each other, othervise false </returns>
-		public static bool IsVisible(Vector3D orign, Vector3D target, IList<Obstacle> obstacles)
+		public static bool IsVisible(Vector orign, Vector target, IList<Obstacle> obstacles)
 		{
 			double minDistance = double.MaxValue;
 
 			//Vector3D direction = target.subtract(orign);
-            Vector3D direction = Vector3D.Subtract(target, orign);
+            Vector direction = target - orign;
 
 			foreach (SpatialAgent so in obstacles)
 			{
 				//Vector3D intersect = GetIntersect(orign, direction, so);
-                Vector3D? intersect = GetIntersect(orign, direction, so);
+                Vector intersect = GetIntersect(orign, direction, so);
 				//if (!intersect.NaN)
-                if (intersect.HasValue)
+                if (intersect != null)
 				{
 					//double distance = orign.distance(intersect);
-                    double distance = Vector3DHelper.Distance(orign, intersect.Value);
+                    double distance = orign.GetDistance(intersect);
 					if (distance < minDistance)
 					{
 						minDistance = distance;
@@ -225,7 +225,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			}
 
 			//return orign.distance(target) < minDistance;
-            return Vector3DHelper.Distance(orign, target) < minDistance;
+            return orign.GetDistance(target) < minDistance;
 		}        
 	}
 

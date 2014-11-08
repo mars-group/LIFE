@@ -1,9 +1,9 @@
-﻿using System;
+﻿using DalskiAgent.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential
 {
@@ -20,7 +20,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential
 		/// </summary>
 		/// <param name="referringPosition"> the position to calculate the potential for. </param>
 		/// <returns> the emitted potential of this emitter at the given position. </returns>
-		double GetPotential(Vector3D referringPosition);
+		double GetPotential(Vector referringPosition);
 
 	}
 

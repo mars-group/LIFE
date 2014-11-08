@@ -1,4 +1,5 @@
 ﻿using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using DalskiAgent.Perception;
 using PedestrianModel.Agents.Reasoning.Movement.Potential;
 using PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter;
@@ -9,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement
 {
@@ -130,13 +130,13 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 				//{
 					//obstacleField.addEmitter(new CuboidEmitter(obstacle.Position, (Vector3D) obstacle.Bounds, OBSTACLE_DISTANCE_POTENTIAL_FUNCTION));
 				//}
-                Vector3D position = Vector3DHelper.FromDalskiVector(obstacle.GetPosition());
-                Vector3D bounds = Vector3DHelper.FromDalskiVector(obstacle.GetDimension());
+                Vector position = obstacle.GetPosition();
+                Vector bounds = obstacle.GetDimension();
                 obstacleField.AddEmitter(new CuboidEmitter(position, bounds, OBSTACLE_DISTANCE_POTENTIAL_FUNCTION));
 			}
 		}
 
-		public Vector3D ModifyMovementVector(Vector3D targetPosition, Vector3D currentPipelineVector)
+		public Vector ModifyMovementVector(Vector targetPosition, Vector currentPipelineVector)
 		{
 			PotentialField agentField = new SimplePotentialField();
 
@@ -151,31 +151,29 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 				{
 					//agentField.addEmitter(new PointEmitter(so.calcCurrentPosition(agent.Environment.CurrentSimulationTime + 20), AGENT_DISTANCE_POTENTIAL_FUNCTION));
                     #warning Old "WALK" code seems looking at the future positions of agents here!
-                    Vector3D position = Vector3DHelper.FromDalskiVector(ped.GetPosition());
+                    Vector position = ped.GetPosition();
                     agentField.AddEmitter(new PointEmitter(position, AGENT_DISTANCE_POTENTIAL_FUNCTION));
 				}
 			}
-			agentField.AddEmitter(new PointEmitter((Vector3D) targetPosition, TARGET_DISTANCE_POTENTIAL_FUNCTION));
+			agentField.AddEmitter(new PointEmitter(targetPosition, TARGET_DISTANCE_POTENTIAL_FUNCTION));
 
 			PotentialFieldCollection potentialFieldCollection = new PotentialFieldCollection();
 			potentialFieldCollection.Add(obstacleField);
 			potentialFieldCollection.Add(agentField);
 
 			//Vector3D currentPosition = agent.Environment.CurrentPosition;
-            Vector3D currentPosition = Vector3DHelper.FromDalskiVector(agent.GetPosition());
+            Vector currentPosition = agent.GetPosition();
 
-			Vector3D bestDirection = currentPipelineVector;
+			Vector bestDirection = currentPipelineVector;
 			double lastPotential = double.NegativeInfinity;
 
 			// try several directions for the best potential
 			for (double angle = -Math.PI / 2; angle <= Math.PI / 2; angle += Math.PI / 8)
 			{
-				Vector3D tempDirection = new Vector3D(currentPipelineVector.X * Math.Cos(angle) - currentPipelineVector.Z * Math.Sin(angle), currentPipelineVector.Y, currentPipelineVector.X * Math.Sin(angle) + currentPipelineVector.Z * Math.Cos(angle));
+                Vector tempDirection = new Vector(currentPipelineVector.X * (float)Math.Cos(angle) - currentPipelineVector.Z * (float)Math.Sin(angle), currentPipelineVector.Y, currentPipelineVector.X * (float)Math.Sin(angle) + currentPipelineVector.Z * (float)Math.Cos(angle));
 
 				//Vector3D position = currentPosition.add(0.2, tempDirection.normalize());
-                Vector3D tempDirection2 = new Vector3D(tempDirection.X, tempDirection.Y, tempDirection.Z);
-                tempDirection2.Normalize(); // we do not want to change the length of tempDirection!
-                Vector3D position = Vector3D.Add(currentPosition, Vector3D.Multiply(0.2, tempDirection2));
+                Vector position = currentPosition + (0.2f * tempDirection.GetNormalVector());
 
 				double potential = potentialFieldCollection.CalculatePotential(position);
 
@@ -190,7 +188,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 			if (double.IsInfinity(lastPotential))
 			{
 				//bestDirection = Vector3D.ZERO;
-                bestDirection = new Vector3D(0, 0, 0);
+                bestDirection = new Vector(0, 0, 0);
 			}
 
 			return bestDirection;

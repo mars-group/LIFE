@@ -1,10 +1,10 @@
-﻿using PedestrianModel.Util.Math;
+﻿using DalskiAgent.Movement;
+using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 {
@@ -19,12 +19,12 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 		/// <summary>
 		/// The lowest point of this cuboid.
 		/// </summary>
-		private readonly Vector3D start;
+		private readonly Vector start;
 
 		/// <summary>
 		/// The size of the cumboid along the positive axes.
 		/// </summary>
-		private readonly Vector3D size;
+		private readonly Vector size;
 
 		/// <summary>
 		/// The function to calculate the potential with.
@@ -41,15 +41,15 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 		/// <param name="startPoint"> the lowest point of this cuboid </param>
 		/// <param name="size"> the size of the cumboid along the positive axes </param>
 		/// <param name="function"> the function to calculate the potential with </param>
-		public CuboidEmitter(Vector3D startPoint, Vector3D size, UnivariateRealFunction function)
+		public CuboidEmitter(Vector startPoint, Vector size, UnivariateRealFunction function)
 		{
 			//this.start = startPoint.subtract(1.0 / 2.0, size);
-            this.start = Vector3D.Subtract(startPoint, Vector3D.Multiply(0.5, size));
+            this.start = startPoint - (0.5f * size);
 			this.size = size;
 			this.function = function;
 		}
 
-		public double GetPotential(Vector3D @ref)
+		public double GetPotential(Vector @ref)
 		{
 			double distance = 0;
 

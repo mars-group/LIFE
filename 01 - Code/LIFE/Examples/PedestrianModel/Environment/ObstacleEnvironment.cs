@@ -36,9 +36,6 @@ namespace PedestrianModel.Environment
 
                 case InformationTypes.Obstacles:
                     {
-
-                        Console.WriteLine("blaaaaaaa!");
-
                         var list = (List<SpatialAgent>)base.GetData(0, geometry);
                         return list.OfType<Obstacle>().ToList();
                     }

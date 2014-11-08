@@ -1,9 +1,9 @@
-﻿using System;
+﻿using DalskiAgent.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential
 {
@@ -37,7 +37,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential
 		/// </summary>
 		/// <param name="position"> the position to calculate the potential for </param>
 		/// <returns> the sum of all potentials </returns>
-		public double CalculatePotential(Vector3D position)
+		public double CalculatePotential(Vector position)
 		{
 			double potentialSum = 0.0;
 

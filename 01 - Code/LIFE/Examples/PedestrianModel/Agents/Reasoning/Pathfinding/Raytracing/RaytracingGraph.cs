@@ -1,11 +1,11 @@
 ﻿using DalskiAgent.Agents;
+using DalskiAgent.Movement;
 using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 {
@@ -14,18 +14,18 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 	/// @author Christian Thiel
 	/// 
 	/// </summary>
-	public class RaytracingGraph : ISearchGraph<Vector3D>
+	public class RaytracingGraph : ISearchGraph<Vector>
 	{
 
 		/// <summary>
 		/// The global graph cache, maps from simulationId to neighborlist.
 		/// </summary>
-		private static readonly IDictionary<string, IDictionary<Vector3D, HashSet<Vector3D>>> GLOBAL_GRAPH_CACHE = new Dictionary<string, IDictionary<Vector3D, HashSet<Vector3D>>>();
+		private static readonly IDictionary<string, IDictionary<Vector, HashSet<Vector>>> GLOBAL_GRAPH_CACHE = new Dictionary<string, IDictionary<Vector, HashSet<Vector>>>();
 
 		/// <summary>
 		/// The local graph maps all neighbors of a point.
 		/// </summary>
-		private readonly IDictionary<Vector3D, HashSet<Vector3D>> nodeNeighbors;
+		private readonly IDictionary<Vector, HashSet<Vector>> nodeNeighbors;
 
 		/// <summary>
 		/// All obstacles in the graph.
@@ -35,7 +35,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <summary>
 		/// The target position for the graph.
 		/// </summary>
-		private Vector3D targetPosition;
+		private Vector targetPosition;
 
 		/// <summary>
 		/// Creates a new RaytracingGraph.
@@ -44,10 +44,11 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="obstacles"> a collection of all obstacles </param>
 		/// <param name="yValue"> the height of all graph points </param>
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
-		public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, double yValue, double waypointEdgeDistance)
+		//public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, double yValue, double waypointEdgeDistance)
+        public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, float yValue, float waypointEdgeDistance)
 		{
 			//IList<Vector3D> edgePoints = new List<Vector3D>();
-            List<Vector3D> edgePoints = new List<Vector3D>();
+            List<Vector> edgePoints = new List<Vector>();
 			this.obstacles = obstacles;
 
 			lock (GLOBAL_GRAPH_CACHE)
@@ -58,7 +59,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 				}
 				else
 				{
-					nodeNeighbors = new Dictionary<Vector3D, HashSet<Vector3D>>();
+					nodeNeighbors = new Dictionary<Vector, HashSet<Vector>>();
 					GLOBAL_GRAPH_CACHE[simulationId] = nodeNeighbors;
 
 					// calculate all static waypoints
@@ -69,7 +70,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 
 					for (int i = 0; i < edgePoints.Count; i++)
 					{
-						nodeNeighbors[edgePoints[i]] = new HashSet<Vector3D>();
+						nodeNeighbors[edgePoints[i]] = new HashSet<Vector>();
 					}
 
 					// raytest all waypoints with each other
@@ -77,8 +78,8 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 					{
 						for (int j = i + 1; j < edgePoints.Count; j++)
 						{
-							Vector3D orign = edgePoints[i];
-							Vector3D target = edgePoints[j];
+							Vector orign = edgePoints[i];
+							Vector target = edgePoints[j];
 
 							// point is visible, add it to both neighbor sets
 							if (RayUtil.IsVisible(orign, target, obstacles))
@@ -99,15 +100,15 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// <param name="yValue"> the height of the edge points </param>
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
 		/// <returns> a list of the edges </returns>
-		public static IList<Vector3D> GetEdgePoints(SpatialAgent obstacle, double yValue, double waypointEdgeDistance)
+		//public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, double yValue, double waypointEdgeDistance)
+        public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, float yValue, float waypointEdgeDistance)
 		{
-			IList<Vector3D> edgePoints = new List<Vector3D>();
+			IList<Vector> edgePoints = new List<Vector>();
 
 			//Vector3D position = obstacle.Position;
-            Vector3D position = Vector3DHelper.FromDalskiVector(obstacle.GetPosition());
+            Vector position = obstacle.GetPosition();
 			//Vector3D boundsHalf = ((Vector3D) obstacle.Bounds).scalarMultiply(0.5);
-            Vector3D bounds = Vector3DHelper.FromDalskiVector(obstacle.GetDimension());
-            Vector3D boundsHalf = Vector3D.Multiply(0.5, bounds);
+            Vector boundsHalf = obstacle.GetDimension() * 0.5f;
 
 			// if the yValue is lower or higher than the obstacle, there are no edge points
 			if (position.Y - boundsHalf.Y - waypointEdgeDistance > yValue || position.Y + boundsHalf.Y + waypointEdgeDistance < yValue)
@@ -116,28 +117,28 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			}
 
 			// calculate all four egde points
-			edgePoints.Add(new Vector3D(position.X - boundsHalf.X - waypointEdgeDistance, yValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
-			edgePoints.Add(new Vector3D(position.X - boundsHalf.X - waypointEdgeDistance, yValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
-			edgePoints.Add(new Vector3D(position.X + boundsHalf.X + waypointEdgeDistance, yValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
-			edgePoints.Add(new Vector3D(position.X + boundsHalf.X + waypointEdgeDistance, yValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
+            edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, yValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
+            edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, yValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
+            edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, yValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
+            edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, yValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
 
 			return edgePoints;
 		}
 
-		public ICollection<IPathNode<Vector3D>> GetNeighbors(IPathNode<Vector3D> node)
+		public ICollection<IPathNode<Vector>> GetNeighbors(IPathNode<Vector> node)
 		{
-			ICollection<IPathNode<Vector3D>> result = new HashSet<IPathNode<Vector3D>>();
+			ICollection<IPathNode<Vector>> result = new HashSet<IPathNode<Vector>>();
 
 			if (nodeNeighbors.ContainsKey(node.AdaptedObject))
 			{
-				foreach (Vector3D neighbor in nodeNeighbors[node.AdaptedObject])
+				foreach (Vector neighbor in nodeNeighbors[node.AdaptedObject])
 				{
 					result.Add(new RaytracingPathNode(neighbor));
 				}
 			}
 			else
 			{
-				foreach (Vector3D waypoint in nodeNeighbors.Keys)
+				foreach (Vector waypoint in nodeNeighbors.Keys)
 				{
 					if (RayUtil.IsVisible(node.AdaptedObject, waypoint, obstacles))
 					{
@@ -154,20 +155,20 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			return result;
 		}
 
-		public double Distance(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
+		public double Distance(IPathNode<Vector> from, IPathNode<Vector> to)
 		{
 			//return from.AdaptedObject.distance(to.AdaptedObject);
-            return Vector3DHelper.Distance(from.AdaptedObject, to.AdaptedObject);
+            return from.AdaptedObject.GetDistance(to.AdaptedObject);
 		}
 
-		public double GetHeuristic(IPathNode<Vector3D> from, IPathNode<Vector3D> to)
+		public double GetHeuristic(IPathNode<Vector> from, IPathNode<Vector> to)
 		{
 			//return from.AdaptedObject.distance(to.AdaptedObject);
-            return Vector3DHelper.Distance(from.AdaptedObject, to.AdaptedObject);
+            return from.AdaptedObject.GetDistance(to.AdaptedObject);
 		}
 
 		/// <returns> the targetPosition </returns>
-		public Vector3D TargetPosition
+		public Vector TargetPosition
 		{
 			get
 			{
@@ -181,7 +182,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 
 
 		/// <returns> the nodeNeighbors </returns>
-		public IDictionary<Vector3D, HashSet<Vector3D>> NodeNeighbors
+		public IDictionary<Vector, HashSet<Vector>> NodeNeighbors
 		{
 			get
 			{

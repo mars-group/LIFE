@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents
 {
@@ -46,10 +45,10 @@ namespace PedestrianModel.Agents
 
         private string simulationId;
 
-        private Vector3D startPosition;
-        private IList<Vector3D> targetPositions;        
+        private Vector startPosition;
+        private IList<Vector> targetPositions;        
         private RaytracingGraph pathfindingSearchGraph;
-        private IPathfinder<Vector3D> pathfinder;
+        private IPathfinder<Vector> pathfinder;
         private readonly ReactiveBehaviorPipeline movementPipeline = new ReactiveBehaviorPipeline();
         private readonly IList<MoveAction> actions = new List<MoveAction>();
         
@@ -57,7 +56,7 @@ namespace PedestrianModel.Agents
 
         /// <summary>
         /// List of the last n positions. </summary>
-        private readonly IList<Vector3D> positionTracker = new List<Vector3D>();
+        private readonly IList<Vector> positionTracker = new List<Vector>();
 
         /// <summary>
         ///   Create a new pedestrian agent.
@@ -114,10 +113,10 @@ namespace PedestrianModel.Agents
 
 
             // WALK
-            this.targetPositions = new List<Vector3D>();
-            this.targetPositions.Add(Vector3DHelper.FromDalskiVector(targetPosition));
+            this.targetPositions = new List<Vector>();
+            this.targetPositions.Add(targetPosition);
 
-            this.startPosition = Vector3DHelper.FromDalskiVector(position);
+            this.startPosition = position;
                         
             Init();
         }
@@ -149,7 +148,7 @@ namespace PedestrianModel.Agents
             set { maxVelocity = value; }
         }
 
-        public IList<Vector3D> TargetPositions
+        public IList<Vector> TargetPositions
         {
             get { return targetPositions; }
             set { targetPositions = value; }
@@ -173,7 +172,7 @@ namespace PedestrianModel.Agents
 			//Environment.VisionSensor.PushMode = false;
 
 			//startPosition = Environment.CurrentPosition;
-            startPosition = Vector3DHelper.FromDalskiVector(GetPosition());
+            startPosition = GetPosition();
 
             //movementPipeline.addBehavior(new ObstacleAvoidanceBehavior(this));
 			movementPipeline.AddBehavior(new ObstacleAvoidanceBehavior(this, PerceptionUnit));
@@ -183,8 +182,8 @@ namespace PedestrianModel.Agents
 			//pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
             var rawObstaclesData = PerceptionUnit.GetData((int)InformationTypes.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>)rawObstaclesData;
-            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0.43, Math.Max(Config.targetReachedDistance * 2.0, 0.28));
-			pathfinder = new AStarPathfinder<Vector3D>(pathfindingSearchGraph);
+            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0.43f, Math.Max(Config.targetReachedDistance * 2.0f, 0.28f));
+			pathfinder = new AStarPathfinder<Vector>(pathfindingSearchGraph);
 
 			CreateAndExecuteMovePlan(targetPositions);
 
@@ -250,7 +249,7 @@ namespace PedestrianModel.Agents
 					//TeleportAction action = new TeleportAction(startPosition);
 					//Environment.executeAction(action);
                     #warning Return a direct move action which puts the agent back to startPosition (if there's space)
-                    directMovementAction = new DirectMovementAction(mover, Vector3DHelper.ToDalskiVector(startPosition));
+                    directMovementAction = new DirectMovementAction(mover, startPosition);
                     // Allowed to already execute this here to immediately change position and have the right agent position for creation of move plan?
                     // Will be executed twice, but shouldn't have any negative effect.
                     directMovementAction.Execute();
@@ -274,16 +273,16 @@ namespace PedestrianModel.Agents
 		/// into the action queue.
 		/// </summary>
 		/// <param name="targetPositions"> the target positions of the movement. </param>
-		private void CreateAndExecuteMovePlan(IList<Vector3D> targetPositions)
+		private void CreateAndExecuteMovePlan(IList<Vector> targetPositions)
 		{
-			IList<Vector3D> shortestPath = null;
+			IList<Vector> shortestPath = null;
 
 			if (Config.targetListType == TargetListType.Parallel)
 			{
 				double shortestPathLength = double.MaxValue;
-				foreach (Vector3D target in targetPositions)
+				foreach (Vector target in targetPositions)
 				{
-					IList<Vector3D> path = GetPathToTarget(target);
+					IList<Vector> path = GetPathToTarget(target);
 
 					if (path == null)
 					{
@@ -291,13 +290,13 @@ namespace PedestrianModel.Agents
 					}
 
 					//path.Insert(0, Environment.CurrentPosition);
-                    path.Insert(0, Vector3DHelper.FromDalskiVector(GetPosition()));
+                    path.Insert(0, GetPosition());
 
 					double pathLength = 0.0;
 					for (int i = 1; i < path.Count; i++)
 					{
 						//pathLength += path[i - 1].distance(path[i]);
-                        pathLength += Vector3DHelper.Distance(path[i - 1], path[i]);
+                        pathLength += path[i - 1].GetDistance(path[i]);
 					}
 
 					if (shortestPathLength > pathLength)
@@ -309,7 +308,7 @@ namespace PedestrianModel.Agents
 			}
 			else
 			{
-				Vector3D currentTarget = targetPositions[targetPositionIndex];
+				Vector currentTarget = targetPositions[targetPositionIndex];
 				shortestPath = GetPathToTarget(currentTarget);
 
 			}
@@ -318,7 +317,7 @@ namespace PedestrianModel.Agents
 
 			if (shortestPath != null)
 			{
-				foreach (Vector3D waypoint in shortestPath)
+				foreach (Vector waypoint in shortestPath)
 				{
 					this.actions.Add(new MoveAction(waypoint, Config.targetReachedDistance));
 				}
@@ -332,13 +331,13 @@ namespace PedestrianModel.Agents
 		/// <param name="targetPosition"> the position to engage </param>
 		/// <returns> the resulting path as a list of <seealso cref="Vector3D"/> positions or <code>null</code> if no path
 		///         could be found. </returns>
-		private IList<Vector3D> GetPathToTarget(Vector3D targetPosition)
+		private IList<Vector> GetPathToTarget(Vector targetPosition)
 		{
 
 			this.pathfindingSearchGraph.TargetPosition = targetPosition;
 
 			//IList<Vector3D> path = pathfinder.FindPath(new RaytracingPathNode(Environment.CurrentPosition), new RaytracingPathNode(pathfindingSearchGraph.TargetPosition));
-            IList<Vector3D> path = pathfinder.FindPath(new RaytracingPathNode(Vector3DHelper.FromDalskiVector(GetPosition())), new RaytracingPathNode(pathfindingSearchGraph.TargetPosition));
+            IList<Vector> path = pathfinder.FindPath(new RaytracingPathNode(GetPosition()), new RaytracingPathNode(pathfindingSearchGraph.TargetPosition));
 
 			if (path == null || path.Count == 0)
 			{
@@ -355,7 +354,7 @@ namespace PedestrianModel.Agents
 		private bool GotStuck()
 		{
 			//this.positionTracker.Add(Environment.CurrentPosition);
-            this.positionTracker.Add(Vector3DHelper.FromDalskiVector(GetPosition()));
+            this.positionTracker.Add(GetPosition());
             
 			if (this.positionTracker.Count > POSITION_TRACKER_SIZE)
 			{
@@ -366,22 +365,22 @@ namespace PedestrianModel.Agents
 				return false; // only do check if enough positions
 			}
 
-			double sumX = 0;
-			double sumY = 0;
-			double sumZ = 0;
-			foreach (Vector3D v in this.positionTracker)
+			float sumX = 0;
+			float sumY = 0;
+			float sumZ = 0;
+			foreach (Vector v in this.positionTracker)
 			{
 				sumX += v.X;
 				sumY += v.Y;
 				sumZ += v.Z;
 			}
-			Vector3D averagePosition = new Vector3D(sumX / POSITION_TRACKER_SIZE, sumY / POSITION_TRACKER_SIZE, sumZ / POSITION_TRACKER_SIZE);
+            Vector averagePosition = new Vector(sumX / POSITION_TRACKER_SIZE, sumY / POSITION_TRACKER_SIZE, sumZ / POSITION_TRACKER_SIZE);
 
 			double sumDistance = 0;
-			foreach (Vector3D v in this.positionTracker)
+			foreach (Vector v in this.positionTracker)
 			{
 				//sumDistance += v.distance(averagePosition);
-                sumDistance += Vector3DHelper.Distance(v, averagePosition);
+                sumDistance += v.GetDistance(averagePosition);
 			}
 
 			double avgDistance = sumDistance / POSITION_TRACKER_SIZE;

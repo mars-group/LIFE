@@ -1,10 +1,10 @@
-﻿using System;
+﻿using DalskiAgent.Movement;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential
 {
@@ -49,7 +49,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential
 			this.potentialEmitters.Clear();
 		}
 
-		public double CalculatePotential(Vector3D position)
+		public double CalculatePotential(Vector position)
 		{
 			double result = 0.0;
 

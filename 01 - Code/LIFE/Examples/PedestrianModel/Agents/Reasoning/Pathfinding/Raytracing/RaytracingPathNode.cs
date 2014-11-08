@@ -1,9 +1,9 @@
-﻿using System;
+﻿using DalskiAgent.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 {
@@ -12,13 +12,13 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 	/// @author Christian Thiel
 	/// 
 	/// </summary>
-	public class RaytracingPathNode : IPathNode<Vector3D>
+	public class RaytracingPathNode : IPathNode<Vector>
 	{
 
 		/// <summary>
 		/// The underlying position.
 		/// </summary>
-		private readonly Vector3D obj;
+		private readonly Vector obj;
 
 		/// <summary>
 		/// The predecessor of this node in the path. If null, this node has no predecessor.
@@ -29,12 +29,12 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// Creates a new LoDNode with the specified Vector3D as source.
 		/// </summary>
 		/// <param name="obj"> the underlying vector </param>
-		public RaytracingPathNode(Vector3D obj)
+		public RaytracingPathNode(Vector obj)
 		{
 			this.obj = obj;
 		}
 
-		public Vector3D AdaptedObject
+		public Vector AdaptedObject
 		{
 			get
 			{
@@ -42,7 +42,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 			}
 		}
 
-		public IPathNode<Vector3D> Predecessor
+		public IPathNode<Vector> Predecessor
 		{
 			get
 			{

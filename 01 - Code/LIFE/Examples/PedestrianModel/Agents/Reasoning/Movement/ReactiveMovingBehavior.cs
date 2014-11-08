@@ -1,9 +1,9 @@
-﻿using System;
+﻿using DalskiAgent.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement
 {
@@ -21,7 +21,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 		/// <param name="currentPipelineVector"> the movement vector calculated by the previous behavior routine in the
 		///            pipeline </param>
 		/// <returns> the resulting movement vector </returns>
-		Vector3D ModifyMovementVector(Vector3D targetPosition, Vector3D currentPipelineVector);
+		Vector ModifyMovementVector(Vector targetPosition, Vector currentPipelineVector);
 
 	}
 

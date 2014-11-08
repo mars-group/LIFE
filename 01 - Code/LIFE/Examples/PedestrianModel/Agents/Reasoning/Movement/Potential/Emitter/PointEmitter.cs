@@ -1,10 +1,10 @@
-﻿using PedestrianModel.Util.Math;
+﻿using DalskiAgent.Movement;
+using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 {
@@ -19,7 +19,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 		/// <summary>
 		/// The position of this point emitter.
 		/// </summary>
-		private readonly Vector3D position;
+		private readonly Vector position;
 
 		/// <summary>
 		/// The function to apply the distance to.
@@ -35,13 +35,13 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 		/// </summary>
 		/// <param name="position"> the position of the emitter </param>
 		/// <param name="function"> the function to calculate the potential with </param>
-		public PointEmitter(Vector3D position, UnivariateRealFunction function) : base()
+		public PointEmitter(Vector position, UnivariateRealFunction function) : base()
 		{
 			this.position = position;
 			this.function = function;
 		}
 
-		public double GetPotential(Vector3D referringPosition)
+		public double GetPotential(Vector referringPosition)
 		{
 			double x = position.X - referringPosition.X;
 			double z = position.Z - referringPosition.Z;
@@ -50,7 +50,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 		}
 
 		/// <returns> the position </returns>
-		public Vector3D Position
+		public Vector Position
 		{
 			get
 			{

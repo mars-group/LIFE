@@ -1,9 +1,9 @@
-﻿using System;
+﻿using DalskiAgent.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Reasoning.Movement
 {
@@ -36,9 +36,9 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 		/// <param name="targetPosition"> the target position of the movement </param>
 		/// <param name="originalMovementVector"> the initial movement vector </param>
 		/// <returns> the final result of the pipeline </returns>
-		public Vector3D ProgressPipeline(Vector3D targetPosition, Vector3D originalMovementVector)
+		public Vector ProgressPipeline(Vector targetPosition, Vector originalMovementVector)
 		{
-			Vector3D v = originalMovementVector;
+			Vector v = originalMovementVector;
 
 			foreach (ReactiveMovingBehavior behavior in pipeline)
 			{

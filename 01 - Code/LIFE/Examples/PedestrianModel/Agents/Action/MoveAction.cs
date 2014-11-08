@@ -1,4 +1,5 @@
-﻿using DalskiAgent.Movement.Actions;
+﻿using DalskiAgent.Movement;
+using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using PedestrianModel.Util.Math;
 using System;
@@ -6,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PedestrianModel.Agents.Action
 {
@@ -25,7 +25,7 @@ namespace PedestrianModel.Agents.Action
 		/// <summary>
 		/// The target position of this MoveAction.
 		/// </summary>
-		private readonly Vector3D targetPosition;
+		private readonly Vector targetPosition;
 
 		/// <summary>
 		/// If the distance of the agent's position to the target position is lesser than this value, it counts as
@@ -39,7 +39,7 @@ namespace PedestrianModel.Agents.Action
 		/// platform.
 		/// </summary>
 		/// <param name="targetPosition"> the target position </param>
-		public MoveAction(Vector3D targetPosition) : this(targetPosition, DEFAULT_DISTANCE_TARGET_REACHED)
+		public MoveAction(Vector targetPosition) : this(targetPosition, DEFAULT_DISTANCE_TARGET_REACHED)
 		{
 		}
 
@@ -50,7 +50,7 @@ namespace PedestrianModel.Agents.Action
 		/// </summary>
 		/// <param name="targetPosition"> the target position </param>
 		/// <param name="distanceTargetReached"> the radius of the target area </param>
-		public MoveAction(Vector3D targetPosition, double distanceTargetReached) : base()
+		public MoveAction(Vector targetPosition, double distanceTargetReached) : base()
 		{
 			this.targetPosition = targetPosition;
 			this.distanceTargetReached = distanceTargetReached;
@@ -62,15 +62,12 @@ namespace PedestrianModel.Agents.Action
 			//double? maxMovingSpeed = agent.getStartParameter("movingSpeed");
             double maxMovingSpeed = agent.MaxVelocity;
 			//Vector3D direction = targetPosition.subtract(agent.Environment.CurrentPosition).normalize().scalarMultiply(maxMovingSpeed);
-            Vector3D agentPos = Vector3DHelper.FromDalskiVector(agent.GetPosition());
-            Vector3D direction = Vector3D.Subtract(targetPosition, agentPos);
-            direction.Normalize();
-            direction = Vector3D.Multiply(maxMovingSpeed, direction);
+            Vector direction = (targetPosition - agent.GetPosition()).GetNormalVector() * (float)maxMovingSpeed;
 
 			direction = agent.MovementPipeline.ProgressPipeline(targetPosition, direction);
 
 			//if (direction.Norm > 0.0)
-            if(direction.Length > 0.0)
+            if(direction.GetLength() > 0.0)
 			{
 				//double currentMovingSpeed = direction.Norm;
                 //double currentMovingSpeed = direction.Length;
@@ -88,8 +85,8 @@ namespace PedestrianModel.Agents.Action
                 //agent.Environment.executeAction(action);
                 #warning This function has to return a DalskiAgent.Movement.Actions.DirectMovementAction or similar
 
-                Vector3D nextPosition = Vector3D.Add(agentPos, Vector3D.Multiply(Config.lengthOfTimestepsInMilliseconds/1000d, direction));
-                return new DirectMovementAction(mover, Vector3DHelper.ToDalskiVector(nextPosition));
+                Vector nextPosition = agent.GetPosition() + ((Config.lengthOfTimestepsInMilliseconds / 1000f) * direction);
+                return new DirectMovementAction(mover, nextPosition);
             }
 			else
 			{
@@ -117,14 +114,14 @@ namespace PedestrianModel.Agents.Action
         public bool IsFinished(Pedestrian agent)
 		{
 			//Vector3D currentPosition = agent.Environment.CurrentPosition;
-            Vector3D currentPosition = Vector3DHelper.FromDalskiVector(agent.GetPosition());
+            Vector currentPosition = agent.GetPosition();
 
 			// calculate the distance using only x and z values
 			// double distance = Math.sqrt(currentPosition.getX() * currentPosition.getX() +
 			// targetPosition.getZ()*targetPosition.getZ());
 
 			//double distance = currentPosition.distance(targetPosition);
-            double distance = Vector3DHelper.Distance(currentPosition, targetPosition);
+            double distance = currentPosition.GetDistance(targetPosition);
 			return distance < distanceTargetReached;
 		}
 
@@ -140,7 +137,7 @@ namespace PedestrianModel.Agents.Action
 		}
 
 		/// <returns> the targetPosition </returns>
-		public Vector3D TargetPosition
+		public Vector TargetPosition
 		{
 			get
 			{
