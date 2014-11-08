@@ -30,7 +30,6 @@ namespace DalskiAgent.Environments {
       _random = new Random();
       Agents = new ConcurrentDictionary<SpatialAgent, MovementData>();
       _isGrid = isGrid;
-      if (!isGrid) throw new NotImplementedException();
     }
 
 
@@ -118,6 +117,31 @@ namespace DalskiAgent.Environments {
       //TODO 
       throw new NotImplementedException();
     }
+
+
+
+    /// <summary>
+    ///   Generate a valid initial movement data container for some given criteria. 
+    /// </summary>
+    /// <param name="dim">Extents of object to place (ranging from (0,0,0) to this point).</param>
+    /// <param name="dir">Direction of object. If not set, it's chosen randomly.</param>
+    /// <param name="target">A wished starting position. It's tried to find a fitting position as close as possible.</param>
+    /// <param name="maxRng">Maximum allowed range to target position. Ignored, if no target specified.</param>
+    /// <returns>A movement data object meeting the given requirements. 'Null', if placement not possible!</returns>
+    private MovementData PlaceAtRandomFreePosition(Vector dim, Direction dir = null, Vector target = null, float maxRng = 1) {
+      throw new NotImplementedException();
+    }
+
+
+/* WARUM DAS SO MIST IST UND WIE ES BESSER WÄRE:
+ * 
+ * - Env bekommt fertigberechnete Zielposition
+ * - muß dann irgendwie gucken, ob's geht
+ * - was wenn nicht? Wie weit kommt der Agent dann? Bewegungsgerade bilden und dann schneiden?
+ * 
+ * Besser: 
+ 
+ */
 
 
     /// <summary>
