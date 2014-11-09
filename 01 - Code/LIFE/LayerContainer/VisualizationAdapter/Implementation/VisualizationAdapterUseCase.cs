@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LayerAPI.Interfaces;
+using LayerAPI.Interfaces.Visualization;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation
@@ -42,7 +43,6 @@ namespace VisualizationAdapter.Implementation
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                // Use the () operator to raise the event.
                 handler(this, visMessages);
             }
         }

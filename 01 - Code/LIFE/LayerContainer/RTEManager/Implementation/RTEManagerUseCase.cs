@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using LayerAPI.Interfaces;
+using LayerAPI.Interfaces.Visualization;
 using LCConnector.TransportTypes;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;

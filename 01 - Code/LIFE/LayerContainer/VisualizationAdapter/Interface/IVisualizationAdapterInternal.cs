@@ -1,4 +1,5 @@
 ﻿using LayerAPI.Interfaces;
+using LayerAPI.Interfaces.Visualization;
 
 namespace VisualizationAdapter.Interface
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
+using LayerAPI.Interfaces.Visualization;
 using Mono.Addins;
 
 [assembly: Addin]

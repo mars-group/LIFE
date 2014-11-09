@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LayerAPI.Interfaces;
+using LayerAPI.Interfaces.Visualization;
 using NetTopologySuite.Geometries;
 using VisualizationAdapter.Interface;
 

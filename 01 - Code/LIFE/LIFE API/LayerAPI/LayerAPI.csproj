@@ -62,11 +62,15 @@
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
     <Compile Include="Interfaces\BasicVisualizationMessage.cs" />
+    <Compile Include="Interfaces\GIS\IGISAccess.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
+    <Compile Include="Interfaces\IGISActiveLayer.cs" />
+    <Compile Include="Interfaces\IGISPassiveLayer.cs" />
     <Compile Include="Interfaces\ILayer.cs" />
+    <Compile Include="Interfaces\ISteppedActiveLayer.cs" />
     <Compile Include="Interfaces\ISteppedLayer.cs" />
     <Compile Include="Interfaces\ITickClient.cs" />
-    <Compile Include="Interfaces\IVisualizable.cs" />
+    <Compile Include="Interfaces\Visualization\IVisualizable.cs" />
     <Compile Include="Interfaces\LayerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

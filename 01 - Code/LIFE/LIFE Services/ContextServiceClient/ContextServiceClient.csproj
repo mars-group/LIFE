@@ -41,7 +41,6 @@
     <Compile Include="KillEvent.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Mono.Messaging.RabbitMQ" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
