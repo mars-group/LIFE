@@ -26,11 +26,13 @@ namespace RTEManager.Implementation {
 
         // indicator whether this Layercontainer ist currently executing a Tick
         private bool _isRunning;
+        private readonly List<ISteppedActiveLayer> _preAndPostTickLayer;
 
         public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter) {
             _visualizationAdapter = visualizationAdapter;
 
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
+            _preAndPostTickLayer = new List<ISteppedActiveLayer>();
             _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _tickClientsMarkedForRegistrationPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
@@ -55,6 +57,18 @@ namespace RTEManager.Implementation {
             var visualizableLayer = layer as IVisualizable;
             if (visualizableLayer != null) {
                 _visualizationAdapter.RegisterVisualizable(visualizableLayer);
+            }
+
+            // add layer to tickClientsPerLayer if it is an active layer
+            var tickedLayer = layer as ITickClient;
+            if (tickedLayer != null) {
+                _tickClientsPerLayer[layer].TryAdd(tickedLayer, new byte());
+            }
+
+            // add layer to Pre- and PostTick execution chain if it is an ISteppedActiveLayer
+            var activeLayer = layer as ISteppedActiveLayer;
+            if (activeLayer != null) {
+                _preAndPostTickLayer.Add(activeLayer);
             }
         }
 
@@ -91,6 +105,9 @@ namespace RTEManager.Implementation {
             _isRunning = true;
             var stopWatch = Stopwatch.StartNew();
 
+            // PreTick all ActiveLayers
+            Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
+
             // tick all tickClients
             Parallel.ForEach(
                 _tickClientsPerLayer.Keys,
@@ -98,6 +115,12 @@ namespace RTEManager.Implementation {
                     client => client.Key.Tick()
                     )
                 );
+
+            // visualize all visualizable layers
+            _visualizationAdapter.VisualizeTick();
+
+            // PostTick all ActiveLayers
+            Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
             // clean up all deleted tickClients
             Parallel.ForEach
@@ -122,16 +145,16 @@ namespace RTEManager.Implementation {
             Parallel.ForEach
                 (
                     _tickClientsPerLayer.Keys,
-                    layer => {
+                    layer =>
+                    {
                         _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentBag<ITickClient>();
                         _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentBag<ITickClient>();
                     }
                 );
 
-            // visualize all visualizable layers
-            _visualizationAdapter.VisualizeTick();
-
+            // stop time measurement
             stopWatch.Stop();
+
             _isRunning = false;
             return stopWatch.ElapsedMilliseconds;
         }

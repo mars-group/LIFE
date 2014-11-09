@@ -11,7 +11,7 @@ namespace ExampleLayer {
     using System.Collections.Generic;
 
     [Extension(typeof (ISteppedLayer))]
-    public class ExampleLayer : ISteppedLayer, IVisualizable {
+    public class ExampleLayer : ISteppedActiveLayer, IVisualizable {
 
 		private List<AgentSmith> _agents;
         private const int agentCount = 10000;
@@ -28,7 +28,7 @@ namespace ExampleLayer {
             _environment.RandomlyAddAgentsToFreeFields(_agents);
 
             foreach (var agentSmith in _agents) {
-                registerAgentHandle.Invoke(this, agentSmith);  
+               registerAgentHandle.Invoke(this, agentSmith);  
             }
 
             return true;
@@ -44,6 +44,18 @@ namespace ExampleLayer {
 
         public List<BasicVisualizationMessage> GetVisData(IGeometry geometry) {
             throw new NotImplementedException();
+        }
+
+        public void Tick() {
+            Console.WriteLine("I am ExampleLayer and I got ticked");
+        }
+
+        public void PreTick() {
+            Console.WriteLine("I am ExampleLayer and I got PREticked");
+        }
+
+        public void PostTick() {
+            Console.WriteLine("I am ExampleLayer and I got POSTticked");
         }
     }
 }
