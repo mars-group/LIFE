@@ -6,8 +6,9 @@ namespace AgentTester.Wolves.Interactions {
   ///   This is an eating interaction, where one agent eats another.
   /// </summary>
   internal class EatInteraction : IInteraction {
+    
     private readonly IEatInteractionSource _predator; // The source agent.
-    private readonly IEatInteractionTarget _prey; // The target agent.
+    private readonly IEatInteractionTarget _prey;     // The target agent.
 
 
     /// <summary>
