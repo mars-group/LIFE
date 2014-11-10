@@ -64,6 +64,10 @@
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Name>GenericAgentArchitectureCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

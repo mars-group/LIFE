@@ -1,6 +1,6 @@
 ﻿using CommonTypes.TransportTypes;
 using DalskiAgent.Movement;
-using LayerAPI.Interfaces;
+using GenericAgentArchitectureCommon.Datatypes;
 
 namespace DalskiAgent.Perception {
 

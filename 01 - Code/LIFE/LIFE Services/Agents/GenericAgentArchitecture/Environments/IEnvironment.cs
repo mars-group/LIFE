@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement;
-using LayerAPI.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Environments {
   

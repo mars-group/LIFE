@@ -5,6 +5,7 @@ using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 
 namespace AgentTester.Wolves.Agents {

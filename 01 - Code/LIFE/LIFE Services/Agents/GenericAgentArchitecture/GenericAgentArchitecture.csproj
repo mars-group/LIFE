@@ -47,8 +47,8 @@
     <Compile Include="Execution\IExecution.cs" />
     <Compile Include="Execution\LayerExec.cs" />
     <Compile Include="Execution\SeqExec.cs" />
-    <Compile Include="Reasoning\Plan.cs" />
     <Compile Include="Perception\ICallbackDataSource.cs" />
+    <Compile Include="Reasoning\Plan.cs" />
     <Compile Include="Movement\Movers\AgentMover.cs" />
     <Compile Include="Movement\Movers\ContinuousMover.cs" />
     <Compile Include="Movement\Direction.cs" />

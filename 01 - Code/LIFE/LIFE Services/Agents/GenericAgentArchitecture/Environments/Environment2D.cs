@@ -5,7 +5,7 @@ using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement;
 using DalskiAgent.Perception;
-using LayerAPI.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Environments {
  

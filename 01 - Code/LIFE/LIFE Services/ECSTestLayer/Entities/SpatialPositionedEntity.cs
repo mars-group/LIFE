@@ -1,17 +1,14 @@
-﻿using CommonTypes.DataTypes;
+﻿using CommonTypes.TransportTypes;
+using GenericAgentArchitectureCommon.Interfaces;
 
-namespace ESCTestLayer.Entities
-{
-    using CommonTypes.TransportTypes;
-    using LayerAPI.Interfaces;
+namespace ESCTestLayer.Entities {
 
-    public struct SpatialPositionedEntity {
+  public struct SpatialPositionedEntity {
 
-        public ISpatialEntity Entity;
+    public ISpatialEntity Entity;
 
-        public TVector Position;
+    public TVector Position;
 
-        public TVector Direction;
-       
-    }
+    public TVector Direction;
+  }
 }

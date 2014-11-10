@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
-using LayerAPI.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Environments {
     

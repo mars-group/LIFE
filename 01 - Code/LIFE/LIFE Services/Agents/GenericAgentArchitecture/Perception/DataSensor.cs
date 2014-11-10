@@ -1,5 +1,5 @@
 ﻿using DalskiAgent.Agents;
-using LayerAPI.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Perception {
   
