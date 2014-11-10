@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>  
+    <version>0.1</version>
+		<id>DalskiAgent</id>
+    <title>Dalski-Agent (generic SRA agent architecture)</title>
+    <authors>Jan Dalski</authors>
+    <owners>MARS Group</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>An agent architecture that provides a generic frame with mounting points for sensors, reasoning logic and actions.</description>
+    <releaseNotes>Parallel execution now supported. 2D environment stub in use, namespace changed.</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>MARS, Generic Agents, Dalski-Agent</tags>
+  </metadata>
+	<files>
+		<file src="bin\Release\*.dll" target="lib\net45\"/>
+	</files>	
+</package>

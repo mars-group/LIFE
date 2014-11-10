@@ -95,6 +95,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terradue.OpenNebula", "R-Components\Terradue.OpenNebula\Terradue.OpenNebula.csproj", "{E488F0B0-3464-4D03-8E2E-8DA1936E3699}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIFE Services", "LIFE Services", "{5BF046F2-CC5D-47DD-AAC9-AD021E984031}"
+	ProjectSection(SolutionItems) = preProject
+		LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj = LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoDimEnvironment", "LIFE Services\TwoDimEnvironment\TwoDimEnvironment.csproj", "{D7383AA1-FB90-4632-BB47-9388778C6D46}"
 EndProject
@@ -121,6 +124,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizationManager", "SimulationManager\VisualizationManager\VisualizationManager.csproj", "{18494945-EDD8-403B-81B3-3B11D0B43D99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizationAdapter", "LayerContainer\VisualizationAdapter\VisualizationAdapter.csproj", "{F6626674-3A9A-460B-A98B-A66B561FD811}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agents", "Agents", "{1791AB7F-736F-4121-B5CF-1DC175834009}"
+	ProjectSection(SolutionItems) = preProject
+		LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj = LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericAgentArchitectureCommon", "LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj", "{FDADF460-19A7-443A-AEA6-EF24580DAF86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCPrototype", "LIFE Services\ECSTestLayer\ESCPrototype.csproj", "{A758654E-AEA9-45F5-8CA3-E09519379F53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -580,6 +592,26 @@ Global
 		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86}.Release|x86.ActiveCfg = Release|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A758654E-AEA9-45F5-8CA3-E09519379F53}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -629,6 +661,9 @@ Global
 		{08137AD1-9B69-4EE9-93E9-0DDC5F818E15} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
 		{18494945-EDD8-403B-81B3-3B11D0B43D99} = {060A5DF3-4C49-402B-9B3F-142A9ECD30B1}
 		{F6626674-3A9A-460B-A98B-A66B561FD811} = {4FB29566-3D30-44FD-8EE7-2CED4E2FC81F}
+		{1791AB7F-736F-4121-B5CF-1DC175834009} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
+		{FDADF460-19A7-443A-AEA6-EF24580DAF86} = {1791AB7F-736F-4121-B5CF-1DC175834009}
+		{A758654E-AEA9-45F5-8CA3-E09519379F53} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SimulationManager\SimulationManager\SimulationManager.csproj

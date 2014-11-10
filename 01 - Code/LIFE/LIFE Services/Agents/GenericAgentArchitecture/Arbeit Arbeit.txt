@@ -1,0 +1,142 @@
+﻿Notizendatei und Ablage 
+***********************
+
+[Halo]: Rückbau / Reparatur:
+        Besitzt MData-Referenz (für Bewegungsdaten) und IGeometry-Objekt herum.
+		(muß aber immer noch IGeometry impl., da GetData sowas braucht)
+		Implementiert Schnittstelle und delegiert die IF-Aufrufe auf eingebettetes Objekt.
+		- Omni-Halo: Beides null.
+		- IsInRange(): Sollte eher "Contains(point)" heißen.
+
+[GridMover]: Planungsrelevante Teile aus Funktion der ehemaligen kombinierten Bewegung extrahieren 
+
+[ESC]: Schnittstellenimplementation ausstehend!
+
+[Bewegungsplanung]: Separate Klasse, die Teil einer Planungslogik werden kann
+                    Flexible Struktur (Plugin-Komponenten) für das IAgentLogic gebraucht!
+					Nimmt Kollisionsvermeidung vor -> muß über die Umgebung Bescheid wissen!
+					 - Enthält Auflistung aller kollidierbaren Entitäten sowie derer Bewegungsdaten
+					 - Wird direkt über die Sensorik mit befüllt (?)
+					 - Kann später auch Terraindaten halten (Wände, Steigung, Klippen, ...)
+
+[AKTUELLES]
+- Vektor herausziehen, gemeinsames Paket
+- Struktur optimieren
+- ICallbackDataSource nach LayerAPI-Interfaces
+
+- Umweltbezug auch in "Agent" nötig.
+  - Ausführungskomponente: LayerContainer oder sequentiell?
+  - Soll für den Agenten transparent sein - Schnittstelle!
+
+  # Basisagent nimmt immer Anmeldung in der Ausführungsumgebung vor.  
+  # Spatialer Agent ergänzt zusätzliche Umwelt-Operation "Add()".
+  - Reihenfolge muß andersrum erfolgen: Position > Ausführungsanmeldung.
+    - geht nicht?
+
+- Sequentielle Ausführung aufbrechen
+  - "Executor"    = Programmtechnische Ausführung
+  - "Environment" = Logische Ausführung
+   ==> soll eines werden!
+
+Executor wird Ausführungsoption
+- Umwelt "kennt" Ausführung. ?
+  - LayerEnv. : LC
+  - ESCAdapter: LC / Exec.
+  - Env2D     : LC / Exec.
+
+
+
+[EXTERNE FEHLER]
+- LC nicht instanzierbar ohne Netzwerkverbindung?
+
+
+----------------------------------- ALTE RASTERBEWEGUNGSAKTION (KOMBINIERT) -----------------------------------
+
+
+    private readonly bool _diagonalEnabled;     // This flag enables diagonal movement. 
+    private readonly bool _failureCostEnabled;  // If set to 'true', failed movements also cost movement points.
+
+    /// <summary>
+    ///   Moves towards a given position using grid options. 
+    /// </summary>
+    /// <param name="targetPos">The target position to move to.</param>
+    /// <param name="movementPoints">The distance the agent is allowed to travel.
+    /// Similar to the speed in continuous environments.</param>
+    public void MoveToPosition(Vector targetPos, float movementPoints) {
+
+      // Repeat function as long as movement is possible (minimal cost: 1).
+      while (movementPoints >= 1) {
+         
+        // Check, if we are already there. Otherwise no need to move anyway.
+        if (targetPos.Equals(Data.Position)) return;
+        
+        // Hide diagonal movement options, if movement points are less than √2 (1.4142).
+        var diagonalEnabled = _diagonalEnabled;
+        if (movementPoints < Sqrt2) diagonalEnabled = false;
+*****
+G       // Calculate yaw to target position and create sorted list of movement options.
+R       var angle = CalculateDirectionToTarget(targetPos).Yaw;
+I       var list = new List<DirDiff>();
+D
+        // Add directions enum values and angular differences to list.
+M       // We loop over all options and calculate difference between desired and actual value.
+O       for (int iEnum = 0, offset = 0, mod = 0; iEnum < 8; iEnum ++, mod ++) {
+V       
+E         // If diagonal movement is allowed, set offset and continue. Otherwise abort.
+R         if (iEnum == 4) {
+            if (diagonalEnabled) { offset = 45; mod = 0; }
+            else break;
+          }
+
+          // Calculate angular difference to current option. If >180°, consider other semicircle.
+          var diff = Math.Abs(angle - (offset + mod*90));
+          if (diff > 180.0f) diff = 360.0f - diff;
+          list.Add(new DirDiff {Dir = (GridDir) iEnum, Diff = diff});
+        }
+
+        // Now we have a list of available movement options, ordered by efficiency.
+        list.Sort();
+*****        
+        // Move it! The loop is needed for alternative action selection.
+        for (var option = 0; option < list.Count; option++) {
+          var oldPosX = (int) Data.Position.X;
+          var oldPosY = (int) Data.Position.Y;
+          var dir = list[option].Dir;
+          
+          //Console.WriteLine("\nTrying to move from "+Data.Position+" in direction "+dir+": ");
+          Move(dir);
+          var success = !((int) Data.Position.X == oldPosX && (int) Data.Position.Y == oldPosY);
+
+          // Reduce movement points needed for execution (if operation succeded or failure cost enabled).
+          if (success || _failureCostEnabled) {
+            if ((int) dir < 4) movementPoints -= 1f;    // straight
+            else               movementPoints -= Sqrt2; // diagonal               
+          }
+
+          // Did it work? Then go back to main movement function loop.
+          if (success) {         
+            //Console.WriteLine("Movement succeeded.");
+            break;
+          }
+          
+          // We're still at the same position. Retry with alternative option. 
+          //Console.WriteLine("Movement failed. MP left: "+movementPoints);
+
+          if (TargetPos.Equals(targetPos)) return;   // If final destination is blocked, abort pathfinding.      
+          TargetPos = new Vector(oldPosX, oldPosY);  // Reset target origin.
+          if (movementPoints < Sqrt2) break;         // Break, if no options left.
+          //TODO Schrägbewegung wäre noch möglich !!
+        }
+      }   
+    }
+
+
+
+Delegate-Zuweisungsarten:
+ 1) Statische Funktion machen, Zeiger = Funktionsname: 
+    public static ConsoleColor Fkt (SpatialAgent agt) { ... }
+    GetColor = new GetColor(Fkt)
+    GetColor = Fkt   // kürzer!
+ 
+ 2) Anonyme Funktion erstellen:
+    GetColor = delegate(SpatialAgent agt) { ... }
