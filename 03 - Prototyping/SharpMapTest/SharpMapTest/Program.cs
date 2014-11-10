@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using SharpMap;
 using SharpMap.Data;
@@ -13,22 +14,19 @@ namespace SharpMapTest
         static void Main(string[] args)
         {
             var rasterLayer = new GdalRasterLayer("elevationLayer", @".\GISData\knp_srtm90m.asc");
+            new VectorLayer("MyLayer");
             var myMap = new Map {
                 Size = rasterLayer.Size,
                 MinimumZoom = 5,
                 BackColor = Color.White,
             };
 
-
-            VectorLayer myLayer = new VectorLayer("My layer") {
-                DataSource = new SharpMap.Data.Providers.ShapeFile(@".\GISData\knp_rivers_cullum.shp"),
-            };
-
             myMap.Layers.Add(rasterLayer);
+            
             var featureSet = new FeatureDataSet();
-
-            rasterLayer.ExecuteIntersectionQuery(new NetTopologySuite.Geometries.Point(rasterLayer.Size.Height / 2, rasterLayer.Size.Width /2), featureSet);
-
+            
+            rasterLayer.ExecuteIntersectionQuery(new NetTopologySuite.Geometries.Point(31, -23), featureSet);
+            
             myMap.ZoomToExtents();
             Image imgMap = myMap.GetMap();
             imgMap.Save(@".\mymap.png", ImageFormat.Png);
