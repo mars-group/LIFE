@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PedestrianModel.Environment
 {
@@ -18,6 +19,7 @@ namespace PedestrianModel.Environment
     public class ObstacleEnvironment : Environment2D
     {
         private readonly IExecution _exec;  // Agent execution container reference.
+        public static Form Visualization;        
 
         /// <summary>
         ///   Create a new environment.
@@ -49,8 +51,12 @@ namespace PedestrianModel.Environment
         }
 
         public override void AdvanceEnvironment()
-        {
-            // Nothing to do here in this case.
+        {            
+            if (Visualization != null)
+            {
+                Visualization.Invalidate();
+            }
         }
+
     }
 }

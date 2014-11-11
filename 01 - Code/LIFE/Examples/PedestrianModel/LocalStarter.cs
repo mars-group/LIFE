@@ -8,12 +8,14 @@ using ESCTestLayer.Interface;
 using LayerAPI.Interfaces;
 using PedestrianModel.Agents;
 using PedestrianModel.Environment;
+using PedestrianModel.Visualization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PedestrianModel
 {
@@ -27,7 +29,7 @@ namespace PedestrianModel
     /// </summary>
     public static void Main() {
         var exec = new SeqExec(true);
-        var env = CreateScenarioEnvironment(exec, false, 5);
+        var env = CreateScenarioEnvironment(exec, false, 5);        
         exec.Run(100, null);
     }
 
@@ -36,6 +38,12 @@ namespace PedestrianModel
         IEnvironment env;
         if (!esc) env = new ObstacleEnvironment(exec);
         else env = new ESCAdapter(new ESC());
+        
+        new Thread(() => {
+            Form visualization = new SimpleVisualization(env);
+            ObstacleEnvironment.Visualization = visualization;
+            Application.Run(visualization);            
+        }).Start();
 
         // Obstacle with center (10,15) going from x=9.5 to x=10.5 and y=10 to y=20
         var obsPosition = new Vector(10f, 15f);
