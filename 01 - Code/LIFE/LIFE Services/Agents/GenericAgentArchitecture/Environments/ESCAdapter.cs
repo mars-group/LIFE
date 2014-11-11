@@ -92,10 +92,10 @@ namespace DalskiAgent.Environments {
     ///   In this case, the adapter redirects to the ESC implementation.
     /// </summary>
     /// <param name="informationType">The type of information to sense.</param>
-    /// <param name="geometry">The perception range.</param>
+    /// <param name="scheissGeometry">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public object GetData(int informationType, IGeometry geometry) {
-      return _esc.GetData(informationType, geometry);
+    public object GetData(int informationType, IScheissGeometry scheissGeometry) {
+      return _esc.GetData(informationType, scheissGeometry);
     }
   }
 }

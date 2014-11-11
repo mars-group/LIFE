@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LayerAPI.Interfaces;
 using LayerAPI.Interfaces.Visualization;
+using MessageWrappers;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation

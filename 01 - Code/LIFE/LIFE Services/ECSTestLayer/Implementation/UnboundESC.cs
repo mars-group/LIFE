@@ -19,14 +19,14 @@ namespace ESCTestLayer.Implementation {
     
     private readonly Random _rnd; // Number generator for random positions.
     private readonly Dictionary<ISpatialEntity, AABB> _aabbs; // Stores the occupied intervals of all elementIds.
-    private readonly IDictionary<ISpatialEntity, IGeometry> _dimensions; // All elements dimensions.
+    private readonly IDictionary<ISpatialEntity, IScheissGeometry> _dimensions; // All elements dimensions.
     private readonly IDictionary<ISpatialEntity, TVector> _positions; // The positions (middlepoints).
     private readonly IDictionary<ISpatialEntity, TVector> _directions; // The positions (middlepoints).
 
     public UnboundESC() {
       _rnd = new Random();
       _aabbs = new Dictionary<ISpatialEntity, AABB>();
-      _dimensions = new ConcurrentDictionary<ISpatialEntity, IGeometry>();
+      _dimensions = new ConcurrentDictionary<ISpatialEntity, IScheissGeometry>();
       _positions = new ConcurrentDictionary<ISpatialEntity, TVector>();
       _directions = new ConcurrentDictionary<ISpatialEntity, TVector>();
     }
@@ -74,7 +74,7 @@ namespace ESCTestLayer.Implementation {
       return new MovementResult(position);
     }
 
-    public IEnumerable<SpatialPositionedEntity> Explore(IGeometry geometry, TVector position, TVector direction) {
+    public IEnumerable<SpatialPositionedEntity> Explore(IScheissGeometry scheissGeometry, TVector position, TVector direction) {
 //            var newPosition = GetAABB(position, direction, _dimensions[elementId]);
 //            var collisions = new List<CollidableElement>();
 //
@@ -101,11 +101,11 @@ namespace ESCTestLayer.Implementation {
     }
 
 
-    public object GetData(int informationType, IGeometry geometry) {
+    public object GetData(int informationType, IScheissGeometry scheissGeometry) {
       //TODO informationType als filter kriterium
 //            const int elementId = -1;
-//            Add(elementId, -1, false, geometry.GetDimensionQuad());
-//            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
+//            Add(elementId, -1, false, scheissGeometry.GetDimensionQuad());
+//            return Explore(elementId, scheissGeometry.GetPosition(), scheissGeometry.GetDirectionOfQuad());
       throw new NotImplementedException();
     }
 

@@ -43,7 +43,7 @@
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Interfaces\IFact.cs" />
     <Compile Include="Interfaces\IGenericDataSource.cs" />
-    <Compile Include="Interfaces\IGeometry.cs" />
+    <Compile Include="Interfaces\IScheissGeometry.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
     <Compile Include="Interfaces\ISpatialEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

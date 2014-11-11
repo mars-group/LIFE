@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</ProjectGuid>
+    <ProjectGuid>{6CB066D7-A187-4EDA-A059-44C6121FAC56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LCConnector</RootNamespace>
-    <AssemblyName>LCConnector</AssemblyName>
+    <RootNamespace>LIFEGisLayerService</RootNamespace>
+    <AssemblyName>LIFEGisLayerService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MessageWrappers">
-      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
+    <Reference Include="GeoAPI">
+      <HintPath>..\..\packages\GeoAPI.1.7.3.1\lib\net45\GeoAPI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,27 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\LayerNotInitializedException.cs" />
-    <Compile Include="Exceptions\LayerNotInstantiatedException.cs" />
-    <Compile Include="ILayerContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransportTypes\ModelStructure\ContentType.cs" />
-    <Compile Include="TransportTypes\ModelStructure\IModelDirectoryContent.cs" />
-    <Compile Include="TransportTypes\ModelStructure\ModelContent.cs" />
-    <Compile Include="TransportTypes\ModelStructure\ModelFile.cs" />
-    <Compile Include="TransportTypes\ModelStructure\ModelFolder.cs" />
-    <Compile Include="TransportTypes\TInitData.cs" />
-    <Compile Include="TransportTypes\TLayerDescription.cs" />
-    <Compile Include="TransportTypes\TLayerInstanceId.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
-      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
-      <Name>Scs</Name>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LayerAPI</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementation\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

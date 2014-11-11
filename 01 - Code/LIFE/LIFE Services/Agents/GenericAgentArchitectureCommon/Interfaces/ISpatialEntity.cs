@@ -1,7 +1,7 @@
 ﻿namespace GenericAgentArchitectureCommon.Interfaces {
   public interface ISpatialEntity  {
 
-        IGeometry GetBounds();
+        IScheissGeometry GetBounds();
 
     }
 }

@@ -133,6 +133,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCPrototype", "LIFE Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericAgentArchitecture", "LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj", "{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIFEGisLayerService", "LIFE Services\LIFEGisLayerService\LIFEGisLayerService.csproj", "{6CB066D7-A187-4EDA-A059-44C6121FAC56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -621,6 +623,16 @@ Global
 		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}.Release|x86.ActiveCfg = Release|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -674,6 +686,7 @@ Global
 		{FDADF460-19A7-443A-AEA6-EF24580DAF86} = {1791AB7F-736F-4121-B5CF-1DC175834009}
 		{A758654E-AEA9-45F5-8CA3-E09519379F53} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 		{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85} = {1791AB7F-736F-4121-B5CF-1DC175834009}
+		{6CB066D7-A187-4EDA-A059-44C6121FAC56} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SimulationManager\SimulationManager\SimulationManager.csproj

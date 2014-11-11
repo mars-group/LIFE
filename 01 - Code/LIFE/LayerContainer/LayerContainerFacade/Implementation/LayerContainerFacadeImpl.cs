@@ -1,9 +1,13 @@
-﻿using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+﻿using System;
+using System.Collections.Generic;
+using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
+using LayerAPI.Interfaces;
 using LayerContainerFacade.Interfaces;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using MessageWrappers;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
 using LayerContainerShared;
@@ -55,6 +59,8 @@ namespace LayerContainerFacade.Implementation
             return _rteManager.AdvanceOneTick();
         }
 
+        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
+
         public void StartVisualization() {
             _visualizationAdapter.StartVisualization();
         }
@@ -62,6 +68,8 @@ namespace LayerContainerFacade.Implementation
         public void StopVisualization() {
             _visualizationAdapter.StopVisualization();
         }
+
+        
 
         public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
             _visualizationAdapter.ChangeVisualizationView(topLeft, topRight, bottomRight, bottomLeft);

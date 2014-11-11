@@ -17,7 +17,7 @@ namespace ESCTestLayer.Interface {
 
     MovementResult Move(ISpatialEntity entity, TVector position, TVector direction);
 
-    IEnumerable<SpatialPositionedEntity> Explore(IGeometry geometry, TVector position, TVector direction);
+    IEnumerable<SpatialPositionedEntity> Explore(IScheissGeometry scheissGeometry, TVector position, TVector direction);
 
     IEnumerable<SpatialPositionedEntity> ExploreAll();
   }

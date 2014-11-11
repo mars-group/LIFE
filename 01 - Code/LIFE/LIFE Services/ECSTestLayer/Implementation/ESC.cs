@@ -17,7 +17,7 @@ namespace ESCTestLayer.Implementation {
   /// </summary>
   public class ESC : IDeprecatedESC {
     
-    //TODO boundaries einführen, vermutlich als polygon(IGeometry). zunächst als Vector siehe Environment2D
+    //TODO boundaries einführen, vermutlich als polygon(IScheissGeometry). zunächst als Vector siehe Environment2D
     // was passiert, wenn Agenten Grenzen erreichen?
     // TODO gibt indexOutOfBounds mit zurück
 
@@ -225,11 +225,11 @@ namespace ESCTestLayer.Implementation {
 
     #endregion
 
-    public object GetData(int informationType, IGeometry geometry) {
+    public object GetData(int informationType, IScheissGeometry scheissGeometry) {
       //TODO informationType als filter kriterium
 //            const int elementId = -1;
-//            Add(elementId, -1, false, geometry.GetDimensionQuad());
-//            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
+//            Add(elementId, -1, false, scheissGeometry.GetDimensionQuad());
+//            return Explore(elementId, scheissGeometry.GetPosition(), scheissGeometry.GetDirectionOfQuad());
       throw new NotImplementedException();
     }
   }

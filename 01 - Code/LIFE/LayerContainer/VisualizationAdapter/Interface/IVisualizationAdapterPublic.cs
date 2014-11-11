@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
+using MessageWrappers;
 using NetTopologySuite.Geometries;
 
 namespace VisualizationAdapter.Interface
