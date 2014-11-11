@@ -2,13 +2,14 @@
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using RTEManager.Interfaces;
+using VisualizationAdapter.Interface;
 
 namespace RTEManager.Implementation {
     public class RTEManagerComponent : IRTEManager {
         private readonly IRTEManager _rteManagerUseCase;
 
-        public RTEManagerComponent() {
-            _rteManagerUseCase = new RTEManagerUseCase();
+        public RTEManagerComponent(IVisualizationAdapterInternal visualizationAdapter) {
+            _rteManagerUseCase = new RTEManagerUseCase(visualizationAdapter);
         }
 
         public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {

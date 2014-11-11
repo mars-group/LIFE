@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using CommonTypes.TransportTypes;
-using GenericAgentArchitecture.Agents;
-using GenericAgentArchitecture.Movement;
-using LayerAPI.Interfaces;
+using DalskiAgent.Agents;
+using DalskiAgent.Movement;
+using DalskiAgent.Perception;
+using GenericAgentArchitectureCommon.Interfaces;
 
-namespace GenericAgentArchitecture.Environments {
+namespace DalskiAgent.Environments {
  
   /// <summary>
   ///   This environment adds movement support to the generic one and contains SpatialAgents. 
   /// </summary>
-  public abstract class Environment2D : Environment, IEnvironment {
-
-    protected readonly Vector Boundaries;    // Env. extent, ranging from (0,0) to this point.
-    protected readonly Dictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
-    public bool IsGrid { get; private set; }                    // Grid-based or continuous?
+  public class Environment2D : IEnvironment {
+    
+    private readonly Vector _boundaries;    // Env. extent, ranging from (0,0) to this point.
+    private readonly bool _isGrid;          // Grid-based or continuous environment?    
+    private readonly Random _random;        // Number generator for random placement.
+    protected readonly ConcurrentDictionary<SpatialAgent, MovementData> Agents;  // Agent-to-movement data mapping.
 
 
     /// <summary>
@@ -24,10 +26,10 @@ namespace GenericAgentArchitecture.Environments {
     /// <param name="boundaries">Boundaries for the environment.</param>
     /// <param name="isGrid">Selects, if this environment is grid-based or continuous.</param>
     public Environment2D(Vector boundaries, bool isGrid = true) {
-      Boundaries = boundaries;
-      Agents = new Dictionary<SpatialAgent, MovementData>();
-      IsGrid = isGrid;
-      if (!isGrid) throw new NotImplementedException();
+      _boundaries = boundaries;
+      _random = new Random();
+      Agents = new ConcurrentDictionary<SpatialAgent, MovementData>();
+      _isGrid = isGrid;
     }
 
 
@@ -35,10 +37,12 @@ namespace GenericAgentArchitecture.Environments {
     ///   Add an agent to the environment.
     /// </summary>
     /// <param name="agent">The agent to add.</param>
-    /// <param name="data">It's movement data.</param>
-    public void AddAgent(SpatialAgent agent, MovementData data) {
-      Agents.Add(agent, data);
-      AddAgent(agent);
+    /// <param name="pos">The agent's initial position.</param>
+    /// <param name="mdata">The movement data container reference.</param>
+    public void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata) {
+      if (pos == null) pos = GetRandomPosition();
+      mdata = new MovementData(pos);
+      Agents[agent] = mdata;
     }
 
 
@@ -47,8 +51,8 @@ namespace GenericAgentArchitecture.Environments {
     /// </summary>
     /// <param name="agent">The agent to remove.</param>
     public void RemoveAgent(SpatialAgent agent) {
-      Agents.Remove(agent);
-      base.RemoveAgent(agent);
+      MovementData m;
+      Agents.TryRemove(agent, out m);     
     }
 
 
@@ -61,8 +65,7 @@ namespace GenericAgentArchitecture.Environments {
     public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
       
       // Return, if position is already blocked.
-      if (! CheckPosition(position)) return;
-      
+      if (! CheckPosition(position) || !Agents.ContainsKey(agent)) return;
       // Set the values.
       Agents[agent].Position.X = position.X;
       Agents[agent].Position.Y = position.Y;
@@ -73,11 +76,18 @@ namespace GenericAgentArchitecture.Environments {
 
 
     /// <summary>
+    ///   This function allows execution of environment-specific code.
+    ///   The generic 2D environment does not use it. Later override possible.
+    /// </summary>
+    public virtual void AdvanceEnvironment() {}
+
+
+    /// <summary>
     ///   Retrieve all agents of this environment.
     /// </summary>
     /// <returns>A list of all spatial agents.</returns>
-    public new List<SpatialAgent> GetAllAgents() {
-      return base.GetAllAgents().Cast<SpatialAgent>().ToList();
+    public List<SpatialAgent> GetAllAgents() {
+      return new List<SpatialAgent>(Agents.Keys);
     }
 
 
@@ -85,14 +95,14 @@ namespace GenericAgentArchitecture.Environments {
     ///   Returns a random position.
     /// </summary>
     /// <returns>A free position.</returns>
-    public TVector GetRandomPosition() {
-      if (IsGrid) {
+    public Vector GetRandomPosition() {
+      if (_isGrid) {
         bool unique;
-        TVector position;
+        Vector position;
         do {
-          var x = Random.Next((int)Boundaries.X);
-          var y = Random.Next((int)Boundaries.Y);
-          position = new TVector(x, y);
+          var x = _random.Next((int)_boundaries.X);
+          var y = _random.Next((int)_boundaries.Y);
+          position = new Vector(x, y);
           unique = true;
           foreach (var md in Agents.Values) {
             if (md.Position.Equals(position)) {
@@ -109,14 +119,39 @@ namespace GenericAgentArchitecture.Environments {
     }
 
 
+
+    /// <summary>
+    ///   Generate a valid initial movement data container for some given criteria. 
+    /// </summary>
+    /// <param name="dim">Extents of object to place (ranging from (0,0,0) to this point).</param>
+    /// <param name="dir">Direction of object. If not set, it's chosen randomly.</param>
+    /// <param name="target">A wished starting position. It's tried to find a fitting position as close as possible.</param>
+    /// <param name="maxRng">Maximum allowed range to target position. Ignored, if no target specified.</param>
+    /// <returns>A movement data object meeting the given requirements. 'Null', if placement not possible!</returns>
+    private MovementData PlaceAtRandomFreePosition(Vector dim, Direction dir = null, Vector target = null, float maxRng = 1) {
+      throw new NotImplementedException();
+    }
+
+
+/* WARUM DAS SO MIST IST UND WIE ES BESSER WÄRE:
+ * 
+ * - Env bekommt fertigberechnete Zielposition
+ * - muß dann irgendwie gucken, ob's geht
+ * - was wenn nicht? Wie weit kommt der Agent dann? Bewegungsgerade bilden und dann schneiden?
+ * 
+ * Besser: 
+ 
+ */
+
+
     /// <summary>
     ///   Check, if a position can be acquired.
     /// </summary>
     /// <param name="position">The intended position</param>
     /// <returns>True, if accessible, false, when not.</returns>
     public bool CheckPosition(Vector position) {
-      if (position.X < 0 || position.X >= Boundaries.X ||
-          position.Y < 0 || position.Y >= Boundaries.Y) return false;
+      if (position.X < 0 || position.X >= _boundaries.X ||
+          position.Y < 0 || position.Y >= _boundaries.Y) return false;
       //TODO Dimensional checks needed!
       foreach (var md in Agents.Values) {
         if (md.Position.Equals(position)) return false;
@@ -127,10 +162,26 @@ namespace GenericAgentArchitecture.Environments {
 
     /// <summary>
     ///   This function is used by sensors to gather data from this environment.
+    ///   It contains a function for "0: Get all perceptible agents". Further refinement 
+    ///   can be made by specific environments overriding this function. 
     /// </summary>
     /// <param name="informationType">The type of information to sense.</param>
     /// <param name="geometry">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public abstract object GetData(int informationType, IGeometry geometry);
+    public virtual object GetData(int informationType, IGeometry geometry) {
+      switch (informationType) {
+        case 0: { // Zero stands here for "all agents". Enum avoided, check it elsewhere!
+          var halo = (Halo) geometry;
+          return GetAllAgents().Where(agent => 
+            halo.IsInRange(agent.GetPosition().GetTVector()) && 
+            halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon).ToList();
+        }
+
+        // Throw exception, if wrong argument was supplied.
+        default: throw new Exception(
+          "[Environment2D] Error on GetData call. Queried '"+informationType+"', though "+
+          "only '0' is valid. Please make sure to override function in specific environment!");
+      }
+    }
   }
 }

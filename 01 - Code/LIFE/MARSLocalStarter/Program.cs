@@ -1,81 +1,42 @@
 ﻿using System;
 using System.Linq;
 using LayerContainerFacade.Interfaces;
+using log4net;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 
 namespace MARSLocalStarter
 {
-    public class Program
+    public static class Program
     {
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 
-        private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
+
+        private static void Main(string[] args)
         {
-            Console.WriteLine(message);
-            optionSet.WriteOptionDescriptions(Console.Out);
-            if (exitWithError)
-            {
-                Environment.Exit(-1);
-            }
+            Log.Info("Initializing components and building application core...");
+
+
+            var core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
+
+
+
+
+            var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+
+
+
+            Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
+
+            // parse for any given parameters and act accordingly
+            ParseArgsAndStart(args, core);
+
+            while (Console.ReadKey().Key != ConsoleKey.Q) { }
         }
 
-        /// <summary>
-        /// Shows interactive shell for choosing a model.
-        /// </summary>
-        /// <param name="core">Core.</param>
-        private static void InteractiveModelChoosing(ISimulationManagerApplicationCore core)
-        {
 
-            //Console input requested
-            Console.WriteLine("Please input the number of the model you'd like to run:");
-
-            // list special option
-            Console.WriteLine("0: ElephantModel via Download (EXPERIMENTAL)");
-
-            // listing all available models
-            var i = 0;
-            foreach (var modelDescription in core.GetAllModels())
-            {
-                i++;
-                Console.Write(i + ": ");
-                Console.WriteLine(modelDescription.Name);
-            }
-
-
-            int nr = 0;
-            // read selected model number from console and start it
-            nr = int.Parse(Console.ReadLine()) - 1;
-
-            if (nr != -1)
-            {
-                while (!Enumerable.Range(0, i).Contains(nr))
-                {
-                    Console.WriteLine("Please input an existing model number.");
-                    nr = int.Parse(Console.ReadLine()) - 1;
-                }
-            }
-
-            Console.WriteLine("For how many steps is the simulation supposed to run?");
-            int ticks = int.Parse(Console.ReadLine());
-            if (nr == -1)
-            {
-                core.StartSimulationWithModel
-                    (new TModelDescription
-                        ("ElephantModel",
-                            "",
-                            "Not Running",
-                            false,
-                            "http://mc.mars.haw-hamburg.de/modeluploads/test@test.com/ElephantModel.zip"),
-                        ticks);
-            }
-            else {
-                var models = core.GetAllModels().ToList();
-                core.StartSimulationWithModel(models[nr], ticks);
-            }
-
-        }
 
         /// <summary>
         /// Start simulation of a model as defined by launcher arguments.
@@ -152,7 +113,7 @@ namespace MARSLocalStarter
                         throw;
                     }
 
-                    SMConnector.TransportTypes.TModelDescription model = null;
+                    TModelDescription model = null;
                     foreach (var modelDescription in core.GetAllModels())
                     {
                         if (modelDescription.Name.Equals(modelName))
@@ -173,42 +134,72 @@ namespace MARSLocalStarter
             }
         }
 
-        private static void Main(string[] args)
+        /// <summary>
+        /// Shows interactive shell for choosing a model.
+        /// </summary>
+        /// <param name="core">Core.</param>
+        private static void InteractiveModelChoosing(ISimulationManagerApplicationCore core)
         {
 
+            //Console input requested
+            Console.WriteLine("Please input the number of the model you'd like to run:");
+
+            // list special option
+            Console.WriteLine("0: ElephantModel via Download (EXPERIMENTAL)");
+
+            // listing all available models
+            var i = 0;
+            foreach (var modelDescription in core.GetAllModels())
+            {
+                i++;
+                Console.Write(i + ": ");
+                Console.WriteLine(modelDescription.Name);
+            }
 
 
-            try {
-                Console.WriteLine("Initializing components and building application core...");
+            int nr = 0;
+            // read selected model number from console and start it
+            nr = int.Parse(Console.ReadLine()) - 1;
 
-
-                var core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
-
-
-
-
-				var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
-
-
-
-                Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
-
-				// parse for any given parameters and act accordingly
-                ParseArgsAndStart(args, core);
-
-                ConsoleKeyInfo info = Console.ReadKey();
-                while (info.Key != ConsoleKey.Q)
+            if (nr != -1)
+            {
+                while (!Enumerable.Range(0, i).Contains(nr))
                 {
-                    info = Console.ReadKey();
+                    Console.WriteLine("Please input an existing model number.");
+                    nr = int.Parse(Console.ReadLine()) - 1;
                 }
             }
-            catch (Exception exception)
-            {
 
-				throw;
+            Console.WriteLine("For how many steps is the simulation supposed to run?");
+            int ticks = int.Parse(Console.ReadLine());
+            if (nr == -1)
+            {
+                core.StartSimulationWithModel
+                    (new TModelDescription
+                        ("ElephantModel",
+                            "",
+                            "Not Running",
+                            false,
+                            "http://mc.mars.haw-hamburg.de/modeluploads/test@test.com/ElephantModel.zip"),
+                        ticks);
+            }
+            else
+            {
+                var models = core.GetAllModels().ToList();
+                core.StartSimulationWithModel(models[nr], ticks);
             }
 
-
         }
+
+        private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
+        {
+            Console.WriteLine(message);
+            optionSet.WriteOptionDescriptions(Console.Out);
+            if (exitWithError)
+            {
+                Environment.Exit(-1);
+            }
+        }
+
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericAgentArchitecture.Agents;
+using DalskiAgent.Agents;
 
-namespace GenericAgentArchitecture.Auxiliary {
+namespace DalskiAgent.Auxiliary {
 
   /// <summary>
   ///   This class provides really simple functions for channel-based communication.

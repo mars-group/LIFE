@@ -1,13 +1,6 @@
 ﻿Notizendatei und Ablage 
 ***********************
 
-[AKTUELLES]
-- Fehler bei der Position. Referenz ist schreibgeschützt -> einmal null, immer null!
-- neues MData-Objekt ist nicht gestattet (Referenzbezug)
-- Position davor erzeugen -> Zufallsmethode öffentlich -> Agentenerzeuger holt Position 
-
-[Env2D]: Kollisionserkennung / Stub
-
 [Halo]: Rückbau / Reparatur:
         Besitzt MData-Referenz (für Bewegungsdaten) und IGeometry-Objekt herum.
 		(muß aber immer noch IGeometry impl., da GetData sowas braucht)
@@ -15,11 +8,9 @@
 		- Omni-Halo: Beides null.
 		- IsInRange(): Sollte eher "Contains(point)" heißen.
 
-[GridMover]: Funktion der ehemaligen kombinierten Bewegung unten
-             Planungsrelevante Teile extrahieren 
+[GridMover]: Planungsrelevante Teile aus Funktion der ehemaligen kombinierten Bewegung extrahieren 
 
 [ESC]: Schnittstellenimplementation ausstehend!
-       Zufallsposition vermutlich nicht möglich.
 
 [Bewegungsplanung]: Separate Klasse, die Teil einer Planungslogik werden kann
                     Flexible Struktur (Plugin-Komponenten) für das IAgentLogic gebraucht!
@@ -28,19 +19,38 @@
 					 - Wird direkt über die Sensorik mit befüllt (?)
 					 - Kann später auch Terraindaten halten (Wände, Steigung, Klippen, ...)
 
-
-
+[AKTUELLES]
 - Vektor herausziehen, gemeinsames Paket
 - Struktur optimieren
-- ICallbackDataSource in GAA-Commons
+- ICallbackDataSource nach LayerAPI-Interfaces
+
+- Umweltbezug auch in "Agent" nötig.
+  - Ausführungskomponente: LayerContainer oder sequentiell?
+  - Soll für den Agenten transparent sein - Schnittstelle!
+
+  # Basisagent nimmt immer Anmeldung in der Ausführungsumgebung vor.  
+  # Spatialer Agent ergänzt zusätzliche Umwelt-Operation "Add()".
+  - Reihenfolge muß andersrum erfolgen: Position > Ausführungsanmeldung.
+    - geht nicht?
+
+- Sequentielle Ausführung aufbrechen
+  - "Executor"    = Programmtechnische Ausführung
+  - "Environment" = Logische Ausführung
+   ==> soll eines werden!
+
+Executor wird Ausführungsoption
+- Umwelt "kennt" Ausführung. ?
+  - LayerEnv. : LC
+  - ESCAdapter: LC / Exec.
+  - Env2D     : LC / Exec.
 
 
 
-
+[EXTERNE FEHLER]
+- LC nicht instanzierbar ohne Netzwerkverbindung?
 
 
 ----------------------------------- ALTE RASTERBEWEGUNGSAKTION (KOMBINIERT) -----------------------------------
-
 
 
     private readonly bool _diagonalEnabled;     // This flag enables diagonal movement. 
@@ -119,3 +129,14 @@ R         if (iEnum == 4) {
         }
       }   
     }
+
+
+
+Delegate-Zuweisungsarten:
+ 1) Statische Funktion machen, Zeiger = Funktionsname: 
+    public static ConsoleColor Fkt (SpatialAgent agt) { ... }
+    GetColor = new GetColor(Fkt)
+    GetColor = Fkt   // kürzer!
+ 
+ 2) Anonyme Funktion erstellen:
+    GetColor = delegate(SpatialAgent agt) { ... }

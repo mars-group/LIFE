@@ -41,6 +41,9 @@ namespace RuntimeEnvironment.Implementation {
         }
 
         private void RunSimulation() {
+            // start Visualization on all layerContainers
+            Parallel.ForEach(_layerContainerClients, l => l.Proxy.StartVisualization());
+
 			var now = DateTime.Now;
             for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
 

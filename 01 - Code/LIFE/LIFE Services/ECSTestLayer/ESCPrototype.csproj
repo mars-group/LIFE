@@ -47,11 +47,12 @@
     <Compile Include="Entities\SpatialPositionedEntity.cs" />
     <Compile Include="Entities\Spatial\Line.cs" />
     <Compile Include="Entities\Spatial\Plane.cs" />
+    <Compile Include="Implementation\UnboundESC.cs" />
     <Compile Include="Implementation\ESC.cs" />
     <Compile Include="Entities\AxisAlignedBoundingInterval.cs" />
     <Compile Include="Implementation\Octree.cs" />
-    <Compile Include="Interface\IOctreeESC.cs" />
-    <Compile Include="Interface\IESC.cs" />
+    <Compile Include="Interface\IUnboundESC.cs" />
+    <Compile Include="Interface\IDeprecatedESC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

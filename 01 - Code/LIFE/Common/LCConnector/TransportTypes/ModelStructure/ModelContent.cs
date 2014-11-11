@@ -59,41 +59,31 @@ namespace LCConnector.TransportTypes.ModelStructure
         /// Blocks until the file is not locked any more.
         /// </summary>
         /// <param name="fullPath"></param>
-        private static bool WaitForFile(string fullPath)
+        private static bool WaitForFile(string fullPath, int retryCount = 10, int sleep = 500)
         {
-            int numTries = 0;
-            while (true)
+            var numTries = 0;
+            while (numTries++ < retryCount)
             {
-                ++numTries;
                 try
                 {
                     // Attempt to open the file exclusively.
-                    using (FileStream fs = new FileStream(fullPath,
+                    using (var fs = new FileStream(fullPath,
                         FileMode.Open, FileAccess.ReadWrite,
                         FileShare.None, 100))
                     {
                         fs.ReadByte();
 
                         // If we got this far the file is ready
-                        break;
+                        return true;
                     }
                 }
                 catch (Exception ex)
                 {
-
-
-                    if (numTries > 10)
-                    {
-
-                        return false;
-                    }
-
                     // Wait for the lock to be released
-                    System.Threading.Thread.Sleep(500);
+                    System.Threading.Thread.Sleep(sleep);
                 }
             }
-
-            return true;
+            return false;
         }
 
         private static void Write(IModelDirectoryContent dirContent, string path)
