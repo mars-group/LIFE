@@ -30,7 +30,7 @@ namespace LayerContainerFacade.Implementation
             _partitionManager = partitionManager;
             _rteManager = rteManager;
             _visualizationAdapter = visualizationAdapter;
-
+			_visualizationAdapter.VisualizationUpdated += _visualizationAdapterInternalUseCase_VisualizationUpdated;
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
             _server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
@@ -38,6 +38,10 @@ namespace LayerContainerFacade.Implementation
             //Start server
             _server.Start();
         }
+
+		void _visualizationAdapterInternalUseCase_VisualizationUpdated(object sender, List<BasicVisualizationMessage> e) {
+			VisualizationUpdated(sender, e);
+		}
 
         public void LoadModelContent(ModelContent content)
         {
