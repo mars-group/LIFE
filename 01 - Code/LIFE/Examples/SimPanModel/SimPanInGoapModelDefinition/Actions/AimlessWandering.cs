@@ -14,7 +14,7 @@ namespace SimPanInGoapModelDefinition.Actions
             base(preconditionWorldstates, effectWorldstates) {}
 
         public override bool ValidateContextPreconditions() {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override bool ExecuteContextEffects() {
@@ -30,7 +30,7 @@ namespace SimPanInGoapModelDefinition.Actions
         }
 
         public override void Execute() {
-            throw new NotImplementedException();
+            
         }
     }
 }

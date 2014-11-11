@@ -8,7 +8,7 @@ namespace CellLayer {
     ///     represents one single cell. cell holds specific simulation data and is communication medium for agents.
     /// </summary>
     public class Cell {
-        private readonly int _cellId;
+        public readonly int CellId;
         public readonly int XCoordinate;
         public readonly int YCoordinate;
         public CellLayerImpl.CellType CellType;
@@ -16,7 +16,7 @@ namespace CellLayer {
 
 
         public Cell(int cellIid, int xCoordinate, int yCoordinate, CellLayerImpl.CellType cellType) {
-            _cellId = cellIid;
+            CellId = cellIid;
             YCoordinate = yCoordinate;
             XCoordinate = xCoordinate;
             CellType = cellType;
@@ -96,7 +96,7 @@ namespace CellLayer {
                         neighbourIds.Add((yCoord - 1)*dim + xCoord);
                     }
                 }
-                neighbourIds.Remove(_cellId);
+                neighbourIds.Remove(CellId);
             }
             return neighbourIds;
         }

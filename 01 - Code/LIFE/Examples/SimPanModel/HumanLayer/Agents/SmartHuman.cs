@@ -9,17 +9,21 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Perception;
+using GenericAgentArchitectureCommon.Interfaces;
 using GoapActionSystem.Implementation;
 
 namespace HumanLayer.Agents
 {
-    class SmartHuman : SpatialAgent
+    class SmartHuman : SpatialAgent, IAgentLogic
 
     {
         private readonly IExecution _exec;
         private readonly IEnvironment _env;
         private readonly Vector _pos;
         public readonly Guid GuidID;
+        private int _tickAccu = 0;
+
+
 
         public SmartHuman(IExecution exec, IEnvironment env, Vector pos, Guid guid) : base(exec, env, pos) {
             _exec = exec;
@@ -30,7 +34,7 @@ namespace HumanLayer.Agents
 
             DataSensor cellSensor = new DataSensor(this, env, (int)CellLayerImpl.CellDataTypes.CellData,new CellHalo(Data.Position));
             PerceptionUnit.AddSensor(cellSensor);
-
+            
 
             //ReasoningComponent = GoapComponent.LoadGoapConfiguration(agentConfigFileName, namespaceOfModelDefinition, _blackboard);
 
@@ -42,7 +46,18 @@ namespace HumanLayer.Agents
         }
 
 
+        public IInteraction Reason() {
+            return new IdleAround();
+        }
+        
 
+       
+    }
 
+    public class IdleAround : IInteraction {
+
+        public void Execute() {
+           HumanLayerImpl.Log.Info("Smart Action done");
+        }
     }
 }

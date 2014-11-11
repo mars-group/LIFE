@@ -53,6 +53,7 @@
     <Compile Include="Actions\GoOut.cs" />
     <Compile Include="Actions\ParticipateMassEscape.cs" />
     <Compile Include="Actions\SuccessiveApproximation.cs" />
+    <Compile Include="AgentConfig1.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Goals\BeOutOfDanger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,7 +10,7 @@ namespace SimPanInGoapModelDefinition.Goals {
             base(targetWorldState, startRelevancy) {}
 
         public override int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate) {
-            throw new NotImplementedException();
+            return 10;
         }
     }
 }

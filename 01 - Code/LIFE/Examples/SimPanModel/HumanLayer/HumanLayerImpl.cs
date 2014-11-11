@@ -19,6 +19,7 @@ namespace HumanLayer {
         public static float HumanDiameter = 0.5f;
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly CellLayerImpl _cellLayer;
+        
 
         public HumanLayerImpl(CellLayerImpl cellLayer) {
             XmlConfigurator.Configure(new FileInfo("conf.log4net"));
@@ -34,7 +35,7 @@ namespace HumanLayer {
             int xPos, yPos;
 
 
-            Guid guid = new Guid();
+            Guid guid = Guid.NewGuid();
             _cellLayer.GiveAndSetToRandomPosition(guid, 0.5f, out xPos, out yPos);
             SmartHuman human = new SmartHuman(exec, _cellLayer, new Vector(xPos, yPos), guid);
             
@@ -50,7 +51,7 @@ namespace HumanLayer {
         }
 
         public long GetCurrentTick() {
-            throw new NotImplementedException();
+            return 0;
         }
 
         #endregion

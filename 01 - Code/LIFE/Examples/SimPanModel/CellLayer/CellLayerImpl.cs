@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -85,7 +86,8 @@ namespace CellLayer {
             392
         };
 
-        private Dictionary<int, Cell> _cellField;
+        
+        private ConcurrentDictionary<int, Cell> _cellField;
         private Dictionary<int, Point> agentsOnField;
 
         private SimPanForm _viewForm;
@@ -143,13 +145,14 @@ namespace CellLayer {
                 for (int posY = 1; posY <= CellCountYAxis; posY++) {
                     int cellIid = CalcCellId(posX, posY);
                     cellDict.Add(cellIid, new Cell(cellIid, posX, posY, CellType.Neutral));
+                    
 
                     object[] data = {posX, posY, CellColors[CellType.Neutral]};
                     if (ObstacleCells.Contains(cellIid)) data[2] = CellColors[CellType.Obstacle];
                     viewDataDict.Add(cellIid, data);
                 }
             }
-            _cellField = cellDict;
+            _cellField = new ConcurrentDictionary<int, Cell>(cellDict);
             viewData = viewDataDict;
         }
 
@@ -221,6 +224,7 @@ namespace CellLayer {
                     posY = freeCell.YCoordinate;
 
                     freeCell.AgentOnCell = iD;
+                    return;
                 }
                 throw new Exception("No free place in cell field");
             }
@@ -230,17 +234,46 @@ namespace CellLayer {
             CellData
         }
 
+        private int GetCellNumber(Vector vector) {
+            int posX = (int)vector.X;
+            int posY = (int)vector.Y;
+            return CalcCellId(posX, posY);
+        }
+
+        private int GetCellNumber(IGeometry geometry) {
+            int posX = (int)geometry.GetPosition().X;
+            int posY = (int)geometry.GetPosition().Y;
+            return CalcCellId(posX, posY);
+        }
+
 
         public object GetData(int informationType, IGeometry geometry) {
-            throw new NotImplementedException();
+            if (informationType.Equals((int)CellDataTypes.CellData)) {
+                var cellId = GetCellNumber(geometry);
+                return new CellData(_cellField[cellId]);
+            }
+            // "cell data for x:" + geometry.GetPosition().X + " y:" + geometry.GetPosition().Y + " is not available"
+
+            throw new ArgumentException("information not of type celldata");
+
         }
 
         public void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata) {
-            throw new NotImplementedException();
+           mdata = new MovementData(pos);
         }
 
         public void RemoveAgent(SpatialAgent agent) {
-            throw new NotImplementedException();
+            var id = GetCellNumber(agent.GetPosition());
+            
+            try {
+                Cell cell;
+                _cellField.TryGetValue(id, out cell);
+                cell.AgentOnCell = Guid.Empty;
+
+            }
+            catch (Exception e) {
+                throw new Exception(e.Message);
+            }
         }
 
         public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
