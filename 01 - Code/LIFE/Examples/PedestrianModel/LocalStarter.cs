@@ -27,8 +27,8 @@ namespace PedestrianModel
     /// </summary>
     public static void Main() {
         var exec = new SeqExec(true);
-        var env = CreateScenarioEnvironment(exec, false, 10);
-        exec.Run(1000, null);
+        var env = CreateScenarioEnvironment(exec, false, 5);
+        exec.Run(100, null);
     }
 
     private static IEnvironment CreateScenarioEnvironment(SeqExec exec, bool esc, int pedestrianCount)

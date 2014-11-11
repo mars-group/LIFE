@@ -64,7 +64,7 @@ namespace PedestrianModel
             pedDirection.SetPitch(0f);
             pedDirection.SetYaw(0f);
 
-            int pedestrianCount = 10;
+            int pedestrianCount = 5;
 
             for (var i = 0; i < pedestrianCount; i++)
             {

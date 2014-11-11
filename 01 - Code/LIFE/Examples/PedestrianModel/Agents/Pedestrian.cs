@@ -132,8 +132,12 @@ namespace PedestrianModel.Agents
             // TODO:
             // - agent logging
             // - simulation visualization
+            Console.SetBufferSize(120, 9999);
+            Console.SetWindowSize(120, 50);
+            Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Pos: " + this.GetPosition() + ", Target: " + this.TargetPositions[0] + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]));
 
-            return Act();
+            IInteraction movementAction = Act();
+            return movementAction;
         }
 
         public String Name
