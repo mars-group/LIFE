@@ -11,13 +11,16 @@ namespace VisualizationAdapter.Implementation
     public class VisualizationAdapterComponent : IVisualizationAdapterInternal
     {
         private readonly IVisualizationAdapterInternal _visualizationAdapterInternalUseCase;
+        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         public VisualizationAdapterComponent() {
             _visualizationAdapterInternalUseCase = new VisualizationAdapterUseCase();
+            _visualizationAdapterInternalUseCase.VisualizationUpdated += _visualizationAdapterInternalUseCase_VisualizationUpdated;
         }
 
-
-        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
+        void _visualizationAdapterInternalUseCase_VisualizationUpdated(object sender, List<BasicVisualizationMessage> e) {
+            VisualizationUpdated(sender, e);
+        }
 
         public void StartVisualization() {
             _visualizationAdapterInternalUseCase.StartVisualization();
