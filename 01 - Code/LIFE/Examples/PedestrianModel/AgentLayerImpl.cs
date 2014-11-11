@@ -45,11 +45,13 @@ namespace PedestrianModel
             _tick = 0;
             _random = new Random();
             _env = new Environment2D(new Vector(1000, 1000));
-            _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);  
+            _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
 
-            // Obstacle with center (5,5) going from x=4.5 to x=5.5 and y=0 to y=10
-            var obsPosition = new Vector(5f, 5f);
-            var obsDimension = new Vector(1f, 10f);
+            int pedestrianCount = 5;
+
+            // Obstacle with center (10,5) going from x=9.5 to x=10.5 and y=0 to y=10
+            var obsPosition = new Vector(10f, 5f);
+            var obsDimension = new Vector(1f, 10f, 0.4f); // same height as pedestrians
             var obsDirection = new Direction();
             obsDirection.SetPitch(0f);
             obsDirection.SetYaw(0f);
@@ -57,20 +59,19 @@ namespace PedestrianModel
             // OBSTACLES HAVE TO BE CREATED BEFORE THE AGENTS!
             new Obstacle(_exec, _env, obsPosition, obsDimension, obsDirection);
 
-            // Create some initial agents.
-            var max = 10f;
-            var pedDimension = new Vector(1f, 1f);
+            var random = new Random();
+            // WALK agents are 0.4m x 0.4m x 0.4m
+            var pedDimension = new Vector(0.4f, 0.4f, 0.4f);
             var pedDirection = new Direction();
             pedDirection.SetPitch(0f);
             pedDirection.SetYaw(0f);
 
-            int pedestrianCount = 5;
-
             for (var i = 0; i < pedestrianCount; i++)
             {
-                // Random position between (0,0) and (10,10).
-                var startPos = new Vector((float)_random.NextDouble() * max, (float)_random.NextDouble() * max);
-                var targetPos = new Vector((float)_random.NextDouble() * max, (float)_random.NextDouble() * max);
+                // Random position between (0,0) and (9,10)
+                var startPos = new Vector((float)random.NextDouble() * 9, (float)random.NextDouble() * 10);
+                // Random position between (11,0) and (20,10)
+                var targetPos = new Vector((float)random.NextDouble() * 9 + 11f, (float)random.NextDouble() * 10);
                 new Pedestrian(_exec, _env, "sim0", startPos, pedDimension, pedDirection, targetPos);
             }            
 

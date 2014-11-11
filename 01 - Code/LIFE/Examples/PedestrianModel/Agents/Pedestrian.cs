@@ -139,9 +139,9 @@ namespace PedestrianModel.Agents
             Console.SetBufferSize(160, 9999);
             Console.SetWindowSize(160, 50);
             if (debugLastPosition == null) debugLastPosition = startPosition;
-            string action = "   ALL ACTIONS COMPLETED   ";
-            if (actions.Count > 0) action = actions[0].ToString();
-            Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Position: " + this.GetPosition() + ", Target: " + this.TargetPositions[0] + ", Action: " + action + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]).ToString("00.0000000") + ", Velocity: " + (this.GetPosition().GetDistance(debugLastPosition) * (1000f / Config.lengthOfTimestepsInMilliseconds)).ToString("00.0000000"));
+            string waypoint = " COMPLETED MOVEMENT";
+            if (actions.Count > 0) waypoint = (actions[0].TargetPosition * 1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
+            Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Position: " + this.GetPosition() * 1f + ", Target: " + this.TargetPositions[0] * 1f + ", Waypoint: " + waypoint + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]).ToString("00.0000000") + ", Velocity: " + (this.GetPosition().GetDistance(debugLastPosition) * (1000f / Config.lengthOfTimestepsInMilliseconds)).ToString("00.0000000"));
             debugLastPosition = this.GetPosition();
 
             return movementAction;
