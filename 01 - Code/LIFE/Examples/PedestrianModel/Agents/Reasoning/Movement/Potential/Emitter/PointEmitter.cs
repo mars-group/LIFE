@@ -44,9 +44,11 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 		public double GetPotential(Vector referringPosition)
 		{
 			double x = position.X - referringPosition.X;
-			double z = position.Z - referringPosition.Z;
+			//double z = position.Z - referringPosition.Z;
+            double y = position.Y - referringPosition.Y;
 
-			return this.function.Value(Math.Sqrt(x * x + z * z));
+			//return this.function.Value(Math.Sqrt(x * x + z * z));
+            return this.function.Value(Math.Sqrt(x * x + y * y));
 		}
 
 		/// <returns> the position </returns>

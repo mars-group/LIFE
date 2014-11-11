@@ -54,25 +54,32 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 			double distance = 0;
 
 			double refX = @ref.X;
-			double refZ = @ref.Z;
+			//double refZ = @ref.Z;
+            double refY = @ref.Y;
 
 			double minX = start.X;
-			double minZ = start.Z;
+			//double minZ = start.Z;
+            double minY = start.Y;
 			double maxX = start.X + size.X;
-			double maxZ = start.Z + size.Z;
+			//double maxZ = start.Z + size.Z;
+            double maxY = start.Y + size.Y;
 
 			if (refX < minX)
 			{
 				// left of the emitter
-				if (refZ < minZ)
+				//if (refZ < minZ)
+                if (refY < minY)
 				{
 					// left below the emitter
-					distance = Distance(minX, minZ, refX, refZ);
+					//distance = Distance(minX, minZ, refX, refZ);
+                    distance = Distance(minX, minY, refX, refY);
 				}
-				else if (refZ > maxZ)
+				//else if (refZ > maxZ)
+                else if (refY > maxY)
 				{
 					// left above the emitter
-					distance = Distance(minX, maxZ, refX, refZ);
+					//distance = Distance(minX, maxZ, refX, refZ);
+                    distance = Distance(minX, maxY, refX, refY);
 				}
 				else
 				{
@@ -83,15 +90,19 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 			else if (refX > maxX)
 			{
 				// right of the emitter
-				if (refZ < minZ)
+				//if (refZ < minZ)
+                if (refY < minY)
 				{
 					// right below the emitter
-					distance = Distance(maxX, minZ, refX, refZ);
+					//distance = Distance(maxX, minZ, refX, refZ);
+                    distance = Distance(maxX, minY, refX, refY);
 				}
-				else if (refZ > maxZ)
+				//else if (refZ > maxZ)
+                else if (refY > maxY)
 				{
 					// right above the emitter
-					distance = Distance(maxX, maxZ, refX, refZ);
+					//distance = Distance(maxX, maxZ, refX, refZ);
+                    distance = Distance(maxX, maxY, refX, refY);
 				}
 				else
 				{
@@ -101,15 +112,19 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 			}
 			else
 			{
-				if (refZ < minZ)
+				//if (refZ < minZ)
+                if (refY < minY)
 				{
 					// below the emitter
-					distance = minZ - refZ;
+					//distance = minZ - refZ;
+                    distance = minY - refY;
 				}
-				else if (refZ > maxZ)
+				//else if (refZ > maxZ)
+                else if (refY > maxY)
 				{
 					// above the emitter
-					distance = refZ - maxZ;
+					//distance = refZ - maxZ;
+                    distance = refY - maxY;
 				}
 				else
 				{
@@ -129,12 +144,15 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
 		/// <param name="qX"> qX </param>
 		/// <param name="qZ"> qZ </param>
 		/// <returns> the euklid distance </returns>
-		private double Distance(double pX, double pZ, double qX, double qZ)
+		//private double Distance(double pX, double pZ, double qX, double qZ)
+        private double Distance(double pX, double pY, double qX, double qY)
 		{
 			double x = pX - qX;
-			double z = pZ - qZ;
+			//double z = pZ - qZ;
+            double y = pY - qY;
 
-			return Math.Sqrt(x * x + z * z);
+			//return Math.Sqrt(x * x + z * z);
+            return Math.Sqrt(x * x + y * y);
 		}
 	}
 

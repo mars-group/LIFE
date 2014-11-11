@@ -37,8 +37,8 @@ namespace PedestrianModel
         if (!esc) env = new ObstacleEnvironment(exec);
         else env = new ESCAdapter(new ESC());
 
-        // Obstacle with center (10,5) going from x=9.5 to x=10.5 and y=0 to y=10
-        var obsPosition = new Vector(10f, 5f);
+        // Obstacle with center (10,15) going from x=9.5 to x=10.5 and y=10 to y=20
+        var obsPosition = new Vector(10f, 15f);
         var obsDimension = new Vector(1f, 10f, 0.4f); // same height as pedestrians
         var obsDirection = new Direction();
         obsDirection.SetPitch(0f);
@@ -56,10 +56,10 @@ namespace PedestrianModel
 
         for (var i = 0; i < pedestrianCount; i++)
         {
-            // Random position between (0,0) and (9,10)
-            var startPos = new Vector((float)random.NextDouble() * 9, (float)random.NextDouble() * 10);
-            // Random position between (11,0) and (20,10)
-            var targetPos = new Vector((float)random.NextDouble() * 9 + 11f, (float)random.NextDouble() * 10);
+            // Random position between (0,10) and (9,20)
+            var startPos = new Vector((float)random.NextDouble() * 9, (float)random.NextDouble() * 10 + 10f);
+            // Random position between (11,10) and (20,20)
+            var targetPos = new Vector((float)random.NextDouble() * 9 + 11f, (float)random.NextDouble() * 10 + 10f);
             new Pedestrian(exec, env, "sim0", startPos, pedDimension, pedDirection, targetPos);
         }        
 

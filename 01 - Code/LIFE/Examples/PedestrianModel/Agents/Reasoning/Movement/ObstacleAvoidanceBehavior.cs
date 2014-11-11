@@ -170,7 +170,8 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 			// try several directions for the best potential
 			for (double angle = -Math.PI / 2; angle <= Math.PI / 2; angle += Math.PI / 8)
 			{
-                Vector tempDirection = new Vector(currentPipelineVector.X * (float)Math.Cos(angle) - currentPipelineVector.Z * (float)Math.Sin(angle), currentPipelineVector.Y, currentPipelineVector.X * (float)Math.Sin(angle) + currentPipelineVector.Z * (float)Math.Cos(angle));
+                //Vector tempDirection = new Vector(currentPipelineVector.X * (float)Math.Cos(angle) - currentPipelineVector.Z * (float)Math.Sin(angle), currentPipelineVector.Y, currentPipelineVector.X * (float)Math.Sin(angle) + currentPipelineVector.Z * (float)Math.Cos(angle));
+                Vector tempDirection = new Vector(currentPipelineVector.X * (float)Math.Cos(angle) - currentPipelineVector.Y * (float)Math.Sin(angle), currentPipelineVector.X * (float)Math.Sin(angle) + currentPipelineVector.Y * (float)Math.Cos(angle), currentPipelineVector.Z);
 
 				//Vector3D position = currentPosition.add(0.2, tempDirection.normalize());
                 Vector position = currentPosition + (0.2f * tempDirection.GetNormalVector());
