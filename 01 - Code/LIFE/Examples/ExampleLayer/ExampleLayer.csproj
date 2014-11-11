@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\GeoAPI.1.7.3\lib\net45-client\GeoAPI.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -47,7 +43,6 @@
     </Reference>
     <Reference Include="NetTopologySuite">
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\NetTopologySuite.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PowerCollections">
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
@@ -60,6 +55,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="GeoAPI">
+      <HintPath>..\..\packages\GeoAPI.1.7.3\lib\net45-client\GeoAPI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="2DEnvironment.cs" />

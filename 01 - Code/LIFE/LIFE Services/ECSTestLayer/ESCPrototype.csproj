@@ -29,9 +29,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,7 +62,7 @@
       <Name>LayerAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
   </ItemGroup>

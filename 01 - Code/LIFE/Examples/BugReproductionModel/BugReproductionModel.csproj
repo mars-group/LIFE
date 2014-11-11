@@ -30,32 +30,28 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\CommonTypes.dll</HintPath>
-    </Reference>
-    <Reference Include="LayerAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\LayerAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="LCConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\LCConnector.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\Mono.Addins.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="Scs">
       <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\Scs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="CommonTypes">
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\CommonTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="LayerAPI">
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\LayerAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="LCConnector">
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\LCConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\protobuf-net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
