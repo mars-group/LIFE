@@ -45,6 +45,10 @@ namespace SimulationController.Implementation {
             _simManager.StartSimulationWithModel(model, layerContainers, nrOfTicks);
         }
 
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
+            _simManager.StepSimulation(model,layerContainers,nrOfTicks);
+        }
+
         public void PauseSimulation(TModelDescription model) {
             _simManager.PauseSimulation(model);
         }

@@ -28,6 +28,8 @@ namespace SMConnector {
         /// <param name="nrOfTicks"></param>
         void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
 
+        void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
+
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.
         /// </summary>

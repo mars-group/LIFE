@@ -64,6 +64,10 @@ namespace RuntimeEnvironment.Implementation {
             }
         }
 
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
+            throw new NotImplementedException();
+        }
+
         public void Pause(TModelDescription model) {
             if (!_steppedSimulations.ContainsKey(model)) return;
 

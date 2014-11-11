@@ -55,6 +55,10 @@ namespace SimulationManagerFacade.Implementation {
             _runtimeEnvironment.StartWithModel(model, layerContainers, nrOfTicks);
         }
 
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
+            _runtimeEnvironment.StepSimulation(model, layerContainers, nrOfTicks);
+        }
+
         public void PauseSimulation(TModelDescription model) {
             _runtimeEnvironment.Pause(model);
         }

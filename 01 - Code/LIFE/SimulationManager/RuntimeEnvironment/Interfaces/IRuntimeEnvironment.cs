@@ -9,6 +9,8 @@ namespace RuntimeEnvironment.Interfaces {
     /// </summary>
     public interface IRuntimeEnvironment {
         void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null);
+
+        void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null);
         void Pause(TModelDescription model);
         void Resume(TModelDescription model);
         void Abort(TModelDescription model);
