@@ -64,8 +64,37 @@ namespace RuntimeEnvironment.Implementation {
             }
         }
 
+		private void StartWithModelStepped(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null){
+			lock (this) {
+				if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
+					throw new NoLayerContainersArePresentException ();
+				}
+				// if not all LayerContainers are idle throw exception
+				if (!layerContainerNodes.All (l => _idleLayerContainers.Any (c => c.Equals (l)))) {
+					throw new LayerContainerBusyException ();
+				}
+
+				// throw Exception if model is already running in this cluster
+				// TODO: Is that really intended?
+				//if (_steppedSimulations.ContainsKey(model)) throw new SimulationAlreadyRunningException();
+
+				// download Model ZIP file from MARS WebSuite, extract and add it to the model repo
+				if (model.SourceURL != String.Empty) {
+					_modelContainer.AddModelFromURL(model.SourceURL);
+				}
+
+				IList<LayerContainerClient> clients = InitConnections(model, layerContainerNodes);
+
+				_steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, true);
+			}
+		}
+
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
-            throw new NotImplementedException();
+			if (_steppedSimulations.ContainsKey (model)) {
+				_steppedSimulations [model].StepSimulation ();
+			} else {
+				StartWithModelStepped(model, layerContainerNodes, nrOfTicks);
+			}
         }
 
         public void Pause(TModelDescription model) {

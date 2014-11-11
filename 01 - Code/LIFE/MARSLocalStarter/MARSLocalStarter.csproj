@@ -67,7 +67,7 @@
       <Name>SMConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj">
-      <Project>{6ef23027-a874-4533-9f39-2c4b165d8bb9}</Project>
+      <Project>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</Project>
       <Name>LayerContainerFacade</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.csproj">
