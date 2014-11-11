@@ -31,35 +31,52 @@ namespace SimPanViewer {
                     CellCountYAxis*_cellSideLength + 2*_cellSideLength);
         }
 
+        /// <summary>
+        /// main paint method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SimPanForm_Paint(object sender, PaintEventArgs e) {
             Graphics g = e.Graphics;
-
+            
             foreach (KeyValuePair<int, object[]> cell in _cellData) {
-                int xCoordinate = (int) cell.Value[0]*_cellSideLength;
-                int yCoordinate = (int) cell.Value[1]*_cellSideLength;
-                Color col = (Color) cell.Value[2];
+                DrawCell(g, cell, drawCoordinates: true, drawCellId: true);
+            }
 
-                //string text = cell.Key.ToString();
-                var text = "(" + xCoordinate + "," + yCoordinate + ")";
+            
+            foreach (KeyValuePair<int, object[]> point in _pointData) {
+                DrawPoint(g, point);
+            }
+        }
 
-                g.FillRectangle
-                    (new SolidBrush(col),
-                        xCoordinate,
-                        yCoordinate,
-                        _cellSideLength,
-                        _cellSideLength);
-                g.DrawRectangle(_pen, xCoordinate, yCoordinate, _cellSideLength, _cellSideLength);
+        private void DrawCell(Graphics g, KeyValuePair<int, object[]> cell, bool drawCoordinates, bool drawCellId) {
+            int xCoordinate = (int)cell.Value[0] * _cellSideLength;
+            int yCoordinate = (int)cell.Value[1] * _cellSideLength;
+            Color col = (Color)cell.Value[2];
+
+            g.FillRectangle (new SolidBrush(col), xCoordinate, yCoordinate, _cellSideLength, _cellSideLength);
+            g.DrawRectangle(_pen, xCoordinate, yCoordinate, _cellSideLength, _cellSideLength);
+
+            if (drawCellId){
+                string text = cell.Key.ToString();
                 g.DrawString(text, _font, _drawBrush, xCoordinate, yCoordinate);
             }
-
-            foreach (KeyValuePair<int, object[]> point in _pointData) {
-                float xCoordinate = (float) point.Value[0];
-                float yCoordinate = (float) point.Value[1];
-                float radius = (float) point.Value[2];
-                Color col = (Color) point.Value[3];
-
-                g.FillEllipse(new SolidBrush(col), xCoordinate, yCoordinate, radius*2, radius*2);
+            if (drawCoordinates) {
+                var text = "(" + xCoordinate + "," + yCoordinate + ")";
+                g.DrawString(text, _font, _drawBrush, xCoordinate, yCoordinate + 12);
             }
+
+            
+        }
+
+        private void DrawPoint(Graphics g ,KeyValuePair<int, object[]> point) {
+            float radius = (float)point.Value[2];
+            float xCoordinate = (float)point.Value[0] * _cellSideLength + (_cellSideLength / 2) - radius;
+            float yCoordinate = (float)point.Value[1] * _cellSideLength + (_cellSideLength / 2) - radius;
+            Color col = (Color)point.Value[3];
+
+            g.FillEllipse(new SolidBrush(col), xCoordinate, yCoordinate, radius * 2, radius * 2);
+            g.DrawEllipse(_pen, xCoordinate, yCoordinate, radius * 2, radius * 2);
         }
 
         public void ChangeCell(int cellId, object[] cellData) {
@@ -69,6 +86,10 @@ namespace SimPanViewer {
             }
         }
 
+        /// <summary>
+        /// change a set set of cells in view form (faster because of single call to paint)
+        /// </summary>
+        /// <param name="cellsToChange"></param>
         public void ChangeCells(Dictionary<int, object[]> cellsToChange) {
             List<int> keyList = _cellData.Keys.ToList();
 
@@ -81,6 +102,11 @@ namespace SimPanViewer {
             }
         }
 
+        /// <summary>
+        /// add a point to the view form
+        /// </summary>
+        /// <param name="pointId"></param>
+        /// <param name="pointData"></param>
         public void AddPoint(int pointId, object[] pointData) {
             _pointData.Add(pointId, pointData);
             Invoke(new MethodInvoker(Refresh));

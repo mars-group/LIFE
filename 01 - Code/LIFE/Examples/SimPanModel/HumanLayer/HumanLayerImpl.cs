@@ -16,7 +16,6 @@ using Mono.Addins;
 namespace HumanLayer {
     [Extension(typeof (ISteppedLayer))]
     public class HumanLayerImpl : ISteppedLayer {
-        public static float HumanDiameter = 0.5f;
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly CellLayerImpl _cellLayer;
         
@@ -36,16 +35,11 @@ namespace HumanLayer {
 
 
             Guid guid = Guid.NewGuid();
-            _cellLayer.GiveAndSetToRandomPosition(guid, 0.5f, out xPos, out yPos);
-            SmartHuman human = new SmartHuman(exec, _cellLayer, new Vector(xPos, yPos), guid);
+            _cellLayer.GiveAndSetToRandomPosition(guid, out xPos, out yPos);
+            SmartHuman human = new SmartHuman(exec, _cellLayer, new Vector(xPos, yPos), guid, _cellLayer);
+           
             
-
-            
-
-            /*
-            Human humanAgent = new Human(_cellLayer);
-            registerAgentHandle.Invoke(this, humanAgent);
-            */
+           
              return true;
              
         }
@@ -55,10 +49,5 @@ namespace HumanLayer {
         }
 
         #endregion
-
-        
-
-
-        
     }
 }

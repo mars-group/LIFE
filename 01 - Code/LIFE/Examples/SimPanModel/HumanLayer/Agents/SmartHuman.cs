@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CellLayer;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
@@ -10,54 +6,55 @@ using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
-using GoapActionSystem.Implementation;
 
-namespace HumanLayer.Agents
-{
-    class SmartHuman : SpatialAgent, IAgentLogic
+namespace HumanLayer.Agents {
 
-    {
+    internal class SmartHuman : SpatialAgent, IAgentLogic {
         private readonly IExecution _exec;
         private readonly IEnvironment _env;
         private readonly Vector _pos;
         public readonly Guid GuidID;
-        private int _tickAccu = 0;
+        private CellLayerImpl _cellLayer;
 
-
-
-        public SmartHuman(IExecution exec, IEnvironment env, Vector pos, Guid guid) : base(exec, env, pos) {
+        public SmartHuman(IExecution exec, IEnvironment env, Vector pos, Guid guid, CellLayerImpl cellLayer) : base(exec, env, pos) {
             _exec = exec;
             _env = env;
             _pos = pos;
             GuidID = guid;
+            _cellLayer = cellLayer;
 
 
-            DataSensor cellSensor = new DataSensor(this, env, (int)CellLayerImpl.CellDataTypes.CellData,new CellHalo(Data.Position));
+            DataSensor cellSensor = new DataSensor
+                (this, env, (int) CellLayerImpl.CellDataTypes.CellData, new CellHalo(Data.Position));
             PerceptionUnit.AddSensor(cellSensor);
-            
 
-            //ReasoningComponent = GoapComponent.LoadGoapConfiguration(agentConfigFileName, namespaceOfModelDefinition, _blackboard);
+            _cellLayer.AddAgent((int)this.Id, _pos.X, _pos.Y, CellLayerImpl.BehaviourType.Reflective);
 
-         
 
-            //CellData sensorData = (CellData)PerceptionUnit.GetData((int)CellLayerImpl.CellDataTypes.CellData).Data; // ! hier muß auf den konkreten Datentyp, den der cell layer gibt gecastet werden
 
-            Init(); // !!
+            Init(); 
         }
 
+        #region IAgentLogic Members
 
         public IInteraction Reason() {
+
+            CellData sensorData = (CellData)PerceptionUnit.GetData((int)CellLayerImpl.CellDataTypes.CellData).Data; // ! hier muß auf den konkreten Datentyp, den der cell layer gibt gecastet werden
+            HumanLayerImpl.Log.Info(sensorData.ToString());
+
             return new IdleAround();
         }
-        
 
-       
+        #endregion
     }
 
     public class IdleAround : IInteraction {
+        #region IInteraction Members
 
         public void Execute() {
-           HumanLayerImpl.Log.Info("Smart Action done");
+            //HumanLayerImpl.Log.Info("Smart Action done");
         }
+
+        #endregion
     }
 }

@@ -16,7 +16,7 @@ namespace HumanLayer.Agents {
             int posY;
             GuidID = new Guid(); 
 
-            cellLayer.GiveAndSetToRandomPosition(GuidID, HumanLayerImpl.HumanDiameter, out this._posX, out this._posY);
+            cellLayer.GiveAndSetToRandomPosition(GuidID, out this._posX, out this._posY);
         }
 
         #region IAgent Members

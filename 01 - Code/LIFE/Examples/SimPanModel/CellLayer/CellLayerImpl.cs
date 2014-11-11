@@ -46,7 +46,8 @@ namespace CellLayer {
 
         public const int CellCountXAxis = 20;
         public const int CellCountYAxis = 20;
-        private const int CellSideLength = 25;
+        private const int CellSideLength = 30;
+        private const float AgentRadius = 12f;
         public const int SmallestXCoordinate = 1;
         public const int SmallestYCoordinate = 1;
         private static readonly object Lock = new object();  // ID access synchronization flag.
@@ -107,13 +108,14 @@ namespace CellLayer {
             CreateCellData(out viewData);
             StartVisualisation(viewData);
 
+            /*
             Log.Info("I'm going to log right this time...");
             Log.Debug("Application Starting");
             Log.DebugFormat("It is {0}.", DateTime.Now);
             Log.Warn("There will be an error soooon....");
             Log.Error("Now I just got bored...");
             Log.Fatal("WTF!?");
-
+            */
             return true;
         }
 
@@ -190,28 +192,60 @@ namespace CellLayer {
             }
         }
 
+        /// <summary>
+        /// add an agent to the view form
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="posX"></param>
+        /// <param name="posY"></param>
+        /// <param name="type"></param>
         public void AddAgent(int Id, float posX, float posY, BehaviourType type) {
-            object[] data = {posX, posY, 5f, AgentColors[type]};
+            object[] data = { posX, posY, AgentRadius, AgentColors[type] };
             _viewForm.AddPoint(Id, data);
+            Log.Info("Agent hat sich angemeldet");
         }
 
-        public void UpdateAgent(int Id, float posX, float posY, Color col) {
-            object[] data = {posX, posY, 5f, col};
+        /// <summary>
+        /// main ethod for maniulating point in view form
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="posX"></param>
+        /// <param name="posY"></param>
+        /// <param name="col"></param>
+        private void UpdateAgent(int Id, float posX, float posY, Color col) {
+            object[] data = { posX, posY, AgentRadius, col };
             _viewForm.UpdatePoint(Id, data);
         }
 
+        /// <summary>
+        /// adapter method for change of agent color depending on behaviour type
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="type"></param>
         public void UpdateAgentStatus(int Id, BehaviourType type) {
             object[] pointData = _viewForm._pointData[Id];
             UpdateAgent(Id, (float) pointData[0], (float) pointData[1], AgentColors[type]);
         }
 
+        /// <summary>
+        /// adapter method
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="posX"></param>
+        /// <param name="posY"></param>
         public void UpdateAgentPosition(int Id, float posX, float posY) {
             object[] pointData = _viewForm._pointData[Id];
             UpdateAgent(Id, posX, posY, (Color) pointData[3]);
         }
 
-        
-        public void GiveAndSetToRandomPosition(Guid iD, float drawingDiameter, out int posX, out int posY) {
+        /// <summary>
+        /// look for free cell and set if available agent on it
+        /// </summary>
+        /// <param name="iD"></param>
+        /// <param name="drawingDiameter"></param>
+        /// <param name="posX"></param>
+        /// <param name="posY"></param>
+        public void GiveAndSetToRandomPosition(Guid iD, out int posX, out int posY) {
             lock (Lock) {
                 Random r = new Random();
                 List<int> celIds = _cellField.Keys.ToList();

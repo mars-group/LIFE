@@ -11,14 +11,19 @@ namespace CellLayer
         public int ID { get; private set; }
         public int X { get; private set; }
         public int Y { get; private set; }
-        public CellLayerImpl.CellType cellType;
+        public CellLayerImpl.CellType CellType;
+        public Guid AgentOnCellGuid { get; set; }
 
         public CellData(Cell correspondingCell) {
-            this.ID = correspondingCell.CellId;
-            this.X = correspondingCell.XCoordinate;
-            this.Y = correspondingCell.YCoordinate;
-            this.cellType = correspondingCell.CellType;
+            ID = correspondingCell.CellId;
+            X = correspondingCell.XCoordinate;
+            Y = correspondingCell.YCoordinate;
+            CellType = correspondingCell.CellType;
+            AgentOnCellGuid = correspondingCell.AgentOnCell;
         }
 
+        public override string ToString() {
+            return string.Format("CellType: {0}, ID: {1}, X: {2}, Y: {3}, AgentOnCellGuid: {4}", CellType, ID, X, Y, AgentOnCellGuid);
+        }
     }
 }
