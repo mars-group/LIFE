@@ -97,11 +97,11 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
 		/// Returns all edge points for an obstacle.
 		/// </summary>
 		/// <param name="obstacle"> the obstacle </param>
-		/// <param name="yValue"> the height of the edge points </param>
+		/// <param name="heightValue"> the height of the edge points </param>
 		/// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
 		/// <returns> a list of the edges </returns>
 		//public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, double yValue, double waypointEdgeDistance)
-        public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, float yValue, float waypointEdgeDistance)
+        public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, float heightValue, float waypointEdgeDistance)
 		{
 			IList<Vector> edgePoints = new List<Vector>();
 
@@ -111,16 +111,21 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing
             Vector boundsHalf = obstacle.GetDimension() * 0.5f;
 
 			// if the yValue is lower or higher than the obstacle, there are no edge points
-			if (position.Y - boundsHalf.Y - waypointEdgeDistance > yValue || position.Y + boundsHalf.Y + waypointEdgeDistance < yValue)
+			//if (position.Y - boundsHalf.Y - waypointEdgeDistance > heightValue || position.Y + boundsHalf.Y + waypointEdgeDistance < heightValue)
+            if (position.Z - boundsHalf.Z - waypointEdgeDistance > heightValue || position.Z + boundsHalf.Z + waypointEdgeDistance < heightValue)
 			{
 				return edgePoints;
 			}
 
 			// calculate all four egde points
-            edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, yValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
-            edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, yValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
-            edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, yValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
-            edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, yValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
+            //edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, heightValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
+            //edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, heightValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
+            //edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, heightValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
+            //edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, heightValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
+            edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, position.Y - boundsHalf.Y - waypointEdgeDistance, heightValue));
+            edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, position.Y + boundsHalf.Y + waypointEdgeDistance, heightValue));
+            edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, position.Y - boundsHalf.Y - waypointEdgeDistance, heightValue));
+            edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, position.Y + boundsHalf.Y + waypointEdgeDistance, heightValue));
 
 			return edgePoints;
 		}

@@ -193,7 +193,7 @@ namespace PedestrianModel.Agents
 			//pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
             var rawObstaclesData = PerceptionUnit.GetData((int)InformationTypes.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>)rawObstaclesData;
-            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0.43f, Math.Max(Config.targetReachedDistance * 2.0f, 0.28f));
+            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0, Math.Max(Config.targetReachedDistance * 2.0f, 0.28f));
 			pathfinder = new AStarPathfinder<Vector>(pathfindingSearchGraph);
 
 			CreateAndExecuteMovePlan(targetPositions);
