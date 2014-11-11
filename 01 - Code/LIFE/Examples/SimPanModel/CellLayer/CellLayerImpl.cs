@@ -5,6 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using DalskiAgent.Agents;
+using DalskiAgent.Environments;
+using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 using log4net;
 using log4net.Config;
@@ -16,7 +20,7 @@ using SimPanViewer;
 
 namespace CellLayer {
     [Extension(typeof (ISteppedLayer))]
-    public class CellLayerImpl : ISteppedLayer {
+    public class CellLayerImpl : ISteppedLayer, IEnvironment {
         #region CellType enum
 
         public enum CellType {
@@ -44,6 +48,7 @@ namespace CellLayer {
         private const int CellSideLength = 25;
         public const int SmallestXCoordinate = 1;
         public const int SmallestYCoordinate = 1;
+        private static readonly object Lock = new object();  // ID access synchronization flag.
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -132,7 +137,7 @@ namespace CellLayer {
         // 1,3 Nr7    2,3 Nr8   3,3 Nr9
         private void CreateCellData(out Dictionary<int, object[]> viewData) {
             Dictionary<int, Cell> cellDict = new Dictionary<int, Cell>();
-            Dictionary<int, object[]> dataDict = new Dictionary<int, object[]>();
+            Dictionary<int, object[]> viewDataDict = new Dictionary<int, object[]>();
 
             for (int posX = 1; posX <= CellCountXAxis; posX++) {
                 for (int posY = 1; posY <= CellCountYAxis; posY++) {
@@ -141,11 +146,11 @@ namespace CellLayer {
 
                     object[] data = {posX, posY, CellColors[CellType.Neutral]};
                     if (ObstacleCells.Contains(cellIid)) data[2] = CellColors[CellType.Obstacle];
-                    dataDict.Add(cellIid, data);
+                    viewDataDict.Add(cellIid, data);
                 }
             }
             _cellField = cellDict;
-            viewData = dataDict;
+            viewData = viewDataDict;
         }
 
         private int CalcCellId(int posX, int posY) {
@@ -202,23 +207,52 @@ namespace CellLayer {
             UpdateAgent(Id, posX, posY, (Color) pointData[3]);
         }
 
-        public bool GiveAndSetToRandomPosition(Guid iD, float drawingDiameter, out int posX, out int posY) {
-            Random r = new Random();
-            List<int> celIds = _cellField.Keys.ToList();
-            IOrderedEnumerable<int> mergedIdList = celIds.OrderBy(item => r.Next());
+        
+        public void GiveAndSetToRandomPosition(Guid iD, float drawingDiameter, out int posX, out int posY) {
+            lock (Lock) {
+                Random r = new Random();
+                List<int> celIds = _cellField.Keys.ToList();
+                IOrderedEnumerable<int> mergedIdList = celIds.OrderBy(item => r.Next());
 
-            foreach (int cellId in mergedIdList) {
-                if (!_cellField[cellId].AgentOnCell.Equals(Guid.Empty)) continue;
-                Cell freeCell = _cellField[cellId];
-                posX = freeCell.XCoordinate;
-                posY = freeCell.YCoordinate;
+                foreach (int cellId in mergedIdList) {
+                    if (!_cellField[cellId].AgentOnCell.Equals(Guid.Empty)) continue;
+                    Cell freeCell = _cellField[cellId];
+                    posX = freeCell.XCoordinate;
+                    posY = freeCell.YCoordinate;
 
-                freeCell.AgentOnCell = iD;
-                return true;
+                    freeCell.AgentOnCell = iD;
+                }
+                throw new Exception("No free place in cell field");
             }
-            posX = 0;
-            posY = 0;
-            return false;
+        }
+
+        public enum CellDataTypes {
+            CellData
+        }
+
+
+        public object GetData(int informationType, IGeometry geometry) {
+            throw new NotImplementedException();
+        }
+
+        public void AddAgent(SpatialAgent agent, Vector pos, out MovementData mdata) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAgent(SpatialAgent agent) {
+            throw new NotImplementedException();
+        }
+
+        public void ChangePosition(SpatialAgent agent, Vector position, Direction direction) {
+            throw new NotImplementedException();
+        }
+
+        public List<SpatialAgent> GetAllAgents() {
+            throw new NotImplementedException();
+        }
+
+        public void AdvanceEnvironment() {
+            throw new NotImplementedException();
         }
     }
 }

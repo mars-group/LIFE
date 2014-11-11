@@ -4,7 +4,7 @@ using LayerAPI.Interfaces;
 
 namespace HumanLayer.Agents {
     public class Human : IAgent {
-        public readonly Guid ID = Guid.NewGuid();
+        public readonly Guid GuidID;
         private CellLayerImpl _cellLayer;
         private int _posX;
         private int _posY;
@@ -14,7 +14,9 @@ namespace HumanLayer.Agents {
             _cellLayer = cellLayer;
             int posX;
             int posY;
-            cellLayer.GiveAndSetToRandomPosition(ID, HumanLayerImpl.HumanDiameter, out this._posX, out this._posY);
+            GuidID = new Guid(); 
+
+            cellLayer.GiveAndSetToRandomPosition(GuidID, HumanLayerImpl.HumanDiameter, out this._posX, out this._posY);
         }
 
         #region IAgent Members

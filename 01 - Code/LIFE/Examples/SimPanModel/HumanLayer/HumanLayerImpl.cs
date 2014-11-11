@@ -2,6 +2,8 @@
 using System.IO;
 using System.Reflection;
 using CellLayer;
+using DalskiAgent.Execution;
+using DalskiAgent.Movement;
 using HumanLayer.Agents;
 using LayerAPI.Interfaces;
 using log4net;
@@ -27,9 +29,24 @@ namespace HumanLayer {
 
         public bool InitLayer<I>
             (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+
+            IExecution exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
+            int xPos, yPos;
+
+
+            Guid guid = new Guid();
+            _cellLayer.GiveAndSetToRandomPosition(guid, 0.5f, out xPos, out yPos);
+            SmartHuman human = new SmartHuman(exec, _cellLayer, new Vector(xPos, yPos), guid);
+            
+
+            
+
+            /*
             Human humanAgent = new Human(_cellLayer);
             registerAgentHandle.Invoke(this, humanAgent);
-            return true;
+            */
+             return true;
+             
         }
 
         public long GetCurrentTick() {
@@ -37,5 +54,10 @@ namespace HumanLayer {
         }
 
         #endregion
+
+        
+
+
+        
     }
 }

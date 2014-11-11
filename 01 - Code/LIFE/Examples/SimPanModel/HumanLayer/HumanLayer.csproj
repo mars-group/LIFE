@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agents\CellHalo.cs" />
     <Compile Include="Agents\Human.cs" />
+    <Compile Include="Agents\SmartHuman.cs" />
     <Compile Include="HumanLayerImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -55,9 +57,29 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Name>GenericAgentArchitectureCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
+      <Project>{e8e32f5e-7e31-41f3-9d49-9cb6dfbafc85}</Project>
+      <Name>GenericAgentArchitecture</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapActionSystem\GoapActionSystem.csproj">
+      <Project>{62773ab7-47e9-42ad-96ae-d4241618199e}</Project>
+      <Name>GoapActionSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapCommon\GoapCommon.csproj">
+      <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
+      <Name>GoapCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\CellLayer\CellLayer.csproj">
       <Project>{a5715b79-3cf8-445e-847d-23def12dbfa3}</Project>
