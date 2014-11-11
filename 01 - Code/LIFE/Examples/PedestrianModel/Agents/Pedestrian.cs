@@ -29,8 +29,8 @@ namespace PedestrianModel.Agents
     {
         private bool startComplete = false;
 
-        private String name;               // Name or ID of agent      
-        private float maxVelocity;         // Maximum movement velocity of agent        
+        private String name;                        // Name or ID of agent      
+        private float maxVelocity = 1.34f;          // Maximum movement velocity of agent        
 
         private readonly IEnvironment environment;
         private readonly DirectMover mover;

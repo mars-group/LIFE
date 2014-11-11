@@ -60,9 +60,9 @@ namespace PedestrianModel.Agents.Action
         public DirectMovementAction PerformAction(Pedestrian agent, AgentMover mover)
 		{
 			//double? maxMovingSpeed = agent.getStartParameter("movingSpeed");
-            double maxMovingSpeed = agent.MaxVelocity;
+            float maxMovingSpeed = agent.MaxVelocity;
 			//Vector3D direction = targetPosition.subtract(agent.Environment.CurrentPosition).normalize().scalarMultiply(maxMovingSpeed);
-            Vector direction = (targetPosition - agent.GetPosition()).GetNormalVector() * (float)maxMovingSpeed;
+            Vector direction = (targetPosition - agent.GetPosition()).GetNormalVector() * maxMovingSpeed;
 
 			direction = agent.MovementPipeline.ProgressPipeline(targetPosition, direction);
 

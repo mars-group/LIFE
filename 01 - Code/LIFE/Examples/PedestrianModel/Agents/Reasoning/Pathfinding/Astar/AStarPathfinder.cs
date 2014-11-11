@@ -60,14 +60,30 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar
 					{
 						AStarNode<E> oldVer = null;
 
-						oldVer = openMap[newNode.ExternalNode];
+						//oldVer = openMap[newNode.ExternalNode];
+                        if (openMap.ContainsKey(newNode.ExternalNode))
+                        {
+                            oldVer = openMap[newNode.ExternalNode];
+                        }
+                        else
+                        {
+                            oldVer = null;
+                        }
 
 						if (oldVer != null && oldVer.CostFromStart <= newNode.CostFromStart)
 						{
 							continue;
 						}
 
-						oldVer = closedMap[newNode.ExternalNode];
+						//oldVer = closedMap[newNode.ExternalNode];
+                        if (closedMap.ContainsKey(newNode.ExternalNode))
+                        {
+                            oldVer = closedMap[newNode.ExternalNode];
+                        }
+                        else
+                        {
+                            oldVer = null;
+                        }
 
 						if (oldVer != null && oldVer.CostFromStart <= newNode.CostFromStart)
 						{
