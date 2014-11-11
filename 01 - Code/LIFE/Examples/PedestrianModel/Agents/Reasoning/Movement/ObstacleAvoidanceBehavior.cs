@@ -142,7 +142,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement
 
 			//IList<SimulationObject> perceptedAgents = ((VisionSensor) agent.Environment.VisionSensor).AgentsAsObjectList;
             var rawPedestrianData = perceptionUnit.GetData((int)InformationTypes.Pedestrians).Data;
-            var pedestrians = ((Dictionary<long, Pedestrian>)rawPedestrianData).Values;
+            IList<Pedestrian> pedestrians = (List<Pedestrian>)rawPedestrianData;
 
 			//foreach (SimulationObject so in perceptedAgents)
             foreach (Pedestrian ped in pedestrians)
