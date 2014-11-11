@@ -28,6 +28,12 @@ namespace SMConnector {
         /// <param name="nrOfTicks"></param>
         void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
 
+		/// <summary>
+		/// Steps the simulation by one tick. If the simulation was not already started, it will start it.
+		/// </summary>
+		/// <param name="model">Model.</param>
+		/// <param name="layerContainers">Layer containers.</param>
+		/// <param name="nrOfTicks">Nr of ticks.</param>
         void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
 
         /// <summary>
