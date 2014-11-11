@@ -54,6 +54,8 @@ namespace PedestrianModel.Agents
         
         private int targetPositionIndex = 0; // if target list type is Sequential, this is the current index
 
+        private Vector debugLastPosition;
+
         /// <summary>
         /// List of the last n positions. </summary>
         private readonly IList<Vector> positionTracker = new List<Vector>();
@@ -132,11 +134,16 @@ namespace PedestrianModel.Agents
             // TODO:
             // - agent logging
             // - simulation visualization
-            Console.SetBufferSize(120, 9999);
-            Console.SetWindowSize(120, 50);
-            Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Pos: " + this.GetPosition() + ", Target: " + this.TargetPositions[0] + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]));
-
             IInteraction movementAction = Act();
+
+            Console.SetBufferSize(160, 9999);
+            Console.SetWindowSize(160, 50);
+            if (debugLastPosition == null) debugLastPosition = startPosition;
+            string action = "   ALL ACTIONS COMPLETED   ";
+            if (actions.Count > 0) action = actions[0].ToString();
+            Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Position: " + this.GetPosition() + ", Target: " + this.TargetPositions[0] + ", Action: " + action + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]).ToString("00.0000000") + ", Velocity: " + (this.GetPosition().GetDistance(debugLastPosition) * (1000f / Config.lengthOfTimestepsInMilliseconds)).ToString("00.0000000"));
+            debugLastPosition = this.GetPosition();
+
             return movementAction;
         }
 
