@@ -1,5 +1,6 @@
 ﻿using DalskiAgent.Agents;
 using DalskiAgent.Environments;
+using DalskiAgent.Movement;
 using PedestrianModel.Agents;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ namespace PedestrianModel.Visualization
     public partial class SimpleVisualization : Form
     {
         private IEnvironment env;
-        private int zoom = 20;
+        private int zoom = 40;
+        private int offsetX = 6;
+        private int offsetY = 3;
 
         public SimpleVisualization(IEnvironment env)
         {
@@ -36,9 +39,9 @@ namespace PedestrianModel.Visualization
             var rects = new List<Rectangle>();
 
             foreach(SpatialAgent agent in env.GetAllAgents()) {
-                var center = agent.GetPosition();
+                var center = agent.GetPosition() + new Vector(offsetX, offsetY, 0);
                 var dimension = agent.GetDimension();
-                var rect = new Rectangle((int)((center.X - (dimension.X / 2f)) * zoom), (int)((center.Y - (dimension.Y / 2f)) * zoom), (int)(dimension.X * zoom), (int)(dimension.Y * zoom));
+                var rect = new Rectangle((int)Math.Round((decimal)((center.X - (dimension.X / 2f)) * zoom)), (int)Math.Round((decimal)((center.Y - (dimension.Y / 2f)) * zoom)), (int)Math.Round(dimension.X * zoom), (int)Math.Round((decimal)(dimension.Y * zoom)));
                 Brush brush;
                 if (agent is Pedestrian) {
                     brush = new SolidBrush(Color.White);

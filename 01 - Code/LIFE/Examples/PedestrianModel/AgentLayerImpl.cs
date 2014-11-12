@@ -7,6 +7,7 @@ using PedestrianModel.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Movement;
 using DalskiAgent.Execution;
+using PedestrianModel.Util;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -48,32 +49,7 @@ namespace PedestrianModel
             _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
 
             int pedestrianCount = 5;
-
-            // Obstacle with center (10,15) going from x=9.5 to x=10.5 and y=10 to y=20
-            var obsPosition = new Vector(10f, 15f);
-            var obsDimension = new Vector(1f, 10f, 0.4f); // same height as pedestrians
-            var obsDirection = new Direction();
-            obsDirection.SetPitch(0f);
-            obsDirection.SetYaw(0f);
-
-            // OBSTACLES HAVE TO BE CREATED BEFORE THE AGENTS!
-            new Obstacle(_exec, _env, obsPosition, obsDimension, obsDirection);
-
-            var random = new Random();
-            // WALK agents are 0.4m x 0.4m x 0.4m
-            var pedDimension = new Vector(0.4f, 0.4f, 0.4f);
-            var pedDirection = new Direction();
-            pedDirection.SetPitch(0f);
-            pedDirection.SetYaw(0f);
-
-            for (var i = 0; i < pedestrianCount; i++)
-            {
-                // Random position between (0,10) and (9,20)
-                var startPos = new Vector((float)random.NextDouble() * 9, (float)random.NextDouble() * 10 + 10f);
-                // Random position between (11,10) and (20,20)
-                var targetPos = new Vector((float)random.NextDouble() * 9 + 11f, (float)random.NextDouble() * 10 + 10f);
-                new Pedestrian(_exec, _env, "sim0", startPos, pedDimension, pedDirection, targetPos);
-            }             
+            ScenarioBuilder.CreateTestScenario(_exec, _env, pedestrianCount);
 
             // Register the layer itself for execution. The agents are registered by themselves.
             registerAgentHandle.Invoke(this, this);

@@ -8,6 +8,7 @@ using ESCTestLayer.Interface;
 using LayerAPI.Interfaces;
 using PedestrianModel.Agents;
 using PedestrianModel.Environment;
+using PedestrianModel.Util;
 using PedestrianModel.Visualization;
 using System;
 using System.Collections.Generic;
@@ -29,11 +30,11 @@ namespace PedestrianModel
     /// </summary>
     public static void Main() {
         var exec = new SeqExec(true);
-        var env = CreateScenarioEnvironment(exec, false, 5);        
+        var env = CreateScenarioEnvironment(exec, false, 5, ScenarioBuilder.ScenarioTypes.Bottleneck);        
         exec.Run(100, null);
     }
 
-    private static IEnvironment CreateScenarioEnvironment(SeqExec exec, bool esc, int pedestrianCount)
+    private static IEnvironment CreateScenarioEnvironment(SeqExec exec, bool esc, int pedestrianCount, ScenarioBuilder.ScenarioTypes scenario)
     {
         IEnvironment env;
         if (!esc) env = new ObstacleEnvironment(exec);
@@ -45,30 +46,17 @@ namespace PedestrianModel
             Application.Run(visualization);            
         }).Start();
 
-        // Obstacle with center (10,15) going from x=9.5 to x=10.5 and y=10 to y=20
-        var obsPosition = new Vector(10f, 15f);
-        var obsDimension = new Vector(1f, 10f, 0.4f); // same height as pedestrians
-        var obsDirection = new Direction();
-        obsDirection.SetPitch(0f);
-        obsDirection.SetYaw(0f);
-
-        // OBSTACLES HAVE TO BE CREATED BEFORE THE AGENTS!
-        new Obstacle(exec, env, obsPosition, obsDimension, obsDirection);
-
-        var random = new Random();
-        // WALK agents are 0.4m x 0.4m x 0.4m
-        var pedDimension = new Vector(0.4f, 0.4f, 0.4f);
-        var pedDirection = new Direction();
-        pedDirection.SetPitch(0f);
-        pedDirection.SetYaw(0f);        
-
-        for (var i = 0; i < pedestrianCount; i++)
+        switch (scenario)
         {
-            // Random position between (0,10) and (9,20)
-            var startPos = new Vector((float)random.NextDouble() * 9, (float)random.NextDouble() * 10 + 10f);
-            // Random position between (11,10) and (20,20)
-            var targetPos = new Vector((float)random.NextDouble() * 9 + 11f, (float)random.NextDouble() * 10 + 10f);
-            new Pedestrian(exec, env, "sim0", startPos, pedDimension, pedDirection, targetPos);
+            case ScenarioBuilder.ScenarioTypes.Test:
+                ScenarioBuilder.CreateTestScenario(exec, env, pedestrianCount);
+                break;
+            case ScenarioBuilder.ScenarioTypes.Density:
+                ScenarioBuilder.CreateDensityScenario(exec, env, pedestrianCount);
+                break;
+            case ScenarioBuilder.ScenarioTypes.Bottleneck:
+                ScenarioBuilder.CreateBottleneckScenario(exec, env, pedestrianCount);
+                break;
         }        
 
         return env;
