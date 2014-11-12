@@ -1,7 +1,6 @@
 ﻿namespace ESCTestLayer.Entities {
     #region Namespace imports
 
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using CommonTypes.TransportTypes;
