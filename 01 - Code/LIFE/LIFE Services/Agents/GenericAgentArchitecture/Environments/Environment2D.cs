@@ -166,12 +166,12 @@ namespace DalskiAgent.Environments {
     ///   can be made by specific environments overriding this function. 
     /// </summary>
     /// <param name="informationType">The type of information to sense.</param>
-    /// <param name="geometry">The perception range.</param>
+    /// <param name="deprecatedGeometry">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public virtual object GetData(int informationType, IGeometry geometry) {
+    public virtual object GetData(int informationType, IDeprecatedGeometry deprecatedGeometry) {
       switch (informationType) {
         case 0: { // Zero stands here for "all agents". Enum avoided, check it elsewhere!
-          var halo = (Halo) geometry;
+          var halo = (Halo) deprecatedGeometry;
           return GetAllAgents().Where(agent => 
             halo.IsInRange(agent.GetPosition().GetTVector()) && 
             halo.Position.GetDistance(agent.GetPosition()) > float.Epsilon).ToList();

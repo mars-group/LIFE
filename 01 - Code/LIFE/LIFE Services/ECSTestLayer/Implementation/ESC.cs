@@ -225,7 +225,7 @@ namespace ESCTestLayer.Implementation {
 
     #endregion
 
-    public object GetData(int informationType, IGeometry geometry) {
+    public object GetData(int informationType, IDeprecatedGeometry deprecatedGeometry) {
       //TODO informationType als filter kriterium
 //            const int elementId = -1;
 //            Add(elementId, -1, false, geometry.GetDimensionQuad());

@@ -6,7 +6,7 @@ namespace GenericAgentArchitectureCommon.Interfaces {
   /// <summary>
   ///   Geometry solely holds the shape and extent of the figure. No position or orientation / direction should be hold.
   /// </summary>
-  public interface IGeometry {
+  public interface IDeprecatedGeometry {
     
     
     /// <summary>

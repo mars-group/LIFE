@@ -1,7 +1,9 @@
 ﻿namespace GenericAgentArchitectureCommon.Interfaces {
-  public interface ISpatialEntity  {
+    using GeoAPI.Geometries;
 
-        IGeometry GetBounds();
+    public interface ISpatialEntity  {
+
+        IGeometry Bounds { get; set; } 
 
     }
 }

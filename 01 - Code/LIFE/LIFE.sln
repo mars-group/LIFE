@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulation Manager", "Simulation Manager", "{060A5DF3-4C49-402B-9B3F-142A9ECD30B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuntimeEnvironment", "SimulationManager\RuntimeEnvironment\RuntimeEnvironment.csproj", "{CD379E3D-8606-4136-978A-2E1E7DD933A1}"
@@ -145,6 +147,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOAPLayer", "Examples\GOAPModel\GOAPLayer\GOAPLayer.csproj", "{59EC3315-B08F-4542-A1DA-D114B340C392}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOAPModelDefinition", "Examples\GOAPModel\GOAPModelDefinition\GOAPModelDefinition.csproj", "{DF6DA140-3074-44A6-AF79-4F6AA057F9C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCSharpOctree", "MyCSharpOctree\MyCSharpOctree.csproj", "{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -694,6 +698,16 @@ Global
 		{DF6DA140-3074-44A6-AF79-4F6AA057F9C5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DF6DA140-3074-44A6-AF79-4F6AA057F9C5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DF6DA140-3074-44A6-AF79-4F6AA057F9C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -730,6 +744,7 @@ Global
 		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{C91776D6-D84C-4183-BD68-D6FA663E3C1C} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
+		{4380DBC9-0E1C-4074-BA7D-FB4D8DAC7CA8} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{528AB6AF-7217-4603-BC96-4893D9FD9C65} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{13B79EC1-DE9C-4CD1-9255-5458505677DF} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{4DD7E6C6-D979-4F7A-AFF0-833BEB67F789} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}

@@ -9,7 +9,7 @@ namespace DalskiAgent.Perception {
   ///   An abstract halo representation. Each sensor has one object of it.
   ///   It has a geometry describing its form and a vertex as center point. 
   /// </summary>
-  public abstract class Halo : IGeometry {
+  public abstract class Halo : IDeprecatedGeometry {
         
     public readonly Vector Position; // The agent's centre.
 

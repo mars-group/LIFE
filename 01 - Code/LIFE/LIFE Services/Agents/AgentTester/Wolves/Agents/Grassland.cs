@@ -45,15 +45,15 @@ namespace AgentTester.Wolves.Agents {
     ///   Overrides GetData to provide additional "Grass" agent queries.
     /// </summary>
     /// <param name="informationType">The information type to query.</param>
-    /// <param name="geometry">The perceptable area.</param>
+    /// <param name="deprecatedGeometry">The perceptable area.</param>
     /// <returns>An arbitrary object. In this case, an agent listing.</returns>
-    public override object GetData(int informationType, IGeometry geometry) {
+    public override object GetData(int informationType, IDeprecatedGeometry deprecatedGeometry) {
       switch ((InformationTypes) informationType) {      
         case InformationTypes.AllAgents:
-          return base.GetData(0, geometry);
+          return base.GetData(0, deprecatedGeometry);
 
         case InformationTypes.Grass: {
-          var list = (List<SpatialAgent>) base.GetData(0, geometry);
+          var list = (List<SpatialAgent>) base.GetData(0, deprecatedGeometry);
           return list.OfType<Grass>().ToList();
         }
 
