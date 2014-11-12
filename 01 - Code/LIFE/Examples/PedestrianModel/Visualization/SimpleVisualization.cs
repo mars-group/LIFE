@@ -41,7 +41,7 @@ namespace PedestrianModel.Visualization
             foreach(SpatialAgent agent in env.GetAllAgents()) {
                 var center = agent.GetPosition() + new Vector(offsetX, offsetY, 0);
                 var dimension = agent.GetDimension();
-                var rect = new Rectangle((int)Math.Round((decimal)((center.X - (dimension.X / 2f)) * zoom)), (int)Math.Round((decimal)((center.Y - (dimension.Y / 2f)) * zoom)), (int)Math.Round(dimension.X * zoom), (int)Math.Round((decimal)(dimension.Y * zoom)));
+                var rect = new Rectangle((int)Math.Round((center.X - (dimension.X / 2f)) * zoom), (int)Math.Round((center.Y - (dimension.Y / 2f)) * zoom), (int)Math.Round(dimension.X * zoom), (int)Math.Round(dimension.Y * zoom));
                 Brush brush;
                 if (agent is Pedestrian) {
                     brush = new SolidBrush(Color.White);
