@@ -8,15 +8,15 @@ namespace ESCTestLayer.Interface {
 
     public interface IUnboundESC : IGenericDataSource {
 
-    MovementResult Add(ISpatialEntity entity, TVector position, TVector direction);
+    bool Add(ISpatialEntity entity, TVector position, float directionAngle = 0);
 
-    MovementResult AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid);
+    bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid);
 
     void Remove(ISpatialEntity entity);
 
-    MovementResult Update(ISpatialEntity entity);
+    bool Update(ISpatialEntity entity, IGeometry newBounds);
 
-    MovementResult Move(ISpatialEntity entity, TVector position, TVector direction);
+    MovementResult Move(ISpatialEntity entity, TVector movementVector, float directionAngle = 0);
 
     IEnumerable<ISpatialEntity> Explore(IGeometry geometry);
 
