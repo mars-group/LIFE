@@ -9,7 +9,7 @@
     using Interface;
     using NetTopologySuite.Geometries.Utilities;
 
-    public class UnboundESC : IUnboundESC {
+    public class UnboundESC : IUnboundESC {//TODO löschen funktioniert nicht mehr wegen MovementResult
         private const int MaxAttemps = 100;
         private readonly Random _random; // Number generator for random positions.
         private readonly List<ISpatialEntity> _entities;
@@ -27,7 +27,7 @@
         }
 
         public bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid) {
-            for (int attemp = 0; attemp < MaxAttemps; attemp++) {
+            for (int attempt = 0; attempt < MaxAttemps; attempt++) {
                 TVector position = GenerateRandomPosition(min, max, grid);
                 bool result = Add(entity, position);
                 if (result) return true;
@@ -50,7 +50,7 @@
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, float directionAngle = 0) {
             IGeometry old = entity.Bounds;
             AffineTransformation trans = new AffineTransformation();
-            trans.SetToTranslation(10, 10);
+            trans.SetToTranslation(movementVector.X, movementVector.Y);
 
 //          GeometricShapeFactory gsf2 = new GeometricShapeFactory(new GeometryFactory(new PrecisionModel(PrecisionModels.Floating), 4326));
 //          gsf2.Centre = old.Centroid.Coordinate;
@@ -59,10 +59,10 @@
 
             List<ISpatialEntity> collisions = Explore(result).ToList();
             collisions.Remove(entity);
-            if (collisions.Any()) return new MovementResult(false, collisions);
+            if (collisions.Any()) return new MovementResult(collisions);
 
             entity.Bounds = result;
-            return new MovementResult(convert(result.Centroid.Coordinate));
+            return new MovementResult();
         }
 
         public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
@@ -95,8 +95,7 @@
                 int y = _random.Next((int) min.Y, (int) max.Y);
                 int z = _random.Next((int) min.Z, (int) max.Z);
                 return new TVector(x, y, z);
-            }
-            else {
+            } else {
                 float x = (float) GetRandomNumber(min.X, max.X);
                 float y = (float) GetRandomNumber(min.Y, max.Y);
                 float z = (float) GetRandomNumber(min.Z, max.Z);
@@ -106,10 +105,6 @@
 
         private double GetRandomNumber(double min, double max) {
             return _random.NextDouble()*(max - min) + min;
-        }
-
-        private TVector convert(Coordinate coordinate) {
-            return new TVector((float) coordinate.X, (float) coordinate.Y, (float) coordinate.Z);
         }
 
         #endregion

@@ -58,14 +58,14 @@ namespace ESCTestLayer.Implementation {
 
     public MovementResult SetPosition(int elementId, TVector position, TVector direction) {
       AABB aabb = GetAABB(position, direction, _dimensions[elementId]);
-      if (CheckForCollisions(aabb)) return new MovementResult(_positions[elementId]);
+      if (CheckForCollisions(aabb)) return new MovementResult();
 
       //otherwise update position, direction and axis aligned bounding intervals for elementId
       _positions[elementId] = position;
       _directions[elementId] = direction;
       _aabbs[elementId] = aabb;
 
-      return new MovementResult(position);
+      return new MovementResult();
     }
 
 
