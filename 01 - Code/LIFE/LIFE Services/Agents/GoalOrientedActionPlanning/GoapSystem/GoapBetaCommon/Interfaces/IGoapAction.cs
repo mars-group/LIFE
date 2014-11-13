@@ -3,8 +3,8 @@ using GenericAgentArchitectureCommon.Interfaces;
 
 namespace GoapBetaCommon.Interfaces {
     /// <summary>
-    ///    An action represents a step towards a goal of one agent. It's a reusable unit.
-    ///    Every agent gets his own set of available IActions. 
+    ///     An action represents a step towards a goal of one agent. It's a reusable unit.
+    ///     Every agent gets his own set of available IActions.
     /// </summary>
     public interface IGoapAction : IInteraction {
         /// <summary>

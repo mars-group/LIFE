@@ -1,27 +1,18 @@
 ﻿using System.Collections.Generic;
-using GoapBetaCommon.Abstract;
 
-namespace GoapBetaCommon.Interfaces
-{
+namespace GoapBetaCommon.Interfaces {
     /// <summary>
     ///     the methods needed for the goap planner
     /// </summary>
     public interface IGoapGraphService {
-
         /// <summary>
-        /// get the initial graph with one vertex (root)
+        ///     get the initial graph with one vertex (root)
         /// </summary>
         /// <param name="rootState"></param>
         /// <param name="targetState"></param>
         /// <param name="maximumGraphDept"></param>
         /// <returns></returns>
-        void InitializeGoapGraph(List<IGoapWorldProperty> rootState, int maximumGraphDept = 0);
-
-        /// <summary>
-        /// empty graph is a graph without any vertex
-        /// </summary>
-        /// <returns></returns>
-        bool IsGraphEmpty();
+        void InitializeGoapGraph(IGoapNode rootNode, int maximumGraphDept = 0);
 
         /// <summary>
         ///     get the next Vertex, which will be inspected by the algorithm
@@ -41,12 +32,7 @@ namespace GoapBetaCommon.Interfaces
         /// <param name="outEdges"></param>
         /// <param name="currentState"></param>
         /// <returns></returns>
-        void ExpandCurrentVertex(List<AbstractGoapAction> outEdges );
-
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        bool IsCurrentVertexTarget();
+        void ExpandCurrentVertex(List<IGoapEdge> outEdges);
 
         /// <summary>
         ///     inspect the children of the current vertex
@@ -55,13 +41,10 @@ namespace GoapBetaCommon.Interfaces
         void AStarStep();
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
-        List<AbstractGoapAction> GetShortestPath();
+        List<IGoapEdge> GetShortestPath();
 
         int GetActualDepthFromRoot();
-
-        IGoapNode GetChildNodeByActionAndParent(AbstractGoapAction action, IGoapNode parent);
     }
 }

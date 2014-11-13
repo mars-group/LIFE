@@ -1,9 +1,7 @@
 ﻿using GoapBetaCommon.Abstract;
 
-namespace GoapBetaCommon.Interfaces
-{
-    public interface IGoapEdge  {
-
+namespace GoapBetaCommon.Interfaces {
+    public interface IGoapEdge {
         IGoapNode GetSource();
 
         IGoapNode GetTarget();
@@ -11,6 +9,5 @@ namespace GoapBetaCommon.Interfaces
         AbstractGoapAction GetAction();
 
         int GetCost();
-
     }
 }

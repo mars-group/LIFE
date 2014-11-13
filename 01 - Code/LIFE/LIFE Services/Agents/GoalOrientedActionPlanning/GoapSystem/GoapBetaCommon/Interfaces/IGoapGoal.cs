@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GoapBetaCommon.Interfaces
-{
+namespace GoapBetaCommon.Interfaces {
     public interface IGoapGoal {
-
         bool IsSatisfied(List<IGoapWorldProperty> worldstate);
 
         int GetRelevancy();

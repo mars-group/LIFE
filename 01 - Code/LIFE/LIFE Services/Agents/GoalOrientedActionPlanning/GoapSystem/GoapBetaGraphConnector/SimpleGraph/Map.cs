@@ -37,11 +37,6 @@ namespace GoapBetaGraphConnector.SimpleGraph {
             return _vertices.Contains(vertex);
         }
 
-        public bool IsEmpty() {
-            if (_vertices == null) return true;
-            return _vertices.Count == 0;
-        }
-
         public override string ToString() {
             var text = _vertices.Aggregate("", (current, vertex) => current + (vertex + Environment.NewLine));
 

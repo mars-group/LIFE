@@ -85,12 +85,12 @@ namespace GoapBetaActionSystem.Implementation {
                 _currentPlan.RemoveAt(0);
                 return currentAction;
             }
-
             return new SurrogateAction();
         }
 
         private void CreateNewPlan() {
-            GoapPlanner planner = new GoapPlanner(20, _availableActions, _effectToAction, _internalBlackboard.Get(Worldstate));
+            GoapPlanner planner = new GoapPlanner
+                (20, _availableActions, _effectToAction, _internalBlackboard.Get(Worldstate));
             _currentPlan = planner.GetPlan(_currentGoal);
         }
 
@@ -115,14 +115,14 @@ namespace GoapBetaActionSystem.Implementation {
             List<IGoapGoal> goalSortedByRelevancy = _availableGoals.OrderByDescending(x => x.GetRelevancy()).ToList();
 
             IGoapGoal highestRelevancyGoal = null;
-            
-            foreach (var goapGoal in goalSortedByRelevancy) {
-                if (highestRelevancyGoal == null && !goapGoal.IsSatisfied(_internalBlackboard.Get(Worldstate))) {
+
+            foreach (IGoapGoal goapGoal in goalSortedByRelevancy) {
+                if (highestRelevancyGoal == null && !goapGoal.IsSatisfied(_internalBlackboard.Get(Worldstate)))
                     highestRelevancyGoal = goapGoal;
-                }
             }
 
-            if (_currentGoal != null && !_currentGoal.Equals(highestRelevancyGoal)) {Console.WriteLine("Goal has changed. New is " + highestRelevancyGoal.GetType());}
+            if (_currentGoal != null && !_currentGoal.Equals(highestRelevancyGoal))
+                Console.WriteLine("Goal has changed. New is " + highestRelevancyGoal.GetType());
             ;
 
             return _currentGoal = highestRelevancyGoal;

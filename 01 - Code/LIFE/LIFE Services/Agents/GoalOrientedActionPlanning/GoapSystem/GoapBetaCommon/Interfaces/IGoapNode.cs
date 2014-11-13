@@ -2,7 +2,6 @@
 
 namespace GoapBetaCommon.Interfaces {
     public interface IGoapNode {
-
         List<IGoapWorldProperty> GetUnsatisfiedGoalValues();
 
         bool CanBeSatisfiedByStartState(List<IGoapWorldProperty> startState);
@@ -10,8 +9,5 @@ namespace GoapBetaCommon.Interfaces {
         int GetHeuristic();
 
         bool HasUnsatisfiedProperties();
-
-        
     }
-
 }

@@ -16,6 +16,7 @@ namespace GoapBetaGraphConnector.SimpleGraph {
         private Dictionary<IGoapNode, object[]> _nodeTable;
 
         /// <summary>
+        ///     the a star search providing class
         /// </summary>
         /// <param name="root"></param>
         /// <param name="graph"></param>
@@ -43,8 +44,7 @@ namespace GoapBetaGraphConnector.SimpleGraph {
             IGoapNode vertex = null;
 
             // TODO in welcher Reihenfolge werden die Elemente iteriert (ist vermutlich unterschiedlich bei dict) und führt das zu Fehlern?
-            foreach (KeyValuePair<IGoapNode, object[]> keyValuePair in _nodeTable)
-            {
+            foreach (KeyValuePair<IGoapNode, object[]> keyValuePair in _nodeTable) {
                 // if not in closed list and estimated value smaller than actual smallestF
                 if (keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false &&
                     (int) keyValuePair.Value[3] < smallestF) {
@@ -58,16 +58,30 @@ namespace GoapBetaGraphConnector.SimpleGraph {
             return _current;
         }
 
+        /// <summary>
+        ///     check if open list is not empty
+        /// </summary>
+        /// <returns></returns>
         public bool HasVerticesOnOpenList() {
             return _nodeTable.Any(keyValuePair => keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false);
         }
 
+        /// <summary>
+        ///     add a vertex to the algorithm table
+        /// </summary>
+        /// <param name="vertex"></param>
         public void AddVertex(IGoapNode vertex) {
             if (!_nodeTable.ContainsKey(vertex)) {
                 _nodeTable.Add(vertex, null);
             }
+            //TODO falls ein knoten schon in der Nodetable ist und noch open ist .... checken ob er geupdated werden muss
         }
 
+
+        /// <summary>
+        ///     get the list of all edges needed to walk to current node
+        /// </summary>
+        /// <returns></returns>
         public List<IGoapEdge> CreatePathToCurrentAsEdgeList() {
             List<IGoapEdge> pathEdges = new List<IGoapEdge>();
             IGoapNode actual = _current;
@@ -82,12 +96,21 @@ namespace GoapBetaGraphConnector.SimpleGraph {
             return pathEdges;
         }
 
+        /// <summary>
+        ///     one iteration in the stepped a star
+        ///     set old actual node to closed list and get the new actual node
+        /// </summary>
         public void Step() {
             SetOnClosedList(_current);
             Calculate(_current, _graph.GetReachableAdjcentVertices(_current));
             ChooseNextNodeFromOpenList();
         }
 
+        /// <summary>
+        ///     get the predecessor of the node from the table from a star
+        /// </summary>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
         private IGoapNode GetPredecessor(IGoapNode vertex){
             if (!_nodeTable.ContainsKey(vertex))
                 throw new AlgorithmException("vertex asked for predeseccor not in algoritm list");
@@ -113,11 +136,11 @@ namespace GoapBetaGraphConnector.SimpleGraph {
 
             // filter out the vertices on closed list
             List<IGoapNode> reachableOnOpenList = new List<IGoapNode>();
-            foreach (IGoapNode v in reachableVertices)
+            foreach (IGoapNode node in reachableVertices)
             {
                 object[] value;
-                _nodeTable.TryGetValue(v, out value);
-                if (value == null || (bool) value[4] == false) reachableOnOpenList.Add(v);
+                _nodeTable.TryGetValue(node, out value);
+                if (value == null || (bool) value[4] == false) reachableOnOpenList.Add(node);
             }
 
             foreach (IGoapNode openVertex in reachableOnOpenList)

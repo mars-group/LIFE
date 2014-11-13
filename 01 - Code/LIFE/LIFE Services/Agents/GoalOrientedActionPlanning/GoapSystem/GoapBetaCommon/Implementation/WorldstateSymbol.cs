@@ -1,12 +1,10 @@
 ﻿using System;
 
 namespace GoapBetaCommon.Implementation {
-
     /// <summary>
-    /// struct offers call by value
+    ///     struct offers call by value
     /// </summary>
-    public struct WorldstateSymbol{
-        
+    public struct WorldstateSymbol {
         public readonly Enum EnumName;
         public readonly ValueType Value;
 
@@ -15,7 +13,7 @@ namespace GoapBetaCommon.Implementation {
         /// </summary>
         public readonly Type TypeOfValue;
 
-        public WorldstateSymbol(Enum enKey, ValueType value, Type typeOfValue){
+        public WorldstateSymbol(Enum enKey, ValueType value, Type typeOfValue) {
             EnumName = enKey;
             Value = value;
             TypeOfValue = typeOfValue;

@@ -2,24 +2,35 @@
 using GoapBetaCommon.Abstract;
 using GoapBetaCommon.Interfaces;
 
-namespace GoapBetaGraphConnector.SimpleGraph {
+namespace GoapBetaCommon.Implementation {
     public class Edge : IGoapEdge, IEquatable<Edge> {
-
         private readonly IGoapNode _source;
         private readonly IGoapNode _target;
         private readonly AbstractGoapAction _action;
 
-        public Edge(AbstractGoapAction action,  IGoapNode source, IGoapNode target){
+        public Edge(AbstractGoapAction action, IGoapNode source, IGoapNode target) {
             _action = action;
             _source = source;
             _target = target;
         }
 
-        public IGoapNode GetSource(){
+        #region IEquatable<Edge> Members
+
+        public bool Equals(Edge other) {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(_target, other._target) && Equals(_action, other._action) && Equals(_source, other._source);
+        }
+
+        #endregion
+
+        #region IGoapEdge Members
+
+        public IGoapNode GetSource() {
             return _source;
         }
 
-        public IGoapNode GetTarget(){
+        public IGoapNode GetTarget() {
             return _target;
         }
 
@@ -31,16 +42,12 @@ namespace GoapBetaGraphConnector.SimpleGraph {
             return _action.GetExecutionCosts();
         }
 
-        public bool Equals(Edge other) {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(_target, other._target) && Equals(_action, other._action) && Equals(_source, other._source);
-        }
+        #endregion
 
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Edge) obj);
         }
 

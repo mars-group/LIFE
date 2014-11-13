@@ -15,17 +15,17 @@ namespace GoapBetaActionSystem.Implementation {
         /// <param name="namespaceOfConfigClass"></param>
         /// <param name="blackboard"></param>
         /// <returns></returns>
-        public static AbstractGoapSystem LoadGoapConfiguration(string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard ) {
-          
-                Assembly assembly = Assembly.Load(namespaceOfConfigClass);
-                var configClass =
-                    (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
+        public static AbstractGoapSystem LoadGoapConfiguration
+            (string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard) {
+            Assembly assembly = Assembly.Load(namespaceOfConfigClass);
+            IGoapAgentConfig configClass =
+                (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
 
-                return new GoapManager
-                    (configClass.GetAllActions(), configClass.GetAllGoals(), blackboard,
-                        configClass.GetStartWorldstate());
-
-            
+            return new GoapManager
+                (configClass.GetAllActions(),
+                    configClass.GetAllGoals(),
+                    blackboard,
+                    configClass.GetStartWorldstate());
         }
     }
 }
