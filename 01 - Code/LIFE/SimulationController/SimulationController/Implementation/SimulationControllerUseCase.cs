@@ -93,6 +93,11 @@ namespace SimulationController.Implementation {
             _simulationManagerClient.StartSimulationWithModel(model, layerContainers, nrOfTicks);
         }
 
+        public void StartSimulationWithModel
+            (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null) {
+            _simulationManagerClient.StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
+        }
+
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
             if (!_isConnected) throw new NoSimulationManagerConnectedException();
             _simulationManagerClient.StepSimulation(model, layerContainers, nrOfTicks);

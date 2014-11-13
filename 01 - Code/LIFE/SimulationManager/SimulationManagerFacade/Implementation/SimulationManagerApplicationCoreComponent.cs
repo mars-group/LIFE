@@ -49,6 +49,10 @@ namespace SimulationManagerFacade.Implementation {
 			_runtimeEnvironment.StartWithModel(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks);
 		}
 
+        public void StartSimulationWithModel(TModelDescription model, bool startPaused, int? nrOfTicks = null) {
+            throw new NotImplementedException();
+        }
+
         public void StepSimulation(TModelDescription model, int? nrOfTicks = null)
         {
             _runtimeEnvironment.StepSimulation(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks);
@@ -58,6 +62,11 @@ namespace SimulationManagerFacade.Implementation {
 
         public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
             _runtimeEnvironment.StartWithModel(model, layerContainers, nrOfTicks);
+        }
+
+        public void StartSimulationWithModel
+            (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null) {
+            _runtimeEnvironment.StepSimulation(model, layerContainers, nrOfTicks);
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {

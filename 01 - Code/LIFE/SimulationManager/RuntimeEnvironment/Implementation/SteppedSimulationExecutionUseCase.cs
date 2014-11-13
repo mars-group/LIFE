@@ -32,10 +32,10 @@ namespace RuntimeEnvironment.Implementation {
         private int? _steppedTicks;
 
         public SteppedSimulationExecutionUseCase
-		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, bool stepped = false) {
+		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, bool startPaused = false) {
             _nrOfTicks = nrOfTicks;
             _layerContainerClients = layerContainerClients;
-			_status = stepped ? SimulationStatus.Stepped : SimulationStatus.Running;
+            _status = startPaused ? SimulationStatus.Paused : SimulationStatus.Running;
             _simulationExecutionSwitch = new ManualResetEvent(false);
 
             // start simulation

@@ -17,9 +17,9 @@ namespace RuntimeEnvironment.Implementation {
             _runtimeEnvironmentUseCase = new RuntimeEnvironmentUseCase(modelContainer, layerRegistry);
         }
 
-        public void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
-            int? nrOfTicks = null) {
-            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainerNodes, nrOfTicks);
+        public void StartWithModel
+            (TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
+            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainerNodes, nrOfTicks, startPaused);
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
