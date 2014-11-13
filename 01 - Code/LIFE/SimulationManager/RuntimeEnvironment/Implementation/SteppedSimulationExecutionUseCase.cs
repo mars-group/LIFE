@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using RuntimeEnvironment.Implementation.Entities;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 [assembly: InternalsVisibleTo("SimulationManagerTest")]
 
 namespace RuntimeEnvironment.Implementation {
-
 
     internal enum SimulationStatus {
         Running,
@@ -44,30 +44,39 @@ namespace RuntimeEnvironment.Implementation {
 
         private void RunSimulation() {
 
-			var now = DateTime.Now;
+            var sw = Stopwatch.StartNew();
             for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
 
                 // check for status change
                 switch (_status) {
                     case SimulationStatus.Paused:
                         // pause execution and wait to be signaled
+                        sw.Stop();
                         _simulationExecutionSwitch.WaitOne();
+                        sw.Start();
                         break;
 
 					case SimulationStatus.Stepped:
-                        if (_steppedTicks.HasValue) {
-                            while (_steppedTicks-- > 0) {
+                        if (_steppedTicks.HasValue){
+                            while ((_steppedTicks+i < _nrOfTicks) && _steppedTicks > 0) {
                                 DoStep();
+                                _steppedTicks--;
+                                i++;
                             }
                             _steppedTicks = null;
                         }
                         else {
                             DoStep();
                         }
+
                         // set switch to non-signaled in case it was signaled before
                         _simulationExecutionSwitch.Reset();
+
 						// pause execution and wait to be signaled
+                        sw.Stop();
 						_simulationExecutionSwitch.WaitOne();
+                        sw.Start();
+
 						continue;
 
                     case SimulationStatus.Aborted:
@@ -78,8 +87,8 @@ namespace RuntimeEnvironment.Implementation {
 				DoStep();
 
             }
-			var then = DateTime.Now;
-			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + (then-now).TotalSeconds);
+			sw.Stop();
+			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds * 1000);
         }
 
 		private void DoStep(){
@@ -124,6 +133,7 @@ namespace RuntimeEnvironment.Implementation {
 
         internal void ResumeSimulation() {
             _status = SimulationStatus.Running;
+
             // signal ManualResetEvent
             _simulationExecutionSwitch.Set();
         }

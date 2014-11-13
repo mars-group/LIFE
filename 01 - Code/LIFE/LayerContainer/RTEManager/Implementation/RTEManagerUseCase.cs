@@ -36,7 +36,6 @@ namespace RTEManager.Implementation {
 
         public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter) {
             _visualizationAdapter = visualizationAdapter;
-
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
             _preAndPostTickLayer = new List<ISteppedActiveLayer>();
             _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
@@ -101,7 +100,7 @@ namespace RTEManager.Implementation {
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
-            _layers[instanceId].InitLayer<TInitData>(initData, RegisterTickClient, UnregisterTickClient);
+            _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
         }
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
