@@ -65,8 +65,9 @@ namespace LayerContainerFacade.Implementation
 
         public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
-        public void StartVisualization() {
-            _visualizationAdapter.StartVisualization();
+        public void StartVisualization(int? nrOfTicksToVisualize = null)
+        {
+            _visualizationAdapter.StartVisualization(nrOfTicksToVisualize);
         }
 
         public void StopVisualization() {

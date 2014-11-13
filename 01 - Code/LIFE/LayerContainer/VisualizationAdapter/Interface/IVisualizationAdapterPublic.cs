@@ -10,8 +10,8 @@ namespace VisualizationAdapter.Interface
 
     public interface IVisualizationAdapterPublic {
         event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
-        
-        void StartVisualization();
+
+        void StartVisualization(int? nrOfTicksToVisualize = null);
 
         void StopVisualization();
         

@@ -61,6 +61,14 @@ namespace SimulationController.Implementation {
             _simManager.AbortSimulation(model);
         }
 
+        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
+            _simManager.StartVisualization(model, nrOfTicksToVisualize);
+        }
+
+        public void StopVisualization(TModelDescription model) {
+            _simManager.StopVisualization(model);
+        }
+
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
             _simManager.SubscribeForStatusUpdate(statusUpdateAvailable);
         }

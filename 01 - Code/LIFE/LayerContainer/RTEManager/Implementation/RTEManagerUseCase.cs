@@ -24,9 +24,15 @@ namespace RTEManager.Implementation {
         // all the layers mapped by their instanceID
         private readonly IDictionary<TLayerInstanceId, ILayer> _layers;
 
+        // all layers which are enlisted for Pre- and PostTick calls
+        private readonly List<ISteppedActiveLayer> _preAndPostTickLayer;
+
         // indicator whether this Layercontainer ist currently executing a Tick
         private bool _isRunning;
-        private readonly List<ISteppedActiveLayer> _preAndPostTickLayer;
+
+        // current Tick
+        private int _currentTick;
+
 
         public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter) {
             _visualizationAdapter = visualizationAdapter;
@@ -37,6 +43,7 @@ namespace RTEManager.Implementation {
             _tickClientsMarkedForRegistrationPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
+            _currentTick = 0;
         }
 
         #region Public Methods
@@ -103,6 +110,7 @@ namespace RTEManager.Implementation {
 
         public long AdvanceOneTick() {
             _isRunning = true;
+            _currentTick++;
             var stopWatch = Stopwatch.StartNew();
 
             // PreTick all ActiveLayers
@@ -117,7 +125,7 @@ namespace RTEManager.Implementation {
                 );
 
             // visualize all visualizable layers
-            _visualizationAdapter.VisualizeTick();
+            _visualizationAdapter.VisualizeTick(_currentTick);
 
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());

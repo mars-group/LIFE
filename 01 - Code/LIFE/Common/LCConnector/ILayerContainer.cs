@@ -42,7 +42,7 @@ namespace LCConnector {
         /// <summary>
         /// Starts visualization of the simulation
         /// </summary>
-        void StartVisualization();
+        void StartVisualization(int? nrOfTicksToVisualize);
 
         /// <summary>
         /// Stops visualization of the simulation

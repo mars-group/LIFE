@@ -113,6 +113,14 @@ namespace SimulationController.Implementation {
             _simulationManagerClient.AbortSimulation(model);
         }
 
+        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
+            _simulationManagerClient.StartVisualization(model, nrOfTicksToVisualize);
+        }
+
+        public void StopVisualization(TModelDescription model) {
+            _simulationManagerClient.StopVisualization(model);
+        }
+
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
             if (!_isConnected) throw new NoSimulationManagerConnectedException();
             _simulationManagerClient.SubscribeForStatusUpdate(statusUpdateAvailable);

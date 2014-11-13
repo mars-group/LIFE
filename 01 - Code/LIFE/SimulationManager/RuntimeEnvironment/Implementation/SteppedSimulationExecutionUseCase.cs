@@ -43,8 +43,6 @@ namespace RuntimeEnvironment.Implementation {
         }
 
         private void RunSimulation() {
-            // start Visualization on all layerContainers
-            Parallel.ForEach(_layerContainerClients, l => l.Proxy.StartVisualization());
 
 			var now = DateTime.Now;
             for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
@@ -131,6 +129,15 @@ namespace RuntimeEnvironment.Implementation {
 
         public void Abort() {
             _status = SimulationStatus.Aborted;
+        }
+
+        public void StartVisualization(int? nrOfTicksToVisualize) {
+            Parallel.ForEach(_layerContainerClients, l => l.Proxy.StartVisualization(nrOfTicksToVisualize));
+        }
+
+        public void StopVisualization()
+        {
+            Parallel.ForEach(_layerContainerClients, l => l.Proxy.StopVisualization());
         }
     }
 }

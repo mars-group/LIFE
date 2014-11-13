@@ -115,6 +115,14 @@ namespace RuntimeEnvironment.Implementation {
             _steppedSimulations[model].Abort();
         }
 
+        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
+            _steppedSimulations[model].StartVisualization(nrOfTicksToVisualize);
+        }
+
+        public void StopVisualization(TModelDescription model) {
+            _steppedSimulations[model].StopVisualization();
+        }
+
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {}
 
         #endregion

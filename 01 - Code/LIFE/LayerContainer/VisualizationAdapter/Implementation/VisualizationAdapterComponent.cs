@@ -22,8 +22,8 @@ namespace VisualizationAdapter.Implementation
             VisualizationUpdated(sender, e);
         }
 
-        public void StartVisualization() {
-            _visualizationAdapterInternalUseCase.StartVisualization();
+        public void StartVisualization(int? nrOfTicksToVisualize = null) {
+            _visualizationAdapterInternalUseCase.StartVisualization(nrOfTicksToVisualize);
         }
 
         public void StopVisualization() {
@@ -38,8 +38,8 @@ namespace VisualizationAdapter.Implementation
             _visualizationAdapterInternalUseCase.RegisterVisualizable(visualizable);
         }
 
-        public void VisualizeTick() {
-            _visualizationAdapterInternalUseCase.VisualizeTick();
+        public void VisualizeTick(int currentTick) {
+            _visualizationAdapterInternalUseCase.VisualizeTick(currentTick);
         }
     }
 }
