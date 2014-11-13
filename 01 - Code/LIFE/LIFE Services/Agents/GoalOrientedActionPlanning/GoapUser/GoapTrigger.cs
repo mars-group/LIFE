@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using GoapActionSystem.Implementation;
-using GoapCommon.Abstract;
-using GoapCommon.Interfaces;
+using GoapBetaActionSystem.Implementation;
+using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Interfaces;
 using TypeSafeBlackboard;
 
 namespace GoapUser {
