@@ -63,6 +63,7 @@ namespace SimulationController.Interface {
                         simController.StartSimulationWithModel(
                             GetTModelDescription(modelDescr),
                             containers,
+                            false,
                             ticks
                             );
 

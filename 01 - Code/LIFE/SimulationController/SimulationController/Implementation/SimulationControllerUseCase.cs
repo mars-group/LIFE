@@ -87,14 +87,10 @@ namespace SimulationController.Implementation {
             return _simulationManagerClient.GetAllModels();
         }
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers,
-            int? nrOfTicks = null) {
-            if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClient.StartSimulationWithModel(model, layerContainers, nrOfTicks);
-        }
+
 
         public void StartSimulationWithModel
-            (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null) {
+            (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused = false, int? nrOfTicks = null) {
             _simulationManagerClient.StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
         }
 

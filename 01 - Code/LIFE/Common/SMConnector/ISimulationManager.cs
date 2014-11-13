@@ -22,21 +22,13 @@ namespace SMConnector {
 
         /// <summary>
         /// Starts a simulation with the model derived from the provided TModelDescription.
-        /// </summary>
-        /// <param name="model">not null</param>
-        /// <param name="layerContainers">The layer containers with which </param>
-        /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
-
-        /// <summary>
-        /// Starts a simulation with the model derived from the provided TModelDescription.
         /// Will just initialize and then pause the execution if <param name="startPaused"/> is true.
         /// </summary>
         /// <param name="model"></param>
         /// <param name="layerContainers"></param>
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null);
+        void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused = false, int? nrOfTicks = null);
 
 		/// <summary>
 		/// Steps the simulation by one tick or by nrOfTicks if provided.
