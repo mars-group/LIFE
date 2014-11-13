@@ -22,6 +22,7 @@ namespace PedestrianModel.Visualization
         public SimpleVisualization(IEnvironment env)
         {
             InitializeComponent();
+            DoubleBuffered = true;
             this.Width = Config.VisualizationWidth;
             this.Height = Config.VisualizationHeight;
             this.BackColor = Color.Black;
@@ -33,26 +34,20 @@ namespace PedestrianModel.Visualization
         {
             Graphics g = pe.Graphics;
 
-            var rects = new List<Rectangle>();
-
             foreach(SpatialAgent agent in env.GetAllAgents()) {
                 var zoom = Config.VisualizationZoom;
                 var center = agent.GetPosition() * zoom + new Vector(Config.VisualizationOffsetX, Config.VisualizationOffsetY, 0);
                 var dimension = agent.GetDimension() * zoom;                
                 var rect = new Rectangle((int)Math.Round(center.X - (dimension.X / 2f)), (int)Math.Round(center.Y - (dimension.Y / 2f)), (int)Math.Round(dimension.X), (int)Math.Round(dimension.Y));
-                Brush brush;
                 if (agent is Pedestrian) {
-                    brush = new SolidBrush(Color.White);
+                    g.FillRectangle(new SolidBrush(Color.SteelBlue), rect);
+                    g.DrawRectangle(new Pen(Color.White), rect);
                 }
                 else
                 {
-                    brush = new SolidBrush(Color.Blue);
-                }                    
-                    
-                g.FillRectangle(brush, rect);
-                rects.Add(rect);
-            }
-            
+                    g.FillRectangle(new SolidBrush(Color.Blue), rect);
+                }                
+            }            
         }
 
         private void Form1_Load(object sender, EventArgs e)
