@@ -39,7 +39,7 @@ namespace SMConnector {
         void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null);
 
 		/// <summary>
-		/// Steps the simulation by one tick. If the simulation was not already started, it will start it.
+		/// Steps the simulation by one tick or by nrOfTicks if provided.
 		/// </summary>
 		/// <param name="model">Model.</param>
 		/// <param name="layerContainers">Layer containers.</param>
