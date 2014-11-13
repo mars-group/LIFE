@@ -113,6 +113,9 @@ namespace RTEManager.Implementation {
             _currentTick++;
             var stopWatch = Stopwatch.StartNew();
 
+            // visualize all visualizable layers
+            _visualizationAdapter.VisualizeTick(_currentTick);
+
             // PreTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
 
@@ -123,9 +126,6 @@ namespace RTEManager.Implementation {
                     client => client.Key.Tick()
                     )
                 );
-
-            // visualize all visualizable layers
-            _visualizationAdapter.VisualizeTick(_currentTick);
 
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
