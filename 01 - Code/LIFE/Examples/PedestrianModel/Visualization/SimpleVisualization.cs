@@ -17,16 +17,13 @@ namespace PedestrianModel.Visualization
 {
     public partial class SimpleVisualization : Form
     {
-        private IEnvironment env;
-        private int zoom = 40;
-        private int offsetX = 6;
-        private int offsetY = 3;
+        private IEnvironment env;        
 
         public SimpleVisualization(IEnvironment env)
         {
             InitializeComponent();
-            this.Width = 1280;
-            this.Height = 720;
+            this.Width = Config.VisualizationWidth;
+            this.Height = Config.VisualizationHeight;
             this.BackColor = Color.Black;
 
             this.env = env;
@@ -39,9 +36,10 @@ namespace PedestrianModel.Visualization
             var rects = new List<Rectangle>();
 
             foreach(SpatialAgent agent in env.GetAllAgents()) {
-                var center = agent.GetPosition() + new Vector(offsetX, offsetY, 0);
-                var dimension = agent.GetDimension();
-                var rect = new Rectangle((int)Math.Round((center.X - (dimension.X / 2f)) * zoom), (int)Math.Round((center.Y - (dimension.Y / 2f)) * zoom), (int)Math.Round(dimension.X * zoom), (int)Math.Round(dimension.Y * zoom));
+                var zoom = Config.VisualizationZoom;
+                var center = agent.GetPosition() * zoom + new Vector(Config.VisualizationOffsetX, Config.VisualizationOffsetY, 0);
+                var dimension = agent.GetDimension() * zoom;                
+                var rect = new Rectangle((int)Math.Round(center.X - (dimension.X / 2f)), (int)Math.Round(center.Y - (dimension.Y / 2f)), (int)Math.Round(dimension.X), (int)Math.Round(dimension.Y));
                 Brush brush;
                 if (agent is Pedestrian) {
                     brush = new SolidBrush(Color.White);

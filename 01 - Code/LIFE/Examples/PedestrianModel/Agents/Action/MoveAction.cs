@@ -85,7 +85,7 @@ namespace PedestrianModel.Agents.Action
                 //agent.Environment.executeAction(action);
                 #warning This function has to return a DalskiAgent.Movement.Actions.DirectMovementAction or similar
 
-                Vector nextPosition = agent.GetPosition() + ((Config.lengthOfTimestepsInMilliseconds / 1000f) * direction);
+                Vector nextPosition = agent.GetPosition() + ((Config.LengthOfTimestepsInMilliseconds / 1000f) * direction);
                 return new DirectMovementAction(mover, nextPosition);
             }
 			else

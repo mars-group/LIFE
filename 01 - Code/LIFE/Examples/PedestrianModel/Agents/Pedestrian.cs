@@ -136,13 +136,16 @@ namespace PedestrianModel.Agents
             // - simulation visualization
             IInteraction movementAction = Act();
 
-            Console.SetBufferSize(160, 9999);
-            Console.SetWindowSize(160, 50);
-            if (debugLastPosition == null) debugLastPosition = startPosition;
-            string waypoint = " COMPLETED MOVEMENT";
-            if (actions.Count > 0) waypoint = (actions[0].TargetPosition * 1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
-            Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Position: " + this.GetPosition() * 1f + ", Target: " + this.TargetPositions[0] * 1f + ", Waypoint: " + waypoint + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]).ToString("00.0000000") + ", Velocity: " + (this.GetPosition().GetDistance(debugLastPosition) * (1000f / Config.lengthOfTimestepsInMilliseconds)).ToString("00.0000000"));
-            debugLastPosition = this.GetPosition();
+            if (Config.DebugEnabled)
+            {
+                Console.SetBufferSize(160, 9999);
+                Console.SetWindowSize(160, 50);
+                if (debugLastPosition == null) debugLastPosition = startPosition;
+                string waypoint = " COMPLETED MOVEMENT";
+                if (actions.Count > 0) waypoint = (actions[0].TargetPosition * 1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
+                Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Position: " + this.GetPosition() * 1f + ", Target: " + this.TargetPositions[0] * 1f + ", Waypoint: " + waypoint + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]).ToString("00.0000000") + ", Velocity: " + (this.GetPosition().GetDistance(debugLastPosition) * (1000f / Config.LengthOfTimestepsInMilliseconds)).ToString("00.0000000"));
+                debugLastPosition = this.GetPosition();
+            }            
 
             return movementAction;
         }
@@ -193,7 +196,7 @@ namespace PedestrianModel.Agents
 			//pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
             var rawObstaclesData = PerceptionUnit.GetData((int)InformationTypes.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>)rawObstaclesData;
-            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0, Math.Max(Config.targetReachedDistance * 2.0f, 0.28f));
+            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance * 2.0f, 0.28f));
 			pathfinder = new AStarPathfinder<Vector>(pathfindingSearchGraph);
 
 			CreateAndExecuteMovePlan(targetPositions);
@@ -243,7 +246,7 @@ namespace PedestrianModel.Agents
 			else
 			{
                 // code only executed if looped or more than 1 target!
-				if (Config.targetListType == TargetListType.SequentialLoop || (Config.targetListType == TargetListType.Sequential && this.targetPositionIndex + 1 < this.targetPositions.Count))
+				if (Config.TargetListType == TargetListType.SequentialLoop || (Config.TargetListType == TargetListType.Sequential && this.targetPositionIndex + 1 < this.targetPositions.Count))
 				{
 					// walk to the next position in the list
 					this.targetPositionIndex = (this.targetPositionIndex + 1) % this.targetPositions.Count;
@@ -253,7 +256,7 @@ namespace PedestrianModel.Agents
                     directMovementAction = actions[0].PerformAction(this, Mover);
 				}
                 // code only executed if looped
-				else if (Config.walkLoops)
+				else if (Config.WalkLoops)
 				{
 					// last target reached, get back to start...
 					// kind of a hack, should be replaced some time and be done in the environment...
@@ -288,7 +291,7 @@ namespace PedestrianModel.Agents
 		{
 			IList<Vector> shortestPath = null;
 
-			if (Config.targetListType == TargetListType.Parallel)
+			if (Config.TargetListType == TargetListType.Parallel)
 			{
 				double shortestPathLength = double.MaxValue;
 				foreach (Vector target in targetPositions)
@@ -330,7 +333,7 @@ namespace PedestrianModel.Agents
 			{
 				foreach (Vector waypoint in shortestPath)
 				{
-					this.actions.Add(new MoveAction(waypoint, Config.targetReachedDistance));
+					this.actions.Add(new MoveAction(waypoint, Config.TargetReachedDistance));
 				}
 			}
 		}

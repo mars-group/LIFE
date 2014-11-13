@@ -48,8 +48,7 @@ namespace PedestrianModel
             _env = new Environment2D(new Vector(1000, 1000));
             _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
 
-            int pedestrianCount = 5;
-            ScenarioBuilder.CreateTestScenario(_exec, _env, pedestrianCount);
+            ScenarioBuilder.CreateScenario(_exec, _env, Config.Scenario);
 
             // Register the layer itself for execution. The agents are registered by themselves.
             registerAgentHandle.Invoke(this, this);
