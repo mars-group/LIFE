@@ -50,7 +50,7 @@ namespace SimulationManagerFacade.Implementation {
 		}
 
         public void StartSimulationWithModel(TModelDescription model, bool startPaused, int? nrOfTicks = null) {
-            throw new NotImplementedException();
+            _runtimeEnvironment.StartWithModel(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, startPaused);
         }
 
         public void StepSimulation(TModelDescription model, int? nrOfTicks = null)
@@ -60,13 +60,10 @@ namespace SimulationManagerFacade.Implementation {
 
         #region RuntimeEnvironment delegation
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
-            _runtimeEnvironment.StartWithModel(model, layerContainers, nrOfTicks);
-        }
 
         public void StartSimulationWithModel
             (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null) {
-            _runtimeEnvironment.StepSimulation(model, layerContainers, nrOfTicks);
+                _runtimeEnvironment.StartWithModel(model, layerContainers, nrOfTicks, startPaused);
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
