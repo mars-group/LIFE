@@ -51,7 +51,7 @@ namespace ExampleLayer {
                 Description = "AgentSmith",
                 State = a.Dead ? "Dead" : "Alive",
                 X =  a.MyPosition.X,
-                Z = a.MyPosition.Y
+                Y = a.MyPosition.Y
             }));
             return result.ToList();
         }

@@ -29,6 +29,7 @@ namespace RuntimeEnvironment.Implementation {
         private SimulationStatus _status;
 
         private readonly ManualResetEvent _simulationExecutionSwitch;
+        private int? _steppedTicks;
 
         public SteppedSimulationExecutionUseCase
 		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, bool stepped = false) {
@@ -56,7 +57,16 @@ namespace RuntimeEnvironment.Implementation {
                         break;
 
 					case SimulationStatus.Stepped:
-						DoStep ();
+                        if (_steppedTicks.HasValue) {
+                            while (_steppedTicks-- > 0) {
+                                DoStep();
+                            }
+                            _steppedTicks = null;
+                        }
+                        else {
+                            DoStep();
+                        }
+
 						// pause execution and wait to be signaled
 						_simulationExecutionSwitch.WaitOne();
 						continue;
@@ -100,10 +110,11 @@ namespace RuntimeEnvironment.Implementation {
 			//Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
 		}
 
-		public void StepSimulation() {
+		public void StepSimulation(int? nrOfTicks = null) {
 			_status = SimulationStatus.Stepped;
+		    _steppedTicks = nrOfTicks;
 			// signal ManualResetEvent
-			this._simulationExecutionSwitch.Set();
+			_simulationExecutionSwitch.Set();
 		}
 
         public void PauseSimulation() {
@@ -115,7 +126,7 @@ namespace RuntimeEnvironment.Implementation {
         internal void ResumeSimulation() {
             _status = SimulationStatus.Running;
             // signal ManualResetEvent
-            this._simulationExecutionSwitch.Set();
+            _simulationExecutionSwitch.Set();
         }
 
         public void Abort() {

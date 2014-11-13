@@ -91,7 +91,7 @@ namespace RuntimeEnvironment.Implementation {
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
 			if (_steppedSimulations.ContainsKey (model)) {
-				_steppedSimulations [model].StepSimulation ();
+				_steppedSimulations[model].StepSimulation(nrOfTicks);
 			} else {
 				StartWithModelStepped(model, layerContainerNodes, nrOfTicks);
 			}

@@ -72,7 +72,12 @@ namespace TwoDimEnvironment
 		{
 			return _quadTree.Query(_quadTree.Root.Bounds);
 		}
-		#endregion
+
+	    public Rect GetBounds() {
+	        return _quadTree.Root.Bounds;
+	    }
+
+	    #endregion
 	}
 }
 

@@ -50,6 +50,12 @@ namespace TwoDimEnvironment
 		/// </summary>
 		/// <returns>A list with all object or an empty list if there are none.</returns>
 		List<T> GetAll();
+
+        /// <summary>
+        /// Returns the boundaries of the environment
+        /// </summary>
+        /// <returns>A Rect</returns>
+	    Rect GetBounds();
 	}
 }
 
