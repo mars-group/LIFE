@@ -111,6 +111,12 @@ namespace GoapGraphConnector.SimpleGraph {
             return new Node(goalValues.ToList(), currValues.ToList(), heuristic);
         }
 
+        /// <summary>
+        /// check if the action changes the worldstate to the "opposite" of wanted value
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         private bool HasConverseEffect(IGoapNode parent, AbstractGoapAction action) {
             foreach (var goalValue in parent.GetUnsatisfiedGoalValues()) {
                 if (action.Effects.Any(effect => effect.GetPropertyKey().Equals(goalValue.GetPropertyKey())

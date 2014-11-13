@@ -8,20 +8,11 @@ namespace GoapCommon.Interfaces {
 
         bool CanBeSatisfiedByStartState(List<IGoapWorldProperty> startState);
 
-        List<IGoapWorldProperty> GetSatisfiedGoalValues();
-        
-        List<IGoapWorldProperty> GetCurrValues();
-        
-        List<IGoapWorldProperty> GetGoalValues();
-        
         int GetHeuristic();
 
         bool HasUnsatisfiedProperties();
 
         
-
-
-
     }
 
 }
