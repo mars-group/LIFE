@@ -64,7 +64,8 @@ namespace RuntimeEnvironment.Implementation {
                         else {
                             DoStep();
                         }
-
+                        // set switch to non-signaled in case it was signaled before
+                        _simulationExecutionSwitch.Reset();
 						// pause execution and wait to be signaled
 						_simulationExecutionSwitch.WaitOne();
 						continue;
