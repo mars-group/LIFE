@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using GenericAgentArchitectureCommon.Interfaces;
+using GoapBetaCommon.Implementation;
 
 namespace GoapBetaCommon.Interfaces {
+
     /// <summary>
     ///     An action represents a step towards a goal of one agent. It's a reusable unit.
     ///     Every agent gets his own set of available IActions.
@@ -12,14 +14,14 @@ namespace GoapBetaCommon.Interfaces {
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        List<IGoapWorldProperty> GetResultingWorldstate(List<IGoapWorldProperty> sourceWorldState);
+        List<WorldstateSymbol> GetResultingWorldstate(List<WorldstateSymbol> sourceWorldState);
 
         /// <summary>
         ///     check if the preconditions are subset of source world state
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        bool IsExecutable(List<IGoapWorldProperty> sourceWorldState);
+        bool IsExecutable(List<WorldstateSymbol> sourceWorldState);
 
         /// <summary>
         ///     check the context preconditions on
@@ -45,4 +47,5 @@ namespace GoapBetaCommon.Interfaces {
         /// <returns></returns>
         int GetPriority();
     }
+
 }

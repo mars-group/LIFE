@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Implementation;
 
 namespace GoapBetaCommon.Interfaces {
+
     /// <summary>
     ///     determines the configuration of an agent
     ///     by convertion name of implementing classes must be "AgentConfig" + unique number per assembly
@@ -11,7 +13,7 @@ namespace GoapBetaCommon.Interfaces {
         ///     start assignment of world
         /// </summary>
         /// <returns></returns>
-        List<IGoapWorldProperty> GetStartWorldstate();
+        List<WorldstateSymbol> GetStartWorldstate();
 
         /// <summary>
         ///     all action that the agent can use
@@ -25,4 +27,5 @@ namespace GoapBetaCommon.Interfaces {
         /// <returns></returns>
         List<IGoapGoal> GetAllGoals();
     }
+
 }

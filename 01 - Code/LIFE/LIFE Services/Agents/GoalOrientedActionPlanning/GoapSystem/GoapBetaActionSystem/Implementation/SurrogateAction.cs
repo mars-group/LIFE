@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Interfaces;
+using GoapBetaCommon.Implementation;
 
 namespace GoapBetaActionSystem.Implementation {
+
     /// <summary>
-    /// null action class
+    ///     null action class
     /// </summary>
     internal class SurrogateAction : AbstractGoapAction {
         public SurrogateAction()
-            : base(new List<IGoapWorldProperty>(), new List<IGoapWorldProperty>()) {}
+            : base(new List<WorldstateSymbol>(), new List<WorldstateSymbol>()) {}
 
         public override bool ValidateContextPreconditions() {
             return true;
@@ -18,8 +19,7 @@ namespace GoapBetaActionSystem.Implementation {
             return true;
         }
 
-        public override void Execute() {
-        }
+        public override void Execute() {}
 
         public override int GetExecutionCosts() {
             return 0;
@@ -29,4 +29,5 @@ namespace GoapBetaActionSystem.Implementation {
             return 0;
         }
     }
+
 }

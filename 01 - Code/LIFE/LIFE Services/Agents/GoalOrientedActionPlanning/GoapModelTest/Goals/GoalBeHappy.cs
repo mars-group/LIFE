@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoapCommon.Interfaces;
+using GoapBetaCommon.Interfaces;
 using GoapModelTest.Worldstates;
 
 namespace GoapModelTest.Goals {

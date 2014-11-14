@@ -1,6 +1,7 @@
 ﻿using GoapBetaCommon.Abstract;
 
 namespace GoapBetaCommon.Interfaces {
+
     public interface IGoapEdge {
         IGoapNode GetSource();
 
@@ -10,4 +11,5 @@ namespace GoapBetaCommon.Interfaces {
 
         int GetCost();
     }
+
 }

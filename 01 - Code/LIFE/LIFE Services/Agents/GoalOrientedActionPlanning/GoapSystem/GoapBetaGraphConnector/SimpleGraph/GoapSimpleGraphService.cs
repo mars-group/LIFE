@@ -2,6 +2,7 @@
 using GoapBetaCommon.Interfaces;
 
 namespace GoapBetaGraphConnector.SimpleGraph {
+
     public class GoapSimpleGraphService : IGoapGraphService {
         private IGoapNode _root;
         private Map _map;
@@ -54,4 +55,5 @@ namespace GoapBetaGraphConnector.SimpleGraph {
 
         #endregion
     }
+
 }

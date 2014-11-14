@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
+using GoapBetaCommon.Implementation;
 
 namespace GoapBetaCommon.Interfaces {
-    public interface IGoapNode {
-        List<IGoapWorldProperty> GetUnsatisfiedGoalValues();
 
-        bool CanBeSatisfiedByStartState(List<IGoapWorldProperty> startState);
+    public interface IGoapNode {
+        List<WorldstateSymbol> GetUnsatisfiedGoalValues();
+
+        bool CanBeSatisfiedByStartState(List<WorldstateSymbol> startState);
 
         int GetHeuristic();
 
         bool HasUnsatisfiedProperties();
     }
+
 }

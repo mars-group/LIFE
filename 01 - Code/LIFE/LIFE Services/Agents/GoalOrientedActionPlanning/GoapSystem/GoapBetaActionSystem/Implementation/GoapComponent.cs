@@ -4,6 +4,7 @@ using GoapBetaCommon.Interfaces;
 using TypeSafeBlackboard;
 
 namespace GoapBetaActionSystem.Implementation {
+
     /// <summary>
     ///     main access to create an instance of the goap component
     /// </summary>
@@ -28,4 +29,5 @@ namespace GoapBetaActionSystem.Implementation {
                     configClass.GetStartWorldstate());
         }
     }
+
 }

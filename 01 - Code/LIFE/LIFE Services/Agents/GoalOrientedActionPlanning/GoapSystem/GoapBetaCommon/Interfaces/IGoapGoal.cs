@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using GoapBetaCommon.Implementation;
 
 namespace GoapBetaCommon.Interfaces {
+
     public interface IGoapGoal {
-        bool IsSatisfied(List<IGoapWorldProperty> worldstate);
+        bool IsSatisfied(List<WorldstateSymbol> worldstate);
 
         int GetRelevancy();
 
-        int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate);
+        int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate);
 
         ISet<Type> GetAffectingWorldstateTypes();
 
-        List<IGoapWorldProperty> GetTargetWorldstates();
+        List<WorldstateSymbol> GetTargetWorldstates();
     }
+
 }

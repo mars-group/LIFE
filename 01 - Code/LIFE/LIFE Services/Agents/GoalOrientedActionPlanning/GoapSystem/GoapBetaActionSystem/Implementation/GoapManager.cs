@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Implementation;
 using GoapBetaCommon.Interfaces;
 using TypeSafeBlackboard;
 
 namespace GoapBetaActionSystem.Implementation {
+
     public class GoapManager : AbstractGoapSystem {
         private readonly List<AbstractGoapAction> _availableActions;
         private readonly List<IGoapGoal> _availableGoals;
@@ -15,7 +17,7 @@ namespace GoapBetaActionSystem.Implementation {
         /// <summary>
         ///     goap element: faster search for action satisfying needed worldstates
         /// </summary>
-        private Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> _effectToAction;
+        private Dictionary<WorldstateSymbol, List<AbstractGoapAction>> _effectToAction;
 
         private List<AbstractGoapAction> _currentPlan = new List<AbstractGoapAction>();
         private IGoapGoal _currentGoal;
@@ -31,9 +33,10 @@ namespace GoapBetaActionSystem.Implementation {
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
-            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals))
+            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals)) {
                 throw new ArgumentException("GoapManager: Goap manager cannot start with empty goal or action list");
-            CreateWorldstatesByNeeds();
+            }
+            //CreateWorldstatesByNeeds();
             CreateEffectActionHashTable();
             ChooseNewGoal();
         }
@@ -49,9 +52,10 @@ namespace GoapBetaActionSystem.Implementation {
             (List<AbstractGoapAction> availableActions,
                 List<IGoapGoal> availableGoals,
                 Blackboard blackboard,
-                List<IGoapWorldProperty> startStates) {
-            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals))
+                List<WorldstateSymbol> startStates) {
+            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals)) {
                 throw new ArgumentException("GoapManager: Goap manager cannot start with empty goal or action list");
+            }
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
@@ -95,20 +99,34 @@ namespace GoapBetaActionSystem.Implementation {
         }
 
         private bool GoalIsReached() {
-            if (HasGoal()) return _currentGoal.IsSatisfied(_internalBlackboard.Get(Worldstate));
+            if (HasGoal()) {
+                return _currentGoal.IsSatisfied(_internalBlackboard.Get(Worldstate));
+            }
             return false;
         }
 
+        /// <summary>
+        ///     create a key value structure for the search for satisfying actions
+        /// </summary>
         private void CreateEffectActionHashTable() {
-            _effectToAction = new Dictionary<IGoapWorldProperty, List<AbstractGoapAction>>();
+            _effectToAction = new Dictionary<WorldstateSymbol, List<AbstractGoapAction>>();
             foreach (AbstractGoapAction action in _availableActions) {
-                foreach (IGoapWorldProperty effect in action.Effects) {
-                    if (_effectToAction.ContainsKey(effect)) _effectToAction[effect].Add(action);
-                    else _effectToAction[effect] = new List<AbstractGoapAction> {action};
+                foreach (WorldstateSymbol effect in action.Effects) {
+                    if (_effectToAction.ContainsKey(effect)) {
+                        _effectToAction[effect].Add(action);
+                    }
+                    else {
+                        _effectToAction[effect] = new List<AbstractGoapAction> {action};
+                    }
                 }
             }
         }
 
+        /// <summary>
+        ///     search the available goals ordered by decreasing relevancy
+        ///     select the first goal not actually satisfied
+        /// </summary>
+        /// <returns></returns>
         private IGoapGoal ChooseNewGoal() {
             UpdateRelevancyOfGoals();
 
@@ -117,27 +135,30 @@ namespace GoapBetaActionSystem.Implementation {
             IGoapGoal highestRelevancyGoal = null;
 
             foreach (IGoapGoal goapGoal in goalSortedByRelevancy) {
-                if (highestRelevancyGoal == null && !goapGoal.IsSatisfied(_internalBlackboard.Get(Worldstate)))
+                if (highestRelevancyGoal == null && !goapGoal.IsSatisfied(_internalBlackboard.Get(Worldstate))) {
                     highestRelevancyGoal = goapGoal;
+                }
             }
 
-            if (_currentGoal != null && !_currentGoal.Equals(highestRelevancyGoal))
+            if (_currentGoal != null && highestRelevancyGoal != null && !_currentGoal.Equals(highestRelevancyGoal)) {
                 Console.WriteLine("Goal has changed. New is " + highestRelevancyGoal.GetType());
-            ;
+            }
+
 
             return _currentGoal = highestRelevancyGoal;
         }
 
+        /*
         private void CreateWorldstatesByNeeds() {
             IEnumerable<Type> allTypes = GetNeededWorldstates();
-            List<IGoapWorldProperty> currentWorldstates = new List<IGoapWorldProperty>();
+            List<WorldstateSymbol> currentWorldstates = new List<WorldstateSymbol>();
             foreach (Type type in allTypes) {
                 object[] args = {false};
-                IGoapWorldProperty instance = (IGoapWorldProperty) Activator.CreateInstance(type, args);
+                WorldstateSymbol instance = (WorldstateSymbol)Activator.CreateInstance(type, args);
                 currentWorldstates.Add(instance);
             }
             _internalBlackboard.Set(Worldstate, currentWorldstates);
-        }
+        }*/
 
         /// <summary>
         ///     get the needed types of all worldstates by the used goals and actions - testing method
@@ -166,13 +187,6 @@ namespace GoapBetaActionSystem.Implementation {
             return (_currentPlan.Count > 0);
         }
 
-        private bool IsGoalValid() {
-            UpdateRelevancyOfGoals();
-            if (HasGoal())
-                if (_availableGoals.All(goal => goal.GetRelevancy() <= _currentGoal.GetRelevancy())) return true;
-            return false;
-        }
-
         private bool HasGoal() {
             return (_currentGoal != null);
         }
@@ -181,4 +195,5 @@ namespace GoapBetaActionSystem.Implementation {
             _availableGoals.ForEach(x => x.UpdateRelevancy(_internalBlackboard.Get(Worldstate)));
         }
     }
+
 }

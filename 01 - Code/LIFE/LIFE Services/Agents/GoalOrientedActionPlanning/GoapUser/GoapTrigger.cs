@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using GoapBetaActionSystem.Implementation;
 using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Implementation;
 using GoapBetaCommon.Interfaces;
 using TypeSafeBlackboard;
 
 namespace GoapUser {
+
     internal static class GoapTrigger {
         private static void Main(string[] args) {
             Console.WriteLine("-----------------------------------");
 
             Blackboard blackboard = new Blackboard();
-            AbstractGoapSystem goapActionSystem = GoapComponent.LoadGoapConfiguration("AgentConfig1", "GoapModelTest", blackboard);
-            
+            AbstractGoapSystem goapActionSystem = GoapComponent.LoadGoapConfiguration
+                ("AgentConfig1", "GoapModelTest", blackboard);
+
 
             Console.WriteLine("Agent loaded. Write n for next action");
             char cha = ' ';
@@ -20,25 +24,20 @@ namespace GoapUser {
             while (cha != 'e') {
                 cha = char.Parse(Console.ReadLine());
                 if (cha == 'n') {
-                    var a = goapActionSystem.GetNextAction();
-                    ExecuteAction(a,blackboard);
-
-
+                    AbstractGoapAction a = goapActionSystem.GetNextAction();
+                    ExecuteAction(a, blackboard);
                 }
             }
             Console.WriteLine("press any key to leave");
             Console.ReadKey();
-
-
         }
 
         private static void ExecuteAction(AbstractGoapAction action, Blackboard blackboard) {
             Console.WriteLine(action.GetType() + " is now executed");
-            var curr = blackboard.Get(AbstractGoapSystem.Worldstate);
-            var result =  action.GetResultingWorldstate(curr);
+            List<WorldstateSymbol> curr = blackboard.Get(AbstractGoapSystem.Worldstate);
+            List<WorldstateSymbol> result = action.GetResultingWorldstate(curr);
             blackboard.Set(AbstractGoapSystem.Worldstate, result);
         }
-
 
 
         private static void GetAssemblyAndConfigClass() {
@@ -56,4 +55,5 @@ namespace GoapUser {
             }
         }
     }
+
 }

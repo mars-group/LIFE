@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using GoapBetaCommon.Implementation;
 using GOAPBetaModelDefinition.Worldstates;
 using GoapBetaCommon.Abstract;
 using GoapBetaCommon.Interfaces;
 
 namespace GOAPBetaModelDefinition.Actions {
     public class ActionGetToy : AbstractGoapAction {
+
         public ActionGetToy()
-            : base(new List<IGoapWorldProperty> {new HasMoney(true)},
-                new List<IGoapWorldProperty> {
-                    new HasMoney(false),
-                    new HasToy(true)
+            : base(new List<WorldstateSymbol> { new WorldstateSymbol(WorldProperties.HasMoney, true, typeof(Boolean)) },
+                new List<WorldstateSymbol> {
+                    new WorldstateSymbol(WorldProperties.HasMoney,false,typeof(Boolean)),
+                    new WorldstateSymbol(WorldProperties.HasToy,true,typeof(Boolean)),
                 }) {}
 
         public override bool ValidateContextPreconditions() {

@@ -5,12 +5,12 @@ using GoapBetaCommon.Exceptions;
 using GoapBetaCommon.Interfaces;
 
 namespace GoapBetaGraphConnector.SimpleGraph {
-    public class Map {
-        private List<IGoapNode> _vertices;
-        private List<IGoapEdge> _edges;
 
-        public Map(List<IGoapNode> vertices, List<IGoapEdge> edges)
-        {
+    public class Map {
+        private readonly List<IGoapNode> _vertices;
+        private readonly List<IGoapEdge> _edges;
+
+        public Map(List<IGoapNode> vertices, List<IGoapEdge> edges) {
             _vertices = vertices;
             _edges = edges;
         }
@@ -29,49 +29,50 @@ namespace GoapBetaGraphConnector.SimpleGraph {
             }
         }
 
-        public void AddVertex(IGoapNode vertex){
-            if(!_vertices.Contains(vertex))_vertices.Add(vertex);
+        public void AddVertex(IGoapNode vertex) {
+            if (!_vertices.Contains(vertex)) {
+                _vertices.Add(vertex);
+            }
         }
 
-        public bool ContainsVertex(IGoapNode vertex){
+        public bool ContainsVertex(IGoapNode vertex) {
             return _vertices.Contains(vertex);
         }
 
         public override string ToString() {
-            var text = _vertices.Aggregate("", (current, vertex) => current + (vertex + Environment.NewLine));
+            string text = _vertices.Aggregate("", (current, vertex) => current + (vertex + Environment.NewLine));
 
             text = text + _edges.Aggregate("", (current, edge) => current + (edge + Environment.NewLine));
-            
+
             return text;
         }
 
 
-        public List<IGoapEdge> GetEdgesBySourceAndTarget(IGoapNode source, IGoapNode target)
-        {
-            if (!ContainsVertex(source) || !ContainsVertex(target))
+        public List<IGoapEdge> GetEdgesBySourceAndTarget(IGoapNode source, IGoapNode target) {
+            if (!ContainsVertex(source) || !ContainsVertex(target)) {
                 throw new GraphException("source or target of edge not available in graph");
+            }
 
-            List<IGoapEdge> bindingEdge = _edges.FindAll(e => e.GetSource().Equals(source) && e.GetTarget().Equals(target));
-            if (bindingEdge == null)
+            List<IGoapEdge> bindingEdge = _edges.FindAll
+                (e => e.GetSource().Equals(source) && e.GetTarget().Equals(target));
+            if (bindingEdge == null) {
                 throw new GraphException("Edge not found by target and source");
+            }
             return bindingEdge;
         }
 
-        public IGoapEdge GetCheapestEdgeBySourceAndTarget(IGoapNode source, IGoapNode target)
-        {
-            var query = GetEdgesBySourceAndTarget(source, target).OrderBy(e => e.GetCost());
+        public IGoapEdge GetCheapestEdgeBySourceAndTarget(IGoapNode source, IGoapNode target) {
+            IOrderedEnumerable<IGoapEdge> query = GetEdgesBySourceAndTarget(source, target).OrderBy(e => e.GetCost());
             return query.First();
         }
 
 
-        public int GetcheapestWayCost(IGoapNode sourceVertex, IGoapNode targetVertex)
-        {
+        public int GetcheapestWayCost(IGoapNode sourceVertex, IGoapNode targetVertex) {
             IGoapEdge edge = GetCheapestEdgeBySourceAndTarget(sourceVertex, targetVertex);
             return edge.GetCost();
         }
 
-        public List<IGoapNode> GetReachableAdjcentVertices(IGoapNode vertex)
-        {
+        public List<IGoapNode> GetReachableAdjcentVertices(IGoapNode vertex) {
             List<IGoapEdge> outEdges = GetEdgesBySourceVertex(vertex);
 
             return outEdges.Select(outEdge => outEdge.GetTarget()).ToList();
@@ -82,9 +83,9 @@ namespace GoapBetaGraphConnector.SimpleGraph {
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        public List<IGoapEdge> GetEdgesBySourceVertex(IGoapNode vertex)
-        {
+        public List<IGoapEdge> GetEdgesBySourceVertex(IGoapNode vertex) {
             return _edges.Where(edge => edge.GetSource().Equals(vertex)).ToList();
         }
     }
+
 }

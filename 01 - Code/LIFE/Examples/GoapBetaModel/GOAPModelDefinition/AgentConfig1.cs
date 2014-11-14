@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Implementation;
+using GoapBetaCommon.Interfaces;
 using GOAPBetaModelDefinition.Actions;
 using GOAPBetaModelDefinition.Goals;
 using GOAPBetaModelDefinition.Worldstates;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Interfaces;
 
 namespace GOAPBetaModelDefinition {
 
@@ -11,9 +13,16 @@ namespace GOAPBetaModelDefinition {
     ///     determines the configuration of agent 1
     /// </summary>
     public class AgentConfig1 : IGoapAgentConfig {
+        #region IGoapAgentConfig Members
 
-        public List<IGoapWorldProperty> GetStartWorldstate() {
-            return new List<IGoapWorldProperty> {new IsHappy(false), new HasMoney(true), new HasToy(false)};
+        public List<WorldstateSymbol> GetStartWorldstate() {
+            List<WorldstateSymbol> symbols = new List<WorldstateSymbol>();
+            symbols.Add(new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)));
+            symbols.Add(new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean)));
+            symbols.Add(new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)));
+
+            return symbols;
+            //return new Worldstate(typeof(WorldProperties), symbols);
         }
 
         public List<AbstractGoapAction> GetAllActions() {
@@ -23,5 +32,8 @@ namespace GOAPBetaModelDefinition {
         public List<IGoapGoal> GetAllGoals() {
             return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
+
+        #endregion
     }
+
 }

@@ -1,31 +1,31 @@
-﻿using System.Collections.Generic;
-using GOAPBetaModelDefinition.Worldstates;
+﻿using System;
+using System.Collections.Generic;
 using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Interfaces;
+using GoapBetaCommon.Implementation;
+using GOAPBetaModelDefinition.Worldstates;
 
-namespace GOAPBetaModelDefinition.Goals
-{
-    public class GoalGetRich : AbstractGoapGoal
-    {
-        public GoalGetRich() 
-            : base(new List<IGoapWorldProperty>{new HasMoney(true)}, 1) {}
+namespace GOAPBetaModelDefinition.Goals {
 
-        public override int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate) {
-            if (IsSatisfied(actualWorldstate))
-            {
+    public class GoalGetRich : AbstractGoapGoal {
+        public GoalGetRich()
+            : base(new List<WorldstateSymbol> {
+                new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean))
+            },
+                1) {}
+
+        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
+            if (IsSatisfied(actualWorldstate)) {
                 return Relevancy = 0;
             }
-            else
-            {
-                if (Relevancy < 10)
-                {
+            else {
+                if (Relevancy < 10) {
                     return Relevancy += 1;
                 }
-                else
-                {
+                else {
                     return Relevancy;
                 }
             }
         }
     }
+
 }

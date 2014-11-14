@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GoapBetaCommon.Implementation;
 using GoapBetaCommon.Interfaces;
 
 namespace GoapBetaCommon.Abstract {
+
     /// <summary>
     ///     nochmal überlegen welche Methoden auf den allgemeinen Objekten ausgeführt werden müssen
     ///     diese können allerdings auch per interface angeboten werden
@@ -13,71 +15,55 @@ namespace GoapBetaCommon.Abstract {
     /// </summary>
     public abstract class AbstractGoapAction : IGoapAction, IEquatable<AbstractGoapAction> {
         /// <summary>
-        ///     partial state of the world must be fulfilled for execution
-        /// </summary>
-        private readonly List<IGoapWorldProperty> _preConditions;
-
-        /// <summary>
-        ///     partial changes of the world state by execution
-        /// </summary>
-        private readonly List<IGoapWorldProperty> _effects;
-
-        /// <summary>
         ///     get the immutable list of preconditions
         /// </summary>
-        public List<IGoapWorldProperty> PreConditions {
-            get { return _preConditions; }
-        }
+        public List<WorldstateSymbol> PreConditions { get { return _preConditions; } }
 
         /// <summary>
         ///     get the immutable list of effects
         /// </summary>
-        public List<IGoapWorldProperty> Effects {
-            get { return _effects; }
-        }
+        public List<WorldstateSymbol> Effects { get { return _effects; } }
 
-        public ISet<Type> GetAffectingWorldstateTypes() {
-            var types = new HashSet<Type>();
+        /// <summary>
+        ///     partial state of the world must be fulfilled for execution
+        /// </summary>
+        private readonly List<WorldstateSymbol> _preConditions;
 
-            foreach (var goapWorldstate in _effects) {
-                types.Add(goapWorldstate.GetType());
-            }
-            foreach (var goapWorldstate in _preConditions) {
-                types.Add(goapWorldstate.GetType());
-            }
-            return types;
-        }
+        /// <summary>
+        ///     partial changes of the world state by execution
+        /// </summary>
+        private readonly List<WorldstateSymbol> _effects;
 
-        protected AbstractGoapAction(List<IGoapWorldProperty> preconditionWorldstates,
-            List<IGoapWorldProperty> effectWorldstates) {
+        protected AbstractGoapAction
+            (List<WorldstateSymbol> preconditionWorldstates,
+                List<WorldstateSymbol> effectWorldstates) {
             _preConditions = preconditionWorldstates;
             _effects = effectWorldstates;
         }
+
+        #region IEquatable<AbstractGoapAction> Members
+
+        public bool Equals(AbstractGoapAction other) {
+            if (ReferenceEquals(null, other)) {
+                return false;
+            }
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+            return (GetType() == other.GetType()) && (_preConditions.All(i => other._preConditions.Contains(i)) &&
+                                                      (other._preConditions.All(i => _preConditions.Contains(i))));
+        }
+
+        #endregion
+
+        #region IGoapAction Members
 
         /// <summary>
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        public bool IsExecutable(List<IGoapWorldProperty> sourceWorldState) {
+        public bool IsExecutable(List<WorldstateSymbol> sourceWorldState) {
             return IsSubset(_preConditions, sourceWorldState);
-        }
-
-        /// <summary>
-        ///     check if a state could be the resulting state after executing this action
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        public bool IsEffectCorrespondingToState(List<IGoapWorldProperty> state) {
-            return IsSubset(_effects, state);
-        }
-
-        public bool IsSatisfyingStateByEffects(List<IGoapWorldProperty> state) {
-            return IsSubset(state, _effects);
-        }
-
-        private bool IsSubset(List<IGoapWorldProperty> potentiallySubSet, List<IGoapWorldProperty> enclosingSet) {
-            return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
-                    potentiallySubSet.Count());
         }
 
         /// <summary>
@@ -86,35 +72,77 @@ namespace GoapBetaCommon.Abstract {
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
-        public List<IGoapWorldProperty> GetResultingWorldstate(List<IGoapWorldProperty> sourceWorldState) {
-            List<IGoapWorldProperty> resultingWorldStates =
-                (from worldstate in _effects select worldstate.GetClone()).ToList();
+        public List<WorldstateSymbol> GetResultingWorldstate(List<WorldstateSymbol> sourceWorldState) {
+            List<WorldstateSymbol> resultingWorldStates =
+                (from worldstate in _effects select worldstate).ToList();
 
             List<Type> typesInEffectList =
                 (from worldstate in _effects select worldstate.GetType()).ToList();
 
-            resultingWorldStates.AddRange(from worldState in sourceWorldState
-                where !typesInEffectList.Contains(worldState.GetType())
-                select worldState.GetClone());
+            resultingWorldStates.AddRange
+                (from worldState in sourceWorldState
+                    where !typesInEffectList.Contains(worldState.GetType())
+                    select worldState);
 
             return resultingWorldStates;
+        }
+
+        public abstract bool ValidateContextPreconditions();
+
+        public abstract bool ExecuteContextEffects();
+
+        public abstract void Execute();
+
+        public abstract int GetExecutionCosts();
+
+        public abstract int GetPriority();
+
+        #endregion
+
+        public ISet<Type> GetAffectingWorldstateTypes() {
+            HashSet<Type> types = new HashSet<Type>();
+
+            foreach (WorldstateSymbol goapWorldstate in _effects) {
+                types.Add(goapWorldstate.GetType());
+            }
+            foreach (WorldstateSymbol goapWorldstate in _preConditions) {
+                types.Add(goapWorldstate.GetType());
+            }
+            return types;
+        }
+
+        /// <summary>
+        ///     check if a state could be the resulting state after executing this action
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public bool IsEffectCorrespondingToState(List<WorldstateSymbol> state) {
+            return IsSubset(_effects, state);
+        }
+
+        public bool IsSatisfyingStateByEffects(List<WorldstateSymbol> state) {
+            return IsSubset(state, _effects);
+        }
+
+        private bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {
+            return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
+                    potentiallySubSet.Count());
         }
 
         public override string ToString() {
             return string.Format("PreConditions: {0}, Effects: {1}", PreConditions, Effects);
         }
 
-        public bool Equals(AbstractGoapAction other) {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return (GetType() == other.GetType()) && (_preConditions.All(i => other._preConditions.Contains(i)) &&
-                                                      (other._preConditions.All(i => _preConditions.Contains(i))));
-        }
-
         public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != GetType()) {
+                return false;
+            }
             return Equals((AbstractGoapAction) obj);
         }
 
@@ -131,16 +159,6 @@ namespace GoapBetaCommon.Abstract {
         public static bool operator !=(AbstractGoapAction left, AbstractGoapAction right) {
             return !Equals(left, right);
         }
-
-
-        public abstract bool ValidateContextPreconditions();
-
-        public abstract bool ExecuteContextEffects();
-
-        public abstract void Execute();
-
-        public abstract int GetExecutionCosts();
-
-        public abstract int GetPriority();
     }
+
 }

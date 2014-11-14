@@ -4,6 +4,7 @@ using GoapBetaCommon.Exceptions;
 using GoapBetaCommon.Interfaces;
 
 namespace GoapBetaGraphConnector.SimpleGraph {
+
     /// <summary>
     ///     tasks are creating the management table of vertices, recalculating the entrys, add vertices to list, check for
     ///     reaching target. Condition for correct work is a graph with positiv edge weights.
@@ -20,7 +21,7 @@ namespace GoapBetaGraphConnector.SimpleGraph {
         /// </summary>
         /// <param name="root"></param>
         /// <param name="graph"></param>
-        public AStarSteppable(IGoapNode root,  Map graph){
+        public AStarSteppable(IGoapNode root, Map graph) {
             _root = root;
             _graph = graph;
             InitializeAStar();
@@ -53,7 +54,9 @@ namespace GoapBetaGraphConnector.SimpleGraph {
                 }
             }
 
-            if (vertex == null) throw new NoVertexFoundException("a* no node found in open list");
+            if (vertex == null) {
+                throw new NoVertexFoundException("a* no node found in open list");
+            }
             _current = vertex;
             return _current;
         }
@@ -111,40 +114,43 @@ namespace GoapBetaGraphConnector.SimpleGraph {
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        private IGoapNode GetPredecessor(IGoapNode vertex){
-            if (!_nodeTable.ContainsKey(vertex))
+        private IGoapNode GetPredecessor(IGoapNode vertex) {
+            if (!_nodeTable.ContainsKey(vertex)) {
                 throw new AlgorithmException("vertex asked for predeseccor not in algoritm list");
+            }
 
             object[] value;
-            if (!_nodeTable.TryGetValue(vertex, out value))
+            if (!_nodeTable.TryGetValue(vertex, out value)) {
                 throw new AlgorithmException("node tab not in algoritm list");
+            }
 
-            return (IGoapNode)value[0];
+            return (IGoapNode) value[0];
         }
 
 
-        private void Calculate(IGoapNode current, List<IGoapNode> reachableVertices)
-        {
+        private void Calculate(IGoapNode current, List<IGoapNode> reachableVertices) {
             // check if all are in the node list
-            if (reachableVertices.Any(v => !_nodeTable.ContainsKey(v)))
+            if (reachableVertices.Any(v => !_nodeTable.ContainsKey(v))) {
                 throw new AlgorithmException("Inconsistence in node list. a reachable vertex is not in the nodelist");
+            }
 
             object[] currentValue;
             _nodeTable.TryGetValue(current, out currentValue);
-            if (currentValue == null)
+            if (currentValue == null) {
                 throw new AlgorithmException("Inconsistence current vertex: " + current + " has no entry in node table");
+            }
 
             // filter out the vertices on closed list
             List<IGoapNode> reachableOnOpenList = new List<IGoapNode>();
-            foreach (IGoapNode node in reachableVertices)
-            {
+            foreach (IGoapNode node in reachableVertices) {
                 object[] value;
                 _nodeTable.TryGetValue(node, out value);
-                if (value == null || (bool) value[4] == false) reachableOnOpenList.Add(node);
+                if (value == null || (bool) value[4] == false) {
+                    reachableOnOpenList.Add(node);
+                }
             }
 
-            foreach (IGoapNode openVertex in reachableOnOpenList)
-            {
+            foreach (IGoapNode openVertex in reachableOnOpenList) {
                 object[] value;
                 _nodeTable.TryGetValue(openVertex, out value);
 
@@ -172,8 +178,7 @@ namespace GoapBetaGraphConnector.SimpleGraph {
         ///     manipulate entry for node in algorithm table - set status to in closed list
         /// </summary>
         /// <param name="vertex"></param>
-        private void SetOnClosedList(IGoapNode vertex)
-        {
+        private void SetOnClosedList(IGoapNode vertex) {
             object[] entryForChange;
             _nodeTable.TryGetValue(vertex, out entryForChange);
             if (entryForChange == null) {
@@ -214,4 +219,5 @@ namespace GoapBetaGraphConnector.SimpleGraph {
             return entry;
         }
     }
+
 }

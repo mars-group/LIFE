@@ -1,8 +1,9 @@
-﻿namespace GOAPBetaModelDefinition.Worldstates
-{
-    public enum WorldStateEnums 
-    {
-        Happy, HasToy, HasMoney
+﻿namespace GOAPBetaModelDefinition.Worldstates {
 
+    public enum WorldProperties {
+        Happy,
+        HasToy,
+        HasMoney
     }
+
 }

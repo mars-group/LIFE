@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace GoapBetaCommon.Implementation {
+
     public class Worldstate {
         private readonly Dictionary<int, WorldstateSymbol> _worldstate = new Dictionary<int, WorldstateSymbol>();
         private readonly Dictionary<Enum, int> _availableEnums = new Dictionary<Enum, int>();
@@ -43,8 +44,9 @@ namespace GoapBetaCommon.Implementation {
             Dictionary<int, WorldstateSymbol> res = new Dictionary<int, WorldstateSymbol>();
             foreach (WorldstateSymbol symbol in worldstateSymbols) {
                 int index = GetIndex(symbol);
-                if (res.ContainsKey(index))
+                if (res.ContainsKey(index)) {
                     throw new ArgumentException("one symbol key is at least double used for worldstate");
+                }
                 res.Add(index, symbol);
             }
             return res;
@@ -60,8 +62,9 @@ namespace GoapBetaCommon.Implementation {
             List<int> newKeys = dict.Keys.ToList();
 
             foreach (int index in newKeys) {
-                if (_worldstate.ContainsKey(index))
+                if (_worldstate.ContainsKey(index)) {
                     throw new ArgumentException("worldstate already contains elem to insert");
+                }
             }
             newSymbols.AddRange(_worldstate.Values);
             return new Worldstate(_enumType, newSymbols);
@@ -83,4 +86,5 @@ namespace GoapBetaCommon.Implementation {
             return new Worldstate(_enumType, newWorld.Values.ToList());
         }
     }
+
 }

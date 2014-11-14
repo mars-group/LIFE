@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace GoapBetaCommon.Interfaces {
+
     /// <summary>
     ///     the methods needed for the goap planner
     /// </summary>
@@ -47,4 +48,5 @@ namespace GoapBetaCommon.Interfaces {
 
         int GetActualDepthFromRoot();
     }
+
 }

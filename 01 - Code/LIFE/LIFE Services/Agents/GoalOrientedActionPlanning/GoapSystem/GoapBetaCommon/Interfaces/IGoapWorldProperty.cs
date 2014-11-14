@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace GoapBetaCommon.Interfaces {
+
     /// <summary>
     ///     Represents one aspect of the world of one agent. Many of this informations configure
     ///     the whole world. Every agent got his own sight on the world from the sum of his aspects.
@@ -25,4 +26,5 @@ namespace GoapBetaCommon.Interfaces {
 
         IGoapWorldProperty GetNegative();
     }
+
 }

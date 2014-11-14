@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace GoapBetaCommon.Implementation {
+
     /// <summary>
     ///     struct offers call by value
     /// </summary>
@@ -19,4 +20,5 @@ namespace GoapBetaCommon.Implementation {
             TypeOfValue = typeOfValue;
         }
     }
+
 }

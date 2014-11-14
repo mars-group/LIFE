@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using GOAPBetaModelDefinition.Worldstates;
 using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Interfaces;
+using GoapBetaCommon.Implementation;
+using GOAPBetaModelDefinition.Worldstates;
 
 namespace GOAPBetaModelDefinition.Actions {
+
     public class ActionPlay : AbstractGoapAction {
         public ActionPlay()
-            : base(new List<IGoapWorldProperty> {new HasToy(true)},
-                new List<IGoapWorldProperty> {
-                    new IsHappy(true),
-                    new HasToy(false)
+            : base(new List<WorldstateSymbol> {new WorldstateSymbol(WorldProperties.HasToy, true, typeof (Boolean))},
+                new List<WorldstateSymbol> {
+                    new WorldstateSymbol(WorldProperties.Happy, true, typeof (Boolean)),
+                    new WorldstateSymbol(WorldProperties.HasToy, false, typeof (Boolean)),
                 }) {}
 
         public override bool ValidateContextPreconditions() {
@@ -33,4 +34,5 @@ namespace GOAPBetaModelDefinition.Actions {
             throw new NotImplementedException();
         }
     }
+
 }

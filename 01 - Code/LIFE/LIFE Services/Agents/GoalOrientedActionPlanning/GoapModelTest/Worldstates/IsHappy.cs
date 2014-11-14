@@ -1,5 +1,5 @@
 ﻿using System;
-using GoapCommon.Interfaces;
+using GoapBetaCommon.Interfaces;
 
 namespace GoapModelTest.Worldstates {
     public class IsHappy : IGoapWorldProperty, IEquatable<IsHappy> {

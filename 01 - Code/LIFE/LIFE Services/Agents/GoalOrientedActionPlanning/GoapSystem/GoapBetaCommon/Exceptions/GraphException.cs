@@ -2,7 +2,7 @@
 
 namespace GoapBetaCommon.Exceptions {
 
-    public class GraphException : Exception{
+    public class GraphException : Exception {
         public GraphException() {}
 
         public GraphException(string message)
@@ -11,4 +11,5 @@ namespace GoapBetaCommon.Exceptions {
         public GraphException(string message, Exception inner)
             : base(message, inner) {}
     }
+
 }

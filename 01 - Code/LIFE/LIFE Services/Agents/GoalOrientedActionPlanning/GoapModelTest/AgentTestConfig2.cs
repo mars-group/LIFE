@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GoapCommon.Abstract;
-using GoapCommon.Interfaces;
+using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Interfaces;
 using GoapModelTest.Actions;
 using GoapModelTest.Goals;
 using GoapModelTest.Worldstates;

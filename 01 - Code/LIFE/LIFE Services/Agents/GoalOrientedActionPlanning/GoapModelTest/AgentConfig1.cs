@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using GoapCommon.Abstract;
-using GoapCommon.Interfaces;
+using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Interfaces;
+using GOAPModelDefinition.Goals;
 using GoapModelTest.Actions;
 using GoapModelTest.Goals;
 using GoapModelTest.Worldstates;
@@ -21,7 +22,7 @@ namespace GoapModelTest {
         }
 
         public List<IGoapGoal> GetAllGoals() {
-            return new List<IGoapGoal> {new GoalBeHappy()};
+            return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
     }
 }

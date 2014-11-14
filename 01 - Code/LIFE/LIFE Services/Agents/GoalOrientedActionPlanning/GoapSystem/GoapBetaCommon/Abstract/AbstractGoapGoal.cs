@@ -1,42 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GoapBetaCommon.Implementation;
 using GoapBetaCommon.Interfaces;
 
-namespace GoapBetaCommon.Abstract
-{
-    public abstract class AbstractGoapGoal :IGoapGoal {
+namespace GoapBetaCommon.Abstract {
 
-        protected readonly List<IGoapWorldProperty> TargetWorldState;
+    public abstract class AbstractGoapGoal : IGoapGoal {
+        protected readonly List<WorldstateSymbol> TargetWorldState;
         protected int Relevancy;
 
-        protected AbstractGoapGoal(List<IGoapWorldProperty> targetWorldState, int startRelevancy) {
+        protected AbstractGoapGoal(List<WorldstateSymbol> targetWorldState, int startRelevancy) {
             TargetWorldState = targetWorldState;
             Relevancy = startRelevancy;
         }
 
-        public int GetRelevancy(){
+        #region IGoapGoal Members
+
+        public int GetRelevancy() {
             return Relevancy;
         }
 
-        public List<IGoapWorldProperty> GetTargetWorldstates(){
+        public List<WorldstateSymbol> GetTargetWorldstates() {
             return TargetWorldState;
         }
 
-        public bool IsSatisfied(List<IGoapWorldProperty> worldstate) {
+        public bool IsSatisfied(List<WorldstateSymbol> worldstate) {
             return (TargetWorldState.Where(x => worldstate.Contains(x)).Count() == TargetWorldState.Count());
         }
-        
-        public ISet<Type> GetAffectingWorldstateTypes() {
-            var types = new HashSet<Type>();
 
-            foreach (var goapWorldstate in TargetWorldState){
+        public ISet<Type> GetAffectingWorldstateTypes() {
+            HashSet<Type> types = new HashSet<Type>();
+
+            foreach (WorldstateSymbol goapWorldstate in TargetWorldState) {
                 types.Add(goapWorldstate.GetType());
             }
             return types;
         }
 
-        public abstract int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate);
+        public abstract int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate);
 
+        #endregion
     }
+
 }

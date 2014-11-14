@@ -7,6 +7,7 @@ using GoapBetaCommon.Interfaces;
 using GoapBetaGraphConnector.SimpleGraph;
 
 namespace GoapBetaActionSystem.Implementation {
+
     /// <summary>
     ///     The goapplanner is responsible for the process of finding a valid plan from the actions, currentWorld and
     ///     targetWorld given to him. He uses the graph component for creating a new plan.
@@ -18,8 +19,8 @@ namespace GoapBetaActionSystem.Implementation {
     internal class GoapPlanner {
         private readonly int _maximuxSearchDepth = int.MaxValue;
         private readonly List<AbstractGoapAction> _availableActions;
-        private readonly Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> _effectToAction;
-        private readonly List<IGoapWorldProperty> _startState;
+        private readonly Dictionary<WorldstateSymbol, List<AbstractGoapAction>> _effectToAction;
+        private readonly List<WorldstateSymbol> _startState;
         private List<AbstractGoapAction> _currentPlan;
 
         /// <summary>
@@ -31,10 +32,11 @@ namespace GoapBetaActionSystem.Implementation {
         internal GoapPlanner
             (int maximuxSearchDepth,
                 List<AbstractGoapAction> availableActions,
-                Dictionary<IGoapWorldProperty, List<AbstractGoapAction>> effectToAction,
-                List<IGoapWorldProperty> startState) {
-            if (availableActions.Count == 0)
+                Dictionary<WorldstateSymbol, List<AbstractGoapAction>> effectToAction,
+                List<WorldstateSymbol> startState) {
+            if (availableActions.Count == 0) {
                 throw new ArgumentException("Planner may not be instanciated with an empty list of actions");
+            }
             _effectToAction = effectToAction;
             _startState = startState;
             _maximuxSearchDepth = maximuxSearchDepth;
@@ -42,10 +44,10 @@ namespace GoapBetaActionSystem.Implementation {
         }
 
 
-        private IGoapGraphService InitializeGraphService(List<IGoapWorldProperty> graphRoot) {
+        private IGoapGraphService InitializeGraphService(List<WorldstateSymbol> graphRoot) {
             GoapSimpleGraphService graphService = new GoapSimpleGraphService();
 
-            IGoapNode root = new Node(graphRoot, new List<IGoapWorldProperty>(), graphRoot.Count);
+            IGoapNode root = new Node(graphRoot, new List<WorldstateSymbol>(), graphRoot.Count);
             graphService.InitializeGoapGraph(root);
             return graphService;
         }
@@ -56,7 +58,7 @@ namespace GoapBetaActionSystem.Implementation {
         /// <param name="goal"></param>
         /// <returns></returns>
         public List<AbstractGoapAction> GetPlan(IGoapGoal goal) {
-            List<IGoapWorldProperty> graphRoot = goal.GetTargetWorldstates();
+            List<WorldstateSymbol> graphRoot = goal.GetTargetWorldstates();
             IGoapGraphService graphService = InitializeGraphService(graphRoot);
             IGoapNode currentNode = graphService.GetNextVertexFromOpenList();
 
@@ -80,8 +82,9 @@ namespace GoapBetaActionSystem.Implementation {
                 _currentPlan = planEdges.Select(goapEdge => goapEdge.GetAction()).ToList();
                 _currentPlan.Reverse();
             }
-            if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList())
+            if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList()) {
                 _currentPlan = new List<AbstractGoapAction> {new SurrogateAction()};
+            }
 
             return _currentPlan;
         }
@@ -100,9 +103,9 @@ namespace GoapBetaActionSystem.Implementation {
         /// </summary>
         /// <param name="unsatisfied"></param>
         /// <returns></returns>
-        private List<AbstractGoapAction> GetActionsByUnsatisfiedProperties(List<IGoapWorldProperty> unsatisfied) {
+        private List<AbstractGoapAction> GetActionsByUnsatisfiedProperties(List<WorldstateSymbol> unsatisfied) {
             HashSet<AbstractGoapAction> relevantActions = new HashSet<AbstractGoapAction>();
-            foreach (IGoapWorldProperty property in unsatisfied) {
+            foreach (WorldstateSymbol property in unsatisfied) {
                 _effectToAction[property].ForEach(x => relevantActions.Add(x));
             }
             return relevantActions.ToList();
@@ -124,8 +127,8 @@ namespace GoapBetaActionSystem.Implementation {
         /// <param name="parent"></param>
         /// <returns></returns>
         private IGoapNode GetChildNodeByActionAndParent(AbstractGoapAction action, IGoapNode parent) {
-            List<IGoapWorldProperty> goalValues = new List<IGoapWorldProperty>();
-            List<IGoapWorldProperty> currValues = new List<IGoapWorldProperty>();
+            List<WorldstateSymbol> goalValues = new List<WorldstateSymbol>();
+            List<WorldstateSymbol> currValues = new List<WorldstateSymbol>();
 
             // step 1 add unsatisfied goal values 
             goalValues.AddRange(parent.GetUnsatisfiedGoalValues());
@@ -134,11 +137,12 @@ namespace GoapBetaActionSystem.Implementation {
             currValues.AddRange(goalValues.Where(goalValue => action.Effects.Contains(goalValue)).ToList());
 
             // step 3 check if effects have satisfied goal values
-            if (!(goalValues.Intersect(currValues).Count() > 0))
+            if (!(goalValues.Intersect(currValues).Count() > 0)) {
                 throw new ArgumentException("an unproductive action was chosen for expanding a node");
+            }
 
             // step 4
-            List<IGoapWorldProperty> additionalGoals = action.PreConditions.Where
+            List<WorldstateSymbol> additionalGoals = action.PreConditions.Where
                 (precondition => !goalValues.Contains(precondition)).
                 ToList();
             goalValues.AddRange(additionalGoals);
@@ -156,10 +160,12 @@ namespace GoapBetaActionSystem.Implementation {
         /// <param name="action"></param>
         /// <returns></returns>
         private bool HasConverseEffect(IGoapNode current, AbstractGoapAction action) {
-            foreach (IGoapWorldProperty goalValue in current.GetUnsatisfiedGoalValues()) {
+            foreach (WorldstateSymbol goalValue in current.GetUnsatisfiedGoalValues()) {
                 if (action.Effects.Any
-                    (effect => effect.GetPropertyKey().Equals(goalValue.GetPropertyKey())
-                               && effect.IsValid() != goalValue.IsValid())) return true;
+                    (effect => effect.EnumName.Equals(goalValue.EnumName)
+                               && effect.Value.Equals(goalValue.Value))) {
+                    return true;
+                }
             }
             return false;
         }
@@ -175,10 +181,10 @@ namespace GoapBetaActionSystem.Implementation {
         private bool IsCreatingDuplicatedGoalValueKeys(IGoapNode current, AbstractGoapAction goapAction) {
             List<Enum> nodeKeys =
                 current.GetUnsatisfiedGoalValues().
-                    Select(unsatisfiedGoalValue => unsatisfiedGoalValue.GetPropertyKey()).
+                    Select(unsatisfiedGoalValue => unsatisfiedGoalValue.EnumName).
                     ToList();
             List<Enum> actionKeys =
-                goapAction.PreConditions.Select(precondition => precondition.GetPropertyKey()).ToList();
+                goapAction.PreConditions.Select(precondition => precondition.EnumName).ToList();
 
             return actionKeys.Any(actionKey => nodeKeys.Contains(actionKey));
         }
@@ -192,8 +198,12 @@ namespace GoapBetaActionSystem.Implementation {
         private List<AbstractGoapAction> FilterActions(List<AbstractGoapAction> applicableActions, IGoapNode parent) {
             List<AbstractGoapAction> filtered = new List<AbstractGoapAction>();
             foreach (AbstractGoapAction action in applicableActions) {
-                if (HasConverseEffect(parent, action)) continue;
-                if (IsCreatingDuplicatedGoalValueKeys(parent, action)) continue;
+                if (HasConverseEffect(parent, action)) {
+                    continue;
+                }
+                if (IsCreatingDuplicatedGoalValueKeys(parent, action)) {
+                    continue;
+                }
                 filtered.Add(action);
             }
             return filtered;
@@ -215,4 +225,5 @@ namespace GoapBetaActionSystem.Implementation {
             return edges;
         }
     }
+
 }

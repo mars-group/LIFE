@@ -4,17 +4,18 @@ using System.Linq;
 using GoapBetaCommon.Interfaces;
 
 namespace GoapBetaCommon.Implementation {
+
     /// <summary>
     ///     node class for use in  graph service
     ///     connect the existing and expected symbols of the worldstate
     /// </summary>
     public class Node : IGoapNode, IEquatable<Node> {
         private readonly int _heuristic;
-        private readonly List<IGoapWorldProperty> _goalValues;
-        private readonly List<IGoapWorldProperty> _currValues;
-        private List<IGoapWorldProperty> _unsatisfiedGoalValues;
+        private readonly List<WorldstateSymbol> _goalValues;
+        private readonly List<WorldstateSymbol> _currValues;
+        private List<WorldstateSymbol> _unsatisfiedGoalValues;
 
-        public Node(List<IGoapWorldProperty> goalValues, List<IGoapWorldProperty> currentValues, int heuristik) {
+        public Node(List<WorldstateSymbol> goalValues, List<WorldstateSymbol> currentValues, int heuristik) {
             _goalValues = goalValues;
             _currValues = currentValues;
             _heuristic = heuristik;
@@ -24,8 +25,12 @@ namespace GoapBetaCommon.Implementation {
         #region IEquatable<Node> Members
 
         public bool Equals(Node other) {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, other)) {
+                return false;
+            }
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
             return (_currValues.Count(x => other._currValues.Contains(x)) == _currValues.Count()
                     && other._currValues.Count(x => _currValues.Contains(x)) == other._currValues.Count()
                     && _goalValues.Count(x => other._goalValues.Contains(x)) == _goalValues.Count()
@@ -37,7 +42,7 @@ namespace GoapBetaCommon.Implementation {
 
         #region IGoapNode Members
 
-        public List<IGoapWorldProperty> GetUnsatisfiedGoalValues() {
+        public List<WorldstateSymbol> GetUnsatisfiedGoalValues() {
             return _unsatisfiedGoalValues;
         }
 
@@ -58,7 +63,7 @@ namespace GoapBetaCommon.Implementation {
         /// </summary>
         /// <param name="startState"></param>
         /// <returns></returns>
-        public bool CanBeSatisfiedByStartState(List<IGoapWorldProperty> startState) {
+        public bool CanBeSatisfiedByStartState(List<WorldstateSymbol> startState) {
             return _unsatisfiedGoalValues.All(unsatisfiedGoalValue => startState.Contains(unsatisfiedGoalValue));
         }
 
@@ -68,20 +73,30 @@ namespace GoapBetaCommon.Implementation {
         ///     compare the expected and existing symbols of the worldstate
         /// </summary>
         private void CalculateUnsatisfiedAndSatisfiedConditions() {
-            List<IGoapWorldProperty> unsatisfiedGoalValues = new List<IGoapWorldProperty>();
-            List<IGoapWorldProperty> satisfiedGoalValues = new List<IGoapWorldProperty>();
+            List<WorldstateSymbol> unsatisfiedGoalValues = new List<WorldstateSymbol>();
+            List<WorldstateSymbol> satisfiedGoalValues = new List<WorldstateSymbol>();
 
-            foreach (IGoapWorldProperty goalValue in _goalValues) {
-                if (_currValues.Contains(goalValue)) satisfiedGoalValues.Add(goalValue);
-                else unsatisfiedGoalValues.Add(goalValue);
+            foreach (WorldstateSymbol goalValue in _goalValues) {
+                if (_currValues.Contains(goalValue)) {
+                    satisfiedGoalValues.Add(goalValue);
+                }
+                else {
+                    unsatisfiedGoalValues.Add(goalValue);
+                }
             }
             _unsatisfiedGoalValues = unsatisfiedGoalValues;
         }
 
         public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != GetType()) {
+                return false;
+            }
             return Equals((Node) obj);
         }
 
@@ -102,4 +117,5 @@ namespace GoapBetaCommon.Implementation {
             return !Equals(left, right);
         }
     }
+
 }

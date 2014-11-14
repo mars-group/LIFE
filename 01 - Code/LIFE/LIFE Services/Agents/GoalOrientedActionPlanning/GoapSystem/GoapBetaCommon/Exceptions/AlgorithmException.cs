@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace GoapBetaCommon.Exceptions
-{
-    public class AlgorithmException : Exception
-    {
+namespace GoapBetaCommon.Exceptions {
+
+    public class AlgorithmException : Exception {
         public AlgorithmException() {}
 
         public AlgorithmException(string message)
@@ -12,4 +11,5 @@ namespace GoapBetaCommon.Exceptions
         public AlgorithmException(string message, Exception inner)
             : base(message, inner) {}
     }
+
 }

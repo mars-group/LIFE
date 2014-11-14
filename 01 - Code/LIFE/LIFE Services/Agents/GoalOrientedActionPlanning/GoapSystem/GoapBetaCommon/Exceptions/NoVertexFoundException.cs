@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace GoapBetaCommon.Exceptions {
+
     public class NoVertexFoundException : Exception {
         public NoVertexFoundException() {}
 
@@ -10,4 +11,5 @@ namespace GoapBetaCommon.Exceptions {
         public NoVertexFoundException(string message, Exception inner)
             : base(message, inner) {}
     }
+
 }
