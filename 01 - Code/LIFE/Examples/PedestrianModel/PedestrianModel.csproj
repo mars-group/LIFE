@@ -38,6 +38,10 @@
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\MonoDataSqlite\Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -70,6 +74,7 @@
     <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RayUtil.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\TargetListType.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Logging\AgentLogger.cs" />
     <Compile Include="Util\Math\UnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />
@@ -108,6 +113,11 @@
       <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
       <Name>ESCPrototype</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sqlite3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

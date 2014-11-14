@@ -4,6 +4,7 @@ using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Perception;
 using PedestrianModel.Agents;
+using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,8 @@ namespace PedestrianModel.Environment
     public class ObstacleEnvironment : Environment2D
     {
         private readonly IExecution _exec;  // Agent execution container reference.
-        public static SimpleVisualization Visualization;        
+        private readonly AgentLogger agentLogger = new AgentLogger();
+        public static SimpleVisualization Visualization;
 
         /// <summary>
         ///   Create a new environment.
@@ -57,6 +59,7 @@ namespace PedestrianModel.Environment
             {
                 Visualization.Invalidate();
             }
+            agentLogger.Log(this.GetAllAgents().OfType<Pedestrian>().ToList());
         }
 
     }
