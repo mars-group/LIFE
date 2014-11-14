@@ -49,6 +49,7 @@ namespace RuntimeEnvironment.Implementation {
 
                 // check for status change
                 switch (_status) {
+
                     case SimulationStatus.Paused:
                         // pause execution and wait to be signaled
                         sw.Stop();
@@ -58,9 +59,11 @@ namespace RuntimeEnvironment.Implementation {
 
 					case SimulationStatus.Stepped:
                         if (_steppedTicks.HasValue){
+                            // make sure we don't step over the maximum nr of Ticks
                             while ((_steppedTicks+i < _nrOfTicks) && _steppedTicks > 0) {
                                 DoStep();
                                 _steppedTicks--;
+                                // increase overall tick number
                                 i++;
                             }
                             _steppedTicks = null;
