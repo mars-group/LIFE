@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using SharpMap;
@@ -53,7 +52,9 @@ namespace SharpMapTest
             rasterLayer.ExecuteIntersectionQuery(polygon, featureSet2);
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
+            featureSet2.CreateDataReader().
             //myMap.ZoomToExtents();
+
             /**Image imgMap = myMap.GetMap();
             imgMap.Save(@".\mymap.png", ImageFormat.Png);
             Process.Start(@"E:\SoftwareProjekte\LIFE\03 - Prototyping\SharpMapTest\SharpMapTest\bin\Debug\mymap.png");

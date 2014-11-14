@@ -8,6 +8,6 @@ namespace LayerAPI.Interfaces
     /// This layer gets ticked via PreTick, Tick and PostTick.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IGISActiveLayer<T> : ISteppedActiveLayer, IGISAccess<T> {
+    public interface IGISActiveLayer : ISteppedActiveLayer, IGISAccess {
     }
 }

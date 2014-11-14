@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Security.Policy;
 using GeoAPI.Geometries;
+using SharpMap.Data;
+
 
 namespace LayerAPI.Interfaces.GIS
 {
@@ -10,9 +11,8 @@ namespace LayerAPI.Interfaces.GIS
     /// TODO: Not yet ready, return type has to be determined! 
     /// DO NOT USE!
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IGISAccess<T> {
+    public interface IGISAccess {
         void LoadGISData(Url gisFileUrl);
-        List<T> GetDataByGeometry(IGeometry geometry);
+        List<FeatureDataSet> GetDataByGeometry(IGeometry geometry);
     }
 }
