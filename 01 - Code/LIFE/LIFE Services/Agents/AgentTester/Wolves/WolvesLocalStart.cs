@@ -1,6 +1,7 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
 using DalskiAgent.Execution;
+using DalskiAgent.Movement;
 using ESCTestLayer.Implementation;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
@@ -28,7 +29,7 @@ namespace AgentTester.Wolves {
       
       IEnvironment env;
       if (!esc) env = new Grassland (exec);
-      else env = new ESCAdapter(new ESC());
+      else env = new ESCAdapter(new UnboundESC(), new Vector(30, 20), true);
       
       var n1 = grass;
       var n2 = n1 + sheeps;

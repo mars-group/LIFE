@@ -2,6 +2,8 @@
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
+using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace DalskiAgent.Agents {
 
@@ -10,11 +12,12 @@ namespace DalskiAgent.Agents {
   ///   is registered at an environment to provide collision detection. 
   ///   Per default it is immobile but it can be equipped with a movement module.
   /// </summary>
-  public abstract class SpatialAgent : Agent {
+  public abstract class SpatialAgent : Agent, IObject {
 
-    private readonly IEnvironment _env;    // IESC implementation for collision detection.
-    protected readonly MovementData Data;  // Container for position, direction and speeds.
-    protected AgentMover Mover;            // Class for agent movement. 
+    private readonly IEnvironment _env;   // IESC implementation for collision detection.
+    protected readonly DataAccessor Data; // R/O container for spatial data access.
+    protected AgentMover Mover;           // Class for agent movement. 
+    public IGeometry Bounds { get; set; } // The physical dimension.
 
 
     /// <summary>
@@ -25,7 +28,8 @@ namespace DalskiAgent.Agents {
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
     protected SpatialAgent(IExecution exec, IEnvironment env, Vector pos) : base(exec) {
       _env = env;
-      _env.AddAgent(this, pos, out Data); // Enlist the agent in environment.
+      Bounds = new Point(1f, 1f, 1f);       // Default hitbox is cube with size 1.
+      _env.AddObject(this, pos, out Data);  // Enlist the agent in environment.
     }
 
 
@@ -44,12 +48,12 @@ namespace DalskiAgent.Agents {
     /// </summary>
     protected override void Remove() {
       base.Remove();
-      _env.RemoveAgent(this);
+      _env.RemoveObject(this);
     }
 
 
     //-------------------------------------------------------------------------
-    // GET methods. The latter two are probably not used.
+    // GET methods. The direction is probably not used.
 
     /// <summary>
     ///   Returns the position of the agent.
@@ -66,15 +70,6 @@ namespace DalskiAgent.Agents {
     /// <returns>A direction vector.</returns>
     public Vector GetDirection() {
       return Data.Direction.GetDirectionalVector();
-    }
-
-
-    /// <summary>
-    ///   Returns the dimension of an agent.
-    /// </summary>
-    /// <returns>A vector representing the bounding box around an agent.</returns>
-    public Vector GetDimension() {
-      return new Vector(Data.Dimension.X, Data.Dimension.Y, Data.Dimension.Z);
     }
   }
 }

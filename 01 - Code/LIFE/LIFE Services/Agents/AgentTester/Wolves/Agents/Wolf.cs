@@ -69,7 +69,7 @@ namespace AgentTester.Wolves.Agents {
       // Calculate hunger percentage, read-out nearby agents.
       var hunger = (int)(((double)(EnergyMax - _energy)/EnergyMax)*100);
       var rawData = PerceptionUnit.GetData((int)InformationTypes.AllAgents).Data;
-      var agents = ((List<SpatialAgent>) rawData);
+      var agents = ((List<IObject>) rawData);
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
       

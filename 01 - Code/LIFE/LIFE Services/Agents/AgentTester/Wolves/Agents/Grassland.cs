@@ -6,7 +6,6 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
-using LayerAPI.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
 
@@ -34,7 +33,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Nevertheless, the spawning of some additional grass agents would be nice.
     /// </summary>
     public override void AdvanceEnvironment() {
-      var grassCount = Agents.Keys.OfType<Grass>().Count();
+      var grassCount = Objects.Keys.OfType<Grass>().Count();
       var create = _random.Next(50 + grassCount) < 20;
       if (create) new Grass(_exec, this, GetRandomPosition());
     }

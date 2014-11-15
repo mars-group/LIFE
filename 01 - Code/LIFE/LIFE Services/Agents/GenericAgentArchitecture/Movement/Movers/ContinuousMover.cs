@@ -20,8 +20,8 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">Container with spatial base data.</param>
-    public ContinuousMover(IEnvironment env, SpatialAgent agent, MovementData data) : base(env, agent, data) {}
+    /// <param name="data">R/O container for spatial data.</param>
+    public ContinuousMover(IEnvironment env, SpatialAgent agent, DataAccessor data) : base(env, agent, data) {}
 
 
     /// <summary>
@@ -34,7 +34,7 @@ namespace DalskiAgent.Movement.Movers {
       PitchAS = pitchAS;
       YawAS = yawAS;
       
-      // Calculate pitch and yaw, then call other Move() function.
+      // Calculate pitch and yaw, then call lower Move() function.
       var dir = new Direction();
       dir.SetPitch(Data.Direction.Pitch + TickLength*PitchAS);
       dir.SetYaw(Data.Direction.Yaw + TickLength*YawAS);
@@ -55,10 +55,10 @@ namespace DalskiAgent.Movement.Movers {
       var pitchRad = Direction.DegToRad(TargetDir.Pitch);
       var yawRad = Direction.DegToRad(TargetDir.Yaw);
       var factor = Speed * TickLength;
-      TargetPos = new Vector(Data.Position.X, Data.Position.Y, Data.Position.Z);    
-      TargetPos.X += (float) (factor * Math.Cos(pitchRad) * Math.Cos(yawRad));
-      TargetPos.Y += (float) (factor * Math.Cos(pitchRad) * Math.Sin(yawRad));
-      TargetPos.Z += (float) (factor * Math.Sin(pitchRad));
+      var x = (float)(factor * Math.Cos(pitchRad) * Math.Sin(yawRad));
+      var y = (float)(factor * Math.Cos(pitchRad) * Math.Cos(yawRad));
+      var z = (float)(factor * Math.Sin(pitchRad));    
+      MovementVector = new Vector(x, y, z);
 
       // Execute L0 call. 
       Move();

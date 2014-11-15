@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 
@@ -72,8 +73,10 @@ namespace DalskiAgent.Auxiliary {
       }
       _agentPos.Clear();
 
-      // Then fetch new list and iterate over all entries to print them.
-      _agents = _env.GetAllAgents();    
+      // Then fetch new list and iterate over all entries to print them.     
+      _agents.Clear();
+      foreach (var obj in _env.GetAllObjects().OfType<SpatialAgent>()) _agents.Add(obj);
+        
       for (int i = 0; i < _agents.Count; i++) {
         int x = (int) _agents[i].GetPosition().X  + 1;  // Offsets: +1: skip left border,
         int y = (int) _agents[i].GetPosition().Y  + 3;  // +3: skip two headlines + border.

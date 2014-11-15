@@ -5,19 +5,19 @@ namespace DalskiAgent.Movement.Movers {
 
   /// <summary>
   ///   This abstract class serves as a base for agent movement.
-  ///   It interfaces the Environment Service Component (ESC).
+  ///   It interfaces an IEnvironment implementation.
   /// </summary>
   public abstract class AgentMover {
 
-    private readonly IEnvironment _env;   // Environment interaction interface.
-    private readonly SpatialAgent _agent; // Agent reference, needed for movement execution.
-    protected readonly MovementData Data; // The agent's movement data container.
-    
-    protected Vector TargetPos;    // Target position to acquire. May be set or calculated.
-    protected Direction TargetDir; // Desired heading.
+    private readonly IEnvironment _env;    // Environment interaction interface.
+    private readonly SpatialAgent _agent;  // Agent reference, needed for movement execution.
+    protected readonly DataAccessor Data;  // The agent's movement data container.
+   
+    protected Vector MovementVector;       // Target position to acquire. May be set or calculated.
+    protected Direction TargetDir;         // Desired heading.
 
-    public const float Sqrt2   = 1.4142f;    // The square root of 2.
-    public static float TickLength = 1.0f;   // Timelength of a simulation tick.
+    public const float Sqrt2 = 1.4142f;    // The square root of 2.
+    public static float TickLength = 1.0f; // Timelength of a simulation tick.
 
 
     /// <summary>
@@ -25,8 +25,8 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">Container with spatial base data.</param>
-    protected AgentMover(IEnvironment env, SpatialAgent agent, MovementData data) {
+    /// <param name="data">R/O container for spatial data.</param>
+    protected AgentMover(IEnvironment env, SpatialAgent agent, DataAccessor data) {
       _env = env;
       _agent = agent;
       Data = data;
@@ -38,7 +38,7 @@ namespace DalskiAgent.Movement.Movers {
     ///   The adapter is responsible to set the checked (returned) data.
     /// </summary>
     protected void Move() {
-      _env.ChangePosition(_agent, TargetPos, TargetDir);
+      _env.MoveObject(_agent, MovementVector, TargetDir);
     }
 
 
