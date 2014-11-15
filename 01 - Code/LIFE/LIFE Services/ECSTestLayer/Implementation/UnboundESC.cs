@@ -77,7 +77,7 @@
             return _entities;
         }
 
-        public object GetData(int informationType, IDeprecatedGeometry deprecatedGeometry) {
+        public object GetData(int informationType, IHalo halo) {
             //TODO informationType als filter kriterium
 //            const int elementId = -1;
 //            Add(elementId, -1, false, geometry.GetDimensionQuad());

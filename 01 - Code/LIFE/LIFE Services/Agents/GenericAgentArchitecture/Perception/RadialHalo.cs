@@ -1,6 +1,5 @@
 ﻿using CommonTypes.TransportTypes;
-using DalskiAgent.Movement;
-using GenericAgentArchitectureCommon.Datatypes;
+using DalskiAgent.Environments;
 
 namespace DalskiAgent.Perception {
 
@@ -10,27 +9,26 @@ namespace DalskiAgent.Perception {
   public class RadialHalo : Halo {
 
     private readonly float _radius; // The radius describing the range of this halo.
-    private readonly AABB _aabb;
 
 
     /// <summary>
     ///   Create a circular halo.
     /// </summary>
-    /// <param name="position">The agent's centre.</param>
+    /// <param name="data">The agent's R/O data container.</param>
     /// <param name="radius">The radius describing the range of this halo.</param>
-    public RadialHalo(Vector position, float radius) : base(position) {
+    public RadialHalo(DataAccessor data, float radius) : base(data) {
       _radius = radius;
-      var min = new TVector(position.X - radius, position.Y - radius, position.Z - radius);
-      var max = new TVector(position.X + radius, position.Y + radius, position.Z + radius);
-      _aabb = AABB.FromMinMax(min, max);
     }
 
-    public override AABB GetAABB() {
-      return _aabb;
-    }
 
+    /// <summary>
+    ///   Check, if a given position is inside this perception range.
+    /// </summary>
+    /// <param name="position">The position to check.</param>
+    /// <returns>True, if position is in range, false otherwise.</returns>
     public override bool IsInRange(TVector position) {
-      return Position.GetTVector().GetDistance(position) <= _radius;
+      var dist = Data.Position.GetTVector().GetDistance(position);
+      return (dist <= _radius) && (dist > float.Epsilon);
     }
   }
 }

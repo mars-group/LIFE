@@ -4,7 +4,8 @@
   ///   This interface shall provide a data callback mechanism for passive sensors.
   /// </summary>
   public interface ICallbackDataSource {
-    
+   
+ 
     /// <summary>
     ///   Enables data source callback mode. Not usable at the moment!
     /// </summary>

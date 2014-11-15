@@ -11,7 +11,7 @@ namespace DalskiAgent.Perception {
 
     protected readonly IGenericDataSource Source;    // The data source (environment) to sense. 
     public int InformationType { get; private set; } // Link to the data type to acquire.
-    protected readonly Halo Halo;                    // The area this sensor can percept. 
+    protected readonly IHalo Halo;                   // The area this sensor can percept. 
 
 
     /// <summary>
@@ -22,7 +22,7 @@ namespace DalskiAgent.Perception {
     /// <param name="source">Reference to the queried data source.</param>
     /// <param name="dataType">The information type, this sensor listens at.</param>
     /// <param name="halo">The halo represents the perception field for this sensor.</param>
-    public DataSensor(Agent agent, IGenericDataSource source, int dataType, Halo halo) 
+    public DataSensor(Agent agent, IGenericDataSource source, int dataType, IHalo halo) 
       : base (agent) {
       Source = source;
       InformationType = dataType;

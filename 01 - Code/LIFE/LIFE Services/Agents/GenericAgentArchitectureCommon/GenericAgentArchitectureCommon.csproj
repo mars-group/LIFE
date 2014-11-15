@@ -54,7 +54,7 @@
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Interfaces\IFact.cs" />
     <Compile Include="Interfaces\IGenericDataSource.cs" />
-    <Compile Include="Interfaces\IDeprecatedGeometry.cs" />
+    <Compile Include="Interfaces\IHalo.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
     <Compile Include="Interfaces\ISpatialEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,4 @@
 ﻿using CommonTypes.TransportTypes;
-using DalskiAgent.Movement;
-using GenericAgentArchitectureCommon.Datatypes;
 
 namespace DalskiAgent.Perception {
     
@@ -13,12 +11,14 @@ namespace DalskiAgent.Perception {
     /// <summary>
     ///   Create a halo that is capable of sensing everything.
     /// </summary>
-    public OmniHalo() : base(new Vector(TVector.Origin.X, TVector.Origin.Y, TVector.Origin.Z)) { }
+    public OmniHalo() : base(null) { }
 
-    public override AABB GetAABB() {
-      return AABB.Omni;
-    }
 
+    /// <summary>
+    ///   Check, if a given position is inside this perception range.
+    /// </summary>
+    /// <param name="position">The position to check.</param>
+    /// <returns>True, if position is in range, false otherwise.</returns>
     public override bool IsInRange(TVector position) {
       return true;
     }

@@ -92,11 +92,11 @@ namespace DalskiAgent.Environments {
     ///   In this case, the adapter redirects to the ESC implementation.
     /// </summary>
     /// <param name="informationType">The type of information to sense.</param>
-    /// <param name="deprecatedGeometry">The perception range.</param>
+    /// <param name="halo">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public object GetData(int informationType, IDeprecatedGeometry deprecatedGeometry) {
+    public object GetData(int informationType, IHalo halo) {
       //TODO Geometrie umschreiben!
-      return _esc.GetData(informationType, deprecatedGeometry);
+      return _esc.GetData(informationType, halo);
     }
   }
 }

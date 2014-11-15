@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using DalskiAgent.Movement;
-using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Environments {
@@ -128,6 +127,7 @@ namespace DalskiAgent.Environments {
     }
 
 
+    /*
     /// <summary>
     ///   Generate a valid initial movement data container for some given criteria. 
     /// </summary>
@@ -139,6 +139,7 @@ namespace DalskiAgent.Environments {
     private SpatialData PlaceAtRandomFreePosition(Vector dim, Direction dir = null, Vector target = null, float maxRng = 1) {
       throw new NotImplementedException();
     }
+    */
 
 
     /// <summary>
@@ -163,18 +164,14 @@ namespace DalskiAgent.Environments {
     ///   can be made by specific environments overriding this function. 
     /// </summary>
     /// <param name="informationType">The type of information to sense.</param>
-    /// <param name="deprecatedGeometry">The perception range.</param>
+    /// <param name="halo">The perception range.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public virtual object GetData(int informationType, IDeprecatedGeometry deprecatedGeometry) {
+    public virtual object GetData(int informationType, IHalo halo) {
       switch (informationType) {
         case 0: { // Zero stands here for "all agents". Enum avoided, check it elsewhere!
-          
-          //TODO Same problem as in ESC Adapter!
-          var halo = (Halo) deprecatedGeometry;
           var objects = new List<IObject>();
           foreach (var obj in GetAllObjects())
-            if (halo.IsInRange(obj.GetPosition().GetTVector()) && 
-            halo.Position.GetDistance(obj.GetPosition()) > float.Epsilon) objects.Add(obj);
+            if (halo.IsInRange(obj.GetPosition().GetTVector())) objects.Add(obj);
           return objects;
         }
 

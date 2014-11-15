@@ -41,7 +41,7 @@ namespace AgentTester.Wolves.Agents {
       PerceptionUnit.AddSensor(new DataSensor(
         this, env,
         (int) InformationTypes.AllAgents,
-        new RadialHalo(Data.Position, 8))
+        new RadialHalo(Data, 8))
       );
 
       // Add movement module.

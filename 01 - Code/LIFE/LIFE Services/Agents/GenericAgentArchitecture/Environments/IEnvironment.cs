@@ -9,6 +9,8 @@ namespace DalskiAgent.Environments {
   ///   It thereby enables abstraction from ESC specific methods.
   /// </summary>
   public interface IEnvironment : IGenericDataSource {
+    
+    
     /// <summary>
     ///   Add a new object to the environment.
     /// </summary>
