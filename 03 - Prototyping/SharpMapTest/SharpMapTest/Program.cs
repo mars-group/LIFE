@@ -14,15 +14,16 @@ namespace SharpMapTest
         static void Main(string[] args)
         {
             var rasterLayer = new GdalRasterLayer("elevationLayer", @"..\..\..\GISData\knp_srtm90m.asc");
-
+            
             var myMap = new Map {
                 Size = rasterLayer.Size,
                 MinimumZoom = 1,
                 BackColor = Color.Black,
             };
-
+            
             myMap.Layers.Add(rasterLayer);
             myMap.ZoomToExtents();
+             
             var projectedCoordinate = myMap.ImageToWorld(new PointF(2000, 5000));
             var polygon =
                 new Polygon(
@@ -52,7 +53,7 @@ namespace SharpMapTest
             rasterLayer.ExecuteIntersectionQuery(polygon, featureSet2);
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
-            featureSet2.CreateDataReader().
+
             //myMap.ZoomToExtents();
 
             /**Image imgMap = myMap.GetMap();

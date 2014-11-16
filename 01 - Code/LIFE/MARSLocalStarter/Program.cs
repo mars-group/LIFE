@@ -14,19 +14,13 @@ namespace MARSLocalStarter
 
 
 
-        private static void Main(string[] args)
-        {
+        private static void Main(string[] args) {
             Log.Info("Initializing components and building application core...");
 
 
             var core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
 
-
-
-
             var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
-
-
 
             Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
 

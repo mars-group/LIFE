@@ -7,7 +7,6 @@ namespace LayerAPI.Interfaces
     /// as well as hold agents.
     /// This layer gets ticked via PreTick, Tick and PostTick.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public interface IGISActiveLayer : ISteppedActiveLayer, IGISAccess {
     }
 }

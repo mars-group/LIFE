@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
@@ -20,7 +19,7 @@ namespace ExampleLayer {
 
 		private List<AgentSmith> _agents;
         private const int agentCount = 10000;
-
+         
         public ExampleLayer() {
 
         }
@@ -55,6 +54,8 @@ namespace ExampleLayer {
             }));
             return result.ToList();
         }
+
+
 
         public List<BasicVisualizationMessage> GetVisData(IGeometry geometry) {
             throw new NotImplementedException();

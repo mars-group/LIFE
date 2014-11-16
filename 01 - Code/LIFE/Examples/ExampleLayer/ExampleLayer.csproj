@@ -32,20 +32,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="CommonTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\CommonTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\SharpMap\GeoAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="LCConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\LCConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MessageWrappers">
       <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Addins">
-      <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
+    <Reference Include="Mono.Addins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\Mono.Addins.dll</HintPath>
     </Reference>
-    <Reference Include="NetTopologySuite">
-      <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\NetTopologySuite.dll</HintPath>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="PowerCollections">
-      <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
+    <Reference Include="Scs, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\Scs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,9 +71,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="GeoAPI">
-      <HintPath>..\..\packages\GeoAPI.1.7.3\lib\net45-client\GeoAPI.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="2DEnvironment.cs" />
