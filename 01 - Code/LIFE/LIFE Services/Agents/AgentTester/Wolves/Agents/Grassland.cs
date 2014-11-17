@@ -5,7 +5,7 @@ using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
-using LayerAPI.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
 
@@ -33,7 +33,7 @@ namespace AgentTester.Wolves.Agents {
     ///   Nevertheless, the spawning of some additional grass agents would be nice.
     /// </summary>
     public override void AdvanceEnvironment() {
-      var grassCount = Agents.Keys.OfType<Grass>().Count();
+      var grassCount = Objects.Keys.OfType<Grass>().Count();
       var create = _random.Next(50 + grassCount) < 20;
       if (create) new Grass(_exec, this, GetRandomPosition());
     }
@@ -43,16 +43,15 @@ namespace AgentTester.Wolves.Agents {
     ///   Retrieve information from a data source.
     ///   Overrides GetData to provide additional "Grass" agent queries.
     /// </summary>
-    /// <param name="informationType">The information type to query.</param>
-    /// <param name="geometry">The perceptable area.</param>
-    /// <returns>An arbitrary object. In this case, an agent listing.</returns>
-    public override object GetData(int informationType, IGeometry geometry) {
-      switch ((InformationTypes) informationType) {      
+    /// <param name="spec">Information object describing which data to query.</param>
+    /// <returns>An object representing the percepted information.</returns>
+    public override object GetData(ISpecificator spec) {
+      switch ((InformationTypes) spec.GetInformationType()) {      
         case InformationTypes.AllAgents:
-          return base.GetData(0, geometry);
+          return base.GetData(spec);
 
         case InformationTypes.Grass: {
-          var list = (List<SpatialAgent>) base.GetData(0, geometry);
+          var list = (List<SpatialAgent>) base.GetData(spec);
           return list.OfType<Grass>().ToList();
         }
 

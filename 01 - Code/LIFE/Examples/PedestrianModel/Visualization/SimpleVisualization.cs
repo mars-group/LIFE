@@ -34,7 +34,7 @@ namespace PedestrianModel.Visualization
         {
             Graphics g = pe.Graphics;
 
-            foreach(SpatialAgent agent in env.GetAllAgents()) {
+            foreach(SpatialAgent agent in env.GetAllObjects()) {
                 var zoom = Config.VisualizationZoom;
                 var center = agent.GetPosition() * zoom + new Vector(Config.VisualizationOffsetX, Config.VisualizationOffsetY, 0);
                 var dimension = agent.GetDimension() * zoom;                

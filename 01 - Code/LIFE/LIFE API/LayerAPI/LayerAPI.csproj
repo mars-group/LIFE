@@ -51,12 +51,8 @@
   <ItemGroup>
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
-    <Compile Include="Interfaces\AABB.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
-    <Compile Include="Interfaces\IGenericDataSource.cs" />
-    <Compile Include="Interfaces\IGeometry.cs" />
     <Compile Include="Interfaces\ILayer.cs" />
-    <Compile Include="Interfaces\ISpatialEntity.cs" />
     <Compile Include="Interfaces\ISteppedLayer.cs" />
     <Compile Include="Interfaces\ITickClient.cs" />
     <Compile Include="Interfaces\LayerStatus.cs" />

@@ -67,43 +67,25 @@ namespace PedestrianModel.Agents
         /// <param name="env">Environment reference.</param>
         /// <param name="pos">Initial position.</param>
         public Pedestrian(IExecution exec, IEnvironment env, string simulationId, Vector position, Vector dimension, Direction direction, Vector targetPosition, String name = "pedestrian")
-            : base(exec, env, position)
+            : base(exec, env, position, dimension, direction)
         {
             this.environment = env;
             this.name = name;
             this.simulationId = simulationId;
 
-            Data.Dimension.X = dimension.X;
-            Data.Dimension.Y = dimension.Y;
-            Data.Dimension.Z = dimension.Z;
-
-            // Up/Down
-            Data.Direction.SetPitch(direction.Pitch);
-            // Left/Right
-            Data.Direction.SetYaw(direction.Yaw);
-
             // Add perception sensor for obstacles.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, environment,
-              (int)InformationTypes.Obstacles,
-              //new RadialHalo(Data.Position, 8))
-              new OmniHalo())
+              this, environment, new OmniHalo((int)InformationTypes.Obstacles))
             );
 
             // Add perception sensor for pedestrians.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, environment,
-              (int)InformationTypes.Pedestrians,
-              //new RadialHalo(Data.Position, 8))
-              new OmniHalo())
+              this, environment, new OmniHalo((int)InformationTypes.Pedestrians))
             );
 
             // Add perception sensor for everything.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, environment,
-              (int)InformationTypes.AllAgents,
-                //new RadialHalo(Data.Position, 8))
-              new OmniHalo())
+              this, environment, new OmniHalo((int)InformationTypes.AllAgents))
             );
 
             // Add movement module.

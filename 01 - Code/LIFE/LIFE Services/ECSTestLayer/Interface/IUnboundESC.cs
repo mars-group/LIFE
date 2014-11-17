@@ -1,25 +1,25 @@
 ﻿using System.Collections.Generic;
+using CommonTypes.TransportTypes;
 using ESCTestLayer.Entities;
-using LayerAPI.Interfaces;
+using GenericAgentArchitectureCommon.Interfaces;
 
-namespace ESCTestLayer.Interface
-{
-    using CommonTypes.TransportTypes;
+namespace ESCTestLayer.Interface {
+    using GeoAPI.Geometries;
 
-    public interface IUnboundESC : IGenericDataSource
-    {
-        MovementResult Add(ISpatialEntity entity, TVector position, TVector direction);
+    public interface IUnboundESC : IGenericDataSource {
 
-        MovementResult AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid);
+    bool Add(ISpatialEntity entity, TVector position, float directionAngle = 0);
 
-        void Remove(ISpatialEntity entity);
+    bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid);
 
-        MovementResult Update(ISpatialEntity entity);
+    void Remove(ISpatialEntity entity);
 
-        MovementResult Move(ISpatialEntity entity, TVector position, TVector direction);
-        
-        IEnumerable<SpatialPositionedEntity> Explore(IGeometry geometry, TVector position, TVector direction);
+    bool Update(ISpatialEntity entity, IGeometry newBounds);
 
-        IEnumerable<SpatialPositionedEntity> ExploreAll();
-    }
+    MovementResult Move(ISpatialEntity entity, TVector movementVector, float directionAngle = 0);
+
+    IEnumerable<ISpatialEntity> Explore(IGeometry geometry);
+
+    IEnumerable<ISpatialEntity> ExploreAll();
+  }
 }

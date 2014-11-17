@@ -3,6 +3,7 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Perception;
+using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents;
 using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
@@ -32,21 +33,21 @@ namespace PedestrianModel.Environment
             exec.SetEnvironment(this);        
         }
 
-        public override object GetData(int informationType, LayerAPI.Interfaces.IGeometry geometry)
+        public override object GetData(ISpecificator spec)
         {
-            switch ((InformationTypes)informationType)
+            switch ((InformationTypes)spec.GetInformationType())
             {
                 case InformationTypes.AllAgents:
-                    return base.GetData(0, geometry);
+                    return base.GetData(spec);
 
                 case InformationTypes.Obstacles:
                     {
-                        var list = (List<SpatialAgent>)base.GetData(0, geometry);
+                        var list = (List<SpatialAgent>)base.GetData(spec);
                         return list.OfType<Obstacle>().ToList();
                     }
                 case InformationTypes.Pedestrians:
                     {
-                        var list = (List<SpatialAgent>)base.GetData(0, geometry);
+                        var list = (List<SpatialAgent>)base.GetData(spec);
                         return list.OfType<Pedestrian>().ToList();
                     }
                 default: return null;
@@ -59,7 +60,7 @@ namespace PedestrianModel.Environment
             {
                 Visualization.Invalidate();
             }
-            agentLogger.Log(this.GetAllAgents().OfType<Pedestrian>().ToList());
+            agentLogger.Log(this.GetAllObjects().OfType<Pedestrian>().ToList());
         }
 
     }

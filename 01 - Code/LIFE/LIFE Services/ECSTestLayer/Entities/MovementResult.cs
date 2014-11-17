@@ -1,25 +1,22 @@
 ﻿namespace ESCTestLayer.Entities {
     #region Namespace imports
 
-    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using CommonTypes.TransportTypes;
+    using GenericAgentArchitectureCommon.Interfaces;
 
     #endregion
 
     public class MovementResult {
-        public bool Success { get; private set; }
-        public TVector Position { get; private set; }
+        public bool Success { get { return Collisions == null || !Collisions.Any(); } }
+        public TVector Position { get; private set; } //TODO obsolet
+        public IEnumerable<ISpatialEntity> Collisions { get; private set; }
 
-        public Dictionary<String, Object> Information { get; private set; }
-
-        public MovementResult(bool success, TVector position, Dictionary<String, Object> information) {
-            Success = success;
-            Position = position;
-            Information = information;
+        public MovementResult(IEnumerable<ISpatialEntity> collisions = null) {
+            Collisions = collisions;
         }
 
-        public MovementResult(TVector position) :
-            this(true, position, new Dictionary<String, Object>()) {}
+
     }
 }

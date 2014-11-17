@@ -25,17 +25,8 @@ namespace PedestrianModel.Agents
         /// <param name="env">Environment reference.</param>
         /// <param name="pos">Initial position.</param>
         public Obstacle(IExecution exec, IEnvironment env, Vector position, Vector dimension, Direction direction)
-            : base(exec, env, position)
+            : base(exec, env, position, dimension, direction)
         {
-            Data.Dimension.X = dimension.X;
-            Data.Dimension.Y = dimension.Y;
-            Data.Dimension.Z = dimension.Z;
-
-            // Up/Down
-            Data.Direction.SetPitch(direction.Pitch);
-            // Left/Right
-            Data.Direction.SetYaw(direction.Yaw);
-
             Init();
         }
 

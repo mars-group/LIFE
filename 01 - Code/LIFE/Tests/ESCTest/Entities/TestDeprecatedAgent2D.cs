@@ -1,16 +1,15 @@
 ﻿namespace ESCTest.Entities {
-    using CommonTypes.DataTypes;
     using CommonTypes.TransportTypes;
     using ESCTestLayer.Interface;
 
-    class TestAgent2D {
+    internal class TestDeprecatedAgent2D {
         private const int InformationType = 1;
-        private readonly IESC _esc;
+        private readonly IDeprecatedESC _esc;
         private readonly int _id;
         private readonly TVector _dimension;
         private readonly TVector _direction;
 
-        public TestAgent2D(int id, IESC esc) {
+        public TestDeprecatedAgent2D(int id, IDeprecatedESC esc) {
             _esc = esc;
             _id = id;
             _dimension = new TVector(1, 1);

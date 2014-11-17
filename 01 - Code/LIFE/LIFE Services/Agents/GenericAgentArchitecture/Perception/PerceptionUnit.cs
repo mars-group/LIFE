@@ -47,7 +47,7 @@ namespace DalskiAgent.Perception {
     ///   Request new sensor information from all attached sensors and store them in a map.
     /// </summary>
     public void SenseAll() {
-      foreach (var sensor in _dataSensors) _dataInput[sensor.InformationType] = sensor.Sense();      
+      foreach (var sensor in _dataSensors) _dataInput[sensor.GetInformationType()] = sensor.Sense();      
       foreach (var sensor in _comSensors)  _messages [sensor.Channel] = sensor.Sense();
     }
 

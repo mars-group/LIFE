@@ -24,10 +24,10 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">Container with spatial base data.</param>
+    /// <param name="data">R/O container for spatial data.</param>
     /// <param name="diagonal">'True': diagonal movement enabled (default value). 
     /// On 'false', only up, down, left and right are available.</param>
-    public GridMover(IEnvironment env, SpatialAgent agent, MovementData data, bool diagonal = true) : base(env, agent, data) {
+    public GridMover(IEnvironment env, SpatialAgent agent, DataAccessor data, bool diagonal = true) : base(env, agent, data) {
       _diagonalEnabled = diagonal;
     }
 
@@ -37,17 +37,17 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="direction">The direction to move (enumeration value).</param>
     public void Move(GridDir direction) {
-      TargetPos = new Vector(Data.Position.X, Data.Position.Y);
+      MovementVector = new Vector(0, 0);
       TargetDir = new Direction();
       switch (direction) {
-        case GridDir.Up       : TargetPos.X ++;                  TargetDir.SetYaw(  0);  break;
-        case GridDir.Down     : TargetPos.X --;                  TargetDir.SetYaw(180);  break;
-        case GridDir.Left     :                 TargetPos.Y --;  TargetDir.SetYaw(270);  break;
-        case GridDir.Right    :                 TargetPos.Y ++;  TargetDir.SetYaw( 90);  break;
-        case GridDir.UpLeft   : TargetPos.X ++; TargetPos.Y --;  TargetDir.SetYaw(  0);  break;  //315 | Diagonal 
-        case GridDir.UpRight  : TargetPos.X ++; TargetPos.Y ++;  TargetDir.SetYaw(  0);  break;  //45  | placement
-        case GridDir.DownLeft : TargetPos.X --; TargetPos.Y --;  TargetDir.SetYaw(180);  break;  //225 | causes
-        case GridDir.DownRight: TargetPos.X --; TargetPos.Y ++;  TargetDir.SetYaw(180);  break;  //135 | overlapping!   
+        case GridDir.Up       : MovementVector.X ++;                  TargetDir.SetYaw(  0);  break;
+        case GridDir.Down     : MovementVector.X --;                  TargetDir.SetYaw(180);  break;
+        case GridDir.Left     :                 MovementVector.Y --;  TargetDir.SetYaw(270);  break;
+        case GridDir.Right    :                 MovementVector.Y ++;  TargetDir.SetYaw( 90);  break;
+        case GridDir.UpLeft   : MovementVector.X ++; MovementVector.Y --;  TargetDir.SetYaw(  0);  break;  //315 | Diagonal 
+        case GridDir.UpRight  : MovementVector.X ++; MovementVector.Y ++;  TargetDir.SetYaw(  0);  break;  //45  | placement
+        case GridDir.DownLeft : MovementVector.X --; MovementVector.Y --;  TargetDir.SetYaw(180);  break;  //225 | causes
+        case GridDir.DownRight: MovementVector.X --; MovementVector.Y ++;  TargetDir.SetYaw(180);  break;  //135 | overlapping!   
       }
       Move();  // Execute movement (call to L0-Move()).
     }

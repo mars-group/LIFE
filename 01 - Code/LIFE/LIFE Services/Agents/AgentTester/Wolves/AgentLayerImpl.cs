@@ -60,7 +60,7 @@ namespace AgentTester.Wolves {
     ///   It increases the tick counter and spawns some additional agents.
     /// </summary>
     public void Tick() {
-      var grassCount = _env.GetAllAgents().OfType<Grass>().Count();
+      var grassCount = _env.GetAllObjects().OfType<Grass>().Count();
       var create = _random.Next(50 + grassCount) < 20;
       if (create) {
         var g = new Grass(_exec, _env);

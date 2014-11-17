@@ -38,7 +38,7 @@ namespace PedestrianModel
     {
         IEnvironment env;
         if (!esc) env = new ObstacleEnvironment(exec);
-        else env = new ESCAdapter(new ESC());
+        else env = new ESCAdapter(new UnboundESC(), new Vector(1000, 1000), false);
         
         new Thread(() => {
             SimpleVisualization visualization = new SimpleVisualization(env);

@@ -1,11 +1,8 @@
-﻿namespace LayerAPI.Interfaces {
-    #region Namespace imports
+﻿using System;
+using System.Collections.Generic;
+using CommonTypes.TransportTypes;
 
-    using System;
-    using System.Collections.Generic;
-    using CommonTypes.TransportTypes;
-
-    #endregion
+namespace GenericAgentArchitectureCommon.Datatypes {
 
     /// <summary>
     ///     Axis Aligned Bounding Box
