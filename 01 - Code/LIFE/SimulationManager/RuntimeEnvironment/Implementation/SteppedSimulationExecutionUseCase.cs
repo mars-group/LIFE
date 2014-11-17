@@ -91,7 +91,7 @@ namespace RuntimeEnvironment.Implementation {
 
             }
 			sw.Stop();
-			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds * 1000);
+			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds.");
         }
 
 		private void DoStep(){
