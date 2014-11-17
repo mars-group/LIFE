@@ -33,6 +33,14 @@ namespace PedestrianModel.Environment
         }
 
         /// <summary>
+        ///   Create a new environment.
+        /// </summary>
+        public ObstacleEnvironment() : base(new Vector(1000, 1000), false)
+        {
+
+        }
+
+        /// <summary>
         ///   Retrieve information from a data source.
         /// </summary>
         /// <param name="spec">Information object describing which data to query.</param>

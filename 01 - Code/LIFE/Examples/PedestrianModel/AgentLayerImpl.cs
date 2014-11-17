@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
@@ -9,8 +11,10 @@ using PedestrianModel.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Movement;
 using DalskiAgent.Execution;
+using PedestrianModel.Environment;
 using PedestrianModel.Util;
 using PedestrianModel.Logging;
+using PedestrianModel.Visualization;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -28,6 +32,7 @@ namespace PedestrianModel
     ///   This layer implementation contains a pedestrian simulation..
     ///   It uses the Generic Agent Architecture and serves as an example for other agent models.
     /// </summary>
+    [Extension(typeof (ISteppedLayer))]
     public class AgentLayerImpl : ISteppedLayer, ITickClient, IGenericDataSource
     {
 
@@ -48,8 +53,15 @@ namespace PedestrianModel
         public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
             _tick = 0;
-            _env = new Environment2D(new Vector(1000, 1000), false);
+            _env = new ObstacleEnvironment();
             _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
+
+            new Thread(() =>
+            {
+                SimpleVisualization visualization = new SimpleVisualization(_env);
+                ObstacleEnvironment.Visualization = visualization;
+                Application.Run(visualization);
+            }).Start();
 
             ScenarioBuilder.CreateScenario(_exec, _env, Config.Scenario);
 
@@ -65,7 +77,10 @@ namespace PedestrianModel
         /// </summary>
         public void Tick()
         {
-            Console.WriteLine("Tick!");
+            if (ObstacleEnvironment.Visualization != null)
+            {
+                ObstacleEnvironment.Visualization.Invalidate();
+            }
             agentLogger.Log(_env.GetAllObjects().OfType<Pedestrian>().ToList());
             _tick++;
         }
