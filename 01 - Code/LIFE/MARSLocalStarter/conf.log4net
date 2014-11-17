@@ -9,17 +9,9 @@
         <conversionPattern value="%date [%thread] %-5level %logger [%ndc] - %message%newline" />
       </layout>
     </appender>
-    <appender name="UdpAppender" type="log4net.Appender.UdpAppender">
-      <RemoteAddress value="141.22.29.17" />
-      <RemotePort value="15960" />
-      <layout type="log4net.Layout.PatternLayout">
-        <conversionPattern value="[%date][%thread][%level][%property{log4net:HostName}][%logger:%M:%line][%file][%appdomain] %message%newline" />
-      </layout>
-    </appender>
     <root>
       <level value="ALL" />
       <appender-ref ref="ConsoleAppender" />
-      <appender-ref ref="UdpAppender" />
-    </root>
+      </root>
   </log4net>
 </configuration>

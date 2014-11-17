@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\MARSLocalStarter\bin\Debug\layers\addins\GOAPBetaModel\</OutputPath>
+    <OutputPath>..\..\..\MARSLocalStarter\bin\Debug\layers\addins\GOAPModel\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

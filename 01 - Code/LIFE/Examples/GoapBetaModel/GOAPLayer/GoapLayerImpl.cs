@@ -12,7 +12,7 @@ namespace GOAPLayer {
 
     [Extension(typeof (ISteppedLayer))]
     public class GoapLayerImpl : ISteppedLayer {
-        private const string NamespaceOfModelDefinition = "GOAPBetaModelDefinition";
+        private const string NamespaceOfModelDefinition = "GOAPModelDefinition";
         private const int GoapWorkdAndPlayAgentCount = 1000;
 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
