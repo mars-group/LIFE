@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using GOAPBetaLayer.Agents;
+using GOAPLayer.Agents;
 using LayerAPI.Interfaces;
 using log4net;
 using Mono.Addins;
@@ -8,7 +8,7 @@ using Mono.Addins;
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
 
-namespace GOAPBetaLayer {
+namespace GOAPLayer {
 
     [Extension(typeof (ISteppedLayer))]
     public class GoapLayerImpl : ISteppedLayer {

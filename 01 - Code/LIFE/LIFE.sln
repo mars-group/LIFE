@@ -149,17 +149,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimPanViewer", "Examples\Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizationAdapter", "LayerContainer\VisualizationAdapter\VisualizationAdapter.csproj", "{F6626674-3A9A-460B-A98B-A66B561FD811}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoapBetaModel", "GoapBetaModel", "{60C6E829-179D-4C48-AED1-BE5F4F7038B9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoapModel", "GoapModel", "{60C6E829-179D-4C48-AED1-BE5F4F7038B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOAPBetaLayer", "Examples\GoapBetaModel\GOAPLayer\GOAPBetaLayer.csproj", "{65019A5A-DCE4-42E8-ACAA-FCD561F03AE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOAPLayer", "Examples\GoapBetaModel\GOAPLayer\GOAPLayer.csproj", "{65019A5A-DCE4-42E8-ACAA-FCD561F03AE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOAPBetaModelDefinition", "Examples\GoapBetaModel\GOAPModelDefinition\GOAPBetaModelDefinition.csproj", "{2BDAE63C-F3C5-4543-9B9D-7A70DCCA39C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOAPModelDefinition", "Examples\GoapBetaModel\GOAPModelDefinition\GOAPModelDefinition.csproj", "{2BDAE63C-F3C5-4543-9B9D-7A70DCCA39C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoapBetaGraphConnector", "LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaGraphConnector\GoapBetaGraphConnector.csproj", "{EAC55EA1-8F7C-45ED-8C74-31660F3E6CA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoapGraphConnector", "LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaGraphConnector\GoapGraphConnector.csproj", "{EAC55EA1-8F7C-45ED-8C74-31660F3E6CA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoapBetaCommon", "LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaCommon\GoapBetaCommon.csproj", "{56103BF6-D58D-448F-9C7D-D05FEB1D5A41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoapCommon", "LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaCommon\GoapCommon.csproj", "{56103BF6-D58D-448F-9C7D-D05FEB1D5A41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoapBetaActionSystem", "LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaActionSystem\GoapBetaActionSystem.csproj", "{30DCDEAD-8053-4118-A811-E55C9106116C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoapActionSystem", "LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaActionSystem\GoapActionSystem.csproj", "{30DCDEAD-8053-4118-A811-E55C9106116C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoapTests", "Tests\GoapTests\GoapTests.csproj", "{0D4F96A8-BB3B-4B81-81C3-9A0C508B79FF}"
 EndProject

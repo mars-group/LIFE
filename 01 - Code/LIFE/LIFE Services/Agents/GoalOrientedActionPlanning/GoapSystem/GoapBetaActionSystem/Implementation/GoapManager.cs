@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Implementation;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
+using GoapCommon.Interfaces;
 using TypeSafeBlackboard;
 
-namespace GoapBetaActionSystem.Implementation {
+namespace GoapActionSystem.Implementation {
 
     public class GoapManager : AbstractGoapSystem {
         private readonly List<AbstractGoapAction> _availableActions;

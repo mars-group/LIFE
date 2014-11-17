@@ -1,6 +1,6 @@
-﻿using GoapBetaCommon.Abstract;
+﻿using GoapCommon.Abstract;
 
-namespace GoapBetaCommon.Interfaces {
+namespace GoapCommon.Interfaces {
 
     public interface IGoapEdge {
         IGoapNode GetSource();

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GoapBetaCommon.Implementation;
+using GoapCommon.Implementation;
 
-namespace GoapBetaCommon.Interfaces {
+namespace GoapCommon.Interfaces {
 
     public interface IGoapGoal {
         bool IsSatisfied(List<WorldstateSymbol> worldstate);

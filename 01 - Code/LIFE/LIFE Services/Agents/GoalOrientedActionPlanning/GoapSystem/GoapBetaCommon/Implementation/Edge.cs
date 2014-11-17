@@ -1,8 +1,8 @@
 ﻿using System;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Abstract;
+using GoapCommon.Interfaces;
 
-namespace GoapBetaCommon.Implementation {
+namespace GoapCommon.Implementation {
 
     public class Edge : IGoapEdge, IEquatable<Edge> {
         private readonly IGoapNode _source;

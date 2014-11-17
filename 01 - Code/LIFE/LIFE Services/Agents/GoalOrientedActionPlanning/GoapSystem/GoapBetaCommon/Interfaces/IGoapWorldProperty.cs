@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GoapBetaCommon.Interfaces {
+namespace GoapCommon.Interfaces {
 
     /// <summary>
     ///     Represents one aspect of the world of one agent. Many of this informations configure

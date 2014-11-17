@@ -77,17 +77,17 @@
       <Project>{85340006-B073-47E6-9DBF-D0CB391A13AA}</Project>
       <Name>GoapModelTest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaActionSystem\GoapBetaActionSystem.csproj">
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaActionSystem\GoapActionSystem.csproj">
       <Project>{30dcdead-8053-4118-a811-e55c9106116c}</Project>
-      <Name>GoapBetaActionSystem</Name>
+      <Name>GoapActionSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaCommon\GoapBetaCommon.csproj">
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaCommon\GoapCommon.csproj">
       <Project>{56103bf6-d58d-448f-9c7d-d05feb1d5a41}</Project>
-      <Name>GoapBetaCommon</Name>
+      <Name>GoapCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaGraphConnector\GoapBetaGraphConnector.csproj">
+    <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapBetaGraphConnector\GoapGraphConnector.csproj">
       <Project>{eac55ea1-8f7c-45ed-8c74-31660f3e6ca5}</Project>
-      <Name>GoapBetaGraphConnector</Name>
+      <Name>GoapGraphConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
       <Project>{D1FEB7B4-55CD-47D7-8828-5EE7B4C2DB95}</Project>

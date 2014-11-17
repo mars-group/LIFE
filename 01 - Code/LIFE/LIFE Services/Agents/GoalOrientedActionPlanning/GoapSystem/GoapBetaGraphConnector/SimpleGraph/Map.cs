@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoapBetaCommon.Exceptions;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Exceptions;
+using GoapCommon.Interfaces;
 
-namespace GoapBetaGraphConnector.SimpleGraph {
+namespace GoapGraphConnector.SimpleGraph {
 
     public class Map {
         private readonly List<IGoapNode> _vertices;

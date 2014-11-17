@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Implementation;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
 
-namespace GoapBetaActionSystem.Implementation {
+namespace GoapActionSystem.Implementation {
 
     /// <summary>
     ///     null action class

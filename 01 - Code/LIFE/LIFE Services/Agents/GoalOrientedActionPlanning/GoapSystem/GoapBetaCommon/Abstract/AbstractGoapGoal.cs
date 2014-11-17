@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoapBetaCommon.Implementation;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Implementation;
+using GoapCommon.Interfaces;
 
-namespace GoapBetaCommon.Abstract {
+namespace GoapCommon.Abstract {
 
     public abstract class AbstractGoapGoal : IGoapGoal {
         protected readonly List<WorldstateSymbol> TargetWorldState;

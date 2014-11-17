@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Implementation;
-using GoapBetaCommon.Interfaces;
-using GOAPBetaModelDefinition.Actions;
-using GOAPBetaModelDefinition.Goals;
-using GOAPBetaModelDefinition.Worldstates;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
+using GoapCommon.Interfaces;
+using GOAPModelDefinition.Actions;
+using GOAPModelDefinition.Goals;
+using GOAPModelDefinition.Worldstates;
 
-namespace GOAPBetaModelDefinition {
+namespace GOAPModelDefinition {
 
     /// <summary>
     ///     determines a configuration of an agent

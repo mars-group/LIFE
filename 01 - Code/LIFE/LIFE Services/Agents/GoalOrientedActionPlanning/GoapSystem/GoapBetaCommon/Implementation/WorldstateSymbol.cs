@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GoapBetaCommon.Implementation {
+namespace GoapCommon.Implementation {
 
     /// <summary>
     ///     struct offers call by value

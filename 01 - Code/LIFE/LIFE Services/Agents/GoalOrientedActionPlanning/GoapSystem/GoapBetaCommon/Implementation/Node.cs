@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Interfaces;
 
-namespace GoapBetaCommon.Implementation {
+namespace GoapCommon.Implementation {
 
     /// <summary>
     ///     node class for use in  graph service

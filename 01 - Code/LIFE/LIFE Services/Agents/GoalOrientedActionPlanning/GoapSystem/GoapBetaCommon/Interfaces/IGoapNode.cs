@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GoapBetaCommon.Implementation;
+using GoapCommon.Implementation;
 
-namespace GoapBetaCommon.Interfaces {
+namespace GoapCommon.Interfaces {
 
     public interface IGoapNode {
         List<WorldstateSymbol> GetUnsatisfiedGoalValues();

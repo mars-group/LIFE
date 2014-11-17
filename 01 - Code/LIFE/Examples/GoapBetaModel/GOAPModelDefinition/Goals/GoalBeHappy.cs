@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Implementation;
-using GOAPBetaModelDefinition.Worldstates;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
+using GOAPModelDefinition.Worldstates;
 
-namespace GOAPBetaModelDefinition.Goals {
+namespace GOAPModelDefinition.Goals {
 
     public class GoalBeHappy : AbstractGoapGoal {
         public GoalBeHappy()

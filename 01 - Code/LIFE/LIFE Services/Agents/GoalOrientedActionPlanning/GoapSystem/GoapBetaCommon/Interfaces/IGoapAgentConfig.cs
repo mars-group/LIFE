@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Implementation;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
 
-namespace GoapBetaCommon.Interfaces {
+namespace GoapCommon.Interfaces {
 
     /// <summary>
     ///     determines the configuration of an agent

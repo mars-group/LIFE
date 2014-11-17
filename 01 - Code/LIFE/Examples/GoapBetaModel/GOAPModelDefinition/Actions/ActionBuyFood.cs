@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using GoapBetaCommon.Implementation;
-using GOAPBetaModelDefinition.Worldstates;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
+using GOAPModelDefinition.Worldstates;
 
-namespace GOAPBetaModelDefinition.Actions
+namespace GOAPModelDefinition.Actions
 {
     public class ActionBuyFood : AbstractGoapAction{
 

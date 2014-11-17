@@ -1,4 +1,4 @@
-﻿namespace GOAPBetaModelDefinition.Worldstates {
+﻿namespace GOAPModelDefinition.Worldstates {
 
     public enum WorldProperties {
         Happy,

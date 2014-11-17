@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using GoapBetaActionSystem.Implementation;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Implementation;
+﻿using System.Collections.Generic;
+using GoapActionSystem.Implementation;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
 using LayerAPI.Interfaces;
 using TypeSafeBlackboard;
 
-namespace GOAPBetaLayer.Agents {
+namespace GOAPLayer.Agents {
 
     internal class WorkAndPlay : IAgent {
         private readonly Blackboard _blackboard;

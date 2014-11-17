@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using GenericAgentArchitectureCommon.Interfaces;
-using GoapBetaCommon.Implementation;
+using GoapCommon.Implementation;
 using TypeSafeBlackboard;
 
-namespace GoapBetaCommon.Abstract {
+namespace GoapCommon.Abstract {
 
     /// <summary>
     ///     action system is the common type of dicision making agent component

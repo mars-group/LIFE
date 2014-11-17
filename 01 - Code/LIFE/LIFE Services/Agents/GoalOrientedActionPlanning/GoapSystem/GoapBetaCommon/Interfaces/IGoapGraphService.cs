@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GoapBetaCommon.Interfaces {
+namespace GoapCommon.Interfaces {
 
     /// <summary>
     ///     the methods needed for the goap planner

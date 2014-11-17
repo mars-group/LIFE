@@ -57,9 +57,9 @@
       <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoapSystem\GoapBetaCommon\GoapBetaCommon.csproj">
+    <ProjectReference Include="..\GoapSystem\GoapBetaCommon\GoapCommon.csproj">
       <Project>{56103bf6-d58d-448f-9c7d-d05feb1d5a41}</Project>
-      <Name>GoapBetaCommon</Name>
+      <Name>GoapCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

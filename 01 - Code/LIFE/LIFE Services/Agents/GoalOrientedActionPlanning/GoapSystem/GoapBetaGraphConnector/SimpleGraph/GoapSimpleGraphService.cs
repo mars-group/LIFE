@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Interfaces;
 
-namespace GoapBetaGraphConnector.SimpleGraph {
+namespace GoapGraphConnector.SimpleGraph {
 
     public class GoapSimpleGraphService : IGoapGraphService {
         private IGoapNode _root;

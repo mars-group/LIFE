@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GoapBetaCommon.Implementation;
+using GoapCommon.Implementation;
 using GoapModelTest.Worldstates;
 using NUnit.Framework;
 

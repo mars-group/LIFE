@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GoapBetaCommon.Exceptions;
-using GoapBetaCommon.Interfaces;
+using GoapCommon.Exceptions;
+using GoapCommon.Interfaces;
 
-namespace GoapBetaGraphConnector.SimpleGraph {
+namespace GoapGraphConnector.SimpleGraph {
 
     /// <summary>
     ///     tasks are creating the management table of vertices, recalculating the entrys, add vertices to list, check for

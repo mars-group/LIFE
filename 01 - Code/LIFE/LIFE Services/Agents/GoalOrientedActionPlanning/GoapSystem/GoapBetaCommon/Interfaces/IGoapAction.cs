@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using GenericAgentArchitectureCommon.Interfaces;
-using GoapBetaCommon.Implementation;
+using GoapCommon.Implementation;
 
-namespace GoapBetaCommon.Interfaces {
+namespace GoapCommon.Interfaces {
 
     /// <summary>
     ///     An action represents a step towards a goal of one agent. It's a reusable unit.

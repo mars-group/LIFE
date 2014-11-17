@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Implementation;
-using GoapBetaCommon.Interfaces;
-using GoapBetaGraphConnector.SimpleGraph;
+using GoapCommon.Abstract;
+using GoapCommon.Implementation;
+using GoapCommon.Interfaces;
+using GoapGraphConnector.SimpleGraph;
 using log4net;
 
-namespace GoapBetaActionSystem.Implementation {
+namespace GoapActionSystem.Implementation {
 
     /// <summary>
     ///     The goapplanner is responsible for the process of finding a valid plan from the actions, currentWorld and

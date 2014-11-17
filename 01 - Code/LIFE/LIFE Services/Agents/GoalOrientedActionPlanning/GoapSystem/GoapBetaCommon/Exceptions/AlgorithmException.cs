@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GoapBetaCommon.Exceptions {
+namespace GoapCommon.Exceptions {
 
     public class AlgorithmException : Exception {
         public AlgorithmException() {}

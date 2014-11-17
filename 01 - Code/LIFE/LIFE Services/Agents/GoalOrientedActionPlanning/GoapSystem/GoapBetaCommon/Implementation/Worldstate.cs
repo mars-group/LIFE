@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GoapBetaCommon.Implementation {
+namespace GoapCommon.Implementation {
 
     public class Worldstate {
         private readonly Dictionary<int, WorldstateSymbol> _worldstate = new Dictionary<int, WorldstateSymbol>();

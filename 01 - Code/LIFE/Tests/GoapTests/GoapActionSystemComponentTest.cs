@@ -1,6 +1,6 @@
 ﻿using System;
-using GoapBetaActionSystem.Implementation;
-using GoapBetaCommon.Abstract;
+using GoapActionSystem.Implementation;
+using GoapCommon.Abstract;
 using GoapModelTest.Actions;
 using NUnit.Framework;
 using TypeSafeBlackboard;
