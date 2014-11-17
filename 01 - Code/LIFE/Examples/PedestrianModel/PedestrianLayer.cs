@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using DalskiAgent.Perception;
-using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 using Mono.Addins;
 using PedestrianModel.Agents;
 using DalskiAgent.Environments;
-using DalskiAgent.Movement;
 using DalskiAgent.Execution;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
-using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
 
 [assembly: Addin]
@@ -26,7 +22,7 @@ namespace PedestrianModel
     ///   It uses the Generic Agent Architecture and serves as an example for other agent models.
     /// </summary>
     [Extension(typeof (ISteppedLayer))]
-    public class PedestrianLayer : ISteppedLayer, ITickClient
+    public class PedestrianLayer : ISteppedActiveLayer
     {
         private long _tick;         // Counter of current tick.  
         private IEnvironment _env;  // Environment object for spatial agents. 
@@ -60,6 +56,14 @@ namespace PedestrianModel
             return true;
         }
 
+        public void PreTick()
+        {
+            if (ObstacleEnvironment.Visualization != null)
+            {
+                ObstacleEnvironment.Visualization.Invalidate();
+            }
+            ObstacleEnvironment.AgentLogger.Log(_env.GetAllObjects().OfType<Pedestrian>().ToList());
+        }
 
         /// <summary>
         ///   This layer is also tickable to execute some functions.
@@ -68,14 +72,12 @@ namespace PedestrianModel
         public void Tick()
         {
             Console.WriteLine("Tick: " + _tick);
-            if (ObstacleEnvironment.Visualization != null)
-            {
-                ObstacleEnvironment.Visualization.Invalidate();
-            }
-            ObstacleEnvironment.AgentLogger.Log(_env.GetAllObjects().OfType<Pedestrian>().ToList());
-            _tick++;
         }
 
+        public void PostTick()
+        {
+            _tick++;
+        }
 
         /// <summary>
         ///   Returns the current tick.
