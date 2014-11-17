@@ -58,7 +58,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A position vector.</returns>
     public Vector GetPosition() {
-      return new Vector(Data.Position.X, Data.Position.Y, Data.Position.Z);
+      return Data.Position;
     }
 
 
@@ -66,8 +66,17 @@ namespace DalskiAgent.Agents {
     ///   Returns the agent's heading.
     /// </summary>
     /// <returns>A direction vector.</returns>
-    public Vector GetDirection() {
-      return Data.Direction.GetDirectionalVector();
+    public Direction GetDirection() {
+      return Data.Direction;
+    }
+
+
+    /// <summary>
+    ///   Returns the agent's dimension.
+    /// </summary>
+    /// <returns>The dimension (as bounding box).</returns>
+    public Vector GetDimension() {
+      return Data.Dimension;
     }
   }
 }

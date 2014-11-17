@@ -63,5 +63,18 @@ namespace DalskiAgent.Environments {
         return dir;
       }
     }
+
+
+    /// <summary>
+    ///   GET accessor for dimension.
+    /// </summary>
+    public Vector Dimension {
+      get {
+        var x = (float) _data.Dimension.X;
+        var y = (float) _data.Dimension.Y;
+        var z = (float) _data.Dimension.Z;
+        return new Vector(x, y, z);
+      } 
+    }
   }
 }
