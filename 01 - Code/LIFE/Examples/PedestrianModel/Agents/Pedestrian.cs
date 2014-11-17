@@ -1,5 +1,4 @@
-﻿using CommonTypes.TransportTypes;
-using DalskiAgent.Agents;
+﻿using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
@@ -12,8 +11,6 @@ using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
-using PedestrianModel.Environment;
-using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,17 +72,17 @@ namespace PedestrianModel.Agents
 
             // Add perception sensor for obstacles.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, environment, new OmniHalo((int)InformationTypes.Obstacles))
+              this, (IGenericDataSource)environment, new OmniHalo((int)InformationTypes.Obstacles))
             );
 
             // Add perception sensor for pedestrians.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, environment, new OmniHalo((int)InformationTypes.Pedestrians))
+              this, (IGenericDataSource)environment, new OmniHalo((int)InformationTypes.Pedestrians))
             );
 
             // Add perception sensor for everything.
             PerceptionUnit.AddSensor(new DataSensor(
-              this, environment, new OmniHalo((int)InformationTypes.AllAgents))
+              this, (IGenericDataSource)environment, new OmniHalo((int)InformationTypes.AllAgents))
             );
 
             // Add movement module.

@@ -1,12 +1,7 @@
-﻿using CommonTypes.TransportTypes;
-using DalskiAgent.Auxiliary;
-using DalskiAgent.Environments;
+﻿using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using ESCTestLayer.Implementation;
-using ESCTestLayer.Interface;
-using LayerAPI.Interfaces;
-using PedestrianModel.Agents;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
 using PedestrianModel.Visualization;

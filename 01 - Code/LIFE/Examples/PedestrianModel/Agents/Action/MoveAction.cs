@@ -1,7 +1,6 @@
 ﻿using DalskiAgent.Movement;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
-using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -32,14 +32,14 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Environment reference.</param>
-    /// <param name="pos">The initial position.</param>
-    public Wolf(IExecution exec, IEnvironment env, Vector pos = null) : base(exec, env, pos) {
+    /// <param name="src">The data source for sensor queries.</param>
+    public Wolf(IExecution exec, IEnvironment env, IGenericDataSource src) : base(exec, env, null) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
       // Add perception sensor.
       PerceptionUnit.AddSensor(new DataSensor(
-        this, env, new RadialHalo(Data, (int) InformationTypes.AllAgents, 8))
+        this, src, new RadialHalo(Data, (int) InformationTypes.AllAgents, 8))
       );
 
       // Add movement module.

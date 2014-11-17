@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
+using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -12,7 +12,7 @@ namespace AgentTester.Wolves.Agents {
   /// <summary>
   ///   This grassland is home to sheeps and wolves ... and yes, 'grass'.
   /// </summary>
-  internal class Grassland : Environment2D {
+  internal class Grassland : Environment2D, IGenericDataSource {
 
     private readonly Random _random;    // Random number generator for grass spawning.
     private readonly IExecution _exec;  // Agent execution container reference.
@@ -45,14 +45,25 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public override object GetData(ISpecificator spec) {
+    public object GetData(ISpecificator spec) {
+      
+      if (!(spec is Halo)) throw new Exception(
+        "[Environment2D] Error on GetData() specificator: Not of type 'Halo'!");
+      var halo = (Halo) spec;
+
       switch ((InformationTypes) spec.GetInformationType()) {      
+        
         case InformationTypes.AllAgents:
-          return base.GetData(spec);
+          var objects = new List<ISpatialObject>();
+          foreach (var obj in GetAllObjects())
+            if (halo.IsInRange(obj.GetPosition().GetTVector())) objects.Add(obj);
+          return objects;
 
         case InformationTypes.Grass: {
-          var list = (List<SpatialAgent>) base.GetData(spec);
-          return list.OfType<Grass>().ToList();
+          var grass = new List<ISpatialObject>();
+          foreach (var obj in GetAllObjects().OfType<Grass>())
+            if (halo.IsInRange(obj.GetPosition().GetTVector())) grass.Add(obj);
+          return grass;
         }
 
         default: return null;

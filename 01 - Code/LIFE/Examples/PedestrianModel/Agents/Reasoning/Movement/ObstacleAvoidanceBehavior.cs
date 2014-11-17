@@ -3,7 +3,6 @@ using DalskiAgent.Movement;
 using DalskiAgent.Perception;
 using PedestrianModel.Agents.Reasoning.Movement.Potential;
 using PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter;
-using PedestrianModel.Environment;
 using PedestrianModel.Util.Math;
 using System;
 using System.Collections.Generic;

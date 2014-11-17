@@ -1,5 +1,4 @@
-﻿using DalskiAgent.Agents;
-using DalskiAgent.Environments;
+﻿using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Perception;
@@ -19,7 +18,7 @@ namespace PedestrianModel.Environment
     /// <summary>
     ///   An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.
     /// </summary>
-    public class ObstacleEnvironment : Environment2D
+    public class ObstacleEnvironment : Environment2D, IGenericDataSource
     {
         private readonly IExecution _exec;  // Agent execution container reference.
         private readonly AgentLogger agentLogger = new AgentLogger();
@@ -33,16 +32,43 @@ namespace PedestrianModel.Environment
             exec.SetEnvironment(this);        
         }
 
-        public override object GetData(ISpecificator spec)
+        /// <summary>
+        ///   Retrieve information from a data source.
+        /// </summary>
+        /// <param name="spec">Information object describing which data to query.</param>
+        /// <returns>An object representing the percepted information.</returns>
+        public object GetData(ISpecificator spec)
         {
+
+            if (!(spec is Halo)) throw new Exception(
+              "[Environment2D] Error on GetData() specificator: Not of type 'Halo'!");
+            var halo = (Halo)spec;
+
             switch ((InformationTypes)spec.GetInformationType())
             {
+
                 case InformationTypes.AllAgents:
-                    return GetAllObjects();
+                    var objects = new List<ISpatialObject>();
+                    foreach (var obj in GetAllObjects())
+                        if (halo.IsInRange(obj.GetPosition().GetTVector())) objects.Add(obj);
+                    return objects;
+
                 case InformationTypes.Obstacles:
-                    return GetAllObjects().OfType<Obstacle>().ToList();
+                    {
+                        var obstacle = new List<Obstacle>();
+                        foreach (var obj in GetAllObjects().OfType<Obstacle>())
+                            if (halo.IsInRange(obj.GetPosition().GetTVector())) obstacle.Add(obj);
+                        return obstacle;
+                    }
+
                 case InformationTypes.Pedestrians:
-                    return GetAllObjects().OfType<Pedestrian>().ToList();
+                    {
+                        var pedestrian = new List<Pedestrian>();
+                        foreach (var obj in GetAllObjects().OfType<Pedestrian>())
+                            if (halo.IsInRange(obj.GetPosition().GetTVector())) pedestrian.Add(obj);
+                        return pedestrian;
+                    }
+
                 default: return null;
             }
         }
