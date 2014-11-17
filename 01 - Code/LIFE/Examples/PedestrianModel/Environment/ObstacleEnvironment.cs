@@ -28,7 +28,7 @@ namespace PedestrianModel.Environment
         /// <summary>
         ///   Create a new environment.
         /// </summary>
-        public ObstacleEnvironment(SeqExec exec) : base(new Vector(1000, 1000)) {
+        public ObstacleEnvironment(SeqExec exec) : base(new Vector(1000, 1000), false) {
             _exec = exec;
             exec.SetEnvironment(this);        
         }
@@ -38,18 +38,11 @@ namespace PedestrianModel.Environment
             switch ((InformationTypes)spec.GetInformationType())
             {
                 case InformationTypes.AllAgents:
-                    return base.GetData(spec);
-
+                    return GetAllObjects();
                 case InformationTypes.Obstacles:
-                    {
-                        var list = (List<SpatialAgent>)base.GetData(spec);
-                        return list.OfType<Obstacle>().ToList();
-                    }
+                    return GetAllObjects().OfType<Obstacle>().ToList();
                 case InformationTypes.Pedestrians:
-                    {
-                        var list = (List<SpatialAgent>)base.GetData(spec);
-                        return list.OfType<Pedestrian>().ToList();
-                    }
+                    return GetAllObjects().OfType<Pedestrian>().ToList();
                 default: return null;
             }
         }
