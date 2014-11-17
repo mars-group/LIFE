@@ -15,7 +15,7 @@ namespace DalskiAgent.Environments {
     private readonly Vector _boundaries;    // Env. extent, ranging from (0,0) to this point.
     private readonly bool _isGrid;          // Grid-based or continuous environment?    
     private readonly Random _random;        // Number generator for random placement.
-    protected readonly ConcurrentDictionary<IObject, SpatialData> Objects;  // Object listing.
+    protected readonly ConcurrentDictionary<ISpatialObject, SpatialData> Objects;  // Object listing.
 
 
     /// <summary>
@@ -26,7 +26,7 @@ namespace DalskiAgent.Environments {
     public Environment2D(Vector boundaries, bool isGrid = true) {
       _boundaries = boundaries;
       _random = new Random();
-      Objects = new ConcurrentDictionary<IObject, SpatialData>();
+      Objects = new ConcurrentDictionary<ISpatialObject, SpatialData>();
       _isGrid = isGrid;
     }
 
@@ -37,14 +37,20 @@ namespace DalskiAgent.Environments {
     /// <param name="obj">The object to add.</param>
     /// <param name="pos">The objects's initial position.</param>
     /// <param name="acc">Read-only object for data queries.</param>
+    /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the object. If null, then 0°.</param>
-    public void AddObject(IObject obj, Vector pos, out DataAccessor acc, Direction dir = null) {
+    public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
       if (pos == null) pos = GetRandomPosition();
       else if (!CheckPosition(pos)) 
         throw new Exception("[Environment2D] Error on object placement: Specified position already in use!");
      
+      // Create new spatial data object and set values or default values.
       var mdata = new SpatialData(pos);
       if (dir != null) mdata.Direction = dir;
+      else             mdata.Direction = new Direction(); // Default facing is straight line northbound.
+      if (dim != null) mdata.Dimension = dim;
+      else             mdata.Dimension = new Vector(1f, 1f, 1f);
+      
       acc = new DataAccessor(mdata);
       Objects[obj] = mdata;
     }
@@ -54,7 +60,7 @@ namespace DalskiAgent.Environments {
     ///   Remove an object from the environment.
     /// </summary>
     /// <param name="obj">The object to delete.</param>
-    public void RemoveObject(IObject obj) {
+    public void RemoveObject(ISpatialObject obj) {
       SpatialData m;
       Objects.TryRemove(obj, out m);     
     }
@@ -66,7 +72,7 @@ namespace DalskiAgent.Environments {
     /// <param name="obj">The object to move.</param>
     /// <param name="movement">Movement vector.</param>
     /// <param name="dir">The object's heading. If null, movement heading is used.</param>
-    public void MoveObject(IObject obj, Vector movement, Direction dir = null) {
+    public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
 
       // If object reference is valid, get new movement data.
       if (!Objects.ContainsKey(obj)) return;
@@ -95,8 +101,8 @@ namespace DalskiAgent.Environments {
     ///   Retrieve all objects of this environment.
     /// </summary>
     /// <returns>A list of all objects.</returns>
-    public List<IObject> GetAllObjects() {
-      return new List<IObject>(Objects.Keys);
+    public List<ISpatialObject> GetAllObjects() {
+      return new List<ISpatialObject>(Objects.Keys);
     }
 
 
@@ -172,7 +178,7 @@ namespace DalskiAgent.Environments {
       var halo = (Halo) spec;
       switch (spec.GetInformationType()) {
         case 0: { // Zero stands here for "all agents". Enum avoided, check it elsewhere!
-          var objects = new List<IObject>();
+          var objects = new List<ISpatialObject>();
           foreach (var obj in GetAllObjects())
             if (halo.IsInRange(obj.GetPosition().GetTVector())) objects.Add(obj);
           return objects;

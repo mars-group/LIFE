@@ -9,23 +9,22 @@ namespace DalskiAgent.Environments {
   ///   It thereby enables abstraction from ESC specific methods.
   /// </summary>
   public interface IEnvironment : IGenericDataSource {
-    
-    
     /// <summary>
     ///   Add a new object to the environment.
     /// </summary>
     /// <param name="obj">The object to add.</param>
     /// <param name="pos">The objects's initial position.</param>
     /// <param name="acc">Read-only object for data queries.</param>
+    /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the object. If null, then 0°.</param>
-    void AddObject(IObject obj, Vector pos, out DataAccessor acc, Direction dir = null);
+    void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir);
 
 
     /// <summary>
     ///   Remove an object from the environment.
     /// </summary>
     /// <param name="obj">The object to delete.</param>
-    void RemoveObject(IObject obj);
+    void RemoveObject(ISpatialObject obj);
 
 
     /// <summary>
@@ -34,14 +33,14 @@ namespace DalskiAgent.Environments {
     /// <param name="obj">The object to move.</param>
     /// <param name="movement">Movement vector.</param>
     /// <param name="dir">The object's heading. If null, movement heading is used.</param>
-    void MoveObject(IObject obj, Vector movement, Direction dir = null);
+    void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null);
 
 
     /// <summary>
     ///   Retrieve all objects of this environment.
     /// </summary>
     /// <returns>A list of all objects.</returns>
-    List<IObject> GetAllObjects();
+    List<ISpatialObject> GetAllObjects();
 
 
     /// <summary>
