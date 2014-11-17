@@ -1,6 +1,7 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
 using DalskiAgent.Execution;
+using DalskiAgent.Movement;
 using ESCTestLayer.Implementation;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
@@ -28,15 +29,15 @@ namespace AgentTester.Wolves {
       
       IEnvironment env;
       if (!esc) env = new Grassland (exec);
-      else env = new ESCAdapter(new ESC());
+      else env = new ESCAdapter(new UnboundESC(), new Vector(30, 20), true);
       
       var n1 = grass;
       var n2 = n1 + sheeps;
       var n3 = n2 + wolves;
       
       for (var i =  0; i < n1; i++) new Grass(exec, env);
-      for (var i = n1; i < n2; i++) new Sheep(exec, env);
-      for (var i = n2; i < n3; i++) new Wolf (exec, env);      
+      for (var i = n1; i < n2; i++) new Sheep(exec, env, (Grassland)env);
+      for (var i = n2; i < n3; i++) new Wolf (exec, env, (Grassland)env);      
       return env;
     }
 
@@ -82,10 +83,10 @@ namespace AgentTester.Wolves {
     /// </summary>
     public static void Main() {
       var exec = new SeqExec(true);
-      var env = CreateWolvesScenario(exec, 18, 6, 2, false);
+      var env = CreateWolvesScenario(exec, 20, 8, 2, false);
       var view = CreateWolvesView(env);
       ConsoleView.LcRedirect = false;
-      exec.Run(750, view);
+      exec.Run(1000, view);
     }
   }
 }

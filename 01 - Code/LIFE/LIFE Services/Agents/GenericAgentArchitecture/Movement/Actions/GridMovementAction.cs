@@ -12,6 +12,7 @@ namespace DalskiAgent.Movement.Actions {
     private readonly GridMover _mover; // The agent movement module.
     private readonly GridDir _gridDir; // The grid direction to move.
 
+
     /// <summary>
     ///   Create a movement action for grid-based movement in 2D environments.
     /// </summary>

@@ -13,7 +13,7 @@ namespace DalskiAgent.Agents {
 
     private readonly IExecution _execution;            // Execution reference for add/remove and queries.     
     protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
-    protected readonly IAgentLogic ReasoningComponent; // The agent's reasoning logic.         
+    protected IAgentLogic ReasoningComponent;          // The agent's reasoning logic.         
     protected bool IsAlive;                            // Alive flag for execution and deletion checks.
     public readonly long Id;                           // Unique identifier. 
 

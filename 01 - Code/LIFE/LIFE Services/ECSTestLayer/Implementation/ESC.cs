@@ -17,7 +17,7 @@ namespace ESCTestLayer.Implementation {
   /// </summary>
   public class ESC : IDeprecatedESC {
     
-    //TODO boundaries einführen, vermutlich als polygon(IScheissGeometry). zunächst als Vector siehe Environment2D
+    //TODO boundaries einführen, vermutlich als polygon(IGeometry). zunächst als Vector siehe Environment2D
     // was passiert, wenn Agenten Grenzen erreichen?
     // TODO gibt indexOutOfBounds mit zurück
 
@@ -58,14 +58,14 @@ namespace ESCTestLayer.Implementation {
 
     public MovementResult SetPosition(int elementId, TVector position, TVector direction) {
       AABB aabb = GetAABB(position, direction, _dimensions[elementId]);
-      if (CheckForCollisions(aabb)) return new MovementResult(_positions[elementId]);
+      if (CheckForCollisions(aabb)) return new MovementResult();
 
       //otherwise update position, direction and axis aligned bounding intervals for elementId
       _positions[elementId] = position;
       _directions[elementId] = direction;
       _aabbs[elementId] = aabb;
 
-      return new MovementResult(position);
+      return new MovementResult();
     }
 
 
@@ -225,11 +225,11 @@ namespace ESCTestLayer.Implementation {
 
     #endregion
 
-    public object GetData(int informationType, IScheissGeometry scheissGeometry) {
+    public object GetData(ISpecificator spec) {
       //TODO informationType als filter kriterium
 //            const int elementId = -1;
-//            Add(elementId, -1, false, scheissGeometry.GetDimensionQuad());
-//            return Explore(elementId, scheissGeometry.GetPosition(), scheissGeometry.GetDirectionOfQuad());
+//            Add(elementId, -1, false, geometry.GetDimensionQuad());
+//            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
       throw new NotImplementedException();
     }
   }

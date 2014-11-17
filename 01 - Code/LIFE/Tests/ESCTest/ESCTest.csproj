@@ -45,10 +45,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ESCTest.cs" />
+    <Compile Include="Entities\TestDeprecatedAgent2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\UnboundESCTest.cs" />
+    <Compile Include="Tests\DeprecatedESCTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
+      <Name>GenericAgentArchitectureCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
+      <Project>{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}</Project>
+      <Name>GenericAgentArchitecture</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\ECSTestLayer\ESCPrototype.csproj">
       <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
       <Name>ESCPrototype</Name>

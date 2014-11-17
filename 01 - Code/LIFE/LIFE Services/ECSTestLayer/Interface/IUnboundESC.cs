@@ -4,21 +4,22 @@ using ESCTestLayer.Entities;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace ESCTestLayer.Interface {
+    using GeoAPI.Geometries;
 
-  public interface IUnboundESC : IGenericDataSource {
+    public interface IUnboundESC : IGenericDataSource {
 
-    MovementResult Add(ISpatialEntity entity, TVector position, TVector direction);
+    bool Add(ISpatialEntity entity, TVector position, float directionAngle = 0);
 
-    MovementResult AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid);
+    bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid);
 
     void Remove(ISpatialEntity entity);
 
-    MovementResult Update(ISpatialEntity entity);
+    bool Update(ISpatialEntity entity, IGeometry newBounds);
 
-    MovementResult Move(ISpatialEntity entity, TVector position, TVector direction);
+    MovementResult Move(ISpatialEntity entity, TVector movementVector, float directionAngle = 0);
 
-    IEnumerable<SpatialPositionedEntity> Explore(IScheissGeometry scheissGeometry, TVector position, TVector direction);
+    IEnumerable<ISpatialEntity> Explore(IGeometry geometry);
 
-    IEnumerable<SpatialPositionedEntity> ExploreAll();
+    IEnumerable<ISpatialEntity> ExploreAll();
   }
 }

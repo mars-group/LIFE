@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
-using CommonTypes.DataTypes;
 using ESCTest.Entities;
 using ESCTestLayer.Implementation;
-using ESCTestLayer.Interface;
 using NUnit.Framework;
 
 namespace ESCTest.Tests {
     using CommonTypes.TransportTypes;
+    using ESCTestLayer.Interface;
 
-    public class ESCTest {
-        private IESC _esc;
+    public class DeprecatedESCTest {
+        private IDeprecatedESC _esc;
         const int InformationType = 1;
 
         #region Setup / Tear down
@@ -28,8 +27,8 @@ namespace ESCTest.Tests {
 
         [Test]
         public void TestAgent2D() {
-            var agent0 = new TestAgent2D(0, _esc);
-            var agent1 = new TestAgent2D(1, _esc);
+            var agent0 = new TestDeprecatedAgent2D(0, _esc);
+            var agent1 = new TestDeprecatedAgent2D(1, _esc);
 
             Assert.True(agent0.SetPosition(new TVector(1, 1)));
             Assert.False(agent1.SetPosition(new TVector(1, 1)));
