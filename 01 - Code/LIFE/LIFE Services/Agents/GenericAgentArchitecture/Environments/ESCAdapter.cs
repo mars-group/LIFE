@@ -22,17 +22,17 @@ namespace DalskiAgent.Environments {
     // Object-geometry mapping. Inner class for write-protected spatial entity representation.
     private readonly ConcurrentDictionary<IObject, GeometryObject> _objects; 
     private class GeometryObject : ISpatialEntity {
-      public IGeometry Bounds { get; set; }
+      public IGeometry Geometry { get; set; }
       public IObject obj;                    //TODO das hier oder interface oben=?
 
       public GeometryObject() {
-        Bounds = new Point(1f, 1f, 1f);  // Default hitbox is cube with size 1.
+        Geometry = new Point(1f, 1f, 1f);  // Default hitbox is cube with size 1.
       }
       public Vector GetPosition() {
         return new Vector(        
-          (float) Bounds.Coordinate.X,
-          (float) Bounds.Coordinate.Y,
-          (float) Bounds.Coordinate.Z);
+          (float) Geometry.Coordinate.X,
+          (float) Geometry.Coordinate.Y,
+          (float) Geometry.Coordinate.Z);
       }
     }
     /*  OBJEKT; DAS VON ISPATIAL ERBT UND BOUNDS SOWIE RÜCKGABEMETHODEN 
@@ -66,7 +66,7 @@ namespace DalskiAgent.Environments {
       if (dir == null) dir = new Direction();
 
       var geometry = new GeometryObject();
-      acc = new DataAccessor(geometry.Bounds);
+      acc = new DataAccessor(geometry.Geometry);
       _objects[obj] = geometry;
 
       if (pos != null) success = _esc.Add(geometry, new TVector(pos.X, pos.Y, pos.Z), dir.Yaw); 

@@ -3,7 +3,7 @@
 
     public interface ISpatialEntity  {
 
-        IGeometry Bounds { get; set; } 
+        IGeometry Geometry { get; set; } 
 
     }
 }

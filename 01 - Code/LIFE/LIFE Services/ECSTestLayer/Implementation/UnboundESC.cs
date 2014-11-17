@@ -4,12 +4,15 @@
     using System.Linq;
     using CommonTypes.TransportTypes;
     using Entities;
+    using GenericAgentArchitectureCommon.Datatypes;
     using GenericAgentArchitectureCommon.Interfaces;
     using GeoAPI.Geometries;
     using Interface;
+    using NetTopologySuite.Geometries;
     using NetTopologySuite.Geometries.Utilities;
+    using NetTopologySuite.Utilities;
 
-    public class UnboundESC : IUnboundESC {//TODO löschen funktioniert nicht mehr wegen MovementResult
+    public class UnboundESC : IUnboundESC { //TODO löschen funktioniert nicht mehr wegen MovementResult
         private const int MaxAttemps = 100;
         private readonly Random _random; // Number generator for random positions.
         private readonly List<ISpatialEntity> _entities;
@@ -23,6 +26,7 @@
 
         public bool Add(ISpatialEntity entity, TVector position, float directionAngle = 0) {
             MovementResult result = Move(entity, position, directionAngle);
+            if (result.Success) _entities.Add(entity);
             return result.Success;
         }
 
@@ -41,34 +45,35 @@
 
         public bool Update(ISpatialEntity entity, IGeometry newBounds) {
             if (Explore(newBounds).Any()) {
-                entity.Bounds = newBounds;
+                entity.Geometry = newBounds;
                 return true;
             }
             return false;
         }
 
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, float directionAngle = 0) {
-            IGeometry old = entity.Bounds;
+            IGeometry old = entity.Geometry;
             AffineTransformation trans = new AffineTransformation();
             trans.SetToTranslation(movementVector.X, movementVector.Y);
 
-//          GeometricShapeFactory gsf2 = new GeometricShapeFactory(new GeometryFactory(new PrecisionModel(PrecisionModels.Floating), 4326));
-//          gsf2.Centre = old.Centroid.Coordinate;
-//          trans.SetToRotation(direction) //TODO vector to angle
+            GeometricShapeFactory gsf2 = new GeometricShapeFactory();
+            var center = old.Centroid.Coordinate;
+            trans.Rotate(directionAngle, center.X, center.Y);
             IGeometry result = trans.Transform(old);
 
             List<ISpatialEntity> collisions = Explore(result).ToList();
             collisions.Remove(entity);
             if (collisions.Any()) return new MovementResult(collisions);
 
-            entity.Bounds = result;
+            entity.Geometry = result;
             return new MovementResult();
         }
 
         public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
             foreach (ISpatialEntity entity in _entities) {
-                if (geometry.Intersects(entity.Bounds)) entities.Add(entity);
+                if (geometry.Envelope.Intersects(entity.Geometry) && !geometry.Touches(entity.Geometry))
+                    entities.Add(entity);
             }
             return entities;
         }
@@ -78,11 +83,9 @@
         }
 
         public object GetData(ISpecificator spec) {
-            //TODO informationType als filter kriterium
-//            const int elementId = -1;
-//            Add(elementId, -1, false, geometry.GetDimensionQuad());
-//            return Explore(elementId, geometry.GetPosition(), geometry.GetDirectionOfQuad());
-            throw new NotImplementedException();
+            SpatialHalo halo = spec as SpatialHalo;
+            if (halo != null) return Explore(halo.Geometry);
+            return null;
         }
 
         #endregion
@@ -91,11 +94,12 @@
 
         private TVector GenerateRandomPosition(TVector min, TVector max, bool grid) {
             if (grid) {
-                int x = _random.Next((int) min.X, (int) max.X);
-                int y = _random.Next((int) min.Y, (int) max.Y);
-                int z = _random.Next((int) min.Z, (int) max.Z);
+                int x = _random.Next((int) min.X, (int) max.X + 1);
+                int y = _random.Next((int) min.Y, (int) max.Y + 1);
+                int z = _random.Next((int) min.Z, (int) max.Z + 1);
                 return new TVector(x, y, z);
-            } else {
+            }
+            else {
                 float x = (float) GetRandomNumber(min.X, max.X);
                 float y = (float) GetRandomNumber(min.Y, max.Y);
                 float z = (float) GetRandomNumber(min.Z, max.Z);
