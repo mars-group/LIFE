@@ -6,13 +6,17 @@ using System.Net;
 using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
 using LayerAPI.Interfaces.GIS;
+using Mono.Addins;
 using SharpMap;
 using SharpMap.Data;
 using SharpMap.Data.Providers;
 using SharpMap.Layers;
 
+[assembly: Addin]
+[assembly: AddinDependency("LayerContainer", "0.1")]
 namespace LIFEGisLayerService.Implementation
 {
+    [Extension(typeof(ISteppedLayer))]
     public abstract class LIFEGisActiveLayer : IGISActiveLayer {
 
         private ICanQueryLayer _layer;
