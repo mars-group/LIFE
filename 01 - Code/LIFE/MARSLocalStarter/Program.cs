@@ -123,7 +123,6 @@ namespace MARSLocalStarter
                     else
                     {
                         core.StartSimulationWithModel(model, false, numOfTicks);
-                        core.StepSimulation(model);
                     }
                 }
             }
@@ -182,7 +181,6 @@ namespace MARSLocalStarter
             {
                 var models = core.GetAllModels().ToList();
                 core.StartSimulationWithModel(models[nr],false, ticks);
-                core.StepSimulation(models[nr]);
             }
 
         }
