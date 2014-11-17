@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\LayerAPI.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,13 +33,30 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\LayerAPI.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\SharpMap\GeoAPI.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MessageWrappers">
+      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite">
+      <HintPath>..\..\Libraries\SharpMap\NetTopologySuite.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpMap">
+      <HintPath>..\..\Libraries\SharpMap\SharpMap.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpMap.Extensions">
+      <HintPath>..\..\Libraries\SharpMap\SharpMap.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,10 +69,15 @@
   <ItemGroup>
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
+    <Compile Include="Interfaces\GIS\IGISAccess.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
+    <Compile Include="Interfaces\IGISActiveLayer.cs" />
+    <Compile Include="Interfaces\IGISPassiveLayer.cs" />
     <Compile Include="Interfaces\ILayer.cs" />
+    <Compile Include="Interfaces\ISteppedActiveLayer.cs" />
     <Compile Include="Interfaces\ISteppedLayer.cs" />
     <Compile Include="Interfaces\ITickClient.cs" />
+    <Compile Include="Interfaces\Visualization\IVisualizable.cs" />
     <Compile Include="Interfaces\LayerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -37,9 +37,7 @@ namespace RuntimeEnvironment.Implementation {
 
         #region IRuntimeEnvironment Members
 
-        public void StartWithModel(TModelDescription model,
-                ICollection<TNodeInformation> layerContainerNodes,
-                int? nrOfTicks = null) {
+        public void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
             lock (this) {
 				if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
 					throw new NoLayerContainersArePresentException ();
@@ -49,10 +47,6 @@ namespace RuntimeEnvironment.Implementation {
 					throw new LayerContainerBusyException ();
 				}
 
-                // throw Exception if model is already running in this cluster
-                // TODO: Is that really intended?
-                //if (_steppedSimulations.ContainsKey(model)) throw new SimulationAlreadyRunningException();
-
                 // download Model ZIP file from MARS WebSuite, extract and add it to the model repo
                 if (model.SourceURL != String.Empty) {
                     _modelContainer.AddModelFromURL(model.SourceURL);
@@ -60,18 +54,35 @@ namespace RuntimeEnvironment.Implementation {
 
                 IList<LayerContainerClient> clients = InitConnections(model, layerContainerNodes);
 
-                _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients);
+                _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, startPaused);
             }
         }
 
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
+            if (!_steppedSimulations.ContainsKey(model))
+            {
+                throw new SimulationHasNotBeenStartedException
+                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+            }  
+    	    _steppedSimulations[model].StepSimulation(nrOfTicks);
+
+        }
+
         public void Pause(TModelDescription model) {
-            if (!_steppedSimulations.ContainsKey(model)) return;
+            if (!_steppedSimulations.ContainsKey(model))
+            {
+                throw new SimulationHasNotBeenStartedException
+                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+            }
 
             _steppedSimulations[model].PauseSimulation();
         }
 
         public void Resume(TModelDescription model) {
-            if (!_steppedSimulations.ContainsKey(model)) return;
+            if (!_steppedSimulations.ContainsKey(model)) {
+                throw new SimulationHasNotBeenStartedException
+                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+            }
 
             _steppedSimulations[model].ResumeSimulation();
         }
@@ -80,6 +91,27 @@ namespace RuntimeEnvironment.Implementation {
             if (!_steppedSimulations.ContainsKey(model)) return;
 
             _steppedSimulations[model].Abort();
+        }
+
+        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
+            if (_steppedSimulations.ContainsKey(model)) {
+                _steppedSimulations[model].StartVisualization(nrOfTicksToVisualize);
+            }
+            else {
+                throw new SimulationHasNotBeenStartedException
+                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+            }
+        }
+
+        public void StopVisualization(TModelDescription model) {
+            if (_steppedSimulations.ContainsKey(model))
+            {
+                _steppedSimulations[model].StopVisualization();
+            }
+            else {
+                throw new SimulationHasNotBeenStartedException
+                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+            }
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {}

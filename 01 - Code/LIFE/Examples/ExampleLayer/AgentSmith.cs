@@ -8,8 +8,9 @@ namespace ExampleLayer {
         private readonly _2DEnvironment _2DEnvironment;
         private readonly UnregisterAgent _unregisterAgentHandle;
         private readonly ExampleLayer _thislayer;
+        public Position2D MyPosition { get; private set; }
 
-        private Guid AgentID;
+        public Guid AgentID { get; private set; }
 
         public AgentSmith(_2DEnvironment _2DEnvironment, UnregisterAgent unregisterAgentHandle, ExampleLayer thislayer) {
             this._2DEnvironment = _2DEnvironment;
@@ -17,6 +18,7 @@ namespace ExampleLayer {
             _thislayer = thislayer;
             AgentID = Guid.NewGuid();
             Dead = false;
+            MyPosition = _2DEnvironment.SetAgentPosition(this);
         }
 
         public void Tick() {

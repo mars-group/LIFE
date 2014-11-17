@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\LayerContainerFacade.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,14 +31,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\LayerContainerFacade.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageWrappers">
+      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +47,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Autofac">
+      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\LayerContainerFacadeImpl.cs" />
@@ -69,6 +73,10 @@
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LayerAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
@@ -98,8 +106,13 @@
       <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
       <Name>RTEManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisualizationAdapter\VisualizationAdapter.csproj">
+      <Project>{F6626674-3A9A-460B-A98B-A66B561FD811}</Project>
+      <Name>VisualizationAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,7 +8,7 @@ namespace LayerAPI.Interfaces {
     /// <summary>
     ///     Base Interface for all layers.
     ///     DO NOT IMPLEMENT THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-    ///     Instead implement either ISteppedLayer or IEventDrivenLayer depending on your requirements.
+    ///     Instead implement either ISteppedLayer or one of its decendants depending on your requirements.
     /// </summary>
     public interface ILayer {
         /// <summary>

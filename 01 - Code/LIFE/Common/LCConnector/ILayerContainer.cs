@@ -1,6 +1,9 @@
-﻿using Hik.Communication.ScsServices.Service;
+﻿using System;
+using System.Collections.Generic;
+using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using MessageWrappers;
 
 namespace LCConnector {
     [ScsService(Version = "0.1")]
@@ -33,5 +36,28 @@ namespace LCConnector {
         /// <returns>The duration of the tick execution in milliseconds.</returns>
         /// <exception cref="Exceptions.LayerNotInitializedException">If one of the layers not yet initialized.</exception>
         long Tick();
+
+        event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
+
+        /// <summary>
+        /// Starts visualization of the simulation
+        /// </summary>
+        void StartVisualization(int? nrOfTicksToVisualize);
+
+        /// <summary>
+        /// Stops visualization of the simulation
+        /// </summary>
+        void StopVisualization();
+
+        /// <summary>
+        /// Changes the view of the visualization
+        /// </summary>
+        /// <param name="topLeft">The top left coordinate of the new view</param>
+        /// <param name="topRight">The top right coordinate of the new view</param>
+        /// <param name="bottomLeft">The bottom left coordinate of the new view</param>
+        /// <param name="bottomRight">The bottom right coordinate of the new view</param>
+        void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight);
+
     }
+
 }
