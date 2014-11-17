@@ -11,6 +11,8 @@ namespace GoapBetaCommon.Interfaces {
         int GetHeuristic();
 
         bool HasUnsatisfiedProperties();
+
+       
     }
 
 }

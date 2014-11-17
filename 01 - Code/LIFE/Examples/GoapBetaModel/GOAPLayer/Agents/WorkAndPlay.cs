@@ -28,7 +28,8 @@ namespace GOAPBetaLayer.Agents {
         #endregion
 
         private void ExecuteAction(AbstractGoapAction action) {
-            Console.WriteLine(action.GetType() + " is now executed");
+            GoapLayerImpl.Log.Info(action.GetType() + " is now executed");
+            //Console.WriteLine(action.GetType() + " is now executed");
             List<WorldstateSymbol> curr = _blackboard.Get(AbstractGoapSystem.Worldstate);
             List<WorldstateSymbol> result = action.GetResultingWorldstate(curr);
             _blackboard.Set(AbstractGoapSystem.Worldstate, result);

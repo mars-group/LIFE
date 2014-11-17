@@ -5,33 +5,39 @@ using GOAPBetaModelDefinition.Worldstates;
 using GoapBetaCommon.Abstract;
 using GoapBetaCommon.Interfaces;
 
-namespace GOAPBetaModelDefinition.Actions {
-    public class ActionGetToy : AbstractGoapAction {
+namespace GOAPBetaModelDefinition.Actions
+{
+    public class ActionBuyFood : AbstractGoapAction{
 
-        public ActionGetToy()
+        public ActionBuyFood()
             : base(new List<WorldstateSymbol> { new WorldstateSymbol(WorldProperties.HasMoney, true, typeof(Boolean)) },
                 new List<WorldstateSymbol> {
                     new WorldstateSymbol(WorldProperties.HasMoney,false,typeof(Boolean)),
-                    new WorldstateSymbol(WorldProperties.HasToy,true,typeof(Boolean)),
-                }) {}
+                    new WorldstateSymbol(WorldProperties.HasFood,true,typeof(Boolean)),
+                }) { }
 
-        public override bool ValidateContextPreconditions() {
+        public override bool ValidateContextPreconditions()
+        {
             return true;
         }
 
-        public override bool ExecuteContextEffects() {
+        public override bool ExecuteContextEffects()
+        {
             throw new NotImplementedException();
         }
 
-        public override void Execute() {
+        public override void Execute()
+        {
             throw new NotImplementedException();
         }
 
-        public override int GetExecutionCosts() {
+        public override int GetExecutionCosts()
+        {
             return 1;
         }
 
-        public override int GetPriority() {
+        public override int GetPriority()
+        {
             throw new NotImplementedException();
         }
     }

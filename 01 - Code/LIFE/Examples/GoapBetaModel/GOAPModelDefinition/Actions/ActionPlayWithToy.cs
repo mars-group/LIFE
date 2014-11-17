@@ -6,8 +6,8 @@ using GOAPBetaModelDefinition.Worldstates;
 
 namespace GOAPBetaModelDefinition.Actions {
 
-    public class ActionPlay : AbstractGoapAction {
-        public ActionPlay()
+    public class ActionPlayWithToy : AbstractGoapAction {
+        public ActionPlayWithToy()
             : base(new List<WorldstateSymbol> {new WorldstateSymbol(WorldProperties.HasToy, true, typeof (Boolean))},
                 new List<WorldstateSymbol> {
                     new WorldstateSymbol(WorldProperties.Happy, true, typeof (Boolean)),

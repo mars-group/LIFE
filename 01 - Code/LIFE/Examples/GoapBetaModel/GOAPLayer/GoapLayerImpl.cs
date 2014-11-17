@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using GOAPBetaLayer.Agents;
 using LayerAPI.Interfaces;
+using log4net;
 using Mono.Addins;
 
 [assembly: Addin]
@@ -11,15 +13,20 @@ namespace GOAPBetaLayer {
     [Extension(typeof (ISteppedLayer))]
     public class GoapLayerImpl : ISteppedLayer {
         private const string NamespaceOfModelDefinition = "GOAPBetaModelDefinition";
-        private const int GoapWorkdandplayCount = 1;
+        private const int GoapWorkdAndPlayAgentCount = 1000;
+
+        public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         #region ISteppedLayer Members
 
         public bool InitLayer<I>
             (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-            WorkAndPlay wap = new WorkAndPlay("AgentConfig1", NamespaceOfModelDefinition);
-            registerAgentHandle.Invoke(this, wap);
 
+            for (int i = 1; i <= GoapWorkdAndPlayAgentCount; i++) {
+                WorkAndPlay wap = new WorkAndPlay("AgentConfig1", NamespaceOfModelDefinition);
+                registerAgentHandle.Invoke(this, wap);
+            }
+            
             return true;
         }
 

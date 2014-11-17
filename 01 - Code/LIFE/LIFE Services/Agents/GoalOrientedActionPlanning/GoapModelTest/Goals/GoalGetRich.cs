@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using GoapBetaCommon.Abstract;
-using GoapBetaCommon.Interfaces;
+using GoapBetaCommon.Implementation;
 using GoapModelTest.Worldstates;
 
-namespace GOAPModelDefinition.Goals
+namespace GoapModelTest.Goals
 {
+
     public class GoalGetRich : AbstractGoapGoal
     {
-        public GoalGetRich() 
-            : base(new List<IGoapWorldProperty>{new HasMoney(true)}, 1) {}
+        public GoalGetRich()
+            : base(new List<WorldstateSymbol> {
+                new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean))
+            },
+                1) { }
 
-        public override int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate) {
+        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate)
+        {
             if (IsSatisfied(actualWorldstate))
             {
                 return Relevancy = 0;
@@ -30,4 +34,7 @@ namespace GOAPModelDefinition.Goals
             }
         }
     }
+
+
+
 }

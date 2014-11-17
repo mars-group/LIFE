@@ -19,6 +19,10 @@ namespace GoapBetaCommon.Implementation {
             Value = value;
             TypeOfValue = typeOfValue;
         }
+
+        public override string ToString() {
+            return string.Format("EnumName: {0}, Value: {1}, TypeOfValue: {2}", EnumName, Value, TypeOfValue);
+        }
     }
 
 }

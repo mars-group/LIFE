@@ -74,7 +74,7 @@ namespace GoapBetaActionSystem.Implementation {
         /// <returns></returns>
         public override AbstractGoapAction GetNextAction() {
             if (GoalIsReached()) {
-                Console.WriteLine("Goal " + _currentGoal.GetType() + " is reached.");
+                //Console.WriteLine("Goal " + _currentGoal.GetType() + " is reached.");
                 ChooseNewGoal();
                 CreateNewPlan();
             }
@@ -131,7 +131,6 @@ namespace GoapBetaActionSystem.Implementation {
             UpdateRelevancyOfGoals();
 
             List<IGoapGoal> goalSortedByRelevancy = _availableGoals.OrderByDescending(x => x.GetRelevancy()).ToList();
-
             IGoapGoal highestRelevancyGoal = null;
 
             foreach (IGoapGoal goapGoal in goalSortedByRelevancy) {
@@ -141,10 +140,8 @@ namespace GoapBetaActionSystem.Implementation {
             }
 
             if (_currentGoal != null && highestRelevancyGoal != null && !_currentGoal.Equals(highestRelevancyGoal)) {
-                Console.WriteLine("Goal has changed. New is " + highestRelevancyGoal.GetType());
+                //Console.WriteLine("Goal has changed. New is " + highestRelevancyGoal.GetType());
             }
-
-
             return _currentGoal = highestRelevancyGoal;
         }
 
@@ -158,7 +155,7 @@ namespace GoapBetaActionSystem.Implementation {
                 currentWorldstates.Add(instance);
             }
             _internalBlackboard.Set(Worldstate, currentWorldstates);
-        }*/
+        }
 
         /// <summary>
         ///     get the needed types of all worldstates by the used goals and actions - testing method
@@ -173,7 +170,7 @@ namespace GoapBetaActionSystem.Implementation {
                 allTypes.UnionWith(availableGoal.GetAffectingWorldstateTypes());
             }
             return allTypes;
-        }
+        }*/
 
         private bool IsPlanValid() {
             return HasPlan() && IsPlanExecutable();

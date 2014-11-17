@@ -10,7 +10,7 @@ using GOAPBetaModelDefinition.Worldstates;
 namespace GOAPBetaModelDefinition {
 
     /// <summary>
-    ///     determines the configuration of agent 1
+    ///     determines a configuration of an agent
     /// </summary>
     public class AgentConfig1 : IGoapAgentConfig {
         #region IGoapAgentConfig Members
@@ -26,7 +26,14 @@ namespace GOAPBetaModelDefinition {
         }
 
         public List<AbstractGoapAction> GetAllActions() {
-            return new List<AbstractGoapAction> {new ActionClean(), new ActionGetToy(), new ActionPlay()};
+            return new List<AbstractGoapAction> {
+                new ActionClean(),
+                new ActionBuyToy(),
+                //new ActionStealToy(),
+                new ActionBuyFood(),
+                new ActionPlayWithToy(),
+                new ActionEat()
+            };
         }
 
         public List<IGoapGoal> GetAllGoals() {

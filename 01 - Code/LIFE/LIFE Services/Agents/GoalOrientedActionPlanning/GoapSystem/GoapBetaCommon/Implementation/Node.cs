@@ -24,6 +24,11 @@ namespace GoapBetaCommon.Implementation {
 
         #region IEquatable<Node> Members
 
+        /// <summary>
+        /// interrelated subset check
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(Node other) {
             if (ReferenceEquals(null, other)) {
                 return false;
@@ -85,6 +90,20 @@ namespace GoapBetaCommon.Implementation {
                 }
             }
             _unsatisfiedGoalValues = unsatisfiedGoalValues;
+        }
+
+
+        public override string ToString() {
+            string view = System.Environment.NewLine + "GOAL VALUES: ";
+            foreach (var value in _goalValues) {
+                view += value.ToString() + " ";
+            }
+            view += System.Environment.NewLine + "CURR VALUES: ";
+            foreach (var value in _currValues){
+                view += value.ToString() + " ";
+            }
+            view += System.Environment.NewLine;
+            return view;
         }
 
         public override bool Equals(object obj) {

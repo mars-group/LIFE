@@ -1,10 +1,12 @@
-﻿using GoapActionSystem.Implementation;
-using GoapCommon.Abstract;
+﻿using System;
+using GoapBetaActionSystem.Implementation;
+using GoapBetaCommon.Abstract;
 using GoapModelTest.Actions;
 using NUnit.Framework;
 using TypeSafeBlackboard;
 
 namespace GoapTests {
+
     [TestFixture]
     public class GoapActionSystemComponentTest {
         #region Setup/Teardown
@@ -20,13 +22,16 @@ namespace GoapTests {
         private AbstractGoapSystem _goapActionSystem2;
 
         private readonly AbstractGoapAction _actionClean = new ActionClean();
+        private readonly AbstractGoapAction _actionClean2 = new ActionClean();
         private readonly AbstractGoapAction _actionGetToy = new ActionGetToy();
         private readonly AbstractGoapAction _actionPlay = new ActionPlay();
 
 
         private void CreateGoapActionSystems() {
-            _goapActionSystem1 = GoapComponent.LoadGoapConfiguration("AgentTestConfig1", "GoapModelTest", new Blackboard());
-            _goapActionSystem2 = GoapComponent.LoadGoapConfiguration("AgentTestConfig2", "GoapModelTest", new Blackboard());
+            _goapActionSystem1 = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfig1", "GoapModelTest", new Blackboard());
+            _goapActionSystem2 = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfig2", "GoapModelTest", new Blackboard());
         }
 
         [Test]
@@ -41,11 +46,17 @@ namespace GoapTests {
         }
 
         [Test]
+        public void ActionEqualityTest() {
+            Assert.True(_actionClean.Equals(_actionClean));
+            Assert.True(_actionClean.Equals(_actionClean2));
+        }
+
+        [Test]
         public void ReturnActionCorrectTest() {
             Assert.True((_goapActionSystem1.GetNextAction()).Equals(_actionGetToy));
             Assert.True((_goapActionSystem2.GetNextAction()).Equals(_actionPlay));
         }
-
+        
         [Test]
         public void NotReturnedActionTest() {
             Assert.False((_goapActionSystem1.GetNextAction()).Equals(_actionPlay));
@@ -55,4 +66,5 @@ namespace GoapTests {
             Assert.False((_goapActionSystem2.GetNextAction()).Equals(_actionClean));
         }
     }
+
 }

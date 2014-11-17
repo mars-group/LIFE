@@ -1,8 +1,11 @@
 ﻿namespace GoapModelTest.Worldstates
 {
-    public enum WorldStateEnums
-    {
-        Happy, HasToy, HasMoney
 
+    public enum WorldProperties
+    {
+        Happy,
+        HasToy,
+        HasMoney,
     }
+
 }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using GoapBetaCommon.Abstract;
 using GoapBetaCommon.Implementation;
 using GoapBetaCommon.Interfaces;
 using GoapBetaGraphConnector.SimpleGraph;
+using log4net;
 
 namespace GoapBetaActionSystem.Implementation {
 
@@ -23,6 +26,7 @@ namespace GoapBetaActionSystem.Implementation {
         private readonly List<WorldstateSymbol> _startState;
         private List<AbstractGoapAction> _currentPlan;
 
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// </summary>
         /// <param name="maximuxSearchDepth"></param>
@@ -48,6 +52,8 @@ namespace GoapBetaActionSystem.Implementation {
             GoapSimpleGraphService graphService = new GoapSimpleGraphService();
 
             IGoapNode root = new Node(graphRoot, new List<WorldstateSymbol>(), graphRoot.Count);
+            Log.Info("NODE CREATED: " + root);
+            //Console.WriteLine("NODE CREATED: " + root);
             graphService.InitializeGoapGraph(root);
             return graphService;
         }
@@ -60,15 +66,16 @@ namespace GoapBetaActionSystem.Implementation {
         public List<AbstractGoapAction> GetPlan(IGoapGoal goal) {
             List<WorldstateSymbol> graphRoot = goal.GetTargetWorldstates();
             IGoapGraphService graphService = InitializeGraphService(graphRoot);
+            
             IGoapNode currentNode = graphService.GetNextVertexFromOpenList();
 
             while (!IsSearchDepthLimitExceeded(graphService)
                    && (currentNode.HasUnsatisfiedProperties() && !currentNode.CanBeSatisfiedByStartState(_startState))) {
-                List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties
-                    (currentNode.GetUnsatisfiedGoalValues());
-                List<AbstractGoapAction> applicableActions = FilterActionsByContextPreconditions(satisfyingActions);
 
-                applicableActions = FilterActions(applicableActions, currentNode);
+                List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties(currentNode.GetUnsatisfiedGoalValues());
+                List<AbstractGoapAction> contextPreconditionsFulfilled = FilterActionsByContextPreconditions(satisfyingActions);
+
+                List<AbstractGoapAction>  applicableActions = FilterActions(contextPreconditionsFulfilled, currentNode);
                 List<IGoapEdge> edges = GetResultingEdges(applicableActions, currentNode);
 
                 graphService.ExpandCurrentVertex(edges);
@@ -117,7 +124,13 @@ namespace GoapBetaActionSystem.Implementation {
         /// <param name="actionsToFilter"></param>
         /// <returns></returns>
         private List<AbstractGoapAction> FilterActionsByContextPreconditions(List<AbstractGoapAction> actionsToFilter) {
-            return actionsToFilter.Where(action => action.ValidateContextPreconditions()).ToList();
+            var correct = new List<AbstractGoapAction>();
+            foreach (var action in actionsToFilter) {
+                if (action.ValidateContextPreconditions()) {
+                    correct.Add(action);
+                }
+            }
+            return correct;
         }
 
         /// <summary>
@@ -150,7 +163,11 @@ namespace GoapBetaActionSystem.Implementation {
             // simple heuristik by counting not reached goal states
             int heuristic = goalValues.Except(currValues).Count();
 
-            return new Node(goalValues.ToList(), currValues.ToList(), heuristic);
+            
+            var node=    new Node(goalValues.ToList(), currValues.ToList(), heuristic);
+            //Console.WriteLine("NODE CREATED: " + node);
+            Log.Info("NODE CREATED: " + node);
+            return node;
         }
 
         /// <summary>
@@ -163,7 +180,7 @@ namespace GoapBetaActionSystem.Implementation {
             foreach (WorldstateSymbol goalValue in current.GetUnsatisfiedGoalValues()) {
                 if (action.Effects.Any
                     (effect => effect.EnumName.Equals(goalValue.EnumName)
-                               && effect.Value.Equals(goalValue.Value))) {
+                               && !effect.Value.Equals(goalValue.Value))) {
                     return true;
                 }
             }

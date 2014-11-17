@@ -3,7 +3,8 @@
     public enum WorldProperties {
         Happy,
         HasToy,
-        HasMoney
+        HasMoney,
+        HasFood,
     }
 
 }

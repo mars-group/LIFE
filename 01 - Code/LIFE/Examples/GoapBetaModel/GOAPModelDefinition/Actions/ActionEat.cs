@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using GoapBetaCommon.Abstract;
 using GoapBetaCommon.Implementation;
-using GoapBetaCommon.Interfaces;
-using GoapModelTest.Worldstates;
+using GOAPBetaModelDefinition.Worldstates;
 
-namespace GoapModelTest.Actions {
+namespace GOAPBetaModelDefinition.Actions
+{
 
-    public class ActionPlay : AbstractGoapAction
+    public class ActionEat : AbstractGoapAction
     {
-        public ActionPlay()
-            : base(new List<WorldstateSymbol> { new WorldstateSymbol(WorldProperties.HasToy, true, typeof(Boolean)) },
+        public ActionEat()
+            : base(new List<WorldstateSymbol> { new WorldstateSymbol(WorldProperties.HasFood, true, typeof(Boolean)) },
                 new List<WorldstateSymbol> {
                     new WorldstateSymbol(WorldProperties.Happy, true, typeof (Boolean)),
-                    new WorldstateSymbol(WorldProperties.HasToy, false, typeof (Boolean)),
+                    new WorldstateSymbol(WorldProperties.HasFood, false, typeof (Boolean)),
                 }) { }
 
         public override bool ValidateContextPreconditions()
@@ -41,4 +41,5 @@ namespace GoapModelTest.Actions {
             throw new NotImplementedException();
         }
     }
+
 }

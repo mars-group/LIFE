@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GoapBetaCommon.Abstract;
+using GoapBetaCommon.Implementation;
 using GoapBetaCommon.Interfaces;
 using GoapModelTest.Actions;
 using GoapModelTest.Goals;
@@ -8,8 +10,15 @@ using GoapModelTest.Worldstates;
 namespace GoapModelTest {
     public class AgentTestConfig2 : IGoapAgentConfig
     {
-        public List<IGoapWorldProperty> GetStartWorldstate() {
-            return new List<IGoapWorldProperty> {new IsHappy(false), new HasMoney(false), new HasToy(true)};
+        public List<WorldstateSymbol> GetStartWorldstate(){
+
+            List<WorldstateSymbol> symbols = new List<WorldstateSymbol> {
+                    new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)),
+                    new WorldstateSymbol(WorldProperties.HasMoney, false, typeof (Boolean)),
+                    new WorldstateSymbol(WorldProperties.HasToy, true, typeof (Boolean))
+                };
+
+            return symbols;
         }
 
         public List<AbstractGoapAction> GetAllActions() {

@@ -50,9 +50,6 @@
     <Compile Include="Goals\GoalGetRich.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AgentConfig1.cs" />
-    <Compile Include="Worldstates\IsHappy.cs" />
-    <Compile Include="Worldstates\HasMoney.cs" />
-    <Compile Include="Worldstates\HasToy.cs" />
     <Compile Include="Worldstates\WorldStateEnums.cs" />
   </ItemGroup>
   <ItemGroup>
