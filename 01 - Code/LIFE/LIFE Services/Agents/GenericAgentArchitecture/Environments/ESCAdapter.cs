@@ -13,17 +13,17 @@ namespace DalskiAgent.Environments {
   /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
   /// </summary> 
-  public class ESCAdapter : IEnvironment {
+  public class ESCAdapter : IEnvironment, IGenericDataSource {
 
     private readonly IUnboundESC _esc;  // Environment Service Component (ESC) implementation.
     private readonly TVector _maxSize;  // The maximum entent (for auto placement).
     private readonly bool _gridMode;    // ESC auto placement mode: True: grid, false: continuous.
 
     // Object-geometry mapping. Inner class for write-protected spatial entity representation.
-    private readonly ConcurrentDictionary<IObject, GeometryObject> _objects; 
+    private readonly ConcurrentDictionary<ISpatialObject, GeometryObject> _objects; 
     private class GeometryObject : ISpatialEntity {
       public IGeometry Geometry { get; set; }
-      public IObject obj;                    //TODO das hier oder interface oben=?
+      public ISpatialObject obj;                    //TODO das hier oder interface oben=?
 
       public GeometryObject() {
         Geometry = new Point(1f, 1f, 1f);  // Default hitbox is cube with size 1.
@@ -50,7 +50,7 @@ namespace DalskiAgent.Environments {
       _esc = esc;   
       _gridMode = gridMode;
       _maxSize = new TVector(maxSize.X, maxSize.Y, maxSize.Z);
-      _objects = new ConcurrentDictionary<IObject, GeometryObject>();
+      _objects = new ConcurrentDictionary<ISpatialObject, GeometryObject>();
     }
 
 
@@ -60,8 +60,9 @@ namespace DalskiAgent.Environments {
     /// <param name="obj">The object to add.</param>
     /// <param name="pos">The objects's initial position.</param>
     /// <param name="acc">Read-only object for data queries.</param>
+    /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the object. If null, then 0°.</param>
-    public void AddObject(IObject obj, Vector pos, out DataAccessor acc, Direction dir = null) {
+    public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
       bool success;
       if (dir == null) dir = new Direction();
 
@@ -79,7 +80,7 @@ namespace DalskiAgent.Environments {
     ///   Remove an object from the environment.
     /// </summary>
     /// <param name="obj">The object to delete.</param>
-    public void RemoveObject(IObject obj) {
+    public void RemoveObject(ISpatialObject obj) {
       _esc.Remove(_objects[obj]);
       GeometryObject g;
       _objects.TryRemove(obj, out g);   
@@ -92,7 +93,7 @@ namespace DalskiAgent.Environments {
     /// <param name="obj">The object to move.</param>
     /// <param name="movement">Movement vector.</param>
     /// <param name="dir">The object's heading. If null, movement heading is used.</param>
-    public void MoveObject(IObject obj, Vector movement, Direction dir = null) {
+    public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
       if (!_objects.ContainsKey(obj)) return;
       if (dir == null) _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z));
       else _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z), dir.Yaw);
@@ -103,10 +104,10 @@ namespace DalskiAgent.Environments {
     ///   Retrieve all objects of this environment.
     /// </summary>
     /// <returns>A list of all objects.</returns>
-    public List<IObject> GetAllObjects() {
-      var objects = new List<IObject>();
+    public List<ISpatialObject> GetAllObjects() {
+      var objects = new List<ISpatialObject>();
       foreach (var entity in _esc.ExploreAll()) {
-        if (entity is IObject) objects.Add((IObject) entity);
+        if (entity is ISpatialObject) objects.Add((ISpatialObject) entity);
       }
       return objects;
     }

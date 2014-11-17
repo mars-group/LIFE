@@ -79,7 +79,7 @@
     <Compile Include="Agents\SpatialAgent.cs" />
     <Compile Include="Auxiliary\ConsoleView.cs" />
     <Compile Include="Auxiliary\MessageServer.cs" />
-    <Compile Include="Environments\IObject.cs" />
+    <Compile Include="Environments\ISpatialObject.cs" />
     <Compile Include="Environments\DataAccessor.cs" />
     <Compile Include="Execution\IExecution.cs" />
     <Compile Include="Execution\LayerExec.cs" />

@@ -19,7 +19,6 @@ namespace DalskiAgent.Environments {
     public SpatialData(Vector pos) {
       if (pos == null) throw new Exception("[SpatialData] Error on initialization: Position is 'null'!");
       Position = new Vector(pos.X, pos.Y, pos.Z);
-      Direction = new Direction();       // Default facing is straight line northbound.
     }   
   }
 }
