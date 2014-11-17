@@ -155,8 +155,10 @@ namespace DalskiAgent.Environments {
     /// <param name="position">The intended position</param>
     /// <returns>True, if accessible, false, when not.</returns>
     private bool CheckPosition(Vector position) {
-      if (position.X < 0 || position.X >= _boundaries.X ||
-          position.Y < 0 || position.Y >= _boundaries.Y) return false;
+      if (_isGrid) {
+        if (position.X < 0 || position.X >= _boundaries.X ||
+            position.Y < 0 || position.Y >= _boundaries.Y) return false;        
+      }
       //TODO Dimensional and directional checks needed!
       foreach (var md in Objects.Values) {
         if (md.Position.Equals(position)) return false;
