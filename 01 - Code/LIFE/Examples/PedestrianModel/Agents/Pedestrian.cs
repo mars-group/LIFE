@@ -11,6 +11,7 @@ using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
+using PedestrianModel.Environment;
 using System;
 using System.Collections.Generic;
 using System.Linq;

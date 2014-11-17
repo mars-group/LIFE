@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgentLayerImpl.cs" />
+    <Compile Include="PedestrianLayer.cs" />
     <Compile Include="Agents\Action\MoveAction.cs" />
     <Compile Include="Agents\Reasoning\Movement\ObstacleAvoidanceBehavior.cs" />
     <Compile Include="Agents\Reasoning\Movement\ReactiveBehaviorPipeline.cs" />

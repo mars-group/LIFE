@@ -21,26 +21,16 @@ using PedestrianModel.Visualization;
 
 namespace PedestrianModel
 {
-
-    /// <summary>
-    ///   Data query information types.
-    /// </summary>
-    public enum InformationTypes { AllAgents, Obstacles, Pedestrians }
-
-
     /// <summary>
     ///   This layer implementation contains a pedestrian simulation..
     ///   It uses the Generic Agent Architecture and serves as an example for other agent models.
     /// </summary>
     [Extension(typeof (ISteppedLayer))]
-    public class AgentLayerImpl : ISteppedLayer, ITickClient, IGenericDataSource
+    public class PedestrianLayer : ISteppedLayer, ITickClient
     {
-
         private long _tick;         // Counter of current tick.  
         private IEnvironment _env;  // Environment object for spatial agents. 
         private IExecution _exec;   // Agent execution container reference.
-
-        private readonly AgentLogger agentLogger = new AgentLogger();
 
         /// <summary>
         ///   Initializes this layer.
@@ -77,11 +67,12 @@ namespace PedestrianModel
         /// </summary>
         public void Tick()
         {
+            Console.WriteLine("Tick: " + _tick);
             if (ObstacleEnvironment.Visualization != null)
             {
                 ObstacleEnvironment.Visualization.Invalidate();
             }
-            agentLogger.Log(_env.GetAllObjects().OfType<Pedestrian>().ToList());
+            ObstacleEnvironment.AgentLogger.Log(_env.GetAllObjects().OfType<Pedestrian>().ToList());
             _tick++;
         }
 
@@ -94,46 +85,6 @@ namespace PedestrianModel
         {
             return _tick;
         }
-
-        /// <summary>
-        ///   Retrieve information from a data source.
-        /// </summary>
-        /// <param name="spec">Information object describing which data to query.</param>
-        /// <returns>An object representing the percepted information.</returns>
-        public object GetData(ISpecificator spec)
-        {
-
-            if (!(spec is Halo)) throw new Exception(
-              "[Environment2D] Error on GetData() specificator: Not of type 'Halo'!");
-            var halo = (Halo)spec;
-
-            switch ((InformationTypes)spec.GetInformationType())
-            {
-
-                case InformationTypes.AllAgents:
-                    var objects = new List<ISpatialObject>();
-                    foreach (var obj in _env.GetAllObjects())
-                        if (halo.IsInRange(obj.GetPosition().GetTVector())) objects.Add(obj);
-                    return objects;
-
-                case InformationTypes.Obstacles:
-                    {
-                        var obstacle = new List<Obstacle>();
-                        foreach (var obj in _env.GetAllObjects().OfType<Obstacle>())
-                            if (halo.IsInRange(obj.GetPosition().GetTVector())) obstacle.Add(obj);
-                        return obstacle;
-                    }
-
-                case InformationTypes.Pedestrians:
-                    {
-                        var pedestrian = new List<Pedestrian>();
-                        foreach (var obj in _env.GetAllObjects().OfType<Pedestrian>())
-                            if (halo.IsInRange(obj.GetPosition().GetTVector())) pedestrian.Add(obj);
-                        return pedestrian;
-                    }
-
-                default: return null;
-            }
-        }
+        
     }
 }

@@ -16,12 +16,17 @@ using System.Windows.Forms;
 namespace PedestrianModel.Environment
 {
     /// <summary>
+    ///   Data query information types.
+    /// </summary>
+    public enum InformationTypes { AllAgents, Obstacles, Pedestrians }
+
+    /// <summary>
     ///   An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.
     /// </summary>
     public class ObstacleEnvironment : Environment2D, IGenericDataSource
     {
         private readonly IExecution _exec;  // Agent execution container reference.
-        private readonly AgentLogger agentLogger = new AgentLogger();
+        public static AgentLogger AgentLogger = new AgentLogger();
         public static SimpleVisualization Visualization;
 
         /// <summary>
@@ -82,12 +87,12 @@ namespace PedestrianModel.Environment
         }
 
         public override void AdvanceEnvironment()
-        {            
+        {
             if (Visualization != null)
             {
                 Visualization.Invalidate();
             }
-            agentLogger.Log(this.GetAllObjects().OfType<Pedestrian>().ToList());
+            AgentLogger.Log(this.GetAllObjects().OfType<Pedestrian>().ToList());
         }
 
     }

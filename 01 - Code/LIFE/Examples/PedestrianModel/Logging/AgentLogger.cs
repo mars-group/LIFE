@@ -11,7 +11,7 @@ using System.IO;
 
 namespace PedestrianModel.Logging
 {
-    class AgentLogger
+    public class AgentLogger
     {
         private SqliteConnection connection;
 
