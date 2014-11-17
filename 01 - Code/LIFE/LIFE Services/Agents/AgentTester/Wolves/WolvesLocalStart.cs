@@ -36,8 +36,8 @@ namespace AgentTester.Wolves {
       var n3 = n2 + wolves;
       
       for (var i =  0; i < n1; i++) new Grass(exec, env);
-      for (var i = n1; i < n2; i++) new Sheep(exec, env);
-      for (var i = n2; i < n3; i++) new Wolf (exec, env);      
+      for (var i = n1; i < n2; i++) new Sheep(exec, env, (Grassland)env);
+      for (var i = n2; i < n3; i++) new Wolf (exec, env, (Grassland)env);      
       return env;
     }
 

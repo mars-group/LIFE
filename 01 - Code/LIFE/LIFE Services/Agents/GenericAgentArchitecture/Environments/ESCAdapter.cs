@@ -13,7 +13,7 @@ namespace DalskiAgent.Environments {
   /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
   /// </summary> 
-  public class ESCAdapter : IEnvironment {
+  public class ESCAdapter : IEnvironment, IGenericDataSource {
 
     private readonly IUnboundESC _esc;  // Environment Service Component (ESC) implementation.
     private readonly TVector _maxSize;  // The maximum entent (for auto placement).

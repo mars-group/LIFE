@@ -2,8 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using DalskiAgent.Movement;
-using DalskiAgent.Perception;
-using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Environments {
  
@@ -166,7 +164,7 @@ namespace DalskiAgent.Environments {
       return true;
     }
 
-
+    /*
     /// <summary>
     ///   This function is used by sensors to gather data from this environment.
     ///   It contains a function for "0: Get all perceptible agents". Further refinement 
@@ -191,6 +189,6 @@ namespace DalskiAgent.Environments {
           "[Environment2D] Error on GetData call. Queried '"+spec.GetInformationType()+"', though "+
           "only '0' is valid. Please make sure to override function in specific environment!");
       }
-    }
+    }*/
   }
 }
