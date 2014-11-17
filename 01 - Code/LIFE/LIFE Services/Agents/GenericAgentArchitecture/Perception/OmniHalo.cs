@@ -11,7 +11,8 @@ namespace DalskiAgent.Perception {
     /// <summary>
     ///   Create a halo that is capable of sensing everything.
     /// </summary>
-    public OmniHalo() : base(null) { }
+    /// <param name="informationType">The information type to query.</param>
+    public OmniHalo(int informationType) : base(null, informationType) { }
 
 
     /// <summary>

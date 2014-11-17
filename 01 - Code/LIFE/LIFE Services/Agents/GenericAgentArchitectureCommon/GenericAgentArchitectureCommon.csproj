@@ -51,12 +51,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datatypes\AABB.cs" />
+    <Compile Include="Datatypes\SpatialHalo.cs" />
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Interfaces\IFact.cs" />
     <Compile Include="Interfaces\IGenericDataSource.cs" />
-    <Compile Include="Interfaces\IHalo.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
     <Compile Include="Interfaces\ISpatialEntity.cs" />
+    <Compile Include="Interfaces\ISpecificator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

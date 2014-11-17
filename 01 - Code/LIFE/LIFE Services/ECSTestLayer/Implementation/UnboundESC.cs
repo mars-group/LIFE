@@ -77,7 +77,7 @@
             return _entities;
         }
 
-        public object GetData(int informationType, IHalo halo) {
+        public object GetData(ISpecificator spec) {
             //TODO informationType als filter kriterium
 //            const int elementId = -1;
 //            Add(elementId, -1, false, geometry.GetDimensionQuad());

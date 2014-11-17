@@ -8,9 +8,9 @@ namespace DalskiAgent.Environments {
   /// </summary>
   public class SpatialData {
     
-    public Vector Position;               // The agent's current position.
-    public Direction Direction;           // Pitch and yaw values.
-
+    public Vector Position;       // The agent's current position.
+    public Direction Direction;   // Pitch and yaw values.
+    public Vector Dimension;      // Agent's dimension. 
 
     /// <summary>
     ///   Create a new spatial data set.

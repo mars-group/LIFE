@@ -1,4 +1,5 @@
 ﻿using DalskiAgent.Movement;
+using GeoAPI.Geometries;
 
 namespace DalskiAgent.Environments {
   
@@ -8,7 +9,8 @@ namespace DalskiAgent.Environments {
   /// </summary>
   public class DataAccessor {
 
-    private readonly SpatialData _data;  // Data source object.
+    private readonly SpatialData _data;    // Data source object.
+    private readonly IGeometry _geometry;  // Geometry source object.
 
 
     /// <summary>
@@ -21,14 +23,31 @@ namespace DalskiAgent.Environments {
 
 
     /// <summary>
+    ///   Create a new r/o object for IGeometry objects.
+    /// </summary>
+    /// <param name="geometry">Geometry source object.</param>
+    public DataAccessor(IGeometry geometry) {
+      _geometry = geometry;
+    }
+
+
+    /// <summary>
     ///   GET access for the object's current position.
     /// </summary>
     public Vector Position {
       get {
-        var x = _data.Position.X;
-        var y = _data.Position.Y;
-        var z = _data.Position.Z;
-        return new Vector(x,y,z);     
+        float x, y, z;
+        if (_data != null) {
+          x = _data.Position.X;
+          y = _data.Position.Y;
+          z = _data.Position.Z;          
+        }
+        else {
+          x = (float) _geometry.Coordinate.X;
+          y = (float) _geometry.Coordinate.Y;
+          z = (float) _geometry.Coordinate.Z;
+        }
+        return new Vector(x, y, z);
       }      
     }
 

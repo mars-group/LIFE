@@ -9,9 +9,8 @@ namespace DalskiAgent.Perception {
   /// </summary>
   public class DataSensor : Sensor {
 
-    protected readonly IGenericDataSource Source;    // The data source (environment) to sense. 
-    public int InformationType { get; private set; } // Link to the data type to acquire.
-    protected readonly IHalo Halo;                   // The area this sensor can percept. 
+    private readonly IGenericDataSource _source;    // The data source (environment) to sense. 
+    private readonly ISpecificator _specificator;   // The area this sensor can percept. 
 
 
     /// <summary>
@@ -20,13 +19,11 @@ namespace DalskiAgent.Perception {
     /// </summary>
     /// <param name="agent">The agent who owns this sensor.</param>
     /// <param name="source">Reference to the queried data source.</param>
-    /// <param name="dataType">The information type, this sensor listens at.</param>
-    /// <param name="halo">The halo represents the perception field for this sensor.</param>
-    public DataSensor(Agent agent, IGenericDataSource source, int dataType, IHalo halo) 
+    /// <param name="specificator">The specificator represents the perception field for this sensor.</param>
+    public DataSensor(Agent agent, IGenericDataSource source, ISpecificator specificator) 
       : base (agent) {
-      Source = source;
-      InformationType = dataType;
-      Halo = halo;
+      _source = source;
+      _specificator = specificator;
     }
 
 
@@ -37,8 +34,17 @@ namespace DalskiAgent.Perception {
     /// </summary>
     /// <returns>Sensor data object.</returns>
     protected override SensorInput RetrieveData() {
-      var result = Source.GetData(InformationType, Halo);
-      return new SensorInput(this, result, InformationType, Agent.GetTick());
+      var result = _source.GetData(_specificator);
+      return new SensorInput(this, result, _specificator.GetInformationType(), Agent.GetTick());
+    }
+
+
+    /// <summary>
+    ///   Return the information type specified by this object.
+    /// </summary>
+    /// <returns>Information type (as enum value).</returns>
+    public int GetInformationType() {
+      return _specificator.GetInformationType();
     }
 
 
@@ -48,9 +54,9 @@ namespace DalskiAgent.Perception {
     /// <param name="active">Set this sensor active (true) or passive (false).</param>
     /// <returns>Return value tells, whether this operation succeeded or not.</returns>
     public bool SetActive(bool active) {
-      if (!(Source is ICallbackDataSource)) return false;
+      if (!(_source is ICallbackDataSource)) return false;
       if (Active != active) {
-        (Source as ICallbackDataSource).SetCallbackMode(!active, LastInput);
+        (_source as ICallbackDataSource).SetCallbackMode(!active, LastInput);
         Active = active;
       }
       return true;

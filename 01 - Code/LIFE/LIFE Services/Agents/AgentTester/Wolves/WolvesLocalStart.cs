@@ -83,10 +83,10 @@ namespace AgentTester.Wolves {
     /// </summary>
     public static void Main() {
       var exec = new SeqExec(true);
-      var env = CreateWolvesScenario(exec, 18, 6, 2, false);
+      var env = CreateWolvesScenario(exec, 20, 8, 2, false);
       var view = CreateWolvesView(env);
       ConsoleView.LcRedirect = false;
-      exec.Run(750, view);
+      exec.Run(1000, view);
     }
   }
 }

@@ -7,7 +7,7 @@ namespace DalskiAgent.Environments {
   ///   This object interface abstracts from agents and other spatial objects 
   ///   for internal use. It implements the ISpatialEntity used by the ESC.
   /// </summary>
-  public interface IObject : ISpatialEntity {
+  public interface IObject /* : ISpatialEntity */ {
 
 
     /// <summary>

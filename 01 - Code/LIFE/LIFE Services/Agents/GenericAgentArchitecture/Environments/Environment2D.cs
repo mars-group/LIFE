@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using DalskiAgent.Movement;
+using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Environments {
@@ -163,11 +164,13 @@ namespace DalskiAgent.Environments {
     ///   It contains a function for "0: Get all perceptible agents". Further refinement 
     ///   can be made by specific environments overriding this function. 
     /// </summary>
-    /// <param name="informationType">The type of information to sense.</param>
-    /// <param name="halo">The perception range.</param>
+    /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public virtual object GetData(int informationType, IHalo halo) {
-      switch (informationType) {
+    public virtual object GetData(ISpecificator spec) {
+      if (!(spec is Halo)) throw new Exception(
+        "[Environment2D] Error on GetData() specificator: Not of type 'Halo'!");
+      var halo = (Halo) spec;
+      switch (spec.GetInformationType()) {
         case 0: { // Zero stands here for "all agents". Enum avoided, check it elsewhere!
           var objects = new List<IObject>();
           foreach (var obj in GetAllObjects())
@@ -177,7 +180,7 @@ namespace DalskiAgent.Environments {
 
         // Throw exception, if wrong argument was supplied.
         default: throw new Exception(
-          "[Environment2D] Error on GetData call. Queried '"+informationType+"', though "+
+          "[Environment2D] Error on GetData call. Queried '"+spec.GetInformationType()+"', though "+
           "only '0' is valid. Please make sure to override function in specific environment!");
       }
     }

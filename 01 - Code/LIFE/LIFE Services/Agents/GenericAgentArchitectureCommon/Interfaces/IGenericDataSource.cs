@@ -2,15 +2,13 @@
 
 namespace GenericAgentArchitectureCommon.Interfaces {
   
-  public interface IGenericDataSource {
-    
+  public interface IGenericDataSource {    
     
     /// <summary>
     ///   Get information of a given type from a data source.
     /// </summary>
-    /// <param name="informationType">The information type to query (enum).</param>
-    /// <param name="halo">A geometry object representing the agent's perception.</param>
+    /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object containing the asked information. Obviously, it has to be casted.</returns>
-    Object GetData(int informationType, IHalo halo);
+    Object GetData(ISpecificator spec);
   }
 }

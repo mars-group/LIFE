@@ -15,8 +15,9 @@ namespace DalskiAgent.Perception {
     ///   Create a circular halo.
     /// </summary>
     /// <param name="data">The agent's R/O data container.</param>
+    /// <param name="infType">The information type to query.</param>
     /// <param name="radius">The radius describing the range of this halo.</param>
-    public RadialHalo(DataAccessor data, float radius) : base(data) {
+    public RadialHalo(DataAccessor data, int infType, float radius) : base(data, infType) {
       _radius = radius;
     }
 

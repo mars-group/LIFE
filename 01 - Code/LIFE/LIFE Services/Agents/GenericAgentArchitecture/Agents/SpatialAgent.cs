@@ -2,8 +2,6 @@
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
-using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
 
 namespace DalskiAgent.Agents {
 
@@ -17,8 +15,7 @@ namespace DalskiAgent.Agents {
     private readonly IEnvironment _env;   // IESC implementation for collision detection.
     protected readonly DataAccessor Data; // R/O container for spatial data access.
     protected AgentMover Mover;           // Class for agent movement. 
-    public IGeometry Bounds { get; set; } // The physical dimension.
-
+ 
 
     /// <summary>
     ///   Instantiate a new agent with spatial data. Only available for specializations.
@@ -28,7 +25,6 @@ namespace DalskiAgent.Agents {
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
     protected SpatialAgent(IExecution exec, IEnvironment env, Vector pos) : base(exec) {
       _env = env;
-      Bounds = new Point(1f, 1f, 1f);       // Default hitbox is cube with size 1.
       _env.AddObject(this, pos, out Data);  // Enlist the agent in environment.
     }
 
