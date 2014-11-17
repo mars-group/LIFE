@@ -39,7 +39,8 @@ namespace RuntimeEnvironment.Implementation {
             _simulationExecutionSwitch = new ManualResetEvent(false);
 
             // start simulation
-            Task.Run(() => this.RunSimulation());
+
+			Task.Run(() => this.RunSimulation());
         }
 
         private void RunSimulation() {
