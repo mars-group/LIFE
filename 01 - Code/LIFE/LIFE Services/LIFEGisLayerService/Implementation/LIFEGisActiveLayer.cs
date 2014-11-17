@@ -6,7 +6,6 @@ using System.Net;
 using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
 using LayerAPI.Interfaces.GIS;
-using Mono.Addins;
 using SharpMap;
 using SharpMap.Data;
 using SharpMap.Data.Providers;
@@ -19,7 +18,7 @@ namespace LIFEGisLayerService.Implementation
         private ICanQueryLayer _layer;
         private readonly Map _map;
 
-        public LIFEGisActiveLayer() {
+        protected LIFEGisActiveLayer() {
             _map = new Map {
                 MinimumZoom = 1
             };
