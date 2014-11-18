@@ -14,5 +14,6 @@
   </metadata>
 	<files>
 		<file src="bin\Release\*.dll" target="lib\net45\"/>
+		<file src="..\..\Libraries\SharpMap\gdal\**" target="lib\net45\gdal"/>
 	</files>	
 </package>
