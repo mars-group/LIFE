@@ -3,9 +3,6 @@ using DalskiAgent.Movement;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public interface IPotentialField {
         /// <summary>
         ///     Returns all potential emitters of this potential field.

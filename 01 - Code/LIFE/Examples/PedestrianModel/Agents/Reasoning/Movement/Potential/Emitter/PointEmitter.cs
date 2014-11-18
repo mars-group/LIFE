@@ -4,9 +4,6 @@ using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class PointEmitter : IPotentialEmitter {
         /// <returns> the position </returns>
         public Vector Position { get { return _position; } }
@@ -42,10 +39,8 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
 
         public double GetPotential(Vector reference) {
             double x = _position.X - reference.X;
-            //double z = position.Z - reference.Z;
             double y = _position.Y - reference.Y;
 
-            //return this.function.Value(Math.Sqrt(x * x + z * z));
             return _function.Value(Math.Sqrt(x*x + y*y));
         }
 

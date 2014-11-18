@@ -2,9 +2,6 @@
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class AStarNode<TE> {
         /// <summary>
         ///     Returns the complete costs from the start value of this node path to this node.
@@ -20,7 +17,6 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar {
                     }
                 }
 
-                //return costFromStart;
                 return _costFromStart.Value;
             }
         }
@@ -106,7 +102,6 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar {
         /// <returns> the costToGoal </returns>
         public double GetCostToGoal(AStarNode<TE> goalNode) {
             if (_costToGoal == null) _costToGoal = _graph.GetHeuristic(_externalNode, goalNode._externalNode);
-            // return costToGoal;
             return _costToGoal.Value;
         }
 

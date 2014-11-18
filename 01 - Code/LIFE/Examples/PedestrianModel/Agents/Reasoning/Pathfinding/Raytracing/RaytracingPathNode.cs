@@ -3,9 +3,6 @@ using DalskiAgent.Movement;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class RaytracingPathNode : IPathNode<Vector> {
         /// <summary>
         ///     The underlying position.
@@ -43,9 +40,6 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
 
 
         public override sealed int GetHashCode() {
-            //long x = Math.Round(obj.X * 100);
-            //long y = Math.Round(obj.Y * 100);
-            //long z = Math.Round(obj.Z * 100);
             long x = (long)Math.Round(_x * 100);
             long y = (long)Math.Round(_y * 100);
             long z = (long)Math.Round(_z * 100);

@@ -21,7 +21,6 @@ namespace PedestrianModel.Agents {
     ///     A pedestrian agent which moves to a target position using wayfinding and collision avoidance.
     /// </summary>
     public class Pedestrian : SpatialAgent, IAgentLogic {
-        //private readonly ContinuousMover mover;
 
         public string Name { get; set; }
 
@@ -116,10 +115,6 @@ namespace PedestrianModel.Agents {
             Mover = new DirectMover(environment, this, Data);
             _mover = (DirectMover) Mover; // Re-declaration to save casts.
 
-            //Mover = new ContinuousMover(env, this, Data);
-            //_mover = (ContinuousMover)Mover;  // Re-declaration to save casts.
-
-
             // WALK
             _targetPositions = new List<Vector> {targetPosition};
 
@@ -163,19 +158,12 @@ namespace PedestrianModel.Agents {
         /// <summary>
         ///     Initialize the agent.
         /// </summary>
-        //protected internal void ProcessStartEvent(StartEvent @event)
         private void Start() {
-            //Environment.VisionSensor.PushMode = false;
-
-            //startPosition = Environment.CurrentPosition;
             _startPosition = GetPosition();
-
-            //movementPipeline.addBehavior(new ObstacleAvoidanceBehavior(this));
             _movementPipeline.AddBehavior(new ObstacleAvoidanceBehavior(this, PerceptionUnit));
 
             // - ok, we don't really have an Y axis, but it's Vector3D, so define a hard coded y-value
             // - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
-            //pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
             object rawObstaclesData = PerceptionUnit.GetData((int) InformationTypes.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>) rawObstaclesData;
             _pathfindingSearchGraph = new RaytracingGraph
@@ -183,10 +171,6 @@ namespace PedestrianModel.Agents {
             _pathfinder = new AStarPathfinder<Vector>(_pathfindingSearchGraph);
 
             CreateAndExecuteMovePlan(_targetPositions);
-
-            // starting agent, starting movement loop
-            //int firstMoveDelay = (int?) getStartParameter("firstMoveDelay");
-            //Environment.addTimer("act", firstMoveDelay, MOVE_TIMER_INTERVAL);
         }
 
         /// <summary>
@@ -205,15 +189,12 @@ namespace PedestrianModel.Agents {
             // remove all actions from top of the queue until we have one that is not finished
             while (_actions.Count > 0) {
                 if (_actions[0].IsFinished(this)) {
-                    //LOGGER.trace("Agent " + Id + ": finished action " + actions.Remove(0));
                     _actions.RemoveAt(0);
                 }
                 else break;
             }
 
             if (_actions.Count > 0) {
-#warning Don't perform the action, yet. Just return it here, so it can be returned in Reason().
-                //actions[0].PerformAction(this);
                 directMovementAction = _actions[0].PerformAction(this, Mover);
             }
             else {
@@ -224,17 +205,11 @@ namespace PedestrianModel.Agents {
                     // walk to the next position in the list
                     _targetPositionIndex = (_targetPositionIndex + 1)%_targetPositions.Count;
                     CreateAndExecuteMovePlan(_targetPositions);
-
-#warning Correct to return DirectMovementAction here?
                     directMovementAction = _actions[0].PerformAction(this, Mover);
                 }
                     // code only executed if looped
                 else if (Config.WalkLoops) {
                     // last target reached, get back to start...
-                    // kind of a hack, should be replaced some time and be done in the environment...
-                    //TeleportAction action = new TeleportAction(startPosition);
-                    //Environment.executeAction(action);
-#warning Return a direct move action which puts the agent back to startPosition (if there's space)
                     directMovementAction = new DirectMovementAction(_mover, _startPosition);
                     // Allowed to already execute this here to immediately change position and have the right agent position for creation of move plan?
                     // Will be executed twice, but shouldn't have any negative effect.
@@ -243,8 +218,6 @@ namespace PedestrianModel.Agents {
                     CreateAndExecuteMovePlan(_targetPositions);
                 }
                 else {
-                    //Environment.executeAction(new SuicideAction());
-#warning Remove agents from the evironment here.
                     // Don't change position. Agent should remove itself in the next Reason().
                     IsAlive = false;
                     directMovementAction = new DirectMovementAction(_mover, GetPosition());
@@ -268,12 +241,10 @@ namespace PedestrianModel.Agents {
 
                     if (path == null) continue;
 
-                    //path.Insert(0, Environment.CurrentPosition);
                     path.Insert(0, GetPosition());
 
                     double pathLength = 0.0;
                     for (int i = 1; i < path.Count; i++) {
-                        //pathLength += path[i - 1].distance(path[i]);
                         pathLength += path[i - 1].GetDistance(path[i]);
                     }
 
@@ -309,7 +280,6 @@ namespace PedestrianModel.Agents {
         private IList<Vector> GetPathToTarget(Vector targetPosition) {
             _pathfindingSearchGraph.TargetPosition = targetPosition;
 
-            //IList<Vector3D> path = pathfinder.FindPath(new RaytracingPathNode(Environment.CurrentPosition), new RaytracingPathNode(pathfindingSearchGraph.TargetPosition));
             IList<Vector> path = _pathfinder.FindPath
                 (new RaytracingPathNode(GetPosition()), new RaytracingPathNode(_pathfindingSearchGraph.TargetPosition));
 
@@ -323,7 +293,6 @@ namespace PedestrianModel.Agents {
         /// </summary>
         /// <returns> true if the agent has not moved a lot during the last steps. </returns>
         private bool GotStuck() {
-            //this.positionTracker.Add(Environment.CurrentPosition);
             _positionTracker.Add(GetPosition());
 
             if (_positionTracker.Count > PositionTrackerSize) _positionTracker.RemoveAt(0);
@@ -342,13 +311,11 @@ namespace PedestrianModel.Agents {
 
             double sumDistance = 0;
             foreach (Vector v in _positionTracker) {
-                //sumDistance += v.distance(averagePosition);
                 sumDistance += v.GetDistance(averagePosition);
             }
 
             double avgDistance = sumDistance/PositionTrackerSize;
 
-            //double movingSpeed = (double?) getStartParameter("movingSpeed");
             double movingSpeed = _maxVelocity;
             double estDistance = movingSpeed*0.2;
 

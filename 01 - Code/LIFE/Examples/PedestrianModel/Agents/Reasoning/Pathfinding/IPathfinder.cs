@@ -2,9 +2,6 @@
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public interface IPathfinder<TE> {
         /// <summary>
         ///     Returns the used search graph.

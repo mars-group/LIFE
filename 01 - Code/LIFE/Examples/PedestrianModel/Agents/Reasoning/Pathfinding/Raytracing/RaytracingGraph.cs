@@ -4,9 +4,6 @@ using DalskiAgent.Movement;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class RaytracingGraph : ISearchGraph<Vector> {
         /// <returns> the targetPosition </returns>
         public Vector TargetPosition { get { return _targetPosition; } set { _targetPosition = value; } }
@@ -43,9 +40,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
         /// <param name="obstacles"> a collection of all obstacles </param>
         /// <param name="yValue"> the height of all graph points </param>
         /// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
-        //public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, double yValue, double waypointEdgeDistance)
         public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, float yValue, float waypointEdgeDistance) {
-            //IList<Vector3D> edgePoints = new List<Vector3D>();
             List<Vector> edgePoints = new List<Vector>();
             _obstacles = obstacles;
 
@@ -67,13 +62,13 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
                     // raytest all waypoints with each other
                     for (int i = 0; i < edgePoints.Count; i++) {
                         for (int j = i + 1; j < edgePoints.Count; j++) {
-                            Vector orign = edgePoints[i];
+                            Vector origin = edgePoints[i];
                             Vector target = edgePoints[j];
 
                             // point is visible, add it to both neighbor sets
-                            if (RayUtil.IsVisible(orign, target, obstacles)) {
-                                _nodeNeighbors[orign].Add(target);
-                                _nodeNeighbors[target].Add(orign);
+                            if (RayUtil.IsVisible(origin, target, obstacles)) {
+                                _nodeNeighbors[origin].Add(target);
+                                _nodeNeighbors[target].Add(origin);
                             }
                         }
                     }
@@ -123,25 +118,17 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
         /// <param name="heightValue"> the height of the edge points </param>
         /// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
         /// <returns> a list of the edges </returns>
-        //public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, double yValue, double waypointEdgeDistance)
         public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, float heightValue, float waypointEdgeDistance) {
             IList<Vector> edgePoints = new List<Vector>();
 
-            //Vector3D position = obstacle.Position;
             Vector position = obstacle.GetPosition();
-            //Vector3D boundsHalf = ((Vector3D) obstacle.Bounds).scalarMultiply(0.5);
             Vector boundsHalf = obstacle.GetDimension()*0.5f;
 
             // if the yValue is lower or higher than the obstacle, there are no edge points
-            //if (position.Y - boundsHalf.Y - waypointEdgeDistance > heightValue || position.Y + boundsHalf.Y + waypointEdgeDistance < heightValue)
             if (position.Z - boundsHalf.Z - waypointEdgeDistance > heightValue
                 || position.Z + boundsHalf.Z + waypointEdgeDistance < heightValue) return edgePoints;
 
             // calculate all four egde points
-            //edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, heightValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
-            //edgePoints.Add(new Vector(position.X - boundsHalf.X - waypointEdgeDistance, heightValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
-            //edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, heightValue, position.Z - boundsHalf.Z - waypointEdgeDistance));
-            //edgePoints.Add(new Vector(position.X + boundsHalf.X + waypointEdgeDistance, heightValue, position.Z + boundsHalf.Z + waypointEdgeDistance));
             edgePoints.Add
                 (new Vector
                     (position.X - boundsHalf.X - waypointEdgeDistance,

@@ -3,9 +3,6 @@ using System.Linq;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class AStarPathfinder<TE> : IPathfinder<TE> {
         /// <summary>
         ///     The search graph to use for the pathfinding.
@@ -34,7 +31,6 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar {
             openList.Add(fromNode);
 
             while (openList.Count > 0) {
-                //bestNode = openList.pollFirst();
                 AStarNode<TE> bestNode = openList.First();
                 openList.Remove(bestNode);
 
@@ -43,19 +39,15 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar {
                 foreach (AStarNode<TE> newNode in neighbors) {
                     AStarNode<TE> oldVer;
 
-                    //oldVer = openMap[newNode.ExternalNode];
                     if (openMap.ContainsKey(newNode.ExternalNode)) oldVer = openMap[newNode.ExternalNode];
                     else oldVer = null;
 
                     if (oldVer != null && oldVer.CostFromStart <= newNode.CostFromStart) continue;
 
-                    //oldVer = closedMap[newNode.ExternalNode];
                     if (closedMap.ContainsKey(newNode.ExternalNode)) oldVer = closedMap[newNode.ExternalNode];
                     else oldVer = null;
 
                     if (oldVer != null && oldVer.CostFromStart <= newNode.CostFromStart) continue;
-#warning Old "WALK" code seems to be incorrect here!
-                    //closedMap.Remove(newNode); -> this should have no effect, because an AStarNode CANNOT be a key, only IPathNodes CAN
                     openList.Add(newNode);
                     openMap[newNode.ExternalNode] = newNode;
                 }

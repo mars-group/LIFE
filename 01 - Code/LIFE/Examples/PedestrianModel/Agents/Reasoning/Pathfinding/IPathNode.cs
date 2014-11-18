@@ -1,8 +1,5 @@
 ﻿namespace PedestrianModel.Agents.Reasoning.Pathfinding {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public interface IPathNode<TE> {
         /// <summary>
         ///     Returns the adapted object of this node.

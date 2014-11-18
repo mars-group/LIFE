@@ -5,7 +5,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
 
     /// <summary>
     ///     A pipeline to postprocess the movement vector with several behaviors.
-    ///     @author Christian Thiel
     /// </summary>
     public class ReactiveBehaviorPipeline {
         /// <summary>
@@ -14,7 +13,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         /// <returns> the content of the pipeline </returns>
         public IList<IReactiveMovingBehavior> PipelineContent {
             get {
-                //return Collections.unmodifiableList(pipeline);
                 return _pipeline.AsReadOnly();
             }
         }
@@ -22,7 +20,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         /// <summary>
         ///     The pipeline.
         /// </summary>
-        //private readonly IList<ReactiveMovingBehavior> pipeline = new List<ReactiveMovingBehavior>();
         private readonly List<IReactiveMovingBehavior> _pipeline = new List<IReactiveMovingBehavior>();
 
         /// <summary>
@@ -55,7 +52,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         /// <param name="behavior"> the behavior to remove </param>
         /// <returns> true if the pipeline changed as a result of this method call. </returns>
         public bool RemoveBehavior(IReactiveMovingBehavior behavior) {
-            //return pipeline.removeAll(Arrays.asList(behavior));
             int removed = _pipeline.RemoveAll(x => x.Equals(behavior));
             return removed > 0;
         }

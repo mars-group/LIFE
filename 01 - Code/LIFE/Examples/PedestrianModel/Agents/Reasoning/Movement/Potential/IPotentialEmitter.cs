@@ -2,9 +2,6 @@
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public interface IPotentialEmitter {
         /// <summary>
         ///     Calculates the potential if this emitter at the given position <code>position</code> ant returns it.

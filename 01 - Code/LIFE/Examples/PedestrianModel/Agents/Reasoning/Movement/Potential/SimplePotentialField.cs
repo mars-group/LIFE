@@ -4,9 +4,6 @@ using DalskiAgent.Movement;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class SimplePotentialField : IPotentialField {
         /// <summary>
         ///     The collection of potential emitters.
@@ -21,7 +18,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 
         public ICollection<IPotentialEmitter> Emitters {
             get {
-                //return Collections.unmodifiableSet(potentialEmitters);
                 return _potentialEmitters.ToList().AsReadOnly();
             }
         }

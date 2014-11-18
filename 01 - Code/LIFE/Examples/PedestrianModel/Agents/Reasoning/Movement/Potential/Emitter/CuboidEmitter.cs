@@ -4,9 +4,6 @@ using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class CuboidEmitter : IPotentialEmitter {
         /// <summary>
         ///     The lowest point of this cuboid.
@@ -32,7 +29,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
         /// <param name="size"> the size of the cumboid along the positive axes </param>
         /// <param name="function"> the function to calculate the potential with </param>
         public CuboidEmitter(Vector startPoint, Vector size, IUnivariateRealFunction function) {
-            //this.start = startPoint.subtract(1.0 / 2.0, size);
             _start = startPoint - (0.5f*size);
             _size = size;
             _function = function;
@@ -44,28 +40,22 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
             double distance;
 
             double refX = reference.X;
-            //double refZ = @reference.Z;
             double refY = reference.Y;
 
             double minX = _start.X;
-            //double minZ = start.Z;
             double minY = _start.Y;
             double maxX = _start.X + _size.X;
-            //double maxZ = start.Z + size.Z;
             double maxY = _start.Y + _size.Y;
 
             if (refX < minX) {
                 // left of the emitter
-                //if (refZ < minZ)
                 if (refY < minY) {
                     // left below the emitter
-                    //distance = Distance(minX, minZ, refX, refZ);
                     distance = Distance(minX, minY, refX, refY);
                 }
                     //else if (refZ > maxZ)
                 else if (refY > maxY) {
                     // left above the emitter
-                    //distance = Distance(minX, maxZ, refX, refZ);
                     distance = Distance(minX, maxY, refX, refY);
                 }
                 else {
@@ -75,16 +65,12 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
             }
             else if (refX > maxX) {
                 // right of the emitter
-                //if (refZ < minZ)
                 if (refY < minY) {
                     // right below the emitter
-                    //distance = Distance(maxX, minZ, refX, refZ);
                     distance = Distance(maxX, minY, refX, refY);
                 }
-                    //else if (refZ > maxZ)
                 else if (refY > maxY) {
                     // right above the emitter
-                    //distance = Distance(maxX, maxZ, refX, refZ);
                     distance = Distance(maxX, maxY, refX, refY);
                 }
                 else {
@@ -93,16 +79,12 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
                 }
             }
             else {
-                //if (refZ < minZ)
                 if (refY < minY) {
                     // below the emitter
-                    //distance = minZ - refZ;
                     distance = minY - refY;
                 }
-                    //else if (refZ > maxZ)
                 else if (refY > maxY) {
                     // above the emitter
-                    //distance = refZ - maxZ;
                     distance = refY - maxY;
                 }
                 else {
@@ -124,13 +106,10 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
         /// <param name="qX"> qX </param>
         /// <param name="qY"> qY </param>
         /// <returns> the euklid distance </returns>
-        //private double Distance(double pX, double pZ, double qX, double qZ)
         private double Distance(double pX, double pY, double qX, double qY) {
             double x = pX - qX;
-            //double z = pZ - qZ;
             double y = pY - qY;
 
-            //return Math.Sqrt(x * x + z * z);
             return Math.Sqrt(x*x + y*y);
         }
     }

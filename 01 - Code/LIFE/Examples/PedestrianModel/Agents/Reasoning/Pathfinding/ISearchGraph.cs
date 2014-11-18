@@ -2,9 +2,6 @@
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public interface ISearchGraph<TE> {
         /// <summary>
         ///     Calculates the heuristic distance between the two nodes <code>from</code> and <code>to</code>. The

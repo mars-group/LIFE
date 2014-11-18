@@ -2,9 +2,6 @@
 
 namespace PedestrianModel.Agents.Reasoning.Movement {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public interface IReactiveMovingBehavior {
         /// <summary>
         ///     Modifies the chosen main movement vector.

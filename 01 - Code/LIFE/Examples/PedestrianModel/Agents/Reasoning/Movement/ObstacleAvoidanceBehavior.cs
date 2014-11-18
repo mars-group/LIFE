@@ -10,32 +10,28 @@ using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Agents.Reasoning.Movement {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class ObstacleAvoidanceBehavior : IReactiveMovingBehavior {
         /// <summary>
         ///     The function to calculate the potential value for other agent distances.
         /// </summary>
         private static readonly IUnivariateRealFunction AgentDistancePotentialFunction =
-            new UnivariateRealFunctionAnonymousInnerClassHelper();
+            new AgentDistancePotentialFunctionImpl();
 
         /// <summary>
         ///     The function to calculate the potential value for the target position.
         /// </summary>
         private static readonly IUnivariateRealFunction TargetDistancePotentialFunction =
-            new UnivariateRealFunctionAnonymousInnerClassHelper2();
+            new TargetDistancePotentialFunctionImpl();
 
         /// <summary>
         ///     The function to calculate the potential value for obstacles.
         /// </summary>
         private static readonly IUnivariateRealFunction ObstacleDistancePotentialFunction =
-            new UnivariateRealFunctionAnonymousInnerClassHelper3();
+            new ObstacleDistancePotentialFunctionImpl();
 
         /// <summary>
         ///     The agent associated with this behavior control.
         /// </summary>
-        //private readonly AbstractAgent agent;
         private readonly SpatialAgent _agent;
 
         private readonly PerceptionUnit _perceptionUnit;
@@ -51,22 +47,15 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         /// </summary>
         /// <param name="agent"> the agent for this behavior </param>
         /// <param name="perceptionUnit"> the perception unit </param>
-        //public ObstacleAvoidanceBehavior(AbstractAgent agent)
         public ObstacleAvoidanceBehavior(SpatialAgent agent, PerceptionUnit perceptionUnit) {
             _agent = agent;
             _perceptionUnit = perceptionUnit;
 
             // creating the static obstacle field
-            //IList<SimulationObject> obstacles = ((VisionSensor) agent.Environment.VisionSensor).ObstaclesAsObjectList;
             object rawObstacleData = perceptionUnit.GetData((int) InformationTypes.Obstacles).Data;
             List<Obstacle> obstacles = (List<Obstacle>) rawObstacleData;
 
-            //foreach (SimulationObject obstacle in obstacles)
             foreach (Obstacle obstacle in obstacles) {
-                //if (!obstacle.Id.StartsWith("floor", StringComparison.Ordinal))
-                //{
-                //obstacleField.addEmitter(new CuboidEmitter(obstacle.Position, (Vector3D) obstacle.Bounds, OBSTACLE_DISTANCE_POTENTIAL_FUNCTION));
-                //}
                 Vector position = obstacle.GetPosition();
                 Vector bounds = obstacle.GetDimension();
                 _obstacleField.AddEmitter(new CuboidEmitter(position, bounds, ObstacleDistancePotentialFunction));
@@ -78,16 +67,12 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         public Vector ModifyMovementVector(Vector targetPosition, Vector currentPipelineVector) {
             IPotentialField agentField = new SimplePotentialField();
 
-            //IList<SimulationObject> perceptedAgents = ((VisionSensor) agent.Environment.VisionSensor).AgentsAsObjectList;
             object rawPedestrianData = _perceptionUnit.GetData((int) InformationTypes.Pedestrians).Data;
             IList<Pedestrian> pedestrians = (List<Pedestrian>) rawPedestrianData;
 
-            //foreach (SimulationObject so in perceptedAgents)
             foreach (Pedestrian ped in pedestrians) {
                 if (!ped.Id.Equals(_agent.Id)) {
-                    //agentField.addEmitter(new PointEmitter(so.calcCurrentPosition(agent.Environment.CurrentSimulationTime + 20), AGENT_DISTANCE_POTENTIAL_FUNCTION));
-#warning Old "WALK" code seems looking at the future positions of agents here!
-                    Vector position = ped.GetPosition();
+                    Vector position = ped.GetPosition();  // Old "WALK" code seems looking at the future positions of agents (+20 ms) here!
                     agentField.AddEmitter(new PointEmitter(position, AgentDistancePotentialFunction));
                 }
             }
@@ -98,7 +83,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
                 agentField
             };
 
-            //Vector3D currentPosition = agent.Environment.CurrentPosition;
             Vector currentPosition = _agent.GetPosition();
 
             Vector bestDirection = currentPipelineVector;
@@ -106,14 +90,12 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
 
             // try several directions for the best potential
             for (double angle = -Math.PI/2; angle <= Math.PI/2; angle += Math.PI/8) {
-                //Vector tempDirection = new Vector(currentPipelineVector.X * (float)Math.Cos(angle) - currentPipelineVector.Z * (float)Math.Sin(angle), currentPipelineVector.Y, currentPipelineVector.X * (float)Math.Sin(angle) + currentPipelineVector.Z * (float)Math.Cos(angle));
                 Vector tempDirection = new Vector
                     (currentPipelineVector.X*(float) Math.Cos(angle) - currentPipelineVector.Y*(float) Math.Sin(angle),
                         currentPipelineVector.X*(float) Math.Sin(angle)
                         + currentPipelineVector.Y*(float) Math.Cos(angle),
                         currentPipelineVector.Z);
 
-                //Vector3D position = currentPosition.add(0.2, tempDirection.normalize());
                 Vector position = currentPosition + (0.2f*tempDirection.GetNormalVector());
 
                 double potential = potentialFieldCollection.CalculatePotential(position);
@@ -126,7 +108,6 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
 
             // obstacles everywhere, no movement
             if (double.IsInfinity(lastPotential)) {
-                //bestDirection = Vector3D.ZERO;
                 bestDirection = new Vector(0, 0, 0);
             }
 
@@ -135,10 +116,9 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
 
         #endregion
 
-        #region Nested type: UnivariateRealFunctionAnonymousInnerClassHelper
+        #region Nested type: AgentDistancePotentialFunctionImpl
 
-        private class UnivariateRealFunctionAnonymousInnerClassHelper : IUnivariateRealFunction {
-            //public override double Value(double x)
+        private class AgentDistancePotentialFunctionImpl : IUnivariateRealFunction {
 
             #region UnivariateRealFunction Members
 
@@ -154,10 +134,9 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
 
         #endregion
 
-        #region Nested type: UnivariateRealFunctionAnonymousInnerClassHelper2
+        #region Nested type: TargetDistancePotentialFunctionImpl
 
-        private class UnivariateRealFunctionAnonymousInnerClassHelper2 : IUnivariateRealFunction {
-            //public override double Value(double x)
+        private class TargetDistancePotentialFunctionImpl : IUnivariateRealFunction {
 
             #region UnivariateRealFunction Members
 
@@ -173,10 +152,9 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
 
         #endregion
 
-        #region Nested type: UnivariateRealFunctionAnonymousInnerClassHelper3
+        #region Nested type: ObstacleDistancePotentialFunctionImpl
 
-        private class UnivariateRealFunctionAnonymousInnerClassHelper3 : IUnivariateRealFunction {
-            //public override double Value(double x)
+        private class ObstacleDistancePotentialFunctionImpl : IUnivariateRealFunction {
 
             #region UnivariateRealFunction Members
 

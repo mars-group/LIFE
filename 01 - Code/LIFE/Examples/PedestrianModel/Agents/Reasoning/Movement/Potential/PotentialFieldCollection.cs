@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DalskiAgent.Movement;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 
-    /// <summary>
-    ///     @author Christian Thiel
-    /// </summary>
     public class PotentialFieldCollection : HashSet<IPotentialField>, IPotentialField {
         /// <summary>
         ///     Constructs a new empty potential field collection.
@@ -35,12 +33,13 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
             return potentialSum;
         }
 
-        public void AddEmitter(IPotentialEmitter emitter) {}
+        public void AddEmitter(IPotentialEmitter emitter) {
+            throw new NotImplementedException();
+        }
 
         public ICollection<IPotentialEmitter> Emitters {
             get {
-                // TODO Auto-generated method stub
-                return null;
+                throw new NotImplementedException();
             }
         }
 
