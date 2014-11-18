@@ -13,24 +13,8 @@ namespace GOAPModelDefinition.Actions {
                     new WorldstateSymbol(WorldProperties.HasMoney,false,typeof(Boolean)),
                     new WorldstateSymbol(WorldProperties.HasToy,true,typeof(Boolean)),
                 }) {}
-
-        public override bool ValidateContextPreconditions() {
-            return true;
-        }
-
-        public override bool ExecuteContextEffects() {
-            throw new NotImplementedException();
-        }
-
+        
         public override void Execute() {
-            throw new NotImplementedException();
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
-        }
-
-        public override int GetPriority() {
             throw new NotImplementedException();
         }
     }

@@ -7,7 +7,7 @@ namespace GoapActionSystem.Implementation {
     /// <summary>
     ///     null action class
     /// </summary>
-    internal class SurrogateAction : AbstractGoapAction {
+    public class SurrogateAction : AbstractGoapAction {
         public SurrogateAction()
             : base(new List<WorldstateSymbol>(), new List<WorldstateSymbol>()) {}
 

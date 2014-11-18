@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using GoapCommon.Abstract;
-using GoapCommon.Interfaces;
+using GoapCommon.Implementation;
 
-namespace SimPanInGoapModelDefinition.Goals
-{
-    internal class CalmDown : AbstractGoapGoal{
+namespace SimPanInGoapModelDefinition.Goals {
 
-        public CalmDown(List<IGoapWorldProperty> targetWorldState, int startRelevancy) : base(targetWorldState, startRelevancy) {}
-        
-        public override int UpdateRelevancy(List<IGoapWorldProperty> actualWorldstate) {
+    internal class CalmDown : AbstractGoapGoal {
+        public CalmDown(List<WorldstateSymbol> targetWorldState, int startRelevancy)
+            : base(targetWorldState, startRelevancy) {}
+
+
+        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
             throw new NotImplementedException();
         }
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapModelTest.Actions;
@@ -20,6 +21,7 @@ namespace GoapTests {
 
         private AbstractGoapSystem _goapActionSystem1;
         private AbstractGoapSystem _goapActionSystem2;
+        private AbstractGoapSystem _goapActionSystemSearchDepth;
 
         private readonly AbstractGoapAction _actionClean = new ActionClean();
         private readonly AbstractGoapAction _actionClean2 = new ActionClean();
@@ -32,6 +34,8 @@ namespace GoapTests {
                 ("AgentTestConfig1", "GoapModelTest", new Blackboard());
             _goapActionSystem2 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig2", "GoapModelTest", new Blackboard());
+            _goapActionSystemSearchDepth = GoapComponent.LoadGoapConfiguration
+                ("AgentTestSearchDepth", "GoapModelTest", new Blackboard());
         }
 
         [Test]
@@ -64,6 +68,11 @@ namespace GoapTests {
 
             Assert.False((_goapActionSystem2.GetNextAction()).Equals(_actionGetToy));
             Assert.False((_goapActionSystem2.GetNextAction()).Equals(_actionClean));
+        }
+
+        [Test]
+        public void RunOutOfSearchDepthLimitTest() {
+            Assert.True(new SurrogateAction().Equals(_goapActionSystemSearchDepth.GetNextAction()));
         }
     }
 

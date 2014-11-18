@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using GoapActionSystem.ContractClasses;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
 using GoapCommon.Interfaces;
@@ -18,14 +20,13 @@ namespace GoapActionSystem.Implementation {
     ///     planner is responsible for the regressive search. the graph component knows nothing about that and the switched
     ///     root and target. planner is also responsible for the correct node creation.
     /// </summary>
+    [ContractClass(typeof(GoapPlannerContract))]
     internal class GoapPlanner {
-        private readonly int _maximuxSearchDepth = int.MaxValue;
-        private readonly List<AbstractGoapAction> _availableActions;
+        private readonly int _maximuxSearchDepth;
         private readonly Dictionary<WorldstateSymbol, List<AbstractGoapAction>> _effectToAction;
         private readonly List<WorldstateSymbol> _startState;
         private List<AbstractGoapAction> _currentPlan;
 
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// </summary>
         /// <param name="maximuxSearchDepth"></param>
@@ -43,7 +44,6 @@ namespace GoapActionSystem.Implementation {
             _effectToAction = effectToAction;
             _startState = startState;
             _maximuxSearchDepth = maximuxSearchDepth;
-            _availableActions = availableActions;
         }
 
 
@@ -51,7 +51,7 @@ namespace GoapActionSystem.Implementation {
             GoapSimpleGraphService graphService = new GoapSimpleGraphService();
 
             IGoapNode root = new Node(graphRoot, new List<WorldstateSymbol>(), graphRoot.Count);
-            Log.Info("NODE CREATED: " + root);
+            GoapComponent.Log.Info("NODE CREATED: " + root);
             //Console.WriteLine("NODE CREATED: " + root);
             graphService.InitializeGoapGraph(root);
             return graphService;
@@ -74,12 +74,20 @@ namespace GoapActionSystem.Implementation {
                 List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties(currentNode.GetUnsatisfiedGoalValues());
                 List<AbstractGoapAction> contextPreconditionsFulfilled = FilterActionsByContextPreconditions(satisfyingActions);
 
-                List<AbstractGoapAction>  applicableActions = FilterActions(contextPreconditionsFulfilled, currentNode);
+                List<AbstractGoapAction>  applicableActions = FurtherActionFilter(contextPreconditionsFulfilled, currentNode);
                 List<IGoapEdge> edges = GetResultingEdges(applicableActions, currentNode);
+
+                // TODO hier einfach bei überschreiten der 
+
 
                 graphService.ExpandCurrentVertex(edges);
                 graphService.AStarStep();
                 currentNode = graphService.GetNextVertexFromOpenList();
+            }
+
+            if (IsSearchDepthLimitExceeded(graphService)) {
+                GoapComponent.Log.Info("goap planner: search limit of " + _maximuxSearchDepth + " is exceeded");
+                return new List<AbstractGoapAction>();
             }
 
             if (currentNode != null
@@ -104,6 +112,8 @@ namespace GoapActionSystem.Implementation {
             return graphService.GetActualDepthFromRoot() > _maximuxSearchDepth;
         }
 
+        
+
         /// <summary>
         ///     get the actions that could satisfy the current needed states. this is done by inspect the effectToAction map.
         /// </summary>
@@ -118,18 +128,18 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     get the action which are executable by context preconditions
+        ///     get a list of actions which are executable by context preconditions
         /// </summary>
         /// <param name="actionsToFilter"></param>
         /// <returns></returns>
         private List<AbstractGoapAction> FilterActionsByContextPreconditions(List<AbstractGoapAction> actionsToFilter) {
-            var correct = new List<AbstractGoapAction>();
+            var passedPreconditions = new List<AbstractGoapAction>();
             foreach (var action in actionsToFilter) {
                 if (action.ValidateContextPreconditions()) {
-                    correct.Add(action);
+                    passedPreconditions.Add(action);
                 }
             }
-            return correct;
+            return passedPreconditions;
         }
 
         /// <summary>
@@ -149,11 +159,11 @@ namespace GoapActionSystem.Implementation {
             currValues.AddRange(goalValues.Where(goalValue => action.Effects.Contains(goalValue)).ToList());
 
             // step 3 check if effects have satisfied goal values
-            if (!(goalValues.Intersect(currValues).Count() > 0)) {
+            if (!(goalValues.Intersect(currValues).Any())) {
                 throw new ArgumentException("an unproductive action was chosen for expanding a node");
             }
 
-            // step 4
+            // step 4 add preconditions of the chosen action to goal values
             List<WorldstateSymbol> additionalGoals = action.PreConditions.Where
                 (precondition => !goalValues.Contains(precondition)).
                 ToList();
@@ -161,11 +171,10 @@ namespace GoapActionSystem.Implementation {
 
             // simple heuristik by counting not reached goal states
             int heuristic = goalValues.Except(currValues).Count();
-
             
-            var node=    new Node(goalValues.ToList(), currValues.ToList(), heuristic);
+            var node = new Node(goalValues.ToList(), currValues.ToList(), heuristic);
             //Console.WriteLine("NODE CREATED: " + node);
-            Log.Info("NODE CREATED: " + node);
+            GoapComponent.Log.Info("NODE CREATED: " + node);
             return node;
         }
 
@@ -187,7 +196,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     because of no inkremental ability in states there may be only one precondition
+        ///     because of no inkremental ability in states there may be only one precondition of one key type
         ///     even if the inspected action needs the same
         ///     this is not allowed
         /// </summary>
@@ -211,7 +220,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="applicableActions"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        private List<AbstractGoapAction> FilterActions(List<AbstractGoapAction> applicableActions, IGoapNode parent) {
+        private List<AbstractGoapAction> FurtherActionFilter(List<AbstractGoapAction> applicableActions, IGoapNode parent) {
             List<AbstractGoapAction> filtered = new List<AbstractGoapAction>();
             foreach (AbstractGoapAction action in applicableActions) {
                 if (HasConverseEffect(parent, action)) {

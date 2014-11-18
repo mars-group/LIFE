@@ -26,6 +26,12 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <returns></returns>
         List<IGoapGoal> GetAllGoals();
+
+        /// <summary>
+        ///     define the maximum of search depth in the planner
+        /// </summary>
+        /// <returns></returns>
+        int GetMaxGraphSearchDepth();
     }
 
 }

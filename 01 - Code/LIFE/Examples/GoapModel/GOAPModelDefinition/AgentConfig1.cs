@@ -40,6 +40,10 @@ namespace GOAPModelDefinition {
             return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
 
+        public int GetMaxGraphSearchDepth(){
+            return 20;
+        }
+
         #endregion
     }
 

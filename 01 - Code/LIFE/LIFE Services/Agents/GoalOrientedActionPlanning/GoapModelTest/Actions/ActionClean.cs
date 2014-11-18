@@ -14,26 +14,9 @@ namespace GoapModelTest.Actions {
                     new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean)),
                 }) { }
 
-        public override bool ValidateContextPreconditions()
-        {
-            return true;
-        }
 
-        public override void Execute() { }
-
-        public override bool ExecuteContextEffects()
-        {
+        public override void Execute() {
             throw new NotImplementedException();
-        }
-
-        public override int GetExecutionCosts()
-        {
-            return 1;
-        }
-
-        public override int GetPriority()
-        {
-            return 1;
         }
     }
 }

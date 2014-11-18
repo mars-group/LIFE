@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GoapCommon.Abstract;
-using GoapCommon.Interfaces;
+using GoapCommon.Implementation;
 
-namespace SimPanInGoapModelDefinition.Actions
-{
-    public class SuccessiveApproximation : AbstractGoapAction
-    {
-        public SuccessiveApproximation(List<IGoapWorldProperty> preconditionWorldstates, List<IGoapWorldProperty> effectWorldstates) :
-            base(preconditionWorldstates, effectWorldstates) {}
+namespace SimPanInGoapModelDefinition.Actions {
+
+    public class SuccessiveApproximation : AbstractGoapAction {
+        public SuccessiveApproximation
+            (List<WorldstateSymbol> preconditionWorldstates, List<WorldstateSymbol> effectWorldstates) :
+                base(preconditionWorldstates, effectWorldstates) {}
 
         public override bool ValidateContextPreconditions() {
             throw new NotImplementedException();
@@ -33,4 +30,5 @@ namespace SimPanInGoapModelDefinition.Actions
             throw new NotImplementedException();
         }
     }
+
 }

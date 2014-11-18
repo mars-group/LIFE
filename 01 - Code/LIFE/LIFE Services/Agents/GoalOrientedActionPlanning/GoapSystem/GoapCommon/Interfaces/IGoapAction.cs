@@ -46,6 +46,11 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <returns></returns>
         int GetPriority();
+
+        /// <summary>
+        ///     an action may last a few ticks , this is checked before executing the sucessor action
+        /// </summary>
+        bool IsFinished();
     }
 
 }

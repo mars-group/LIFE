@@ -16,28 +16,8 @@ namespace GOAPModelDefinition.Actions
                     new WorldstateSymbol(WorldProperties.HasFood, false, typeof (Boolean)),
                 }) { }
 
-        public override bool ValidateContextPreconditions()
-        {
-            return true;
-        }
 
-        public override bool ExecuteContextEffects()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Execute()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int GetExecutionCosts()
-        {
-            return 1;
-        }
-
-        public override int GetPriority()
-        {
+        public override void Execute() {
             throw new NotImplementedException();
         }
     }

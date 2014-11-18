@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using GenericAgentArchitectureCommon.Interfaces;
 using GoapCommon.Implementation;
 using TypeSafeBlackboard;
@@ -10,17 +11,17 @@ namespace GoapCommon.Abstract {
     /// </summary>
     public abstract class AbstractGoapSystem : IAgentLogic {
         public static BlackboardProperty<AbstractGoapAction> ActionForExecution =
-            new BlackboardProperty<AbstractGoapAction>();
+            new BlackboardProperty<AbstractGoapAction>("ActionForExecution");
 
         public static readonly BlackboardProperty<List<WorldstateSymbol>> Worldstate =
-            new BlackboardProperty<List<WorldstateSymbol>>();
+            new BlackboardProperty<List<WorldstateSymbol>>("Worldstate");
 
         #region IAgentLogic Members
 
         /// <summary>
         ///     get next valid action
         /// </summary>
-        /// <returns>IGoapAction</returns>
+        /// <returns>IInteraction</returns>
         public IInteraction Reason() {
             return GetNextAction();
         }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using GoapCommon.Abstract;
+using GoapCommon.Implementation;
 using GoapCommon.Interfaces;
-using SimPanInGoapModelDefinition.Actions;
-using SimPanInGoapModelDefinition.Goals;
 
 namespace SimPanInGoapModelDefinition {
 
@@ -11,9 +10,10 @@ namespace SimPanInGoapModelDefinition {
     ///     determines the configuration of agent 1
     /// </summary>
     public class AgentConfig1 : IGoapAgentConfig {
+        #region IGoapAgentConfig Members
 
-        public List<IGoapWorldProperty> GetStartWorldstate() {
-            return new List<IGoapWorldProperty> {};
+        public List<WorldstateSymbol> GetStartWorldstate() {
+            return new List<WorldstateSymbol> {};
         }
 
         public List<AbstractGoapAction> GetAllActions() {
@@ -23,5 +23,12 @@ namespace SimPanInGoapModelDefinition {
         public List<IGoapGoal> GetAllGoals() {
             throw new NotImplementedException();
         }
+
+        public int GetMaxGraphSearchDepth(){
+            return 20;
+        }
+
+        #endregion
     }
+
 }

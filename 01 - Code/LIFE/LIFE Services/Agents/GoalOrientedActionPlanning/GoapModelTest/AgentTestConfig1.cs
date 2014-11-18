@@ -8,15 +8,16 @@ using GoapModelTest.Goals;
 using GoapModelTest.Worldstates;
 
 namespace GoapModelTest {
+
     public class AgentTestConfig1 : IGoapAgentConfig {
+        #region IGoapAgentConfig Members
 
-        public List<WorldstateSymbol> GetStartWorldstate(){
-
+        public List<WorldstateSymbol> GetStartWorldstate() {
             List<WorldstateSymbol> symbols = new List<WorldstateSymbol> {
-                    new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)),
-                    new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean)),
-                    new WorldstateSymbol(WorldProperties.HasToy, false, typeof (Boolean))
-                };
+                new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)),
+                new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean)),
+                new WorldstateSymbol(WorldProperties.HasToy, false, typeof (Boolean))
+            };
 
             return symbols;
         }
@@ -29,8 +30,11 @@ namespace GoapModelTest {
             return new List<IGoapGoal> {new GoalBeHappy()};
         }
 
+        public int GetMaxGraphSearchDepth() {
+            return 20;
+        }
 
-       
-
+        #endregion
     }
+
 }

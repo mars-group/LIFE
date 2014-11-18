@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using GoapCommon.Abstract;
 using GoapCommon.Interfaces;
+using log4net;
 using TypeSafeBlackboard;
 
 namespace GoapActionSystem.Implementation {
@@ -9,6 +10,11 @@ namespace GoapActionSystem.Implementation {
     ///     main access to create an instance of the goap component
     /// </summary>
     public static class GoapComponent {
+        /// <summary>
+        /// Logger instance for the goap action system
+        /// </summary>
+        public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         ///     load the configuration of the agent by the config class
         /// </summary>
@@ -26,7 +32,8 @@ namespace GoapActionSystem.Implementation {
                 (configClass.GetAllActions(),
                     configClass.GetAllGoals(),
                     blackboard,
-                    configClass.GetStartWorldstate());
+                    configClass.GetStartWorldstate(),
+                    configClass.GetMaxGraphSearchDepth());
         }
     }
 

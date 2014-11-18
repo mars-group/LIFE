@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GoapCommon.Abstract;
-using GoapCommon.Interfaces;
+using GoapCommon.Implementation;
 
-namespace SimPanInGoapModelDefinition.Actions
-{
-    public class AimlessWandering : AbstractGoapAction
-    {
-        public AimlessWandering(List<IGoapWorldProperty> preconditionWorldstates, List<IGoapWorldProperty> effectWorldstates) :
-            base(preconditionWorldstates, effectWorldstates) {}
+namespace SimPanInGoapModelDefinition.Actions {
+
+    public class AimlessWandering : AbstractGoapAction {
+        public AimlessWandering
+            (List<WorldstateSymbol> preconditionWorldstates, List<WorldstateSymbol> effectWorldstates) :
+                base(preconditionWorldstates, effectWorldstates) {}
 
         public override bool ValidateContextPreconditions() {
             return true;
@@ -29,8 +26,7 @@ namespace SimPanInGoapModelDefinition.Actions
             throw new NotImplementedException();
         }
 
-        public override void Execute() {
-            
-        }
+        public override void Execute() {}
     }
+
 }

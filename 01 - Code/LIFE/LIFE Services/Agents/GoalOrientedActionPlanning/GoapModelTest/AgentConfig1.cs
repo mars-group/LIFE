@@ -13,14 +13,14 @@ namespace GoapModelTest {
     ///     determines the configuration of agent 1
     /// </summary>
     public class AgentConfig1 : IGoapAgentConfig {
+        #region IGoapAgentConfig Members
 
-        public List<WorldstateSymbol> GetStartWorldstate(){
-           
-                List<WorldstateSymbol> symbols = new List<WorldstateSymbol> {
-                    new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)),
-                    new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean)),
-                    new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean))
-                };
+        public List<WorldstateSymbol> GetStartWorldstate() {
+            List<WorldstateSymbol> symbols = new List<WorldstateSymbol> {
+                new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)),
+                new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean)),
+                new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean))
+            };
 
             return symbols;
         }
@@ -32,9 +32,12 @@ namespace GoapModelTest {
         public List<IGoapGoal> GetAllGoals() {
             return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
+
+        public int GetMaxGraphSearchDepth() {
+            return 20;
+        }
+
+        #endregion
     }
 
-
-
-   
 }

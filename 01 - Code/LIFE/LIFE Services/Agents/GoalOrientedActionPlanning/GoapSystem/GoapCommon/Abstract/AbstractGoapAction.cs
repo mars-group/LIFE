@@ -59,6 +59,7 @@ namespace GoapCommon.Abstract {
         #region IGoapAction Members
 
         /// <summary>
+        ///     check if the preconditions are subset of source world state
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>
@@ -87,18 +88,54 @@ namespace GoapCommon.Abstract {
             return resultingWorldStates;
         }
 
-        public abstract bool ValidateContextPreconditions();
+        /// <summary>
+        ///     override this method if there are any conditions for execution exect the precondition symbols of action
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool ValidateContextPreconditions() {
+            return true;
+        }
 
-        public abstract bool ExecuteContextEffects();
+        /// <summary>
+        ///     override this method if there are any effects at execution except the effect symbols of action
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool ExecuteContextEffects() {
+            return true;
+        }
+
+        /// <summary>
+        ///     the costs are used as way costs for the created edges in the graph
+        /// </summary>
+        /// <returns></returns>
+        public virtual int GetExecutionCosts() {
+            return 1;
+        }
+
+        /// <summary>
+        ///     TODO wird noch nicht im Graphaufbau genutzt - fragliche sinnhaftigkeit - a stern wird verfälscht
+        /// </summary>
+        /// <returns></returns>
+        public virtual int GetPriority() {
+            return 1;
+        }
 
         public abstract void Execute();
 
-        public abstract int GetExecutionCosts();
-
-        public abstract int GetPriority();
+        /// <summary>
+        ///     an action may last a few ticks , this is checked before executing the sucessor action
+        ///     override this method if actions run more than one tick depending on other facts
+        /// </summary>
+        public virtual bool IsFinished() {
+            return true;
+        }
 
         #endregion
 
+        /// <summary>
+        ///     get all symbols used in the action
+        /// </summary>
+        /// <returns></returns>
         public ISet<Type> GetAffectingWorldstateTypes() {
             HashSet<Type> types = new HashSet<Type>();
 
@@ -120,10 +157,21 @@ namespace GoapCommon.Abstract {
             return IsSubset(_effects, state);
         }
 
+        /// <summary>
+        ///     check if effects of action are equal to the given symbol list
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public bool IsSatisfyingStateByEffects(List<WorldstateSymbol> state) {
             return IsSubset(state, _effects);
         }
 
+        /// <summary>
+        ///     check if elements of potentially subset are subset of enclosing set
+        /// </summary>
+        /// <param name="potentiallySubSet"></param>
+        /// <param name="enclosingSet"></param>
+        /// <returns></returns>
         private bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {
             return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
                     potentiallySubSet.Count());
