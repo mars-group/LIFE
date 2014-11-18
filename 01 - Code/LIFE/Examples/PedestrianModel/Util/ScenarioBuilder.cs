@@ -7,41 +7,6 @@ using PedestrianModel.Agents;
 namespace PedestrianModel.Util {
 
     internal class ScenarioBuilder {
-        #region ScenarioTypes enum
-
-        public enum ScenarioTypes {
-            UShape500Cm,
-            UShape10000Cm,
-            Lane250Cm,
-            Lane500Cm,
-            Oscillation50Cm,
-            Oscillation100Cm,
-            Oscillation200Cm,
-            Bottleneck50Agents,
-            Bottleneck75Agents,
-            Bottleneck100Agents,
-            Bottleneck125Agents,
-            Bottleneck150Agents,
-            Density50Agents,
-            Density100Agents,
-            Density200Agents,
-            Density300Agents,
-            Density400Agents,
-            Density500Agents,
-            Bottleneck40Cm,
-            Bottleneck50Cm,
-            Bottleneck60Cm,
-            Bottleneck70Cm,
-            Bottleneck80Cm,
-            Bottleneck90Cm,
-            Bottleneck100Cm,
-            Bottleneck120Cm,
-            Bottleneck140Cm,
-            Bottleneck160Cm
-        }
-
-        #endregion
-
         private static readonly Random Random = new Random();
 
         public static void CreateDensityScenario(IExecution exec, IEnvironment env, int pedestrianCount) {
@@ -347,171 +312,171 @@ namespace PedestrianModel.Util {
             }
         }
 
-        public static void CreateScenario(IExecution exec, IEnvironment env, ScenarioTypes scenario) {
+        public static void CreateScenario(IExecution exec, IEnvironment env, ScenarioType scenario) {
             switch (scenario) {
-                case ScenarioTypes.Lane250Cm:
+                case ScenarioType.Lane250Cm:
                     CreateLaneScenario(exec, env, 50, 2.5f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 240;
                     Config.VisualizationOffsetY = -60;
                     break;
-                case ScenarioTypes.Lane500Cm:
+                case ScenarioType.Lane500Cm:
                     CreateLaneScenario(exec, env, 50, 5f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 240;
                     Config.VisualizationOffsetY = -60;
                     break;
-                case ScenarioTypes.UShape500Cm:
+                case ScenarioType.UShape500Cm:
                     CreateUShapeScenario(exec, env, 1, 5f);
                     Config.VisualizationZoom = 30;
                     Config.VisualizationOffsetX = -2350;
                     Config.VisualizationOffsetY = -2650;
                     break;
-                case ScenarioTypes.UShape10000Cm:
+                case ScenarioType.UShape10000Cm:
                     CreateUShapeScenario(exec, env, 1, 100f);
                     Config.VisualizationZoom = 5;
                     Config.VisualizationOffsetX = 100;
                     Config.VisualizationOffsetY = -160;
                     break;
-                case ScenarioTypes.Oscillation50Cm:
+                case ScenarioType.Oscillation50Cm:
                     CreateOscillationScenario(exec, env, 50, 0.5f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 625;
                     Config.VisualizationOffsetY = 340;
                     break;
-                case ScenarioTypes.Oscillation100Cm:
+                case ScenarioType.Oscillation100Cm:
                     CreateOscillationScenario(exec, env, 50, 1f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 230;
                     Config.VisualizationOffsetY = -60;
                     break;
-                case ScenarioTypes.Oscillation200Cm:
+                case ScenarioType.Oscillation200Cm:
                     CreateOscillationScenario(exec, env, 50, 2f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 625;
                     Config.VisualizationOffsetY = 340;
                     break;
-                case ScenarioTypes.Density50Agents:
+                case ScenarioType.Density50Agents:
                     CreateDensityScenario(exec, env, 50);
                     Config.VisualizationZoom = 30;
                     Config.VisualizationOffsetX = 25;
                     Config.VisualizationOffsetY = 175;
                     break;
-                case ScenarioTypes.Density100Agents:
+                case ScenarioType.Density100Agents:
                     CreateDensityScenario(exec, env, 100);
                     Config.VisualizationZoom = 30;
                     Config.VisualizationOffsetX = 25;
                     Config.VisualizationOffsetY = 175;
                     break;
-                case ScenarioTypes.Density200Agents:
+                case ScenarioType.Density200Agents:
                     CreateDensityScenario(exec, env, 200);
                     Config.VisualizationZoom = 30;
                     Config.VisualizationOffsetX = 25;
                     Config.VisualizationOffsetY = 175;
                     break;
-                case ScenarioTypes.Density300Agents:
+                case ScenarioType.Density300Agents:
                     CreateDensityScenario(exec, env, 300);
                     Config.VisualizationZoom = 30;
                     Config.VisualizationOffsetX = 25;
                     Config.VisualizationOffsetY = 175;
                     break;
-                case ScenarioTypes.Density400Agents:
+                case ScenarioType.Density400Agents:
                     CreateDensityScenario(exec, env, 400);
                     Config.VisualizationZoom = 30;
                     Config.VisualizationOffsetX = 25;
                     Config.VisualizationOffsetY = 175;
                     break;
-                case ScenarioTypes.Density500Agents:
+                case ScenarioType.Density500Agents:
                     CreateDensityScenario(exec, env, 500);
                     Config.VisualizationZoom = 30;
                     Config.VisualizationOffsetX = 25;
                     Config.VisualizationOffsetY = 175;
                     break;
-                case ScenarioTypes.Bottleneck50Agents:
+                case ScenarioType.Bottleneck50Agents:
                     CreateRimeaScenario(exec, env, 50);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 125;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck75Agents:
+                case ScenarioType.Bottleneck75Agents:
                     CreateRimeaScenario(exec, env, 75);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 125;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck100Agents:
+                case ScenarioType.Bottleneck100Agents:
                     CreateRimeaScenario(exec, env, 100);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 125;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck125Agents:
+                case ScenarioType.Bottleneck125Agents:
                     CreateRimeaScenario(exec, env, 125);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 125;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck150Agents:
+                case ScenarioType.Bottleneck150Agents:
                     CreateRimeaScenario(exec, env, 150);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 125;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck40Cm:
+                case ScenarioType.Bottleneck40Cm:
                     CreateBottleneckScenario(exec, env, 100, 0.4f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck50Cm:
+                case ScenarioType.Bottleneck50Cm:
                     CreateBottleneckScenario(exec, env, 100, 0.5f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck60Cm:
+                case ScenarioType.Bottleneck60Cm:
                     CreateBottleneckScenario(exec, env, 100, 0.6f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck70Cm:
+                case ScenarioType.Bottleneck70Cm:
                     CreateBottleneckScenario(exec, env, 100, 0.7f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck80Cm:
+                case ScenarioType.Bottleneck80Cm:
                     CreateBottleneckScenario(exec, env, 100, 0.8f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck90Cm:
+                case ScenarioType.Bottleneck90Cm:
                     CreateBottleneckScenario(exec, env, 100, 0.9f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck100Cm:
+                case ScenarioType.Bottleneck100Cm:
                     CreateBottleneckScenario(exec, env, 100, 1f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck120Cm:
+                case ScenarioType.Bottleneck120Cm:
                     CreateBottleneckScenario(exec, env, 100, 1.2f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck140Cm:
+                case ScenarioType.Bottleneck140Cm:
                     CreateBottleneckScenario(exec, env, 100, 1.4f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;
                     Config.VisualizationOffsetY = 140;
                     break;
-                case ScenarioTypes.Bottleneck160Cm:
+                case ScenarioType.Bottleneck160Cm:
                     CreateBottleneckScenario(exec, env, 100, 1.6f);
                     Config.VisualizationZoom = 40;
                     Config.VisualizationOffsetX = 225;

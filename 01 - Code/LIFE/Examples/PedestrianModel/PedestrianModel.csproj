@@ -53,8 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InformationType.cs" />
     <Compile Include="PedestrianLayer.cs" />
-    <Compile Include="Agents\Action\MoveAction.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\Waypoint.cs" />
     <Compile Include="Agents\Reasoning\Movement\ObstacleAvoidanceBehavior.cs" />
     <Compile Include="Agents\Reasoning\Movement\ReactiveBehaviorPipeline.cs" />
     <Compile Include="Agents\Reasoning\Movement\IReactiveMovingBehavior.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Agents\Reasoning\Pathfinding\TargetListType.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Logging\AgentLogger.cs" />
+    <Compile Include="Util\ScenarioType.cs" />
     <Compile Include="Util\Math\IUnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />

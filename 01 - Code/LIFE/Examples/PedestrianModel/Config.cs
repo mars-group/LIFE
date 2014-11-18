@@ -6,8 +6,8 @@ namespace PedestrianModel {
 
     internal class Config {
         // Start
-        public static readonly ScenarioBuilder.ScenarioTypes Scenario =
-            ScenarioBuilder.ScenarioTypes.Bottleneck150Agents;
+        public static readonly ScenarioType Scenario =
+            ScenarioType.Bottleneck150Agents;
 
         // Debug
         public static readonly bool DebugEnabled = false;

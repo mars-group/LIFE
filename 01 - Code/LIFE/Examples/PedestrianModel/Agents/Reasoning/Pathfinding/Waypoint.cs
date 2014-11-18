@@ -2,9 +2,9 @@
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 
-namespace PedestrianModel.Agents.Action {
+namespace PedestrianModel.Agents.Reasoning.Pathfinding {
 
-    public class MoveAction {
+    public class Waypoint {
         /// <returns> the targetPosition </returns>
         public Vector TargetPosition { get { return _targetPosition; } }
 
@@ -15,7 +15,7 @@ namespace PedestrianModel.Agents.Action {
         private const double DefaultDistanceTargetReached = 0.1;
 
         /// <summary>
-        ///     The target position of this MoveAction.
+        ///     The target position of this Waypoint.
         /// </summary>
         private readonly Vector _targetPosition;
 
@@ -26,16 +26,16 @@ namespace PedestrianModel.Agents.Action {
         private readonly double _distanceTargetReached;
 
         /// <summary>
-        ///     Creates a new MoveAction.
+        ///     Creates a new Waypoint.
         /// </summary>
         /// <param name="targetPosition"> the target position </param>
         /// <param name="distanceTargetReached"> the radius of the target area </param>
-        public MoveAction(Vector targetPosition, double distanceTargetReached = DefaultDistanceTargetReached) {
+        public Waypoint(Vector targetPosition, double distanceTargetReached = DefaultDistanceTargetReached) {
             _targetPosition = targetPosition;
             _distanceTargetReached = distanceTargetReached;
         }
 
-        public DirectMovementAction PerformAction(Pedestrian agent, AgentMover mover) {
+        public DirectMovementAction Approach(Pedestrian agent, AgentMover mover) {
             float maxMovingSpeed = agent.MaxVelocity;
             Vector direction = (_targetPosition - agent.GetPosition()).GetNormalVector()*maxMovingSpeed;
 
@@ -57,18 +57,18 @@ namespace PedestrianModel.Agents.Action {
         /// </summary>
         /// <param name="agent"> the agent </param>
         /// <returns> true if the agent is at the target position. </returns>
-        public bool IsFinished(Pedestrian agent) {
+        public bool IsReached(Pedestrian agent) {
             Vector currentPosition = agent.GetPosition();
             double distance = currentPosition.GetDistance(_targetPosition);
             return distance < _distanceTargetReached;
         }
 
         public override sealed string ToString() {
-            return "MoveAction to " + _targetPosition;
+            return "Waypoint to " + _targetPosition;
         }
 
         public bool IsSuccess(Pedestrian agent) {
-            return IsFinished(agent);
+            return IsReached(agent);
         }
     }
 

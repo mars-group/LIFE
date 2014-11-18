@@ -8,12 +8,10 @@ using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
-using PedestrianModel.Agents.Action;
 using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
-using PedestrianModel.Environment;
 
 namespace PedestrianModel.Agents {
 
@@ -39,14 +37,14 @@ namespace PedestrianModel.Agents {
 
         private readonly string _simulationId;
         private readonly ReactiveBehaviorPipeline _movementPipeline = new ReactiveBehaviorPipeline();
-        private readonly IList<MoveAction> _actions = new List<MoveAction>();
+        private readonly IList<Waypoint> _waypoints = new List<Waypoint>();
 
         /// <summary>
         ///     List of the last n positions.
         /// </summary>
         private readonly IList<Vector> _positionTracker = new List<Vector>();
 
-        private bool _startComplete;
+        private bool _preparedFirstStep;
 
         private float _maxVelocity = 1.34f; // Maximum movement velocity of agent        
 
@@ -90,7 +88,7 @@ namespace PedestrianModel.Agents {
                     (
                     this,
                     (IGenericDataSource) environment,
-                    new OmniHalo((int) InformationTypes.Obstacles))
+                    new OmniHalo((int) InformationType.Obstacles))
                 );
 
             // Add perception sensor for pedestrians.
@@ -99,7 +97,7 @@ namespace PedestrianModel.Agents {
                     (
                     this,
                     (IGenericDataSource) environment,
-                    new OmniHalo((int) InformationTypes.Pedestrians))
+                    new OmniHalo((int) InformationType.Pedestrians))
                 );
 
             // Add perception sensor for everything.
@@ -108,7 +106,7 @@ namespace PedestrianModel.Agents {
                     (
                     this,
                     (IGenericDataSource) environment,
-                    new OmniHalo((int) InformationTypes.AllAgents))
+                    new OmniHalo((int) InformationType.AllAgents))
                 );
 
             // Add movement module.
@@ -126,20 +124,20 @@ namespace PedestrianModel.Agents {
         #region IAgentLogic Members
 
         public IInteraction Reason() {
-            if (!_startComplete) {
-                Start();
-                _startComplete = true;
+            if (!_preparedFirstStep) {
+                PrepareFirstStep();
+                _preparedFirstStep = true;
             }
 
-            IInteraction movementAction = Act();
+            IInteraction movementAction = CalculateNewPosition();
 
             if (Config.DebugEnabled) {
                 Console.SetBufferSize(160, 9999);
                 Console.SetWindowSize(160, 50);
                 if (_debugLastPosition == null) _debugLastPosition = _startPosition;
                 string waypoint = " COMPLETED MOVEMENT";
-                if (_actions.Count > 0)
-                    waypoint = (_actions[0].TargetPosition*1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
+                if (_waypoints.Count > 0)
+                    waypoint = (_waypoints[0].TargetPosition*1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
                 Console.WriteLine
                     ("Tick: " + GetTick().ToString("0000") + ", ID: " + Id.ToString("0000") + ", Position: "
                      + GetPosition()*1f + ", Target: " + TargetPositions[0]*1f + ", Waypoint: " + waypoint
@@ -158,44 +156,44 @@ namespace PedestrianModel.Agents {
         /// <summary>
         ///     Initialize the agent.
         /// </summary>
-        private void Start() {
+        private void PrepareFirstStep() {
             _startPosition = GetPosition();
             _movementPipeline.AddBehavior(new ObstacleAvoidanceBehavior(this, PerceptionUnit));
 
             // - ok, we don't really have an Y axis, but it's Vector3D, so define a hard coded y-value
             // - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
-            object rawObstaclesData = PerceptionUnit.GetData((int) InformationTypes.Obstacles).Data;
+            object rawObstaclesData = PerceptionUnit.GetData((int) InformationType.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>) rawObstaclesData;
             _pathfindingSearchGraph = new RaytracingGraph
                 (_simulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0f, 0.28f));
             _pathfinder = new AStarPathfinder<Vector>(_pathfindingSearchGraph);
 
-            CreateAndExecuteMovePlan(_targetPositions);
+            CreateMovePlan(_targetPositions);
         }
 
         /// <summary>
-        ///     Executes the first action in the action queue. If the first action is finished or no longer valid, it
+        ///     Approaches the first waypoint in the waypoint queue. If the first waypoint was reached or is no longer valid, it
         ///     will be removed without execution. If the queue is empty and the agent is started with the
         ///     <code>walkLoops = true</code> parameter, the agent teleports to its start
         ///     position and starts the movement to the target position again.
         /// </summary>
-        private DirectMovementAction Act() {
+        private DirectMovementAction CalculateNewPosition() {
             DirectMovementAction directMovementAction;
 
             // save current position in track-list
-            if (GotStuck()) CreateAndExecuteMovePlan(_targetPositions);
+            if (GotStuck()) CreateMovePlan(_targetPositions);
 
-            // first check if the current action has finished
-            // remove all actions from top of the queue until we have one that is not finished
-            while (_actions.Count > 0) {
-                if (_actions[0].IsFinished(this)) {
-                    _actions.RemoveAt(0);
+            // first check if the current waypoint is reached
+            // remove all waypoints from top of the queue until we have one that is not reached
+            while (_waypoints.Count > 0) {
+                if (_waypoints[0].IsReached(this)) {
+                    _waypoints.RemoveAt(0);
                 }
                 else break;
             }
 
-            if (_actions.Count > 0) {
-                directMovementAction = _actions[0].PerformAction(this, Mover);
+            if (_waypoints.Count > 0) {
+                directMovementAction = _waypoints[0].Approach(this, Mover);
             }
             else {
                 // code only executed if looped or more than 1 target!
@@ -204,8 +202,8 @@ namespace PedestrianModel.Agents {
                         && _targetPositionIndex + 1 < _targetPositions.Count)) {
                     // walk to the next position in the list
                     _targetPositionIndex = (_targetPositionIndex + 1)%_targetPositions.Count;
-                    CreateAndExecuteMovePlan(_targetPositions);
-                    directMovementAction = _actions[0].PerformAction(this, Mover);
+                    CreateMovePlan(_targetPositions);
+                    directMovementAction = _waypoints[0].Approach(this, Mover);
                 }
                     // code only executed if looped
                 else if (Config.WalkLoops) {
@@ -215,7 +213,7 @@ namespace PedestrianModel.Agents {
                     // Will be executed twice, but shouldn't have any negative effect.
                     directMovementAction.Execute();
 
-                    CreateAndExecuteMovePlan(_targetPositions);
+                    CreateMovePlan(_targetPositions);
                 }
                 else {
                     // Don't change position. Agent should remove itself in the next Reason().
@@ -227,11 +225,11 @@ namespace PedestrianModel.Agents {
         }
 
         /// <summary>
-        ///     Creates a plan with move action which leads the agent to the target position. The plan will be enqueued
+        ///     Creates a plan with move actions which lead the agent to the target position. The plan will be enqueued
         ///     into the action queue.
         /// </summary>
         /// <param name="targetPositions"> the target positions of the movement. </param>
-        private void CreateAndExecuteMovePlan(IList<Vector> targetPositions) {
+        private void CreateMovePlan(IList<Vector> targetPositions) {
             IList<Vector> shortestPath = null;
 
             if (Config.TargetListType == TargetListType.Parallel) {
@@ -259,11 +257,11 @@ namespace PedestrianModel.Agents {
                 shortestPath = GetPathToTarget(currentTarget);
             }
 
-            _actions.Clear();
+            _waypoints.Clear();
 
             if (shortestPath != null) {
                 foreach (Vector waypoint in shortestPath) {
-                    _actions.Add(new MoveAction(waypoint, Config.TargetReachedDistance));
+                    _waypoints.Add(new Waypoint(waypoint, Config.TargetReachedDistance));
                 }
             }
         }

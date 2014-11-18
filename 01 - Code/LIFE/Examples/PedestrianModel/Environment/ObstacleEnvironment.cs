@@ -13,15 +13,6 @@ using PedestrianModel.Visualization;
 namespace PedestrianModel.Environment {
 
     /// <summary>
-    ///     Data query information types.
-    /// </summary>
-    public enum InformationTypes {
-        AllAgents,
-        Obstacles,
-        Pedestrians
-    }
-
-    /// <summary>
     ///     An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.
     /// </summary>
     public class ObstacleEnvironment : Environment2D, IGenericDataSource {
@@ -55,15 +46,15 @@ namespace PedestrianModel.Environment {
             }
             Halo halo = (Halo) spec;
 
-            switch ((InformationTypes) spec.GetInformationType()) {
-                case InformationTypes.AllAgents:
+            switch ((InformationType) spec.GetInformationType()) {
+                case InformationType.AllAgents:
                     List<ISpatialObject> objects = new List<ISpatialObject>();
                     foreach (ISpatialObject obj in GetAllObjects()) {
                         if (halo.IsInRange(obj.GetPosition().GetTVector())) objects.Add(obj);
                     }
                     return objects;
 
-                case InformationTypes.Obstacles: {
+                case InformationType.Obstacles: {
                     List<Obstacle> obstacle = new List<Obstacle>();
                     foreach (Obstacle obj in GetAllObjects().OfType<Obstacle>()) {
                         if (halo.IsInRange(obj.GetPosition().GetTVector())) obstacle.Add(obj);
@@ -71,7 +62,7 @@ namespace PedestrianModel.Environment {
                     return obstacle;
                 }
 
-                case InformationTypes.Pedestrians: {
+                case InformationType.Pedestrians: {
                     List<Pedestrian> pedestrian = new List<Pedestrian>();
                     foreach (Pedestrian obj in GetAllObjects().OfType<Pedestrian>()) {
                         if (halo.IsInRange(obj.GetPosition().GetTVector())) pedestrian.Add(obj);
