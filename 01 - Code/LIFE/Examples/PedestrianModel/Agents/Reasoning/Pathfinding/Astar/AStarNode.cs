@@ -1,198 +1,140 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar
-{
+namespace PedestrianModel.Agents.Reasoning.Pathfinding.Astar {
 
-	/// 
-	/// <summary>
-	/// @author Christian Thiel
-	/// </summary>
-	/// @param <E> The type of the node used in the search graph </param>
-	public class AStarNode<E>
-	{
-
-		/// <summary>
-		/// The original search graph node.
-		/// </summary>
-		private readonly IPathNode<E> externalNode;
-
-		/// <summary>
-		/// The search graph containing the external node.
-		/// </summary>
-		private readonly ISearchGraph<E> graph;
-
-		/// <summary>
-		/// The predecessor of this AStar node. <code>null</code> if it has none.
-		/// </summary>
-		private AStarNode<E> predecessor = null;
-
-		/// <summary>
-		/// Cached value of the costs from start.
-		/// </summary>
-		private double? costFromStart = null;
-
-		/// <summary>
-		/// Cached value of the predicted costs to goal.
-		/// </summary>
-		private double? costToGoal = null;
-
-		/// <summary>
-		/// Creates a new AStar node.
-		/// </summary>
-		/// <param name="graphNode"> the graph node </param>
-		/// <param name="graph"> the search graph </param>
-		public AStarNode(IPathNode<E> graphNode, ISearchGraph<E> graph)
-		{
-			externalNode = graphNode;
-			this.graph = graph;
-		}
-
-		/// <summary>
-		/// Returns the complete costs from the start value of this node path to this node.
-		/// </summary>
-		/// <returns> the costFromStart </returns>
-		public double CostFromStart
-		{
-			get
-			{
-                if (costFromStart == null)
-				{
-					if (predecessor == null)
-					{
-						costFromStart = 0d;
-					}
-					else
-					{
-						costFromStart = predecessor.CostFromStart + graph.Distance(predecessor.externalNode, externalNode);
-					}
-				}
+    /// <summary>
+    ///     @author Christian Thiel
+    /// </summary>
+    public class AStarNode<TE> {
+        /// <summary>
+        ///     Returns the complete costs from the start value of this node path to this node.
+        /// </summary>
+        /// <returns> the costFromStart </returns>
+        public double CostFromStart {
+            get {
+                if (_costFromStart == null) {
+                    if (_predecessor == null) _costFromStart = 0d;
+                    else {
+                        _costFromStart = _predecessor.CostFromStart
+                                        + _graph.Distance(_predecessor._externalNode, _externalNode);
+                    }
+                }
 
                 //return costFromStart;
-				return costFromStart.Value;
-			}
-		}
+                return _costFromStart.Value;
+            }
+        }
 
-		/// <summary>
-		/// Returns the estimated cost to the given goal node.
-		/// </summary>
-		/// <param name="goalNode"> the goal node </param>
-		/// <returns> the costToGoal </returns>
-		public double GetCostToGoal(AStarNode<E> goalNode)
-		{
-            if (costToGoal == null)
-			{
-				costToGoal = graph.GetHeuristic(externalNode, goalNode.externalNode);
-			}
+        /// <summary>
+        ///     Returns the predecessor of this node.
+        /// </summary>
+        /// <returns> the predecessor. </returns>
+        public AStarNode<TE> Predecessor {
+            get { return _predecessor; }
+            set {
+                _predecessor = value;
+                _externalNode.Predecessor = value._externalNode;
+                _costFromStart = null;
+            }
+        }
+
+
+        /// <summary>
+        ///     Returns a collection of all neighbors of this node based on the underlying search graph.
+        /// </summary>
+        /// <returns> a collection of all neighbors. </returns>
+        public ICollection<AStarNode<TE>> Neighbors {
+            get {
+                ICollection<AStarNode<TE>> result = new HashSet<AStarNode<TE>>();
+
+                ICollection<IPathNode<TE>> neighbors = _graph.GetNeighbors(_externalNode);
+
+                foreach (IPathNode<TE> n in neighbors) {
+                    AStarNode<TE> nb = new AStarNode<TE>(n, _graph) {Predecessor = this};
+                    result.Add(nb);
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        ///     Returns the external node from the search graph.
+        /// </summary>
+        /// <returns> the externalNode </returns>
+        public IPathNode<TE> ExternalNode { get { return _externalNode; } }
+
+        /// <summary>
+        ///     The original search graph node.
+        /// </summary>
+        private readonly IPathNode<TE> _externalNode;
+
+        /// <summary>
+        ///     The search graph containing the external node.
+        /// </summary>
+        private readonly ISearchGraph<TE> _graph;
+
+        /// <summary>
+        ///     The predecessor of this AStar node. <code>null</code> if it has none.
+        /// </summary>
+        private AStarNode<TE> _predecessor;
+
+        /// <summary>
+        ///     Cached value of the costs from start.
+        /// </summary>
+        private double? _costFromStart;
+
+        /// <summary>
+        ///     Cached value of the predicted costs to goal.
+        /// </summary>
+        private double? _costToGoal;
+
+        /// <summary>
+        ///     Creates a new AStar node.
+        /// </summary>
+        /// <param name="graphNode"> the graph node </param>
+        /// <param name="graph"> the search graph </param>
+        public AStarNode(IPathNode<TE> graphNode, ISearchGraph<TE> graph) {
+            _externalNode = graphNode;
+            _graph = graph;
+        }
+
+        /// <summary>
+        ///     Returns the estimated cost to the given goal node.
+        /// </summary>
+        /// <param name="goalNode"> the goal node </param>
+        /// <returns> the costToGoal </returns>
+        public double GetCostToGoal(AStarNode<TE> goalNode) {
+            if (_costToGoal == null) _costToGoal = _graph.GetHeuristic(_externalNode, goalNode._externalNode);
             // return costToGoal;
-			return costToGoal.Value;
-		}
+            return _costToGoal.Value;
+        }
 
-		/// <summary>
-		/// Returns the predecessor of this node.
-		/// </summary>
-		/// <returns> the predecessor. </returns>
-		public AStarNode<E> Predecessor
-		{
-			get
-			{
-				return predecessor;
-			}
-			set
-			{
-				this.predecessor = value;
-				this.externalNode.Predecessor = value.externalNode;
-				this.costFromStart = null;
-			}
-		}
+        public override sealed int GetHashCode() {
+            const int prime = 31;
+            int result = 1;
+            result = prime*result;
 
+            if (!(_externalNode == null)) result += _externalNode.GetHashCode();
 
-		/// <summary>
-		/// Returns a collection of all neighbors of this node based on the underlying search graph.
-		/// </summary>
-		/// <returns> a collection of all neighbors. </returns>
-		public ICollection<AStarNode<E>> Neighbors
-		{
-			get
-			{
-				ICollection<AStarNode<E>> result = new HashSet<AStarNode<E>>();
-    
-				ICollection<IPathNode<E>> neighbors = graph.GetNeighbors(externalNode);
-    
-				foreach (IPathNode<E> n in neighbors)
-				{
-					AStarNode<E> nb = new AStarNode<E>(n, graph);
-					nb.Predecessor = this;
-					result.Add(nb);
-				}
-    
-				return result;
-			}
-		}
+            return result;
+        }
 
-		public override sealed int GetHashCode()
-		{
-			const int prime = 31;
-			int result = 1;
-			result = prime * result;
+        public override sealed bool Equals(object obj) {
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (GetType() != obj.GetType()) return false;
+            AStarNode<TE> other = (AStarNode<TE>) obj;
+            if (_externalNode == null) {
+                if (other._externalNode != null) return false;
+            }
+            else if (!_externalNode.Equals(other._externalNode)) return false;
+            return true;
+        }
 
-			if (!(externalNode == null))
-			{
-				result += externalNode.GetHashCode();
-			}
-
-			return result;
-		}
-
-		public override sealed bool Equals(object obj)
-		{
-			if (this == obj)
-			{
-				return true;
-			}
-			if (obj == null)
-			{
-				return false;
-			}
-			if (this.GetType() != obj.GetType())
-			{
-				return false;
-			}
-			AStarNode<E> other = (AStarNode<E>) obj;
-			if (externalNode == null)
-			{
-				if (other.externalNode != null)
-				{
-					return false;
-				}
-			}
-			else if (!externalNode.Equals(other.externalNode))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		public override sealed string ToString()
-		{
-			return externalNode.ToString();
-		}
-
-		/// <summary>
-		/// Returns the external node from the search graph.
-		/// </summary>
-		/// <returns> the externalNode </returns>
-		public IPathNode<E> ExternalNode
-		{
-			get
-			{
-				return externalNode;
-			}
-		}
-
-	}
+        public override sealed string ToString() {
+            return _externalNode.ToString();
+        }
+    }
 
 }

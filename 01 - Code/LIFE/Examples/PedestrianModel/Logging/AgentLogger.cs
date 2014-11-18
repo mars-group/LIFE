@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mono.Data.Sqlite;
+﻿using System.Collections.Generic;
 using System.Data;
-using PedestrianModel.Agents;
 using System.Globalization;
 using System.IO;
+using Mono.Data.Sqlite;
+using PedestrianModel.Agents;
 
-namespace PedestrianModel.Logging
-{
-    public class AgentLogger
-    {
-        private SqliteConnection connection;
+namespace PedestrianModel.Logging {
 
-        public AgentLogger()
-        {            
-            connection = new SqliteConnection("URI=file:Database" + getDatabaseNumber() + ".sqlite");
-            connection.Open();
-            IDbCommand command = connection.CreateCommand();            
+    public class AgentLogger {
+        private SqliteConnection _connection;
+
+        public AgentLogger() {
+            _connection = new SqliteConnection("URI=file:Database" + getDatabaseNumber() + ".sqlite");
+            _connection.Open();
+            IDbCommand command = _connection.CreateCommand();
             command.CommandText = "PRAGMA journal_mode = off";
             command.ExecuteNonQuery();
             command.CommandText = "PRAGMA synchronous = off";
@@ -27,49 +21,39 @@ namespace PedestrianModel.Logging
             command.CommandText = "DROP TABLE IF EXISTS agent";
             command.ExecuteNonQuery();
             command.CommandText = "CREATE TABLE agent (id INTEGER, name TEXT, x REAL, y REAL, t INTEGER)";
-            command.ExecuteNonQuery();            
+            command.ExecuteNonQuery();
             command.Dispose();
-            command = null;
         }
 
-        public void Log(List<Pedestrian> pedestrians)
-        {
-            SqliteTransaction transaction = connection.BeginTransaction();
-            IDbCommand command = connection.CreateCommand();
+        public void Log(List<Pedestrian> pedestrians) {
+            SqliteTransaction transaction = _connection.BeginTransaction();
+            IDbCommand command = _connection.CreateCommand();
             command.Transaction = transaction;
             foreach (Pedestrian ped in pedestrians) {
-                string query = "INSERT INTO agent (id, name, x, y, t) VALUES ('" + ped.Id + "'," + "'" + ped.Name + "'" + "," + ped.GetPosition().X.ToString(CultureInfo.InvariantCulture) + "," + ped.GetPosition().Y.ToString(CultureInfo.InvariantCulture) + "," + ped.GetTick() + ");";
+                string query = "INSERT INTO agent (id, name, x, y, t) VALUES ('" + ped.Id + "'," + "'" + ped.Name + "'"
+                               + "," + ped.GetPosition().X.ToString(CultureInfo.InvariantCulture) + ","
+                               + ped.GetPosition().Y.ToString(CultureInfo.InvariantCulture) + "," + ped.GetTick() + ");";
                 command.CommandText = query;
                 command.ExecuteNonQuery();
             }
             transaction.Commit();
             command.Dispose();
-            command = null;            
         }
 
-        public void Close()
-        {
-            connection.Close();
-            connection = null;
+        public void Close() {
+            _connection.Close();
+            _connection = null;
         }
 
-        private int getDatabaseNumber()
-        {
+        private int getDatabaseNumber() {
             int i = 1;
-            while (true)
-            {
+            while (true) {
                 bool exists = File.Exists("database" + i + ".sqlite");
-                if (exists)
-                {
-                    i++;
-                }
-                else
-                {
-                    break;
-                }
+                if (exists) i++;
+                else break;
             }
             return i;
         }
-
     }
+
 }

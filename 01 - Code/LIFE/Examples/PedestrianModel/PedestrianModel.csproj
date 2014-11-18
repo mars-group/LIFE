@@ -57,7 +57,7 @@
     <Compile Include="Agents\Action\MoveAction.cs" />
     <Compile Include="Agents\Reasoning\Movement\ObstacleAvoidanceBehavior.cs" />
     <Compile Include="Agents\Reasoning\Movement\ReactiveBehaviorPipeline.cs" />
-    <Compile Include="Agents\Reasoning\Movement\ReactiveMovingBehavior.cs" />
+    <Compile Include="Agents\Reasoning\Movement\IReactiveMovingBehavior.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\Astar\AStarNode.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\Astar\AStarPathfinder.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\IPathfinder.cs" />
@@ -65,8 +65,8 @@
     <Compile Include="Agents\Reasoning\Pathfinding\ISearchGraph.cs" />
     <Compile Include="Agents\Reasoning\Movement\Potential\Emitter\CuboidEmitter.cs" />
     <Compile Include="Agents\Reasoning\Movement\Potential\Emitter\PointEmitter.cs" />
-    <Compile Include="Agents\Reasoning\Movement\Potential\PotentialEmitter.cs" />
-    <Compile Include="Agents\Reasoning\Movement\Potential\PotentialField.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\IPotentialEmitter.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\IPotentialField.cs" />
     <Compile Include="Agents\Reasoning\Movement\Potential\PotentialFieldCollection.cs" />
     <Compile Include="Agents\Reasoning\Movement\Potential\SimplePotentialField.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RaytracingGraph.cs" />
@@ -75,7 +75,7 @@
     <Compile Include="Agents\Reasoning\Pathfinding\TargetListType.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Logging\AgentLogger.cs" />
-    <Compile Include="Util\Math\UnivariateRealFunction.cs" />
+    <Compile Include="Util\Math\IUnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />
     <Compile Include="Agents\Pedestrian.cs" />
     <Compile Include="LocalStarter.cs" />

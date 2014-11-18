@@ -1,74 +1,55 @@
-﻿using DalskiAgent.Movement;
+﻿using System;
+using DalskiAgent.Movement;
 using PedestrianModel.Util.Math;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter
-{
+namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
 
-	/// <summary>
-	/// @author Christian Thiel
-	/// 
-	/// </summary>
-	public class PointEmitter : PotentialEmitter
-	{
+    /// <summary>
+    ///     @author Christian Thiel
+    /// </summary>
+    public class PointEmitter : IPotentialEmitter {
+        /// <returns> the position </returns>
+        public Vector Position { get { return _position; } }
 
-		/// <summary>
-		/// The position of this point emitter.
-		/// </summary>
-		private readonly Vector position;
+        /// <returns> the function </returns>
+        public IUnivariateRealFunction Function { get { return _function; } }
 
-		/// <summary>
-		/// The function to apply the distance to.
-		/// </summary>
-		private readonly UnivariateRealFunction function;
+        /// <summary>
+        ///     The position of this point emitter.
+        /// </summary>
+        private readonly Vector _position;
 
-		/// <summary>
-		/// Creates a new Point emitter at the position <code>position</code>. THe potential will be calculated by
-		/// applying the euklid distance between the emitters position and the given position to the given
-		/// <seealso cref="DoubleFunction"/>.<br/>
-		/// <br/>
-		/// The euklid distance between the two points will only be calculated 2D (x and z axis).
-		/// </summary>
-		/// <param name="position"> the position of the emitter </param>
-		/// <param name="function"> the function to calculate the potential with </param>
-		public PointEmitter(Vector position, UnivariateRealFunction function) : base()
-		{
-			this.position = position;
-			this.function = function;
-		}
+        /// <summary>
+        ///     The function to apply the distance to.
+        /// </summary>
+        private readonly IUnivariateRealFunction _function;
 
-		public double GetPotential(Vector referringPosition)
-		{
-			double x = position.X - referringPosition.X;
-			//double z = position.Z - referringPosition.Z;
-            double y = position.Y - referringPosition.Y;
+        /// <summary>
+        ///     Creates a new Point emitter at the position <code>position</code>. The potential will be calculated by
+        ///     applying the euklid distance between the emitters position and the given position to the given
+        ///     <seealso cref="IUnivariateRealFunction" />.<br />
+        ///     <br />
+        ///     The euklid distance between the two points will only be calculated 2D (x and z axis).
+        /// </summary>
+        /// <param name="position"> the position of the emitter </param>
+        /// <param name="function"> the function to calculate the potential with </param>
+        public PointEmitter(Vector position, IUnivariateRealFunction function) {
+            _position = position;
+            _function = function;
+        }
 
-			//return this.function.Value(Math.Sqrt(x * x + z * z));
-            return this.function.Value(Math.Sqrt(x * x + y * y));
-		}
+        #region PotentialEmitter Members
 
-		/// <returns> the position </returns>
-		public Vector Position
-		{
-			get
-			{
-				return position;
-			}
-		}
+        public double GetPotential(Vector reference) {
+            double x = _position.X - reference.X;
+            //double z = position.Z - reference.Z;
+            double y = _position.Y - reference.Y;
 
-		/// <returns> the function </returns>
-		public UnivariateRealFunction Function
-		{
-			get
-			{
-				return function;
-			}
-		}
+            //return this.function.Value(Math.Sqrt(x * x + z * z));
+            return _function.Value(Math.Sqrt(x*x + y*y));
+        }
 
-	}
+        #endregion
+    }
 
 }

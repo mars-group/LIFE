@@ -1,6 +1,7 @@
 ﻿namespace PedestrianModel.Visualization
 {
-    partial class SimpleVisualization
+
+    sealed partial class SimpleVisualization
     {
         /// <summary>
         /// Required designer variable.

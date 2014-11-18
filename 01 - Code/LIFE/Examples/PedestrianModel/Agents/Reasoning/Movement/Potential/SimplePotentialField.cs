@@ -1,65 +1,46 @@
-﻿using DalskiAgent.Movement;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DalskiAgent.Movement;
 
-namespace PedestrianModel.Agents.Reasoning.Movement.Potential
-{
+namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 
-	/// 
-	/// <summary>
-	/// @author Christian Thiel
-	/// 
-	/// </summary>
-	public class SimplePotentialField : PotentialField
-	{
+    /// <summary>
+    ///     @author Christian Thiel
+    /// </summary>
+    public class SimplePotentialField : IPotentialField {
+        /// <summary>
+        ///     The collection of potential emitters.
+        /// </summary>
+        private readonly HashSet<IPotentialEmitter> _potentialEmitters = new HashSet<IPotentialEmitter>();
 
-		/// <summary>
-		/// The collection of potential emitters.
-		/// </summary>
-		private readonly HashSet<PotentialEmitter> potentialEmitters = new HashSet<PotentialEmitter>();
+        #region IPotentialField Members
 
-		/// <summary>
-		/// Creates a new and empty potential field.
-		/// </summary>
-		public SimplePotentialField()
-		{
+        public void AddEmitter(IPotentialEmitter emitter) {
+            _potentialEmitters.Add(emitter);
+        }
 
-		}
+        public ICollection<IPotentialEmitter> Emitters {
+            get {
+                //return Collections.unmodifiableSet(potentialEmitters);
+                return _potentialEmitters.ToList().AsReadOnly();
+            }
+        }
 
-		public void AddEmitter(PotentialEmitter emitter)
-		{
-			this.potentialEmitters.Add(emitter);
-		}
+        public void ClearAll() {
+            _potentialEmitters.Clear();
+        }
 
-		public ICollection<PotentialEmitter> Emitters
-		{
-			get
-			{
-				//return Collections.unmodifiableSet(potentialEmitters);
-                return potentialEmitters.ToList<PotentialEmitter>().AsReadOnly();
-			}
-		}
+        public double CalculatePotential(Vector position) {
+            double result = 0.0;
 
-		public void ClearAll()
-		{
-			this.potentialEmitters.Clear();
-		}
+            foreach (IPotentialEmitter emitter in _potentialEmitters) {
+                result += emitter.GetPotential(position);
+            }
 
-		public double CalculatePotential(Vector position)
-		{
-			double result = 0.0;
+            return result;
+        }
 
-			foreach (PotentialEmitter emitter in potentialEmitters)
-			{
-				result += emitter.GetPotential(position);
-			}
-
-			return result;
-		}
-
-	}
+        #endregion
+    }
 
 }

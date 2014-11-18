@@ -1,4 +1,6 @@
-﻿using DalskiAgent.Agents;
+﻿using System;
+using System.Collections.Generic;
+using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
@@ -12,379 +14,346 @@ using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
 using PedestrianModel.Environment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PedestrianModel.Agents
-{
+namespace PedestrianModel.Agents {
+
     /// <summary>
-    ///   A pedestrian agent which moves to a target position using wayfinding and collision avoidance.
+    ///     A pedestrian agent which moves to a target position using wayfinding and collision avoidance.
     /// </summary>
-    public class Pedestrian : SpatialAgent, IAgentLogic
-    {
-        private bool startComplete = false;
-
-        private String name;                        // Name or ID of agent      
-        private float maxVelocity = 1.34f;          // Maximum movement velocity of agent        
-
-        private readonly IEnvironment environment;
-        private readonly DirectMover mover;
+    public class Pedestrian : SpatialAgent, IAgentLogic {
         //private readonly ContinuousMover mover;
 
-        /// <summary>
-        /// Recalculate movement direction every n milli seconds. </summary>
-        private const long MOVE_TIMER_INTERVAL = 100;
-        /// <summary>
-        /// Track the last n positions to notice if I'm stuck... </summary>
-        private const int POSITION_TRACKER_SIZE = 20;
+        public string Name { get; set; }
 
-        private string simulationId;
+        public float MaxVelocity { get { return _maxVelocity; } set { _maxVelocity = value; } }
 
-        private Vector startPosition;
-        private IList<Vector> targetPositions;        
-        private RaytracingGraph pathfindingSearchGraph;
-        private IPathfinder<Vector> pathfinder;
-        private readonly ReactiveBehaviorPipeline movementPipeline = new ReactiveBehaviorPipeline();
-        private readonly IList<MoveAction> actions = new List<MoveAction>();
-        
-        private int targetPositionIndex = 0; // if target list type is Sequential, this is the current index
+        public IList<Vector> TargetPositions { get { return _targetPositions; } set { _targetPositions = value; } }
 
-        private Vector debugLastPosition;
+        public ReactiveBehaviorPipeline MovementPipeline { get { return _movementPipeline; } }
 
         /// <summary>
-        /// List of the last n positions. </summary>
-        private readonly IList<Vector> positionTracker = new List<Vector>();
-
-        /// <summary>
-        ///   Create a new pedestrian agent.
+        ///     Track the last n positions to notice if I'm stuck...
         /// </summary>
-        /// <param name="id">Agent identifier.</param>
+        private const int PositionTrackerSize = 20;
+
+        private readonly DirectMover _mover;
+
+        private readonly string _simulationId;
+        private readonly ReactiveBehaviorPipeline _movementPipeline = new ReactiveBehaviorPipeline();
+        private readonly IList<MoveAction> _actions = new List<MoveAction>();
+
+        /// <summary>
+        ///     List of the last n positions.
+        /// </summary>
+        private readonly IList<Vector> _positionTracker = new List<Vector>();
+
+        private bool _startComplete;
+
+        private float _maxVelocity = 1.34f; // Maximum movement velocity of agent        
+
+        private Vector _startPosition;
+        private IList<Vector> _targetPositions;
+        private RaytracingGraph _pathfindingSearchGraph;
+        private IPathfinder<Vector> _pathfinder;
+
+        private int _targetPositionIndex; // if target list type is Sequential, this is the current index
+
+        private Vector _debugLastPosition;
+
+        /// <summary>
+        ///     Create a new pedestrian agent.
+        /// </summary>
+        /// <param name="exec"></param>
         /// <param name="env">Environment reference.</param>
-        /// <param name="pos">Initial position.</param>
-        public Pedestrian(IExecution exec, IEnvironment env, string simulationId, Vector position, Vector dimension, Direction direction, Vector targetPosition, String name = "pedestrian")
-            : base(exec, env, position, dimension, direction)
-        {
-            this.environment = env;
-            this.name = name;
-            this.simulationId = simulationId;
+        /// <param name="simulationId">ID of the simulation which contains the agent.</param>
+        /// <param name="position">Initial position.</param>
+        /// <param name="dimension">Initial dimension.</param>
+        /// <param name="direction">Initial direction.</param>
+        /// <param name="targetPosition">Target position.</param>
+        /// <param name="name"></param>
+        public Pedestrian
+            (IExecution exec,
+                IEnvironment env,
+                string simulationId,
+                Vector position,
+                Vector dimension,
+                Direction direction,
+                Vector targetPosition,
+                String name = "pedestrian")
+            : base(exec, env, position, dimension, direction) {
+            IEnvironment environment = env;
+            Name = name;
+            _simulationId = simulationId;
 
             // Add perception sensor for obstacles.
-            PerceptionUnit.AddSensor(new DataSensor(
-              this, (IGenericDataSource)environment, new OmniHalo((int)InformationTypes.Obstacles))
-            );
+            PerceptionUnit.AddSensor
+                (new DataSensor
+                    (
+                    this,
+                    (IGenericDataSource) environment,
+                    new OmniHalo((int) InformationTypes.Obstacles))
+                );
 
             // Add perception sensor for pedestrians.
-            PerceptionUnit.AddSensor(new DataSensor(
-              this, (IGenericDataSource)environment, new OmniHalo((int)InformationTypes.Pedestrians))
-            );
+            PerceptionUnit.AddSensor
+                (new DataSensor
+                    (
+                    this,
+                    (IGenericDataSource) environment,
+                    new OmniHalo((int) InformationTypes.Pedestrians))
+                );
 
             // Add perception sensor for everything.
-            PerceptionUnit.AddSensor(new DataSensor(
-              this, (IGenericDataSource)environment, new OmniHalo((int)InformationTypes.AllAgents))
-            );
+            PerceptionUnit.AddSensor
+                (new DataSensor
+                    (
+                    this,
+                    (IGenericDataSource) environment,
+                    new OmniHalo((int) InformationTypes.AllAgents))
+                );
 
             // Add movement module.
             Mover = new DirectMover(environment, this, Data);
-            this.mover = (DirectMover)Mover;  // Re-declaration to save casts.
+            _mover = (DirectMover) Mover; // Re-declaration to save casts.
 
             //Mover = new ContinuousMover(env, this, Data);
             //_mover = (ContinuousMover)Mover;  // Re-declaration to save casts.
 
 
             // WALK
-            this.targetPositions = new List<Vector>();
-            this.targetPositions.Add(targetPosition);
+            _targetPositions = new List<Vector> {targetPosition};
 
-            this.startPosition = position;
-                        
+            _startPosition = position;
+
             Init();
         }
 
-        public IInteraction Reason()
-        {
-            if (!startComplete)
-            {
+        #region IAgentLogic Members
+
+        public IInteraction Reason() {
+            if (!_startComplete) {
                 Start();
-                startComplete = true;
+                _startComplete = true;
             }
 
-            // TODO:
-            // - agent logging
-            // - simulation visualization
             IInteraction movementAction = Act();
 
-            if (Config.DebugEnabled)
-            {
+            if (Config.DebugEnabled) {
                 Console.SetBufferSize(160, 9999);
                 Console.SetWindowSize(160, 50);
-                if (debugLastPosition == null) debugLastPosition = startPosition;
+                if (_debugLastPosition == null) _debugLastPosition = _startPosition;
                 string waypoint = " COMPLETED MOVEMENT";
-                if (actions.Count > 0) waypoint = (actions[0].TargetPosition * 1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
-                Console.WriteLine("Tick: " + this.GetTick().ToString("0000") + ", ID: " + this.Id.ToString("0000") + ", Position: " + this.GetPosition() * 1f + ", Target: " + this.TargetPositions[0] * 1f + ", Waypoint: " + waypoint + ", Distance: " + this.GetPosition().GetDistance(this.TargetPositions[0]).ToString("00.0000000") + ", Velocity: " + (this.GetPosition().GetDistance(debugLastPosition) * (1000f / Config.LengthOfTimestepsInMilliseconds)).ToString("00.0000000"));
-                debugLastPosition = this.GetPosition();
-            }            
+                if (_actions.Count > 0)
+                    waypoint = (_actions[0].TargetPosition*1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
+                Console.WriteLine
+                    ("Tick: " + GetTick().ToString("0000") + ", ID: " + Id.ToString("0000") + ", Position: "
+                     + GetPosition()*1f + ", Target: " + TargetPositions[0]*1f + ", Waypoint: " + waypoint
+                     + ", Distance: " + GetPosition().GetDistance(TargetPositions[0]).ToString("00.0000000")
+                     + ", Velocity: "
+                     + (GetPosition().GetDistance(_debugLastPosition)*(1000f/Config.LengthOfTimestepsInMilliseconds)).
+                         ToString("00.0000000"));
+                _debugLastPosition = GetPosition();
+            }
 
             return movementAction;
         }
 
-        public String Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        #endregion
 
-        public float MaxVelocity
-        {
-            get { return maxVelocity; }
-            set { maxVelocity = value; }
-        }
+        /// <summary>
+        ///     Initialize the agent.
+        /// </summary>
+        //protected internal void ProcessStartEvent(StartEvent @event)
+        private void Start() {
+            //Environment.VisionSensor.PushMode = false;
 
-        public IList<Vector> TargetPositions
-        {
-            get { return targetPositions; }
-            set { targetPositions = value; }
-        }
-
-        public ReactiveBehaviorPipeline MovementPipeline
-        {
-            get
-            {
-                return movementPipeline;
-            }
-        }
-
-		/// <summary>
-		/// Process start event.
-		/// </summary>
-		/// <param name="event"> the event </param>
-		//protected internal void ProcessStartEvent(StartEvent @event)
-        protected internal void Start()
-		{
-			//Environment.VisionSensor.PushMode = false;
-
-			//startPosition = Environment.CurrentPosition;
-            startPosition = GetPosition();
+            //startPosition = Environment.CurrentPosition;
+            _startPosition = GetPosition();
 
             //movementPipeline.addBehavior(new ObstacleAvoidanceBehavior(this));
-			movementPipeline.AddBehavior(new ObstacleAvoidanceBehavior(this, PerceptionUnit));
+            _movementPipeline.AddBehavior(new ObstacleAvoidanceBehavior(this, PerceptionUnit));
 
-			// - ok, we don't really have an Y axis, but it's Vector3D, so define a hard coded y-value
-			// - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
-			//pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
-            var rawObstaclesData = PerceptionUnit.GetData((int)InformationTypes.Obstacles).Data;
-            IList<Obstacle> obstacles = (List<Obstacle>)rawObstaclesData;
-            pathfindingSearchGraph = new RaytracingGraph(simulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance * 2.0f, 0.28f));
-			pathfinder = new AStarPathfinder<Vector>(pathfindingSearchGraph);
+            // - ok, we don't really have an Y axis, but it's Vector3D, so define a hard coded y-value
+            // - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
+            //pathfindingSearchGraph = new RaytracingGraph(SimulationId, Environment.VisionSensor.ObstaclesAsObjectList, 0.43, Math.Max(targetReachedDistance * 2.0, 0.28));
+            object rawObstaclesData = PerceptionUnit.GetData((int) InformationTypes.Obstacles).Data;
+            IList<Obstacle> obstacles = (List<Obstacle>) rawObstaclesData;
+            _pathfindingSearchGraph = new RaytracingGraph
+                (_simulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0f, 0.28f));
+            _pathfinder = new AStarPathfinder<Vector>(_pathfindingSearchGraph);
 
-			CreateAndExecuteMovePlan(targetPositions);
+            CreateAndExecuteMovePlan(_targetPositions);
 
-			// starting agent, starting movement loop
-			//int firstMoveDelay = (int?) getStartParameter("firstMoveDelay");
-			//Environment.addTimer("act", firstMoveDelay, MOVE_TIMER_INTERVAL);
-		}
+            // starting agent, starting movement loop
+            //int firstMoveDelay = (int?) getStartParameter("firstMoveDelay");
+            //Environment.addTimer("act", firstMoveDelay, MOVE_TIMER_INTERVAL);
+        }
 
-		/// <summary>
-		/// Executes the first action in the action queue. If the first action is finished or no longer valid, it
-		/// will be removed without execution. If the queue is empty and the agent is started with the
-		/// <code>walkLoops = true</code> parameter, the agent executes a <seealso cref="TeleportAction"/> to it#s start
-		/// position and starts the movement to the target position again.
-		/// </summary>
-		private DirectMovementAction Act()
-		{
+        /// <summary>
+        ///     Executes the first action in the action queue. If the first action is finished or no longer valid, it
+        ///     will be removed without execution. If the queue is empty and the agent is started with the
+        ///     <code>walkLoops = true</code> parameter, the agent teleports to its start
+        ///     position and starts the movement to the target position again.
+        /// </summary>
+        private DirectMovementAction Act() {
             DirectMovementAction directMovementAction;
 
-			// save current position in track-list
-			if (GotStuck())
-			{
-				CreateAndExecuteMovePlan(targetPositions);
-			}
+            // save current position in track-list
+            if (GotStuck()) CreateAndExecuteMovePlan(_targetPositions);
 
-			// first check if the current action has finished
-			// remove all actions from top of the queue until we have one that is not finished
-			while (actions.Count > 0)
-			{
-				if (actions[0].IsFinished(this))
-				{
-					//LOGGER.trace("Agent " + Id + ": finished action " + actions.Remove(0));
-                    actions.RemoveAt(0);					
-				}
-				else
-				{
-					break;
-				}
-			}
+            // first check if the current action has finished
+            // remove all actions from top of the queue until we have one that is not finished
+            while (_actions.Count > 0) {
+                if (_actions[0].IsFinished(this)) {
+                    //LOGGER.trace("Agent " + Id + ": finished action " + actions.Remove(0));
+                    _actions.RemoveAt(0);
+                }
+                else break;
+            }
 
-			if (actions.Count > 0)
-			{
-                #warning Don't perform the action, yet. Just return it here, so it can be returned in Reason().
+            if (_actions.Count > 0) {
+#warning Don't perform the action, yet. Just return it here, so it can be returned in Reason().
                 //actions[0].PerformAction(this);
-				directMovementAction = actions[0].PerformAction(this, Mover);
-			}
-			else
-			{
+                directMovementAction = _actions[0].PerformAction(this, Mover);
+            }
+            else {
                 // code only executed if looped or more than 1 target!
-				if (Config.TargetListType == TargetListType.SequentialLoop || (Config.TargetListType == TargetListType.Sequential && this.targetPositionIndex + 1 < this.targetPositions.Count))
-				{
-					// walk to the next position in the list
-					this.targetPositionIndex = (this.targetPositionIndex + 1) % this.targetPositions.Count;
-					CreateAndExecuteMovePlan(targetPositions);
+                if (Config.TargetListType == TargetListType.SequentialLoop
+                    || (Config.TargetListType == TargetListType.Sequential
+                        && _targetPositionIndex + 1 < _targetPositions.Count)) {
+                    // walk to the next position in the list
+                    _targetPositionIndex = (_targetPositionIndex + 1)%_targetPositions.Count;
+                    CreateAndExecuteMovePlan(_targetPositions);
 
-                    #warning Correct to return DirectMovementAction here?
-                    directMovementAction = actions[0].PerformAction(this, Mover);
-				}
-                // code only executed if looped
-				else if (Config.WalkLoops)
-				{
-					// last target reached, get back to start...
-					// kind of a hack, should be replaced some time and be done in the environment...
-					//TeleportAction action = new TeleportAction(startPosition);
-					//Environment.executeAction(action);
-                    #warning Return a direct move action which puts the agent back to startPosition (if there's space)
-                    directMovementAction = new DirectMovementAction(mover, startPosition);
+#warning Correct to return DirectMovementAction here?
+                    directMovementAction = _actions[0].PerformAction(this, Mover);
+                }
+                    // code only executed if looped
+                else if (Config.WalkLoops) {
+                    // last target reached, get back to start...
+                    // kind of a hack, should be replaced some time and be done in the environment...
+                    //TeleportAction action = new TeleportAction(startPosition);
+                    //Environment.executeAction(action);
+#warning Return a direct move action which puts the agent back to startPosition (if there's space)
+                    directMovementAction = new DirectMovementAction(_mover, _startPosition);
                     // Allowed to already execute this here to immediately change position and have the right agent position for creation of move plan?
                     // Will be executed twice, but shouldn't have any negative effect.
                     directMovementAction.Execute();
 
-					CreateAndExecuteMovePlan(targetPositions);
-				}
-				else
-				{
-					//Environment.executeAction(new SuicideAction());
-                    #warning Remove agents from the evironment here.
+                    CreateAndExecuteMovePlan(_targetPositions);
+                }
+                else {
+                    //Environment.executeAction(new SuicideAction());
+#warning Remove agents from the evironment here.
                     // Don't change position. Agent should remove itself in the next Reason().
                     IsAlive = false;
-                    directMovementAction = new DirectMovementAction(mover, GetPosition());
-				}
-			}
+                    directMovementAction = new DirectMovementAction(_mover, GetPosition());
+                }
+            }
             return directMovementAction;
-		}
+        }
 
-		/// <summary>
-		/// Creates a plan with move action which leads the agent to the target position. The plan will be enqueued
-		/// into the action queue.
-		/// </summary>
-		/// <param name="targetPositions"> the target positions of the movement. </param>
-		private void CreateAndExecuteMovePlan(IList<Vector> targetPositions)
-		{
-			IList<Vector> shortestPath = null;
+        /// <summary>
+        ///     Creates a plan with move action which leads the agent to the target position. The plan will be enqueued
+        ///     into the action queue.
+        /// </summary>
+        /// <param name="targetPositions"> the target positions of the movement. </param>
+        private void CreateAndExecuteMovePlan(IList<Vector> targetPositions) {
+            IList<Vector> shortestPath = null;
 
-			if (Config.TargetListType == TargetListType.Parallel)
-			{
-				double shortestPathLength = double.MaxValue;
-				foreach (Vector target in targetPositions)
-				{
-					IList<Vector> path = GetPathToTarget(target);
+            if (Config.TargetListType == TargetListType.Parallel) {
+                double shortestPathLength = double.MaxValue;
+                foreach (Vector target in targetPositions) {
+                    IList<Vector> path = GetPathToTarget(target);
 
-					if (path == null)
-					{
-						continue;
-					}
+                    if (path == null) continue;
 
-					//path.Insert(0, Environment.CurrentPosition);
+                    //path.Insert(0, Environment.CurrentPosition);
                     path.Insert(0, GetPosition());
 
-					double pathLength = 0.0;
-					for (int i = 1; i < path.Count; i++)
-					{
-						//pathLength += path[i - 1].distance(path[i]);
+                    double pathLength = 0.0;
+                    for (int i = 1; i < path.Count; i++) {
+                        //pathLength += path[i - 1].distance(path[i]);
                         pathLength += path[i - 1].GetDistance(path[i]);
-					}
+                    }
 
-					if (shortestPathLength > pathLength)
-					{
-						shortestPathLength = pathLength;
-						shortestPath = path;
-					}
-				}
-			}
-			else
-			{
-				Vector currentTarget = targetPositions[targetPositionIndex];
-				shortestPath = GetPathToTarget(currentTarget);
+                    if (shortestPathLength > pathLength) {
+                        shortestPathLength = pathLength;
+                        shortestPath = path;
+                    }
+                }
+            }
+            else {
+                Vector currentTarget = targetPositions[_targetPositionIndex];
+                shortestPath = GetPathToTarget(currentTarget);
+            }
 
-			}
+            _actions.Clear();
 
-			this.actions.Clear();
+            if (shortestPath != null) {
+                foreach (Vector waypoint in shortestPath) {
+                    _actions.Add(new MoveAction(waypoint, Config.TargetReachedDistance));
+                }
+            }
+        }
 
-			if (shortestPath != null)
-			{
-				foreach (Vector waypoint in shortestPath)
-				{
-					this.actions.Add(new MoveAction(waypoint, Config.TargetReachedDistance));
-				}
-			}
-		}
+        /// <summary>
+        ///     Calculates a path from the current agent's position to the given target position using the agent's
+        ///     pathfinder and searchgraph.
+        /// </summary>
+        /// <param name="targetPosition"> the position to engage </param>
+        /// <returns>
+        ///     the resulting path as a list of <seealso cref="Vector" /> positions or <code>null</code> if no path
+        ///     could be found.
+        /// </returns>
+        private IList<Vector> GetPathToTarget(Vector targetPosition) {
+            _pathfindingSearchGraph.TargetPosition = targetPosition;
 
-		/// <summary>
-		/// Calculates a path from the current agent's position to the given target position using the agent's
-		/// pathfinder and searchgraph.
-		/// </summary>
-		/// <param name="targetPosition"> the position to engage </param>
-		/// <returns> the resulting path as a list of <seealso cref="Vector3D"/> positions or <code>null</code> if no path
-		///         could be found. </returns>
-		private IList<Vector> GetPathToTarget(Vector targetPosition)
-		{
+            //IList<Vector3D> path = pathfinder.FindPath(new RaytracingPathNode(Environment.CurrentPosition), new RaytracingPathNode(pathfindingSearchGraph.TargetPosition));
+            IList<Vector> path = _pathfinder.FindPath
+                (new RaytracingPathNode(GetPosition()), new RaytracingPathNode(_pathfindingSearchGraph.TargetPosition));
 
-			this.pathfindingSearchGraph.TargetPosition = targetPosition;
+            if (path == null || path.Count == 0) return null;
 
-			//IList<Vector3D> path = pathfinder.FindPath(new RaytracingPathNode(Environment.CurrentPosition), new RaytracingPathNode(pathfindingSearchGraph.TargetPosition));
-            IList<Vector> path = pathfinder.FindPath(new RaytracingPathNode(GetPosition()), new RaytracingPathNode(pathfindingSearchGraph.TargetPosition));
+            return path;
+        }
 
-			if (path == null || path.Count == 0)
-			{
-				return null;
-			}
+        /// <summary>
+        ///     Checks if the agent got stuck at a position and needs new pathfinding, to get to it's target position.
+        /// </summary>
+        /// <returns> true if the agent has not moved a lot during the last steps. </returns>
+        private bool GotStuck() {
+            //this.positionTracker.Add(Environment.CurrentPosition);
+            _positionTracker.Add(GetPosition());
 
-			return path;
-		}
+            if (_positionTracker.Count > PositionTrackerSize) _positionTracker.RemoveAt(0);
+            else return false; // only do check if enough positions
 
-		/// <summary>
-		/// Checks if the agent got stuck at a position and needs new pathfinding, to get to it's target position.
-		/// </summary>
-		/// <returns> true if the agent has not moved a lot during the last steps. </returns>
-		private bool GotStuck()
-		{
-			//this.positionTracker.Add(Environment.CurrentPosition);
-            this.positionTracker.Add(GetPosition());
-            
-			if (this.positionTracker.Count > POSITION_TRACKER_SIZE)
-			{
-				this.positionTracker.RemoveAt(0);
-			}
-			else
-			{
-				return false; // only do check if enough positions
-			}
+            float sumX = 0;
+            float sumY = 0;
+            float sumZ = 0;
+            foreach (Vector v in _positionTracker) {
+                sumX += v.X;
+                sumY += v.Y;
+                sumZ += v.Z;
+            }
+            Vector averagePosition = new Vector
+                (sumX/PositionTrackerSize, sumY/PositionTrackerSize, sumZ/PositionTrackerSize);
 
-			float sumX = 0;
-			float sumY = 0;
-			float sumZ = 0;
-			foreach (Vector v in this.positionTracker)
-			{
-				sumX += v.X;
-				sumY += v.Y;
-				sumZ += v.Z;
-			}
-            Vector averagePosition = new Vector(sumX / POSITION_TRACKER_SIZE, sumY / POSITION_TRACKER_SIZE, sumZ / POSITION_TRACKER_SIZE);
-
-			double sumDistance = 0;
-			foreach (Vector v in this.positionTracker)
-			{
-				//sumDistance += v.distance(averagePosition);
+            double sumDistance = 0;
+            foreach (Vector v in _positionTracker) {
+                //sumDistance += v.distance(averagePosition);
                 sumDistance += v.GetDistance(averagePosition);
-			}
+            }
 
-			double avgDistance = sumDistance / POSITION_TRACKER_SIZE;
+            double avgDistance = sumDistance/PositionTrackerSize;
 
-			//double movingSpeed = (double?) getStartParameter("movingSpeed");
-            double movingSpeed = maxVelocity;
-			double estDistance = movingSpeed * 0.2;
+            //double movingSpeed = (double?) getStartParameter("movingSpeed");
+            double movingSpeed = _maxVelocity;
+            double estDistance = movingSpeed*0.2;
 
-			return avgDistance < estDistance;
-		}
-
+            return avgDistance < estDistance;
+        }
     }
+
 }
