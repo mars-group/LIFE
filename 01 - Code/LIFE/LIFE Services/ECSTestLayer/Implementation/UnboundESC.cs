@@ -43,7 +43,7 @@
             _entities.Remove(entity);
         }
 
-        public bool Update(ISpatialEntity entity, IGeometry newBounds) {
+        public bool Resize(ISpatialEntity entity, IGeometry newBounds) {
             if (Explore(newBounds).Any()) {
                 entity.Geometry = newBounds;
                 return true;

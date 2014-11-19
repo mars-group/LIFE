@@ -10,9 +10,9 @@
     using NetTopologySuite.Shape;
     using NetTopologySuite.Utilities;
 
-    internal class MyGeometryFactory  {
+    internal class MyTestGeometryFactory  {
 
-        public MyGeometryFactory() {
+        public MyTestGeometryFactory() {
             var factory = new GeometricShapeFactory();
             factory.Centre = new Coordinate(1, 1);
             factory.Width = 4;

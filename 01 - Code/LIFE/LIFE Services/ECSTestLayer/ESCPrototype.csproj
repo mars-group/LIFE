@@ -81,6 +81,7 @@
     <Compile Include="Entities\CollidableElement.cs" />
     <Compile Include="Entities\Spatial\Line.cs" />
     <Compile Include="Entities\Spatial\Plane.cs" />
+    <Compile Include="Implementation\MyGeometryFactory.cs" />
     <Compile Include="Implementation\UnboundESC.cs" />
     <Compile Include="Implementation\ESC.cs" />
     <Compile Include="Entities\AxisAlignedBoundingInterval.cs" />

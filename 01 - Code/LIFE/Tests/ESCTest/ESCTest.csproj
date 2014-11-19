@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\MyGeometryFactory.cs" />
+    <Compile Include="Entities\MyTestGeometryFactory.cs" />
     <Compile Include="Entities\TestAgent2Dy.cs" />
     <Compile Include="Entities\TestDeprecatedAgent2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
