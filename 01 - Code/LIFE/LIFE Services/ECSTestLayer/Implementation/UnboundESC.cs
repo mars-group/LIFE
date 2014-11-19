@@ -2,19 +2,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using CommonTypes.TransportTypes;
     using Entities;
     using GenericAgentArchitectureCommon.Datatypes;
     using GenericAgentArchitectureCommon.Interfaces;
+    using GenericAgentArchitectureCommon.TransportTypes;
     using GeoAPI.Geometries;
     using Interface;
-    using NetTopologySuite.Geometries;
     using NetTopologySuite.Geometries.Utilities;
-    using NetTopologySuite.Utilities;
 
-    public class UnboundESC : IUnboundESC { //TODO löschen funktioniert nicht mehr wegen MovementResult
-        private const int MaxAttemps = 100;
-        private readonly Random _random; // Number generator for random positions.
+    public class UnboundESC : IUnboundESC {
+        private const int MaxAttempsToAddRandom = 100;
+        private readonly Random _random;
         private readonly List<ISpatialEntity> _entities;
 
         public UnboundESC() {
@@ -24,14 +22,14 @@
 
         #region IUnboundESC Members
 
-        public bool Add(ISpatialEntity entity, TVector position, float directionAngle = 0) {
-            MovementResult result = Move(entity, position, directionAngle);
+        public bool Add(ISpatialEntity entity, GenericAgentArchitectureCommon.TransportTypes.TVector position, TVector direction = default(TVector)) {
+            MovementResult result = Move(entity, position, direction);
             if (result.Success) _entities.Add(entity);
             return result.Success;
         }
 
-        public bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid) {
-            for (int attempt = 0; attempt < MaxAttemps; attempt++) {
+        public bool AddWithRandomPosition(ISpatialEntity entity, TVector min, GenericAgentArchitectureCommon.TransportTypes.TVector max, bool grid) {
+            for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {
                 TVector position = GenerateRandomPosition(min, max, grid);
                 bool result = Add(entity, position);
                 if (result) return true;
@@ -51,15 +49,17 @@
             return false;
         }
 
-        public MovementResult Move(ISpatialEntity entity, TVector movementVector, float directionAngle = 0) {
+        public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector direction = default(TVector)) {
             IGeometry old = entity.Geometry;
             AffineTransformation trans = new AffineTransformation();
             trans.SetToTranslation(movementVector.X, movementVector.Y);
 
-            GeometricShapeFactory gsf2 = new GeometricShapeFactory();
-            var center = old.Centroid.Coordinate;
-            trans.Rotate(directionAngle, center.X, center.Y);
+            Coordinate center = old.Centroid.Coordinate;
+            var directionTransformer = new Direction();
+            directionTransformer.SetDirectionalVector(new Vector(direction.X, direction.Y, direction.Z));
+            trans.Rotate(directionTransformer.Yaw, center.X, center.Y);
             IGeometry result = trans.Transform(old);
+
 
             List<ISpatialEntity> collisions = Explore(result).ToList();
             collisions.Remove(entity);

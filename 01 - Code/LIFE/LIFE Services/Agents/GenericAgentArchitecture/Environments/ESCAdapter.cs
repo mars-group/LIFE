@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using CommonTypes.TransportTypes;
 using System.Collections.Generic;
-using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using GenericAgentArchitectureCommon.TransportTypes;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 
@@ -17,7 +16,7 @@ namespace DalskiAgent.Environments {
   public class ESCAdapter : IEnvironment, IGenericDataSource {
 
     private readonly IUnboundESC _esc;  // Environment Service Component (ESC) implementation.
-    private readonly TVector _maxSize;  // The maximum entent (for auto placement).
+    private readonly GenericAgentArchitectureCommon.TransportTypes.TVector _maxSize;  // The maximum entent (for auto placement).
     private readonly bool _gridMode;    // ESC auto placement mode: True: grid, false: continuous.
 
     // Object-geometry mapping. Inner class for write-protected spatial entity representation.
@@ -78,7 +77,7 @@ namespace DalskiAgent.Environments {
       acc = new DataAccessor(geometry.Geometry);
       _objects[obj] = geometry;
 
-      if (pos != null) success = _esc.Add(geometry, new TVector(pos.X, pos.Y, pos.Z), dir.Yaw); 
+      if (pos != null) success = _esc.Add(geometry, new TVector(pos.X, pos.Y, pos.Z), dir.GetDirectionalVector().GetTVector()); 
       else success = _esc.AddWithRandomPosition(geometry, TVector.Origin, _maxSize, _gridMode);                     
       if (!success) throw new Exception("[ESCAdapter] AddObject(): Placement failed, ESC returned 'false'!");
     }
@@ -104,7 +103,7 @@ namespace DalskiAgent.Environments {
     public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
       if (!_objects.ContainsKey(obj)) return;
       if (dir == null) _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z));
-      else _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z), dir.Yaw);
+      else _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z), dir.GetDirectionalVector().GetTVector());
     }
 
 

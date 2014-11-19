@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using CommonTypes.TransportTypes;
 using ESCTestLayer.Entities;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace ESCTestLayer.Interface {
+    using GenericAgentArchitectureCommon.TransportTypes;
 
-  public interface IDeprecatedESC : IGenericDataSource {
+    public interface IDeprecatedESC : IGenericDataSource {
     
     
     /// <summary>

@@ -4,8 +4,9 @@ using DalskiAgent.Environments;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Perception {
+    using GenericAgentArchitectureCommon.TransportTypes;
 
-  /// <summary>
+    /// <summary>
   ///   An abstract halo representation. Each sensor has one object of it.
   ///   It has a geometry describing its form and a vertex as center point. 
   /// </summary>
@@ -34,11 +35,11 @@ namespace DalskiAgent.Perception {
     }
 
 
-    /// <summary>
-    ///   Check, if a given position is inside this perception range.
-    /// </summary>
-    /// <param name="position">The position to check.</param>
-    /// <returns>True, if position is in range, false otherwise.</returns>
-    public abstract bool IsInRange(TVector position);
+        /// <summary>
+        ///   Check, if a given position is inside this perception range.
+        /// </summary>
+        /// <param name="position">The position to check.</param>
+        /// <returns>True, if position is in range, false otherwise.</returns>
+        public abstract bool IsInRange(TVector position);
   }
 }

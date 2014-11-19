@@ -61,6 +61,7 @@
     <Compile Include="Interfaces\ISpatialEntity.cs" />
     <Compile Include="Interfaces\ISpecificator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransportTypes\TVector.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\CommonTypes\CommonTypes.csproj">

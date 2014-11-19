@@ -1,4 +1,4 @@
-﻿namespace CommonTypes.TransportTypes {
+﻿namespace GenericAgentArchitectureCommon.TransportTypes {
     #region Namespace imports
 
     using System;

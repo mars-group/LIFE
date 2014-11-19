@@ -1,6 +1,6 @@
 ﻿namespace ESCTest.Entities {
-    using CommonTypes.TransportTypes;
     using ESCTestLayer.Interface;
+    using GenericAgentArchitectureCommon.TransportTypes;
 
     internal class TestDeprecatedAgent2D {
         private const int InformationType = 1;

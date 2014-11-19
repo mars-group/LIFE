@@ -2,8 +2,9 @@
 using CommonTypes.TransportTypes;
 
 namespace GenericAgentArchitectureCommon.Datatypes {
-    
-  /// <summary>
+    using TransportTypes;
+
+    /// <summary>
   ///   This class serves as a representation of a vector or vertex.
   /// </summary>
   public class Vector : IEquatable<Vector>, IEquatable<TVector> {

@@ -2,15 +2,15 @@
     using System;
     using System.Diagnostics;
     using System.Linq;
-    using CommonTypes.TransportTypes;
     using Entities;
     using ESCTestLayer.Implementation;
     using ESCTestLayer.Interface;
-    using NetTopologySuite.Geometries;
+    using GenericAgentArchitectureCommon.Datatypes;
+    using GenericAgentArchitectureCommon.TransportTypes;
     using NUnit.Framework;
 
     public class UnboundESCTest {
-        private const int InformationType = 1;
+//        private const int InformationType = 1;
 
         #region Setup / Tear down
 
@@ -90,15 +90,13 @@
         }
 
 
-        private void printAllAgents() {
+        private void PrintAllAgents() {
             Console.WriteLine(_esc.ExploreAll().Count()+ " Agents found.");
             foreach (var entity in _esc.ExploreAll()) {
                 Console.WriteLine(entity.Geometry);
             }
             Console.WriteLine("---");
         }
-
-
 
         [Test]
         public void TestRegainOfOldPosition() {
@@ -125,14 +123,16 @@
         public void TestRotation() {
             TestAgent2D a1 = new TestAgent2D(10, 1);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
-            printAllAgents();
-            Assert.True(_esc.Move(a1, new TVector(0, 0), 360).Success);
-            printAllAgents();
+            PrintAllAgents();
+            var direction = new Direction();
+            direction.SetYaw(360);
+            Assert.True(_esc.Move(a1, new TVector(0, 0), direction.GetDirectionalVector().GetTVector()).Success);
+            PrintAllAgents();
         }
 
         [Test]
         public void TestAdd500Elements() {
-            var dimension = new TVector(1, 1, 1);
+//            var dimension = new TVector(1, 1, 1);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < 500; i++)

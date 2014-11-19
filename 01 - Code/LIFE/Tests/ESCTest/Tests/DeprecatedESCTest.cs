@@ -5,8 +5,8 @@ using ESCTestLayer.Implementation;
 using NUnit.Framework;
 
 namespace ESCTest.Tests {
-    using CommonTypes.TransportTypes;
     using ESCTestLayer.Interface;
+    using GenericAgentArchitectureCommon.TransportTypes;
 
     public class DeprecatedESCTest {
         private IDeprecatedESC _esc;

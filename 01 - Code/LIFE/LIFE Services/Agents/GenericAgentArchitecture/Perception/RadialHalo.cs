@@ -1,10 +1,10 @@
 ﻿using System;
-using CommonTypes.TransportTypes;
 using DalskiAgent.Environments;
+using GenericAgentArchitectureCommon.TransportTypes;
 
 namespace DalskiAgent.Perception {
 
-  /// <summary>
+    /// <summary>
   ///   A halo capable of sensing in a circle around its position.
   /// </summary>
   public class RadialHalo : Halo {
@@ -23,12 +23,12 @@ namespace DalskiAgent.Perception {
     }
 
 
-    /// <summary>
-    ///   Check, if a given position is inside this perception range.
-    /// </summary>
-    /// <param name="position">The position to check.</param>
-    /// <returns>True, if position is in range, false otherwise.</returns>
-    public override bool IsInRange(TVector position) {
+        /// <summary>
+        ///   Check, if a given position is inside this perception range.
+        /// </summary>
+        /// <param name="position">The position to check.</param>
+        /// <returns>True, if position is in range, false otherwise.</returns>
+        public override bool IsInRange(TVector position) {
       var dist = Data.Position.GetTVector().GetDistance(position);
       return (dist <= _radius) && (dist > float.Epsilon);
     }

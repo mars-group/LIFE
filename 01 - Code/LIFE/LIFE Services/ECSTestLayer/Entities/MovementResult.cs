@@ -3,8 +3,8 @@
 
     using System.Collections.Generic;
     using System.Linq;
-    using CommonTypes.TransportTypes;
     using GenericAgentArchitectureCommon.Interfaces;
+    using GenericAgentArchitectureCommon.TransportTypes;
 
     #endregion
 
