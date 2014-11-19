@@ -13,7 +13,7 @@ namespace SharpMapTest
     {
         static void Main(string[] args)
         {
-            var rasterLayer = new GdalRasterLayer("elevationLayer", @"E:\SoftwareProjekte\KNPSimulation\GISData\" + @"knp_srtm90m.asc");
+            var rasterLayer = new GdalRasterLayer("elevationLayer", @"..\..\..\GISData\knp_srtm90m.asc");
             
             var myMap = new Map {
                 Size = rasterLayer.Size,

@@ -76,7 +76,7 @@ namespace LIFEGisLayerService.Implementation
             // if we got to here, we've managed to load a layer.
             // so add it to the Map
             _map.Layers.Add(_layer);
-            _map.ZoomToBox(_layer.Envelope);
+
         }
 
 
