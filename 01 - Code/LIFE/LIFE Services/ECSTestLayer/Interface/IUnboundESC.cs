@@ -14,7 +14,7 @@ namespace ESCTestLayer.Interface {
 
     void Remove(ISpatialEntity entity);
 
-    bool Update(ISpatialEntity entity, IGeometry newBounds);
+    bool Resize(ISpatialEntity entity, IGeometry newBounds);
 
     MovementResult Move(ISpatialEntity entity, TVector movementVector, float directionAngle = 0);
 

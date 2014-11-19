@@ -6,6 +6,7 @@
     using Entities;
     using ESCTestLayer.Implementation;
     using ESCTestLayer.Interface;
+    using NetTopologySuite.Geometries;
     using NUnit.Framework;
 
     public class UnboundESCTest {
@@ -116,7 +117,8 @@
 
         [Test]
         public void TestGeometryFactory() {
-            new MyGeometryFactory();
+//            new MyTestGeometryFactory();
+            Console.WriteLine(MyGeometryFactory.Rectangle(10, 4));
         }
 
         [Test]
