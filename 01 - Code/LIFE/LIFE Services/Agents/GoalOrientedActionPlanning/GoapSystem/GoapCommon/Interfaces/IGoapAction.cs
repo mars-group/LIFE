@@ -5,7 +5,7 @@ using GoapCommon.Implementation;
 namespace GoapCommon.Interfaces {
 
     /// <summary>
-    ///     An action represents a step towards a goal of one agent. It's a reusable unit.
+    ///     An action represents a step towards a goal for an agent. It's a reusable unit.
     ///     Every agent gets his own set of available IActions.
     /// </summary>
     public interface IGoapAction : IInteraction {
@@ -40,12 +40,6 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <returns></returns>
         int GetExecutionCosts();
-
-        /// <summary>
-        ///     get / calculate the priority
-        /// </summary>
-        /// <returns></returns>
-        int GetPriority();
 
         /// <summary>
         ///     an action may last a few ticks , this is checked before executing the sucessor action

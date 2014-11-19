@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Exceptions;
 using GoapCommon.Interfaces;
@@ -38,34 +39,55 @@ namespace GoapGraphConnector.SimpleGraph {
         }
 
         /// <summary>
-        ///     Select the vertex from the open list with the best estimate
+        ///     set the node to closed list and calculate entries for sucessors: 
+        ///     predecessor, heuristic, traveldistance and estimated
         /// </summary>
-        private IGoapNode ChooseNextNodeFromOpenList() {
-            int smallestF = int.MaxValue;
-            IGoapNode vertex = null;
+        public void CalculateCurrentNode() {
+            SetOnClosedList(_current);
+            Calculate(_current, _graph.GetReachableAdjcentVertices(_current));
+        }
 
-            // TODO in welcher Reihenfolge werden die Elemente iteriert (ist vermutlich unterschiedlich bei dict) und führt das zu Fehlern?
-            foreach (KeyValuePair<IGoapNode, object[]> keyValuePair in _nodeTable) {
-                // if not in closed list and estimated value smaller than actual smallestF
-                if (keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false &&
-                    (int) keyValuePair.Value[3] < smallestF) {
-                    smallestF = (int) keyValuePair.Value[3];
-                    vertex = keyValuePair.Key;
+        /// <summary>
+        ///     Select the first vertex from the open list sorted by estimate value
+        /// </summary>
+        public IGoapNode ChooseNextNodeFromOpenList() {
+            if (!HasAnyVertexOnOpenList()) {
+                throw new Exception("AStarSteppable: cannot choose next node from open list because it is empty ");
+            }
+
+            Dictionary<IGoapNode, object[]> openList = GetOpenList();
+            IOrderedEnumerable<KeyValuePair<IGoapNode, object[]>> orderedOpenList = openList.OrderBy
+                (entry => entry.Value[3]);
+            IGoapNode cheapestFromOpenList = orderedOpenList.First().Key;
+
+            if (cheapestFromOpenList == null) {
+                throw new Exception("AStarSteppable: open list contains null elem");
+            }
+
+            _current = cheapestFromOpenList;
+            return orderedOpenList.First().Key;
+        }
+
+        /// <summary>
+        ///     get the nodes from the node table not closed
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<IGoapNode, object[]> GetOpenList() {
+            Dictionary<IGoapNode, object[]> openList = new Dictionary<IGoapNode, object[]>();
+
+            foreach (KeyValuePair<IGoapNode, object[]> node in _nodeTable) {
+                if (node.Value != null && (bool) node.Value[4] == false) {
+                    openList.Add(node.Key, node.Value);
                 }
             }
-
-            if (vertex == null) {
-                throw new NoVertexFoundException("a* no node found in open list");
-            }
-            _current = vertex;
-            return _current;
+            return openList;
         }
 
         /// <summary>
         ///     check if open list is not empty
         /// </summary>
         /// <returns></returns>
-        public bool HasVerticesOnOpenList() {
+        public bool HasAnyVertexOnOpenList() {
             return _nodeTable.Any(keyValuePair => keyValuePair.Value != null && (bool) keyValuePair.Value[4] == false);
         }
 
@@ -79,7 +101,6 @@ namespace GoapGraphConnector.SimpleGraph {
             }
             //TODO falls ein knoten schon in der Nodetable ist und noch open ist .... checken ob er geupdated werden muss
         }
-
 
         /// <summary>
         ///     get the list of all edges needed to walk to current node
@@ -99,15 +120,6 @@ namespace GoapGraphConnector.SimpleGraph {
             return pathEdges;
         }
 
-        /// <summary>
-        ///     one iteration in the stepped a star
-        ///     set old actual node to closed list and get the new actual node
-        /// </summary>
-        public void Step() {
-            SetOnClosedList(_current);
-            Calculate(_current, _graph.GetReachableAdjcentVertices(_current));
-            ChooseNextNodeFromOpenList();
-        }
 
         /// <summary>
         ///     get the predecessor of the node from the table from a star
@@ -123,11 +135,14 @@ namespace GoapGraphConnector.SimpleGraph {
             if (!_nodeTable.TryGetValue(vertex, out value)) {
                 throw new AlgorithmException("node tab not in algoritm list");
             }
-
             return (IGoapNode) value[0];
         }
 
-
+        /// <summary>
+        ///     update or add entries for the sucessors of the current node
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="reachableVertices"></param>
         private void Calculate(IGoapNode current, List<IGoapNode> reachableVertices) {
             // check if all are in the node list
             if (reachableVertices.Any(v => !_nodeTable.ContainsKey(v))) {
@@ -159,13 +174,13 @@ namespace GoapGraphConnector.SimpleGraph {
                 int travelDistanceG = (int) currentValue[2] + _graph.GetcheapestWayCost(current, openVertex);
                 int estimatedValueF = travelDistanceG + heuristic;
 
-
-                // check if the entry of the vertex must be updated because it was a cheaper way found
+                // check if the entry of the vertex must be created ...
                 if (value == null) {
                     object[] entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
                     _nodeTable.Remove(openVertex);
                     _nodeTable.Add(openVertex, entry);
                 }
+                    // ... or updated because it was a cheaper way found
                 else if ((int) value[2] > travelDistanceG) {
                     object[] entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
                     _nodeTable.Remove(openVertex);
@@ -197,24 +212,24 @@ namespace GoapGraphConnector.SimpleGraph {
         /// <summary>
         ///     create the entry to one vertex for the list of the astar algoritm
         /// </summary>
-        /// <param name="predecessor"></param>
-        /// <param name="heuristic"></param>
+        /// <param name="predecessorP"></param>
+        /// <param name="heuristicH"></param>
         /// <param name="travelDistanceG"></param>
         /// <param name="estimatedValueF"></param>
-        /// <param name="onClosedList"></param>
+        /// <param name="onClosedListCl"></param>
         /// <returns></returns>
         private object[] CreateNodeEntry
-            (IGoapNode predecessor = null,
-                int heuristic = int.MaxValue,
+            (IGoapNode predecessorP = null,
+                int heuristicH = int.MaxValue,
                 int travelDistanceG = int.MaxValue,
                 int estimatedValueF = int.MaxValue,
-                bool onClosedList = false) {
+                bool onClosedListCl = false) {
             object[] entry = new object[5];
-            entry[0] = predecessor;
-            entry[1] = heuristic;
+            entry[0] = predecessorP;
+            entry[1] = heuristicH;
             entry[2] = travelDistanceG;
             entry[3] = estimatedValueF;
-            entry[4] = onClosedList;
+            entry[4] = onClosedListCl;
 
             return entry;
         }

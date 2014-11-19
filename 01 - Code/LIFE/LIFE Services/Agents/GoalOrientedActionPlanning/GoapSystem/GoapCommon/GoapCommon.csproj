@@ -60,7 +60,6 @@
     <Compile Include="Interfaces\IGoapGoal.cs" />
     <Compile Include="Interfaces\IGoapGraphService.cs" />
     <Compile Include="Interfaces\IGoapNode.cs" />
-    <Compile Include="Interfaces\IGoapWorldProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

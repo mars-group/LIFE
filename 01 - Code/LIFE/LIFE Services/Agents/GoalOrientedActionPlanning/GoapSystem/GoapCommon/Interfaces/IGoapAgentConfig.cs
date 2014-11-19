@@ -16,13 +16,13 @@ namespace GoapCommon.Interfaces {
         List<WorldstateSymbol> GetStartWorldstate();
 
         /// <summary>
-        ///     all action that the agent can use
+        ///     all action the agent may use for planning
         /// </summary>
         /// <returns></returns>
         List<AbstractGoapAction> GetAllActions();
 
         /// <summary>
-        ///     all the goals the agent can follow
+        ///     all the goals the agent may follow
         /// </summary>
         /// <returns></returns>
         List<IGoapGoal> GetAllGoals();

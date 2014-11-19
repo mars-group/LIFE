@@ -11,7 +11,7 @@ namespace GoapActionSystem.Implementation {
     /// </summary>
     public static class GoapComponent {
         /// <summary>
-        /// Logger instance for the goap action system
+        ///     Logger instance for the goap action system
         /// </summary>
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

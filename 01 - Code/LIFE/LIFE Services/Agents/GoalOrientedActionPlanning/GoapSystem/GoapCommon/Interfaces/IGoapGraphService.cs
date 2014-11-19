@@ -3,49 +3,57 @@
 namespace GoapCommon.Interfaces {
 
     /// <summary>
-    ///     the methods needed for the goap planner
+    ///     fascade for services of holding graph data and usage of astar
     /// </summary>
     public interface IGoapGraphService {
         /// <summary>
         ///     get the initial graph with one vertex (root)
         /// </summary>
-        /// <param name="rootState"></param>
-        /// <param name="targetState"></param>
+        /// <param name="rootNode"></param>
         /// <param name="maximumGraphDept"></param>
         /// <returns></returns>
         void InitializeGoapGraph(IGoapNode rootNode, int maximumGraphDept = 0);
 
         /// <summary>
-        ///     get the next Vertex, which will be inspected by the algorithm
-        /// </summary>
-        /// <returns>IGoapVertex</returns>
-        IGoapNode GetNextVertexFromOpenList();
-
-        /// <summary>
-        ///     check if there is a vertex in white list
-        /// </summary>
-        /// <returns>bool</returns>
-        bool HasNextVertexOnOpenList();
-
-        /// <summary>
         ///     create the children of the vertex in the graph
         /// </summary>
         /// <param name="outEdges"></param>
-        /// <param name="currentState"></param>
         /// <returns></returns>
         void ExpandCurrentVertex(List<IGoapEdge> outEdges);
 
         /// <summary>
-        ///     inspect the children of the current vertex
+        ///     set node on closed list and create values of child nodes
         /// </summary>
-        /// <returns></returns>
-        void AStarStep();
+        void CalculateCurrentNode();
 
         /// <summary>
+        ///     check if open list contains a vertex
+        /// </summary>
+        /// <returns></returns>
+        bool HasNextVertexOnOpenList();
+
+        /// <summary>
+        ///     get the cheapest node from open list if available
+        /// </summary>
+        void ChooseNextNodeFromOpenList();
+
+        /// <summary>
+        ///     get the next Vertex, which will be calculated by the algorithm
+        /// </summary>
+        /// <returns></returns>
+        IGoapNode GetNextVertex();
+
+        /// <summary>
+        ///     get sorted list of actions representing the path.
+        ///     starting at current and finish with root
         /// </summary>
         /// <returns></returns>
         List<IGoapEdge> GetShortestPath();
 
+        /// <summary>
+        ///     walk path from root to current and retrun count of edges
+        /// </summary>
+        /// <returns></returns>
         int GetActualDepthFromRoot();
     }
 

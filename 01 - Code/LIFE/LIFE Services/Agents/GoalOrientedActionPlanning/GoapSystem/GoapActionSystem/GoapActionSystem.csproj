@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContractClasses\GoapPlannerContract.cs" />
     <Compile Include="Implementation\GoapComponent.cs" />
     <Compile Include="Implementation\GoapManager.cs" />
     <Compile Include="Implementation\GoapPlanner.cs" />

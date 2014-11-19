@@ -3,7 +3,8 @@
 namespace GoapCommon.Implementation {
 
     /// <summary>
-    ///     struct offers call by value
+    ///     struct offers call by value.
+    ///     represents one world state in the goap action system.
     /// </summary>
     public struct WorldstateSymbol {
         public readonly Enum EnumName;

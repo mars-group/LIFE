@@ -2,24 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
 using GoapCommon.Interfaces;
-using log4net;
 using TypeSafeBlackboard;
 
 namespace GoapActionSystem.Implementation {
 
     public class GoapManager : AbstractGoapSystem {
-        
         private readonly List<AbstractGoapAction> _availableActions;
         private readonly List<IGoapGoal> _availableGoals;
         private readonly Blackboard _internalBlackboard;
         private readonly int _maximumGraphSearchDepth;
 
         /// <summary>
-        ///     goap element: faster search for action satisfying needed worldstates
+        ///     goap element: faster search for actions be needed worldstates
         /// </summary>
         private Dictionary<WorldstateSymbol, List<AbstractGoapAction>> _effectToAction;
 
@@ -52,16 +49,13 @@ namespace GoapActionSystem.Implementation {
             CreateEffectActionHashTable();
         }
 
+        /// <summary>
+        ///     helper method for checking constructor parameter
+        /// </summary>
+        /// <param name="paramList"></param>
+        /// <returns></returns>
         private static bool IsEmptyParam(IList paramList) {
             return paramList.Count == 0;
-        }
-
-        private Dictionary<IGoapGoal, bool> GetGoalToBoolDict() {
-            Dictionary<IGoapGoal, bool> goalToBool = new Dictionary<IGoapGoal, bool>();
-            foreach (IGoapGoal goapGoal in _availableGoals) {
-                goalToBool.Add(goapGoal, false);
-            }
-            return goalToBool;
         }
 
         /// <summary>
@@ -85,10 +79,9 @@ namespace GoapActionSystem.Implementation {
                     return new SurrogateAction();
                 }
             }
-            // case: last tick no goal was found
+                // case: last tick no goal was found
             else if (_currentGoal == null) {
-                if (!TryGegGoalAndPlan())
-                {
+                if (!TryGegGoalAndPlan()) {
                     return new SurrogateAction();
                 }
             }
@@ -104,7 +97,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        /// search goals by priority. choose the first goal which is reachable with a plan 
+        ///     search goals by priority. choose the first goal which is reachable with a plan
         /// </summary>
         /// <returns></returns>
         private bool TryGegGoalAndPlan() {
@@ -114,7 +107,7 @@ namespace GoapActionSystem.Implementation {
 
             // case all goals are satisfied
             if (!goals.Any()) {
-                GoapComponent.Log.Info("TryGegGoalAndPlan: there were no unsatisfied goals found");
+                GoapComponent.Log.Info("TryGetGoalAndPlan: there were no unsatisfied goals found");
                 return false;
             }
 
@@ -127,13 +120,13 @@ namespace GoapActionSystem.Implementation {
                     return true;
                 }
             }
-            GoapComponent.Log.Info("TryGegGoalAndPlan: there was no plan found for any unsatisfied goal");
+            GoapComponent.Log.Info("TryGetGoalAndPlan: there was no plan found for any unsatisfied goal");
             return false;
         }
 
 
         /// <summary>
-        ///     create a new goap planner to create a new plan by the current goal
+        ///     create a new goap planner to create a new plan by the given goal
         /// </summary>
         private List<AbstractGoapAction> CreateNewPlan(IGoapGoal goal) {
             GoapPlanner planner = new GoapPlanner
@@ -167,35 +160,10 @@ namespace GoapActionSystem.Implementation {
             }
         }
 
-        /*
         /// <summary>
-        ///     search the available goals ordered by decreasing relevancy
-        ///     select the first goal not actually satisfied
+        ///     get all goal sorted by relevancy which are currently not satisfied
         /// </summary>
         /// <returns></returns>
-        private bool ChooseNewGoal(List<IGoapGoal> goalsForChoice) {
-            
-            IOrderedEnumerable<IGoapGoal> goalSortedByRelevancy = goalsForChoice.OrderByDescending(x => x.GetRelevancy());
-            IGoapGoal highestRelevancyGoal = null;
-            
-            // get the first goal not satisfied
-            foreach (IGoapGoal goapGoal in goalSortedByRelevancy) {
-                if (!goapGoal.IsSatisfied(_internalBlackboard.Get(Worldstate))) {
-                    highestRelevancyGoal = goapGoal;
-                    break;
-                }
-            }
-
-            // case: no unsatisfied goal was found or no goal is available
-            if (highestRelevancyGoal == null) {
-                return false;
-            }
-
-            // replace old goal with new
-            _currentGoal = highestRelevancyGoal;
-            return true;
-        }*/
-
         private IOrderedEnumerable<IGoapGoal> GetUnsatisfiedGoalsSortedByRelevancy() {
             List<IGoapGoal> notSatisfied = _availableGoals.FindAll
                 (g => !g.IsSatisfied(_internalBlackboard.Get(Worldstate)));

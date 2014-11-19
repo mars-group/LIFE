@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Reflection;
-using GoapActionSystem.ContractClasses;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
 using GoapCommon.Interfaces;
 using GoapGraphConnector.SimpleGraph;
-using log4net;
 
 namespace GoapActionSystem.Implementation {
 
@@ -20,7 +16,6 @@ namespace GoapActionSystem.Implementation {
     ///     planner is responsible for the regressive search. the graph component knows nothing about that and the switched
     ///     root and target. planner is also responsible for the correct node creation.
     /// </summary>
-    [ContractClass(typeof(GoapPlannerContract))]
     internal class GoapPlanner {
         private readonly int _maximuxSearchDepth;
         private readonly Dictionary<WorldstateSymbol, List<AbstractGoapAction>> _effectToAction;
@@ -33,7 +28,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="availableActions"></param>
         /// <param name="effectToAction"></param>
         /// <param name="startState"></param>
-        internal GoapPlanner
+        public GoapPlanner
             (int maximuxSearchDepth,
                 List<AbstractGoapAction> availableActions,
                 Dictionary<WorldstateSymbol, List<AbstractGoapAction>> effectToAction,
@@ -46,76 +41,107 @@ namespace GoapActionSystem.Implementation {
             _maximuxSearchDepth = maximuxSearchDepth;
         }
 
-
+        /// <summary>
+        ///     create the initial datastructures and values for search with a star.
+        /// </summary>
+        /// <param name="graphRoot"></param>
+        /// <returns></returns>
         private IGoapGraphService InitializeGraphService(List<WorldstateSymbol> graphRoot) {
             GoapSimpleGraphService graphService = new GoapSimpleGraphService();
-
             IGoapNode root = new Node(graphRoot, new List<WorldstateSymbol>(), graphRoot.Count);
             GoapComponent.Log.Info("NODE CREATED: " + root);
-            //Console.WriteLine("NODE CREATED: " + root);
             graphService.InitializeGoapGraph(root);
             return graphService;
         }
 
         /// <summary>
-        ///     main method of the planner called from goap manager
+        ///     main method of the planner. is called from goap manager.
+        ///     create a list of actions the agent can follow. search direction is regressive.
         /// </summary>
         /// <param name="goal"></param>
         /// <returns></returns>
         public List<AbstractGoapAction> GetPlan(IGoapGoal goal) {
             List<WorldstateSymbol> graphRoot = goal.GetTargetWorldstates();
             IGoapGraphService graphService = InitializeGraphService(graphRoot);
-            
-            IGoapNode currentNode = graphService.GetNextVertexFromOpenList();
 
-            while (!IsSearchDepthLimitExceeded(graphService)
-                   && (currentNode.HasUnsatisfiedProperties() && !currentNode.CanBeSatisfiedByStartState(_startState))) {
+            //here the root node is chosen
+            IGoapNode currentNode = graphService.GetNextVertex();
 
-                List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties(currentNode.GetUnsatisfiedGoalValues());
-                List<AbstractGoapAction> contextPreconditionsFulfilled = FilterActionsByContextPreconditions(satisfyingActions);
+            while (IsNotTargetNode(currentNode)) {
+                // expand node if search depth is smaller than maximum 
+                if (IsSearchDepthSmallerAsMaximum(graphService)) {
+                    List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties
+                        (currentNode.GetUnsatisfiedGoalValues());
+                    List<AbstractGoapAction> contextPreconditionsFulfilled = FilterActionsByContextPreconditions
+                        (satisfyingActions);
+                    List<AbstractGoapAction> applicableActions = FurtherActionFilter
+                        (contextPreconditionsFulfilled, currentNode);
+                    List<IGoapEdge> edges = GetResultingEdges(applicableActions, currentNode);
 
-                List<AbstractGoapAction>  applicableActions = FurtherActionFilter(contextPreconditionsFulfilled, currentNode);
-                List<IGoapEdge> edges = GetResultingEdges(applicableActions, currentNode);
+                    graphService.ExpandCurrentVertex(edges);
+                }
+                else {
+                    GoapComponent.Log.Info("goap planner: search depth maximum on branch of graph reached");
+                }
 
-                // TODO hier einfach bei überschreiten der 
+                // set node on closed list and calculate values for reachable adjacent neighbours
+                graphService.CalculateCurrentNode();
 
-
-                graphService.ExpandCurrentVertex(edges);
-                graphService.AStarStep();
-                currentNode = graphService.GetNextVertexFromOpenList();
+                if (graphService.HasNextVertexOnOpenList()) {
+                    graphService.ChooseNextNodeFromOpenList();
+                    currentNode = graphService.GetNextVertex();
+                }
+                else {
+                    GoapComponent.Log.Info("goap planner: no more nodes in graph for search");
+                    return new List<AbstractGoapAction>();
+                }
             }
 
-            if (IsSearchDepthLimitExceeded(graphService)) {
-                GoapComponent.Log.Info("goap planner: search limit of " + _maximuxSearchDepth + " is exceeded");
-                return new List<AbstractGoapAction>();
-            }
-
-            if (currentNode != null
-                && (!currentNode.HasUnsatisfiedProperties() || currentNode.CanBeSatisfiedByStartState(_startState))) {
+            // case: target is found
+            if (IsTargetNode(currentNode)) {
                 List<IGoapEdge> planEdges = graphService.GetShortestPath();
                 _currentPlan = planEdges.Select(goapEdge => goapEdge.GetAction()).ToList();
                 _currentPlan.Reverse();
             }
-            if (graphService.GetActualDepthFromRoot() >= _maximuxSearchDepth || !graphService.HasNextVertexOnOpenList()) {
-                _currentPlan = new List<AbstractGoapAction> {new SurrogateAction()};
+            if (_currentPlan != null && _currentPlan.Count > 0) {
+                return _currentPlan;
             }
-
-            return _currentPlan;
+            return new List<AbstractGoapAction>();
         }
 
         /// <summary>
-        ///     check if the limit of graph depth is exceedet
+        ///     check if the current nodes depth in graph is smaller than maximum search depth.
+        ///     only if it is smaller the current nodes children can be inserted in graph.
         /// </summary>
         /// <param name="graphService"></param>
         /// <returns></returns>
-        private bool IsSearchDepthLimitExceeded(IGoapGraphService graphService) {
-            return graphService.GetActualDepthFromRoot() > _maximuxSearchDepth;
+        private bool IsSearchDepthSmallerAsMaximum(IGoapGraphService graphService) {
+            return graphService.GetActualDepthFromRoot() < _maximuxSearchDepth;
         }
 
-        
+        /// <summary>
+        ///     inspect current node if its current values are equal to goal values or
+        ///     if the unsatisfied goal values can be satisfied by the start worldstate.
+        /// </summary>
+        /// <param name="currentNode"></param>
+        /// <returns></returns>
+        private bool IsNotTargetNode(IGoapNode currentNode) {
+            return (currentNode.HasUnsatisfiedProperties() && !currentNode.CanBeSatisfiedByStartState(_startState));
+        }
 
         /// <summary>
-        ///     get the actions that could satisfy the current needed states. this is done by inspect the effectToAction map.
+        ///     inspect current node if its current values are NOT equal to goal values or
+        ///     if the unsatisfied goal values can NOT be satisfied by the start worldstate.
+        /// </summary>
+        /// <param name="currentNode"></param>
+        /// <returns></returns>
+        private bool IsTargetNode(IGoapNode currentNode) {
+            return !IsNotTargetNode(currentNode);
+        }
+
+        /// <summary>
+        ///     get the actions that could satisfy the current needed states.
+        ///     this is done by inspect the effectToAction map.
         /// </summary>
         /// <param name="unsatisfied"></param>
         /// <returns></returns>
@@ -128,13 +154,13 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     get a list of actions which are executable by context preconditions
+        ///     get list of actions which are executable by context preconditions
         /// </summary>
         /// <param name="actionsToFilter"></param>
         /// <returns></returns>
         private List<AbstractGoapAction> FilterActionsByContextPreconditions(List<AbstractGoapAction> actionsToFilter) {
-            var passedPreconditions = new List<AbstractGoapAction>();
-            foreach (var action in actionsToFilter) {
+            List<AbstractGoapAction> passedPreconditions = new List<AbstractGoapAction>();
+            foreach (AbstractGoapAction action in actionsToFilter) {
                 if (action.ValidateContextPreconditions()) {
                     passedPreconditions.Add(action);
                 }
@@ -171,9 +197,8 @@ namespace GoapActionSystem.Implementation {
 
             // simple heuristik by counting not reached goal states
             int heuristic = goalValues.Except(currValues).Count();
-            
-            var node = new Node(goalValues.ToList(), currValues.ToList(), heuristic);
-            //Console.WriteLine("NODE CREATED: " + node);
+
+            Node node = new Node(goalValues.ToList(), currValues.ToList(), heuristic);
             GoapComponent.Log.Info("NODE CREATED: " + node);
             return node;
         }
@@ -196,9 +221,8 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     because of no inkremental ability in states there may be only one precondition of one key type
-        ///     even if the inspected action needs the same
-        ///     this is not allowed
+        ///     because of no increment ability for world states there may be only one precondition of one key type.
+        ///     even if the inspected action needs the same this is not allowed.
         /// </summary>
         /// <param name="current"></param>
         /// <param name="goapAction"></param>
@@ -220,7 +244,8 @@ namespace GoapActionSystem.Implementation {
         /// <param name="applicableActions"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        private List<AbstractGoapAction> FurtherActionFilter(List<AbstractGoapAction> applicableActions, IGoapNode parent) {
+        private List<AbstractGoapAction> FurtherActionFilter
+            (List<AbstractGoapAction> applicableActions, IGoapNode parent) {
             List<AbstractGoapAction> filtered = new List<AbstractGoapAction>();
             foreach (AbstractGoapAction action in applicableActions) {
                 if (HasConverseEffect(parent, action)) {
@@ -235,7 +260,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     create the new edge (includes target node) resulting from node and action
+        ///     create the new edge (includes target node) resulting from node and action.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="actions"></param>

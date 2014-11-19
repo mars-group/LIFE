@@ -7,7 +7,7 @@ namespace GoapCommon.Implementation {
 
     /// <summary>
     ///     node class for use in  graph service
-    ///     connect the existing and expected symbols of the worldstate
+    ///     contains the existing and expected symbols of the worldstate
     /// </summary>
     public class Node : IGoapNode, IEquatable<Node> {
         private readonly int _heuristic;
@@ -25,7 +25,7 @@ namespace GoapCommon.Implementation {
         #region IEquatable<Node> Members
 
         /// <summary>
-        /// interrelated subset check
+        ///     interrelated subset check
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -47,16 +47,24 @@ namespace GoapCommon.Implementation {
 
         #region IGoapNode Members
 
+        /// <summary>
+        ///     get a list of goal value symbols that are not satisfied by current value symbols
+        /// </summary>
+        /// <returns></returns>
         public List<WorldstateSymbol> GetUnsatisfiedGoalValues() {
             return _unsatisfiedGoalValues;
         }
 
+        /// <summary>
+        ///     get the heuristic value
+        /// </summary>
+        /// <returns></returns>
         public int GetHeuristic() {
             return _heuristic;
         }
 
         /// <summary>
-        ///     get the count of unsatisfied symbols
+        ///     check if there are unsatisfied symbols
         /// </summary>
         /// <returns></returns>
         public bool HasUnsatisfiedProperties() {
@@ -92,17 +100,16 @@ namespace GoapCommon.Implementation {
             _unsatisfiedGoalValues = unsatisfiedGoalValues;
         }
 
-
         public override string ToString() {
-            string view = System.Environment.NewLine + "GOAL VALUES: ";
-            foreach (var value in _goalValues) {
+            string view = Environment.NewLine + "GOAL VALUES: ";
+            foreach (WorldstateSymbol value in _goalValues) {
                 view += value.ToString() + " ";
             }
-            view += System.Environment.NewLine + "CURR VALUES: ";
-            foreach (var value in _currValues){
+            view += Environment.NewLine + "CURR VALUES: ";
+            foreach (WorldstateSymbol value in _currValues) {
                 view += value.ToString() + " ";
             }
-            view += System.Environment.NewLine;
+            view += Environment.NewLine;
             return view;
         }
 

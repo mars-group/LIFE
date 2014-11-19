@@ -6,13 +6,6 @@ using GoapCommon.Interfaces;
 
 namespace GoapCommon.Abstract {
 
-    /// <summary>
-    ///     nochmal überlegen welche Methoden auf den allgemeinen Objekten ausgeführt werden müssen
-    ///     diese können allerdings auch per interface angeboten werden
-    ///     für die abstrakte klasse ist allerdings interessant, welche methoden immer gleich sind für alle unterklassen und
-    ///     wie den programmierern der actions somit arbeit abgenommen werden kann
-    ///     auch das graphensystem sollte nur die methoden der abtracten benutzen
-    /// </summary>
     public abstract class AbstractGoapAction : IGoapAction, IEquatable<AbstractGoapAction> {
         /// <summary>
         ///     get the immutable list of preconditions
@@ -68,7 +61,7 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
-        ///     create a new list of cloned worldstates based on the sourceWorldstate
+        ///     create a new list of worldstates based on the sourceWorldstate
         ///     without the elements with same type in effect list and add effect list
         /// </summary>
         /// <param name="sourceWorldState"></param>
@@ -89,7 +82,8 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
-        ///     override this method if there are any conditions for execution exect the precondition symbols of action
+        ///     override this method if there are any conditions for execution exect
+        ///     the precondition symbols of action
         /// </summary>
         /// <returns></returns>
         public virtual bool ValidateContextPreconditions() {
@@ -97,7 +91,8 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
-        ///     override this method if there are any effects at execution except the effect symbols of action
+        ///     override this method if there are any effects at execution except
+        ///     the effect symbols of action
         /// </summary>
         /// <returns></returns>
         public virtual bool ExecuteContextEffects() {
@@ -105,6 +100,7 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
+        ///     override this method if there are any calculations for costs or other value.
         ///     the costs are used as way costs for the created edges in the graph
         /// </summary>
         /// <returns></returns>
@@ -113,13 +109,8 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
-        ///     TODO wird noch nicht im Graphaufbau genutzt - fragliche sinnhaftigkeit - a stern wird verfälscht
+        ///     called from agent, manipulate world of agent
         /// </summary>
-        /// <returns></returns>
-        public virtual int GetPriority() {
-            return 1;
-        }
-
         public abstract void Execute();
 
         /// <summary>
@@ -158,7 +149,7 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
-        ///     check if effects of action are equal to the given symbol list
+        ///     check if effects of action satisfy the given symbol list
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>

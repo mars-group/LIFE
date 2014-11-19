@@ -5,21 +5,33 @@ using GoapCommon.Exceptions;
 using GoapCommon.Interfaces;
 
 namespace GoapGraphConnector.SimpleGraph {
-
+    /// <summary>
+    ///     hold the information of the build graph in search process.
+    /// </summary>
     public class Map {
         private readonly List<IGoapNode> _vertices;
         private readonly List<IGoapEdge> _edges;
 
-        public Map(List<IGoapNode> vertices, List<IGoapEdge> edges) {
-            _vertices = vertices;
-            _edges = edges;
+        
+        public Map(IGoapNode rootNode) {
+            _vertices = new List<IGoapNode> { rootNode };
+            _edges = new List<IGoapEdge>() ;
         }
 
+        /// <summary>
+        ///     add an edge to the graph.
+        ///     if source or target are missing add them to graph, too.
+        /// </summary>
+        /// <param name="edge"></param>
         public void AddEdge(IGoapEdge edge) {
             MaintainConsistence(edge);
             _edges.Add(edge);
         }
 
+        /// <summary>
+        ///     ensure that every source or target node of an inserted edge is in the graph.
+        /// </summary>
+        /// <param name="addedEdge"></param>
         private void MaintainConsistence(IGoapEdge addedEdge) {
             if (!ContainsVertex(addedEdge.GetSource())) {
                 AddVertex(addedEdge.GetSource());
@@ -29,13 +41,22 @@ namespace GoapGraphConnector.SimpleGraph {
             }
         }
 
+        /// <summary>
+        ///     add the vertex if not already in the list
+        /// </summary>
+        /// <param name="vertex"></param>
         public void AddVertex(IGoapNode vertex) {
             if (!_vertices.Contains(vertex)) {
                 _vertices.Add(vertex);
             }
         }
 
-        public bool ContainsVertex(IGoapNode vertex) {
+        /// <summary>
+        ///     check if vertex list of graph contains vertex
+        /// </summary>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
+        private bool ContainsVertex(IGoapNode vertex) {
             return _vertices.Contains(vertex);
         }
 
@@ -47,8 +68,14 @@ namespace GoapGraphConnector.SimpleGraph {
             return text;
         }
 
-
-        public List<IGoapEdge> GetEdgesBySourceAndTarget(IGoapNode source, IGoapNode target) {
+        /// <summary>
+        ///     graph may be a multigraph. so there may be parallel edges. 
+        ///     get all edges by given source and target node.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        private List<IGoapEdge> GetEdgesBySourceAndTarget(IGoapNode source, IGoapNode target) {
             if (!ContainsVertex(source) || !ContainsVertex(target)) {
                 throw new GraphException("source or target of edge not available in graph");
             }
@@ -66,12 +93,23 @@ namespace GoapGraphConnector.SimpleGraph {
             return query.First();
         }
 
-
+        /// <summary>
+        ///     graph may be a multigraph. so there may be parallel edges. 
+        ///     get always the cheapest edge by given source and target node. 
+        /// </summary>
+        /// <param name="sourceVertex"></param>
+        /// <param name="targetVertex"></param>
+        /// <returns></returns>
         public int GetcheapestWayCost(IGoapNode sourceVertex, IGoapNode targetVertex) {
             IGoapEdge edge = GetCheapestEdgeBySourceAndTarget(sourceVertex, targetVertex);
             return edge.GetCost();
         }
 
+        /// <summary>
+        ///     get the adjacent vertices by outgoing edges of given vertex
+        /// </summary>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
         public List<IGoapNode> GetReachableAdjcentVertices(IGoapNode vertex) {
             List<IGoapEdge> outEdges = GetEdgesBySourceVertex(vertex);
 
@@ -83,7 +121,7 @@ namespace GoapGraphConnector.SimpleGraph {
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        public List<IGoapEdge> GetEdgesBySourceVertex(IGoapNode vertex) {
+        private List<IGoapEdge> GetEdgesBySourceVertex(IGoapNode vertex) {
             return _edges.Where(edge => edge.GetSource().Equals(vertex)).ToList();
         }
     }

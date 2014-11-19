@@ -25,9 +25,6 @@ namespace GoapActionSystem.Implementation {
             return 0;
         }
 
-        public override int GetPriority() {
-            return 0;
-        }
     }
 
 }

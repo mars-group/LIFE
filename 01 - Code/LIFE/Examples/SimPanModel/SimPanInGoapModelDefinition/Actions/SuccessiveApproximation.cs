@@ -21,11 +21,7 @@ namespace SimPanInGoapModelDefinition.Actions {
         public override int GetExecutionCosts() {
             throw new NotImplementedException();
         }
-
-        public override int GetPriority() {
-            throw new NotImplementedException();
-        }
-
+        
         public override void Execute() {
             throw new NotImplementedException();
         }

@@ -4,6 +4,9 @@ using GoapCommon.Interfaces;
 
 namespace GoapCommon.Implementation {
 
+    /// <summary>
+    ///     used in graph for plan creation
+    /// </summary>
     public class Edge : IGoapEdge, IEquatable<Edge> {
         private readonly IGoapNode _source;
         private readonly IGoapNode _target;
