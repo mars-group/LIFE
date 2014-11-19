@@ -44,6 +44,14 @@ namespace LayerAPI.Interfaces.GIS
         /// <returns>A Coordinate which has been transformed to the world space.</returns>
         /// <exception cref="GISLayerHasNoDataException"></exception>
         Coordinate TransformToWorld(double X, double Y);
+
+        /// <summary>
+        /// Returns the bounding box of the entire layer. 
+        /// </summary>
+        /// <returns>An Envelope object containing all relevant information</returns>
+        /// <exception cref="GISLayerHasNoDataException">Throws GISLayerHasNoDataException if no
+        /// GIS data file has been loaded before calling.</exception>
+        Envelope GetEnvelope();
     }
 
     /// <summary>
