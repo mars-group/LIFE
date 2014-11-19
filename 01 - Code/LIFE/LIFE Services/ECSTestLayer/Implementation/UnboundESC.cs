@@ -22,13 +22,13 @@
 
         #region IUnboundESC Members
 
-        public bool Add(ISpatialEntity entity, GenericAgentArchitectureCommon.TransportTypes.TVector position, TVector direction = default(TVector)) {
+        public bool Add(ISpatialEntity entity, TVector position, TVector direction = default(TVector)) {
             MovementResult result = Move(entity, position, direction);
             if (result.Success) _entities.Add(entity);
             return result.Success;
         }
 
-        public bool AddWithRandomPosition(ISpatialEntity entity, TVector min, GenericAgentArchitectureCommon.TransportTypes.TVector max, bool grid) {
+        public bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid) {
             for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {
                 TVector position = GenerateRandomPosition(min, max, grid);
                 bool result = Add(entity, position);
@@ -69,6 +69,7 @@
             return new MovementResult();
         }
 
+        //TODO This function call is not thread safe. Enumeration may change during read access!
         public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
             foreach (ISpatialEntity entity in _entities) {

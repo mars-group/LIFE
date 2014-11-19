@@ -9,6 +9,8 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
+using ESCTestLayer.Implementation;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -32,14 +34,16 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Grassland reference.</param>
-    public Sheep(IExecution exec, Grassland env) : base(exec, env, null) {
+    /// <param name="pos">Initial agent position.</param>
+    public Sheep(IExecution exec, Grassland env, Vector pos = null) : base(exec, env, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
       // Add perception sensor.
-      PerceptionUnit.AddSensor(new DataSensor(
-        this, env, new RadialHalo(Data, InformationTypes.AllAgents, 8))
-      );
+      ISpecificator halo;
+      if (env.UsesESC) halo = new SpatialHalo(MyGeometryFactory.Rectangle(6, 6), InformationTypes.AllAgents);
+      else             halo = new RadialHalo(Data, InformationTypes.AllAgents, 8);
+      PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
 
       // Add movement module.
       Mover = new GridMover(env, this, Data);

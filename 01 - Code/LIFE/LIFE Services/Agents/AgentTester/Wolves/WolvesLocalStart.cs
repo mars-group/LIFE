@@ -2,7 +2,6 @@
 using AgentTester.Wolves.Agents;
 using AgentTester.Wolves.Environment;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
@@ -81,11 +80,30 @@ namespace AgentTester.Wolves {
     ///   Start the executor!
     /// </summary>
     public static void Main() {
+     
       var exec = new SeqExec(true);
-      var env = CreateWolvesScenario(exec, 20, 10, 1, false);
+      var env = CreateWolvesScenario(exec, 20, 10, 1, true);
       var view = CreateWolvesView(env);
       ConsoleView.LcRedirect = false;
       exec.Run(00, view);
+      
+       
+      /*
+      IExecution exec = new SeqExec(false);
+      Grassland   env = new Grassland(true, new Vector(30, 20), true);
+      
+      Sheep agent1 = new Sheep(exec, env, new Vector(20, 10));
+      Console.WriteLine("Pos: " + agent1.GetPosition());
+      Console.WriteLine("Dir: " + (int) agent1.GetDirection().Yaw + "°, " + (int) agent1.GetDirection().Pitch + "°");
+      Console.WriteLine("Dim: " + agent1.GetDimension()+"\n");
+
+      env.MoveObject(agent1, new Vector(1,0));
+
+      Console.WriteLine("Pos: " + agent1.GetPosition());
+      Console.WriteLine("Dir: " + (int) agent1.GetDirection().Yaw + "°, " + (int) agent1.GetDirection().Pitch + "°");
+      Console.WriteLine("Dim: " + agent1.GetDimension()+"\n");
+
+      Console.ReadLine(); */
     }
   }
 }

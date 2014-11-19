@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AgentTester.Wolves.Agents;
 using DalskiAgent.Environments;
-using DalskiAgent.Movement;
 using DalskiAgent.Perception;
 using ESCTestLayer.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
@@ -18,7 +17,7 @@ namespace AgentTester.Wolves.Environment {
   class Grassland : IEnvironment, IGenericDataSource {
 
     private readonly IEnvironment _env;   // Environment implementation.
-
+    public readonly bool UsesESC;         // Boolean to indicate ESC usage. 
 
     /// <summary>
     ///   Create a new grassland.
@@ -27,6 +26,7 @@ namespace AgentTester.Wolves.Environment {
     /// <param name="boundaries">Positive extent of the environment.</param>
     /// <param name="isGrid">Shall a grid be used?</param>
     public Grassland(bool useESC, Vector boundaries, bool isGrid) {
+      UsesESC = useESC;
       if (useESC) _env = new ESCAdapter(new UnboundESC(), boundaries, isGrid);  
       else        _env = new Environment2D(boundaries, isGrid);
     }
@@ -39,7 +39,11 @@ namespace AgentTester.Wolves.Environment {
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
     public object GetData(ISpecificator spec) {
-      
+
+      // ESC indirection.
+      if (UsesESC) return ((ESCAdapter) _env).GetAllObjects();
+
+      // Otherwise use own data source implementation.
       if (!(spec is Halo)) throw new Exception(
         "[Grassland] Error on GetData() specificator: Not of type 'Halo'!");
       var halo = (Halo) spec;
@@ -72,8 +76,9 @@ namespace AgentTester.Wolves.Environment {
     /// <returns>A vector representing a free position.</returns>
     public Vector GetRandomPosition() {
       if (_env is Environment2D) return ((Environment2D) _env).GetRandomPosition();
-      throw new Exception(
-        "[[Grassland] Error on GetRandomPosition(): Not implemented for ESC version!");
+      return new Vector(10,10);  //TODO
+      //throw new Exception(
+      //  "[[Grassland] Error on GetRandomPosition(): Not implemented for ESC version!");
     }
 
 

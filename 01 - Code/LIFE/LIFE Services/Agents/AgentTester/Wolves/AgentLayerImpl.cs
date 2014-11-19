@@ -43,7 +43,7 @@ namespace AgentTester.Wolves {
     public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
       // Create the environment, the execution container and an agent spawner.
-      _env = new Grassland(false, new Vector(30, 20), true);
+      _env = new Grassland(true, new Vector(30, 20), true);
       _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);      
       _spawner = new AgentSpawner(_exec, _env);  
 

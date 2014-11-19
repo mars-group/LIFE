@@ -57,8 +57,14 @@ namespace DalskiAgent.Environments {
     public Direction Direction {
       get {
         var dir = new Direction();
-        dir.SetPitch(_data.Direction.Pitch);
-        dir.SetYaw(_data.Direction.Yaw);
+        if (_data != null) {
+          dir.SetPitch(_data.Direction.Pitch);
+          dir.SetYaw(_data.Direction.Yaw);
+        }
+        else {
+          dir.SetPitch(_geometry.Direction.Pitch);
+          dir.SetYaw(_geometry.Direction.Yaw);          
+        }
         return dir;
       }
     }
@@ -69,9 +75,18 @@ namespace DalskiAgent.Environments {
     /// </summary>
     public Vector Dimension {
       get {
-        var x = (float) _data.Dimension.X;
-        var y = (float) _data.Dimension.Y;
-        var z = (float) _data.Dimension.Z;
+        float x, y, z;
+        if (_data != null) {
+          x = _data.Dimension.X;
+          y = _data.Dimension.Y;
+          z = _data.Dimension.Z;
+        }
+        else {
+          x = (float) _geometry.Geometry.EnvelopeInternal.Width;
+          y = (float) _geometry.Geometry.EnvelopeInternal.Height;
+          z = 0f;
+        }
+
         return new Vector(x, y, z);
       } 
     }

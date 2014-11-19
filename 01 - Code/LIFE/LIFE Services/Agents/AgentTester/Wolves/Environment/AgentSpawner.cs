@@ -7,6 +7,8 @@ using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Perception;
+using ESCTestLayer.Implementation;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Environment {
@@ -33,7 +35,12 @@ namespace AgentTester.Wolves.Environment {
       _env = env;
       _exec = exec;
       _random = new Random();
-      PerceptionUnit.AddSensor(new DataSensor(this, env, new OmniHalo(InformationTypes.AllAgents)));
+
+      // Add perception sensor.
+      ISpecificator halo;
+      if (env.UsesESC) halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
+      else             halo = new OmniHalo(InformationTypes.AllAgents);
+      PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
       TickCnt = 1;
       Init();
     }
@@ -52,10 +59,10 @@ namespace AgentTester.Wolves.Environment {
       var wolves = raw.OfType< Wolf>().Count();
 
       // Output numbers.
-      //ConsoleView.AddMessage("["+GetTick()+"] Gras "+grass+", Schafe "+sheeps+", Wölfe "+wolves, ConsoleColor.DarkGray);
+      ConsoleView.AddMessage("["+GetTick()+"] Gras "+grass+", Schafe "+sheeps+", Wölfe "+wolves, ConsoleColor.DarkGray);
 
       // Grass spawning
-      var create = _random.Next(50 + (int)(grass*2)) < 20;
+      var create = _random.Next(50 + grass*2) < 20;
       if (create) {
         var g = new Grass(_exec, _env);
         ConsoleView.AddMessage("["+GetTick()+"] Neues Gras auf Position "+g.GetPosition(), ConsoleColor.Cyan);
