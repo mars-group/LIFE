@@ -76,6 +76,7 @@
     <Compile Include="Agents\Reasoning\Pathfinding\TargetListType.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Logging\AgentLogger.cs" />
+    <Compile Include="Util\Math\Distribution.cs" />
     <Compile Include="Util\ScenarioType.cs" />
     <Compile Include="Util\Math\IUnivariateRealFunction.cs" />
     <Compile Include="Environment\ObstacleEnvironment.cs" />

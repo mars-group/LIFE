@@ -3,6 +3,7 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using PedestrianModel.Agents;
+using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Util {
 
@@ -34,7 +35,13 @@ namespace PedestrianModel.Util {
                 Vector targetPos = new Vector
                     ((float) Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         (float) Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
-                new Pedestrian(exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos);
+
+                float maxVelocity;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos, maxVelocity);
             }
         }
 
@@ -106,7 +113,13 @@ namespace PedestrianModel.Util {
                 Vector targetPos = new Vector
                     ((float) Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         (float) Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
-                new Pedestrian(exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos);
+
+                float maxVelocity;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos, maxVelocity);
             }
         }
 
@@ -158,7 +171,13 @@ namespace PedestrianModel.Util {
                 Vector targetPos = new Vector
                     ((float) Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         (float) Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
-                new Pedestrian(exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos);
+
+                float maxVelocity;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos, maxVelocity);
             }
         }
 
@@ -200,7 +219,13 @@ namespace PedestrianModel.Util {
                 Vector targetPos = new Vector
                     ((float) Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         (float) Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
-                new Pedestrian(exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos);
+
+                float maxVelocity;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos, maxVelocity);
             }
         }
 
@@ -260,8 +285,20 @@ namespace PedestrianModel.Util {
                 Vector targetPos = new Vector
                     ((float) Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         (float) Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
-                new Pedestrian(exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos);
-                new Pedestrian(exec, env, "sim0", targetPos, Config.PedestrianDimensions, new Direction(), startPos);
+
+                float maxVelocity1;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity1 = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity1 = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos, maxVelocity1);
+
+                float maxVelocity2;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity2 = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity2 = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", targetPos, Config.PedestrianDimensions, new Direction(), startPos, maxVelocity2);
             }
         }
 
@@ -307,8 +344,20 @@ namespace PedestrianModel.Util {
                 Vector targetPos = new Vector
                     ((float) Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         (float) Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
-                new Pedestrian(exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos);
-                new Pedestrian(exec, env, "sim0", targetPos, Config.PedestrianDimensions, new Direction(), startPos);
+
+                float maxVelocity1;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity1 = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity1 = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", startPos, Config.PedestrianDimensions, new Direction(), targetPos, maxVelocity1);
+
+                float maxVelocity2;
+                if (Config.IsGaussianNormalDistribution)
+                    maxVelocity2 = (float) Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
+                else maxVelocity2 = Config.MaxVelocity;
+                new Pedestrian
+                    (exec, env, "sim0", targetPos, Config.PedestrianDimensions, new Direction(), startPos, maxVelocity2);
             }
         }
 

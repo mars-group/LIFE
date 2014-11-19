@@ -19,12 +19,13 @@ namespace PedestrianModel.Agents {
     ///     A pedestrian agent which moves to a target position using wayfinding and collision avoidance.
     /// </summary>
     public class Pedestrian : SpatialAgent, IAgentLogic {
+        public string Name { get; private set; }
 
-        public string Name { get; set; }
+        public float MaxVelocity { get; private set; }
 
-        public float MaxVelocity { get { return _maxVelocity; } set { _maxVelocity = value; } }
+        public string SimulationId { get; private set; }
 
-        public IList<Vector> TargetPositions { get { return _targetPositions; } set { _targetPositions = value; } }
+        public IList<Vector> TargetPositions { get { return _targetPositions; } }
 
         public ReactiveBehaviorPipeline MovementPipeline { get { return _movementPipeline; } }
 
@@ -35,7 +36,6 @@ namespace PedestrianModel.Agents {
 
         private readonly DirectMover _mover;
 
-        private readonly string _simulationId;
         private readonly ReactiveBehaviorPipeline _movementPipeline = new ReactiveBehaviorPipeline();
         private readonly IList<Waypoint> _waypoints = new List<Waypoint>();
 
@@ -44,12 +44,11 @@ namespace PedestrianModel.Agents {
         /// </summary>
         private readonly IList<Vector> _positionTracker = new List<Vector>();
 
+        private readonly IList<Vector> _targetPositions;
+
         private bool _preparedFirstStep;
 
-        private float _maxVelocity = 1.34f; // Maximum movement velocity of agent        
-
         private Vector _startPosition;
-        private IList<Vector> _targetPositions;
         private RaytracingGraph _pathfindingSearchGraph;
         private IPathfinder<Vector> _pathfinder;
 
@@ -60,14 +59,15 @@ namespace PedestrianModel.Agents {
         /// <summary>
         ///     Create a new pedestrian agent.
         /// </summary>
-        /// <param name="exec"></param>
+        /// <param name="exec">Executer.</param>
         /// <param name="env">Environment reference.</param>
         /// <param name="simulationId">ID of the simulation which contains the agent.</param>
         /// <param name="position">Initial position.</param>
         /// <param name="dimension">Initial dimension.</param>
         /// <param name="direction">Initial direction.</param>
         /// <param name="targetPosition">Target position.</param>
-        /// <param name="name"></param>
+        /// <param name="maxVelocity">Maximum Velocity.</param>
+        /// <param name="name">Name.</param>
         public Pedestrian
             (IExecution exec,
                 IEnvironment env,
@@ -76,11 +76,13 @@ namespace PedestrianModel.Agents {
                 Vector dimension,
                 Direction direction,
                 Vector targetPosition,
+                float maxVelocity,
                 String name = "pedestrian")
             : base(exec, env, position, dimension, direction) {
             IEnvironment environment = env;
+            MaxVelocity = maxVelocity;
             Name = name;
-            _simulationId = simulationId;
+            SimulationId = simulationId;
 
             // Add perception sensor for obstacles.
             PerceptionUnit.AddSensor
@@ -165,7 +167,7 @@ namespace PedestrianModel.Agents {
             object rawObstaclesData = PerceptionUnit.GetData((int) InformationType.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>) rawObstaclesData;
             _pathfindingSearchGraph = new RaytracingGraph
-                (_simulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0f, 0.28f));
+                (SimulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0f, 0.28f));
             _pathfinder = new AStarPathfinder<Vector>(_pathfindingSearchGraph);
 
             CreateMovePlan(_targetPositions);
@@ -186,15 +188,11 @@ namespace PedestrianModel.Agents {
             // first check if the current waypoint is reached
             // remove all waypoints from top of the queue until we have one that is not reached
             while (_waypoints.Count > 0) {
-                if (_waypoints[0].IsReached(this)) {
-                    _waypoints.RemoveAt(0);
-                }
+                if (_waypoints[0].IsReached(this)) _waypoints.RemoveAt(0);
                 else break;
             }
 
-            if (_waypoints.Count > 0) {
-                directMovementAction = _waypoints[0].Approach(this, Mover);
-            }
+            if (_waypoints.Count > 0) directMovementAction = _waypoints[0].Approach(this, Mover);
             else {
                 // code only executed if looped or more than 1 target!
                 if (Config.TargetListType == TargetListType.SequentialLoop
@@ -314,7 +312,7 @@ namespace PedestrianModel.Agents {
 
             double avgDistance = sumDistance/PositionTrackerSize;
 
-            double movingSpeed = _maxVelocity;
+            double movingSpeed = MaxVelocity;
             double estDistance = movingSpeed*0.2;
 
             return avgDistance < estDistance;
