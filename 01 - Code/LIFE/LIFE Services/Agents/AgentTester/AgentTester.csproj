@@ -55,9 +55,10 @@
     <Compile Include="Wolves\AgentLayerImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wolves\Agents\Grass.cs" />
-    <Compile Include="Wolves\Agents\Grassland.cs" />
     <Compile Include="Wolves\Agents\Sheep.cs" />
+    <Compile Include="Wolves\Environment\AgentSpawner.cs" />
     <Compile Include="Wolves\Agents\Wolf.cs" />
+    <Compile Include="Wolves\Environment\Grassland.cs" />
     <Compile Include="Wolves\Interactions\EatInteraction.cs" />
     <Compile Include="Wolves\Interactions\GrowInteraction.cs" />
     <Compile Include="Wolves\Interactions\ProcreateInteraction.cs" />
@@ -67,9 +68,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Wolves\Reasoning\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\CommonTypes\CommonTypes.csproj">
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>

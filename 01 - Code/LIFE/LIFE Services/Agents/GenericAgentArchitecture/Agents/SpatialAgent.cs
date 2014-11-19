@@ -2,6 +2,7 @@
 using DalskiAgent.Execution;
 using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
+using GenericAgentArchitectureCommon.Datatypes;
 
 namespace DalskiAgent.Agents {
 

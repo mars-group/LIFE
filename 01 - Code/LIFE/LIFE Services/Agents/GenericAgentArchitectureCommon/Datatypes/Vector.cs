@@ -1,7 +1,7 @@
 ﻿using System;
 using CommonTypes.TransportTypes;
 
-namespace DalskiAgent.Movement {
+namespace GenericAgentArchitectureCommon.Datatypes {
     
   /// <summary>
   ///   This class serves as a representation of a vector or vertex.

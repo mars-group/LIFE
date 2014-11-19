@@ -4,6 +4,7 @@ using CommonTypes.TransportTypes;
 using System.Collections.Generic;
 using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
@@ -30,13 +31,20 @@ namespace DalskiAgent.Environments {
       }
       public Vector GetPosition() {
         return new Vector(        
-          (float) Geometry.Coordinate.X,
-          (float) Geometry.Coordinate.Y,
-          (float) Geometry.Coordinate.Z);
+          (float) Geometry.Centroid.Coordinate.X,
+          (float) Geometry.Centroid.Coordinate.Y,
+          (float) Geometry.Centroid.Coordinate.Z);
       }
     }
+
     /*  OBJEKT; DAS VON ISPATIAL ERBT UND BOUNDS SOWIE RÜCKGABEMETHODEN 
      *  FÜR POS UND DIRection DRINNE HAT. dataaccessor anpassen dafür
+     *  
+     * - Centroid.Coordinate   // Position
+     * - Direction dir         // paßt in das IGeometry nicht rein
+     * - abfragen über (ISpatialEntity Instanz).Geometry
+     * 
+     * Factoryklasse für IGeometry-Quader
      */
 
 

@@ -1,4 +1,5 @@
-﻿using CommonTypes.TransportTypes;
+﻿using System;
+using CommonTypes.TransportTypes;
 using DalskiAgent.Environments;
 
 namespace DalskiAgent.Perception {
@@ -15,9 +16,9 @@ namespace DalskiAgent.Perception {
     ///   Create a circular halo.
     /// </summary>
     /// <param name="data">The agent's R/O data container.</param>
-    /// <param name="infType">The information type to query.</param>
+    /// <param name="infType">The information type to perceive.</param>
     /// <param name="radius">The radius describing the range of this halo.</param>
-    public RadialHalo(DataAccessor data, int infType, float radius) : base(data, infType) {
+    public RadialHalo(DataAccessor data, Enum infType, float radius) : base(data, infType) {
       _radius = radius;
     }
 

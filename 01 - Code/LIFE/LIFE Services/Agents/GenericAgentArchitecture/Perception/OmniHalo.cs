@@ -1,4 +1,5 @@
-﻿using CommonTypes.TransportTypes;
+﻿using System;
+using CommonTypes.TransportTypes;
 
 namespace DalskiAgent.Perception {
     
@@ -11,8 +12,8 @@ namespace DalskiAgent.Perception {
     /// <summary>
     ///   Create a halo that is capable of sensing everything.
     /// </summary>
-    /// <param name="informationType">The information type to query.</param>
-    public OmniHalo(int informationType) : base(null, informationType) { }
+    /// <param name="informationType">The information type to perceive.</param>
+    public OmniHalo(Enum informationType) : base(null, informationType) { }
 
 
     /// <summary>

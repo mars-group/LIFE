@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datatypes\AABB.cs" />
+    <Compile Include="Datatypes\Direction.cs" />
     <Compile Include="Datatypes\SpatialHalo.cs" />
+    <Compile Include="Datatypes\Vector.cs" />
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Interfaces\IFact.cs" />
     <Compile Include="Interfaces\IGenericDataSource.cs" />

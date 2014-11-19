@@ -1,4 +1,5 @@
 ﻿using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Datatypes;
 using GeoAPI.Geometries;
 
 namespace DalskiAgent.Environments {
