@@ -87,6 +87,15 @@ namespace LIFEGisLayerService.Implementation
             return _map.ImageToWorld(new PointF((float) X,(float)Y));
         }
 
+        public Coordinate TransformToImage(double X, double Y) {
+            if (!_map.Layers.Any())
+            {
+                throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
+            }
+            var p = _map.WorldToImage(new Coordinate(X, Y));
+            return new Coordinate(p.X, p.Y);
+        }
+
         public Envelope GetEnvelope() {
             if (!_map.Layers.Any())
             {

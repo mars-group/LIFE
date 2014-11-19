@@ -46,6 +46,20 @@ namespace LayerAPI.Interfaces.GIS
         Coordinate TransformToWorld(double X, double Y);
 
         /// <summary>
+        /// Transforms the provided X and Y into an image coordinate.
+        /// This is only usefull if the GIS data is coded in world coordinates, but you 
+        /// are working with relative X,Y (and Z) coordinats in your simulation.
+        /// Be aware that your relative coordinate system must match the scale of the
+        /// loaded GIS date. Otherwise an intersection will most likely not return anything
+        /// or at least not what you expect!
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <returns>A Coordinate which has been transformed to the world space.</returns>
+        /// <exception cref="GISLayerHasNoDataException"></exception>
+        Coordinate TransformToImage(double X, double Y);
+
+        /// <summary>
         /// Returns the bounding box of the entire layer. 
         /// </summary>
         /// <returns>An Envelope object containing all relevant information</returns>
