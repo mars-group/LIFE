@@ -28,7 +28,7 @@ namespace LayerAPI.Interfaces {
         /// </summary>
         /// <returns>True if init finished successfully, false otherwise</returns>
         Boolean InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
-
+        
         /// <summary>
         ///     The current Tick this layer is in
         /// </summary>
