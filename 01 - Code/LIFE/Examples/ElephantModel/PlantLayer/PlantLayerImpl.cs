@@ -19,8 +19,9 @@ namespace PlantLayer
     {
 		private ITwoDimEnvironment<Plant> environment;
 		private List<Plant> _plants;
+	    private long _currentTick;
 
-        public PlantLayerImpl()
+	    public PlantLayerImpl()
         {
 
         }
@@ -43,11 +44,14 @@ namespace PlantLayer
 			Console.WriteLine ("PlantLayer just finished initializing!");
             return true;
         }
-
-        public long GetCurrentTick() {
-            throw new NotImplementedException();
+        public long GetCurrentTick()
+        {
+            return _currentTick;
         }
-
+        public void SetCurrentTick(long currentTick)
+        {
+            this._currentTick = currentTick;
+        }
 		public void Stomp (double x, double y, Size size, double force)
         {
 			// check if something is there

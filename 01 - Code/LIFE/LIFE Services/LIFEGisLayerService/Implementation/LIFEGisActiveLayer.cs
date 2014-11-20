@@ -17,6 +17,7 @@ namespace LIFEGisLayerService.Implementation
 
         private ICanQueryLayer _layer;
         private readonly Map _map;
+        private long _currentTick;
 
         protected LIFEGisActiveLayer() {
             _map = new Map {
@@ -26,7 +27,12 @@ namespace LIFEGisLayerService.Implementation
 
         public abstract bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
-        public abstract long GetCurrentTick();
+        public long GetCurrentTick() {
+            return _currentTick;
+        }
+        public void SetCurrentTick(long currentTick) {
+            this._currentTick = currentTick;
+        }
 
         public abstract void Tick();
 
