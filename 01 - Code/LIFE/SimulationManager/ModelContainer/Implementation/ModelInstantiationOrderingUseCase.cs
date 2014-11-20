@@ -39,7 +39,7 @@ namespace ModelContainer.Implementation {
             // use AddinLoader from LIFEApi, because Mono.Addins may only load Plugins whose 
             // Interfaces originate from the Assembly they are attempted to be loaded from
             IAddinLoader addinLoader = AddinLoader.Instance;
-
+            
             var nodes = addinLoader.LoadAllLayers(description.Name);
             
             var modelStructure = new ModelStructure();

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using CommonTypes.TransportTypes;
 using System.Collections.Generic;
+using CommonTypes.TransportTypes;
 using DalskiAgent.Movement;
 using ESCTestLayer.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
+
 
 namespace DalskiAgent.Environments {
     

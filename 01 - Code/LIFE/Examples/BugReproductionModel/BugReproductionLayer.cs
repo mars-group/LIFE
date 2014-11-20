@@ -1,7 +1,7 @@
 ﻿using System;
 using LayerAPI.Interfaces;
 using Mono.Addins;
-using System.IO;
+
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -9,9 +9,9 @@ using System.IO;
 namespace BugReproductionModel
 {
 	[Extension(typeof (ISteppedLayer))]
-	public class ExampleLayer: ISteppedLayer
+	public class BugReproductionLayer: ISteppedLayer
 	{
-		public ExampleLayer ()
+		public BugReproductionLayer ()
 		{
 		}
 
@@ -31,9 +31,13 @@ namespace BugReproductionModel
 			return true;
 		}
 
-		public long GetCurrentTick() {
-			throw new NotImplementedException();
-		}
+	    public long GetCurrentTick() {
+	        throw new NotImplementedException();
+	    }
+
+	    public void SetCurrentTick(long currentTick) {
+	        throw new NotImplementedException();
+	    }
 	}
 }
 

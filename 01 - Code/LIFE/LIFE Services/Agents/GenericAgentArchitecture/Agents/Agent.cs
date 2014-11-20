@@ -3,6 +3,7 @@ using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Interfaces;
 using LayerAPI.Interfaces;
 
+
 namespace DalskiAgent.Agents {
 
   /// <summary>

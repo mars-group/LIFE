@@ -72,6 +72,10 @@ namespace AWRShowcase
             throw new System.NotImplementedException();
         }
 
+        public void SetCurrentTick(long currentTick) {
+            throw new NotImplementedException();
+        }
+
         public TTree GetTree()
         {
             return new TTree(_treeList.GetAllItems().ToArray()[_rand.Next(_treeList.Count)]);

@@ -132,6 +132,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNebulaAdapter", "OpenNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARSLocalStarter", "MARSLocalStarter\MARSLocalStarter.csproj", "{9F7FBE17-2E7D-4F79-947E-3DA2F0A41296}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForestLayer", "Examples\AWRShowcase\ForestLayer\ForestLayer.csproj", "{C9206FDB-F895-4F68-9422-5BD6B12E9727}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -432,10 +434,10 @@ Global
 		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}.Release|x86.ActiveCfg = Release|Any CPU
-		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Any CPU.Build.0 = Debug|x86
-		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|x86.ActiveCfg = Debug|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Debug|x86.Build.0 = Debug|x86
 		{07C0CD14-D301-44B4-8B1A-7FD5D68F03CB}.Release|Any CPU.ActiveCfg = Release|x86
@@ -550,9 +552,10 @@ Global
 		{D1FEB7B4-55CD-47D7-8828-5EE7B4C2DB95}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D1FEB7B4-55CD-47D7-8828-5EE7B4C2DB95}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D1FEB7B4-55CD-47D7-8828-5EE7B4C2DB95}.Release|x86.ActiveCfg = Release|Any CPU
-		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|x86.ActiveCfg = Debug|x86
 		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Debug|x86.Build.0 = Debug|x86
 		{0597696F-EAB7-43FC-9F5A-3E3DE9C4CBBB}.Release|Any CPU.ActiveCfg = Release|x86
@@ -630,6 +633,16 @@ Global
 		{9F7FBE17-2E7D-4F79-947E-3DA2F0A41296}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9F7FBE17-2E7D-4F79-947E-3DA2F0A41296}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9F7FBE17-2E7D-4F79-947E-3DA2F0A41296}.Release|x86.ActiveCfg = Release|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -684,6 +697,7 @@ Global
 		{6CB066D7-A187-4EDA-A059-44C6121FAC56} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 		{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81} = {21C88CD1-A41C-4908-B309-A33A2F23683B}
 		{B7C20AF5-5107-4E4E-B196-890EC2DA6030} = {B488B2F7-D268-41D3-B31D-CC0DF03F9F34}
+		{C9206FDB-F895-4F68-9422-5BD6B12E9727} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj

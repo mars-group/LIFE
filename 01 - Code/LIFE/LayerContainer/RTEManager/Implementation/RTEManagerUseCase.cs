@@ -113,7 +113,7 @@ namespace RTEManager.Implementation {
             var stopWatch = Stopwatch.StartNew();
 
             // set currentTick to all layers
-            Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
+          //  Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
             // visualize all visualizable layers
             _visualizationAdapter.VisualizeTick(_currentTick);

@@ -4,7 +4,6 @@ using LayerAPI.Interfaces;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
-using Mono.Addins;
 
 namespace LayerFactory.Implementation {
     internal class LayerFactoryUseCase : ILayerFactory {
