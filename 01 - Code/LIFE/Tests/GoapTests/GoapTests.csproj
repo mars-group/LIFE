@@ -74,7 +74,7 @@
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapModelTest\GoapModelTest.csproj">
-      <Project>{85340006-B073-47E6-9DBF-D0CB391A13AA}</Project>
+      <Project>{dd3b4dfd-fadf-43fc-a0eb-eea34d7c5c12}</Project>
       <Name>GoapModelTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapActionSystem\GoapActionSystem.csproj">

@@ -14,6 +14,7 @@ namespace GOAPLayer {
     public class GoapLayerImpl : ISteppedLayer {
         private const string NamespaceOfModelDefinition = "GOAPModelDefinition";
         private const int GoapWorkdAndPlayAgentCount = 1;
+        private long CurrentTick;
 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -31,7 +32,13 @@ namespace GOAPLayer {
         }
 
         public long GetCurrentTick() {
-            throw new NotImplementedException();
+            return CurrentTick;
+        }
+
+        public void SetCurrentTick(long currentTick)
+        {
+            CurrentTick = currentTick;
+
         }
 
         #endregion
