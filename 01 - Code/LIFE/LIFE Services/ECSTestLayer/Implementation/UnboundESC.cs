@@ -1,13 +1,15 @@
-﻿namespace ESCTestLayer.Implementation {
+﻿using GeoAPI.Geometries;
+using NetTopologySuite.Geometries.Utilities;
+
+namespace ESCTestLayer.Implementation {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using CommonTypes.TransportTypes;
     using Entities;
     using GenericAgentArchitectureCommon.Interfaces;
-    using GeoAPI.Geometries;
     using Interface;
-    using NetTopologySuite.Geometries.Utilities;
+
 
     public class UnboundESC : IUnboundESC {//TODO löschen funktioniert nicht mehr wegen MovementResult
         private const int MaxAttemps = 100;

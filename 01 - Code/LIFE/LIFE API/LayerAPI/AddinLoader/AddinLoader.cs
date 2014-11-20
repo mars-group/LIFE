@@ -62,6 +62,7 @@ namespace LayerAPI.AddinLoader {
         public ExtensionNodeList LoadAllLayers() {
             WaitForAddinManagerToBeInitialized();
             UpdateAddinRegistry();
+            
             return AddinManager.GetExtensionNodes(typeof(ISteppedLayer));
         }
 

@@ -109,8 +109,11 @@ namespace RTEManager.Implementation {
 
         public long AdvanceOneTick() {
             _isRunning = true;
-            _currentTick++;
+
             var stopWatch = Stopwatch.StartNew();
+
+            // set currentTick to all layers
+          //  Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
             // visualize all visualizable layers
             _visualizationAdapter.VisualizeTick(_currentTick);
@@ -128,6 +131,9 @@ namespace RTEManager.Implementation {
 
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
+            
+            // increase Tick counter
+            _currentTick++;
 
             // clean up all deleted tickClients
             Parallel.ForEach

@@ -17,6 +17,7 @@ namespace LIFEGisLayerService.Implementation
 
         private ICanQueryLayer _layer;
         private readonly Map _map;
+        private long _currentTick;
 
         protected LIFEGisActiveLayer() {
             _map = new Map {
@@ -26,7 +27,12 @@ namespace LIFEGisLayerService.Implementation
 
         public abstract bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
-        public abstract long GetCurrentTick();
+        public long GetCurrentTick() {
+            return _currentTick;
+        }
+        public void SetCurrentTick(long currentTick) {
+            this._currentTick = currentTick;
+        }
 
         public abstract void Tick();
 
@@ -76,6 +82,7 @@ namespace LIFEGisLayerService.Implementation
             // if we got to here, we've managed to load a layer.
             // so add it to the Map
             _map.Layers.Add(_layer);
+
         }
 
 
@@ -86,6 +93,23 @@ namespace LIFEGisLayerService.Implementation
             return _map.ImageToWorld(new PointF((float) X,(float)Y));
         }
 
+        public Coordinate TransformToImage(double X, double Y) {
+            if (!_map.Layers.Any())
+            {
+                throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
+            }
+            var p = _map.WorldToImage(new Coordinate(X, Y));
+            return new Coordinate(p.X, p.Y);
+        }
+
+        public Envelope GetEnvelope() {
+            if (!_map.Layers.Any())
+            {
+                throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
+            }
+            return _layer.Envelope;
+        }
+
         public FeatureDataSet GetDataByGeometry(IGeometry geometry)
         {
             if (!_map.Layers.Any())
@@ -93,6 +117,7 @@ namespace LIFEGisLayerService.Implementation
                 throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
             }
             FeatureDataSet fds = new FeatureDataSet();
+            
             _layer.ExecuteIntersectionQuery(geometry, fds);
             return fds;
         }

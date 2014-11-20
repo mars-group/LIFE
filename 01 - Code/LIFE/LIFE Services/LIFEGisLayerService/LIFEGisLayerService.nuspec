@@ -11,8 +11,12 @@
     <releaseNotes>Initial release</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>MARS, GIS layer, LIFEGISService</tags>
+    <dependencies>
+		<dependency id="Baseclass.Contrib.Nuget.Output" />
+	</dependencies>
   </metadata>
 	<files>
 		<file src="bin\Release\*.dll" target="lib\net45\"/>
+		<file src="..\..\Libraries\SharpMap\gdal\**" target="output\gdal"/>
 	</files>	
 </package>

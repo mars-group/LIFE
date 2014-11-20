@@ -1,9 +1,10 @@
-﻿namespace ESCTestLayer.Entities {
+﻿using CommonTypes.TransportTypes;
+
+namespace ESCTestLayer.Entities {
     #region Namespace imports
 
     using System.Collections.Generic;
     using System.Linq;
-    using CommonTypes.TransportTypes;
     using GenericAgentArchitectureCommon.Interfaces;
 
     #endregion

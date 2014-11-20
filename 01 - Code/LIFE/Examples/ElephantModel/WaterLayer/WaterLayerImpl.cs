@@ -19,8 +19,9 @@ namespace WaterLayer
 		private ITwoDimEnvironment<Waterhole> environment;
 
 		private List<Waterhole> _waterholes;
+	    private long _currentTick;
 
-        public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+	    public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
 			environment = new TwoDimEnvironmentUseCase<Waterhole>();
 			_waterholes = new List<Waterhole>();
 
@@ -47,9 +48,13 @@ namespace WaterLayer
 			return result;
 		}
 
-
-        public long GetCurrentTick() {
-            throw new NotImplementedException();
+        public long GetCurrentTick()
+        {
+            return _currentTick;
+        }
+        public void SetCurrentTick(long currentTick)
+        {
+            this._currentTick = currentTick;
         }
     }
 }

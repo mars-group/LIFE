@@ -19,10 +19,7 @@ namespace ExampleLayer {
 
 		private List<AgentSmith> _agents;
         private const int agentCount = 10000;
-         
-        public ExampleLayer() {
 
-        }
 
         public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             var _environment = new _2DEnvironment(100, 100);
@@ -42,6 +39,11 @@ namespace ExampleLayer {
             throw new NotImplementedException();
         }
 
+        public void SetCurrentTick(long currentTick) {
+            throw new NotImplementedException();
+        }
+
+
         public List<BasicVisualizationMessage> GetVisData() {
             var result = new ConcurrentBag<BasicVisualizationMessage>();
             result.Add(new TerrainDataMessage(100, 0, 100));
@@ -55,23 +57,20 @@ namespace ExampleLayer {
             return result.ToList();
         }
 
-
-
         public List<BasicVisualizationMessage> GetVisData(IGeometry geometry) {
-            throw new NotImplementedException();
+            return new List<BasicVisualizationMessage>();
         }
 
-
         public void Tick() {
-            Console.WriteLine("I am ExampleLayer and I got ticked");
+            Console.WriteLine("Hello from Tick");
         }
 
         public void PreTick() {
-            Console.WriteLine("I am ExampleLayer and I got PREticked");
+            Console.WriteLine("Hello from PreTick");
         }
 
         public void PostTick() {
-            Console.WriteLine("I am ExampleLayer and I got POSTticked");
+            Console.WriteLine("Hello from PostTick");
         }
     }
 }
