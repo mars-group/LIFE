@@ -44,6 +44,10 @@ namespace EventLayer {
             throw new NotImplementedException();
         }
 
+        public void SetCurrentTick(long currentTick) {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

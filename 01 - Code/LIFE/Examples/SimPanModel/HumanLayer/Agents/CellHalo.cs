@@ -18,8 +18,6 @@ namespace HumanLayer.Agents
             return Position.Equals(position);
         }
       
-        public override AABB GetAABB() {
-            throw new NotImplementedException();
-        }
+       
     }
 }

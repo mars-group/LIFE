@@ -48,6 +48,10 @@ namespace HumanLayer {
             return 0;
         }
 
+        public void SetCurrentTick(long currentTick) {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }
