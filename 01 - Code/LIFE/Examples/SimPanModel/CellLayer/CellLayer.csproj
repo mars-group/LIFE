@@ -35,12 +35,26 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\Libraries\MonoAddins\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Addins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Mono.Addins.1.1\lib\Mono.Addins.dll</HintPath>
+    <Reference Include="Mono.Addins">
+      <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Addins.CecilReflector">
+      <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.CecilReflector.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Addins.Gui">
+      <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.Gui.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Addins.MSBuild">
+      <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.MSBuild.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Addins.Setup">
+      <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.Setup.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
