@@ -1,8 +1,11 @@
 ﻿using System;
-using System.Runtime.Serialization;
+using System.Collections.Generic;
+using System.Linq;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
+using GoapCommon.Implementation;
 using GoapModelTest.Actions;
+using GoapModelTest.Worldstates;
 using NUnit.Framework;
 using TypeSafeBlackboard;
 
@@ -38,6 +41,11 @@ namespace GoapTests {
                 ("AgentTestSearchDepth", "GoapModelTest", new Blackboard());
         }
 
+        private static bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {
+            return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
+                    potentiallySubSet.Count());
+        }
+
         [Test]
         public void FindAssemblyAndClassTest() {
             CreateGoapActionSystems();
@@ -57,14 +65,12 @@ namespace GoapTests {
 
         [Test]
         public void ReturnActionCorrectTest() {
-
-            //var nextAction1 = _goapActionSystem1.GetNextAction();
-            var nextAction2 = _goapActionSystem2.GetNextAction();
-            //Assert.True(nextAction1.Equals(_actionGetToy));
+            AbstractGoapAction nextAction1 = _goapActionSystem1.GetNextAction();
+            AbstractGoapAction nextAction2 = _goapActionSystem2.GetNextAction();
+            Assert.True(nextAction1.Equals(_actionGetToy));
             Assert.True(nextAction2.Equals(_actionPlay));
-            
         }
-        
+
         [Test]
         public void NotReturnedActionTest() {
             Assert.False((_goapActionSystem1.GetNextAction()).Equals(_actionPlay));
@@ -77,6 +83,29 @@ namespace GoapTests {
         [Test]
         public void RunOutOfSearchDepthLimitTest() {
             Assert.True(new SurrogateAction().Equals(_goapActionSystemSearchDepth.GetNextAction()));
+        }
+
+        [Test]
+        public void ResultingWorldstateSymbolsFromActionTest() {
+            List<WorldstateSymbol> startState = new List<WorldstateSymbol> {
+                new WorldstateSymbol(WorldProperties.Happy, true, typeof (Boolean))
+            };
+
+            List<WorldstateSymbol> secondState = new List<WorldstateSymbol> {
+                new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)),
+                new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean))
+            };
+
+            List<WorldstateSymbol> thirdState = new List<WorldstateSymbol> {
+                new WorldstateSymbol(WorldProperties.HasMoney, false, typeof (Boolean)),
+                new WorldstateSymbol(WorldProperties.HasToy, true, typeof (Boolean))
+            };
+
+            Assert.True(IsSubset(_actionClean.GetResultingWorldstate(startState), secondState));
+            Assert.True(IsSubset(secondState, _actionClean.GetResultingWorldstate(startState)));
+
+            Assert.True(IsSubset(_actionGetToy.GetResultingWorldstate(secondState), thirdState));
+            Assert.True(IsSubset(thirdState, _actionGetToy.GetResultingWorldstate(secondState)));
         }
     }
 

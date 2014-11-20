@@ -75,13 +75,13 @@ namespace GoapActionSystem.Implementation {
             if (IsCurrentGoalReached()) {
                 GoapComponent.Log.Info("Goal " + _currentGoal.GetType() + " is reached.");
 
-                if (!TryGegGoalAndPlan()) {
+                if (!TryGetGoalAndPlan()) {
                     return new SurrogateAction();
                 }
             }
                 // case: last tick no goal was found
             else if (_currentGoal == null) {
-                if (!TryGegGoalAndPlan()) {
+                if (!TryGetGoalAndPlan()) {
                     return new SurrogateAction();
                 }
             }
@@ -100,7 +100,7 @@ namespace GoapActionSystem.Implementation {
         ///     search goals by priority. choose the first goal which is reachable with a plan
         /// </summary>
         /// <returns></returns>
-        private bool TryGegGoalAndPlan() {
+        private bool TryGetGoalAndPlan() {
             _currentGoal = null;
             _currentPlan = null;
             IOrderedEnumerable<IGoapGoal> goals = GetUnsatisfiedGoalsSortedByRelevancy();
