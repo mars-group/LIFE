@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>  
+    <version>0.1</version>
+		<id>LifeGISLayer</id>
+    <title>LIFEGisLayer</title>
+    <authors>Christian Hüning</authors>
+    <owners>MARS Group</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>An abstract implementation of a GIS Layer. Extend this to make use of its features. Currently supports .asc and .shp files.</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>MARS, GIS layer, LIFEGISService</tags>
+    <dependencies>
+		<dependency id="Baseclass.Contrib.Nuget.Output" />
+	</dependencies>
+  </metadata>
+	<files>
+		<file src="bin\Release\*.dll" target="lib\net45\"/>
+		<file src="..\..\Libraries\SharpMap\gdal\**" target="output\gdal"/>
+	</files>	
+</package>

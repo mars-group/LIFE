@@ -14,8 +14,8 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">Container with spatial base data.</param>
-    public DirectMover(IEnvironment env, SpatialAgent agent, MovementData data) : base(env, agent, data) {}
+    /// <param name="data">R/O container for spatial data.</param>
+    public DirectMover(IEnvironment env, SpatialAgent agent, DataAccessor data) : base(env, agent, data) {}
 
 
     /// <summary>
@@ -24,7 +24,10 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="target">The target position.</param>
     /// <param name="dir">The new direction (optional).</param> 
     public void Move(Vector target, Direction dir = null) {
-      TargetPos = new Vector(target.X, target.Y, target.Z);
+      MovementVector = new Vector(
+        target.X-Data.Position.X, 
+        target.Y-Data.Position.Y, 
+        target.Z-Data.Position.Z);
       if (dir != null) TargetDir = dir;
       else TargetDir = Data.Direction;
       Move();

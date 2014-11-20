@@ -22,8 +22,9 @@ namespace ResultLayer
 		private ElephantLayerImpl _elephantLayer;
 		private PlantLayerImpl _plantLayer;
 		private WaterLayerImpl _waterLayer;
+	    private long _currentTick;
 
-		public ResultLayer(ElephantLayerImpl elephantLayer, PlantLayerImpl plantLayer, WaterLayerImpl waterlayer){
+	    public ResultLayer(ElephantLayerImpl elephantLayer, PlantLayerImpl plantLayer, WaterLayerImpl waterlayer){
 			_elephantLayer = elephantLayer;
 			_plantLayer = plantLayer;
 			_waterLayer = waterlayer;
@@ -34,9 +35,13 @@ namespace ResultLayer
 			registerAgentHandle.Invoke (this, m);
 			return true;
         }
-
-        public long GetCurrentTick() {
-            throw new NotImplementedException();
+        public long GetCurrentTick()
+        {
+            return _currentTick;
+        }
+        public void SetCurrentTick(long currentTick)
+        {
+            this._currentTick = currentTick;
         }
     }
 }

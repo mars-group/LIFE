@@ -40,9 +40,13 @@ namespace SimulationController.Implementation {
             return _simManager.GetAllModels();
         }
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers,
-            int? nrOfTicks = null) {
-            _simManager.StartSimulationWithModel(model, layerContainers, nrOfTicks);
+
+        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null) {
+            _simManager.StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
+        }
+
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
+            _simManager.StepSimulation(model,layerContainers,nrOfTicks);
         }
 
         public void PauseSimulation(TModelDescription model) {
@@ -55,6 +59,14 @@ namespace SimulationController.Implementation {
 
         public void AbortSimulation(TModelDescription model) {
             _simManager.AbortSimulation(model);
+        }
+
+        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
+            _simManager.StartVisualization(model, nrOfTicksToVisualize);
+        }
+
+        public void StopVisualization(TModelDescription model) {
+            _simManager.StopVisualization(model);
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {

@@ -47,6 +47,14 @@ namespace ExampleLayer
             }
         }
 
+        public Position2D SetAgentPosition(AgentSmith agent) {
+            var freePos = _freePositions.First();
+            _agentPositions.Add(freePos, agent);
+            _freePositions.Remove(freePos);
+            _positionsOfAgents.Add(agent, freePos);
+            return freePos;
+        }
+
         public IEnumerable<AgentSmith> ExploreRadius(AgentSmith agent) {
             if (agent.Dead) {
                 return new List<AgentSmith>(); 

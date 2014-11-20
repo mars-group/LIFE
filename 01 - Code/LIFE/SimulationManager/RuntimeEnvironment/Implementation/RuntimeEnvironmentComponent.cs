@@ -17,9 +17,13 @@ namespace RuntimeEnvironment.Implementation {
             _runtimeEnvironmentUseCase = new RuntimeEnvironmentUseCase(modelContainer, layerRegistry);
         }
 
-        public void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
-            int? nrOfTicks = null) {
-            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainerNodes, nrOfTicks);
+        public void StartWithModel
+            (TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
+            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainerNodes, nrOfTicks, startPaused);
+        }
+
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
+            _runtimeEnvironmentUseCase.StepSimulation(model, layerContainerNodes, nrOfTicks);
         }
 
         public void Pause(TModelDescription model) {
@@ -32,6 +36,14 @@ namespace RuntimeEnvironment.Implementation {
 
         public void Abort(TModelDescription model) {
             _runtimeEnvironmentUseCase.Abort(model);
+        }
+
+        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
+            _runtimeEnvironmentUseCase.StartVisualization(model, nrOfTicksToVisualize);
+        }
+
+        public void StopVisualization(TModelDescription model) {
+            _runtimeEnvironmentUseCase.StopVisualization(model);
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {

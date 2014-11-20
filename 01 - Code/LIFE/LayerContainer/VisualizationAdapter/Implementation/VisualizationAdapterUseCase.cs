@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LayerAPI.Interfaces;
 using LayerAPI.Interfaces.Visualization;
+using MessageWrappers;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation
@@ -10,6 +10,7 @@ namespace VisualizationAdapter.Implementation
     internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
         private readonly List<IVisualizable> _visualizables;
         private bool _isRunning;
+        private int? _tickVisualizationIntervall;
 
         public VisualizationAdapterUseCase() {
             _visualizables = new List<IVisualizable>();
@@ -18,8 +19,10 @@ namespace VisualizationAdapter.Implementation
 
         public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
-        public void VisualizeTick() {
+        public void VisualizeTick(int currentTick) {
             if (!_isRunning) return;
+            if (_tickVisualizationIntervall.HasValue && currentTick % _tickVisualizationIntervall != 0) return;
+
 
             Parallel.ForEach(_visualizables,
                 vis => {
@@ -52,7 +55,8 @@ namespace VisualizationAdapter.Implementation
             _visualizables.Add(visualizable);
         }
 
-        public void StartVisualization() {
+        public void StartVisualization(int? nrOfTicksToVisualize = null) {
+            _tickVisualizationIntervall = nrOfTicksToVisualize;
             this._isRunning = true;
         }
 

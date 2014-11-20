@@ -87,10 +87,16 @@ namespace SimulationController.Implementation {
             return _simulationManagerClient.GetAllModels();
         }
 
-        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers,
-            int? nrOfTicks = null) {
+
+
+        public void StartSimulationWithModel
+            (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused = false, int? nrOfTicks = null) {
+            _simulationManagerClient.StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
+        }
+
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
             if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClient.StartSimulationWithModel(model, layerContainers, nrOfTicks);
+            _simulationManagerClient.StepSimulation(model, layerContainers, nrOfTicks);
         }
 
         public void PauseSimulation(TModelDescription model) {
@@ -106,6 +112,14 @@ namespace SimulationController.Implementation {
         public void AbortSimulation(TModelDescription model) {
             if (!_isConnected) throw new NoSimulationManagerConnectedException();
             _simulationManagerClient.AbortSimulation(model);
+        }
+
+        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
+            _simulationManagerClient.StartVisualization(model, nrOfTicksToVisualize);
+        }
+
+        public void StopVisualization(TModelDescription model) {
+            _simulationManagerClient.StopVisualization(model);
         }
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {

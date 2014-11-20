@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LayerAPI.Interfaces;
 using LayerAPI.Interfaces.Visualization;
+using MessageWrappers;
 using NetTopologySuite.Geometries;
 using VisualizationAdapter.Interface;
 
@@ -10,16 +11,19 @@ namespace VisualizationAdapter.Implementation
     public class VisualizationAdapterComponent : IVisualizationAdapterInternal
     {
         private readonly IVisualizationAdapterInternal _visualizationAdapterInternalUseCase;
+        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         public VisualizationAdapterComponent() {
             _visualizationAdapterInternalUseCase = new VisualizationAdapterUseCase();
+            _visualizationAdapterInternalUseCase.VisualizationUpdated += _visualizationAdapterInternalUseCase_VisualizationUpdated;
         }
 
+        void _visualizationAdapterInternalUseCase_VisualizationUpdated(object sender, List<BasicVisualizationMessage> e) {
+            VisualizationUpdated(sender, e);
+        }
 
-        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
-
-        public void StartVisualization() {
-            _visualizationAdapterInternalUseCase.StartVisualization();
+        public void StartVisualization(int? nrOfTicksToVisualize = null) {
+            _visualizationAdapterInternalUseCase.StartVisualization(nrOfTicksToVisualize);
         }
 
         public void StopVisualization() {
@@ -34,8 +38,8 @@ namespace VisualizationAdapter.Implementation
             _visualizationAdapterInternalUseCase.RegisterVisualizable(visualizable);
         }
 
-        public void VisualizeTick() {
-            _visualizationAdapterInternalUseCase.VisualizeTick();
+        public void VisualizeTick(int currentTick) {
+            _visualizationAdapterInternalUseCase.VisualizeTick(currentTick);
         }
     }
 }

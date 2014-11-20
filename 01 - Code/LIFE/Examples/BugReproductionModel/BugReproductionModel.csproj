@@ -30,32 +30,103 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BruTile">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\BruTile.dll</HintPath>
+    </Reference>
+    <Reference Include="BruTile.Desktop">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\BruTile.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="CommonTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\CommonTypes.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\CommonTypes.dll</HintPath>
     </Reference>
-    <Reference Include="LayerAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\LayerAPI.dll</HintPath>
+    <Reference Include="gdal_csharp">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\gdal_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoAPI">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\GeoAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="LayerAPI">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\LayerAPI.dll</HintPath>
     </Reference>
     <Reference Include="LCConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\LCConnector.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\LCConnector.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageWrappers">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\MessageWrappers.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\Mono.Addins.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\Mono.Addins.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\protobuf-net.dll</HintPath>
+    <Reference Include="Mono.Security">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\NetTopologySuite.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.PostGis">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\NetTopologySuite.IO.PostGis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.SpatiaLite">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\NetTopologySuite.IO.SpatiaLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ogr_csharp">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\ogr_csharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="osr_csharp">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\osr_csharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PowerCollections">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\PowerCollections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ProjNet">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\ProjNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\protobuf-net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Scs">
-      <HintPath>..\..\packages\LayerAPI.0.1.184\lib\net45\Scs.dll</HintPath>
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\Scs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpMap">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\SharpMap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpMap.Extensions">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\SharpMap.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\packages\LayerAPI.0.1.223\lib\net45\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

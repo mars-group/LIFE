@@ -24,19 +24,25 @@ namespace RTEManager.Implementation {
         // all the layers mapped by their instanceID
         private readonly IDictionary<TLayerInstanceId, ILayer> _layers;
 
+        // all layers which are enlisted for Pre- and PostTick calls
+        private readonly List<ISteppedActiveLayer> _preAndPostTickLayer;
+
         // indicator whether this Layercontainer ist currently executing a Tick
         private bool _isRunning;
-        private readonly List<ISteppedActiveLayer> _preAndPostTickLayer;
+
+        // current Tick
+        private int _currentTick;
+
 
         public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter) {
             _visualizationAdapter = visualizationAdapter;
-
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
             _preAndPostTickLayer = new List<ISteppedActiveLayer>();
             _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _tickClientsMarkedForRegistrationPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
+            _currentTick = 0;
         }
 
         #region Public Methods
@@ -94,7 +100,7 @@ namespace RTEManager.Implementation {
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
-            _layers[instanceId].InitLayer<TInitData>(initData, RegisterTickClient, UnregisterTickClient);
+            _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
         }
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
@@ -103,7 +109,14 @@ namespace RTEManager.Implementation {
 
         public long AdvanceOneTick() {
             _isRunning = true;
+
             var stopWatch = Stopwatch.StartNew();
+
+            // set currentTick to all layers
+            Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
+
+            // visualize all visualizable layers
+            _visualizationAdapter.VisualizeTick(_currentTick);
 
             // PreTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
@@ -116,11 +129,11 @@ namespace RTEManager.Implementation {
                     )
                 );
 
-            // visualize all visualizable layers
-            _visualizationAdapter.VisualizeTick();
-
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
+            
+            // increase Tick counter
+            _currentTick++;
 
             // clean up all deleted tickClients
             Parallel.ForEach

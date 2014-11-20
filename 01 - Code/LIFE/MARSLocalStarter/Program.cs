@@ -14,19 +14,13 @@ namespace MARSLocalStarter
 
 
 
-        private static void Main(string[] args)
-        {
+        private static void Main(string[] args) {
             Log.Info("Initializing components and building application core...");
 
 
             var core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
 
-
-
-
             var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
-
-
 
             Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
 
@@ -128,7 +122,7 @@ namespace MARSLocalStarter
                     }
                     else
                     {
-                        core.StartSimulationWithModel(model, numOfTicks);
+                        core.StartSimulationWithModel(model, false, numOfTicks);
                     }
                 }
             }
@@ -186,7 +180,7 @@ namespace MARSLocalStarter
             else
             {
                 var models = core.GetAllModels().ToList();
-                core.StartSimulationWithModel(models[nr], ticks);
+                core.StartSimulationWithModel(models[nr],false, ticks);
             }
 
         }

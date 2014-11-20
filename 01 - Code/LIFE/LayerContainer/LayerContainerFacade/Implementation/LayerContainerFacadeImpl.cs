@@ -1,9 +1,13 @@
-﻿using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+﻿using System;
+using System.Collections.Generic;
+using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
+using LayerAPI.Interfaces;
 using LayerContainerFacade.Interfaces;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using MessageWrappers;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
 using LayerContainerShared;
@@ -26,7 +30,7 @@ namespace LayerContainerFacade.Implementation
             _partitionManager = partitionManager;
             _rteManager = rteManager;
             _visualizationAdapter = visualizationAdapter;
-
+			_visualizationAdapter.VisualizationUpdated += _visualizationAdapterInternalUseCase_VisualizationUpdated;
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
             _server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
@@ -34,6 +38,10 @@ namespace LayerContainerFacade.Implementation
             //Start server
             _server.Start();
         }
+
+		void _visualizationAdapterInternalUseCase_VisualizationUpdated(object sender, List<BasicVisualizationMessage> e) {
+			VisualizationUpdated(sender, e);
+		}
 
         public void LoadModelContent(ModelContent content)
         {
@@ -55,13 +63,18 @@ namespace LayerContainerFacade.Implementation
             return _rteManager.AdvanceOneTick();
         }
 
-        public void StartVisualization() {
-            _visualizationAdapter.StartVisualization();
+        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
+
+        public void StartVisualization(int? nrOfTicksToVisualize = null)
+        {
+            _visualizationAdapter.StartVisualization(nrOfTicksToVisualize);
         }
 
         public void StopVisualization() {
             _visualizationAdapter.StopVisualization();
         }
+
+        
 
         public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
             _visualizationAdapter.ChangeVisualizationView(topLeft, topRight, bottomRight, bottomLeft);

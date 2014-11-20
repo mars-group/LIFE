@@ -22,8 +22,9 @@ namespace ElephantLayer
 		private PlantLayerImpl _plantLayer;
 		private WaterLayerImpl _waterLayer;
 		private ITwoDimEnvironment<Elephant> _environment;
+	    private long _currentTick;
 
-		public ElephantLayerImpl(PlantLayerImpl plantLayer, WaterLayerImpl waterLayer){
+	    public ElephantLayerImpl(PlantLayerImpl plantLayer, WaterLayerImpl waterLayer){
 			_plantLayer = plantLayer;
 			_waterLayer = waterLayer;
 			_environment = new TwoDimEnvironmentUseCase<Elephant> ();
@@ -39,9 +40,13 @@ namespace ElephantLayer
 
 			return true;
         }
-
-        public long GetCurrentTick() {
-            throw new NotImplementedException();
+        public long GetCurrentTick()
+        {
+            return _currentTick;
+        }
+        public void SetCurrentTick(long currentTick)
+        {
+            this._currentTick = currentTick;
         }
 
 		public List<TElephant> GetAllElephants(){

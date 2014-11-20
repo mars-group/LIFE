@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GeoAPI.Geometries;
+using MessageWrappers;
 
 namespace LayerAPI.Interfaces.Visualization
 {
