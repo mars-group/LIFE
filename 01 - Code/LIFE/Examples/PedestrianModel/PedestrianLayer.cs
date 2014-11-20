@@ -81,6 +81,10 @@ namespace PedestrianModel {
             return _tick;
         }
 
+        public void SetCurrentTick(long currentTick) {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 

@@ -134,6 +134,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARSLocalStarter", "MARSLoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForestLayer", "Examples\AWRShowcase\ForestLayer\ForestLayer.csproj", "{C9206FDB-F895-4F68-9422-5BD6B12E9727}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianModel", "Examples\PedestrianModel\PedestrianModel.csproj", "{3D7B252F-D318-453B-A82F-D4B5B97D14EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -643,6 +645,16 @@ Global
 		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C9206FDB-F895-4F68-9422-5BD6B12E9727}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -698,6 +710,7 @@ Global
 		{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81} = {21C88CD1-A41C-4908-B309-A33A2F23683B}
 		{B7C20AF5-5107-4E4E-B196-890EC2DA6030} = {B488B2F7-D268-41D3-B31D-CC0DF03F9F34}
 		{C9206FDB-F895-4F68-9422-5BD6B12E9727} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
+		{3D7B252F-D318-453B-A82F-D4B5B97D14EA} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj
