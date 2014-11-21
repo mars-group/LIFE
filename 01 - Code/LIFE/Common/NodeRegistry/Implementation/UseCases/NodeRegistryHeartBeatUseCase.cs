@@ -4,6 +4,7 @@ using System.Data.Odbc;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Threading;
 using CommonTypes.DataTypes;
@@ -43,6 +44,7 @@ namespace NodeRegistry.Implementation.UseCases
         private TNodeInformation _localNodeInformation;
 
         private Thread _heartBeatSenderThread;
+        private Timer _heartBeatSenderTimer;
 
         private ILog Logger;
 
@@ -60,14 +62,18 @@ namespace NodeRegistry.Implementation.UseCases
             _localNodeInformation = localNodeInformation;
 
             _heartBeatTimers = new ThreadSafeSortedList<TNodeInformation, Timer>();
-
+            _heartBeatSenderTimer = new Timer(_heartBeatInterval);
             StartSendingHeartBeats();
         }
 
         private void StartSendingHeartBeats()
         {
-            _heartBeatSenderThread = new Thread(SendHeartBeat);
-            _heartBeatSenderThread.Start();
+            
+            //_heartBeatSenderThread = new Thread(SendHeartBeat);
+            _heartBeatSenderTimer.Elapsed += SendHeartBeat;
+            _heartBeatSenderTimer.Enabled = true;
+            _heartBeatSenderTimer.Start();
+            //_heartBeatSenderThread.Start();
         }
 
 
@@ -98,7 +104,8 @@ namespace NodeRegistry.Implementation.UseCases
 
         public void Shutdow()
         {
-            _heartBeatSenderThread.Interrupt();
+            //_heartBeatSenderThread.Interrupt();
+            _heartBeatSenderTimer.Stop();
         }
 
         public void DeleteTimerForNodeInformationType(TNodeInformation nodeInformation) {
@@ -116,39 +123,22 @@ namespace NodeRegistry.Implementation.UseCases
             var timer = new Timer(_heartBeatInterval * _heartBeatTimeOutMultiplier) { AutoReset = false };
 			// add event to timer
             timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args)
-            {
-                Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
-                _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
-                _heartBeatTimers.Remove(nodeInformation);
-
-            }
-
-                );
+                {
+                    Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
+                    _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
+                    _heartBeatTimers.Remove(nodeInformation);
+                }
+            );
 
             return timer;
         }
 
-        private void SendHeartBeat()
+        private void SendHeartBeat(object sender, EventArgs eventArgs)
         {
-            while (Thread.CurrentThread.IsAlive)
-            {
-                try
-                {
-                    Thread.Sleep(_heartBeatInterval);
-                    _multicastAdapter.SendMessageToMulticastGroup(
-                        NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation)
-                        );
-                }
-                catch (ThreadInterruptedException exception)
-                {
-                    return;
-                }
-
-            }
+            _multicastAdapter.SendMessageToMulticastGroup(
+                NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation)
+                );
         }
-
-
-
 
     }
 }
