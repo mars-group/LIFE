@@ -19,7 +19,7 @@
         bool Add(ISpatialEntity entity, TVector position, TVector rotation = default(TVector));
 
         /// <summary>
-        /// Adds a new entity to the ESC within the range of min and max.
+        ///     Adds a new entity to the ESC within the range of min and max.
         /// </summary>
         /// <param name="entity">That should be added.</param>
         /// <param name="min">The down, left position of an area that is spanned between min and max.</param>

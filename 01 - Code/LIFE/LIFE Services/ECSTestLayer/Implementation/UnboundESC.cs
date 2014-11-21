@@ -8,6 +8,7 @@
     using GenericAgentArchitectureCommon.TransportTypes;
     using GeoAPI.Geometries;
     using Interface;
+    using NetTopologySuite.Geometries;
     using NetTopologySuite.Geometries.Utilities;
 
     public class UnboundESC : IUnboundESC {
@@ -26,11 +27,13 @@
             IGeometry oldGeometry = entity.Geometry;
             IPoint oldCentroid = oldGeometry.Centroid;
 
-            // move to origin
-            AffineTransformation trans = new AffineTransformation();
-            trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
-            IGeometry newGeometry = trans.Transform(oldGeometry);
-            entity.Geometry = newGeometry;
+            if (!oldCentroid.Equals(new Point(0, 0, 0))) {
+                // move to origin
+                AffineTransformation trans = new AffineTransformation();
+                trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
+                IGeometry newGeometry = trans.Transform(oldGeometry);
+                entity.Geometry = newGeometry;
+            }
 
             //move to position
             MovementResult result = Move(entity, position, rotation);
@@ -56,7 +59,10 @@
         }
 
         public bool Resize(ISpatialEntity entity, IGeometry newGeometry) {
-            if (Explore(newGeometry).Any()) {
+            var result = Explore(newGeometry).ToList();
+            result.Remove(entity);
+            if (!result.Any())
+            {
                 entity.Geometry = newGeometry;
                 return true;
             }
@@ -71,9 +77,8 @@
             Coordinate center = old.Centroid.Coordinate;
             Direction directionTransformer = new Direction();
             directionTransformer.SetDirectionalVector(new Vector(rotation.X, rotation.Y, rotation.Z));
-            trans.Rotate(directionTransformer.Yaw, center.X, center.Y);
+            trans.Rotate(Direction.DegToRad(directionTransformer.Yaw), center.X, center.Y);
             IGeometry result = trans.Transform(old);
-
 
             List<ISpatialEntity> collisions = Explore(result).ToList();
             collisions.Remove(entity);
@@ -83,18 +88,18 @@
             return new MovementResult();
         }
 
-        //TODO This function call is not thread safe. Enumeration may change during read access!
         public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
-            foreach (ISpatialEntity entity in _entities) {
-                if (geometry.Envelope.Intersects(entity.Geometry) && !geometry.Touches(entity.Geometry))
+            foreach (ISpatialEntity entity in _entities.ToArray()) {
+                if (geometry.Envelope.Intersects(entity.Geometry) && !geometry.Touches(entity.Geometry)) {
                     entities.Add(entity);
+                }
             }
             return entities;
         }
 
         public IEnumerable<ISpatialEntity> ExploreAll() {
-            return _entities;
+            return _entities.ToList();
         }
 
         public object GetData(ISpecificator spec) {

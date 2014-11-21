@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using GenericAgentArchitectureCommon.Interfaces;
-    using GenericAgentArchitectureCommon.TransportTypes;
 
     #endregion
     /// <summary>
