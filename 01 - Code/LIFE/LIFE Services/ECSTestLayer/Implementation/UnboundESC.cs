@@ -22,10 +22,24 @@
 
         #region IUnboundESC Members
 
-        public bool Add(ISpatialEntity entity, TVector position, TVector direction = default(TVector)) {
-            MovementResult result = Move(entity, position, direction);
-            if (result.Success) _entities.Add(entity);
-            return result.Success;
+        public bool Add(ISpatialEntity entity, TVector position, TVector rotation = default(TVector)) {
+            IGeometry oldGeometry = entity.Geometry;
+            IPoint oldCentroid = oldGeometry.Centroid;
+
+            // move to origin
+            AffineTransformation trans = new AffineTransformation();
+            trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
+            IGeometry newGeometry = trans.Transform(oldGeometry);
+            entity.Geometry = newGeometry;
+
+            //move to position
+            MovementResult result = Move(entity, position, rotation);
+            if (!result.Success) {
+                entity.Geometry = oldGeometry;
+                return false;
+            }
+            _entities.Add(entity);
+            return true;
         }
 
         public bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid) {
@@ -41,22 +55,22 @@
             _entities.Remove(entity);
         }
 
-        public bool Resize(ISpatialEntity entity, IGeometry newBounds) {
-            if (Explore(newBounds).Any()) {
-                entity.Geometry = newBounds;
+        public bool Resize(ISpatialEntity entity, IGeometry newGeometry) {
+            if (Explore(newGeometry).Any()) {
+                entity.Geometry = newGeometry;
                 return true;
             }
             return false;
         }
 
-        public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector direction = default(TVector)) {
+        public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
             IGeometry old = entity.Geometry;
             AffineTransformation trans = new AffineTransformation();
             trans.SetToTranslation(movementVector.X, movementVector.Y);
 
             Coordinate center = old.Centroid.Coordinate;
-            var directionTransformer = new Direction();
-            directionTransformer.SetDirectionalVector(new Vector(direction.X, direction.Y, direction.Z));
+            Direction directionTransformer = new Direction();
+            directionTransformer.SetDirectionalVector(new Vector(rotation.X, rotation.Y, rotation.Z));
             trans.Rotate(directionTransformer.Yaw, center.X, center.Y);
             IGeometry result = trans.Transform(old);
 

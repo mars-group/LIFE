@@ -59,10 +59,8 @@
   <ItemGroup>
     <Compile Include="Entities\MyTestGeometryFactory.cs" />
     <Compile Include="Entities\TestAgent2Dy.cs" />
-    <Compile Include="Entities\TestDeprecatedAgent2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\UnboundESCTest.cs" />
-    <Compile Include="Tests\DeprecatedESCTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
