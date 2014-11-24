@@ -4,7 +4,7 @@ using GenericAgentArchitectureCommon.TransportTypes;
 
 namespace DalskiAgent.Perception {
 
-    /// <summary>
+  /// <summary>
   ///   A halo capable of sensing in a circle around its position.
   /// </summary>
   public class RadialHalo : Halo {

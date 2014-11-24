@@ -1,5 +1,4 @@
-﻿using System;
-using DalskiAgent.Agents;
+﻿using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
 
 namespace DalskiAgent.Perception {

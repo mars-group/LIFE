@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DalskiAgent.Movement;
 using GenericAgentArchitectureCommon.Datatypes;
 
 namespace DalskiAgent.Environments {
@@ -9,6 +8,7 @@ namespace DalskiAgent.Environments {
   ///   It thereby enables abstraction from ESC specific methods.
   /// </summary>
   public interface IEnvironment {
+    
     /// <summary>
     ///   Add a new object to the environment.
     /// </summary>

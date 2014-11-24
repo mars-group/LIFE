@@ -72,12 +72,15 @@
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
             IGeometry old = entity.Geometry;
             AffineTransformation trans = new AffineTransformation();
-            trans.SetToTranslation(movementVector.X, movementVector.Y);
-
+            
+          
             Coordinate center = old.Centroid.Coordinate;
             Direction directionTransformer = new Direction();
             directionTransformer.SetDirectionalVector(new Vector(rotation.X, rotation.Y, rotation.Z));
             trans.Rotate(Direction.DegToRad(directionTransformer.Yaw), center.X, center.Y);
+            
+            trans.SetToTranslation(movementVector.X, movementVector.Y);
+
             IGeometry result = trans.Transform(old);
 
             List<ISpatialEntity> collisions = Explore(result).ToList();
