@@ -67,7 +67,6 @@
     <Compile Include="Reasoning\Plan.cs" />
     <Compile Include="Movement\Movers\AgentMover.cs" />
     <Compile Include="Movement\Movers\ContinuousMover.cs" />
-    <Compile Include="Movement\Direction.cs" />
     <Compile Include="Movement\Movers\DirectMover.cs" />
     <Compile Include="Environments\Environment2D.cs" />
     <Compile Include="Environments\ESCAdapter.cs" />
@@ -77,7 +76,6 @@
     <Compile Include="Movement\Actions\GridMovementAction.cs" />
     <Compile Include="Environments\IEnvironment.cs" />
     <Compile Include="Environments\SpatialData.cs" />
-    <Compile Include="Movement\Vector.cs" />
     <Compile Include="Perception\CommunicationSensor.cs" />
     <Compile Include="Perception\DataSensor.cs" />
     <Compile Include="Perception\Halo.cs" />

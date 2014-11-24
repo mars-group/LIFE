@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CommonTypes.TransportTypes;
 
 namespace GenericAgentArchitectureCommon.Datatypes {
+    using TransportTypes;
 
     /// <summary>
     ///     Axis Aligned Bounding Box

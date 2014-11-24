@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using DalskiAgent.Agents;
-using DalskiAgent.Movement;
 using DalskiAgent.Perception;
+using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Agents.Reasoning.Movement.Potential;
 using PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter;
 using PedestrianModel.Util.Math;
@@ -51,7 +51,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
             _perceptionUnit = perceptionUnit;
 
             // creating the static obstacle field
-            object rawObstacleData = perceptionUnit.GetData((int) InformationType.Obstacles).Data;
+            object rawObstacleData = perceptionUnit.GetData(InformationType.Obstacles).Data;
             List<Obstacle> obstacles = (List<Obstacle>) rawObstacleData;
 
             foreach (Obstacle obstacle in obstacles) {
@@ -66,7 +66,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         public Vector ModifyMovementVector(Vector targetPosition, Vector currentPipelineVector) {
             IPotentialField agentField = new SimplePotentialField();
 
-            object rawPedestrianData = _perceptionUnit.GetData((int) InformationType.Pedestrians).Data;
+            object rawPedestrianData = _perceptionUnit.GetData(InformationType.Pedestrians).Data;
             IList<Pedestrian> pedestrians = (List<Pedestrian>) rawPedestrianData;
 
             foreach (Pedestrian ped in pedestrians) {

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AgentTester.Wolves.Environment;
 using AgentTester.Wolves.Interactions;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
+using ESCTestLayer.Implementation;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace AgentTester.Wolves.Agents {
@@ -19,28 +21,28 @@ namespace AgentTester.Wolves.Agents {
   /// </summary>
   internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
     
-    private int _energy = 80;                    // Current energy (with initial value).
-    private const int EnergyMax = 100;           // Maximum health.
-    private readonly Random _random;             // Random number generator for energy loss.
-    private readonly IEnvironment _environment;  // Environment reference for random movement.
-    private string _states;                      // Output string for console.
-    private readonly GridMover _mover;           // Specific agent mover reference (to avoid casts).
+    private int _energy = 80;                 // Current energy (with initial value).
+    private const int EnergyMax = 100;        // Maximum health.
+    private readonly Random _random;          // Random number generator for energy loss.
+    private readonly Grassland _environment;  // Environment reference for random movement.
+    private string _states;                   // Output string for console.
+    private readonly GridMover _mover;        // Specific agent mover reference (to avoid casts).
 
 
     /// <summary>
     ///   Create a new wolf agent.
     /// </summary>
     /// <param name="exec">Agent execution container reference.</param>
-    /// <param name="env">Environment reference.</param>
-    /// <param name="src">The data source for sensor queries.</param>
-    public Wolf(IExecution exec, IEnvironment env, IGenericDataSource src) : base(exec, env, null) {
+    /// <param name="env">Grassland reference.</param>
+    public Wolf(IExecution exec, Grassland env) : base(exec, env, null) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
       // Add perception sensor.
-      PerceptionUnit.AddSensor(new DataSensor(
-        this, src, new RadialHalo(Data, (int) InformationTypes.AllAgents, 8))
-      );
+      ISpecificator halo;
+      if (env.UsesESC) halo = new SpatialHalo(MyGeometryFactory.Rectangle(6, 6), InformationTypes.AllAgents);
+      else             halo = new RadialHalo(Data, InformationTypes.AllAgents, 8);
+      PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
 
       // Add movement module.
       Mover = new GridMover(env, this, Data);
@@ -66,7 +68,7 @@ namespace AgentTester.Wolves.Agents {
 
       // Calculate hunger percentage, read-out nearby agents.
       var hunger = (int)(((double)(EnergyMax - _energy)/EnergyMax)*100);
-      var rawData = PerceptionUnit.GetData((int)InformationTypes.AllAgents).Data;
+      var rawData = PerceptionUnit.GetData(InformationTypes.AllAgents).Data;
       var agents = ((List<ISpatialObject>) rawData);
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
@@ -112,18 +114,12 @@ namespace AgentTester.Wolves.Agents {
       }
 
       // Just for distance output appendix (in case there was no target).
-      if (sheeps.Count == 0) _states += "        | ";      
+      if (sheeps.Count == 0) _states += "        | "; 
 
       // R4: Perform random movement.
       _states += "R4";
-      if (_environment is Environment2D) {
-        var pos = ((Environment2D) _environment).GetRandomPosition();     
-        var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
-        return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
-      }
-      
-      //TODO Build something for ESC case.  
-      return null;
+      var rndOpts = _mover.GetMovementOptions(_environment.GetRandomPosition());
+      return rndOpts.Count == 0 ? null : _mover.MoveInDirection(rndOpts[0].Direction);
     }
 
 

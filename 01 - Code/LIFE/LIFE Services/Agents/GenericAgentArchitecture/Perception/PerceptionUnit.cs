@@ -14,10 +14,10 @@ namespace DalskiAgent.Perception {
      * sensors, who listen on a channel and report all present messages to this unit, 
      * also wrapped in a SensorInput. The integer represent information type or channel. */
 
-    private readonly List<DataSensor> _dataSensors;           // Available data sensors.
-    private readonly List<CommunicationSensor> _comSensors;   // Communication sensors. 
-    private readonly Dictionary<int, SensorInput> _dataInput; // Storage for data input.
-    private readonly Dictionary<int, SensorInput> _messages;  // Storage for messages.
+    private readonly List<DataSensor> _dataSensors;            // Available data sensors.
+    private readonly List<CommunicationSensor> _comSensors;    // Communication sensors. 
+    private readonly Dictionary<Enum, SensorInput> _dataInput; // Storage for data input.
+    private readonly Dictionary<int, SensorInput> _messages;   // Storage for messages.
 
 
     /// <summary>
@@ -26,7 +26,7 @@ namespace DalskiAgent.Perception {
     public PerceptionUnit() {      
       _dataSensors = new List<DataSensor>();
       _comSensors = new List<CommunicationSensor>();
-      _dataInput = new Dictionary<int, SensorInput>();
+      _dataInput = new Dictionary<Enum, SensorInput>();
       _messages = new Dictionary<int, SensorInput>();
     }
 
@@ -47,7 +47,7 @@ namespace DalskiAgent.Perception {
     ///   Request new sensor information from all attached sensors and store them in a map.
     /// </summary>
     public void SenseAll() {
-      foreach (var sensor in _dataSensors) _dataInput[sensor.GetInformationType()] = sensor.Sense();      
+      foreach (var sensor in _dataSensors) _dataInput[sensor.InformationType] = sensor.Sense();      
       foreach (var sensor in _comSensors)  _messages [sensor.Channel] = sensor.Sense();
     }
 
@@ -57,7 +57,7 @@ namespace DalskiAgent.Perception {
     /// </summary>
     /// <param name="informationType">The information type to query.</param> 
     /// <returns>An input object containing the desired information.</returns>
-    public SensorInput GetData(int informationType) {
+    public SensorInput GetData(Enum informationType) {
       if (_dataInput.ContainsKey(informationType)) return _dataInput[informationType];
       throw new Exception("[PerceptionUnit] Error requesting input of type \""+
                           informationType+"\". No sensor enlisted for this type.");

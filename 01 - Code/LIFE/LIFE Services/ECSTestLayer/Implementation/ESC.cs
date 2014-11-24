@@ -2,15 +2,15 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CommonTypes.TransportTypes;
 using ESCTestLayer.Entities;
 using ESCTestLayer.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace ESCTestLayer.Implementation {
-  
-  
-  /// <summary>
+    using GenericAgentArchitectureCommon.TransportTypes;
+
+
+    /// <summary>
   ///   implements 3-axis sweep and prune model
   ///   @see http://jitter-physics.com/wordpress/?tag=sweep-and-prune
   ///   @see http://www.philorwig.com/research/spatial/collision-detection-sweep-and-prune.html

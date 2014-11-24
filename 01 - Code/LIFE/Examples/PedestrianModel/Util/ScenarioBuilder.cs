@@ -1,7 +1,7 @@
 ﻿using System;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Agents;
 using PedestrianModel.Util.Math;
 

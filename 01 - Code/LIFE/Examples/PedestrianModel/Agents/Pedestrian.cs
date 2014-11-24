@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
@@ -90,7 +90,7 @@ namespace PedestrianModel.Agents {
                     (
                     this,
                     (IGenericDataSource) environment,
-                    new OmniHalo((int) InformationType.Obstacles))
+                    new OmniHalo(InformationType.Obstacles))
                 );
 
             // Add perception sensor for pedestrians.
@@ -99,7 +99,7 @@ namespace PedestrianModel.Agents {
                     (
                     this,
                     (IGenericDataSource) environment,
-                    new OmniHalo((int) InformationType.Pedestrians))
+                    new OmniHalo(InformationType.Pedestrians))
                 );
 
             // Add perception sensor for everything.
@@ -108,7 +108,7 @@ namespace PedestrianModel.Agents {
                     (
                     this,
                     (IGenericDataSource) environment,
-                    new OmniHalo((int) InformationType.AllAgents))
+                    new OmniHalo(InformationType.AllAgents))
                 );
 
             // Add movement module.
@@ -164,7 +164,7 @@ namespace PedestrianModel.Agents {
 
             // - ok, we don't really have an Y axis, but it's Vector3D, so define a hard coded y-value
             // - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
-            object rawObstaclesData = PerceptionUnit.GetData((int) InformationType.Obstacles).Data;
+            object rawObstaclesData = PerceptionUnit.GetData(InformationType.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>) rawObstaclesData;
             _pathfindingSearchGraph = new RaytracingGraph
                 (SimulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0f, 0.28f));

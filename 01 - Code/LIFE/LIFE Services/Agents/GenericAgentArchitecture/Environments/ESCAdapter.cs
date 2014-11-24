@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using CommonTypes.TransportTypes;
-using DalskiAgent.Movement;
+using System.Linq;
+using DalskiAgent.Auxiliary;
+using ESCTestLayer.Implementation;
 using ESCTestLayer.Interface;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using GenericAgentArchitectureCommon.TransportTypes;
 using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
-
 
 namespace DalskiAgent.Environments {
     
@@ -22,23 +23,6 @@ namespace DalskiAgent.Environments {
 
     // Object-geometry mapping. Inner class for write-protected spatial entity representation.
     private readonly ConcurrentDictionary<ISpatialObject, GeometryObject> _objects; 
-    private class GeometryObject : ISpatialEntity {
-      public IGeometry Bounds { get; set; }
-      public ISpatialObject obj;                    //TODO das hier oder interface oben=?
-
-      public GeometryObject() {
-        Bounds = new Point(1f, 1f, 1f);  // Default hitbox is cube with size 1.
-      }
-      public Vector GetPosition() {
-        return new Vector(        
-          (float) Bounds.Coordinate.X,
-          (float) Bounds.Coordinate.Y,
-          (float) Bounds.Coordinate.Z);
-      }
-    }
-    /*  OBJEKT; DAS VON ISPATIAL ERBT UND BOUNDS SOWIE RÜCKGABEMETHODEN 
-     *  FÜR POS UND DIRection DRINNE HAT. dataaccessor anpassen dafür
-     */
 
 
     /// <summary>
@@ -50,7 +34,7 @@ namespace DalskiAgent.Environments {
     public ESCAdapter(IUnboundESC esc, Vector maxSize, bool gridMode) {
       _esc = esc;   
       _gridMode = gridMode;
-      _maxSize = new TVector(maxSize.X, maxSize.Y, maxSize.Z);
+      _maxSize = maxSize.GetTVector();
       _objects = new ConcurrentDictionary<ISpatialObject, GeometryObject>();
     }
 
@@ -63,16 +47,18 @@ namespace DalskiAgent.Environments {
     /// <param name="acc">Read-only object for data queries.</param>
     /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the object. If null, then 0°.</param>
-    public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
-      bool success;
+    public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {      
+      
+      // Set default values to direction and dimension, if not given. Then create geometry and accessor.
       if (dir == null) dir = new Direction();
-
-      var geometry = new GeometryObject();
-      acc = new DataAccessor(geometry.Bounds);
+      if (dim == null) dim = new Vector(1f, 1f, 1f);
+      var geometry = new GeometryObject(obj, MyGeometryFactory.Rectangle(dim.X, dim.Y), dir);
+      acc = new DataAccessor(geometry);
       _objects[obj] = geometry;
 
-      if (pos != null) success = _esc.Add(geometry, new TVector(pos.X, pos.Y, pos.Z), dir.Yaw); 
-      else success = _esc.AddWithRandomPosition(geometry, TVector.Origin, _maxSize, _gridMode);                     
+      bool success;
+      if (pos != null) success = _esc.Add(geometry, pos.GetTVector(), dir.GetDirectionalVector().GetTVector()); 
+      else             success = _esc.AddWithRandomPosition(geometry, TVector.Origin, _maxSize, _gridMode);                     
       if (!success) throw new Exception("[ESCAdapter] AddObject(): Placement failed, ESC returned 'false'!");
     }
 
@@ -96,8 +82,21 @@ namespace DalskiAgent.Environments {
     /// <param name="dir">The object's heading. If null, movement heading is used.</param>
     public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
       if (!_objects.ContainsKey(obj)) return;
-      if (dir == null) _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z));
-      else _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z), dir.Yaw);
+
+      // If direction not set, calculate it based on movement vector.
+      if (dir == null) {
+        dir = new Direction();
+        dir.SetDirectionalVector(movement);
+      }
+
+      // Set new direction to geometry object. Position is updated automatically by the ESC.
+      _objects[obj].Direction = dir;
+
+      // Call the ESC move function and evaluate the return value.
+      var result = _esc.Move(_objects[obj], movement.GetTVector(), dir.GetDirectionalVector().GetTVector());
+      if (!result.Success) ConsoleView.AddMessage("[ESCAdapter] Kollision auf "+obj.GetPosition()+
+        " mit "+result.Collisions.Count()+".", ConsoleColor.DarkBlue);
+      //TODO Store return value and use it!
     }
 
 
@@ -107,9 +106,7 @@ namespace DalskiAgent.Environments {
     /// <returns>A list of all objects.</returns>
     public List<ISpatialObject> GetAllObjects() {
       var objects = new List<ISpatialObject>();
-      foreach (var entity in _esc.ExploreAll()) {
-        if (entity is ISpatialObject) objects.Add((ISpatialObject) entity);
-      }
+      foreach (var entity in _esc.ExploreAll().OfType<GeometryObject>()) objects.Add(entity.Object);
       return objects;
     }
 
@@ -128,6 +125,30 @@ namespace DalskiAgent.Environments {
     /// <returns>An object representing the percepted information.</returns>
     public object GetData(ISpecificator spec) {
       return _esc.GetData(spec);
+    }
+  }
+
+
+
+  /// <summary>
+  ///   This geometry class serves as a wrapper for the IGeometry object and its orientation.
+  /// </summary>
+  public class GeometryObject : ISpatialEntity {
+    
+    public IGeometry Geometry  { get; set; }           // Geometry: Holds position (centroid) and dimension (envelope).
+    public Direction Direction { get; set; }           // The direction of the object.
+    public ISpatialObject Object { get; private set; } // The spatial object corresponding to this geometry.
+
+    /// <summary>
+    ///   Create a geometry object.
+    /// </summary>
+    /// <param name="obj">The spatial object corresponding to this geometry.</param>
+    /// <param name="geom">Geometry to hold.</param>
+    /// <param name="dir">Direction object.</param>
+    public GeometryObject(ISpatialObject obj, IGeometry geom, Direction dir) {
+      Object = obj;
+      Geometry = geom;
+      Direction = dir;
     }
   }
 }

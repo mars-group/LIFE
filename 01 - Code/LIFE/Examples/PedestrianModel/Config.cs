@@ -1,4 +1,4 @@
-﻿using DalskiAgent.Movement;
+﻿using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Util;
 

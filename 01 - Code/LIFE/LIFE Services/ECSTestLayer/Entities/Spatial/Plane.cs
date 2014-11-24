@@ -1,4 +1,6 @@
-﻿namespace Modelthulhu.Geom {
+﻿using GenericAgentArchitectureCommon.TransportTypes;
+
+namespace Modelthulhu.Geom {
     using CommonTypes.TransportTypes;
 
     #region Namespace imports

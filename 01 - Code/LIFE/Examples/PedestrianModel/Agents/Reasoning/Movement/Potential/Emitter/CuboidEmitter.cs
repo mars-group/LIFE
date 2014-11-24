@@ -1,5 +1,5 @@
 ﻿using System;
-using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {

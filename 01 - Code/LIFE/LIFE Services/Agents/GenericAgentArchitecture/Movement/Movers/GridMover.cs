@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Movement.Actions;
+using GenericAgentArchitectureCommon.Datatypes;
 
 namespace DalskiAgent.Movement.Movers {
 

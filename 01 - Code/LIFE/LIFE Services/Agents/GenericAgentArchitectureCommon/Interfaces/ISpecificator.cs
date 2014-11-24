@@ -1,4 +1,6 @@
-﻿namespace GenericAgentArchitectureCommon.Interfaces {
+﻿using System;
+
+namespace GenericAgentArchitectureCommon.Interfaces {
   
   /// <summary>
   ///   Information object describing which data to query.
@@ -9,6 +11,6 @@
     ///   Return the information type specified by this object.
     /// </summary>
     /// <returns>Information type (as enum value).</returns>
-    int GetInformationType();
+    Enum GetInformationType();
   }
 }

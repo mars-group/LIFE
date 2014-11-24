@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Datatypes;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 

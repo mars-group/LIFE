@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DalskiAgent.Movement {
+namespace GenericAgentArchitectureCommon.Datatypes {
   
   /// <summary>
   ///   Direction class, holds pitch and yaw value and provides some conversions. 
@@ -40,8 +40,8 @@ namespace DalskiAgent.Movement {
     public Vector GetDirectionalVector() {     
       var pitchRad = DegToRad(Pitch);
       var yawRad   = DegToRad(Yaw);      
-      return new Vector((float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
-                        (float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
+      return new Vector((float) (Math.Cos(pitchRad) * Math.Sin(yawRad)),
+                        (float) (Math.Cos(pitchRad) * Math.Cos(yawRad)),
                         (float) (Math.Sin(pitchRad))).GetNormalVector();        
     }
 
@@ -55,15 +55,15 @@ namespace DalskiAgent.Movement {
       var yaw = Yaw;
 
       // Check 90° and 270° (arctan infinite) first.      
-      if (Math.Abs(vector.X) <= float.Epsilon) {
-        if      (vector.Y > 0f) yaw = 90f;
-        else if (vector.Y < 0f) yaw = 270f;
+      if (Math.Abs(vector.Y) <= float.Epsilon) {
+        if      (vector.X > 0f) yaw = 90f;
+        else if (vector.X < 0f) yaw = 270f;
       }
 
       // Arctan argument fine? Calculate heading then.    
       else {
-        yaw = RadToDeg((float) Math.Atan(vector.Y / vector.X));
-        if (vector.X < 0f) yaw += 180f;  // Range  90° to 270° correction. 
+        yaw = RadToDeg((float) Math.Atan(vector.X / vector.Y));
+        if (vector.Y < 0f) yaw += 180f;  // Range  90° to 270° correction. 
         if (yaw      < 0f) yaw += 360f;  // Range 270° to 360° correction.        
       }
       SetYaw(yaw);

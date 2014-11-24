@@ -1,9 +1,10 @@
 ﻿using System;
 using CommonTypes.TransportTypes;
 
-namespace DalskiAgent.Movement {
-    
-  /// <summary>
+namespace GenericAgentArchitectureCommon.Datatypes {
+    using TransportTypes;
+
+    /// <summary>
   ///   This class serves as a representation of a vector or vertex.
   /// </summary>
   public class Vector : IEquatable<Vector>, IEquatable<TVector> {

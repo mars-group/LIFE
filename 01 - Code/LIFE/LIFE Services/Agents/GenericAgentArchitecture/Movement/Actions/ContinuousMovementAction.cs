@@ -1,5 +1,6 @@
 ﻿using System;
 using DalskiAgent.Movement.Movers;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 
 namespace DalskiAgent.Movement.Actions {

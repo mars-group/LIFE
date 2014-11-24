@@ -1,5 +1,4 @@
-﻿using DalskiAgent.Movement;
-using GeoAPI.Geometries;
+﻿using GenericAgentArchitectureCommon.Datatypes;
 
 namespace DalskiAgent.Environments {
   
@@ -9,8 +8,8 @@ namespace DalskiAgent.Environments {
   /// </summary>
   public class DataAccessor {
 
-    private readonly SpatialData _data;    // Data source object.
-    private readonly IGeometry _geometry;  // Geometry source object.
+    private readonly SpatialData _data;         // Data source object.
+    private readonly GeometryObject _geometry;  // Geometry source object.
 
 
     /// <summary>
@@ -26,7 +25,7 @@ namespace DalskiAgent.Environments {
     ///   Create a new r/o object for IGeometry objects.
     /// </summary>
     /// <param name="geometry">Geometry source object.</param>
-    public DataAccessor(IGeometry geometry) {
+    public DataAccessor(GeometryObject geometry) {
       _geometry = geometry;
     }
 
@@ -43,9 +42,9 @@ namespace DalskiAgent.Environments {
           z = _data.Position.Z;          
         }
         else {
-          x = (float) _geometry.Coordinate.X;
-          y = (float) _geometry.Coordinate.Y;
-          z = (float) _geometry.Coordinate.Z;
+          x = (float) _geometry.Geometry.Centroid.Coordinate.X;
+          y = (float) _geometry.Geometry.Centroid.Coordinate.Y;
+          z = (float) _geometry.Geometry.Centroid.Coordinate.Z;
         }
         return new Vector(x, y, z);
       }      
@@ -58,8 +57,14 @@ namespace DalskiAgent.Environments {
     public Direction Direction {
       get {
         var dir = new Direction();
-        dir.SetPitch(_data.Direction.Pitch);
-        dir.SetYaw(_data.Direction.Yaw);
+        if (_data != null) {
+          dir.SetPitch(_data.Direction.Pitch);
+          dir.SetYaw(_data.Direction.Yaw);
+        }
+        else {
+          dir.SetPitch(_geometry.Direction.Pitch);
+          dir.SetYaw(_geometry.Direction.Yaw);          
+        }
         return dir;
       }
     }
@@ -70,9 +75,18 @@ namespace DalskiAgent.Environments {
     /// </summary>
     public Vector Dimension {
       get {
-        var x = (float) _data.Dimension.X;
-        var y = (float) _data.Dimension.Y;
-        var z = (float) _data.Dimension.Z;
+        float x, y, z;
+        if (_data != null) {
+          x = _data.Dimension.X;
+          y = _data.Dimension.Y;
+          z = _data.Dimension.Z;
+        }
+        else {
+          x = (float) _geometry.Geometry.EnvelopeInternal.Width;
+          y = (float) _geometry.Geometry.EnvelopeInternal.Height;
+          z = 0f;
+        }
+
         return new Vector(x, y, z);
       } 
     }

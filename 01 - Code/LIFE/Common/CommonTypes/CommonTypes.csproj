@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="DataTypes\NodeEndpoint.cs" />
     <Compile Include="DataTypes\TNodeInformation.cs" />
-    <Compile Include="TransportTypes\TVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransportTypes\SimulationControl\DistributionInformation.cs" />
     <Compile Include="TransportTypes\TModel.cs" />
