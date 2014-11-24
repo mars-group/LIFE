@@ -1,8 +1,7 @@
 ﻿using System;
-using CommonTypes.TransportTypes;
+using GenericAgentArchitectureCommon.TransportTypes;
 
 namespace GenericAgentArchitectureCommon.Datatypes {
-    using TransportTypes;
 
     /// <summary>
   ///   This class serves as a representation of a vector or vertex.

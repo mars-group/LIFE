@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonTypes.TransportTypes;
+using GenericAgentArchitectureCommon.TransportTypes;
 
 namespace GenericAgentArchitectureCommon.Datatypes {
-    using TransportTypes;
 
     /// <summary>
-    ///     Axis Aligned Bounding Box
-    ///     @author: Andrew Lubitz (https://code.google.com/p/modelthulhu/)
+    ///   Axis Aligned Bounding Box
+    ///   @author: Andrew Lubitz (https://code.google.com/p/modelthulhu/)
     /// </summary>
     public class AABB {
-        private static float[][] EmptyBoundsArray { get { return new[] {new float[2], new float[2], new float[2]}; } }
+        
+      private static float[][] EmptyBoundsArray { get { return new[] {new float[2], new float[2], new float[2]}; } }
 
         public static readonly AABB Omni = new AABB
             (new[] {

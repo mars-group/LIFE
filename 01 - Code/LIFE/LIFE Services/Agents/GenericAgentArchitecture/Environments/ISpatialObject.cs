@@ -1,5 +1,4 @@
-﻿using DalskiAgent.Movement;
-using GenericAgentArchitectureCommon.Datatypes;
+﻿using GenericAgentArchitectureCommon.Datatypes;
 
 namespace DalskiAgent.Environments {
   
