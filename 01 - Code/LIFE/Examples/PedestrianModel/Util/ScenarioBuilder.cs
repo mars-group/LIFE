@@ -130,13 +130,13 @@ namespace PedestrianModel.Util {
             // left room, top wall
             new Obstacle(exec, env, new Vector(5f, -0.025f, 0), new Vector(10f, 0.05f, 0.4f), new Direction());
             // connection, top wall
-            new Obstacle(exec, env, new Vector(12.5f, 4.475f, 0), new Vector(5f, 0.05f, 0.4f), new Direction());
+            new Obstacle(exec, env, new Vector(12.5f, 4.475f, 0), new Vector(4.9f, 0.05f, 0.4f), new Direction());
             // right room, top wall
             new Obstacle(exec, env, new Vector(20f, -0.025f, 0), new Vector(10f, 0.05f, 0.4f), new Direction());
             // left room, bottom wall
             new Obstacle(exec, env, new Vector(5f, 10.025f, 0), new Vector(10f, 0.05f, 0.4f), new Direction());
             // connection, bottom wall
-            new Obstacle(exec, env, new Vector(12.5f, 5.525f, 0), new Vector(5f, 0.05f, 0.4f), new Direction());
+            new Obstacle(exec, env, new Vector(12.5f, 5.525f, 0), new Vector(4.9f, 0.05f, 0.4f), new Direction());
             // right room, bottom wall
             new Obstacle(exec, env, new Vector(20f, 10.025f, 0), new Vector(10f, 0.05f, 0.4f), new Direction());
 
