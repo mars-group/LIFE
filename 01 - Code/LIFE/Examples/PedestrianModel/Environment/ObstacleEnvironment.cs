@@ -4,6 +4,7 @@ using System.Linq;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Perception;
+using ESCTestLayer.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents;
@@ -15,21 +16,33 @@ namespace PedestrianModel.Environment {
     /// <summary>
     ///     An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.
     /// </summary>
-    public class ObstacleEnvironment : Environment2D, IGenericDataSource {
+    public class ObstacleEnvironment : IEnvironment, IGenericDataSource {
         public static AgentLogger AgentLogger = new AgentLogger();
         public static SimpleVisualization Visualization;
+
+        private readonly IEnvironment _env;   // Environment implementation.
+        public readonly bool UsesESC;       // Boolean to indicate ESC usage. 
 
         /// <summary>
         ///     Create a new environment.
         /// </summary>
-        public ObstacleEnvironment(SeqExec exec) : base(new Vector(1000, 1000), false) {
+        public ObstacleEnvironment(SeqExec exec, bool usesESC) {
+            UsesESC = usesESC;
+            # warning Size?
+            if (UsesESC) _env = new ESCAdapter(new UnboundESC(), new Vector(1000, 1000), false);
+            else _env = new Environment2D(new Vector(1000, 1000), false);
             exec.SetEnvironment(this);
         }
 
         /// <summary>
         ///     Create a new environment.
         /// </summary>
-        public ObstacleEnvironment() : base(new Vector(1000, 1000), false) {}
+        public ObstacleEnvironment(bool usesESC) {
+            UsesESC = usesESC;
+            # warning Size?
+            if (UsesESC) _env = new ESCAdapter(new UnboundESC(), new Vector(1000, 1000), false);
+            else _env = new Environment2D(new Vector(1000, 1000), false);
+        }
 
         #region IGenericDataSource Members
 
@@ -39,6 +52,20 @@ namespace PedestrianModel.Environment {
         /// <param name="spec">Information object describing which data to query.</param>
         /// <returns>An object representing the percepted information.</returns>
         public object GetData(ISpecificator spec) {
+            if (UsesESC) {
+                switch ((InformationType)spec.GetInformationType())
+                {
+                    case InformationType.AllAgents:
+                        return GetAllObjects();
+                    case InformationType.Obstacles:
+                        return GetAllObjects().OfType<Obstacle>().ToList();
+                    case InformationType.Pedestrians:
+                        return GetAllObjects().OfType<Pedestrian>().ToList();
+                    default:
+                        return null;
+                }
+            }
+
             if (!(spec is Halo)) {
                 throw new Exception
                     (
@@ -77,7 +104,23 @@ namespace PedestrianModel.Environment {
 
         #endregion
 
-        public override void AdvanceEnvironment() {
+        public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
+            _env.AddObject(obj, pos, out acc, dim, dir);
+        }
+
+        public void RemoveObject(ISpatialObject obj) {
+            _env.RemoveObject(obj);
+        }
+
+        public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
+            _env.MoveObject(obj, movement, dir);
+        }
+
+        public List<ISpatialObject> GetAllObjects() {
+            return _env.GetAllObjects();
+        }
+
+        public void AdvanceEnvironment() {
             if (Visualization != null) Visualization.Invalidate();
             AgentLogger.Log(GetAllObjects().OfType<Pedestrian>().ToList());
         }

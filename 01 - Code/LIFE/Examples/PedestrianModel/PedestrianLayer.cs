@@ -23,7 +23,7 @@ namespace PedestrianModel {
     [Extension(typeof (ISteppedLayer))]
     public class PedestrianLayer : ISteppedActiveLayer {
         private long _tick; // Counter of current tick.  
-        private IEnvironment _env; // Environment object for spatial agents. 
+        private ObstacleEnvironment _env; // Environment object for spatial agents. 
         private IExecution _exec; // Agent execution container reference.
 
         #region ISteppedActiveLayer Members
@@ -39,7 +39,7 @@ namespace PedestrianModel {
         public bool InitLayer<T>
             (T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _tick = 0;
-            _env = new ObstacleEnvironment();
+            _env = new ObstacleEnvironment(Config.UsesESC);
             _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
 
             new Thread

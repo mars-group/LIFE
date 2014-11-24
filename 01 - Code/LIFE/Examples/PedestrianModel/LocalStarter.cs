@@ -3,8 +3,6 @@ using System.Threading;
 using System.Windows.Forms;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using ESCTestLayer.Implementation;
-using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
 using PedestrianModel.Visualization;
@@ -20,15 +18,13 @@ namespace PedestrianModel {
         /// </summary>
         public static void Main() {
             SeqExec exec = new SeqExec(true);
-            CreateScenarioEnvironment(exec, false, Config.Scenario);
+            CreateScenarioEnvironment(exec, Config.UsesESC, Config.Scenario);
             exec.Run((int) Math.Round(Config.LengthOfTimestepsInMilliseconds), null);
         }
 
         private static void CreateScenarioEnvironment
-            (SeqExec exec, bool esc, ScenarioType scenario) {
-            IEnvironment env;
-            if (!esc) env = new ObstacleEnvironment(exec);
-            else env = new ESCAdapter(new UnboundESC(), new Vector(1000, 1000), false);
+            (SeqExec exec, bool usesESC, ScenarioType scenario) {
+            ObstacleEnvironment env = new ObstacleEnvironment(exec, usesESC);
 
             new Thread
                 (() => {

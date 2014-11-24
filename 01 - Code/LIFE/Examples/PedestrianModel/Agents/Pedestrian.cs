@@ -6,12 +6,14 @@ using DalskiAgent.Execution;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
+using ESCTestLayer.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
+using PedestrianModel.Environment;
 
 namespace PedestrianModel.Agents {
 
@@ -70,7 +72,7 @@ namespace PedestrianModel.Agents {
         /// <param name="name">Name.</param>
         public Pedestrian
             (IExecution exec,
-                IEnvironment env,
+                ObstacleEnvironment env,
                 string simulationId,
                 Vector position,
                 Vector dimension,
@@ -84,32 +86,29 @@ namespace PedestrianModel.Agents {
             Name = name;
             SimulationId = simulationId;
 
+            ISpecificator obstaclesHalo;
+            ISpecificator pedestriansHalo;
+            ISpecificator allAgentsHalo;
+            if (env.UsesESC) {
+                # warning Size?
+                obstaclesHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.Obstacles);
+                pedestriansHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.Pedestrians);
+                allAgentsHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.AllAgents);
+            }
+            else {
+                obstaclesHalo = new OmniHalo(InformationType.Obstacles);
+                pedestriansHalo = new OmniHalo(InformationType.Pedestrians);
+                allAgentsHalo = new OmniHalo(InformationType.AllAgents);
+            }
+
             // Add perception sensor for obstacles.
-            PerceptionUnit.AddSensor
-                (new DataSensor
-                    (
-                    this,
-                    (IGenericDataSource) environment,
-                    new OmniHalo(InformationType.Obstacles))
-                );
+            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource) environment, obstaclesHalo));
 
             // Add perception sensor for pedestrians.
-            PerceptionUnit.AddSensor
-                (new DataSensor
-                    (
-                    this,
-                    (IGenericDataSource) environment,
-                    new OmniHalo(InformationType.Pedestrians))
-                );
+            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource) environment, pedestriansHalo));
 
             // Add perception sensor for everything.
-            PerceptionUnit.AddSensor
-                (new DataSensor
-                    (
-                    this,
-                    (IGenericDataSource) environment,
-                    new OmniHalo(InformationType.AllAgents))
-                );
+            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource) environment, allAgentsHalo));
 
             // Add movement module.
             Mover = new DirectMover(environment, this, Data);
