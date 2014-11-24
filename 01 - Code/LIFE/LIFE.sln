@@ -141,6 +141,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCTest", "Tests\ESCTest\ES
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianModel", "Examples\PedestrianModel\PedestrianModel.csproj", "{3D7B252F-D318-453B-A82F-D4B5B97D14EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedTest", "PedTest\PedTest.csproj", "{C4846885-91E6-4AE0-A219-2290E7E33869}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -669,6 +671,16 @@ Global
 		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3D7B252F-D318-453B-A82F-D4B5B97D14EA}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C4846885-91E6-4AE0-A219-2290E7E33869}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -726,6 +738,7 @@ Global
 		{69AB1421-4A50-4DA7-942F-99980080EA17} = {1791AB7F-736F-4121-B5CF-1DC175834009}
 		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{3D7B252F-D318-453B-A82F-D4B5B97D14EA} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
+		{C4846885-91E6-4AE0-A219-2290E7E33869} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj
