@@ -2,6 +2,8 @@
     using System;
     using System.Diagnostics;
     using System.Linq;
+    using DalskiAgent.Environments;
+    using DalskiAgent.Execution;
     using Entities;
     using ESCTestLayer.Entities;
     using ESCTestLayer.Implementation;
@@ -180,6 +182,17 @@
             }
             // 4.9 sec für 5k agents.
             Console.WriteLine(stopwatch.ElapsedMilliseconds + " ms");
+        }
+        [Test]
+        public void TestIntersections()
+        {
+            ESCAdapter adapter = new ESCAdapter(_esc, new Vector(1000, 1000), false);
+            SeqExec exec = new SeqExec(false);
+
+            // The agents do not collide. They touch at point (10,10). Exception is thrown if ESC thinks there is a collision.
+            new TestSpatialAgent(exec, adapter, new Vector(5d, 10.025d, 0d), new Vector(10d, 0.05d, 0.4d), new Direction());
+            new TestSpatialAgent(exec, adapter, new Vector(10.025d, 7.75d, 0d), new Vector(0.05d, 4.5d, 0.4d), new Direction());
+            PrintAllAgents();
         }
     }
 }

@@ -1,4 +1,16 @@
-﻿namespace ESCTestLayer.Implementation {
+﻿namespace ESCTestLayer {
+    /// <summary>
+    ///     Data query information types.
+    /// </summary>
+    public enum CollisionType {
+        StaticEnv,
+//        DynamicEnv,
+        MassiveAgent,
+//        VolatileAgent
+    }
+}
+
+namespace ESCTestLayer.Implementation {
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -13,10 +25,15 @@
 
     public class UnboundESC : IUnboundESC {
         private const int MaxAttempsToAddRandom = 100;
+        private readonly bool[][] _collisionTypes;
         private readonly Random _random;
         private readonly List<ISpatialEntity> _entities;
 
-        public UnboundESC() {
+        public UnboundESC()
+            : this(new[] {new[] {false, true}, new[] {true, true}}) {}
+
+        public UnboundESC(bool[][] collisionTypes) {
+            _collisionTypes = collisionTypes;
             _random = new Random();
             _entities = new List<ISpatialEntity>();
         }
