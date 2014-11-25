@@ -40,7 +40,25 @@
         }
 
         [Test]
-        public void TestCollisionWithTwoAgents() {
+        public void TestMoveAround()
+        {
+            TestAgent2D a1 = new TestAgent2D(2, 2);
+            Assert.True(_esc.Add(a1, new TVector(1, 1)));
+            Assert.True(_esc.Move(a1, new TVector(0, 1)).Success);
+            Assert.True(a1.Geometry.Centroid.Equals(new Point(1, 2)));
+            Assert.True(_esc.Move(a1, new TVector(0, -1)).Success);
+            Assert.True(a1.Geometry.Centroid.Equals(new Point(1, 1)));
+            Assert.True(_esc.Move(a1, new TVector(10, 0)).Success);
+            Assert.True(a1.Geometry.Centroid.Equals(new Point(11, 1)));
+            Assert.True(_esc.Move(a1, new TVector(-5, 0)).Success);
+            Assert.True(a1.Geometry.Centroid.Equals(new Point(6, 1)));
+            Assert.True(_esc.Move(a1, new TVector(-3.5f, 7.71f)).Success);
+            Assert.True(a1.Geometry.Centroid.Equals(new Point(2.5f, 8.71f)));
+        }
+
+        [Test]
+        public void TestCollisionWithTwoAgents()
+        {
             TestAgent2D a1 = new TestAgent2D(1, 1);
             TestAgent2D a2 = new TestAgent2D(1, 1);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
@@ -113,7 +131,7 @@
         private void PrintAllAgents() {
             Console.WriteLine(_esc.ExploreAll().Count() + " Agents found.");
             foreach (ISpatialEntity entity in _esc.ExploreAll()) {
-                Console.WriteLine( entity.Geometry);
+                Console.WriteLine( entity.Geometry + " center: "+entity.Geometry.Centroid);
             }
             Console.WriteLine("---");
         }
@@ -138,21 +156,24 @@
         public void TestRotation() {
             TestAgent2D a1 = new TestAgent2D(4, 2);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
-
+            PrintAllAgents();
             Assert.False(a1.Geometry.Intersects(new Point(-0.9, -1.9)));
             Assert.False(a1.Geometry.Intersects(new Point(-0.9, 1.9)));
             Assert.False(a1.Geometry.Intersects(new Point(0.9, -1.9)));
             Assert.False(a1.Geometry.Intersects(new Point(0.9, 1.9)));
 
+            PrintAllAgents();
             Direction direction = new Direction();
             direction.SetYaw(90);
             var rotationVector = direction.GetDirectionalVector().GetTVector();
             Assert.True(_esc.Move(a1, new TVector(0, 0), rotationVector).Success);
-            
+            Console.WriteLine("bam");
+            PrintAllAgents();
             Assert.True(a1.Geometry.Intersects(new Point(-0.9, -1.9)));
             Assert.True(a1.Geometry.Intersects(new Point(-0.9, 1.9)));
             Assert.True(a1.Geometry.Intersects(new Point(0.9, -1.9)));
             Assert.True(a1.Geometry.Intersects(new Point(0.9, 1.9)));
+            PrintAllAgents();
         }
 
         [Test]
