@@ -11,7 +11,7 @@ namespace DalskiAgent.Movement.Movers {
   /// </summary>
   public class ContinuousMover : AgentMover {
 
-    public float Speed   { get; private set; }  // Current movement speed.
+    public double Speed  { get; private set; }  // Current movement speed.
     public float PitchAS { get; private set; }  // Pitch changing angular speed.
     public float YawAS   { get; private set; }  // Rotary speed (vertical axis).   
 
@@ -31,7 +31,7 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="speed">The movement speed.</param>
     /// <param name="pitchAS">Pitch changing angular speed.</param>
     /// <param name="yawAS">Rotary speed (vertical axis).</param>
-    public void Move(float speed, float pitchAS, float yawAS) {
+    public void Move(double speed, float pitchAS, float yawAS) {
       PitchAS = pitchAS;
       YawAS = yawAS;
       
@@ -48,7 +48,7 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="speed">Movement speed.</param>
     /// <param name="dir">The direction.</param>
-    public void Move(float speed, Direction dir) {
+    public void Move(double speed, Direction dir) {
       Speed = speed;
       TargetDir = dir;
       
@@ -56,9 +56,9 @@ namespace DalskiAgent.Movement.Movers {
       var pitchRad = Direction.DegToRad(TargetDir.Pitch);
       var yawRad = Direction.DegToRad(TargetDir.Yaw);
       var factor = Speed * TickLength;
-      var x = (float)(factor * Math.Cos(pitchRad) * Math.Sin(yawRad));
-      var y = (float)(factor * Math.Cos(pitchRad) * Math.Cos(yawRad));
-      var z = (float)(factor * Math.Sin(pitchRad));    
+      var x = factor * Math.Cos(pitchRad) * Math.Sin(yawRad);
+      var y = factor * Math.Cos(pitchRad) * Math.Cos(yawRad);
+      var z = factor * Math.Sin(pitchRad);    
       MovementVector = new Vector(x, y, z);
 
       // Execute L0 call. 
@@ -73,7 +73,7 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="targetPos">A point the agent shall go to.</param>
     /// <param name="speed">The agent's movement speed.</param>
     /// <returns>A movement action, ready for execution. </returns>
-    public ContinuousMovementAction MoveTowardsPosition (Vector targetPos, float speed) {
+    public ContinuousMovementAction MoveTowardsPosition (Vector targetPos, double speed) {
 
       // Check, if we are already there. Otherwise no need to move anyway.
       var distance = Data.Position.GetDistance(targetPos);

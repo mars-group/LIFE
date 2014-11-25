@@ -9,24 +9,24 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     ///   @author: Andrew Lubitz (https://code.google.com/p/modelthulhu/)
     /// </summary>
     public class AABB {
-        
-      private static float[][] EmptyBoundsArray { get { return new[] {new float[2], new float[2], new float[2]}; } }
+
+        private static double[][] EmptyBoundsArray { get { return new[] { new double[2], new double[2], new double[2] }; } }
 
         public static readonly AABB Omni = new AABB
             (new[] {
-                new[] {float.MinValue, float.MaxValue},
-                new[] {float.MinValue, float.MaxValue},
-                new[] {float.MinValue, float.MaxValue}
+                new[] {double.MinValue, double.MaxValue},
+                new[] {double.MinValue, double.MaxValue},
+                new[] {double.MinValue, double.MaxValue}
             });
 
         // first index is x/y/z, second index is min/max
-        public readonly float[][] Bounds;
+        public readonly double[][] Bounds;
 
         public AABB() {
             Bounds = EmptyBoundsArray;
         }
 
-        public AABB(float[][] bounds) {
+        public AABB(double[][] bounds) {
             Bounds = bounds;
         }
 
@@ -59,7 +59,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
         /// <returns></returns>
         public static AABB ExpandedToFit(AABB input, TVector point) {
             AABB result = new AABB();
-            float[] pointArray = {point.X, point.Y, point.Z};
+            double[] pointArray = { point.X, point.Y, point.Z };
             for (int dim = 0; dim < 3; dim++) {
                 result.Bounds[dim][0] = Math.Min(input.Bounds[dim][0], pointArray[dim]);
                 result.Bounds[dim][1] = Math.Max(input.Bounds[dim][1], pointArray[dim]);
@@ -118,7 +118,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
         /// <param name="points"></param>
         /// <returns></returns>
         public static AABB FitPointList(List<TVector> points) {
-            float[][] bounds = EmptyBoundsArray;
+            double[][] bounds = EmptyBoundsArray;
             TVector first = points[0];
             bounds[0][0] = bounds[0][1] = first.X;
             bounds[1][0] = bounds[1][1] = first.Y;

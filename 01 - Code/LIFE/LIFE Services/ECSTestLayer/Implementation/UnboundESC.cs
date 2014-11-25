@@ -75,7 +75,7 @@
             trans.SetToTranslation(movementVector.X, movementVector.Y);
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
                 Direction direction = new Direction();
-                direction.SetDirectionalVector(new Vector(rotation.X, rotation.Y, rotation.Z));
+                direction.SetDirectionalVector(rotation.GetVector());
                 Console.WriteLine(direction.Yaw);
                 Coordinate center = old.Centroid.Coordinate;
                 trans.Rotate(Direction.DegToRad(direction.Yaw), center.X, center.Y);
@@ -98,8 +98,8 @@
             foreach (ISpatialEntity entity in _entities.ToArray()) {
                 IGeometry poly1 = gfactory.CreatePolygon(geometry.Envelope.Coordinates);
                 IGeometry poly2 = gfactory.CreatePolygon(entity.Geometry.Coordinates);
-                if (poly1.Intersects(poly2) && !poly1.Touches(poly2))
-                    if (poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon)) entities.Add(entity);
+                if (poly1.Intersects(poly2) && !poly1.Touches(poly2) &&
+                    poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon)) entities.Add(entity);
             }
             return entities;
         }
@@ -126,9 +126,9 @@
                 return new TVector(x, y, z);
             }
             else {
-                float x = (float) GetRandomNumber(min.X, max.X);
-                float y = (float) GetRandomNumber(min.Y, max.Y);
-                float z = (float) GetRandomNumber(min.Z, max.Z);
+                double x = GetRandomNumber(min.X, max.X);
+                double y = GetRandomNumber(min.Y, max.Y);
+                double z = GetRandomNumber(min.Z, max.Z);
                 return new TVector(x, y, z);
             }
         }

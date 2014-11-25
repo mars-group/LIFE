@@ -35,18 +35,18 @@ namespace DalskiAgent.Environments {
     /// </summary>
     public Vector Position {
       get {
-        float x, y, z;
+        double x, y, z;
         if (_data != null) {
           x = _data.Position.X;
           y = _data.Position.Y;
           z = _data.Position.Z;          
         }
         else {
-          x = (float) _geometry.Geometry.Centroid.Coordinate.X;
-          y = (float) _geometry.Geometry.Centroid.Coordinate.Y;
-          z = (float) _geometry.Geometry.Centroid.Coordinate.Z;
+          x = _geometry.Geometry.Centroid.Coordinate.X;
+          y = _geometry.Geometry.Centroid.Coordinate.Y;
+          z = _geometry.Geometry.Centroid.Coordinate.Z;
         }
-        if (float.IsNaN(z)) z = 0.0f;
+        if (double.IsNaN(z)) z = 0.0f;
         return new Vector(x, y, z);
       }      
     }
@@ -76,16 +76,16 @@ namespace DalskiAgent.Environments {
     /// </summary>
     public Vector Dimension {
       get {
-        float x, y, z;
+        double x, y, z;
         if (_data != null) {
           x = _data.Dimension.X;
           y = _data.Dimension.Y;
           z = _data.Dimension.Z;
         }
         else {
-          x = (float) _geometry.Geometry.EnvelopeInternal.Width;
-          y = (float) _geometry.Geometry.EnvelopeInternal.Height;
-          z = 0f;
+          x = _geometry.Geometry.EnvelopeInternal.Width;
+          y = _geometry.Geometry.EnvelopeInternal.Height;
+          z = 0;
         }
 
         return new Vector(x, y, z);
