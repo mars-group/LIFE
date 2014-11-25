@@ -59,13 +59,13 @@ namespace AgentTester.Wolves.Environment {
       var wolves = raw.OfType< Wolf>().Count();
 
       // Output numbers.
-      ConsoleView.AddMessage("["+GetTick()+"] Gras "+grass+", Schafe "+sheeps+", Wölfe "+wolves, ConsoleColor.DarkGray);
+      //ConsoleView.AddMessage("["+GetTick()+"] Gras "+grass+", Schafe "+sheeps+", Wölfe "+wolves, ConsoleColor.DarkGray);
 
       // Grass spawning
       var create = _random.Next(50 + grass*2) < 20;
       if (create) {
         var g = new Grass(_exec, _env);
-        ConsoleView.AddMessage("["+GetTick()+"] Neues Gras auf Position "+g.GetPosition(), ConsoleColor.Cyan);
+        //ConsoleView.AddMessage("["+GetTick()+"] Neues Gras auf Position "+g.GetPosition(), ConsoleColor.Cyan);
       }
 
 
