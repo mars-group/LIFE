@@ -93,9 +93,15 @@
 
         public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
+            IGeometryFactory gfactory = GeometryFactory.FloatingSingle;
             foreach (ISpatialEntity entity in _entities.ToArray()) {
-                if (geometry.Envelope.Intersects(entity.Geometry) && !geometry.Touches(entity.Geometry)) {
-                    entities.Add(entity);
+                IGeometry poly1 = gfactory.CreatePolygon(geometry.Envelope.Coordinates);
+                //Console.WriteLine("Polygon 1: " + poly1);
+                IGeometry poly2 = gfactory.CreatePolygon(entity.Geometry.Coordinates);
+                //Console.WriteLine("Polygon 2: " + poly2);
+                if (poly1.Intersects(poly2) && !poly1.Touches(poly2)) {
+                    //Console.WriteLine("Intersection: " + poly1.Intersection(poly2));
+                    if (poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon)) entities.Add(entity);
                 }
             }
             return entities;

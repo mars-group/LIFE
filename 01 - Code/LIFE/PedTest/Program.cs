@@ -26,6 +26,7 @@ namespace PedTest
             if (poly1.Intersects(poly2) && !poly1.Touches(poly2)) {
                 Console.WriteLine("Intersects and doesn't touch -> Collision!");
                 Console.WriteLine("Intersection: " + poly1.Intersection(poly2));
+                Console.WriteLine("Intersection is polygon? " + poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon));
             }
             Console.WriteLine();
 
@@ -44,6 +45,7 @@ namespace PedTest
             {
                 Console.WriteLine("Intersects and doesn't touch -> Collision!");
                 Console.WriteLine("Intersection: " + poly1.Intersection(poly2));
+                Console.WriteLine("Intersection is polygon? " + poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon));
             }
             Console.WriteLine();
 
@@ -63,6 +65,7 @@ namespace PedTest
             {
                 Console.WriteLine("Intersects and doesn't touch -> Collision!");
                 Console.WriteLine("Intersection: " + poly1.Intersection(poly2));
+                Console.WriteLine("Intersection is polygon? " + poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon));
             }
             Console.ReadLine();
         }
