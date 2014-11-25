@@ -53,19 +53,18 @@ namespace AgentTester.Wolves.Environment {
     /// <returns>Always 'null', because this agent does not interact.</returns>
     public IInteraction Reason() {
 
+      // Output numbers.
       var raw = (List<ISpatialObject>) PerceptionUnit.GetData(InformationTypes.AllAgents).Data;
       var grass  = raw.OfType<Grass>().Count();
-      var sheeps = raw.OfType<Sheep>().Count();
-      var wolves = raw.OfType< Wolf>().Count();
-
-      // Output numbers.
+      //var sheeps = raw.OfType<Sheep>().Count();
+      //var wolves = raw.OfType< Wolf>().Count();     
       //ConsoleView.AddMessage("["+GetTick()+"] Gras "+grass+", Schafe "+sheeps+", Wölfe "+wolves, ConsoleColor.DarkGray);
 
-      // Grass spawning
+      // Grass spawning.
       var create = _random.Next(50 + grass*2) < 20;
       if (create) {
         var g = new Grass(_exec, _env);
-        //ConsoleView.AddMessage("["+GetTick()+"] Neues Gras auf Position "+g.GetPosition(), ConsoleColor.Cyan);
+        ConsoleView.AddMessage("["+GetTick()+"] Neues Gras auf Position "+g.GetPosition(), ConsoleColor.Cyan);
       }
 
 

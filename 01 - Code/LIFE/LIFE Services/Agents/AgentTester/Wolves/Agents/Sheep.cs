@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AgentTester.Wolves.Environment;
 using AgentTester.Wolves.Interactions;
 using DalskiAgent.Agents;
@@ -41,7 +42,7 @@ namespace AgentTester.Wolves.Agents {
       
       // Add perception sensor.
       ISpecificator halo;
-      if (env.UsesESC) halo = new SpatialHalo(MyGeometryFactory.Rectangle(6, 6), InformationTypes.AllAgents);
+      if (env.UsesESC) halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
       else             halo = new RadialHalo(Data, InformationTypes.AllAgents, 8);
       PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
 
@@ -71,6 +72,17 @@ namespace AgentTester.Wolves.Agents {
       int hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
       var rawData = PerceptionUnit.GetData(InformationTypes.AllAgents).Data;
       var agents = ((List<ISpatialObject>) rawData);
+
+      // Remove own agent from perception list.
+      if (_environment.UsesESC) {
+        for (var i = 0; i < agents.Count; i ++) {
+          if (agents[i] == this) {
+            agents.RemoveAt(i);
+            break;
+          }
+        }
+      }
+
       var grass = agents.OfType<Grass>().ToList();
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
