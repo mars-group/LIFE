@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using DalskiAgent.Agents;
-using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
@@ -81,45 +80,77 @@ namespace PedestrianModel.Agents {
                 float maxVelocity,
                 String name = "pedestrian")
             : base(exec, env, position, dimension, direction) {
-            IEnvironment environment = env;
             MaxVelocity = maxVelocity;
             Name = name;
             SimulationId = simulationId;
 
+            AddSensors(env);
+
+            // Add movement module.
+            Mover = new DirectMover(env, this, Data);
+            _mover = (DirectMover) Mover; // Re-declaration to save casts.
+
+            // WALK
+            _targetPositions = new List<Vector> {targetPosition};
+
+            Init();
+        }
+
+        public Pedestrian
+            (IExecution exec,
+                ObstacleEnvironment env,
+                string simulationId,
+                Vector minPos,
+                Vector maxPos,
+                Vector dimension,
+                Direction direction,
+                Vector targetPosition,
+                float maxVelocity,
+                String name = "pedestrian")
+            : base(exec, env, minPos, maxPos, dimension, direction)
+        {
+            MaxVelocity = maxVelocity;
+            Name = name;
+            SimulationId = simulationId;
+
+            AddSensors(env);
+
+            // Add movement module.
+            Mover = new DirectMover(env, this, Data);
+            _mover = (DirectMover)Mover; // Re-declaration to save casts.
+
+            // WALK
+            _targetPositions = new List<Vector> { targetPosition };
+
+            Init();
+        }
+
+        private void AddSensors(ObstacleEnvironment env) {
             ISpecificator obstaclesHalo;
             ISpecificator pedestriansHalo;
             ISpecificator allAgentsHalo;
-            if (env.UsesESC) {
-                # warning Size?
+            if (env.UsesESC)
+            {
+            # warning Size?
                 obstaclesHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.Obstacles);
                 pedestriansHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.Pedestrians);
                 allAgentsHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.AllAgents);
             }
-            else {
+            else
+            {
                 obstaclesHalo = new OmniHalo(InformationType.Obstacles);
                 pedestriansHalo = new OmniHalo(InformationType.Pedestrians);
                 allAgentsHalo = new OmniHalo(InformationType.AllAgents);
             }
 
             // Add perception sensor for obstacles.
-            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource) environment, obstaclesHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, env, obstaclesHalo));
 
             // Add perception sensor for pedestrians.
-            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource) environment, pedestriansHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, env, pedestriansHalo));
 
             // Add perception sensor for everything.
-            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource) environment, allAgentsHalo));
-
-            // Add movement module.
-            Mover = new DirectMover(environment, this, Data);
-            _mover = (DirectMover) Mover; // Re-declaration to save casts.
-
-            // WALK
-            _targetPositions = new List<Vector> {targetPosition};
-
-            _startPosition = position;
-
-            Init();
+            PerceptionUnit.AddSensor(new DataSensor(this, env, allAgentsHalo));
         }
 
         #region IAgentLogic Members
