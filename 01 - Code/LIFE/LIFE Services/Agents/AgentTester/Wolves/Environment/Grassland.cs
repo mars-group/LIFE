@@ -17,6 +17,8 @@ namespace AgentTester.Wolves.Environment {
   class Grassland : IEnvironment, IGenericDataSource {
 
     private readonly IEnvironment _env;   // Environment implementation.
+    private readonly Vector _boundaries;  // Positive extent of the environment.
+    private readonly Random _random;      // Random number generator.
     public readonly bool UsesESC;         // Boolean to indicate ESC usage. 
 
     /// <summary>
@@ -27,6 +29,8 @@ namespace AgentTester.Wolves.Environment {
     /// <param name="isGrid">Shall a grid be used?</param>
     public Grassland(bool useESC, Vector boundaries, bool isGrid) {
       UsesESC = useESC;
+      _random = new Random();
+      _boundaries = boundaries;
       if (useESC) _env = new ESCAdapter(new UnboundESC(), boundaries, isGrid);  
       else        _env = new Environment2D(boundaries, isGrid);
     }
@@ -41,7 +45,7 @@ namespace AgentTester.Wolves.Environment {
     public object GetData(ISpecificator spec) {
 
       // ESC indirection.
-      if (UsesESC) return ((ESCAdapter) _env).GetAllObjects();
+      if (UsesESC) return ((ESCAdapter) _env).GetData(spec);
 
       // Otherwise use own data source implementation.
       if (!(spec is Halo)) throw new Exception(
@@ -75,10 +79,10 @@ namespace AgentTester.Wolves.Environment {
     /// </summary>
     /// <returns>A vector representing a free position.</returns>
     public Vector GetRandomPosition() {
-      if (_env is Environment2D) return ((Environment2D) _env).GetRandomPosition();
-      return new Vector(10,10);  //TODO
-      //throw new Exception(
-      //  "[[Grassland] Error on GetRandomPosition(): Not implemented for ESC version!");
+      if (_env is Environment2D) return ((Environment2D) _env).GetRandomPosition();    
+      var x = _random.Next((int)_boundaries.X);
+      var y = _random.Next((int)_boundaries.Y);     
+      return new Vector(x, y);
     }
 
 

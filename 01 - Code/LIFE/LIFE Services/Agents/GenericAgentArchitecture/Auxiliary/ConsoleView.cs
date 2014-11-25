@@ -78,9 +78,9 @@ namespace DalskiAgent.Auxiliary {
       foreach (var obj in _env.GetAllObjects().OfType<SpatialAgent>()) _agents.Add(obj);
         
       for (int i = 0; i < _agents.Count; i++) {
-        int x = (int) _agents[i].GetPosition().X  + 1;  // Offsets: +1: skip left border,
-        int y = (int) _agents[i].GetPosition().Y  + 3;  // +3: skip two headlines + border.
-        _agentPos.Add(new Pos{X = x, Y = y});
+        int x = (int) _agents[i].GetPosition().X  + 1;              // Offsets: +1: skip left border,
+        int y = _cid.MapY - ((int)_agents[i].GetPosition().Y) + 3;  // +3: skip two headlines + border.
+        _agentPos.Add(new Pos{X = x, Y = y});                       // Substraction: (0,0) is down-left, not top-left!
         Console.SetCursorPosition(x, y);     
         if (_cid.GetColor  != null) Console.ForegroundColor = _cid.GetColor(_agents[i]);
         else                        Console.ForegroundColor = ConsoleColor.Gray;      

@@ -1,4 +1,5 @@
-﻿using DalskiAgent.Environments;
+﻿using System;
+using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
 using GenericAgentArchitectureCommon.Datatypes;
@@ -28,6 +29,24 @@ namespace DalskiAgent.Agents {
     protected SpatialAgent(IExecution exec, IEnvironment env, Vector pos, Vector dim = null, Direction dir = null) : base(exec) {
       _env = env;
       _env.AddObject(this, pos, out Data, dim, dir);  // Enlist the agent in environment.
+    }
+
+    
+    /// <summary>
+    ///   Instantiate a new agent with spatial data. Only available for specializations.
+    /// </summary>
+    /// <param name="exec">Agent execution container reference.</param>
+    /// <param name="env">Environment implementation reference.</param>
+    /// <param name="minPos">Minimum coordinate for random position.</param>
+    /// <param name="maxPos">Maximum coordinate for random position.</param>
+    /// <param name="dim">Dimension of the agent. If null, then (1,1,1).</param>
+    /// <param name="dir">Direction of the agent. If null, then 0°.</param>
+    protected SpatialAgent(IExecution exec, IEnvironment env, Vector minPos, Vector maxPos, Vector dim = null, Direction dir = null) : base(exec) {
+      if (env is ESCAdapter) {
+        _env = env;
+        ((ESCAdapter)_env).AddObject(this, minPos, maxPos, out Data, dim, dir);  // Enlist the agent in environment.        
+      }
+      else throw new Exception("[SpatialAgent] Constructor error: Environment does not support interval placement. Use ESCAdapter instead!");
     }
 
 

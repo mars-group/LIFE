@@ -18,7 +18,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     public Vector (float x, float y) {
       X = x;
       Y = y;
-      Z = 0;
+      Z = 0.0f;
       _is3D = false;
     }
 

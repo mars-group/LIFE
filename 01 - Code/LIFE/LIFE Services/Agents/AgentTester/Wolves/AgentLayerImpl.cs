@@ -43,14 +43,16 @@ namespace AgentTester.Wolves {
     public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
       // Create the environment, the execution container and an agent spawner.
-      _env = new Grassland(true, new Vector(30, 20), true);
+      _env = new Grassland(true, new Vector(100, 100), true);
       _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);      
-      _spawner = new AgentSpawner(_exec, _env);  
+      _spawner = new AgentSpawner(_exec, _env);
+
+      int j = 1;
 
       // Create some initial agents.
-      for (var i = 0; i < 20; i ++) new Grass(_exec, _env);
-      for (var i = 0; i < 10; i ++) new Sheep(_exec, _env);
-      for (var i = 0; i <  1; i ++) new Wolf (_exec, _env);     
+      for (var i = 0; i < 50*j; i ++) new Grass(_exec, _env);
+      for (var i = 0; i < 30*j; i ++) new Sheep(_exec, _env);
+      for (var i = 0; i < 20*j; i ++) new Wolf (_exec, _env);     
       return true;
     }
 

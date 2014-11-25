@@ -64,6 +64,29 @@ namespace DalskiAgent.Environments {
 
 
     /// <summary>
+    ///   Add a new object to the environment.
+    /// </summary>
+    /// <param name="obj">The object to add.</param>
+    /// <param name="minPos">Minimum coordinate for random position.</param>
+    /// <param name="maxPos">Maximum coordinate for random position.</param>
+    /// <param name="acc">Read-only object for data queries.</param>
+    /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
+    /// <param name="dir">Direction of the object. If null, then 0°.</param>
+    public void AddObject(ISpatialObject obj, Vector minPos, Vector maxPos, out DataAccessor acc, Vector dim, Direction dir) {      
+      
+      // Set default values to direction and dimension, if not given. Then create geometry and accessor.
+      if (dir == null) dir = new Direction();
+      if (dim == null) dim = new Vector(1f, 1f, 1f);
+      var geometry = new GeometryObject(obj, MyGeometryFactory.Rectangle(dim.X, dim.Y), dir);
+      acc = new DataAccessor(geometry);
+      _objects[obj] = geometry;
+
+      var success = _esc.AddWithRandomPosition(geometry, minPos.GetTVector(), maxPos.GetTVector(), _gridMode);                     
+      if (!success) throw new Exception("[ESCAdapter] AddObject(): Interval placement failed, ESC returned 'false'!");
+    }
+
+
+    /// <summary>
     ///   Remove an object from the environment.
     /// </summary>
     /// <param name="obj">The object to delete.</param>
@@ -95,7 +118,7 @@ namespace DalskiAgent.Environments {
       // Call the ESC move function and evaluate the return value.
       var result = _esc.Move(_objects[obj], movement.GetTVector(), dir.GetDirectionalVector().GetTVector());
       if (!result.Success) ConsoleView.AddMessage("[ESCAdapter] Kollision auf "+obj.GetPosition()+
-        " mit "+result.Collisions.Count()+".", ConsoleColor.DarkBlue);
+        " mit "+result.Collisions.Count()+".", ConsoleColor.Red);
       //TODO Store return value and use it!
     }
 
@@ -124,7 +147,10 @@ namespace DalskiAgent.Environments {
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
     public object GetData(ISpecificator spec) {
-      return _esc.GetData(spec);
+      var entities = (List<ISpatialEntity>)_esc.GetData(spec);
+      var objects = new List<ISpatialObject>();     
+      foreach (var entity in entities.OfType<GeometryObject>()) objects.Add(entity.Object);
+      return objects;
     }
   }
 
