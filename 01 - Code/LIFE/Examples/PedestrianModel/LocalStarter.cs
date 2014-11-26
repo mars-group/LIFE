@@ -18,13 +18,14 @@ namespace PedestrianModel {
         /// </summary>
         public static void Main() {
             SeqExec exec = new SeqExec(true);
-            CreateScenarioEnvironment(exec, Config.UsesESC, Config.Scenario);
+            CreateScenarioEnvironment(exec, Config.Scenario);
             exec.Run((int) Math.Round(Config.LengthOfTimestepsInMilliseconds), null);
         }
 
-        private static void CreateScenarioEnvironment
-            (SeqExec exec, bool usesESC, ScenarioType scenario) {
-            ObstacleEnvironment env = new ObstacleEnvironment(exec, usesESC);
+        private static void CreateScenarioEnvironment(SeqExec exec, ScenarioType scenario) {
+            IEnvironment env;
+            if (Config.UsesESC) env = new ObstacleEnvironmentESC(exec);
+            else env = new ObstacleEnvironment2D(exec);
 
             new Thread
                 (() => {

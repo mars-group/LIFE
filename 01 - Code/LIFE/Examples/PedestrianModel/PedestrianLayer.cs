@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using LayerAPI.Interfaces;
 using Mono.Addins;
-using PedestrianModel.Agents;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
-using PedestrianModel.Visualization;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -23,7 +18,7 @@ namespace PedestrianModel {
     [Extension(typeof (ISteppedLayer))]
     public class PedestrianLayer : ISteppedActiveLayer {
         private long _tick; // Counter of current tick.  
-        private ObstacleEnvironment _env; // Environment object for spatial agents. 
+        private IEnvironment _env; // Environment object for spatial agents. 
         private IExecution _exec; // Agent execution container reference.
 
         #region ISteppedActiveLayer Members
@@ -39,15 +34,9 @@ namespace PedestrianModel {
         public bool InitLayer<T>
             (T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _tick = 0;
-            _env = new ObstacleEnvironment(Config.UsesESC);
+            if (Config.UsesESC) _env = new ObstacleEnvironmentESC();
+            else _env = new ObstacleEnvironment2D();
             _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
-
-            new Thread
-                (() => {
-                    SimpleVisualization visualization = new SimpleVisualization(_env);
-                    ObstacleEnvironment.Visualization = visualization;
-                    Application.Run(visualization);
-                }).Start();
 
             ScenarioBuilder.CreateScenario(_exec, _env, Config.Scenario);
 
@@ -57,8 +46,11 @@ namespace PedestrianModel {
         }
 
         public void PreTick() {
-            if (ObstacleEnvironment.Visualization != null) ObstacleEnvironment.Visualization.Invalidate();
-            ObstacleEnvironment.AgentLogger.Log(_env.GetAllObjects().OfType<Pedestrian>().ToList());
+            if (_env is ObstacleEnvironmentESC) {
+                ObstacleEnvironmentESC escEnv = (ObstacleEnvironmentESC) _env;
+                escEnv.AdvanceEnvironment();
+            }
+            _env.AdvanceEnvironment();
         }
 
         /// <summary>

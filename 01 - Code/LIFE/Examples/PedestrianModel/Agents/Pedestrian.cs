@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DalskiAgent.Agents;
+using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
@@ -12,7 +14,6 @@ using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
-using PedestrianModel.Environment;
 
 namespace PedestrianModel.Agents {
 
@@ -71,7 +72,7 @@ namespace PedestrianModel.Agents {
         /// <param name="name">Name.</param>
         public Pedestrian
             (IExecution exec,
-                ObstacleEnvironment env,
+                IEnvironment env,
                 string simulationId,
                 Vector position,
                 Vector dimension,
@@ -98,7 +99,7 @@ namespace PedestrianModel.Agents {
 
         public Pedestrian
             (IExecution exec,
-                ObstacleEnvironment env,
+                IEnvironment env,
                 string simulationId,
                 Vector minPos,
                 Vector maxPos,
@@ -125,11 +126,11 @@ namespace PedestrianModel.Agents {
             Init();
         }
 
-        private void AddSensors(ObstacleEnvironment env) {
+        private void AddSensors(IEnvironment env) {
             ISpecificator obstaclesHalo;
             ISpecificator pedestriansHalo;
             ISpecificator allAgentsHalo;
-            if (env.UsesESC)
+            if (Config.UsesESC)
             {
             # warning Size?
                 obstaclesHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.Obstacles);
@@ -144,13 +145,13 @@ namespace PedestrianModel.Agents {
             }
 
             // Add perception sensor for obstacles.
-            PerceptionUnit.AddSensor(new DataSensor(this, env, obstaclesHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource)env, obstaclesHalo));
 
             // Add perception sensor for pedestrians.
-            PerceptionUnit.AddSensor(new DataSensor(this, env, pedestriansHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource)env, pedestriansHalo));
 
             // Add perception sensor for everything.
-            PerceptionUnit.AddSensor(new DataSensor(this, env, allAgentsHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource)env, allAgentsHalo));
         }
 
         #region IAgentLogic Members
@@ -195,7 +196,14 @@ namespace PedestrianModel.Agents {
             // - ok, we don't really have an Y axis, but it's Vector3D, so define a hard coded y-value
             // - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
             object rawObstaclesData = PerceptionUnit.GetData(InformationType.Obstacles).Data;
-            IList<Obstacle> obstacles = (List<Obstacle>) rawObstaclesData;
+            List<Obstacle> obstacles;
+            if (Config.UsesESC)
+            {
+                # warning 'Hack' because ESCAdapter always gives back all agents
+                List<ISpatialObject> spatials = (List<ISpatialObject>)rawObstaclesData;
+                obstacles = spatials.OfType<Obstacle>().ToList();
+            }
+            else obstacles = (List<Obstacle>)rawObstaclesData;
             _pathfindingSearchGraph = new RaytracingGraph
                 (SimulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0d, 0.28d));
             _pathfinder = new AStarPathfinder<Vector>(_pathfindingSearchGraph);

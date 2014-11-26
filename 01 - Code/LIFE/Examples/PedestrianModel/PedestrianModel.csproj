@@ -59,6 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Environment\ObstacleEnvironment2D.cs" />
+    <Compile Include="Environment\ObstacleEnvironmentESC.cs" />
     <Compile Include="InformationType.cs" />
     <Compile Include="PedestrianLayer.cs" />
     <Compile Include="Agents\Reasoning\Pathfinding\Waypoint.cs" />

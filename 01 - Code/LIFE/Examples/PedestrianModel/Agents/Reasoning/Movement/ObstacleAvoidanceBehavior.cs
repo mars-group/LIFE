@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DalskiAgent.Agents;
+using DalskiAgent.Environments;
 using DalskiAgent.Perception;
 using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Agents.Reasoning.Movement.Potential;
@@ -52,7 +54,12 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
 
             // creating the static obstacle field
             object rawObstacleData = perceptionUnit.GetData(InformationType.Obstacles).Data;
-            List<Obstacle> obstacles = (List<Obstacle>) rawObstacleData;
+            List<Obstacle> obstacles;
+            if (Config.UsesESC) {
+                # warning 'Hack' because ESCAdapter always gives back all agents
+                List<ISpatialObject> spatials = (List<ISpatialObject>) rawObstacleData;
+                obstacles = spatials.OfType<Obstacle>().ToList();
+            } else obstacles = (List<Obstacle>) rawObstacleData;
 
             foreach (Obstacle obstacle in obstacles) {
                 Vector position = obstacle.GetPosition();
@@ -67,7 +74,14 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
             IPotentialField agentField = new SimplePotentialField();
 
             object rawPedestrianData = _perceptionUnit.GetData(InformationType.Pedestrians).Data;
-            IList<Pedestrian> pedestrians = (List<Pedestrian>) rawPedestrianData;
+            List<Pedestrian> pedestrians;
+            if (Config.UsesESC)
+            {
+                # warning 'Hack' because ESCAdapter always gives back all agents
+                List<ISpatialObject> spatials = (List<ISpatialObject>)rawPedestrianData;
+                pedestrians = spatials.OfType<Pedestrian>().ToList();
+            }
+            else pedestrians = (List<Pedestrian>)rawPedestrianData;
 
             foreach (Pedestrian ped in pedestrians) {
                 if (!ped.Id.Equals(_agent.Id)) {

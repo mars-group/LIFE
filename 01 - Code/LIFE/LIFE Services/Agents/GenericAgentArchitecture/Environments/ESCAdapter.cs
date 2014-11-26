@@ -138,7 +138,7 @@ namespace DalskiAgent.Environments {
     /// <summary>
     ///   Environment-related functions. Not needed in the ESC (at least, not now)!
     /// </summary>
-    public void AdvanceEnvironment() { }
+    public virtual void AdvanceEnvironment() { }
 
 
     /// <summary>

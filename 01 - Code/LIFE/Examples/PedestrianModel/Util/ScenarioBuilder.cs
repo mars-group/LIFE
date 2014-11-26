@@ -1,8 +1,8 @@
 ﻿using System;
+using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Agents;
-using PedestrianModel.Environment;
 using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Util {
@@ -10,7 +10,7 @@ namespace PedestrianModel.Util {
     internal class ScenarioBuilder {
         private static readonly Random Random = new Random();
 
-        public static void CreateDensityScenario(IExecution exec, ObstacleEnvironment env, int pedestrianCount) {
+        public static void CreateDensityScenario(IExecution exec, IEnvironment env, int pedestrianCount) {
             // top wall
             new Obstacle(exec, env, new Vector(20d, -0.025d, 0), new Vector(40d, 0.05d, 0.4d), new Direction());
             // bottom wall
@@ -70,7 +70,7 @@ namespace PedestrianModel.Util {
         }
 
         public static void CreateBottleneckScenario
-            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double bottleneckWidth) {
+            (IExecution exec, IEnvironment env, int pedestrianCount, double bottleneckWidth) {
             double wallWidth = 0.05d;
             double wallCorrection = wallWidth/2d;
             double maxY = 10d;
@@ -171,7 +171,7 @@ namespace PedestrianModel.Util {
             }
         }
 
-        public static void CreateRimeaScenario(IExecution exec, ObstacleEnvironment env, int pedestrianCount) {
+        public static void CreateRimeaScenario(IExecution exec, IEnvironment env, int pedestrianCount) {
             // walls of left room, connection and right room
             // left room, top wall
             new Obstacle(exec, env, new Vector(5d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
@@ -254,7 +254,7 @@ namespace PedestrianModel.Util {
         }
 
         public static void CreateUShapeScenario
-            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double wallLength) {
+            (IExecution exec, IEnvironment env, int pedestrianCount, double wallLength) {
             // move the old scenario positions to positive positions
             double xOffset = 100d;
             double yOffset = 100d;
@@ -326,7 +326,7 @@ namespace PedestrianModel.Util {
         }
 
         public static void CreateOscillationScenario
-            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double bottleneckWidth) {
+            (IExecution exec, IEnvironment env, int pedestrianCount, double bottleneckWidth) {
             // move the old scenario positions to positive positions
             double xOffset = 10d;
             double yOffset = 10d;
@@ -447,7 +447,7 @@ namespace PedestrianModel.Util {
         }
 
         public static void CreateLaneScenario
-            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double laneWidth) {
+            (IExecution exec, IEnvironment env, int pedestrianCount, double laneWidth) {
             // move the old scenario positions to positive positions
             double xOffset = 10d;
             double yOffset = 10d;
@@ -554,7 +554,7 @@ namespace PedestrianModel.Util {
             }
         }
 
-        public static void CreateScenario(IExecution exec, ObstacleEnvironment env, ScenarioType scenario) {
+        public static void CreateScenario(IExecution exec, IEnvironment env, ScenarioType scenario) {
             switch (scenario) {
                 case ScenarioType.Lane250Cm:
                     CreateLaneScenario(exec, env, 50, 2.5d);

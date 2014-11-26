@@ -92,7 +92,6 @@ namespace ESCTestLayer.Implementation {
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
                 Direction direction = new Direction();
                 direction.SetDirectionalVector(rotation.GetVector());
-                Console.WriteLine(direction.Yaw);
                 Coordinate center = old.Centroid.Coordinate;
                 trans.Rotate(Direction.DegToRad(direction.Yaw), center.X, center.Y);
             }
