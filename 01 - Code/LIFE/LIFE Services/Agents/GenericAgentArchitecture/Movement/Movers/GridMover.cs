@@ -106,7 +106,7 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     public struct MovementOption : IComparable {
       public GridDir Direction;
-      public float Offset;
+      public double Offset;
 
       public int CompareTo(Object obj) {
         var other = (MovementOption) obj;

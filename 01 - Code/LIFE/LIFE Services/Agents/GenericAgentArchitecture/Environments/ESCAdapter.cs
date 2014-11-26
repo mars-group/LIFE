@@ -11,8 +11,9 @@ using GenericAgentArchitectureCommon.TransportTypes;
 using GeoAPI.Geometries;
 
 namespace DalskiAgent.Environments {
-    
-  /// <summary>
+    using ESCTestLayer;
+
+    /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
   /// </summary> 
   public class ESCAdapter : IEnvironment, IGenericDataSource {
@@ -51,7 +52,7 @@ namespace DalskiAgent.Environments {
       
       // Set default values to direction and dimension, if not given. Then create geometry and accessor.
       if (dir == null) dir = new Direction();
-      if (dim == null) dim = new Vector(1f, 1f, 1f);
+      if (dim == null) dim = new Vector(1d, 1d, 1d);
       var geometry = new GeometryObject(obj, MyGeometryFactory.Rectangle(dim.X, dim.Y), dir);
       acc = new DataAccessor(geometry);
       _objects[obj] = geometry;
@@ -161,7 +162,13 @@ namespace DalskiAgent.Environments {
   /// </summary>
   public class GeometryObject : ISpatialEntity {
     
-    public IGeometry Geometry  { get; set; }           // Geometry: Holds position (centroid) and dimension (envelope).
+    public IGeometry Geometry  { get; set; }
+
+    public Enum GetCollisionType() {
+      return CollisionType.MassiveAgent;
+    }
+
+// Geometry: Holds position (centroid) and dimension (envelope).
     public Direction Direction { get; set; }           // The direction of the object.
     public ISpatialObject Object { get; private set; } // The spatial object corresponding to this geometry.
 

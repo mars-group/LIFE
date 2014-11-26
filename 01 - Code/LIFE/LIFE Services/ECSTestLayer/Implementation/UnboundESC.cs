@@ -1,4 +1,16 @@
-﻿namespace ESCTestLayer.Implementation {
+﻿namespace ESCTestLayer {
+    /// <summary>
+    ///     Data query information types.
+    /// </summary>
+    public enum CollisionType {
+        StaticEnv,
+//        DynamicEnv,
+        MassiveAgent,
+//        VolatileAgent
+    }
+}
+
+namespace ESCTestLayer.Implementation {
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -13,10 +25,15 @@
 
     public class UnboundESC : IUnboundESC {
         private const int MaxAttempsToAddRandom = 100;
+        private readonly bool[][] _collisionTypes;
         private readonly Random _random;
         private readonly List<ISpatialEntity> _entities;
 
-        public UnboundESC() {
+        public UnboundESC()
+            : this(new[] {new[] {false, true}, new[] {true, true}}) {}
+
+        public UnboundESC(bool[][] collisionTypes) {
+            _collisionTypes = collisionTypes;
             _random = new Random();
             _entities = new List<ISpatialEntity>();
         }
@@ -59,10 +76,9 @@
         }
 
         public bool Resize(ISpatialEntity entity, IGeometry newGeometry) {
-            var result = Explore(newGeometry).ToList();
+            List<ISpatialEntity> result = Explore(newGeometry).ToList();
             result.Remove(entity);
-            if (!result.Any())
-            {
+            if (!result.Any()) {
                 entity.Geometry = newGeometry;
                 return true;
             }
@@ -72,14 +88,14 @@
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
             IGeometry old = entity.Geometry;
             AffineTransformation trans = new AffineTransformation();
-            
-          
-            Coordinate center = old.Centroid.Coordinate;
-            Direction directionTransformer = new Direction();
-            directionTransformer.SetDirectionalVector(new Vector(rotation.X, rotation.Y, rotation.Z));
-            trans.Rotate(Direction.DegToRad(directionTransformer.Yaw), center.X, center.Y);
-            
-            trans.SetToTranslation(movementVector.X, movementVector.Y);
+            trans.Translate(movementVector.X, movementVector.Y);
+            if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
+                Direction direction = new Direction();
+                direction.SetDirectionalVector(rotation.GetVector());
+                Console.WriteLine(direction.Yaw);
+                Coordinate center = old.Centroid.Coordinate;
+                trans.Rotate(Direction.DegToRad(direction.Yaw), center.X, center.Y);
+            }
 
             IGeometry result = trans.Transform(old);
 
@@ -96,13 +112,9 @@
             IGeometryFactory gfactory = GeometryFactory.FloatingSingle;
             foreach (ISpatialEntity entity in _entities.ToArray()) {
                 IGeometry poly1 = gfactory.CreatePolygon(geometry.Envelope.Coordinates);
-                //Console.WriteLine("Polygon 1: " + poly1);
                 IGeometry poly2 = gfactory.CreatePolygon(entity.Geometry.Coordinates);
-                //Console.WriteLine("Polygon 2: " + poly2);
-                if (poly1.Intersects(poly2) && !poly1.Touches(poly2)) {
-                    //Console.WriteLine("Intersection: " + poly1.Intersection(poly2));
-                    if (poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon)) entities.Add(entity);
-                }
+                if (poly1.Intersects(poly2) && !poly1.Touches(poly2) &&
+                    poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon)) entities.Add(entity);
             }
             return entities;
         }
@@ -129,9 +141,9 @@
                 return new TVector(x, y, z);
             }
             else {
-                float x = (float) GetRandomNumber(min.X, max.X);
-                float y = (float) GetRandomNumber(min.Y, max.Y);
-                float z = (float) GetRandomNumber(min.Z, max.Z);
+                double x = GetRandomNumber(min.X, max.X);
+                double y = GetRandomNumber(min.Y, max.Y);
+                double z = GetRandomNumber(min.Z, max.Z);
                 return new TVector(x, y, z);
             }
         }

@@ -9,16 +9,16 @@ namespace GenericAgentArchitectureCommon.Datatypes {
   public class Vector : IEquatable<Vector>, IEquatable<TVector> {
 
     private bool _is3D;      // Dimension flag: false: 2D, true: 3D.
-    public float X, Y, Z;    // The vector's coordinates.
+    public double X, Y, Z;    // The vector's coordinates.
 
 
     /// <summary>
     ///   Initialize a two-dimensional vector (height is set to zero). 
     /// </summary>
-    public Vector (float x, float y) {
+    public Vector (double x, double y) {
       X = x;
       Y = y;
-      Z = 0.0f;
+      Z = 0.0d;
       _is3D = false;
     }
 
@@ -26,7 +26,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <summary>
     ///   Initialize a three-dimensional vector.
     /// </summary>
-    public Vector (float x, float y, float z) {
+    public Vector (double x, double y, double z) {
       X = x;
       Y = y;
       Z = z;
@@ -39,8 +39,8 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// </summary>
     /// <param name="pos">The target point.</param>
     /// <returns>Euclidian distance value.</returns>
-    public float GetDistance(Vector pos) {
-      return (float) Math.Sqrt((X - pos.X)*(X - pos.X) +
+    public double GetDistance(Vector pos) {
+      return Math.Sqrt((X - pos.X)*(X - pos.X) +
                                (Y - pos.Y)*(Y - pos.Y) +
                                (Z - pos.Z)*(Z - pos.Z));      
     }
@@ -50,8 +50,8 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     ///   Calculate the vector length.
     /// </summary>
     /// <returns>Length of this vector.</returns>
-    public float GetLength() {
-      return GetDistance(new Vector(0.0f, 0.0f, 0.0f));
+    public double GetLength() {
+      return GetDistance(new Vector(0.0d, 0.0d, 0.0d));
     }
 
 
@@ -73,7 +73,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     public void GetPlanarOrthogonalVectors(out Vector nY, out Vector nZ) {
       
       // [Y-Axis]: Create orthogonal vector to new x-axis laying in plane (x, y): => Scalar product = 0.
-      nY = new Vector(-Y/X, 1.0f, 0.0f).GetNormalVector();
+      nY = new Vector(-Y/X, 1.0d, 0.0d).GetNormalVector();
 
       // [Z-Axis / Height]: Build orthogonal vector with cross-product.
       var x3 = (Y * nY.Z  -  Z * nY.Y);  // x: a2b3 - a3b2
@@ -99,9 +99,9 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <param name="vector">Comparison vector.</param>
     /// <returns>Equals boolean.</returns>
     public bool Equals(Vector vector) {
-      return (Math.Abs(X - vector.X) <= float.Epsilon &&
-              Math.Abs(Y - vector.Y) <= float.Epsilon &&
-              Math.Abs(Z - vector.Z) <= float.Epsilon);
+      return (Math.Abs(X - vector.X) <= double.Epsilon &&
+              Math.Abs(Y - vector.Y) <= double.Epsilon &&
+              Math.Abs(Z - vector.Z) <= double.Epsilon);
     }
 
 
@@ -111,11 +111,10 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <param name="tvector">Comparison vector.</param>
     /// <returns>Equals boolean.</returns>
     public bool Equals(TVector tvector) {
-      return (Math.Abs(X - tvector.X) <= float.Epsilon &&
-              Math.Abs(Y - tvector.Y) <= float.Epsilon &&
-              Math.Abs(Z - tvector.Z) <= float.Epsilon);
+      return (Math.Abs(X - tvector.X) <= double.Epsilon &&
+              Math.Abs(Y - tvector.Y) <= double.Epsilon &&
+              Math.Abs(Z - tvector.Z) <= double.Epsilon);
     }
-
 
     /// <summary>
     ///   Casts this Vector to a TVector object.
@@ -132,7 +131,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <param name="a">First vector.</param>
     /// <param name="b">Second vector.</param>
     /// <returns>The scalar [inner] product.</returns>
-    public static float DotProduct(Vector a, Vector b) {
+    public static double DotProduct(Vector a, Vector b) {
       return a.X*b.X + a.Y*b.Y + a.Z*b.Z;
     }
 
@@ -186,7 +185,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <param name="vec">Vector to scale.</param>
     /// <param name="factor">Scaling factor.</param>
     /// <returns>The scaled vector.</returns> 
-    public static Vector operator *(Vector vec, float factor) {
+    public static Vector operator *(Vector vec, double factor) {
       return new Vector(vec.X*factor, vec.Y*factor, vec.Z*factor);
     }
 
@@ -197,7 +196,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <param name="factor">Scaling factor.</param>
     /// <param name="vec">Vector to scale.</param>
     /// <returns>The scaled vector.</returns> 
-    public static Vector operator *(float factor, Vector vec) {
+    public static Vector operator *(double factor, Vector vec) {
       return new Vector(vec.X*factor, vec.Y*factor, vec.Z*factor);
     }
 
@@ -209,8 +208,8 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <param name="vec">Vector to scale.</param>
     /// <param name="div">Divisor scalar.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector operator /(Vector vec, float div) {
-      return vec*(1.0f/div);
+    public static Vector operator /(Vector vec, double div) {
+      return vec*(1.0d/div);
     }
   };
 }

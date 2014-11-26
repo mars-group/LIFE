@@ -3,10 +3,11 @@
 namespace ESCTestLayer.Entities
 {
     public class AxisAlignedBoundingInterval {
-        private readonly float _min;
-        private readonly float _max;
+        private readonly double _min;
+        private readonly double _max;
 
-        public AxisAlignedBoundingInterval(float val1, float val2) {
+        public AxisAlignedBoundingInterval(double val1, double val2)
+        {
           
           // Set smaller value as minimum.
           if (val1 < val2) {

@@ -12,7 +12,7 @@ namespace DalskiAgent.Movement.Actions {
 
     private readonly ContinuousMover _mover; // The agent movement module.
     private readonly Direction _targetDir;   // The target direction (mode 1).
-    private readonly float _speed;           // Movement speed.
+    private readonly double _speed;           // Movement speed.
     private readonly float _pitchAS;         // Pitch turning speed (mode 2).
     private readonly float _yawAS;           // Yaw turning speed (mode 2).
     private readonly bool _turnSpdUsed;      // 'True' on mode 2, otherwise 'false'.
@@ -23,7 +23,7 @@ namespace DalskiAgent.Movement.Actions {
     /// </summary>
     /// <param name="mover">The agent movement module.</param>
     /// <param name="speed">The new movement speed.</param>
-    private ContinuousMovementAction(AgentMover mover, float speed) {
+    private ContinuousMovementAction(AgentMover mover, double speed) {
       if (mover is ContinuousMover) _mover = (ContinuousMover) mover;
       else throw new Exception("[ContinuousMovementAction] Error: Agent movement type is incompatible!");
       _speed = speed;
@@ -36,7 +36,7 @@ namespace DalskiAgent.Movement.Actions {
     /// <param name="mover">The agent movement module.</param>
     /// <param name="speed">The new movement speed.</param>
     /// <param name="dir">The direction the agent is facing.</param>
-    public ContinuousMovementAction(AgentMover mover, float speed, Direction dir) : this(mover, speed) {
+    public ContinuousMovementAction(AgentMover mover, double speed, Direction dir) : this(mover, speed) {
       _targetDir = dir;
       _turnSpdUsed = false;
     }

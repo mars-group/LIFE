@@ -56,7 +56,7 @@ namespace ESCTestLayer.Interface {
     /// <param name="anElementId"></param>
     /// <param name="anotherElementId"></param>
     /// <returns></returns>
-    float GetDistance(int anElementId, int anotherElementId);
+    double GetDistance(int anElementId, int anotherElementId);
 
     /// <summary>
     ///   finds a list of elements that would collide with given element if set at given position with given direction

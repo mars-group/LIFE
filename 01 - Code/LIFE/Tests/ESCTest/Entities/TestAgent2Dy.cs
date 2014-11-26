@@ -1,4 +1,6 @@
 ﻿namespace ESCTest.Entities {
+    using System;
+    using ESCTestLayer;
     using ESCTestLayer.Implementation;
     using GenericAgentArchitectureCommon.Interfaces;
     using GeoAPI.Geometries;
@@ -26,5 +28,8 @@
 
 
         public IGeometry Geometry { get; set; }
+        public Enum GetCollisionType() {
+            return CollisionType.MassiveAgent;
+        }
     }
 }
