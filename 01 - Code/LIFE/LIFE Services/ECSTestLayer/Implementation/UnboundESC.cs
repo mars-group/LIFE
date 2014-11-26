@@ -92,7 +92,6 @@ namespace ESCTestLayer.Implementation {
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
                 Direction direction = new Direction();
                 direction.SetDirectionalVector(rotation.GetVector());
-                Console.WriteLine(direction.Yaw);
                 Coordinate center = old.Centroid.Coordinate;
                 trans.Rotate(Direction.DegToRad(direction.Yaw), center.X, center.Y);
             }
@@ -109,12 +108,10 @@ namespace ESCTestLayer.Implementation {
 
         public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
-            IGeometryFactory gfactory = GeometryFactory.FloatingSingle;
             foreach (ISpatialEntity entity in _entities.ToArray()) {
-                IGeometry poly1 = gfactory.CreatePolygon(geometry.Envelope.Coordinates);
-                IGeometry poly2 = gfactory.CreatePolygon(entity.Geometry.Coordinates);
-                if (poly1.Intersects(poly2) && !poly1.Touches(poly2) &&
-                    poly1.Intersection(poly2).OgcGeometryType.Equals(OgcGeometryType.Polygon)) entities.Add(entity);
+                if (geometry.Envelope.Intersects(entity.Geometry) && !geometry.Touches(entity.Geometry)) {
+                    entities.Add(entity);
+                }
             }
             return entities;
         }
