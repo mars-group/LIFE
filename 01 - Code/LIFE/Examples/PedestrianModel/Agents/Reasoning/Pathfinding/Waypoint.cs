@@ -36,13 +36,13 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding {
         }
 
         public DirectMovementAction Approach(Pedestrian agent, AgentMover mover) {
-            float maxMovingSpeed = agent.MaxVelocity;
+            double maxMovingSpeed = agent.MaxVelocity;
             Vector direction = (_targetPosition - agent.GetPosition()).GetNormalVector()*maxMovingSpeed;
 
             direction = agent.MovementPipeline.ProgressPipeline(_targetPosition, direction);
 
             if (direction.GetLength() > 0.0) {
-                Vector nextPosition = agent.GetPosition() + ((Config.LengthOfTimestepsInMilliseconds/1000f)*direction);
+                Vector nextPosition = agent.GetPosition() + ((Config.LengthOfTimestepsInMilliseconds/1000d)*direction);
                 return new DirectMovementAction(mover, nextPosition);
             }
             return new DirectMovementAction(mover, agent.GetPosition());

@@ -40,7 +40,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
         /// <param name="obstacles"> a collection of all obstacles </param>
         /// <param name="yValue"> the height of all graph points </param>
         /// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
-        public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, float yValue, float waypointEdgeDistance) {
+        public RaytracingGraph(string simulationId, IList<Obstacle> obstacles, double yValue, double waypointEdgeDistance) {
             List<Vector> edgePoints = new List<Vector>();
             _obstacles = obstacles;
 
@@ -100,12 +100,10 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
         }
 
         public double Distance(IPathNode<Vector> from, IPathNode<Vector> to) {
-            //return from.AdaptedObject.distance(to.AdaptedObject);
             return from.AdaptedObject.GetDistance(to.AdaptedObject);
         }
 
         public double GetHeuristic(IPathNode<Vector> from, IPathNode<Vector> to) {
-            //return from.AdaptedObject.distance(to.AdaptedObject);
             return from.AdaptedObject.GetDistance(to.AdaptedObject);
         }
 
@@ -118,11 +116,11 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
         /// <param name="heightValue"> the height of the edge points </param>
         /// <param name="waypointEdgeDistance"> the distance of the waypoints to the obstacle's edges </param>
         /// <returns> a list of the edges </returns>
-        public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, float heightValue, float waypointEdgeDistance) {
+        public static IList<Vector> GetEdgePoints(SpatialAgent obstacle, double heightValue, double waypointEdgeDistance) {
             IList<Vector> edgePoints = new List<Vector>();
 
             Vector position = obstacle.GetPosition();
-            Vector boundsHalf = obstacle.GetDimension()*0.5f;
+            Vector boundsHalf = obstacle.GetDimension()*0.5d;
 
             // if the yValue is lower or higher than the obstacle, there are no edge points
             if (position.Z - boundsHalf.Z - waypointEdgeDistance > heightValue

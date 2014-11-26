@@ -29,7 +29,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
         /// <param name="size"> the size of the cumboid along the positive axes </param>
         /// <param name="function"> the function to calculate the potential with </param>
         public CuboidEmitter(Vector startPoint, Vector size, IUnivariateRealFunction function) {
-            _start = startPoint - (0.5f*size);
+            _start = startPoint - (0.5d*size);
             _size = size;
             _function = function;
         }

@@ -9,9 +9,9 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
         /// </summary>
         private readonly Vector _obj;
 
-        private readonly float _x;
-        private readonly float _y;
-        private readonly float _z;
+        private readonly double _x;
+        private readonly double _y;
+        private readonly double _z;
 
         /// <summary>
         ///     The predecessor of this node in the path. If null, this node has no predecessor.

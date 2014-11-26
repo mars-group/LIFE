@@ -49,7 +49,7 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
             Vector position = so.GetPosition();
             Vector bounds = so.GetDimension();
 
-            return GetIntersectWithBox(origin, direction, position + (-0.5f*bounds), position + (0.5f*bounds));
+            return GetIntersectWithBox(origin, direction, position + (-0.5d*bounds), position + (0.5d*bounds));
         }
 
         /// <summary>

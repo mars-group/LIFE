@@ -26,13 +26,13 @@ namespace PedestrianModel.Visualization {
 
             foreach (var o in _env.GetAllObjects()) {
                 var agent = (SpatialAgent) o;
-                float zoom = Config.VisualizationZoom;
+                double zoom = Config.VisualizationZoom;
                 Vector center = agent.GetPosition()*zoom
                                 + new Vector(Config.VisualizationOffsetX, Config.VisualizationOffsetY, 0);
                 Vector dimension = agent.GetDimension()*zoom;
                 Rectangle rect = new Rectangle
-                    ((int) Math.Round(center.X - (dimension.X/2f)),
-                        (int) Math.Round(center.Y - (dimension.Y/2f)),
+                    ((int) Math.Round(center.X - (dimension.X/2d)),
+                        (int) Math.Round(center.Y - (dimension.Y/2d)),
                         (int) Math.Round(dimension.X),
                         (int) Math.Round(dimension.Y));
                 if (agent is Pedestrian) {

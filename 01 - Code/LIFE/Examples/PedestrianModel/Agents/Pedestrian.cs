@@ -22,7 +22,7 @@ namespace PedestrianModel.Agents {
     public class Pedestrian : SpatialAgent, IAgentLogic {
         public string Name { get; private set; }
 
-        public float MaxVelocity { get; private set; }
+        public double MaxVelocity { get; private set; }
 
         public string SimulationId { get; private set; }
 
@@ -77,7 +77,7 @@ namespace PedestrianModel.Agents {
                 Vector dimension,
                 Direction direction,
                 Vector targetPosition,
-                float maxVelocity,
+                double maxVelocity,
                 String name = "pedestrian")
             : base(exec, env, position, dimension, direction) {
             MaxVelocity = maxVelocity;
@@ -105,7 +105,7 @@ namespace PedestrianModel.Agents {
                 Vector dimension,
                 Direction direction,
                 Vector targetPosition,
-                float maxVelocity,
+                double maxVelocity,
                 String name = "pedestrian")
             : base(exec, env, minPos, maxPos, dimension, direction)
         {
@@ -169,13 +169,13 @@ namespace PedestrianModel.Agents {
                 if (_debugLastPosition == null) _debugLastPosition = _startPosition;
                 string waypoint = " COMPLETED MOVEMENT";
                 if (_waypoints.Count > 0)
-                    waypoint = (_waypoints[0].TargetPosition*1f).ToString(); // * 1f -> converts 2d Vector to 3d Vector 
+                    waypoint = (_waypoints[0].TargetPosition*1d).ToString(); // * 1d -> converts 2d Vector to 3d Vector 
                 Console.WriteLine
                     ("Tick: " + GetTick().ToString("0000") + ", ID: " + Id.ToString("0000") + ", Position: "
-                     + GetPosition()*1f + ", Target: " + TargetPositions[0]*1f + ", Waypoint: " + waypoint
+                     + GetPosition()*1d + ", Target: " + TargetPositions[0]*1d + ", Waypoint: " + waypoint
                      + ", Distance: " + GetPosition().GetDistance(TargetPositions[0]).ToString("00.0000000")
                      + ", Velocity: "
-                     + (GetPosition().GetDistance(_debugLastPosition)*(1000f/Config.LengthOfTimestepsInMilliseconds)).
+                     + (GetPosition().GetDistance(_debugLastPosition)*(1000d/Config.LengthOfTimestepsInMilliseconds)).
                          ToString("00.0000000"));
                 _debugLastPosition = GetPosition();
             }
@@ -197,7 +197,7 @@ namespace PedestrianModel.Agents {
             object rawObstaclesData = PerceptionUnit.GetData(InformationType.Obstacles).Data;
             IList<Obstacle> obstacles = (List<Obstacle>) rawObstaclesData;
             _pathfindingSearchGraph = new RaytracingGraph
-                (SimulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0f, 0.28f));
+                (SimulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0d, 0.28d));
             _pathfinder = new AStarPathfinder<Vector>(_pathfindingSearchGraph);
 
             CreateMovePlan(_targetPositions);
@@ -324,9 +324,9 @@ namespace PedestrianModel.Agents {
             if (_positionTracker.Count > PositionTrackerSize) _positionTracker.RemoveAt(0);
             else return false; // only do check if enough positions
 
-            float sumX = 0;
-            float sumY = 0;
-            float sumZ = 0;
+            double sumX = 0;
+            double sumY = 0;
+            double sumZ = 0;
             foreach (Vector v in _positionTracker) {
                 sumX += v.X;
                 sumY += v.Y;
@@ -343,7 +343,7 @@ namespace PedestrianModel.Agents {
             double avgDistance = sumDistance/PositionTrackerSize;
 
             double movingSpeed = MaxVelocity;
-            double estDistance = movingSpeed*0.2;
+            double estDistance = movingSpeed*0.2d;
 
             return avgDistance < estDistance;
         }

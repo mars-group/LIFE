@@ -90,12 +90,12 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
             // try several directions for the best potential
             for (double angle = -Math.PI/2; angle <= Math.PI/2; angle += Math.PI/8) {
                 Vector tempDirection = new Vector
-                    (currentPipelineVector.X*(float) Math.Cos(angle) - currentPipelineVector.Y*(float) Math.Sin(angle),
-                        currentPipelineVector.X*(float) Math.Sin(angle)
-                        + currentPipelineVector.Y*(float) Math.Cos(angle),
+                    (currentPipelineVector.X*Math.Cos(angle) - currentPipelineVector.Y*Math.Sin(angle),
+                        currentPipelineVector.X*Math.Sin(angle)
+                        + currentPipelineVector.Y*Math.Cos(angle),
                         currentPipelineVector.Z);
 
-                Vector position = currentPosition + (0.2f*tempDirection.GetNormalVector());
+                Vector position = currentPosition + (0.2d*tempDirection.GetNormalVector());
 
                 double potential = potentialFieldCollection.CalculatePotential(position);
 
