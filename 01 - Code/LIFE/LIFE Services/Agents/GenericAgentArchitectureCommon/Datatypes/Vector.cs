@@ -18,7 +18,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     public Vector (double x, double y) {
       X = x;
       Y = y;
-      Z = 0.0f;
+      Z = 0.0d;
       _is3D = false;
     }
 
@@ -51,7 +51,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// </summary>
     /// <returns>Length of this vector.</returns>
     public double GetLength() {
-      return GetDistance(new Vector(0.0f, 0.0f, 0.0f));
+      return GetDistance(new Vector(0.0d, 0.0d, 0.0d));
     }
 
 
@@ -73,7 +73,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     public void GetPlanarOrthogonalVectors(out Vector nY, out Vector nZ) {
       
       // [Y-Axis]: Create orthogonal vector to new x-axis laying in plane (x, y): => Scalar product = 0.
-      nY = new Vector(-Y/X, 1.0f, 0.0f).GetNormalVector();
+      nY = new Vector(-Y/X, 1.0d, 0.0d).GetNormalVector();
 
       // [Z-Axis / Height]: Build orthogonal vector with cross-product.
       var x3 = (Y * nY.Z  -  Z * nY.Y);  // x: a2b3 - a3b2
@@ -209,7 +209,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     /// <param name="div">Divisor scalar.</param>
     /// <returns>The scaled vector.</returns>
     public static Vector operator /(Vector vec, double div) {
-      return vec*(1.0f/div);
+      return vec*(1.0d/div);
     }
   };
 }

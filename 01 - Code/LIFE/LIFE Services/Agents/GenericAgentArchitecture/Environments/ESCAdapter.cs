@@ -52,7 +52,7 @@ namespace DalskiAgent.Environments {
       
       // Set default values to direction and dimension, if not given. Then create geometry and accessor.
       if (dir == null) dir = new Direction();
-      if (dim == null) dim = new Vector(1f, 1f, 1f);
+      if (dim == null) dim = new Vector(1d, 1d, 1d);
       var geometry = new GeometryObject(obj, MyGeometryFactory.Rectangle(dim.X, dim.Y), dir);
       acc = new DataAccessor(geometry);
       _objects[obj] = geometry;

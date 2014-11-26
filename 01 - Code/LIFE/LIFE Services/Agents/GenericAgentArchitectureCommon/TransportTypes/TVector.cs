@@ -7,9 +7,9 @@
     #endregion
 
     public struct TVector : IEquatable<TVector> {
-        public static readonly TVector Origin = new TVector(0.0f, 0.0f, 0.0f);
-        public static readonly TVector Null = new TVector(0.0f, 0.0f, 0.0f, true);
-        public static readonly TVector UnitVectorXAxis = new TVector(1.0f, 0.0f, 0.0f).Normalize();
+        public static readonly TVector Origin = new TVector(0.0d, 0.0d, 0.0d);
+        public static readonly TVector Null = new TVector(0.0d, 0.0d, 0.0d, true);
+        public static readonly TVector UnitVectorXAxis = new TVector(1.0d, 0.0d, 0.0d).Normalize();
         public static readonly TVector MaxVector = new TVector(double.MaxValue, double.MaxValue, double.MaxValue);
 
         private readonly bool _is3D; // Dimension flag: false: 2D, true: 3D.
@@ -122,7 +122,7 @@
         /// <param name="nZ">Same for z-axis (height) vector.</param>
         public void GetPlanarOrthogonalVectors(out TVector nY, out TVector nZ) {
             // [Y-Axis]: Create orthogonal vector to new x-axis laying in plane (x, y): => Scalar product = 0.
-            nY = (Math.Abs(X) <= double.Epsilon) ? UnitVectorXAxis : new TVector(-Y/X, 1.0f, 0.0f).Normalize();
+            nY = (Math.Abs(X) <= double.Epsilon) ? UnitVectorXAxis : new TVector(-Y/X, 1.0d, 0.0d).Normalize();
 
             // [Z-Axis / Height]: Build orthogonal vector with cross-product.
             double x3 = (Y*nY.Z - Z*nY.Y); // x: a2b3 - a3b2

@@ -88,8 +88,7 @@ namespace ESCTestLayer.Implementation {
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
             IGeometry old = entity.Geometry;
             AffineTransformation trans = new AffineTransformation();
-
-            trans.SetToTranslation(movementVector.X, movementVector.Y);
+            trans.Translate(movementVector.X, movementVector.Y);
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
                 Direction direction = new Direction();
                 direction.SetDirectionalVector(rotation.GetVector());
@@ -97,7 +96,6 @@ namespace ESCTestLayer.Implementation {
                 Coordinate center = old.Centroid.Coordinate;
                 trans.Rotate(Direction.DegToRad(direction.Yaw), center.X, center.Y);
             }
-
 
             IGeometry result = trans.Transform(old);
 

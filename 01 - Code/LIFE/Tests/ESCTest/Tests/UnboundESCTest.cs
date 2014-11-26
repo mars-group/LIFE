@@ -37,7 +37,7 @@
             TestAgent2D a2 = new TestAgent2D(1, 1);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
             Assert.False(_esc.Add(a2, new TVector(0, 0)));
-            Assert.False(_esc.Add(a2, new TVector(0.5f, 0.5f)));
+            Assert.False(_esc.Add(a2, new TVector(0.5d, 0.5d)));
             Assert.True(_esc.Add(a2, new TVector(1, 1)));
         }
 
@@ -54,8 +54,8 @@
             Assert.True(a1.Geometry.Centroid.Equals(new Point(11, 1)));
             Assert.True(_esc.Move(a1, new TVector(-5, 0)).Success);
             Assert.True(a1.Geometry.Centroid.Equals(new Point(6, 1)));
-            Assert.True(_esc.Move(a1, new TVector(-3.5f, 7.71f)).Success);
-            Assert.True(a1.Geometry.Centroid.Equals(new Point(2.5f, 8.71f)));
+            Assert.True(_esc.Move(a1, new TVector(-3.5d, 7.71d)).Success);
+            Assert.True(a1.Geometry.Centroid.Equals(new Point(2.5d, 8.71d)));
         }
 
         [Test]
@@ -183,16 +183,21 @@
             // 4.9 sec für 5k agents.
             Console.WriteLine(stopwatch.ElapsedMilliseconds + " ms");
         }
+
         [Test]
         public void TestIntersections()
         {
             ESCAdapter adapter = new ESCAdapter(_esc, new Vector(1000, 1000), false);
             SeqExec exec = new SeqExec(false);
 
+            var pos1 = new Vector(5d, 10.025d, 0d);
+            var pos2 = new Vector(10.025d, 7.75d, 0);
             // The agents do not collide. They touch at point (10,10). Exception is thrown if ESC thinks there is a collision.
-            new TestSpatialAgent(exec, adapter, new Vector(5d, 10.025d, 0d), new Vector(10d, 0.05d, 0.4d), new Direction());
-            new TestSpatialAgent(exec, adapter, new Vector(10.025d, 7.75d, 0d), new Vector(0.05d, 4.5d, 0.4d), new Direction());
-            PrintAllAgents();
+            var a1 = new TestSpatialAgent(exec, adapter, pos1, new Vector(10d, 0.05d, 0.4d), new Direction());
+            var a2 = new TestSpatialAgent(exec, adapter, pos2, new Vector(0.05d, 4.5d, 0.4d), new Direction());
+
+            Assert.True(a1.GetPosition().Equals(pos1));
+            Assert.True(a2.GetPosition().Equals(pos2));
         }
     }
 }
