@@ -37,25 +37,13 @@ namespace GoapActionSystem.Implementation {
                 Blackboard blackboard,
                 List<WorldstateSymbol> startStates,
                 int maximumGraphSearchDepth) {
-            if (IsEmptyParam(availableActions) || IsEmptyParam(availableGoals) || IsEmptyParam(startStates)) {
-                throw new ArgumentException
-                    ("GoapManager: Goap manager cannot start with empty goal, action list or startstate");
-            }
+            
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
             _internalBlackboard.Set(Worldstate, startStates);
             _maximumGraphSearchDepth = maximumGraphSearchDepth;
             CreateEffectActionHashTable();
-        }
-
-        /// <summary>
-        ///     helper method for checking constructor parameter
-        /// </summary>
-        /// <param name="paramList"></param>
-        /// <returns></returns>
-        private static bool IsEmptyParam(IList paramList) {
-            return paramList.Count == 0;
         }
 
         /// <summary>

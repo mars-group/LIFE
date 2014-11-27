@@ -13,7 +13,7 @@ namespace GoapGraphConnector.SimpleGraph {
 
         #region IGoapGraphService Members
 
-        public void InitializeGoapGraph(IGoapNode root, int maximumGraphDept = 0) {
+        public void InitializeGoapGraph(IGoapNode root, int maximumGraphDept = 10) {
             _root = root;
             _map = new Map(_root);
             _aStar = new AStarSteppable(_root, _map);

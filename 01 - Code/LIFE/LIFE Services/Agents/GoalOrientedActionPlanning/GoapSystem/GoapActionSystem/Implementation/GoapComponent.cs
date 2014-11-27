@@ -1,5 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using GoapCommon.Abstract;
+using GoapCommon.Implementation;
 using GoapCommon.Interfaces;
 using log4net;
 using TypeSafeBlackboard;
@@ -28,12 +32,53 @@ namespace GoapActionSystem.Implementation {
             IGoapAgentConfig configClass =
                 (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
 
-            return new GoapManager
-                (configClass.GetAllActions(),
-                    configClass.GetAllGoals(),
-                    blackboard,
-                    configClass.GetStartWorldstate(),
-                    configClass.GetMaxGraphSearchDepth());
+
+            if (configClass == null) {
+                throw new NullReferenceException("The configuration class for the Goap manager was not found");
+            }
+
+
+            List<AbstractGoapAction> actions = configClass.GetAllActions();
+            List<IGoapGoal> goals = configClass.GetAllGoals();
+            List<WorldstateSymbol> symbols = configClass.GetStartWorldstate();
+            int maxGraphDepth = configClass.GetMaxGraphSearchDepth();
+
+            CheckActionsValid(actions);
+            CheckGoalsValid(goals);
+            CheckSymbolsValid(symbols);
+
+
+            return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth);
+        }
+
+        /// <summary>
+        ///     helper method for checking parameter
+        /// </summary>
+        /// <param name="paramList"></param>
+        /// <returns></returns>
+        private static bool IsEmptyParam(IList paramList) {
+            return paramList == null || paramList.Count == 0;
+        }
+
+        private static void CheckActionsValid(List<AbstractGoapAction> actions) {
+            if (IsEmptyParam(actions)) {
+                throw new ArgumentException
+                    ("GoapManager: Goap manager cannot start with empty action list");
+            }
+        }
+
+        private static void CheckGoalsValid(List<IGoapGoal> goals) {
+            if (IsEmptyParam(goals)) {
+                throw new ArgumentException
+                    ("GoapManager: Goap manager cannot start with empty goal list");
+            }
+        }
+
+        private static void CheckSymbolsValid(List<WorldstateSymbol> symbols) {
+            if (IsEmptyParam(symbols)) {
+                throw new ArgumentException
+                    ("GoapManager: Goap manager cannot start with empty symbols list");
+            }
         }
     }
 
