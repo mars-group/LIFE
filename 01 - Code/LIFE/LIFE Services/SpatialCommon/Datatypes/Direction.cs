@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GenericAgentArchitectureCommon.Datatypes {
+namespace SpatialCommon.Datatypes {
   
   /// <summary>
   ///   Direction class, holds pitch and yaw value and provides some conversions. 

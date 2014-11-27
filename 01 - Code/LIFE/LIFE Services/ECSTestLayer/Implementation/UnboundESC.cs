@@ -1,4 +1,8 @@
-﻿namespace ESCTestLayer {
+﻿using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
+
+namespace ESCTestLayer {
     /// <summary>
     ///     Data query information types.
     /// </summary>
@@ -15,9 +19,9 @@ namespace ESCTestLayer.Implementation {
     using System.Collections.Generic;
     using System.Linq;
     using Entities;
+    using Entities.Spatial;
     using GenericAgentArchitectureCommon.Datatypes;
     using GenericAgentArchitectureCommon.Interfaces;
-    using GenericAgentArchitectureCommon.TransportTypes;
     using GeoAPI.Geometries;
     using Interface;
     using NetTopologySuite.Geometries;
@@ -41,7 +45,7 @@ namespace ESCTestLayer.Implementation {
         #region IUnboundESC Members
 
         public bool Add(ISpatialEntity entity, TVector position, TVector rotation = default(TVector)) {
-            IGeometry oldGeometry = entity.Geometry;
+            IGeometry oldGeometry = (entity.Shape as GeoShape).Geometry;
             IPoint oldCentroid = oldGeometry.Centroid;
 
             if (!oldCentroid.Equals(new Point(0, 0, 0))) {
@@ -49,13 +53,13 @@ namespace ESCTestLayer.Implementation {
                 AffineTransformation trans = new AffineTransformation();
                 trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
                 IGeometry newGeometry = trans.Transform(oldGeometry);
-                entity.Geometry = newGeometry;
+                (entity.Shape as GeoShape).Geometry = newGeometry;
             }
 
             //move to position
             MovementResult result = Move(entity, position, rotation);
             if (!result.Success) {
-                entity.Geometry = oldGeometry;
+                (entity.Shape as GeoShape).Geometry = oldGeometry;
                 return false;
             }
             _entities.Add(entity);
@@ -79,14 +83,14 @@ namespace ESCTestLayer.Implementation {
             List<ISpatialEntity> result = Explore(newGeometry).ToList();
             result.Remove(entity);
             if (!result.Any()) {
-                entity.Geometry = newGeometry;
+                (entity.Shape as GeoShape).Geometry = newGeometry;
                 return true;
             }
             return false;
         }
 
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
-            IGeometry old = entity.Geometry;
+            IGeometry old = (entity.Shape as GeoShape).Geometry;
             AffineTransformation trans = new AffineTransformation();
             trans.Translate(movementVector.X, movementVector.Y);
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
@@ -102,14 +106,15 @@ namespace ESCTestLayer.Implementation {
             collisions.Remove(entity);
             if (collisions.Any()) return new MovementResult(collisions);
 
-            entity.Geometry = result;
+            (entity.Shape as GeoShape).Geometry = result;
             return new MovementResult();
         }
 
         public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
             foreach (ISpatialEntity entity in _entities.ToArray()) {
-                if (geometry.Envelope.Intersects(entity.Geometry) && !geometry.Touches(entity.Geometry)) {
+                if (geometry.Envelope.Intersects((entity.Shape as GeoShape).Geometry) && !geometry.Touches((entity.Shape as GeoShape).Geometry))
+                {
                     entities.Add(entity);
                 }
             }
@@ -120,7 +125,7 @@ namespace ESCTestLayer.Implementation {
             return _entities.ToList();
         }
 
-        public object GetData(ISpecificator spec) {
+        public object GetData(ISpecification spec) {
             SpatialHalo halo = spec as SpatialHalo;
             if (halo != null) return Explore(halo.Geometry);
             return null;

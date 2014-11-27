@@ -1,7 +1,7 @@
 ﻿using System;
-using GenericAgentArchitectureCommon.TransportTypes;
+using SpatialCommon.TransportTypes;
 
-namespace GenericAgentArchitectureCommon.Datatypes {
+namespace SpatialCommon.Datatypes {
 
     /// <summary>
   ///   This class serves as a representation of a vector or vertex.

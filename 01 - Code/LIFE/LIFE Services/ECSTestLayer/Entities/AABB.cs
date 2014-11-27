@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericAgentArchitectureCommon.TransportTypes;
+using SpatialCommon.TransportTypes;
 
-namespace GenericAgentArchitectureCommon.Datatypes {
+namespace ESCTestLayer.Entities {
 
     /// <summary>
     ///   Axis Aligned Bounding Box

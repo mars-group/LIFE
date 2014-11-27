@@ -1,6 +1,6 @@
 ﻿using System;
 using DalskiAgent.Environments;
-using GenericAgentArchitectureCommon.TransportTypes;
+using SpatialCommon.TransportTypes;
 
 namespace DalskiAgent.Perception {
 

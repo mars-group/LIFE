@@ -6,6 +6,7 @@ using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
 using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace AgentTester.Wolves {
   

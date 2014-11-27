@@ -1,4 +1,9 @@
-﻿namespace ESCTest.Tests {
+﻿using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
+
+namespace ESCTest.Tests {
     using System;
     using System.Diagnostics;
     using System.Linq;
@@ -8,9 +13,6 @@
     using ESCTestLayer.Entities;
     using ESCTestLayer.Implementation;
     using ESCTestLayer.Interface;
-    using GenericAgentArchitectureCommon.Datatypes;
-    using GenericAgentArchitectureCommon.Interfaces;
-    using GenericAgentArchitectureCommon.TransportTypes;
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;
     using NUnit.Framework;
@@ -133,7 +135,7 @@
         protected void PrintAllAgents() {
             Console.WriteLine(_esc.ExploreAll().Count() + " Agents found.");
             foreach (ISpatialEntity entity in _esc.ExploreAll()) {
-                Console.WriteLine( entity.Geometry + " center: "+entity.Geometry.Centroid);
+   //             Console.WriteLine(entity.Geometry + " center: "+entity.Geometry.Centroid);
             }
             Console.WriteLine("---");
         }

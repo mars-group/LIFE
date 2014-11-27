@@ -2,6 +2,7 @@
 using DalskiAgent.Movement.Movers;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Movement.Actions {
   

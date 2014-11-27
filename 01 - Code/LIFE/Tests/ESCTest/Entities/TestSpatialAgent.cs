@@ -1,7 +1,7 @@
 ﻿using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace ESCTest.Entities
 {
