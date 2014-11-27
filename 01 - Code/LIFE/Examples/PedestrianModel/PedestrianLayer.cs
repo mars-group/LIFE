@@ -34,6 +34,23 @@ namespace PedestrianModel {
         public bool InitLayer<T>
             (T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _tick = 0;
+
+            Console.WriteLine("Calculate collisions?\n1: Collisions on.\n2: Collisions off.");
+            String decisionString = Console.ReadLine();
+            int decisionInt;
+            int.TryParse(decisionString, out decisionInt);
+            if (decisionInt == 1) {
+                Config.UsesESC = true;
+                Console.WriteLine("Collisions on.");
+            }
+            else if (decisionInt == 2) {
+                Config.UsesESC = false;
+                Console.WriteLine("Collisions off.");
+            }
+            else {
+                Console.WriteLine("Invalid input. Using default settings.");
+            }
+
             if (Config.UsesESC) _env = new ObstacleEnvironmentESC();
             else _env = new ObstacleEnvironment2D();
             _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
