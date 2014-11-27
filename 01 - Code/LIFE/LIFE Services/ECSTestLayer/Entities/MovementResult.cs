@@ -1,4 +1,6 @@
-﻿namespace ESCTestLayer.Entities {
+﻿using SpatialCommon.Interfaces;
+
+namespace ESCTestLayer.Entities {
     #region Namespace imports
 
     using System.Collections.Generic;

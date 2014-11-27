@@ -1,4 +1,6 @@
-﻿namespace ESCTest.Entities {
+﻿using SpatialCommon.Interfaces;
+
+namespace ESCTest.Entities {
     using System;
     using ESCTestLayer;
     using ESCTestLayer.Implementation;
@@ -31,5 +33,12 @@
         public Enum GetCollisionType() {
             return CollisionType.MassiveAgent;
         }
+
+
+      public Enum GetInformationType() {
+        throw new NotImplementedException();
+      }
+
+      public IShape Shape { get; set; }
     }
 }

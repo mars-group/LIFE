@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace GenericAgentArchitectureCommon.Interfaces {
+namespace SpatialCommon.Interfaces {
   
   /// <summary>
   ///   Information object describing which data to query.
   /// </summary>
-  public interface ISpecificator {
+  public interface ISpecification {
 
     /// <summary>
     ///   Return the information type specified by this object.

@@ -1,13 +1,13 @@
 ﻿using System;
-using GenericAgentArchitectureCommon.Interfaces;
 using GeoAPI.Geometries;
+using SpatialCommon.Interfaces;
 
 namespace GenericAgentArchitectureCommon.Datatypes {
   
   /// <summary>
   /// This halo serves as a perception object in a spatial environment.
   /// </summary>
-  public class SpatialHalo : ISpecificator {
+  public class SpatialHalo : ISpecification {
     
     public readonly IGeometry Geometry;     // Perception object.
     private readonly Enum _informationType; // The information type to perceive.

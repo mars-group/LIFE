@@ -1,7 +1,8 @@
 ﻿using System;
-using GenericAgentArchitectureCommon.TransportTypes;
 using DalskiAgent.Environments;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
 
 namespace DalskiAgent.Perception {
 
@@ -9,7 +10,7 @@ namespace DalskiAgent.Perception {
   ///   An abstract halo representation. Each sensor has one object of it.
   ///   It has a geometry describing its form and a vertex as center point. 
   /// </summary>
-  public abstract class Halo : ISpecificator {
+  public abstract class Halo : ISpecification {
         
     protected readonly DataAccessor Data;   // The agent's R/O data container.
     private readonly Enum _informationType; // The information type to perceive.

@@ -1,14 +1,16 @@
-﻿namespace ESCTestLayer.Interface {
+﻿using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
+
+namespace ESCTestLayer.Interface {
     using System.Collections.Generic;
     using Entities;
     using GenericAgentArchitectureCommon.Interfaces;
-    using GenericAgentArchitectureCommon.TransportTypes;
     using GeoAPI.Geometries;
 
     /// <summary>
     ///     The ESC should provide the possibility to check collisisions between entities and to explore defined areas.
     /// </summary>
-    public interface IUnboundESC : IGenericDataSource {
+    public interface IUnboundESC : IDataSource {
         /// <summary>
         ///     Adds a new entity to the ESC at given position with given direction.
         /// </summary>

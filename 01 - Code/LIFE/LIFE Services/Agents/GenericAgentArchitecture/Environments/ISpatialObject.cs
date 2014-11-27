@@ -1,7 +1,9 @@
-﻿using GenericAgentArchitectureCommon.Datatypes;
+﻿using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Environments {
   
+  //TODO This object is crap. Get rid of it !!!
+
   /// <summary>
   ///   This object interface abstracts from agents and other spatial objects 
   ///   for internal use. It implements the ISpatialEntity used by the ESC.

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Environments {
  
@@ -172,7 +173,7 @@ namespace DalskiAgent.Environments {
     /// </summary>
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public virtual object GetData(ISpecificator spec) {
+    public virtual object GetData(ISpecification spec) {
       if (!(spec is Halo)) throw new Exception(
         "[Environment2D] Error on GetData() specificator: Not of type 'Halo'!");
       var halo = (Halo) spec;

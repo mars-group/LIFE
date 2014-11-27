@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
+      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
@@ -106,6 +106,10 @@
     <ProjectReference Include="..\..\LIFE Services\ECSTestLayer\ESCPrototype.csproj">
       <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
       <Name>ESCPrototype</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\SpatialCommon\SpatialCommon.csproj">
+      <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>
+      <Name>SpatialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

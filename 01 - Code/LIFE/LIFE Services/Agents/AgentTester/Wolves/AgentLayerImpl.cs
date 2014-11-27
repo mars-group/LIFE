@@ -4,6 +4,7 @@ using DalskiAgent.Execution;
 using GenericAgentArchitectureCommon.Datatypes;
 using LayerAPI.Interfaces;
 using Mono.Addins;
+using SpatialCommon.Datatypes;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]

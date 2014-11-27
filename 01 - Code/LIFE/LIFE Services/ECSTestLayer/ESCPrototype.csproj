@@ -77,8 +77,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\AABB.cs" />
     <Compile Include="Entities\MovementResult.cs" />
     <Compile Include="Entities\CollidableElement.cs" />
+    <Compile Include="Entities\Spatial\GeoShape.cs" />
     <Compile Include="Entities\Spatial\Line.cs" />
     <Compile Include="Entities\Spatial\Plane.cs" />
     <Compile Include="Implementation\MyGeometryFactory.cs" />
@@ -94,6 +96,10 @@
     <ProjectReference Include="..\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
       <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpatialCommon\SpatialCommon.csproj">
+      <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>
+      <Name>SpatialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

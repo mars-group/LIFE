@@ -1,4 +1,8 @@
-﻿namespace ESCTestLayer {
+﻿using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
+
+namespace ESCTestLayer {
     /// <summary>
     ///     Data query information types.
     /// </summary>
@@ -17,7 +21,6 @@ namespace ESCTestLayer.Implementation {
     using Entities;
     using GenericAgentArchitectureCommon.Datatypes;
     using GenericAgentArchitectureCommon.Interfaces;
-    using GenericAgentArchitectureCommon.TransportTypes;
     using GeoAPI.Geometries;
     using Interface;
     using NetTopologySuite.Geometries;
@@ -120,7 +123,7 @@ namespace ESCTestLayer.Implementation {
             return _entities.ToList();
         }
 
-        public object GetData(ISpecificator spec) {
+        public object GetData(ISpecification spec) {
             SpatialHalo halo = spec as SpatialHalo;
             if (halo != null) return Explore(halo.Geometry);
             return null;
