@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESC.Entities
+namespace EnvironmentServiceComponent.Entities
 {
     public class AxisAlignedBoundingInterval {
         private readonly double _min;

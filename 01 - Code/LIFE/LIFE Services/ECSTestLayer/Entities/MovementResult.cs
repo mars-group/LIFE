@@ -1,6 +1,6 @@
 ﻿using SpatialCommon.Interfaces;
 
-namespace ESC.Entities {
+namespace EnvironmentServiceComponent.Entities {
     #region Namespace imports
 
     using System.Collections.Generic;

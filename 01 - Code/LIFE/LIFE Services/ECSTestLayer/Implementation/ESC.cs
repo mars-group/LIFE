@@ -1,7 +1,7 @@
 ﻿using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESC.Implementation {
+namespace EnvironmentServiceComponent.Implementation {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;

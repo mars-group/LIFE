@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using DalskiAgent.Auxiliary;
-using ESC.Entities;
-using ESC.Implementation;
-using ESC.Interface;
+using EnvironmentServiceComponent.Entities;
+using EnvironmentServiceComponent.Implementation;
+using EnvironmentServiceComponent.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
 using GeoAPI.Geometries;
 using SpatialCommon.Datatypes;
@@ -13,7 +13,7 @@ using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
 namespace DalskiAgent.Environments {
-    using ESC;
+    using EnvironmentServiceComponent;
 
     /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 

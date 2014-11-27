@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ESC.Entities;
-using ESC.Interface;
+using EnvironmentServiceComponent.Entities;
+using EnvironmentServiceComponent.Interface;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
@@ -10,7 +10,7 @@ using SpatialCommon.Datatypes;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESC {
+namespace EnvironmentServiceComponent {
 
     /// <summary>
     ///     Data query information types.
@@ -24,7 +24,7 @@ namespace ESC {
 
 }
 
-namespace ESC.Implementation {
+namespace EnvironmentServiceComponent.Implementation {
 
     public class UnboundESC : IUnboundESC {
         private const int MaxAttempsToAddRandom = 100;
@@ -46,7 +46,6 @@ namespace ESC.Implementation {
 
                 if (!oldCentroid.Equals(new Point(0, 0, 0))) {
                     // move to origin
-                    Console.WriteLine("move to origin");
                     var trans = new AffineTransformation();
                     trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
                     IGeometry newGeometry = trans.Transform(oldGeometry);
@@ -94,13 +93,12 @@ namespace ESC.Implementation {
         }
 
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
-            var geometryShape = entity.Shape as GeometryShape; Console.WriteLine("move");
+            var geometryShape = entity.Shape as GeometryShape; 
             if (geometryShape == null) {
                 throw new NotImplementedException();
             }
 
             var old = geometryShape.Geometry;
-            Console.WriteLine(old.Centroid.Z);//TODO
             var trans = new AffineTransformation();
             trans.Translate(movementVector.X, movementVector.Y);
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {

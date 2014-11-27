@@ -1,7 +1,7 @@
 ﻿using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESC.Interface {
+namespace EnvironmentServiceComponent.Interface {
     using System.Collections.Generic;
     using Entities;
     using GenericAgentArchitectureCommon.Interfaces;

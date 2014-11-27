@@ -2,7 +2,7 @@
     using System;
     using System.Reflection;
     using CommonTypes.TransportTypes;
-    using ESC.Interface;
+    using EnvironmentServiceComponent.Interface;
     using GenericAgentArchitectureCommon.Interfaces;
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;

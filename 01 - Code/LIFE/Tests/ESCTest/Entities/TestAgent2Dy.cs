@@ -1,10 +1,10 @@
-﻿using ESC.Entities;
+﻿using EnvironmentServiceComponent.Entities;
 using SpatialCommon.Interfaces;
 
 namespace ESCTest.Entities {
     using System;
-    using ESC;
-    using ESC.Implementation;
+    using EnvironmentServiceComponent;
+    using EnvironmentServiceComponent.Implementation;
     using GenericAgentArchitectureCommon.Interfaces;
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;

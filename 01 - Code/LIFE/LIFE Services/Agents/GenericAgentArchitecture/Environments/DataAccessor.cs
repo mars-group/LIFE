@@ -43,9 +43,7 @@ namespace DalskiAgent.Environments {
           z = _data.Position.Z;          
         }
         else {
-          x = _geometry.Geometry.Centroid.Coordinate.X;
-          y = _geometry.Geometry.Centroid.Coordinate.Y;
-          z = _geometry.Geometry.Centroid.Coordinate.Z;
+          return _geometry.Shape.GetPosition().GetVector();
         }
         if (double.IsNaN(z)) z = 0.0f;
         return new Vector(x, y, z);

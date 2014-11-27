@@ -6,7 +6,7 @@ using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Execution;
 using DalskiAgent.Perception;
-using ESC.Implementation;
+using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using SpatialCommon.Interfaces;

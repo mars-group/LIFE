@@ -4,7 +4,7 @@ using System.Linq;
 using AgentTester.Wolves.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Perception;
-using ESC.Implementation;
+using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Interfaces;
 using SpatialCommon.Datatypes;
 using SpatialCommon.Interfaces;

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using ESC.Entities;
+using EnvironmentServiceComponent.Entities;
 using GenericAgentArchitectureCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESC.Interface {
+namespace EnvironmentServiceComponent.Interface {
     using Entities;
 
     public interface IDeprecatedESC : IDataSource {

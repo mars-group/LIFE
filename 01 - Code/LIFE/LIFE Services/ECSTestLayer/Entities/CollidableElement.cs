@@ -1,7 +1,7 @@
 ﻿
 using SpatialCommon.TransportTypes;
 
-namespace ESC.Entities
+namespace EnvironmentServiceComponent.Entities
 {
 
     public class CollidableElement {

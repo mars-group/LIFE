@@ -3,7 +3,7 @@ using CommonTypes.TransportTypes;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 
-namespace ESC.Implementation {
+namespace EnvironmentServiceComponent.Implementation {
 
   public class InternetOctree {
 

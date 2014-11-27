@@ -10,9 +10,9 @@ namespace ESCTest.Tests {
     using DalskiAgent.Environments;
     using DalskiAgent.Execution;
     using Entities;
-    using ESC.Entities;
-    using ESC.Implementation;
-    using ESC.Interface;
+    using EnvironmentServiceComponent.Entities;
+    using EnvironmentServiceComponent.Implementation;
+    using EnvironmentServiceComponent.Interface;
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;
     using NUnit.Framework;
@@ -201,7 +201,6 @@ namespace ESCTest.Tests {
             var a1 = new TestSpatialAgent(exec, adapter, pos1, new Vector(10d, 0.05d, 0.4d), new Direction());
             var a2 = new TestSpatialAgent(exec, adapter, pos2, new Vector(0.05d, 4.5d, 0.4d), new Direction());
 
-            PrintAllAgents();
             Assert.True(a1.GetPosition().Equals(pos1));
             Assert.True(a2.GetPosition().Equals(pos2));
         }

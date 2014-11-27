@@ -1,6 +1,6 @@
 ﻿using GeoAPI.Geometries;
 
-namespace ESC.Entities
+namespace EnvironmentServiceComponent.Entities
 {
     public class ExploreShape : GeometryShape
     {

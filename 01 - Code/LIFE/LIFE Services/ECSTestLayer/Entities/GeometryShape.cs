@@ -2,7 +2,7 @@
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESC.Entities {
+namespace EnvironmentServiceComponent.Entities {
   
   public class GeometryShape : IShape {
     public IGeometry Geometry { get; set; }
@@ -11,6 +11,7 @@ namespace ESC.Entities {
       var x = Geometry.Centroid.Coordinate.X;
       var y = Geometry.Centroid.Coordinate.Y;
       var z = Geometry.Centroid.Coordinate.Z;
+      if (double.IsNaN(z)) z = 0.0f;
       return new TVector(x, y, z);
     }
   }

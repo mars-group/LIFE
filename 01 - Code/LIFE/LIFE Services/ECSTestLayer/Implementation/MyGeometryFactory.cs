@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESC.Implementation {
+namespace EnvironmentServiceComponent.Implementation {
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;
     using NetTopologySuite.Utilities;
