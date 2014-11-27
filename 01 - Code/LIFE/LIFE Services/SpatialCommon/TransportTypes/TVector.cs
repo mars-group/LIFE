@@ -1,10 +1,8 @@
-﻿namespace GenericAgentArchitectureCommon.TransportTypes {
-    #region Namespace imports
+﻿using System;
+using SpatialCommon.Datatypes;
 
-    using System;
-    using Datatypes;
+namespace SpatialCommon.TransportTypes {
 
-    #endregion
 
     public struct TVector : IEquatable<TVector> {
         public static readonly TVector Origin = new TVector(0.0d, 0.0d, 0.0d);

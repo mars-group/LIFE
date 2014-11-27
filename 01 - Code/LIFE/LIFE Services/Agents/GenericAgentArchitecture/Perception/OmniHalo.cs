@@ -1,5 +1,5 @@
 ﻿using System;
-using GenericAgentArchitectureCommon.TransportTypes;
+using SpatialCommon.TransportTypes;
 
 namespace DalskiAgent.Perception {
 

@@ -3,6 +3,7 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
 using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Agents {
 

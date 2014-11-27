@@ -4,9 +4,12 @@ using System.Linq;
 using AgentTester.Wolves.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Perception;
-using ESCTestLayer.Implementation;
-using GenericAgentArchitectureCommon.Datatypes;
+using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
+
 
 namespace AgentTester.Wolves.Environment {
   
@@ -14,7 +17,7 @@ namespace AgentTester.Wolves.Environment {
   ///   This grassland is home to sheeps and wolves ... and yes, 'grass'.
   ///   It serves two purposes here: Environment representation and data source.
   /// </summary>
-  class Grassland : IEnvironment, IGenericDataSource {
+  class Grassland : IEnvironment, IDataSource {
 
     private readonly IEnvironment _env;   // Environment implementation.
     private readonly Vector _boundaries;  // Positive extent of the environment.
@@ -42,7 +45,7 @@ namespace AgentTester.Wolves.Environment {
     /// </summary>
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public object GetData(ISpecificator spec) {
+    public object GetData(ISpecification spec) {
 
       // ESC indirection.
       if (UsesESC) return ((ESCAdapter) _env).GetData(spec);

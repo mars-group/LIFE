@@ -1,10 +1,8 @@
-﻿namespace GenericAgentArchitectureCommon.Interfaces {
-    using System;
-    using GeoAPI.Geometries;
+﻿using System;
 
-    public interface ISpatialEntity  {
+namespace SpatialCommon.Interfaces {
 
-        IGeometry Geometry { get; set; }
+  public interface ISpatialEntity : ISpatialObject {
 
         /// <summary>
         ///   Return the information type specified by this object.

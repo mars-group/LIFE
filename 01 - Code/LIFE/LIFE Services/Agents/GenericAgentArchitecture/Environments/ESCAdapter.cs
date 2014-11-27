@@ -3,20 +3,22 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using DalskiAgent.Auxiliary;
-using ESCTestLayer.Implementation;
-using ESCTestLayer.Interface;
-using GenericAgentArchitectureCommon.Datatypes;
+using EnvironmentServiceComponent.Entities;
+using EnvironmentServiceComponent.Implementation;
+using EnvironmentServiceComponent.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
-using GenericAgentArchitectureCommon.TransportTypes;
 using GeoAPI.Geometries;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
 
 namespace DalskiAgent.Environments {
-    using ESCTestLayer;
+    using EnvironmentServiceComponent;
 
     /// <summary>
   ///   This adapter provides ESC usage via generic IEnvironment interface. 
   /// </summary> 
-  public class ESCAdapter : IEnvironment, IGenericDataSource {
+  public class ESCAdapter : IEnvironment, IDataSource {
 
     private readonly IUnboundESC _esc;  // Environment Service Component (ESC) implementation.
     private readonly TVector _maxSize;  // The maximum entent (for auto placement).
@@ -147,7 +149,7 @@ namespace DalskiAgent.Environments {
     /// </summary>
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public object GetData(ISpecificator spec) {
+    public object GetData(ISpecification spec) {
       var entities = (List<ISpatialEntity>)_esc.GetData(spec);
       var objects = new List<ISpatialObject>();     
       foreach (var entity in entities.OfType<GeometryObject>()) objects.Add(entity.Object);
@@ -181,7 +183,14 @@ namespace DalskiAgent.Environments {
     public GeometryObject(ISpatialObject obj, IGeometry geom, Direction dir) {
       Object = obj;
       Geometry = geom;
+      Shape = new ExploreShape(geom);
       Direction = dir;
     }
+
+    public Enum GetInformationType() {
+      throw new NotImplementedException();
+    }
+
+    public IShape Shape { get; set; }
   }
 }

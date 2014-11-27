@@ -121,9 +121,13 @@
       <Project>{e8e32f5e-7e31-41f3-9d49-9cb6dfbafc85}</Project>
       <Name>GenericAgentArchitecture</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE Services\ECSTestLayer\ESCPrototype.csproj">
-      <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
-      <Name>ESCPrototype</Name>
+    <ProjectReference Include="..\..\LIFE Services\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
+      <Project>{4ca49432-e852-40b5-9f37-0f5cba61c613}</Project>
+      <Name>EnvironmentServiceComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\SpatialCommon\SpatialCommon.csproj">
+      <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>
+      <Name>SpatialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

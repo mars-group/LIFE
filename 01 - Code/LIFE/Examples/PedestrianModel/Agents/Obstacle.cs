@@ -1,8 +1,8 @@
 ﻿using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Agents {
 

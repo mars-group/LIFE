@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AgentTester.Wolves.Environment;
 using AgentTester.Wolves.Interactions;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
-using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
-using ESCTestLayer.Implementation;
+using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace AgentTester.Wolves.Agents {
   
@@ -41,7 +42,7 @@ namespace AgentTester.Wolves.Agents {
       _environment = env;
       
       // Add perception sensor.
-      ISpecificator halo;
+      ISpecification halo;
       if (env.UsesESC) halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
       else             halo = new RadialHalo(Data, InformationTypes.AllAgents, 8);
       PerceptionUnit.AddSensor(new DataSensor(this, env, halo));

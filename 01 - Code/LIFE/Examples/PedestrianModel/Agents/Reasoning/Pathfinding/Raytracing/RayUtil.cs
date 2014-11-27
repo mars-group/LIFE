@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DalskiAgent.Agents;
-using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
 

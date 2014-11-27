@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Agents.Reasoning.Movement {
 

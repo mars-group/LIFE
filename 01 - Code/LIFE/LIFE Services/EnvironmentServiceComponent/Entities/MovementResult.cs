@@ -1,6 +1,6 @@
-﻿using CommonTypes.TransportTypes;
+﻿using SpatialCommon.Interfaces;
 
-namespace ESCTestLayer.Entities {
+namespace EnvironmentServiceComponent.Entities {
     #region Namespace imports
 
     using System.Collections.Generic;

@@ -3,12 +3,11 @@ using System.Threading;
 using System.Windows.Forms;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using ESCTestLayer.Implementation;
-using GenericAgentArchitectureCommon.Datatypes;
-using GenericAgentArchitectureCommon.Interfaces;
+using EnvironmentServiceComponent.Implementation;
 using PedestrianModel.Agents;
 using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
+using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Environment {
 

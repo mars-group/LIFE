@@ -6,15 +6,17 @@ using System.Windows.Forms;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Perception;
-using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents;
 using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace PedestrianModel.Environment {
 
-    public class ObstacleEnvironment2D : Environment2D, IGenericDataSource {
+    public class ObstacleEnvironment2D : Environment2D, IDataSource {
         public AgentLogger AgentLogger = new AgentLogger();
         public SimpleVisualization Visualization;
 
@@ -29,7 +31,7 @@ namespace PedestrianModel.Environment {
             InitializeVisualization();
         }
 
-        public object GetData(ISpecificator spec) {
+        public object GetData(ISpecification spec) {
             if (!(spec is Halo)) {
                 throw new Exception
                     (

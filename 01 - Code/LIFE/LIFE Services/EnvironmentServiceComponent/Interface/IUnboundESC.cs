@@ -1,14 +1,16 @@
-﻿namespace ESCTestLayer.Interface {
+﻿using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
+
+namespace EnvironmentServiceComponent.Interface {
     using System.Collections.Generic;
     using Entities;
     using GenericAgentArchitectureCommon.Interfaces;
-    using GenericAgentArchitectureCommon.TransportTypes;
     using GeoAPI.Geometries;
 
     /// <summary>
     ///     The ESC should provide the possibility to check collisisions between entities and to explore defined areas.
     /// </summary>
-    public interface IUnboundESC : IGenericDataSource {
+    public interface IUnboundESC : IDataSource {
         /// <summary>
         ///     Adds a new entity to the ESC at given position with given direction.
         /// </summary>
@@ -38,9 +40,9 @@
         ///     Gives the entity a new geometry.
         /// </summary>
         /// <param name="entity">That should be resized.</param>
-        /// <param name="newGeometry">The new geometry that should be assigned to the entity.</param>
+        /// <param name="shape">The new shape that should be assigned to the entity.</param>
         /// <returns>True, if the operation succeeded. False, otherwise (collision detection).</returns>
-        bool Resize(ISpatialEntity entity, IGeometry newGeometry);
+        bool Resize(ISpatialEntity entity, IShape shape);
 
         /// <summary>
         ///     Tries to move given entity relatively from it's current position.
@@ -54,9 +56,9 @@
         /// <summary>
         ///     Get spatial entities that corresponds with given geometry.
         /// </summary>
-        /// <param name="geometry">Defines area that should be explored.</param>
+        /// <param name="spatial">Defines area that should be explored.</param>
         /// <returns>All spatial entities in geometry of the ESC.</returns>
-        IEnumerable<ISpatialEntity> Explore(IGeometry geometry);
+        IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial);
 
         /// <summary>
         ///     Get all added spatial entities of the ESC.

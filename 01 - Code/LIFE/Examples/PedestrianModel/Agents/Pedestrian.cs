@@ -7,13 +7,16 @@ using DalskiAgent.Execution;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
-using ESCTestLayer.Implementation;
+using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace PedestrianModel.Agents {
 
@@ -127,9 +130,9 @@ namespace PedestrianModel.Agents {
         }
 
         private void AddSensors(IEnvironment env) {
-            ISpecificator obstaclesHalo;
-            ISpecificator pedestriansHalo;
-            ISpecificator allAgentsHalo;
+            ISpecification obstaclesHalo;
+            ISpecification pedestriansHalo;
+            ISpecification allAgentsHalo;
             if (Config.UsesESC)
             {
             # warning Size?
@@ -145,13 +148,13 @@ namespace PedestrianModel.Agents {
             }
 
             // Add perception sensor for obstacles.
-            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource)env, obstaclesHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, (IDataSource)env, obstaclesHalo));
 
             // Add perception sensor for pedestrians.
-            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource)env, pedestriansHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, (IDataSource)env, pedestriansHalo));
 
             // Add perception sensor for everything.
-            PerceptionUnit.AddSensor(new DataSensor(this, (IGenericDataSource)env, allAgentsHalo));
+            PerceptionUnit.AddSensor(new DataSensor(this, (IDataSource)env, allAgentsHalo));
         }
 
         #region IAgentLogic Members

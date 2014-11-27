@@ -4,19 +4,21 @@ using System.Linq;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Perception;
-using ESCTestLayer.Implementation;
-using GenericAgentArchitectureCommon.Datatypes;
+using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents;
 using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace PedestrianModel.Environment {
 
     /// <summary>
     ///     An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.
     /// </summary>
-    public class ObstacleEnvironment : IEnvironment, IGenericDataSource {
+    public class ObstacleEnvironment : IEnvironment, IDataSource {
         public static AgentLogger AgentLogger = new AgentLogger();
         public static SimpleVisualization Visualization;
 
@@ -44,14 +46,14 @@ namespace PedestrianModel.Environment {
             else _env = new Environment2D(new Vector(1000, 1000), false);
         }
 
-        #region IGenericDataSource Members
+        #region IDataSource Members
 
         /// <summary>
         ///     Retrieve information from a data source.
         /// </summary>
         /// <param name="spec">Information object describing which data to query.</param>
         /// <returns>An object representing the percepted information.</returns>
-        public object GetData(ISpecificator spec) {
+        public object GetData(ISpecification spec) {
             if (UsesESC) {
                 switch ((InformationType)spec.GetInformationType())
                 {

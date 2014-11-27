@@ -82,9 +82,13 @@
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ECSTestLayer\ESCPrototype.csproj">
-      <Project>{A758654E-AEA9-45F5-8CA3-E09519379F53}</Project>
-      <Name>ESCPrototype</Name>
+    <ProjectReference Include="..\..\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
+      <Project>{4ca49432-e852-40b5-9f37-0f5cba61c613}</Project>
+      <Name>EnvironmentServiceComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpatialCommon\SpatialCommon.csproj">
+      <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>
+      <Name>SpatialCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
       <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>

@@ -1,9 +1,9 @@
 ﻿using System;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using GenericAgentArchitectureCommon.Datatypes;
 using PedestrianModel.Agents;
 using PedestrianModel.Util.Math;
+using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Util {
 

@@ -1,11 +1,13 @@
-﻿namespace ESCTestLayer.Implementation {
+﻿using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
+
+namespace EnvironmentServiceComponent.Implementation {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Entities;
     using GenericAgentArchitectureCommon.Interfaces;
-    using GenericAgentArchitectureCommon.TransportTypes;
     using Interface;
 
     /// <summary>
@@ -138,7 +140,7 @@
             return collisions;
         }
 
-        public object GetData(ISpecificator spec) {
+        public object GetData(ISpecification spec) {
             //TODO informationType als filter kriterium
 //            const int elementId = -1;
 //            Add(elementId, -1, false, geometry.GetDimensionQuad());
