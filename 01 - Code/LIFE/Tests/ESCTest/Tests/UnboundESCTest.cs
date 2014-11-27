@@ -1,21 +1,21 @@
-﻿using GenericAgentArchitectureCommon.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using DalskiAgent.Environments;
+using DalskiAgent.Execution;
+using EnvironmentServiceComponent.Entities;
+using EnvironmentServiceComponent.Implementation;
+using EnvironmentServiceComponent.Interface;
+using ESCTest.Entities;
+using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
+using NUnit.Framework;
 using SpatialCommon.Datatypes;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
 namespace ESCTest.Tests {
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using DalskiAgent.Environments;
-    using DalskiAgent.Execution;
-    using Entities;
-    using EnvironmentServiceComponent.Entities;
-    using EnvironmentServiceComponent.Implementation;
-    using EnvironmentServiceComponent.Interface;
-    using GeoAPI.Geometries;
-    using NetTopologySuite.Geometries;
-    using NUnit.Framework;
 
     public class UnboundESCTest {
         #region Setup / Tear down
@@ -44,8 +44,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestMoveAround()
-        {
+        public void TestMoveAround() {
             TestAgent2D a1 = new TestAgent2D(2, 2);
             Assert.True(_esc.Add(a1, new TVector(1, 1)));
             Assert.True(_esc.Move(a1, new TVector(0, 1)).Success);
@@ -61,8 +60,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestMoveAgentForCollision()
-        {
+        public void TestMoveAgentForCollision() {
             TestAgent2D a1 = new TestAgent2D(1, 1);
             TestAgent2D a2 = new TestAgent2D(1, 1);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
@@ -78,11 +76,11 @@ namespace ESCTest.Tests {
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
             Assert.True(_esc.Add(a2, new TVector(3, 0)));
 
-            var pos1 = a1.Shape.GetPosition();
-            IGeometry newGeometry =  MyGeometryFactory.Rectangle(6, 2, new Coordinate(pos1.X, pos1.Y));
+            TVector pos1 = a1.Shape.GetPosition();
+            IGeometry newGeometry = MyGeometryFactory.Rectangle(6, 2, new Coordinate(pos1.X, pos1.Y));
             Assert.False(_esc.Resize(a2, new ExploreShape(newGeometry)));
 
-            var pos2 = a2.Shape.GetPosition();
+            TVector pos2 = a2.Shape.GetPosition();
             newGeometry = MyGeometryFactory.Rectangle(4, 2, new Coordinate(pos2.X, pos2.Y));
             Assert.True(_esc.Resize(a2, new ExploreShape(newGeometry)));
         }
@@ -138,7 +136,7 @@ namespace ESCTest.Tests {
         protected void PrintAllAgents() {
             Console.WriteLine(_esc.ExploreAll().Count() + " Agents found.");
             foreach (ISpatialEntity entity in _esc.ExploreAll()) {
-                Console.WriteLine(entity + " "+ entity.Shape.GetPosition());
+                Console.WriteLine(entity + " " + entity.Shape.GetPosition());
             }
             Console.WriteLine("---");
         }
@@ -170,7 +168,7 @@ namespace ESCTest.Tests {
 
             Direction direction = new Direction();
             direction.SetYaw(90);
-            var rotationVector = direction.GetDirectionalVector().GetTVector();
+            TVector rotationVector = direction.GetDirectionalVector().GetTVector();
             Assert.True(_esc.Move(a1, TVector.Origin, rotationVector).Success);
             Assert.True((a1.Shape as GeometryShape).Geometry.Intersects(new Point(-0.9, -1.9)));
             Assert.True((a1.Shape as GeometryShape).Geometry.Intersects(new Point(-0.9, 1.9)));
@@ -179,7 +177,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestAdd50Elements() {
+        public void TestPerfomanceAdd500Elements() {
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < 500; i++) {
                 TestAgent2D a1 = new TestAgent2D(1, 1);
@@ -190,19 +188,54 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestIntersections()
-        {
-            var adapter = new ESCAdapter(_esc, new Vector(1000, 1000), false);
-            var exec = new SeqExec(false);
+        public void TestPerfomanceMove50ElementsFor100Ticks() {
+            int amount = 50;
+            int ticks = 500;
+            Stopwatch initTime = Stopwatch.StartNew();
+            List<TestAgent2D> agents = new List<TestAgent2D>();
+            for (int i = 0; i < amount; i++) {
+                TestAgent2D a1 = new TestAgent2D(1, 1);
+                agents.Add(a1);
+                Assert.True(_esc.AddWithRandomPosition(a1, new TVector(0, 0), new TVector(70, 70), false));
+            }
+            Console.WriteLine(initTime.ElapsedMilliseconds + " ms");
 
-            var pos1 = new Vector(5d, 10.025d, 0d);
-            var pos2 = new Vector(10.025d, 7.75d, 0d);
+            Stopwatch moveTime = Stopwatch.StartNew();
+            Random random = new Random();
+
+            int collisions = 0;
+            int movementSucess = 0;
+            for (int i = 0; i < ticks; i++) {
+                foreach (TestAgent2D agent in agents) {
+                    if (_esc.Move(agent, new TVector(random.Next(-2, 2), random.Next(-2, 2))).Success) {
+                        movementSucess++;
+                    }
+                    else {
+                        collisions++;
+                    }
+                }
+            }
+            Console.WriteLine("Collisions: " + collisions);
+            Console.WriteLine("Movement succeeded: " + movementSucess);
+            Console.WriteLine(moveTime.ElapsedMilliseconds + " ms");
+        }
+
+        [Test]
+        public void TestIntersections() {
+            ESCAdapter adapter = new ESCAdapter(_esc, new Vector(1000, 1000), false);
+            SeqExec exec = new SeqExec(false);
+
+            Vector pos1 = new Vector(5d, 10.025d, 0d);
+            Vector pos2 = new Vector(10.025d, 7.75d, 0d);
             // The agents do not collide. They touch at point (10,10). Exception is thrown if ESC thinks there is a collision.
-            var a1 = new TestSpatialAgent(exec, adapter, pos1, new Vector(10d, 0.05d, 0.4d), new Direction());
-            var a2 = new TestSpatialAgent(exec, adapter, pos2, new Vector(0.05d, 4.5d, 0.4d), new Direction());
+            TestSpatialAgent a1 = new TestSpatialAgent
+                (exec, adapter, pos1, new Vector(10d, 0.05d, 0.4d), new Direction());
+            TestSpatialAgent a2 = new TestSpatialAgent
+                (exec, adapter, pos2, new Vector(0.05d, 4.5d, 0.4d), new Direction());
 
             Assert.True(a1.GetPosition().Equals(pos1));
             Assert.True(a2.GetPosition().Equals(pos2));
         }
     }
+
 }
