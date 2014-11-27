@@ -1,9 +1,10 @@
-﻿using SpatialCommon.Interfaces;
+﻿using ESC.Entities;
+using SpatialCommon.Interfaces;
 
 namespace ESCTest.Entities {
     using System;
-    using ESCTestLayer;
-    using ESCTestLayer.Implementation;
+    using ESC;
+    using ESC.Implementation;
     using GenericAgentArchitectureCommon.Interfaces;
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;
@@ -11,7 +12,7 @@ namespace ESCTest.Entities {
     internal class TestAgent2D : ISpatialEntity {
 
         public TestAgent2D(int dx, int dy) {
-            Geometry = MyGeometryFactory.Rectangle(dx, dy);
+            Shape = new ExploreShape( MyGeometryFactory.Rectangle(dx, dy));
 //            Point bottomLeft = new Point(0, 0, 0);
 //            Point topLeft = new Point(0, dy, 0);
 //            Point topRight = new Point(dx, dy, 0);
@@ -29,7 +30,6 @@ namespace ESCTest.Entities {
         }
 
 
-        public IGeometry Geometry { get; set; }
         public Enum GetCollisionType() {
             return CollisionType.MassiveAgent;
         }

@@ -1,7 +1,7 @@
 ﻿using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESCTestLayer.Implementation {
+namespace ESC.Implementation {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;

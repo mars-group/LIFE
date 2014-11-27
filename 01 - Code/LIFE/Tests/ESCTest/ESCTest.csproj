@@ -103,9 +103,9 @@
       <Project>{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}</Project>
       <Name>GenericAgentArchitecture</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE Services\ECSTestLayer\ESCPrototype.csproj">
+    <ProjectReference Include="..\..\LIFE Services\ECSTestLayer\ESC.csproj">
       <Project>{a758654e-aea9-45f5-8ca3-e09519379f53}</Project>
-      <Name>ESCPrototype</Name>
+      <Name>ESC</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\SpatialCommon\SpatialCommon.csproj">
       <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>

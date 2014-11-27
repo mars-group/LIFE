@@ -1,43 +1,37 @@
-﻿using SpatialCommon.Datatypes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ESC.Entities;
+using ESC.Interface;
+using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries.Utilities;
+using SpatialCommon.Datatypes;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESCTestLayer {
+namespace ESC {
+
     /// <summary>
     ///     Data query information types.
     /// </summary>
     public enum CollisionType {
         StaticEnv,
-//        DynamicEnv,
+        //        DynamicEnv,
         MassiveAgent,
-//        VolatileAgent
+        //        VolatileAgent
     }
+
 }
 
-namespace ESCTestLayer.Implementation {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Entities;
-    using Entities.Spatial;
-    using GenericAgentArchitectureCommon.Datatypes;
-    using GenericAgentArchitectureCommon.Interfaces;
-    using GeoAPI.Geometries;
-    using Interface;
-    using NetTopologySuite.Geometries;
-    using NetTopologySuite.Geometries.Utilities;
+namespace ESC.Implementation {
 
     public class UnboundESC : IUnboundESC {
         private const int MaxAttempsToAddRandom = 100;
-        private readonly bool[][] _collisionTypes;
         private readonly Random _random;
         private readonly List<ISpatialEntity> _entities;
 
-        public UnboundESC()
-            : this(new[] {new[] {false, true}, new[] {true, true}}) {}
-
-        public UnboundESC(bool[][] collisionTypes) {
-            _collisionTypes = collisionTypes;
+        public UnboundESC() {
             _random = new Random();
             _entities = new List<ISpatialEntity>();
         }
@@ -45,22 +39,26 @@ namespace ESCTestLayer.Implementation {
         #region IUnboundESC Members
 
         public bool Add(ISpatialEntity entity, TVector position, TVector rotation = default(TVector)) {
-            IGeometry oldGeometry = (entity.Shape as GeoShape).Geometry;
-            IPoint oldCentroid = oldGeometry.Centroid;
+            var geometryShape = entity.Shape as GeometryShape;
+            if (geometryShape != null) {
+                var oldGeometry = geometryShape.Geometry;
+                var oldCentroid = oldGeometry.Centroid;
 
-            if (!oldCentroid.Equals(new Point(0, 0, 0))) {
-                // move to origin
-                AffineTransformation trans = new AffineTransformation();
-                trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
-                IGeometry newGeometry = trans.Transform(oldGeometry);
-                (entity.Shape as GeoShape).Geometry = newGeometry;
-            }
+                if (!oldCentroid.Equals(new Point(0, 0, 0))) {
+                    // move to origin
+                    Console.WriteLine("move to origin");
+                    var trans = new AffineTransformation();
+                    trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
+                    IGeometry newGeometry = trans.Transform(oldGeometry);
+                    geometryShape.Geometry = newGeometry;
+                }
 
-            //move to position
-            MovementResult result = Move(entity, position, rotation);
-            if (!result.Success) {
-                (entity.Shape as GeoShape).Geometry = oldGeometry;
-                return false;
+                //move to position
+                MovementResult result = Move(entity, position, rotation);
+                if (!result.Success) {
+                    geometryShape.Geometry = oldGeometry;
+                    return false;
+                }
             }
             _entities.Add(entity);
             return true;
@@ -70,7 +68,9 @@ namespace ESCTestLayer.Implementation {
             for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {
                 TVector position = GenerateRandomPosition(min, max, grid);
                 bool result = Add(entity, position);
-                if (result) return true;
+                if (result) {
+                    return true;
+                }
             }
             return false;
         }
@@ -79,42 +79,64 @@ namespace ESCTestLayer.Implementation {
             _entities.Remove(entity);
         }
 
-        public bool Resize(ISpatialEntity entity, IGeometry newGeometry) {
-            List<ISpatialEntity> result = Explore(newGeometry).ToList();
+        public bool Resize(ISpatialEntity entity, IShape shape) {
+            var geometryShape = shape as GeometryShape;
+            if (geometryShape == null) {
+                return false;
+            }
+            List<ISpatialEntity> result = Explore(new ExploreSpatialObject(geometryShape.Geometry)).ToList();
             result.Remove(entity);
             if (!result.Any()) {
-                (entity.Shape as GeoShape).Geometry = newGeometry;
+                entity.Shape = geometryShape;
                 return true;
             }
             return false;
         }
 
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
-            IGeometry old = (entity.Shape as GeoShape).Geometry;
-            AffineTransformation trans = new AffineTransformation();
+            var geometryShape = entity.Shape as GeometryShape; Console.WriteLine("move");
+            if (geometryShape == null) {
+                throw new NotImplementedException();
+            }
+
+            var old = geometryShape.Geometry;
+            Console.WriteLine(old.Centroid.Z);//TODO
+            var trans = new AffineTransformation();
             trans.Translate(movementVector.X, movementVector.Y);
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
-                Direction direction = new Direction();
+                var direction = new Direction();
                 direction.SetDirectionalVector(rotation.GetVector());
-                Coordinate center = old.Centroid.Coordinate;
+                var center = old.Centroid.Coordinate;
                 trans.Rotate(Direction.DegToRad(direction.Yaw), center.X, center.Y);
             }
 
-            IGeometry result = trans.Transform(old);
+            var result = trans.Transform(old);
 
-            List<ISpatialEntity> collisions = Explore(result).ToList();
+            var collisions = Explore(new ExploreSpatialObject(result)).ToList();
             collisions.Remove(entity);
-            if (collisions.Any()) return new MovementResult(collisions);
-
-            (entity.Shape as GeoShape).Geometry = result;
+            if (collisions.Any()) {
+                return new MovementResult(collisions);
+            } 
+            geometryShape.Geometry = result;
             return new MovementResult();
         }
 
-        public IEnumerable<ISpatialEntity> Explore(IGeometry geometry) {
-            List<ISpatialEntity> entities = new List<ISpatialEntity>();
-            foreach (ISpatialEntity entity in _entities.ToArray()) {
-                if (geometry.Envelope.Intersects((entity.Shape as GeoShape).Geometry) && !geometry.Touches((entity.Shape as GeoShape).Geometry))
+        public IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial) {
+            var exploreShape = spatial.Shape as GeometryShape;
+            if (exploreShape == null) {
+                throw new NotImplementedException();
+            }
+
+            var entities = new List<ISpatialEntity>();
+            foreach (ISpatialEntity entity in _entities.ToArray())
+            {
+                var entityShape = entity.Shape as GeometryShape;
+                if (entityShape == null)
                 {
+                    throw new NotImplementedException();
+                }
+                if (exploreShape.Geometry.Envelope.Intersects(entityShape.Geometry)
+                    && !exploreShape.Geometry.Touches(entityShape.Geometry)) {
                     entities.Add(entity);
                 }
             }
@@ -126,8 +148,10 @@ namespace ESCTestLayer.Implementation {
         }
 
         public object GetData(ISpecification spec) {
-            SpatialHalo halo = spec as SpatialHalo;
-            if (halo != null) return Explore(halo.Geometry);
+            ISpatialObject spatialObject = spec as ISpatialObject;
+            if (spatialObject != null) {
+                return Explore(spatialObject);
+            }
             return null;
         }
 
@@ -155,5 +179,31 @@ namespace ESCTestLayer.Implementation {
         }
 
         #endregion
+
+
+
+        private class ExploreSpatialObject : ISpatialObject
+        {
+            public ExploreSpatialObject(IGeometry geometry)
+            {
+                Shape = new ExploreShape(geometry);
+            }
+
+            public IShape Shape { get; set; }
+
+            public Enum GetInformationType()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Enum GetCollisionType()
+            {
+                return CollisionType.MassiveAgent;
+            }
+        }
+
+       
+
     }
+
 }

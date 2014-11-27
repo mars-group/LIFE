@@ -121,7 +121,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericAgentArchitectureCom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericAgentArchitecture", "LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj", "{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCPrototype", "LIFE Services\ECSTestLayer\ESCPrototype.csproj", "{A758654E-AEA9-45F5-8CA3-E09519379F53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESC", "LIFE Services\ECSTestLayer\ESC.csproj", "{A758654E-AEA9-45F5-8CA3-E09519379F53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIFEGisLayerService", "LIFE Services\LIFEGisLayerService\LIFEGisLayerService.csproj", "{6CB066D7-A187-4EDA-A059-44C6121FAC56}"
 EndProject

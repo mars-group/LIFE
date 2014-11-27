@@ -114,9 +114,9 @@
     <None Include="UML-Diagramme.ncp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ECSTestLayer\ESCPrototype.csproj">
+    <ProjectReference Include="..\..\ECSTestLayer\ESC.csproj">
       <Project>{A758654E-AEA9-45F5-8CA3-E09519379F53}</Project>
-      <Name>ESCPrototype</Name>
+      <Name>ESC</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SpatialCommon\SpatialCommon.csproj">
       <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>

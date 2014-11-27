@@ -1,4 +1,6 @@
-﻿namespace ESCTestLayer.Implementation {
+﻿using System;
+
+namespace ESC.Implementation {
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;
     using NetTopologySuite.Utilities;
@@ -27,7 +29,7 @@
         /// <param name="height">Vertical dimension.</param>
         /// <returns>A rectangle that is an IGeometry.</returns>
         public static IGeometry Rectangle(double width, double height) {
-            return Rectangle(width, height, new Coordinate(0, 0));
+            return Rectangle(width, height, new Coordinate(0, 0, 0));
         }
     }
 }

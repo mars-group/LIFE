@@ -1,7 +1,7 @@
 ﻿
 using SpatialCommon.TransportTypes;
 
-namespace ESCTestLayer.Entities
+namespace ESC.Entities
 {
 
     public class CollidableElement {

@@ -10,9 +10,9 @@ namespace ESCTest.Tests {
     using DalskiAgent.Environments;
     using DalskiAgent.Execution;
     using Entities;
-    using ESCTestLayer.Entities;
-    using ESCTestLayer.Implementation;
-    using ESCTestLayer.Interface;
+    using ESC.Entities;
+    using ESC.Implementation;
+    using ESC.Interface;
     using GeoAPI.Geometries;
     using NetTopologySuite.Geometries;
     using NUnit.Framework;
@@ -49,15 +49,15 @@ namespace ESCTest.Tests {
             TestAgent2D a1 = new TestAgent2D(2, 2);
             Assert.True(_esc.Add(a1, new TVector(1, 1)));
             Assert.True(_esc.Move(a1, new TVector(0, 1)).Success);
-            Assert.True(a1.Geometry.Centroid.Equals(new Point(1, 2)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Centroid.Equals(new Point(1, 2)));
             Assert.True(_esc.Move(a1, new TVector(0, -1)).Success);
-            Assert.True(a1.Geometry.Centroid.Equals(new Point(1, 1)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Centroid.Equals(new Point(1, 1)));
             Assert.True(_esc.Move(a1, new TVector(10, 0)).Success);
-            Assert.True(a1.Geometry.Centroid.Equals(new Point(11, 1)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Centroid.Equals(new Point(11, 1)));
             Assert.True(_esc.Move(a1, new TVector(-5, 0)).Success);
-            Assert.True(a1.Geometry.Centroid.Equals(new Point(6, 1)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Centroid.Equals(new Point(6, 1)));
             Assert.True(_esc.Move(a1, new TVector(-3.5d, 7.71d)).Success);
-            Assert.True(a1.Geometry.Centroid.Equals(new Point(2.5d, 8.71d)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Centroid.Equals(new Point(2.5d, 8.71d)));
         }
 
         [Test]
@@ -78,10 +78,13 @@ namespace ESCTest.Tests {
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
             Assert.True(_esc.Add(a2, new TVector(3, 0)));
 
-            IGeometry newGeometry = MyGeometryFactory.Rectangle(6, 2, a2.Geometry.Centroid.Coordinate);
-            Assert.False(_esc.Resize(a2, newGeometry));
-            newGeometry = MyGeometryFactory.Rectangle(4, 2, a2.Geometry.Centroid.Coordinate);
-            Assert.True(_esc.Resize(a2, newGeometry));
+            var pos1 = a1.Shape.GetPosition();
+            IGeometry newGeometry =  MyGeometryFactory.Rectangle(6, 2, new Coordinate(pos1.X, pos1.Y));
+            Assert.False(_esc.Resize(a2, new ExploreShape(newGeometry)));
+
+            var pos2 = a2.Shape.GetPosition();
+            newGeometry = MyGeometryFactory.Rectangle(4, 2, new Coordinate(pos2.X, pos2.Y));
+            Assert.True(_esc.Resize(a2, new ExploreShape(newGeometry)));
         }
 
         [Test]
@@ -135,7 +138,7 @@ namespace ESCTest.Tests {
         protected void PrintAllAgents() {
             Console.WriteLine(_esc.ExploreAll().Count() + " Agents found.");
             foreach (ISpatialEntity entity in _esc.ExploreAll()) {
-   //             Console.WriteLine(entity.Geometry + " center: "+entity.Geometry.Centroid);
+                Console.WriteLine(entity + " "+ entity.Shape.GetPosition());
             }
             Console.WriteLine("---");
         }
@@ -148,11 +151,11 @@ namespace ESCTest.Tests {
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
             Assert.True(_esc.Add(a2, new TVector(0, 1)));
 
-            IPoint oldCentroid = a2.Geometry.Centroid;
+            IPoint oldCentroid = (a2.Shape as GeometryShape).Geometry.Centroid;
             MovementResult movementResult = _esc.Move(a2, new TVector(0, -1));
             Assert.False(movementResult.Success);
             Assert.True(movementResult.Collisions.Contains(a1));
-            Assert.True(a2.Geometry.Centroid.Equals(oldCentroid));
+            Assert.True((a2.Shape as GeometryShape).Geometry.Centroid.Equals(oldCentroid));
         }
 
 
@@ -160,23 +163,23 @@ namespace ESCTest.Tests {
         public void TestRotation() {
             TestAgent2D a1 = new TestAgent2D(4, 2);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
-            Assert.False(a1.Geometry.Intersects(new Point(-0.9, -1.9)));
-            Assert.False(a1.Geometry.Intersects(new Point(-0.9, 1.9)));
-            Assert.False(a1.Geometry.Intersects(new Point(0.9, -1.9)));
-            Assert.False(a1.Geometry.Intersects(new Point(0.9, 1.9)));
+            Assert.False((a1.Shape as GeometryShape).Geometry.Intersects(new Point(-0.9, -1.9)));
+            Assert.False((a1.Shape as GeometryShape).Geometry.Intersects(new Point(-0.9, 1.9)));
+            Assert.False((a1.Shape as GeometryShape).Geometry.Intersects(new Point(0.9, -1.9)));
+            Assert.False((a1.Shape as GeometryShape).Geometry.Intersects(new Point(0.9, 1.9)));
 
             Direction direction = new Direction();
             direction.SetYaw(90);
             var rotationVector = direction.GetDirectionalVector().GetTVector();
             Assert.True(_esc.Move(a1, TVector.Origin, rotationVector).Success);
-            Assert.True(a1.Geometry.Intersects(new Point(-0.9, -1.9)));
-            Assert.True(a1.Geometry.Intersects(new Point(-0.9, 1.9)));
-            Assert.True(a1.Geometry.Intersects(new Point(0.9, -1.9)));
-            Assert.True(a1.Geometry.Intersects(new Point(0.9, 1.9)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Intersects(new Point(-0.9, -1.9)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Intersects(new Point(-0.9, 1.9)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Intersects(new Point(0.9, -1.9)));
+            Assert.True((a1.Shape as GeometryShape).Geometry.Intersects(new Point(0.9, 1.9)));
         }
 
         [Test]
-        public void TestAdd500Elements() {
+        public void TestAdd50Elements() {
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < 500; i++) {
                 TestAgent2D a1 = new TestAgent2D(1, 1);
@@ -189,15 +192,16 @@ namespace ESCTest.Tests {
         [Test]
         public void TestIntersections()
         {
-            ESCAdapter adapter = new ESCAdapter(_esc, new Vector(1000, 1000), false);
-            SeqExec exec = new SeqExec(false);
+            var adapter = new ESCAdapter(_esc, new Vector(1000, 1000), false);
+            var exec = new SeqExec(false);
 
             var pos1 = new Vector(5d, 10.025d, 0d);
-            var pos2 = new Vector(10.025d, 7.75d, 0);
+            var pos2 = new Vector(10.025d, 7.75d, 0d);
             // The agents do not collide. They touch at point (10,10). Exception is thrown if ESC thinks there is a collision.
             var a1 = new TestSpatialAgent(exec, adapter, pos1, new Vector(10d, 0.05d, 0.4d), new Direction());
             var a2 = new TestSpatialAgent(exec, adapter, pos2, new Vector(0.05d, 4.5d, 0.4d), new Direction());
 
+            PrintAllAgents();
             Assert.True(a1.GetPosition().Equals(pos1));
             Assert.True(a2.GetPosition().Equals(pos2));
         }

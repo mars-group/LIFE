@@ -2,9 +2,9 @@
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESCTestLayer.Entities.Spatial {
+namespace ESC.Entities {
   
-  public class GeoShape : IShape {
+  public class GeometryShape : IShape {
     public IGeometry Geometry { get; set; }
     
     public TVector GetPosition() {

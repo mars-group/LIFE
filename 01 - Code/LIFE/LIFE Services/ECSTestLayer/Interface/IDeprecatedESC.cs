@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using ESCTestLayer.Entities;
+using ESC.Entities;
 using GenericAgentArchitectureCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
-namespace ESCTestLayer.Interface {
+namespace ESC.Interface {
+    using Entities;
 
     public interface IDeprecatedESC : IDataSource {
     
