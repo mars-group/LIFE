@@ -51,16 +51,20 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         public ObstacleAvoidanceBehavior(SpatialAgent agent, PerceptionUnit perceptionUnit) {
             _agent = agent;
             _perceptionUnit = perceptionUnit;
+            
+            List<Obstacle> obstacles;
+            if (Config.UsesESC)
+            {
+                # warning 'Hack' because of broken DataSensors for ESC
+                obstacles = (_agent as Pedestrian).Environment.GetAllObjects().OfType<Obstacle>().ToList();
+            }
+            else
+            {
+                object rawObstaclesData = _perceptionUnit.GetData(InformationType.Obstacles).Data;
+                obstacles = (List<Obstacle>)rawObstaclesData;
+            }
 
             // creating the static obstacle field
-            object rawObstacleData = perceptionUnit.GetData(InformationType.Obstacles).Data;
-            List<Obstacle> obstacles;
-            if (Config.UsesESC) {
-                # warning 'Hack' because ESCAdapter always gives back all agents
-                List<ISpatialObject> spatials = (List<ISpatialObject>) rawObstacleData;
-                obstacles = spatials.OfType<Obstacle>().ToList();
-            } else obstacles = (List<Obstacle>) rawObstacleData;
-
             foreach (Obstacle obstacle in obstacles) {
                 Vector position = obstacle.GetPosition();
                 Vector bounds = obstacle.GetDimension();
@@ -73,15 +77,17 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
         public Vector ModifyMovementVector(Vector targetPosition, Vector currentPipelineVector) {
             IPotentialField agentField = new SimplePotentialField();
 
-            object rawPedestrianData = _perceptionUnit.GetData(InformationType.Pedestrians).Data;
             List<Pedestrian> pedestrians;
             if (Config.UsesESC)
             {
-                # warning 'Hack' because ESCAdapter always gives back all agents
-                List<ISpatialObject> spatials = (List<ISpatialObject>)rawPedestrianData;
-                pedestrians = spatials.OfType<Pedestrian>().ToList();
+                # warning 'Hack' because of broken DataSensors for ESC
+                pedestrians = (_agent as Pedestrian).Environment.GetAllObjects().OfType<Pedestrian>().ToList();
             }
-            else pedestrians = (List<Pedestrian>)rawPedestrianData;
+            else
+            {
+                object rawPedestrianData = _perceptionUnit.GetData(InformationType.Pedestrians).Data;
+                pedestrians = (List<Pedestrian>)rawPedestrianData;
+            }
 
             foreach (Pedestrian ped in pedestrians) {
                 if (!ped.Id.Equals(_agent.Id)) {

@@ -24,6 +24,8 @@ namespace PedestrianModel.Agents {
     ///     A pedestrian agent which moves to a target position using wayfinding and collision avoidance.
     /// </summary>
     public class Pedestrian : SpatialAgent, IAgentLogic {
+        public IEnvironment Environment { get; private set; }
+
         public string Name { get; private set; }
 
         public double MaxVelocity { get; private set; }
@@ -84,11 +86,12 @@ namespace PedestrianModel.Agents {
                 double maxVelocity,
                 String name = "pedestrian")
             : base(exec, env, position, dimension, direction) {
+            Environment = env;
             MaxVelocity = maxVelocity;
             Name = name;
             SimulationId = simulationId;
 
-            AddSensors(env);
+            if (!Config.UsesESC) AddSensors(env);
 
             // Add movement module.
             Mover = new DirectMover(env, this, Data);
@@ -111,13 +114,13 @@ namespace PedestrianModel.Agents {
                 Vector targetPosition,
                 double maxVelocity,
                 String name = "pedestrian")
-            : base(exec, env, minPos, maxPos, dimension, direction)
-        {
+            : base(exec, env, minPos, maxPos, dimension, direction) {
+            Environment = env;
             MaxVelocity = maxVelocity;
             Name = name;
             SimulationId = simulationId;
 
-            AddSensors(env);
+            if (!Config.UsesESC) AddSensors(env);
 
             // Add movement module.
             Mover = new DirectMover(env, this, Data);
@@ -130,29 +133,16 @@ namespace PedestrianModel.Agents {
         }
 
         private void AddSensors(IEnvironment env) {
-            ISpecification obstaclesHalo;
-            ISpecification pedestriansHalo;
-            ISpecification allAgentsHalo;
-            if (Config.UsesESC)
-            {
-            # warning Size?
-                obstaclesHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.Obstacles);
-                pedestriansHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.Pedestrians);
-                allAgentsHalo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationType.AllAgents);
-            }
-            else
-            {
-                obstaclesHalo = new OmniHalo(InformationType.Obstacles);
-                pedestriansHalo = new OmniHalo(InformationType.Pedestrians);
-                allAgentsHalo = new OmniHalo(InformationType.AllAgents);
-            }
-
+            ISpecification obstaclesHalo = new OmniHalo(InformationType.Obstacles);
+            ISpecification pedestriansHalo = new OmniHalo(InformationType.Pedestrians);
+            ISpecification allAgentsHalo = new OmniHalo(InformationType.AllAgents);
+            
             // Add perception sensor for obstacles.
             PerceptionUnit.AddSensor(new DataSensor(this, (IDataSource)env, obstaclesHalo));
-
+            
             // Add perception sensor for pedestrians.
             PerceptionUnit.AddSensor(new DataSensor(this, (IDataSource)env, pedestriansHalo));
-
+            
             // Add perception sensor for everything.
             PerceptionUnit.AddSensor(new DataSensor(this, (IDataSource)env, allAgentsHalo));
         }
@@ -195,18 +185,19 @@ namespace PedestrianModel.Agents {
         private void PrepareFirstStep() {
             _startPosition = GetPosition();
             _movementPipeline.AddBehavior(new ObstacleAvoidanceBehavior(this, PerceptionUnit));
+            
+            List<Obstacle> obstacles;
+            if (Config.UsesESC) {
+                # warning 'Hack' because of broken DataSensors for ESC
+                obstacles = Environment.GetAllObjects().OfType<Obstacle>().ToList();
+            }
+            else {
+                object rawObstaclesData = PerceptionUnit.GetData(InformationType.Obstacles).Data;
+                obstacles = (List<Obstacle>)rawObstaclesData;
+            }
 
             // - ok, we don't really have an Y axis, but it's Vector3D, so define a hard coded y-value
             // - the 0.28 is in relation to the hardcoded 0.4m size of the agents bounding-box
-            object rawObstaclesData = PerceptionUnit.GetData(InformationType.Obstacles).Data;
-            List<Obstacle> obstacles;
-            if (Config.UsesESC)
-            {
-                # warning 'Hack' because ESCAdapter always gives back all agents
-                List<ISpatialObject> spatials = (List<ISpatialObject>)rawObstaclesData;
-                obstacles = spatials.OfType<Obstacle>().ToList();
-            }
-            else obstacles = (List<Obstacle>)rawObstaclesData;
             _pathfindingSearchGraph = new RaytracingGraph
                 (SimulationId, obstacles, 0, Math.Max(Config.TargetReachedDistance*2.0d, 0.28d));
             _pathfinder = new AStarPathfinder<Vector>(_pathfindingSearchGraph);
