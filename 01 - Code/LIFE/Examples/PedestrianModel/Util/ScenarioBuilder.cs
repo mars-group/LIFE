@@ -81,24 +81,28 @@ namespace PedestrianModel.Util {
             // left room, top wall
             new Obstacle(exec, env, new Vector(5d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // connection, top wall
-            double conTopY = connectionCenterY - (bottleneckWidth/2d) - wallCorrection;
-            new Obstacle
-                (exec, env, new Vector(10.2d, conTopY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
+            if (!Config.UsesESC) {
+                double conTopY = connectionCenterY - (bottleneckWidth / 2d) - wallCorrection;
+                new Obstacle
+                    (exec, env, new Vector(10.2d, conTopY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
+            }
             // right room, top wall
             new Obstacle(exec, env, new Vector(15.4d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // left room, bottom wall
             new Obstacle(exec, env, new Vector(5d, 10.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // connection, bottom wall
-            double conBotY = connectionCenterY + (bottleneckWidth/2d) + wallCorrection;
-            new Obstacle
-                (exec, env, new Vector(10.2d, conBotY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
+            if (!Config.UsesESC) {
+                double conBotY = connectionCenterY + (bottleneckWidth / 2d) + wallCorrection;
+                new Obstacle
+                    (exec, env, new Vector(10.2d, conBotY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
+            }
             // right room, bottom wall
             new Obstacle(exec, env, new Vector(15.4d, 10.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
 
             // left room, left wall
             new Obstacle(exec, env, new Vector(-0.025d, 5d, 0), new Vector(0.05d, 10d, 0.4d), new Direction());
             // left room, right wall above exit
-            double sideWallWidthY = connectionCenterY - (bottleneckWidth/2d);
+            double sideWallWidthY = connectionCenterY - (bottleneckWidth/2d) - wallWidth;
             double lrrwaeY = sideWallWidthY/2d;
             new Obstacle
                 (exec, env, new Vector(10.025d, lrrwaeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
