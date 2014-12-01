@@ -6,7 +6,7 @@ namespace PedestrianModel {
 
     internal class Config {
         // Scenario options
-        public static readonly ScenarioType Scenario = ScenarioType.Bottleneck50Agents;
+        public static ScenarioType Scenario = ScenarioType.Bottleneck50Agents;
         public static readonly bool IsGaussianNormalDistribution = false;
 
         // ESC
