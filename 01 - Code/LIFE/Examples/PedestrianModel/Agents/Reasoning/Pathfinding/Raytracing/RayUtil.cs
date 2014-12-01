@@ -49,6 +49,11 @@ namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
             Vector position = so.GetPosition();
             Vector bounds = so.GetDimension();
 
+            # warning 'Hack' because with ESC the z value of vectors is always 0, even though it is set during obstacle creation
+            if (Config.UsesESC) {
+                bounds = new Vector(bounds.X, bounds.Y, Config.PedestrianDimensions.Z);
+            }
+
             return GetIntersectWithBox(origin, direction, position + (-0.5d*bounds), position + (0.5d*bounds));
         }
 
