@@ -1,18 +1,16 @@
-﻿using EnvironmentServiceComponent.Entities;
+﻿using System;
+using System.Runtime.CompilerServices;
+using EnvironmentServiceComponent;
+using EnvironmentServiceComponent.Entities.Shape;
+using EnvironmentServiceComponent.Implementation;
 using SpatialCommon.Interfaces;
 
 namespace ESCTest.Entities {
-    using System;
-    using EnvironmentServiceComponent;
-    using EnvironmentServiceComponent.Implementation;
-    using GenericAgentArchitectureCommon.Interfaces;
-    using GeoAPI.Geometries;
-    using NetTopologySuite.Geometries;
 
-    internal class TestAgent2D : ISpatialEntity {
-
-        public TestAgent2D(int dx, int dy) {
-            Shape = new ExploreShape( MyGeometryFactory.Rectangle(dx, dy));
+    internal class GeometryAgent : ISpatialEntity {
+        public GeometryAgent(double x, double y)
+        {
+            Shape = new ExploreShape(MyGeometryFactory.Rectangle(x, y));
 //            Point bottomLeft = new Point(0, 0, 0);
 //            Point topLeft = new Point(0, dy, 0);
 //            Point topRight = new Point(dx, dy, 0);
@@ -29,16 +27,20 @@ namespace ESCTest.Entities {
 //            Geometry = new Polygon(lr);
         }
 
+        #region ISpatialEntity Members
 
         public Enum GetCollisionType() {
             return CollisionType.MassiveAgent;
         }
 
 
-      public Enum GetInformationType() {
-        throw new NotImplementedException();
-      }
+        public Enum GetInformationType() {
+            throw new NotImplementedException();
+        }
 
-      public IShape Shape { get; set; }
+        public IShape Shape { get; set; }
+
+        #endregion
     }
+
 }

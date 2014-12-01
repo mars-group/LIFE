@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EnvironmentServiceComponent.Entities;
+using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Interface;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
@@ -26,17 +27,17 @@ namespace EnvironmentServiceComponent {
 
 namespace EnvironmentServiceComponent.Implementation {
 
-    public class UnboundESC : IUnboundESC {
+    public class GeometryESC : IEnvironmentServiceComponent {
         private const int MaxAttempsToAddRandom = 100;
         private readonly Random _random;
         private readonly List<ISpatialEntity> _entities;
 
-        public UnboundESC() {
+        public GeometryESC() {
             _random = new Random();
             _entities = new List<ISpatialEntity>();
         }
 
-        #region IUnboundESC Members
+        #region IEnvironmentServiceComponent Members
 
         public bool Add(ISpatialEntity entity, TVector position, TVector rotation = default(TVector)) {
             var geometryShape = entity.Shape as GeometryShape;
@@ -112,7 +113,8 @@ namespace EnvironmentServiceComponent.Implementation {
 
             var collisions = Explore(new ExploreSpatialObject(result)).ToList();
             collisions.Remove(entity);
-            if (collisions.Any()) {
+            if (collisions.Any())
+            {
                 return new MovementResult(collisions);
             } 
             geometryShape.Geometry = result;
@@ -133,8 +135,7 @@ namespace EnvironmentServiceComponent.Implementation {
                 {
                     throw new NotImplementedException();
                 }
-                if (exploreShape.Geometry.Envelope.Intersects(entityShape.Geometry)
-                    && !exploreShape.Geometry.Touches(entityShape.Geometry)) {
+                if (exploreShape.Geometry.Envelope.Intersects(entityShape.Geometry)) {
                     entities.Add(entity);
                 }
             }

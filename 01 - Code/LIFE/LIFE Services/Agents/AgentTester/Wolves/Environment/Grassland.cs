@@ -34,7 +34,7 @@ namespace AgentTester.Wolves.Environment {
       UsesESC = useESC;
       _random = new Random();
       _boundaries = boundaries;
-      if (useESC) _env = new ESCAdapter(new UnboundESC(), boundaries, isGrid);  
+      if (useESC) _env = new ESCAdapter(new GeometryESC(), boundaries, isGrid);  
       else        _env = new Environment2D(boundaries, isGrid);
     }
 

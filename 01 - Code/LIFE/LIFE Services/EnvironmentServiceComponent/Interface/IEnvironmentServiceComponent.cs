@@ -10,7 +10,7 @@ namespace EnvironmentServiceComponent.Interface {
     /// <summary>
     ///     The ESC should provide the possibility to check collisisions between entities and to explore defined areas.
     /// </summary>
-    public interface IUnboundESC : IDataSource {
+    public interface IEnvironmentServiceComponent : IDataSource {
         /// <summary>
         ///     Adds a new entity to the ESC at given position with given direction.
         /// </summary>

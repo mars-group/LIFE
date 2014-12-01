@@ -89,10 +89,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\MyTestGeometryFactory.cs" />
-    <Compile Include="Entities\TestAgent2Dy.cs" />
+    <Compile Include="Entities\RectAgent.cs" />
+    <Compile Include="Entities\GeometryAgent.cs" />
     <Compile Include="Entities\TestSpatialAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\UnboundESCTest.cs" />
+    <Compile Include="Tests\TestESC.cs" />
+    <Compile Include="Tests\TestRectESC.cs" />
+    <Compile Include="Tests\TestGeometryESC.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
@@ -110,6 +113,10 @@
     <ProjectReference Include="..\..\LIFE Services\SpatialCommon\SpatialCommon.csproj">
       <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>
       <Name>SpatialCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
+      <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>
+      <Name>CSharpQuadTree</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

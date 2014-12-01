@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DalskiAgent.Auxiliary;
 using EnvironmentServiceComponent.Entities;
+using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
@@ -20,7 +21,7 @@ namespace DalskiAgent.Environments {
   /// </summary> 
   public class ESCAdapter : IEnvironment, IDataSource {
 
-    private readonly IUnboundESC _esc;  // Environment Service Component (ESC) implementation.
+    private readonly IEnvironmentServiceComponent _esc;  // Environment Service Component (ESC) implementation.
     private readonly TVector _maxSize;  // The maximum entent (for auto placement).
     private readonly bool _gridMode;    // ESC auto placement mode: True: grid, false: continuous.
 
@@ -34,7 +35,7 @@ namespace DalskiAgent.Environments {
     /// <param name="esc">The ESC reference.</param>
     /// <param name="maxSize">The maximum entent (for auto placement).</param>
     /// <param name="gridMode">ESC auto placement mode: True: grid, false: continuous.</param>
-    public ESCAdapter(IUnboundESC esc, Vector maxSize, bool gridMode) {
+    public ESCAdapter(IEnvironmentServiceComponent esc, Vector maxSize, bool gridMode) {
       _esc = esc;   
       _gridMode = gridMode;
       _maxSize = maxSize.GetTVector();

@@ -16,13 +16,13 @@ namespace PedestrianModel.Environment {
         public SimpleVisualization Visualization;
 
         # warning Size?
-        public ObstacleEnvironmentESC(SeqExec exec) : base(new UnboundESC(), new Vector(1000, 1000), false) {
+        public ObstacleEnvironmentESC(SeqExec exec) : base(new GeometryESC(), new Vector(1000, 1000), false) {
             exec.SetEnvironment(this);
             InitializeVisualization();
         }
 
         # warning Size?
-        public ObstacleEnvironmentESC() : base(new UnboundESC(), new Vector(1000, 1000), false) {
+        public ObstacleEnvironmentESC() : base(new GeometryESC(), new Vector(1000, 1000), false) {
             InitializeVisualization();
         }
 
