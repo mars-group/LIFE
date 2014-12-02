@@ -86,6 +86,10 @@
       <Project>{a5715b79-3cf8-445e-847d-23def12dbfa3}</Project>
       <Name>CellLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HumanLayer\HumanLayer.csproj">
+      <Project>{97aa1431-0d40-415a-ae57-6212deae7db6}</Project>
+      <Name>HumanLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
