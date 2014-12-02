@@ -71,10 +71,6 @@
       <Project>{d1feb7b4-55cd-47d7-8828-5ee7b4c2db95}</Project>
       <Name>TypeSafeBlackboard</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
-      <Name>GenericAgentArchitectureCommon</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

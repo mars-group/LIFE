@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GenericAgentArchitectureCommon.Interfaces;
 using GoapCommon.Implementation;
 
 namespace GoapCommon.Interfaces {
@@ -8,7 +7,7 @@ namespace GoapCommon.Interfaces {
     ///     An action represents a step towards a goal for an agent. It's a reusable unit.
     ///     Every agent gets his own set of available IActions.
     /// </summary>
-    public interface IGoapAction : IInteraction {
+    public interface IGoapAction  {
         /// <summary>
         ///     calcutate the resulting list of world states by source world
         /// </summary>

@@ -69,10 +69,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
-      <Name>GenericAgentArchitectureCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapModelTest\GoapModelTest.csproj">
       <Project>{dd3b4dfd-fadf-43fc-a0eb-eea34d7c5c12}</Project>
       <Name>GoapModelTest</Name>
