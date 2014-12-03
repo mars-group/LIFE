@@ -112,9 +112,9 @@ namespace EnvironmentServiceComponent.Implementation {
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
             foreach (RectShape rectShape in _quadTree.Query(exploreShape.Bounds))
             {
-                Console.WriteLine(spatial.GetCollisionType());
-                Console.WriteLine(_entities[rectShape].GetCollisionType());
-                Console.WriteLine(_collisionMatrix[spatial.GetCollisionType().GetHashCode(), _entities[rectShape].GetCollisionType().GetHashCode()]);
+//                Console.WriteLine(spatial.GetCollisionType());
+//                Console.WriteLine(_entities[rectShape].GetCollisionType());
+//                Console.WriteLine(_collisionMatrix[spatial.GetCollisionType().GetHashCode(), _entities[rectShape].GetCollisionType().GetHashCode()]);
                 if (_collisionMatrix[spatial.GetCollisionType().GetHashCode(), _entities[rectShape].GetCollisionType().GetHashCode()])
                 {
                     entities.Add(_entities[rectShape]);

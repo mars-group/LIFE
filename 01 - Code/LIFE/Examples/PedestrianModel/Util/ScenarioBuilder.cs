@@ -81,21 +81,15 @@ namespace PedestrianModel.Util {
             // left room, top wall
             new Obstacle(exec, env, new Vector(5d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // connection, top wall
-            if (!Config.UsesESC) {
-                double conTopY = connectionCenterY - (bottleneckWidth / 2d) - wallCorrection;
-                new Obstacle
-                    (exec, env, new Vector(10.2d, conTopY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
-            }
+            double conTopY = connectionCenterY - (bottleneckWidth / 2d) - wallCorrection;
+            new Obstacle(exec, env, new Vector(10.2d, conTopY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
             // right room, top wall
             new Obstacle(exec, env, new Vector(15.4d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // left room, bottom wall
             new Obstacle(exec, env, new Vector(5d, 10.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // connection, bottom wall
-            if (!Config.UsesESC) {
-                double conBotY = connectionCenterY + (bottleneckWidth / 2d) + wallCorrection;
-                new Obstacle
-                    (exec, env, new Vector(10.2d, conBotY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
-            }
+            double conBotY = connectionCenterY + (bottleneckWidth / 2d) + wallCorrection;
+            new Obstacle(exec, env, new Vector(10.2d, conBotY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
             // right room, bottom wall
             new Obstacle(exec, env, new Vector(15.4d, 10.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
 
@@ -104,12 +98,10 @@ namespace PedestrianModel.Util {
             // left room, right wall above exit
             double sideWallWidthY = connectionCenterY - (bottleneckWidth/2d) - wallWidth;
             double lrrwaeY = sideWallWidthY/2d;
-            new Obstacle
-                (exec, env, new Vector(10.025d, lrrwaeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
+            new Obstacle(exec, env, new Vector(10.025d, lrrwaeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
             // left room, right wall below exit
             double lrrwbeY = maxY - lrrwaeY;
-            new Obstacle
-                (exec, env, new Vector(10.025d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
+            new Obstacle(exec, env, new Vector(10.025d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
 
             // right room, left wall above entrance
             new Obstacle
@@ -121,8 +113,7 @@ namespace PedestrianModel.Util {
             new Obstacle
                 (exec, env, new Vector(20.425d, lrrwaeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
             // right room, right wall below exit
-            new Obstacle
-                (exec, env, new Vector(20.425d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
+            new Obstacle(exec, env, new Vector(20.425d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
 
             double startMinX = 0.2d;
             double startMaxX = 4.8d;

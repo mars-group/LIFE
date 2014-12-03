@@ -7,8 +7,6 @@ using DalskiAgent.Execution;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
-using EnvironmentServiceComponent.Implementation;
-using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
 using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
@@ -17,7 +15,6 @@ using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
 using SpatialCommon.Datatypes;
 using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
-using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace PedestrianModel.Agents {
 

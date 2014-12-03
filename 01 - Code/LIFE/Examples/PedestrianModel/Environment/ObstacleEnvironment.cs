@@ -43,7 +43,7 @@ namespace PedestrianModel.Environment {
         public ObstacleEnvironment(bool usesESC) {
             UsesESC = usesESC;
             # warning Size?
-            if (UsesESC) _env = new ESCAdapter(new GeometryESC(), new Vector(1000, 1000), false);
+            if (UsesESC) _env = new ESCRectAdapter(new RectESC(), new Vector(1000, 1000), false);
             else _env = new Environment2D(new Vector(1000, 1000), false);
         }
 
