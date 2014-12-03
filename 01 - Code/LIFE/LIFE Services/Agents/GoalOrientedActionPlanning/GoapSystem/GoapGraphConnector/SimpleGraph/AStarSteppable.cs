@@ -39,7 +39,7 @@ namespace GoapGraphConnector.SimpleGraph {
         }
 
         /// <summary>
-        ///     set the node to closed list and calculate entries for sucessors: 
+        ///     set the node to closed list and calculate entries for sucessors:
         ///     predecessor, heuristic, traveldistance and estimated
         /// </summary>
         public void CalculateCurrentNode() {
@@ -180,7 +180,7 @@ namespace GoapGraphConnector.SimpleGraph {
                     _nodeTable.Remove(openVertex);
                     _nodeTable.Add(openVertex, entry);
                 }
-                    // ... or updated because it was a cheaper way found
+                // ... or updated because it was a cheaper way found
                 else if ((int) value[2] > travelDistanceG) {
                     object[] entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
                     _nodeTable.Remove(openVertex);

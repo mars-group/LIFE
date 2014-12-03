@@ -3,7 +3,7 @@
 namespace GoapCommon.Interfaces {
 
     /// <summary>
-    ///     directed edge in serach graph of planning process
+    ///     Directed edge in serach graph of planning process
     /// </summary>
     public interface IGoapEdge {
         /// <summary>
