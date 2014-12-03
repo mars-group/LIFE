@@ -190,7 +190,7 @@ namespace CellLayer {
                     if (ObstacleCells.Contains(cellIid)) {
                         cellType = CellType.Obstacle;
                     }
-                    cellDict.GetOrAdd(cellIid, new Cell(cellIid, posX, posY, cellType));
+                    cellDict.GetOrAdd(cellIid, new Cell(cellIid, new Point(posX, posY), cellType));
 
                     object[] data = {posX, posY, CellColors[CellType.Neutral]};
                     if (ObstacleCells.Contains(cellIid)) {
@@ -211,6 +211,10 @@ namespace CellLayer {
         /// <returns></returns>
         public static int CalcCellId(int posX, int posY) {
             return (posY - 1)*CellCountXAxis + posX;
+        }
+
+        public static int CalcCellId(Point coordinates) {
+            return CalcCellId(coordinates.X, coordinates.Y);
         }
 
         /// <summary>
@@ -286,7 +290,7 @@ namespace CellLayer {
                 _cellField.AddOrUpdate(cellNumber, copied, (k, v) => copied);
 
                 // update the view data
-                object[] newViewData = {cell.XCoordinate, cell.YCoordinate, CellColors[copied.CellType]};
+                object[] newViewData = {cell.Coordinates.X, cell.Coordinates.Y, CellColors[copied.CellType]};
                 _viewForm.UpdateCellView(cellNumber, newViewData);
             }
         }
@@ -317,7 +321,7 @@ namespace CellLayer {
                     _cellField.AddOrUpdate(cellNumer, copied, (k, v) => copied);
 
                     // update the view data
-                    object[] newViewData = {cell.XCoordinate, cell.YCoordinate, CellColors[copied.CellType]};
+                    object[] newViewData = {cell.Coordinates.X, cell.Coordinates.Y, CellColors[copied.CellType]};
                     cellViewData.Add(cellNumer, newViewData);
                 }
                 _viewForm.UpdateCellsView(cellViewData);
@@ -373,9 +377,8 @@ namespace CellLayer {
         ///     Look for a cell whose member AgentOnCell is set with empty guid. If found set the given guid at cell.
         /// </summary>
         /// <param name="guid"></param>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
-        public void GiveAndSetToRandomPosition(Guid guid, out int posX, out int posY) {
+        /// <param name="coordinates"></param>
+        public void GiveAndSetToRandomPosition(Guid guid, out Point coordinates) {
             lock (Lock) {
                 Random r = new Random();
                 List<int> celIds = _cellField.Keys.ToList();
@@ -400,8 +403,7 @@ namespace CellLayer {
                         continue;
                     }
 
-                    posX = cell.XCoordinate;
-                    posY = cell.YCoordinate;
+                    coordinates = new Point(cell.Coordinates.X, cell.Coordinates.Y);
                     cell.AgentOnCell = guid;
                     return;
                 }
@@ -438,13 +440,12 @@ namespace CellLayer {
         ///     atomic test if an other agent is on the cell. if there is no other agent on the cell reserve cell with the agentId.
         /// </summary>
         /// <param name="agentID"></param>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
+        /// <param name="coordinates"></param>
         /// <returns></returns>
-        public bool TestAndSetAgentMove(Guid agentID, int posX, int posY) {
-            if (CellCoordinatesAreValid(posX, posY)) {
+        public bool TestAndSetAgentMove(Guid agentID, Point coordinates) {
+            if (CellCoordinatesAreValid(coordinates)) {
                 lock (Lock) {
-                    int calculatedCellId = CalcCellId(posX, posY);
+                    int calculatedCellId = CalcCellId(coordinates.X, coordinates.Y);
 
                     Cell cell;
                     _cellField.TryGetValue(calculatedCellId, out cell);
@@ -470,10 +471,9 @@ namespace CellLayer {
         ///     Set the cell member AgentOnCell back to the empty guid.
         /// </summary>
         /// <param name="agentID"></param>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
-        public void DeleteAgentIdFromCell(Guid agentID, int posX, int posY) {
-            int calculatedCellId = CalcCellId(posX, posY);
+        /// <param name="coordinates"></param>
+        public void DeleteAgentIdFromCell(Guid agentID, Point coordinates) {
+            int calculatedCellId = CalcCellId(coordinates.X, coordinates.Y);
 
             Cell cell;
             _cellField.TryGetValue(calculatedCellId, out cell);
@@ -492,12 +492,11 @@ namespace CellLayer {
         /// <summary>
         ///     Test if the given coordinates are valid in context of dimensions of the cell field.
         /// </summary>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
+        /// <param name="coordinates"></param>
         /// <returns></returns>
-        private bool CellCoordinatesAreValid(int posX, int posY) {
-            return ((SmallestXCoordinate <= posX && posX <= CellCountXAxis) &&
-                    (SmallestYCoordinate <= posY && posY <= CellCountYAxis));
+        private bool CellCoordinatesAreValid(Point coordinates) {
+            return ((SmallestXCoordinate <= coordinates.X && coordinates.X <= CellCountXAxis) &&
+                    (SmallestYCoordinate <= coordinates.Y && coordinates.Y <= CellCountYAxis));
         }
     }
 

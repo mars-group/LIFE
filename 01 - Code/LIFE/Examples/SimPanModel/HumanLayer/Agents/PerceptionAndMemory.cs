@@ -18,9 +18,8 @@ namespace HumanLayer.Agents {
         }
 
         /// <summary>
-        /// 
+        ///     Get the data of the cell the agent is on and save it to the humans map.
         /// </summary>
-        /// <param name="cellId"></param>
         public void SenseCell() {
             TCell cellData = _dataSourceLayer.GetDataOfCell(_owner.CellId);
             _cellIdToData[_owner.CellId] = cellData;

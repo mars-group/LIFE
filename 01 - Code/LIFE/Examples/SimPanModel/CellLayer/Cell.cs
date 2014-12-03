@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using CellLayer.TransportTypes;
 
@@ -10,16 +11,14 @@ namespace CellLayer {
     /// </summary>
     public class Cell {
         public readonly int CellId;
-        public readonly int XCoordinate;
-        public readonly int YCoordinate;
+        public readonly Point Coordinates;
         public CellLayerImpl.CellType CellType;
         public Guid AgentOnCell = Guid.Empty;
 
 
-        public Cell(int cellIid, int xCoordinate, int yCoordinate, CellLayerImpl.CellType cellType) {
+        public Cell(int cellIid, Point position, CellLayerImpl.CellType cellType) {
             CellId = cellIid;
-            YCoordinate = yCoordinate;
-            XCoordinate = xCoordinate;
+            Coordinates = position;
             CellType = cellType;
         }
 
@@ -74,7 +73,7 @@ namespace CellLayer {
         /// <returns></returns>
         public Cell GetCopyWithOtherStatus(CellLayerImpl.CellType newState) {
             if (IsChangeStateToAllowed(newState)) {
-                Cell copiedCell = new Cell(CellId, XCoordinate, YCoordinate, newState);
+                Cell copiedCell = new Cell(CellId, Coordinates, newState);
                 copiedCell.AgentOnCell = AgentOnCell;
                 return copiedCell;
             }
@@ -88,7 +87,7 @@ namespace CellLayer {
         /// <returns></returns>
         public Cell GetCopyWithAgentOnCell(Guid agentId) {
             if (AgentOnCell == Guid.Empty) {
-                Cell copiedCell = new Cell(CellId, XCoordinate, YCoordinate, CellType);
+                Cell copiedCell = new Cell(CellId, Coordinates, CellType);
                 copiedCell.AgentOnCell = agentId;
                 return copiedCell;
             }
@@ -102,7 +101,7 @@ namespace CellLayer {
         /// <returns></returns>
         public Cell GetCopyWithoutAgentOnCell(Guid agentID) {
             if (AgentOnCell == agentID) {
-                Cell copiedCell = new Cell(CellId, XCoordinate, YCoordinate, CellType);
+                Cell copiedCell = new Cell(CellId, Coordinates, CellType);
                 copiedCell.AgentOnCell = Guid.Empty;
                 return copiedCell;
             }
@@ -128,8 +127,8 @@ namespace CellLayer {
                 int dim = CellLayerImpl.CellCountXAxis;
 
                 // get the range of x and y coordinates which correspond to neighbour cells
-                neighbourXCoordinates.AddRange(Enumerable.Range(XCoordinate - cellRange, cellRange*2 + 1));
-                neighbourYCoordinates.AddRange(Enumerable.Range(YCoordinate - cellRange, cellRange*2 + 1));
+                neighbourXCoordinates.AddRange(Enumerable.Range(Coordinates.X - cellRange, cellRange*2 + 1));
+                neighbourYCoordinates.AddRange(Enumerable.Range(Coordinates.Y - cellRange, cellRange*2 + 1));
 
                 // Correct the ranges to the coordinates allowed in current cellfield
                 neighbourXCoordinates.RemoveAll(coordinate => coordinate < minX || coordinate > dim);

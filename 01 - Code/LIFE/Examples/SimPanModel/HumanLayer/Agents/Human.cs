@@ -11,23 +11,22 @@ namespace HumanLayer.Agents {
     /// </summary>
     public class Human : IAgent {
         public readonly Guid AgentID = Guid.NewGuid();
-        Blackboard _blackboard = new Blackboard();
+        public readonly Blackboard Blackboard = new Blackboard();
         private CellLayerImpl _cellLayer;
         private readonly PerceptionAndMemory _sensor;
         private readonly MotorAndNavigation _motor;
-        public int PosX;
-        public int PosY;
+        public Point Position;
         public int CellId;
         public bool CanMove = true;
         public bool IsAlive = true;
 
+       
         /// <summary>
         ///     blackboard property
         ///     save the current action. actions can use more than one tick, so they needed to be saved.
         /// </summary>
-        public static readonly BlackboardProperty<AbstractGoapAction> ActionForExecution =
-            new BlackboardProperty<AbstractGoapAction>("ActionForExecution");
-
+        public static readonly BlackboardProperty<Point> Target =
+            new BlackboardProperty<Point>("Target");
 
         public Human(CellLayerImpl cellLayer) {
             _cellLayer = cellLayer;
@@ -35,7 +34,7 @@ namespace HumanLayer.Agents {
             _sensor = new PerceptionAndMemory(_cellLayer, this);
             _motor = new MotorAndNavigation(_cellLayer, this);
 
-            _motor.GetPositionInCellWorld();
+            _motor.GetRandomPositionInCellWorld();
 
             //AbstractGoapSystem goapActionSystem = GoapActionSystem.Implementation.GoapComponent.LoadGoapConfiguration
             //  ("eine klasse", "ein namespace", blackboard);
@@ -47,9 +46,19 @@ namespace HumanLayer.Agents {
         public void Tick() {
             if (IsAlive) {
                 _sensor.SenseCell();
+
+                Blackboard.Set(Target,new Point(10,10));
+
                 WalkRandom();
-                HumanLayerImpl.Log.Info("i " + AgentID + " changed to : (" + PosX + "," + PosY + ")");
+                GoToTarget();
+                HumanLayerImpl.Log.Info("i " + AgentID + " changed to : (" + Position.X + "," + Position.Y + ")");
                 
+            }
+        }
+
+        private void GoToTarget() {
+            if (CanMove) {
+                _motor.ApproximateToTarget();
             }
         }
 
@@ -73,6 +82,7 @@ namespace HumanLayer.Agents {
         }
 
         
+
         public void SuccessiveApproximation() {
             
         }
