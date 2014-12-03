@@ -5,6 +5,7 @@ using System.Windows;
 using CSharpQuadTree;
 using EnvironmentServiceComponent.Entities;
 using EnvironmentServiceComponent.Entities.Shape;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
@@ -13,6 +14,7 @@ namespace EnvironmentServiceComponent.Implementation {
     public class RectESC : ACollisionESC {
         private readonly Dictionary<RectShape, ISpatialEntity> _entities;
         private readonly QuadTree<RectShape> _quadTree;
+        private readonly bool[,] _collisionMatrix = new bool[,] { { false, false, false, false }, { false, true, false, false }, { false, false, false, true }, { false, false, true, true } };
 
         public RectESC()
             : base() {
@@ -55,7 +57,7 @@ namespace EnvironmentServiceComponent.Implementation {
             if (oldShape == null || newShape == null) {
                 return false;
             }
-            List<ISpatialEntity> result = Explore(new ExploreSpatialObject(newShape.Bounds)).ToList();
+            List<ISpatialEntity> result = Explore(new ExploreSpatialObject(newShape.Bounds, entity.GetCollisionType())).ToList();
             result.Remove(entity);
             if (result.Any()) {
                 return false;
@@ -82,7 +84,7 @@ namespace EnvironmentServiceComponent.Implementation {
                     oldBounds.Height);
 
 
-            List<ISpatialEntity> collisions = Explore(new ExploreSpatialObject(newBounds)).ToList();
+            List<ISpatialEntity> collisions = Explore(new ExploreSpatialObject(newBounds, entity.GetCollisionType())).ToList();
             collisions.Remove(entity);
             if (collisions.Any()) {
                 return new MovementResult(collisions);
@@ -108,8 +110,15 @@ namespace EnvironmentServiceComponent.Implementation {
             }
 
             List<ISpatialEntity> entities = new List<ISpatialEntity>();
-            foreach (RectShape rectShape in _quadTree.Query(exploreShape.Bounds)) {
-                entities.Add(_entities[rectShape]);
+            foreach (RectShape rectShape in _quadTree.Query(exploreShape.Bounds))
+            {
+                Console.WriteLine(spatial.GetCollisionType());
+                Console.WriteLine(_entities[rectShape].GetCollisionType());
+                Console.WriteLine(_collisionMatrix[spatial.GetCollisionType().GetHashCode(), _entities[rectShape].GetCollisionType().GetHashCode()]);
+                if (_collisionMatrix[spatial.GetCollisionType().GetHashCode(), _entities[rectShape].GetCollisionType().GetHashCode()])
+                {
+                    entities.Add(_entities[rectShape]);
+                }
             }
 
             return entities;
@@ -130,7 +139,11 @@ namespace EnvironmentServiceComponent.Implementation {
         #region Nested type: ExploreSpatialObject
 
         private class ExploreSpatialObject : ISpatialObject {
-            public ExploreSpatialObject(Rect geometry) {
+            private readonly Enum _collisionType;
+
+            public ExploreSpatialObject(Rect geometry, Enum collisionType)
+            {
+                _collisionType = collisionType;
                 Shape = new ExploreRectShape(geometry);
             }
 
@@ -145,7 +158,7 @@ namespace EnvironmentServiceComponent.Implementation {
             #endregion
 
             public Enum GetCollisionType() {
-                return CollisionType.MassiveAgent;
+                return _collisionType;
             }
         }
 

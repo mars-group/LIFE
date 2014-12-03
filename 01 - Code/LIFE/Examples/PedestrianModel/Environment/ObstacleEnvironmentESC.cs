@@ -11,31 +11,32 @@ using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Environment {
 
-    public class ObstacleEnvironmentESC : ESCAdapter {
+    public class ObstacleEnvironmentESC : ESCRectAdapter {
         public AgentLogger AgentLogger = new AgentLogger();
         public SimpleVisualization Visualization;
 
-        # warning Size?
-        public ObstacleEnvironmentESC(SeqExec exec) : base(new GeometryESC(), new Vector(1000, 1000), false) {
+# warning Size?
+        public ObstacleEnvironmentESC(SeqExec exec) : base(new RectESC(), new Vector(1000, 1000), false) {
             exec.SetEnvironment(this);
             InitializeVisualization();
         }
 
-        # warning Size?
-        public ObstacleEnvironmentESC() : base(new GeometryESC(), new Vector(1000, 1000), false) {
+# warning Size?
+        public ObstacleEnvironmentESC()
+            : base(new RectESC(), new Vector(1000, 1000), false) {
             InitializeVisualization();
         }
 
-        public new void AdvanceEnvironment()
-        {
-            if (Visualization != null) Visualization.Invalidate();
+        public new void AdvanceEnvironment() {
+            if (Visualization != null) {
+                Visualization.Invalidate();
+            }
             AgentLogger.Log(GetAllObjects().OfType<Pedestrian>().ToList());
         }
 
         private void InitializeVisualization() {
             new Thread
-                (() =>
-                {
+                (() => {
                     Visualization = new SimpleVisualization(this);
                     Application.Run(Visualization);
                 }).Start();

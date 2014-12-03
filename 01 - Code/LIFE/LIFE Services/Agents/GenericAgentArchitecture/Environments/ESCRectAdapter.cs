@@ -11,6 +11,7 @@ using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
 using SpatialCommon.Datatypes;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 using Vector = SpatialCommon.Datatypes.Vector;
@@ -53,7 +54,8 @@ namespace DalskiAgent.Environments {
         public object GetData(ISpecification spec) {
             List<ISpatialEntity> entities = (List<ISpatialEntity>) _esc.GetData(spec);
             List<ISpatialObject> objects = new List<ISpatialObject>();
-            foreach (GeometryObject entity in entities.OfType<GeometryObject>()) {
+            foreach (RectObject entity in entities.OfType<RectObject>())
+            {
                 objects.Add(entity.Object);
             }
             return objects;
@@ -67,11 +69,12 @@ namespace DalskiAgent.Environments {
         ///     Add a new object to the environment.
         /// </summary>
         /// <param name="obj">The object to add.</param>
+        /// <param name="collisionType">Collision type defines with whom the agent may collide.</param>
         /// <param name="pos">The objects's initial position.</param>
         /// <param name="acc">Read-only object for data queries.</param>
         /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
         /// <param name="dir">Direction of the object. If null, then 0°.</param>
-        public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
+        public void AddObject(ISpatialObject obj, CollisionType collisionType, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
             // Set default values to direction and dimension, if not given. Then create geometry and accessor.
             if (dir == null) {
                 dir = new Direction();
@@ -79,7 +82,7 @@ namespace DalskiAgent.Environments {
             if (dim == null) {
                 dim = new Vector(1d, 1d, 1d);
             }
-            RectObject geometry = new RectObject(obj, MyRectFactory.Rectangle(dim.X, dim.Y), dir);
+            RectObject geometry = new RectObject(obj, MyRectFactory.Rectangle(dim.X, dim.Y), dir, collisionType);
             acc = new DataAccessor(geometry);
             _objects[obj] = geometry;
 
@@ -146,7 +149,8 @@ namespace DalskiAgent.Environments {
         /// <returns>A list of all objects.</returns>
         public List<ISpatialObject> GetAllObjects() {
             List<ISpatialObject> objects = new List<ISpatialObject>();
-            foreach (GeometryObject entity in _esc.ExploreAll().OfType<GeometryObject>()) {
+            foreach (RectObject entity in _esc.ExploreAll().OfType<RectObject>())
+            {
                 objects.Add(entity.Object);
             }
             return objects;
@@ -164,13 +168,13 @@ namespace DalskiAgent.Environments {
         ///     Add a new object to the environment.
         /// </summary>
         /// <param name="obj">The object to add.</param>
+        /// <param name="collisionType">Collision type defines with whom the agent may collide.</param>
         /// <param name="minPos">Minimum coordinate for random position.</param>
         /// <param name="maxPos">Maximum coordinate for random position.</param>
         /// <param name="acc">Read-only object for data queries.</param>
         /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
         /// <param name="dir">Direction of the object. If null, then 0°.</param>
-        public void AddObject
-            (ISpatialObject obj, Vector minPos, Vector maxPos, out DataAccessor acc, Vector dim, Direction dir) {
+        public void AddObject(ISpatialObject obj, CollisionType collisionType, Vector minPos, Vector maxPos, out DataAccessor acc, Vector dim, Direction dir) {
             // Set default values to direction and dimension, if not given. Then create geometry and accessor.
             if (dir == null) {
                 dir = new Direction();
@@ -178,7 +182,7 @@ namespace DalskiAgent.Environments {
             if (dim == null) {
                 dim = new Vector(1f, 1f, 1f);
             }
-            RectObject geometry = new RectObject(obj, MyRectFactory.Rectangle(dim.X, dim.Y), dir);
+            RectObject geometry = new RectObject(obj, MyRectFactory.Rectangle(dim.X, dim.Y), dir, collisionType);
             acc = new DataAccessor(geometry);
             _objects[obj] = geometry;
 
@@ -194,6 +198,7 @@ namespace DalskiAgent.Environments {
     ///     This geometry class serves as a wrapper for the Rect object and its orientation.
     /// </summary>
     public class RectObject : ISpatialEntity {
+        private readonly CollisionType _collisionType;
         public Rect Geometry { get; set; }
 
 // Geometry: Holds position (centroid) and dimension (envelope).
@@ -206,7 +211,9 @@ namespace DalskiAgent.Environments {
         /// <param name="obj">The spatial object corresponding to this geometry.</param>
         /// <param name="geom">Geometry to hold.</param>
         /// <param name="dir">Direction object.</param>
-        public RectObject(ISpatialObject obj, Rect geom, Direction dir) {
+        public RectObject(ISpatialObject obj, Rect geom, Direction dir, CollisionType collisionType)
+        {
+            _collisionType = collisionType;
             Object = obj;
             Geometry = geom;
             Shape = new ExploreRectShape(geom);
@@ -216,7 +223,7 @@ namespace DalskiAgent.Environments {
         #region ISpatialEntity Members
 
         public Enum GetCollisionType() {
-            return CollisionType.MassiveAgent;
+            return _collisionType;
         }
 
         public Enum GetInformationType() {

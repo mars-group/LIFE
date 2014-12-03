@@ -1,21 +1,25 @@
 ﻿using System;
-using EnvironmentServiceComponent;
 using EnvironmentServiceComponent.Entities.Shape;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
 namespace ESCTest.Entities {
 
     internal class RectAgent : ISpatialEntity {
-        public RectAgent(double x, double y)
-        {
-            Shape = new RectShape(TVector.Origin, new TVector(x,y));
+        private readonly CollisionType _collisionType;
+
+        public RectAgent(double x, double y, CollisionType collisionType) {
+            _collisionType = collisionType;
+            Shape = new RectShape(TVector.Origin, new TVector(x, y));
         }
+
+        public RectAgent(double x, double y) : this(x, y, CollisionType.MassiveAgent) {}
 
         #region ISpatialEntity Members
 
         public Enum GetCollisionType() {
-            return CollisionType.MassiveAgent;
+            return _collisionType;
         }
 
 

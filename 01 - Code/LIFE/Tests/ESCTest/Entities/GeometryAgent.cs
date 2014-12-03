@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using EnvironmentServiceComponent;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 
 namespace ESCTest.Entities {
 
     internal class GeometryAgent : ISpatialEntity {
-        public GeometryAgent(double x, double y)
-        {
+        public GeometryAgent(double x, double y) {
             Shape = new ExploreShape(MyGeometryFactory.Rectangle(x, y));
 //            Point bottomLeft = new Point(0, 0, 0);
 //            Point topLeft = new Point(0, dy, 0);

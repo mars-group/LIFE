@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using DalskiAgent.Environments;
-using DalskiAgent.Execution;
 using EnvironmentServiceComponent.Entities;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
@@ -10,6 +8,7 @@ using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using SpatialCommon.Datatypes;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
@@ -29,13 +28,10 @@ namespace ESCTest.Tests {
 
         #endregion
 
-    
-
         [Test]
-        public void TestMoveAndCollideWithOneOtherAgent()
-        {
-            var a1 = GenerateAgent(0.9, 0.9);
-            var a2 = GenerateAgent(0.9, 0.9);
+        public void TestMoveAndCollideWithOneOtherAgent() {
+            ISpatialEntity a1 = GenerateAgent(0.9, 0.9);
+            ISpatialEntity a2 = GenerateAgent(0.9, 0.9);
 
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
             Assert.True(_esc.Add(a2, new TVector(0, 1)));
@@ -49,9 +45,8 @@ namespace ESCTest.Tests {
 
 
         [Test]
-        public void TestMoveAround()
-        {
-            var a1 = new GeometryAgent(2, 2);
+        public void TestMoveAround() {
+            GeometryAgent a1 = new GeometryAgent(2, 2);
             Assert.True(_esc.Add(a1, new TVector(1, 1)));
             Assert.True(_esc.Move(a1, new TVector(0, 1)).Success);
             Assert.True((a1.Shape as GeometryShape).Geometry.Centroid.Equals(new Point(1, 2)));
@@ -65,20 +60,17 @@ namespace ESCTest.Tests {
             Assert.True((a1.Shape as GeometryShape).Geometry.Centroid.Equals(new Point(2.5d, 8.71d)));
         }
 
-        protected void PrintAllAgents()
-        {
+        protected void PrintAllAgents() {
             Console.WriteLine(_esc.ExploreAll().Count() + " Agents found.");
-            foreach (ISpatialEntity entity in _esc.ExploreAll())
-            {
-                var geometryShape = entity.Shape as GeometryShape;
+            foreach (ISpatialEntity entity in _esc.ExploreAll()) {
+                GeometryShape geometryShape = entity.Shape as GeometryShape;
                 Console.WriteLine(entity + " " + geometryShape.Geometry.Envelope);
             }
             Console.WriteLine("---");
         }
 
         [Test]
-        public void TestResize()
-        {
+        public void TestResize() {
             GeometryAgent a1 = new GeometryAgent(2, 2);
             GeometryAgent a2 = new GeometryAgent(2, 2);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
@@ -94,8 +86,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestRotation()
-        {
+        public void TestRotation() {
             GeometryAgent a1 = new GeometryAgent(4, 2);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
             Assert.False((a1.Shape as GeometryShape).Geometry.Intersects(new Point(-0.9, -1.9)));
@@ -113,8 +104,11 @@ namespace ESCTest.Tests {
             Assert.True((a1.Shape as GeometryShape).Geometry.Intersects(new Point(0.9, 1.9)));
         }
 
-        protected override ISpatialEntity GenerateAgent(double x, double y)
-        {
+        protected override ISpatialEntity GenerateAgent(double x, double y) {
+            return GenerateAgent(x, y, CollisionType.MassiveAgent);
+        }
+
+        protected override ISpatialEntity GenerateAgent(double x, double y, CollisionType collisionType) {
             return new GeometryAgent(x, y);
         }
     }

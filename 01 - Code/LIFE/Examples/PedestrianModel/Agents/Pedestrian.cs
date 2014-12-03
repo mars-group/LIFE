@@ -15,6 +15,7 @@ using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
 using SpatialCommon.Datatypes;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
@@ -85,7 +86,7 @@ namespace PedestrianModel.Agents {
                 Vector targetPosition,
                 double maxVelocity,
                 String name = "pedestrian")
-            : base(exec, env, position, dimension, direction) {
+            : base(exec, env, CollisionType.MassiveAgent, position, dimension, direction) {
             Environment = env;
             MaxVelocity = maxVelocity;
             Name = name;
@@ -114,7 +115,7 @@ namespace PedestrianModel.Agents {
                 Vector targetPosition,
                 double maxVelocity,
                 String name = "pedestrian")
-            : base(exec, env, minPos, maxPos, dimension, direction) {
+            : base(exec, env, CollisionType.MassiveAgent, minPos, maxPos, dimension, direction) {
             Environment = env;
             MaxVelocity = maxVelocity;
             Name = name;

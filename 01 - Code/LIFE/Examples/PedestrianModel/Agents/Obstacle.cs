@@ -3,6 +3,7 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using GenericAgentArchitectureCommon.Interfaces;
 using SpatialCommon.Datatypes;
+using SpatialCommon.Enums;
 
 namespace PedestrianModel.Agents {
 
@@ -19,7 +20,7 @@ namespace PedestrianModel.Agents {
         /// <param name="dimension">Initial dimension.</param>
         /// <param name="direction">Initial direction.</param>
         public Obstacle(IExecution exec, IEnvironment env, Vector position, Vector dimension, Direction direction)
-            : base(exec, env, position, dimension, direction) {
+            : base(exec, env,CollisionType.StaticEnvironment, position, dimension, direction) {
             Init();
         }
 

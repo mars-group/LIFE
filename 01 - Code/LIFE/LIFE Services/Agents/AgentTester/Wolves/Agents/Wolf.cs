@@ -11,6 +11,7 @@ using DalskiAgent.Perception;
 using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
@@ -35,7 +36,8 @@ namespace AgentTester.Wolves.Agents {
     /// </summary>
     /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Grassland reference.</param>
-    public Wolf(IExecution exec, Grassland env) : base(exec, env, null) {
+    public Wolf(IExecution exec, Grassland env) : base(exec, env, CollisionType.MassiveAgent, null)
+    {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       

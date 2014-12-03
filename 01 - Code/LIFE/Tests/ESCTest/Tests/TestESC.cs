@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using EnvironmentServiceComponent.Interface;
 using NUnit.Framework;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
@@ -41,11 +42,19 @@ namespace ESCTest.Tests {
 
         [Test]
         public void TestMoveAgentForCollision() {
-            ISpatialEntity a1 = GenerateAgent(0.9,0.9);
+            ISpatialEntity a1 = GenerateAgent(0.9, 0.9);
             ISpatialEntity a2 = GenerateAgent(0.9, 0.9);
             Assert.True(_esc.Add(a1, new TVector(0, 0)));
             Assert.True(_esc.Add(a2, new TVector(1, 1)));
             Assert.False(_esc.Move(a2, new TVector(-1, -1)).Success);
+        }
+
+        [Test]
+        public void TestPlaceEnvironmentAtSamePosition() {
+            ISpatialEntity a1 = GenerateAgent(10, 10, CollisionType.StaticEnvironment);
+            ISpatialEntity a2 = GenerateAgent(10, 10, CollisionType.StaticEnvironment);
+            Assert.True(_esc.Add(a1, new TVector(0, 0)));
+            Assert.True(_esc.Add(a2, new TVector(0, 0)));
         }
 
 
@@ -78,7 +87,7 @@ namespace ESCTest.Tests {
 
         [Test]
         public void TestCorrectPlacement2D() {
-            ISpatialEntity a1 = GenerateAgent(0.9,0.9);
+            ISpatialEntity a1 = GenerateAgent(0.9, 0.9);
             ISpatialEntity a2 = GenerateAgent(0.9, 0.9);
             ISpatialEntity a3 = GenerateAgent(0.9, 0.9);
             ISpatialEntity a4 = GenerateAgent(0.9, 0.9);
@@ -110,7 +119,7 @@ namespace ESCTest.Tests {
         public void TestPerfomanceAdd500Elements() {
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < 500; i++) {
-                ISpatialEntity a1 = GenerateAgent(0.9,0.9);
+                ISpatialEntity a1 = GenerateAgent(0.9, 0.9);
                 Assert.True(_esc.Add(a1, new TVector(i, 0)));
             }
             // 4.9 sec für 5k agents.
@@ -151,6 +160,7 @@ namespace ESCTest.Tests {
         }
 
         protected abstract ISpatialEntity GenerateAgent(double x, double y);
+        protected abstract ISpatialEntity GenerateAgent(double x, double y, CollisionType collisionType);
     }
 
 }

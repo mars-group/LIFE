@@ -4,6 +4,7 @@ using EnvironmentServiceComponent.Implementation;
 using ESCTest.Entities;
 using NUnit.Framework;
 using SpatialCommon.Datatypes;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 
 namespace ESCTest.Tests {
@@ -23,8 +24,15 @@ namespace ESCTest.Tests {
         #endregion
 
         protected override ISpatialEntity GenerateAgent(double x, double y) {
-            return new RectAgent(x, y);
+            return GenerateAgent(x, y, CollisionType.MassiveAgent);
         }
+
+        protected override ISpatialEntity GenerateAgent(double x, double y, CollisionType collisionType) {
+            return new RectAgent(x, y, collisionType);
+        }
+
+        [Test]
+        public void TestCollisions() {}
 
         [Test]
         public void TestIntersections() {

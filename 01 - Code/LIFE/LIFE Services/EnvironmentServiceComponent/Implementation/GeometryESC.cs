@@ -8,22 +8,9 @@ using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using SpatialCommon.Datatypes;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
-
-namespace EnvironmentServiceComponent {
-
-    /// <summary>
-    ///     Data query information types.
-    /// </summary>
-    public enum CollisionType {
-        StaticEnv,
-        //        DynamicEnv,
-        MassiveAgent,
-        //        VolatileAgent
-    }
-
-}
 
 namespace EnvironmentServiceComponent.Implementation {
 
@@ -40,14 +27,14 @@ namespace EnvironmentServiceComponent.Implementation {
         #region IEnvironmentServiceComponent Members
 
         public bool Add(ISpatialEntity entity, TVector position, TVector rotation = default(TVector)) {
-            var geometryShape = entity.Shape as GeometryShape;
+            GeometryShape geometryShape = entity.Shape as GeometryShape;
             if (geometryShape != null) {
-                var oldGeometry = geometryShape.Geometry;
-                var oldCentroid = oldGeometry.Centroid;
+                IGeometry oldGeometry = geometryShape.Geometry;
+                IPoint oldCentroid = oldGeometry.Centroid;
 
                 if (!oldCentroid.Equals(new Point(0, 0, 0))) {
                     // move to origin
-                    var trans = new AffineTransformation();
+                    AffineTransformation trans = new AffineTransformation();
                     trans.SetToTranslation(-oldCentroid.X, -oldCentroid.Y);
                     IGeometry newGeometry = trans.Transform(oldGeometry);
                     geometryShape.Geometry = newGeometry;
@@ -80,7 +67,7 @@ namespace EnvironmentServiceComponent.Implementation {
         }
 
         public bool Resize(ISpatialEntity entity, IShape shape) {
-            var geometryShape = shape as GeometryShape;
+            GeometryShape geometryShape = shape as GeometryShape;
             if (geometryShape == null) {
                 return false;
             }
@@ -94,45 +81,42 @@ namespace EnvironmentServiceComponent.Implementation {
         }
 
         public MovementResult Move(ISpatialEntity entity, TVector movementVector, TVector rotation = default(TVector)) {
-            var geometryShape = entity.Shape as GeometryShape; 
+            GeometryShape geometryShape = entity.Shape as GeometryShape;
             if (geometryShape == null) {
                 throw new NotImplementedException();
             }
 
-            var old = geometryShape.Geometry;
-            var trans = new AffineTransformation();
+            IGeometry old = geometryShape.Geometry;
+            AffineTransformation trans = new AffineTransformation();
             trans.Translate(movementVector.X, movementVector.Y);
             if (!EqualityComparer<TVector>.Default.Equals(rotation, default(TVector))) {
-                var direction = new Direction();
+                Direction direction = new Direction();
                 direction.SetDirectionalVector(rotation.GetVector());
-                var center = old.Centroid.Coordinate;
+                Coordinate center = old.Centroid.Coordinate;
                 trans.Rotate(Direction.DegToRad(direction.Yaw), center.X, center.Y);
             }
 
-            var result = trans.Transform(old);
+            IGeometry result = trans.Transform(old);
 
-            var collisions = Explore(new ExploreSpatialObject(result)).ToList();
+            List<ISpatialEntity> collisions = Explore(new ExploreSpatialObject(result)).ToList();
             collisions.Remove(entity);
-            if (collisions.Any())
-            {
+            if (collisions.Any()) {
                 return new MovementResult(collisions);
-            } 
+            }
             geometryShape.Geometry = result;
             return new MovementResult();
         }
 
         public IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial) {
-            var exploreShape = spatial.Shape as GeometryShape;
+            GeometryShape exploreShape = spatial.Shape as GeometryShape;
             if (exploreShape == null) {
                 throw new NotImplementedException();
             }
 
-            var entities = new List<ISpatialEntity>();
-            foreach (ISpatialEntity entity in _entities.ToArray())
-            {
-                var entityShape = entity.Shape as GeometryShape;
-                if (entityShape == null)
-                {
+            List<ISpatialEntity> entities = new List<ISpatialEntity>();
+            foreach (ISpatialEntity entity in _entities.ToArray()) {
+                GeometryShape entityShape = entity.Shape as GeometryShape;
+                if (entityShape == null) {
                     throw new NotImplementedException();
                 }
                 if (exploreShape.Geometry.Envelope.Intersects(entityShape.Geometry)) {
@@ -179,30 +163,29 @@ namespace EnvironmentServiceComponent.Implementation {
 
         #endregion
 
+        #region Nested type: ExploreSpatialObject
 
-
-        private class ExploreSpatialObject : ISpatialObject
-        {
-            public ExploreSpatialObject(IGeometry geometry)
-            {
+        private class ExploreSpatialObject : ISpatialObject {
+            public ExploreSpatialObject(IGeometry geometry) {
                 Shape = new ExploreShape(geometry);
             }
 
+            #region ISpatialObject Members
+
             public IShape Shape { get; set; }
 
-            public Enum GetInformationType()
-            {
+            public Enum GetInformationType() {
                 throw new NotImplementedException();
             }
 
-            public Enum GetCollisionType()
-            {
+            #endregion
+
+            public Enum GetCollisionType() {
                 return CollisionType.MassiveAgent;
             }
         }
 
-       
-
+        #endregion
     }
 
 }

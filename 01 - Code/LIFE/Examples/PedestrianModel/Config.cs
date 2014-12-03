@@ -17,7 +17,7 @@ namespace PedestrianModel {
 
         // Simulation
         public static readonly double LengthOfTimestepsInMilliseconds = 1000/15d; // 66,66666... ms, 15 frames per second
-        public static readonly bool WalkLoops = false; // if reached target, teleport to start position and start again
+        public static readonly bool WalkLoops = true; // if reached target, teleport to start position and start again
 
         public static readonly TargetListType TargetListType = TargetListType.Sequential; // how to process the target positions
 

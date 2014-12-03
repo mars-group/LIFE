@@ -7,6 +7,7 @@ using DalskiAgent.Perception;
 using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Interfaces;
 using SpatialCommon.Datatypes;
+using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
@@ -93,8 +94,9 @@ namespace AgentTester.Wolves.Environment {
     /* Redirection of environment functions to concrete implementation. */
     /********************************************************************/
 
-    public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
-      _env.AddObject(obj, pos, out acc, dim, dir);
+    public void AddObject(ISpatialObject obj, CollisionType collisionType, Vector pos, out DataAccessor acc, Vector dim, Direction dir)
+    {
+      _env.AddObject(obj,collisionType, pos, out acc, dim, dir);
     }
 
     public void RemoveObject(ISpatialObject obj) {
