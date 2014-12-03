@@ -7,16 +7,23 @@ namespace CellLayer.TransportTypes {
     ///     Represents sensor data of a single cell. Prevent from direkt reference.
     /// </summary>
     public class TCell {
+
         public readonly int ID;
         public readonly Point Coordinates;
         public readonly Guid AgentOnCellGuid;
         public readonly CellLayerImpl.CellType CellType;
+        public readonly int PressureOnCell;
+        public readonly int ResistanceToPressure;
+
+
 
         public TCell(Cell correspondingCell) {
             ID = correspondingCell.CellId;
             Coordinates = correspondingCell.Coordinates;
             CellType = correspondingCell.CellType;
             AgentOnCellGuid = correspondingCell.AgentOnCell;
+            PressureOnCell = correspondingCell.PressureOnCell;
+            ResistanceToPressure = correspondingCell.ResistanceToPressure;
         }
 
         public override string ToString() {

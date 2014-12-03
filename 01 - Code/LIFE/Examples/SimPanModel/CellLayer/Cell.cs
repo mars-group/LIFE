@@ -14,6 +14,8 @@ namespace CellLayer {
         public readonly Point Coordinates;
         public CellLayerImpl.CellType CellType;
         public Guid AgentOnCell = Guid.Empty;
+        public int PressureOnCell = 0;
+        public int ResistanceToPressure = 50;
 
 
         public Cell(int cellIid, Point position, CellLayerImpl.CellType cellType) {
@@ -150,6 +152,16 @@ namespace CellLayer {
         /// <returns></returns>
         public TCell GetTransportType() {
             return new TCell(this);
+        }
+
+        public void AddPressure(int strenght) {
+            PressureOnCell += strenght;
+
+            if (PressureOnCell > ResistanceToPressure && CellType == CellLayerImpl.CellType.Obstacle) {
+                CellLayerImpl.Log.Info("CELL: " + CellId + " Obstacle cell broke under pressure to neutral");
+                ChangeStateTo(CellLayerImpl.CellType.Neutral);
+                PressureOnCell = 0;
+            }
         }
     }
 

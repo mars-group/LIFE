@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +21,8 @@ namespace HumanLayer {
     public class HumanLayerImpl : ISteppedLayer {
 
         private long _currentTick;
-        private const int CountOfHumans = 20;
+        private const int CountOfHumans = 10;
+        private const int CountOfRandomWalker = 10;
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);      
         private readonly CellLayerImpl _cellLayer;
         private ConcurrentDictionary<Guid, Human> _humanList = new ConcurrentDictionary<Guid, Human>();
@@ -34,9 +36,18 @@ namespace HumanLayer {
 
         public bool InitLayer<I>
             (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+            
             for (int i = 0; CountOfHumans >= i; i++) {
                 Human humanAgent = new Human(_cellLayer);
+                humanAgent.SetTarget(new Point(10,10));
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                registerAgentHandle.Invoke(this, humanAgent);
+            }
+
+            for (int i = 0; CountOfRandomWalker >= i; i++)
+            {
+                Human humanAgent = new Human(_cellLayer);
+               _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
             return true;

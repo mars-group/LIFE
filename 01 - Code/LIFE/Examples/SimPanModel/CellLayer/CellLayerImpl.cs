@@ -65,7 +65,7 @@ namespace CellLayer {
         public const int SmallestXCoordinate = 1;
         public const int SmallestYCoordinate = 1;
         private static readonly object Lock = new object(); // access synchronization 
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         ///     the tuple represents an addition of (x,y) value to get in the enumerated direction
@@ -103,6 +103,7 @@ namespace CellLayer {
             56,
             57,
             58,
+            190,
             328,
             329,
             330,
@@ -184,7 +185,7 @@ namespace CellLayer {
 
             for (int posX = 1; posX <= CellCountXAxis; posX++) {
                 for (int posY = 1; posY <= CellCountYAxis; posY++) {
-                    int cellIid = CalcCellId(posX, posY);
+                    int cellIid = CalculateCellId(posX, posY);
 
                     CellType cellType = CellType.Neutral;
                     if (ObstacleCells.Contains(cellIid)) {
@@ -209,12 +210,12 @@ namespace CellLayer {
         /// <param name="posX"></param>
         /// <param name="posY"></param>
         /// <returns></returns>
-        public static int CalcCellId(int posX, int posY) {
+        public static int CalculateCellId(int posX, int posY) {
             return (posY - 1)*CellCountXAxis + posX;
         }
 
-        public static int CalcCellId(Point coordinates) {
-            return CalcCellId(coordinates.X, coordinates.Y);
+        public static int CalculateCellId(Point coordinates) {
+            return CalculateCellId(coordinates.X, coordinates.Y);
         }
 
         /// <summary>
@@ -296,6 +297,26 @@ namespace CellLayer {
         }
 
         /// <summary>
+        ///     If cells get manipulated, they maybe must be rewritten.
+        /// </summary>
+        /// <param name="cell"></param>
+        public void RefreshCell(int cellId) {
+            Cell cell;
+            _cellField.TryGetValue(cellId, out cell);
+            if (cell == null){
+                return;
+            }
+            
+            object[] newViewData = { cell.Coordinates.X, cell.Coordinates.Y, CellColors[cell.CellType] };
+            _viewForm.UpdateCellView(cell.CellId, newViewData);
+        }
+
+        public void RefreshCell(Point cellPosition) {
+            int cellId = CalculateCellId(cellPosition);
+            RefreshCell(cellId);
+        }
+
+        /// <summary>
         ///     Same as SetCellStatus exept this method handles many cells.
         ///     The cell field and the view data must be updated.
         /// </summary>
@@ -374,7 +395,8 @@ namespace CellLayer {
         }
 
         /// <summary>
-        ///     Look for a cell whose member AgentOnCell is set with empty guid. If found set the given guid at cell.
+        ///     Look for a cell whose member AgentOnCell is set with empty guid.
+        ///     If found set the given guid at cell. Method is alike the hardware test-and-set.
         /// </summary>
         /// <param name="guid"></param>
         /// <param name="coordinates"></param>
@@ -412,7 +434,7 @@ namespace CellLayer {
         }
 
         /// <summary>
-        ///     get the transport type of the cell data
+        ///     Get the transport type of the cell data
         /// </summary>
         /// <param name="cellId"></param>
         /// <returns></returns>
@@ -432,12 +454,12 @@ namespace CellLayer {
         /// <param name="posY"></param>
         /// <returns></returns>
         public TCell GetDataOfCell(int posX, int posY) {
-            int calculatedCellId = CalcCellId(posX, posY);
+            int calculatedCellId = CalculateCellId(posX, posY);
             return GetDataOfCell(calculatedCellId);
         }
 
         /// <summary>
-        ///     atomic test if an other agent is on the cell. if there is no other agent on the cell reserve cell with the agentId.
+        ///     Atomic test if an other agent is on the cell. if there is no other agent on the cell reserve cell with the agentId.
         /// </summary>
         /// <param name="agentID"></param>
         /// <param name="coordinates"></param>
@@ -445,7 +467,7 @@ namespace CellLayer {
         public bool TestAndSetAgentMove(Guid agentID, Point coordinates) {
             if (CellCoordinatesAreValid(coordinates)) {
                 lock (Lock) {
-                    int calculatedCellId = CalcCellId(coordinates.X, coordinates.Y);
+                    int calculatedCellId = CalculateCellId(coordinates.X, coordinates.Y);
 
                     Cell cell;
                     _cellField.TryGetValue(calculatedCellId, out cell);
@@ -473,7 +495,7 @@ namespace CellLayer {
         /// <param name="agentID"></param>
         /// <param name="coordinates"></param>
         public void DeleteAgentIdFromCell(Guid agentID, Point coordinates) {
-            int calculatedCellId = CalcCellId(coordinates.X, coordinates.Y);
+            int calculatedCellId = CalculateCellId(coordinates.X, coordinates.Y);
 
             Cell cell;
             _cellField.TryGetValue(calculatedCellId, out cell);
@@ -494,9 +516,19 @@ namespace CellLayer {
         /// </summary>
         /// <param name="coordinates"></param>
         /// <returns></returns>
-        private bool CellCoordinatesAreValid(Point coordinates) {
+        public static bool CellCoordinatesAreValid(Point coordinates) {
             return ((SmallestXCoordinate <= coordinates.X && coordinates.X <= CellCountXAxis) &&
                     (SmallestYCoordinate <= coordinates.Y && coordinates.Y <= CellCountYAxis));
+        }
+
+        public void AddPressure(Point cellCoordinates, int strenght) {
+            int cellNumber = CalculateCellId(cellCoordinates);
+            Cell cell;
+            _cellField.TryGetValue(cellNumber, out cell);
+            if(cell != null) {
+
+                cell.AddPressure(strenght);
+            }
         }
     }
 
