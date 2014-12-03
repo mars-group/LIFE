@@ -50,6 +50,34 @@ namespace ESCTest.Tests {
             Assert.True(a1.GetPosition().Equals(pos1));
             Assert.True(a2.GetPosition().Equals(pos2));
         }
+
+        [Test]
+        public void TestSpatialAgentPlacementAboveAndBelowObstacle() {
+            ESCRectAdapter adapter = new ESCRectAdapter(_esc, new Vector(1000, 1000), false);
+            SeqExec exec = new SeqExec(false);
+
+            // centerY = 10
+            Vector posObstacle = new Vector(10d, 10d, 0d);
+            // minY = 10 - 0.025 = 9.975, maxY = 10 + 0.025 = 10.025
+            Vector dimObstacle = new Vector(10d, 0.05d, 0.4d);
+
+            // centerY = 9.75
+            Vector posPedestrianAbove = new Vector(10d, 9.75d, 0d);
+            // minY = 9.75 - 0.2 = 9.55, maxY = 9.75 + 0.2 = 9.95
+            Vector dimPedestrianAbove = new Vector(0.4d, 0.4d, 0.4d);
+            // pedestrian1 is 0.025 above obstacle (not touching)
+
+            // centerY = 10.25
+            Vector posPedestrianBelow = new Vector(10d, 10.25d, 0d);
+            // minY = 10.25 - 0.2 = 10.05, maxY = 10.25 + 0.2 = 10.45
+            Vector dimPedestrianBelow = new Vector(0.4d, 0.4d, 0.4d);
+            // pedestrian1 is 0.025 below obstacle (not touching)
+
+            new TestSpatialAgent(exec, adapter, posObstacle, dimObstacle, new Direction());
+
+            new TestSpatialAgent(exec, adapter, posPedestrianBelow, dimPedestrianBelow, new Direction());
+            new TestSpatialAgent(exec, adapter, posPedestrianAbove, dimPedestrianAbove, new Direction());
+        }
     }
 
 }
