@@ -15,7 +15,7 @@ namespace EnvironmentServiceComponent.Implementation {
     ///     @see http://jitter-physics.com/wordpress/?tag=sweep-and-prune
     ///     @see http://www.philorwig.com/research/spatial/collision-detection-sweep-and-prune.html
     /// </summary>
-    public class ESC : IDeprecatedESC {
+    public class DeprecatedESC : IDeprecatedESC {
         //TODO boundaries einführen, vermutlich als polygon(IGeometry). zunächst als Vector siehe Environment2D
         // was passiert, wenn Agenten Grenzen erreichen?
         // TODO gibt indexOutOfBounds mit zurück
@@ -26,7 +26,7 @@ namespace EnvironmentServiceComponent.Implementation {
         private readonly IDictionary<int, TVector> _positions; // The positions (middlepoints).
         private readonly IDictionary<int, TVector> _directions; // The positions (middlepoints).
 
-        public ESC() {
+        public DeprecatedESC() {
             _rnd = new Random();
             _aabbs = new Dictionary<int, AABB>();
             _dimensions = new ConcurrentDictionary<int, TVector>();

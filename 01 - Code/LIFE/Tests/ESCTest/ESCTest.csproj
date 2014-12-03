@@ -41,10 +41,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\LayerAPI.0.1.214\lib\net45\GeoAPI.dll</HintPath>
     </Reference>
-    <Reference Include="LayerAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LayerAPI.0.1.214\lib\net45\LayerAPI.dll</HintPath>
-    </Reference>
     <Reference Include="LCConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\LayerAPI.0.1.214\lib\net45\LCConnector.dll</HintPath>
@@ -98,6 +94,10 @@
     <Compile Include="Tests\TestGeometryESC.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
       <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
       <Name>GenericAgentArchitectureCommon</Name>

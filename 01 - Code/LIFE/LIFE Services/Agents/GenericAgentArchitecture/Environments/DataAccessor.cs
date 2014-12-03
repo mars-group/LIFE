@@ -9,8 +9,9 @@ namespace DalskiAgent.Environments {
   /// </summary>
   public class DataAccessor {
 
-    private readonly SpatialData _data;         // Data source object.
-    private readonly GeometryObject _geometry;  // Geometry source object.
+      private readonly SpatialData _data;         // Data source object.
+      private readonly GeometryObject _geometry;  // Geometry source object.
+      private readonly RectObject _rectObject;  // RectObject source object.
 
 
     /// <summary>
@@ -26,8 +27,18 @@ namespace DalskiAgent.Environments {
     ///   Create a new r/o object for IGeometry objects.
     /// </summary>
     /// <param name="geometry">Geometry source object.</param>
-    public DataAccessor(GeometryObject geometry) {
-      _geometry = geometry;
+    public DataAccessor(GeometryObject geometry)
+    {
+        _geometry = geometry;
+    }
+
+    /// <summary>
+    ///   Create a new r/o object for IGeometry objects.
+    /// </summary>
+    /// <param name="geometry">Geometry source object.</param>
+    public DataAccessor(RectObject rectObject)
+    {
+        _rectObject = rectObject;
     }
 
 
@@ -42,8 +53,11 @@ namespace DalskiAgent.Environments {
           y = _data.Position.Y;
           z = _data.Position.Z;          
         }
+        else if (_geometry != null) {
+            return _geometry.Shape.GetPosition().GetVector();
+        }
         else {
-          return _geometry.Shape.GetPosition().GetVector();
+            return _rectObject.Shape.GetPosition().GetVector();
         }
         if (double.IsNaN(z)) z = 0.0f;
         return new Vector(x, y, z);

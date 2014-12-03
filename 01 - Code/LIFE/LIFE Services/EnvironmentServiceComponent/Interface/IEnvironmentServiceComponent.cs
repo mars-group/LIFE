@@ -1,11 +1,10 @@
-﻿using SpatialCommon.Interfaces;
+﻿using System.Collections.Generic;
+using EnvironmentServiceComponent.Entities;
+using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
 namespace EnvironmentServiceComponent.Interface {
-    using System.Collections.Generic;
-    using Entities;
-    using GenericAgentArchitectureCommon.Interfaces;
-    using GeoAPI.Geometries;
 
     /// <summary>
     ///     The ESC should provide the possibility to check collisisions between entities and to explore defined areas.
@@ -66,4 +65,5 @@ namespace EnvironmentServiceComponent.Interface {
         /// <returns>All spatial entities of the ESC.</returns>
         IEnumerable<ISpatialEntity> ExploreAll();
     }
+
 }

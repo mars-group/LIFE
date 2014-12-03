@@ -43,9 +43,9 @@ namespace DalskiAgent.Agents {
     /// <param name="dim">Dimension of the agent. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the agent. If null, then 0°.</param>
     protected SpatialAgent(IExecution exec, IEnvironment env, Vector minPos, Vector maxPos, Vector dim = null, Direction dir = null) : base(exec) {
-      if (env is ESCAdapter) {
+      if (env is ESCRectAdapter) {
         _env = env;
-        ((ESCAdapter)_env).AddObject(this, minPos, maxPos, out Data, dim, dir);  // Enlist the agent in environment.        
+        ((ESCRectAdapter)_env).AddObject(this, minPos, maxPos, out Data, dim, dir);  // Enlist the agent in environment.        
       }
       else throw new Exception("[SpatialAgent] Constructor error: Environment does not support interval placement. Use ESCAdapter instead!");
     }
