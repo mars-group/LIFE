@@ -1,4 +1,13 @@
-﻿using System.Collections.Generic;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System.Collections.Generic;
 using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
 using RTEManager.Interfaces;
@@ -11,6 +20,8 @@ namespace RTEManager.Implementation {
         public RTEManagerComponent(IVisualizationAdapterInternal visualizationAdapter) {
             _rteManagerUseCase = new RTEManagerUseCase(visualizationAdapter);
         }
+
+        #region IRTEManager Members
 
         public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {
             _rteManagerUseCase.RegisterLayer(instanceId, layer);
@@ -41,5 +52,6 @@ namespace RTEManager.Implementation {
             return _rteManagerUseCase.AdvanceOneTick();
         }
 
+        #endregion
     }
 }

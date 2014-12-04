@@ -1,4 +1,13 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 06.11.2014
+//  *******************************************************/
+
+using System;
 using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
@@ -61,9 +70,9 @@ namespace ModelContainer.Interfaces {
         IList<TLayerDescription> GetInstantiationOrder(TModelDescription model);
 
         /// <summary>
-        /// Adds a Model from a URL.
-        /// Will therefore download the specified file from the URL, 
-        /// unzip it to the addins directory and add it to the registry
+        ///     Adds a Model from a URL.
+        ///     Will therefore download the specified file from the URL,
+        ///     unzip it to the addins directory and add it to the registry
         /// </summary>
         /// <param name="sourceUrl"></param>
         /// <returns></returns>

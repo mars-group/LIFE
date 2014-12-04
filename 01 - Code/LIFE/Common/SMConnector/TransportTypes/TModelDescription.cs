@@ -1,8 +1,15 @@
-﻿using System;
-using CommonTypes.TransportTypes;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 06.11.2014
+//  *******************************************************/
 
-namespace SMConnector.TransportTypes
-{
+using System;
+
+namespace SMConnector.TransportTypes {
     [Serializable]
     public class TModelDescription : IEquatable<TModelDescription> {
         public string SourceURL { get; private set; }
@@ -14,17 +21,20 @@ namespace SMConnector.TransportTypes
 
         public TStatusUpdate Status { get; set; }
 
-        public TModelDescription(string name, string description = "", string status = "Not Running", bool running = false, string sourceURL = "")
-        {
+        public TModelDescription
+            (string name,
+                string description = "",
+                string status = "Not Running",
+                bool running = false,
+                string sourceURL = "") {
             Name = name;
             Running = running;
-            this.Description = description;
-            this.Status = new TStatusUpdate(status);
+            Description = description;
+            Status = new TStatusUpdate(status);
             SourceURL = sourceURL;
         }
 
-        public TModelDescription() { }
-
+        public TModelDescription() {}
 
         #region Object contracts
 
@@ -37,7 +47,7 @@ namespace SMConnector.TransportTypes
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((TModelDescription) obj);
         }
 

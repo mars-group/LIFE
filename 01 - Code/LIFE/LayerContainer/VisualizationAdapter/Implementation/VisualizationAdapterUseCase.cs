@@ -1,12 +1,20 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LayerAPI.Interfaces.Visualization;
 using MessageWrappers;
 using VisualizationAdapter.Interface;
 
-namespace VisualizationAdapter.Implementation
-{
+namespace VisualizationAdapter.Implementation {
     internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
         private readonly List<IVisualizable> _visualizables;
         private bool _isRunning;
@@ -17,57 +25,56 @@ namespace VisualizationAdapter.Implementation
             _isRunning = false;
         }
 
+        #region IVisualizationAdapterInternal Members
+
         public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         public void VisualizeTick(int currentTick) {
             if (!_isRunning) return;
-            if (_tickVisualizationIntervall.HasValue && currentTick % _tickVisualizationIntervall != 0) return;
+            if (_tickVisualizationIntervall.HasValue && currentTick%_tickVisualizationIntervall != 0) return;
 
 
-            Parallel.ForEach(_visualizables,
-                vis => {
-                    // Get data from Layers
-                    var visMessages = vis.GetVisData();
-                    
-                    // Raise Event for everbody locally interested
-                    OnRaiseVisualizationUpdated(visMessages);
+            Parallel.ForEach
+                (_visualizables,
+                    vis => {
+                        // Get data from Layers
+                        List<BasicVisualizationMessage> visMessages = vis.GetVisData();
 
-                    // Send via Queue if possible
-                    // TODO: Send via Queue
-                });
+                        // Raise Event for everbody locally interested
+                        OnRaiseVisualizationUpdated(visMessages);
+
+                        // Send via Queue if possible
+                        // TODO: Send via Queue
+                    });
         }
 
-        private void OnRaiseVisualizationUpdated(List<BasicVisualizationMessage> visMessages) {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            var handler = VisualizationUpdated;
-
-            // Event will be null if there are no subscribers
-            if (handler != null)
-            {
-                handler(this, visMessages);
-            }
-        }
-
-        public void RegisterVisualizable(IVisualizable visualizable)
-        {
+        public void RegisterVisualizable(IVisualizable visualizable) {
             _visualizables.Add(visualizable);
         }
 
         public void StartVisualization(int? nrOfTicksToVisualize = null) {
             _tickVisualizationIntervall = nrOfTicksToVisualize;
-            this._isRunning = true;
+            _isRunning = true;
         }
 
         public void StopVisualization() {
-            this._isRunning = false;
+            _isRunning = false;
         }
 
         public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
             throw new NotImplementedException();
         }
 
+        #endregion
 
+        private void OnRaiseVisualizationUpdated(List<BasicVisualizationMessage> visMessages) {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<List<BasicVisualizationMessage>> handler = VisualizationUpdated;
+
+            // Event will be null if there are no subscribers
+            if (handler != null) handler(this, visMessages);
+        }
     }
 }

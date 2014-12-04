@@ -1,4 +1,13 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 06.11.2014
+//  *******************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,14 +15,11 @@ using System.Threading.Tasks;
 using OpenNebulaAdapter.Entities;
 using OpenNebulaAdapter.Implementation;
 
-namespace OpenNebulaAdapter.Interface
-{
-    public class OpenNebulaAdapterNodeJsInterface
-    {
-
+namespace OpenNebulaAdapter.Interface {
+    public class OpenNebulaAdapterNodeJsInterface {
         /// <summary>
-        /// Returns the OpenNebulaAdapter to the JS caller
-        /// Makes sure states are being hold throughout subsequent calls from the WebUI.
+        ///     Returns the OpenNebulaAdapter to the JS caller
+        ///     Makes sure states are being hold throughout subsequent calls from the WebUI.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -23,46 +29,44 @@ namespace OpenNebulaAdapter.Interface
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
 
 
-            var oneAdapter = new OpenNebulaAdapterUseCase();
+            OpenNebulaAdapterUseCase oneAdapter = new OpenNebulaAdapterUseCase();
 
             // return anon object with interface methods
             return new {
                 // takes a NodeConfig as argument and instantiates these VMs if possible. Returns a list of VMs or an error message
-                createVMsFromNodeConfig = (Func<dynamic, Task<object>>) (async i => await Task.Run(
-                    () => 
-                        {
-                            var payload = (IDictionary<string, object>) i;
+                createVMsFromNodeConfig = (Func<dynamic, Task<object>>) (async i => await Task.Run
+                    (
+                        () => {
+                            IDictionary<string, object> payload = (IDictionary<string, object>) i;
                             return oneAdapter.CreateVMsFromNodeConfig(new NodeConfig(payload));
-                    })
+                        })
                     ),
                 // takes an array of VM ids as argument and deletes them
-                deleteVMs = (Func<dynamic, Task<object>>)(async i => await Task.Run(
-                    () =>
-                        {
-                            var payload = (object[])i;
+                deleteVMs = (Func<dynamic, Task<object>>) (async i => await Task.Run
+                    (
+                        () => {
+                            object[] payload = (object[]) i;
 
                             oneAdapter.deleteVMs(payload.Cast<int>().ToArray());
                             return 0;
-                    })
+                        })
                     ),
                 // takes a VM ID as argument and returns a VM Object
-                getVMStatus = (Func<dynamic, Task<object>>)(async i => await Task.Run(
-                    () =>
-                    {
-                        var payload = (string)i;
-                        return oneAdapter.GetVmInfo(int.Parse(payload));
-                    })
+                getVMStatus = (Func<dynamic, Task<object>>) (async i => await Task.Run
+                    (
+                        () => {
+                            string payload = (string) i;
+                            return oneAdapter.GetVmInfo(int.Parse(payload));
+                        })
                     ),
             };
         }
     }
 
-    public static class AssemblyResolverFix
-    {
+    public static class AssemblyResolverFix {
         //Looks up the assembly in the set of currently loaded assemblies,
         //and returns it if the name matches. Else returns null.
-        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
-        {
+        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args) {
             return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
         }
     }

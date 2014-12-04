@@ -1,46 +1,40 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
+//  *******************************************************/
+
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
-using log4net.Util;
 
-namespace LoggerFactory.Interface
-{
-    public class LoggerInstanceFactory
-    {
+namespace LoggerFactory.Interface {
+    public class LoggerInstanceFactory {
         private static ILog Logger = null;
         private static string defaultLayout = "%d [%t] %-5p %m%n";
 
 
-        public static ILog GetLoggerInstance<T>()
-        {
-            if (Logger == null)
-            {
-                initLogger<T>();
-            }
+        public static ILog GetLoggerInstance<T>() {
+            if (Logger == null) initLogger<T>();
 
             return Logger;
         }
 
-        private static void initLogger<T>()
-        {
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+        private static void initLogger<T>() {
+            Hierarchy hierarchy = (Hierarchy) LogManager.GetRepository();
             TraceAppender tracer = new TraceAppender();
             PatternLayout patternLayout = GetPatternLayout();
 
             tracer.Layout = patternLayout;
             tracer.ActivateOptions();
             hierarchy.Root.AddAppender(tracer);
-            foreach (var appender in CreateAppenders())
-            {
+            foreach (IAppender appender in CreateAppenders()) {
                 hierarchy.Root.AddAppender(appender);
             }
 
@@ -48,33 +42,27 @@ namespace LoggerFactory.Interface
             hierarchy.Root.Level = Level.Off;
             hierarchy.Configured = true;
 
-            Logger = LogManager.GetLogger(typeof(T));
-
+            Logger = LogManager.GetLogger(typeof (T));
         }
 
-        private static List<IAppender> CreateAppenders()
-        {
-            var appenderList = new List<IAppender>();
+        private static List<IAppender> CreateAppenders() {
+            List<IAppender> appenderList = new List<IAppender>();
 
             appenderList.Add(CreateConsoleAppender());
             //appenderList.Add(CreateRollingFileAppender());
 
             return appenderList;
-
         }
 
-        private static IAppender CreateConsoleAppender()
-        {
+        private static IAppender CreateConsoleAppender() {
             ConsoleAppender consoleAppender = new ConsoleAppender();
 
             consoleAppender.Layout = GetPatternLayout();
-            
-            return consoleAppender;
 
+            return consoleAppender;
         }
 
-        private static IAppender CreateRollingFileAppender()
-        {
+        private static IAppender CreateRollingFileAppender() {
             RollingFileAppender roller = new RollingFileAppender();
             roller.Layout = GetPatternLayout();
             roller.AppendToFile = true;
@@ -88,15 +76,12 @@ namespace LoggerFactory.Interface
         }
 
 
-        private static PatternLayout GetPatternLayout()
-        {
-            var patternLayout = new PatternLayout();
+        private static PatternLayout GetPatternLayout() {
+            PatternLayout patternLayout = new PatternLayout();
             patternLayout.ConversionPattern = defaultLayout;
             patternLayout.ActivateOptions();
 
             return patternLayout;
         }
-
-
     }
 }

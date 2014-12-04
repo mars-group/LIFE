@@ -1,5 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using Hik.Communication.ScsServices.Service;
 using SMConnector.TransportTypes;
@@ -12,7 +20,6 @@ namespace SMConnector {
     /// </summary>
     [ScsService(Version = "0.1")]
     public interface ISimulationManager {
-        
         /// <summary>
         ///     Returns a list of TModelDescriptions, describing all available models on the
         ///     SimulationManager node.
@@ -21,22 +28,29 @@ namespace SMConnector {
         ICollection<TModelDescription> GetAllModels();
 
         /// <summary>
-        /// Starts a simulation with the model derived from the provided TModelDescription.
-        /// Will just initialize and then pause the execution if <param name="startPaused"/> is true.
+        ///     Starts a simulation with the model derived from the provided TModelDescription.
+        ///     Will just initialize and then pause the execution if
+        ///     <param name="startPaused" />
+        ///     is true.
         /// </summary>
         /// <param name="model"></param>
         /// <param name="layerContainers"></param>
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused = false, int? nrOfTicks = null);
+        void StartSimulationWithModel
+            (TModelDescription model,
+                ICollection<TNodeInformation> layerContainers,
+                bool startPaused = false,
+                int? nrOfTicks = null);
 
-		/// <summary>
-		/// Steps the simulation by one tick or by nrOfTicks if provided.
-		/// </summary>
-		/// <param name="model">Model.</param>
-		/// <param name="layerContainers">Layer containers.</param>
-		/// <param name="nrOfTicks">Nr of ticks.</param>
-        void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
+        /// <summary>
+        ///     Steps the simulation by one tick or by nrOfTicks if provided.
+        /// </summary>
+        /// <param name="model">Model.</param>
+        /// <param name="layerContainers">Layer containers.</param>
+        /// <param name="nrOfTicks">Nr of ticks.</param>
+        void StepSimulation
+            (TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.
@@ -57,17 +71,17 @@ namespace SMConnector {
         void AbortSimulation(TModelDescription model);
 
         /// <summary>
-        /// Starts the visuzalization of the model.
-        /// Optional: Provide an integer value describing
-        /// the intervall of visualized ticks in case you do
-        /// not want to visualize every tick.
+        ///     Starts the visuzalization of the model.
+        ///     Optional: Provide an integer value describing
+        ///     the intervall of visualized ticks in case you do
+        ///     not want to visualize every tick.
         /// </summary>
         /// <param name="model">The model to visualize.</param>
         /// <param name="nrOfTicksToVisualize">The intervall in which to visualize.</param>
         void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null);
 
         /// <summary>
-        /// Stops the visualization for the given model.
+        ///     Stops the visualization for the given model.
         /// </summary>
         /// <param name="model"></param>
         void StopVisualization(TModelDescription model);

@@ -1,4 +1,13 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 09.07.2014
+//  *******************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -41,10 +50,12 @@ namespace ModelContainer.Implementation.Entities {
 
             while (_nodes.Any()) {
                 // get all satisfied nodes from _nodes
-                var dependentNodes = _nodes.Where(
-                    n => n.Edges.All(
-                        e => setList.Any(s => s.Contains(e))
-                        )
+                var dependentNodes = _nodes.Where
+                    (
+                        n => n.Edges.All
+                            (
+                                e => setList.Any(s => s.Contains(e))
+                            )
                     ).ToArray();
 
                 // remove these from the _nodes collection
@@ -56,10 +67,12 @@ namespace ModelContainer.Implementation.Entities {
                 setList.Add(new HashSet<ModelNode>(dependentNodes));
             }
 
-            return setList.Aggregate(new List<TLayerDescription>(), (list, set) => {
-                list.AddRange(set.Select(n => n.LayerDescription).ToList());
-                return list;
-            });
+            return setList.Aggregate
+                (new List<TLayerDescription>(),
+                    (list, set) => {
+                        list.AddRange(set.Select(n => n.LayerDescription).ToList());
+                        return list;
+                    });
         }
     }
 }
