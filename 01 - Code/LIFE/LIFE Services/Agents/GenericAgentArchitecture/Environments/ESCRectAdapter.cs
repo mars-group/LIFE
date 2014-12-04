@@ -83,6 +83,7 @@ namespace DalskiAgent.Environments {
                 dim = new Vector(1d, 1d, 1d);
             }
             RectObject geometry = new RectObject(obj, MyRectFactory.Rectangle(dim.X, dim.Y), dir, collisionType);
+
             acc = new DataAccessor(geometry);
             _objects[obj] = geometry;
 

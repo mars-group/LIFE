@@ -1,11 +1,18 @@
-﻿using DalskiAgent.Environments;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using CSharpQuadTree;
+using DalskiAgent.Environments;
 using DalskiAgent.Execution;
+using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
 using ESCTest.Entities;
 using NUnit.Framework;
-using SpatialCommon.Datatypes;
 using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
+using Direction = SpatialCommon.Datatypes.Direction;
+using Vector = SpatialCommon.Datatypes.Vector;
 
 namespace ESCTest.Tests {
 
@@ -31,8 +38,7 @@ namespace ESCTest.Tests {
             return new RectAgent(x, y, collisionType);
         }
 
-        [Test]
-        public void TestCollisions() {}
+       
 
         [Test]
         public void TestIntersections() {
@@ -74,9 +80,35 @@ namespace ESCTest.Tests {
             // pedestrian1 is 0.025 below obstacle (not touching)
 
             new TestSpatialAgent(exec, adapter, posObstacle, dimObstacle, new Direction());
-
+            PrintAllAgents();
             new TestSpatialAgent(exec, adapter, posPedestrianBelow, dimPedestrianBelow, new Direction());
+            PrintAllAgents();
             new TestSpatialAgent(exec, adapter, posPedestrianAbove, dimPedestrianAbove, new Direction());
+            PrintAllAgents();
+        }
+
+        [Test]
+        public void TestMoveTwoAgentsOnSamePosition() {
+            ISpatialEntity a1 = GenerateAgent(10, 10);
+            ISpatialEntity a2 = GenerateAgent(10, 10);
+            Assert.True(_esc.Add(a1, new TVector(0, 0)));
+            Assert.True(_esc.Add(a2, new TVector(15, 15)));
+            Assert.False(_esc.Move(a1, new TVector(15, 15)).Success);
+            Assert.True(_esc.Move(a2, new TVector(30, 30)).Success);
+            Assert.True(_esc.Move(a1, new TVector(15, 15)).Success);
+
+            PrintAllAgents();
+        }
+
+        protected void PrintAllAgents() {
+            Console.WriteLine(_esc.ExploreAll().Count() + " Agents found.");
+            foreach (ISpatialEntity entity in _esc.ExploreAll()) {
+                RectShape rectShape = entity.Shape as RectShape;
+                Rect bounds = rectShape.Bounds;
+                Console.WriteLine
+                    (entity + " " + rectShape.GetPosition() + " // " + bounds.TopLeft + " -> " + bounds.BottomRight);
+            }
+            Console.WriteLine("---");
         }
     }
 
