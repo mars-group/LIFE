@@ -26,6 +26,7 @@ namespace ExampleLayer {
     public class ExampleLayer : ISteppedActiveLayer, IVisualizable {
         private const int agentCount = 10000;
         private List<AgentSmith> _agents;
+        private long _currentTick;
 
         #region ISteppedActiveLayer Members
 
@@ -47,11 +48,11 @@ namespace ExampleLayer {
         }
 
         public long GetCurrentTick() {
-
+            return _currentTick;
         }
 
         public void SetCurrentTick(long currentTick) {
-
+            _currentTick = currentTick;
         }
 
 
