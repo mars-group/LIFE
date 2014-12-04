@@ -18,6 +18,11 @@ using SimPanViewer;
 
 namespace CellLayer {
 
+    /// <summary>
+    ///     The cell Layer ist a passive Layer. The cells are used by the humans for implicit communication.
+    ///     The cell layer manages the visualisation, bacause all needed informations are set here in the cells.
+    ///     Here are the dimensions, colors movement directions defined.
+    /// </summary>
     [Extension(typeof (ISteppedLayer))]
     public class CellLayerImpl : ISteppedLayer {
         #region Direction enum
@@ -64,11 +69,17 @@ namespace CellLayer {
         private const float AgentRadius = 12f;
         public const int SmallestXCoordinate = 1;
         public const int SmallestYCoordinate = 1;
+
+        /// <summary>
+        ///     the limit of pressure a cell can resist befor collapsing
+        /// </summary>
+        public const int PressureResistanceOfObstacleCells = 50;
+
         private static readonly object Lock = new object(); // access synchronization 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
-        ///     the tuple represents an addition of (x,y) value to get in the enumerated direction
+        ///     The tuples represents an addition of (x,y) value to get in the enumerated direction
         /// </summary>
         public static readonly Dictionary<Enum, Tuple<int, int>> DirectionMeaning =
             new Dictionary<Enum, Tuple<int, int>> {
@@ -82,6 +93,9 @@ namespace CellLayer {
                 {Direction.LeftAndUp, Tuple.Create(-1, -1)},
             };
 
+        /// <summary>
+        ///     the colors chosen for the view of cells depending on the status of the cell
+        /// </summary>
         private static readonly Dictionary<CellType, Color> CellColors = new Dictionary<CellType, Color> {
             {CellType.Neutral, Color.WhiteSmoke},
             {CellType.Obstacle, Color.SlateGray},
@@ -90,13 +104,19 @@ namespace CellLayer {
             {CellType.Sacrifice, Color.Purple}
         };
 
+        /// <summary>
+        ///     the colors chosen for the view of agents depending on the status of the agent
+        /// </summary>
         private static readonly Dictionary<BehaviourType, Color> AgentColors = new Dictionary<BehaviourType, Color> {
             {BehaviourType.Reactive, Color.Red},
             {BehaviourType.Deliberative, Color.Blue},
             {BehaviourType.Reflective, Color.Green},
             {BehaviourType.Dead, Color.LightBlue},
         };
-
+        
+        /// <summary>
+        ///     the list of obsacle cell
+        /// </summary>
         private static readonly List<int> ObstacleCells = new List<int> {
             54,
             55,
@@ -134,15 +154,6 @@ namespace CellLayer {
             ConcurrentDictionary<int, object[]> viewData;
             CreateCellData(out viewData);
             StartVisualisation(viewData);
-
-            /*
-            Log.Info("I'm going to log right this time...");
-            Log.Debug("Application Starting");
-            Log.DebugFormat("It is {0}.", DateTime.Now);
-            Log.Warn("There will be an error soooon....");
-            Log.Error("Now I just got bored...");
-            Log.Fatal("WTF!?");
-            */
             return true;
         }
 
@@ -202,6 +213,14 @@ namespace CellLayer {
             }
             _cellField = new ConcurrentDictionary<int, Cell>(cellDict);
             viewData = viewDataDict;
+        }
+
+        public List<TCell> GetAllCellsData() {
+            List<TCell> cellData = new List<TCell>();
+            foreach (KeyValuePair<int, Cell> cellEntry in _cellField) {
+                cellData.Add(cellEntry.Value.GetTransportType());
+            }
+            return cellData;
         }
 
         /// <summary>
@@ -299,18 +318,22 @@ namespace CellLayer {
         /// <summary>
         ///     If cells get manipulated, they maybe must be rewritten.
         /// </summary>
-        /// <param name="cell"></param>
+        /// <param name="cellId"></param>
         public void RefreshCell(int cellId) {
             Cell cell;
             _cellField.TryGetValue(cellId, out cell);
-            if (cell == null){
+            if (cell == null) {
                 return;
             }
-            
-            object[] newViewData = { cell.Coordinates.X, cell.Coordinates.Y, CellColors[cell.CellType] };
+
+            object[] newViewData = {cell.Coordinates.X, cell.Coordinates.Y, CellColors[cell.CellType]};
             _viewForm.UpdateCellView(cell.CellId, newViewData);
         }
 
+        /// <summary>
+        ///     Adapter of Refresh cell with param point
+        /// </summary>
+        /// <param name="cellPosition"></param>
         public void RefreshCell(Point cellPosition) {
             int cellId = CalculateCellId(cellPosition);
             RefreshCell(cellId);
@@ -400,7 +423,7 @@ namespace CellLayer {
         /// </summary>
         /// <param name="guid"></param>
         /// <param name="coordinates"></param>
-        public void GiveAndSetToRandomPosition(Guid guid, out Point coordinates) {
+        public Point GiveAndSetToRandomPosition(Guid guid) {
             lock (Lock) {
                 Random r = new Random();
                 List<int> celIds = _cellField.Keys.ToList();
@@ -425,9 +448,9 @@ namespace CellLayer {
                         continue;
                     }
 
-                    coordinates = new Point(cell.Coordinates.X, cell.Coordinates.Y);
+                    Point coordinates = new Point(cell.Coordinates.X, cell.Coordinates.Y);
                     cell.AgentOnCell = guid;
-                    return;
+                    return coordinates;
                 }
                 throw new Exception("No free place in cell field");
             }
@@ -525,8 +548,7 @@ namespace CellLayer {
             int cellNumber = CalculateCellId(cellCoordinates);
             Cell cell;
             _cellField.TryGetValue(cellNumber, out cell);
-            if(cell != null) {
-
+            if (cell != null) {
                 cell.AddPressure(strenght);
             }
         }

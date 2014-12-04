@@ -1,8 +1,8 @@
-﻿// is needed because of TCell !
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using CellLayer;
 using CellLayer.TransportTypes;
+using TypeSafeBlackboard;
 
 namespace HumanLayer.Agents {
 
@@ -12,59 +12,36 @@ namespace HumanLayer.Agents {
     public class PerceptionAndMemory {
         private readonly CellLayerImpl _dataSourceLayer;
         private readonly Human _owner;
-        private readonly Dictionary<int, TCell> _cellIdToData = new Dictionary<int, TCell>();
+        public readonly Dictionary<int, TCell> CellIdToData = new Dictionary<int, TCell>();
+        private readonly Blackboard _blackboard;
 
-        public PerceptionAndMemory(CellLayerImpl celllayer, Human owner) {
+
+        public PerceptionAndMemory(CellLayerImpl celllayer, Human owner, Blackboard blackboard) {
             _dataSourceLayer = celllayer;
             _owner = owner;
+            _blackboard = blackboard;
         }
 
-        public void SenseAndProcessInformations() {
+        public void SenseCellInformations() {
             SenseCell();
-            CalculateInformations();
         }
 
         /// <summary>
         ///     Get the data of the cell the agent is on and save it to the humans map.
         /// </summary>
         private void SenseCell() {
-            TCell cellData = _dataSourceLayer.GetDataOfCell(_owner.CellId);
-            _cellIdToData[_owner.CellId] = cellData;
+            int cellId = _blackboard.Get(Human.CellIdOfPosition);
+            TCell cellData = _dataSourceLayer.GetDataOfCell(cellId);
+            CellIdToData[cellId] = cellData;
         }
 
         public void SetAsKilled() {
-            _owner.CanMove = false;
-            _owner.IsAlive = false;
+            _blackboard.Set(Human.IsAlive, false);
+            _blackboard.Set(Human.CanMove, false);
             _dataSourceLayer.UpdateAgentDrawStatus(_owner.AgentID, CellLayerImpl.BehaviourType.Dead);
         }
 
-        /// <summary>
-        ///     Rework the informations by the environment. Refresh dependent variables.
-        /// </summary>
-        private void CalculateInformations() {
-            Point target = _owner.HumanBlackboard.Get(Human.Target);
-            if (!target.IsEmpty) {
-                _owner.HumanBlackboard.Set(Human.HasTarget, true);
-            }
-            else {
-                _owner.HumanBlackboard.Set(Human.HasTarget, false);
-            }
-
-
-            TCell cellData = _cellIdToData[_owner.CellId];
-            if (cellData.PressureOnCell > _owner.ResistanceToPressure) {
-                if (_owner.VitalEnergy < 5) {
-                    _owner.VitalEnergy = 0;
-                }
-                else {
-                    _owner.VitalEnergy -= 5;
-                }
-            }
-
-            if (_owner.VitalEnergy == 0) {
-                SetAsKilled();
-            }
-        }
+        
     }
 
 }

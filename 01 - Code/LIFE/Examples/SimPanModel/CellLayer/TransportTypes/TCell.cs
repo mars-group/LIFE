@@ -7,14 +7,15 @@ namespace CellLayer.TransportTypes {
     ///     Represents sensor data of a single cell. Prevent from direkt reference.
     /// </summary>
     public class TCell {
-
         public readonly int ID;
         public readonly Point Coordinates;
         public readonly Guid AgentOnCellGuid;
         public readonly CellLayerImpl.CellType CellType;
         public readonly int PressureOnCell;
         public readonly int ResistanceToPressure;
-
+        public Point ExitInformationTechnical = new Point();
+        public Point ExitInformationFromHuman = new Point();
+        public bool HasCalmingSphere = false;
 
 
         public TCell(Cell correspondingCell) {
@@ -24,11 +25,19 @@ namespace CellLayer.TransportTypes {
             AgentOnCellGuid = correspondingCell.AgentOnCell;
             PressureOnCell = correspondingCell.PressureOnCell;
             ResistanceToPressure = correspondingCell.ResistanceToPressure;
+            ExitInformationTechnical = correspondingCell.ExitInformationTechnical;
+            ExitInformationFromHuman = correspondingCell.ExitInformationFromHuman;
+            HasCalmingSphere = correspondingCell.HasCalmingSphere;
         }
 
         public override string ToString() {
             return string.Format
-                ("CellType: {0}, ID: {1}, X: {2}, Y: {3}, AgentOnCellGuid: {4}", CellType, ID, Coordinates.X, Coordinates.Y, AgentOnCellGuid);
+                ("CellType: {0}, ID: {1}, X: {2}, Y: {3}, AgentOnCellGuid: {4}",
+                    CellType,
+                    ID,
+                    Coordinates.X,
+                    Coordinates.Y,
+                    AgentOnCellGuid);
         }
     }
 

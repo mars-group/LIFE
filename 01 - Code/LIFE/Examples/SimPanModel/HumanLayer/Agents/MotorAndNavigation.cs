@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using CellLayer;
+using CellLayer.TransportTypes;
+using TypeSafeBlackboard;
 
 namespace HumanLayer.Agents {
 
@@ -12,10 +14,12 @@ namespace HumanLayer.Agents {
     public class MotorAndNavigation {
         private readonly CellLayerImpl _cellWorldLayer;
         private readonly Human _owner;
+        private readonly Blackboard _blackboard;
 
-        public MotorAndNavigation(CellLayerImpl cellLayer, Human owner) {
+        public MotorAndNavigation(CellLayerImpl cellLayer, Human owner, Blackboard blackboard) {
             _cellWorldLayer = cellLayer;
             _owner = owner;
+            _blackboard = blackboard;
         }
 
         /// <summary>
@@ -56,13 +60,14 @@ namespace HumanLayer.Agents {
         private bool TryWalkToCoordinates(Point targetCoordinates) {
             if (_cellWorldLayer.TestAndSetAgentMove(_owner.AgentID, targetCoordinates)) {
                 // delete the entry on the old cell
-                _cellWorldLayer.DeleteAgentIdFromCell(_owner.AgentID, _owner.Position);
+                _cellWorldLayer.DeleteAgentIdFromCell(_owner.AgentID, _blackboard.Get(Human.Position));
 
                 // change the coordinaties of human
-                SetHumanPosition(targetCoordinates);
+                ChangeHumanPosition(targetCoordinates);
 
                 // redraw the new position of the agent
-                _cellWorldLayer.UpdateAgentDrawPosition(_owner.AgentID, _owner.Position.X, _owner.Position.Y);
+                Point position = _blackboard.Get(Human.Position);
+                _cellWorldLayer.UpdateAgentDrawPosition(_owner.AgentID, position.X, position.Y);
 
                 return true;
             }
@@ -76,8 +81,9 @@ namespace HumanLayer.Agents {
         /// <param name="transformationData"></param>
         /// <param name="newCoordinates"></param>
         private void TransformPosition(Point transformationData, out Point newCoordinates) {
-            int newX = _owner.Position.X + transformationData.X;
-            int newY = _owner.Position.Y + transformationData.Y;
+            Point position = _blackboard.Get(Human.Position);
+            int newX = position.X + transformationData.X;
+            int newY = position.Y + transformationData.Y;
             newCoordinates = new Point(newX, newY);
         }
 
@@ -88,29 +94,35 @@ namespace HumanLayer.Agents {
         private void SetHumanOnTransformedPosition(Point transformationData) {
             Point newCoordinates;
             TransformPosition(transformationData, out newCoordinates);
-            SetHumanPosition(newCoordinates);
+            ChangeHumanPosition(newCoordinates);
         }
 
         /// <summary>
         ///     Set the new position for human and calculate and set the new cell id.
         /// </summary>
         /// <param name="newPosition"></param>
-        private void SetHumanPosition(Point newPosition) {
-            _owner.Position = newPosition;
-            _owner.CellId = CellLayerImpl.CalculateCellId(_owner.Position);
+        private void ChangeHumanPosition(Point newPosition) {
+            _blackboard.Set(Human.Position, newPosition);
+            int newCellId = CellLayerImpl.CalculateCellId(_blackboard.Get(Human.Position));
+            _blackboard.Set(Human.CellIdOfPosition, newCellId);
         }
 
         /// <summary>
-        ///     Initial random position on the cell field.
+        ///     Create the initial random position on the cell field. Fill the values into the human balckboard.
+        ///     Trigger draw agent in simulation view.
         /// </summary>
-        public void GetRandomPositionInCellWorld() {
-            _cellWorldLayer.GiveAndSetToRandomPosition(_owner.AgentID, out _owner.Position);
-
+        public void GetAnSetRandomPositionInCellWorld() {
+            
+            Point randomPosition = _cellWorldLayer.GiveAndSetToRandomPosition(_owner.AgentID);
+            _blackboard.Set(Human.Position,randomPosition);
             HumanLayerImpl.Log.Info
-                ("i  " + _owner.AgentID + " logged in on : (" + _owner.Position.X + "," + _owner.Position.Y + ")");
-            _owner.CellId = CellLayerImpl.CalculateCellId(_owner.Position);
+                ("i  " + _owner.AgentID + " logged in on : (" + randomPosition.X + "," + randomPosition.Y + ")");
+
+            int cellId = CellLayerImpl.CalculateCellId(randomPosition);
+            _blackboard.Set(Human.CellIdOfPosition,cellId);
+
             _cellWorldLayer.AddAgentDraw
-                (_owner.AgentID, _owner.Position.X, _owner.Position.Y, CellLayerImpl.BehaviourType.Deliberative);
+                (_owner.AgentID, randomPosition.X, randomPosition.Y, CellLayerImpl.BehaviourType.Deliberative);
         }
 
         private List<Point> ShufflePointsList(List<Point> list) {
@@ -124,7 +136,7 @@ namespace HumanLayer.Agents {
         /// </summary>
         /// <returns></returns>
         public void ApproximateToTarget(bool aggressiveMode = false) {
-            Point targetCoordinates = _owner.HumanBlackboard.Get(Human.Target);
+            Point targetCoordinates = _blackboard.Get(Human.Target);
             Dictionary<int, List<Point>> usefulCoordinates = FindApproximatingCoordinates(targetCoordinates);
 
             if (!targetCoordinates.IsEmpty) {
@@ -138,12 +150,12 @@ namespace HumanLayer.Agents {
                         // Try to walk on the chosen cell
                         if (TryWalkToCoordinates(fastWay)) {
                             HumanLayerImpl.Log.Info("Approximation successful");
-                            _owner.HumanBlackboard.Set(Human.MovementFailed, false);
+                            _blackboard.Set(Human.MovementFailed, false);
                             return;
                         }
 
                         if (aggressiveMode ){
-                            _cellWorldLayer.AddPressure(fastWay, _owner.Strength);
+                            _cellWorldLayer.AddPressure(fastWay, _blackboard.Get(Human.Strength));
                             _cellWorldLayer.RefreshCell(fastWay);
                             return;
                         }
@@ -159,19 +171,19 @@ namespace HumanLayer.Agents {
                         // Try to walk on the chosen cell
                         if (TryWalkToCoordinates(slowWay)) {
                             HumanLayerImpl.Log.Info("Approximation successful");
-                            _owner.HumanBlackboard.Set(Human.MovementFailed, false);
+                            _blackboard.Set(Human.MovementFailed, false);
                             return;
                         }
 
                         if (aggressiveMode ){
-                            _cellWorldLayer.AddPressure(slowWay, _owner.Strength);
+                            _cellWorldLayer.AddPressure(slowWay, _blackboard.Get(Human.Strength));
                             _cellWorldLayer.RefreshCell(slowWay);
                             return;
                         }
                     }
                 }
             }
-            _owner.HumanBlackboard.Set(Human.MovementFailed, true);
+            _blackboard.Set(Human.MovementFailed, true);
         }
 
         /// <summary>
@@ -222,7 +234,7 @@ namespace HumanLayer.Agents {
         /// </summary>
         /// <returns></returns>
         private int GetMinimalDistanceToOwner(Point targetCoordinates) {
-            return GetMinimalDistanceBetweenCoordinates(_owner.Position, targetCoordinates);
+            return GetMinimalDistanceBetweenCoordinates(_blackboard.Get(Human.Position), targetCoordinates);
         }
 
         /// <summary>
@@ -236,6 +248,13 @@ namespace HumanLayer.Agents {
             int distY = Math.Abs(currentPoint.Y - targetCoordinates.Y);
             return Math.Max(distX, distY);
         }
+
+        private bool PlanRouteToPosition(Point position) {
+            List<TCell> cellData =  _cellWorldLayer.GetAllCellsData();
+
+            return true;
+        }
+
     }
 
 }

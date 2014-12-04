@@ -15,8 +15,10 @@ namespace CellLayer {
         public CellLayerImpl.CellType CellType;
         public Guid AgentOnCell = Guid.Empty;
         public int PressureOnCell = 0;
-        public int ResistanceToPressure = 50;
-
+        public int ResistanceToPressure = CellLayerImpl.PressureResistanceOfObstacleCells;
+        public Point ExitInformationTechnical = new Point();
+        public Point ExitInformationFromHuman = new Point();
+        public bool HasCalmingSphere = false;
 
         public Cell(int cellIid, Point position, CellLayerImpl.CellType cellType) {
             CellId = cellIid;
@@ -124,7 +126,7 @@ namespace CellLayer {
             const int minX = CellLayerImpl.SmallestXCoordinate;
             const int minY = CellLayerImpl.SmallestYCoordinate;
 
-
+            // following calculation needs a square cell field
             if (CellLayerImpl.CellCountXAxis == CellLayerImpl.CellCountYAxis && cellRange > 0) {
                 int dim = CellLayerImpl.CellCountXAxis;
 
