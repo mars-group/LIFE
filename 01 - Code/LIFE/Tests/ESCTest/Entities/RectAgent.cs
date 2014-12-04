@@ -1,6 +1,6 @@
 ﻿using System;
 using EnvironmentServiceComponent.Entities.Shape;
-using SpatialCommon.Enums;
+using SpatialCommon.Collision;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 

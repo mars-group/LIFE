@@ -2,8 +2,8 @@
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Collision;
 using SpatialCommon.Datatypes;
-using SpatialCommon.Enums;
 
 namespace PedestrianModel.Agents {
 

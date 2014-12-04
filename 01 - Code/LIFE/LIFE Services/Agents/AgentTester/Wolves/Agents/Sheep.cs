@@ -11,8 +11,8 @@ using DalskiAgent.Perception;
 using EnvironmentServiceComponent.Implementation;
 using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Collision;
 using SpatialCommon.Datatypes;
-using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 

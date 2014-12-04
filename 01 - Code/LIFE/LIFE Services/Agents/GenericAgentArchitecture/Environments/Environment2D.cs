@@ -2,8 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Collision;
 using SpatialCommon.Datatypes;
-using SpatialCommon.Enums;
 
 namespace DalskiAgent.Environments {
  
