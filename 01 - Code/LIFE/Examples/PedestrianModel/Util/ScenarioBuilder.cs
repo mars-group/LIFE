@@ -578,8 +578,8 @@ namespace PedestrianModel.Util {
                 case ScenarioType.Oscillation50Cm:
                     CreateOscillationScenario(exec, env, 50, 0.5d);
                     Config.VisualizationZoom = 40d;
-                    Config.VisualizationOffsetX = 625d;
-                    Config.VisualizationOffsetY = 340d;
+                    Config.VisualizationOffsetX = 230d;
+                    Config.VisualizationOffsetY = -60d;
                     break;
                 case ScenarioType.Oscillation100Cm:
                     CreateOscillationScenario(exec, env, 50, 1d);
@@ -590,8 +590,8 @@ namespace PedestrianModel.Util {
                 case ScenarioType.Oscillation200Cm:
                     CreateOscillationScenario(exec, env, 50, 2d);
                     Config.VisualizationZoom = 40d;
-                    Config.VisualizationOffsetX = 625d;
-                    Config.VisualizationOffsetY = 340d;
+                    Config.VisualizationOffsetX = 230d;
+                    Config.VisualizationOffsetY = -60d;
                     break;
                 case ScenarioType.Density50Agents:
                     CreateDensityScenario(exec, env, 50);
