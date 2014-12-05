@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using CellLayer;
 using CellLayer.TransportTypes;
 using TypeSafeBlackboard;
@@ -34,14 +33,6 @@ namespace HumanLayer.Agents {
             TCell cellData = _dataSourceLayer.GetDataOfCell(cellId);
             CellIdToData[cellId] = cellData;
         }
-
-        public void SetAsKilled() {
-            _blackboard.Set(Human.IsAlive, false);
-            _blackboard.Set(Human.CanMove, false);
-            _dataSourceLayer.UpdateAgentDrawStatus(_owner.AgentID, CellLayerImpl.BehaviourType.Dead);
-        }
-
-        
     }
 
 }

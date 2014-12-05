@@ -15,7 +15,11 @@ namespace CellLayer.TransportTypes {
         public readonly int ResistanceToPressure;
         public Point ExitInformationTechnical = new Point();
         public Point ExitInformationFromHuman = new Point();
-        public bool HasCalmingSphere = false;
+
+        public bool HasCalmingSphereTechnical = false;
+        public bool HasCalmingSphereByHuman = false;
+        public bool IsExit = false;
+        public bool IsTechnicalInformationSource = false;
 
 
         public TCell(Cell correspondingCell) {
@@ -26,18 +30,13 @@ namespace CellLayer.TransportTypes {
             PressureOnCell = correspondingCell.PressureOnCell;
             ResistanceToPressure = correspondingCell.ResistanceToPressure;
             ExitInformationTechnical = correspondingCell.ExitInformationTechnical;
-            ExitInformationFromHuman = correspondingCell.ExitInformationFromHuman;
-            HasCalmingSphere = correspondingCell.HasCalmingSphere;
-        }
+            ExitInformationFromHuman = correspondingCell.ExitInformationByHuman;
 
-        public override string ToString() {
-            return string.Format
-                ("CellType: {0}, ID: {1}, X: {2}, Y: {3}, AgentOnCellGuid: {4}",
-                    CellType,
-                    ID,
-                    Coordinates.X,
-                    Coordinates.Y,
-                    AgentOnCellGuid);
+            HasCalmingSphereTechnical = correspondingCell.HasCalmingSphereTechnical;
+            HasCalmingSphereByHuman = correspondingCell.HasCalmingSphereByHuman;
+
+            IsExit = correspondingCell.IsExit;
+            IsTechnicalInformationSource = correspondingCell.IsTechnicalInformationSource;
         }
     }
 

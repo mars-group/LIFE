@@ -28,7 +28,7 @@ namespace HumanLayer.Agents {
         ///     update position data and trigger redraw.
         /// </summary>
         /// <returns></returns>
-        public bool WalkRandom() {
+        public void WalkAbsolutRandom() {
             Random rand = new Random();
             List<int> list = new List<int>();
             list.AddRange(Enumerable.Range(0, 7));
@@ -44,12 +44,45 @@ namespace HumanLayer.Agents {
                 TransformPosition(positionChanges, out newCoordinates);
 
                 if (TryWalkToCoordinates(newCoordinates)) {
-                    HumanLayerImpl.Log.Info("random walk successful");
-                    return true;
+                    //HumanLayerImpl.Log.Info("random walk successful");
                 }
             }
-            HumanLayerImpl.Log.Info("random walk failed");
-            return false;
+            //HumanLayerImpl.Log.Info("random walk failed");
+        }
+
+        /// <summary>
+        ///     This is the random movement from SimPan. The direction is randomised chosen and the
+        ///     human will walk until he cannot acces thenext position.
+        /// </summary>
+        public void FollowDirectionOrSwitchDirection() {
+            // Check if the last movement failed and if so choose a direction for movement.
+            if (_blackboard.Get(Human.MovementFailed)) {
+                ChooseNewRandomDirection();
+                _blackboard.Set(Human.MovementFailed, false);
+            }
+
+            CellLayerImpl.Direction direction = _blackboard.Get(Human.RandomDirectionToFollow);
+            Tuple<int, int> changes = CellLayerImpl.DirectionMeaning[direction];
+
+            Point positionChanges = new Point(changes.Item1, changes.Item2);
+            Point newCoordinates;
+
+            TransformPosition(positionChanges, out newCoordinates);
+
+            if (!TryWalkToCoordinates(newCoordinates)) {
+                _blackboard.Set(Human.MovementFailed, true);
+            }
+        }
+
+        /// <summary>
+        ///     Choose a new direction from the eight available and set the direction in the blackboard.
+        /// </summary>
+        public CellLayerImpl.Direction ChooseNewRandomDirection() {
+            Random rand = new Random();
+            int enumNumber = rand.Next(0, 8);
+            CellLayerImpl.Direction chosendirection = (CellLayerImpl.Direction) enumNumber;
+            _blackboard.Set(Human.RandomDirectionToFollow, chosendirection);
+            return chosendirection;
         }
 
         /// <summary>
@@ -88,16 +121,6 @@ namespace HumanLayer.Agents {
         }
 
         /// <summary>
-        ///     Get the new Position and refresh the human member x,y and cellid
-        /// </summary>
-        /// <param name="transformationData"></param>
-        private void SetHumanOnTransformedPosition(Point transformationData) {
-            Point newCoordinates;
-            TransformPosition(transformationData, out newCoordinates);
-            ChangeHumanPosition(newCoordinates);
-        }
-
-        /// <summary>
         ///     Set the new position for human and calculate and set the new cell id.
         /// </summary>
         /// <param name="newPosition"></param>
@@ -107,22 +130,28 @@ namespace HumanLayer.Agents {
             _blackboard.Set(Human.CellIdOfPosition, newCellId);
         }
 
+        private void DeleteHumanInWorld() {
+            _cellWorldLayer.DeleteAgentIdFromCell(_owner.AgentID, _blackboard.Get(Human.Position));
+            _cellWorldLayer.DeleteAgentDraw(_owner.AgentID);
+            // reset the point coordinates when all manipulation is done and not before, bacause the value is needed for manipulations
+            _blackboard.Set(Human.Position, new Point());
+        }
+
         /// <summary>
         ///     Create the initial random position on the cell field. Fill the values into the human balckboard.
         ///     Trigger draw agent in simulation view.
         /// </summary>
         public void GetAnSetRandomPositionInCellWorld() {
-            
             Point randomPosition = _cellWorldLayer.GiveAndSetToRandomPosition(_owner.AgentID);
-            _blackboard.Set(Human.Position,randomPosition);
+            _blackboard.Set(Human.Position, randomPosition);
             HumanLayerImpl.Log.Info
                 ("i  " + _owner.AgentID + " logged in on : (" + randomPosition.X + "," + randomPosition.Y + ")");
 
             int cellId = CellLayerImpl.CalculateCellId(randomPosition);
-            _blackboard.Set(Human.CellIdOfPosition,cellId);
+            _blackboard.Set(Human.CellIdOfPosition, cellId);
 
             _cellWorldLayer.AddAgentDraw
-                (_owner.AgentID, randomPosition.X, randomPosition.Y, CellLayerImpl.BehaviourType.Deliberative);
+                (_owner.AgentID, randomPosition.X, randomPosition.Y, _blackboard.Get(Human.BehaviourType));
         }
 
         private List<Point> ShufflePointsList(List<Point> list) {
@@ -146,15 +175,14 @@ namespace HumanLayer.Agents {
                     fastWays = ShufflePointsList(fastWays);
 
                     foreach (Point fastWay in fastWays) {
-
                         // Try to walk on the chosen cell
                         if (TryWalkToCoordinates(fastWay)) {
-                            HumanLayerImpl.Log.Info("Approximation successful");
+                            //HumanLayerImpl.Log.Info("Approximation successful");
                             _blackboard.Set(Human.MovementFailed, false);
                             return;
                         }
 
-                        if (aggressiveMode ){
+                        if (aggressiveMode) {
                             _cellWorldLayer.AddPressure(fastWay, _blackboard.Get(Human.Strength));
                             _cellWorldLayer.RefreshCell(fastWay);
                             return;
@@ -167,15 +195,14 @@ namespace HumanLayer.Agents {
                     slowWays = ShufflePointsList(slowWays);
 
                     foreach (Point slowWay in slowWays) {
-
                         // Try to walk on the chosen cell
                         if (TryWalkToCoordinates(slowWay)) {
-                            HumanLayerImpl.Log.Info("Approximation successful");
+                            //HumanLayerImpl.Log.Info("Approximation successful");
                             _blackboard.Set(Human.MovementFailed, false);
                             return;
                         }
 
-                        if (aggressiveMode ){
+                        if (aggressiveMode) {
                             _cellWorldLayer.AddPressure(slowWay, _blackboard.Get(Human.Strength));
                             _cellWorldLayer.RefreshCell(slowWay);
                             return;
@@ -250,11 +277,17 @@ namespace HumanLayer.Agents {
         }
 
         private bool PlanRouteToPosition(Point position) {
-            List<TCell> cellData =  _cellWorldLayer.GetAllCellsData();
+            List<TCell> cellData = _cellWorldLayer.GetAllCellsData();
 
             return true;
         }
 
+        public void LeaveByExit() {
+            _owner.DeleteCalmingSphere();
+            _blackboard.Set(Human.IsOutSide, true);
+            DeleteHumanInWorld();
+            HumanLayerImpl.Log.Info("Agent " + _owner.AgentID + " has left simulation by exit");
+        }
     }
 
 }

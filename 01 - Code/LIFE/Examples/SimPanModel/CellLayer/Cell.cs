@@ -14,11 +14,28 @@ namespace CellLayer {
         public readonly Point Coordinates;
         public CellLayerImpl.CellType CellType;
         public Guid AgentOnCell = Guid.Empty;
+        public bool IsExit = false;
+        public bool IsTechnicalInformationSource = false;
+        
         public int PressureOnCell = 0;
-        public int ResistanceToPressure = CellLayerImpl.PressureResistanceOfObstacleCells;
+        public int ResistanceToPressure = CellFieldStartConfig.PressureResistanceOfObstacleCells;
+        
+        /// <summary>
+        ///     There may be more than one influencing human on one cell, if one deletes his information the cell must show
+        ///     furthermore if there is another entry in the array. For a simple solution only the first entry is shown on cell.
+        /// </summary>
+        public Guid[] GuidsOfExitInformationByHuman = new Guid[0];
+        public Point ExitInformationByHuman = new Point();
         public Point ExitInformationTechnical = new Point();
-        public Point ExitInformationFromHuman = new Point();
-        public bool HasCalmingSphere = false;
+        
+        /// <summary>
+        ///     There may be more than one influencing human on one cell, if one deletes his effect the cell must show it
+        ///     furthermore if there is another entry in the array
+        /// </summary>
+        public Guid[] GuidsOfCalmingHumans = new Guid[0];
+        public bool HasCalmingSphereByHuman = false;
+        public bool HasCalmingSphereTechnical = false;
+
 
         public Cell(int cellIid, Point position, CellLayerImpl.CellType cellType) {
             CellId = cellIid;
@@ -38,20 +55,21 @@ namespace CellLayer {
         ///     OC => {NC; PC, CC}
         ///     PC => none
         ///     CC => none
-        ///     SC => none
+        ///     SC => {PC, CC} this is a change to the SimPan model, but is needed for trampled humans and then panic event on cell
         /// </summary>
         /// <param name="state"></param>
         public bool IsChangeStateToAllowed(CellLayerImpl.CellType state) {
-            CellLayerImpl.CellType cellType = CellType;
-            switch (cellType) {
+            switch (CellType) {
                 case CellLayerImpl.CellType.Neutral:
                     return true;
+
                 case CellLayerImpl.CellType.Obstacle:
-                    if (state == CellLayerImpl.CellType.Neutral || state == CellLayerImpl.CellType.Panic
-                        || state == CellLayerImpl.CellType.Chaos) {
-                        return true;
-                    }
-                    return false;
+                    return state == CellLayerImpl.CellType.Neutral || state == CellLayerImpl.CellType.Panic
+                           || state == CellLayerImpl.CellType.Chaos;
+
+                case CellLayerImpl.CellType.Sacrifice:
+                    return state == CellLayerImpl.CellType.Panic || state == CellLayerImpl.CellType.Chaos;
+
                 default:
                     return false;
             }
@@ -71,15 +89,37 @@ namespace CellLayer {
         }
 
         /// <summary>
+        ///     Get a cloned Cell object to work on and to replace the old on the cell field data structure.
+        /// </summary>
+        /// <returns></returns>
+        public Cell GetClone() {
+            Cell cloneCell = new Cell(CellId, Coordinates, CellType) {
+                AgentOnCell = AgentOnCell,
+                PressureOnCell = PressureOnCell,
+                ResistanceToPressure = ResistanceToPressure,
+                ExitInformationTechnical = ExitInformationTechnical,
+                ExitInformationByHuman = ExitInformationByHuman,
+                HasCalmingSphereTechnical = HasCalmingSphereTechnical,
+                HasCalmingSphereByHuman = HasCalmingSphereByHuman,
+                IsExit = IsExit,
+                IsTechnicalInformationSource = IsTechnicalInformationSource,
+                // guids are value types and don not get manipulated 
+                GuidsOfCalmingHumans = (Guid[]) GuidsOfCalmingHumans.Clone()
+            };
+            return cloneCell;
+        }
+
+        /// <summary>
         ///     Get a new cell object with the changed state of cell type if transition is allowed
         /// </summary>
         /// <param name="newState"></param>
         /// <returns></returns>
         public Cell GetCopyWithOtherStatus(CellLayerImpl.CellType newState) {
             if (IsChangeStateToAllowed(newState)) {
-                Cell copiedCell = new Cell(CellId, Coordinates, newState);
-                copiedCell.AgentOnCell = AgentOnCell;
-                return copiedCell;
+                Cell cloneToModify = GetClone();
+                cloneToModify.CellType = newState;
+
+                return cloneToModify;
             }
             return null;
         }
@@ -91,7 +131,7 @@ namespace CellLayer {
         /// <returns></returns>
         public Cell GetCopyWithAgentOnCell(Guid agentId) {
             if (AgentOnCell == Guid.Empty) {
-                Cell copiedCell = new Cell(CellId, Coordinates, CellType);
+                Cell copiedCell = GetClone();
                 copiedCell.AgentOnCell = agentId;
                 return copiedCell;
             }
@@ -105,7 +145,7 @@ namespace CellLayer {
         /// <returns></returns>
         public Cell GetCopyWithoutAgentOnCell(Guid agentID) {
             if (AgentOnCell == agentID) {
-                Cell copiedCell = new Cell(CellId, Coordinates, CellType);
+                Cell copiedCell = GetClone();
                 copiedCell.AgentOnCell = Guid.Empty;
                 return copiedCell;
             }
@@ -114,7 +154,7 @@ namespace CellLayer {
 
         /// <summary>
         ///     Search for all cell ids reachable in a radius of a this cell.
-        ///     Respects cell field borders
+        ///     Respect cell field borders.
         /// </summary>
         /// <param name="cellRange"></param>
         /// <returns></returns>
@@ -123,12 +163,13 @@ namespace CellLayer {
             List<int> neighbourYCoordinates = new List<int>();
             List<int> neighbourIds = new List<int>();
 
-            const int minX = CellLayerImpl.SmallestXCoordinate;
-            const int minY = CellLayerImpl.SmallestYCoordinate;
+            const int minX = CellFieldStartConfig.SmallestXCoordinate;
+            const int minY = CellFieldStartConfig.SmallestYCoordinate;
 
             // following calculation needs a square cell field
-            if (CellLayerImpl.CellCountXAxis == CellLayerImpl.CellCountYAxis && cellRange > 0) {
-                int dim = CellLayerImpl.CellCountXAxis;
+            if (CellFieldStartConfig.CellCountXAxis == CellFieldStartConfig.CellCountYAxis && cellRange > 0)
+            {
+                int dim = CellFieldStartConfig.CellCountXAxis;
 
                 // get the range of x and y coordinates which correspond to neighbour cells
                 neighbourXCoordinates.AddRange(Enumerable.Range(Coordinates.X - cellRange, cellRange*2 + 1));
@@ -149,20 +190,137 @@ namespace CellLayer {
         }
 
         /// <summary>
-        ///     Get the transport type of the cell.
+        ///     Get the dominant exit information (as point data) if available.
+        ///     The hirarchie is defined here.
+        /// </summary>
+        /// <returns></returns>
+        private Point GetExitInformation() {
+            if (!ExitInformationByHuman.IsEmpty) {
+                return ExitInformationByHuman;
+            }
+            if (!ExitInformationTechnical.IsEmpty) {
+                return ExitInformationTechnical;
+            }
+            return new Point();
+        }
+
+        private bool HasExitInformation() {
+            return (!ExitInformationByHuman.IsEmpty || !ExitInformationTechnical.IsEmpty);
+        }
+
+        /// <summary>
+        ///     Get the transport type of the cell. The transport type represent
+        ///     a simple snapshot of the current member values of the cell. The cell
+        ///     is not referenced and so there is no danger of manipulating the cell.
         /// </summary>
         /// <returns></returns>
         public TCell GetTransportType() {
             return new TCell(this);
         }
 
+        /// <summary>
+        ///     Add the point entry to the list of 
+        /// </summary>
+        /// <param name="guid"></param>
+        public void AddExitCoordinatesByHuman(Guid guid) {
+            
+        }
+
+
+        /// <summary>
+        ///     Add an entry in the GuidsOfCalmingHumans member. there may be more than one
+        ///     human influencing this cell with an calming sphere.
+        /// </summary>
+        /// <param name="guid"></param>
+        public void AddGuidOfCalmingHuman(Guid guid) {
+            int index = Array.IndexOf(GuidsOfCalmingHumans, guid);
+
+            // check if guid is maybe already contained
+            if (index == -1) {
+                // Use the list operations for lesser instructions, guids are value types and don not get manipulated 
+                List<Guid> guidsList = new List<Guid>(GuidsOfCalmingHumans) {guid};
+                Guid[] newCalmingHumans = guidsList.ToArray();
+                GuidsOfCalmingHumans = newCalmingHumans;
+                RefreshCalmingStatus();
+            }
+        }
+
+        /// <summary>
+        ///     If a human has the calming effect to this cell he may not be the only influencing human.
+        ///     So the effect must be kept if there is still influence from another human.
+        /// </summary>
+        /// <param name="guid"></param>
+        public void DeleteGuidOfCalmingHuman(Guid guid) {
+            int index = Array.IndexOf(GuidsOfCalmingHumans, guid);
+
+            // check if guid is really contained
+            if (index != -1) {
+                // Use the list operations for lesser instructions, guids are value types and don not get manipulated 
+                List<Guid> guidsList = new List<Guid>(GuidsOfCalmingHumans);
+                guidsList.Remove(guid);
+                Guid[] newCalmingHumans = guidsList.ToArray();
+                GuidsOfCalmingHumans = newCalmingHumans;
+                RefreshCalmingStatus();
+            }
+        }
+
+        private void RefreshCalmingStatus() {
+            HasCalmingSphereByHuman = GuidsOfCalmingHumans.Length != 0;
+        }
+
+        /// <summary>
+        ///     Prepare the colors and border informations for the view. Data is
+        ///     passed via a primitive array of values from various types.
+        /// </summary>
+        /// <returns></returns>
+        public object[] GetViewData() {
+            // minimum values
+            int posX = Coordinates.X;
+            int posY = Coordinates.Y;
+            Color fillingColour = CellLayerImpl.CellColors[CellType];
+            string cellText = "";
+            string borderStyle = "thin black";
+
+            // add a text presenting the submitted coordinates
+            if (HasExitInformation()) {
+                Point exit = GetExitInformation();
+                cellText = "(Exit(" + exit.X + "," + exit.Y + ")";
+            }
+
+            // correct the cell filling color if is calming
+            if (HasCalmingSphereTechnical || HasCalmingSphereByHuman) {
+                // Only  present the sphere if it is a neutral cell
+                if (CellType == CellLayerImpl.CellType.Neutral) {
+                    fillingColour = CellLayerImpl.ColorOfCalmingCell;
+                }
+            }
+
+            if (IsExit) {
+                borderStyle = "fat grey";
+            }
+
+            if (IsTechnicalInformationSource) {
+                borderStyle = "fat blue";
+            }
+
+            object[] data = {posX, posY, fillingColour, cellText, borderStyle};
+            return data;
+        }
+
+        /// <summary>
+        ///     Add the strenght value to the current pressure of the cell. If pressure is higher than the
+        ///     pressure resistance value and is an obstacle cell it gets broken down to neutral cell.
+        ///     Humans read this value too but their reaction depends on their own resistance to pressure.
+        /// </summary>
+        /// <param name="strenght"></param>
         public void AddPressure(int strenght) {
             PressureOnCell += strenght;
 
             if (PressureOnCell > ResistanceToPressure && CellType == CellLayerImpl.CellType.Obstacle) {
+                PressureOnCell = 0;
                 CellLayerImpl.Log.Info("CELL: " + CellId + " Obstacle cell broke under pressure to neutral");
                 ChangeStateTo(CellLayerImpl.CellType.Neutral);
-                PressureOnCell = 0;
+                
             }
         }
     }

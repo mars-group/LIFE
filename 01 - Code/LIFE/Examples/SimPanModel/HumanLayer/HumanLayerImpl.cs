@@ -19,14 +19,14 @@ namespace HumanLayer {
 
     [Extension(typeof (ISteppedLayer))]
     public class HumanLayerImpl : ISteppedLayer {
-
-        private long _currentTick;
         private const int CountOfHumans = 10;
         private const int CountOfRandomWalker = 10;
-        public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);      
+        private const int CountOfCalmingHumans = 2;
+        public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly CellLayerImpl _cellLayer;
-        private ConcurrentDictionary<Guid, Human> _humanList = new ConcurrentDictionary<Guid, Human>();
-        
+        private readonly ConcurrentDictionary<Guid, Human> _humanList = new ConcurrentDictionary<Guid, Human>();
+        private long _currentTick;
+
         public HumanLayerImpl(CellLayerImpl cellLayer) {
             XmlConfigurator.Configure(new FileInfo("conf.log4net"));
             _cellLayer = cellLayer;
@@ -36,23 +36,30 @@ namespace HumanLayer {
 
         public bool InitLayer<I>
             (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-            
-            for (int i = 0; CountOfHumans >= i; i++) {
+            for (int i = 1; CountOfHumans >= i; i++) {
                 Human humanAgent = new Human(_cellLayer);
-                humanAgent.SetTarget(new Point(10,10));
+                humanAgent.SetTarget(new Point(10, 10));
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
 
-            for (int i = 0; CountOfRandomWalker >= i; i++)
-            {
+            for (int i = 1; CountOfRandomWalker >= i; i++) {
                 Human humanAgent = new Human(_cellLayer);
-               _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
+
+            for (int i = 1; CountOfCalmingHumans >= i; i++) {
+                Human humanAgent = new Human(_cellLayer);
+                humanAgent.SetCalmingSphere();
+                humanAgent.SetTarget(new Point(11, 20));
+                _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                registerAgentHandle.Invoke(this, humanAgent);
+            }
+
             return true;
         }
-        
+
         public long GetCurrentTick() {
             return _currentTick;
         }
@@ -64,14 +71,14 @@ namespace HumanLayer {
         #endregion
 
         /// <summary>
-        /// Get reference of agents on the human layer by the given guid list.
+        ///     Get reference of agents on the human layer by the given guid list.
         /// </summary>
         /// <param name="guidList"></param>
         /// <returns></returns>
         public List<Human> GetHumansById(List<Guid> guidList) {
-            List<Human> humanList =  _humanList.Values.Where(human => guidList.Contains(human.AgentID)).ToList();
+            List<Human> humanList = _humanList.Values.Where(human => guidList.Contains(human.AgentID)).ToList();
             return humanList;
-        } 
+        }
     }
 
 }

@@ -63,18 +63,6 @@ namespace CellLayer {
 
         #endregion
 
-        public const int CellCountXAxis = 20;
-        public const int CellCountYAxis = 20;
-        private const int CellSideLength = 30;
-        private const float AgentRadius = 12f;
-        public const int SmallestXCoordinate = 1;
-        public const int SmallestYCoordinate = 1;
-
-        /// <summary>
-        ///     the limit of pressure a cell can resist befor collapsing
-        /// </summary>
-        public const int PressureResistanceOfObstacleCells = 50;
-
         private static readonly object Lock = new object(); // access synchronization 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -96,13 +84,16 @@ namespace CellLayer {
         /// <summary>
         ///     the colors chosen for the view of cells depending on the status of the cell
         /// </summary>
-        private static readonly Dictionary<CellType, Color> CellColors = new Dictionary<CellType, Color> {
+        public static readonly Dictionary<CellType, Color> CellColors = new Dictionary<CellType, Color> {
             {CellType.Neutral, Color.WhiteSmoke},
             {CellType.Obstacle, Color.SlateGray},
             {CellType.Panic, Color.Crimson},
             {CellType.Chaos, Color.OrangeRed},
             {CellType.Sacrifice, Color.Purple}
         };
+
+        public static readonly Color ColorOfExitInformationCell = Color.LightBlue;
+        public static readonly Color ColorOfCalmingCell = Color.LightGreen;
 
         /// <summary>
         ///     the colors chosen for the view of agents depending on the status of the agent
@@ -112,29 +103,6 @@ namespace CellLayer {
             {BehaviourType.Deliberative, Color.Blue},
             {BehaviourType.Reflective, Color.Green},
             {BehaviourType.Dead, Color.LightBlue},
-        };
-        
-        /// <summary>
-        ///     the list of obsacle cell
-        /// </summary>
-        private static readonly List<int> ObstacleCells = new List<int> {
-            54,
-            55,
-            56,
-            57,
-            58,
-            190,
-            328,
-            329,
-            330,
-            331,
-            332,
-            333,
-            334,
-            370,
-            372,
-            390,
-            392
         };
 
         private long _currentTick;
@@ -174,7 +142,11 @@ namespace CellLayer {
         private void StartVisualisation(ConcurrentDictionary<int, object[]> viewData) {
             ThreadStart threadStart = new ThreadStart
                 (delegate {
-                    _viewForm = new SimPanForm(CellCountXAxis, CellCountYAxis, CellSideLength, viewData);
+                    _viewForm = new SimPanForm
+                        (CellFieldStartConfig.CellCountXAxis,
+                            CellFieldStartConfig.CellCountYAxis,
+                            CellFieldStartConfig.CellSideLength,
+                            viewData);
                     _viewForm.ShowDialog();
                 });
             _visualizationThread = new Thread(threadStart);
@@ -183,7 +155,8 @@ namespace CellLayer {
 
 
         /// <summary>
-        ///     Build the cell field by the dimensions of x any axis. Create the obstacle cell by the list of ObstacleCells.
+        ///     Build the cell field by the dimensions of x any axis. Create
+        ///     the obstacle cells by the list of obstacle cell ids.
         ///     cells (x,y) Nr of cell
         ///     1,1 Nr1    2,1 Nr2   3,1 Nr3
         ///     1,2 Nr4    2,2 Nr5   3,2 Nr6
@@ -194,21 +167,31 @@ namespace CellLayer {
             ConcurrentDictionary<int, Cell> cellDict = new ConcurrentDictionary<int, Cell>();
             ConcurrentDictionary<int, object[]> viewDataDict = new ConcurrentDictionary<int, object[]>();
 
-            for (int posX = 1; posX <= CellCountXAxis; posX++) {
-                for (int posY = 1; posY <= CellCountYAxis; posY++) {
-                    int cellIid = CalculateCellId(posX, posY);
+            for (int posX = 1; posX <= CellFieldStartConfig.CellCountXAxis; posX++) {
+                for (int posY = 1; posY <= CellFieldStartConfig.CellCountYAxis; posY++) {
+                    int cellIId = CalculateCellId(posX, posY);
 
                     CellType cellType = CellType.Neutral;
-                    if (ObstacleCells.Contains(cellIid)) {
+                    if (CellFieldStartConfig.ObstacleCells.Contains(cellIId)) {
                         cellType = CellType.Obstacle;
                     }
-                    cellDict.GetOrAdd(cellIid, new Cell(cellIid, new Point(posX, posY), cellType));
+                    Cell newCell = new Cell(cellIId, new Point(posX, posY), cellType);
+                    cellDict.GetOrAdd(cellIId, newCell);
 
-                    object[] data = {posX, posY, CellColors[CellType.Neutral]};
-                    if (ObstacleCells.Contains(cellIid)) {
-                        data[2] = CellColors[CellType.Obstacle];
+                    if (CellFieldStartConfig.ObstacleCells.Contains(cellIId)) {
+                        newCell.CellType = CellType.Obstacle;
                     }
-                    viewDataDict.AddOrUpdate(cellIid, data, (k, v) => data);
+
+                    if (CellFieldStartConfig.CalmingCells.Contains(cellIId)) {
+                        newCell.HasCalmingSphereTechnical = true;
+                    }
+
+                    if (CellFieldStartConfig.ExitCells.Contains(cellIId)) {
+                        newCell.IsExit = true;
+                    }
+
+                    object[] data = newCell.GetViewData();
+                    viewDataDict.AddOrUpdate(cellIId, data, (k, v) => data);
                 }
             }
             _cellField = new ConcurrentDictionary<int, Cell>(cellDict);
@@ -230,7 +213,7 @@ namespace CellLayer {
         /// <param name="posY"></param>
         /// <returns></returns>
         public static int CalculateCellId(int posX, int posY) {
-            return (posY - 1)*CellCountXAxis + posX;
+            return (posY - 1)*CellFieldStartConfig.CellCountXAxis + posX;
         }
 
         public static int CalculateCellId(Point coordinates) {
@@ -243,10 +226,12 @@ namespace CellLayer {
         /// <param name="cellNumber"></param>
         /// <param name="chaosRange"></param>
         public void SetCellToPanik(int cellNumber, int chaosRange = 0) {
-            SetCellStatus(cellNumber, CellType.Panic);
-            if (chaosRange > 0) {
-                List<int> neighbourIds = _cellField[cellNumber].GetNeighbourIdsInRange(chaosRange);
-                SetCellsStatus(neighbourIds, CellType.Chaos);
+            lock (Lock) {
+                SetCellStatus(cellNumber, CellType.Panic);
+                if (chaosRange > 0) {
+                    List<int> neighbourIds = _cellField[cellNumber].GetNeighbourIdsInRange(chaosRange);
+                    SetCellsStatus(neighbourIds, CellType.Chaos);
+                }
             }
         }
 
@@ -291,6 +276,17 @@ namespace CellLayer {
         }
 
         /// <summary>
+        ///     Get the list of cell ids in the range around a cell.
+        /// </summary>
+        /// <param name="referenceCellId"></param>
+        /// <param name="range"></param>
+        /// <returns></returns>
+        public List<int> GetNeighbourCellIdsInRange(int referenceCellId, int range) {
+            return _cellField[referenceCellId].GetNeighbourIdsInRange(range);
+        }
+
+
+        /// <summary>
         ///     Change the status of a cell. The cell field and the view data must be updated.
         /// </summary>
         /// <param name="cellNumber"></param>
@@ -310,8 +306,119 @@ namespace CellLayer {
                 _cellField.AddOrUpdate(cellNumber, copied, (k, v) => copied);
 
                 // update the view data
-                object[] newViewData = {cell.Coordinates.X, cell.Coordinates.Y, CellColors[copied.CellType]};
+                object[] newViewData = copied.GetViewData();
                 _viewForm.UpdateCellView(cellNumber, newViewData);
+            }
+        }
+
+        /// <summary>
+        ///     Same as SetCellStatus exept this method handles many cells.
+        ///     The cell field and the view data must be updated.
+        /// </summary>
+        /// <param name="cellIds"></param>
+        /// <param name="type"></param>
+        public void SetCellsStatus(List<int> cellIds, CellType type) {
+            lock (Lock) {
+                if (cellIds.All(_cellField.ContainsKey)) {
+                    Dictionary<int, object[]> cellViewData = new Dictionary<int, object[]>();
+
+                    foreach (int cellNumer in cellIds) {
+                        Cell cell;
+                        _cellField.TryGetValue(cellNumer, out cell);
+                        if (cell == null) {
+                            continue;
+                        }
+
+                        if (!cell.IsChangeStateToAllowed(type)) {
+                            continue;
+                        }
+                        Cell copied = cell.GetCopyWithOtherStatus(type);
+
+                        // update the cell field data
+                        _cellField.AddOrUpdate(cellNumer, copied, (k, v) => copied);
+
+                        // update the view data
+                        object[] newViewData = copied.GetViewData();
+                        //object[] newViewData = { copied.Coordinates.X, copied.Coordinates.Y, CellColors[copied.CellType] };
+                        cellViewData.Add(cellNumer, newViewData);
+                    }
+                    _viewForm.UpdateCellsView(cellViewData);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Triggers an update on the cells of  the given ids by using the cells own method for creating the needed
+        ///     view information.
+        /// </summary>
+        /// <param name="cellIds"></param>
+        public void UpdateCellsView(List<int> cellIds) {
+            lock (Lock) {
+                Dictionary<int, object[]> cellViewData = new Dictionary<int, object[]>();
+
+                foreach (int cellId in cellIds) {
+                    Cell cell;
+                    _cellField.TryGetValue(cellId, out cell);
+
+                    if (cell == null) {
+                        continue;
+                    }
+                    cellViewData.Add(cellId, cell.GetViewData());
+                }
+                _viewForm.UpdateCellsView(cellViewData);
+            }
+        }
+
+        /// <summary>
+        ///     Adapter for setting calming by human value on cell.
+        /// </summary>
+        /// <param name="cellIds"></param>
+        /// <param name="causingHuman"></param>
+        public void AddHumanCalmingToCells(List<int> cellIds, Guid causingHuman) {
+            ChangeHumanCalmingOnCells(cellIds, true, causingHuman);
+        }
+
+        /// <summary>
+        ///     Adapter for setting calming by human value on cell.
+        /// </summary>
+        /// <param name="cellIds"></param>
+        /// <param name="causingHuman"></param>
+        public void DeleteHumanCalmingFromCells(List<int> cellIds, Guid causingHuman) {
+            ChangeHumanCalmingOnCells(cellIds, false, causingHuman);
+        }
+
+        /// <summary>
+        ///     Set the member of cell to calming sphere by human to target value.
+        ///     Update a list of cells indentified by the given cell id list. Works on clone of cells and
+        ///     updates the view data after inserting the clones.
+        /// </summary>
+        /// <param name="cellIds"></param>
+        /// <param name="targetValue"></param>
+        /// <param name="causingHuman"></param>
+        private void ChangeHumanCalmingOnCells(List<int> cellIds, bool targetValue, Guid causingHuman) {
+            lock (Lock) {
+                if (cellIds.All(_cellField.ContainsKey)) {
+                    foreach (int cellNumer in cellIds) {
+                        Cell cell;
+                        _cellField.TryGetValue(cellNumer, out cell);
+
+                        if (cell == null) {
+                            continue;
+                        }
+                        // Only work on the clone and try to insert him.
+                        Cell cellCopy = cell.GetClone();
+                        if (targetValue == true) {
+                            cellCopy.AddGuidOfCalmingHuman(causingHuman);
+                        }
+                        else {
+                            cellCopy.DeleteGuidOfCalmingHuman(causingHuman);
+                        }
+
+                        // update the cell field data with the new cell
+                        _cellField.AddOrUpdate(cellNumer, cellCopy, (k, v) => cellCopy);
+                    }
+                    UpdateCellsView(cellIds);
+                }
             }
         }
 
@@ -320,14 +427,14 @@ namespace CellLayer {
         /// </summary>
         /// <param name="cellId"></param>
         public void RefreshCell(int cellId) {
-            Cell cell;
-            _cellField.TryGetValue(cellId, out cell);
-            if (cell == null) {
-                return;
+            lock (Lock) {
+                Cell cell;
+                _cellField.TryGetValue(cellId, out cell);
+                if (cell == null) {
+                    return;
+                }
+                _viewForm.UpdateCellView(cell.CellId, cell.GetViewData());
             }
-
-            object[] newViewData = {cell.Coordinates.X, cell.Coordinates.Y, CellColors[cell.CellType]};
-            _viewForm.UpdateCellView(cell.CellId, newViewData);
         }
 
         /// <summary>
@@ -340,39 +447,6 @@ namespace CellLayer {
         }
 
         /// <summary>
-        ///     Same as SetCellStatus exept this method handles many cells.
-        ///     The cell field and the view data must be updated.
-        /// </summary>
-        /// <param name="cellNumbers"></param>
-        /// <param name="type"></param>
-        public void SetCellsStatus(List<int> cellNumbers, CellType type) {
-            if (cellNumbers.All(_cellField.ContainsKey)) {
-                Dictionary<int, object[]> cellViewData = new Dictionary<int, object[]>();
-
-                foreach (int cellNumer in cellNumbers) {
-                    Cell cell;
-                    _cellField.TryGetValue(cellNumer, out cell);
-                    if (cell == null) {
-                        continue;
-                    }
-
-                    if (!cell.IsChangeStateToAllowed(type)) {
-                        continue;
-                    }
-                    Cell copied = cell.GetCopyWithOtherStatus(type);
-
-                    // update the cell field data
-                    _cellField.AddOrUpdate(cellNumer, copied, (k, v) => copied);
-
-                    // update the view data
-                    object[] newViewData = {cell.Coordinates.X, cell.Coordinates.Y, CellColors[copied.CellType]};
-                    cellViewData.Add(cellNumer, newViewData);
-                }
-                _viewForm.UpdateCellsView(cellViewData);
-            }
-        }
-
-        /// <summary>
         ///     Add an agent to the view form. Agents are colored points.
         /// </summary>
         /// <param name="guid"></param>
@@ -380,9 +454,11 @@ namespace CellLayer {
         /// <param name="posY"></param>
         /// <param name="type"></param>
         public void AddAgentDraw(Guid guid, float posX, float posY, BehaviourType type) {
-            object[] data = {posX, posY, AgentRadius, AgentColors[type]};
-            _viewForm.AddPoint(guid, data);
-            Log.Info("Agent hat sich angemeldet");
+            lock (Lock) {
+                object[] data = {posX, posY, CellFieldStartConfig.AgentRadius, AgentColors[type]};
+                _viewForm.AddPoint(guid, data);
+                Log.Info("Agent hat sich angemeldet");
+            }
         }
 
         /// <summary>
@@ -393,9 +469,12 @@ namespace CellLayer {
         /// <param name="posY"></param>
         /// <param name="col"></param>
         private void UpdateAgentDraw(Guid guid, float posX, float posY, Color col) {
-            object[] data = {posX, posY, AgentRadius, col};
-            _viewForm.UpdatePoint(guid, data);
+            lock (Lock) {
+                object[] data = {posX, posY, CellFieldStartConfig.AgentRadius, col};
+                _viewForm.UpdatePoint(guid, data);
+            }
         }
+
 
         /// <summary>
         ///     Adapter method for change of agent color depending on behaviour type with lesser param.
@@ -403,8 +482,23 @@ namespace CellLayer {
         /// <param name="guid"></param>
         /// <param name="type"></param>
         public void UpdateAgentDrawStatus(Guid guid, BehaviourType type) {
-            object[] pointData = _viewForm._pointsData[guid];
-            UpdateAgentDraw(guid, (float) pointData[0], (float) pointData[1], AgentColors[type]);
+            lock (Lock) {
+                object[] pointData;
+                _viewForm.PointsData.TryGetValue(guid, out pointData);
+
+                // TODO manchmal kommt hier null...ablaüfe noch fehlerhaft?
+                //if (pointData != null) {
+                UpdateAgentDraw(guid, (float) pointData[0], (float) pointData[1], AgentColors[type]);
+                //}
+            }
+        }
+
+        /// <summary>
+        ///     Delete the point and drawing data from form.
+        /// </summary>
+        /// <param name="guid"></param>
+        public void DeleteAgentDraw(Guid guid) {
+            _viewForm.DeletePoint(guid);
         }
 
         /// <summary>
@@ -413,8 +507,10 @@ namespace CellLayer {
         /// <param name="posX"></param>
         /// <param name="posY"></param>
         public void UpdateAgentDrawPosition(Guid guid, float posX, float posY) {
-            object[] pointData = _viewForm._pointsData[guid];
-            UpdateAgentDraw(guid, posX, posY, (Color) pointData[3]);
+            lock (Lock) {
+                object[] pointData = _viewForm.PointsData[guid];
+                UpdateAgentDraw(guid, posX, posY, (Color) pointData[3]);
+            }
         }
 
         /// <summary>
@@ -422,7 +518,6 @@ namespace CellLayer {
         ///     If found set the given guid at cell. Method is alike the hardware test-and-set.
         /// </summary>
         /// <param name="guid"></param>
-        /// <param name="coordinates"></param>
         public Point GiveAndSetToRandomPosition(Guid guid) {
             lock (Lock) {
                 Random r = new Random();
@@ -457,7 +552,8 @@ namespace CellLayer {
         }
 
         /// <summary>
-        ///     Get the transport type of the cell data
+        ///     Get the transport type of the cell data. It is a TCell object with copied
+        ///     values as snapshot and no reference to the cell.
         /// </summary>
         /// <param name="cellId"></param>
         /// <returns></returns>
@@ -471,40 +567,36 @@ namespace CellLayer {
         }
 
         /// <summary>
-        ///     Adapter method for getting the transport type of a cell containing copy of current cell members.
-        /// </summary>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
-        /// <returns></returns>
-        public TCell GetDataOfCell(int posX, int posY) {
-            int calculatedCellId = CalculateCellId(posX, posY);
-            return GetDataOfCell(calculatedCellId);
-        }
-
-        /// <summary>
-        ///     Atomic test if an other agent is on the cell. if there is no other agent on the cell reserve cell with the agentId.
+        ///     Atomic test if an other agent is on the cell. if there is no other agent on
+        ///     the cell reserve cell with the agentId.
         /// </summary>
         /// <param name="agentID"></param>
         /// <param name="coordinates"></param>
         /// <returns></returns>
         public bool TestAndSetAgentMove(Guid agentID, Point coordinates) {
-            if (CellCoordinatesAreValid(coordinates)) {
-                lock (Lock) {
-                    int calculatedCellId = CalculateCellId(coordinates.X, coordinates.Y);
+            lock (Lock) {
+                if (CellCoordinatesAreValid(coordinates)) {
+                    lock (Lock) {
+                        int calculatedCellId = CalculateCellId(coordinates.X, coordinates.Y);
 
-                    Cell cell;
-                    _cellField.TryGetValue(calculatedCellId, out cell);
+                        Cell cell;
+                        _cellField.TryGetValue(calculatedCellId, out cell);
 
-                    if (cell == null) {
-                        return false;
-                    }
+                        if (cell == null) {
+                            return false;
+                        }
 
-                    if (cell.AgentOnCell == Guid.Empty && cell.CellType == CellType.Neutral) {
-                        Cell cellWithAgent = cell.GetCopyWithAgentOnCell(agentID);
-                        if (cellWithAgent != null) {
-                            // update the cell field data view of cell is not changeg
-                            _cellField.AddOrUpdate(cell.CellId, cellWithAgent, (k, v) => cellWithAgent);
-                            return true;
+                        if (cell.AgentOnCell == Guid.Empty &&
+                            (
+                                cell.CellType == CellType.Neutral
+                                || cell.CellType == CellType.Sacrifice)
+                            ) {
+                            Cell cellWithAgent = cell.GetCopyWithAgentOnCell(agentID);
+                            if (cellWithAgent != null) {
+                                // update the cell field data view of cell is not changeg
+                                _cellField.AddOrUpdate(cell.CellId, cellWithAgent, (k, v) => cellWithAgent);
+                                return true;
+                            }
                         }
                     }
                 }
@@ -518,17 +610,19 @@ namespace CellLayer {
         /// <param name="agentID"></param>
         /// <param name="coordinates"></param>
         public void DeleteAgentIdFromCell(Guid agentID, Point coordinates) {
-            int calculatedCellId = CalculateCellId(coordinates.X, coordinates.Y);
+            lock (Lock) {
+                int calculatedCellId = CalculateCellId(coordinates.X, coordinates.Y);
 
-            Cell cell;
-            _cellField.TryGetValue(calculatedCellId, out cell);
+                Cell cell;
+                _cellField.TryGetValue(calculatedCellId, out cell);
 
-            if (cell != null) {
-                if (cell.AgentOnCell == agentID) {
-                    Cell cellWithoutAgent = cell.GetCopyWithoutAgentOnCell(agentID);
-                    if (cellWithoutAgent != null) {
-                        // update the cell field data view of cell is not changeg
-                        _cellField.AddOrUpdate(cell.CellId, cellWithoutAgent, (k, v) => cellWithoutAgent);
+                if (cell != null) {
+                    if (cell.AgentOnCell == agentID) {
+                        Cell cellWithoutAgent = cell.GetCopyWithoutAgentOnCell(agentID);
+                        if (cellWithoutAgent != null) {
+                            // update the cell field data view of cell is not changeg
+                            _cellField.AddOrUpdate(cell.CellId, cellWithoutAgent, (k, v) => cellWithoutAgent);
+                        }
                     }
                 }
             }
@@ -540,16 +634,20 @@ namespace CellLayer {
         /// <param name="coordinates"></param>
         /// <returns></returns>
         public static bool CellCoordinatesAreValid(Point coordinates) {
-            return ((SmallestXCoordinate <= coordinates.X && coordinates.X <= CellCountXAxis) &&
-                    (SmallestYCoordinate <= coordinates.Y && coordinates.Y <= CellCountYAxis));
+            return ((CellFieldStartConfig.SmallestXCoordinate <= coordinates.X
+                     && coordinates.X <= CellFieldStartConfig.CellCountXAxis) &&
+                    (CellFieldStartConfig.SmallestYCoordinate <= coordinates.Y
+                     && coordinates.Y <= CellFieldStartConfig.CellCountYAxis));
         }
 
         public void AddPressure(Point cellCoordinates, int strenght) {
-            int cellNumber = CalculateCellId(cellCoordinates);
-            Cell cell;
-            _cellField.TryGetValue(cellNumber, out cell);
-            if (cell != null) {
-                cell.AddPressure(strenght);
+            lock (Lock) {
+                int cellNumber = CalculateCellId(cellCoordinates);
+                Cell cell;
+                _cellField.TryGetValue(cellNumber, out cell);
+                if (cell != null) {
+                    cell.AddPressure(strenght);
+                }
             }
         }
     }

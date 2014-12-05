@@ -33,7 +33,7 @@ namespace EventLayer.Agents {
                 List<Guid> affectedAgentIds = _cellLayer.GetAgentIdsOfCellAndRange(regardingCell, range);
                 List<Human> humansToKill = _humanLayer.GetHumansById(affectedAgentIds);
                 foreach (Human human in humansToKill) {
-                    human.GetKilled();
+                    human.GetKilledByPanicArea();
                 }
                 _cellLayer.SetCellToPanik(regardingCell, range);
 
