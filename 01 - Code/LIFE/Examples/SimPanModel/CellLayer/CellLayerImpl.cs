@@ -89,7 +89,7 @@ namespace CellLayer {
             {CellType.Obstacle, Color.SlateGray},
             {CellType.Panic, Color.Crimson},
             {CellType.Chaos, Color.OrangeRed},
-            {CellType.Sacrifice, Color.Purple}
+            {CellType.Sacrifice, Color.MediumOrchid}
         };
 
         public static readonly Color ColorOfExitInformationCell = Color.LightBlue;
@@ -190,6 +190,15 @@ namespace CellLayer {
                         newCell.IsExit = true;
                     }
 
+                    if (CellFieldStartConfig.TechnicalInformationCells.Contains(cellIId)){
+                        newCell.IsTechnicalInformationSource = true;
+                    }
+
+                    if (CellFieldStartConfig.TechnicalExitInformation.ContainsKey(cellIId)) {
+                        Point information = CellFieldStartConfig.TechnicalExitInformation[cellIId];
+                        newCell.ExitInformationTechnical = information;
+                    }
+
                     object[] data = newCell.GetViewData();
                     viewDataDict.AddOrUpdate(cellIId, data, (k, v) => data);
                 }
@@ -283,6 +292,17 @@ namespace CellLayer {
         /// <returns></returns>
         public List<int> GetNeighbourCellIdsInRange(int referenceCellId, int range) {
             return _cellField[referenceCellId].GetNeighbourIdsInRange(range);
+        }
+
+        /// <summary>
+        ///     Get the list of points in the range around a cell.
+        /// </summary>
+        /// <param name="referenceCellId"></param>
+        /// <param name="range"></param>
+        /// <returns></returns>
+        public List<Point> GetNeighbourPointsInRange(int referenceCellId, int range)
+        {
+            return _cellField[referenceCellId].GetNeighbourPointsInRange(range);
         }
 
 
@@ -412,6 +432,50 @@ namespace CellLayer {
                         }
                         else {
                             cellCopy.DeleteGuidOfCalmingHuman(causingHuman);
+                        }
+
+                        // update the cell field data with the new cell
+                        _cellField.AddOrUpdate(cellNumer, cellCopy, (k, v) => cellCopy);
+                    }
+                    UpdateCellsView(cellIds);
+                }
+            }
+        }
+
+
+    
+        public void DeleteMassFlightFromCells(List<int> cellIds, Point informationCoordinates) {
+            ChangeMassFlightOnCells(cellIds, false, informationCoordinates);
+        }
+        
+        public void AddMassFlightToCells(List<int> cellIds, Point informationCoordinates) {
+            ChangeMassFlightOnCells(cellIds, true, informationCoordinates);
+        }
+
+
+        private void ChangeMassFlightOnCells(List<int> cellIds, bool addInformation, Point informationCoordinates){
+            lock (Lock)
+            {
+                if (cellIds.All(_cellField.ContainsKey))
+                {
+                    foreach (int cellNumer in cellIds)
+                    {
+                        Cell cell;
+                        _cellField.TryGetValue(cellNumer, out cell);
+
+                        if (cell == null)
+                        {
+                            continue;
+                        }
+                        // Only work on the clone and try to insert him.
+                        Cell cellCopy = cell.GetClone();
+                        if (addInformation == true)
+                        {
+                            cellCopy.AddMassFlightInformation(informationCoordinates);
+                        }
+                        else
+                        {
+                            cellCopy.DeleteMassFlightInformation(informationCoordinates);
                         }
 
                         // update the cell field data with the new cell

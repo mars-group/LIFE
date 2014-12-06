@@ -12,14 +12,18 @@ namespace CellLayer.TransportTypes {
         public readonly Guid AgentOnCellGuid;
         public readonly CellLayerImpl.CellType CellType;
         public readonly int PressureOnCell;
-        public readonly int ResistanceToPressure;
-        public Point ExitInformationTechnical = new Point();
-        public Point ExitInformationFromHuman = new Point();
+        //public readonly int ResistanceToPressure;
+        public Point ExitInformationTechnical;
+        public Point ExitInformationFromHuman;
 
-        public bool HasCalmingSphereTechnical = false;
-        public bool HasCalmingSphereByHuman = false;
-        public bool IsExit = false;
-        public bool IsTechnicalInformationSource = false;
+        public bool HasCalmingSphereTechnical;
+        public bool HasCalmingSphereByHuman;
+        public bool IsExit;
+        public bool IsTechnicalInformationSource;
+
+        //public Point[] CoordinatesOfMassFlightLeaders;
+        public Point DominantMassFlightLeaderCoordinates;
+        //public Guid[] GuidsOfCalmingHumans;
 
 
         public TCell(Cell correspondingCell) {
@@ -27,16 +31,31 @@ namespace CellLayer.TransportTypes {
             Coordinates = correspondingCell.Coordinates;
             CellType = correspondingCell.CellType;
             AgentOnCellGuid = correspondingCell.AgentOnCell;
-            PressureOnCell = correspondingCell.PressureOnCell;
-            ResistanceToPressure = correspondingCell.ResistanceToPressure;
-            ExitInformationTechnical = correspondingCell.ExitInformationTechnical;
-            ExitInformationFromHuman = correspondingCell.ExitInformationByHuman;
-
-            HasCalmingSphereTechnical = correspondingCell.HasCalmingSphereTechnical;
-            HasCalmingSphereByHuman = correspondingCell.HasCalmingSphereByHuman;
-
             IsExit = correspondingCell.IsExit;
             IsTechnicalInformationSource = correspondingCell.IsTechnicalInformationSource;
+            PressureOnCell = correspondingCell.PressureOnCell;
+            //ResistanceToPressure = correspondingCell.ResistanceToPressure;
+            //CoordinatesOfMassFlightLeaders = (Point[])correspondingCell.CoordinatesOfMassFlightLeaders.Clone();
+            DominantMassFlightLeaderCoordinates = correspondingCell.DominantMassFlightLeaderCoordinates;
+            ExitInformationTechnical = correspondingCell.ExitInformationTechnical;
+            //GuidsOfCalmingHumans = (Guid[])correspondingCell.GuidsOfCalmingHumans.Clone();
+            HasCalmingSphereByHuman = correspondingCell.HasCalmingSphereByHuman;
+            HasCalmingSphereTechnical = correspondingCell.HasCalmingSphereTechnical;
+           
+            
+            
+
+           
+            
+         
+      
+       
+            
+            
+            
+          
+            
+
         }
     }
 

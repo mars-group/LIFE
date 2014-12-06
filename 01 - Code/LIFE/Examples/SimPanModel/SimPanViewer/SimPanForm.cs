@@ -73,9 +73,7 @@ namespace SimPanViewer {
             string text = (string) cell.Value[3];
             string borderStyle = (string) cell.Value[4];
 
-            if (text != "") {
-                g.DrawString(text, _font, _drawBrush, xCoordinate, yCoordinate);
-            }
+           
 
             g.FillRectangle(new SolidBrush(col), xCoordinate, yCoordinate, _cellSideLength, _cellSideLength);
 
@@ -107,6 +105,9 @@ namespace SimPanViewer {
             if (drawCoordinates) {
                 string coordText = "(" + xCoordinate + "," + yCoordinate + ")";
                 g.DrawString(coordText, _font, _drawBrush, xCoordinate, yCoordinate + 12);
+            }
+            if (text != ""){
+                g.DrawString(text, _font, _drawBrush, xCoordinate, yCoordinate + 12);
             }
         }
 

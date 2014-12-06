@@ -19,9 +19,13 @@ namespace HumanLayer {
 
     [Extension(typeof (ISteppedLayer))]
     public class HumanLayerImpl : ISteppedLayer {
-        private const int CountOfHumans = 10;
-        private const int CountOfRandomWalker = 10;
-        private const int CountOfCalmingHumans = 2;
+        private const int CountOfHumans = 14;
+        private const int CountOfRandomWalker = 6;
+        private const int CountOfCalmingHumans = 0;
+        private const int CountOfMassFlightLeader = 0;
+        private const int CountOfMassFlightAndCalmingLeader = 2;
+
+
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly CellLayerImpl _cellLayer;
         private readonly ConcurrentDictionary<Guid, Human> _humanList = new ConcurrentDictionary<Guid, Human>();
@@ -57,6 +61,21 @@ namespace HumanLayer {
                 registerAgentHandle.Invoke(this, humanAgent);
             }
 
+            for (int i = 1; CountOfMassFlightLeader >= i; i++) {
+                Human humanAgent = new Human(_cellLayer);
+                humanAgent.SetMassFlightSphere();
+                humanAgent.SetTarget(new Point(11, 20));
+                _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                registerAgentHandle.Invoke(this, humanAgent);
+            }
+
+            for (int i = 1; CountOfMassFlightAndCalmingLeader >= i; i++) {
+                Human humanAgent = new Human(_cellLayer);
+                humanAgent.SetMassFlightSphere();
+                humanAgent.SetCalmingSphere();
+                _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                registerAgentHandle.Invoke(this, humanAgent);
+            }
             return true;
         }
 

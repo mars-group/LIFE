@@ -121,15 +121,20 @@ namespace HumanLayer.Agents {
         }
 
         /// <summary>
-        ///     Set the new position for human and calculate and set the new cell id.
+        ///     Set the new position for human and calculate and set the new cell id. The position
+        ///     before is remembered in the blackboard on lastPosition for other operations.
         /// </summary>
         /// <param name="newPosition"></param>
         private void ChangeHumanPosition(Point newPosition) {
+            _blackboard.Set(Human.LastPosition, _blackboard.Get(Human.Position));
             _blackboard.Set(Human.Position, newPosition);
             int newCellId = CellLayerImpl.CalculateCellId(_blackboard.Get(Human.Position));
             _blackboard.Set(Human.CellIdOfPosition, newCellId);
         }
 
+        /// <summary>
+        ///     Delete the human information on cell and in view.
+        /// </summary>
         private void DeleteHumanInWorld() {
             _cellWorldLayer.DeleteAgentIdFromCell(_owner.AgentID, _blackboard.Get(Human.Position));
             _cellWorldLayer.DeleteAgentDraw(_owner.AgentID);
@@ -154,6 +159,11 @@ namespace HumanLayer.Agents {
                 (_owner.AgentID, randomPosition.X, randomPosition.Y, _blackboard.Get(Human.BehaviourType));
         }
 
+        /// <summary>
+        ///     Helper method for shuffling a list of points for random functions.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         private List<Point> ShufflePointsList(List<Point> list) {
             Random rand = new Random();
             return list.OrderBy(item => rand.Next()).ToList();
@@ -182,7 +192,7 @@ namespace HumanLayer.Agents {
                             return;
                         }
 
-                        if (aggressiveMode) {
+                        if (aggressiveMode && !_blackboard.Get(Human.IsOnMassFlight)) {
                             _cellWorldLayer.AddPressure(fastWay, _blackboard.Get(Human.Strength));
                             _cellWorldLayer.RefreshCell(fastWay);
                             return;
@@ -202,7 +212,7 @@ namespace HumanLayer.Agents {
                             return;
                         }
 
-                        if (aggressiveMode) {
+                        if (aggressiveMode && !_blackboard.Get(Human.IsOnMassFlight)) {
                             _cellWorldLayer.AddPressure(slowWay, _blackboard.Get(Human.Strength));
                             _cellWorldLayer.RefreshCell(slowWay);
                             return;
@@ -283,10 +293,11 @@ namespace HumanLayer.Agents {
         }
 
         public void LeaveByExit() {
+            Point leavingPosition = _blackboard.Get(Human.Position);
             _owner.DeleteCalmingSphere();
             _blackboard.Set(Human.IsOutSide, true);
             DeleteHumanInWorld();
-            HumanLayerImpl.Log.Info("Agent " + _owner.AgentID + " has left simulation by exit");
+            HumanLayerImpl.Log.Info("Agent " + _owner.AgentID + " has left by exit on " + leavingPosition);
         }
     }
 

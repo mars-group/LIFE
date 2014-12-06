@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace CellLayer {
 
@@ -73,6 +74,40 @@ namespace CellLayer {
         /// </summary>
         public static readonly List<int> ExitCells = new List<int>() {
             391,
+        };
+
+        private static readonly Point ExitPoint = new Point(11, 20);
+
+        public static readonly List<int> TechnicalInformationCells = new List<int> {
+            1,
+            300,
+        };
+
+        public static readonly Dictionary<int, Point> TechnicalExitInformation = new Dictionary<int, Point> {
+            {1, ExitPoint},
+            {2, ExitPoint},
+            {3, ExitPoint},
+            {21, ExitPoint},
+            {22, ExitPoint},
+            {23, ExitPoint},
+            {41, ExitPoint},
+            {42, ExitPoint},
+            {43, ExitPoint},
+            {258, ExitPoint},
+            {259, ExitPoint},
+            {260, ExitPoint},
+            {278, ExitPoint},
+            {279, ExitPoint},
+            {280, ExitPoint},
+            {298, ExitPoint},
+            {299, ExitPoint},
+            {318, ExitPoint},
+            {319, ExitPoint},
+            {320, ExitPoint},
+            {338, ExitPoint},
+            {339, ExitPoint},
+            {340, ExitPoint},
+            {300, ExitPoint},
         };
     }
 

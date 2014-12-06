@@ -24,8 +24,9 @@ namespace CellLayer {
         ///     There may be more than one influencing human on one cell, if one deletes his information the cell must show
         ///     furthermore if there is another entry in the array. For a simple solution only the first entry is shown on cell.
         /// </summary>
-        public Guid[] GuidsOfExitInformationByHuman = new Guid[0];
-        public Point ExitInformationByHuman = new Point();
+        public Point[] CoordinatesOfMassFlightLeaders = new Point[0];
+        public Point DominantMassFlightLeaderCoordinates = new Point();
+
         public Point ExitInformationTechnical = new Point();
         
         /// <summary>
@@ -89,24 +90,35 @@ namespace CellLayer {
         }
 
         /// <summary>
-        ///     Get a cloned Cell object to work on and to replace the old on the cell field data structure.
+        ///     Get a cloned Cell object to work on and to replace the old on the cell field data structure. 
+        ///     Because array is always reference type a direct copy is needed.
         /// </summary>
         /// <returns></returns>
         public Cell GetClone() {
-            Cell cloneCell = new Cell(CellId, Coordinates, CellType) {
-                AgentOnCell = AgentOnCell,
-                PressureOnCell = PressureOnCell,
-                ResistanceToPressure = ResistanceToPressure,
-                ExitInformationTechnical = ExitInformationTechnical,
-                ExitInformationByHuman = ExitInformationByHuman,
-                HasCalmingSphereTechnical = HasCalmingSphereTechnical,
-                HasCalmingSphereByHuman = HasCalmingSphereByHuman,
-                IsExit = IsExit,
-                IsTechnicalInformationSource = IsTechnicalInformationSource,
-                // guids are value types and don not get manipulated 
-                GuidsOfCalmingHumans = (Guid[]) GuidsOfCalmingHumans.Clone()
-            };
+            Cell cloneCell = new Cell(CellId, Coordinates, CellType);
+            cloneCell.AgentOnCell = AgentOnCell;
+            cloneCell.IsExit = IsExit;
+            cloneCell.IsTechnicalInformationSource = IsTechnicalInformationSource;
+            cloneCell.PressureOnCell = PressureOnCell;
+            cloneCell.ResistanceToPressure = ResistanceToPressure;
+            cloneCell.CoordinatesOfMassFlightLeaders = (Point[])CoordinatesOfMassFlightLeaders.Clone();
+            cloneCell.DominantMassFlightLeaderCoordinates = DominantMassFlightLeaderCoordinates;
+            cloneCell.ExitInformationTechnical = ExitInformationTechnical;
+            cloneCell.GuidsOfCalmingHumans = (Guid[]) GuidsOfCalmingHumans.Clone();
+            cloneCell.HasCalmingSphereByHuman = HasCalmingSphereByHuman;
+            cloneCell.HasCalmingSphereTechnical = HasCalmingSphereTechnical;
             return cloneCell;
+        }
+
+        /// <summary>
+        ///     Get the transport type of the cell. The transport type represent
+        ///     a simple snapshot of the current member values of the cell. The cell
+        ///     is not referenced and so there is no danger of manipulating the cell.
+        /// </summary>
+        /// <returns></returns>
+        public TCell GetTransportType()
+        {
+            return new TCell(this);
         }
 
         /// <summary>
@@ -140,6 +152,7 @@ namespace CellLayer {
 
         /// <summary>
         ///     Get a new cell object with member agentID entry empty guid.
+        ///     Delete Pressure if a human has left cell.
         /// </summary>
         /// <param name="agentID"></param>
         /// <returns></returns>
@@ -147,6 +160,7 @@ namespace CellLayer {
             if (AgentOnCell == agentID) {
                 Cell copiedCell = GetClone();
                 copiedCell.AgentOnCell = Guid.Empty;
+                copiedCell.PressureOnCell = 0;
                 return copiedCell;
             }
             return null;
@@ -158,10 +172,10 @@ namespace CellLayer {
         /// </summary>
         /// <param name="cellRange"></param>
         /// <returns></returns>
-        public List<int> GetNeighbourIdsInRange(int cellRange) {
+        public List<Point> GetNeighbourPointsInRange(int cellRange) {
             List<int> neighbourXCoordinates = new List<int>();
             List<int> neighbourYCoordinates = new List<int>();
-            List<int> neighbourIds = new List<int>();
+            List<Point> neighbourPoints = new List<Point>();
 
             const int minX = CellFieldStartConfig.SmallestXCoordinate;
             const int minY = CellFieldStartConfig.SmallestYCoordinate;
@@ -181,13 +195,24 @@ namespace CellLayer {
 
                 foreach (int xCoord in neighbourXCoordinates) {
                     foreach (int yCoord in neighbourYCoordinates) {
-                        neighbourIds.Add((yCoord - 1)*dim + xCoord);
+                        neighbourPoints.Add(new Point(xCoord, yCoord));
                     }
                 }
-                neighbourIds.Remove(CellId);
+                neighbourPoints.Remove(Coordinates);
+            }
+            return neighbourPoints;
+        }
+
+        public List<int> GetNeighbourIdsInRange(int cellRange) {
+            List<Point> neighbourPoints =  GetNeighbourPointsInRange(cellRange);
+            List<int> neighbourIds = new List<int>();
+
+            foreach (Point neighbourPoint in neighbourPoints) {
+                neighbourIds.Add(CellLayerImpl.CalculateCellId(neighbourPoint.X, neighbourPoint.Y));
             }
             return neighbourIds;
         }
+
 
         /// <summary>
         ///     Get the dominant exit information (as point data) if available.
@@ -195,8 +220,9 @@ namespace CellLayer {
         /// </summary>
         /// <returns></returns>
         private Point GetExitInformation() {
-            if (!ExitInformationByHuman.IsEmpty) {
-                return ExitInformationByHuman;
+            if (!DominantMassFlightLeaderCoordinates.IsEmpty)
+            {
+                return DominantMassFlightLeaderCoordinates;
             }
             if (!ExitInformationTechnical.IsEmpty) {
                 return ExitInformationTechnical;
@@ -205,18 +231,10 @@ namespace CellLayer {
         }
 
         private bool HasExitInformation() {
-            return (!ExitInformationByHuman.IsEmpty || !ExitInformationTechnical.IsEmpty);
+            return (!DominantMassFlightLeaderCoordinates.IsEmpty || !ExitInformationTechnical.IsEmpty);
         }
 
-        /// <summary>
-        ///     Get the transport type of the cell. The transport type represent
-        ///     a simple snapshot of the current member values of the cell. The cell
-        ///     is not referenced and so there is no danger of manipulating the cell.
-        /// </summary>
-        /// <returns></returns>
-        public TCell GetTransportType() {
-            return new TCell(this);
-        }
+        
 
         /// <summary>
         ///     Add the point entry to the list of 
@@ -237,7 +255,7 @@ namespace CellLayer {
 
             // check if guid is maybe already contained
             if (index == -1) {
-                // Use the list operations for lesser instructions, guids are value types and don not get manipulated 
+                // Use the list operations for lesser instructions, guids are value types and do not get manipulated 
                 List<Guid> guidsList = new List<Guid>(GuidsOfCalmingHumans) {guid};
                 Guid[] newCalmingHumans = guidsList.ToArray();
                 GuidsOfCalmingHumans = newCalmingHumans;
@@ -255,7 +273,7 @@ namespace CellLayer {
 
             // check if guid is really contained
             if (index != -1) {
-                // Use the list operations for lesser instructions, guids are value types and don not get manipulated 
+                // Use the list operations for lesser instructions, guids are value types and do not get manipulated 
                 List<Guid> guidsList = new List<Guid>(GuidsOfCalmingHumans);
                 guidsList.Remove(guid);
                 Guid[] newCalmingHumans = guidsList.ToArray();
@@ -264,9 +282,55 @@ namespace CellLayer {
             }
         }
 
-        private void RefreshCalmingStatus() {
+
+        private void RefreshCalmingStatus(){
             HasCalmingSphereByHuman = GuidsOfCalmingHumans.Length != 0;
         }
+
+        public void AddMassFlightInformation(Point positionOfLeader){
+
+            int index = Array.IndexOf(CoordinatesOfMassFlightLeaders, positionOfLeader);
+
+            // check if point is maybe already contained
+            if (index == -1)
+            {
+
+                // Use the list operations for lesser instructions, points are value types and do not get manipulated 
+                List<Point> pointList = new List<Point>(CoordinatesOfMassFlightLeaders) { positionOfLeader };
+                Point[] newMassFlightPoints = pointList.ToArray();
+                CoordinatesOfMassFlightLeaders = newMassFlightPoints;
+                RefreshMassFlightStatus();
+            }
+        }
+
+       
+        public void DeleteMassFlightInformation(Point positionOfLeader)
+        {
+            int index = Array.IndexOf(CoordinatesOfMassFlightLeaders, positionOfLeader);
+
+            // check if point is really contained
+            if (index != -1) {
+                // Use the list operations for lesser instructions, point are value types and do not get manipulated 
+                List<Point> pointList = new List<Point>(CoordinatesOfMassFlightLeaders);
+                pointList.Remove(positionOfLeader);
+                Point[] newMassFlightPoints = pointList.ToArray();
+                CoordinatesOfMassFlightLeaders = newMassFlightPoints;
+                RefreshMassFlightStatus();
+            }
+        }
+
+        private void RefreshMassFlightStatus(){
+
+            if (CoordinatesOfMassFlightLeaders.Length != 0) {
+                DominantMassFlightLeaderCoordinates = CoordinatesOfMassFlightLeaders[0];
+            }
+            else {
+                DominantMassFlightLeaderCoordinates = new Point();
+            }
+        }
+
+
+
 
         /// <summary>
         ///     Prepare the colors and border informations for the view. Data is
@@ -284,7 +348,7 @@ namespace CellLayer {
             // add a text presenting the submitted coordinates
             if (HasExitInformation()) {
                 Point exit = GetExitInformation();
-                cellText = "(Exit(" + exit.X + "," + exit.Y + ")";
+                cellText = "(" + exit.X + "," + exit.Y + ")";
             }
 
             // correct the cell filling color if is calming
