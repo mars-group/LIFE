@@ -29,7 +29,7 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Udp
         }
 
         internal override IScsClient CreateClient() {
-            
+            throw new NotImplementedException();
         }
     }
 }

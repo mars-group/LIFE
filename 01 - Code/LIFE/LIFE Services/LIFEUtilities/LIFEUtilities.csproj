@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7A9452D0-A0EB-450A-8C87-454536B1B741}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{09D5EB43-70C5-4E24-92CA-6C35548A0629}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MCastAddressGenerator</RootNamespace>
-    <AssemblyName>MCastAddressGenerator</AssemblyName>
+    <RootNamespace>LIFEUtilities</RootNamespace>
+    <AssemblyName>LIFEUtilities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,19 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Agent.cs" />
-    <Compile Include="AnotherAgent.cs" />
-    <Compile Include="BigInteger.cs" />
-    <Compile Include="FnvHash.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Hashing\BigInteger.cs" />
+    <Compile Include="Hashing\FnvHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="tnegA.cs" />
-    <Compile Include="VeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongClass.cs" />
-    <Compile Include="Xor128Random.cs" />
+    <Compile Include="Random\Xor128Random.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
