@@ -29,6 +29,7 @@ namespace GoapCommon.Abstract {
         /// </summary>
         /// <returns></returns>
         public abstract AbstractGoapAction GetNextAction();
+
     }
 
 }

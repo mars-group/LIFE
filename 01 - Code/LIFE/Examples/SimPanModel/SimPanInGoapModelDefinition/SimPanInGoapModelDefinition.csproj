@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstactSimPanGoapAction.cs" />
     <Compile Include="Actions\AggressiveApproximation.cs" />
     <Compile Include="Actions\AimlessWandering.cs" />
     <Compile Include="Actions\ChooseExit.cs" />
@@ -56,24 +57,32 @@
     <Compile Include="Actions\GoOut.cs" />
     <Compile Include="Actions\ParticipateMassEscape.cs" />
     <Compile Include="Actions\SuccessiveApproximation.cs" />
-    <Compile Include="AgentConfig1.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Goals\BeOutOfDanger.cs" />
     <Compile Include="Goals\CalmDown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReactiveConfig.cs" />
     <Compile Include="Worldstates\Properties.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
-      <Name>GenericAgentArchitectureCommon</Name>
+    <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Name>LayerAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapCommon\GoapCommon.csproj">
       <Project>{846c7c43-fc1b-4709-8a43-b2ee8213f63f}</Project>
       <Name>GoapCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
+      <Project>{d1feb7b4-55cd-47d7-8828-5ee7b4c2db95}</Project>
+      <Name>TypeSafeBlackboard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HumanLayer\HumanLayer.csproj">
+      <Project>{97aa1431-0d40-415a-ae57-6212deae7db6}</Project>
+      <Name>HumanLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

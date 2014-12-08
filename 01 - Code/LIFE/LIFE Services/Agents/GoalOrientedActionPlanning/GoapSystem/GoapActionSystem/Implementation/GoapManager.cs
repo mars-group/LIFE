@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
@@ -14,6 +12,8 @@ namespace GoapActionSystem.Implementation {
         private readonly List<IGoapGoal> _availableGoals;
         private readonly Blackboard _internalBlackboard;
         private readonly int _maximumGraphSearchDepth;
+        private readonly IGoapAgentConfig _configClass = null;
+        private readonly bool _ignoreIfFinishedForTesting = false;
 
         /// <summary>
         ///     goap element: faster search for actions be needed worldstates
@@ -31,61 +31,176 @@ namespace GoapActionSystem.Implementation {
         /// <param name="startStates"></param>
         /// <param name="blackboard"></param>
         /// <param name="maximumGraphSearchDepth"></param>
+        /// <param name="ignoreFinishedForTesting"></param>
         internal GoapManager
             (List<AbstractGoapAction> availableActions,
                 List<IGoapGoal> availableGoals,
                 Blackboard blackboard,
                 List<WorldstateSymbol> startStates,
-                int maximumGraphSearchDepth) {
-            
+                int maximumGraphSearchDepth,
+                bool ignoreFinishedForTesting)
+        {
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
             _internalBlackboard.Set(Worldstate, startStates);
             _maximumGraphSearchDepth = maximumGraphSearchDepth;
-            CreateEffectActionHashTable();
+            _ignoreIfFinishedForTesting = ignoreFinishedForTesting;
+            InitializationHelper();
         }
 
         /// <summary>
-        ///     entry point for user of goap services and main method
+        ///     create the manager inklusive the current worldstates
+        /// </summary>
+        /// <param name="availableActions"></param>
+        /// <param name="availableGoals"></param>
+        /// <param name="startStates"></param>
+        /// <param name="blackboard"></param>
+        /// <param name="maximumGraphSearchDepth"></param>
+        /// <param name="configClass"></param>
+        internal GoapManager
+            (List<AbstractGoapAction> availableActions,
+                List<IGoapGoal> availableGoals,
+                Blackboard blackboard,
+                List<WorldstateSymbol> startStates,
+                int maximumGraphSearchDepth,
+                IGoapAgentConfig configClass) {
+            _availableActions = availableActions;
+            _availableGoals = availableGoals;
+            _internalBlackboard = blackboard;
+            _internalBlackboard.Set(Worldstate, startStates);
+            _maximumGraphSearchDepth = maximumGraphSearchDepth;
+            _configClass = configClass;
+
+            InitializationHelper();
+        }
+
+        /// <summary>
+        ///     Initialize the first goal and plan
+        /// </summary>
+        /// <returns></returns>
+        private bool InitializationHelper() {
+            CreateEffectActionHashTable();
+            UpdateRelevancyOfGoals();
+
+            if (TryGetGoalAndPlan()) {
+                TakeActionFromPlan();
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsActionForExecutionFinished() {
+            AbstractGoapAction action = _internalBlackboard.Get(ActionForExecution);
+            if (!_ignoreIfFinishedForTesting) {
+                return action.IsFinished();
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     Entry point for user of goap services and main method
         /// </summary>
         /// <returns></returns>
         public override AbstractGoapAction GetNextAction() {
-            UpdateRelevancyOfGoals();
 
-            // case: the current action has not yet finished (actions may last more than one tick)
-            AbstractGoapAction runningAction = _internalBlackboard.Get(ActionForExecution);
-            if (runningAction != null && !runningAction.IsFinished()) {
-                return runningAction;
+            /* current action can be given if: 
+             *  + goal is still valid
+             *  + the action is not finished
+             *  + the action is executable
+            */
+            if (CurrentGoalIsValid() && !IsActionForExecutionFinished() && IsCurrentActionExecutable()){
+                return _internalBlackboard.Get(ActionForExecution);
             }
 
-            // case: current goal is reached
+            /* next action can be given if
+             *  + goal is still valid
+             *  + current action is finished
+             *  + plan is not empty
+             *  + the action is executable            
+             * */
+            if (CurrentGoalIsValid() && IsActionForExecutionFinished() && IsCurrentPlanAvailable()
+                && IsCurrentActionExecutable()) {
+                    ConvertWorldstateByActionForExecution();
+                    AbstractGoapAction nextAction = TakeActionFromPlan();
+                    return nextAction;
+            }
+
+            /* new plan and goal is needed if
+             *      Goal = null
+             * OR
+             *      the current action is NOT executable
+             * OR   
+             *      current goal is NOT valid
+             * OR     
+             *      the current goal is REACHED 
+             * OR 
+             *      current action is finished and plan is empty
+             * 
+             *  ERROR wenn plan leer und goal nicht erreicht
+             */
+            bool replanningTime = false;
+
             if (IsCurrentGoalReached()) {
-                GoapComponent.Log.Info("Goal " + _currentGoal.GetType() + " is reached.");
+                replanningTime = true;
+                GoapComponent.Log.Info("GoapManager: current goal is successful reached");
+            }
+            else if (!CurrentGoalIsValid()) {
+                replanningTime = true;
+                GoapComponent.Log.Info("GoapManager: current goal is not valid or empty");
+            }
+            else if (!IsCurrentActionExecutable()) {
+                replanningTime = true;
+                GoapComponent.Log.Info("GoapManager: current action is not executable");
+            }
 
-                if (!TryGetGoalAndPlan()) {
-                    return new SurrogateAction();
+            if (replanningTime) {
+                _internalBlackboard.Set(ActionForExecution, null);
+                _currentPlan = new List<AbstractGoapAction>();
+
+                if (IsWorldstateUpdateConfiguredBeforeReplanning()) {
+                    UpdateWorldstateByAgent();
+                }
+
+                if (TryGetGoalAndPlan()) {
+                    AbstractGoapAction currentAction = TakeActionFromPlan();
+                    return currentAction;
                 }
             }
-                // case: last tick no goal was found
-            else if (_currentGoal == null) {
-                if (!TryGetGoalAndPlan()) {
-                    return new SurrogateAction();
-                }
-            }
-
-            // case: a plan is given and the next action is executable 
-            if (IsCurrentPlanAvailable() && IsNextActionExecutable()) {
-                AbstractGoapAction currentAction = _currentPlan.First();
-                _internalBlackboard.Set(ActionForExecution, currentAction);
-                _currentPlan.RemoveAt(0);
-                return currentAction;
-            }
+            GoapComponent.Log.Info("GoapManager: planning failed");
             return new SurrogateAction();
         }
 
         /// <summary>
-        ///     search goals by priority. choose the first goal which is reachable with a plan
+        ///     Check if the current goal is not null and ...
+        /// </summary>
+        /// <returns></returns>
+        private bool CurrentGoalIsValid() {
+            if (_currentGoal != null) {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     Read from in the configuration class if available if the world state symbols 
+        ///     have to be updated before planning.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsWorldstateUpdateConfiguredBeforeReplanning() {
+            return _configClass != null && _configClass.ForceSymbolsUpdateBeforePlanning();
+        }
+
+        /// <summary>
+        ///     Use the connection between agent and goap to update the symbols in the goap system.
+        /// </summary>
+        private void UpdateWorldstateByAgent() {
+            List<WorldstateSymbol> newState = _configClass.GetUpdatedSymbols();
+            _internalBlackboard.Set(Worldstate, newState);
+        }
+
+        /// <summary>
+        ///     Search goals by priority. Choose the first goal which is reachable with a plan.
         /// </summary>
         /// <returns></returns>
         private bool TryGetGoalAndPlan() {
@@ -112,6 +227,16 @@ namespace GoapActionSystem.Implementation {
             return false;
         }
 
+        /// <summary>
+        ///     Get the first action of the plan and update the blackboard entry for the ActionForExecution.
+        /// </summary>
+        /// <returns></returns>
+        private AbstractGoapAction TakeActionFromPlan() {
+            AbstractGoapAction currentAction = _currentPlan.First();
+            _internalBlackboard.Set(ActionForExecution, currentAction);
+            _currentPlan.RemoveAt(0);
+            return currentAction;
+        }
 
         /// <summary>
         ///     create a new goap planner to create a new plan by the given goal
@@ -171,7 +296,20 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     check if plan is not null or empty
+        ///     validate next action of the plan
+        /// </summary>
+        /// <returns></returns>
+        private bool IsCurrentActionExecutable() {
+            AbstractGoapAction currentaction = _internalBlackboard.Get(ActionForExecution);
+            if (currentaction != null) {
+                return (currentaction.IsExecutable(_internalBlackboard.Get(Worldstate))
+                        && currentaction.ValidateContextPreconditions());
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     Check if plan is not null or empty.
         /// </summary>
         /// <returns></returns>
         private bool IsCurrentPlanAvailable() {
@@ -179,10 +317,29 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     call the update relavancy method on all known goals
+        ///     Call the update relavancy method on all known goals.
         /// </summary>
         private void UpdateRelevancyOfGoals() {
             _availableGoals.ForEach(x => x.UpdateRelevancy(_internalBlackboard.Get(Worldstate)));
+        }
+
+        /// <summary>
+        ///     Change the goap internal worldstate by the effects of the action.
+        /// </summary>
+        /// <param name="action"></param>
+        private void ConvertWorldstateByAction(AbstractGoapAction action) {
+            List<WorldstateSymbol> newsWorldstate = action.GetResultingWorldstate
+                (_internalBlackboard.Get(Worldstate));
+            _internalBlackboard.Set(Worldstate, newsWorldstate);
+        }
+
+        /// <summary>
+        ///     Adapter for ConvertWorldstateByAction.
+        /// </summary>
+        private void ConvertWorldstateByActionForExecution()
+        {
+            AbstractGoapAction currentAction = _internalBlackboard.Get(ActionForExecution);
+            ConvertWorldstateByAction(currentAction);
         }
     }
 

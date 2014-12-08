@@ -81,14 +81,6 @@
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
-      <Name>GenericAgentArchitectureCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
-      <Project>{e8e32f5e-7e31-41f3-9d49-9cb6dfbafc85}</Project>
-      <Name>GenericAgentArchitecture</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapActionSystem\GoapActionSystem.csproj">
       <Project>{62773ab7-47e9-42ad-96ae-d4241618199e}</Project>
       <Name>GoapActionSystem</Name>

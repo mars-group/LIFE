@@ -55,7 +55,7 @@ namespace HumanLayer.Agents {
         ///     human will walk until he cannot acces thenext position.
         /// </summary>
         public void FollowDirectionOrSwitchDirection() {
-            // Check if the last movement failed and if so choose a direction for movement.
+            
             if (_blackboard.Get(Human.MovementFailed)) {
                 ChooseNewRandomDirection();
                 _blackboard.Set(Human.MovementFailed, false);
@@ -292,6 +292,10 @@ namespace HumanLayer.Agents {
             return true;
         }
 
+
+        /// <summary>
+        ///     Is used if a human is on a exit cell and need to leave the field.
+        /// </summary>
         public void LeaveByExit() {
             Point leavingPosition = _blackboard.Get(Human.Position);
             _owner.DeleteCalmingSphere();

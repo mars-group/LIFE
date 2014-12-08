@@ -34,11 +34,14 @@ namespace GoapTests {
 
         private void CreateGoapActionSystems() {
             _goapActionSystem1 = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfig1", "GoapModelTest", new Blackboard());
+                ("AgentTestConfig1", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+            
+
             _goapActionSystem2 = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfig2", "GoapModelTest", new Blackboard());
+                ("AgentTestConfig2", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+
             _goapActionSystemSearchDepth = GoapComponent.LoadGoapConfiguration
-                ("AgentTestSearchDepth", "GoapModelTest", new Blackboard());
+                ("AgentTestSearchDepth", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
         }
 
         private static bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {
@@ -73,11 +76,17 @@ namespace GoapTests {
 
         [Test]
         public void NotReturnedActionTest() {
-            Assert.False((_goapActionSystem1.GetNextAction()).Equals(_actionPlay));
-            Assert.False((_goapActionSystem1.GetNextAction()).Equals(_actionClean));
+            AbstractGoapAction nextAction1 = _goapActionSystem1.GetNextAction();
+            AbstractGoapAction nextAction2 = _goapActionSystem1.GetNextAction();
 
-            Assert.False((_goapActionSystem2.GetNextAction()).Equals(_actionGetToy));
-            Assert.False((_goapActionSystem2.GetNextAction()).Equals(_actionClean));
+            AbstractGoapAction nextAction3 = _goapActionSystem2.GetNextAction();
+            AbstractGoapAction nextAction4 = _goapActionSystem2.GetNextAction();
+
+            Assert.False(nextAction1.Equals(_actionPlay));
+            Assert.False(nextAction2.Equals(_actionClean));
+
+            Assert.False(nextAction3.Equals(_actionGetToy));
+            Assert.False(nextAction4.Equals(_actionClean));
         }
 
         [Test]

@@ -25,18 +25,48 @@ namespace GoapActionSystem.Implementation {
         /// <param name="nameOfConfigClass"></param>
         /// <param name="namespaceOfConfigClass"></param>
         /// <param name="blackboard"></param>
+        /// <param name="ignoreFinishedForTesting"></param>
         /// <returns></returns>
         public static AbstractGoapSystem LoadGoapConfiguration
-            (string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard) {
+            (string nameOfConfigClass,
+                string namespaceOfConfigClass,
+                Blackboard blackboard,
+                bool ignoreFinishedForTesting = false) {
+
             Assembly assembly = Assembly.Load(namespaceOfConfigClass);
             IGoapAgentConfig configClass =
                 (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
-
 
             if (configClass == null) {
                 throw new NullReferenceException("The configuration class for the Goap manager was not found");
             }
 
+            List<AbstractGoapAction> actions = configClass.GetAllActions();
+            List<IGoapGoal> goals = configClass.GetAllGoals();
+            List<WorldstateSymbol> symbols = configClass.GetStartWorldstate();
+            int maxGraphDepth = configClass.GetMaxGraphSearchDepth();
+
+            CheckActionsValid(actions);
+            CheckGoalsValid(goals);
+            CheckSymbolsValid(symbols);
+
+            return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth, ignoreFinishedForTesting);
+        }
+
+
+        public static AbstractGoapSystem LoadGoapConfigurationWithSelfreference
+            (string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard, object agent) {
+            Assembly assembly = Assembly.Load(namespaceOfConfigClass);
+
+            Type type = Type.GetType(namespaceOfConfigClass + "." + nameOfConfigClass + ", " + assembly.FullName);
+
+            object[] parameterArray = {agent, blackboard};
+            IGoapAgentConfig configClass = (IGoapAgentConfig) Activator.CreateInstance(type, parameterArray);
+
+
+            if (configClass == null) {
+                throw new NullReferenceException("The configuration class for the Goap manager was not found");
+            }
 
             List<AbstractGoapAction> actions = configClass.GetAllActions();
             List<IGoapGoal> goals = configClass.GetAllGoals();
@@ -48,7 +78,7 @@ namespace GoapActionSystem.Implementation {
             CheckSymbolsValid(symbols);
 
 
-            return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth);
+            return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth, configClass);
         }
 
         /// <summary>

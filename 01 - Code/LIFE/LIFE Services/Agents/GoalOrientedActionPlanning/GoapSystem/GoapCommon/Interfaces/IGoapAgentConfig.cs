@@ -32,6 +32,23 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <returns></returns>
         int GetMaxGraphSearchDepth();
+
+
+        /// <summary>
+        ///     Instruction if the goap manager has to use the UpdateWorldstate method before planning.
+        /// </summary>
+        /// <returns></returns>
+        bool ForceSymbolsUpdateBeforePlanning();
+            
+        
+        /// <summary>
+        ///     Connector between the concrete agent variables and the worldstate of the goap system.
+        ///     Here the relation between agent variables and concrete symbols for the planning.
+        /// </summary>
+        /// <returns></returns>
+        List<WorldstateSymbol> GetUpdatedSymbols();
+
+        
     }
 
 }

@@ -8,7 +8,7 @@ namespace GoapGraphConnector.SimpleGraph {
     /// <summary>
     ///     hold the information of the build graph in search process.
     /// </summary>
-    public class Map {
+    internal class Map {
         private readonly List<IGoapNode> _vertices;
         private readonly List<IGoapEdge> _edges;
 

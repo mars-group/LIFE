@@ -34,6 +34,15 @@ namespace GoapModelTest {
             return 20;
         }
 
+        public bool ForceSymbolsUpdateBeforePlanning() {
+            return false;
+        }
+
+        public List<WorldstateSymbol> GetUpdatedSymbols()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 

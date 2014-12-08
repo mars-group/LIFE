@@ -10,7 +10,7 @@ namespace GoapGraphConnector.SimpleGraph {
     ///     tasks are creating the management table of vertices, recalculating the entrys, add vertices to list, check for
     ///     reaching target. Condition for correct work is a graph with positiv edge weights.
     /// </summary>
-    public class AStarSteppable {
+    internal class AStarSteppable {
         public IGoapNode Current { get { return _current; } }
         private readonly IGoapNode _root;
         private readonly Map _graph;

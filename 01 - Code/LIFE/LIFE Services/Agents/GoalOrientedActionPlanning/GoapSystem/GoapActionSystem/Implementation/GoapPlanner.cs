@@ -28,7 +28,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="availableActions"></param>
         /// <param name="effectToAction"></param>
         /// <param name="startState"></param>
-        public GoapPlanner
+        internal GoapPlanner
             (int maximuxSearchDepth,
                 List<AbstractGoapAction> availableActions,
                 Dictionary<WorldstateSymbol, List<AbstractGoapAction>> effectToAction,
@@ -55,7 +55,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     main method of the planner. is called from goap manager.
+        ///     Main method of the planner. is called from goap manager.
         ///     create a list of actions the agent can follow. search direction is regressive.
         /// </summary>
         /// <param name="goal"></param>
@@ -64,11 +64,11 @@ namespace GoapActionSystem.Implementation {
             List<WorldstateSymbol> graphRoot = goal.GetTargetWorldstates();
             IGoapGraphService graphService = InitializeGraphService(graphRoot);
 
-            //here the root node is chosen
+            // Here the root node is chosen.
             IGoapNode currentNode = graphService.GetNextVertex();
 
             while (IsNotTargetNode(currentNode)) {
-                // expand node if search depth is smaller than maximum 
+                // Expand node if search depth is smaller than maximum .
                 if (IsSearchDepthSmallerAsMaximum(graphService)) {
                     List<AbstractGoapAction> satisfyingActions = GetActionsByUnsatisfiedProperties
                         (currentNode.GetUnsatisfiedGoalValues());
@@ -84,7 +84,7 @@ namespace GoapActionSystem.Implementation {
                     GoapComponent.Log.Info("goap planner: search depth maximum on branch of graph reached");
                 }
 
-                // set node on closed list and calculate values for reachable adjacent neighbours
+                // Set node on closed list and calculate values for reachable adjacent neighbours.
                 graphService.CalculateCurrentNode();
 
                 if (graphService.HasNextVertexOnOpenList()) {
@@ -110,8 +110,8 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     check if the current nodes depth in graph is smaller than maximum search depth.
-        ///     only if it is smaller the current nodes children can be inserted in graph.
+        ///     Check if the current nodes depth in graph is smaller than maximum search depth.
+        ///     Only if it is smaller the current nodes children can be inserted in graph.
         /// </summary>
         /// <param name="graphService"></param>
         /// <returns></returns>
@@ -120,7 +120,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     inspect current node if its current values are equal to goal values or
+        ///     Inspect current node if its current values are equal to goal values or
         ///     if the unsatisfied goal values can be satisfied by the start worldstate.
         /// </summary>
         /// <param name="currentNode"></param>
@@ -140,21 +140,21 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     get the actions that could satisfy the current needed states.
-        ///     this is done by inspect the effectToAction map.
+        ///     Get the actions that could satisfy the current needed states by a copy of the actions
+        ///     from config class. Search is done by inspecting the effectToAction map.
         /// </summary>
         /// <param name="unsatisfied"></param>
         /// <returns></returns>
         private List<AbstractGoapAction> GetActionsByUnsatisfiedProperties(List<WorldstateSymbol> unsatisfied) {
             HashSet<AbstractGoapAction> relevantActions = new HashSet<AbstractGoapAction>();
             foreach (WorldstateSymbol property in unsatisfied) {
-                _effectToAction[property].ForEach(x => relevantActions.Add(x));
+                _effectToAction[property].ForEach(action => relevantActions.Add(action.GetResetCopy()));
             }
             return relevantActions.ToList();
         }
 
         /// <summary>
-        ///     get list of actions which are executable by context preconditions
+        ///     Get list of actions which are executable by context preconditions
         /// </summary>
         /// <param name="actionsToFilter"></param>
         /// <returns></returns>
@@ -169,7 +169,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     node creation protocoll
+        ///     Node creation protocoll
         /// </summary>
         /// <param name="action"></param>
         /// <param name="parent"></param>
@@ -204,7 +204,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     check if the action changes the worldstate to the "opposite" of wanted value
+        ///     Check if the action changes the worldstate to the "opposite" of wanted value
         /// </summary>
         /// <param name="current"></param>
         /// <param name="action"></param>
@@ -221,8 +221,8 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     because of no increment ability for world states there may be only one precondition of one key type.
-        ///     even if the inspected action needs the same this is not allowed.
+        ///     Because of no increment ability for world states there may be only one precondition of one key type.
+        ///     Even if the inspected action needs the same this is not allowed.
         /// </summary>
         /// <param name="current"></param>
         /// <param name="goapAction"></param>
@@ -239,7 +239,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     union of specialized test methods for actions to use on node
+        ///     Union of specialized test methods for actions to use on node
         /// </summary>
         /// <param name="applicableActions"></param>
         /// <param name="parent"></param>
@@ -260,7 +260,7 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     create the new edge (includes target node) resulting from node and action.
+        ///     Create the new edge (includes target node) resulting from node and the new created action.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="actions"></param>

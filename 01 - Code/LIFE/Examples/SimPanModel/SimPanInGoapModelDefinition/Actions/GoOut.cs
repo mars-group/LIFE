@@ -2,28 +2,37 @@
 using System.Collections.Generic;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
+using HumanLayer.Agents;
+using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
     public class GoOut : AbstractGoapAction {
-        public GoOut(List<WorldstateSymbol> preconditionWorldstates, List<WorldstateSymbol> effectWorldstates) :
-            base(preconditionWorldstates, effectWorldstates) {}
+        private readonly Human _human;
+        
+        public GoOut(Human human) :
+            base(
+            new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsOnExit, true, typeof (Boolean))},
+                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsOutSide, true, typeof (Boolean))}) {
+            _human = human;
+        }
 
         public override bool ValidateContextPreconditions() {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override bool ExecuteContextEffects() {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override int GetExecutionCosts() {
-            throw new NotImplementedException();
+            return 1;
+        }
+
+        public override void Execute() {
+            _human.MotorAndNavigation.LeaveByExit();
         }
         
-        public override void Execute() {
-            throw new NotImplementedException();
-        }
     }
 
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using CellLayer;
-using CellLayer.TransportTypes;
+using GoapActionSystem.Implementation;
+using GoapCommon.Abstract;
 using LayerAPI.Interfaces;
 using TypeSafeBlackboard;
 
@@ -35,6 +36,9 @@ namespace HumanLayer.Agents {
 
         public static readonly BlackboardProperty<Point> Target =
             new BlackboardProperty<Point>("Target");
+
+        public static readonly BlackboardProperty<Point> SelfChosenTarget =
+            new BlackboardProperty<Point>("SelfChosenTarget");
 
         public static readonly BlackboardProperty<Boolean> MovementFailed =
             new BlackboardProperty<Boolean>("MovementFailed");
@@ -87,11 +91,13 @@ namespace HumanLayer.Agents {
 
 
         public readonly Guid AgentID = Guid.NewGuid();
-        private readonly Blackboard _blackboard = new Blackboard();
-        private readonly PerceptionAndMemory _sensor;
-        private readonly MotorAndNavigation _motorAndNavigation;
+        public readonly Blackboard HumanBlackboard = new Blackboard();
+        public readonly PerceptionAndMemory Sensor;
+        public readonly MotorAndNavigation MotorAndNavigation;
         private readonly CellLayerImpl _cellLayer;
 
+        private readonly bool _helperIsGoap;
+        private readonly AbstractGoapSystem _goapActionSystem;
         private List<int> _helperVariableCalmedCells = new List<int>();
         private List<int> _helperVariableMassFlightCells = new List<int>();
 
@@ -100,46 +106,59 @@ namespace HumanLayer.Agents {
         /// </summary>
         /// <param name="cellLayer"></param>
         /// <param name="behaviourType"></param>
-        public Human
-            (CellLayerImpl cellLayer, CellLayerImpl.BehaviourType behaviourType = CellLayerImpl.BehaviourType.Reactive) {
+        public Human(bool isGoap, CellLayerImpl cellLayer, CellLayerImpl.BehaviourType behaviourType = CellLayerImpl.BehaviourType.Reactive) {
             // startvalues
-            _blackboard.Set(ResistanceToPressure, 10);
-            _blackboard.Set(VitalEnergy, 20);
-            _blackboard.Set(Strength, 5);
-            _blackboard.Set(CanMove, true);
-            _blackboard.Set(IsAlive, true);
-            _blackboard.Set(BehaviourType, behaviourType);
-            _blackboard.Set(LastPosition, new Point());
-            _blackboard.Set(IsOnMassFlight, false);
-            _blackboard.Set(PauseMassFlightSphere,0);
+            HumanBlackboard.Set(ResistanceToPressure, 10);
+            HumanBlackboard.Set(VitalEnergy, 20);
+            HumanBlackboard.Set(Strength, 5);
+            HumanBlackboard.Set(CanMove, true);
+            HumanBlackboard.Set(IsAlive, true);
+            HumanBlackboard.Set(BehaviourType, behaviourType);
+            HumanBlackboard.Set(LastPosition, new Point());
+            HumanBlackboard.Set(IsOnMassFlight, false);
+            HumanBlackboard.Set(PauseMassFlightSphere, 0);
+            HumanBlackboard.Set(IsOnExit, false);
 
+            _helperIsGoap = isGoap;
             _cellLayer = cellLayer;
 
             //create the sensor
-            _sensor = new PerceptionAndMemory(cellLayer, this, _blackboard);
+            Sensor = new PerceptionAndMemory(cellLayer, this, HumanBlackboard);
 
             // create the moving and manipuliating system/ action trigger
-            _motorAndNavigation = new MotorAndNavigation(cellLayer, this, _blackboard);
+            MotorAndNavigation = new MotorAndNavigation(cellLayer, this, HumanBlackboard);
 
             // place the human on the cell field by random
-            _motorAndNavigation.GetAnSetRandomPositionInCellWorld();
-            _blackboard.Set(RandomDirectionToFollow, _motorAndNavigation.ChooseNewRandomDirection());
+            MotorAndNavigation.GetAnSetRandomPositionInCellWorld();
+            HumanBlackboard.Set(RandomDirectionToFollow, MotorAndNavigation.ChooseNewRandomDirection());
 
-            //AbstractGoapSystem goapActionSystem = GoapActionSystem.Implementation.GoapComponent.LoadGoapConfiguration
-            //  ("eine klasse", "ein namespace", blackboard);
+            const string namespaceOfModelDefinition = "SimPanInGoapModelDefinition";
+            const string nameOfConfigClass = "ReactiveConfig";
+
+            if (isGoap) {
+                _goapActionSystem =
+                    GoapComponent.LoadGoapConfigurationWithSelfreference
+                        (nameOfConfigClass, namespaceOfModelDefinition, HumanBlackboard, this);
+            }
         }
 
         #region IAgent Members
 
         public void Tick() {
-            if (_blackboard.Get(IsAlive)) {
-                _sensor.SenseCellInformations();
-                ProcessSensorInformations();
+            if (HumanBlackboard.Get(IsAlive)) {
+                Sensor.SenseCellInformations();
+                Sensor.ProcessSensorInformations();
             }
 
-            if (_blackboard.Get(IsAlive) && !_blackboard.Get(IsOutSide)) {
+            if (_helperIsGoap && !HumanBlackboard.Get(IsOutSide))
+            {
+                _goapActionSystem.GetNextAction();
+            }
+
+            if (HumanBlackboard.Get(IsAlive) && !HumanBlackboard.Get(IsOutSide)) {
                 ChooseAction();
             }
+
 
             //_motorAndNavigation.Execute();
         }
@@ -150,29 +169,35 @@ namespace HumanLayer.Agents {
         ///     This part will be replaced with the goap decisions.
         /// </summary>
         private void ChooseAction() {
-            if (_blackboard.Get(IsOnExit)) {
-                LeaveCellFieldByExit();
+            if (_helperIsGoap) {
+                AbstractGoapAction currentAction = HumanBlackboard.Get(AbstractGoapSystem.ActionForExecution);
+                currentAction.Execute();
             }
             else {
-                if (_blackboard.Get(HasCalmingSphere)) {
-                    CreateOrUpdateCalmingSphere();
-                }
-                if (_blackboard.Get(HasMassFlightSphere) && _blackboard.Get(PauseMassFlightSphere) == 0) {
-                    CreateOrUpdateMassFlightSphere();
-                }
-
-                if (_blackboard.Get(PauseMassFlightSphere) > 0) {
-                    _blackboard.Set(PauseMassFlightSphere, _blackboard.Get(PauseMassFlightSphere) - 1);
-                    DeleteMassFlightSphere();
-                }
-
-                if (_blackboard.Get(HasTarget)) {
-                    SuccessiveApproximation();
+                if (HumanBlackboard.Get(IsOnExit)) {
+                    MotorAndNavigation.LeaveByExit();
                 }
                 else {
-                    _motorAndNavigation.FollowDirectionOrSwitchDirection();
+                    if (HumanBlackboard.Get(HasCalmingSphere)) {
+                        CreateOrUpdateCalmingSphere();
+                    }
+                    if (HumanBlackboard.Get(HasMassFlightSphere) && HumanBlackboard.Get(PauseMassFlightSphere) == 0) {
+                        CreateOrUpdateMassFlightSphere();
+                    }
 
-                    //WalkRandom();
+                    if (HumanBlackboard.Get(PauseMassFlightSphere) > 0) {
+                        HumanBlackboard.Set(PauseMassFlightSphere, HumanBlackboard.Get(PauseMassFlightSphere) - 1);
+                        DeleteMassFlightSphere();
+                    }
+
+                    if (HumanBlackboard.Get(HasTarget)) {
+                        SuccessiveApproximation();
+                    }
+                    else {
+                        MotorAndNavigation.FollowDirectionOrSwitchDirection();
+
+                        //WalkRandom();
+                    }
                 }
             }
         }
@@ -181,30 +206,30 @@ namespace HumanLayer.Agents {
         ///     Set a target point.
         /// </summary>
         /// <param name="targetPosition"></param>
-        public void SetTarget(Point targetPosition) {
-            _blackboard.Set(Target, targetPosition);
+        public void SetChosenTarget(Point targetPosition) {
+            HumanBlackboard.Set(SelfChosenTarget, targetPosition);
         }
 
         /// <summary>
         ///     The entry on the blackboard is the trigger for creation of a sphere.
         /// </summary>
         public void SetCalmingSphere() {
-            _blackboard.Set(HasCalmingSphere, true);
+            HumanBlackboard.Set(HasCalmingSphere, true);
         }
 
         /// <summary>
         ///     The entry on the blackboard is the trigger for creation of a sphere.
         /// </summary>
         public void SetMassFlightSphere() {
-            _blackboard.Set(HasMassFlightSphere, true);
+            HumanBlackboard.Set(HasMassFlightSphere, true);
         }
 
         /// <summary>
         ///     Choose a random direction with a cell with no agent on. Go one step.
         /// </summary>
         private void WalkRandom() {
-            if (_blackboard.Get(CanMove)) {
-                _motorAndNavigation.WalkAbsolutRandom();
+            if (HumanBlackboard.Get(CanMove)) {
+                MotorAndNavigation.WalkAbsolutRandom();
             }
         }
 
@@ -224,8 +249,8 @@ namespace HumanLayer.Agents {
         public void CreateOrUpdateCalmingSphere(int radius = CalmingRadius) {
             List<int> previousCalmedCellIds = _helperVariableCalmedCells;
             List<int> actualAffectedCellIds = _cellLayer.GetNeighbourCellIdsInRange
-                (_blackboard.Get(CellIdOfPosition), radius);
-            actualAffectedCellIds.Add(_blackboard.Get(CellIdOfPosition));
+                (HumanBlackboard.Get(CellIdOfPosition), radius);
+            actualAffectedCellIds.Add(HumanBlackboard.Get(CellIdOfPosition));
 
             //get all elements from previous cell id list which are not in actual cell id list
             List<int> cellIdsForEffectDeletion = previousCalmedCellIds.Except(actualAffectedCellIds).ToList();
@@ -249,9 +274,9 @@ namespace HumanLayer.Agents {
         public void CreateOrUpdateMassFlightSphere(int massFlightRadius = 2) {
             List<int> previousCellIds = _helperVariableMassFlightCells;
 
-            if (!_blackboard.Get(LastPosition).IsEmpty) {
-                Point newPosition = _blackboard.Get(Position);
-                Point oldPosition = _blackboard.Get(LastPosition);
+            if (!HumanBlackboard.Get(LastPosition).IsEmpty) {
+                Point newPosition = HumanBlackboard.Get(Position);
+                Point oldPosition = HumanBlackboard.Get(LastPosition);
 
                 if (oldPosition != newPosition) {
                     List<int> actualCellIds = GetSphereCellIDsExceptInFrontOfHuman
@@ -260,8 +285,8 @@ namespace HumanLayer.Agents {
 
                     // add the old position to the cells to populate the information.
                     //actualCellIds.Add(lastCell);
-                    _cellLayer.AddMassFlightToCells(actualCellIds, _blackboard.Get(Position));
-                    _cellLayer.DeleteMassFlightFromCells(previousCellIds, _blackboard.Get(LastPosition));
+                    _cellLayer.AddMassFlightToCells(actualCellIds, HumanBlackboard.Get(Position));
+                    _cellLayer.DeleteMassFlightFromCells(previousCellIds, HumanBlackboard.Get(LastPosition));
 
                     _helperVariableMassFlightCells = actualCellIds;
                 }
@@ -277,7 +302,8 @@ namespace HumanLayer.Agents {
         /// <param name="radius"></param>
         /// <returns></returns>
         private List<int> GetSphereCellIDsExceptInFrontOfHuman(Point oldPosition, Point newPosition, int radius) {
-            List<Point> spherePoints = _cellLayer.GetNeighbourPointsInRange(_blackboard.Get(CellIdOfPosition), radius);
+            List<Point> spherePoints = _cellLayer.GetNeighbourPointsInRange
+                (HumanBlackboard.Get(CellIdOfPosition), radius);
             List<Point> filtered = new List<Point>();
             List<int> filteredIds = new List<int>();
             int newX = newPosition.X;
@@ -325,7 +351,6 @@ namespace HumanLayer.Agents {
             return filteredIds;
         }
 
-
         /// <summary>
         ///     Delete the calming sphere of the human.
         /// </summary>
@@ -339,7 +364,7 @@ namespace HumanLayer.Agents {
         /// </summary>
         public void DeleteMassFlightSphere() {
             //_cellLayer.DeleteMassFlightFromCells(_helperVariableMassFlightCells, _blackboard.Get(LastPosition));
-            _cellLayer.DeleteMassFlightFromCells(_helperVariableMassFlightCells, _blackboard.Get(Position));
+            _cellLayer.DeleteMassFlightFromCells(_helperVariableMassFlightCells, HumanBlackboard.Get(Position));
             _helperVariableMassFlightCells = new List<int>();
         }
 
@@ -348,73 +373,8 @@ namespace HumanLayer.Agents {
         ///     or no movement if no closer cell is found than the actual position.
         /// </summary>
         public void SuccessiveApproximation() {
-            if (_blackboard.Get(CanMove)) {
-                _motorAndNavigation.ApproximateToTarget(aggressiveMode: true);
-            }
-        }
-
-        /// <summary>
-        ///     Rework the informations by the environment. Refresh dependent variables.
-        ///     This step is needed after collecting sensor data from the cell.
-        /// </summary>
-        private void ProcessSensorInformations() {
-            // Inspect the new data of the cell the agent is on.
-            int cellID = _blackboard.Get(CellIdOfPosition);
-            TCell cellData = _sensor.CellIdToData[cellID];
-
-            RefreshTargetDepedingInformation(cellData);
-
-            RefreshPressureDependingValues(cellData);
-
-            if (_blackboard.Get(MovementFailed) && _blackboard.Get(HasMassFlightSphere)) {
-                _blackboard.Set(PauseMassFlightSphere,2);
-            }
-
-            if (cellData.IsExit) {
-                _blackboard.Set(IsOnExit, true);
-            }
-        }
-
-        /// <summary>
-        ///     If a human is on a exit cell he has to leave the field.
-        /// </summary>
-        public void LeaveCellFieldByExit() {
-            _motorAndNavigation.LeaveByExit();
-        }
-
-        /// <summary>
-        ///     Calculate cell pressure depending variables.
-        /// </summary>
-        /// <param name="cellData"></param>
-        private void RefreshPressureDependingValues(TCell cellData) {
-            // Check if the pressure is higher than the human can handle with
-            if (cellData.PressureOnCell > _blackboard.Get(ResistanceToPressure)) {
-                int vitalEnergy = _blackboard.Get(VitalEnergy);
-                if (vitalEnergy < 5) {
-                    _blackboard.Set(VitalEnergy, 0);
-                    SetAsKilled();
-                }
-                else {
-                    _blackboard.Set(VitalEnergy, vitalEnergy - 5);
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Refresh the data depending on target informations on the cell. A reactive human cannot access the technical target
-        ///     information. He will only follow a mass flight information. an deliberativ or reflective human will only follow his
-        ///     own information by memory of getting into the room or technical source.
-        /// </summary>
-        /// <param name="cellData"></param>
-        private void RefreshTargetDepedingInformation(TCell cellData) {
-            if (!cellData.DominantMassFlightLeaderCoordinates.IsEmpty && !_blackboard.Get(HasMassFlightSphere)) {
-                _blackboard.Set(Target, cellData.DominantMassFlightLeaderCoordinates);
-                _blackboard.Set(HasTarget, true);
-                _blackboard.Set(IsOnMassFlight, true);
-            }
-            else {
-                _blackboard.Set(Target, new Point());
-                _blackboard.Set(HasTarget, false);
+            if (HumanBlackboard.Get(CanMove)) {
+                MotorAndNavigation.ApproximateToTarget(aggressiveMode: true);
             }
         }
 
@@ -424,24 +384,24 @@ namespace HumanLayer.Agents {
         /// </summary>
         /// <param name="createObstacle"></param>
         public void SetAsKilled(bool createObstacle = true) {
-            _blackboard.Set(IsAlive, false);
-            _blackboard.Set(CanMove, false);
+            HumanBlackboard.Set(IsAlive, false);
+            HumanBlackboard.Set(CanMove, false);
 
-            if (_blackboard.Get(HasCalmingSphere)) {
-                _blackboard.Set(HasCalmingSphere, false);
+            if (HumanBlackboard.Get(HasCalmingSphere)) {
+                HumanBlackboard.Set(HasCalmingSphere, false);
                 DeleteCalmingSphere();
             }
 
-            if (_blackboard.Get(HasMassFlightSphere)) {
-                _blackboard.Set(HasMassFlightSphere, false);
+            if (HumanBlackboard.Get(HasMassFlightSphere)) {
+                HumanBlackboard.Set(HasMassFlightSphere, false);
                 DeleteMassFlightSphere();
             }
 
             if (createObstacle) {
-                _cellLayer.SetCellStatus(_blackboard.Get(CellIdOfPosition), CellLayerImpl.CellType.Sacrifice);
+                _cellLayer.SetCellStatus(HumanBlackboard.Get(CellIdOfPosition), CellLayerImpl.CellType.Sacrifice);
                 _cellLayer.DeleteAgentDraw(AgentID);
-                _cellLayer.DeleteAgentIdFromCell(AgentID, _blackboard.Get(Position));
-                _blackboard.Set(Position, new Point());
+                _cellLayer.DeleteAgentIdFromCell(AgentID, HumanBlackboard.Get(Position));
+                HumanBlackboard.Set(Position, new Point());
             }
             else {
                 _cellLayer.UpdateAgentDrawStatus(AgentID, CellLayerImpl.BehaviourType.Dead);

@@ -74,14 +74,6 @@
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
-      <Name>GenericAgentArchitectureCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
-      <Project>{E8E32F5E-7E31-41F3-9D49-9CB6DFBAFC85}</Project>
-      <Name>GenericAgentArchitecture</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CellLayer\CellLayer.csproj">
       <Project>{a5715b79-3cf8-445e-847d-23def12dbfa3}</Project>
       <Name>CellLayer</Name>

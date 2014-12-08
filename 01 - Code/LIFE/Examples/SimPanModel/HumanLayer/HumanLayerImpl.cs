@@ -19,11 +19,12 @@ namespace HumanLayer {
 
     [Extension(typeof (ISteppedLayer))]
     public class HumanLayerImpl : ISteppedLayer {
-        private const int CountOfHumans = 14;
-        private const int CountOfRandomWalker = 6;
+        private const int CountOfHumans = 0;
+        private const int CountOfRandomWalker = 0;
         private const int CountOfCalmingHumans = 0;
         private const int CountOfMassFlightLeader = 0;
-        private const int CountOfMassFlightAndCalmingLeader = 2;
+        private const int CountOfMassFlightAndCalmingLeader = 0;
+        private const int GoapAgents = 1;
 
 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -41,41 +42,49 @@ namespace HumanLayer {
         public bool InitLayer<I>
             (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             for (int i = 1; CountOfHumans >= i; i++) {
-                Human humanAgent = new Human(_cellLayer);
-                humanAgent.SetTarget(new Point(10, 10));
+                Human humanAgent = new Human(false, _cellLayer);
+                humanAgent.SetChosenTarget(new Point(10, 10));
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
 
             for (int i = 1; CountOfRandomWalker >= i; i++) {
-                Human humanAgent = new Human(_cellLayer);
+                Human humanAgent = new Human(false, _cellLayer);
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
 
             for (int i = 1; CountOfCalmingHumans >= i; i++) {
-                Human humanAgent = new Human(_cellLayer);
+                Human humanAgent = new Human(false, _cellLayer);
                 humanAgent.SetCalmingSphere();
-                humanAgent.SetTarget(new Point(11, 20));
+                humanAgent.SetChosenTarget(new Point(11, 20));
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
 
             for (int i = 1; CountOfMassFlightLeader >= i; i++) {
-                Human humanAgent = new Human(_cellLayer);
+                Human humanAgent = new Human(false, _cellLayer);
                 humanAgent.SetMassFlightSphere();
-                humanAgent.SetTarget(new Point(11, 20));
+                humanAgent.SetChosenTarget(new Point(11, 20));
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
 
             for (int i = 1; CountOfMassFlightAndCalmingLeader >= i; i++) {
-                Human humanAgent = new Human(_cellLayer);
+                Human humanAgent = new Human(false, _cellLayer);
                 humanAgent.SetMassFlightSphere();
                 humanAgent.SetCalmingSphere();
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
+            for (int i = 1; GoapAgents >= i; i++)
+            {
+                Human humanAgent = new Human(true, _cellLayer);
+                humanAgent.SetChosenTarget(new Point(11, 20));
+                _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                registerAgentHandle.Invoke(this, humanAgent);
+            }
+
             return true;
         }
 

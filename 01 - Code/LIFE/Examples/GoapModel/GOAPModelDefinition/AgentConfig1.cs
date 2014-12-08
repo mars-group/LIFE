@@ -40,8 +40,20 @@ namespace GOAPModelDefinition {
             return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
 
-        public int GetMaxGraphSearchDepth(){
+        public int GetMaxGraphSearchDepth() {
             return 20;
+        }
+
+        public bool ForceSymbolsUpdateBeforePlanning() {
+            return false;
+        }
+
+        public List<WorldstateSymbol> GetUpdatedSymbols() {
+            throw new NotImplementedException();
+        }
+
+        public bool UseClonedActionsForPlanCreation() {
+            return false;
         }
 
         #endregion

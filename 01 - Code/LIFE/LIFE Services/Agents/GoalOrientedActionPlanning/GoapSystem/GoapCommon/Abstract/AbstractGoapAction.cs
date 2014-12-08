@@ -40,9 +40,9 @@ namespace GoapCommon.Abstract {
             if (ReferenceEquals(null, other)) {
                 return false;
             }
-            if (ReferenceEquals(this, other)) {
+            /*if (ReferenceEquals(this, other)) {
                 return true;
-            }
+            }*/
             return (GetType() == other.GetType()) && (_preConditions.All(i => other._preConditions.Contains(i)) &&
                                                       (other._preConditions.All(i => _preConditions.Contains(i))));
         }
@@ -109,11 +109,6 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
-        ///     called from agent, manipulate world of agent
-        /// </summary>
-        public abstract void Execute();
-
-        /// <summary>
         ///     an action may last a few ticks , this is checked before executing the sucessor action
         ///     override this method if actions run more than one tick depending on other facts
         /// </summary>
@@ -121,7 +116,21 @@ namespace GoapCommon.Abstract {
             return true;
         }
 
+        /// <summary>
+        ///     Get a copy with all values on start. Because in the abstract goap action there are 
+        ///     no manipulated values return value is the class itself.
+        /// </summary>
+        /// <returns></returns>
+        public virtual AbstractGoapAction GetResetCopy() {
+            return this;
+        }
+
         #endregion
+
+        /// <summary>
+        ///     called from agent, manipulate world of agent
+        /// </summary>
+        public abstract void Execute();
 
         /// <summary>
         ///     get all symbols used in the action
