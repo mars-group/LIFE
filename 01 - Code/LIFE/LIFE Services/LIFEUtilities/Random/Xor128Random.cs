@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MCastAddressGenerator
+﻿namespace MCastAddressGenerator
 {
     public class Xor128Random {
         private static int x;
@@ -33,6 +27,10 @@ namespace MCastAddressGenerator
             t = x ^ (x << 11);
             x = y; y = z; z = w;
             return w = w ^ (w >> 19) ^ (t ^ (t >> 8));
+        }
+
+        public int Next(int range) {
+            return range & Next();
         }
     }
 }
