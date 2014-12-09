@@ -39,7 +39,7 @@ namespace MulticastAdapter.Implementation
 
         }
 
-		/// <summary>
+        /// <summary>
 		/// Gets the sending interfaces.
 		/// Either only creates a updClient for the configured interface
 		/// or selects all multicast enabled interfaces and creates udpClients for them
