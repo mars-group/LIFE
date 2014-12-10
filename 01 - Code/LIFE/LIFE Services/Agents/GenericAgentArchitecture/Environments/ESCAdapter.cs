@@ -9,8 +9,8 @@ using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
 using GeoAPI.Geometries;
+using SpatialCommon.Collision;
 using SpatialCommon.Datatypes;
-using SpatialCommon.Enums;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 

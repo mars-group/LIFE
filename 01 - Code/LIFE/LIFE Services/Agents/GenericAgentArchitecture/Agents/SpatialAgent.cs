@@ -3,8 +3,8 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
 using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Collision;
 using SpatialCommon.Datatypes;
-using SpatialCommon.Enums;
 
 namespace DalskiAgent.Agents {
 

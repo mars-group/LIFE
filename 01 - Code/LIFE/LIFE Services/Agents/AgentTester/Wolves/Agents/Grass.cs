@@ -4,8 +4,8 @@ using AgentTester.Wolves.Interactions;
 using DalskiAgent.Agents;
 using DalskiAgent.Execution;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Collision;
 using SpatialCommon.Datatypes;
-using SpatialCommon.Enums;
 
 namespace AgentTester.Wolves.Agents {
 

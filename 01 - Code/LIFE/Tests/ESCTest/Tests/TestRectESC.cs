@@ -8,7 +8,7 @@ using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
 using ESCTest.Entities;
 using NUnit.Framework;
-using SpatialCommon.Enums;
+using SpatialCommon.Collision;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 using Direction = SpatialCommon.Datatypes.Direction;

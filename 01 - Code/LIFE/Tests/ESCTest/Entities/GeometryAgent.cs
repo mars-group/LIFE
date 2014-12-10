@@ -1,7 +1,7 @@
 ﻿using System;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
-using SpatialCommon.Enums;
+using SpatialCommon.Collision;
 using SpatialCommon.Interfaces;
 
 namespace ESCTest.Entities {

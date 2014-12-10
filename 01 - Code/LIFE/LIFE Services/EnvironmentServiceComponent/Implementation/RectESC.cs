@@ -14,15 +14,9 @@ namespace EnvironmentServiceComponent.Implementation {
         private readonly Dictionary<RectShape, ISpatialEntity> _entities;
         private readonly QuadTree<RectShape> _quadTree;
 
-        private readonly bool[,] _collisionMatrix = new bool[,] {
-            {false, false, false, false},
-            {false, true, false, false},
-            {false, false, false, true},
-            {false, false, true, true}
-        };
 
-        public RectESC()
-            : base() {
+        public RectESC(bool[,] collisionMatrix = null)
+            : base(collisionMatrix) {
             _entities = new Dictionary<RectShape, ISpatialEntity>();
             _quadTree = new QuadTree<RectShape>(new Size(25, 25), 1, true);
         }
@@ -84,7 +78,7 @@ namespace EnvironmentServiceComponent.Implementation {
                 (new TVector(oldPosition.X + movementVector.X, oldPosition.Y + movementVector.Y),
                     new TVector(oldBounds.Width, oldBounds.Height));
 
-            var newShape = new ExploreSpatialObject(newBounds, entity.GetCollisionType());
+            ExploreSpatialObject newShape = new ExploreSpatialObject(newBounds, entity.GetCollisionType());
             List<ISpatialEntity> collisions =
                 Explore(newShape).ToList();
             collisions.Remove(entity);
@@ -112,11 +106,10 @@ namespace EnvironmentServiceComponent.Implementation {
                 throw new NotImplementedException();
             }
             List<ISpatialEntity> result = new List<ISpatialEntity>();
-            foreach (RectShape rectShape in _quadTree.Query(exploreShape.Bounds))
-            {
+            foreach (RectShape rectShape in _quadTree.Query(exploreShape.Bounds)) {
                 int givenCollisionType = spatial.GetCollisionType().GetHashCode();
                 int foundCollisionType = _entities[rectShape].GetCollisionType().GetHashCode();
-                if (_collisionMatrix[givenCollisionType, foundCollisionType]) {
+                if (Collides(givenCollisionType, foundCollisionType)) {
                     result.Add(_entities[rectShape]);
                 }
             }

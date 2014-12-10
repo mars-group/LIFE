@@ -40,9 +40,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collision\CollisionMatrix.cs" />
     <Compile Include="Datatypes\Direction.cs" />
     <Compile Include="Datatypes\Vector.cs" />
-    <Compile Include="Enums\CollisionType.cs" />
+    <Compile Include="Collision\CollisionType.cs" />
     <Compile Include="Interfaces\IShape.cs" />
     <Compile Include="Interfaces\ISpatialEntity.cs" />
     <Compile Include="Interfaces\ISpatialObject.cs" />

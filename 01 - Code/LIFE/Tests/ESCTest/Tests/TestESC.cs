@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using EnvironmentServiceComponent.Interface;
 using NUnit.Framework;
-using SpatialCommon.Enums;
+using SpatialCommon.Collision;
 using SpatialCommon.Interfaces;
 using SpatialCommon.TransportTypes;
 
