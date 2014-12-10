@@ -1,4 +1,13 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System;
 using System.Collections.Generic;
 using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
@@ -40,24 +49,22 @@ namespace LCConnector {
         event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         /// <summary>
-        /// Starts visualization of the simulation
+        ///     Starts visualization of the simulation
         /// </summary>
         void StartVisualization(int? nrOfTicksToVisualize);
 
         /// <summary>
-        /// Stops visualization of the simulation
+        ///     Stops visualization of the simulation
         /// </summary>
         void StopVisualization();
 
         /// <summary>
-        /// Changes the view of the visualization
+        ///     Changes the view of the visualization
         /// </summary>
         /// <param name="topLeft">The top left coordinate of the new view</param>
         /// <param name="topRight">The top right coordinate of the new view</param>
         /// <param name="bottomLeft">The bottom left coordinate of the new view</param>
         /// <param name="bottomRight">The bottom right coordinate of the new view</param>
         void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight);
-
     }
-
 }

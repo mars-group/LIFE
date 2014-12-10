@@ -1,4 +1,13 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System;
 
 namespace LayerAPI.Interfaces {
     public delegate void RegisterAgent(ILayer layer, ITickClient tickClient);
@@ -28,7 +37,7 @@ namespace LayerAPI.Interfaces {
         /// </summary>
         /// <returns>True if init finished successfully, false otherwise</returns>
         Boolean InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
-        
+
         /// <summary>
         ///     The current Tick this layer is in
         /// </summary>
@@ -39,9 +48,9 @@ namespace LayerAPI.Interfaces {
         long GetCurrentTick();
 
         /// <summary>
-        /// Sets the current Tick of the layer.
-        /// This will be called by the RuntimeEnvironment to 
-        /// deliver the currenTick into the layer.
+        ///     Sets the current Tick of the layer.
+        ///     This will be called by the RuntimeEnvironment to
+        ///     deliver the currenTick into the layer.
         /// </summary>
         /// <param name="currentTick">A positive number</param>
         void SetCurrentTick(long currentTick);

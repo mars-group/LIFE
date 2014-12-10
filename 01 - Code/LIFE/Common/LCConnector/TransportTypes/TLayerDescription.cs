@@ -1,44 +1,41 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
+//  *******************************************************/
+
+using System;
 
 namespace LCConnector.TransportTypes {
     [Serializable]
     public class TLayerDescription : IEquatable<TLayerDescription> {
-        private string _name;
-        private int _majorVersion;
-        private int _minorVersion;
-        private string _fileName;
-
         /// <summary>
         ///     The layer's name.
         /// </summary>
-        public string Name {
-            get { return _name; }
-            set { }
-        }
+        public string Name { get { return _name; } set { } }
 
         /// <summary>
         ///     In a version xx.yyyyyy, this is the xx.
         /// </summary>
-        public int MajorVersion {
-            get { return _majorVersion; }
-            set { }
-        }
+        public int MajorVersion { get { return _majorVersion; } set { } }
 
         /// <summary>
         ///     /// In a version xx.yyyyyy, this is the yyyyyy.
         /// </summary>
-        public int MinorVersion {
-            get { return _minorVersion; }
-            set { }
-        }
+        public int MinorVersion { get { return _minorVersion; } set { } }
 
         /// <summary>
         ///     The filename of the original dll holding the binary code.
         /// </summary>
-        public string FileName {
-            get { return _fileName; }
-            set { }
-        }
+        public string FileName { get { return _fileName; } set { } }
+
+        private readonly string _name;
+        private readonly int _majorVersion;
+        private readonly int _minorVersion;
+        private readonly string _fileName;
 
         public TLayerDescription(string name, int majorVersion, int minorVersion, string fileName) {
             _name = name;

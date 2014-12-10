@@ -1,4 +1,14 @@
-﻿using LayerFactory.Interface;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
+//  *******************************************************/
+
+using LayerAPI.Interfaces;
+using LayerFactory.Interface;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using PartitionManager.Interfaces;
@@ -15,8 +25,10 @@ namespace PartitionManager.Implementation {
             _rteManager = rteManager;
         }
 
+        #region IPartitionManager Members
+
         public bool AddLayer(TLayerInstanceId instanceId) {
-            var layer = _layerFactory.GetLayer(instanceId.LayerDescription.Name);
+            ILayer layer = _layerFactory.GetLayer(instanceId.LayerDescription.Name);
             _rteManager.RegisterLayer(instanceId, layer);
             return true;
         }
@@ -24,5 +36,7 @@ namespace PartitionManager.Implementation {
         public void LoadModelContent(ModelContent content) {
             _layerFactory.LoadModelContent(content);
         }
+
+        #endregion
     }
 }

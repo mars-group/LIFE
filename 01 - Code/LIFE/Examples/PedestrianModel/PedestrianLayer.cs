@@ -65,9 +65,7 @@ namespace PedestrianModel {
             Console.WriteLine("Tick: " + _tick);
         }
 
-        public void PostTick() {
-            _tick++;
-        }
+        public void PostTick() {}
 
         /// <summary>
         ///     Returns the current tick.
@@ -78,7 +76,7 @@ namespace PedestrianModel {
         }
 
         public void SetCurrentTick(long currentTick) {
-            throw new NotImplementedException();
+            _tick = currentTick;
         }
 
         #endregion

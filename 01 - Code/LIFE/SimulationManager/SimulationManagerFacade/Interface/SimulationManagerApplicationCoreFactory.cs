@@ -1,4 +1,14 @@
-﻿using AppSettingsManager;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+
+using AppSettingsManager;
 using Autofac;
 using ConfigurationAdapter.Interface;
 using ModelContainer.Implementation;
@@ -45,14 +55,14 @@ namespace SimulationManagerFacade.Interface {
                     .InstancePerDependency();
 
                 // Make the configurations available for all components
-                var globalConfig = Configuration.Load<GlobalConfig>();
+                GlobalConfig globalConfig = Configuration.Load<GlobalConfig>();
                 builder.RegisterInstance(globalConfig);
 
-                var localConfig = Configuration.Load<SimulationManagerSettings>();
+                SimulationManagerSettings localConfig = Configuration.Load<SimulationManagerSettings>();
                 builder.RegisterInstance(localConfig);
                 builder.RegisterInstance(localConfig.NodeRegistryConfig);
                 builder.RegisterInstance(localConfig.MulticastSenderConfig);
-                
+
                 container = builder.Build();
             }
 

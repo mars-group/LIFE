@@ -1,27 +1,28 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
+//  *******************************************************/
+
+using System;
 
 namespace CommonTypes.TransportTypes {
     /// <summary>
-    /// 
     /// </summary>
     [Serializable]
     public class TSimModel : IEquatable<TSimModel> {
-        private string _path;
-        private string _name;
+        public string Path { get { return _path; } set { } }
 
-        public string Path {
-            get { return _path; }
-            set { }
-        }
-
-        public string Name {
-            get { return _name; }
-            set { }
-        }
+        public string Name { get { return _name; } set { } }
+        private readonly string _path;
+        private readonly string _name;
 
         public TSimModel(string path) {
             _path = path;
-            var tmp = path.Split(System.IO.Path.DirectorySeparatorChar);
+            string[] tmp = path.Split(System.IO.Path.DirectorySeparatorChar);
             _name = tmp[tmp.Length - 1];
         }
 
@@ -36,7 +37,7 @@ namespace CommonTypes.TransportTypes {
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((TSimModel) obj);
         }
 

@@ -1,17 +1,24 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
+//  *******************************************************/
 
-namespace LCConnector.TransportTypes
-{
+using System;
+
+namespace LCConnector.TransportTypes {
     [Serializable]
     public class TLayerInstanceId : IEquatable<TLayerInstanceId> {
-        
         /// <summary>
-        /// The layer's identity.
+        ///     The layer's identity.
         /// </summary>
         public TLayerDescription LayerDescription { get; protected set; }
 
         /// <summary>
-        /// The instance's unique number.
+        ///     The instance's unique number.
         /// </summary>
         public int InstanceNr { get; protected set; }
 
@@ -21,7 +28,7 @@ namespace LCConnector.TransportTypes
         }
 
         /// <summary>
-        /// ONLY for serializeation
+        ///     ONLY for serializeation
         /// </summary>
         public TLayerInstanceId() {}
 
@@ -36,7 +43,7 @@ namespace LCConnector.TransportTypes
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((TLayerInstanceId) obj);
         }
 

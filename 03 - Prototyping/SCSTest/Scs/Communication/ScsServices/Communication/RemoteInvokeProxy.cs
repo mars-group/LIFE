@@ -8,19 +8,16 @@ using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.ScsServices.Communication.Messages;
 using Hik.Communication.ScsServices.Service;
 
-namespace Hik.Communication.ScsServices.Communication
-{
+namespace Hik.Communication.ScsServices.Communication {
     /// <summary>
-    /// This class is used to generate a dynamic proxy to invoke remote methods.
-    /// It translates method invocations to messaging.
+    ///     This class is used to generate a dynamic proxy to invoke remote methods.
+    ///     It translates method invocations to messaging.
     /// </summary>
     /// <typeparam name="TProxy">Type of the proxy class/interface</typeparam>
     /// <typeparam name="TMessenger">Type of the messenger object that is used to send/receive messages</typeparam>
-    internal class RemoteInvokeProxy<TProxy, TMessenger> : RealProxy where TMessenger : IMessenger
-    {
-
+    internal class RemoteInvokeProxy<TProxy, TMessenger> : RealProxy where TMessenger : IMessenger {
         /// <summary>
-        /// Messenger object that is used to send/receive messages.
+        ///     Messenger object that is used to send/receive messages.
         /// </summary>
         private readonly RequestReplyMessenger<TMessenger> _clientMessenger;
 
@@ -29,20 +26,12 @@ namespace Hik.Communication.ScsServices.Communication
         private readonly List<MethodInfo> _cacheableMethods;
         private readonly Type _typeOfTProxy;
 
-        private readonly IDictionary<string,object> _cache;
+        private readonly IDictionary<string, object> _cache;
 
 
-        /// <summary>
-        /// Creates a new RemoteInvokeProxy object.
-        /// </summary>
-        /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
-        public RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, Guid serviceID)
-            : base(typeof(TProxy))
-        {
-
+        protected RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger)
+            : base(typeof (TProxy)) {
             _clientMessenger = clientMessenger;
-            _serviceId = serviceID;
-
             // subscribe for new PropertyChangedMessages. Will work since
             // SendAndWaitForReply() does not raise MessageReceived Event
             _clientMessenger.MessageReceived += ClientMessengerOnMessageReceived;
@@ -55,10 +44,9 @@ namespace Hik.Communication.ScsServices.Communication
             var methodsOfTProxy = _typeOfTProxy.GetMethods();
             _cacheableMethods = new List<MethodInfo>();
 
-            foreach (var method in methodsOfTProxy)
-            {
+            foreach (var method in methodsOfTProxy) {
                 var cacheable = Attribute.GetCustomAttribute(method,
-                    typeof(CacheableAttribute), false) as CacheableAttribute;
+                    typeof (CacheableAttribute), false) as CacheableAttribute;
                 if (cacheable == null)
                     continue;
                 // store methodInfos
@@ -67,73 +55,63 @@ namespace Hik.Communication.ScsServices.Communication
 
             //retreive all properties of TProxy
             var properties = _typeOfTProxy.GetProperties();
-            foreach (var propertyInfo in properties)
-            {
+            foreach (var propertyInfo in properties) {
                 _cacheableMethods.Add(propertyInfo.GetGetMethod());
             }
         }
 
-        private void ClientMessengerOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
-        {
+        /// <summary>
+        ///     Creates a new RemoteInvokeProxy object.
+        /// </summary>
+        /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
+        /// <param name="serviceID"></param>
+        public RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, Guid serviceID)
+            : this(clientMessenger) {
+            _serviceId = serviceID;
+        }
+
+        private void ClientMessengerOnMessageReceived(object sender, MessageEventArgs messageEventArgs) {
             var msg = messageEventArgs.Message as PropertyChangedMessage;
-            if (msg != null)
-            {
-                _cache[msg.PropertyGetMethodName] = msg.NewValue;
-            }
+            if (msg != null) _cache[msg.PropertyGetMethodName] = msg.NewValue;
         }
 
         /// <summary>
-        /// Overrides message calls and translates them to messages to remote application.
+        ///     Overrides message calls and translates them to messages to remote application.
         /// </summary>
         /// <param name="msg">Method invoke message (from RealProxy base class)</param>
         /// <returns>Method invoke return message (to RealProxy base class)</returns>
-        public override IMessage Invoke(IMessage msg)
-        {
+        public override IMessage Invoke(IMessage msg) {
             var message = msg as IMethodCallMessage;
-            if (message == null)
-            {
-                return null;
-            }
+            if (message == null) return null;
 
             // TODO Extend to support additional parameter for target agent. Was soll das ???
 
             // Answer request from cache if available
             if (_cache.ContainsKey(message.MethodName))
-            {
                 return new ReturnMessage(_cache[message.MethodName], null, 0, message.LogicalCallContext, message);
-            }
 
-            var requestMessage = new ScsRemoteInvokeMessage
-            {
+            var requestMessage = new ScsRemoteInvokeMessage {
                 ServiceClassName = _typeOfTProxy.Name,
                 MethodName = message.MethodName,
                 Parameters = message.InArgs,
                 ServiceID = _serviceId
             };
 
-            var responseMessage = _clientMessenger.SendMessageAndWaitForResponse(requestMessage) as ScsRemoteInvokeReturnMessage;
-            if (responseMessage == null)
-            {
-                return null;
-            }
+            var responseMessage =
+                _clientMessenger.SendMessageAndWaitForResponse(requestMessage) as ScsRemoteInvokeReturnMessage;
+            if (responseMessage == null) return null;
 
             // Store result in cache if no exception was thrown and the method has been marked as cacheable
-            if (responseMessage.RemoteException == null && _cacheableMethods.Exists(m => m.Name.Equals(message.MethodName)))
-            {
+            if (responseMessage.RemoteException == null &&
+                _cacheableMethods.Exists(m => m.Name.Equals(message.MethodName))) {
                 if (!_cache.ContainsKey(message.MethodName))
-                {
                     _cache.Add(message.MethodName, responseMessage.ReturnValue);
-                }
-                else
-                {
-                    _cache[message.MethodName] = responseMessage.ReturnValue;
-                }
-
+                else _cache[message.MethodName] = responseMessage.ReturnValue;
             }
 
             return responseMessage.RemoteException != null
-                       ? new ReturnMessage(responseMessage.RemoteException, message)
-                       : new ReturnMessage(responseMessage.ReturnValue, null, 0, message.LogicalCallContext, message);
+                ? new ReturnMessage(responseMessage.RemoteException, message)
+                : new ReturnMessage(responseMessage.ReturnValue, null, 0, message.LogicalCallContext, message);
         }
     }
 }

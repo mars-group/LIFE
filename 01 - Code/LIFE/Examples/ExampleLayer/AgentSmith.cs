@@ -1,16 +1,26 @@
-﻿using System;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using LayerAPI.Interfaces;
 
 namespace ExampleLayer {
-    using System.Linq;
-
     internal class AgentSmith : IAgent, IEquatable<AgentSmith> {
-        private readonly _2DEnvironment _2DEnvironment;
-        private readonly UnregisterAgent _unregisterAgentHandle;
-        private readonly ExampleLayer _thislayer;
         public Position2D MyPosition { get; private set; }
 
         public Guid AgentID { get; private set; }
+        public bool Dead { get; set; }
+        private readonly _2DEnvironment _2DEnvironment;
+        private readonly UnregisterAgent _unregisterAgentHandle;
+        private readonly ExampleLayer _thislayer;
 
         public AgentSmith(_2DEnvironment _2DEnvironment, UnregisterAgent unregisterAgentHandle, ExampleLayer thislayer) {
             this._2DEnvironment = _2DEnvironment;
@@ -21,10 +31,12 @@ namespace ExampleLayer {
             MyPosition = _2DEnvironment.SetAgentPosition(this);
         }
 
+        #region IAgent Members
+
         public void Tick() {
             if (!Dead) {
-                var enemies = _2DEnvironment.ExploreRadius(this);
-                var enemy = enemies.FirstOrDefault();
+                IEnumerable<AgentSmith> enemies = _2DEnvironment.ExploreRadius(this);
+                AgentSmith enemy = enemies.FirstOrDefault();
                 if (enemy != null && !enemy.Dead) {
                     enemy.Kill();
                     Console.WriteLine("Killed someone!");
@@ -40,6 +52,18 @@ namespace ExampleLayer {
             //Console.WriteLine("Tell me, Mr. Anderson, what good is a phone call when you are unable to speak?");
         }
 
+        #endregion
+
+        #region IEquatable<AgentSmith> Members
+
+        public bool Equals(AgentSmith other) {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return AgentID.Equals(other.AgentID);
+        }
+
+        #endregion
+
         public void Kill() {
             if (!Dead) {
                 Dead = true;
@@ -47,23 +71,15 @@ namespace ExampleLayer {
             }
         }
 
-        public bool Dead { get; set; }
-
-        public bool Equals(AgentSmith other) {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return this.AgentID.Equals(other.AgentID);
-        }
-
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((AgentSmith)obj);
+            if (obj.GetType() != GetType()) return false;
+            return Equals((AgentSmith) obj);
         }
 
         public override int GetHashCode() {
-            return this.AgentID.GetHashCode();
+            return AgentID.GetHashCode();
         }
 
         public static bool operator ==(AgentSmith left, AgentSmith right) {

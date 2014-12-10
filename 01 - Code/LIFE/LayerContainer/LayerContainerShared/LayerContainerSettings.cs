@@ -1,18 +1,24 @@
-﻿using System;
-using System.Net;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using AppSettingsManager;
+using CommonTypes.Types;
 using LayerRegistry.Interfaces.Config;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
-namespace LayerContainerShared
-{
-    using CommonTypes.Types;
-
+namespace LayerContainerShared {
     [Serializable]
-    public class LayerContainerSettings
-    {
+    public class LayerContainerSettings {
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
         public LayerRegistryConfig LayerRegistryConfig { get; set; }
 
@@ -20,18 +26,11 @@ namespace LayerContainerShared
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
         public LayerContainerSettings() {
-
-            var ipAddress = "127.0.0.1";
-            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                {
-                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
-                    {
-                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                        {
-                             ipAddress = ip.Address.ToString();
-                        }
+            string ipAddress = "127.0.0.1";
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
+                if (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
+                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
+                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork) ipAddress = ip.Address.ToString();
                     }
                 }
             }
@@ -41,6 +40,5 @@ namespace LayerContainerShared
             GlobalConfig = new GlobalConfig();
             MulticastSenderConfig = new MulticastSenderConfig();
         }
-
     }
 }

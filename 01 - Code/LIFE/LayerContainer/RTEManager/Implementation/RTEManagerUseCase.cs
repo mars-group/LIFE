@@ -1,4 +1,13 @@
-﻿using System.Collections.Concurrent;
+﻿// /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
+//  *******************************************************/
+
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -48,34 +57,24 @@ namespace RTEManager.Implementation {
         #region Public Methods
 
         public void RegisterLayer(TLayerInstanceId layerInstanceId, ILayer layer) {
-            if (!_tickClientsPerLayer.ContainsKey(layer))
-            {
+            if (!_tickClientsPerLayer.ContainsKey(layer)) {
                 _tickClientsPerLayer.Add(layer, new ConcurrentDictionary<ITickClient, byte>());
                 _tickClientsMarkedForDeletionPerLayer.Add(layer, new ConcurrentBag<ITickClient>());
                 _tickClientsMarkedForRegistrationPerLayer.Add(layer, new ConcurrentBag<ITickClient>());
             }
-            if (!_layers.ContainsKey(layerInstanceId))
-            {
-                _layers.Add(layerInstanceId, layer);
-            }
+            if (!_layers.ContainsKey(layerInstanceId)) _layers.Add(layerInstanceId, layer);
 
             // check layer for visualizability and if true register it with the adapter
-            var visualizableLayer = layer as IVisualizable;
-            if (visualizableLayer != null) {
-                _visualizationAdapter.RegisterVisualizable(visualizableLayer);
-            }
+            IVisualizable visualizableLayer = layer as IVisualizable;
+            if (visualizableLayer != null) _visualizationAdapter.RegisterVisualizable(visualizableLayer);
 
             // add layer to tickClientsPerLayer if it is an active layer
-            var tickedLayer = layer as ITickClient;
-            if (tickedLayer != null) {
-                _tickClientsPerLayer[layer].TryAdd(tickedLayer, new byte());
-            }
+            ITickClient tickedLayer = layer as ITickClient;
+            if (tickedLayer != null) _tickClientsPerLayer[layer].TryAdd(tickedLayer, new byte());
 
             // add layer to Pre- and PostTick execution chain if it is an ISteppedActiveLayer
-            var activeLayer = layer as ISteppedActiveLayer;
-            if (activeLayer != null) {
-                _preAndPostTickLayer.Add(activeLayer);
-            }
+            ISteppedActiveLayer activeLayer = layer as ISteppedActiveLayer;
+            if (activeLayer != null) _preAndPostTickLayer.Add(activeLayer);
         }
 
         public void UnregisterLayer(TLayerInstanceId layerInstanceId) {
@@ -85,18 +84,12 @@ namespace RTEManager.Implementation {
 
         public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
             if (_tickClientsMarkedForDeletionPerLayer.ContainsKey(layer))
-            {
                 _tickClientsMarkedForDeletionPerLayer[layer].Add(tickClient);
-            }
         }
 
         public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
-            if (!_isRunning) {
-                _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
-            }
-            else {
-                _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
-            }
+            if (!_isRunning) _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
+            else _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
@@ -110,56 +103,63 @@ namespace RTEManager.Implementation {
         public long AdvanceOneTick() {
             _isRunning = true;
 
-            var stopWatch = Stopwatch.StartNew();
+            Stopwatch stopWatch = Stopwatch.StartNew();
 
             // set currentTick to all layers
-          //  Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
+            Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
-            // visualize all visualizable layers
-            _visualizationAdapter.VisualizeTick(_currentTick);
+            // visualize all visualizable layers once prior to first execution if tick = 0
+            if (_currentTick == 0) _visualizationAdapter.VisualizeTick(_currentTick);
 
             // PreTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
 
             // tick all tickClients
-            Parallel.ForEach(
-                _tickClientsPerLayer.Keys,
-                layer => Parallel.ForEach(_tickClientsPerLayer[layer],
-                    client => client.Key.Tick()
-                    )
+            Parallel.ForEach
+                (
+                    _tickClientsPerLayer.Keys,
+                    layer => Parallel.ForEach
+                        (_tickClientsPerLayer[layer],
+                            client => client.Key.Tick()
+                        )
                 );
 
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
-            
+
             // increase Tick counter
             _currentTick++;
+
+            // visualize all layers
+            _visualizationAdapter.VisualizeTick(_currentTick);
 
             // clean up all deleted tickClients
             Parallel.ForEach
                 (
-                _tickClientsMarkedForDeletionPerLayer.Keys,
-                layer => Parallel.ForEach(_tickClientsMarkedForDeletionPerLayer[layer],
-                    tickClientToBeRemoved => {
-                        byte trash;
-                        _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
-                    })
+                    _tickClientsMarkedForDeletionPerLayer.Keys,
+                    layer => Parallel.ForEach
+                        (_tickClientsMarkedForDeletionPerLayer[layer],
+                            tickClientToBeRemoved => {
+                                byte trash;
+                                _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
+                            })
                 );
 
             // add all new TickClients which were registered during the run
             Parallel.ForEach
                 (
-                _tickClientsMarkedForRegistrationPerLayer.Keys,
-                layer => Parallel.ForEach(_tickClientsMarkedForRegistrationPerLayer[layer],
-                    tickClientToBeRegistered => _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte()))
+                    _tickClientsMarkedForRegistrationPerLayer.Keys,
+                    layer => Parallel.ForEach
+                        (_tickClientsMarkedForRegistrationPerLayer[layer],
+                            tickClientToBeRegistered =>
+                                _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte()))
                 );
 
             // reset collections
             Parallel.ForEach
                 (
                     _tickClientsPerLayer.Keys,
-                    layer =>
-                    {
+                    layer => {
                         _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentBag<ITickClient>();
                         _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentBag<ITickClient>();
                     }

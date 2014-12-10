@@ -2,15 +2,13 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hik.Communication.Scs.Client.Tcp
-{
+namespace Hik.Communication.Scs.Client.Tcp {
     /// <summary>
-    /// This class is used to simplify TCP socket operations.
+    ///     This class is used to simplify TCP socket operations.
     /// </summary>
-    internal static class TcpHelper
-    {
+    internal static class TcpHelper {
         /// <summary>
-        /// This code is used to connect to a TCP socket with timeout option.
+        ///     This code is used to connect to a TCP socket with timeout option.
         /// </summary>
         /// <param name="endPoint">IP endpoint of remote server</param>
         /// <param name="timeoutMs">Timeout to wait until connect</param>
@@ -18,19 +16,13 @@ namespace Hik.Communication.Scs.Client.Tcp
         /// <exception cref="SocketException">Throws SocketException if can not connect.</exception>
         /// <exception cref="TimeoutException">Throws TimeoutException if can not connect within specified timeoutMs</exception>
         public static Socket ConnectToServer(EndPoint endPoint, int timeoutMs)
-
         {
             var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-           
-
-
             try
             {
-
-                socket.Blocking = true;
-                
+                socket.Blocking = false;
                 socket.Connect(endPoint);
-               //socket.Blocking = true;
+                socket.Blocking = true;
                 return socket;
             }
             catch (SocketException socketException)

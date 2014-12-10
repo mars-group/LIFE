@@ -3,7 +3,6 @@ using SpatialCommon.Datatypes;
 
 namespace SpatialCommon.TransportTypes {
 
-
     public struct TVector : IEquatable<TVector> {
         public static readonly TVector Origin = new TVector(0.0d, 0.0d, 0.0d);
         public static readonly TVector Null = new TVector(0.0d, 0.0d, 0.0d, true);

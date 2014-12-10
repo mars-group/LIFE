@@ -1,13 +1,8 @@
-﻿
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-
-namespace Hik.Communication.ScsServices.Service
-{
+namespace Hik.Communication.ScsServices.Service {
     /// <summary>
-    /// Marks a Service Class as chacheable
+    ///     Marks a Service Class as chacheable
     /// </summary>
-    public interface ICacheable : INotifyPropertyChanged
-    {
-    }
+    public interface ICacheable : INotifyPropertyChanged {}
 }
