@@ -33,17 +33,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GeoAPI">
-      <HintPath>..\..\Libraries\SharpMap\GeoAPI.dll</HintPath>
+      <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\GeoAPI.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\MARSLocalStarter\bin\Debug\layers\addins\ExampleLayer\Mono.Addins.dll</HintPath>
     </Reference>
     <Reference Include="SharpMap">
-      <HintPath>..\..\Libraries\SharpMap\SharpMap.dll</HintPath>
+      <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\SharpMap.dll</HintPath>
     </Reference>
     <Reference Include="SharpMap.Extensions">
-      <HintPath>..\..\Libraries\SharpMap\SharpMap.Extensions.dll</HintPath>
+      <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\SharpMap.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
