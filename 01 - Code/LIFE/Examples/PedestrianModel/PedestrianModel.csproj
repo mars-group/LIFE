@@ -39,11 +39,11 @@
   <ItemGroup>
     <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\GeoAPI.1.7.3.1\lib\net45\GeoAPI.dll</HintPath>
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\GeoAPI.dll</HintPath>
     </Reference>
     <Reference Include="MessageWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\MessageWrappers.dll</HintPath>
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\MessageWrappers.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
@@ -51,6 +51,18 @@
     <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\MonoDataSqlite\Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite">
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\NetTopologySuite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PowerCollections">
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\PowerCollections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -135,6 +147,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="KnownAgents.xml" />
     <Content Include="sqlite3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
