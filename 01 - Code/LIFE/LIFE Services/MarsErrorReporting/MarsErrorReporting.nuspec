@@ -12,7 +12,7 @@
     <copyright>Copyright 2014</copyright>
     <tags>MARS, Errorreporting</tags>
     <dependencies>
-		<dependency id="Atlassian.SDK" />
+		<dependency id="Atlassian.SDK" version="2.5.0"/>
 	</dependencies>
   </metadata>
 	<files>
