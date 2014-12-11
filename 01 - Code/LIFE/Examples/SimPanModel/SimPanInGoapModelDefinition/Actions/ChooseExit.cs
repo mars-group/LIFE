@@ -7,6 +7,10 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
+    /// <summary>
+    ///     Reflective and deliberative humans can choose an exit. At least they can access the memory information
+    ///     about the coordinates from the entrance.
+    /// </summary>
     public class ChooseExit : AbstractGoapAction {
         private readonly Human _human;
 
@@ -15,18 +19,6 @@ namespace SimPanInGoapModelDefinition.Actions {
             new List<WorldstateSymbol> {new WorldstateSymbol(Properties.KnowsExitLocation, true, typeof (Boolean))},
             new List<WorldstateSymbol> {new WorldstateSymbol(Properties.HasTarget, true, typeof (Boolean))}) {
             _human = human;
-        }
-
-        public override bool ValidateContextPreconditions() {
-            return true;
-        }
-
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
         }
 
         public override void Execute() {

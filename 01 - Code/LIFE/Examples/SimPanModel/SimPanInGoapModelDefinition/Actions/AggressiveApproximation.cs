@@ -7,11 +7,15 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
+    /// <summary>
+    ///     Is used for humans in reactive behaviour mode. If the human fails in moving he will add pressure to
+    ///     the cell in the chosen direction.
+    /// </summary>
     public class AggressiveApproximation : AbstractGoapAction {
         private const int MaximumAttemps = 30;
         private readonly Human _human;
         private int _previousAttemps;
-        
+
         public AggressiveApproximation
             (Human human) :
                 base(
@@ -26,14 +30,6 @@ namespace SimPanInGoapModelDefinition.Actions {
                 return true;
             }
             return false;
-        }
-
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
         }
 
         public override void Execute() {

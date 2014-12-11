@@ -7,6 +7,9 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
+    /// <summary>
+    ///     Follow the path across the cell field to the exit position.
+    /// </summary>
     public class FollowPathToExit : AbstractGoapAction {
         private const int MaximumAttemps = 50;
         private const int MaximumFailedMovementsPerStep = 2;
@@ -29,14 +32,6 @@ namespace SimPanInGoapModelDefinition.Actions {
                 }
             }
             return false;
-        }
-
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
         }
 
         public override void Execute() {

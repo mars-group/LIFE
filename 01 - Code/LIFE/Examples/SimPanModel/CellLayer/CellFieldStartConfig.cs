@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace CellLayer {
 
-    internal static class CellFieldStartConfig {
+    public static class CellFieldStartConfig {
         public const int CellCountXAxis = 20;
         public const int CellCountYAxis = 20;
         public const int CellSideLength = 30;
@@ -72,7 +72,7 @@ namespace CellLayer {
         ///     The list of exit cell ids.
         /// </summary>
         public static readonly List<int> ExitCells = new List<int> { 391};
-        private static readonly Point ExitPoint = new Point(11, 20);
+        public static readonly Point ExitPoint = new Point(11, 20);
 
         public static readonly List<int> TechnicalInformationCells = new List<int> {
             1,

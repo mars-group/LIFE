@@ -7,6 +7,10 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
+    /// <summary>
+    ///     Trigger the planning of a route on the cell field from the current position of the human to
+    ///     the target position saved in the human.
+    /// </summary>
     public class FindPathToExit : AbstractGoapAction {
         private readonly Human _human;
         private bool _successOnPlanning = true;
@@ -21,15 +25,7 @@ namespace SimPanInGoapModelDefinition.Actions {
         public override bool ValidateContextPreconditions() {
             return _successOnPlanning;
         }
-
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
-        }
-
+        
         public override void Execute() {
             _successOnPlanning = _human.MotorAndNavigation.PlanRoute(_human.HumanBlackboard.Get(Human.Target));
         }

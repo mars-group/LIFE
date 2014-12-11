@@ -7,13 +7,16 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
+    /// <summary>
+    ///     Search and walk an approximating direction.
+    /// </summary>
     public class SuccessiveApproximation : AbstractGoapAction {
         private const int MaximumFailures = 3;
         private const int MaximumAttemps = 30;
         private readonly Human _human;
         private int _previousFailures;
         private int _previousAttemps;
-        
+
         public SuccessiveApproximation
             (Human human) :
                 base(
@@ -30,17 +33,8 @@ namespace SimPanInGoapModelDefinition.Actions {
             return false;
         }
 
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
-        }
-
         public override void Execute() {
             _previousAttemps += 1;
-            Console.WriteLine("SuccessiveApproximation executing with " + _previousFailures + " try");
             if (_human.HumanBlackboard.Get(Human.MovementFailed)) {
                 _previousFailures += 1;
             }

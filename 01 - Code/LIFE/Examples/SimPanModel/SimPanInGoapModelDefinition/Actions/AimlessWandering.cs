@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
@@ -7,6 +8,10 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
+    /// <summary>
+    ///     If a human in reaktive mode has no target ther is no more option then running around and maybe
+    ///     find the exit area.
+    /// </summary>
     public class AimlessWandering : AbstractGoapAction {
         private readonly Human _human;
 
@@ -19,14 +24,6 @@ namespace SimPanInGoapModelDefinition.Actions {
 
         public override bool ValidateContextPreconditions() {
             return !_human.IsOnMassFlight;
-        }
-
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
         }
 
         public override bool IsFinished() {

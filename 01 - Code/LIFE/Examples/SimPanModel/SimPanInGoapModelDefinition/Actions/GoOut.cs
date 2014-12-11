@@ -7,6 +7,9 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
+    /// <summary>
+    ///     This action is udes if a human is standing on an exit cell to get out of the simulation.
+    /// </summary>
     public class GoOut : AbstractGoapAction {
         private readonly Human _human;
 
@@ -17,20 +20,8 @@ namespace SimPanInGoapModelDefinition.Actions {
             _human = human;
         }
 
-        public override bool ValidateContextPreconditions() {
-            return true;
-        }
-
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
-        }
-
         public override void Execute() {
-            _human.MotorAndNavigation.LeaveByExit();
+            _human.LeaveByExit();
         }
 
         public override bool IsFinished() {

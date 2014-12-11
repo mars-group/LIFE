@@ -61,10 +61,8 @@ namespace SimPanInGoapModelDefinition {
                 new WorldstateSymbol(Properties.IsInExitArea, _blackboard.Get(Human.IsInExitArea), typeof (Boolean)),
                 new WorldstateSymbol(Properties.HasTarget, _blackboard.Get(Human.HasTarget), typeof (Boolean)),
                 new WorldstateSymbol(Properties.HasPath, _blackboard.Get(Human.HasPath), typeof (Boolean)),
-                new WorldstateSymbol
-                    (Properties.KnowsExitLocation, _blackboard.Get(Human.KnowsExitLocation), typeof (Boolean)),
-                new WorldstateSymbol
-                    (Properties.KnowsExitLocation, _blackboard.Get(Human.KnowsExitLocation), typeof (Boolean))
+                new WorldstateSymbol(Properties.KnowsExitLocation, _blackboard.Get(Human.KnowsExitLocation), typeof (Boolean)),
+               
             };
             return updatedSymbols;
         }

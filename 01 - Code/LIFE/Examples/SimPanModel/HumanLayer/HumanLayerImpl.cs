@@ -28,12 +28,16 @@ namespace HumanLayer {
         private const int GoapReactiveAgents = 10;
         private const int GoapDeliberativeAgents = 4;
         private const int GoapReflectiveAgents = 0;
-
-
+        
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly CellLayerImpl _cellLayer;
         private readonly ConcurrentDictionary<Guid, Human> _humanList = new ConcurrentDictionary<Guid, Human>();
         private long _currentTick;
+
+        public const string NamespaceOfModelDefinition = "SimPanInGoapModelDefinition";
+        public const string ReactiveConfig = "ReactiveConfig";
+        public const string DeliberativeConfig = "DeliberativeConfig";
+        public const string ReflectiveConfig = "ReflectiveConfig";
 
         public HumanLayerImpl(CellLayerImpl cellLayer) {
             XmlConfigurator.Configure(new FileInfo("conf.log4net"));

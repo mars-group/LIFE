@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
 using HumanLayer.Agents;
@@ -9,11 +10,10 @@ namespace SimPanInGoapModelDefinition.Actions {
     public class ParticipateMassEscape : AbstractGoapAction {
         private readonly Human _human;
 
-        public ParticipateMassEscape
-            (Human human) :
-                base(
-                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.HasTarget, true, typeof (bool))},
-                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsInExitArea, true, typeof (bool))}) {
+        public ParticipateMassEscape(Human human) :
+            base(
+            new List<WorldstateSymbol> {new WorldstateSymbol(Properties.HasTarget, true, typeof (Boolean))},
+            new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsInExitArea, true, typeof (Boolean))}) {
             _human = human;
         }
 
@@ -21,15 +21,12 @@ namespace SimPanInGoapModelDefinition.Actions {
             return _human.IsOnMassFlight;
         }
 
-        public override bool ExecuteContextEffects() {
-            return true;
-        }
-
-        public override int GetExecutionCosts() {
-            return 1;
-        }
-
         public override void Execute() {
+            if (_human.HumanBlackboard.Get(Human.Target).IsEmpty) {
+                bool b = IsExecutable(_human.HumanBlackboard.Get(AbstractGoapSystem.Worldstate));
+                bool c = ValidateContextPreconditions();
+                int a = 1;
+            }
             _human.MotorAndNavigation.ApproximateToTarget();
         }
 
