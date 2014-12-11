@@ -1,11 +1,12 @@
 ﻿using System;
 using AgentTester.Wolves.Agents;
+using AgentTester.Wolves.Environment;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
-using ESCTestLayer.Implementation;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
 using DalskiAgent.Environments;
+using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace AgentTester.Wolves {
   
@@ -15,6 +16,7 @@ namespace AgentTester.Wolves {
   /// </summary>
   static class WolvesLocalStart {
       
+
     /// <summary>
     /// Builder for the wolves vs. sheeps scenario.
     /// </summary>
@@ -25,19 +27,16 @@ namespace AgentTester.Wolves {
     /// <param name="esc">'True': ESC instance created. 
     /// 'False': Own environment with collision prevention.</param>
     /// <returns>A grassland with the agents.</returns>
-    private static IEnvironment CreateWolvesScenario(SeqExec exec, int grass, int sheeps, int wolves, bool esc) {
-      
-      IEnvironment env;
-      if (!esc) env = new Grassland (exec);
-      else env = new ESCAdapter(new UnboundESC(), new Vector(30, 20), true);
-      
-      var n1 = grass;
-      var n2 = n1 + sheeps;
-      var n3 = n2 + wolves;
-      
-      for (var i =  0; i < n1; i++) new Grass(exec, env);
-      for (var i = n1; i < n2; i++) new Sheep(exec, env, (Grassland)env);
-      for (var i = n2; i < n3; i++) new Wolf (exec, env, (Grassland)env);      
+    private static IEnvironment CreateWolvesScenario(IExecution exec, int grass, int sheeps, int wolves, bool esc) {
+           
+      // Create environment and agent spawner.
+      var env = new Grassland (esc, new Vector(30, 20), true);
+      new AgentSpawner(exec, env);
+
+      // Create some initial agents.
+      for (var i = 0; i < grass;  i ++) new Grass(exec, env);
+      for (var i = 0; i < sheeps; i ++) new Sheep(exec, env);
+      for (var i = 0; i < wolves; i ++) new Wolf (exec, env);      
       return env;
     }
 
@@ -82,11 +81,12 @@ namespace AgentTester.Wolves {
     ///   Start the executor!
     /// </summary>
     public static void Main() {
+     
       var exec = new SeqExec(true);
-      var env = CreateWolvesScenario(exec, 20, 8, 2, false);
+      var env = CreateWolvesScenario(exec, 14, 5, 1, true);
       var view = CreateWolvesView(env);
       ConsoleView.LcRedirect = false;
-      exec.Run(1000, view);
+      exec.Run(850, view);
     }
   }
 }

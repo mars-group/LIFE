@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3D7B252F-D318-453B-A82F-D4B5B97D14EA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PedestrianModel</RootNamespace>
+    <AssemblyName>PedestrianModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\MARSLocalStarter\bin\Debug\layers\addins\PedestrianModel\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\GeoAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\MessageWrappers.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Addins">
+      <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\MonoDataSqlite\Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite">
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\NetTopologySuite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PowerCollections">
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\PowerCollections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MarsView.0.9\lib\net45\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Environment\ObstacleEnvironment2D.cs" />
+    <Compile Include="Environment\ObstacleEnvironmentESC.cs" />
+    <Compile Include="InformationType.cs" />
+    <Compile Include="PedestrianLayer.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\Waypoint.cs" />
+    <Compile Include="Agents\Reasoning\Movement\ObstacleAvoidanceBehavior.cs" />
+    <Compile Include="Agents\Reasoning\Movement\ReactiveBehaviorPipeline.cs" />
+    <Compile Include="Agents\Reasoning\Movement\IReactiveMovingBehavior.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\Astar\AStarNode.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\Astar\AStarPathfinder.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\IPathfinder.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\IPathNode.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\ISearchGraph.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\Emitter\CuboidEmitter.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\Emitter\PointEmitter.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\IPotentialEmitter.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\IPotentialField.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\PotentialFieldCollection.cs" />
+    <Compile Include="Agents\Reasoning\Movement\Potential\SimplePotentialField.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RaytracingGraph.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RaytracingPathNode.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\Raytracing\RayUtil.cs" />
+    <Compile Include="Agents\Reasoning\Pathfinding\TargetListType.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Logging\AgentLogger.cs" />
+    <Compile Include="Util\Math\Distribution.cs" />
+    <Compile Include="Util\ScenarioType.cs" />
+    <Compile Include="Util\Math\IUnivariateRealFunction.cs" />
+    <Compile Include="Environment\ObstacleEnvironment.cs" />
+    <Compile Include="Agents\Pedestrian.cs" />
+    <Compile Include="LocalStarter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Agents\Obstacle.cs" />
+    <Compile Include="Util\ScenarioBuilder.cs" />
+    <Compile Include="Visualization\SimpleVisualization.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Visualization\SimpleVisualization.Designer.cs">
+      <DependentUpon>SimpleVisualization.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
+      <Name>LayerAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
+      <Project>{fdadf460-19a7-443a-aea6-ef24580daf86}</Project>
+      <Name>GenericAgentArchitectureCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitecture\GenericAgentArchitecture.csproj">
+      <Project>{e8e32f5e-7e31-41f3-9d49-9cb6dfbafc85}</Project>
+      <Name>GenericAgentArchitecture</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
+      <Project>{4ca49432-e852-40b5-9f37-0f5cba61c613}</Project>
+      <Name>EnvironmentServiceComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\SpatialCommon\SpatialCommon.csproj">
+      <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>
+      <Name>SpatialCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="KnownAgents.xml" />
+    <Content Include="sqlite3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

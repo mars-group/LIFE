@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Collision;
+using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Environments {
  
@@ -37,7 +39,8 @@ namespace DalskiAgent.Environments {
     /// <param name="acc">Read-only object for data queries.</param>
     /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the object. If null, then 0°.</param>
-    public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
+    public void AddObject(ISpatialObject obj, CollisionType collisionType, Vector pos, out DataAccessor acc, Vector dim, Direction dir)
+    {
       if (pos == null) pos = GetRandomPosition();
       else if (!CheckPosition(pos)) 
         throw new Exception("[Environment2D] Error on object placement: Specified position already in use!");
@@ -172,7 +175,7 @@ namespace DalskiAgent.Environments {
     /// </summary>
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
-    public virtual object GetData(ISpecificator spec) {
+    public virtual object GetData(ISpecification spec) {
       if (!(spec is Halo)) throw new Exception(
         "[Environment2D] Error on GetData() specificator: Not of type 'Halo'!");
       var halo = (Halo) spec;

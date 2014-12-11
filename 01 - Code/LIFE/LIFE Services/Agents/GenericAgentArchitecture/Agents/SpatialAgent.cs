@@ -1,7 +1,10 @@
-﻿using DalskiAgent.Environments;
+﻿using System;
+using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
+using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Collision;
+using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Agents {
 
@@ -22,12 +25,32 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <param name="exec">Agent execution container reference.</param>
     /// <param name="env">Environment implementation reference.</param>
+    /// <param name="collision">Collision type defines with whom the agent may collide.</param>
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
     /// <param name="dim">Dimension of the agent. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the agent. If null, then 0°.</param>
-    protected SpatialAgent(IExecution exec, IEnvironment env, Vector pos, Vector dim = null, Direction dir = null) : base(exec) {
+    protected SpatialAgent(IExecution exec, IEnvironment env, CollisionType collision, Vector pos, Vector dim = null, Direction dir = null): base(exec) {
       _env = env;
-      _env.AddObject(this, pos, out Data, dim, dir);  // Enlist the agent in environment.
+      _env.AddObject(this, collision, pos, out Data, dim, dir);  // Enlist the agent in environment.
+    }
+
+    
+    /// <summary>
+    ///   Instantiate a new agent with spatial data. Only available for specializations.
+    /// </summary>
+    /// <param name="exec">Agent execution container reference.</param>
+    /// <param name="env">Environment implementation reference.</param>
+    /// <param name="collision">Collision type defines with whom the agent may collide.</param>
+    /// <param name="minPos">Minimum coordinate for random position.</param>
+    /// <param name="maxPos">Maximum coordinate for random position.</param>
+    /// <param name="dim">Dimension of the agent. If null, then (1,1,1).</param>
+    /// <param name="dir">Direction of the agent. If null, then 0°.</param>
+    protected SpatialAgent(IExecution exec, IEnvironment env, CollisionType collision, Vector minPos, Vector maxPos, Vector dim = null, Direction dir = null) : base(exec) {
+      if (env is ESCRectAdapter) {
+        _env = env;
+        ((ESCRectAdapter)_env).AddObject(this, collision, minPos, maxPos, out Data, dim, dir);  // Enlist the agent in environment.        
+      }
+      else throw new Exception("[SpatialAgent] Constructor error: Environment does not support interval placement. Use ESCAdapter instead!");
     }
 
 

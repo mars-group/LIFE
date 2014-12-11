@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Movement.Actions;
+using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Movement.Movers {
 
@@ -40,14 +42,14 @@ namespace DalskiAgent.Movement.Movers {
       MovementVector = new Vector(0, 0);
       TargetDir = new Direction();
       switch (direction) {
-        case GridDir.Up       : MovementVector.X ++;                  TargetDir.SetYaw(  0);  break;
-        case GridDir.Down     : MovementVector.X --;                  TargetDir.SetYaw(180);  break;
-        case GridDir.Left     :                 MovementVector.Y --;  TargetDir.SetYaw(270);  break;
-        case GridDir.Right    :                 MovementVector.Y ++;  TargetDir.SetYaw( 90);  break;
-        case GridDir.UpLeft   : MovementVector.X ++; MovementVector.Y --;  TargetDir.SetYaw(  0);  break;  //315 | Diagonal 
+        case GridDir.Up       :                      MovementVector.Y ++;  TargetDir.SetYaw(  0);  break;
+        case GridDir.Down     :                      MovementVector.Y --;  TargetDir.SetYaw(180);  break;
+        case GridDir.Left     : MovementVector.X --;                       TargetDir.SetYaw(270);  break;
+        case GridDir.Right    : MovementVector.X ++;                       TargetDir.SetYaw( 90);  break;
+        case GridDir.UpLeft   : MovementVector.X --; MovementVector.Y ++;  TargetDir.SetYaw(  0);  break;  //315 | Diagonal 
         case GridDir.UpRight  : MovementVector.X ++; MovementVector.Y ++;  TargetDir.SetYaw(  0);  break;  //45  | placement
         case GridDir.DownLeft : MovementVector.X --; MovementVector.Y --;  TargetDir.SetYaw(180);  break;  //225 | causes
-        case GridDir.DownRight: MovementVector.X --; MovementVector.Y ++;  TargetDir.SetYaw(180);  break;  //135 | overlapping!   
+        case GridDir.DownRight: MovementVector.X ++; MovementVector.Y --;  TargetDir.SetYaw(180);  break;  //135 | overlapping!   
       }
       Move();  // Execute movement (call to L0-Move()).
     }
@@ -105,7 +107,7 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     public struct MovementOption : IComparable {
       public GridDir Direction;
-      public float Offset;
+      public double Offset;
 
       public int CompareTo(Object obj) {
         var other = (MovementOption) obj;

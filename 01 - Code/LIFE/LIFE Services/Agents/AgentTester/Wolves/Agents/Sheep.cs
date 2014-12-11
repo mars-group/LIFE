@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AgentTester.Wolves.Environment;
 using AgentTester.Wolves.Interactions;
 using DalskiAgent.Agents;
 using DalskiAgent.Auxiliary;
-using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
+using EnvironmentServiceComponent.Implementation;
+using GenericAgentArchitectureCommon.Datatypes;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Collision;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace AgentTester.Wolves.Agents {
   
@@ -19,28 +24,29 @@ namespace AgentTester.Wolves.Agents {
   /// </summary>
   internal class Sheep : SpatialAgent, IAgentLogic, IEatInteractionTarget, IEatInteractionSource {
     
-    private int _energy = 50;                    // Current energy (with initial value).
-    private const int EnergyMax = 80;            // Maximum health.
-    private readonly Random _random;             // Random number generator for energy loss.
-    private readonly IEnvironment _environment;  // Environment reference for random movement.   
-    private string _states;                      // Output string for console.
-    private readonly GridMover _mover;           // Specific agent mover reference (to avoid casts).
+    private int _energy = 50;                 // Current energy (with initial value).
+    private const int EnergyMax = 80;         // Maximum health.
+    private readonly Random _random;          // Random number generator for energy loss.
+    private readonly Grassland _environment;  // Environment reference for random movement.   
+    private string _states;                   // Output string for console.
+    private readonly GridMover _mover;        // Specific agent mover reference (to avoid casts).
 
 
     /// <summary>
     ///   Create a new sheep agent.
     /// </summary>
     /// <param name="exec">Agent execution container reference.</param>
-    /// <param name="env">Environment reference.</param>
-    /// <param name="src">The data source for sensor queries.</param>
-    public Sheep(IExecution exec, IEnvironment env, IGenericDataSource src) : base(exec, env, null) {
+    /// <param name="env">Grassland reference.</param>
+    /// <param name="pos">Initial agent position.</param>
+    public Sheep(IExecution exec, Grassland env, Vector pos = null) : base(exec, env, CollisionType.MassiveAgent, pos) {
       _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
       _environment = env;
       
       // Add perception sensor.
-      PerceptionUnit.AddSensor(new DataSensor(
-        this, src, new RadialHalo(Data, (int) InformationTypes.AllAgents, 8))
-      );
+      ISpecification halo;
+      if (env.UsesESC) halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
+      else             halo = new RadialHalo(Data, InformationTypes.AllAgents, 8);
+      PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
 
       // Add movement module.
       Mover = new GridMover(env, this, Data);
@@ -66,8 +72,19 @@ namespace AgentTester.Wolves.Agents {
 
       // Calculate hunger percentage, read-out nearby agents.
       int hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
-      var rawData = PerceptionUnit.GetData((int) InformationTypes.AllAgents).Data;
+      var rawData = PerceptionUnit.GetData(InformationTypes.AllAgents).Data;
       var agents = ((List<ISpatialObject>) rawData);
+
+      // Remove own agent from perception list.
+      if (_environment.UsesESC) {
+        for (var i = 0; i < agents.Count; i ++) {
+          if (agents[i] == this) {
+            agents.RemoveAt(i);
+            break;
+          }
+        }
+      }
+
       var grass = agents.OfType<Grass>().ToList();
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
@@ -94,7 +111,7 @@ namespace AgentTester.Wolves.Agents {
         // R1: Eat nearby grass.
         if (dist <= 1.4143 && hunger > 20) {
           _states += "R1";
-          ConsoleView.AddMessage("["+GetTick()+"] Schaf "+Id+" frißt Gras "+grs.Id+"!", ConsoleColor.Green);
+          ConsoleView.AddMessage("[" + GetTick() + "] Schaf " + Id + " frißt Gras " + grs.Id + "!", ConsoleColor.Green);
           return new EatInteraction(this, grs);
         }
 
@@ -118,14 +135,8 @@ namespace AgentTester.Wolves.Agents {
 
       // R4: Perform random movement.
       _states += "R4";
-      if (_environment is Environment2D) {
-        var pos = ((Environment2D) _environment).GetRandomPosition();
-        var options = _mover.GetMovementOptions(new Vector(pos.X, pos.Y, pos.Z));
-        return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
-      }
-      
-      //TODO Build something for ESC case.  
-      return null;
+      var rndOpts = _mover.GetMovementOptions(_environment.GetRandomPosition());
+      return rndOpts.Count == 0 ? null : _mover.MoveInDirection(rndOpts[0].Direction);
     }
 
 

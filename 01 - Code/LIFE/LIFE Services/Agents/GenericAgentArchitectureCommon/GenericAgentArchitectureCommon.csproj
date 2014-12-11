@@ -50,20 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Datatypes\AABB.cs" />
     <Compile Include="Datatypes\SpatialHalo.cs" />
     <Compile Include="Interfaces\IAgentLogic.cs" />
     <Compile Include="Interfaces\IFact.cs" />
-    <Compile Include="Interfaces\IGenericDataSource.cs" />
+    <Compile Include="Interfaces\IDataSource.cs" />
     <Compile Include="Interfaces\IInteraction.cs" />
-    <Compile Include="Interfaces\ISpatialEntity.cs" />
-    <Compile Include="Interfaces\ISpecificator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\CommonTypes\CommonTypes.csproj">
       <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
       <Name>CommonTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpatialCommon\SpatialCommon.csproj">
+      <Project>{130583c4-18f4-4969-9cfc-2653b624c415}</Project>
+      <Name>SpatialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

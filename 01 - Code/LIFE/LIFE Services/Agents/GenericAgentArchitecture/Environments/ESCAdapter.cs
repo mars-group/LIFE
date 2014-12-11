@@ -1,133 +1,231 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using CommonTypes.TransportTypes;
-using DalskiAgent.Movement;
-using ESCTestLayer.Interface;
+using System.Linq;
+using DalskiAgent.Auxiliary;
+using EnvironmentServiceComponent.Entities;
+using EnvironmentServiceComponent.Entities.Shape;
+using EnvironmentServiceComponent.Implementation;
+using EnvironmentServiceComponent.Interface;
 using GenericAgentArchitectureCommon.Interfaces;
 using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
-
+using SpatialCommon.Collision;
+using SpatialCommon.Datatypes;
+using SpatialCommon.Interfaces;
+using SpatialCommon.TransportTypes;
 
 namespace DalskiAgent.Environments {
-    
-  /// <summary>
-  ///   This adapter provides ESC usage via generic IEnvironment interface. 
-  /// </summary> 
-  public class ESCAdapter : IEnvironment, IGenericDataSource {
 
-    private readonly IUnboundESC _esc;  // Environment Service Component (ESC) implementation.
-    private readonly TVector _maxSize;  // The maximum entent (for auto placement).
-    private readonly bool _gridMode;    // ESC auto placement mode: True: grid, false: continuous.
+    /// <summary>
+    ///     This adapter provides ESC usage via generic IEnvironment interface.
+    /// </summary>
+    public class ESCAdapter : IEnvironment, IDataSource {
+        private readonly IEnvironmentServiceComponent _esc; // Environment Service Component (ESC) implementation.
+        private readonly TVector _maxSize; // The maximum entent (for auto placement).
+        private readonly bool _gridMode; // ESC auto placement mode: True: grid, false: continuous.
 
-    // Object-geometry mapping. Inner class for write-protected spatial entity representation.
-    private readonly ConcurrentDictionary<ISpatialObject, GeometryObject> _objects; 
-    private class GeometryObject : ISpatialEntity {
-      public IGeometry Bounds { get; set; }
-      public ISpatialObject obj;                    //TODO das hier oder interface oben=?
+        // Object-geometry mapping. Inner class for write-protected spatial entity representation.
+        private readonly ConcurrentDictionary<ISpatialObject, GeometryObject> _objects;
 
-      public GeometryObject() {
-        Bounds = new Point(1f, 1f, 1f);  // Default hitbox is cube with size 1.
-      }
-      public Vector GetPosition() {
-        return new Vector(        
-          (float) Bounds.Coordinate.X,
-          (float) Bounds.Coordinate.Y,
-          (float) Bounds.Coordinate.Z);
-      }
+
+        /// <summary>
+        ///     Create a new ESC adapter.
+        /// </summary>
+        /// <param name="esc">The ESC reference.</param>
+        /// <param name="maxSize">The maximum entent (for auto placement).</param>
+        /// <param name="gridMode">ESC auto placement mode: True: grid, false: continuous.</param>
+        public ESCAdapter(IEnvironmentServiceComponent esc, Vector maxSize, bool gridMode) {
+            _esc = esc;
+            _gridMode = gridMode;
+            _maxSize = maxSize.GetTVector();
+            _objects = new ConcurrentDictionary<ISpatialObject, GeometryObject>();
+        }
+
+        #region IDataSource Members
+
+        /// <summary>
+        ///     This function is used by sensors to gather data from this environment.
+        ///     In this case, the adapter redirects to the ESC implementation.
+        /// </summary>
+        /// <param name="spec">Information object describing which data to query.</param>
+        /// <returns>An object representing the percepted information.</returns>
+        public object GetData(ISpecification spec) {
+            List<ISpatialEntity> entities = (List<ISpatialEntity>) _esc.GetData(spec);
+            List<ISpatialObject> objects = new List<ISpatialObject>();
+            foreach (GeometryObject entity in entities.OfType<GeometryObject>()) {
+                objects.Add(entity.Object);
+            }
+            return objects;
+        }
+
+        #endregion
+
+        #region IEnvironment Members
+
+        /// <summary>
+        ///     Add a new object to the environment.
+        /// </summary>
+        /// <param name="obj">The object to add.</param>
+        /// <param name="collisionType">Collision type defines with whom the agent may collide.</param>
+        /// <param name="pos">The objects's initial position.</param>
+        /// <param name="acc">Read-only object for data queries.</param>
+        /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
+        /// <param name="dir">Direction of the object. If null, then 0°.</param>
+        public void AddObject(ISpatialObject obj, CollisionType collisionType, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
+            // Set default values to direction and dimension, if not given. Then create geometry and accessor.
+            if (dir == null) {
+                dir = new Direction();
+            }
+            if (dim == null) {
+                dim = new Vector(1d, 1d, 1d);
+            }
+            GeometryObject geometry = new GeometryObject(obj, MyGeometryFactory.Rectangle(dim.X, dim.Y), dir);
+            acc = new DataAccessor(geometry);
+            _objects[obj] = geometry;
+
+            bool success;
+            if (pos != null) {
+                success = _esc.Add(geometry, pos.GetTVector(), dir.GetDirectionalVector().GetTVector());
+            }
+            else {
+                success = _esc.AddWithRandomPosition(geometry, TVector.Origin, _maxSize, _gridMode);
+            }
+            if (!success) {
+                throw new Exception("[ESCAdapter] AddObject(): Placement failed, ESC returned 'false'!");
+            }
+        }
+
+
+        /// <summary>
+        ///     Remove an object from the environment.
+        /// </summary>
+        /// <param name="obj">The object to delete.</param>
+        public void RemoveObject(ISpatialObject obj) {
+            _esc.Remove(_objects[obj]);
+            GeometryObject g;
+            _objects.TryRemove(obj, out g);
+        }
+
+
+        /// <summary>
+        ///     Displace a spatial object given a movement vector.
+        /// </summary>
+        /// <param name="obj">The object to move.</param>
+        /// <param name="movement">Movement vector.</param>
+        /// <param name="dir">The object's heading. If null, movement heading is used.</param>
+        public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
+            if (!_objects.ContainsKey(obj)) {
+                return;
+            }
+
+            // If direction not set, calculate it based on movement vector.
+            if (dir == null) {
+                dir = new Direction();
+                dir.SetDirectionalVector(movement);
+            }
+
+            // Set new direction to geometry object. Position is updated automatically by the ESC.
+            _objects[obj].Direction = dir;
+
+            // Call the ESC move function and evaluate the return value.
+            MovementResult result = _esc.Move
+                (_objects[obj], movement.GetTVector(), dir.GetDirectionalVector().GetTVector());
+            if (!result.Success) {
+                ConsoleView.AddMessage
+                    ("[ESCAdapter] Kollision auf " + obj.GetPosition() +
+                     " mit " + result.Collisions.Count() + ".",
+                        ConsoleColor.Red);
+            }
+            //TODO Store return value and use it!
+        }
+
+
+        /// <summary>
+        ///     Retrieve all objects of this environment.
+        /// </summary>
+        /// <returns>A list of all objects.</returns>
+        public List<ISpatialObject> GetAllObjects() {
+            List<ISpatialObject> objects = new List<ISpatialObject>();
+            foreach (GeometryObject entity in _esc.ExploreAll().OfType<GeometryObject>()) {
+                objects.Add(entity.Object);
+            }
+            return objects;
+        }
+
+
+        /// <summary>
+        ///     Environment-related functions. Not needed in the ESC (at least, not now)!
+        /// </summary>
+        public virtual void AdvanceEnvironment() {}
+
+        #endregion
+
+        /// <summary>
+        ///     Add a new object to the environment.
+        /// </summary>
+        /// <param name="obj">The object to add.</param>
+        /// <param name="collisionType">Collision type defines with whom the agent may collide.</param>
+        /// <param name="minPos">Minimum coordinate for random position.</param>
+        /// <param name="maxPos">Maximum coordinate for random position.</param>
+        /// <param name="acc">Read-only object for data queries.</param>
+        /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
+        /// <param name="dir">Direction of the object. If null, then 0°.</param>
+        public void AddObject(ISpatialObject obj, CollisionType collisionType, Vector minPos, Vector maxPos, out DataAccessor acc, Vector dim, Direction dir) {
+            // Set default values to direction and dimension, if not given. Then create geometry and accessor.
+            if (dir == null) {
+                dir = new Direction();
+            }
+            if (dim == null) {
+                dim = new Vector(1f, 1f, 1f);
+            }
+            GeometryObject geometry = new GeometryObject(obj, MyGeometryFactory.Rectangle(dim.X, dim.Y), dir);
+            acc = new DataAccessor(geometry);
+            _objects[obj] = geometry;
+
+            bool success = _esc.AddWithRandomPosition(geometry, minPos.GetTVector(), maxPos.GetTVector(), _gridMode);
+            if (!success) {
+                throw new Exception("[ESCAdapter] AddObject(): Interval placement failed, ESC returned 'false'!");
+            }
+        }
     }
-    /*  OBJEKT; DAS VON ISPATIAL ERBT UND BOUNDS SOWIE RÜCKGABEMETHODEN 
-     *  FÜR POS UND DIRection DRINNE HAT. dataaccessor anpassen dafür
-     */
 
 
     /// <summary>
-    ///   Create a new ESC adapter.
+    ///     This geometry class serves as a wrapper for the IGeometry object and its orientation.
     /// </summary>
-    /// <param name="esc">The ESC reference.</param>
-    /// <param name="maxSize">The maximum entent (for auto placement).</param>
-    /// <param name="gridMode">ESC auto placement mode: True: grid, false: continuous.</param>
-    public ESCAdapter(IUnboundESC esc, Vector maxSize, bool gridMode) {
-      _esc = esc;   
-      _gridMode = gridMode;
-      _maxSize = new TVector(maxSize.X, maxSize.Y, maxSize.Z);
-      _objects = new ConcurrentDictionary<ISpatialObject, GeometryObject>();
+    public class GeometryObject : ISpatialEntity {
+        public IGeometry Geometry { get; set; }
+
+// Geometry: Holds position (centroid) and dimension (envelope).
+        public Direction Direction { get; set; } // The direction of the object.
+        public ISpatialObject Object { get; private set; } // The spatial object corresponding to this geometry.
+
+        /// <summary>
+        ///     Create a geometry object.
+        /// </summary>
+        /// <param name="obj">The spatial object corresponding to this geometry.</param>
+        /// <param name="geom">Geometry to hold.</param>
+        /// <param name="dir">Direction object.</param>
+        public GeometryObject(ISpatialObject obj, IGeometry geom, Direction dir) {
+            Object = obj;
+            Geometry = geom;
+            Shape = new ExploreShape(geom);
+            Direction = dir;
+        }
+
+        #region ISpatialEntity Members
+
+        public Enum GetCollisionType() {
+            return CollisionType.MassiveAgent;
+        }
+
+        public Enum GetInformationType() {
+            throw new NotImplementedException();
+        }
+
+        public IShape Shape { get; set; }
+
+        #endregion
     }
 
-
-    /// <summary>
-    ///   Add a new object to the environment.
-    /// </summary>
-    /// <param name="obj">The object to add.</param>
-    /// <param name="pos">The objects's initial position.</param>
-    /// <param name="acc">Read-only object for data queries.</param>
-    /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
-    /// <param name="dir">Direction of the object. If null, then 0°.</param>
-    public void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir) {
-      bool success;
-      if (dir == null) dir = new Direction();
-
-      var geometry = new GeometryObject();
-      acc = new DataAccessor(geometry.Bounds);
-      _objects[obj] = geometry;
-
-      if (pos != null) success = _esc.Add(geometry, new TVector(pos.X, pos.Y, pos.Z), dir.Yaw); 
-      else success = _esc.AddWithRandomPosition(geometry, TVector.Origin, _maxSize, _gridMode);                     
-      if (!success) throw new Exception("[ESCAdapter] AddObject(): Placement failed, ESC returned 'false'!");
-    }
-
-
-    /// <summary>
-    ///   Remove an object from the environment.
-    /// </summary>
-    /// <param name="obj">The object to delete.</param>
-    public void RemoveObject(ISpatialObject obj) {
-      _esc.Remove(_objects[obj]);
-      GeometryObject g;
-      _objects.TryRemove(obj, out g);   
-    }
-    
-
-    /// <summary>
-    ///   Displace a spatial object given a movement vector.
-    /// </summary>
-    /// <param name="obj">The object to move.</param>
-    /// <param name="movement">Movement vector.</param>
-    /// <param name="dir">The object's heading. If null, movement heading is used.</param>
-    public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
-      if (!_objects.ContainsKey(obj)) return;
-      if (dir == null) _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z));
-      else _esc.Move(_objects[obj], new TVector(movement.X, movement.Y, movement.Z), dir.Yaw);
-    }
-
-
-    /// <summary>
-    ///   Retrieve all objects of this environment.
-    /// </summary>
-    /// <returns>A list of all objects.</returns>
-    public List<ISpatialObject> GetAllObjects() {
-      var objects = new List<ISpatialObject>();
-      foreach (var entity in _esc.ExploreAll()) {
-        if (entity is ISpatialObject) objects.Add((ISpatialObject) entity);
-      }
-      return objects;
-    }
-
-
-    /// <summary>
-    ///   Environment-related functions. Not needed in the ESC (at least, not now)!
-    /// </summary>
-    public void AdvanceEnvironment() { }
-
-
-    /// <summary>
-    ///   This function is used by sensors to gather data from this environment.
-    ///   In this case, the adapter redirects to the ESC implementation.
-    /// </summary>
-    /// <param name="spec">Information object describing which data to query.</param>
-    /// <returns>An object representing the percepted information.</returns>
-    public object GetData(ISpecificator spec) {
-      return _esc.GetData(spec);
-    }
-  }
 }

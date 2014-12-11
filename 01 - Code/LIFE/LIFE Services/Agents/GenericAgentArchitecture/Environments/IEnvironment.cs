@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
-using DalskiAgent.Movement;
+using GenericAgentArchitectureCommon.Datatypes;
+using SpatialCommon.Collision;
+using SpatialCommon.Datatypes;
 
 namespace DalskiAgent.Environments {
   
@@ -8,15 +10,17 @@ namespace DalskiAgent.Environments {
   ///   It thereby enables abstraction from ESC specific methods.
   /// </summary>
   public interface IEnvironment {
+    
     /// <summary>
     ///   Add a new object to the environment.
     /// </summary>
-    /// <param name="obj">The object to add.</param>
+      /// <param name="obj">The object to add.</param>
+      /// <param name="collisionType">Collision type defines with whom the agent may collide.</param>
     /// <param name="pos">The objects's initial position.</param>
     /// <param name="acc">Read-only object for data queries.</param>
     /// <param name="dim">Dimension of the object. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the object. If null, then 0°.</param>
-    void AddObject(ISpatialObject obj, Vector pos, out DataAccessor acc, Vector dim, Direction dir);
+    void AddObject(ISpatialObject obj, CollisionType collisionType, Vector pos, out DataAccessor acc, Vector dim, Direction dir);
 
 
     /// <summary>

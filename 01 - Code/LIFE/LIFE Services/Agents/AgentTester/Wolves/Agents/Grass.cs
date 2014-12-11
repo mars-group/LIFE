@@ -1,10 +1,11 @@
 ﻿using System;
+using AgentTester.Wolves.Environment;
 using AgentTester.Wolves.Interactions;
 using DalskiAgent.Agents;
-using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using DalskiAgent.Movement;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Collision;
+using SpatialCommon.Datatypes;
 
 namespace AgentTester.Wolves.Agents {
 
@@ -22,9 +23,9 @@ namespace AgentTester.Wolves.Agents {
     ///   Create a new grass agent.
     /// </summary>
     /// <param name="exec">Agent execution container reference.</param>
-    /// <param name="env">Environment reference.</param>
+    /// <param name="env">Grassland reference.</param>
     /// <param name="pos">The initial position.</param>
-    public Grass(IExecution exec, IEnvironment env, Vector pos = null) : base(exec, env, pos) {
+    public Grass(IExecution exec, Grassland env, Vector pos = null) : base(exec, env, CollisionType.SelfCollision, pos) {
       _random = new Random(Id.GetHashCode());
       Init();
     }

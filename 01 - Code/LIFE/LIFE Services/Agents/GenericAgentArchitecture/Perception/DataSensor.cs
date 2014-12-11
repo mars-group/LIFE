@@ -1,5 +1,7 @@
-﻿using DalskiAgent.Agents;
+﻿using System;
+using DalskiAgent.Agents;
 using GenericAgentArchitectureCommon.Interfaces;
+using SpatialCommon.Interfaces;
 
 namespace DalskiAgent.Perception {
   
@@ -9,8 +11,9 @@ namespace DalskiAgent.Perception {
   /// </summary>
   public class DataSensor : Sensor {
 
-    private readonly IGenericDataSource _source;    // The data source (environment) to sense. 
-    private readonly ISpecificator _specificator;   // The area this sensor can percept. 
+    private readonly IDataSource _source;      // The data source (environment) to sense. 
+    private readonly ISpecification _specification;     // The area this sensor can percept. 
+    public Enum InformationType { get; private set; } // This sensor's information type.
 
 
     /// <summary>
@@ -19,11 +22,12 @@ namespace DalskiAgent.Perception {
     /// </summary>
     /// <param name="agent">The agent who owns this sensor.</param>
     /// <param name="source">Reference to the queried data source.</param>
-    /// <param name="specificator">The specificator represents the perception field for this sensor.</param>
-    public DataSensor(Agent agent, IGenericDataSource source, ISpecificator specificator) 
+    /// <param name="specification">The specification represents the perception field for this sensor.</param>
+    public DataSensor(Agent agent, IDataSource source, ISpecification specification) 
       : base (agent) {
       _source = source;
-      _specificator = specificator;
+      _specification = specification;
+      InformationType = specification.GetInformationType();
     }
 
 
@@ -34,17 +38,8 @@ namespace DalskiAgent.Perception {
     /// </summary>
     /// <returns>Sensor data object.</returns>
     protected override SensorInput RetrieveData() {
-      var result = _source.GetData(_specificator);
-      return new SensorInput(this, result, _specificator.GetInformationType(), Agent.GetTick());
-    }
-
-
-    /// <summary>
-    ///   Return the information type specified by this object.
-    /// </summary>
-    /// <returns>Information type (as enum value).</returns>
-    public int GetInformationType() {
-      return _specificator.GetInformationType();
+      var result = _source.GetData(_specification);
+      return new SensorInput(this, result,  Convert.ToInt32(InformationType), Agent.GetTick());
     }
 
 

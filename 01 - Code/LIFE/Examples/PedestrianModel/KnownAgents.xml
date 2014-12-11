@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Contains the basic information about agents, definitions can be extended with any arguments -->
+<KnownAgents>
+	<Agent>
+		<Type>BasicAgent</Type>
+		<SizeX>1</SizeX><!--Body or object length-->
+		<SizeY>1</SizeY><!--Body or object width-->
+		<SizeZ>1</SizeZ><!--Body or object height-->
+		<State>Alive</State><!--State of the agent. Alive, dead...-->
+		<Description>A basic agent</Description><!--Description of the agent. This will be displayed on inspection-->
+	</Agent>
+	<Agent>
+		<Type>MovingBasicAgent</Type>
+		<InheritFrom>BasicAgent</InheritFrom>
+		<Description>A basic agent</Description>
+	</Agent>
+	<Agent>
+		<Type>NonMovingBasicAgent</Type>
+		<InheritFrom>BasicAgent</InheritFrom>
+		<Description>An agent fixed in one place</Description>
+	</Agent>
+	<Agent>
+		<Type>Vegetation Agent</Type>
+		<InheritFrom>NonMovingBasicAgent</InheritFrom>
+		<Species>Unknown</Species>
+		<Weight>100</Weight>
+		<Worth>1000</Worth>
+		<Description>Vegetation that is simulated</Description>
+	</Agent>
+	<Agent>
+		<Type>Tree Agent</Type>
+		<InheritFrom>Vegetation Agent</InheritFrom>
+		<Species>Some Tree Species</Species>
+		<Description>A tree agent</Description>
+	</Agent>
+	<Agent>
+		<Type>Human Agent</Type>
+		<InheritFrom>MovingBasicAgent</InheritFrom>
+		<Legs>2</Legs>
+		<Gender>Undefined</Gender>
+		<SizeX>0.6</SizeX>
+		<SizeY>0.4</SizeY>
+		<SizeZ>1.7</SizeZ>
+		<State>Alive</State>
+		<Weight>60</Weight>
+		<Description>A simple human agent</Description>
+	</Agent>
+	<Agent>
+		<Type>Animal Agent</Type>
+		<InheritFrom>MovingBasicAgent</InheritFrom>
+		<Species>Unknown</Species>
+		<Gender>Undefined</Gender>
+		<Legs>4</Legs>
+		<Description>A simple animal agent</Description>
+	</Agent>
+	<Agent>
+		<Type>Cheetah Agent</Type>
+		<InheritFrom>Animal Agent</InheritFrom>
+		<Species>Acinonyx jubatus</Species>
+		<SizeX>1.5</SizeX>
+		<SizeY>0.4</SizeY>
+		<SizeZ>0.8</SizeZ>
+		<Description>A cheetah agent</Description>
+	</Agent>
+	<Agent>
+		<Type>Impala Agent</Type>
+		<InheritFrom>Animal Agent</InheritFrom>
+		<Species>Aepyceros melampus</Species>
+		<SizeX>1.4</SizeX>
+		<SizeY>0.4</SizeY>
+		<SizeZ>0.8</SizeZ>
+		<Description>A cheetah agent</Description>
+	</Agent>
+	<Agent>
+		<Type>Other Agent</Type>
+		<InheritFrom>MovingBasicAgent</InheritFrom>
+		<Description>Maybe a car or a cell</Description>
+	</Agent>
+</KnownAgents>

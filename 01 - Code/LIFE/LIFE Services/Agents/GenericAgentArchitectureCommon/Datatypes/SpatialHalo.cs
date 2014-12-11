@@ -1,22 +1,23 @@
-﻿using GenericAgentArchitectureCommon.Interfaces;
+﻿using System;
 using GeoAPI.Geometries;
+using SpatialCommon.Interfaces;
 
 namespace GenericAgentArchitectureCommon.Datatypes {
   
   /// <summary>
   /// This halo serves as a perception object in a spatial environment.
   /// </summary>
-  public class SpatialHalo : ISpecificator {
+  public class SpatialHalo : ISpecification {
     
-    public readonly IGeometry Geometry;   // Perception object.
-    private readonly int _informationType; // The information type to query.
+    public readonly IGeometry Geometry;     // Perception object.
+    private readonly Enum _informationType; // The information type to perceive.
 
     /// <summary>
     ///   Create a new spatial halo.
     /// </summary>
     /// <param name="geometry">Perception object.</param>
-    /// <param name="informationType">The information type to query.</param>
-    public SpatialHalo(IGeometry geometry, int informationType) {
+    /// <param name="informationType">The information type to perceive.</param>
+    public SpatialHalo(IGeometry geometry, Enum informationType) {
       Geometry = geometry;
       _informationType = informationType;
     }
@@ -26,7 +27,7 @@ namespace GenericAgentArchitectureCommon.Datatypes {
     ///   Return the information type specified by this object.
     /// </summary>
     /// <returns>Information type (as enum value).</returns>
-    public int GetInformationType() {
+    public Enum GetInformationType() {
       return _informationType;
     }
   }
