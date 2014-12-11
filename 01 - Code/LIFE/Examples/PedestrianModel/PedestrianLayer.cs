@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
+using GeoAPI.Geometries;
 using LayerAPI.Interfaces;
+using LayerAPI.Interfaces.Visualization;
+using MessageWrappers;
 using Mono.Addins;
+using PedestrianModel.Agents;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
 
@@ -16,7 +22,8 @@ namespace PedestrianModel {
     ///     It uses the Generic Agent Architecture and serves as an example for other agent models.
     /// </summary>
     [Extension(typeof (ISteppedLayer))]
-    public class PedestrianLayer : ISteppedActiveLayer {
+    public class PedestrianLayer : ISteppedActiveLayer, IVisualizable
+    {
         private long _tick; // Counter of current tick.  
         private IEnvironment _env; // Environment object for spatial agents. 
         private IExecution _exec; // Agent execution container reference.
@@ -275,6 +282,44 @@ namespace PedestrianModel {
                     Console.WriteLine("Invalid input. Using default scenario.");
                     break;
             }
+        }
+
+        public List<BasicVisualizationMessage> GetVisData()
+        {
+            List<BasicVisualizationMessage> result = new List<BasicVisualizationMessage>();
+            foreach (var o in _env.GetAllObjects())
+            {
+                if (o is Obstacle)
+                {
+                    Obstacle obs = (Obstacle)o;
+                    VegetationPassiveObject vpo = new VegetationPassiveObject();
+                    vpo.X = (float)obs.GetPosition().X;
+                    vpo.Y = (float)obs.GetPosition().Y;
+                    vpo.Z = (float)obs.GetPosition().Z;
+                    vpo.Width = (float)obs.GetDimension().X;
+                    vpo.Height = (float)obs.GetDimension().Y;
+                    vpo.Id = obs.Id.ToString(CultureInfo.InvariantCulture);
+                    result.Add(vpo);
+                }
+                else if (o is Pedestrian)
+                {
+                    Pedestrian ped = (Pedestrian)o;
+                    HumanAgent ha = new HumanAgent();
+                    ha.X = (float)ped.GetPosition().X;
+                    ha.Y = (float)ped.GetPosition().Y;
+                    ha.Z = (float)ped.GetPosition().Z;
+                    ha.Width = (float)ped.GetDimension().X;
+                    ha.Height = (float)ped.GetDimension().Y;
+                    ha.Id = ped.Id.ToString(CultureInfo.InvariantCulture);
+                    result.Add(ha);
+                }
+            }
+            return result;
+        }
+
+        public List<BasicVisualizationMessage> GetVisData(IGeometry geometry)
+        {
+            return GetVisData();
         }
     }
 
