@@ -34,7 +34,6 @@ namespace SimPanInGoapModelDefinition.Actions {
 
         public override void Execute() {
             _previousAttemps += 1;
-            Console.WriteLine("AggressiveApproximation executing with " + _previousAttemps + " try");
             if (_human.HumanBlackboard.Get(Human.MovementFailed)) {
                 _human.MotorAndNavigation.ApproximateToTarget(aggressiveMode: true);
             }

@@ -68,10 +68,17 @@ namespace GoapTests {
 
         [Test]
         public void ReturnActionCorrectTest() {
-            AbstractGoapAction nextAction1 = _goapActionSystem1.GetNextAction();
-            AbstractGoapAction nextAction2 = _goapActionSystem2.GetNextAction();
-            Assert.True(nextAction1.Equals(_actionGetToy));
-            Assert.True(nextAction2.Equals(_actionPlay));
+            AbstractGoapAction nextAction1A = _goapActionSystem1.GetNextAction();
+            AbstractGoapAction nextAction1B = _goapActionSystem1.GetNextAction();
+
+            AbstractGoapAction nextAction2A = _goapActionSystem2.GetNextAction();
+            //AbstractGoapAction nextAction2B = _goapActionSystem2.GetNextAction();
+
+            Assert.True(nextAction1A.Equals(_actionGetToy));
+            Assert.True(nextAction1B.Equals(_actionPlay));
+
+
+            Assert.True(nextAction2A.Equals(_actionPlay));
         }
 
         [Test]

@@ -80,7 +80,7 @@ namespace CellLayer {
         };
 
         public static readonly Dictionary<int, Point> TechnicalExitInformation = new Dictionary<int, Point> {
-            {1, ExitPoint},
+           /* {1, ExitPoint},
             {2, ExitPoint},
             {3, ExitPoint},
             {21, ExitPoint},
@@ -103,7 +103,7 @@ namespace CellLayer {
             {338, ExitPoint},
             {339, ExitPoint},
             {340, ExitPoint},
-            {300, ExitPoint},
+            {300, ExitPoint},*/
         };
 
         public static readonly Dictionary<int, Point> ExitAreaInformation = new Dictionary<int, Point> {

@@ -583,7 +583,9 @@ namespace CellLayer {
         /// </summary>
         /// <param name="guid"></param>
         public void DeleteAgentDraw(Guid guid) {
-            _viewForm.DeletePoint(guid);
+            lock (Lock) {
+                _viewForm.DeletePoint(guid);
+            }
         }
 
         /// <summary>
