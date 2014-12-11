@@ -69,8 +69,8 @@ namespace CellLayer {
         /// <summary>
         ///     The tuples represents an addition of (x,y) value to get in the enumerated direction
         /// </summary>
-        public static readonly Dictionary<Enum, Tuple<int, int>> DirectionMeaning =
-            new Dictionary<Enum, Tuple<int, int>> {
+        public static readonly Dictionary<CellLayerImpl.Direction, Tuple<int, int>> DirectionMeaning =
+            new Dictionary<CellLayerImpl.Direction, Tuple<int, int>> {
                 {Direction.Up, Tuple.Create(0, -1)},
                 {Direction.UpAndRight, Tuple.Create(1, -1)},
                 {Direction.Right, Tuple.Create(1, 0)},
@@ -152,8 +152,7 @@ namespace CellLayer {
             _visualizationThread = new Thread(threadStart);
             _visualizationThread.Start();
         }
-
-
+        
         /// <summary>
         ///     Build the cell field by the dimensions of x any axis. Create
         ///     the obstacle cells by the list of obstacle cell ids.
@@ -199,6 +198,12 @@ namespace CellLayer {
                         newCell.ExitInformationTechnical = information;
                     }
 
+                    if (CellFieldStartConfig.ExitAreaInformation.ContainsKey(cellIId)) {
+                        Point information = CellFieldStartConfig.ExitAreaInformation[cellIId];
+                        newCell.IsExitArea = true;
+                        newCell.ExitAreaInformation = information;
+                    }
+
                     object[] data = newCell.GetViewData();
                     viewDataDict.AddOrUpdate(cellIId, data, (k, v) => data);
                 }
@@ -213,6 +218,22 @@ namespace CellLayer {
                 cellData.Add(cellEntry.Value.GetTransportType());
             }
             return cellData;
+        }
+
+        /// <summary>
+        ///     Test if hte cell on a position is walkable by an agent.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public bool IsCellOnPointWalkable(Point point) {
+            int cellId = CalculateCellId(point);
+            Cell cell;
+            _cellField.TryGetValue(cellId, out cell);
+
+            if (cell != null) {
+                return (cell.CellType == CellType.Neutral || cell.CellType == CellType.Sacrifice);
+            }
+            return false;
         }
 
         /// <summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using CellLayer;
-using CellLayer.TransportTypes;
+using GoapCommon.Abstract;
 using TypeSafeBlackboard;
 
 namespace HumanLayer.Agents {
@@ -35,17 +35,14 @@ namespace HumanLayer.Agents {
             List<int> result = list.OrderBy(item => rand.Next()).ToList();
 
             foreach (int enumNumber in result) {
-                Enum chosendirection = (CellLayerImpl.Direction) enumNumber;
+                CellLayerImpl.Direction chosendirection = (CellLayerImpl.Direction) enumNumber;
 
                 Tuple<int, int> changes = CellLayerImpl.DirectionMeaning[chosendirection];
                 Point positionChanges = new Point(changes.Item1, changes.Item2);
-                Point newCoordinates;
 
-                TransformPosition(positionChanges, out newCoordinates);
-
-                if (TryWalkToCoordinates(newCoordinates)) {
-                    //HumanLayerImpl.Log.Info("random walk successful");
-                }
+                Point newCoordinates = TransformCurrentPosition(positionChanges);
+                TryWalkToCoordinates(newCoordinates);
+                //HumanLayerImpl.Log.Info("random walk successful");
             }
             //HumanLayerImpl.Log.Info("random walk failed");
         }
@@ -55,23 +52,17 @@ namespace HumanLayer.Agents {
         ///     human will walk until he cannot acces thenext position.
         /// </summary>
         public void FollowDirectionOrSwitchDirection() {
-            
             if (_blackboard.Get(Human.MovementFailed)) {
                 ChooseNewRandomDirection();
-                _blackboard.Set(Human.MovementFailed, false);
             }
 
-            CellLayerImpl.Direction direction = _blackboard.Get(Human.RandomDirectionToFollow);
+            CellLayerImpl.Direction direction = _owner.RandomDirectionToFollow;
             Tuple<int, int> changes = CellLayerImpl.DirectionMeaning[direction];
 
             Point positionChanges = new Point(changes.Item1, changes.Item2);
-            Point newCoordinates;
+            Point newCoordinates = TransformCurrentPosition(positionChanges);
 
-            TransformPosition(positionChanges, out newCoordinates);
-
-            if (!TryWalkToCoordinates(newCoordinates)) {
-                _blackboard.Set(Human.MovementFailed, true);
-            }
+            TryWalkToCoordinates(newCoordinates);
         }
 
         /// <summary>
@@ -81,16 +72,39 @@ namespace HumanLayer.Agents {
             Random rand = new Random();
             int enumNumber = rand.Next(0, 8);
             CellLayerImpl.Direction chosendirection = (CellLayerImpl.Direction) enumNumber;
-            _blackboard.Set(Human.RandomDirectionToFollow, chosendirection);
+            _owner.RandomDirectionToFollow = chosendirection;
             return chosendirection;
         }
 
+        /// <summary>
+        ///     Use the first of the formulated plan in blackboard. 
+        /// </summary>
+        /// <returns></returns>
+        public bool TryWalkNextDirectionOfPlan() {
+
+            if (_owner.HasValidPath()) {
+                List<CellLayerImpl.Direction> directionList = _owner.HumanBlackboard.Get(Human.Path);
+                CellLayerImpl.Direction nextDirection = directionList.First();
+
+                Tuple<int, int> transformation =  CellLayerImpl.DirectionMeaning[nextDirection];
+                Point transformationPoint = new Point(transformation.Item1, transformation.Item2);
+
+                Point nextPointToWalkOn = TransformCurrentPosition(transformationPoint);
+                bool success =  TryWalkToCoordinates(nextPointToWalkOn);
+                if (success) {
+                    _owner.DeleteFirstDirectionFromPath();
+                }
+            }
+            return false;
+        }
+
+       
         /// <summary>
         ///     Try to walk further afar an another cell. Cell can only entered if no other human is on it.
         /// </summary>
         /// <param name="targetCoordinates"></param>
         /// <returns></returns>
-        private bool TryWalkToCoordinates(Point targetCoordinates) {
+        public bool TryWalkToCoordinates(Point targetCoordinates) {
             if (_cellWorldLayer.TestAndSetAgentMove(_owner.AgentID, targetCoordinates)) {
                 // delete the entry on the old cell
                 _cellWorldLayer.DeleteAgentIdFromCell(_owner.AgentID, _blackboard.Get(Human.Position));
@@ -101,23 +115,33 @@ namespace HumanLayer.Agents {
                 // redraw the new position of the agent
                 Point position = _blackboard.Get(Human.Position);
                 _cellWorldLayer.UpdateAgentDrawPosition(_owner.AgentID, position.X, position.Y);
-
+                _blackboard.Set(Human.MovementFailed, false);
                 return true;
             }
+            _blackboard.Set(Human.MovementFailed, true);
             return false;
         }
 
         /// <summary>
-        ///     Service Method to transform the coordinates of the corresponding human by adding
+        ///     Adapter of service Method to transform the coordinates of the corresponding human by adding
         ///     the tuple values to x and y.
         /// </summary>
         /// <param name="transformationData"></param>
-        /// <param name="newCoordinates"></param>
-        private void TransformPosition(Point transformationData, out Point newCoordinates) {
+        private Point TransformCurrentPosition(Point transformationData) {
             Point position = _blackboard.Get(Human.Position);
-            int newX = position.X + transformationData.X;
-            int newY = position.Y + transformationData.Y;
-            newCoordinates = new Point(newX, newY);
+            return TransformPosition(position, transformationData);
+        }
+
+        /// <summary>
+        ///     Service Method to transform  coordinates by adding the tuple values to x and y.
+        /// </summary>
+        /// <param name="oldPosition"></param>
+        /// <param name="transformationData"></param>
+        /// <returns></returns>
+        private Point TransformPosition(Point oldPosition, Point transformationData) {
+            int newX = oldPosition.X + transformationData.X;
+            int newY = oldPosition.Y + transformationData.Y;
+            return new Point(newX, newY);
         }
 
         /// <summary>
@@ -156,7 +180,7 @@ namespace HumanLayer.Agents {
             _blackboard.Set(Human.CellIdOfPosition, cellId);
 
             _cellWorldLayer.AddAgentDraw
-                (_owner.AgentID, randomPosition.X, randomPosition.Y, _blackboard.Get(Human.BehaviourType));
+                (_owner.AgentID, randomPosition.X, randomPosition.Y, _owner.CurrentBehaviourType);
         }
 
         /// <summary>
@@ -167,6 +191,18 @@ namespace HumanLayer.Agents {
         private List<Point> ShufflePointsList(List<Point> list) {
             Random rand = new Random();
             return list.OrderBy(item => rand.Next()).ToList();
+        }
+
+        /// <summary>
+        ///     Helper method to shuffle a dictionary with point and direction. 
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <returns></returns>
+        public Dictionary<Point, CellLayerImpl.Direction> ShufflePointDirectionDict(Dictionary<Point, CellLayerImpl.Direction> dict){
+            Random rand = new Random();
+            dict = dict.OrderBy(x => rand.Next())
+              .ToDictionary(item => item.Key, item => item.Value);
+            return dict;
         }
 
         /// <summary>
@@ -188,12 +224,11 @@ namespace HumanLayer.Agents {
                         // Try to walk on the chosen cell
                         if (TryWalkToCoordinates(fastWay)) {
                             //HumanLayerImpl.Log.Info("Approximation successful");
-                            _blackboard.Set(Human.MovementFailed, false);
                             return;
                         }
 
-                        if (aggressiveMode && !_blackboard.Get(Human.IsOnMassFlight)) {
-                            _cellWorldLayer.AddPressure(fastWay, _blackboard.Get(Human.Strength));
+                        if (aggressiveMode && !_owner.IsOnMassFlight) {
+                            _cellWorldLayer.AddPressure(fastWay, Human.Strength);
                             _cellWorldLayer.RefreshCell(fastWay);
                             return;
                         }
@@ -208,19 +243,20 @@ namespace HumanLayer.Agents {
                         // Try to walk on the chosen cell
                         if (TryWalkToCoordinates(slowWay)) {
                             //HumanLayerImpl.Log.Info("Approximation successful");
-                            _blackboard.Set(Human.MovementFailed, false);
                             return;
                         }
 
-                        if (aggressiveMode && !_blackboard.Get(Human.IsOnMassFlight)) {
-                            _cellWorldLayer.AddPressure(slowWay, _blackboard.Get(Human.Strength));
+                        if (aggressiveMode && !_owner.IsOnMassFlight) {
+                            _cellWorldLayer.AddPressure(slowWay, Human.Strength);
                             _cellWorldLayer.RefreshCell(slowWay);
                             return;
                         }
                     }
                 }
             }
-            _blackboard.Set(Human.MovementFailed, true);
+            else {
+                throw new ArgumentException("MotorAndNavigation: call on ApproximateToTarget with emtpty target");
+            }
         }
 
         /// <summary>
@@ -234,11 +270,10 @@ namespace HumanLayer.Agents {
             // Remember the distance of human to target.
             int currentDistance = GetMinimalDistanceToOwner(targetCoordinates);
 
-            foreach (KeyValuePair<Enum, Tuple<int, int>> direction in CellLayerImpl.DirectionMeaning) {
+            foreach (KeyValuePair<CellLayerImpl.Direction, Tuple<int, int>> direction in CellLayerImpl.DirectionMeaning) {
                 Point transformationValues = new Point(direction.Value.Item1, direction.Value.Item2);
 
-                Point newCoordinates;
-                TransformPosition(transformationValues, out newCoordinates);
+                Point newCoordinates = TransformCurrentPosition(transformationValues);
                 if (!CellLayerImpl.CellCoordinatesAreValid(newCoordinates)) {
                     continue;
                 }
@@ -261,6 +296,18 @@ namespace HumanLayer.Agents {
                 }
             }
             return approximatingCoordinates;
+        }
+
+        /// <summary>
+        ///     Is used if a human is on a exit cell and need to leave the field.
+        /// </summary>
+        public void LeaveByExit() {
+            Point leavingPosition = _blackboard.Get(Human.Position);
+            _owner.DeleteCalmingSphere();
+            _owner.DeleteMassFlightSphere();
+            _blackboard.Set(Human.IsOutSide, true);
+            DeleteHumanInWorld();
+            HumanLayerImpl.Log.Info("Agent " + _owner.AgentID + " has left by exit on " + leavingPosition);
         }
 
 
@@ -286,22 +333,170 @@ namespace HumanLayer.Agents {
             return Math.Max(distX, distY);
         }
 
-        private bool PlanRouteToPosition(Point position) {
-            List<TCell> cellData = _cellWorldLayer.GetAllCellsData();
+       
+        /// <summary>
+        ///     Get a route to the target position on the cell field. Walkable cells are neutral and sacrifice.
+        ///     In the created nodes are directions of movement saved. If planning was successful a list
+        /// </summary>
+        /// <param name="targetPosition"></param>
+        /// <returns></returns>
+        public bool PlanRoute(Point targetPosition) {
+            Dictionary<Point, object[]> nodeTable = new Dictionary<Point, object[]>();
+            Point startPosition = _blackboard.Get(Human.Position);
 
-            return true;
+            int heuristik = GetMinimalDistanceBetweenCoordinates(startPosition, targetPosition);
+            object[] nodeMetadata = PlanRouteNodeCreator(new Point(), null, heuristik);
+            nodeTable.Add(startPosition, nodeMetadata);
+
+            Point currentPoint = startPosition;
+
+            while (!currentPoint.Equals(targetPosition)
+                   && nodeTable.Any(keyValuePair => (bool) keyValuePair.Value[4] == false)) {
+                // get the point with smallest estimate
+                int minEstimate = int.MaxValue;
+                foreach (KeyValuePair<Point, object[]> keyValuePair in nodeTable) {
+                    if ((bool) keyValuePair.Value[4] == false && (int) keyValuePair.Value[3] < minEstimate) {
+                        currentPoint = keyValuePair.Key;
+                        minEstimate = (int) keyValuePair.Value[3];
+                    }
+                }
+
+                // set on closed
+                object[] currentNodeData;
+                nodeTable.TryGetValue(currentPoint, out currentNodeData);
+
+                if (currentNodeData == null) {
+                    return false;
+                }
+                currentNodeData[4] = true;
+                nodeTable[currentPoint] = currentNodeData;
+
+                Dictionary<Point, CellLayerImpl.Direction> surroundingPoints =
+                    new Dictionary<Point, CellLayerImpl.Direction>();
+
+                // get the reachable nodes
+                foreach (
+                    KeyValuePair<CellLayerImpl.Direction, Tuple<int, int>> direction in CellLayerImpl.DirectionMeaning) {
+                    Point transformationValues = new Point(direction.Value.Item1, direction.Value.Item2);
+                    Point neighbour = TransformPosition(currentPoint, transformationValues);
+
+                    if (CellLayerImpl.CellCoordinatesAreValid(neighbour)) {
+                        surroundingPoints.Add(neighbour, direction.Key);
+                    }
+                }
+
+                surroundingPoints = ShufflePointDirectionDict(surroundingPoints);
+
+                // create or update the entrys in the nodeTable
+                foreach (KeyValuePair<Point, CellLayerImpl.Direction> neighbourPoint in surroundingPoints) {
+                    // test if a cell is walkable
+                    if (!_cellWorldLayer.IsCellOnPointWalkable(neighbourPoint.Key)) {
+                        continue;
+                    }
+
+                    int neighbourHeuristic = GetMinimalDistanceBetweenCoordinates(neighbourPoint.Key, targetPosition);
+
+                    // create a new entry if key is not already in list
+                    if (!nodeTable.ContainsKey(neighbourPoint.Key)) {
+                        object[] newNodeData = PlanRouteNodeCreator
+                            (currentPoint, currentNodeData, neighbourHeuristic, neighbourPoint.Value);
+                        nodeTable.Add(neighbourPoint.Key, newNodeData);
+                    }
+
+                        //check if entry must be updated
+                    else if (nodeTable.ContainsKey(neighbourPoint.Key)) {
+                        object[] oldNodeData;
+                        nodeTable.TryGetValue(neighbourPoint.Key, out oldNodeData);
+
+                        // update only if on open list
+                        if (oldNodeData != null && (bool) oldNodeData[4] == false) {
+                            object[] newNodeData = PlanRouteNodeCreator
+                                (currentPoint, currentNodeData, neighbourHeuristic, neighbourPoint.Value);
+
+                            if ((int) oldNodeData[3] > (int) newNodeData[3]) {
+                                nodeTable[neighbourPoint.Key] = newNodeData;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (currentPoint.Equals(targetPosition)) {
+                List<CellLayerImpl.Direction> resultList = new List<CellLayerImpl.Direction>();
+                resultList = PlanRouteGetDirectionsList(currentPoint, nodeTable, resultList);
+                if (resultList != null) {
+                    _blackboard.Set(Human.Path, resultList);
+                    _blackboard.Set(Human.HasPath, true);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     End recursive accumulation of used way to target. At the end the list is reversed so the human can use
+        ///     the first direction to walk.
+        /// </summary>
+        /// <param name="currentPoint"></param>
+        /// <param name="nodeList"></param>
+        /// <param name="resultingList"></param>
+        /// <returns></returns>
+        private List<CellLayerImpl.Direction> PlanRouteGetDirectionsList
+            (Point currentPoint, Dictionary<Point, object[]> nodeList, List<CellLayerImpl.Direction> resultingList) {
+            object[] entry;
+            nodeList.TryGetValue(currentPoint, out entry);
+
+            if (entry != null) {
+                // In this case the current node is the start node. Start node has no predeseccor point.
+                if ((Point) entry[0] == new Point()) {
+                    resultingList.Reverse();
+                    return resultingList;
+                }
+                // In this case use the function again with the extended list and the predecessor as current point.
+                resultingList.Add((CellLayerImpl.Direction) entry[5]);
+                return PlanRouteGetDirectionsList((Point) entry[0], nodeList, resultingList);
+            }
+            return null;
         }
 
 
         /// <summary>
-        ///     Is used if a human is on a exit cell and need to leave the field.
+        ///     Create data corresponding to a point needed for algorithm. values are
+        ///     entry[0] previous point
+        ///     entry[1] linear distance to target
+        ///     entry[2] count of already gone steps
+        ///     entry[3] [1] plus [2]
+        ///     entry[4] if the node is on closed list
+        ///     entry[5] direction by which this point is entered
         /// </summary>
-        public void LeaveByExit() {
-            Point leavingPosition = _blackboard.Get(Human.Position);
-            _owner.DeleteCalmingSphere();
-            _blackboard.Set(Human.IsOutSide, true);
-            DeleteHumanInWorld();
-            HumanLayerImpl.Log.Info("Agent " + _owner.AgentID + " has left by exit on " + leavingPosition);
+        /// <param name="predecessorPoint"></param>
+        /// <param name="predecessorData"></param>
+        /// <param name="heuristic"></param>
+        /// <param name="usedDirection"></param>
+        /// <returns></returns>
+        private object[] PlanRouteNodeCreator
+            (Point predecessorPoint, object[] predecessorData, int heuristic, Enum usedDirection = null) {
+            Point predecessorP = predecessorPoint;
+
+            int travelDistanceG = predecessorPoint.IsEmpty && predecessorData == null ? 0 : (int) predecessorData[2] + 1;
+            int estimatedValueF = travelDistanceG + heuristic;
+
+            object[] entry = new object[6];
+            entry[0] = predecessorP;
+            entry[1] = heuristic;
+            entry[2] = travelDistanceG;
+            entry[3] = estimatedValueF;
+            entry[4] = false;
+            entry[5] = usedDirection;
+
+            return entry;
+        }
+
+        public void ExecuteGoapAction() {
+            AbstractGoapAction currentAction = _blackboard.Get(AbstractGoapSystem.ActionForExecution);
+            if (currentAction != null) {
+                currentAction.Execute();
+            }
         }
     }
 

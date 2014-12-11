@@ -62,7 +62,7 @@ namespace GoapCommon.Abstract {
 
         /// <summary>
         ///     create a new list of worldstates based on the sourceWorldstate
-        ///     without the elements with same type in effect list and add effect list
+        ///     with replaced symbols if keys is equal.
         /// </summary>
         /// <param name="sourceWorldState"></param>
         /// <returns></returns>

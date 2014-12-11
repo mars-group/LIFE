@@ -14,16 +14,17 @@ namespace CellLayer.TransportTypes {
         public readonly int PressureOnCell;
         //public readonly int ResistanceToPressure;
         public Point ExitInformationTechnical;
-        public Point ExitInformationFromHuman;
-
+       
         public bool HasCalmingSphereTechnical;
         public bool HasCalmingSphereByHuman;
         public bool IsExit;
         public bool IsTechnicalInformationSource;
 
-        //public Point[] CoordinatesOfMassFlightLeaders;
+        public bool IsExitArea;
+        public Point ExitAreaInformation;
+
+
         public Point DominantMassFlightLeaderCoordinates;
-        //public Guid[] GuidsOfCalmingHumans;
 
 
         public TCell(Cell correspondingCell) {
@@ -34,15 +35,15 @@ namespace CellLayer.TransportTypes {
             IsExit = correspondingCell.IsExit;
             IsTechnicalInformationSource = correspondingCell.IsTechnicalInformationSource;
             PressureOnCell = correspondingCell.PressureOnCell;
-            //ResistanceToPressure = correspondingCell.ResistanceToPressure;
-            //CoordinatesOfMassFlightLeaders = (Point[])correspondingCell.CoordinatesOfMassFlightLeaders.Clone();
+         
             DominantMassFlightLeaderCoordinates = correspondingCell.DominantMassFlightLeaderCoordinates;
             ExitInformationTechnical = correspondingCell.ExitInformationTechnical;
-            //GuidsOfCalmingHumans = (Guid[])correspondingCell.GuidsOfCalmingHumans.Clone();
             HasCalmingSphereByHuman = correspondingCell.HasCalmingSphereByHuman;
             HasCalmingSphereTechnical = correspondingCell.HasCalmingSphereTechnical;
-           
-            
+
+
+            IsExitArea = correspondingCell.IsExitArea;
+            ExitAreaInformation = correspondingCell.ExitAreaInformation;
             
 
            

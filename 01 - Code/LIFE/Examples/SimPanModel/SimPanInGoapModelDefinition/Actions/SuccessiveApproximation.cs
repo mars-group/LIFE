@@ -8,25 +8,24 @@ using SimPanInGoapModelDefinition.Worldstates;
 namespace SimPanInGoapModelDefinition.Actions {
 
     public class SuccessiveApproximation : AbstractGoapAction {
-        private readonly Human _human;
+        private const int MaximumFailures = 3;
         private const int MaximumAttemps = 30;
+        private readonly Human _human;
+        private int _previousFailures;
         private int _previousAttemps;
-
-
+        
         public SuccessiveApproximation
             (Human human) :
                 base(
-                //new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsInExitArea, true, typeof (Boolean))},
-                new List<WorldstateSymbol>(),
+                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsInExitArea, true, typeof (Boolean))},
                 new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsOnExit, true, typeof (Boolean))}) {
             _human = human;
-            _previousAttemps = 0;
+            _previousFailures = 0;
         }
 
         public override bool ValidateContextPreconditions() {
-            if (_previousAttemps <= MaximumAttemps){
+            if (_previousFailures <= MaximumFailures && _previousAttemps <= MaximumAttemps) {
                 return true;
-                
             }
             return false;
         }
@@ -38,17 +37,14 @@ namespace SimPanInGoapModelDefinition.Actions {
         public override int GetExecutionCosts() {
             return 1;
         }
-        
+
         public override void Execute() {
             _previousAttemps += 1;
-            Console.WriteLine("SuccessiveApproximation executing with " + _previousAttemps + " try");
+            Console.WriteLine("SuccessiveApproximation executing with " + _previousFailures + " try");
             if (_human.HumanBlackboard.Get(Human.MovementFailed)) {
-                _human.MotorAndNavigation.ApproximateToTarget(true);
+                _previousFailures += 1;
             }
-            else {
-                _human.MotorAndNavigation.ApproximateToTarget();
-                
-            }
+            _human.MotorAndNavigation.ApproximateToTarget();
         }
 
         public override bool IsFinished() {
@@ -58,8 +54,6 @@ namespace SimPanInGoapModelDefinition.Actions {
         public override AbstractGoapAction GetResetCopy() {
             return new SuccessiveApproximation(_human);
         }
-
-
     }
 
 }

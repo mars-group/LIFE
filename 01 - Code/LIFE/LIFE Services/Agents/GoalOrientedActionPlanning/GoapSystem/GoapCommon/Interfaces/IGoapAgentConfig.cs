@@ -39,7 +39,12 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <returns></returns>
         bool ForceSymbolsUpdateBeforePlanning();
-            
+
+        /// <summary>
+        ///     Instruction for the goap manger has to use the UpdateWorldstate method every time GetNextAction is called. 
+        /// </summary>
+        /// <returns></returns>
+        bool ForceSymbolsUpdateEveryActionRequest();
         
         /// <summary>
         ///     Connector between the concrete agent variables and the worldstate of the goap system.

@@ -19,7 +19,7 @@ namespace GoapCommon.Implementation {
             _goalValues = goalValues;
             _currValues = currentValues;
             _heuristic = heuristik;
-            CalculateUnsatisfiedAndSatisfiedConditions();
+            CalculateUnsatisfiedConditions();
         }
 
         #region IEquatable<Node> Members
@@ -85,15 +85,11 @@ namespace GoapCommon.Implementation {
         /// <summary>
         ///     compare the expected and existing symbols of the worldstate
         /// </summary>
-        private void CalculateUnsatisfiedAndSatisfiedConditions() {
+        private void CalculateUnsatisfiedConditions() {
             List<WorldstateSymbol> unsatisfiedGoalValues = new List<WorldstateSymbol>();
-            List<WorldstateSymbol> satisfiedGoalValues = new List<WorldstateSymbol>();
 
             foreach (WorldstateSymbol goalValue in _goalValues) {
-                if (_currValues.Contains(goalValue)) {
-                    satisfiedGoalValues.Add(goalValue);
-                }
-                else {
+                if (!_currValues.Contains(goalValue)) {
                     unsatisfiedGoalValues.Add(goalValue);
                 }
             }

@@ -24,7 +24,10 @@ namespace HumanLayer {
         private const int CountOfCalmingHumans = 0;
         private const int CountOfMassFlightLeader = 0;
         private const int CountOfMassFlightAndCalmingLeader = 0;
-        private const int GoapAgents = 1;
+
+        private const int GoapReactiveAgents = 10;
+        private const int GoapDeliberativeAgents = 4;
+        private const int GoapReflectiveAgents = 0;
 
 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -41,8 +44,10 @@ namespace HumanLayer {
 
         public bool InitLayer<I>
             (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+
+            /*
             for (int i = 1; CountOfHumans >= i; i++) {
-                Human humanAgent = new Human(false, _cellLayer);
+                Human humanAgent = new Human(false, _cellLayer, null);
                 humanAgent.SetChosenTarget(new Point(10, 10));
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
@@ -76,15 +81,24 @@ namespace HumanLayer {
                 humanAgent.SetCalmingSphere();
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
-            }
-            for (int i = 1; GoapAgents >= i; i++)
-            {
-                Human humanAgent = new Human(true, _cellLayer);
-                humanAgent.SetChosenTarget(new Point(11, 20));
+            }*/
+            for (int i = 1; GoapReactiveAgents >= i; i++){
+                Human humanAgent = new Human(true, _cellLayer, CellLayerImpl.BehaviourType.Reactive);
                 _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
                 registerAgentHandle.Invoke(this, humanAgent);
             }
 
+             for (int i = 1; GoapDeliberativeAgents >= i; i++){
+                Human humanAgent = new Human(true, _cellLayer,  CellLayerImpl.BehaviourType.Deliberative);
+                _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                registerAgentHandle.Invoke(this, humanAgent);
+            }
+
+             for (int i = 1; GoapReflectiveAgents >= i; i++){
+                Human humanAgent = new Human(true, _cellLayer,  CellLayerImpl.BehaviourType.Reflective);
+                _humanList.GetOrAdd(humanAgent.AgentID, humanAgent);
+                registerAgentHandle.Invoke(this, humanAgent);
+            }
             return true;
         }
 

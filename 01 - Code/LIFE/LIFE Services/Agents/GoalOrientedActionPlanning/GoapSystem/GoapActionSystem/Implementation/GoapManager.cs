@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
@@ -104,6 +105,10 @@ namespace GoapActionSystem.Implementation {
         /// <returns></returns>
         public override AbstractGoapAction GetNextAction() {
 
+            if (IsWorldstateUpdateConfiguredForEveryCallOfGetNextAction()) {
+                UpdateWorldstateByAgent();
+            }
+
             /* current action can be given if: 
              *  + goal is still valid
              *  + the action is not finished
@@ -191,6 +196,10 @@ namespace GoapActionSystem.Implementation {
             return _configClass != null && _configClass.ForceSymbolsUpdateBeforePlanning();
         }
 
+        private bool IsWorldstateUpdateConfiguredForEveryCallOfGetNextAction() {
+            return _configClass != null && _configClass.ForceSymbolsUpdateEveryActionRequest();
+        }
+
         /// <summary>
         ///     Use the connection between agent and goap to update the symbols in the goap system.
         /// </summary>
@@ -223,8 +232,20 @@ namespace GoapActionSystem.Implementation {
                     return true;
                 }
             }
-            GoapComponent.Log.Info("TryGetGoalAndPlan: there was no plan found for any unsatisfied goal");
+
+            GoapComponent.Log.Debug("TryGetGoalAndPlan: there was no plan found for any unsatisfied goal at state: " + GetCurrentStateValues());
             return false;
+        }
+
+        private string GetCurrentStateValues(){
+            string symbolsAsString = "";
+
+            List<WorldstateSymbol> symbols = _internalBlackboard.Get(Worldstate);
+            foreach (var symbol in symbols)
+            {
+                symbolsAsString += "| " + symbol.ToString() + "| ";
+            }
+            return symbolsAsString;
         }
 
         /// <summary>
@@ -336,8 +357,7 @@ namespace GoapActionSystem.Implementation {
         /// <summary>
         ///     Adapter for ConvertWorldstateByAction.
         /// </summary>
-        private void ConvertWorldstateByActionForExecution()
-        {
+        private void ConvertWorldstateByActionForExecution(){
             AbstractGoapAction currentAction = _internalBlackboard.Get(ActionForExecution);
             ConvertWorldstateByAction(currentAction);
         }

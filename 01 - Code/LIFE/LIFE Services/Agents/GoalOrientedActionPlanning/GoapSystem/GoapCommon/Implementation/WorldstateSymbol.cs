@@ -22,7 +22,7 @@ namespace GoapCommon.Implementation {
         }
 
         public override string ToString() {
-            return string.Format("EnumName: {0}, Value: {1}, TypeOfValue: {2}", EnumName, Value, TypeOfValue);
+            return string.Format("Key: {0}, Value: {1}, Type: {2}", EnumName, Value, TypeOfValue);
         }
     }
 

@@ -15,8 +15,13 @@ namespace CellLayer {
         public CellLayerImpl.CellType CellType;
         public Guid AgentOnCell = Guid.Empty;
         public bool IsExit = false;
-        public bool IsTechnicalInformationSource = false;
         
+        public bool IsTechnicalInformationSource = false;
+        public Point ExitInformationTechnical = new Point();
+
+        public bool IsExitArea = false;
+        public Point ExitAreaInformation = new Point();
+
         public int PressureOnCell = 0;
         public int ResistanceToPressure = CellFieldStartConfig.PressureResistanceOfObstacleCells;
         
@@ -27,7 +32,7 @@ namespace CellLayer {
         public Point[] CoordinatesOfMassFlightLeaders = new Point[0];
         public Point DominantMassFlightLeaderCoordinates = new Point();
 
-        public Point ExitInformationTechnical = new Point();
+       
         
         /// <summary>
         ///     There may be more than one influencing human on one cell, if one deletes his effect the cell must show it
@@ -107,6 +112,10 @@ namespace CellLayer {
             cloneCell.GuidsOfCalmingHumans = (Guid[]) GuidsOfCalmingHumans.Clone();
             cloneCell.HasCalmingSphereByHuman = HasCalmingSphereByHuman;
             cloneCell.HasCalmingSphereTechnical = HasCalmingSphereTechnical;
+
+            cloneCell.IsExitArea = IsExitArea;
+            cloneCell.ExitAreaInformation = ExitAreaInformation;
+
             return cloneCell;
         }
 
@@ -203,6 +212,11 @@ namespace CellLayer {
             return neighbourPoints;
         }
 
+        /// <summary>
+        ///     Adapter for GetNeighbourPointsInRange inclusive transfomation from point to cell id.
+        /// </summary>
+        /// <param name="cellRange"></param>
+        /// <returns></returns>
         public List<int> GetNeighbourIdsInRange(int cellRange) {
             List<Point> neighbourPoints =  GetNeighbourPointsInRange(cellRange);
             List<int> neighbourIds = new List<int>();
@@ -220,6 +234,10 @@ namespace CellLayer {
         /// </summary>
         /// <returns></returns>
         private Point GetExitInformation() {
+            if (!ExitAreaInformation.IsEmpty) {
+                return ExitAreaInformation;
+            }
+
             if (!DominantMassFlightLeaderCoordinates.IsEmpty)
             {
                 return DominantMassFlightLeaderCoordinates;
@@ -231,7 +249,7 @@ namespace CellLayer {
         }
 
         private bool HasExitInformation() {
-            return (!DominantMassFlightLeaderCoordinates.IsEmpty || !ExitInformationTechnical.IsEmpty);
+            return (!DominantMassFlightLeaderCoordinates.IsEmpty || !ExitInformationTechnical.IsEmpty || !ExitAreaInformation.IsEmpty);
         }
 
         

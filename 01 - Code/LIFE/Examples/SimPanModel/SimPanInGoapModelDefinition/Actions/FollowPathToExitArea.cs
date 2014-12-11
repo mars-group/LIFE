@@ -7,23 +7,26 @@ using SimPanInGoapModelDefinition.Worldstates;
 
 namespace SimPanInGoapModelDefinition.Actions {
 
-    public class AggressiveApproximation : AbstractGoapAction {
-        private const int MaximumAttemps = 30;
+    public class FollowPathToExitArea : AbstractGoapAction {
+        private const int MaximumAttemps = 50;
+        private const int MaximumFailedMovementsPerStep = 2;
         private readonly Human _human;
         private int _previousAttemps;
-        
-        public AggressiveApproximation
+        private int _previousFailedMovements;
+
+        public FollowPathToExitArea
             (Human human) :
                 base(
-                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsInExitArea, true, typeof (Boolean))},
-                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsOnExit, true, typeof (Boolean))}) {
+                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.HasPath, true, typeof (Boolean))},
+                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsInExitArea, true, typeof (Boolean))}) {
             _human = human;
-            _previousAttemps = 0;
         }
 
         public override bool ValidateContextPreconditions() {
             if (_previousAttemps <= MaximumAttemps) {
-                return true;
+                if (_previousFailedMovements <= MaximumFailedMovementsPerStep) {
+                    return true;
+                }
             }
             return false;
         }
@@ -38,21 +41,22 @@ namespace SimPanInGoapModelDefinition.Actions {
 
         public override void Execute() {
             _previousAttemps += 1;
-            Console.WriteLine("AggressiveApproximation executing with " + _previousAttemps + " try");
+            _human.MotorAndNavigation.TryWalkNextDirectionOfPlan();
+
             if (_human.HumanBlackboard.Get(Human.MovementFailed)) {
-                _human.MotorAndNavigation.ApproximateToTarget(aggressiveMode: true);
+                _previousFailedMovements += 1;
             }
             else {
-                _human.MotorAndNavigation.ApproximateToTarget();
+                _previousFailedMovements = 0;
             }
         }
 
         public override bool IsFinished() {
-            return _human.HumanBlackboard.Get(Human.IsOnExit);
+            return _human.HumanBlackboard.Get(Human.IsInExitArea);
         }
 
         public override AbstractGoapAction GetResetCopy() {
-            return new AggressiveApproximation(_human);
+            return new FollowPathToExitArea(_human);
         }
     }
 

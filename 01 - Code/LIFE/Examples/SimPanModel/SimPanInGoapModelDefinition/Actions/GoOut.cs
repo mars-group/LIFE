@@ -9,11 +9,11 @@ namespace SimPanInGoapModelDefinition.Actions {
 
     public class GoOut : AbstractGoapAction {
         private readonly Human _human;
-        
+
         public GoOut(Human human) :
             base(
             new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsOnExit, true, typeof (Boolean))},
-                new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsOutSide, true, typeof (Boolean))}) {
+            new List<WorldstateSymbol> {new WorldstateSymbol(Properties.IsOutSide, true, typeof (Boolean))}) {
             _human = human;
         }
 
@@ -32,7 +32,10 @@ namespace SimPanInGoapModelDefinition.Actions {
         public override void Execute() {
             _human.MotorAndNavigation.LeaveByExit();
         }
-        
+
+        public override bool IsFinished() {
+            return _human.HumanBlackboard.Get(Human.IsOutSide);
+        }
     }
 
 }

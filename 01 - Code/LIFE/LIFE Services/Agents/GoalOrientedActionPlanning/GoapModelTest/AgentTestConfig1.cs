@@ -38,6 +38,11 @@ namespace GoapModelTest {
             return false;
         }
 
+        public bool ForceSymbolsUpdateEveryActionRequest()
+        {
+            return false;
+        }
+
         public List<WorldstateSymbol> GetUpdatedSymbols()
         {
             throw new NotImplementedException();

@@ -11,11 +11,11 @@ using TypeSafeBlackboard;
 
 namespace SimPanInGoapModelDefinition {
 
-    public class ReactiveConfig : IGoapAgentConfig {
+    public class ReflectiveConfig : IGoapAgentConfig {
         private readonly Human _human;
         private readonly Blackboard _blackboard;
 
-        public ReactiveConfig(Human human, Blackboard blackboard) {
+        public ReflectiveConfig(Human human, Blackboard blackboard) {
             _human = human;
             _blackboard = blackboard;
         }
@@ -28,10 +28,11 @@ namespace SimPanInGoapModelDefinition {
 
         public List<AbstractGoapAction> GetAllActions() {
             return new List<AbstractGoapAction> {
+                new ChooseExit(_human),
+                new FindPathToExit(_human),
+                new FollowPathToExit(_human),
+                new SuccessiveApproximation(_human),
                 new GoOut(_human),
-                new AggressiveApproximation(_human),
-                new AimlessWandering(_human),
-                new ParticipateMassEscape(_human)
             };
         }
 
@@ -60,6 +61,8 @@ namespace SimPanInGoapModelDefinition {
                 new WorldstateSymbol(Properties.IsInExitArea, _blackboard.Get(Human.IsInExitArea), typeof (Boolean)),
                 new WorldstateSymbol(Properties.HasTarget, _blackboard.Get(Human.HasTarget), typeof (Boolean)),
                 new WorldstateSymbol(Properties.HasPath, _blackboard.Get(Human.HasPath), typeof (Boolean)),
+                new WorldstateSymbol
+                    (Properties.KnowsExitLocation, _blackboard.Get(Human.KnowsExitLocation), typeof (Boolean)),
                 new WorldstateSymbol
                     (Properties.KnowsExitLocation, _blackboard.Get(Human.KnowsExitLocation), typeof (Boolean))
             };

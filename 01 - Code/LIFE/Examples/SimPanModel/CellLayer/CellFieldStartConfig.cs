@@ -55,7 +55,6 @@ namespace CellLayer {
             56,
             57,
             58,
-            190,
             328,
             329,
             330,
@@ -72,10 +71,7 @@ namespace CellLayer {
         /// <summary>
         ///     The list of exit cell ids.
         /// </summary>
-        public static readonly List<int> ExitCells = new List<int>() {
-            391,
-        };
-
+        public static readonly List<int> ExitCells = new List<int> { 391};
         private static readonly Point ExitPoint = new Point(11, 20);
 
         public static readonly List<int> TechnicalInformationCells = new List<int> {
@@ -108,6 +104,25 @@ namespace CellLayer {
             {339, ExitPoint},
             {340, ExitPoint},
             {300, ExitPoint},
+        };
+
+        public static readonly Dictionary<int, Point> ExitAreaInformation = new Dictionary<int, Point> {
+            {329, ExitPoint},
+            {330, ExitPoint},
+            {331, ExitPoint},
+            {332, ExitPoint},
+            {333, ExitPoint},
+            {349, ExitPoint},
+            {350, ExitPoint},
+            {351, ExitPoint},
+            {352, ExitPoint},
+            {353, ExitPoint},
+            {370, ExitPoint},
+            {371, ExitPoint},
+            {372, ExitPoint},
+            {390, ExitPoint},
+            {391, ExitPoint},
+            {392, ExitPoint},
         };
     }
 

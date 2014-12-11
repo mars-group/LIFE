@@ -92,6 +92,7 @@ namespace GoapActionSystem.Implementation {
                     currentNode = graphService.GetNextVertex();
                 }
                 else {
+
                     GoapComponent.Log.Info("goap planner: no more nodes in graph for search");
                     return new List<AbstractGoapAction>();
                 }
@@ -148,7 +149,9 @@ namespace GoapActionSystem.Implementation {
         private List<AbstractGoapAction> GetActionsByUnsatisfiedProperties(List<WorldstateSymbol> unsatisfied) {
             HashSet<AbstractGoapAction> relevantActions = new HashSet<AbstractGoapAction>();
             foreach (WorldstateSymbol property in unsatisfied) {
-                _effectToAction[property].ForEach(action => relevantActions.Add(action.GetResetCopy()));
+                if (_effectToAction.ContainsKey(property)) {
+                    _effectToAction[property].ForEach(action => relevantActions.Add(action.GetResetCopy()));
+                }
             }
             return relevantActions.ToList();
         }

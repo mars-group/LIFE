@@ -41,7 +41,7 @@ namespace EventLayer.Agents {
             }
 
             IncrTick();
-            Thread.Sleep(500);
+            Thread.Sleep(10);
         }
 
         #endregion
