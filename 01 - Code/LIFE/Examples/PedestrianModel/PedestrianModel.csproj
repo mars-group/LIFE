@@ -43,7 +43,7 @@
     </Reference>
     <Reference Include="MessageWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
+      <HintPath>.\MessageWrappers.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>

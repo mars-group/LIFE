@@ -11,6 +11,7 @@ using Mono.Addins;
 using PedestrianModel.Agents;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
+using SpatialCommon.Datatypes;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -292,26 +293,44 @@ namespace PedestrianModel {
                 if (o is Obstacle)
                 {
                     Obstacle obs = (Obstacle)o;
-                    VegetationPassiveObject vpo = new VegetationPassiveObject();
-                    vpo.X = (float)obs.GetPosition().X;
-                    vpo.Y = (float)obs.GetPosition().Y;
-                    vpo.Z = (float)obs.GetPosition().Z;
-                    vpo.Width = (float)obs.GetDimension().X;
-                    vpo.Height = (float)obs.GetDimension().Y;
-                    vpo.Id = obs.Id.ToString(CultureInfo.InvariantCulture);
-                    result.Add(vpo);
+                    Vector obsPos = obs.GetPosition();
+                    Vector obsDim = obs.GetDimension();
+                    NonMovingPassiveObject npo = new NonMovingPassiveObject
+                        (Definitions.PassiveTypes.WallPassiveObject,
+                            obsPos.X,
+                            obsPos.Y,
+                            obsPos.Z,
+                            0,
+                            obs.Id.ToString(CultureInfo.InvariantCulture),
+                            "Wall",
+                            "Obstacle",
+                            1,
+                            obsDim.X,
+                            obsDim.Y);
+                    result.Add(npo);
                 }
                 else if (o is Pedestrian)
                 {
                     Pedestrian ped = (Pedestrian)o;
-                    HumanAgent ha = new HumanAgent();
-                    ha.X = (float)ped.GetPosition().X;
-                    ha.Y = (float)ped.GetPosition().Y;
-                    ha.Z = (float)ped.GetPosition().Z;
-                    ha.Width = (float)ped.GetDimension().X;
-                    ha.Height = (float)ped.GetDimension().Y;
-                    ha.Id = ped.Id.ToString(CultureInfo.InvariantCulture);
-                    result.Add(ha);
+                    Vector pedPos = ped.GetPosition();
+                    Vector pedDim = ped.GetDimension();
+                    MovingBasicAgent mba = new MovingBasicAgent
+                        (Definitions.AgentTypes.HumanAgent,
+                            pedPos.X,
+                            pedPos.Y,
+                            pedPos.Z,
+                            0,
+                            ped.Id.ToString(CultureInfo.InvariantCulture),
+                            _tick,
+                            (float)pedDim.X,
+                            (float)pedDim.Y,
+                            (float)pedDim.Z,
+                            new Dictionary<string, string>(),
+                            "Pedestrian",
+                            "Moving",
+                            0,
+                            new List<GroupDefinition>());
+                    result.Add(mba);
                 }
             }
             return result;
