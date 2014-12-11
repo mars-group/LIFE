@@ -1,130 +1,26 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using LayerContainerFacade.Interfaces;
 using log4net;
+using MARSLocalStarter.WinForms;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 
 namespace MARSLocalStarter
 {
-    public static class Program
+    public class Program
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
-
-
-        private static void Main(string[] args) {
-            Log.Info("Initializing components and building application core...");
-
-
-            var core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
-
-            var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
-
-            Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
-
-            // parse for any given parameters and act accordingly
-            ParseArgsAndStart(args, core);
-
-            while (Console.ReadKey().Key != ConsoleKey.Q) { }
-        }
-
-
-
-        /// <summary>
-        /// Start simulation of a model as defined by launcher arguments.
-        /// -h / --help / -? shows quick help
-        /// -l / --list lists all available models
-        /// -m / --model followed by the name of a model starts specified model
-        /// -c / --count specifies the number of ticks to simulate
-        /// finally -cli starts an interactive shell to choose a model.
-        /// </summary>
-        /// <param name="args">Arguments.</param>
-        /// <param name="core">Core.</param>
-        private static void ParseArgsAndStart(string[] args, ISimulationManagerApplicationCore core)
+        private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
         {
-            bool help = false;
-            bool listModels = false;
-            int numOfTicks = 0;
-            string numOfTicksS = "0";
-            string modelName = "";
-            bool interactive = false;
-
-            OptionSet optionSet = new OptionSet()
-                .Add("?|h|help", "Shows short usage", option => help = option != null)
-                .Add("c=|count=", "Specifies number of ticks to simulate",
-                                      option => numOfTicksS = option)
-                .Add("l|list", "List all available models",
-                                      option => listModels = option != null)
-                .Add("m=|model=", "Model to simulate", option => modelName = option)
-                .Add("cli", "Use interactive model chooser",
-                                      option => interactive = option != null);
-
-            try
+            Console.WriteLine(message);
+            optionSet.WriteOptionDescriptions(Console.Out);
+            if (exitWithError)
             {
-                optionSet.Parse(args);
-            }
-            catch (OptionException)
-            {
-                ShowHelp("Usage is:", optionSet, true);
-            }
-
-            if (help)
-            {
-                ShowHelp("Usage is:", optionSet, false);
-                Environment.Exit(0);
-            }
-            else
-            {
-                if (listModels)
-                {
-                    Console.WriteLine("Available models:");
-                    var i = 1;
-                    foreach (var modelDescription in core.GetAllModels())
-                    {
-                        Console.Write(i + ": ");
-                        Console.WriteLine(modelDescription.Name);
-                        i++;
-                    }
-                }
-                else if (interactive)
-                {
-                    InteractiveModelChoosing(core);
-                }
-                else if (!modelName.Equals(""))
-                {
-                    try
-                    {
-                        numOfTicks = Convert.ToInt32(numOfTicksS, 10);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex is OverflowException || ex is FormatException)
-                        {
-                            ShowHelp("Please specify tick count as number!", optionSet, true);
-                        }
-                        throw;
-                    }
-
-                    TModelDescription model = null;
-                    foreach (var modelDescription in core.GetAllModels())
-                    {
-                        if (modelDescription.Name.Equals(modelName))
-                        {
-                            model = modelDescription;
-                        }
-                    }
-
-                    if (model == null)
-                    {
-                        ShowHelp("Model " + modelName + " not exists", optionSet, true);
-                    }
-                    else
-                    {
-                        core.StartSimulationWithModel(model, false, numOfTicks);
-                    }
-                }
+                Environment.Exit(-1);
             }
         }
 
@@ -180,20 +76,168 @@ namespace MARSLocalStarter
             else
             {
                 var models = core.GetAllModels().ToList();
-                core.StartSimulationWithModel(models[nr],false, ticks);
+                core.StartSimulationWithModel(models[nr], ticks);
             }
-
         }
 
-        private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
+        /// <summary>
+        /// Start simulation of a model as defined by launcher arguments.
+        /// -h / --help / -? shows quick help
+        /// -l / --list lists all available models
+        /// -m / --model followed by the name of a model starts specified model
+        /// -c / --count specifies the number of ticks to simulate
+        /// finally -cli starts an interactive shell to choose a model.
+        /// </summary>
+        /// <param name="args">Arguments.</param>
+        /// <param name="core">Core.</param>
+        private static void ParseArgsAndStart(string[] args, ISimulationManagerApplicationCore core, ILayerContainerFacade layerContainer)
         {
-            Console.WriteLine(message);
-            optionSet.WriteOptionDescriptions(Console.Out);
-            if (exitWithError)
+            bool help = false;
+            bool listModels = false;
+            string numOfTicksS = "0";
+            string modelName = string.Empty;
+            bool interactive = false;
+            bool interactiveUI = false;
+
+            OptionSet optionSet = new OptionSet()
+                .Add("?|h|help", "Shows short usage", option => help = option != null)
+                .Add("c=|count=", "Specifies number of ticks to simulate",
+                                      option => numOfTicksS = option)
+                .Add("l|list", "List all available models",
+                                      option => listModels = option != null)
+                .Add("m=|model=", "Model to simulate", option => modelName = option)
+                .Add("cli", "Use interactive model chooser",
+                                      option => interactive = option != null)
+                .Add("cli-ui", "Use interactive model chooser and start ui",
+                                      option => interactiveUI = option != null);
+
+            try
             {
-                Environment.Exit(-1);
+                optionSet.Parse(args);
+            }
+            catch (OptionException)
+            {
+                ShowHelp("Usage is:", optionSet, true);
+            }
+
+            if (help || args.Length == 0)
+            {
+                ShowHelp("Usage is:", optionSet, false);
+            }
+            else
+            {
+                if (listModels)
+                {
+                    Console.WriteLine("Available models:");
+                    var i = 1;
+                    foreach (var modelDescription in core.GetAllModels())
+                    {
+                        Console.Write(i + ": ");
+                        Console.WriteLine(modelDescription.Name);
+                        i++;
+                    }
+                }
+                else if (interactive)
+                {
+                    InteractiveModelChoosing(core);
+                }
+                else if (interactiveUI)
+                {
+                    InteractiveWithUi(core, layerContainer);
+                }
+                else if (!modelName.Equals(string.Empty))
+                {
+                    var numOfTicks = 0;
+                    try
+                    {
+                        numOfTicks = Convert.ToInt32(numOfTicksS, 10);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is OverflowException || ex is FormatException)
+                        {
+                            ShowHelp("Please specify tick count as number!", optionSet, true);
+                        }
+                        throw;
+                    }
+
+                    SMConnector.TransportTypes.TModelDescription model = null;
+                    foreach (var modelDescription in core.GetAllModels())
+                    {
+                        if (modelDescription.Name.Equals(modelName))
+                        {
+                            model = modelDescription;
+                        }
+                    }
+
+                    if (model == null)
+                    {
+                        ShowHelp("Model " + modelName + " not exists", optionSet, true);
+                    }
+                    else
+                    {
+                        core.StartSimulationWithModel(model, numOfTicks);
+                    }
+                }
             }
         }
 
+        private static void InteractiveWithUi(ISimulationManagerApplicationCore core, ILayerContainerFacade layerContainer)
+        {
+            new Thread(new ThreadStart(delegate
+            {
+                try
+                {
+                    var marsMc = new MarsMC(core, layerContainer);
+                    marsMc.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.ToString());
+                }
+            })).Start();
+        }
+
+        private static void Main(string[] args)
+        {
+            log4net.Config.XmlConfigurator.Configure();
+            Logger.Info("MARS LIFE trying to start up.");
+
+            try
+            {
+                Logger.Info("Initializing components and building application core...");
+
+
+                var simCore = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
+                Logger.Info("SimulationManager successfully started.");
+
+                var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+                Logger.Info("LayerContainer successfully started.");
+
+                // parse for any given parameters and act accordingly
+                ParseArgsAndStart(args, simCore, layerCountainerCore);
+
+                Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
+
+                ConsoleKeyInfo info = Console.ReadKey();
+                while (info.Key != ConsoleKey.Q)
+                {
+                    info = Console.ReadKey();
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Fatal("MARS LIFE crashed fatally. Exception:\n {0}", exception);
+
+                throw;
+            }
+
+
+            Logger.Info("MARS LIFE shutting down.");
+
+            // This will shutdown the log4net system
+            LogManager.Shutdown();
+            Environment.Exit(0);
+        }
     }
 }
