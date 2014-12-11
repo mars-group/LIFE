@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AppSettingsManager;
 using Hik.Communication.Scs.Communication.EndPoints;
@@ -14,7 +11,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Udp
 {
     class UdpCommunicationChannel : CommunicationChannelBase {
         private ScsUdpEndPoint _endPoint;
-        private MulticastAdapterComponent _multicastAdapter;
+        private readonly MulticastAdapterComponent _multicastAdapter;
         private bool _running;
 
         /// <summary>
