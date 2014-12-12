@@ -1,89 +1,123 @@
-﻿// /*******************************************************
-//  * Copyright (C) Christian Hüning - All Rights Reserved
-//  * Unauthorized copying of this file, via any medium is strictly prohibited
-//  * Proprietary and confidential
-//  * This file is part of the MARS LIFE project, which is part of the MARS System
-//  * More information under: http://www.mars-group.org
-//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
-//  *******************************************************/
+﻿
 
+using System;
+using System.Runtime.CompilerServices;
+using System.Security.Permissions;
+using NetTopologySuite.Geometries;
 
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+namespace ExampleLayer
+{
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
 
-namespace ExampleLayer {
-    internal class _2DEnvironment {
-        private readonly IDictionary<Position2D, AgentSmith> _agentPositions;
-        private readonly IDictionary<AgentSmith, Position2D> _positionsOfAgents;
+    internal class _2DEnvironment
+    {
+        private readonly IDictionary<Point, AgentSmith> _posToAgent;
+        private readonly IDictionary<AgentSmith, Point> _agentToPos;
 
-        private readonly HashSet<Position2D> _freePositions;
+        private readonly HashSet<Point> _freePositions;
+        private readonly Random _random;
 
+        public _2DEnvironment(int maxx, int maxy)
+        {
+            _posToAgent = new ConcurrentDictionary<Point, AgentSmith>();
+            _agentToPos = new ConcurrentDictionary<AgentSmith, Point>();
+            _freePositions = new HashSet<Point>();
 
-        public _2DEnvironment(int maxx, int maxy) {
-            _agentPositions = new ConcurrentDictionary<Position2D, AgentSmith>();
-            _freePositions = new HashSet<Position2D>();
-            _positionsOfAgents = new ConcurrentDictionary<AgentSmith, Position2D>();
-            for (int x = 0; x < maxx; x++) {
-                for (int y = 0; y < maxy; y++) {
-                    _freePositions.Add(new Position2D(x, y));
+            _random = new Random((int)DateTime.Now.Ticks);
+
+            for (var x = 0; x < maxx; x++)
+            {
+                for (var y = 0; y < maxy; y++)
+                {
+                    _freePositions.Add(new Point(x, y));
                 }
             }
         }
 
-
-        public void ReleaseMyPosition(AgentSmith agent) {
-            lock (_freePositions) {
-                _freePositions.Add(_positionsOfAgents[agent]);
-            }
-            _positionsOfAgents.Remove(agent);
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void ReleaseMyPosition(AgentSmith agent)
+        {
+            if (!_agentToPos.ContainsKey(agent)) return;
+            var pos = _agentToPos[agent];
+            _agentToPos.Remove(agent);
+            _posToAgent.Remove(pos);
+            _freePositions.Add(pos);
         }
 
-        public void RandomlyAddAgentsToFreeFields(IEnumerable<AgentSmith> agents) {
-            foreach (AgentSmith agent in agents) {
-                Position2D freePos = _freePositions.First();
-                _agentPositions.Add(freePos, agent);
-                _freePositions.Remove(freePos);
-                _positionsOfAgents.Add(agent, freePos);
-            }
-        }
-
-        public Position2D SetAgentPosition(AgentSmith agent) {
-            Position2D freePos = _freePositions.First();
-            _agentPositions.Add(freePos, agent);
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void SetAgentPosition(AgentSmith agent)
+        {
+            ReleaseMyPosition(agent);
+            var freePos = _freePositions.ElementAt(_random.Next(0, _freePositions.Count - 1));
             _freePositions.Remove(freePos);
-            _positionsOfAgents.Add(agent, freePos);
-            return freePos;
+            _posToAgent.Add(freePos, agent);
+            _agentToPos.Add(agent, freePos);
         }
 
-        public IEnumerable<AgentSmith> ExploreRadius(AgentSmith agent) {
-            if (agent.Dead) return new List<AgentSmith>();
-            Position2D agentPosition = _positionsOfAgents[agent];
-            List<AgentSmith> result = new List<AgentSmith>();
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        internal Point GetPosition(AgentSmith agent)
+        {
+            return _agentToPos[agent];
+        }
 
-            Position2D posToCheck = new Position2D(agentPosition.X, agentPosition.Y + 1);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public IEnumerable<AgentSmith> ExploreRadius(AgentSmith agent)
+        {
+            Point agentPosition;
+            if (!_agentToPos.TryGetValue(agent, out agentPosition)) return new AgentSmith[0];
 
-            posToCheck = new Position2D(agentPosition.X, agentPosition.Y - 1);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+            var result = new List<AgentSmith>();
+            AgentSmith outAgent;
 
-            posToCheck = new Position2D(agentPosition.X + 1, agentPosition.Y);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+            var posToCheck = new Point(agentPosition.X, agentPosition.Y + 1);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
 
-            posToCheck = new Position2D(agentPosition.X - 1, agentPosition.Y);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+            posToCheck = new Point(agentPosition.X, agentPosition.Y - 1);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
 
-            posToCheck = new Position2D(agentPosition.X - 1, agentPosition.Y - 1);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+            posToCheck = new Point(agentPosition.X + 1, agentPosition.Y);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
 
-            posToCheck = new Position2D(agentPosition.X + 1, agentPosition.Y + 1);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+            posToCheck = new Point(agentPosition.X - 1, agentPosition.Y);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
 
-            posToCheck = new Position2D(agentPosition.X - 1, agentPosition.Y + 1);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+            posToCheck = new Point(agentPosition.X - 1, agentPosition.Y - 1);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
 
-            posToCheck = new Position2D(agentPosition.X + 1, agentPosition.Y - 1);
-            if (_agentPositions.ContainsKey(posToCheck)) result.Add(_agentPositions[posToCheck]);
+            posToCheck = new Point(agentPosition.X + 1, agentPosition.Y + 1);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
+
+            posToCheck = new Point(agentPosition.X - 1, agentPosition.Y + 1);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
+
+            posToCheck = new Point(agentPosition.X + 1, agentPosition.Y - 1);
+            if (_posToAgent.TryGetValue(posToCheck, out outAgent))
+            {
+                result.Add(outAgent);
+            }
             return result;
         }
     }

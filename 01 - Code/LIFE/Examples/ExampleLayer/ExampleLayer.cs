@@ -1,15 +1,6 @@
-﻿// /*******************************************************
-//  * Copyright (C) Christian Hüning - All Rights Reserved
-//  * Unauthorized copying of this file, via any medium is strictly prohibited
-//  * Proprietary and confidential
-//  * This file is part of the MARS LIFE project, which is part of the MARS System
-//  * More information under: http://www.mars-group.org
-//  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
-//  *******************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoAPI.Geometries;
@@ -20,78 +11,87 @@ using Mono.Addins;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
+namespace ExampleLayer
+{
+    using System.Collections.Generic;
 
-namespace ExampleLayer {
-    [Extension(typeof (ISteppedLayer))]
-    public class ExampleLayer : ISteppedActiveLayer, IVisualizable {
-        private const int agentCount = 10000;
-        private List<AgentSmith> _agents;
+    [Mono.Addins.Extension(typeof(ISteppedLayer))]
+    public class ExampleLayer : ISteppedActiveLayer, IVisualizable
+    {
+        private AgentSmith[] _agents;
+        private const int TerrainSizeX = 300;
+        private const int TerrainSizeY = 200;
+        private const int AgentCount = TerrainSizeX * TerrainSizeY;
+        private readonly TerrainDataMessage _terrainMessage = new TerrainDataMessage(TerrainSizeX, TerrainSizeY, 0);
+        private _2DEnvironment _environment;
         private long _currentTick;
 
-        #region ISteppedActiveLayer Members
+        public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
+        {
+            Console.WriteLine("Starting initialization...");
+            var sw = Stopwatch.StartNew();
+            _environment = new _2DEnvironment(TerrainSizeX, TerrainSizeY);
+            _agents = new AgentSmith[AgentCount];
+            Parallel.For(0, AgentCount, delegate(int i)
+            {
+                var smith = new AgentSmith(_environment, unregisterAgentHandle, this);
+                _agents[i] = smith;
+                registerAgentHandle.Invoke(this, smith);
+            });
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-            _2DEnvironment _environment = new _2DEnvironment(100, 100);
-            _agents = new List<AgentSmith>();
-            for (int i = 0; i < agentCount; i++) {
-                _agents.Add(new AgentSmith(_environment, unregisterAgentHandle, this));
-            }
-
-            //_environment.RandomlyAddAgentsToFreeFields(_agents);
-
-            foreach (AgentSmith agentSmith in _agents) {
-                registerAgentHandle.Invoke(this, agentSmith);
-            }
+            Console.WriteLine("Initialized {0} agents in {1}ms.", TerrainSizeX * TerrainSizeY, sw.ElapsedMilliseconds);
 
             return true;
         }
 
-        public long GetCurrentTick() {
-            return _currentTick;
+        public long GetCurrentTick()
+        {
+            throw new NotImplementedException();
         }
 
-        public void SetCurrentTick(long currentTick) {
+        public void SetCurrentTick(long currentTick)
+        {
             _currentTick = currentTick;
         }
 
+        public List<BasicVisualizationMessage> GetVisData()
+        {
+            var result = new ConcurrentBag<BasicVisualizationMessage> { _terrainMessage };
+            Parallel.ForEach(_agents.Where(a => !a.Dead), delegate(AgentSmith a)
+            {
+                var pos = _environment.GetPosition(a);
+                result.Add(new BasicAgent()
+                {
+                    Id = a.AgentID.ToString(),
+                    Description = "AgentSmith",
+                    State = a.Dead ? "Dead" : "Alive",
+                    X = (float)pos.X,
+                    Y = (float)pos.Y
+                });
+            });
 
-        public void Tick() {
-            Console.WriteLine("Hello from Tick");
-        }
-
-        public void PreTick() {
-            Console.WriteLine("Hello from PreTick");
-        }
-
-        public void PostTick() {
-            Console.WriteLine("Hello from PostTick");
-        }
-
-        #endregion
-
-        #region IVisualizable Members
-
-        public List<BasicVisualizationMessage> GetVisData() {
-            ConcurrentBag<BasicVisualizationMessage> result = new ConcurrentBag<BasicVisualizationMessage>();
-            result.Add(new TerrainDataMessage(100, 0, 100));
-            Parallel.ForEach
-                (_agents,
-                    a => result.Add
-                        (new BasicAgent() {
-                            Id = a.AgentID.ToString(),
-                            Description = "AgentSmith",
-                            State = a.Dead ? "Dead" : "Alive",
-                            X = a.MyPosition.X,
-                            Y = a.MyPosition.Y
-                        }));
             return result.ToList();
         }
 
-        public List<BasicVisualizationMessage> GetVisData(IGeometry geometry) {
-            return new List<BasicVisualizationMessage>();
+        public List<BasicVisualizationMessage> GetVisData(IGeometry geometry)
+        {
+            throw new NotImplementedException();
         }
 
-        #endregion
+
+        public void Tick()
+        {
+            //  Console.WriteLine("I am ExampleLayer and I got ticked");
+        }
+
+        public void PreTick()
+        {
+            //Console.WriteLine("I am ExampleLayer and I got PREticked");
+        }
+
+        public void PostTick()
+        {
+            //Console.WriteLine("I am ExampleLayer and I got POSTticked");
+        }
     }
 }
