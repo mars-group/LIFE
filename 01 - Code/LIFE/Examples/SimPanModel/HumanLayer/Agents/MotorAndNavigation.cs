@@ -70,7 +70,7 @@ namespace HumanLayer.Agents {
         ///     Use the first of the formulated plan in blackboard.
         /// </summary>
         /// <returns></returns>
-        public bool TryWalkNextDirectionOfPlan() {
+        public bool TryWalkNextDirectionOfPlan(bool aggressiveMode = false) {
             if (_owner.HasValidPath()) {
                 // Get the first direction of plan.
                 List<CellLayerImpl.Direction> directionList = _blackboard.Get(Human.Path);
@@ -86,8 +86,16 @@ namespace HumanLayer.Agents {
                     directionList.RemoveAt(0);
                     _blackboard.Set(Human.Path, directionList);
                 }
+                else {
+                    if (aggressiveMode) {
+                        _cellWorldLayer.AddPressure(nextPointToWalkOn, Human.Strength);
+                        _cellWorldLayer.RefreshCell(nextPointToWalkOn);
+                    }
+                }
                 return success;
             }
+            _blackboard.Set(Human.MovementFailed, true);
+            DeletePath();
             return false;
         }
 
@@ -162,6 +170,14 @@ namespace HumanLayer.Agents {
                 (_owner.AgentID, randomPosition.X, randomPosition.Y, _owner.CurrentBehaviourType);
         }
 
+        public void GetPosition(int cellId) {
+            Point coordinatePoint = _cellWorldLayer.SetOnCell(cellId, _owner.AgentID);
+            _blackboard.Set(Human.Position, coordinatePoint);
+            _blackboard.Set(Human.CellIdOfPosition, cellId);
+            _cellWorldLayer.AddAgentDraw
+                (_owner.AgentID, coordinatePoint.X, coordinatePoint.Y, _owner.CurrentBehaviourType);
+        }
+
         /// <summary>
         ///     Get a route to the target position on the cell field. Walkable cells are neutral and sacrifice.
         ///     In the created nodes are directions of movement saved. If planning was successful a list
@@ -171,6 +187,10 @@ namespace HumanLayer.Agents {
         public bool PlanRoute(Point targetPosition) {
             Dictionary<Point, object[]> nodeTable = new Dictionary<Point, object[]>();
             Point startPosition = _blackboard.Get(Human.Position);
+
+            if (targetPosition == startPosition) {
+                var a = 1;
+            }
 
             int heuristik = GetMinimalDistanceBetweenCoordinates(startPosition, targetPosition);
             object[] nodeMetadata = PlanRouteNodeCreator(new Point(), null, heuristik);
@@ -259,6 +279,11 @@ namespace HumanLayer.Agents {
                 }
             }
             return false;
+        }
+
+        public void DeletePath() {
+            _blackboard.Set(Human.Path, new List<CellLayerImpl.Direction>());
+            _blackboard.Set(Human.HasPath, false);
         }
 
         /// <summary>

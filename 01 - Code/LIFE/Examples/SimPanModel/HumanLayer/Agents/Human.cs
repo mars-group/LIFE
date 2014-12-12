@@ -13,10 +13,10 @@ namespace HumanLayer.Agents {
     ///     Represens one single human in the simulation. A human is shown as a point in the simulation view.
     /// </summary>
     public class Human : IAgent {
-        public const int CalmingRadius = 2;
-        public const int MassFlightRadius = 2;
-        public const int Strength = 5;
-        public const int ResistanceToPressure = 10;
+        public const int CalmingRadius = HumanLayerImpl.CalmingRadius;
+        public const int MassFlightRadius = HumanLayerImpl.MassFlightRadius;
+        public const int Strength = HumanLayerImpl.Strength;
+        public const int ResistanceToPressure = HumanLayerImpl.ResistanceToPressure;
 
         public static readonly BlackboardProperty<Boolean> IsOnExit =
             new BlackboardProperty<Boolean>("IsOnExit");
@@ -54,19 +54,19 @@ namespace HumanLayer.Agents {
         public static readonly BlackboardProperty<List<CellLayerImpl.Direction>> Path =
             new BlackboardProperty<List<CellLayerImpl.Direction>>("Path");
 
+
         public readonly Guid AgentID = Guid.NewGuid();
         public readonly Blackboard HumanBlackboard = new Blackboard();
         public readonly PerceptionAndMemory SensorAndMemory;
         public readonly MotorAndNavigation MotorAndNavigation;
-        public readonly CellLayerImpl CellLayer;
-        private readonly bool _helperIsGoap;
-        private readonly AbstractGoapSystem _goapActionSystem;
+        private readonly CellLayerImpl _cellLayer;
 
-        public bool IsAlive = true;
+        private AbstractGoapSystem _goapActionSystem;
+        private bool _isAlive = true;
+
         public int VitalEnergy = 20;
-        public bool CanMove = true;
+        private bool _canMove = true;
         public CellLayerImpl.BehaviourType CurrentBehaviourType;
-
 
         public bool HasMassFlightSphere;
         public int PauseMassFlightSphere;
@@ -79,23 +79,21 @@ namespace HumanLayer.Agents {
         /// <summary>
         ///     Create the start value und the sensor and motor classes.
         /// </summary>
-        /// <param name="isGoap"></param>
         /// <param name="cellLayer"></param>
         /// <param name="behaviourType"></param>
         public Human
-            (bool isGoap,
-                CellLayerImpl cellLayer,
+            (CellLayerImpl cellLayer,
                 CellLayerImpl.BehaviourType behaviourType) {
-            // startvalues
             CurrentBehaviourType = behaviourType;
+            _cellLayer = cellLayer;
+
+            // startvalues
             FearValue = GetRandomisedFearValue(behaviourType);
             HumanBlackboard.Set(LastPosition, new Point());
             IsOnMassFlight = false;
             HumanBlackboard.Set(IsOnExit, false);
-            _helperIsGoap = isGoap;
-            CellLayer = cellLayer;
 
-            //create the sensor
+            // create the sensor and memory management
             SensorAndMemory = new PerceptionAndMemory(cellLayer, this, HumanBlackboard);
 
             // create the moving and manipuliating system/ action trigger
@@ -103,44 +101,48 @@ namespace HumanLayer.Agents {
 
             // place the human on the cell field by random
             MotorAndNavigation.GetAnSetRandomPositionInCellWorld();
+            //MotorAndNavigation.GetPosition(391);
+            SensorAndMemory.CollectAndProcessSensorInformation();
 
-            if (isGoap) {
-                string nameOfConfigClass = null;
-                switch (behaviourType) {
-                    case CellLayerImpl.BehaviourType.Reactive:
-                        nameOfConfigClass = HumanLayerImpl.ReactiveConfig;
-                        break;
-                    case CellLayerImpl.BehaviourType.Deliberative:
-                        nameOfConfigClass = HumanLayerImpl.DeliberativeConfig;
-                        HumanBlackboard.Set(KnowsExitLocation, true);
-                        break;
-                    case CellLayerImpl.BehaviourType.Reflective:
-                        nameOfConfigClass = HumanLayerImpl.ReflectiveConfig;
-                        HumanBlackboard.Set(KnowsExitLocation, true);
-                        HasCalmingSphere = true;
-                        break;
-                    default:
-                        throw new ArgumentException("Human: BehaviourType of agent is not known.");
-                }
+            string nameOfConfigClass;
 
-                _goapActionSystem =
-                    GoapComponent.LoadGoapConfigurationWithSelfreference
-                        (nameOfConfigClass, HumanLayerImpl.NamespaceOfModelDefinition, HumanBlackboard, this);
-
-                FearValue = GetRandomisedFearValue(behaviourType);
+            switch (behaviourType) {
+                case CellLayerImpl.BehaviourType.Reactive:
+                    nameOfConfigClass = HumanLayerImpl.ReactiveConfig;
+                    break;
+                case CellLayerImpl.BehaviourType.Deliberative:
+                    nameOfConfigClass = HumanLayerImpl.DeliberativeConfig;
+                    HumanBlackboard.Set(KnowsExitLocation, true);
+                    break;
+                case CellLayerImpl.BehaviourType.Reflective:
+                    nameOfConfigClass = HumanLayerImpl.ReflectiveConfig;
+                    HumanBlackboard.Set(KnowsExitLocation, true);
+                    HasCalmingSphere = true;
+                    break;
+                default:
+                    throw new ArgumentException("Human: BehaviourType of agent is not known.");
             }
+            _goapActionSystem =
+                GoapComponent.LoadGoapConfigurationWithSelfreference
+                    (nameOfConfigClass, HumanLayerImpl.NamespaceOfModelDefinition, HumanBlackboard, this);
+
+            FearValue = GetRandomisedFearValue(behaviourType);
         }
 
         #region IAgent Members
 
         public void Tick() {
-            if (_helperIsGoap && IsAlive && !HumanBlackboard.Get(IsOutSide)) {
-                SensorAndMemory.SenseCellInformations();
-                SensorAndMemory.ProcessSensorInformations();
+            if (_isAlive && !HumanBlackboard.Get(IsOutSide)) {
+                SensorAndMemory.CollectAndProcessSensorInformation();
 
-                AbstractGoapAction action = _goapActionSystem.GetNextAction();
-
-                MotorAndNavigation.ExecuteGoapAction();
+                if (_canMove) {
+                    _goapActionSystem.GetNextAction();
+                    MotorAndNavigation.ExecuteGoapAction();
+                }
+                // update is only needed if the human has not left the simalution area
+                if (HumanBlackboard.Get(IsOutSide) == false) {
+                    UpdateBehaviourType();
+                }
             }
         }
 
@@ -154,15 +156,139 @@ namespace HumanLayer.Agents {
         private int GetRandomisedFearValue(CellLayerImpl.BehaviourType behaviour) {
             Random rand = new Random();
             if (behaviour == CellLayerImpl.BehaviourType.Reactive) {
-                return rand.Next(45, 101);
+                return rand.Next
+                    (HumanLayerImpl.UpperBoundOfDeliberativeBehaviourArea + 1, HumanLayerImpl.HighestBoundOfFear + 1);
             }
             if (behaviour == CellLayerImpl.BehaviourType.Deliberative) {
-                return rand.Next(15, 45);
+                return rand.Next
+                    (HumanLayerImpl.UpperBoundOfReflectiveBehaviourArea + 1,
+                        HumanLayerImpl.UpperBoundOfDeliberativeBehaviourArea + 1);
             }
             if (behaviour == CellLayerImpl.BehaviourType.Reflective) {
-                return rand.Next(1, 15);
+                return rand.Next
+                    (HumanLayerImpl.LowestBoundOfFear, HumanLayerImpl.UpperBoundOfReflectiveBehaviourArea + 1);
             }
             throw new ArgumentException("Human: No matching in behaviour types at GetRandomisedFearValue");
+        }
+
+        /// <summary>
+        ///     Check if depending on the fear value the agent got the right behaviour type. If the behaviour 
+        ///     must be switched, updtae needed variables so goap can choose the correct actions.
+        /// </summary>
+        private void UpdateBehaviourType() {
+            // Range for akinesia. Fear is between highest and above upper reactive bound.
+            if (HumanLayerImpl.HighestBoundOfFear >= FearValue
+                && FearValue > HumanLayerImpl.UpperBoundOfReactiveBehaviourArea) {
+                if (_canMove == false) {
+                    _canMove = false;
+                }
+                // change to reactive behaviour
+                if (CurrentBehaviourType != CellLayerImpl.BehaviourType.Reactive) {
+                    // Reset controlling values and create the matiching goap system.
+                    IsOnMassFlight = false;
+                    HumanBlackboard.Set(KnowsExitLocation, false);
+                    HumanBlackboard.Set(Target, new Point());
+                    HumanBlackboard.Set(HasTarget, false);
+                    SensorAndMemory.DeleteCalmingSphere();
+                    SensorAndMemory.DeleteMassFlightSphere();
+                    MotorAndNavigation.DeletePath();
+
+                    CurrentBehaviourType = CellLayerImpl.BehaviourType.Reactive;
+                    SensorAndMemory.CollectAndProcessSensorInformation();
+                    HumanLayerImpl.Log.Info("Changed behaviour type to akinesia");
+
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                        (HumanLayerImpl.ReactiveConfig,
+                            HumanLayerImpl.NamespaceOfModelDefinition,
+                            HumanBlackboard,
+                            this);
+
+                    _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
+                }
+
+                // Range for reactive behaviour.
+            }
+            else if (HumanLayerImpl.UpperBoundOfDeliberativeBehaviourArea >= FearValue &&
+                     FearValue > HumanLayerImpl.UpperBoundOfDeliberativeBehaviourArea) {
+                // change to reactive behaviour
+                if (CurrentBehaviourType != CellLayerImpl.BehaviourType.Reactive) {
+                    // Reset controlling values and create the matiching goap system.
+                    IsOnMassFlight = false;
+                    HumanBlackboard.Set(KnowsExitLocation, false);
+                    HumanBlackboard.Set(Target, new Point());
+                    HumanBlackboard.Set(HasTarget, false);
+                    SensorAndMemory.DeleteCalmingSphere();
+                    SensorAndMemory.DeleteMassFlightSphere();
+                    MotorAndNavigation.DeletePath();
+
+                    CurrentBehaviourType = CellLayerImpl.BehaviourType.Reactive;
+                    SensorAndMemory.CollectAndProcessSensorInformation();
+                    HumanLayerImpl.Log.Info("Changed behaviour type to reactive");
+
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                        (HumanLayerImpl.ReactiveConfig,
+                            HumanLayerImpl.NamespaceOfModelDefinition,
+                            HumanBlackboard,
+                            this);
+
+                    _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
+                }
+
+                // Range for deliberative behaviour.
+            }
+            else if (HumanLayerImpl.UpperBoundOfDeliberativeBehaviourArea >= FearValue &&
+                     FearValue > HumanLayerImpl.UpperBoundOfReflectiveBehaviourArea) {
+                // change to deliberative behaviour
+                if (CurrentBehaviourType != CellLayerImpl.BehaviourType.Deliberative) {
+                    // Reset controlling values and create the matiching goap system.
+                    IsOnMassFlight = false;
+                    HumanBlackboard.Set(KnowsExitLocation, true);
+                    HumanBlackboard.Set(Target, new Point());
+                    HumanBlackboard.Set(HasTarget, false);
+                    SensorAndMemory.DeleteCalmingSphere();
+                    MotorAndNavigation.DeletePath();
+
+                    CurrentBehaviourType = CellLayerImpl.BehaviourType.Deliberative;
+                    SensorAndMemory.CollectAndProcessSensorInformation();
+                    HumanLayerImpl.Log.Info("Changed behaviour type to deliberative");
+
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                        (HumanLayerImpl.DeliberativeConfig,
+                            HumanLayerImpl.NamespaceOfModelDefinition,
+                            HumanBlackboard,
+                            this);
+
+                    _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
+                }
+
+
+                // Range for reflective behaviour.
+            }
+            else if (HumanLayerImpl.UpperBoundOfReflectiveBehaviourArea >= FearValue
+                     && FearValue <= HumanLayerImpl.LowestBoundOfFear) {
+                // change to reflective behaviour
+                if (CurrentBehaviourType != CellLayerImpl.BehaviourType.Reflective) {
+                    // Reset controlling values and create the matiching goap system.
+                    IsOnMassFlight = false;
+                    HumanBlackboard.Set(KnowsExitLocation, true);
+                    HumanBlackboard.Set(Target, new Point());
+                    HumanBlackboard.Set(HasTarget, false);
+                    HasCalmingSphere = true;
+                    MotorAndNavigation.DeletePath();
+
+                    CurrentBehaviourType = CellLayerImpl.BehaviourType.Reflective;
+                    SensorAndMemory.CollectAndProcessSensorInformation();
+                    HumanLayerImpl.Log.Info("Changed behaviour type to reflective");
+
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                        (HumanLayerImpl.ReflectiveConfig,
+                            HumanLayerImpl.NamespaceOfModelDefinition,
+                            HumanBlackboard,
+                            this);
+
+                    _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
+                }
+            }
         }
 
         /// <summary>
@@ -186,6 +312,7 @@ namespace HumanLayer.Agents {
             SensorAndMemory.DeleteCalmingSphere();
             SensorAndMemory.DeleteMassFlightSphere();
             HumanBlackboard.Set(IsOutSide, true);
+            _canMove = false;
             MotorAndNavigation.DeleteHumanInWorld();
             HumanLayerImpl.Log.Info("Agent " + AgentID + " has left by exit on " + leavingPosition);
         }
@@ -204,27 +331,24 @@ namespace HumanLayer.Agents {
         /// </summary>
         /// <param name="createObstacle"></param>
         public void SetAsKilled(bool createObstacle = true) {
-            IsAlive = false;
-            CanMove = false;
+            _isAlive = false;
+            _canMove = false;
 
-            if (HasCalmingSphere) {
-                HasCalmingSphere = false;
-                SensorAndMemory.DeleteCalmingSphere();
-            }
+            HasCalmingSphere = false;
+            SensorAndMemory.DeleteCalmingSphere();
 
-            if (HasMassFlightSphere) {
-                HasMassFlightSphere = false;
-                SensorAndMemory.DeleteMassFlightSphere();
-            }
+            HasMassFlightSphere = false;
+            SensorAndMemory.DeleteMassFlightSphere();
+
 
             if (createObstacle) {
-                CellLayer.SetCellStatus(HumanBlackboard.Get(CellIdOfPosition), CellLayerImpl.CellType.Sacrifice);
-                CellLayer.DeleteAgentDraw(AgentID);
-                CellLayer.DeleteAgentIdFromCell(AgentID, HumanBlackboard.Get(Position));
+                _cellLayer.SetCellStatus(HumanBlackboard.Get(CellIdOfPosition), CellLayerImpl.CellType.Sacrifice);
+                _cellLayer.DeleteAgentDraw(AgentID);
+                _cellLayer.DeleteAgentIdFromCell(AgentID, HumanBlackboard.Get(Position));
                 HumanBlackboard.Set(Position, new Point());
             }
             else {
-                CellLayer.UpdateAgentDrawStatus(AgentID, CellLayerImpl.BehaviourType.Dead);
+                _cellLayer.UpdateAgentDrawStatus(AgentID, CellLayerImpl.BehaviourType.Dead);
             }
             HumanLayerImpl.Log.Info("i am " + AgentID + " dead.");
         }

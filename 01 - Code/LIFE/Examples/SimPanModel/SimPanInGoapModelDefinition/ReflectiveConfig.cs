@@ -31,7 +31,6 @@ namespace SimPanInGoapModelDefinition {
                 new ChooseExit(_human),
                 new FindPathToExit(_human),
                 new FollowPathToExit(_human),
-                new SuccessiveApproximation(_human),
                 new GoOut(_human),
             };
         }
@@ -55,7 +54,8 @@ namespace SimPanInGoapModelDefinition {
         }
 
         public List<WorldstateSymbol> GetUpdatedSymbols() {
-            List<WorldstateSymbol> updatedSymbols = new List<WorldstateSymbol> {
+            List<WorldstateSymbol> updatedSymbols;
+            updatedSymbols = new List<WorldstateSymbol> {
                 new WorldstateSymbol(Properties.IsOutSide, _blackboard.Get(Human.IsOutSide), typeof (Boolean)),
                 new WorldstateSymbol(Properties.IsOnExit, _blackboard.Get(Human.IsOnExit), typeof (Boolean)),
                 new WorldstateSymbol(Properties.IsInExitArea, _blackboard.Get(Human.IsInExitArea), typeof (Boolean)),

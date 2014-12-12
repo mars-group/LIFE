@@ -11,12 +11,13 @@ namespace SimPanInGoapModelDefinition.Actions {
     ///     Follow the path across the cell field to the exit position.
     /// </summary>
     public class FollowPathToExit : AbstractGoapAction {
-        private const int MaximumAttemps = 50;
-        private const int MaximumFailedMovementsPerStep = 2;
         private readonly Human _human;
+        
+        // Maximum of steps the action can use.
+        private const int MaximumAttemps = 5;
         private int _previousAttemps;
-        private int _previousFailedMovements;
 
+        
         public FollowPathToExit
             (Human human) :
                 base(
@@ -27,9 +28,7 @@ namespace SimPanInGoapModelDefinition.Actions {
 
         public override bool ValidateContextPreconditions() {
             if (_previousAttemps <= MaximumAttemps) {
-                if (_previousFailedMovements <= MaximumFailedMovementsPerStep) {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -39,11 +38,9 @@ namespace SimPanInGoapModelDefinition.Actions {
             _human.MotorAndNavigation.TryWalkNextDirectionOfPlan();
 
             if (_human.HumanBlackboard.Get(Human.MovementFailed)) {
-                _previousFailedMovements += 1;
+                _human.MotorAndNavigation.DeletePath();
             }
-            else {
-                _previousFailedMovements = 0;
-            }
+            
         }
 
         public override bool IsFinished() {

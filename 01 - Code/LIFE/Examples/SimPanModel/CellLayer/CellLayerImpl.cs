@@ -571,10 +571,10 @@ namespace CellLayer {
                 object[] pointData;
                 _viewForm.PointsData.TryGetValue(guid, out pointData);
 
-                // TODO manchmal kommt hier null...ablaüfe noch fehlerhaft?
-                //if (pointData != null) {
-                UpdateAgentDraw(guid, (float) pointData[0], (float) pointData[1], AgentColors[type]);
-                //}
+                
+                if (pointData != null) {
+                    UpdateAgentDraw(guid, (float) pointData[0], (float) pointData[1], AgentColors[type]);
+                }
             }
         }
 
@@ -638,6 +638,29 @@ namespace CellLayer {
             }
         }
 
+        public Point SetOnCell(int cellId, Guid guid)
+        {
+            Cell cell;
+            _cellField.TryGetValue(cellId, out cell);
+
+            if (cell == null) {
+                return new Point();
+            }
+
+            if (cell.CellType != CellType.Neutral){
+                return new Point(); ;
+            }
+
+            if (!cell.AgentOnCell.Equals(Guid.Empty)){
+                return new Point(); ;
+            }
+            cell.AgentOnCell = guid;
+            Point coordinates = new Point(cell.Coordinates.X, cell.Coordinates.Y);
+            return coordinates;
+        }
+
+
+
         /// <summary>
         ///     Get the transport type of the cell data. It is a TCell object with copied
         ///     values as snapshot and no reference to the cell.
@@ -649,6 +672,9 @@ namespace CellLayer {
             _cellField.TryGetValue(cellId, out cell);
             if (cell != null) {
                 return cell.GetTransportType();
+            }
+            else {
+                var a = 1;
             }
             return null;
         }

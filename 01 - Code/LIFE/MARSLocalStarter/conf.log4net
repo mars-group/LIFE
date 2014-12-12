@@ -10,8 +10,8 @@
       </layout>
     </appender>
     <root>
-      <!-- <level value="ALL" /> -->
-      <levelMin value="DEBUG" />
+      <level value="ALL" />
+     
       <appender-ref ref="ConsoleAppender" />
       </root>
   </log4net>

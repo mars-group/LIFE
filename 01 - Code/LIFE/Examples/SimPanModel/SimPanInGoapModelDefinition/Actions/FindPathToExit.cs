@@ -23,7 +23,7 @@ namespace SimPanInGoapModelDefinition.Actions {
         }
 
         public override bool ValidateContextPreconditions() {
-            return _successOnPlanning;
+            return _successOnPlanning ;
         }
         
         public override void Execute() {
