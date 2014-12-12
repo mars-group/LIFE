@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading;
-using LayerAPI.Interfaces;
-using NetTopologySuite.Geometries;
+using LayerAPI.Agent;
+using LayerAPI.Layer;
 
 namespace ExampleLayer
 {

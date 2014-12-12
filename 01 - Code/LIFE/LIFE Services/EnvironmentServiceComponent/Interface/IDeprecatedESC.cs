@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using EnvironmentServiceComponent.Entities;
-using GenericAgentArchitectureCommon.Interfaces;
-using SpatialCommon.TransportTypes;
+using LayerAPI.Perception;
+using LayerAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Interface {
     using Entities;

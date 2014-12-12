@@ -8,7 +8,7 @@
 //  *******************************************************/
 
 using System;
-using LayerAPI.Interfaces;
+using LayerAPI.Agent;
 
 namespace ForestLayer.Agents {
     public class Tree : IAgent {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SpatialCommon.Datatypes;
+using LayerAPI.Spatial;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 

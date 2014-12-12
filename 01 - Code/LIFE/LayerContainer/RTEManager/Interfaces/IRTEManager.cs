@@ -8,7 +8,8 @@
 //  *******************************************************/
 
 using System.Collections.Generic;
-using LayerAPI.Interfaces;
+using LayerAPI.Agent;
+using LayerAPI.Layer;
 using LCConnector.TransportTypes;
 
 namespace RTEManager.Interfaces {

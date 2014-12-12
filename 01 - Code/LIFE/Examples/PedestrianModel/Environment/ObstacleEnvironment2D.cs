@@ -6,12 +6,11 @@ using System.Windows.Forms;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Perception;
-using GenericAgentArchitectureCommon.Interfaces;
+using LayerAPI.Perception;
+using LayerAPI.Spatial;
 using PedestrianModel.Agents;
 using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
-using SpatialCommon.Datatypes;
-using SpatialCommon.Interfaces;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace PedestrianModel.Environment {

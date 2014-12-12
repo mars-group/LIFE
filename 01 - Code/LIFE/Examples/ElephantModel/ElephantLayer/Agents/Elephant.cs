@@ -13,7 +13,7 @@ using System.Linq;
 using System.Windows;
 using CSharpQuadTree;
 using ElephantLayer.TransportTypes;
-using LayerAPI.Interfaces;
+using LayerAPI.Agent;
 using PlantLayer;
 using TwoDimEnvironment;
 using WaterLayer;

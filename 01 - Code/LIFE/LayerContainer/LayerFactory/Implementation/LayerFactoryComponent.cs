@@ -7,7 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
 //  *******************************************************/
 
-using LayerAPI.Interfaces;
+using LayerAPI.Layer;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;

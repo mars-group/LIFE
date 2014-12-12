@@ -1,4 +1,4 @@
-﻿using SpatialCommon.Datatypes;
+﻿using LayerAPI.Spatial;
 
 namespace PedestrianModel.Agents.Reasoning.Movement {
 

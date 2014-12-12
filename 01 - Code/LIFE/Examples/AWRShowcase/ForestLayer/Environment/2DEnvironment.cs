@@ -11,7 +11,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using LayerAPI.Interfaces;
+using LayerAPI.Agent;
 
 namespace ForestLayer.Environment {
     internal class _2DEnvironment {

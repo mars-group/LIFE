@@ -7,7 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
-using LayerAPI.Interfaces.Visualization;
+using LayerAPI.Layer.Visualization;
 
 namespace VisualizationAdapter.Interface {
     public interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {

@@ -1,6 +1,6 @@
 ﻿using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
-using SpatialCommon.Datatypes;
+using LayerAPI.Spatial;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding {
 

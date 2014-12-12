@@ -8,7 +8,7 @@
 //  *******************************************************/
 
 using ElephantLayer;
-using LayerAPI.Interfaces;
+using LayerAPI.Layer;
 using Mono.Addins;
 using PlantLayer;
 using WaterLayer;

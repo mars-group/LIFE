@@ -1,6 +1,5 @@
-﻿using ConfigurationAdapter.Interface;
-using DistributedKeyValueStore.Implementation;
-using LayerAPI.Interfaces;
+﻿using DistributedKeyValueStore.Implementation;
+using LayerAPI.Layer;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
 using LayerRegistry.Interfaces.Config;

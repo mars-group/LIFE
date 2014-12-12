@@ -121,17 +121,29 @@
   <ItemGroup>
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
-    <Compile Include="Interfaces\GIS\IGISAccess.cs" />
-    <Compile Include="Interfaces\IAgent.cs" />
-    <Compile Include="Interfaces\IGISActiveLayer.cs" />
-    <Compile Include="Interfaces\IGISPassiveLayer.cs" />
-    <Compile Include="Interfaces\ILayer.cs" />
-    <Compile Include="Interfaces\ISteppedActiveLayer.cs" />
-    <Compile Include="Interfaces\ISteppedLayer.cs" />
-    <Compile Include="Interfaces\ITickClient.cs" />
-    <Compile Include="Interfaces\Visualization\IVisualizable.cs" />
-    <Compile Include="Interfaces\LayerStatus.cs" />
+    <Compile Include="Environment\IEnvironment.cs" />
+    <Compile Include="Layer\GIS\IGISAccess.cs" />
+    <Compile Include="Agent\IAgent.cs" />
+    <Compile Include="Layer\GIS\IGISActiveLayer.cs" />
+    <Compile Include="Layer\GIS\IGISPassiveLayer.cs" />
+    <Compile Include="Layer\ILayer.cs" />
+    <Compile Include="Layer\ISteppedActiveLayer.cs" />
+    <Compile Include="Layer\ISteppedLayer.cs" />
+    <Compile Include="Agent\ITickClient.cs" />
+    <Compile Include="Layer\Visualization\IVisualizable.cs" />
+    <Compile Include="Layer\LayerStatus.cs" />
+    <Compile Include="Perception\IDataSource.cs" />
+    <Compile Include="Perception\ISpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spatial\CollisionType.cs" />
+    <Compile Include="Spatial\Direction.cs" />
+    <Compile Include="Spatial\IShape.cs" />
+    <Compile Include="Spatial\ISpatialEntity.cs" />
+    <Compile Include="Spatial\ISpatialObject.cs" />
+    <Compile Include="Spatial\ISpatialPerception.cs" />
+    <Compile Include="Spatial\MovementResult.cs" />
+    <Compile Include="Spatial\TVector.cs" />
+    <Compile Include="Spatial\Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
@@ -145,6 +157,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Layer\Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

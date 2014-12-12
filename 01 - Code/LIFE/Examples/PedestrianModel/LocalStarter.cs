@@ -23,7 +23,7 @@ namespace PedestrianModel {
         }
 
         private static void CreateScenarioEnvironment(SeqExec exec, ScenarioType scenario) {
-            IEnvironment env;
+            IEnvironmentOld env;
             if (Config.UsesESC) env = new ObstacleEnvironmentESC(exec);
             else env = new ObstacleEnvironment2D(exec);
 

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using EnvironmentServiceComponent.Entities;
-using EnvironmentServiceComponent.Interface;
-using SpatialCommon.Collision;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
+using LayerAPI.Environment;
+using LayerAPI.Perception;
+using LayerAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Implementation {
 
-    public abstract class ACollisionESC : IEnvironmentServiceComponent {
+    public abstract class ACollisionESC : IEnvironment {
         private const int MaxAttempsToAddRandom = 100;
         private readonly Random _random;
         private readonly bool[,] _collisionMatrix;
@@ -18,7 +17,7 @@ namespace EnvironmentServiceComponent.Implementation {
             _collisionMatrix = collisionMatrix ?? CollisionMatrix.Get();
         }
 
-        #region IEnvironmentServiceComponent Members
+        #region IEnvironment Members
 
         public abstract bool Add(ISpatialEntity entity, TVector position, TVector rotation = new TVector());
 

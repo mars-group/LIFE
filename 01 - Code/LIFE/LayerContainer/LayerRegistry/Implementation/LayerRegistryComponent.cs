@@ -9,7 +9,7 @@
 
 using System;
 using DistributedKeyValueStore.Interface;
-using LayerAPI.Interfaces;
+using LayerAPI.Layer;
 using LayerRegistry.Interfaces;
 using LayerRegistry.Interfaces.Config;
 

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using SpatialCommon.TransportTypes;
+using LayerAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Implementation {
 

@@ -4,10 +4,10 @@ using System.Windows.Forms;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using EnvironmentServiceComponent.Implementation;
+using LayerAPI.Spatial;
 using PedestrianModel.Agents;
 using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
-using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Environment {
 

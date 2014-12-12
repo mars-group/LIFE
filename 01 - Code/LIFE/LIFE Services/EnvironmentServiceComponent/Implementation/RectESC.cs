@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using CSharpQuadTree;
-using EnvironmentServiceComponent.Entities;
 using EnvironmentServiceComponent.Entities.Shape;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
+using LayerAPI.Perception;
+using LayerAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Implementation {
 

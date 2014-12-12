@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows;
 using CSharpQuadTree;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
+using LayerAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Entities.Shape {
 

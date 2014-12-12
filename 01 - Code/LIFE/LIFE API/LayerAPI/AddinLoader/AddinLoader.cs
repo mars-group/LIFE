@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using LayerAPI.Interfaces;
+using LayerAPI.Layer;
 using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
 
