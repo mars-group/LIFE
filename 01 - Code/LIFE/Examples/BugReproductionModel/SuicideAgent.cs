@@ -16,8 +16,8 @@ namespace BugReproductionModel
 
 		private UnregisterAgent _unregister = null;
 
-		public SuicideAgent (int identifier, ILayer layer, UnregisterAgent unregister)
-		{
+		public SuicideAgent (int identifier, ILayer layer, UnregisterAgent unregister) {
+            ID = identifier;
 			_id = identifier;
 			_layer = layer;
 			_unregister = unregister;
@@ -64,6 +64,7 @@ namespace BugReproductionModel
 			return !Equals(left, right);
 		}
 
+	    public long ID { get; set; }
 	}
 }
 

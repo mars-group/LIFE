@@ -23,7 +23,7 @@ namespace BugReproductionModel
 			}
 
 			for (int i = 0; i < 25; i++) {
-				registerAgentHandle.Invoke(this, new BreedAgent(this, registerAgentHandle, unregisterAgentHandle));
+				registerAgentHandle.Invoke(this, new BreedAgent(this, registerAgentHandle, unregisterAgentHandle, i));
 			}
 				
 			Console.WriteLine ("Layer with equals initialized");

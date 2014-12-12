@@ -50,7 +50,9 @@ namespace ElephantLayer.Agents {
                 double stepLength,
                 PlantLayerImpl plantLayer,
                 WaterLayerImpl waterLayer,
-                ITwoDimEnvironment<Elephant> twoDimEnv) {
+                ITwoDimEnvironment<Elephant> twoDimEnv,
+                long agentID) {
+            ID = agentID;
             _bounds.X = x;
             _bounds.Y = y;
             _bounds.Size = size;
@@ -363,5 +365,7 @@ namespace ElephantLayer.Agents {
         public int getRank() {
             return rank;
         }
+
+        public long ID { get; set; }
     }
 }

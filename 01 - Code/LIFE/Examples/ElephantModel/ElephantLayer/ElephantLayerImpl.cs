@@ -50,7 +50,8 @@ namespace ElephantLayer {
                         0.5,
                         _plantLayer,
                         _waterLayer,
-                        _environment);
+                        _environment,
+                        i);
                 registerAgentHandle.Invoke(this, e);
                 _environment.Add(e);
             }

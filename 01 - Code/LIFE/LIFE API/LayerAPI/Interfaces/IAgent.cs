@@ -7,6 +7,11 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+
 namespace LayerAPI.Interfaces {
-    public interface IAgent : ITickClient {}
+    public interface IAgent : ITickClient {
+
+        long ID { get; set; }        
+
+    }
 }

@@ -80,5 +80,7 @@ namespace DalskiAgent.Agents {
     public new virtual string ToString() {
       return "Agent: " + Id + "\t  Cycle: " + GetTick();
     }
+
+      public long ID { get { return Id; } set { } }
   }
 }

@@ -49,5 +49,7 @@ namespace ForestLayer.Agents {
         }
 
         #endregion
+
+        public long ID { get; set; }
     }
 }

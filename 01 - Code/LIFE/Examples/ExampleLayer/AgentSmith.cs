@@ -85,5 +85,7 @@ namespace ExampleLayer
         {
             return !Equals(left, right);
         }
+
+        public long ID { get; set; }
     }
 }

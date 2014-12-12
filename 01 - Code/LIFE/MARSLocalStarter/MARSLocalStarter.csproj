@@ -39,6 +39,9 @@
     <ApplicationIcon>Resources\bitmap.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Atlassian.Jira">
+      <HintPath>..\packages\Atlassian.SDK.2.5.0\lib\Atlassian.Jira.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\LayerAPI.0.1.223\lib\net45\log4net.dll</HintPath>
     </Reference>
@@ -118,6 +121,10 @@
     <ProjectReference Include="..\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj">
       <Project>{6ef23027-a874-4533-9f39-2c4b165d8bb9}</Project>
       <Name>LayerContainerFacade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LIFE Services\MarsErrorReporting\MarsErrorReporting.csproj">
+      <Project>{D2957897-135D-4E3C-93EA-9FFAF8607A82}</Project>
+      <Name>MarsErrorReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.csproj">
       <Project>{58149ff0-0801-46f8-a9c6-571b6030dc1e}</Project>
