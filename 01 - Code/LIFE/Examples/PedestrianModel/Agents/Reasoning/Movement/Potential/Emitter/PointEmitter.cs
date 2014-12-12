@@ -1,6 +1,6 @@
 ﻿using System;
+using LifeAPI.Spatial;
 using PedestrianModel.Util.Math;
-using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {
 

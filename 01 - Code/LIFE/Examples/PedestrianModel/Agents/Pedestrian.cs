@@ -7,14 +7,13 @@ using DalskiAgent.Execution;
 using DalskiAgent.Movement.Actions;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Perception;
-using GenericAgentArchitectureCommon.Interfaces;
+using DalskiAgent.Reasoning;
+using LifeAPI.Spatial;
+using LifeAPI.Perception;
 using PedestrianModel.Agents.Reasoning.Movement;
 using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Astar;
 using PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing;
-using SpatialCommon.Collision;
-using SpatialCommon.Datatypes;
-using SpatialCommon.Interfaces;
 
 namespace PedestrianModel.Agents {
 
@@ -22,7 +21,7 @@ namespace PedestrianModel.Agents {
     ///     A pedestrian agent which moves to a target position using wayfinding and collision avoidance.
     /// </summary>
     public class Pedestrian : SpatialAgent, IAgentLogic {
-        public IEnvironment Environment { get; private set; }
+        public IEnvironmentOld Environment { get; private set; }
 
         public string Name { get; private set; }
 
@@ -75,7 +74,7 @@ namespace PedestrianModel.Agents {
         /// <param name="name">Name.</param>
         public Pedestrian
             (IExecution exec,
-                IEnvironment env,
+                IEnvironmentOld env,
                 string simulationId,
                 Vector position,
                 Vector dimension,
@@ -103,7 +102,7 @@ namespace PedestrianModel.Agents {
 
         public Pedestrian
             (IExecution exec,
-                IEnvironment env,
+                IEnvironmentOld env,
                 string simulationId,
                 Vector minPos,
                 Vector maxPos,
@@ -130,7 +129,7 @@ namespace PedestrianModel.Agents {
             Init();
         }
 
-        private void AddSensors(IEnvironment env) {
+        private void AddSensors(IEnvironmentOld env) {
             ISpecification obstaclesHalo = new OmniHalo(InformationType.Obstacles);
             ISpecification pedestriansHalo = new OmniHalo(InformationType.Pedestrians);
             ISpecification allAgentsHalo = new OmniHalo(InformationType.AllAgents);

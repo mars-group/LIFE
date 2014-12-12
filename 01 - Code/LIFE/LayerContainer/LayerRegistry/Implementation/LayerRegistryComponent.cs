@@ -9,9 +9,9 @@
 
 using System;
 using DistributedKeyValueStore.Interface;
-using LayerAPI.Interfaces;
 using LayerRegistry.Interfaces;
 using LayerRegistry.Interfaces.Config;
+using LifeAPI.Layer;
 
 namespace LayerRegistry.Implementation {
     public class LayerRegistryComponent : ILayerRegistry {

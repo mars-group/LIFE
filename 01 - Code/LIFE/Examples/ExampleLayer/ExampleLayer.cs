@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoAPI.Geometries;
-using LayerAPI.Interfaces;
-using LayerAPI.Interfaces.Visualization;
+using LifeAPI.Layer;
+using LifeAPI.Layer.Visualization;
 using MessageWrappers;
 using Mono.Addins;
 
