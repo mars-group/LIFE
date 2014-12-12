@@ -4,7 +4,7 @@ using System.Drawing;
 namespace CellLayer.TransportTypes {
 
     /// <summary>
-    ///     Represents sensor data of a single cell. Prevent from direkt reference.
+    ///     Represents sensor data of a single cell. Prevents original cell object from direkt reference.
     /// </summary>
     public class TCell {
         public readonly int ID;
@@ -12,21 +12,22 @@ namespace CellLayer.TransportTypes {
         public readonly Guid AgentOnCellGuid;
         public readonly CellLayerImpl.CellType CellType;
         public readonly int PressureOnCell;
-        //public readonly int ResistanceToPressure;
+
+        public readonly bool HasCalmingSphereTechnical;
+        public readonly bool HasCalmingSphereByHuman;
+        public readonly bool IsExit;
+
+        public readonly bool IsExitArea;
         public Point ExitInformationTechnical;
-       
-        public bool HasCalmingSphereTechnical;
-        public bool HasCalmingSphereByHuman;
-        public bool IsExit;
         public bool IsTechnicalInformationSource;
-
-        public bool IsExitArea;
         public Point ExitAreaInformation;
-
-
         public Point DominantMassFlightLeaderCoordinates;
 
-
+        /// <summary>
+        ///     Create the TCell by the values of the original cell object. Because the data types are all
+        ///     value type there is no depp copy needed.
+        /// </summary>
+        /// <param name="correspondingCell"></param>
         public TCell(Cell correspondingCell) {
             ID = correspondingCell.CellId;
             Coordinates = correspondingCell.Coordinates;
@@ -35,28 +36,14 @@ namespace CellLayer.TransportTypes {
             IsExit = correspondingCell.IsExit;
             IsTechnicalInformationSource = correspondingCell.IsTechnicalInformationSource;
             PressureOnCell = correspondingCell.PressureOnCell;
-         
+
             DominantMassFlightLeaderCoordinates = correspondingCell.DominantMassFlightLeaderCoordinates;
             ExitInformationTechnical = correspondingCell.ExitInformationTechnical;
             HasCalmingSphereByHuman = correspondingCell.HasCalmingSphereByHuman;
             HasCalmingSphereTechnical = correspondingCell.HasCalmingSphereTechnical;
-
-
+            
             IsExitArea = correspondingCell.IsExitArea;
             ExitAreaInformation = correspondingCell.ExitAreaInformation;
-            
-
-           
-            
-         
-      
-       
-            
-            
-            
-          
-            
-
         }
     }
 

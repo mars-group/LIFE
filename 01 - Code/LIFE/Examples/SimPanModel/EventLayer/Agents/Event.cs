@@ -16,7 +16,7 @@ namespace EventLayer.Agents {
         private readonly CellLayerImpl _cellLayer;
         private readonly HumanLayerImpl _humanLayer;
         public readonly Guid ID = Guid.NewGuid();
-        private int _tickAccu = 0;
+        private int _tickAccu;
 
         public Event(CellLayerImpl cellLayer, HumanLayerImpl humanLayer) {
             _cellLayer = cellLayer;
@@ -39,7 +39,6 @@ namespace EventLayer.Agents {
 
                 EventLayerImpl.Log.Info("Panic Time! at tick: " + _tickAccu + " !");
             }
-
             IncrTick();
             Thread.Sleep(10);
         }

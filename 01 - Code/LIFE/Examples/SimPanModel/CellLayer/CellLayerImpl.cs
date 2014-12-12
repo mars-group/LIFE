@@ -69,8 +69,8 @@ namespace CellLayer {
         /// <summary>
         ///     The tuples represents an addition of (x,y) value to get in the enumerated direction
         /// </summary>
-        public static readonly Dictionary<CellLayerImpl.Direction, Tuple<int, int>> DirectionMeaning =
-            new Dictionary<CellLayerImpl.Direction, Tuple<int, int>> {
+        public static readonly Dictionary<Direction, Tuple<int, int>> DirectionMeaning =
+            new Dictionary<Direction, Tuple<int, int>> {
                 {Direction.Up, Tuple.Create(0, -1)},
                 {Direction.UpAndRight, Tuple.Create(1, -1)},
                 {Direction.Right, Tuple.Create(1, 0)},
@@ -152,7 +152,7 @@ namespace CellLayer {
             _visualizationThread = new Thread(threadStart);
             _visualizationThread.Start();
         }
-        
+
         /// <summary>
         ///     Build the cell field by the dimensions of x any axis. Create
         ///     the obstacle cells by the list of obstacle cell ids.
@@ -189,7 +189,7 @@ namespace CellLayer {
                         newCell.IsExit = true;
                     }
 
-                    if (CellFieldStartConfig.TechnicalInformationCells.Contains(cellIId)){
+                    if (CellFieldStartConfig.TechnicalInformationCells.Contains(cellIId)) {
                         newCell.IsTechnicalInformationSource = true;
                     }
 
@@ -212,16 +212,8 @@ namespace CellLayer {
             viewData = viewDataDict;
         }
 
-        public List<TCell> GetAllCellsData() {
-            List<TCell> cellData = new List<TCell>();
-            foreach (KeyValuePair<int, Cell> cellEntry in _cellField) {
-                cellData.Add(cellEntry.Value.GetTransportType());
-            }
-            return cellData;
-        }
-
         /// <summary>
-        ///     Test if hte cell on a position is walkable by an agent.
+        ///     Test if the cell on a position is walkable by an agent.
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
@@ -246,6 +238,11 @@ namespace CellLayer {
             return (posY - 1)*CellFieldStartConfig.CellCountXAxis + posX;
         }
 
+        /// <summary>
+        ///     Adapter for calculation of cell id by the point.
+        /// </summary>
+        /// <param name="coordinates"></param>
+        /// <returns></returns>
         public static int CalculateCellId(Point coordinates) {
             return CalculateCellId(coordinates.X, coordinates.Y);
         }
@@ -321,11 +318,9 @@ namespace CellLayer {
         /// <param name="referenceCellId"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public List<Point> GetNeighbourPointsInRange(int referenceCellId, int range)
-        {
+        public List<Point> GetNeighbourPointsInRange(int referenceCellId, int range) {
             return _cellField[referenceCellId].GetNeighbourPointsInRange(range);
         }
-
 
         /// <summary>
         ///     Change the status of a cell. The cell field and the view data must be updated.
@@ -358,7 +353,7 @@ namespace CellLayer {
         /// </summary>
         /// <param name="cellIds"></param>
         /// <param name="type"></param>
-        public void SetCellsStatus(List<int> cellIds, CellType type) {
+        private void SetCellsStatus(List<int> cellIds, CellType type) {
             lock (Lock) {
                 if (cellIds.All(_cellField.ContainsKey)) {
                     Dictionary<int, object[]> cellViewData = new Dictionary<int, object[]>();
@@ -393,7 +388,7 @@ namespace CellLayer {
         ///     view information.
         /// </summary>
         /// <param name="cellIds"></param>
-        public void UpdateCellsView(List<int> cellIds) {
+        private void UpdateCellsView(List<int> cellIds) {
             lock (Lock) {
                 Dictionary<int, object[]> cellViewData = new Dictionary<int, object[]>();
 
@@ -448,7 +443,7 @@ namespace CellLayer {
                         }
                         // Only work on the clone and try to insert him.
                         Cell cellCopy = cell.GetClone();
-                        if (targetValue == true) {
+                        if (targetValue) {
                             cellCopy.AddGuidOfCalmingHuman(causingHuman);
                         }
                         else {
@@ -464,38 +459,36 @@ namespace CellLayer {
         }
 
 
-    
+        /// <summary>
+        ///     Delete the mass flight coordinates
+        /// </summary>
+        /// <param name="cellIds"></param>
+        /// <param name="informationCoordinates"></param>
         public void DeleteMassFlightFromCells(List<int> cellIds, Point informationCoordinates) {
             ChangeMassFlightOnCells(cellIds, false, informationCoordinates);
         }
-        
+
         public void AddMassFlightToCells(List<int> cellIds, Point informationCoordinates) {
             ChangeMassFlightOnCells(cellIds, true, informationCoordinates);
         }
 
 
-        private void ChangeMassFlightOnCells(List<int> cellIds, bool addInformation, Point informationCoordinates){
-            lock (Lock)
-            {
-                if (cellIds.All(_cellField.ContainsKey))
-                {
-                    foreach (int cellNumer in cellIds)
-                    {
+        private void ChangeMassFlightOnCells(List<int> cellIds, bool addInformation, Point informationCoordinates) {
+            lock (Lock) {
+                if (cellIds.All(_cellField.ContainsKey)) {
+                    foreach (int cellNumer in cellIds) {
                         Cell cell;
                         _cellField.TryGetValue(cellNumer, out cell);
 
-                        if (cell == null)
-                        {
+                        if (cell == null) {
                             continue;
                         }
                         // Only work on the clone and try to insert him.
                         Cell cellCopy = cell.GetClone();
-                        if (addInformation == true)
-                        {
+                        if (addInformation) {
                             cellCopy.AddMassFlightInformation(informationCoordinates);
                         }
-                        else
-                        {
+                        else {
                             cellCopy.DeleteMassFlightInformation(informationCoordinates);
                         }
 
@@ -571,7 +564,7 @@ namespace CellLayer {
                 object[] pointData;
                 _viewForm.PointsData.TryGetValue(guid, out pointData);
 
-                
+
                 if (pointData != null) {
                     UpdateAgentDraw(guid, (float) pointData[0], (float) pointData[1], AgentColors[type]);
                 }
@@ -591,6 +584,7 @@ namespace CellLayer {
         /// <summary>
         ///     Adapter method for UpdateDrawAgent with lesser param.
         /// </summary>
+        /// <param name="guid"></param>
         /// <param name="posX"></param>
         /// <param name="posY"></param>
         public void UpdateAgentDrawPosition(Guid guid, float posX, float posY) {
@@ -638,8 +632,13 @@ namespace CellLayer {
             }
         }
 
-        public Point SetOnCell(int cellId, Guid guid)
-        {
+        /// <summary>
+        ///     Method for setting a human on a non randomized position.
+        /// </summary>
+        /// <param name="cellId"></param>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public Point SetOnCell(int cellId, Guid guid) {
             Cell cell;
             _cellField.TryGetValue(cellId, out cell);
 
@@ -647,18 +646,17 @@ namespace CellLayer {
                 return new Point();
             }
 
-            if (cell.CellType != CellType.Neutral){
-                return new Point(); ;
+            if (cell.CellType != CellType.Neutral) {
+                return new Point();
             }
 
-            if (!cell.AgentOnCell.Equals(Guid.Empty)){
-                return new Point(); ;
+            if (!cell.AgentOnCell.Equals(Guid.Empty)) {
+                return new Point();
             }
             cell.AgentOnCell = guid;
             Point coordinates = new Point(cell.Coordinates.X, cell.Coordinates.Y);
             return coordinates;
         }
-
 
 
         /// <summary>
@@ -672,9 +670,6 @@ namespace CellLayer {
             _cellField.TryGetValue(cellId, out cell);
             if (cell != null) {
                 return cell.GetTransportType();
-            }
-            else {
-                var a = 1;
             }
             return null;
         }
@@ -753,6 +748,11 @@ namespace CellLayer {
                      && coordinates.Y <= CellFieldStartConfig.CellCountYAxis));
         }
 
+        /// <summary>
+        ///     Increase the pressure value on the cell.
+        /// </summary>
+        /// <param name="cellCoordinates"></param>
+        /// <param name="strenght"></param>
         public void AddPressure(Point cellCoordinates, int strenght) {
             lock (Lock) {
                 int cellNumber = CalculateCellId(cellCoordinates);

@@ -48,19 +48,21 @@ namespace HumanLayer.Agents {
             _blackboard.Set(Human.IsOnExit, _currentCellData.IsExit);
             _blackboard.Set(Human.IsInExitArea, _currentCellData.IsExitArea);
 
-            RefreshCalmingSphereDependingValues(_currentCellData);
+            RefreshFearValue(_currentCellData);
             RefreshPressureDependingValues(_currentCellData);
 
-            switch (_owner.CurrentBehaviourType) {
-                case CellLayerImpl.BehaviourType.Reactive:
-                    ProcessSensorInformationsReactive(_currentCellData);
-                    break;
-                case CellLayerImpl.BehaviourType.Deliberative:
-                    ProcessSensorInformationsDeliberative(_currentCellData);
-                    break;
-                case CellLayerImpl.BehaviourType.Reflective:
-                    ProcessSensorInformationsReflective(_currentCellData);
-                    break;
+            if (_owner.IsAlive) {
+                switch (_owner.CurrentBehaviourType) {
+                    case CellLayerImpl.BehaviourType.Reactive:
+                        ProcessSensorInformationsReactive(_currentCellData);
+                        break;
+                    case CellLayerImpl.BehaviourType.Deliberative:
+                        ProcessSensorInformationsDeliberative(_currentCellData);
+                        break;
+                    case CellLayerImpl.BehaviourType.Reflective:
+                        ProcessSensorInformationsReflective(_currentCellData);
+                        break;
+                }
             }
         }
 
@@ -150,7 +152,7 @@ namespace HumanLayer.Agents {
                 _owner.IsOnMassFlight = false;
             }
         }
-        
+
         /// <summary>
         ///     Calculate cell pressure depending variables.
         /// </summary>
@@ -158,7 +160,7 @@ namespace HumanLayer.Agents {
         private void RefreshPressureDependingValues(TCell cellData) {
             // Check if the pressure is higher than the human can handle with
             if (cellData.PressureOnCell > Human.ResistanceToPressure) {
-                if (_owner.VitalEnergy < 5) {
+                if (_owner.VitalEnergy <= 5) {
                     _owner.VitalEnergy = 0;
                     _owner.SetAsKilled();
                 }
@@ -174,7 +176,7 @@ namespace HumanLayer.Agents {
         ///     than one.
         /// </summary>
         /// <param name="cellData"></param>
-        private void RefreshCalmingSphereDependingValues(TCell cellData) {
+        private void RefreshFearValue(TCell cellData) {
             if (cellData.HasCalmingSphereByHuman) {
                 _owner.FearValue -= 4;
             }
@@ -185,7 +187,7 @@ namespace HumanLayer.Agents {
                 _owner.FearValue -= 1;
             }
             // Prevent zero or negative values of fear.
-            if (_owner.FearValue <= HumanLayerImpl.LowestBoundOfFear){
+            if (_owner.FearValue <= HumanLayerImpl.LowestBoundOfFear) {
                 _owner.FearValue = HumanLayerImpl.LowestBoundOfFear;
             }
         }
@@ -222,7 +224,6 @@ namespace HumanLayer.Agents {
             _helperVariableCalmedCells = new List<int>();
         }
 
-
         /// <summary>
         ///     Update or add the massflight coordinates on the cells behind the human. For this calculation
         ///     the direction is needed. Direction is calculable by difference of positions.
@@ -240,14 +241,14 @@ namespace HumanLayer.Agents {
                 if (oldPosition != newPosition) {
                     List<int> actualCellIds = GetSphereCellIDsExceptInFrontOfHuman
                         (oldPosition, newPosition, massFlightRadius);
-                    
+
                     _dataSourceLayer.AddMassFlightToCells(actualCellIds, _blackboard.Get(Human.Position));
                     _dataSourceLayer.DeleteMassFlightFromCells(previousCellIds, _blackboard.Get(Human.LastPosition));
                     _helperVariableMassFlightCells = actualCellIds;
                 }
             }
         }
-        
+
         /// <summary>
         ///     If human dies the sphere have to be deleted. So identify cells, update and redraw.
         /// </summary>

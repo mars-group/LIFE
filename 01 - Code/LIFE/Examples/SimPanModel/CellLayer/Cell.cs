@@ -14,35 +14,33 @@ namespace CellLayer {
         public readonly Point Coordinates;
         public CellLayerImpl.CellType CellType;
         public Guid AgentOnCell = Guid.Empty;
-        public bool IsExit = false;
-        
-        public bool IsTechnicalInformationSource = false;
-        public Point ExitInformationTechnical = new Point();
+        public bool IsExit;
 
-        public bool IsExitArea = false;
-        public Point ExitAreaInformation = new Point();
+        public bool IsTechnicalInformationSource;
+        public Point ExitInformationTechnical;
 
-        public int PressureOnCell = 0;
-        public int ResistanceToPressure = CellFieldStartConfig.PressureResistanceOfObstacleCells;
-        
+        public bool IsExitArea;
+        public Point ExitAreaInformation;
+
+        public int PressureOnCell;
+        private int _resistanceToPressure = CellFieldStartConfig.PressureResistanceOfObstacleCells;
+
         /// <summary>
         ///     There may be more than one influencing human on one cell, if one deletes his information the cell must show
         ///     furthermore if there is another entry in the array. For a simple solution only the first entry is shown on cell.
         /// </summary>
-        public Point[] CoordinatesOfMassFlightLeaders = new Point[0];
-        public Point DominantMassFlightLeaderCoordinates = new Point();
+        private Point[] _coordinatesOfMassFlightLeaders = new Point[0];
+        public Point DominantMassFlightLeaderCoordinates;
 
-       
-        
         /// <summary>
         ///     There may be more than one influencing human on one cell, if one deletes his effect the cell must show it
         ///     furthermore if there is another entry in the array
         /// </summary>
-        public Guid[] GuidsOfCalmingHumans = new Guid[0];
-        public bool HasCalmingSphereByHuman = false;
-        public bool HasCalmingSphereTechnical = false;
+        private Guid[] _guidsOfCalmingHumans = new Guid[0];
 
-
+        public bool HasCalmingSphereByHuman;
+        public bool HasCalmingSphereTechnical;
+        
         public Cell(int cellIid, Point position, CellLayerImpl.CellType cellType) {
             CellId = cellIid;
             Coordinates = position;
@@ -82,20 +80,34 @@ namespace CellLayer {
         }
 
         /// <summary>
+        ///     Add the strenght value to the current pressure of the cell. If pressure is higher than the
+        ///     pressure resistance value and is an obstacle cell it gets broken down to neutral cell.
+        ///     Humans read this value too but their reaction depends on their own resistance to pressure.
+        /// </summary>
+        /// <param name="strenght"></param>
+        public void AddPressure(int strenght) {
+            PressureOnCell += strenght;
+
+            if (PressureOnCell > _resistanceToPressure && CellType == CellLayerImpl.CellType.Obstacle) {
+                PressureOnCell = 0;
+                CellLayerImpl.Log.Info("CELL: " + CellId + " Obstacle cell broke under pressure to neutral");
+                ChangeStateTo(CellLayerImpl.CellType.Neutral);
+            }
+        }
+
+        /// <summary>
         ///     Change the state of cell respecting the allowed transitions.
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        public bool ChangeStateTo(CellLayerImpl.CellType state) {
+        private void ChangeStateTo(CellLayerImpl.CellType state) {
             if (IsChangeStateToAllowed(state)) {
                 CellType = state;
-                return true;
             }
-            return false;
         }
 
         /// <summary>
-        ///     Get a cloned Cell object to work on and to replace the old on the cell field data structure. 
+        ///     Get a cloned Cell object to work on and to replace the old on the cell field data structure.
         ///     Because array is always reference type a direct copy is needed.
         /// </summary>
         /// <returns></returns>
@@ -105,11 +117,11 @@ namespace CellLayer {
             cloneCell.IsExit = IsExit;
             cloneCell.IsTechnicalInformationSource = IsTechnicalInformationSource;
             cloneCell.PressureOnCell = PressureOnCell;
-            cloneCell.ResistanceToPressure = ResistanceToPressure;
-            cloneCell.CoordinatesOfMassFlightLeaders = (Point[])CoordinatesOfMassFlightLeaders.Clone();
+            cloneCell._resistanceToPressure = _resistanceToPressure;
+            cloneCell._coordinatesOfMassFlightLeaders = (Point[]) _coordinatesOfMassFlightLeaders.Clone();
             cloneCell.DominantMassFlightLeaderCoordinates = DominantMassFlightLeaderCoordinates;
             cloneCell.ExitInformationTechnical = ExitInformationTechnical;
-            cloneCell.GuidsOfCalmingHumans = (Guid[]) GuidsOfCalmingHumans.Clone();
+            cloneCell._guidsOfCalmingHumans = (Guid[]) _guidsOfCalmingHumans.Clone();
             cloneCell.HasCalmingSphereByHuman = HasCalmingSphereByHuman;
             cloneCell.HasCalmingSphereTechnical = HasCalmingSphereTechnical;
 
@@ -125,8 +137,7 @@ namespace CellLayer {
         ///     is not referenced and so there is no danger of manipulating the cell.
         /// </summary>
         /// <returns></returns>
-        public TCell GetTransportType()
-        {
+        public TCell GetTransportType() {
             return new TCell(this);
         }
 
@@ -139,7 +150,6 @@ namespace CellLayer {
             if (IsChangeStateToAllowed(newState)) {
                 Cell cloneToModify = GetClone();
                 cloneToModify.CellType = newState;
-
                 return cloneToModify;
             }
             return null;
@@ -190,17 +200,16 @@ namespace CellLayer {
             const int minY = CellFieldStartConfig.SmallestYCoordinate;
 
             // following calculation needs a square cell field
-            if (CellFieldStartConfig.CellCountXAxis == CellFieldStartConfig.CellCountYAxis && cellRange > 0)
-            {
-                int dim = CellFieldStartConfig.CellCountXAxis;
-
+            if (CellFieldStartConfig.CellCountXAxis == CellFieldStartConfig.CellCountYAxis && cellRange > 0) {
                 // get the range of x and y coordinates which correspond to neighbour cells
                 neighbourXCoordinates.AddRange(Enumerable.Range(Coordinates.X - cellRange, cellRange*2 + 1));
                 neighbourYCoordinates.AddRange(Enumerable.Range(Coordinates.Y - cellRange, cellRange*2 + 1));
 
                 // Correct the ranges to the coordinates allowed in current cellfield
-                neighbourXCoordinates.RemoveAll(coordinate => coordinate < minX || coordinate > dim);
-                neighbourYCoordinates.RemoveAll(coordinate => coordinate < minY || coordinate > dim);
+                neighbourXCoordinates.RemoveAll
+                    (coordinate => coordinate < minX || coordinate > CellFieldStartConfig.CellCountXAxis);
+                neighbourYCoordinates.RemoveAll
+                    (coordinate => coordinate < minY || coordinate > CellFieldStartConfig.CellCountXAxis);
 
                 foreach (int xCoord in neighbourXCoordinates) {
                     foreach (int yCoord in neighbourYCoordinates) {
@@ -218,7 +227,7 @@ namespace CellLayer {
         /// <param name="cellRange"></param>
         /// <returns></returns>
         public List<int> GetNeighbourIdsInRange(int cellRange) {
-            List<Point> neighbourPoints =  GetNeighbourPointsInRange(cellRange);
+            List<Point> neighbourPoints = GetNeighbourPointsInRange(cellRange);
             List<int> neighbourIds = new List<int>();
 
             foreach (Point neighbourPoint in neighbourPoints) {
@@ -226,7 +235,6 @@ namespace CellLayer {
             }
             return neighbourIds;
         }
-
 
         /// <summary>
         ///     Get the dominant exit information (as point data) if available.
@@ -238,8 +246,7 @@ namespace CellLayer {
                 return ExitAreaInformation;
             }
 
-            if (!DominantMassFlightLeaderCoordinates.IsEmpty)
-            {
+            if (!DominantMassFlightLeaderCoordinates.IsEmpty) {
                 return DominantMassFlightLeaderCoordinates;
             }
             if (!ExitInformationTechnical.IsEmpty) {
@@ -248,20 +255,14 @@ namespace CellLayer {
             return new Point();
         }
 
-        private bool HasExitInformation() {
-            return (!DominantMassFlightLeaderCoordinates.IsEmpty || !ExitInformationTechnical.IsEmpty || !ExitAreaInformation.IsEmpty);
-        }
-
-        
-
         /// <summary>
-        ///     Add the point entry to the list of 
+        ///     Test if the cell has an entry of exit coordinates.
         /// </summary>
-        /// <param name="guid"></param>
-        public void AddExitCoordinatesByHuman(Guid guid) {
-            
+        /// <returns></returns>
+        private bool HasExitInformation() {
+            return (!DominantMassFlightLeaderCoordinates.IsEmpty || !ExitInformationTechnical.IsEmpty
+                    || !ExitAreaInformation.IsEmpty);
         }
-
 
         /// <summary>
         ///     Add an entry in the GuidsOfCalmingHumans member. there may be more than one
@@ -269,14 +270,14 @@ namespace CellLayer {
         /// </summary>
         /// <param name="guid"></param>
         public void AddGuidOfCalmingHuman(Guid guid) {
-            int index = Array.IndexOf(GuidsOfCalmingHumans, guid);
+            int index = Array.IndexOf(_guidsOfCalmingHumans, guid);
 
             // check if guid is maybe already contained
             if (index == -1) {
                 // Use the list operations for lesser instructions, guids are value types and do not get manipulated 
-                List<Guid> guidsList = new List<Guid>(GuidsOfCalmingHumans) {guid};
+                List<Guid> guidsList = new List<Guid>(_guidsOfCalmingHumans) {guid};
                 Guid[] newCalmingHumans = guidsList.ToArray();
-                GuidsOfCalmingHumans = newCalmingHumans;
+                _guidsOfCalmingHumans = newCalmingHumans;
                 RefreshCalmingStatus();
             }
         }
@@ -287,68 +288,72 @@ namespace CellLayer {
         /// </summary>
         /// <param name="guid"></param>
         public void DeleteGuidOfCalmingHuman(Guid guid) {
-            int index = Array.IndexOf(GuidsOfCalmingHumans, guid);
+            int index = Array.IndexOf(_guidsOfCalmingHumans, guid);
 
-            // check if guid is really contained
+            // Check if guid is really contained
             if (index != -1) {
                 // Use the list operations for lesser instructions, guids are value types and do not get manipulated 
-                List<Guid> guidsList = new List<Guid>(GuidsOfCalmingHumans);
+                List<Guid> guidsList = new List<Guid>(_guidsOfCalmingHumans);
                 guidsList.Remove(guid);
                 Guid[] newCalmingHumans = guidsList.ToArray();
-                GuidsOfCalmingHumans = newCalmingHumans;
+                _guidsOfCalmingHumans = newCalmingHumans;
                 RefreshCalmingStatus();
             }
         }
 
-
-        private void RefreshCalmingStatus(){
-            HasCalmingSphereByHuman = GuidsOfCalmingHumans.Length != 0;
+        /// <summary>
+        ///     Test if any human has influence with his calming sphere on this cell.The guids of all
+        ///     influencing humans are listet in the GuidsOfCalmingHumans. If it is empty there is no influencing human.
+        /// </summary>
+        private void RefreshCalmingStatus() {
+            HasCalmingSphereByHuman = _guidsOfCalmingHumans.Length != 0;
         }
 
-        public void AddMassFlightInformation(Point positionOfLeader){
-
-            int index = Array.IndexOf(CoordinatesOfMassFlightLeaders, positionOfLeader);
+        /// <summary>
+        ///     If a human has a sphere in which he spread exit informations, this information
+        ///     is saved in the cell.
+        /// </summary>
+        /// <param name="positionOfLeader"></param>
+        public void AddMassFlightInformation(Point positionOfLeader) {
+            int index = Array.IndexOf(_coordinatesOfMassFlightLeaders, positionOfLeader);
 
             // check if point is maybe already contained
-            if (index == -1)
-            {
-
+            if (index == -1) {
                 // Use the list operations for lesser instructions, points are value types and do not get manipulated 
-                List<Point> pointList = new List<Point>(CoordinatesOfMassFlightLeaders) { positionOfLeader };
+                List<Point> pointList = new List<Point>(_coordinatesOfMassFlightLeaders) {positionOfLeader};
                 Point[] newMassFlightPoints = pointList.ToArray();
-                CoordinatesOfMassFlightLeaders = newMassFlightPoints;
+                _coordinatesOfMassFlightLeaders = newMassFlightPoints;
                 RefreshMassFlightStatus();
             }
         }
 
-       
-        public void DeleteMassFlightInformation(Point positionOfLeader)
-        {
-            int index = Array.IndexOf(CoordinatesOfMassFlightLeaders, positionOfLeader);
+        /// <summary>
+        ///     If a human has a sphere in which he spread exit informations, this information
+        ///     is saved in the cell and must be deleted if the influence is ending.
+        /// </summary>
+        /// <param name="positionOfLeader"></param>
+        public void DeleteMassFlightInformation(Point positionOfLeader) {
+            int index = Array.IndexOf(_coordinatesOfMassFlightLeaders, positionOfLeader);
 
             // check if point is really contained
             if (index != -1) {
                 // Use the list operations for lesser instructions, point are value types and do not get manipulated 
-                List<Point> pointList = new List<Point>(CoordinatesOfMassFlightLeaders);
+                List<Point> pointList = new List<Point>(_coordinatesOfMassFlightLeaders);
                 pointList.Remove(positionOfLeader);
                 Point[] newMassFlightPoints = pointList.ToArray();
-                CoordinatesOfMassFlightLeaders = newMassFlightPoints;
+                _coordinatesOfMassFlightLeaders = newMassFlightPoints;
                 RefreshMassFlightStatus();
             }
         }
 
-        private void RefreshMassFlightStatus(){
-
-            if (CoordinatesOfMassFlightLeaders.Length != 0) {
-                DominantMassFlightLeaderCoordinates = CoordinatesOfMassFlightLeaders[0];
-            }
-            else {
-                DominantMassFlightLeaderCoordinates = new Point();
-            }
+        /// <summary>
+        ///     If there are any mass flight informations from a human the status is positive.
+        /// </summary>
+        private void RefreshMassFlightStatus() {
+            DominantMassFlightLeaderCoordinates = _coordinatesOfMassFlightLeaders.Length != 0
+                ? _coordinatesOfMassFlightLeaders[0]
+                : new Point();
         }
-
-
-
 
         /// <summary>
         ///     Prepare the colors and border informations for the view. Data is
@@ -387,23 +392,6 @@ namespace CellLayer {
 
             object[] data = {posX, posY, fillingColour, cellText, borderStyle};
             return data;
-        }
-
-        /// <summary>
-        ///     Add the strenght value to the current pressure of the cell. If pressure is higher than the
-        ///     pressure resistance value and is an obstacle cell it gets broken down to neutral cell.
-        ///     Humans read this value too but their reaction depends on their own resistance to pressure.
-        /// </summary>
-        /// <param name="strenght"></param>
-        public void AddPressure(int strenght) {
-            PressureOnCell += strenght;
-
-            if (PressureOnCell > ResistanceToPressure && CellType == CellLayerImpl.CellType.Obstacle) {
-                PressureOnCell = 0;
-                CellLayerImpl.Log.Info("CELL: " + CellId + " Obstacle cell broke under pressure to neutral");
-                ChangeStateTo(CellLayerImpl.CellType.Neutral);
-                
-            }
         }
     }
 

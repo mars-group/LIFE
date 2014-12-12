@@ -24,8 +24,6 @@ namespace EventLayer {
         public static readonly Dictionary<int, List<int>> PanicTime =
             new Dictionary<int, List<int>> {
                 {0, new List<int> {68, 2}},
-                //{3, new List<int> {25, 4}},
-                //{5, new List<int> {200, 3}}
             };
 
         private readonly CellLayerImpl _cellLayer;

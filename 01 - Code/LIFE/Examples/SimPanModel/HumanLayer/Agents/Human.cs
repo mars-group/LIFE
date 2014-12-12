@@ -62,7 +62,7 @@ namespace HumanLayer.Agents {
         private readonly CellLayerImpl _cellLayer;
 
         private AbstractGoapSystem _goapActionSystem;
-        private bool _isAlive = true;
+        public bool IsAlive = true;
 
         public int VitalEnergy = 20;
         private bool _canMove = true;
@@ -132,10 +132,10 @@ namespace HumanLayer.Agents {
         #region IAgent Members
 
         public void Tick() {
-            if (_isAlive && !HumanBlackboard.Get(IsOutSide)) {
+            if (IsAlive && HumanBlackboard.Get(IsOutSide) == false) {
                 SensorAndMemory.CollectAndProcessSensorInformation();
 
-                if (_canMove) {
+                if (IsAlive && _canMove){
                     _goapActionSystem.GetNextAction();
                     MotorAndNavigation.ExecuteGoapAction();
                 }
@@ -331,16 +331,12 @@ namespace HumanLayer.Agents {
         /// </summary>
         /// <param name="createObstacle"></param>
         public void SetAsKilled(bool createObstacle = true) {
-            _isAlive = false;
+            IsAlive = false;
             _canMove = false;
 
-            HasCalmingSphere = false;
             SensorAndMemory.DeleteCalmingSphere();
-
-            HasMassFlightSphere = false;
             SensorAndMemory.DeleteMassFlightSphere();
-
-
+            
             if (createObstacle) {
                 _cellLayer.SetCellStatus(HumanBlackboard.Get(CellIdOfPosition), CellLayerImpl.CellType.Sacrifice);
                 _cellLayer.DeleteAgentDraw(AgentID);
