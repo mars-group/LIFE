@@ -73,7 +73,12 @@ namespace LifeAPI.AddinLoader {
         }
 
         public ExtensionNodeList LoadAllLayers(string modelName) {
-            if (AddinManager.IsInitialized) AddinManager.Shutdown();
+			try {
+				if (AddinManager.IsInitialized) AddinManager.Shutdown();
+			}
+			catch (InvalidOperationException ex) {
+				// ignore this case. It's stupid...
+			}
             AddinManager.Initialize("./layers", "./addins/" + modelName);
             WaitForAddinManagerToBeInitialized();
             UpdateAddinRegistry();
