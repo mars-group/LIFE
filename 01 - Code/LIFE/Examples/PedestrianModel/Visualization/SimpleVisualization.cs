@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 using PedestrianModel.Agents;
 
 namespace PedestrianModel.Visualization {

@@ -1,7 +1,7 @@
 ﻿using System;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 using PedestrianModel.Agents;
 using PedestrianModel.Util.Math;
 

@@ -7,7 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
-using LayerAPI.Layer.Visualization;
+using LifeAPI.Layer.Visualization;
 
 namespace VisualizationAdapter.Interface {
     public interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {

@@ -2,7 +2,7 @@
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace DalskiAgent.Agents {

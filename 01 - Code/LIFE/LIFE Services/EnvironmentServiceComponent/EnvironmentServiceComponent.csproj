@@ -75,9 +75,9 @@
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
-      <Name>LayerAPI</Name>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
       <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>

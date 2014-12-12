@@ -8,10 +8,10 @@ using EnvironmentServiceComponent.Entities;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.Interface;
-using LayerAPI.Environment;
-using LayerAPI.Perception;
-using LayerAPI.Spatial;
-using Vector = LayerAPI.Spatial.Vector;
+using LifeAPI.Spatial;
+using LifeAPI.Environment;
+using LifeAPI.Perception;
+using Vector = LifeAPI.Spatial.Vector;
 
 namespace DalskiAgent.Environments {
 

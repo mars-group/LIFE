@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using CSharpQuadTree;
 using EnvironmentServiceComponent.Entities.Shape;
-using LayerAPI.Perception;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
+using LifeAPI.Perception;
 
 namespace EnvironmentServiceComponent.Implementation {
 

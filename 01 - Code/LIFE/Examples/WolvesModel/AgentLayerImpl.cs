@@ -1,6 +1,6 @@
 ﻿using DalskiAgent.Execution;
-using LayerAPI.Layer;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
+using LifeAPI.Layer;
 using Mono.Addins;
 using WolvesModel.Agents;
 using WolvesModel.Environment;

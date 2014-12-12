@@ -7,10 +7,10 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
 //  *******************************************************/
 
-using LayerAPI.Layer;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
+using LifeAPI.Layer;
 
 namespace LayerFactory.Implementation {
     public class LayerFactoryComponent : ILayerFactory {

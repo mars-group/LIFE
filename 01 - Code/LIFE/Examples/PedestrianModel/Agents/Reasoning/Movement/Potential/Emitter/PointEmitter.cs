@@ -1,5 +1,5 @@
 ﻿using System;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter {

@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
@@ -114,7 +114,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIFEGisLayerService", "LIFE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIFE API", "LIFE API", "{21C88CD1-A41C-4908-B309-A33A2F23683B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerAPI", "LIFE API\LayerAPI\LayerAPI.csproj", "{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeAPI", "LIFE API\LifeAPI\LifeAPI.csproj", "{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenNebulaAdapter", "OpenNebulaAdapter", "{B488B2F7-D268-41D3-B31D-CC0DF03F9F34}"
 EndProject

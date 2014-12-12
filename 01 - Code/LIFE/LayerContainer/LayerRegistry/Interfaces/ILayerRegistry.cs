@@ -8,7 +8,7 @@
 //  *******************************************************/
 
 using System;
-using LayerAPI.Layer;
+using LifeAPI.Layer;
 
 namespace LayerRegistry.Interfaces {
     /// <summary>

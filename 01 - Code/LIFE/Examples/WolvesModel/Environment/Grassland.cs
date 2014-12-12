@@ -4,8 +4,8 @@ using System.Linq;
 using DalskiAgent.Environments;
 using DalskiAgent.Perception;
 using EnvironmentServiceComponent.Implementation;
-using LayerAPI.Perception;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
+using LifeAPI.Perception;
 using WolvesModel.Agents;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 

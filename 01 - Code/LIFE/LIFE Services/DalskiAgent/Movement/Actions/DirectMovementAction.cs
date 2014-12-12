@@ -1,7 +1,7 @@
 ﻿using System;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Reasoning;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 
 namespace DalskiAgent.Movement.Actions {
   

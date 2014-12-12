@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvironmentServiceComponent.Entities.Shape;
 using GeoAPI.Geometries;
-using LayerAPI.Environment;
-using LayerAPI.Perception;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
+using LifeAPI.Environment;
+using LifeAPI.Perception;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 

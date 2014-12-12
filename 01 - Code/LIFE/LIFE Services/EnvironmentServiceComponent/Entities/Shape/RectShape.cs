@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using CSharpQuadTree;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Entities.Shape {
 

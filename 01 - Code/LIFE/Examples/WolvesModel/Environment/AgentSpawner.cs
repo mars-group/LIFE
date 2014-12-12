@@ -8,7 +8,7 @@ using DalskiAgent.Execution;
 using DalskiAgent.Perception;
 using DalskiAgent.Reasoning;
 using EnvironmentServiceComponent.Implementation;
-using LayerAPI.Perception;
+using LifeAPI.Perception;
 using WolvesModel.Agents;
 
 namespace WolvesModel.Environment {

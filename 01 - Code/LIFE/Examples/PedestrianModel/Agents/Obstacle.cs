@@ -2,7 +2,7 @@
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Reasoning;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 
 namespace PedestrianModel.Agents {
 

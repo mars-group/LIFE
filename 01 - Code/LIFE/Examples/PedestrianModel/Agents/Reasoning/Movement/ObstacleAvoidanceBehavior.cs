@@ -4,7 +4,7 @@ using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Perception;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
 using PedestrianModel.Agents.Reasoning.Movement.Potential;
 using PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter;
 using PedestrianModel.Util.Math;

@@ -1,8 +1,8 @@
 ﻿using DistributedKeyValueStore.Implementation;
-using LayerAPI.Layer;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
 using LayerRegistry.Interfaces.Config;
+using LifeAPI.Layer;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Implementation;

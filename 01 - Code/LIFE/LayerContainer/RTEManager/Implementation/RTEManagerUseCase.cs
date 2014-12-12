@@ -11,10 +11,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using LayerAPI.Agent;
-using LayerAPI.Layer;
-using LayerAPI.Layer.Visualization;
 using LCConnector.TransportTypes;
+using LifeAPI.Agent;
+using LifeAPI.Layer;
+using LifeAPI.Layer.Visualization;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 

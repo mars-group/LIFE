@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LayerAPI.Layer.Visualization;
+using LifeAPI.Layer.Visualization;
 using MessageWrappers;
 using VisualizationAdapter.Interface;
 

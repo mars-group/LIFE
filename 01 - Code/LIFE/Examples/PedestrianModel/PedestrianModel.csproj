@@ -125,9 +125,9 @@
       <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
-      <Name>LayerAPI</Name>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\DalskiAgent\DalskiAgent.csproj">
       <Project>{9dc34799-0130-4a2b-962d-946cca54dd9e}</Project>

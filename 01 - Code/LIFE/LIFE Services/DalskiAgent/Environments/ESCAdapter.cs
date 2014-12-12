@@ -8,9 +8,9 @@ using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.Interface;
 using GeoAPI.Geometries;
-using LayerAPI.Environment;
-using LayerAPI.Perception;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
+using LifeAPI.Environment;
+using LifeAPI.Perception;
 
 namespace DalskiAgent.Environments {
 

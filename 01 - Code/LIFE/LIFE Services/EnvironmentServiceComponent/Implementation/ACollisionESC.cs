@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using EnvironmentServiceComponent.Entities;
-using LayerAPI.Environment;
-using LayerAPI.Perception;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
+using LifeAPI.Environment;
+using LifeAPI.Perception;
 
 namespace EnvironmentServiceComponent.Implementation {
 

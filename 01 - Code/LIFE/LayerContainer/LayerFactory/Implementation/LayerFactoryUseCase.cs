@@ -9,11 +9,11 @@
 
 using System.Linq;
 using System.Reflection;
-using LayerAPI.AddinLoader;
-using LayerAPI.Layer;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
+using LifeAPI.AddinLoader;
+using LifeAPI.Layer;
 using Mono.Addins;
 
 namespace LayerFactory.Implementation {

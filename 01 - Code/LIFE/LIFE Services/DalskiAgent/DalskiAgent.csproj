@@ -92,9 +92,9 @@
     <Content Include="Movement\Readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
-      <Name>LayerAPI</Name>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
       <Project>{c91776d6-d84c-4183-bd68-d6fa663e3c1c}</Project>
@@ -106,7 +106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GenericAgentArchitecture.nuspec" />
+    <None Include="DalskiAgent.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

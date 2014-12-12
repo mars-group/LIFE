@@ -1,7 +1,7 @@
 ﻿using System;
 using DalskiAgent.Environments;
-using LayerAPI.Perception;
-using LayerAPI.Spatial;
+using LifeAPI.Spatial;
+using LifeAPI.Perception;
 
 namespace DalskiAgent.Perception {
 
