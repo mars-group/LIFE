@@ -11,7 +11,6 @@ using Mono.Addins;
 using PedestrianModel.Agents;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
-using SpatialCommon.Datatypes;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -287,52 +286,85 @@ namespace PedestrianModel {
 
         public List<BasicVisualizationMessage> GetVisData()
         {
-            List<BasicVisualizationMessage> result = new List<BasicVisualizationMessage>();
+            var result = new List<BasicVisualizationMessage>();
+            result.Add(new TerrainDataMessage(26, 11, 0));
+
             foreach (var o in _env.GetAllObjects())
             {
                 if (o is Obstacle)
                 {
-                    Obstacle obs = (Obstacle)o;
-                    Vector obsPos = obs.GetPosition();
-                    Vector obsDim = obs.GetDimension();
-                    NonMovingPassiveObject npo = new NonMovingPassiveObject
-                        (Definitions.PassiveTypes.WallPassiveObject,
-                            obsPos.X,
-                            obsPos.Y,
-                            obsPos.Z,
-                            0,
-                            obs.Id.ToString(CultureInfo.InvariantCulture),
-                            "Wall",
-                            "Obstacle",
-                            1,
-                            obsDim.X,
-                            obsDim.Y);
-                    result.Add(npo);
+                    var obs = (Obstacle)o;
+                    var vpo = new VegetationPassiveObject {
+                        X = (float) obs.GetPosition().X,
+                        Y = (float) obs.GetPosition().Y,
+                        Z = (float) obs.GetPosition().Z,
+                        Width = (float) obs.GetDimension().X,
+                        Height = (float) obs.GetDimension().Y,
+                        Id = obs.Id.ToString(CultureInfo.InvariantCulture),
+                        Description = "Wall"
+                    };
+                    result.Add(vpo);
                 }
                 else if (o is Pedestrian)
                 {
-                    Pedestrian ped = (Pedestrian)o;
-                    Vector pedPos = ped.GetPosition();
-                    Vector pedDim = ped.GetDimension();
-                    MovingBasicAgent mba = new MovingBasicAgent
-                        (Definitions.AgentTypes.HumanAgent,
-                            pedPos.X,
-                            pedPos.Y,
-                            pedPos.Z,
-                            0,
-                            ped.Id.ToString(CultureInfo.InvariantCulture),
-                            _tick,
-                            (float)pedDim.X,
-                            (float)pedDim.Y,
-                            (float)pedDim.Z,
-                            new Dictionary<string, string>(),
-                            "Pedestrian",
-                            "Moving",
-                            0,
-                            new List<GroupDefinition>());
-                    result.Add(mba);
+                    var ped = (Pedestrian)o;
+                    var ha = new HumanAgent {
+                        X = (float) ped.GetPosition().X,
+                        Y = (float) ped.GetPosition().Y,
+                        Z = (float) ped.GetPosition().Z,
+                        Width = (float) ped.GetDimension().X,
+                        Height = (float) ped.GetDimension().Y,
+                        Id = ped.Id.ToString(CultureInfo.InvariantCulture),
+                        Description = "Pedestrian"
+                    };
+                    result.Add(ha);
                 }
             }
+//            foreach (var o in _env.GetAllObjects())
+//            {
+//                if (o is Obstacle)
+//                {
+//                    Obstacle obs = (Obstacle)o;
+//                    Vector obsPos = obs.GetPosition();
+//                    Vector obsDim = obs.GetDimension();
+//                    NonMovingPassiveObject npo = new NonMovingPassiveObject
+//                        (Definitions.PassiveTypes.WallPassiveObject,
+//                            obsPos.X,
+//                            obsPos.Y,
+//                            obsPos.Z,
+//                            0,
+//                            obs.Id.ToString(CultureInfo.InvariantCulture),
+//                            "Wall",
+//                            "Obstacle",
+//                            1,
+//                            obsDim.X,
+//                            obsDim.Y);
+//                    result.Add(npo);
+//                }
+//                else if (o is Pedestrian)
+//                {
+//                    Pedestrian ped = (Pedestrian)o;
+//                    Vector pedPos = ped.GetPosition();
+//                    Vector pedDim = ped.GetDimension();
+//                    MovingBasicAgent mba = new MovingBasicAgent
+//                        (Definitions.AgentTypes.HumanAgent,
+//                            pedPos.X,
+//                            pedPos.Y,
+//                            pedPos.Z,
+//                            0,
+//                            ped.Id.ToString(CultureInfo.InvariantCulture),
+//                            _tick,
+//                            (float)pedDim.X,
+//                            (float)pedDim.Y,
+//                            (float)pedDim.Z,
+//                            new Dictionary<string, string>(),
+//                            "Pedestrian",
+//                            "Moving",
+//                            0,
+//                            new List<GroupDefinition>());
+//                    result.Add(mba);
+//                }
+//            }
             return result;
         }
 
