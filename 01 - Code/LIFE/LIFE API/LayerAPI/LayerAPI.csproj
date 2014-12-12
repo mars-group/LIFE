@@ -121,6 +121,9 @@
   <ItemGroup>
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
+    <Compile Include="Config\DistributionStrategy.cs" />
+    <Compile Include="Config\LayerConfig.cs" />
+    <Compile Include="Config\ModelConfig.cs" />
     <Compile Include="Interfaces\GIS\IGISAccess.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
     <Compile Include="Interfaces\IGISActiveLayer.cs" />

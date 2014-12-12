@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using LayerAPI.Config;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using ModelContainer.Interfaces;
@@ -37,6 +38,10 @@ namespace ModelContainer.Implementation {
 
         public ModelContent GetModel(TModelDescription modelID) {
             return _modelContainerUseCase.GetModel(modelID);
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription modelId) {
+            return _modelContainerUseCase.GetModelConfig(modelId);
         }
 
         public TModelDescription AddModelFromDirectory(string filePath) {

@@ -5,6 +5,7 @@ using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
 using LCConnector;
+using LCConnector.TransportTypes;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -128,10 +129,15 @@ namespace RuntimeEnvironment.Implementation {
         private LayerContainerClient[] InitConnections(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
             var content = _modelContainer.GetModel(modelDescription);
+            var modelConfig = _modelContainer.GetModelConfig(modelDescription);
             var layerContainerClients = new LayerContainerClient[layerContainers.Count];
 
-            var i = 0;
-            foreach (TNodeInformation nodeInformationType in layerContainers) {
+            /* 1.
+             * Create LayerContainerClients for all connected LayerContainers
+             */
+            int i = 0;
+            foreach (TNodeInformation nodeInformationType in layerContainers)
+            {
                 var client = new LayerContainerClient
                     (
                     ScsServiceClientBuilder.CreateClient<ILayerContainer>
@@ -139,11 +145,39 @@ namespace RuntimeEnvironment.Implementation {
                             nodeInformationType.NodeEndpoint.IpAddress + ":" +
                             nodeInformationType.NodeEndpoint.Port),
                     content,
-                    _modelContainer.GetInstantiationOrder(modelDescription),
                     i);
                 layerContainerClients[i] = client;
                 i++;
             }
+
+            /* 2.
+             * Instantiate Layers by InstantiationOrder,
+             * differentiate between distributable and non-distributable layers.
+             * If distributable: instantiate in all LayerContainers according to DistributionStrategy
+             */
+            int layerId = 0;
+            foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription)) {
+                var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
+
+                if (modelConfig.LayerConfigs[layerDescription.Name].Distributable) {
+                    foreach (var layerContainerClient in layerContainerClients) {
+                        layerContainerClient.Instantiate(layerInstanceId);
+                    }
+                }
+                else {
+                    layerContainerClients[0].Instantiate(layerInstanceId);   
+                }
+
+                layerId++;
+            }
+
+
+
+
+
+            // initialize Layers and setup AgentShadowing
+            //layerContainer.ServiceProxy.InitializeLayer(tmp, new TInitData());
+
 
             return layerContainerClients;
         }

@@ -11,7 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using ConfigurationAdapter.Interface;
 using Ionic.Zip;
+using LayerAPI.Config;
 using LCConnector.TransportTypes.ModelStructure;
 using log4net;
 using SimulationManagerShared;
@@ -120,6 +122,11 @@ namespace ModelContainer.Implementation {
             foreach (Action listener in _listeners) {
                 listener();
             }
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription model) {
+            string path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name + Path.DirectorySeparatorChar + model.Name + ".cfg";
+            return Configuration.Load<ModelConfig>(path);
         }
     }
 }

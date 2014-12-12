@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using LayerAPI.Config;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using SMConnector.TransportTypes;
@@ -49,6 +50,13 @@ namespace ModelContainer.Interfaces {
         /// <param name="modelID">must not be null</param>
         /// <returns>null, if model not found.</returns>
         ModelContent GetModel(TModelDescription modelID);
+
+        /// <summary>
+        /// Returns the ModelConfig for the given modelDescription
+        /// </summary>
+        /// <param name="modelId"></param>
+        /// <returns></returns>
+        ModelConfig GetModelConfig(TModelDescription modelId);
 
         /// <summary>
         ///     Copies the contents of filePath into a folder into a model folder with the same name.
