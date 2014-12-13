@@ -6,20 +6,19 @@ using GoapModelTest.Worldstates;
 
 namespace GoapModelTest.Goals {
 
-    public class GoalGetRich : AbstractGoapGoal {
-        public GoalGetRich()
+    internal class GoalC : AbstractGoapGoal {
+        public GoalC()
             : base(new List<WorldstateSymbol> {
-                new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean))
-            },1) {}
+                new WorldstateSymbol(WorldProperties.C, true, typeof (Boolean))
+            },6) {}
 
         public override void UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
-            if (IsSatisfied(actualWorldstate)) {
-                Relevancy = 0;
+
+            if (actualWorldstate.Contains(new WorldstateSymbol(WorldProperties.H, true, typeof (Boolean)))) {
+                Relevancy = 10;
             }
             else {
-                if (Relevancy < 10) {
-                   Relevancy += 1;
-                }
+                Relevancy = 6;
             }
         }
     }

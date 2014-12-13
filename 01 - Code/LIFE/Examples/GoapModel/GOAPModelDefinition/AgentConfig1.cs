@@ -22,7 +22,6 @@ namespace GOAPModelDefinition {
             symbols.Add(new WorldstateSymbol(WorldProperties.Happy, false, typeof (Boolean)));
 
             return symbols;
-            //return new Worldstate(typeof(WorldProperties), symbols);
         }
 
         public List<AbstractGoapAction> GetAllActions() {

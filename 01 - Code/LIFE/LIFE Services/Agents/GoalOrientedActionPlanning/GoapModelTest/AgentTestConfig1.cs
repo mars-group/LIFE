@@ -44,8 +44,7 @@ namespace GoapModelTest {
             return false;
         }
 
-        public List<WorldstateSymbol> GetUpdatedSymbols()
-        {
+        public List<WorldstateSymbol> GetUpdatedSymbols(){
             throw new NotImplementedException();
         }
 

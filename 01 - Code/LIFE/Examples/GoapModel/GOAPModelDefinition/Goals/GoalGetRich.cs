@@ -10,19 +10,15 @@ namespace GOAPModelDefinition.Goals {
         public GoalGetRich()
             : base(new List<WorldstateSymbol> {
                 new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean))
-            },
-                1) {}
+            }, 1) {}
 
-        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
+        public override void UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
             if (IsSatisfied(actualWorldstate)) {
-                return Relevancy = 0;
+                Relevancy = 0;
             }
             else {
                 if (Relevancy < 10) {
-                    return Relevancy += 1;
-                }
-                else {
-                    return Relevancy;
+                    Relevancy += 1;
                 }
             }
         }

@@ -48,7 +48,7 @@ namespace GoapActionSystem.Implementation {
 
             CheckActionsValid(actions);
             CheckGoalsValid(goals);
-            CheckSymbolsValid(symbols);
+            //CheckSymbolsValid(symbols);
 
             return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth, ignoreFinishedForTesting);
         }
@@ -75,7 +75,7 @@ namespace GoapActionSystem.Implementation {
 
             CheckActionsValid(actions);
             CheckGoalsValid(goals);
-            CheckSymbolsValid(symbols);
+            //CheckSymbolsValid(symbols);
 
 
             return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth, configClass);

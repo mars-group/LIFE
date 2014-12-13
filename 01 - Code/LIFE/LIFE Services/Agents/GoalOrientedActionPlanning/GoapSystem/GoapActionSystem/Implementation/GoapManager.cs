@@ -15,6 +15,8 @@ namespace GoapActionSystem.Implementation {
         private readonly IGoapAgentConfig _configClass;
         private readonly bool _ignoreIfFinishedForTesting;
 
+        private readonly bool _updateGoalRelevancyBeforePlanning = true;
+
         /// <summary>
         ///     goap element: faster search for actions by needed worldstate symbols
         /// </summary>
@@ -38,12 +40,15 @@ namespace GoapActionSystem.Implementation {
                 List<WorldstateSymbol> startStates,
                 int maximumGraphSearchDepth,
                 bool ignoreFinishedForTesting) {
+
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
             _internalBlackboard.Set(Worldstate, startStates);
+
             _maximumGraphSearchDepth = maximumGraphSearchDepth;
             _ignoreIfFinishedForTesting = ignoreFinishedForTesting;
+
             InitializationHelper();
         }
 
@@ -63,11 +68,14 @@ namespace GoapActionSystem.Implementation {
                 List<WorldstateSymbol> startStates,
                 int maximumGraphSearchDepth,
                 IGoapAgentConfig configClass) {
+
+
             _availableActions = availableActions;
             _availableGoals = availableGoals;
             _internalBlackboard = blackboard;
             _internalBlackboard.Set(Worldstate, startStates);
             _maximumGraphSearchDepth = maximumGraphSearchDepth;
+
             _configClass = configClass;
 
             InitializationHelper();
@@ -80,7 +88,6 @@ namespace GoapActionSystem.Implementation {
         /// <returns></returns>
         private bool InitializationHelper() {
             CreateEffectActionHashTable();
-            UpdateRelevancyOfGoals();
             
             if (!_ignoreIfFinishedForTesting) {
                 if (!TryGetGoalAndPlan()) {
@@ -175,6 +182,10 @@ namespace GoapActionSystem.Implementation {
                 _internalBlackboard.Set(ActionForExecution, null);
                 _currentPlan = new List<AbstractGoapAction>();
 
+                if (_updateGoalRelevancyBeforePlanning){
+                    UpdateRelevancyOfGoals();
+                }
+
                 if (IsWorldstateUpdateConfiguredBeforeReplanning()) {
                     UpdateWorldstateByAgent();
                 }
@@ -226,6 +237,10 @@ namespace GoapActionSystem.Implementation {
                 _internalBlackboard.Set(ActionForExecution, null);
                 _currentPlan = new List<AbstractGoapAction>();
 
+                if (_updateGoalRelevancyBeforePlanning){
+                    UpdateRelevancyOfGoals();
+                }
+                
                 if (IsWorldstateUpdateConfiguredBeforeReplanning()) {
                     UpdateWorldstateByAgent();
                 }
@@ -283,6 +298,7 @@ namespace GoapActionSystem.Implementation {
         private bool TryGetGoalAndPlan() {
             _currentGoal = null;
             _currentPlan = null;
+            
             IOrderedEnumerable<AbstractGoapGoal> goals = GetUnsatisfiedGoalsSortedByRelevancy();
 
             // case all goals are satisfied

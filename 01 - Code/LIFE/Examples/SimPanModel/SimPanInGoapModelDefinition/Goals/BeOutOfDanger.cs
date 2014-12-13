@@ -13,9 +13,6 @@ namespace SimPanInGoapModelDefinition.Goals {
             ,
             1) {}
         
-        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
-            return 10;
-        }
     }
 
 }

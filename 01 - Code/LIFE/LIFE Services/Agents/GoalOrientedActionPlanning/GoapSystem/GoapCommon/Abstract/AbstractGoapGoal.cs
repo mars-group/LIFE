@@ -33,15 +33,6 @@ namespace GoapCommon.Abstract {
             return Relevancy;
         }
 
-/*
-        /// <summary>
-        ///     get the world state symbols defining the reached goal.
-        /// </summary>
-        /// <returns></returns>
-        public List<WorldstateSymbol> GetTargetWorldstates() {
-            return _targetWorldState;
-        }*/
-
         /// <summary>
         ///     check the target world state against the given world state.
         /// </summary>
@@ -66,11 +57,11 @@ namespace GoapCommon.Abstract {
 
         /// <summary>
         ///     create an individual relevancy depending on actual
-        ///     world state or let it static.
+        ///     world state, other values or let it static.
         /// </summary>
         /// <param name="actualWorldstate"></param>
         /// <returns></returns>
-        public abstract int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate);
+        public virtual void UpdateRelevancy(List<WorldstateSymbol> actualWorldstate){}
     }
 
 }

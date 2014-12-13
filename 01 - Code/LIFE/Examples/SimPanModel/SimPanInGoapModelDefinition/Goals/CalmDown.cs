@@ -10,9 +10,6 @@ namespace SimPanInGoapModelDefinition.Goals {
             : base(targetWorldState, startRelevancy) {}
 
 
-        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
-            throw new NotImplementedException();
-        }
     }
 
 }

@@ -16,10 +16,7 @@ namespace GoapModelTest.Goals {
                 new WorldstateSymbol(WorldProperties.E, true, typeof (Boolean)),
             },
                 1) {}
-
-        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
-            return 1;
-        }
+        
     }
 
 }

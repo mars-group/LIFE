@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
@@ -25,6 +26,11 @@ namespace GoapTests {
         private AbstractGoapSystem _goapActionSystem1;
         private AbstractGoapSystem _goapActionSystem2;
         private AbstractGoapSystem _goapActionSystemSearchDepth;
+
+        private AbstractGoapSystem _goapActionSystemSwitchGoal;
+
+        private AbstractGoapSystem _goapActionSystemSwitchGoalRelevany;
+
         private AbstractGoapSystem _goapActionSystemHighBranching3X;
         private AbstractGoapSystem _goapActionSystemHighBranching4X;
         private AbstractGoapSystem _goapActionSystemHighBranching5X;
@@ -34,8 +40,7 @@ namespace GoapTests {
         private readonly AbstractGoapAction _actionClean2 = new ActionClean();
         private readonly AbstractGoapAction _actionGetToy = new ActionGetToy();
         private readonly AbstractGoapAction _actionPlay = new ActionPlay();
-
-
+        
         private void CreateGoapActionSystems() {
             _goapActionSystem1 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig1", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
@@ -47,6 +52,12 @@ namespace GoapTests {
             _goapActionSystemSearchDepth = GoapComponent.LoadGoapConfiguration
                 ("AgentTestSearchDepth", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
 
+            _goapActionSystemSwitchGoal = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfigSwitchGoal", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+            
+            _goapActionSystemSwitchGoalRelevany = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfigGoalRelevancy", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+            
             _goapActionSystemHighBranching3X = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfigHighBranching3X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
 
@@ -80,6 +91,7 @@ namespace GoapTests {
         public void ActionEqualityTest() {
             Assert.True(_actionClean.Equals(_actionClean));
             Assert.True(_actionClean.Equals(_actionClean2));
+            Assert.False(_actionClean.Equals(_actionGetToy));
         }
 
         [Test]
@@ -87,11 +99,12 @@ namespace GoapTests {
             AbstractGoapAction nextAction1A = _goapActionSystem1.GetNextAction();
             AbstractGoapAction nextAction1B = _goapActionSystem1.GetNextAction();
 
-            AbstractGoapAction nextAction2A = _goapActionSystem2.GetNextAction();
-
             Assert.True(nextAction1A.Equals(_actionGetToy));
             Assert.True(nextAction1B.Equals(_actionPlay));
 
+
+            AbstractGoapAction nextAction2A = _goapActionSystem2.GetNextAction();
+            
             Assert.True(nextAction2A.Equals(_actionPlay));
         }
 
@@ -108,6 +121,58 @@ namespace GoapTests {
 
             Assert.False(nextAction3.Equals(_actionGetToy));
             Assert.False(nextAction4.Equals(_actionClean));
+        }
+
+        [Test]
+        public void SwitchGoalIfFinishedTest() {
+
+            // First goal is to get happy
+            AbstractGoapAction nextAction1 = _goapActionSystemSwitchGoal.GetNextAction();
+            Assert.True(nextAction1.Equals(_actionGetToy));
+
+            AbstractGoapAction nextAction2 = _goapActionSystemSwitchGoal.GetNextAction();
+            Assert.True(nextAction2.Equals(_actionPlay));
+
+            // Happy is satisfied and new goal is get rich
+            AbstractGoapAction nextAction3 = _goapActionSystemSwitchGoal.GetNextAction();
+            Assert.True(nextAction3.Equals(_actionClean));
+
+            // Get rich is satisfied and new goal is get happy
+            AbstractGoapAction nextAction4 = _goapActionSystemSwitchGoal.GetNextAction();
+            Assert.True(nextAction4.Equals(_actionGetToy));
+        }
+
+        [Test]
+        public void SwitchGoalRelevancyTest() {
+            AbstractGoapAction action1 = new ToA();
+            AbstractGoapAction action2 = new AToB();
+            AbstractGoapAction action3 = new BToC();
+
+            AbstractGoapAction action4 = new ToF();
+            AbstractGoapAction action5 = new FToG();
+            AbstractGoapAction action6 = new GToH();
+
+            AbstractGoapAction nextAction1 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
+            Assert.True(nextAction1.Equals(action1));
+
+            AbstractGoapAction nextAction2 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
+            Assert.True(nextAction2.Equals(action2));
+
+            AbstractGoapAction nextAction3 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
+            Assert.True(nextAction3.Equals(action3));
+
+            AbstractGoapAction nextAction4 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
+            Assert.True(nextAction4.Equals(action4));
+
+            AbstractGoapAction nextAction5 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
+            Assert.True(nextAction5.Equals(action5));
+
+            AbstractGoapAction nextAction6 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
+            Assert.True(nextAction6.Equals(action6));
+
+            AbstractGoapAction nextAction7 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
+            Assert.True(nextAction7.Equals(action1));
+
         }
 
         [Test]
@@ -139,8 +204,7 @@ namespace GoapTests {
         }
 
         [Test]
-        public void TestHighBranching3XFindPath()
-        {
+        public void TestHighBranching3XFindPath() {
             AbstractGoapAction chosenAction = _goapActionSystemHighBranching3X.GetNextAction();
             Assert.False(chosenAction.Equals(new SurrogateAction()));
         }
@@ -152,19 +216,16 @@ namespace GoapTests {
         }
 
         [Test]
-        public void TestHighBranching5XFindPath(){
+        public void TestHighBranching5XFindPath() {
             AbstractGoapAction chosenAction = _goapActionSystemHighBranching5X.GetNextAction();
             Assert.False(chosenAction.Equals(new SurrogateAction()));
         }
 
         [Test]
-        public void TestHighBranching6XFindPath(){
+        public void TestHighBranching6XFindPath() {
             AbstractGoapAction chosenAction = _goapActionSystemHighBranching6X.GetNextAction();
             Assert.False(chosenAction.Equals(new SurrogateAction()));
         }
-
     }
-
-
 
 }

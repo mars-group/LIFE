@@ -10,19 +10,15 @@ namespace GOAPModelDefinition.Goals {
         public GoalBeHappy()
             : base(new List<WorldstateSymbol> {
                 new WorldstateSymbol(WorldProperties.Happy, true, typeof (Boolean))
-            },
-                2) {}
+            }, 2) {}
 
-        public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
+        public override void UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
             if (IsSatisfied(actualWorldstate)) {
-                return Relevancy = 0;
+                Relevancy = 0;
             }
             else {
                 if (Relevancy < 10) {
-                    return Relevancy += 1;
-                }
-                else {
-                    return Relevancy;
+                    Relevancy += 1;
                 }
             }
         }
