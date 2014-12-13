@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 using PlantLayer.Agents;
@@ -29,8 +30,8 @@ namespace PlantLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             environment = new TwoDimEnvironmentUseCase<Plant>();
             _plants = new List<Plant>();
             // create a 100x100 playboard and add plants everywhere but in the middle

@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using GeoAPI.Geometries;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using LifeAPI.Layer.GIS;
 using SharpMap;
@@ -34,8 +35,7 @@ namespace LIFEGisLayerService.Implementation {
 
         #region IGISActiveLayer Members
 
-        public abstract bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
+        public abstract bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
         public long GetCurrentTick() {
             return _currentTick;

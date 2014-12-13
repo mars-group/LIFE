@@ -1,5 +1,6 @@
 ﻿using System;
 using KNPElevationLayer;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 
@@ -17,7 +18,8 @@ namespace KNPTreeLayer
             _elevationLayer = elevationLayer;
         }
 
-        public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+            // TODO: Implement AgentInitializer or something ;-)
             throw new NotImplementedException();
         }
 

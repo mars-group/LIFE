@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using ForestLayer.Agents;
 using ForestLayer.TransportTypes;
 using Hik.Collections;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using mars.rock.drill;
 using Mono.Addins;
@@ -43,8 +44,8 @@ namespace AWRShowcase {
         /// <param name="layerInitData">Layer init data.</param>
         /// <param name="registerAgentHandle">Register agent handle.</param>
         /// <param name="unregisterAgentHandle">Unregister agent handle.</param>
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             Drill.InitializeConnection("rock.mars.haw-hamburg.de", "mars", "rock");
             Cube cubeAwr = Drill.Cubes.FirstOrDefault(cube => cube.CubeName == "awr");
             if (cubeAwr == null) throw new IOException("Could not load data from database.");

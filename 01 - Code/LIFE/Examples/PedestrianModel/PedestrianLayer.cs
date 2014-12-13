@@ -4,6 +4,7 @@ using System.Globalization;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using GeoAPI.Geometries;
+using LCConnector.TransportTypes;
 using LifeAPI.Spatial;
 using LifeAPI.Layer;
 using LifeAPI.Layer.Visualization;
@@ -39,8 +40,8 @@ namespace PedestrianModel {
         /// <param name="registerAgentHandle">Delegate for agent registration function.</param>
         /// <param name="unregisterAgentHandle">Delegate for agent unregistration function.</param>
         /// <returns></returns>
-        public bool InitLayer<T>
-            (T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _tick = 0;
             
             ChooseCollisions();
