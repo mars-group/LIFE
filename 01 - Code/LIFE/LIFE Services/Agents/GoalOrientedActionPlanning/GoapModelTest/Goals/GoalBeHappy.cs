@@ -10,8 +10,7 @@ namespace GoapModelTest.Goals {
         public GoalBeHappy()
             : base(new List<WorldstateSymbol> {
                 new WorldstateSymbol(WorldProperties.Happy, true, typeof (Boolean))
-            },
-                5) {}
+            },5) {}
 
         public override int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
             return Relevancy;
@@ -19,4 +18,3 @@ namespace GoapModelTest.Goals {
     }
 
 }
-

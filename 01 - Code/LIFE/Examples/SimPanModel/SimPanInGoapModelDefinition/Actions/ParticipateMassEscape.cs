@@ -22,11 +22,6 @@ namespace SimPanInGoapModelDefinition.Actions {
         }
 
         public override void Execute() {
-            if (_human.HumanBlackboard.Get(Human.Target).IsEmpty) {
-                bool b = IsExecutable(_human.HumanBlackboard.Get(AbstractGoapSystem.Worldstate));
-                bool c = ValidateContextPreconditions();
-                int a = 1;
-            }
             _human.MotorAndNavigation.ApproximateToTarget();
         }
 

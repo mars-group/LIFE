@@ -188,10 +188,6 @@ namespace HumanLayer.Agents {
             Dictionary<Point, object[]> nodeTable = new Dictionary<Point, object[]>();
             Point startPosition = _blackboard.Get(Human.Position);
 
-            if (targetPosition == startPosition) {
-                var a = 1;
-            }
-
             int heuristik = GetMinimalDistanceBetweenCoordinates(startPosition, targetPosition);
             object[] nodeMetadata = PlanRouteNodeCreator(new Point(), null, heuristik);
             nodeTable.Add(startPosition, nodeMetadata);

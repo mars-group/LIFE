@@ -25,6 +25,10 @@ namespace GoapTests {
         private AbstractGoapSystem _goapActionSystem1;
         private AbstractGoapSystem _goapActionSystem2;
         private AbstractGoapSystem _goapActionSystemSearchDepth;
+        private AbstractGoapSystem _goapActionSystemHighBranching3X;
+        private AbstractGoapSystem _goapActionSystemHighBranching4X;
+        private AbstractGoapSystem _goapActionSystemHighBranching5X;
+        private AbstractGoapSystem _goapActionSystemHighBranching6X;
 
         private readonly AbstractGoapAction _actionClean = new ActionClean();
         private readonly AbstractGoapAction _actionClean2 = new ActionClean();
@@ -35,13 +39,25 @@ namespace GoapTests {
         private void CreateGoapActionSystems() {
             _goapActionSystem1 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig1", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
-            
+
 
             _goapActionSystem2 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig2", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
 
             _goapActionSystemSearchDepth = GoapComponent.LoadGoapConfiguration
                 ("AgentTestSearchDepth", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+
+            _goapActionSystemHighBranching3X = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfigHighBranching3X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+
+            _goapActionSystemHighBranching4X = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfigHighBranching4X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+
+            _goapActionSystemHighBranching5X = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfigHighBranching5X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+
+            _goapActionSystemHighBranching6X = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfigHighBranching6X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
         }
 
         private static bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {
@@ -72,11 +88,9 @@ namespace GoapTests {
             AbstractGoapAction nextAction1B = _goapActionSystem1.GetNextAction();
 
             AbstractGoapAction nextAction2A = _goapActionSystem2.GetNextAction();
-            //AbstractGoapAction nextAction2B = _goapActionSystem2.GetNextAction();
 
             Assert.True(nextAction1A.Equals(_actionGetToy));
             Assert.True(nextAction1B.Equals(_actionPlay));
-
 
             Assert.True(nextAction2A.Equals(_actionPlay));
         }
@@ -123,6 +137,34 @@ namespace GoapTests {
             Assert.True(IsSubset(_actionGetToy.GetResultingWorldstate(secondState), thirdState));
             Assert.True(IsSubset(thirdState, _actionGetToy.GetResultingWorldstate(secondState)));
         }
+
+        [Test]
+        public void TestHighBranching3XFindPath()
+        {
+            AbstractGoapAction chosenAction = _goapActionSystemHighBranching3X.GetNextAction();
+            Assert.False(chosenAction.Equals(new SurrogateAction()));
+        }
+
+        [Test]
+        public void TestHighBranching4XFindPath() {
+            AbstractGoapAction chosenAction = _goapActionSystemHighBranching4X.GetNextAction();
+            Assert.False(chosenAction.Equals(new SurrogateAction()));
+        }
+
+        [Test]
+        public void TestHighBranching5XFindPath(){
+            AbstractGoapAction chosenAction = _goapActionSystemHighBranching5X.GetNextAction();
+            Assert.False(chosenAction.Equals(new SurrogateAction()));
+        }
+
+        [Test]
+        public void TestHighBranching6XFindPath(){
+            AbstractGoapAction chosenAction = _goapActionSystemHighBranching6X.GetNextAction();
+            Assert.False(chosenAction.Equals(new SurrogateAction()));
+        }
+
     }
+
+
 
 }
