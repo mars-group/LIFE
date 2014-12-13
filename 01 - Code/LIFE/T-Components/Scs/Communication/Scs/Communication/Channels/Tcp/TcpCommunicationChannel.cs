@@ -132,7 +132,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
                 OnMessageSent(message);
             }
         }
-
+        
         #endregion
 
         #region Private methods

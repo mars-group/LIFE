@@ -59,7 +59,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         ///     Starts listening socket.
         /// </summary>
         private void StartSocket() {
-            _listenerSocket = new TcpListener(IPAddress.Any, _endPoint.TcpPort);
+            _listenerSocket = new TcpListener(IPAddress.Any, _endPoint.TcpPort); 
             _listenerSocket.Start();
         }
 

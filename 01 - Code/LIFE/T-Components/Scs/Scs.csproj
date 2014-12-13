@@ -37,9 +37,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
@@ -64,6 +61,9 @@
     <Compile Include="Communication\ScsServices\Communication\RemoteInvokeProxy.cs" />
     <Compile Include="Communication\ScsServices\Service\CacheableAttribute.cs" />
     <Compile Include="Communication\ScsServices\Service\ICacheable.cs" />
+    <Compile Include="Communication\Scs\Communication\Channels\Udp\UdpCommunicationChannel.cs" />
+    <Compile Include="Communication\Scs\Communication\Channels\Udp\UdpConnectionListener.cs" />
+    <Compile Include="Communication\Scs\Communication\EndPoints\Udp\ScsUdpEndPoint.cs" />
     <Compile Include="Communication\Scs\Communication\Messengers\RequestReplyMessenger.cs" />
     <Compile Include="Communication\ScsServices\Service\IScsServiceApplication.cs" />
     <Compile Include="Communication\ScsServices\Service\IScsServiceClient.cs" />
@@ -116,6 +116,7 @@
     <Compile Include="Communication\Scs\Server\ScsServerManager.cs" />
     <Compile Include="Communication\Scs\Server\ServerClientEventArgs.cs" />
     <Compile Include="Communication\Scs\Server\Tcp\ScsTcpServer.cs" />
+    <Compile Include="Communication\Scs\Server\Udp\ScsUdpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\SequentialItemProcessor.cs" />
     <Compile Include="Collections\ThreadSafeList.cs" />
@@ -139,6 +140,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MulticastAdapter\MulticastAdapter.csproj">
+      <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
+      <Name>MulticastAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
