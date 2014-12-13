@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LifeAPI.Config
 {
@@ -7,16 +8,17 @@ namespace LifeAPI.Config
     {
         public string LayerName { get; set; }
 
-        public int TotalAgentCount { get; set; }
+        public List<AgentConfig> AgentConfigs { get; set; }
 
         public bool Distributable { get; set; }
 
         public DistributionStrategy DistributionStrategy { get; set; }
 
-        public LayerConfig(string layerName, int totalAgentCount, bool distributable, DistributionStrategy distributionStrategy) {
-            TotalAgentCount = totalAgentCount;
+        public LayerConfig(string layerName, bool distributable, DistributionStrategy distributionStrategy, List<AgentConfig> agentConfigs) {
+            
             Distributable = distributable;
             DistributionStrategy = distributionStrategy;
+            AgentConfigs = agentConfigs;
             LayerName = layerName;
         }
     }

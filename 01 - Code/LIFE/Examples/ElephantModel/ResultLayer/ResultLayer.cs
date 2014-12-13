@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using ElephantLayer;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 using PlantLayer;
@@ -32,8 +33,8 @@ namespace ResultLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             MatrixToFileResultAgent m = new MatrixToFileResultAgent(_elephantLayer, _plantLayer, _waterLayer);
             registerAgentHandle.Invoke(this, m);
             return true;

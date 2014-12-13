@@ -9,6 +9,7 @@
 
 using System.Collections.Generic;
 using System.Windows;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 using TwoDimEnvironment;
@@ -26,8 +27,8 @@ namespace WaterLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             environment = new TwoDimEnvironmentUseCase<Waterhole>();
             _waterholes = new List<Waterhole>();
 

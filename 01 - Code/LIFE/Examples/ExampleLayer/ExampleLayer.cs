@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoAPI.Geometries;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using LifeAPI.Layer.Visualization;
 using MessageWrappers;
@@ -26,7 +27,7 @@ namespace ExampleLayer
         private _2DEnvironment _environment;
         private long _currentTick;
 
-        public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
+        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
             Console.WriteLine("Starting initialization...");
             var sw = Stopwatch.StartNew();

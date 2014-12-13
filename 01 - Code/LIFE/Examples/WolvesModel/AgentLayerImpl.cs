@@ -1,4 +1,5 @@
 ﻿using DalskiAgent.Execution;
+using LCConnector.TransportTypes;
 using LifeAPI.Spatial;
 using LifeAPI.Layer;
 using Mono.Addins;
@@ -29,15 +30,15 @@ namespace WolvesModel {
     private AgentSpawner _spawner;   // Agent spawner object.
 
 
-    /// <summary>
-    ///   Initializes this layer.
-    /// </summary>
-    /// <typeparam name="T">Object type of layer init data object.</typeparam>
-    /// <param name="layerInitData">Generic layer init data object. Not used here!</param>
-    /// <param name="registerAgentHandle">Delegate for agent registration function.</param>
-    /// <param name="unregisterAgentHandle">Delegate for agent unregistration function.</param>
-    /// <returns></returns>
-    public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
+      /// <summary>
+      ///   Initializes this layer.
+      /// </summary>
+      /// <typeparam name="T">Object type of layer init data object.</typeparam>
+      /// <param name="layerInitData">Generic layer init data object. Not used here!</param>
+      /// <param name="registerAgentHandle">Delegate for agent registration function.</param>
+      /// <param name="unregisterAgentHandle">Delegate for agent unregistration function.</param>
+      /// <returns></returns>
+      public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
       // Create the environment, the execution container and an agent spawner.
       _env = new Grassland(true, new Vector(100, 100), true);
