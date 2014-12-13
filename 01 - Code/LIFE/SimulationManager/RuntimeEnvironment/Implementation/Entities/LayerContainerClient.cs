@@ -28,5 +28,10 @@ namespace RuntimeEnvironment.Implementation.Entities {
         public ILayerContainer Proxy {
             get { return _layerContainer.ServiceProxy; }
         }
+
+        public void Initialize(TLayerInstanceId layerInstanceId, TInitData initData)
+        {
+            Proxy.InitializeLayer(layerInstanceId, initData);
+        }
     }
 }

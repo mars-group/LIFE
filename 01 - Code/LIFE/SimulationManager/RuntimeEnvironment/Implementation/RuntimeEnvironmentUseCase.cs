@@ -151,11 +151,13 @@ namespace RuntimeEnvironment.Implementation {
             }
 
             /* 2.
-             * Instantiate Layers by InstantiationOrder,
+             * Instantiate and initialize Layers by InstantiationOrder,
              * differentiate between distributable and non-distributable layers.
-             * If distributable: instantiate in all LayerContainers according to DistributionStrategy
+             * If distributable: instantiate and initialize in all LayerContainers according to DistributionStrategy
              */
-            int layerId = 0;
+
+            // unique layerID per LayerContainer, does not need to be unique across whole simulation 
+            var layerId = 0;
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription)) {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
@@ -164,21 +166,24 @@ namespace RuntimeEnvironment.Implementation {
                 if (layerConfig.Distributable) {
                     foreach (var layerContainerClient in layerContainerClients) {
                         layerContainerClient.Instantiate(layerInstanceId);
+                        // TODO: Determine which portion of the agents to initialize
+                        layerContainerClient.Initialize(layerInstanceId, new TInitData());
                     }
                 }
                 else {
-                    layerContainerClients[0].Instantiate(layerInstanceId);   
+                    layerContainerClients[0].Instantiate(layerInstanceId);
+                    layerContainerClients[0].Initialize(layerInstanceId, new TInitData());
                 }
 
                 layerId++;
             }
+            
 
+            /* 3.
+             * Setup shadow agents
+             */
+            
 
-
-
-
-            // initialize Layers and setup AgentShadowing
-            //layerContainer.ServiceProxy.InitializeLayer(tmp, new TInitData());
 
 
             return layerContainerClients;
