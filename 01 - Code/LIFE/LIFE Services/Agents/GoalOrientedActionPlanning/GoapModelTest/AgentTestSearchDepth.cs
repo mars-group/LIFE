@@ -41,13 +41,16 @@ namespace GoapModelTest {
             };
         }
 
-        public List<AbstractGoapGoal> GetAllGoals()
-        {
-            return new List<AbstractGoapGoal> { new GoalSearchDeptLimitTest() };
+        public List<AbstractGoapGoal> GetAllGoals() {
+            return new List<AbstractGoapGoal> {new GoalSearchDeptLimitTest()};
         }
 
         public int GetMaxGraphSearchDepth() {
             return 5;
+        }
+
+        public bool IgnoreActionsIsFinished() {
+            return true;
         }
 
         public bool ForceSymbolsUpdateBeforePlanning() {
@@ -55,6 +58,10 @@ namespace GoapModelTest {
         }
 
         public bool ForceSymbolsUpdateEveryActionRequest() {
+            return false;
+        }
+
+        public bool ForceGoalRelevancyUpdateBeforePlanning() {
             return false;
         }
 

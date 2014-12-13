@@ -11,29 +11,30 @@ using TypeSafeBlackboard;
 namespace GoapActionSystem.Implementation {
 
     /// <summary>
-    ///     main access to create an instance of the goap component
+    ///     Main access to create an instance of the goap component. 
     /// </summary>
     public static class GoapComponent {
+
         /// <summary>
         ///     Logger instance for the goap action system
         /// </summary>
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
-        ///     load the configuration of the agent by the config class
+        ///     Here the goap manager can be created with a config class
+        ///      without any parameter.     
         /// </summary>
         /// <param name="nameOfConfigClass"></param>
         /// <param name="namespaceOfConfigClass"></param>
         /// <param name="blackboard"></param>
-        /// <param name="ignoreFinishedForTesting"></param>
         /// <returns></returns>
         public static AbstractGoapSystem LoadGoapConfiguration
             (string nameOfConfigClass,
                 string namespaceOfConfigClass,
-                Blackboard blackboard,
-                bool ignoreFinishedForTesting = false) {
+                Blackboard blackboard) {
 
             Assembly assembly = Assembly.Load(namespaceOfConfigClass);
+
             IGoapAgentConfig configClass =
                 (IGoapAgentConfig) assembly.CreateInstance(namespaceOfConfigClass + "." + nameOfConfigClass);
 
@@ -41,27 +42,29 @@ namespace GoapActionSystem.Implementation {
                 throw new NullReferenceException("The configuration class for the Goap manager was not found");
             }
 
-            List<AbstractGoapAction> actions = configClass.GetAllActions();
-            List<AbstractGoapGoal> goals = configClass.GetAllGoals();
-            List<WorldstateSymbol> symbols = configClass.GetStartWorldstate();
-            int maxGraphDepth = configClass.GetMaxGraphSearchDepth();
-
-            CheckActionsValid(actions);
-            CheckGoalsValid(goals);
-            //CheckSymbolsValid(symbols);
-
-            return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth, ignoreFinishedForTesting);
+            CheckActionsValid(configClass.GetAllActions());
+            CheckGoalsValid(configClass.GetAllGoals());
+            
+            return new GoapManager(blackboard, configClass);
         }
 
-
-        public static AbstractGoapSystem LoadGoapConfigurationWithSelfreference
+        /// <summary>
+        ///     Here the goap manager can be created with a config class that needs 
+        ///     additional object instances for creation.
+        /// </summary>
+        /// <param name="nameOfConfigClass"></param>
+        /// <param name="namespaceOfConfigClass"></param>
+        /// <param name="blackboard"></param>
+        /// <param name="agent"></param>
+        /// <returns></returns>
+        public static AbstractGoapSystem LoadGoapConfigurationWithSelfReference
             (string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard, object agent) {
-            Assembly assembly = Assembly.Load(namespaceOfConfigClass);
 
-            Type type = Type.GetType(namespaceOfConfigClass + "." + nameOfConfigClass + ", " + assembly.FullName);
+            Assembly assembly = Assembly.Load(namespaceOfConfigClass);
+            Type typeOfConfigClass = Type.GetType(namespaceOfConfigClass + "." + nameOfConfigClass + ", " + assembly.FullName);
 
             object[] parameterArray = {agent, blackboard};
-            IGoapAgentConfig configClass = (IGoapAgentConfig) Activator.CreateInstance(type, parameterArray);
+            IGoapAgentConfig configClass = (IGoapAgentConfig) Activator.CreateInstance(typeOfConfigClass, parameterArray);
 
 
             if (configClass == null) {
@@ -75,10 +78,8 @@ namespace GoapActionSystem.Implementation {
 
             CheckActionsValid(actions);
             CheckGoalsValid(goals);
-            //CheckSymbolsValid(symbols);
 
-
-            return new GoapManager(actions, goals, blackboard, symbols, maxGraphDepth, configClass);
+            return new GoapManager(blackboard, configClass);
         }
 
         /// <summary>
@@ -97,8 +98,7 @@ namespace GoapActionSystem.Implementation {
             }
         }
 
-        private static void CheckGoalsValid(List<AbstractGoapGoal> goals)
-        {
+        private static void CheckGoalsValid(List<AbstractGoapGoal> goals){
             if (IsEmptyParam(goals)) {
                 throw new ArgumentException
                     ("GoapManager: Goap manager cannot start with empty goal list");

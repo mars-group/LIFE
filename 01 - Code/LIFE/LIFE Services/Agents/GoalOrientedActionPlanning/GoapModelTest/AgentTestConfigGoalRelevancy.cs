@@ -34,12 +34,20 @@ namespace GoapModelTest {
             return 10;
         }
 
+        public bool IgnoreActionsIsFinished() {
+            return true;
+        }
+
         public bool ForceSymbolsUpdateBeforePlanning() {
             return true;
         }
 
         public bool ForceSymbolsUpdateEveryActionRequest() {
             return false;
+        }
+
+        public bool ForceGoalRelevancyUpdateBeforePlanning() {
+            return true;
         }
 
         public List<WorldstateSymbol> GetUpdatedSymbols() {

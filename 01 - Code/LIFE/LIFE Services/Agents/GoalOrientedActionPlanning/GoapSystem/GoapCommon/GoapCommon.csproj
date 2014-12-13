@@ -49,7 +49,6 @@
     <Compile Include="Abstract\AbstractGoapSystem.cs" />
     <Compile Include="Exceptions\AlgorithmException.cs" />
     <Compile Include="Exceptions\GraphException.cs" />
-    <Compile Include="Exceptions\NoVertexFoundException.cs" />
     <Compile Include="Implementation\Edge.cs" />
     <Compile Include="Implementation\Node.cs" />
     <Compile Include="Implementation\WorldstateSymbol.cs" />

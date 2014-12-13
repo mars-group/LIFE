@@ -63,7 +63,6 @@ namespace GoapGraphConnector.SimpleGraph {
             if (cheapestFromOpenList == null) {
                 throw new Exception("AStarSteppable: open list contains null elem");
             }
-
             _current = cheapestFromOpenList;
             return orderedOpenList.First().Key;
         }
@@ -99,7 +98,6 @@ namespace GoapGraphConnector.SimpleGraph {
             if (!_nodeTable.ContainsKey(vertex)) {
                 _nodeTable.Add(vertex, null);
             }
-            //TODO falls ein knoten schon in der Nodetable ist und noch open ist .... checken ob er geupdated werden muss
         }
 
         /// <summary>
@@ -119,8 +117,7 @@ namespace GoapGraphConnector.SimpleGraph {
             pathEdges.Reverse();
             return pathEdges;
         }
-
-
+        
         /// <summary>
         ///     get the predecessor of the node from the table from a star
         /// </summary>
@@ -180,7 +177,7 @@ namespace GoapGraphConnector.SimpleGraph {
                     _nodeTable.Remove(openVertex);
                     _nodeTable.Add(openVertex, entry);
                 }
-                // ... or updated because it was a cheaper way found
+                    // ... or updated because it was a cheaper way found
                 else if ((int) value[2] > travelDistanceG) {
                     object[] entry = CreateNodeEntry(current, heuristic, travelDistanceG, estimatedValueF);
                     _nodeTable.Remove(openVertex);

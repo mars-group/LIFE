@@ -81,7 +81,7 @@ namespace GoapActionSystem.Implementation {
                     graphService.ExpandCurrentVertex(edges);
                 }
                 else {
-                    //GoapComponent.Log.Info("goap planner: search depth maximum on branch of graph reached");
+                    GoapComponent.Log.Info("GoapPlanner: search depth maximum on branch of graph reached");
                 }
 
                 // Set node on closed list and calculate values for reachable adjacent neighbours.
@@ -93,7 +93,7 @@ namespace GoapActionSystem.Implementation {
                 }
                 else {
 
-                    //GoapComponent.Log.Info("goap planner: no more nodes in graph for search");
+                    GoapComponent.Log.Info("GoapPlanner: no more nodes in graph for search");
                     return new List<AbstractGoapAction>();
                 }
             }

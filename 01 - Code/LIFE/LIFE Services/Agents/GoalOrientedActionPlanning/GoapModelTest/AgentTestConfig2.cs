@@ -35,11 +35,19 @@ namespace GoapModelTest {
             return 20;
         }
 
+        public bool IgnoreActionsIsFinished() {
+            return true;
+        }
+
         public bool ForceSymbolsUpdateBeforePlanning() {
             return false;
         }
 
         public bool ForceSymbolsUpdateEveryActionRequest() {
+            return false;
+        }
+
+        public bool ForceGoalRelevancyUpdateBeforePlanning() {
             return false;
         }
 

@@ -43,32 +43,32 @@ namespace GoapTests {
         
         private void CreateGoapActionSystems() {
             _goapActionSystem1 = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfig1", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfig1", "GoapModelTest", new Blackboard());
 
 
             _goapActionSystem2 = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfig2", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfig2", "GoapModelTest", new Blackboard());
 
             _goapActionSystemSearchDepth = GoapComponent.LoadGoapConfiguration
-                ("AgentTestSearchDepth", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestSearchDepth", "GoapModelTest", new Blackboard());
 
             _goapActionSystemSwitchGoal = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfigSwitchGoal", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfigSwitchGoal", "GoapModelTest", new Blackboard());
             
             _goapActionSystemSwitchGoalRelevany = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfigGoalRelevancy", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfigGoalRelevancy", "GoapModelTest", new Blackboard());
             
             _goapActionSystemHighBranching3X = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfigHighBranching3X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfigHighBranching3X", "GoapModelTest", new Blackboard());
 
             _goapActionSystemHighBranching4X = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfigHighBranching4X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfigHighBranching4X", "GoapModelTest", new Blackboard());
 
             _goapActionSystemHighBranching5X = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfigHighBranching5X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfigHighBranching5X", "GoapModelTest", new Blackboard());
 
             _goapActionSystemHighBranching6X = GoapComponent.LoadGoapConfiguration
-                ("AgentTestConfigHighBranching6X", "GoapModelTest", new Blackboard(), ignoreFinishedForTesting: true);
+                ("AgentTestConfigHighBranching6X", "GoapModelTest", new Blackboard());
         }
 
         private static bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {

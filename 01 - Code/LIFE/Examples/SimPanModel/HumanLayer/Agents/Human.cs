@@ -123,7 +123,7 @@ namespace HumanLayer.Agents {
                     throw new ArgumentException("Human: BehaviourType of agent is not known.");
             }
             _goapActionSystem =
-                GoapComponent.LoadGoapConfigurationWithSelfreference
+                GoapComponent.LoadGoapConfigurationWithSelfReference
                     (nameOfConfigClass, HumanLayerImpl.NamespaceOfModelDefinition, HumanBlackboard, this);
 
             FearValue = GetRandomisedFearValue(behaviourType);
@@ -197,7 +197,7 @@ namespace HumanLayer.Agents {
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to akinesia");
 
-                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.ReactiveConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,
@@ -225,7 +225,7 @@ namespace HumanLayer.Agents {
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to reactive");
 
-                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.ReactiveConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,
@@ -252,7 +252,7 @@ namespace HumanLayer.Agents {
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to deliberative");
 
-                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.DeliberativeConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,
@@ -280,7 +280,7 @@ namespace HumanLayer.Agents {
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to reflective");
 
-                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfreference
+                    _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.ReflectiveConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,

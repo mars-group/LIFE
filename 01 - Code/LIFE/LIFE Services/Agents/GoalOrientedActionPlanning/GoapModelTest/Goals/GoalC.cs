@@ -10,15 +10,17 @@ namespace GoapModelTest.Goals {
         public GoalC()
             : base(new List<WorldstateSymbol> {
                 new WorldstateSymbol(WorldProperties.C, true, typeof (Boolean))
-            },6) {}
+            },5) {}
 
         public override void UpdateRelevancy(List<WorldstateSymbol> actualWorldstate) {
 
-            if (actualWorldstate.Contains(new WorldstateSymbol(WorldProperties.H, true, typeof (Boolean)))) {
-                Relevancy = 10;
-            }
-            else {
-                Relevancy = 6;
+            switch (Relevancy) {
+                case 5:
+                    Relevancy = 10;
+                    break;
+                case 10:
+                    Relevancy = 5;
+                    break;
             }
         }
     }

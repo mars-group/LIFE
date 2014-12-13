@@ -35,8 +35,7 @@ namespace SimPanInGoapModelDefinition {
             };
         }
 
-        public List<AbstractGoapGoal> GetAllGoals()
-        {
+        public List<AbstractGoapGoal> GetAllGoals() {
             return new List<AbstractGoapGoal> {
                 new BeOutOfDanger(),
             };
@@ -44,6 +43,10 @@ namespace SimPanInGoapModelDefinition {
 
         public int GetMaxGraphSearchDepth() {
             return 20;
+        }
+
+        public bool IgnoreActionsIsFinished() {
+            return false;
         }
 
         public bool ForceSymbolsUpdateBeforePlanning() {
@@ -54,16 +57,19 @@ namespace SimPanInGoapModelDefinition {
             return true;
         }
 
+        public bool ForceGoalRelevancyUpdateBeforePlanning() {
+            return false;
+        }
+
         public List<WorldstateSymbol> GetUpdatedSymbols() {
-            List<WorldstateSymbol> updatedSymbols;
-            updatedSymbols = new List<WorldstateSymbol> {
+            List<WorldstateSymbol> updatedSymbols = new List<WorldstateSymbol> {
                 new WorldstateSymbol(Properties.IsOutSide, _blackboard.Get(Human.IsOutSide), typeof (Boolean)),
                 new WorldstateSymbol(Properties.IsOnExit, _blackboard.Get(Human.IsOnExit), typeof (Boolean)),
                 new WorldstateSymbol(Properties.IsInExitArea, _blackboard.Get(Human.IsInExitArea), typeof (Boolean)),
                 new WorldstateSymbol(Properties.HasTarget, _blackboard.Get(Human.HasTarget), typeof (Boolean)),
                 new WorldstateSymbol(Properties.HasPath, _blackboard.Get(Human.HasPath), typeof (Boolean)),
-                new WorldstateSymbol(Properties.KnowsExitLocation, _blackboard.Get(Human.KnowsExitLocation), typeof (Boolean)),
-               
+                new WorldstateSymbol
+                    (Properties.KnowsExitLocation, _blackboard.Get(Human.KnowsExitLocation), typeof (Boolean)),
             };
             return updatedSymbols;
         }

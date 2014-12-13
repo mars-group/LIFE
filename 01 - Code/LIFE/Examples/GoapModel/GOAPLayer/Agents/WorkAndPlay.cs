@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
@@ -28,7 +29,7 @@ namespace GOAPLayer.Agents {
 
         private void ExecuteAction(AbstractGoapAction action) {
             GoapLayerImpl.Log.Info(action.GetType() + " is now executed");
-            //Console.WriteLine(action.GetType() + " is now executed");
+            Console.WriteLine(action.GetType() + " is now executed");
             List<WorldstateSymbol> curr = _blackboard.Get(AbstractGoapSystem.Worldstate);
             List<WorldstateSymbol> result = action.GetResultingWorldstate(curr);
             _blackboard.Set(AbstractGoapSystem.Worldstate, result);

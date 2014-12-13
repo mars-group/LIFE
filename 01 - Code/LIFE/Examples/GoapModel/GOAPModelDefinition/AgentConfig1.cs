@@ -28,20 +28,22 @@ namespace GOAPModelDefinition {
             return new List<AbstractGoapAction> {
                 new ActionClean(),
                 new ActionBuyToy(),
-                //new ActionStealToy(),
                 new ActionBuyFood(),
                 new ActionPlayWithToy(),
                 new ActionEat()
             };
         }
 
-        public List<AbstractGoapGoal> GetAllGoals()
-        {
-            return new List<AbstractGoapGoal> { new GoalBeHappy(), new GoalGetRich() };
+        public List<AbstractGoapGoal> GetAllGoals() {
+            return new List<AbstractGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
         }
 
         public int GetMaxGraphSearchDepth() {
             return 20;
+        }
+
+        public bool IgnoreActionsIsFinished() {
+            return true;
         }
 
         public bool ForceSymbolsUpdateBeforePlanning() {
@@ -52,12 +54,12 @@ namespace GOAPModelDefinition {
             return false;
         }
 
-        public List<WorldstateSymbol> GetUpdatedSymbols() {
-            throw new NotImplementedException();
+        public bool ForceGoalRelevancyUpdateBeforePlanning() {
+            return false;
         }
 
-        public bool UseClonedActionsForPlanCreation() {
-            return false;
+        public List<WorldstateSymbol> GetUpdatedSymbols() {
+            throw new NotImplementedException();
         }
 
         #endregion

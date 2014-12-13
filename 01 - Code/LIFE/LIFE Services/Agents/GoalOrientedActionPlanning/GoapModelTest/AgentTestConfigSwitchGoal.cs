@@ -42,6 +42,10 @@ namespace GoapModelTest
             return 20;
         }
 
+        public bool IgnoreActionsIsFinished() {
+            return true;
+        }
+
         public bool ForceSymbolsUpdateBeforePlanning()
         {
             return false;
@@ -52,8 +56,11 @@ namespace GoapModelTest
             return false;
         }
 
-        public List<WorldstateSymbol> GetUpdatedSymbols()
-        {
+        public bool ForceGoalRelevancyUpdateBeforePlanning() {
+            return true;
+        }
+
+        public List<WorldstateSymbol> GetUpdatedSymbols(){
             throw new NotImplementedException();
         }
 

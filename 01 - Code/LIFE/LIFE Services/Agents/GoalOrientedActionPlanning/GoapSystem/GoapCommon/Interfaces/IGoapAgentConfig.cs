@@ -34,6 +34,13 @@ namespace GoapCommon.Interfaces {
         int GetMaxGraphSearchDepth();
 
         /// <summary>
+        ///     If actions are only used one time and the is finished value is not depending on any agent variables
+        ///     or for test methods this flag is true.
+        /// </summary>
+        /// <returns></returns>
+        bool IgnoreActionsIsFinished();
+
+        /// <summary>
         ///     Instruction if the goap manager has to use the UpdateWorldstate method before planning.
         /// </summary>
         /// <returns></returns>
@@ -45,13 +52,13 @@ namespace GoapCommon.Interfaces {
         /// <returns></returns>
         bool ForceSymbolsUpdateEveryActionRequest();
 
-        /*
+        
         /// <summary>
-        ///     Instruction to update the relevancy of known goals. This is done with the last resulting
-        ///     world state (before ForceSymbolsUpdateBeforePlanning).
+        ///     Instruction to update the relevancy of known goals. This is done with the updated symbols if 
+        ///     resulting ForceSymbolsUpdateBeforePlanning is set to true.
         /// </summary>
         /// <returns></returns>
-        bool ForceGoalRelevancyUpdateBeforePlanning();*/
+        bool ForceGoalRelevancyUpdateBeforePlanning();
         
         /// <summary>
         ///     Connector between the concrete agent variables and the worldstate of the goap system.

@@ -12,72 +12,40 @@ namespace GoapActionSystem.Implementation {
         private readonly List<AbstractGoapGoal> _availableGoals;
         private readonly Blackboard _internalBlackboard;
         private readonly int _maximumGraphSearchDepth;
+
         private readonly IGoapAgentConfig _configClass;
         private readonly bool _ignoreIfFinishedForTesting;
 
-        private readonly bool _updateGoalRelevancyBeforePlanning = true;
+        private readonly bool _forceUpdateGoalRelevancyBeforePlanning;
+        private readonly bool _forceSymbolsUpdateBeforePlanning;
+        private readonly bool _forceSymbolsUpdateEveryActionRequest;
 
         /// <summary>
         ///     goap element: faster search for actions by needed worldstate symbols
         /// </summary>
         private Dictionary<WorldstateSymbol, List<AbstractGoapAction>> _effectToAction;
+
         private List<AbstractGoapAction> _currentPlan = new List<AbstractGoapAction>();
         private AbstractGoapGoal _currentGoal;
 
         /// <summary>
         ///     create the manager inklusive the current worldstates
         /// </summary>
-        /// <param name="availableActions"></param>
-        /// <param name="availableGoals"></param>
-        /// <param name="startStates"></param>
         /// <param name="blackboard"></param>
-        /// <param name="maximumGraphSearchDepth"></param>
-        /// <param name="ignoreFinishedForTesting"></param>
-        internal GoapManager
-            (List<AbstractGoapAction> availableActions,
-                List<AbstractGoapGoal> availableGoals,
-                Blackboard blackboard,
-                List<WorldstateSymbol> startStates,
-                int maximumGraphSearchDepth,
-                bool ignoreFinishedForTesting) {
-
-            _availableActions = availableActions;
-            _availableGoals = availableGoals;
-            _internalBlackboard = blackboard;
-            _internalBlackboard.Set(Worldstate, startStates);
-
-            _maximumGraphSearchDepth = maximumGraphSearchDepth;
-            _ignoreIfFinishedForTesting = ignoreFinishedForTesting;
-
-            InitializationHelper();
-        }
-
-        /// <summary>
-        ///     create the manager inklusive the current worldstates
-        /// </summary>
-        /// <param name="availableActions"></param>
-        /// <param name="availableGoals"></param>
-        /// <param name="startStates"></param>
-        /// <param name="blackboard"></param>
-        /// <param name="maximumGraphSearchDepth"></param>
         /// <param name="configClass"></param>
-        internal GoapManager
-            (List<AbstractGoapAction> availableActions,
-                List<AbstractGoapGoal> availableGoals,
-                Blackboard blackboard,
-                List<WorldstateSymbol> startStates,
-                int maximumGraphSearchDepth,
-                IGoapAgentConfig configClass) {
-
-
-            _availableActions = availableActions;
-            _availableGoals = availableGoals;
+        internal GoapManager(Blackboard blackboard, IGoapAgentConfig configClass) {
             _internalBlackboard = blackboard;
-            _internalBlackboard.Set(Worldstate, startStates);
-            _maximumGraphSearchDepth = maximumGraphSearchDepth;
+
+            _availableActions = configClass.GetAllActions();
+            _availableGoals = configClass.GetAllGoals();
+            _internalBlackboard.Set(Worldstate, configClass.GetStartWorldstate());
+            _maximumGraphSearchDepth = configClass.GetMaxGraphSearchDepth();
+            _ignoreIfFinishedForTesting = configClass.IgnoreActionsIsFinished();
+            _forceSymbolsUpdateBeforePlanning = configClass.ForceSymbolsUpdateBeforePlanning();
+            _forceSymbolsUpdateEveryActionRequest = configClass.ForceSymbolsUpdateEveryActionRequest();
+            _forceUpdateGoalRelevancyBeforePlanning = configClass.ForceGoalRelevancyUpdateBeforePlanning();
 
             _configClass = configClass;
-
             InitializationHelper();
         }
 
@@ -86,30 +54,17 @@ namespace GoapActionSystem.Implementation {
         ///     manager has to respect the return value from IsFinished by actions.
         /// </summary>
         /// <returns></returns>
-        private bool InitializationHelper() {
+        private void InitializationHelper() {
             CreateEffectActionHashTable();
-            
+
             if (!_ignoreIfFinishedForTesting) {
-                if (!TryGetGoalAndPlan()) {
-                    return false;
+                if (TryGetGoalAndPlan()) {
+                    TakeActionFromPlan();
                 }
-                TakeActionFromPlan();
-                return true;
             }
-            return true;
         }
 
-        /// <summary>
-        ///     Call the current action on method is finished. This is only used if 
-        ///     respecting finished action is configured.
-        /// </summary>
-        /// <returns></returns>
-        private bool IsActionForExecutionFinished() {
-            AbstractGoapAction action = _internalBlackboard.Get(ActionForExecution);
-            return action.IsFinished();
-        }
-
-        /// <summary>
+       /// <summary>
         ///     Entry point for user of goap services and main method.
         /// </summary>
         /// <returns></returns>
@@ -121,12 +76,12 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     Entry point for complex use of goap, where actions must care for setting finished when n times 
-        ///     executed. 
+        ///     Entry point for complex use of goap, where actions must care for setting finished when n times
+        ///     executed.
         /// </summary>
         /// <returns></returns>
         private AbstractGoapAction GetNextActionRespectingIsFinishedByActions() {
-            if (IsWorldstateUpdateConfiguredForEveryCallOfGetNextAction()) {
+            if (_forceSymbolsUpdateEveryActionRequest) {
                 UpdateWorldstateByAgent();
             }
 
@@ -182,11 +137,11 @@ namespace GoapActionSystem.Implementation {
                 _internalBlackboard.Set(ActionForExecution, null);
                 _currentPlan = new List<AbstractGoapAction>();
 
-                if (_updateGoalRelevancyBeforePlanning){
+                if (_forceUpdateGoalRelevancyBeforePlanning) {
                     UpdateRelevancyOfGoals();
                 }
 
-                if (IsWorldstateUpdateConfiguredBeforeReplanning()) {
+                if (_forceSymbolsUpdateBeforePlanning) {
                     UpdateWorldstateByAgent();
                 }
 
@@ -200,11 +155,21 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
+        ///     Call the current action on method is finished. This is only used if
+        ///     respecting finished action is configured.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsActionForExecutionFinished(){
+            AbstractGoapAction action = _internalBlackboard.Get(ActionForExecution);
+            return action.IsFinished();
+        }
+
+        /// <summary>
         ///     Entry point for simple use of goap, where actions are finished when tey ar given back.
         /// </summary>
         /// <returns></returns>
         private AbstractGoapAction GetNextActionIgnoringIsFinishedAtAction() {
-            if (IsWorldstateUpdateConfiguredForEveryCallOfGetNextAction()) {
+            if (_forceSymbolsUpdateEveryActionRequest) {
                 UpdateWorldstateByAgent();
             }
 
@@ -237,27 +202,28 @@ namespace GoapActionSystem.Implementation {
                 _internalBlackboard.Set(ActionForExecution, null);
                 _currentPlan = new List<AbstractGoapAction>();
 
-                if (_updateGoalRelevancyBeforePlanning){
-                    UpdateRelevancyOfGoals();
-                }
-                
-                if (IsWorldstateUpdateConfiguredBeforeReplanning()) {
+                if (_forceSymbolsUpdateBeforePlanning) {
                     UpdateWorldstateByAgent();
                 }
+                
+                if (_forceUpdateGoalRelevancyBeforePlanning){
+                    UpdateRelevancyOfGoals();
+                }
+
                 replanningSuccessful = TryGetGoalAndPlan();
             }
 
             // get the next action from plan. Instant manipulation of worldstate in goap.
             if (replanningSuccessful) {
                 AbstractGoapAction currentAction = TakeActionFromPlan();
-                List<WorldstateSymbol> newState =  currentAction.GetResultingWorldstate(_internalBlackboard.Get(AbstractGoapSystem.Worldstate));
-                _internalBlackboard.Set(AbstractGoapSystem.Worldstate,newState);
+                List<WorldstateSymbol> newState = currentAction.GetResultingWorldstate
+                    (_internalBlackboard.Get(Worldstate));
+                _internalBlackboard.Set(Worldstate, newState);
                 return currentAction;
             }
             GoapComponent.Log.Info("GoapManager: planning failed");
             return new SurrogateAction();
         }
-
 
         /// <summary>
         ///     Check if the current goal is not null and ...
@@ -268,19 +234,6 @@ namespace GoapActionSystem.Implementation {
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        ///     Read from in the configuration class if available if the world state symbols
-        ///     have to be updated before planning.
-        /// </summary>
-        /// <returns></returns>
-        private bool IsWorldstateUpdateConfiguredBeforeReplanning() {
-            return _configClass != null && _configClass.ForceSymbolsUpdateBeforePlanning();
-        }
-
-        private bool IsWorldstateUpdateConfiguredForEveryCallOfGetNextAction() {
-            return _configClass != null && _configClass.ForceSymbolsUpdateEveryActionRequest();
         }
 
         /// <summary>
@@ -298,7 +251,7 @@ namespace GoapActionSystem.Implementation {
         private bool TryGetGoalAndPlan() {
             _currentGoal = null;
             _currentPlan = null;
-            
+
             IOrderedEnumerable<AbstractGoapGoal> goals = GetUnsatisfiedGoalsSortedByRelevancy();
 
             // case all goals are satisfied
@@ -307,8 +260,7 @@ namespace GoapActionSystem.Implementation {
                 return false;
             }
 
-            foreach (AbstractGoapGoal goapGoal in goals)
-            {
+            foreach (AbstractGoapGoal goapGoal in goals) {
                 List<AbstractGoapAction> tempPlan = CreateNewPlan(goapGoal);
 
                 if (tempPlan.Count > 0) {
@@ -348,8 +300,7 @@ namespace GoapActionSystem.Implementation {
         /// <summary>
         ///     create a new goap planner to create a new plan by the given goal
         /// </summary>
-        private List<AbstractGoapAction> CreateNewPlan(AbstractGoapGoal goal)
-        {
+        private List<AbstractGoapAction> CreateNewPlan(AbstractGoapGoal goal) {
             GoapPlanner planner = new GoapPlanner
                 (_maximumGraphSearchDepth, _availableActions, _effectToAction, _internalBlackboard.Get(Worldstate));
             return planner.GetPlan(goal);
@@ -385,8 +336,7 @@ namespace GoapActionSystem.Implementation {
         ///     get all goal sorted by relevancy which are currently not satisfied
         /// </summary>
         /// <returns></returns>
-        private IOrderedEnumerable<AbstractGoapGoal> GetUnsatisfiedGoalsSortedByRelevancy()
-        {
+        private IOrderedEnumerable<AbstractGoapGoal> GetUnsatisfiedGoalsSortedByRelevancy() {
             List<AbstractGoapGoal> notSatisfied = _availableGoals.FindAll
                 (g => !g.IsSatisfied(_internalBlackboard.Get(Worldstate)));
             return notSatisfied.OrderByDescending(x => x.GetRelevancy());

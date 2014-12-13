@@ -5,17 +5,18 @@ using GoapCommon.Implementation;
 using GOAPModelDefinition.Worldstates;
 
 namespace GOAPModelDefinition.Actions {
-    public class ActionBuyToy : AbstractGoapAction {
 
+    public class ActionBuyToy : AbstractGoapAction {
         public ActionBuyToy()
-            : base(new List<WorldstateSymbol> { new WorldstateSymbol(WorldProperties.HasMoney, true, typeof(Boolean)) },
+            : base(new List<WorldstateSymbol> {new WorldstateSymbol(WorldProperties.HasMoney, true, typeof (Boolean))},
                 new List<WorldstateSymbol> {
-                    new WorldstateSymbol(WorldProperties.HasMoney,false,typeof(Boolean)),
-                    new WorldstateSymbol(WorldProperties.HasToy,true,typeof(Boolean)),
+                    new WorldstateSymbol(WorldProperties.HasMoney, false, typeof (Boolean)),
+                    new WorldstateSymbol(WorldProperties.HasToy, true, typeof (Boolean)),
                 }) {}
-        
+
         public override void Execute() {
             throw new NotImplementedException();
         }
     }
+
 }

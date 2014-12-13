@@ -60,7 +60,6 @@
     <Compile Include="Actions\SuccessiveApproximation.cs" />
     <Compile Include="DeliberativeConfig.cs" />
     <Compile Include="Goals\BeOutOfDanger.cs" />
-    <Compile Include="Goals\CalmDown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveConfig.cs" />
     <Compile Include="ReflectiveConfig.cs" />

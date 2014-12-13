@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using GOAPLayer.Agents;
 using LayerAPI.Interfaces;
 using log4net;
@@ -14,20 +13,19 @@ namespace GOAPLayer {
     public class GoapLayerImpl : ISteppedLayer {
         private const string NamespaceOfModelDefinition = "GOAPModelDefinition";
         private const int GoapWorkdAndPlayAgentCount = 1;
-        private long CurrentTick;
 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private long CurrentTick;
 
         #region ISteppedLayer Members
 
         public bool InitLayer<I>
             (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-
             for (int i = 1; i <= GoapWorkdAndPlayAgentCount; i++) {
                 WorkAndPlay wap = new WorkAndPlay("AgentConfig1", NamespaceOfModelDefinition);
                 registerAgentHandle.Invoke(this, wap);
             }
-            
+
             return true;
         }
 
@@ -35,10 +33,8 @@ namespace GOAPLayer {
             return CurrentTick;
         }
 
-        public void SetCurrentTick(long currentTick)
-        {
+        public void SetCurrentTick(long currentTick) {
             CurrentTick = currentTick;
-
         }
 
         #endregion
