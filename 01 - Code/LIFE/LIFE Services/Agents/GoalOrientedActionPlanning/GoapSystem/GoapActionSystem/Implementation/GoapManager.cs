@@ -64,7 +64,7 @@ namespace GoapActionSystem.Implementation {
             }
         }
 
-       /// <summary>
+        /// <summary>
         ///     Entry point for user of goap services and main method.
         /// </summary>
         /// <returns></returns>
@@ -73,6 +73,21 @@ namespace GoapActionSystem.Implementation {
                 return GetNextActionIgnoringIsFinishedAtAction();
             }
             return GetNextActionRespectingIsFinishedByActions();
+        }
+
+        /// <summary>
+        ///     Force the goap manager to create a new plan.
+        /// </summary>
+        public override void ForceReplanning() {
+            _currentPlan = new List<AbstractGoapAction>();
+            _currentGoal = null;
+            _internalBlackboard.Set(ActionForExecution, null);
+
+            if (!_ignoreIfFinishedForTesting) {
+                if (TryGetGoalAndPlan()) {
+                    TakeActionFromPlan();
+                }
+            }
         }
 
         /// <summary>
@@ -155,16 +170,6 @@ namespace GoapActionSystem.Implementation {
         }
 
         /// <summary>
-        ///     Call the current action on method is finished. This is only used if
-        ///     respecting finished action is configured.
-        /// </summary>
-        /// <returns></returns>
-        private bool IsActionForExecutionFinished(){
-            AbstractGoapAction action = _internalBlackboard.Get(ActionForExecution);
-            return action.IsFinished();
-        }
-
-        /// <summary>
         ///     Entry point for simple use of goap, where actions are finished when tey ar given back.
         /// </summary>
         /// <returns></returns>
@@ -205,8 +210,8 @@ namespace GoapActionSystem.Implementation {
                 if (_forceSymbolsUpdateBeforePlanning) {
                     UpdateWorldstateByAgent();
                 }
-                
-                if (_forceUpdateGoalRelevancyBeforePlanning){
+
+                if (_forceUpdateGoalRelevancyBeforePlanning) {
                     UpdateRelevancyOfGoals();
                 }
 
@@ -223,6 +228,16 @@ namespace GoapActionSystem.Implementation {
             }
             GoapComponent.Log.Info("GoapManager: planning failed");
             return new SurrogateAction();
+        }
+
+        /// <summary>
+        ///     Call the current action on method is finished. This is only used if
+        ///     respecting finished action is configured.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsActionForExecutionFinished() {
+            AbstractGoapAction action = _internalBlackboard.Get(ActionForExecution);
+            return action.IsFinished();
         }
 
         /// <summary>

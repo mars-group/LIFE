@@ -71,13 +71,8 @@ namespace GoapActionSystem.Implementation {
                 throw new NullReferenceException("The configuration class for the Goap manager was not found");
             }
 
-            List<AbstractGoapAction> actions = configClass.GetAllActions();
-            List<AbstractGoapGoal> goals = configClass.GetAllGoals();
-            List<WorldstateSymbol> symbols = configClass.GetStartWorldstate();
-            int maxGraphDepth = configClass.GetMaxGraphSearchDepth();
-
-            CheckActionsValid(actions);
-            CheckGoalsValid(goals);
+            CheckActionsValid(configClass.GetAllActions());
+            CheckGoalsValid(configClass.GetAllGoals());
 
             return new GoapManager(blackboard, configClass);
         }

@@ -51,8 +51,7 @@ namespace GoapCommon.Interfaces {
         /// </summary>
         /// <returns></returns>
         bool ForceSymbolsUpdateEveryActionRequest();
-
-        
+                
         /// <summary>
         ///     Instruction to update the relevancy of known goals. This is done with the updated symbols if 
         ///     resulting ForceSymbolsUpdateBeforePlanning is set to true.

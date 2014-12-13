@@ -30,6 +30,10 @@ namespace GoapCommon.Abstract {
         /// <returns></returns>
         public abstract AbstractGoapAction GetNextAction();
 
+        /// <summary>
+        ///     After this call the goap manager will create a new plan.
+        /// </summary>
+        public abstract void ForceReplanning();
     }
 
 }

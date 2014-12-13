@@ -267,7 +267,7 @@ namespace CellLayer {
         /// </summary>
         /// <param name="cellId"></param>
         /// <returns></returns>
-        public Guid GetAgentOnCell(int cellId) {
+        private Guid GetAgentOnCell(int cellId) {
             Cell cell;
             _cellField.TryGetValue(cellId, out cell);
             if (cell != null) {
@@ -504,7 +504,7 @@ namespace CellLayer {
         ///     If cells get manipulated, they maybe must be rewritten.
         /// </summary>
         /// <param name="cellId"></param>
-        public void RefreshCell(int cellId) {
+        private void RefreshCell(int cellId) {
             lock (Lock) {
                 Cell cell;
                 _cellField.TryGetValue(cellId, out cell);
