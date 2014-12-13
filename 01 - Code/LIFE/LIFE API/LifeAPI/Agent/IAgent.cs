@@ -8,5 +8,8 @@
 //  *******************************************************/
 
 namespace LifeAPI.Agent {
-    public interface IAgent : ITickClient {}
+    public interface IAgent : ITickClient
+    {
+        long ID { get; set; }
+    }
 }

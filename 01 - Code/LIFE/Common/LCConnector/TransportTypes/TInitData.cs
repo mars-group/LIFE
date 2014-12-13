@@ -8,8 +8,42 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 
 namespace LCConnector.TransportTypes {
     [Serializable]
-    public class TInitData {}
+    public class TInitData
+    {
+        public List<AgentInitConfig> AgentInitConfigs { get; private set; }
+
+        public TInitData()
+        {
+            AgentInitConfigs = new List<AgentInitConfig>();
+        }
+
+        public void AddAgentInitConfig(string agentName, int agentAmount)
+        {
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount));
+        }
+    }
+
+    [Serializable]
+    public class AgentInitConfig
+    {
+                /// <summary>
+        /// The name of the agent
+        /// </summary>
+        public string AgentName { get; set; }
+
+        /// <summary>
+        /// The amount of agents to use in the simulation
+        /// </summary>
+        public int AgentCount { get; set; }
+
+        public AgentInitConfig(string agentName, int agentCount)
+        {
+            AgentName = agentName;
+            AgentCount = agentCount;
+        }
+    }
 }
