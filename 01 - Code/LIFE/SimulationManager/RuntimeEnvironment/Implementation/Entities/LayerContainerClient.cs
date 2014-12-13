@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Hik.Communication.ScsServices.Client;
+﻿using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
