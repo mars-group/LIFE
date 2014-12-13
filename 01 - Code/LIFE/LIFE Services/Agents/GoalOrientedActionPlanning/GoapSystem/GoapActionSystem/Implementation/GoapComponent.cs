@@ -104,13 +104,5 @@ namespace GoapActionSystem.Implementation {
                     ("GoapManager: Goap manager cannot start with empty goal list");
             }
         }
-
-        private static void CheckSymbolsValid(List<WorldstateSymbol> symbols) {
-            if (IsEmptyParam(symbols)) {
-                throw new ArgumentException
-                    ("GoapManager: Goap manager cannot start with empty symbols list");
-            }
-        }
     }
-
 }
