@@ -2,23 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Implementation;
-using GoapCommon.Interfaces;
 
 namespace GoapCommon.Abstract {
 
     /// <summary>
     ///     offers some ready done methods for creation of goap goals
     /// </summary>
-    public abstract class AbstractGoapGoal : IGoapGoal {
-        protected readonly List<WorldstateSymbol> TargetWorldState;
+    public abstract class AbstractGoapGoal {
+        /// <summary>
+        ///     get the world state symbols defining the reached goal.
+        /// </summary>
+        /// <returns></returns>
+        public List<WorldstateSymbol> TargetWorldState { get { return _targetWorldState; } }
+
+
+        private readonly List<WorldstateSymbol> _targetWorldState;
         protected int Relevancy;
 
         protected AbstractGoapGoal(List<WorldstateSymbol> targetWorldState, int startRelevancy) {
-            TargetWorldState = targetWorldState;
+            _targetWorldState = targetWorldState;
             Relevancy = startRelevancy;
         }
-
-        #region IGoapGoal Members
 
         /// <summary>
         ///     get the weight of this goal.
@@ -29,13 +33,14 @@ namespace GoapCommon.Abstract {
             return Relevancy;
         }
 
+/*
         /// <summary>
         ///     get the world state symbols defining the reached goal.
         /// </summary>
         /// <returns></returns>
         public List<WorldstateSymbol> GetTargetWorldstates() {
-            return TargetWorldState;
-        }
+            return _targetWorldState;
+        }*/
 
         /// <summary>
         ///     check the target world state against the given world state.
@@ -43,7 +48,7 @@ namespace GoapCommon.Abstract {
         /// <param name="worldstate"></param>
         /// <returns></returns>
         public bool IsSatisfied(List<WorldstateSymbol> worldstate) {
-            return (TargetWorldState.Where(x => worldstate.Contains(x)).Count() == TargetWorldState.Count());
+            return (_targetWorldState.Where(x => worldstate.Contains(x)).Count() == _targetWorldState.Count());
         }
 
         /// <summary>
@@ -53,7 +58,7 @@ namespace GoapCommon.Abstract {
         public ISet<Type> GetAffectingWorldstateTypes() {
             HashSet<Type> types = new HashSet<Type>();
 
-            foreach (WorldstateSymbol goapWorldstate in TargetWorldState) {
+            foreach (WorldstateSymbol goapWorldstate in _targetWorldState) {
                 types.Add(goapWorldstate.GetType());
             }
             return types;
@@ -66,8 +71,6 @@ namespace GoapCommon.Abstract {
         /// <param name="actualWorldstate"></param>
         /// <returns></returns>
         public abstract int UpdateRelevancy(List<WorldstateSymbol> actualWorldstate);
-
-        #endregion
     }
 
 }

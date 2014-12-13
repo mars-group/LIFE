@@ -9,7 +9,7 @@ namespace GoapActionSystem.Implementation {
 
     public class GoapManager : AbstractGoapSystem {
         private readonly List<AbstractGoapAction> _availableActions;
-        private readonly List<IGoapGoal> _availableGoals;
+        private readonly List<AbstractGoapGoal> _availableGoals;
         private readonly Blackboard _internalBlackboard;
         private readonly int _maximumGraphSearchDepth;
         private readonly IGoapAgentConfig _configClass;
@@ -20,7 +20,7 @@ namespace GoapActionSystem.Implementation {
         /// </summary>
         private Dictionary<WorldstateSymbol, List<AbstractGoapAction>> _effectToAction;
         private List<AbstractGoapAction> _currentPlan = new List<AbstractGoapAction>();
-        private IGoapGoal _currentGoal;
+        private AbstractGoapGoal _currentGoal;
 
         /// <summary>
         ///     create the manager inklusive the current worldstates
@@ -33,7 +33,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="ignoreFinishedForTesting"></param>
         internal GoapManager
             (List<AbstractGoapAction> availableActions,
-                List<IGoapGoal> availableGoals,
+                List<AbstractGoapGoal> availableGoals,
                 Blackboard blackboard,
                 List<WorldstateSymbol> startStates,
                 int maximumGraphSearchDepth,
@@ -58,7 +58,7 @@ namespace GoapActionSystem.Implementation {
         /// <param name="configClass"></param>
         internal GoapManager
             (List<AbstractGoapAction> availableActions,
-                List<IGoapGoal> availableGoals,
+                List<AbstractGoapGoal> availableGoals,
                 Blackboard blackboard,
                 List<WorldstateSymbol> startStates,
                 int maximumGraphSearchDepth,
@@ -283,7 +283,7 @@ namespace GoapActionSystem.Implementation {
         private bool TryGetGoalAndPlan() {
             _currentGoal = null;
             _currentPlan = null;
-            IOrderedEnumerable<IGoapGoal> goals = GetUnsatisfiedGoalsSortedByRelevancy();
+            IOrderedEnumerable<AbstractGoapGoal> goals = GetUnsatisfiedGoalsSortedByRelevancy();
 
             // case all goals are satisfied
             if (!goals.Any()) {
@@ -291,7 +291,8 @@ namespace GoapActionSystem.Implementation {
                 return false;
             }
 
-            foreach (IGoapGoal goapGoal in goals) {
+            foreach (AbstractGoapGoal goapGoal in goals)
+            {
                 List<AbstractGoapAction> tempPlan = CreateNewPlan(goapGoal);
 
                 if (tempPlan.Count > 0) {
@@ -331,7 +332,8 @@ namespace GoapActionSystem.Implementation {
         /// <summary>
         ///     create a new goap planner to create a new plan by the given goal
         /// </summary>
-        private List<AbstractGoapAction> CreateNewPlan(IGoapGoal goal) {
+        private List<AbstractGoapAction> CreateNewPlan(AbstractGoapGoal goal)
+        {
             GoapPlanner planner = new GoapPlanner
                 (_maximumGraphSearchDepth, _availableActions, _effectToAction, _internalBlackboard.Get(Worldstate));
             return planner.GetPlan(goal);
@@ -367,8 +369,9 @@ namespace GoapActionSystem.Implementation {
         ///     get all goal sorted by relevancy which are currently not satisfied
         /// </summary>
         /// <returns></returns>
-        private IOrderedEnumerable<IGoapGoal> GetUnsatisfiedGoalsSortedByRelevancy() {
-            List<IGoapGoal> notSatisfied = _availableGoals.FindAll
+        private IOrderedEnumerable<AbstractGoapGoal> GetUnsatisfiedGoalsSortedByRelevancy()
+        {
+            List<AbstractGoapGoal> notSatisfied = _availableGoals.FindAll
                 (g => !g.IsSatisfied(_internalBlackboard.Get(Worldstate)));
             return notSatisfied.OrderByDescending(x => x.GetRelevancy());
         }

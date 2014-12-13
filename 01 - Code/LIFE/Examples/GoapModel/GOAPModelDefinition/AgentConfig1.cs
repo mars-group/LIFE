@@ -36,8 +36,9 @@ namespace GOAPModelDefinition {
             };
         }
 
-        public List<IGoapGoal> GetAllGoals() {
-            return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
+        public List<AbstractGoapGoal> GetAllGoals()
+        {
+            return new List<AbstractGoapGoal> { new GoalBeHappy(), new GoalGetRich() };
         }
 
         public int GetMaxGraphSearchDepth() {

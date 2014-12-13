@@ -41,8 +41,9 @@ namespace GoapModelTest {
             };
         }
 
-        public List<IGoapGoal> GetAllGoals() {
-            return new List<IGoapGoal> {new GoalSearchDeptLimitTest()};
+        public List<AbstractGoapGoal> GetAllGoals()
+        {
+            return new List<AbstractGoapGoal> { new GoalSearchDeptLimitTest() };
         }
 
         public int GetMaxGraphSearchDepth() {

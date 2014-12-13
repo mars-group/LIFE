@@ -29,8 +29,9 @@ namespace GoapModelTest {
             return new List<AbstractGoapAction> {new ActionClean(), new ActionGetToy(), new ActionPlay()};
         }
 
-        public List<IGoapGoal> GetAllGoals() {
-            return new List<IGoapGoal> {new GoalBeHappy(), new GoalGetRich()};
+        public List<AbstractGoapGoal> GetAllGoals()
+        {
+            return new List<AbstractGoapGoal> { new GoalBeHappy(), new GoalGetRich() };
         }
 
         public int GetMaxGraphSearchDepth() {

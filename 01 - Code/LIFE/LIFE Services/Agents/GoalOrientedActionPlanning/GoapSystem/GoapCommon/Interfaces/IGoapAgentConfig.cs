@@ -25,7 +25,7 @@ namespace GoapCommon.Interfaces {
         ///     all the goals the agent may follow
         /// </summary>
         /// <returns></returns>
-        List<IGoapGoal> GetAllGoals();
+        List<AbstractGoapGoal> GetAllGoals();
 
         /// <summary>
         ///     define the maximum of search depth in the planner

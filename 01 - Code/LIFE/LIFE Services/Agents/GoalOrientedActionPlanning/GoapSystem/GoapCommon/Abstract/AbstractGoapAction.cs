@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using GoapCommon.Implementation;
-using GoapCommon.Interfaces;
 
 namespace GoapCommon.Abstract {
 
-    public abstract class AbstractGoapAction : IGoapAction, IEquatable<AbstractGoapAction> {
+    public abstract class AbstractGoapAction : IEquatable<AbstractGoapAction> {
         /// <summary>
         ///     get the immutable list of preconditions
         /// </summary>
@@ -40,16 +39,11 @@ namespace GoapCommon.Abstract {
             if (ReferenceEquals(null, other)) {
                 return false;
             }
-            /*if (ReferenceEquals(this, other)) {
-                return true;
-            }*/
             return (GetType() == other.GetType()) && (_preConditions.All(i => other._preConditions.Contains(i)) &&
                                                       (other._preConditions.All(i => _preConditions.Contains(i))));
         }
 
         #endregion
-
-        #region IGoapAction Members
 
         /// <summary>
         ///     check if the preconditions are subset of source world state
@@ -117,15 +111,13 @@ namespace GoapCommon.Abstract {
         }
 
         /// <summary>
-        ///     Get a copy with all values on start. Because in the abstract goap action there are 
+        ///     Get a copy with all values on start. Because in the abstract goap action there are
         ///     no manipulated values return value is the class itself.
         /// </summary>
         /// <returns></returns>
         public virtual AbstractGoapAction GetResetCopy() {
             return this;
         }
-
-        #endregion
 
         /// <summary>
         ///     called from agent, manipulate world of agent

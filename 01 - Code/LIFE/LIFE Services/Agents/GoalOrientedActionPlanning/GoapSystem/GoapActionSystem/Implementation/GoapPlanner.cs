@@ -49,7 +49,7 @@ namespace GoapActionSystem.Implementation {
         private IGoapGraphService InitializeGraphService(List<WorldstateSymbol> graphRoot) {
             GoapSimpleGraphService graphService = new GoapSimpleGraphService();
             IGoapNode root = new Node(graphRoot, new List<WorldstateSymbol>(), graphRoot.Count);
-            GoapComponent.Log.Info("NODE CREATED: " + root);
+            //GoapComponent.Log.Debug("NODE CREATED: " + root);
             graphService.InitializeGoapGraph(root);
             return graphService;
         }
@@ -60,8 +60,8 @@ namespace GoapActionSystem.Implementation {
         /// </summary>
         /// <param name="goal"></param>
         /// <returns></returns>
-        public List<AbstractGoapAction> GetPlan(IGoapGoal goal) {
-            List<WorldstateSymbol> graphRoot = goal.GetTargetWorldstates();
+        public List<AbstractGoapAction> GetPlan(AbstractGoapGoal goal) {
+            List<WorldstateSymbol> graphRoot = goal.TargetWorldState;
             IGoapGraphService graphService = InitializeGraphService(graphRoot);
 
             // Here the root node is chosen.
@@ -81,7 +81,7 @@ namespace GoapActionSystem.Implementation {
                     graphService.ExpandCurrentVertex(edges);
                 }
                 else {
-                    GoapComponent.Log.Info("goap planner: search depth maximum on branch of graph reached");
+                    //GoapComponent.Log.Info("goap planner: search depth maximum on branch of graph reached");
                 }
 
                 // Set node on closed list and calculate values for reachable adjacent neighbours.
@@ -93,7 +93,7 @@ namespace GoapActionSystem.Implementation {
                 }
                 else {
 
-                    GoapComponent.Log.Info("goap planner: no more nodes in graph for search");
+                    //GoapComponent.Log.Info("goap planner: no more nodes in graph for search");
                     return new List<AbstractGoapAction>();
                 }
             }
@@ -202,7 +202,7 @@ namespace GoapActionSystem.Implementation {
             int heuristic = goalValues.Except(currValues).Count();
 
             Node node = new Node(goalValues.ToList(), currValues.ToList(), heuristic);
-            GoapComponent.Log.Info("NODE CREATED: " + node);
+            //GoapComponent.Log.Debug("NODE CREATED: " + node);
             return node;
         }
 

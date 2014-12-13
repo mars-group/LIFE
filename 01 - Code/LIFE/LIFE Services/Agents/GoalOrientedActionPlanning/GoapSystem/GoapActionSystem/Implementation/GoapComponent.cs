@@ -42,7 +42,7 @@ namespace GoapActionSystem.Implementation {
             }
 
             List<AbstractGoapAction> actions = configClass.GetAllActions();
-            List<IGoapGoal> goals = configClass.GetAllGoals();
+            List<AbstractGoapGoal> goals = configClass.GetAllGoals();
             List<WorldstateSymbol> symbols = configClass.GetStartWorldstate();
             int maxGraphDepth = configClass.GetMaxGraphSearchDepth();
 
@@ -69,7 +69,7 @@ namespace GoapActionSystem.Implementation {
             }
 
             List<AbstractGoapAction> actions = configClass.GetAllActions();
-            List<IGoapGoal> goals = configClass.GetAllGoals();
+            List<AbstractGoapGoal> goals = configClass.GetAllGoals();
             List<WorldstateSymbol> symbols = configClass.GetStartWorldstate();
             int maxGraphDepth = configClass.GetMaxGraphSearchDepth();
 
@@ -97,7 +97,8 @@ namespace GoapActionSystem.Implementation {
             }
         }
 
-        private static void CheckGoalsValid(List<IGoapGoal> goals) {
+        private static void CheckGoalsValid(List<AbstractGoapGoal> goals)
+        {
             if (IsEmptyParam(goals)) {
                 throw new ArgumentException
                     ("GoapManager: Goap manager cannot start with empty goal list");

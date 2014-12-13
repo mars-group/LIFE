@@ -35,8 +35,9 @@ namespace SimPanInGoapModelDefinition {
             };
         }
 
-        public List<IGoapGoal> GetAllGoals() {
-            return new List<IGoapGoal> {
+        public List<AbstractGoapGoal> GetAllGoals()
+        {
+            return new List<AbstractGoapGoal> {
                 new BeOutOfDanger(),
             };
         }
