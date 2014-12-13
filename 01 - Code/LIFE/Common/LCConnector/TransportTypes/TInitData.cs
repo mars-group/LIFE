@@ -21,9 +21,9 @@ namespace LCConnector.TransportTypes {
             AgentInitConfigs = new List<AgentInitConfig>();
         }
 
-        public void AddAgentInitConfig(string agentName, int agentAmount)
+        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, long lastIdOfRealAgent)
         {
-            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount));
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, lastIdOfRealAgent));
         }
     }
 
@@ -38,12 +38,26 @@ namespace LCConnector.TransportTypes {
         /// <summary>
         /// The amount of agents to use in the simulation
         /// </summary>
-        public int AgentCount { get; set; }
+        public int RealAgentCount { get; set; }
 
-        public AgentInitConfig(string agentName, int agentCount)
+        /// <summary>
+        /// The amount of shadow agents
+        /// </summary>
+        public int ShadowAgentCount { get; set; }
+
+        /// <summary>
+        /// The last Id of the real agents.
+        /// Can be used to calculate the ranges and Ids of
+        /// all shadow agents
+        /// </summary>
+        public long LastIdOfRealAgent { get; set; }
+
+        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, long lastIdOfRealAgent)
         {
             AgentName = agentName;
-            AgentCount = agentCount;
+            RealAgentCount = agentCount;
+            ShadowAgentCount = shadowAgentCount;
+            LastIdOfRealAgent = lastIdOfRealAgent;
         }
     }
 }

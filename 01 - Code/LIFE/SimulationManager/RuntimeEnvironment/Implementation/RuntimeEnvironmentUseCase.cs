@@ -155,6 +155,9 @@ namespace RuntimeEnvironment.Implementation {
              * Instantiate and initialize Layers by InstantiationOrder,
              * differentiate between distributable and non-distributable layers.
              * If distributable: instantiate and initialize in all LayerContainers according to DistributionStrategy
+             * This also includes initialization of the agent shadowing system.
+             * This is possible because each shadow agent stub, only joins a multicast group, but mustn't have a 
+             * 1-1 connection to its real agent counterpart
              */
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
@@ -176,31 +179,31 @@ namespace RuntimeEnvironment.Implementation {
                     }
                 }
                 else {
+                    // easy: first instantiate the layer...
                     layerContainerClients[0].Instantiate(layerInstanceId);
 
+                    //...fetch all agentTypes and amounts...
                     var initData = new TInitData();
                     foreach (var agentConfig in layerConfig.AgentConfigs)
                     {
-                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount);
+                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, 0, agentConfig.AgentCount);
                     }
-
+                    //...and finally initialize the layer with it
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
                 }
 
                 layerId++;
             }
-            
-
-            /* 3.
-             * Setup shadow agents
-             */
-            
-
-
 
             return layerContainerClients;
         }
 
+        /// <summary>
+        /// Creates a Dictionary of initialization data per Layercontainer
+        /// </summary>
+        /// <param name="layerConfig"></param>
+        /// <param name="layerContainerClients"></param>
+        /// <returns></returns>
         private IDictionary<LayerContainerClient, TInitData> GetInitDataByLayerConfig(LayerConfig layerConfig, LayerContainerClient[] layerContainerClients)
         {
             if (layerContainerClients == null) throw new ArgumentNullException("layerContainerClients");
@@ -232,12 +235,24 @@ namespace RuntimeEnvironment.Implementation {
                             // add overhead to first layerContainer
                             if (i == 0)
                             {
-                                result[layerContainerClients[i]].AddAgentInitConfig(agentConfig.AgentName,
-                                    agentAmount + agentOverhead);
+                                var overheadedAmount = agentAmount + agentOverhead;
+                                result[layerContainerClients[i]]
+                                    .AddAgentInitConfig(
+                                        agentConfig.AgentName,
+                                        overheadedAmount,
+                                        agentConfig.AgentCount-overheadedAmount,
+                                        i + agentAmount
+                                    );
                             }
                             else
                             {
-                                result[layerContainerClients[i]].AddAgentInitConfig(agentConfig.AgentName, agentAmount);   
+                                result[layerContainerClients[i]]
+                                    .AddAgentInitConfig(
+                                        agentConfig.AgentName,
+                                        agentAmount,
+                                        agentConfig.AgentCount-agentAmount,
+                                        i+agentAmount
+                                    );   
                             }
                         }
                     }
