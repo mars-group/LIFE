@@ -159,7 +159,9 @@ namespace RuntimeEnvironment.Implementation {
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription)) {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
-                if (modelConfig.LayerConfigs[layerDescription.Name].Distributable) {
+                var layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
+
+                if (layerConfig.Distributable) {
                     foreach (var layerContainerClient in layerContainerClients) {
                         layerContainerClient.Instantiate(layerInstanceId);
                     }

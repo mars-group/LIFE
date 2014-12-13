@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoAPI.Geometries;
-using LayerAPI.Interfaces;
-using LayerAPI.Interfaces.Visualization;
+using LifeAPI.Layer;
+using LifeAPI.Layer.Visualization;
 using MessageWrappers;
 using Mono.Addins;
 
@@ -19,8 +19,8 @@ namespace ExampleLayer
     public class ExampleLayer : ISteppedActiveLayer, IVisualizable
     {
         private AgentSmith[] _agents;
-        private const int TerrainSizeX = 300;
-        private const int TerrainSizeY = 200;
+        private const int TerrainSizeX = 100;
+        private const int TerrainSizeY = 100;
         private const int AgentCount = TerrainSizeX * TerrainSizeY;
         private readonly TerrainDataMessage _terrainMessage = new TerrainDataMessage(TerrainSizeX, TerrainSizeY, 0);
         private _2DEnvironment _environment;

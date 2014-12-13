@@ -4,14 +4,14 @@ using System.Globalization;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using GeoAPI.Geometries;
-using LayerAPI.Interfaces;
-using LayerAPI.Interfaces.Visualization;
+using LifeAPI.Spatial;
+using LifeAPI.Layer;
+using LifeAPI.Layer.Visualization;
 using MessageWrappers;
 using Mono.Addins;
 using PedestrianModel.Agents;
 using PedestrianModel.Environment;
 using PedestrianModel.Util;
-using SpatialCommon.Datatypes;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -26,7 +26,7 @@ namespace PedestrianModel {
     public class PedestrianLayer : ISteppedActiveLayer, IVisualizable
     {
         private long _tick; // Counter of current tick.  
-        private IEnvironment _env; // Environment object for spatial agents. 
+        private IEnvironmentOld _env; // Environment object for spatial agents. 
         private IExecution _exec; // Agent execution container reference.
 
         #region ISteppedActiveLayer Members

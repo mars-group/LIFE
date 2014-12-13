@@ -4,10 +4,10 @@ using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Perception;
+using LifeAPI.Spatial;
 using PedestrianModel.Agents.Reasoning.Movement.Potential;
 using PedestrianModel.Agents.Reasoning.Movement.Potential.Emitter;
 using PedestrianModel.Util.Math;
-using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Agents.Reasoning.Movement {
 

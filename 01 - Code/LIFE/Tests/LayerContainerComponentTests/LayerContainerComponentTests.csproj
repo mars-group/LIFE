@@ -92,9 +92,9 @@
       <Project>{6C7F5166-6D0F-4CD9-B95B-14EBB11F7033}</Project>
       <Name>ExampleLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LayerAPI</Name>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>

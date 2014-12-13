@@ -52,9 +52,9 @@
     <Compile Include="Agents\MatrixToFileResultAgent.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LayerAPI</Name>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\PlantLayer\PlantLayer.csproj">
       <Project>{F85AAD4F-3639-44CA-8CC0-08017069E4AF}</Project>

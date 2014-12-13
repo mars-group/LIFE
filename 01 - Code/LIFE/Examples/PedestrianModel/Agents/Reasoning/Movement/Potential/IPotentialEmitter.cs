@@ -1,4 +1,4 @@
-﻿using SpatialCommon.Datatypes;
+﻿using LifeAPI.Spatial;
 
 namespace PedestrianModel.Agents.Reasoning.Movement.Potential {
 

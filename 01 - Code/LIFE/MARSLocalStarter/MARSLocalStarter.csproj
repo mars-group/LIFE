@@ -24,7 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-cli</Commandlineparameters>
+    <Commandlineparameters>-cli-ui</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,14 +40,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Atlassian.Jira">
-      <HintPath>..\packages\Atlassian.SDK.2.5.0\lib\Atlassian.Jira.dll</HintPath>
+      <HintPath>..\packages\MARSErrorReporting.0.1.273\lib\net45\Atlassian.Jira.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\LayerAPI.0.1.223\lib\net45\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MessageWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
+    <Reference Include="MarsErrorReporting">
+      <HintPath>..\packages\MARSErrorReporting.0.1.273\lib\net45\MarsErrorReporting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,6 +51,12 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageWrappers">
+      <HintPath>..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WinForms\MarsMC.cs">
@@ -107,25 +109,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\LCConnector\LCConnector.csproj">
-      <Project>{76bffba7-7bf3-439e-83d4-a340b1227461}</Project>
-      <Name>LCConnector</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common\SMConnector\SMConnector.csproj">
-      <Project>{277c3cc1-699d-417b-9d2c-a88b8caf6957}</Project>
+      <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
       <Name>SMConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj">
-      <Project>{6ef23027-a874-4533-9f39-2c4b165d8bb9}</Project>
+      <Project>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</Project>
       <Name>LayerContainerFacade</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LIFE Services\MarsErrorReporting\MarsErrorReporting.csproj">
-      <Project>{D2957897-135D-4E3C-93EA-9FFAF8607A82}</Project>
-      <Name>MarsErrorReporting</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.csproj">
-      <Project>{58149ff0-0801-46f8-a9c6-571b6030dc1e}</Project>
+      <Project>{58149FF0-0801-46F8-A9C6-571B6030DC1E}</Project>
       <Name>SimulationManagerFacade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\LCConnector\LCConnector.csproj">
+      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
+      <Name>LCConnector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

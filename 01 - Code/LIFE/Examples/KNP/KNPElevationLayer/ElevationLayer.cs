@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using GeoAPI.Geometries;
-using LayerAPI.Interfaces;
-using LayerAPI.Interfaces.Visualization;
+using LifeAPI.Layer;
 using LIFEGisLayerService.Implementation;
-using MessageWrappers;
 using Mono.Addins;
 
 [assembly: Addin]

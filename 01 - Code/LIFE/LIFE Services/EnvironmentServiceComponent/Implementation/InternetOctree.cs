@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using CommonTypes.TransportTypes;
-using GenericAgentArchitectureCommon.Datatypes;
-using GenericAgentArchitectureCommon.Interfaces;
-
-namespace EnvironmentServiceComponent.Implementation {
+﻿namespace EnvironmentServiceComponent.Implementation {
 
   public class InternetOctree {
 

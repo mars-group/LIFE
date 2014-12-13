@@ -3,15 +3,15 @@ using System.Drawing;
 using System.Windows.Forms;
 using DalskiAgent.Agents;
 using DalskiAgent.Environments;
+using LifeAPI.Spatial;
 using PedestrianModel.Agents;
-using SpatialCommon.Datatypes;
 
 namespace PedestrianModel.Visualization {
 
     public sealed partial class SimpleVisualization : Form {
-        private readonly IEnvironment _env;
+        private readonly IEnvironmentOld _env;
 
-        public SimpleVisualization(IEnvironment env) {
+        public SimpleVisualization(IEnvironmentOld env) {
             InitializeComponent();
             DoubleBuffered = true;
             Width = Config.VisualizationWidth;

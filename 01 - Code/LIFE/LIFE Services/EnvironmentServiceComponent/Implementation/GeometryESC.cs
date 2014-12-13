@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EnvironmentServiceComponent.Entities;
 using EnvironmentServiceComponent.Entities.Shape;
-using EnvironmentServiceComponent.Interface;
 using GeoAPI.Geometries;
+using LifeAPI.Spatial;
+using LifeAPI.Environment;
+using LifeAPI.Perception;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
-using SpatialCommon.Collision;
-using SpatialCommon.Datatypes;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
 
 namespace EnvironmentServiceComponent.Implementation {
 
-    public class GeometryESC : IEnvironmentServiceComponent {
+    public class GeometryESC : IEnvironment {
         private const int MaxAttempsToAddRandom = 100;
         private readonly Random _random;
         private readonly List<ISpatialEntity> _entities;
@@ -24,7 +21,7 @@ namespace EnvironmentServiceComponent.Implementation {
             _entities = new List<ISpatialEntity>();
         }
 
-        #region IEnvironmentServiceComponent Members
+        #region IEnvironment Members
 
         public bool Add(ISpatialEntity entity, TVector position, TVector rotation = default(TVector)) {
             GeometryShape geometryShape = entity.Shape as GeometryShape;

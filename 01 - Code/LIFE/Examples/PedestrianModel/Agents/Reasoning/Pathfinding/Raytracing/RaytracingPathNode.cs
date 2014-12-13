@@ -1,5 +1,5 @@
 ﻿using System;
-using SpatialCommon.Datatypes;
+using LifeAPI.Spatial;
 
 namespace PedestrianModel.Agents.Reasoning.Pathfinding.Raytracing {
 

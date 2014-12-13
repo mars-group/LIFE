@@ -1,5 +1,5 @@
-﻿using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
+﻿using LifeAPI.Spatial;
+using LifeAPI.Perception;
 
 namespace EnvironmentServiceComponent.Implementation {
     using System;
@@ -7,7 +7,6 @@ namespace EnvironmentServiceComponent.Implementation {
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Entities;
-    using GenericAgentArchitectureCommon.Interfaces;
     using Interface;
 
     /// <summary>

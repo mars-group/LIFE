@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿
+using System;
 using System.Threading;
-using LayerAPI.Interfaces;
-using NetTopologySuite.Geometries;
+using LifeAPI.Agent;
+using LifeAPI.Layer;
 
 namespace ExampleLayer
 {

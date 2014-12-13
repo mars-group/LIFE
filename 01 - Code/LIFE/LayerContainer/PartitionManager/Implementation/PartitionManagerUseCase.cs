@@ -7,10 +7,10 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
 //  *******************************************************/
 
-using LayerAPI.Interfaces;
 using LayerFactory.Interface;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using LifeAPI.Layer;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
 

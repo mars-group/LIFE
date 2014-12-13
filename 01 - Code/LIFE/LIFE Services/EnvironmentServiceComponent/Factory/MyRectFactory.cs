@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using SpatialCommon.TransportTypes;
+using LifeAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Implementation {
 

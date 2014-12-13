@@ -10,7 +10,7 @@
 using System;
 using System.Windows;
 using CSharpQuadTree;
-using LayerAPI.Interfaces;
+using LifeAPI.Agent;
 
 namespace WaterLayer {
     public class Waterhole : IAgent, IQuadObject {

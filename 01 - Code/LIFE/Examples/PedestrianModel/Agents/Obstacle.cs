@@ -1,9 +1,8 @@
 ﻿using DalskiAgent.Agents;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
-using GenericAgentArchitectureCommon.Interfaces;
-using SpatialCommon.Collision;
-using SpatialCommon.Datatypes;
+using DalskiAgent.Reasoning;
+using LifeAPI.Spatial;
 
 namespace PedestrianModel.Agents {
 
@@ -19,7 +18,7 @@ namespace PedestrianModel.Agents {
         /// <param name="position">Initial position.</param>
         /// <param name="dimension">Initial dimension.</param>
         /// <param name="direction">Initial direction.</param>
-        public Obstacle(IExecution exec, IEnvironment env, Vector position, Vector dimension, Direction direction)
+        public Obstacle(IExecution exec, IEnvironmentOld env, Vector position, Vector dimension, Direction direction)
             : base(exec, env, CollisionType.StaticEnvironment, position, dimension, direction) {
             Init();
         }

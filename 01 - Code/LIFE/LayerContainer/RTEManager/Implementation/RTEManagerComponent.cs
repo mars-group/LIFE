@@ -8,8 +8,9 @@
 //  *******************************************************/
 
 using System.Collections.Generic;
-using LayerAPI.Interfaces;
 using LCConnector.TransportTypes;
+using LifeAPI.Agent;
+using LifeAPI.Layer;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 

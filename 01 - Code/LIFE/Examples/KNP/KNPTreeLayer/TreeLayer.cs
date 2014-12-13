@@ -1,6 +1,6 @@
 ﻿using System;
 using KNPElevationLayer;
-using LayerAPI.Interfaces;
+using LifeAPI.Layer;
 using Mono.Addins;
 
 [assembly: Addin]

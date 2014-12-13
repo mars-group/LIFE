@@ -1,5 +1,5 @@
 ﻿
-using SpatialCommon.TransportTypes;
+using LifeAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Entities
 {

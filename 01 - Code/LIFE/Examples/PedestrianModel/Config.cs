@@ -1,6 +1,6 @@
-﻿using PedestrianModel.Agents.Reasoning.Pathfinding;
+﻿using LifeAPI.Spatial;
+using PedestrianModel.Agents.Reasoning.Pathfinding;
 using PedestrianModel.Util;
-using SpatialCommon.Datatypes;
 
 namespace PedestrianModel {
 
