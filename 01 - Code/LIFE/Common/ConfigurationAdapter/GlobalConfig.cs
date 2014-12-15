@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 
 namespace AppSettingsManager {
     /// <summary>
@@ -33,6 +34,8 @@ namespace AppSettingsManager {
         /// </summary>
         public int DHTPort { get; set; }
 
+
+        public List<string> Strings { get; set; } 
         /// <summary>
         /// </summary>
         public int IPVersion { get; set; }

@@ -5,6 +5,9 @@ using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
 using LCConnector;
+using LCConnector.TransportTypes;
+using LifeAPI.Config;
+using log4net.Config;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -128,10 +131,15 @@ namespace RuntimeEnvironment.Implementation {
         private LayerContainerClient[] InitConnections(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
             var content = _modelContainer.GetModel(modelDescription);
+            var modelConfig = _modelContainer.GetModelConfig(modelDescription);
             var layerContainerClients = new LayerContainerClient[layerContainers.Count];
 
+            /* 1.
+             * Create LayerContainerClients for all connected LayerContainers
+             */
             var i = 0;
-            foreach (TNodeInformation nodeInformationType in layerContainers) {
+            foreach (TNodeInformation nodeInformationType in layerContainers)
+            {
                 var client = new LayerContainerClient
                     (
                     ScsServiceClientBuilder.CreateClient<ILayerContainer>
@@ -139,13 +147,157 @@ namespace RuntimeEnvironment.Implementation {
                             nodeInformationType.NodeEndpoint.IpAddress + ":" +
                             nodeInformationType.NodeEndpoint.Port),
                     content,
-                    _modelContainer.GetInstantiationOrder(modelDescription),
                     i);
                 layerContainerClients[i] = client;
                 i++;
             }
 
+            /* 2.
+             * Instantiate and initialize Layers by InstantiationOrder,
+             * differentiate between distributable and non-distributable layers.
+             * If distributable: instantiate and initialize in all LayerContainers according to DistributionStrategy
+             * This also includes initialization of the agent shadowing system.
+             * This is possible because each shadow agent stub, only joins a multicast group, but mustn't have a 
+             * 1-1 connection to its real agent counterpart
+             */
+
+            // unique layerID per LayerContainer, does not need to be unique across whole simulation 
+            var layerId = 0;
+            foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription)) {
+                var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
+
+                // fetch layerConfig by layerName
+                var layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
+
+                if (layerConfig.Distributable)
+                {
+                    // get initData by layerConfig and LayerContainers
+                    var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients);
+
+                    foreach (var layerContainerClient in layerContainerClients) {
+                        layerContainerClient.Instantiate(layerInstanceId);
+                        layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
+                    }
+                }
+                else {
+                    // easy: first instantiate the layer...
+                    layerContainerClients[0].Instantiate(layerInstanceId);
+
+                    //...fetch all agentTypes and amounts...
+                    var initData = new TInitData();
+                    foreach (var agentConfig in layerConfig.AgentConfigs) {
+                        var ids = new Guid[agentConfig.AgentCount];
+                        for (int j = 0; j < agentConfig.AgentCount; j++) {
+                            ids[0] = Guid.NewGuid();
+                        }
+                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, agentConfig.AgentCount, ids, new Guid[0]);
+                    }
+                    //...and finally initialize the layer with it
+                    layerContainerClients[0].Initialize(layerInstanceId, initData);
+                }
+
+                layerId++;
+            }
+
             return layerContainerClients;
+        }
+
+        /// <summary>
+        /// Creates a Dictionary of initialization data per Layercontainer
+        /// </summary>
+        /// <param name="layerConfig"></param>
+        /// <param name="layerContainerClients"></param>
+        /// <returns></returns>
+        private IDictionary<LayerContainerClient, TInitData> GetInitDataByLayerConfig(LayerConfig layerConfig, LayerContainerClient[] layerContainerClients)
+        {
+            if (layerContainerClients == null) throw new ArgumentNullException("layerContainerClients");
+            
+            var result = new Dictionary<LayerContainerClient, TInitData>();
+
+            switch (layerConfig.DistributionStrategy)
+            {
+
+                    case DistributionStrategy.EVEN_DISTRIBUTION:
+
+                    // initialize result Dictionary
+                    foreach (var layerContainerClient in layerContainerClients)
+                    {
+                        result.Add(layerContainerClient, new TInitData());
+                    }
+
+                    var lcCount = layerContainerClients.Length;
+                    
+                    foreach (var agentConfig in layerConfig.AgentConfigs)
+                    {
+                        
+                        // calculate Agents per LacerContainer
+                        var agentAmount = agentConfig.AgentCount / lcCount;
+                        
+                        // calculate overhead resulting from uneven division
+                        var agentOverhead = agentConfig.AgentCount % lcCount;
+
+                        for (var i = 0; i < lcCount; i++) {
+                            // add overhead to first layerContainer
+                            if (i == 0)
+                            {
+                                var overheadedAmount = agentAmount + agentOverhead;
+                                var shadowAgentCount = agentConfig.AgentCount - overheadedAmount;
+
+                                var realAgentIds = new Guid[overheadedAmount];
+                                var shadowAgentIds = new Guid[shadowAgentCount];
+
+                                for (var ra = 0; ra < overheadedAmount; ra++)
+                                {
+                                    realAgentIds[ra] = Guid.NewGuid();
+                                }
+
+                                for (var sa = 0; sa < shadowAgentCount; sa++)
+                                {
+                                    realAgentIds[sa] = Guid.NewGuid();
+                                }
+
+                                result[layerContainerClients[i]]
+                                    .AddAgentInitConfig(
+                                        agentConfig.AgentName,
+                                        overheadedAmount,
+                                        shadowAgentCount,
+                                        realAgentIds,
+                                        shadowAgentIds
+                                    );
+                            }
+                            else
+                            {
+
+                                var shadowAgentCount = agentConfig.AgentCount-agentAmount;
+
+                                var realAgentIds = new Guid[agentAmount];
+                                var shadowAgentIds = new Guid[shadowAgentCount];
+
+                                for (var ra = 0; ra < agentAmount; ra++)
+                                {
+                                    realAgentIds[ra] = Guid.NewGuid();
+                                }
+
+                                for (var sa = 0; sa < shadowAgentCount; sa++)
+                                {
+                                    realAgentIds[sa] = Guid.NewGuid();
+                                }
+                                result[layerContainerClients[i]]
+                                    .AddAgentInitConfig(
+                                        agentConfig.AgentName,
+                                        agentAmount,
+                                        shadowAgentCount,
+                                        realAgentIds,
+                                        shadowAgentIds
+                                    );   
+                            }
+                        }
+                    }
+
+                    break;
+
+            }
+            return result;
         }
 
         private void NewNode(TNodeInformation newnode) {

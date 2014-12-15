@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 
 namespace LifeAPI.Layer {
@@ -37,7 +38,7 @@ namespace LifeAPI.Layer {
         ///     <param name="registerAgentHandle"> </param>
         /// </summary>
         /// <returns>True if init finished successfully, false otherwise</returns>
-        Boolean InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
+        bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
 
         /// <summary>
         ///     The current Tick this layer is in

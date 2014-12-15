@@ -8,8 +8,54 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 
 namespace LCConnector.TransportTypes {
     [Serializable]
-    public class TInitData {}
+    public class TInitData
+    {
+        public List<AgentInitConfig> AgentInitConfigs { get; private set; }
+
+        public TInitData()
+        {
+            AgentInitConfigs = new List<AgentInitConfig>();
+        }
+
+        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds)
+        {
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds));
+        }
+    }
+
+    [Serializable]
+    public class AgentInitConfig
+    {
+                /// <summary>
+        /// The name of the agent
+        /// </summary>
+        public string AgentName { get; set; }
+
+        /// <summary>
+        /// The amount of agents to use in the simulation
+        /// </summary>
+        public int RealAgentCount { get; set; }
+
+        /// <summary>
+        /// The amount of shadow agents
+        /// </summary>
+        public int ShadowAgentCount { get; set; }
+
+        public Guid[] RealAgentIds { get; set; }
+
+        public Guid[] ShadowAgentsIds { get; set; }
+
+        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds)
+        {
+            AgentName = agentName;
+            RealAgentCount = agentCount;
+            ShadowAgentCount = shadowAgentCount;
+            ShadowAgentsIds = shadowAgentsIds;
+            RealAgentIds = realAgentIds;
+        }
+    }
 }

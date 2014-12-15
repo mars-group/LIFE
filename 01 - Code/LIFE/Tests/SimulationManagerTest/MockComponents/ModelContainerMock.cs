@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using LifeAPI.Config;
 using ModelContainer.Interfaces;
 using SMConnector.TransportTypes;
 
@@ -13,6 +14,10 @@ namespace SimulationManagerTestClasses.MockComponents {
 
         public ICollection<TModelDescription> GetAllModels() {
             return new List<TModelDescription> {new TModelDescription("TestSimulationModel")};
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription modelId) {
+            throw new NotImplementedException("Don't mock me, I'm only a mock :(");
         }
 
         public TModelDescription AddModelFromDirectory(string filePath) {

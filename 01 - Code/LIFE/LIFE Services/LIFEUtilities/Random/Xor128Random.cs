@@ -1,4 +1,4 @@
-﻿namespace MCastAddressGenerator
+﻿namespace LIFEUtilities.Random
 {
     public class Xor128Random {
         private static int x;

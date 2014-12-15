@@ -27,7 +27,7 @@ namespace BugReproductionModel
 		public BreedAgent (ILayer layer, RegisterAgent registerHandle, UnregisterAgent unregister)
 		{
 			AgentID = Guid.NewGuid ();
-
+		    ID = AgentID;
 			_tickCount = 0;
 
 			_registerHandle = registerHandle;
@@ -74,6 +74,8 @@ namespace BugReproductionModel
 		public static bool operator !=(BreedAgent left, BreedAgent right) {
 			return !Equals(left, right);
 		}
+
+	    public Guid ID { get; set; }
 	}
 }
 

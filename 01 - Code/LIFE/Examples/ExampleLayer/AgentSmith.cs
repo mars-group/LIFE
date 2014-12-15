@@ -85,5 +85,7 @@ namespace ExampleLayer
         {
             return !Equals(left, right);
         }
+
+        public Guid ID { get; set; }
     }
 }

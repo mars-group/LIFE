@@ -7,10 +7,12 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using ElephantLayer.Agents;
 using ElephantLayer.TransportTypes;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 using PlantLayer;
@@ -38,8 +40,8 @@ namespace ElephantLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             for (int i = 0; i < _ELEPHANT_COUNT; i++) {
                 Elephant e = new Elephant
                     (i*10,
@@ -50,7 +52,8 @@ namespace ElephantLayer {
                         0.5,
                         _plantLayer,
                         _waterLayer,
-                        _environment);
+                        _environment,
+                        new Guid());
                 registerAgentHandle.Invoke(this, e);
                 _environment.Add(e);
             }

@@ -1,4 +1,5 @@
-﻿using DalskiAgent.Execution;
+﻿using System;
+using DalskiAgent.Execution;
 using DalskiAgent.Perception;
 using DalskiAgent.Reasoning;
 using LifeAPI.Agent;
@@ -79,5 +80,7 @@ namespace DalskiAgent.Agents {
     public new virtual string ToString() {
       return "Agent: " + Id + "\t  Cycle: " + GetTick();
     }
+
+    public Guid ID { get; set; }
   }
 }

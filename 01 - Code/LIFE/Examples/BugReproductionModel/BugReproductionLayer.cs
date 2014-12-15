@@ -1,4 +1,5 @@
 ﻿using System;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 
@@ -15,8 +16,7 @@ namespace BugReproductionModel
 		{
 		}
 
-		public bool InitLayer<I>(I layerInitData, RegisterAgent registerAgentHandle,
-			UnregisterAgent unregisterAgentHandle) {
+		public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
 
 			for (int i = 0; i < 50; i++) {
 				registerAgentHandle.Invoke(this, new SuicideAgent(i, this, unregisterAgentHandle));

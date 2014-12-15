@@ -7,6 +7,11 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
+
 namespace LifeAPI.Agent {
-    public interface IAgent : ITickClient {}
+    public interface IAgent : ITickClient
+    {
+        Guid ID { get; set; }
+    }
 }

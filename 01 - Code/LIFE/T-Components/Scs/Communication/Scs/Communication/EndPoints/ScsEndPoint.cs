@@ -1,6 +1,7 @@
 ﻿using System;
 using Hik.Communication.Scs.Client;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+using Hik.Communication.Scs.Communication.EndPoints.Udp;
 using Hik.Communication.Scs.Server;
 
 namespace Hik.Communication.Scs.Communication.EndPoints {
@@ -35,6 +36,8 @@ namespace Hik.Communication.Scs.Communication.EndPoints {
             switch (protocol) {
                 case "tcp":
                     return new ScsTcpEndPoint(address);
+                case "udp":
+                    return new ScsUdpEndPoint(address);
                 default:
                     throw new ApplicationException("Unsupported protocol " + protocol + " in end point " +
                                                    endPointAddress);
