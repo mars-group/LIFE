@@ -17,7 +17,7 @@ namespace KNPElevationLayer
 
         public override bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
         {
-            var path = Path.Combine(Application.ExecutablePath, "..", "..", "..", "..", "GISData", "knp_srtm90m.asc");
+            var path = Path.Combine(Application.StartupPath, "GISData", "knp_srtm90m.asc");
             var filePath = Path.GetFullPath(path);
 
             LoadGISData(new Uri(filePath, UriKind.Absolute), "ElevationLayerKNP");

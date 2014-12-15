@@ -31,7 +31,9 @@ namespace KNPTreeLayer {
 
                     // instantiate real Agents
                     for (int i = 0; i < agentInitConfig.RealAgentCount; i++) {
-                        trees.Add(new Tree(4, 2, 10, 10, 500, 30, 22, agentInitConfig.RealAgentIds[i]));
+                        var t = new Tree(4, 2, 10, 10, 500, 30, 22, agentInitConfig.RealAgentIds[i]);
+                        registerAgentHandle(this, t);
+                        trees.Add(t);
                     }
 
                     // instantiate Shadow Agents

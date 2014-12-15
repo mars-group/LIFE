@@ -15,6 +15,8 @@ namespace MARSLocalStarter
 {
     public class Program
     {
+
+
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
         private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
@@ -201,8 +203,8 @@ namespace MARSLocalStarter
             })).Start();
         }
 
-        private static void Main(string[] args)
-        {
+        private static void Main(string[] args) {
+
             log4net.Config.XmlConfigurator.Configure();
             Logger.Info("MARS LIFE trying to start up.");
 

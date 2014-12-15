@@ -244,11 +244,12 @@ namespace RuntimeEnvironment.Implementation {
                                 var realAgentIds = new Guid[overheadedAmount];
                                 var shadowAgentIds = new Guid[shadowAgentCount];
 
-                                for (long ra = 0; ra < overheadedAmount; ra++) {
+                                for (var ra = 0; ra < overheadedAmount; ra++)
+                                {
                                     realAgentIds[ra] = Guid.NewGuid();
                                 }
 
-                                for (long sa = 0; sa < shadowAgentCount; sa++)
+                                for (var sa = 0; sa < shadowAgentCount; sa++)
                                 {
                                     realAgentIds[sa] = Guid.NewGuid();
                                 }
@@ -270,12 +271,12 @@ namespace RuntimeEnvironment.Implementation {
                                 var realAgentIds = new Guid[agentAmount];
                                 var shadowAgentIds = new Guid[shadowAgentCount];
 
-                                for (long ra = 0; ra < agentAmount; ra++)
+                                for (var ra = 0; ra < agentAmount; ra++)
                                 {
                                     realAgentIds[ra] = Guid.NewGuid();
                                 }
 
-                                for (long sa = 0; sa < shadowAgentCount; sa++)
+                                for (var sa = 0; sa < shadowAgentCount; sa++)
                                 {
                                     realAgentIds[sa] = Guid.NewGuid();
                                 }
