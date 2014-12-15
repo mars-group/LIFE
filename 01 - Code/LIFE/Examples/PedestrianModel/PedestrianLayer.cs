@@ -4,7 +4,6 @@ using System.Globalization;
 using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using GeoAPI.Geometries;
-using LifeAPI.Spatial;
 using LifeAPI.Layer;
 using LifeAPI.Layer.Visualization;
 using MessageWrappers;
