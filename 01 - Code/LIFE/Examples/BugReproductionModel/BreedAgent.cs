@@ -24,10 +24,10 @@ namespace BugReproductionModel
 
 		private ILayer _layer = null;
 
-		public BreedAgent (ILayer layer, RegisterAgent registerHandle, UnregisterAgent unregister, long agentID)
+		public BreedAgent (ILayer layer, RegisterAgent registerHandle, UnregisterAgent unregister)
 		{
 			AgentID = Guid.NewGuid ();
-		    ID = agentID;
+		    ID = AgentID;
 			_tickCount = 0;
 
 			_registerHandle = registerHandle;
@@ -75,7 +75,7 @@ namespace BugReproductionModel
 			return !Equals(left, right);
 		}
 
-	    public long ID { get; set; }
+	    public Guid ID { get; set; }
 	}
 }
 

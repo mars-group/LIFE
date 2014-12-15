@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using ElephantLayer.Agents;
@@ -52,7 +53,7 @@ namespace ElephantLayer {
                         _plantLayer,
                         _waterLayer,
                         _environment,
-                        i);
+                        new Guid());
                 registerAgentHandle.Invoke(this, e);
                 _environment.Add(e);
             }

@@ -39,7 +39,7 @@ namespace PlantLayer {
             for (int x = 0; x < 100; x++) {
                 for (int y = 0; y < 100; y++) {
                     if ((x < 48 && y < 48) || (x > 52 && y > 52)) {
-                        Plant p = new Plant(x, y, new Size(1.0, 1.0),i);
+                        Plant p = new Plant(x, y, new Size(1.0, 1.0), new Guid());
                         registerAgentHandle.Invoke(this, p);
                         _plants.Add(p);
                         environment.Add(p);

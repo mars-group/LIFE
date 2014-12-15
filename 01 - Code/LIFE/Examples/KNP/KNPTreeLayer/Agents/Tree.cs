@@ -8,26 +8,26 @@
 //  *******************************************************/
 
 using System;
-using LifeAPI.Agent;
 
-namespace ForestLayer.Agents {
-    public class Tree : IAgent {
-        public Guid TreeId { get; private set; }
+namespace TreeLayer.Agents {
+    public class Tree : ITree {
+        public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
         public double CrownDiameter { get; set; }
-        public double Age { get; set; }
+        public double Age { get; set;}
         public double Biomass { get; set; }
         public double Lat { get; set; }
         public double Lon { get; set; }
+
         private const double GParK = 0.18;
         private const double GmaxH = 600;
         private const double GmaxD = 325/3.14;
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon) {
-            TreeId = Guid.NewGuid();
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id) {
+            ID = id;
             Height = height;
             Diameter = diameter;
             CrownDiameter = crownDiameter;
@@ -49,7 +49,5 @@ namespace ForestLayer.Agents {
         }
 
         #endregion
-
-        public Guid ID { get; set; }
     }
 }

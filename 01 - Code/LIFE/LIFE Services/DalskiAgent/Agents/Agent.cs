@@ -81,10 +81,6 @@ namespace DalskiAgent.Agents {
       return "Agent: " + Id + "\t  Cycle: " + GetTick();
     }
 
-      public long ID
-      {
-          get { return Id; } 
-          set { throw new NotImplementedException();}
-      }
+    public Guid ID { get; set; }
   }
 }

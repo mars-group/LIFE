@@ -184,9 +184,12 @@ namespace RuntimeEnvironment.Implementation {
 
                     //...fetch all agentTypes and amounts...
                     var initData = new TInitData();
-                    foreach (var agentConfig in layerConfig.AgentConfigs)
-                    {
-                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, 0, agentConfig.AgentCount);
+                    foreach (var agentConfig in layerConfig.AgentConfigs) {
+                        var ids = new Guid[agentConfig.AgentCount];
+                        for (int j = 0; j < agentConfig.AgentCount; j++) {
+                            ids[0] = Guid.NewGuid();
+                        }
+                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, agentConfig.AgentCount, ids, new Guid[0]);
                     }
                     //...and finally initialize the layer with it
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
@@ -209,6 +212,7 @@ namespace RuntimeEnvironment.Implementation {
             if (layerContainerClients == null) throw new ArgumentNullException("layerContainerClients");
             
             var result = new Dictionary<LayerContainerClient, TInitData>();
+
             switch (layerConfig.DistributionStrategy)
             {
 
@@ -230,28 +234,58 @@ namespace RuntimeEnvironment.Implementation {
                         // calculate overhead resulting from uneven division
                         var agentOverhead = agentConfig.AgentCount % lcCount;
 
-                        for (var i = 0; i < lcCount; i++)
-                        {
+                        for (var i = 0; i < lcCount; i++) {
                             // add overhead to first layerContainer
                             if (i == 0)
                             {
                                 var overheadedAmount = agentAmount + agentOverhead;
+                                var shadowAgentCount = agentConfig.AgentCount - overheadedAmount;
+
+                                var realAgentIds = new Guid[overheadedAmount];
+                                var shadowAgentIds = new Guid[shadowAgentCount];
+
+                                for (long ra = 0; ra < overheadedAmount; ra++) {
+                                    realAgentIds[ra] = Guid.NewGuid();
+                                }
+
+                                for (long sa = 0; sa < shadowAgentCount; sa++)
+                                {
+                                    realAgentIds[sa] = Guid.NewGuid();
+                                }
+
                                 result[layerContainerClients[i]]
                                     .AddAgentInitConfig(
                                         agentConfig.AgentName,
                                         overheadedAmount,
-                                        agentConfig.AgentCount-overheadedAmount,
-                                        i + agentAmount
+                                        shadowAgentCount,
+                                        realAgentIds,
+                                        shadowAgentIds
                                     );
                             }
                             else
                             {
+
+                                var shadowAgentCount = agentConfig.AgentCount-agentAmount;
+
+                                var realAgentIds = new Guid[agentAmount];
+                                var shadowAgentIds = new Guid[shadowAgentCount];
+
+                                for (long ra = 0; ra < agentAmount; ra++)
+                                {
+                                    realAgentIds[ra] = Guid.NewGuid();
+                                }
+
+                                for (long sa = 0; sa < shadowAgentCount; sa++)
+                                {
+                                    realAgentIds[sa] = Guid.NewGuid();
+                                }
                                 result[layerContainerClients[i]]
                                     .AddAgentInitConfig(
                                         agentConfig.AgentName,
                                         agentAmount,
-                                        agentConfig.AgentCount-agentAmount,
-                                        i+agentAmount
+                                        shadowAgentCount,
+                                        realAgentIds,
+                                        shadowAgentIds
                                     );   
                             }
                         }

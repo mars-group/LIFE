@@ -18,7 +18,7 @@ namespace PlantLayer.Agents {
 
         private Rect _bounds;
 
-        public Plant(float x, float y, Size size, long i) {
+        public Plant(float x, float y, Size size, Guid i) {
             _bounds.X = x;
             _bounds.Y = y;
             _bounds.Size = size;
@@ -53,7 +53,7 @@ namespace PlantLayer.Agents {
             _health -= x;
         }
 
-        public long ID
+        public Guid ID
  { get; set; }
     }
 }

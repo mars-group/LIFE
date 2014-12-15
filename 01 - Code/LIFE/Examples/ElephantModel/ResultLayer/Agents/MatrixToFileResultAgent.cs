@@ -85,6 +85,6 @@ namespace ResultLayer {
             File.WriteAllText(filepath, matrix);
         }
 
-        public long ID { get; set; }
+        public Guid ID { get; set; }
     }
 }

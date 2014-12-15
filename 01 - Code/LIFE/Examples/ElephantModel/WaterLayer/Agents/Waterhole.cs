@@ -51,6 +51,6 @@ namespace WaterLayer {
 
         #endregion
 
-        public long ID { get; set; }
+        public Guid ID { get; set; }
     }
 }
