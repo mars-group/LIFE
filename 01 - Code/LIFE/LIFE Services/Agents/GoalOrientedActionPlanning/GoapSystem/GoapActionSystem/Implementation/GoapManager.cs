@@ -56,12 +56,6 @@ namespace GoapActionSystem.Implementation {
         /// <returns></returns>
         private void InitializationHelper() {
             CreateEffectActionHashTable();
-
-            if (!_ignoreIfFinishedForTesting) {
-                if (TryGetGoalAndPlan()) {
-                    TakeActionFromPlan();
-                }
-            }
         }
 
         /// <summary>
@@ -82,12 +76,6 @@ namespace GoapActionSystem.Implementation {
             _currentPlan = new List<AbstractGoapAction>();
             _currentGoal = null;
             _internalBlackboard.Set(ActionForExecution, null);
-
-            if (!_ignoreIfFinishedForTesting) {
-                if (TryGetGoalAndPlan()) {
-                    TakeActionFromPlan();
-                }
-            }
         }
 
         /// <summary>
@@ -100,28 +88,6 @@ namespace GoapActionSystem.Implementation {
                 UpdateWorldstateByAgent();
             }
 
-            /* current action can be given if: 
-             *  + goal is still valid
-             *  + the action is not finished
-             *  + the action is executable
-            */
-            if (CurrentGoalIsValid() && !IsActionForExecutionFinished() && IsCurrentActionExecutable()) {
-                return _internalBlackboard.Get(ActionForExecution);
-            }
-
-            /* next action can be given if
-             *  + goal is still valid
-             *  + current action is finished
-             *  + plan is not empty
-             *  + the action is executable            
-             * */
-            if (CurrentGoalIsValid() && IsActionForExecutionFinished() && IsCurrentPlanAvailable()
-                && IsCurrentActionExecutable()) {
-                ConvertWorldstateByActionForExecution();
-                AbstractGoapAction nextAction = TakeActionFromPlan();
-                return nextAction;
-            }
-
             /* new plan and goal is needed if
              *      Goal = null
              * OR
@@ -132,6 +98,7 @@ namespace GoapActionSystem.Implementation {
              *      the current goal is REACHED 
              * OR 
              *      current action is finished and plan is empty
+             *      
              */
             bool replanningTime = false;
 
@@ -141,11 +108,16 @@ namespace GoapActionSystem.Implementation {
             }
             else if (!CurrentGoalIsValid()) {
                 replanningTime = true;
-                GoapComponent.Log.Info("GoapManager: current goal is not valid or empty");
+                GoapComponent.Log.Info("GoapManager: current goal is empty");
             }
             else if (!IsCurrentActionExecutable()) {
                 replanningTime = true;
-                GoapComponent.Log.Info("GoapManager: current action is not executable");
+            }
+                // if one of theese two cases  match replanning is not neccessary:
+                // case 1: action ism not finished  and is executable
+                // case 2: action is finished and a next action is on plan
+            else if (!(IsCurrentActionNotFinishedAndExecutable() || IsCurrendActionFinishedAndPlanIsNotEmpty())) {
+                replanningTime = true;
             }
 
             if (replanningTime) {
@@ -163,6 +135,27 @@ namespace GoapActionSystem.Implementation {
                 if (TryGetGoalAndPlan()) {
                     AbstractGoapAction currentAction = TakeActionFromPlan();
                     return currentAction;
+                }
+            }
+            else {
+                /* next action can be given if
+            *  + current action is finished
+            *  + plan is not empty
+            *  + the action is executable            
+            * */
+                if (IsCurrendActionFinishedAndPlanIsNotEmpty()) {
+                    ConvertWorldstateByActionForExecution();
+                    AbstractGoapAction nextAction = TakeActionFromPlan();
+                    return nextAction;
+                }
+
+                /* current action can be given if: 
+            *  + goal is still valid
+            *  + the action is not finished
+            *  + the action is executable
+           */
+                if (IsCurrentActionNotFinishedAndExecutable()) {
+                    return _internalBlackboard.Get(ActionForExecution);
                 }
             }
             GoapComponent.Log.Info("GoapManager: planning failed");
@@ -192,7 +185,7 @@ namespace GoapActionSystem.Implementation {
             }
             else if (!CurrentGoalIsValid()) {
                 replanningTime = true;
-                GoapComponent.Log.Info("GoapManager: current goal is not valid or empty");
+                GoapComponent.Log.Info("GoapManager: current goal is or empty");
             }
             else if (!IsCurrentPlanAvailable()) {
                 replanningTime = true;
@@ -249,6 +242,14 @@ namespace GoapActionSystem.Implementation {
                 return true;
             }
             return false;
+        }
+
+        private bool IsCurrentActionNotFinishedAndExecutable() {
+            return (!IsActionForExecutionFinished() && IsCurrentActionExecutable());
+        }
+
+        private bool IsCurrendActionFinishedAndPlanIsNotEmpty() {
+            return (IsActionForExecutionFinished() && IsCurrentPlanAvailable());
         }
 
         /// <summary>

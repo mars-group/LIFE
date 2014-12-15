@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
+using GoapCommon.Exceptions;
 using GoapCommon.Implementation;
 using GoapModelTest.Actions;
+using GoapModelTest.Goals;
 using GoapModelTest.Worldstates;
 using NUnit.Framework;
 using TypeSafeBlackboard;
@@ -40,11 +41,11 @@ namespace GoapTests {
         private readonly AbstractGoapAction _actionClean2 = new ActionClean();
         private readonly AbstractGoapAction _actionGetToy = new ActionGetToy();
         private readonly AbstractGoapAction _actionPlay = new ActionPlay();
-        
+
         private void CreateGoapActionSystems() {
             _goapActionSystem1 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig1", "GoapModelTest", new Blackboard());
-            
+
             _goapActionSystem2 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig2", "GoapModelTest", new Blackboard());
 
@@ -53,10 +54,10 @@ namespace GoapTests {
 
             _goapActionSystemSwitchGoal = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfigSwitchGoal", "GoapModelTest", new Blackboard());
-            
+
             _goapActionSystemSwitchGoalRelevany = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfigGoalRelevancy", "GoapModelTest", new Blackboard());
-            
+
             _goapActionSystemHighBranching3X = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfigHighBranching3X", "GoapModelTest", new Blackboard());
 
@@ -73,6 +74,22 @@ namespace GoapTests {
         private static bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {
             return (potentiallySubSet.Where(x => enclosingSet.Contains(x)).Count() ==
                     potentiallySubSet.Count());
+        }
+
+        private void ExceptionActionDesign(List<AbstractGoapAction> actions) {
+            GoapComponent.CheckActionsForDoubledWorldstateSymbolKeys(actions);
+        }
+
+        private void ExceptionGoalDesign(List<AbstractGoapGoal> goals) {
+            GoapComponent.CheckGoalsForDoubledWorldstateSymbolKeys(goals);
+        }
+
+        private void ExceptionEmptyGoals(List<AbstractGoapGoal> goals) {
+            GoapComponent.CheckGoalsNotEmpty(goals);
+        }
+
+        private void ExceptioEmptyActions(List<AbstractGoapAction> actions) {
+            GoapComponent.CheckActionsNotEmpty(actions);
         }
 
         [Test]
@@ -100,7 +117,7 @@ namespace GoapTests {
 
             Assert.True(nextAction1A.Equals(_actionGetToy));
             Assert.True(nextAction1B.Equals(_actionPlay));
-            
+
             AbstractGoapAction nextAction2A = _goapActionSystem2.GetNextAction();
             Assert.True(nextAction2A.Equals(_actionPlay));
         }
@@ -122,7 +139,6 @@ namespace GoapTests {
 
         [Test]
         public void SwitchGoalIfFinishedTest() {
-
             // First goal is to get happy
             AbstractGoapAction nextAction1 = _goapActionSystemSwitchGoal.GetNextAction();
             Assert.True(nextAction1.Equals(_actionGetToy));
@@ -221,6 +237,35 @@ namespace GoapTests {
         public void TestHighBranching6XFindPath() {
             AbstractGoapAction chosenAction = _goapActionSystemHighBranching6X.GetNextAction();
             Assert.False(chosenAction.Equals(new SurrogateAction()));
+        }
+
+        [Test]
+        public void MisdesignedActionTest() {
+            List<AbstractGoapAction> misdesignedPreconditionAction = new List<AbstractGoapAction> {
+                new MisdesignedPreconditionsAction()
+            };
+            List<AbstractGoapAction> misdesignedEffectction = new List<AbstractGoapAction> {
+                new MisdesignedEffectsAction()
+            };
+
+            Assert.Throws(typeof (ActionDesignException), () => ExceptionActionDesign(misdesignedPreconditionAction));
+            Assert.Throws(typeof (ActionDesignException), () => ExceptionActionDesign(misdesignedEffectction));
+        }
+
+        [Test]
+        public void MisdesignedGoalTest() {
+            List<AbstractGoapGoal> misdesignedGoals = new List<AbstractGoapGoal> {new MisdesignedTargetstateGoal()};
+            Assert.Throws(typeof (GoalDesignException), () => ExceptionGoalDesign(misdesignedGoals));
+        }
+
+        [Test]
+        public void EmptyGoalsTest() {
+            Assert.Throws(typeof (ArgumentException), () => ExceptionEmptyGoals(new List<AbstractGoapGoal>()));
+        }
+
+        [Test]
+        public void EmptyActionsTest() {
+            Assert.Throws(typeof (ArgumentException), () => ExceptioEmptyActions(new List<AbstractGoapAction>()));
         }
     }
 

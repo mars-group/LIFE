@@ -47,7 +47,9 @@
     <Compile Include="Abstract\AbstractGoapAction.cs" />
     <Compile Include="Abstract\AbstractGoapGoal.cs" />
     <Compile Include="Abstract\AbstractGoapSystem.cs" />
+    <Compile Include="Exceptions\ActionDesignException.cs" />
     <Compile Include="Exceptions\AlgorithmException.cs" />
+    <Compile Include="Exceptions\GoalDesignException.cs" />
     <Compile Include="Exceptions\GraphException.cs" />
     <Compile Include="Implementation\Edge.cs" />
     <Compile Include="Implementation\Node.cs" />
