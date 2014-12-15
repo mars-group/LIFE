@@ -68,6 +68,7 @@
     <Compile Include="AgentTestConfigHighBranching4X.cs" />
     <Compile Include="AgentTestConfigHighBranching5X.cs" />
     <Compile Include="AgentTestConfigHighBranching6X.cs" />
+    <Compile Include="AgentTestConfigProvokeSurrogateAction.cs" />
     <Compile Include="AgentTestConfigSwitchGoal.cs" />
     <Compile Include="AgentTestSearchDepth.cs" />
     <Compile Include="Goals\GoalBeHappy.cs" />

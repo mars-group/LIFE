@@ -37,6 +37,8 @@ namespace GoapTests {
         private AbstractGoapSystem _goapActionSystemHighBranching5X;
         private AbstractGoapSystem _goapActionSystemHighBranching6X;
 
+        private AbstractGoapSystem _goapActionSystemProvokeSurrogateAction;
+
         private readonly AbstractGoapAction _actionClean = new ActionClean();
         private readonly AbstractGoapAction _actionClean2 = new ActionClean();
         private readonly AbstractGoapAction _actionGetToy = new ActionGetToy();
@@ -69,6 +71,9 @@ namespace GoapTests {
 
             _goapActionSystemHighBranching6X = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfigHighBranching6X", "GoapModelTest", new Blackboard());
+
+            _goapActionSystemProvokeSurrogateAction = GoapComponent.LoadGoapConfiguration
+                ("AgentTestConfigProvokeSurrogateAction", "GoapModelTest", new Blackboard());
         }
 
         private static bool IsSubset(List<WorldstateSymbol> potentiallySubSet, List<WorldstateSymbol> enclosingSet) {
@@ -266,6 +271,14 @@ namespace GoapTests {
         [Test]
         public void EmptyActionsTest() {
             Assert.Throws(typeof (ArgumentException), () => ExceptioEmptyActions(new List<AbstractGoapAction>()));
+        }
+
+        [Test]
+        public void ReturnsSurrogateActionTest() {
+            AbstractGoapAction returnedAction = _goapActionSystemProvokeSurrogateAction.GetNextAction();
+            AbstractGoapAction emptyAction = new SurrogateAction();
+
+            Assert.True(returnedAction.Equals(emptyAction));
         }
     }
 
