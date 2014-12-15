@@ -10,7 +10,7 @@ namespace PedestrianModel {
         public static readonly bool IsGaussianNormalDistribution = false;
 
         // ESC
-        public static bool UsesESC = true;
+        public static bool UsesDataSensors = false;
 
         // Debug
         public static readonly bool DebugEnabled = false;

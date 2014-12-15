@@ -53,7 +53,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
             _perceptionUnit = perceptionUnit;
             
             List<Obstacle> obstacles;
-            if (Config.UsesESC)
+            if (!Config.UsesDataSensors)
             {
                 # warning 'Hack' because of broken DataSensors for ESC
                 obstacles = (_agent as Pedestrian).Environment.GetAllObjects().OfType<Obstacle>().ToList();
@@ -78,7 +78,7 @@ namespace PedestrianModel.Agents.Reasoning.Movement {
             IPotentialField agentField = new SimplePotentialField();
 
             List<Pedestrian> pedestrians;
-            if (Config.UsesESC)
+            if (!Config.UsesDataSensors)
             {
                 # warning 'Hack' because of broken DataSensors for ESC
                 pedestrians = (_agent as Pedestrian).Environment.GetAllObjects().OfType<Pedestrian>().ToList();

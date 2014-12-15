@@ -88,7 +88,7 @@ namespace PedestrianModel.Agents {
             Name = name;
             SimulationId = simulationId;
 
-            if (!Config.UsesESC) AddSensors(env);
+            if (Config.UsesDataSensors) AddSensors(env);
 
             // Add movement module.
             Mover = new DirectMover(env, this, Data);
@@ -117,7 +117,7 @@ namespace PedestrianModel.Agents {
             Name = name;
             SimulationId = simulationId;
 
-            if (!Config.UsesESC) AddSensors(env);
+            if (Config.UsesDataSensors) AddSensors(env);
 
             // Add movement module.
             Mover = new DirectMover(env, this, Data);
@@ -184,7 +184,7 @@ namespace PedestrianModel.Agents {
             _movementPipeline.AddBehavior(new ObstacleAvoidanceBehavior(this, PerceptionUnit));
             
             List<Obstacle> obstacles;
-            if (Config.UsesESC) {
+            if (!Config.UsesDataSensors) {
                 # warning 'Hack' because of broken DataSensors for ESC
                 obstacles = Environment.GetAllObjects().OfType<Obstacle>().ToList();
             }
