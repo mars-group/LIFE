@@ -43,7 +43,7 @@
       <HintPath>..\packages\MARSErrorReporting.0.1.273\lib\net45\Atlassian.Jira.dll</HintPath>
     </Reference>
     <Reference Include="MarsErrorReporting">
-      <HintPath>..\LIFE Services\MarsErrorReporting\bin\Debug\MarsErrorReporting.dll</HintPath>
+      <HintPath>..\LIFE Services\MarsErrorReporting\obj\Debug\MarsErrorReporting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
