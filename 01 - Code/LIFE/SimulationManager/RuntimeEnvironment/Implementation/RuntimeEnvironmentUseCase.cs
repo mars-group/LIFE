@@ -7,6 +7,7 @@ using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
+using log4net.Config;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -228,6 +229,7 @@ namespace RuntimeEnvironment.Implementation {
                     
                     foreach (var agentConfig in layerConfig.AgentConfigs)
                     {
+                        
                         // calculate Agents per LacerContainer
                         var agentAmount = agentConfig.AgentCount / lcCount;
                         
