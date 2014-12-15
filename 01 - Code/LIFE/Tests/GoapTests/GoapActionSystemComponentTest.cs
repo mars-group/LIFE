@@ -44,8 +44,7 @@ namespace GoapTests {
         private void CreateGoapActionSystems() {
             _goapActionSystem1 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig1", "GoapModelTest", new Blackboard());
-
-
+            
             _goapActionSystem2 = GoapComponent.LoadGoapConfiguration
                 ("AgentTestConfig2", "GoapModelTest", new Blackboard());
 
@@ -101,10 +100,8 @@ namespace GoapTests {
 
             Assert.True(nextAction1A.Equals(_actionGetToy));
             Assert.True(nextAction1B.Equals(_actionPlay));
-
-
-            AbstractGoapAction nextAction2A = _goapActionSystem2.GetNextAction();
             
+            AbstractGoapAction nextAction2A = _goapActionSystem2.GetNextAction();
             Assert.True(nextAction2A.Equals(_actionPlay));
         }
 
@@ -172,7 +169,6 @@ namespace GoapTests {
 
             AbstractGoapAction nextAction7 = _goapActionSystemSwitchGoalRelevany.GetNextAction();
             Assert.True(nextAction7.Equals(action1));
-
         }
 
         [Test]

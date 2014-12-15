@@ -58,10 +58,6 @@
     <Compile Include="Worldstates\WorldProperties.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
-      <Name>GenericAgentArchitectureCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapCommon\GoapCommon.csproj">
       <Project>{56103bf6-d58d-448f-9c7d-d05feb1d5a41}</Project>
       <Name>GoapCommon</Name>

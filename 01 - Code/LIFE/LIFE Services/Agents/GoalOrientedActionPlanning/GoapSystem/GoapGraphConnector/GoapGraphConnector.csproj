@@ -50,10 +50,6 @@
     <Compile Include="SimpleGraph\Map.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
-      <Name>CommonTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GoapCommon\GoapCommon.csproj">
       <Project>{56103bf6-d58d-448f-9c7d-d05feb1d5a41}</Project>
       <Name>GoapCommon</Name>

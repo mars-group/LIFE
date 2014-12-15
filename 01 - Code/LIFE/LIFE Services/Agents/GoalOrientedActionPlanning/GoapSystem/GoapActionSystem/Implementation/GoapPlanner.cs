@@ -92,7 +92,6 @@ namespace GoapActionSystem.Implementation {
                     currentNode = graphService.GetNextVertex();
                 }
                 else {
-
                     GoapComponent.Log.Info("GoapPlanner: no more nodes in graph for search");
                     return new List<AbstractGoapAction>();
                 }

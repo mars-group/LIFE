@@ -59,10 +59,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{df8053ef-4673-4812-99bf-11ab6e669a11}</Project>
-      <Name>CommonTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\TypeSafeBlackboard\TypeSafeBlackboard.csproj">
       <Project>{d1feb7b4-55cd-47d7-8828-5ee7b4c2db95}</Project>
       <Name>TypeSafeBlackboard</Name>
