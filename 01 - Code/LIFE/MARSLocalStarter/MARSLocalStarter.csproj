@@ -39,12 +39,6 @@
     <ApplicationIcon>Resources\bitmap.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Atlassian.Jira">
-      <HintPath>$(SolutionDir)packages\MARSErrorReporting.0.1.273\lib\net45\Atlassian.Jira.dll</HintPath>
-    </Reference>
-    <Reference Include="MarsErrorReporting">
-      <HintPath>$(SolutionDir)LIFE Services\MarsErrorReporting\obj\Debug\MarsErrorReporting.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -124,6 +118,10 @@
     <ProjectReference Include="..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LifeAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LIFE Services\MarsErrorReporting\MarsErrorReporting.csproj">
+      <Project>{d2957897-135d-4e3c-93ea-9ffaf8607a82}</Project>
+      <Name>MarsErrorReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.csproj">
       <Project>{58149FF0-0801-46F8-A9C6-571B6030DC1E}</Project>
