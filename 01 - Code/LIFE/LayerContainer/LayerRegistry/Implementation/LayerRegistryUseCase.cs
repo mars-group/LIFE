@@ -14,9 +14,9 @@ using System.Reflection;
 using DistributedKeyValueStore.Interface;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
-using LayerAPI.Interfaces;
 using LayerRegistry.Interfaces;
 using LayerRegistry.Interfaces.Config;
+using LifeAPI.Layer;
 using Newtonsoft.Json;
 
 namespace LayerRegistry.Implementation {

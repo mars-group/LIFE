@@ -5,13 +5,11 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using DalskiAgent.Perception;
 using EnvironmentServiceComponent.Implementation;
-using GenericAgentArchitectureCommon.Interfaces;
+using LifeAPI.Spatial;
+using LifeAPI.Perception;
 using PedestrianModel.Agents;
 using PedestrianModel.Logging;
 using PedestrianModel.Visualization;
-using SpatialCommon.Collision;
-using SpatialCommon.Datatypes;
-using SpatialCommon.Interfaces;
 using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace PedestrianModel.Environment {
@@ -19,11 +17,11 @@ namespace PedestrianModel.Environment {
     /// <summary>
     ///     An environment used to simulate pedestrians in areas with obstacles like rooms or buildings with walls.
     /// </summary>
-    public class ObstacleEnvironment : IEnvironment, IDataSource {
+    public class ObstacleEnvironment : IEnvironmentOld, IDataSource {
         public static AgentLogger AgentLogger = new AgentLogger();
         public static SimpleVisualization Visualization;
 
-        private readonly IEnvironment _env;   // Environment implementation.
+        private readonly IEnvironmentOld _env;   // Environment implementation.
         public readonly bool UsesESC;       // Boolean to indicate ESC usage. 
 
         /// <summary>

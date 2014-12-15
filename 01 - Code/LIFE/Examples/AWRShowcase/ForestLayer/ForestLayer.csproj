@@ -44,12 +44,13 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Mars.Rock.Common">
-      <HintPath>..\..\..\packages\Mars.Rock.Common.0.0.5387.25999\lib\net45\Mars.Rock.Common.dll</HintPath>
+    <Reference Include="Mars.Rock.Common, Version=0.0.5387.25999, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Mars.Rock.Common.0.1.249\lib\net45\Mars.Rock.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Mars.Rock.Drill">
-      <HintPath>..\..\..\packages\Mars.Rock.Drill.0.0.5401.26963\lib\net45\Mars.Rock.Drill.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Mars.Rock.Drill, Version=0.0.5401.26963, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Mars.Rock.Drill.0.1.249\lib\net45\Mars.Rock.Drill.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
@@ -92,9 +93,9 @@
     <Compile Include="TransportTypes\TTree.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LayerAPI</Name>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\T-Components\Scs\Scs.csproj">
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>

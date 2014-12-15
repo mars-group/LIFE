@@ -1,6 +1,5 @@
 ﻿using GeoAPI.Geometries;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
+using LifeAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Entities.Shape {
 
