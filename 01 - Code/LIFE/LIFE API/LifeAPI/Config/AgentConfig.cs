@@ -13,6 +13,11 @@ namespace LifeAPI.Config
         /// </summary>
         public int AgentCount { get; set; }
 
+        public AgentConfig() {
+            AgentName = "noname";
+            AgentCount = 0;
+        }
+
         public AgentConfig(string agentName, int agentCount)
         {
             AgentName = agentName;
