@@ -41,7 +41,7 @@ namespace KNPTreeLayer {
                         trees.Add(
                                 ScsServiceClientBuilder.CreateClient<ITree>(
                                     new ScsUdpEndPoint(
-                                        MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeof (Tree))),
+                                        MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeof (Tree)) + ":6666"),
                                     agentInitConfig.ShadowAgentsIds[i]).ServiceProxy
                                 );
                     }

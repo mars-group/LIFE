@@ -10,19 +10,15 @@ namespace LifeAPI.Config
 
         public List<AgentConfig> AgentConfigs { get; set; }
 
-        public bool Distributable { get; set; }
-
         public DistributionStrategy DistributionStrategy { get; set; }
 
         public LayerConfig() {
-            Distributable = false;
             DistributionStrategy = DistributionStrategy.NO_DISTRIBUTION;
             AgentConfigs = new List<AgentConfig>();
             LayerName = "Noname";
         }
 
-        public LayerConfig(string layerName, bool distributable, DistributionStrategy distributionStrategy, List<AgentConfig> agentConfigs) {
-            Distributable = distributable;
+        public LayerConfig(string layerName, DistributionStrategy distributionStrategy, List<AgentConfig> agentConfigs) {
             DistributionStrategy = distributionStrategy;
             AgentConfigs = agentConfigs;
             LayerName = layerName;

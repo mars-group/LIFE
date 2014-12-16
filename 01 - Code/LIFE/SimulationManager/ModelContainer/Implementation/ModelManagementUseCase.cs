@@ -138,7 +138,7 @@ namespace ModelContainer.Implementation {
             // config does not exist, create the default one
             var addinLoader = AddinLoader.Instance;
             var nodes = addinLoader.LoadAllLayers(model.Name);
-            var layerConfigs = nodes.Cast<TypeExtensionNode>().Select(node => new LayerConfig(node.Type.Name, false, DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>())).ToList();
+            var layerConfigs = nodes.Cast<TypeExtensionNode>().Select(node => new LayerConfig(node.Type.Name, DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>())).ToList();
             var mc = new ModelConfig(layerConfigs);
             Configuration.Save(mc, path);
             return mc;

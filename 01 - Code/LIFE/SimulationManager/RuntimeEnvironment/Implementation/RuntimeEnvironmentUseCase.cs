@@ -169,31 +169,34 @@ namespace RuntimeEnvironment.Implementation {
                 // fetch layerConfig by layerName
                 var layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
 
-                if (layerConfig.Distributable)
+                if (layerConfig.DistributionStrategy == DistributionStrategy.NO_DISTRIBUTION)
                 {
-                    // get initData by layerConfig and LayerContainers
-                    var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients);
-
-                    foreach (var layerContainerClient in layerContainerClients) {
-                        layerContainerClient.Instantiate(layerInstanceId);
-                        layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
-                    }
-                }
-                else {
                     // easy: first instantiate the layer...
                     layerContainerClients[0].Instantiate(layerInstanceId);
 
                     //...fetch all agentTypes and amounts...
                     var initData = new TInitData();
-                    foreach (var agentConfig in layerConfig.AgentConfigs) {
+                    foreach (var agentConfig in layerConfig.AgentConfigs)
+                    {
                         var ids = new Guid[agentConfig.AgentCount];
-                        for (int j = 0; j < agentConfig.AgentCount; j++) {
+                        for (int j = 0; j < agentConfig.AgentCount; j++)
+                        {
                             ids[0] = Guid.NewGuid();
                         }
-                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, agentConfig.AgentCount, ids, new Guid[0]);
+                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, 0, ids, new Guid[0]);
                     }
                     //...and finally initialize the layer with it
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
+                }
+                else {
+                    // get initData by layerConfig and LayerContainers
+                    var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients);
+
+                    foreach (var layerContainerClient in layerContainerClients)
+                    {
+                        layerContainerClient.Instantiate(layerInstanceId);
+                        layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
+                    }
                 }
 
                 layerId++;
@@ -230,37 +233,45 @@ namespace RuntimeEnvironment.Implementation {
                     foreach (var agentConfig in layerConfig.AgentConfigs)
                     {
                         
-                        // calculate Agents per LacerContainer
-                        var agentAmount = agentConfig.AgentCount / lcCount;
+                        // create Guids for all agents
+                        var agentIds = new Guid[agentConfig.AgentCount];
+                        for (int i = 0; i < agentConfig.AgentCount; i++) {
+                            agentIds[i] = Guid.NewGuid();
+                        }
+
+                        // calculate Agents per LayerContainer
+                        var agentAmountPerLayerContainer = agentConfig.AgentCount / lcCount;
                         
                         // calculate overhead resulting from uneven division
                         var agentOverhead = agentConfig.AgentCount % lcCount;
+                        var overheadedAmount = agentAmountPerLayerContainer + agentOverhead;
 
-                        for (var i = 0; i < lcCount; i++) {
+                        var agentInitIndex = 0;
+                        for (var lcIndex = 0; lcIndex < lcCount; lcIndex++) {
                             // add overhead to first layerContainer
-                            if (i == 0)
+                            if (lcIndex == 0)
                             {
-                                var overheadedAmount = agentAmount + agentOverhead;
-                                var shadowAgentCount = agentConfig.AgentCount - overheadedAmount;
+
+                                var shadowAgentCountPerLayerContainer = agentConfig.AgentCount - overheadedAmount;
 
                                 var realAgentIds = new Guid[overheadedAmount];
-                                var shadowAgentIds = new Guid[shadowAgentCount];
+                                var shadowAgentIds = new Guid[shadowAgentCountPerLayerContainer];
 
-                                for (var ra = 0; ra < overheadedAmount; ra++)
-                                {
-                                    realAgentIds[ra] = Guid.NewGuid();
+                                for (int j = 0; j < overheadedAmount; j++) {
+                                    realAgentIds[j] = agentIds[lcIndex + j];
                                 }
 
-                                for (var sa = 0; sa < shadowAgentCount; sa++)
-                                {
-                                    realAgentIds[sa] = Guid.NewGuid();
+                                agentInitIndex += overheadedAmount;
+
+                                for (int j = 0; j < shadowAgentCountPerLayerContainer; j++) {
+                                    shadowAgentIds[j] = agentIds[overheadedAmount + j];
                                 }
 
-                                result[layerContainerClients[i]]
+                                result[layerContainerClients[lcIndex]]
                                     .AddAgentInitConfig(
                                         agentConfig.AgentName,
                                         overheadedAmount,
-                                        shadowAgentCount,
+                                        shadowAgentCountPerLayerContainer,
                                         realAgentIds,
                                         shadowAgentIds
                                     );
@@ -268,25 +279,34 @@ namespace RuntimeEnvironment.Implementation {
                             else
                             {
 
-                                var shadowAgentCount = agentConfig.AgentCount-agentAmount;
+                                var shadowAgentCountPerLayerContainer = agentConfig.AgentCount-agentAmountPerLayerContainer;
 
-                                var realAgentIds = new Guid[agentAmount];
-                                var shadowAgentIds = new Guid[shadowAgentCount];
+                                var realAgentIds = new Guid[agentAmountPerLayerContainer];
+                                var shadowAgentIds = new Guid[shadowAgentCountPerLayerContainer];
 
-                                for (var ra = 0; ra < agentAmount; ra++)
+                                for (int j = 0; j < agentAmountPerLayerContainer; j++)
                                 {
-                                    realAgentIds[ra] = Guid.NewGuid();
+                                    realAgentIds[j] = agentIds[agentInitIndex + j];
+                                }
+                                // set initIndex to next block of agents
+                                agentInitIndex += agentAmountPerLayerContainer;
+
+                                // add all agentIds which are before the current range of real agents
+                                for (int j = 0; j < agentInitIndex-agentAmountPerLayerContainer; j++)
+                                {
+                                    shadowAgentIds[j] = agentIds[j];
                                 }
 
-                                for (var sa = 0; sa < shadowAgentCount; sa++)
-                                {
-                                    realAgentIds[sa] = Guid.NewGuid();
+                                // add all agentIds which are after the current range of real agents
+                                for (int i = agentInitIndex-agentAmountPerLayerContainer; i < agentConfig.AgentCount-agentInitIndex; i++) {
+                                    shadowAgentIds[i] = agentIds[i + agentAmountPerLayerContainer];
                                 }
-                                result[layerContainerClients[i]]
+
+                                result[layerContainerClients[lcIndex]]
                                     .AddAgentInitConfig(
                                         agentConfig.AgentName,
-                                        agentAmount,
-                                        shadowAgentCount,
+                                        agentAmountPerLayerContainer,
+                                        shadowAgentCountPerLayerContainer,
                                         realAgentIds,
                                         shadowAgentIds
                                     );   

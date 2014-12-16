@@ -92,5 +92,6 @@ namespace LayerRegistry.Implementation {
         #endregion
     }
 
+    [Serializable]
     internal class LayerInstanceNotRegisteredException : Exception {}
 }
