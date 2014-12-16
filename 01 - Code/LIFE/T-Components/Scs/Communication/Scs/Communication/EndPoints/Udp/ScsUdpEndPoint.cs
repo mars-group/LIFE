@@ -20,8 +20,9 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Udp {
             return new ScsUdpServer(this);
         }
 
-        internal override IScsClient CreateClient() {
-            throw new NotImplementedException();
+        internal override IScsClient CreateClient()
+        {
+            return new ScsUdpClient(this);
         }
     }
 }
