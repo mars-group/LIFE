@@ -56,7 +56,6 @@
     <Compile Include="Auxiliary\ConsoleView.cs" />
     <Compile Include="Auxiliary\MessageServer.cs" />
     <Compile Include="Environments\DataAccessor.cs" />
-    <Compile Include="Environments\Environment2D.cs" />
     <Compile Include="Environments\ESCAdapter.cs" />
     <Compile Include="Environments\ESCRectAdapter.cs" />
     <Compile Include="Environments\IEnvironmentOld.cs" />
@@ -64,7 +63,6 @@
     <Compile Include="Environments\SpatialData.cs" />
     <Compile Include="Execution\IExecution.cs" />
     <Compile Include="Execution\LayerExec.cs" />
-    <Compile Include="Execution\SeqExec.cs" />
     <Compile Include="Movement\Actions\ContinuousMovementAction.cs" />
     <Compile Include="Movement\Actions\DirectMovementAction.cs" />
     <Compile Include="Movement\Actions\GridMovementAction.cs" />

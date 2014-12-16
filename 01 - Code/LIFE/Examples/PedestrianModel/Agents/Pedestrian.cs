@@ -96,8 +96,6 @@ namespace PedestrianModel.Agents {
 
             // WALK
             _targetPositions = new List<Vector> {targetPosition};
-
-            Init();
         }
 
         public Pedestrian
@@ -125,8 +123,6 @@ namespace PedestrianModel.Agents {
 
             // WALK
             _targetPositions = new List<Vector> { targetPosition };
-
-            Init();
         }
 
         private void AddSensors(IEnvironmentOld env) {

@@ -3,11 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using DalskiAgent.Auxiliary;
-using EnvironmentServiceComponent.Entities;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
-using EnvironmentServiceComponent.Interface;
 using LifeAPI.Spatial;
 using LifeAPI.Environment;
 using LifeAPI.Perception;
@@ -50,8 +47,8 @@ namespace DalskiAgent.Environments {
     /// <param name="spec">Information object describing which data to query.</param>
     /// <returns>An object representing the percepted information.</returns>
     public object GetData(ISpecification spec) {
-      List<ISpatialEntity> entities = (List<ISpatialEntity>) _esc.GetData(spec);
-      List<ISpatialObject> objects = new List<ISpatialObject>();
+      var entities = (List<ISpatialEntity>) _esc.GetData(spec);
+      var objects = new List<ISpatialObject>();
       foreach (RectObject entity in entities.OfType<RectObject>()) {
         objects.Add(entity.Object);
       }
@@ -120,12 +117,6 @@ namespace DalskiAgent.Environments {
       // Call the ESC move function and evaluate the return value.
       MovementResult result = _esc.Move
         (_objects[obj], movement.GetTVector(), dir.GetDirectionalVector().GetTVector());
-      if (!result.Success) {
-        ConsoleView.AddMessage
-          ("[ESCAdapter] Kollision auf " + obj.GetPosition() +
-           " mit " + result.Collisions.Count() + ".",
-            ConsoleColor.Red);
-      }
       //TODO Store return value and use it!
     }
 

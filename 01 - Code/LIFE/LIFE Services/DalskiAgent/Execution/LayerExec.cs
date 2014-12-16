@@ -61,7 +61,7 @@ namespace DalskiAgent.Execution {
     /// </summary>
     /// <returns>Current tick counter value.</returns>
     public long GetCurrentTick() {
-      return ((ISteppedLayer) _layerImpl).GetCurrentTick();
+      return _layerImpl.GetCurrentTick();
     }
   }
 }

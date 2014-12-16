@@ -47,7 +47,6 @@ namespace WolvesModel.Agents {
       // Add movement module.
       Mover = new GridMover(env, this, Data);
       _mover = (GridMover) Mover;  // Re-declaration to save casts.
-      Init();
     }
 
 

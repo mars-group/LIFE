@@ -54,15 +54,6 @@ namespace DalskiAgent.Agents {
 
 
     /// <summary>
-    ///   Initialization function (post-constructor). In this case, 
-    ///   it just calls the base init method for execution registration.
-    /// </summary>
-    protected new void Init() {
-      base.Init();
-    }
-
-
-    /// <summary>
     ///   This function unbinds the agent from the environment.
     ///   It is triggered by the base agent, when alive flag on 'false'.
     /// </summary>

@@ -40,7 +40,6 @@ namespace WolvesModel.Environment {
       ISpecification halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
       PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
       TickCnt = 1;
-      Init();
     }
 
 

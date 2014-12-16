@@ -26,7 +26,6 @@ namespace WolvesModel.Agents {
     /// <param name="pos">The initial position.</param>
     public Grass(IExecution exec, Grassland env, Vector pos = null) : base(exec, env, CollisionType.SelfCollision, pos) {
       _random = new Random(Id.GetHashCode());
-      Init();
     }
 
 

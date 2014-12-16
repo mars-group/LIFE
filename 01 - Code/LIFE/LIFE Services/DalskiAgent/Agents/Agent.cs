@@ -27,7 +27,8 @@ namespace DalskiAgent.Agents {
       Id = exec.GetNewID();
       IsAlive = true;
       PerceptionUnit = new PerceptionUnit();
-      if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;       
+      if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;  
+      _execution.AddAgent(this);
     }
 
 
@@ -41,16 +42,6 @@ namespace DalskiAgent.Agents {
       var action = ReasoningComponent.Reason();        // Phase 2: Reasoning      
       if (IsAlive && action != null) action.Execute(); // Phase 3: Execution
       else if (!IsAlive) Remove();                     // Agent deletion.      
-    }
-
-
-    /// <summary>
-    ///   This function registers the agent at the execution component. Later functions
-    ///   may add more instructions. This function has to be called manually as last  
-    ///   statement in the specific agent constructor. 
-    /// </summary>
-    protected void Init() {
-      _execution.AddAgent(this);
     }
 
 
