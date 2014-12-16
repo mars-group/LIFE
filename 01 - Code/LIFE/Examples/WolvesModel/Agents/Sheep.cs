@@ -41,9 +41,7 @@ namespace WolvesModel.Agents {
       _environment = env;
       
       // Add perception sensor.
-      ISpecification halo;
-      if (env.UsesEsc) halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
-      else             halo = new RadialHalo(Data, InformationTypes.AllAgents, 8);
+      ISpecification halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
       PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
 
       // Add movement module.
@@ -74,12 +72,10 @@ namespace WolvesModel.Agents {
       var agents = ((List<ISpatialObject>) rawData);
 
       // Remove own agent from perception list.
-      if (_environment.UsesEsc) {
-        for (var i = 0; i < agents.Count; i ++) {
-          if (agents[i] == this) {
-            agents.RemoveAt(i);
-            break;
-          }
+      for (var i = 0; i < agents.Count; i ++) {
+        if (agents[i] == this) {
+          agents.RemoveAt(i);
+          break;
         }
       }
 

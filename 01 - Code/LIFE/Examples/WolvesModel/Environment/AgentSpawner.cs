@@ -37,9 +37,7 @@ namespace WolvesModel.Environment {
       _random = new Random();
 
       // Add perception sensor.
-      ISpecification halo;
-      if (env.UsesEsc) halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
-      else             halo = new OmniHalo(InformationTypes.AllAgents);
+      ISpecification halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
       PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
       TickCnt = 1;
       Init();

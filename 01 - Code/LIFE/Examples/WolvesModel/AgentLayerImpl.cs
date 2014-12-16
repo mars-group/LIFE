@@ -27,6 +27,7 @@ namespace WolvesModel {
     private Grassland _env;          // Grassland (environment) object for spatial agents. 
     private IExecution _exec;        // Agent execution container reference.
     private AgentSpawner _spawner;   // Agent spawner object.
+    private long _tick;
 
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace WolvesModel {
     public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
       // Create the environment, the execution container and an agent spawner.
-      _env = new Grassland(true, new Vector(100, 100), true);
+      _env = new Grassland(new Vector(100, 100), true);
       _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);      
       _spawner = new AgentSpawner(_exec, _env);
 
@@ -62,8 +63,13 @@ namespace WolvesModel {
       return _spawner.TickCnt;
     }
 
+
+    /// <summary>
+    ///   Sets the current tick. This function is called by the RTE manager in each tick.
+    /// </summary>
+    /// <param name="currentTick">current tick value.</param>
     public void SetCurrentTick(long currentTick) {
-      throw new System.NotImplementedException();
+      _tick = currentTick;
     }
   }
 }
