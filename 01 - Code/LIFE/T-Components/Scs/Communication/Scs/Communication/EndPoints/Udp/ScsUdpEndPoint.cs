@@ -1,5 +1,6 @@
 ﻿using System;
 using Hik.Communication.Scs.Client;
+using Hik.Communication.Scs.Client.Udp;
 using Hik.Communication.Scs.Server;
 using Hik.Communication.Scs.Server.Udp;
 

@@ -61,6 +61,7 @@
     <Compile Include="Communication\ScsServices\Communication\RemoteInvokeProxy.cs" />
     <Compile Include="Communication\ScsServices\Service\CacheableAttribute.cs" />
     <Compile Include="Communication\ScsServices\Service\ICacheable.cs" />
+    <Compile Include="Communication\Scs\Client\Udp\ScsUdpClient.cs" />
     <Compile Include="Communication\Scs\Communication\Channels\Udp\UdpCommunicationChannel.cs" />
     <Compile Include="Communication\Scs\Communication\Channels\Udp\UdpConnectionListener.cs" />
     <Compile Include="Communication\Scs\Communication\EndPoints\Udp\ScsUdpEndPoint.cs" />
