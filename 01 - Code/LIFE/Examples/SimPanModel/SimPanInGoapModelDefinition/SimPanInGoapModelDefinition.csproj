@@ -57,7 +57,6 @@
     <Compile Include="Actions\FollowPathToExitArea.cs" />
     <Compile Include="Actions\GoOut.cs" />
     <Compile Include="Actions\ParticipateMassEscape.cs" />
-    <Compile Include="Actions\SuccessiveApproximation.cs" />
     <Compile Include="DeliberativeConfig.cs" />
     <Compile Include="Goals\BeOutOfDanger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

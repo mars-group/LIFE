@@ -28,9 +28,7 @@ namespace GOAPModelDefinition {
             return new List<AbstractGoapAction> {
                 new ActionClean(),
                 new ActionBuyToy(),
-                new ActionBuyFood(),
                 new ActionPlayWithToy(),
-                new ActionEat()
             };
         }
 

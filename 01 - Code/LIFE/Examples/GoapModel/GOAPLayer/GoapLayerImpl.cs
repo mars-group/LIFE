@@ -12,10 +12,10 @@ namespace GOAPLayer {
     [Extension(typeof (ISteppedLayer))]
     public class GoapLayerImpl : ISteppedLayer {
         private const string NamespaceOfModelDefinition = "GOAPModelDefinition";
-        private const int GoapWorkdAndPlayAgentCount = 1;
+        private const int GoapWorkdAndPlayAgentCount = 50;
 
         public static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private long CurrentTick;
+        private long _currentTick;
 
         #region ISteppedLayer Members
 
@@ -30,11 +30,11 @@ namespace GOAPLayer {
         }
 
         public long GetCurrentTick() {
-            return CurrentTick;
+            return _currentTick;
         }
 
         public void SetCurrentTick(long currentTick) {
-            CurrentTick = currentTick;
+            _currentTick = currentTick;
         }
 
         #endregion

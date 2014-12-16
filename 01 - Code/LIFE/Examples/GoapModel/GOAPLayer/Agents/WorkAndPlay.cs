@@ -22,13 +22,13 @@ namespace GOAPLayer.Agents {
 
         public void Tick() {
             AbstractGoapAction a = _goapActionSystem.GetNextAction();
-            ExecuteAction(a);
+            //ExecuteAction(a);
         }
 
         #endregion
 
         private void ExecuteAction(AbstractGoapAction action) {
-            GoapLayerImpl.Log.Info(action.GetType() + " is now executed");
+            //GoapLayerImpl.Log.Info(action.GetType() + " is now executed");
             Console.WriteLine(action.GetType() + " is now executed");
             List<WorldstateSymbol> curr = _blackboard.Get(AbstractGoapSystem.Worldstate);
             List<WorldstateSymbol> result = action.GetResultingWorldstate(curr);
