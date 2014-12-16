@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using GeoAPI.Geometries;
 using LifeAPI.Layer;
@@ -25,7 +24,7 @@ namespace PedestrianModel {
     public class PedestrianLayer : ISteppedActiveLayer, IVisualizable
     {
         private long _tick; // Counter of current tick.  
-        private IEnvironmentOld _env; // Environment object for spatial agents. 
+        private ObstacleEnvironment _env; // Environment object for spatial agents. 
         private IExecution _exec; // Agent execution container reference.
 
         #region ISteppedActiveLayer Members
@@ -42,11 +41,9 @@ namespace PedestrianModel {
             (T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _tick = 0;
             
-            ChooseCollisions();
             ChooseScenario();
 
-            if (Config.UsesESC) _env = new ObstacleEnvironmentESC();
-            else _env = new ObstacleEnvironment2D();
+            _env = new ObstacleEnvironment();
             _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);
 
             ScenarioBuilder.CreateScenario(_exec, _env, Config.Scenario);
@@ -57,10 +54,6 @@ namespace PedestrianModel {
         }
 
         public void PreTick() {
-            if (_env is ObstacleEnvironmentESC) {
-                ObstacleEnvironmentESC escEnv = (ObstacleEnvironmentESC) _env;
-                escEnv.AdvanceEnvironment();
-            }
             _env.AdvanceEnvironment();
         }
 
@@ -87,28 +80,6 @@ namespace PedestrianModel {
         }
 
         #endregion
-
-        private void ChooseCollisions()
-        {
-            Console.WriteLine("Calculate collisions?\n1: Collisions on.\n2: Collisions off.");
-            String decisionString = Console.ReadLine();
-            int decisionInt;
-            int.TryParse(decisionString, out decisionInt);
-            if (decisionInt == 1)
-            {
-                Config.UsesESC = true;
-                Console.WriteLine("Collisions on.");
-            }
-            else if (decisionInt == 2)
-            {
-                Config.UsesESC = false;
-                Console.WriteLine("Collisions off.");
-            }
-            else
-            {
-                Console.WriteLine("Invalid input. Using default settings.");
-            }
-        }
 
         private void ChooseScenario()
         {

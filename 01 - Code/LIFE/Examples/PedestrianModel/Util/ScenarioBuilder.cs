@@ -3,6 +3,7 @@ using DalskiAgent.Environments;
 using DalskiAgent.Execution;
 using LifeAPI.Spatial;
 using PedestrianModel.Agents;
+using PedestrianModel.Environment;
 using PedestrianModel.Util.Math;
 
 namespace PedestrianModel.Util {
@@ -10,7 +11,7 @@ namespace PedestrianModel.Util {
     internal class ScenarioBuilder {
         private static readonly Random Random = new Random();
 
-        public static void CreateDensityScenario(IExecution exec, IEnvironmentOld env, int pedestrianCount) {
+        public static void CreateDensityScenario(IExecution exec, ObstacleEnvironment env, int pedestrianCount) {
             // top wall
             new Obstacle(exec, env, new Vector(20d, -0.025d, 0), new Vector(40d, 0.05d, 0.4d), new Direction());
             // bottom wall
@@ -30,47 +31,34 @@ namespace PedestrianModel.Util {
 
             for (int i = 0; i < pedestrianCount; i++) {
                 double maxVelocity;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity = Config.MaxVelocity;
+                }
+                else {
+                    maxVelocity = Config.MaxVelocity;
+                }
 
                 Vector targetPos = new Vector
                     (Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
 
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(startMinX, startMinY);
-                    Vector maxPos = new Vector(startMaxX, startMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
-                else {
-                    Vector startPos = new Vector
-                        (Random.NextDouble()*(startMaxX - startMinX) + startMinX,
-                            Random.NextDouble()*(startMaxY - startMinY) + startMinY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            startPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
+                Vector minPos = new Vector(startMinX, startMinY);
+                Vector maxPos = new Vector(startMaxX, startMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos,
+                        maxPos,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        targetPos,
+                        maxVelocity);
             }
         }
 
         public static void CreateBottleneckScenario
-            (IExecution exec, IEnvironmentOld env, int pedestrianCount, double bottleneckWidth) {
+            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double bottleneckWidth) {
             double wallWidth = 0.05d;
             double wallCorrection = wallWidth/2d;
             double maxY = 10d;
@@ -81,15 +69,17 @@ namespace PedestrianModel.Util {
             // left room, top wall
             new Obstacle(exec, env, new Vector(5d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // connection, top wall
-            double conTopY = connectionCenterY - (bottleneckWidth / 2d) - wallCorrection;
-            new Obstacle(exec, env, new Vector(10.2d, conTopY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
+            double conTopY = connectionCenterY - (bottleneckWidth/2d) - wallCorrection;
+            new Obstacle
+                (exec, env, new Vector(10.2d, conTopY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
             // right room, top wall
             new Obstacle(exec, env, new Vector(15.4d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // left room, bottom wall
             new Obstacle(exec, env, new Vector(5d, 10.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
             // connection, bottom wall
-            double conBotY = connectionCenterY + (bottleneckWidth / 2d) + wallCorrection;
-            new Obstacle(exec, env, new Vector(10.2d, conBotY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
+            double conBotY = connectionCenterY + (bottleneckWidth/2d) + wallCorrection;
+            new Obstacle
+                (exec, env, new Vector(10.2d, conBotY, 0), new Vector(bottleneckLength, 0.05d, 0.4d), new Direction());
             // right room, bottom wall
             new Obstacle(exec, env, new Vector(15.4d, 10.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
 
@@ -98,10 +88,12 @@ namespace PedestrianModel.Util {
             // left room, right wall above exit
             double sideWallWidthY = connectionCenterY - (bottleneckWidth/2d) - wallWidth;
             double lrrwaeY = sideWallWidthY/2d;
-            new Obstacle(exec, env, new Vector(10.025d, lrrwaeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
+            new Obstacle
+                (exec, env, new Vector(10.025d, lrrwaeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
             // left room, right wall below exit
             double lrrwbeY = maxY - lrrwaeY;
-            new Obstacle(exec, env, new Vector(10.025d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
+            new Obstacle
+                (exec, env, new Vector(10.025d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
 
             // right room, left wall above entrance
             new Obstacle
@@ -113,7 +105,8 @@ namespace PedestrianModel.Util {
             new Obstacle
                 (exec, env, new Vector(20.425d, lrrwaeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
             // right room, right wall below exit
-            new Obstacle(exec, env, new Vector(20.425d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
+            new Obstacle
+                (exec, env, new Vector(20.425d, lrrwbeY, 0), new Vector(0.05d, sideWallWidthY, 0.4d), new Direction());
 
             double startMinX = 0.2d;
             double startMaxX = 4.8d;
@@ -127,46 +120,33 @@ namespace PedestrianModel.Util {
 
             for (int i = 0; i < pedestrianCount; i++) {
                 double maxVelocity;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity = Config.MaxVelocity;
+                }
+                else {
+                    maxVelocity = Config.MaxVelocity;
+                }
 
                 Vector targetPos = new Vector
                     (Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
 
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(startMinX, startMinY);
-                    Vector maxPos = new Vector(startMaxX, startMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
-                else {
-                    Vector startPos = new Vector
-                        (Random.NextDouble()*(startMaxX - startMinX) + startMinX,
-                            Random.NextDouble()*(startMaxY - startMinY) + startMinY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            startPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
+                Vector minPos = new Vector(startMinX, startMinY);
+                Vector maxPos = new Vector(startMaxX, startMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos,
+                        maxPos,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        targetPos,
+                        maxVelocity);
             }
         }
 
-        public static void CreateRimeaScenario(IExecution exec, IEnvironmentOld env, int pedestrianCount) {
+        public static void CreateRimeaScenario(IExecution exec, ObstacleEnvironment env, int pedestrianCount) {
             // walls of left room, connection and right room
             // left room, top wall
             new Obstacle(exec, env, new Vector(5d, -0.025d, 0), new Vector(10d, 0.05d, 0.4d), new Direction());
@@ -209,47 +189,34 @@ namespace PedestrianModel.Util {
 
             for (int i = 0; i < pedestrianCount; i++) {
                 double maxVelocity;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity = Config.MaxVelocity;
+                }
+                else {
+                    maxVelocity = Config.MaxVelocity;
+                }
 
                 Vector targetPos = new Vector
                     (Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
 
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(startMinX, startMinY);
-                    Vector maxPos = new Vector(startMaxX, startMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
-                else {
-                    Vector startPos = new Vector
-                        (Random.NextDouble()*(startMaxX - startMinX) + startMinX,
-                            Random.NextDouble()*(startMaxY - startMinY) + startMinY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            startPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
+                Vector minPos = new Vector(startMinX, startMinY);
+                Vector maxPos = new Vector(startMaxX, startMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos,
+                        maxPos,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        targetPos,
+                        maxVelocity);
             }
         }
 
         public static void CreateUShapeScenario
-            (IExecution exec, IEnvironmentOld env, int pedestrianCount, double wallLength) {
+            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double wallLength) {
             // move the old scenario positions to positive positions
             double xOffset = 100d;
             double yOffset = 100d;
@@ -281,47 +248,34 @@ namespace PedestrianModel.Util {
 
             for (int i = 0; i < pedestrianCount; i++) {
                 double maxVelocity;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity = Config.MaxVelocity;
+                }
+                else {
+                    maxVelocity = Config.MaxVelocity;
+                }
 
                 Vector targetPos = new Vector
                     (Random.NextDouble()*(targetMaxX - targetMinX) + targetMinX,
                         Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
 
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(startMinX, startMinY);
-                    Vector maxPos = new Vector(startMaxX, startMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
-                else {
-                    Vector startPos = new Vector
-                        (Random.NextDouble()*(startMaxX - startMinX) + startMinX,
-                            Random.NextDouble()*(startMaxY - startMinY) + startMinY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            startPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity);
-                }
+                Vector minPos = new Vector(startMinX, startMinY);
+                Vector maxPos = new Vector(startMaxX, startMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos,
+                        maxPos,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        targetPos,
+                        maxVelocity);
             }
         }
 
         public static void CreateOscillationScenario
-            (IExecution exec, IEnvironmentOld env, int pedestrianCount, double bottleneckWidth) {
+            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double bottleneckWidth) {
             // move the old scenario positions to positive positions
             double xOffset = 10d;
             double yOffset = 10d;
@@ -378,71 +332,51 @@ namespace PedestrianModel.Util {
                         Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
 
                 double maxVelocity1;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity1 = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity1 = Config.MaxVelocity;
-
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(startMinX, startMinY);
-                    Vector maxPos = new Vector(startMaxX, startMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity1);
                 }
                 else {
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            startPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity1);
+                    maxVelocity1 = Config.MaxVelocity;
                 }
+
+                Vector minPos1 = new Vector(startMinX, startMinY);
+                Vector maxPos1 = new Vector(startMaxX, startMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos1,
+                        maxPos1,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        targetPos,
+                        maxVelocity1);
 
                 double maxVelocity2;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity2 = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity2 = Config.MaxVelocity;
-
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(targetMinX, targetMinY);
-                    Vector maxPos = new Vector(targetMaxX, targetMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            startPos,
-                            maxVelocity2);
                 }
                 else {
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            targetPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            startPos,
-                            maxVelocity2);
+                    maxVelocity2 = Config.MaxVelocity;
                 }
+
+                Vector minPos2 = new Vector(targetMinX, targetMinY);
+                Vector maxPos2 = new Vector(targetMaxX, targetMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos2,
+                        maxPos2,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        startPos,
+                        maxVelocity2);
             }
         }
 
         public static void CreateLaneScenario
-            (IExecution exec, IEnvironmentOld env, int pedestrianCount, double laneWidth) {
+            (IExecution exec, ObstacleEnvironment env, int pedestrianCount, double laneWidth) {
             // move the old scenario positions to positive positions
             double xOffset = 10d;
             double yOffset = 10d;
@@ -486,70 +420,50 @@ namespace PedestrianModel.Util {
                         Random.NextDouble()*(targetMaxY - targetMinY) + targetMinY);
 
                 double maxVelocity1;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity1 = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity1 = Config.MaxVelocity;
-
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(startMinX, startMinY);
-                    Vector maxPos = new Vector(startMaxX, startMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity1);
                 }
                 else {
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            startPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            targetPos,
-                            maxVelocity1);
+                    maxVelocity1 = Config.MaxVelocity;
                 }
+
+                Vector minPos1 = new Vector(startMinX, startMinY);
+                Vector maxPos1 = new Vector(startMaxX, startMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos1,
+                        maxPos1,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        targetPos,
+                        maxVelocity1);
 
                 double maxVelocity2;
-                if (Config.IsGaussianNormalDistribution)
+                if (Config.IsGaussianNormalDistribution) {
                     maxVelocity2 = Distribution.NormalGaussian(Config.MaxVelocity, Config.StandardDeviation);
-                else maxVelocity2 = Config.MaxVelocity;
-
-                if (Config.UsesESC) {
-                    Vector minPos = new Vector(targetMinX, targetMinY);
-                    Vector maxPos = new Vector(targetMaxX, targetMaxY);
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            minPos,
-                            maxPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            startPos,
-                            maxVelocity2);
                 }
                 else {
-                    new Pedestrian
-                        (exec,
-                            env,
-                            "sim0",
-                            targetPos,
-                            Config.PedestrianDimensions,
-                            new Direction(),
-                            startPos,
-                            maxVelocity2);
+                    maxVelocity2 = Config.MaxVelocity;
                 }
+
+                Vector minPos2 = new Vector(targetMinX, targetMinY);
+                Vector maxPos2 = new Vector(targetMaxX, targetMaxY);
+                new Pedestrian
+                    (exec,
+                        env,
+                        "sim0",
+                        minPos2,
+                        maxPos2,
+                        Config.PedestrianDimensions,
+                        new Direction(),
+                        startPos,
+                        maxVelocity2);
             }
         }
 
-        public static void CreateScenario(IExecution exec, IEnvironmentOld env, ScenarioType scenario) {
+        public static void CreateScenario(IExecution exec, ObstacleEnvironment env, ScenarioType scenario) {
             switch (scenario) {
                 case ScenarioType.Lane250Cm:
                     CreateLaneScenario(exec, env, 50, 2.5d);
