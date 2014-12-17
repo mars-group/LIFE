@@ -19,6 +19,7 @@ namespace DalskiAgent.Movement.Movers {
 
     public const float Sqrt2 = 1.4142f;    // The square root of 2.
     public static float TickLength = 1.0f; // Timelength of a simulation tick.
+    public MovementResult MovementResult;  // Result of last movement.
 
 
     /// <summary>
@@ -31,6 +32,7 @@ namespace DalskiAgent.Movement.Movers {
       _env = env;
       _agent = agent;
       Data = data;
+      MovementResult = null;
     }
 
 
@@ -39,7 +41,7 @@ namespace DalskiAgent.Movement.Movers {
     ///   The adapter is responsible to set the checked (returned) data.
     /// </summary>
     protected void Move() {
-      _env.MoveObject(_agent, MovementVector, TargetDir);
+      MovementResult = _env.MoveObject(_agent, MovementVector, TargetDir);  //TODO !!!
     }
 
 

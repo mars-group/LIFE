@@ -34,7 +34,8 @@ namespace DalskiAgent.Environments {
     /// <param name="obj">The object to move.</param>
     /// <param name="movement">Movement vector.</param>
     /// <param name="dir">The object's heading. If null, movement heading is used.</param>
-    void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null);
+    /// <returns>Result of movement, contains all SpatialEntities, with that this agent collided.</returns>
+    MovementResult MoveObject(ISpatialObject obj, Vector movement, Direction dir = null);
 
 
     /// <summary>

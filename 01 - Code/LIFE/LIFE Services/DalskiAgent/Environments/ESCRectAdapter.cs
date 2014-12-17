@@ -102,8 +102,9 @@ namespace DalskiAgent.Environments {
     /// <param name="obj">The object to move.</param>
     /// <param name="movement">Movement vector.</param>
     /// <param name="dir">The object's heading. If null, movement heading is used.</param>
-    public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
-      if (!_objects.ContainsKey(obj)) return;
+    /// <returns>Result of movement, contains all SpatialEntities, with that this agent collided.</returns>
+    public MovementResult MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
+      if (!_objects.ContainsKey(obj)) return null;
 
       // If direction not set, calculate it based on movement vector.
       if (dir == null) {
@@ -115,9 +116,7 @@ namespace DalskiAgent.Environments {
       _objects[obj].Direction = dir;
 
       // Call the ESC move function and evaluate the return value.
-      MovementResult result = _esc.Move
-        (_objects[obj], movement.GetTVector(), dir.GetDirectionalVector().GetTVector());
-      //TODO Store return value and use it!
+      return _esc.Move(_objects[obj], movement.GetTVector(), dir.GetDirectionalVector().GetTVector());
     }
 
 

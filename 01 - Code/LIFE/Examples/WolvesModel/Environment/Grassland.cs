@@ -65,8 +65,8 @@ namespace WolvesModel.Environment {
       _env.RemoveObject(obj);
     }
 
-    public void MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
-      _env.MoveObject(obj, movement, dir);
+    public MovementResult MoveObject(ISpatialObject obj, Vector movement, Direction dir = null) {
+      return _env.MoveObject(obj, movement, dir);
     }
 
     public List<ISpatialObject> GetAllObjects() {
