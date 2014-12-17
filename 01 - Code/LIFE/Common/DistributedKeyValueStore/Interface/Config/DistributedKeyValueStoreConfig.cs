@@ -7,9 +7,12 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 13.05.2014
 //  *******************************************************/
 
+using System;
+
 namespace DistributedKeyValueStore.Interface.Config {
+    [Serializable]
     public class DistributedKeyValueStoreConfig {
-        public readonly int KademliaPort;
+        public int KademliaPort { get; set; }
 
         public DistributedKeyValueStoreConfig() {
             KademliaPort = 8500;
