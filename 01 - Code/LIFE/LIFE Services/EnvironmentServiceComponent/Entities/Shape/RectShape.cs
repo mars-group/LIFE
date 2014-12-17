@@ -5,7 +5,7 @@ using LifeAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Entities.Shape {
 
-    public class RectShape : IShape, IQuadObject {
+    public class RectShape : IShapeOld, IQuadObject {
         private Rect _bounds;
 
         protected RectShape(Rect bounds) {

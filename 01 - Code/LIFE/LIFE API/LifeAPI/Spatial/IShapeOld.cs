@@ -1,5 +1,5 @@
 ﻿namespace LifeAPI.Spatial {
-  public interface IShape {
+  public interface IShapeOld {
     TVector GetPosition();
   }
 }

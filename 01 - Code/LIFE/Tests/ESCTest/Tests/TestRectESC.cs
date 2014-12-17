@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using DalskiAgent.Environments;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
 using ESCTest.Entities;
 using LifeAPI.Spatial;
 using NUnit.Framework;
-using Vector = LifeAPI.Spatial.Vector;
 
 namespace ESCTest.Tests {
 
@@ -33,7 +31,6 @@ namespace ESCTest.Tests {
             return new RectAgent(x, y, collisionType);
         }
 
-       
 
 //        [Test]
 //        public void TestIntersections() {

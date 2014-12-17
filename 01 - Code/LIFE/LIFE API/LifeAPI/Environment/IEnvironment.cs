@@ -43,7 +43,7 @@ namespace LifeAPI.Environment {
         /// <param name="entity">That should be resized.</param>
         /// <param name="shape">The new shape that should be assigned to the entity.</param>
         /// <returns>True, if the operation succeeded. False, otherwise (collision detection).</returns>
-        bool Resize(ISpatialEntity entity, IShape shape);
+        bool Resize(ISpatialEntity entity, IShapeOld shape);
 
         /// <summary>
         ///     Tries to move given entity relatively from it's current position.

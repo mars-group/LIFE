@@ -38,7 +38,7 @@ namespace EnvironmentServiceComponent.Implementation {
 
         public abstract void Remove(ISpatialEntity entity);
 
-        public abstract bool Resize(ISpatialEntity entity, IShape shape);
+        public abstract bool Resize(ISpatialEntity entity, IShapeOld shape);
 
         public abstract MovementResult Move
             (ISpatialEntity entity, TVector movementVector, TVector rotation = new TVector());

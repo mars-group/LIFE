@@ -137,10 +137,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spatial\CollisionType.cs" />
     <Compile Include="Spatial\Direction.cs" />
-    <Compile Include="Spatial\IShape.cs" />
+    <Compile Include="Spatial\Shape\IShape.cs" />
+    <Compile Include="Spatial\IShapeOld.cs" />
     <Compile Include="Spatial\ISpatialEntity.cs" />
     <Compile Include="Spatial\ISpatialObject.cs" />
     <Compile Include="Spatial\MovementResult.cs" />
+    <Compile Include="Spatial\Shape\Quad.cs" />
+    <Compile Include="Spatial\SpatialEntity.cs" />
+    <Compile Include="Spatial\SpatialObject.cs" />
     <Compile Include="Spatial\TVector.cs" />
     <Compile Include="Spatial\Vector.cs" />
   </ItemGroup>

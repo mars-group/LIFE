@@ -137,6 +137,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalskiAgent", "LIFE Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESCTest", "Tests\ESCTest\ESCTest.csproj", "{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialTest", "SpatialTest\SpatialTest.csproj", "{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -674,6 +676,16 @@ Global
 		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -731,6 +743,7 @@ Global
 		{8354D4D2-C043-4A01-A9C0-5CFFB7FE1E43} = {FA351A96-F90D-4959-BC5E-257EC7984DDC}
 		{9DC34799-0130-4A2B-962D-946CCA54DD9E} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
+		{BDB6BD5F-6D97-4E37-AD93-818A2ADE610C} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj

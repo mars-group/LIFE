@@ -60,7 +60,7 @@ namespace EnvironmentServiceComponent.Implementation {
             _entities.Remove(entity);
         }
 
-        public override bool Resize(ISpatialEntity entity, IShape shape) {
+        public override bool Resize(ISpatialEntity entity, IShapeOld shape) {
             GeometryShape geometryShape = shape as GeometryShape;
             if (geometryShape == null) {
                 return false;
@@ -172,7 +172,7 @@ namespace EnvironmentServiceComponent.Implementation {
 
             #region ISpatialObject Members
 
-            public IShape Shape { get; set; }
+            public IShapeOld Shape { get; set; }
 
             public Enum GetInformationType() {
                 throw new NotImplementedException();

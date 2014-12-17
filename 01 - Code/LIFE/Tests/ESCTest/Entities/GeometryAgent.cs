@@ -42,7 +42,7 @@ namespace ESCTest.Entities {
             throw new NotImplementedException();
         }
 
-        public IShape Shape { get; set; }
+        public IShapeOld Shape { get; set; }
 
         #endregion
     }

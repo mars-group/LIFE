@@ -14,7 +14,7 @@ namespace ESCTest.Entities {
 
         #region ISpatialEntity Members
 
-        public IShape Shape { get; set; }
+        public IShapeOld Shape { get; set; }
 
         public Enum GetCollisionType() {
             return _collisionType;

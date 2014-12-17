@@ -3,7 +3,7 @@ using LifeAPI.Spatial;
 
 namespace EnvironmentServiceComponent.Entities.Shape {
 
-    public class GeometryShape : IShape {
+    public class GeometryShape : IShapeOld {
         public IGeometry Geometry { get; set; }
 
         #region IShape Members

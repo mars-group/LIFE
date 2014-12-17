@@ -4,7 +4,7 @@ using LifeAPI.Perception;
 namespace LifeAPI.Spatial {
 
     public interface ISpatialObject : ISpecification {
-        IShape Shape { get; set; }
+        IShapeOld Shape { get; set; }
 
         /// <summary>
         ///     Return the information type specified by this object.

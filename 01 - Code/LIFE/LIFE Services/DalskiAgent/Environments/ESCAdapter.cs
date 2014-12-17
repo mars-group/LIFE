@@ -211,7 +211,7 @@ namespace DalskiAgent.Environments {
             throw new NotImplementedException();
         }
 
-        public IShape Shape { get; set; }
+        public IShapeOld Shape { get; set; }
 
         #endregion
     }

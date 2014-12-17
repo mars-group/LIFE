@@ -48,7 +48,7 @@ namespace EnvironmentServiceComponent.Implementation {
             }
         }
 
-        public override bool Resize(ISpatialEntity entity, IShape shape) {
+        public override bool Resize(ISpatialEntity entity, IShapeOld shape) {
             RectShape oldShape = entity.Shape as RectShape;
             RectShape newShape = shape as RectShape;
             if (oldShape == null || newShape == null) {
@@ -139,7 +139,7 @@ namespace EnvironmentServiceComponent.Implementation {
 
             #region ISpatialObject Members
 
-            public IShape Shape { get; set; }
+            public IShapeOld Shape { get; set; }
 
             public Enum GetInformationType() {
                 throw new NotImplementedException();
