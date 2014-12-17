@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using CellLayer;
 using HumanLayer.Agents;
-using LayerAPI.Interfaces;
 using log4net;
 using log4net.Config;
+using LCConnector.TransportTypes;
+using LifeAPI.Layer;
 using Mono.Addins;
 
 [assembly: Addin]
@@ -53,8 +53,8 @@ namespace HumanLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
 
            for (int i = 1; GoapReactiveAgents >= i; i++){
                 Human humanAgent = new Human( _cellLayer, CellLayerImpl.BehaviourType.Reactive);

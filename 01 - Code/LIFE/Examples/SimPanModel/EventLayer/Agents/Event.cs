@@ -4,7 +4,7 @@ using System.Threading;
 using CellLayer;
 using HumanLayer;
 using HumanLayer.Agents;
-using LayerAPI.Interfaces;
+using LifeAPI.Agent;
 
 namespace EventLayer.Agents {
 
@@ -15,7 +15,6 @@ namespace EventLayer.Agents {
     public class Event : IAgent {
         private readonly CellLayerImpl _cellLayer;
         private readonly HumanLayerImpl _humanLayer;
-        public readonly Guid ID = Guid.NewGuid();
         private int _tickAccu;
 
         public Event(CellLayerImpl cellLayer, HumanLayerImpl humanLayer) {
@@ -50,6 +49,11 @@ namespace EventLayer.Agents {
         /// </summary>
         private void IncrTick() {
             _tickAccu += 1;
+        }
+
+        public Guid ID {
+            get;
+            set;
         }
     }
 

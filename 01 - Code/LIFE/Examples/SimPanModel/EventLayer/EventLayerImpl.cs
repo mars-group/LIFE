@@ -4,9 +4,10 @@ using System.Reflection;
 using CellLayer;
 using EventLayer.Agents;
 using HumanLayer;
-using LayerAPI.Interfaces;
 using log4net;
 using log4net.Config;
+using LCConnector.TransportTypes;
+using LifeAPI.Layer;
 using Mono.Addins;
 
 [assembly: Addin]
@@ -38,8 +39,8 @@ namespace EventLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             Event eventAgent = new Event(_cellLayer, _humanLayer);
             registerAgentHandle.Invoke(this, eventAgent);
             return true;

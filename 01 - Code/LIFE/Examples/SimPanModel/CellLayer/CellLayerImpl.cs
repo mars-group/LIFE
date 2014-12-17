@@ -7,9 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using CellLayer.TransportTypes;
-using LayerAPI.Interfaces;
 using log4net;
 using log4net.Config;
+using LCConnector.TransportTypes;
+using LifeAPI.Layer;
 using Mono.Addins;
 using SimPanViewer;
 
@@ -117,8 +118,8 @@ namespace CellLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             ConcurrentDictionary<int, object[]> viewData;
             CreateCellData(out viewData);
             StartVisualisation(viewData);

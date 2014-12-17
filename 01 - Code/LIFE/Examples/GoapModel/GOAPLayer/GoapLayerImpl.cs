@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using GOAPLayer.Agents;
-using LayerAPI.Interfaces;
 using log4net;
+using LCConnector.TransportTypes;
+using LifeAPI.Layer;
 using Mono.Addins;
 
 [assembly: Addin]
@@ -19,8 +20,8 @@ namespace GOAPLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             for (int i = 1; i <= GoapWorkdAndPlayAgentCount; i++) {
                 WorkAndPlay wap = new WorkAndPlay("AgentConfig1", NamespaceOfModelDefinition);
                 registerAgentHandle.Invoke(this, wap);

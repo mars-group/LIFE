@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
 using GoapCommon.Implementation;
-using LayerAPI.Interfaces;
+using LifeAPI.Agent;
 using TypeSafeBlackboard;
 
 namespace GOAPLayer.Agents {
@@ -34,6 +34,9 @@ namespace GOAPLayer.Agents {
             List<WorldstateSymbol> result = action.GetResultingWorldstate(curr);
             _blackboard.Set(AbstractGoapSystem.Worldstate, result);
         }
+
+        public Guid ID {
+            get; set; }
     }
 
 }

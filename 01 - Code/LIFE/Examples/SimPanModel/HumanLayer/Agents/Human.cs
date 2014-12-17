@@ -4,7 +4,7 @@ using System.Drawing;
 using CellLayer;
 using GoapActionSystem.Implementation;
 using GoapCommon.Abstract;
-using LayerAPI.Interfaces;
+using LifeAPI.Agent;
 using TypeSafeBlackboard;
 
 namespace HumanLayer.Agents {
@@ -355,6 +355,9 @@ namespace HumanLayer.Agents {
             }
             HumanLayerImpl.Log.Info("i am " + AgentID + " dead.");
         }
+
+        public Guid ID {
+            get; set; }
     }
 
 }

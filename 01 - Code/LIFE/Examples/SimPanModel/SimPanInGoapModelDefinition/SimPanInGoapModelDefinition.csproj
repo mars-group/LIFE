@@ -68,7 +68,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LIFE API\LayerAPI\LayerAPI.csproj">
+    <ProjectReference Include="..\..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LayerAPI</Name>
     </ProjectReference>
