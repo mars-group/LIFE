@@ -59,19 +59,17 @@ namespace GoapActionSystem.Implementation {
         /// <param name="nameOfConfigClass"></param>
         /// <param name="namespaceOfConfigClass"></param>
         /// <param name="blackboard"></param>
-        /// <param name="agent"></param>
+        /// <param name="configParams"></param>
         /// <returns></returns>
         public static AbstractGoapSystem LoadGoapConfigurationWithSelfReference
-            (string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard, object agent) {
+            (string nameOfConfigClass, string namespaceOfConfigClass, Blackboard blackboard, object[] configParams) {
             Assembly assembly = Assembly.Load(namespaceOfConfigClass);
             Type typeOfConfigClass = Type.GetType
                 (namespaceOfConfigClass + "." + nameOfConfigClass + ", " + assembly.FullName);
 
-            object[] parameterArray = {agent, blackboard};
             IGoapAgentConfig configClass =
-                (IGoapAgentConfig) Activator.CreateInstance(typeOfConfigClass, parameterArray);
-
-
+                (IGoapAgentConfig) Activator.CreateInstance(typeOfConfigClass, configParams);
+            
             if (configClass == null) {
                 throw new NullReferenceException("The configuration class for the Goap manager was not found");
             }
@@ -93,21 +91,21 @@ namespace GoapActionSystem.Implementation {
             return paramList == null || paramList.Count == 0;
         }
 
-        internal static void CheckActionsNotEmpty(List<AbstractGoapAction> actions){
+        internal static void CheckActionsNotEmpty(List<AbstractGoapAction> actions) {
             if (IsEmptyParam(actions)) {
                 throw new ArgumentException
                     ("GoapManager: Goap manager cannot start with empty action list");
             }
         }
 
-        internal static void CheckGoalsNotEmpty(List<AbstractGoapGoal> goals){
+        internal static void CheckGoalsNotEmpty(List<AbstractGoapGoal> goals) {
             if (IsEmptyParam(goals)) {
                 throw new ArgumentException
                     ("GoapManager: Goap manager cannot start with empty goal list");
             }
         }
 
-        internal static void CheckGoalsForDoubledWorldstateSymbolKeys(List<AbstractGoapGoal> goals){
+        internal static void CheckGoalsForDoubledWorldstateSymbolKeys(List<AbstractGoapGoal> goals) {
             foreach (AbstractGoapGoal goal in goals) {
                 if (HasDoubleKeys(goal.TargetWorldState)) {
                     throw new GoalDesignException("GoapComponent: A goal has a doubled key in the target worldstate");
@@ -126,8 +124,7 @@ namespace GoapActionSystem.Implementation {
             }
         }
 
-        internal static bool HasDoubleKeys(List<WorldstateSymbol> worldstateSymbols)
-        {
+        internal static bool HasDoubleKeys(List<WorldstateSymbol> worldstateSymbols) {
             List<Enum> usedSymbolKeys = new List<Enum>();
             foreach (WorldstateSymbol symbol in worldstateSymbols) {
                 if (usedSymbolKeys.Contains(symbol.EnumName)) {

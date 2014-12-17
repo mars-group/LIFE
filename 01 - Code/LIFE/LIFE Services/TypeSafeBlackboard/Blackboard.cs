@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace TypeSafeBlackboard {
     /// <summary>
-    ///     Licence: CPOL 
+    ///     Licence: CPOL 1.02
     ///     auhor Antonio Nakić Alfirević 
     ///     published at http://www.codeproject.com/Articles/451326/Type-safe-blackboard-property-bag
     /// </summary>

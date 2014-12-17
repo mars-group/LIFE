@@ -122,9 +122,11 @@ namespace HumanLayer.Agents {
                 default:
                     throw new ArgumentException("Human: BehaviourType of agent is not known.");
             }
+
+            object[] configClassParameter = { this, HumanBlackboard };
             _goapActionSystem =
                 GoapComponent.LoadGoapConfigurationWithSelfReference
-                    (nameOfConfigClass, HumanLayerImpl.NamespaceOfModelDefinition, HumanBlackboard, this);
+                    (nameOfConfigClass, HumanLayerImpl.NamespaceOfModelDefinition, HumanBlackboard, configClassParameter);
 
             FearValue = GetRandomisedFearValue(behaviourType);
         }
@@ -196,12 +198,13 @@ namespace HumanLayer.Agents {
                     CurrentBehaviourType = CellLayerImpl.BehaviourType.Reactive;
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to akinesia");
-
+                    
+                    object[] configClassParameter = { this, HumanBlackboard };
                     _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.ReactiveConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,
-                            this);
+                            configClassParameter);
 
                     _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
                 }
@@ -224,12 +227,14 @@ namespace HumanLayer.Agents {
                     CurrentBehaviourType = CellLayerImpl.BehaviourType.Reactive;
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to reactive");
-
+                    
+                    object[] configClassParameter = {this, HumanBlackboard};
                     _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.ReactiveConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,
-                            this);
+                            configClassParameter
+                );
 
                     _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
                 }
@@ -252,11 +257,12 @@ namespace HumanLayer.Agents {
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to deliberative");
 
+                    object[] configClassParameter = { this, HumanBlackboard };
                     _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.DeliberativeConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,
-                            this);
+                            configClassParameter);
 
                     _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
                 }
@@ -280,11 +286,12 @@ namespace HumanLayer.Agents {
                     SensorAndMemory.CollectAndProcessSensorInformation();
                     HumanLayerImpl.Log.Info("Changed behaviour type to reflective");
 
+                    object[] configClassParameter = { this, HumanBlackboard };
                     _goapActionSystem = GoapComponent.LoadGoapConfigurationWithSelfReference
                         (HumanLayerImpl.ReflectiveConfig,
                             HumanLayerImpl.NamespaceOfModelDefinition,
                             HumanBlackboard,
-                            this);
+                            configClassParameter);
 
                     _cellLayer.UpdateAgentDrawStatus(AgentID, CurrentBehaviourType);
                 }
