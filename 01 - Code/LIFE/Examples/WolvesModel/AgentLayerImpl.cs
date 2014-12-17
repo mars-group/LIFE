@@ -24,10 +24,9 @@ namespace WolvesModel {
   [Extension(typeof (ISteppedLayer))]
   public class AgentLayerImpl : ISteppedLayer {
 
-    private Grassland _env;          // Grassland (environment) object for spatial agents. 
-    private IExecution _exec;        // Agent execution container reference.
-    private AgentSpawner _spawner;   // Agent spawner object.
-    private long _tick;
+    private Grassland _env;    // Grassland (environment) object for spatial agents. 
+    private IExecution _exec;  // Agent execution container reference.
+    private long _tick;        // Current tick.
 
 
     /// <summary>
@@ -43,14 +42,14 @@ namespace WolvesModel {
       // Create the environment, the execution container and an agent spawner.
       _env = new Grassland(new Vector(100, 100), true);
       _exec = new LayerExec(registerAgentHandle, unregisterAgentHandle, this);      
-      _spawner = new AgentSpawner(_exec, _env);
+      new AgentSpawner(_exec, _env);
 
-      int j = 1;
+      const int j = 2;
 
       // Create some initial agents.
-      for (var i = 0; i < 50*j; i ++) new Grass(_exec, _env);
-      for (var i = 0; i < 30*j; i ++) new Sheep(_exec, _env);
-      for (var i = 0; i < 20*j; i ++) new Wolf (_exec, _env);     
+      for (var i = 0; i < 5*j; i ++) new Grass(_exec, _env);
+      for (var i = 0; i < 3*j; i ++) new Sheep(_exec, _env);
+      for (var i = 0; i < 2*j; i ++) new Wolf (_exec, _env);     
       return true;
     }
 
@@ -60,7 +59,7 @@ namespace WolvesModel {
     /// </summary>
     /// <returns>Current tick value.</returns>
     public long GetCurrentTick() {
-      return _spawner.TickCnt;
+      return _tick;
     }
 
 

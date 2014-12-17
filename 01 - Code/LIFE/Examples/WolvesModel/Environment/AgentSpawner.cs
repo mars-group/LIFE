@@ -22,7 +22,6 @@ namespace WolvesModel.Environment {
     private readonly IExecution _exec;        // Execution reference.
     private readonly Grassland _env;          // Grassland reference.
     private readonly Random _random;          // Random number generator for agent spawning.
-    public long TickCnt { get; private set; } // Read-only tick counter (increased in each cycle). 
 
 
     /// <summary>
@@ -39,13 +38,11 @@ namespace WolvesModel.Environment {
       // Add perception sensor.
       ISpecification halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
       PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
-      TickCnt = 1;
     }
 
 
     /// <summary>
     ///   Agent spawning logic.
-    ///   It also carries an tick counter.
     /// </summary>
     /// <returns>Always 'null', because this agent does not interact.</returns>
     public IInteraction Reason() {
@@ -53,9 +50,6 @@ namespace WolvesModel.Environment {
       // Output numbers.
       var raw = (List<ISpatialObject>) PerceptionUnit.GetData(InformationTypes.AllAgents).Data;
       var grass  = raw.OfType<Grass>().Count();
-      //var sheeps = raw.OfType<Sheep>().Count();
-      //var wolves = raw.OfType< Wolf>().Count();     
-      //ConsoleView.AddMessage("["+GetTick()+"] Gras "+grass+", Schafe "+sheeps+", Wölfe "+wolves, ConsoleColor.DarkGray);
 
       // Grass spawning.
       var create = _random.Next(50 + grass*2) < 20;
@@ -64,8 +58,6 @@ namespace WolvesModel.Environment {
         ConsoleView.AddMessage("["+GetTick()+"] Neues Gras auf Position "+g.GetPosition(), ConsoleColor.Cyan);
       }
 
-
-      TickCnt ++;
       return null;
     }
   }

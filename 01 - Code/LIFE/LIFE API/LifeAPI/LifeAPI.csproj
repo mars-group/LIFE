@@ -140,7 +140,6 @@
     <Compile Include="Spatial\IShape.cs" />
     <Compile Include="Spatial\ISpatialEntity.cs" />
     <Compile Include="Spatial\ISpatialObject.cs" />
-    <Compile Include="Spatial\ISpatialPerception.cs" />
     <Compile Include="Spatial\MovementResult.cs" />
     <Compile Include="Spatial\TVector.cs" />
     <Compile Include="Spatial\Vector.cs" />

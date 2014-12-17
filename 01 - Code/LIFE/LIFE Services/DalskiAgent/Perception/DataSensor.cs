@@ -40,20 +40,5 @@ namespace DalskiAgent.Perception {
       var result = _source.GetData(_specification);
       return new SensorInput(this, result,  Convert.ToInt32(InformationType), Agent.GetTick());
     }
-
-
-    /// <summary>
-    ///   Switch this sensor between active (polling) and reactive (callback) mode.
-    /// </summary>
-    /// <param name="active">Set this sensor active (true) or passive (false).</param>
-    /// <returns>Return value tells, whether this operation succeeded or not.</returns>
-    public bool SetActive(bool active) {
-      if (!(_source is ICallbackDataSource)) return false;
-      if (Active != active) {
-        (_source as ICallbackDataSource).SetCallbackMode(!active, LastInput);
-        Active = active;
-      }
-      return true;
-    }
   }
 }
