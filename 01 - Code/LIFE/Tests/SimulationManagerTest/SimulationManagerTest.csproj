@@ -69,7 +69,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LayerAPI</Name>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SimulationManager\ModelContainer\ModelContainer.csproj">
       <Project>{D83FD1A0-6698-404E-9515-7754C28063BC}</Project>
