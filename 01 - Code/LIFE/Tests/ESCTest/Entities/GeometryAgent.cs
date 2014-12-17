@@ -1,13 +1,19 @@
 ﻿using System;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
-using SpatialCommon.Collision;
-using SpatialCommon.Interfaces;
+using LifeAPI.Spatial;
 
 namespace ESCTest.Entities {
 
     internal class GeometryAgent : ISpatialEntity {
-        public GeometryAgent(double x, double y) {
+        private readonly Enum _collisionType;
+
+        public GeometryAgent(double x, double y) :
+            this(x, y, CollisionType.MassiveAgent) {}
+
+
+        public GeometryAgent(double x, double y, Enum collisionType) {
+            _collisionType = collisionType;
             Shape = new ExploreShape(MyGeometryFactory.Rectangle(x, y));
 //            Point bottomLeft = new Point(0, 0, 0);
 //            Point topLeft = new Point(0, dy, 0);
@@ -28,7 +34,7 @@ namespace ESCTest.Entities {
         #region ISpatialEntity Members
 
         public Enum GetCollisionType() {
-            return CollisionType.MassiveAgent;
+            return _collisionType;
         }
 
 

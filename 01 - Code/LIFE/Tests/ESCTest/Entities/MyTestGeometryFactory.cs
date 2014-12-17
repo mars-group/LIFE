@@ -1,13 +1,7 @@
 ﻿namespace ESCTest.Entities {
     using System;
-    using System.Reflection;
-    using CommonTypes.TransportTypes;
-    using EnvironmentServiceComponent.Interface;
-    using GenericAgentArchitectureCommon.Interfaces;
     using GeoAPI.Geometries;
-    using NetTopologySuite.Geometries;
     using NetTopologySuite.Geometries.Utilities;
-    using NetTopologySuite.Shape;
     using NetTopologySuite.Utilities;
 
     internal class MyTestGeometryFactory  {

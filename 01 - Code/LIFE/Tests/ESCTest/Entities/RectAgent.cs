@@ -1,8 +1,6 @@
 ﻿using System;
 using EnvironmentServiceComponent.Entities.Shape;
-using SpatialCommon.Collision;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
+using LifeAPI.Spatial;
 
 namespace ESCTest.Entities {
 

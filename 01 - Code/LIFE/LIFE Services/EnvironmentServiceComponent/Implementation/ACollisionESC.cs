@@ -12,7 +12,7 @@ namespace EnvironmentServiceComponent.Implementation {
         private readonly Random _random;
         private readonly bool[,] _collisionMatrix;
 
-        protected ACollisionESC(bool[,] collisionMatrix) {
+        protected ACollisionESC(bool[,] collisionMatrix = null) {
             _random = new Random();
             _collisionMatrix = collisionMatrix ?? CollisionMatrix.Get();
         }

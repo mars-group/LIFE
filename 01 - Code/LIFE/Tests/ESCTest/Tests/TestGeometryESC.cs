@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Linq;
-using EnvironmentServiceComponent.Entities;
 using EnvironmentServiceComponent.Entities.Shape;
 using EnvironmentServiceComponent.Implementation;
 using ESCTest.Entities;
 using GeoAPI.Geometries;
+using LifeAPI.Spatial;
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
-using SpatialCommon.Collision;
-using SpatialCommon.Datatypes;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
 
 namespace ESCTest.Tests {
 
@@ -109,7 +105,7 @@ namespace ESCTest.Tests {
         }
 
         protected override ISpatialEntity GenerateAgent(double x, double y, CollisionType collisionType) {
-            return new GeometryAgent(x, y);
+            return new GeometryAgent(x, y, collisionType);
         }
     }
 

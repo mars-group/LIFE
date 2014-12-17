@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using EnvironmentServiceComponent.Interface;
+using LifeAPI.Environment;
+using LifeAPI.Spatial;
 using NUnit.Framework;
-using SpatialCommon.Collision;
-using SpatialCommon.Interfaces;
-using SpatialCommon.TransportTypes;
 
 namespace ESCTest.Tests {
 
     public abstract class TestESC {
-        protected IEnvironmentServiceComponent _esc;
+        protected IEnvironment _esc;
 
 
         [Test]
