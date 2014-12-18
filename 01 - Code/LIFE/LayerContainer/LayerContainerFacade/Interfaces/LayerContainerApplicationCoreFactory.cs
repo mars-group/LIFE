@@ -9,8 +9,6 @@
 
 using Autofac;
 using ConfigurationAdapter.Interface;
-using DistributedKeyValueStore.Implementation;
-using DistributedKeyValueStore.Interface;
 using LayerContainerFacade.Implementation;
 using LayerContainerShared;
 using LayerFactory.Implementation;
@@ -36,10 +34,6 @@ namespace LayerContainerFacade.Interfaces {
         public static ILayerContainerFacade GetLayerContainerFacade() {
             if (_container == null) {
                 if (_containerBuilder == null) _containerBuilder = new ContainerBuilder();
-
-                _containerBuilder.RegisterType<DistributedKeyValueStoreComponent>()
-                    .As<IDistributedKeyValueStore>()
-                    .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<NodeRegistryComponent>()
                     .As<INodeRegistry>()
