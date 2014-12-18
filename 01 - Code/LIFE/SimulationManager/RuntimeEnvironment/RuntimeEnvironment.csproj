@@ -70,6 +70,10 @@
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\LoggerFactory\LoggerFactory.csproj">
+      <Project>{F87E5894-0AB9-4DDC-8B96-D9ABBAD243AC}</Project>
+      <Name>LoggerFactory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
