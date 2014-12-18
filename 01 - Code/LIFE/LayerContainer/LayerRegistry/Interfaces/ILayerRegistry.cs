@@ -36,7 +36,7 @@ namespace LayerRegistry.Interfaces {
         /// <summary>
         ///     Returns an instance of parameterType either as local object or as a stub
         /// </summary>
-        /// <param name="parameterType"></param>
+        /// <param name="layerType"></param>
         /// <returns></returns>
         ILayer GetLayerInstance(Type layerType);
 

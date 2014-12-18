@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoAPI.Geometries;
+using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
-using LifeAPI.Layer.Visualization;
 using MessageWrappers;
 using Mono.Addins;
 
@@ -14,10 +15,8 @@ using Mono.Addins;
 [assembly: AddinDependency("LayerContainer", "0.1")]
 namespace ExampleLayer
 {
-    using System.Collections.Generic;
-
-    [Mono.Addins.Extension(typeof(ISteppedLayer))]
-    public class ExampleLayer : ISteppedActiveLayer, IVisualizable
+    [Extension(typeof(ISteppedLayer))]
+    public class ExampleLayer : ScsService, IExampleLayer
     {
         private AgentSmith[] _agents;
         private const int TerrainSizeX = 100;
@@ -47,7 +46,7 @@ namespace ExampleLayer
 
         public long GetCurrentTick()
         {
-            throw new NotImplementedException();
+            return _currentTick;
         }
 
         public void SetCurrentTick(long currentTick)

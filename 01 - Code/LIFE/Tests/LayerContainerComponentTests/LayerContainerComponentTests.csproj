@@ -96,6 +96,10 @@
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
       <Name>MulticastAdapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
+      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
+      <Name>Scs</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

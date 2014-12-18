@@ -15,6 +15,7 @@ using System.Reflection;
 using CommonTypes.Types;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
+using Hik.Communication.ScsServices.Service;
 using LayerRegistry.Interfaces;
 using LifeAPI.Layer;
 using LNSConnector.Interface;
@@ -27,10 +28,14 @@ namespace LayerRegistry.Implementation {
         private IDictionary<Type, ILayer> _localLayers;
         private readonly ILayerNameService _layerNameService;
         private readonly NodeRegistryConfig _nodeRegistryConfig;
+        private List<IScsServiceApplication> _layerServers;
+        private int _layerServiceStartPort = 39999;
 
         public LayerRegistryUseCase(INodeRegistry nodeRegistry, NodeRegistryConfig nodeRegistryConfig)
         {
             _nodeRegistryConfig = nodeRegistryConfig;
+
+            _layerServers = new List<IScsServiceApplication>();
 
             // fetch SimulationManager Node from registry
             var simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
@@ -74,8 +79,23 @@ namespace LayerRegistry.Implementation {
             // store in Dict for local usage
             _localLayers.Add(layer.GetType(), layer);
 
+            // add service to SCS Server
+            var serversPort = _layerServiceStartPort++;
+            var layerType = layer.GetType();
+            // get first interface, is always the directly implemented interface
+            // TODO: maybe do more sophisticated stuff here!
+            var interfaceType = layerType.GetInterfaces()[0];
+
+            var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
+            var addServiceMethod = server.GetType().GetMethod("AddService");
+            var genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
+            genericAddServiceMethod.Invoke(server, new object[]{layer});
+
+            server.Start();
+            _layerServers.Add(server);
+
             // store LayerRegistryEntry in DHT for remote usage
-            _layerNameService.RegisterLayer(layer.GetType(),new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP,_nodeRegistryConfig.NodeEndPointPort , layer.GetType()));
+            _layerNameService.RegisterLayer(layer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
         }
 
         #endregion

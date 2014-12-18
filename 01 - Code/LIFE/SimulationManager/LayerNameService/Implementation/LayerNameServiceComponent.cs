@@ -4,6 +4,7 @@ using LNSConnector.TransportTypes;
 
 namespace LayerNameService.Implementation
 {
+
     public class LayerNameServiceComponent : ILayerNameService
     {
         private readonly ILayerNameService _layerNameServiceUseCase;
