@@ -24,7 +24,7 @@ namespace LayerRegistry.Implementation {
         #region ILayerRegistry Members
 
         public void RemoveLayerInstance(Type layerType) {
-            return _layerRegistryUseCase.RemoveLayerInstance(layerType);
+            _layerRegistryUseCase.RemoveLayerInstance(layerType);
         }
 
         public void ResetLayerRegistry() {

@@ -27,7 +27,7 @@ namespace LayerRegistry.Interfaces {
         void RemoveLayerInstance(Type layerType);
 
         /// <summary>
-        ///     Resets the whole LayerRegistry, loosing all implementations, statets and
+        ///     Resets the whole LayerRegistry, loosing all implementations, states and
         ///     remote endpoints.
         ///     CAUTION: This cannot be undone!
         /// </summary>

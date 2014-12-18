@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +24,7 @@ using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
-        private readonly IDictionary<Type, ILayer> _localLayers;
+        private IDictionary<Type, ILayer> _localLayers;
         private readonly ILayerNameService _layerNameService;
         private readonly NodeRegistryConfig _nodeRegistryConfig;
 
@@ -56,7 +57,11 @@ namespace LayerRegistry.Implementation {
         }
 
         public void ResetLayerRegistry() {
-            throw new NotImplementedException();
+            foreach (var localLayer in _localLayers)
+            {
+                _layerNameService.RemoveLayer(localLayer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType()));
+            }
+            _localLayers = new ConcurrentDictionary<Type, ILayer>();
         }
 
         public ILayer GetLayerInstance(Type layerType)
