@@ -29,13 +29,15 @@ namespace LayerRegistry.Implementation {
         private readonly ILayerNameService _layerNameService;
         private readonly NodeRegistryConfig _nodeRegistryConfig;
         private List<IScsServiceApplication> _layerServers;
-        private int _layerServiceStartPort = 39999;
+        private int _layerServiceStartPort;
 
         public LayerRegistryUseCase(INodeRegistry nodeRegistry, NodeRegistryConfig nodeRegistryConfig)
         {
             _nodeRegistryConfig = nodeRegistryConfig;
 
             _layerServers = new List<IScsServiceApplication>();
+
+            _layerServiceStartPort = nodeRegistryConfig.LayerServiceStartPort;
 
             // fetch SimulationManager Node from registry
             var simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
@@ -59,6 +61,7 @@ namespace LayerRegistry.Implementation {
             if (!_localLayers.ContainsKey(layerType)) return;
             _layerNameService.RemoveLayer(layerType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType));
             _localLayers.Remove(layerType);
+            _layerServiceStartPort--;
         }
 
         public void ResetLayerRegistry() {
@@ -83,8 +86,13 @@ namespace LayerRegistry.Implementation {
             var serversPort = _layerServiceStartPort++;
             var layerType = layer.GetType();
             // get first interface, is always the directly implemented interface
-            // TODO: maybe do more sophisticated stuff here!
-            var interfaceType = layerType.GetInterfaces()[0];
+            Type interfaceType = null;
+            foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof (ScsServiceAttribute) select @interface)
+            {
+                interfaceType = @interface;
+            }
+
+            if (interfaceType == null) { throw new SCSServiceAttributeHasNotBeenSpecifiedException("Please specifiy the SCSService attribute in your Layer's interface"); }
 
             var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
             var addServiceMethod = server.GetType().GetMethod("AddService");
@@ -125,6 +133,11 @@ namespace LayerRegistry.Implementation {
         #endregion
     }
 
+    [Serializable]
+    internal class SCSServiceAttributeHasNotBeenSpecifiedException : Exception
+    {
+        public SCSServiceAttributeHasNotBeenSpecifiedException(string msg) : base(msg){}
+    }
 
 
     [Serializable]
