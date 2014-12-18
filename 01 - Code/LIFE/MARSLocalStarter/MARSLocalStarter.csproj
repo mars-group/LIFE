@@ -111,6 +111,10 @@
       <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
       <Name>ConfigurationAdapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\LNSConnector\LNSConnector.csproj">
+      <Project>{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}</Project>
+      <Name>LNSConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\SMConnector\SMConnector.csproj">
       <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
       <Name>SMConnector</Name>

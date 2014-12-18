@@ -63,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\LNSConnector\LNSConnector.csproj">
+      <Project>{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}</Project>
+      <Name>LNSConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
