@@ -23,5 +23,7 @@ namespace LNSConnector.Interface
         /// <param name="layerType"></param>
         /// <param name="layerNameServiceEntry"></param>
         void RegisterLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry);
+
+        void RemoveLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry);
     }
 }

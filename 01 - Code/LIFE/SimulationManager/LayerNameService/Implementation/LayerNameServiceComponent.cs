@@ -22,5 +22,10 @@ namespace LayerNameService.Implementation
         {
             _layerNameServiceUseCase.RegisterLayer(layerType, layerNameServiceEntry);
         }
+
+        public void RemoveLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            _layerNameServiceUseCase.RemoveLayer(layerType, layerNameServiceEntry);
+        }
     }
 }

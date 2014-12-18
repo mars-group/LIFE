@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\LayerRegistryComponent.cs" />
-    <Compile Include="Implementation\LayerRegistryEntry.cs" />
     <Compile Include="Implementation\LayerRegistryUseCase.cs" />
     <Compile Include="Interfaces\ILayerRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

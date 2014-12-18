@@ -134,5 +134,10 @@ namespace SimulationManagerFacade.Implementation {
         {
             _layerNameService.RegisterLayer(layerType, layerNameServiceEntry);
         }
+
+        public void RemoveLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            _layerNameService.RemoveLayer(layerType, layerNameServiceEntry);
+        }
     }
 }

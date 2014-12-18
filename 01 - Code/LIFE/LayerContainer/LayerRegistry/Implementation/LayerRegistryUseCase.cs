@@ -25,16 +25,14 @@ namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
         private readonly IDictionary<Type, ILayer> _localLayers;
         private readonly ILayerNameService _layerNameService;
-        private readonly INodeRegistry _nodeRegistry;
         private readonly NodeRegistryConfig _nodeRegistryConfig;
 
         public LayerRegistryUseCase(INodeRegistry nodeRegistry, NodeRegistryConfig nodeRegistryConfig)
         {
-            _nodeRegistry = nodeRegistry;
             _nodeRegistryConfig = nodeRegistryConfig;
 
             // fetch SimulationManager Node from registry
-            var simManager = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
+            var simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
             if (simManager == null)
             {
                 throw new NoSimulationManagerPresentException("No SimulationManager is connected, please check your network configuration.");
@@ -51,8 +49,10 @@ namespace LayerRegistry.Implementation {
 
         #region ILayerRegistry Members
 
-        public ILayer RemoveLayerInstance(Type layerType) {
-            throw new NotImplementedException();
+        public void RemoveLayerInstance(Type layerType) {
+            if (!_localLayers.ContainsKey(layerType)) return;
+            _layerNameService.RemoveLayer(layerType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType));
+            _localLayers.Remove(layerType);
         }
 
         public void ResetLayerRegistry() {

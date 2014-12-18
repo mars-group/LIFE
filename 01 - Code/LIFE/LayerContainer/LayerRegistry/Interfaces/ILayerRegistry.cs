@@ -24,7 +24,7 @@ namespace LayerRegistry.Interfaces {
         /// <param name="layerType"></param>
         /// <param name="layerID"></param>
         /// <returns>The removed ILayer, Null if no Layer could be found.</returns>
-        ILayer RemoveLayerInstance(Type layerType);
+        void RemoveLayerInstance(Type layerType);
 
         /// <summary>
         ///     Resets the whole LayerRegistry, loosing all implementations, statets and
