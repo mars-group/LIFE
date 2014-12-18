@@ -54,7 +54,6 @@
     <Compile Include="Implementation\LayerRegistryComponent.cs" />
     <Compile Include="Implementation\LayerRegistryEntry.cs" />
     <Compile Include="Implementation\LayerRegistryUseCase.cs" />
-    <Compile Include="Interfaces\Config\LayerRegistryConfig.cs" />
     <Compile Include="Interfaces\ILayerRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,6 +69,14 @@
     <ProjectReference Include="..\..\Common\DistributedKeyValueStore\DistributedKeyValueStore.csproj">
       <Project>{AD32517C-230C-435B-953D-BD96732927B8}</Project>
       <Name>DistributedKeyValueStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\LNSConnector\LNSConnector.csproj">
+      <Project>{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}</Project>
+      <Name>LNSConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Name>NodeRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>

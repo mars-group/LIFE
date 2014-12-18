@@ -77,7 +77,6 @@ namespace LayerContainerFacade.Interfaces {
                 LayerContainerSettings config = Configuration.Load<LayerContainerSettings>();
                 _containerBuilder.RegisterInstance(config);
                 _containerBuilder.RegisterInstance(config.NodeRegistryConfig);
-                _containerBuilder.RegisterInstance(config.LayerRegistryConfig);
                 _containerBuilder.RegisterInstance(config.GlobalConfig);
                 _containerBuilder.RegisterInstance(config.MulticastSenderConfig);
 

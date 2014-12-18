@@ -12,7 +12,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using AppSettingsManager;
 using CommonTypes.Types;
-using LayerRegistry.Interfaces.Config;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
@@ -20,7 +19,6 @@ namespace LayerContainerShared {
     [Serializable]
     public class LayerContainerSettings {
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
-        public LayerRegistryConfig LayerRegistryConfig { get; set; }
 
         public GlobalConfig GlobalConfig { get; set; }
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
@@ -36,7 +34,6 @@ namespace LayerContainerShared {
             }
 
             NodeRegistryConfig = new NodeRegistryConfig(NodeType.LayerContainer, "LC-1", ipAddress, 60100, true);
-            LayerRegistryConfig = new LayerRegistryConfig();
             GlobalConfig = new GlobalConfig();
             MulticastSenderConfig = new MulticastSenderConfig();
         }

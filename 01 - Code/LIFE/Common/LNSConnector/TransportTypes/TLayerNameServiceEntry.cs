@@ -2,6 +2,7 @@
 
 namespace LNSConnector.TransportTypes
 {
+    [Serializable]
     public class TLayerNameServiceEntry
     {
         public string IpAddress { get; private set; }
