@@ -8,49 +8,73 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DistributedKeyValueStore.Interface;
+using CommonTypes.Types;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
+using Hik.Communication.ScsServices.Service;
 using LayerRegistry.Interfaces;
-using LayerRegistry.Interfaces.Config;
 using LifeAPI.Layer;
-using Newtonsoft.Json;
+using LNSConnector.Interface;
+using LNSConnector.TransportTypes;
+using NodeRegistry.Exceptions;
+using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
-        private readonly IDistributedKeyValueStore _distributedKeyValueStore;
-        private readonly LayerRegistryConfig _layerRegistryConfig;
-        private readonly string _ownIpAddress;
-        private readonly int _ownPort;
-        private readonly IDictionary<Type, ILayer> _localLayers;
+        private IDictionary<Type, ILayer> _localLayers;
+        private readonly ILayerNameService _layerNameService;
+        private readonly NodeRegistryConfig _nodeRegistryConfig;
+        private List<IScsServiceApplication> _layerServers;
+        private int _layerServiceStartPort;
 
-        public LayerRegistryUseCase
-            (IDistributedKeyValueStore distributedKeyValueStore, LayerRegistryConfig layerRegistryConfig) {
-            _distributedKeyValueStore = distributedKeyValueStore;
-            _layerRegistryConfig = layerRegistryConfig;
+        public LayerRegistryUseCase(INodeRegistry nodeRegistry, NodeRegistryConfig nodeRegistryConfig)
+        {
+            _nodeRegistryConfig = nodeRegistryConfig;
+
+            _layerServers = new List<IScsServiceApplication>();
+
+            _layerServiceStartPort = nodeRegistryConfig.LayerServiceStartPort;
+
+            // fetch SimulationManager Node from registry
+            var simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
+            if (simManager == null)
+            {
+                throw new NoSimulationManagerPresentException("No SimulationManager is connected, please check your network configuration.");
+            }
+
+            // now create layerNameService Stub
+            _layerNameService =
+                ScsServiceClientBuilder.CreateClient<ILayerNameService>(
+                        new ScsTcpEndPoint(simManager.NodeEndpoint.IpAddress, simManager.NodeEndpoint.Port)
+                ).ServiceProxy;
 
             _localLayers = new Dictionary<Type, ILayer>();
-
-            _ownIpAddress = _layerRegistryConfig.MainNetworkAddress;
-            _ownPort = _layerRegistryConfig.MainNetworkPort;
         }
 
         #region ILayerRegistry Members
 
-        public ILayer RemoveLayerInstance(Type layerType) {
-            throw new NotImplementedException();
+        public void RemoveLayerInstance(Type layerType) {
+            if (!_localLayers.ContainsKey(layerType)) return;
+            _layerNameService.RemoveLayer(layerType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType));
+            _localLayers.Remove(layerType);
+            _layerServiceStartPort--;
         }
 
         public void ResetLayerRegistry() {
-            throw new NotImplementedException();
+            foreach (var localLayer in _localLayers)
+            {
+                _layerNameService.RemoveLayer(localLayer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType()));
+            }
+            _localLayers = new ConcurrentDictionary<Type, ILayer>();
         }
 
-        public ILayer GetLayerInstance(Type layerType) {
-            if (_localLayers.ContainsKey(layerType)) return _localLayers[layerType];
-            return GetRemoteLayerInstance(_distributedKeyValueStore.Get(layerType.ToString()), layerType);
+        public ILayer GetLayerInstance(Type layerType)
+        {
+            return _localLayers.ContainsKey(layerType) ? _localLayers[layerType] : GetRemoteLayerInstance(layerType);
         }
 
 
@@ -58,9 +82,28 @@ namespace LayerRegistry.Implementation {
             // store in Dict for local usage
             _localLayers.Add(layer.GetType(), layer);
 
+            // add service to SCS Server
+            var serversPort = _layerServiceStartPort++;
+            var layerType = layer.GetType();
+            // get first interface, is always the directly implemented interface
+            Type interfaceType = null;
+            foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof (ScsServiceAttribute) select @interface)
+            {
+                interfaceType = @interface;
+            }
+
+            if (interfaceType == null) { throw new SCSServiceAttributeHasNotBeenSpecifiedException("Please specifiy the SCSService attribute in your Layer's interface"); }
+
+            var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
+            var addServiceMethod = server.GetType().GetMethod("AddService");
+            var genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
+            genericAddServiceMethod.Invoke(server, new object[]{layer});
+
+            server.Start();
+            _layerServers.Add(server);
+
             // store LayerRegistryEntry in DHT for remote usage
-            string value = JsonConvert.SerializeObject(new LayerRegistryEntry(_ownIpAddress, _ownPort, layer.GetType()));
-            _distributedKeyValueStore.Put(layer.GetType().ToString(), JsonConvert.SerializeObject(value));
+            _layerNameService.RegisterLayer(layer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
         }
 
         #endregion
@@ -75,11 +118,9 @@ namespace LayerRegistry.Implementation {
         /// <param name="registryEntries"></param>
         /// <param name="layerType"></param>
         /// <returns></returns>
-        private static ILayer GetRemoteLayerInstance(ICollection<string> registryEntries, Type layerType) {
-            if (registryEntries.Count <= 0) throw new LayerInstanceNotRegisteredException();
-
-            LayerRegistryEntry entry = JsonConvert.DeserializeObject<LayerRegistryEntry>(registryEntries.First());
-
+        private ILayer GetRemoteLayerInstance(Type layerType)
+        {
+            var entry = _layerNameService.ResolveLayer(layerType);
             MethodInfo createClientMethod = typeof (ScsServiceClientBuilder).GetMethod("CreateClient");
             MethodInfo genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
             dynamic scsStub = genericCreateClientMethod.Invoke
@@ -92,5 +133,13 @@ namespace LayerRegistry.Implementation {
         #endregion
     }
 
+    [Serializable]
+    internal class SCSServiceAttributeHasNotBeenSpecifiedException : Exception
+    {
+        public SCSServiceAttributeHasNotBeenSpecifiedException(string msg) : base(msg){}
+    }
+
+
+    [Serializable]
     internal class LayerInstanceNotRegisteredException : Exception {}
 }

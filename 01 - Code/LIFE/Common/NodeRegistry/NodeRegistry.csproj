@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\NoSimulationManagerPresentException.cs" />
     <Compile Include="Implementation\Messages\AbstractNodeRegistryMessage.cs" />
     <Compile Include="Implementation\Messages\NodeRegistryHeartBeatMessage.cs" />
     <Compile Include="Implementation\Messages\Factory\NodeRegistryMessageFactory.cs" />

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Odbc;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
@@ -13,10 +7,8 @@ using Hik.Collections;
 using log4net;
 using LoggerFactory.Interface;
 using MulticastAdapter.Interface;
-using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Implementation.Messages.Factory;
 using Timer = System.Timers.Timer;
-
 
 [assembly: InternalsVisibleTo("NodeRegistryTest")]
 
@@ -35,18 +27,18 @@ namespace NodeRegistry.Implementation.UseCases
         /// </summary>
         private ThreadSafeSortedList<TNodeInformation, Timer> _heartBeatTimers;
 
-        private int _heartBeatInterval;
+        private readonly int _heartBeatInterval;
 
-        private int _heartBeatTimeOutMultiplier;
+        private readonly int _heartBeatTimeOutMultiplier;
 
-        private IMulticastAdapter _multicastAdapter;
+        private readonly IMulticastAdapter _multicastAdapter;
 
-        private TNodeInformation _localNodeInformation;
+        private readonly TNodeInformation _localNodeInformation;
 
         private Thread _heartBeatSenderThread;
-        private Timer _heartBeatSenderTimer;
+        private readonly Timer _heartBeatSenderTimer;
 
-        private ILog Logger;
+        private readonly ILog Logger;
 
 
 
@@ -122,13 +114,11 @@ namespace NodeRegistry.Implementation.UseCases
         {
             var timer = new Timer(_heartBeatInterval * _heartBeatTimeOutMultiplier) { AutoReset = false };
 			// add event to timer
-            timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs args)
-                {
-                    Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
-                    _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
-                    _heartBeatTimers.Remove(nodeInformation);
-                }
-            );
+            timer.Elapsed += delegate {
+                Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
+                _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
+                _heartBeatTimers.Remove(nodeInformation);
+            };
 
             return timer;
         }

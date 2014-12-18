@@ -30,7 +30,7 @@ namespace LCConnector.TransportTypes {
     [Serializable]
     public class AgentInitConfig
     {
-                /// <summary>
+        /// <summary>
         /// The name of the agent
         /// </summary>
         public string AgentName { get; set; }

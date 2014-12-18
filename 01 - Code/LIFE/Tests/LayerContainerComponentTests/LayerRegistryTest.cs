@@ -1,7 +1,6 @@
-﻿using DistributedKeyValueStore.Implementation;
+﻿using AppSettingsManager;
 using LayerRegistry.Implementation;
 using LayerRegistry.Interfaces;
-using LayerRegistry.Interfaces.Config;
 using LifeAPI.Layer;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
@@ -10,8 +9,6 @@ using NodeRegistry.Interface;
 using NUnit.Framework;
 
 namespace LayerContainerComponentTests {
-    using AppSettingsManager;
-
     [TestFixture]
     public class LayerRegistryTest {
         private ILayerRegistry _layerRegistry;
@@ -20,13 +17,11 @@ namespace LayerContainerComponentTests {
 
         [SetUp]
         public void Init() {
-
+            var nodeREgistryConfig = new NodeRegistryConfig();
             _layerRegistry = new LayerRegistryComponent(
-                new DistributedKeyValueStoreComponent(
                     new NodeRegistryComponent(
-                        new MulticastAdapterComponent(new GlobalConfig(),new MulticastSenderConfig()), new NodeRegistryConfig())),
-                        new LayerRegistryConfig()
-                        );
+                        new MulticastAdapterComponent(new GlobalConfig(), new MulticastSenderConfig()), nodeREgistryConfig),
+                        nodeREgistryConfig);
             _layer = new ExampleLayer.ExampleLayer();
         }
 

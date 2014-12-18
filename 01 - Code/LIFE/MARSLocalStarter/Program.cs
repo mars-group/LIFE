@@ -15,8 +15,6 @@ namespace MARSLocalStarter
 {
     public class Program
     {
-
-
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
         private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)

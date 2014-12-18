@@ -7,7 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
-using System;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 

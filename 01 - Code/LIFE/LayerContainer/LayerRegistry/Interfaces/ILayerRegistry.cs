@@ -24,10 +24,10 @@ namespace LayerRegistry.Interfaces {
         /// <param name="layerType"></param>
         /// <param name="layerID"></param>
         /// <returns>The removed ILayer, Null if no Layer could be found.</returns>
-        ILayer RemoveLayerInstance(Type layerType);
+        void RemoveLayerInstance(Type layerType);
 
         /// <summary>
-        ///     Resets the whole LayerRegistry, loosing all implementations, statets and
+        ///     Resets the whole LayerRegistry, loosing all implementations, states and
         ///     remote endpoints.
         ///     CAUTION: This cannot be undone!
         /// </summary>
@@ -36,7 +36,7 @@ namespace LayerRegistry.Interfaces {
         /// <summary>
         ///     Returns an instance of parameterType either as local object or as a stub
         /// </summary>
-        /// <param name="parameterType"></param>
+        /// <param name="layerType"></param>
         /// <returns></returns>
         ILayer GetLayerInstance(Type layerType);
 

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
+using LNSConnector.Interface;
+using LNSConnector.TransportTypes;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
-
 using SimulationManagerFacade.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
@@ -27,19 +28,23 @@ namespace SimulationManagerFacade.Implementation {
         private readonly IRuntimeEnvironment _runtimeEnvironment;
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
+        private readonly ILayerNameService _layerNameService;
         private IScsServiceApplication _server;
 
         public SimulationManagerApplicationCoreComponent(SimulationManagerSettings settings,
                                         IRuntimeEnvironment runtimeEnvironment,
                                         IModelContainer modelContainer,
-                                        INodeRegistry nodeRegistry) {
+                                        INodeRegistry nodeRegistry,
+                                        ILayerNameService layerNameService) {
             _runtimeEnvironment = runtimeEnvironment;
             _modelContainer = modelContainer;
             _nodeRegistry = nodeRegistry;
+            _layerNameService = layerNameService;
 
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
             _server.AddService<ISimulationManager, SimulationManagerApplicationCoreComponent>(this);
+            _server.AddService<ILayerNameService, SimulationManagerApplicationCoreComponent>(this);
 
             _server.Start();
         }
@@ -119,5 +124,20 @@ namespace SimulationManagerFacade.Implementation {
         }
 
         #endregion
+
+        public TLayerNameServiceEntry ResolveLayer(Type layerType)
+        {
+            return _layerNameService.ResolveLayer(layerType);
+        }
+
+        public void RegisterLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            _layerNameService.RegisterLayer(layerType, layerNameServiceEntry);
+        }
+
+        public void RemoveLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            _layerNameService.RemoveLayer(layerType, layerNameServiceEntry);
+        }
     }
 }
