@@ -82,28 +82,33 @@ namespace LayerRegistry.Implementation {
             // store in Dict for local usage
             _localLayers.Add(layer.GetType(), layer);
 
-            // add service to SCS Server
-            var serversPort = _layerServiceStartPort++;
+            // check whether this layer should create a service endpoint and be remotely accessible or not
+            
             var layerType = layer.GetType();
             // get first interface, is always the directly implemented interface
             Type interfaceType = null;
-            foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof (ScsServiceAttribute) select @interface)
+            foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
             {
                 interfaceType = @interface;
             }
 
-            if (interfaceType == null) { throw new SCSServiceAttributeHasNotBeenSpecifiedException("Please specifiy the SCSService attribute in your Layer's interface"); }
+            // if interfaceType is not null, we can create a service endpoint, so do it.
+            if (interfaceType != null) {
+                // add service to SCS Server
+                var serversPort = _layerServiceStartPort++;
 
-            var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
-            var addServiceMethod = server.GetType().GetMethod("AddService");
-            var genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
-            genericAddServiceMethod.Invoke(server, new object[]{layer});
 
-            server.Start();
-            _layerServers.Add(server);
+                var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
+                var addServiceMethod = server.GetType().GetMethod("AddService");
+                var genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
+                genericAddServiceMethod.Invoke(server, new object[]{layer});
 
-            // store LayerRegistryEntry in DHT for remote usage
-            _layerNameService.RegisterLayer(layer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
+                server.Start();
+                _layerServers.Add(server);
+
+                // store LayerRegistryEntry in DHT for remote usage
+                _layerNameService.RegisterLayer(layer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
+            }
         }
 
         #endregion
