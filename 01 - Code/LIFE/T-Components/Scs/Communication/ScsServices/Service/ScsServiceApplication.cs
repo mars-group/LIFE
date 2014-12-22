@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Hik.Collections;
+using CustomCollections.Collections;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.Scs.Server;
@@ -384,6 +383,7 @@ namespace Hik.Communication.ScsServices.Service {
             /// <param name="propertyChangedEventArgs"></param>
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs) {
                 // send PropertyChangedMessage to all subscribed clients
+                // TODO: change or adapt this for Multicast Messaging (maybe not possible...)
                 Parallel.ForEach(_clients.GetAllItems(), messenger => {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod()
                         .Invoke(Service, null);

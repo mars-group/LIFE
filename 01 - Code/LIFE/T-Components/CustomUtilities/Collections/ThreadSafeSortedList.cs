@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace Hik.Collections {
+namespace CustomCollections.Collections {
     /// <summary>
     ///     This class is used to store key-value based items in a thread safe manner.
     ///     It uses System.Collections.Generic.SortedList internally.

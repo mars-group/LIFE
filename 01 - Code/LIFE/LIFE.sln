@@ -141,6 +141,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerNameService", "Simulat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LNSConnector", "Common\LNSConnector\LNSConnector.csproj", "{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentShadowingService", "R-Components\AgentShadowingService\AgentShadowingService.csproj", "{17064DB2-8976-439F-A697-AD8ACDB975CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASC", "T-Components\ASC\ASC.csproj", "{6BEC24D9-FD97-4D66-BCFF-8671343B798E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomCollections", "CustomCollections\CustomCollections.csproj", "{6124943B-80A6-4594-869E-5711E21F9AEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -686,6 +692,36 @@ Global
 		{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}.Release|x86.ActiveCfg = Release|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|x86.ActiveCfg = Release|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -745,6 +781,9 @@ Global
 		{9DC34799-0130-4A2B-962D-946CCA54DD9E} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 		{AEC2A321-CE09-4A06-8616-8E57A685E610} = {060A5DF3-4C49-402B-9B3F-142A9ECD30B1}
 		{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77} = {B43F18BD-D65F-4604-AC98-1A61DC77CDFE}
+		{17064DB2-8976-439F-A697-AD8ACDB975CC} = {E873F75D-2C07-4688-8635-075D60A32574}
+		{6BEC24D9-FD97-4D66-BCFF-8671343B798E} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
+		{6124943B-80A6-4594-869E-5711E21F9AEE} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj

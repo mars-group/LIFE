@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\ThreadSafeSortedList.cs" />
     <Compile Include="Communication\ScsServices\Client\IScsServiceClient.cs" />
     <Compile Include="Communication\ScsServices\Client\ScsServiceClient.cs" />
     <Compile Include="Communication\ScsServices\Client\ScsServiceClientBuilder.cs" />
@@ -120,7 +119,6 @@
     <Compile Include="Communication\Scs\Server\Udp\ScsUdpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\SequentialItemProcessor.cs" />
-    <Compile Include="Collections\ThreadSafeList.cs" />
     <Compile Include="Threading\Timer.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using Hik.Collections;
+using CustomCollections.Collections;
 using log4net;
 using LoggerFactory.Interface;
 using MulticastAdapter.Interface;

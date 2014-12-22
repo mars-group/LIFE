@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using Hik.Collections;
-using NodeRegistry.Interface;
+using CustomCollections.Collections;
+
 
 namespace NodeRegistry.Implementation.UseCases
 {
