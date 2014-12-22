@@ -1,8 +1,7 @@
 ﻿using System;
+using ASC.Communication.Scs.Communication.Channels;
+using ASC.Communication.Scs.Communication.Protocols;
 using CustomUtilities.Collections;
-using Hik.Communication.Scs.Communication.Channels;
-using Hik.Communication.Scs.Communication.Protocols;
-using Hik.Communication.Scs.Server;
 
 namespace ASC.Communication.Scs.Server {
     /// <summary>

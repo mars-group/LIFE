@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hik.Communication.Scs.Client.Tcp {
+namespace ASC.Communication.Scs.Client.Tcp {
     /// <summary>
     ///     This class is used to simplify TCP socket operations.
     /// </summary>

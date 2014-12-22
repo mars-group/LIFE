@@ -1,9 +1,9 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Protocols;
+using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Communication.Channels {
+namespace ASC.Communication.Scs.Communication.Channels {
     /// <summary>
     ///     This class provides base functionality for all communication channel classes.
     /// </summary>

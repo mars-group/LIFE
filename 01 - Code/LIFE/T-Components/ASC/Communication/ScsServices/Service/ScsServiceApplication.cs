@@ -4,12 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messengers;
+using ASC.Communication.Scs.Server;
+using ASC.Communication.ScsServices.Communication.Messages;
 using CustomUtilities.Collections;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Messengers;
-using Hik.Communication.Scs.Server;
-using Hik.Communication.ScsServices.Communication.Messages;
-using Hik.Communication.ScsServices.Service;
 
 namespace ASC.Communication.ScsServices.Service {
     /// <summary>

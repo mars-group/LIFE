@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 
-namespace Hik.Communication.Scs.Communication.Channels.Tcp {
+namespace ASC.Communication.Scs.Communication.Channels.Tcp {
     /// <summary>
     ///     This class is used to listen and accept incoming TCP
     ///     connection requests on a TCP port.

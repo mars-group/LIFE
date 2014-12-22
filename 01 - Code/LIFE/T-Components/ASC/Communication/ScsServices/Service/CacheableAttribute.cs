@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Indicates that the return type of a Method shall be cached by its stub.
     ///     Works only on Getter Methods.

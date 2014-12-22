@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Base class for all services that is serviced by IScsServiceApplication.
     ///     A class must be derived from ScsService to serve as a SCS service.

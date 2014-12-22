@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Reflection;
-using Hik.Communication.Scs.Client;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Messengers;
-using Hik.Communication.ScsServices.Communication;
-using Hik.Communication.ScsServices.Communication.Messages;
+using ASC.Communication.Scs.Client;
+using ASC.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messengers;
+using ASC.Communication.ScsServices.Communication;
+using ASC.Communication.ScsServices.Communication.Messages;
 
-namespace Hik.Communication.ScsServices.Client {
+namespace ASC.Communication.ScsServices.Client {
     /// <summary>
     ///     Represents a service client that consumes a SCS service.
     /// </summary>

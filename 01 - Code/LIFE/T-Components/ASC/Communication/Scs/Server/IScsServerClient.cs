@@ -1,9 +1,9 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Communication.Messengers;
+using ASC.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.Messengers;
 
-namespace Hik.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     Represents a client from a perspective of a server.
     /// </summary>

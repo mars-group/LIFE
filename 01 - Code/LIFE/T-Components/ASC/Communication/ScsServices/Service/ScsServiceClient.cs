@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Runtime.Remoting.Proxies;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Communication.Messengers;
-using Hik.Communication.Scs.Server;
-using Hik.Communication.ScsServices.Communication;
+using ASC.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.Messengers;
+using ASC.Communication.Scs.Server;
+using ASC.Communication.ScsServices.Communication;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Implements IScsServiceClient.
     ///     It is used to manage and monitor a service client.

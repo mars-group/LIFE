@@ -1,8 +1,8 @@
 ﻿using System;
+using ASC.Communication.Scs.Communication.Protocols;
 using CustomUtilities.Collections;
-using Hik.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     Represents a SCS server that is used to accept and manage client connections.
     /// </summary>

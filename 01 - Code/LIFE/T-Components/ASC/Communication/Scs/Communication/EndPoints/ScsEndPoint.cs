@@ -1,10 +1,10 @@
 ﻿using System;
-using Hik.Communication.Scs.Client;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
-using Hik.Communication.Scs.Communication.EndPoints.Udp;
-using Hik.Communication.Scs.Server;
+using ASC.Communication.Scs.Client;
+using ASC.Communication.Scs.Communication.EndPoints.Tcp;
+using ASC.Communication.Scs.Communication.EndPoints.Udp;
+using ASC.Communication.Scs.Server;
 
-namespace Hik.Communication.Scs.Communication.EndPoints {
+namespace ASC.Communication.Scs.Communication.EndPoints {
     /// <summary>
     ///     Represents a server side end point in SCS.
     /// </summary>

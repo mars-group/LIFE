@@ -1,7 +1,7 @@
-﻿using Hik.Communication.Scs.Communication.Messengers;
-using Hik.Communication.Scs.Server;
+﻿using ASC.Communication.Scs.Communication.Messengers;
+using ASC.Communication.Scs.Server;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     This class is used to create service client objects that is used in server-side.
     /// </summary>

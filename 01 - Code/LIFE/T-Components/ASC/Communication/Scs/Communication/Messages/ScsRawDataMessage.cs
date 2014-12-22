@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.Scs.Communication.Messages {
+namespace ASC.Communication.Scs.Communication.Messages {
     /// <summary>
     ///     This message is used to send/receive a raw byte array as message data.
     /// </summary>

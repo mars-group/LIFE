@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Protocols;
-using Hik.Communication.ScsServices.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.ScsServices.Communication.Messages;
 using ProtoBuf;
 using ProtoBuf.Meta;
 

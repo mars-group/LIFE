@@ -1,8 +1,8 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Protocols;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Communication.Messengers {
+namespace ASC.Communication.Scs.Communication.Messengers {
     /// <summary>
     ///     Represents an object that can send and receive messages.
     /// </summary>

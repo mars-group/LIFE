@@ -1,10 +1,10 @@
 ﻿using System;
-using Hik.Communication.Scs.Client;
-using Hik.Communication.Scs.Client.Udp;
-using Hik.Communication.Scs.Server;
-using Hik.Communication.Scs.Server.Udp;
+using ASC.Communication.Scs.Client;
+using ASC.Communication.Scs.Client.Udp;
+using ASC.Communication.Scs.Server;
+using ASC.Communication.Scs.Server.Udp;
 
-namespace Hik.Communication.Scs.Communication.EndPoints.Udp {
+namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
     public class ScsUdpEndPoint : ScsEndPoint {
         public string IpAddress { get; private set; }
 

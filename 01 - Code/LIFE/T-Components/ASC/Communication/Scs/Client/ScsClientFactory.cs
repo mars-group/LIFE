@@ -1,6 +1,6 @@
-﻿using Hik.Communication.Scs.Communication.EndPoints;
+﻿using ASC.Communication.Scs.Communication.EndPoints;
 
-namespace Hik.Communication.Scs.Client {
+namespace ASC.Communication.Scs.Client {
     /// <summary>
     ///     This class is used to create SCS Clients to connect to a SCS server.
     /// </summary>

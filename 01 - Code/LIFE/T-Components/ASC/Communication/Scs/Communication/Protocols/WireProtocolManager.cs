@@ -1,6 +1,6 @@
-﻿using Hik.Communication.Scs.Communication.Protocols.BinarySerialization;
+﻿using ASC.Communication.Scs.Communication.Protocols.BinarySerialization;
 
-namespace Hik.Communication.Scs.Communication.Protocols {
+namespace ASC.Communication.Scs.Communication.Protocols {
     /// <summary>
     ///     This class is used to get default protocols.
     /// </summary>

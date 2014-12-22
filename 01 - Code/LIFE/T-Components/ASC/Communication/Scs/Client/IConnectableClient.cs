@@ -1,7 +1,7 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication;
 
-namespace Hik.Communication.Scs.Client {
+namespace ASC.Communication.Scs.Client {
     /// <summary>
     ///     Represents a client for SCS servers.
     /// </summary>

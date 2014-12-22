@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
-using Hik.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.EndPoints.Tcp;
+using ASC.Communication.Scs.Communication.Messages;
+using Hik.Communication.Scs.Communication;
 
-namespace Hik.Communication.Scs.Communication.Channels.Tcp {
+namespace ASC.Communication.Scs.Communication.Channels.Tcp {
     /// <summary>
     ///     This class is used to communicate with a remote application over TCP/IP protocol.
     /// </summary>

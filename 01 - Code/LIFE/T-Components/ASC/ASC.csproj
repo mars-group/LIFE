@@ -67,7 +67,7 @@
     <Compile Include="Communication\Scs\Client\ClientReConnecter.cs" />
     <Compile Include="Communication\Scs\Client\IConnectableClient.cs" />
     <Compile Include="Communication\Scs\Client\IScsClient.cs" />
-    <Compile Include="Communication\Scs\Client\ScsClientBase.cs" />
+    <Compile Include="Communication\Scs\Client\SscClientBase.cs" />
     <Compile Include="Communication\Scs\Client\ScsClientFactory.cs" />
     <Compile Include="Communication\Scs\Client\Tcp\ScsTcpClient.cs" />
     <Compile Include="Communication\Scs\Client\Tcp\TcpHelper.cs" />
@@ -113,8 +113,6 @@
     <Compile Include="Communication\Scs\Server\Tcp\ScsTcpServer.cs" />
     <Compile Include="Communication\Scs\Server\Udp\ScsUdpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Threading\SequentialItemProcessor.cs" />
-    <Compile Include="Threading\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

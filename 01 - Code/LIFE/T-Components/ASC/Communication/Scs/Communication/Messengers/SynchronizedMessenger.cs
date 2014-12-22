@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Hik.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messengers;
 
 namespace Hik.Communication.Scs.Communication.Messengers {
     /// <summary>

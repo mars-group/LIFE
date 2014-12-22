@@ -1,4 +1,4 @@
-﻿namespace Hik.Communication.Scs.Communication.Protocols {
+﻿namespace ASC.Communication.Scs.Communication.Protocols {
     /// <summary>
     ///     Defines a Wire Protocol Factory class that is used to create Wire Protocol objects.
     /// </summary>

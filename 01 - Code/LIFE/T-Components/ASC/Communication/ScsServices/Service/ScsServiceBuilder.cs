@@ -1,8 +1,7 @@
-﻿using ASC.Communication.ScsServices.Service;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Server;
+﻿using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Server;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     This class is used to build ScsService applications.
     /// </summary>

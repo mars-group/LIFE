@@ -1,7 +1,7 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.ScsServices.Communication.Messages {
+namespace ASC.Communication.ScsServices.Communication.Messages {
     /// <summary>
     ///     This message is sent to invoke a method of a remote application.
     /// </summary>

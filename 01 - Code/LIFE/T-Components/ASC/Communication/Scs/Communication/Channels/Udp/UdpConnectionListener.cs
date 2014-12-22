@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ASC.Communication.Scs.Communication.Channels.Udp;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Communication.EndPoints.Udp;
+﻿using ASC.Communication.Scs.Communication.EndPoints.Udp;
 
-namespace Hik.Communication.Scs.Communication.Channels.Udp
+namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
     /// <summary>
     /// Will just raise the OnCommunicationChannelconnected Event to fullful the 

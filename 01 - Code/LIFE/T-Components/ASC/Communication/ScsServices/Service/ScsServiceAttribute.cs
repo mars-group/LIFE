@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Any SCS Service interface class must have this attribute.
     /// </summary>

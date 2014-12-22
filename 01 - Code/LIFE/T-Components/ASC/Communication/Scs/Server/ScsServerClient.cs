@@ -1,11 +1,11 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.Channels;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Protocols;
+using ASC.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication.Channels;
+using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     This class represents a client in server side.
     /// </summary>

@@ -1,6 +1,4 @@
-﻿using ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization;
-
-namespace Hik.Communication.Scs.Communication.Protocols.ProtobufSerialization {
+﻿namespace ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization {
     internal class ProtobufSerializationProtocolFactory : IScsWireProtocolFactory {
         public IScsWireProtocol CreateWireProtocol() {
             return new ProtobufSerializationProtocol();

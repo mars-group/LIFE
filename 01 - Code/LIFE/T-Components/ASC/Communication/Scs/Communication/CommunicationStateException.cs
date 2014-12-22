@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Hik.Communication.Scs.Communication {
+namespace ASC.Communication.Scs.Communication {
     /// <summary>
     ///     This application is thrown if communication is not expected state.
     /// </summary>

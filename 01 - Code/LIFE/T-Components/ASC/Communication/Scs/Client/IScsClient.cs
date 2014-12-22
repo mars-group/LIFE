@@ -1,6 +1,7 @@
-﻿using Hik.Communication.Scs.Communication.Messengers;
+﻿using ASC.Communication.Scs.Communication.Messengers;
+using Hik.Communication.Scs.Communication.Messengers;
 
-namespace Hik.Communication.Scs.Client {
+namespace ASC.Communication.Scs.Client {
     /// <summary>
     ///     Represents a client to connect to server.
     /// </summary>

@@ -1,9 +1,8 @@
-﻿using ASC.Communication.Scs.Server;
-using Hik.Communication.Scs.Communication.Channels;
-using Hik.Communication.Scs.Communication.Channels.Udp;
-using Hik.Communication.Scs.Communication.EndPoints.Udp;
+﻿using ASC.Communication.Scs.Communication.Channels;
+using ASC.Communication.Scs.Communication.Channels.Udp;
+using ASC.Communication.Scs.Communication.EndPoints.Udp;
 
-namespace Hik.Communication.Scs.Server.Udp
+namespace ASC.Communication.Scs.Server.Udp
 {
     class ScsUdpServer : ScsServerBase
     {

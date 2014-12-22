@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Hik.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.Scs.Communication.Protocols {
+namespace ASC.Communication.Scs.Communication.Protocols {
     /// <summary>
     ///     Represents a byte-level communication protocol between applications.
     /// </summary>

@@ -1,8 +1,9 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication;
-using Hik.Threading;
+using ASC.Communication.Scs.Communication;
+using CustomUtilities.Threading;
 
-namespace Hik.Communication.Scs.Client {
+
+namespace ASC.Communication.Scs.Client {
     /// <summary>
     ///     This class is used to automatically re-connect to server if disconnected.
     ///     It attempts to reconnect to server periodically until connection established.

@@ -1,6 +1,6 @@
-﻿using Hik.Communication.Scs.Client;
+﻿using ASC.Communication.Scs.Client;
 
-namespace Hik.Communication.ScsServices.Client {
+namespace ASC.Communication.ScsServices.Client {
     /// <summary>
     ///     Represents a service client that consumes a SCS service.
     /// </summary>

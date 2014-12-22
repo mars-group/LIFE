@@ -1,7 +1,7 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.ScsServices.Communication.Messages {
+namespace ASC.Communication.ScsServices.Communication.Messages {
     /// <summary>
     ///     This message is sent as response message to a ScsRemoteInvokeMessage.
     ///     It is used to send return value of method invocation.

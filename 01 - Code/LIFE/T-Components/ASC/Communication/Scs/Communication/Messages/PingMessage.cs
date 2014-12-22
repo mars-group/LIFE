@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.Scs.Communication.Messages {
+namespace ASC.Communication.Scs.Communication.Messages {
     /// <summary>
     ///     This message is used to send/receive ping messages.
     ///     Ping messages is used to keep connection alive between server and client.

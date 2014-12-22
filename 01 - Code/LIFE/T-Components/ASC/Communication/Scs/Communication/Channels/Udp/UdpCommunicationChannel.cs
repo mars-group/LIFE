@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AppSettingsManager;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.Channels;
-using Hik.Communication.Scs.Communication.EndPoints;
-using Hik.Communication.Scs.Communication.EndPoints.Udp;
-using Hik.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.EndPoints.Udp;
+using ASC.Communication.Scs.Communication.Messages;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
 

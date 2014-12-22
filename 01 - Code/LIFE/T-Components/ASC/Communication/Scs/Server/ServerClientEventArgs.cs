@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     Stores client information to be used by an event.
     /// </summary>

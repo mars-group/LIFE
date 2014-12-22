@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.Scs.Communication.Channels {
+namespace ASC.Communication.Scs.Communication.Channels {
     /// <summary>
     ///     This class provides base functionality for communication listener classes.
     /// </summary>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Remoting.Messaging;
-using Hik.Communication.Scs.Client;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.Messengers;
+using ASC.Communication.Scs.Client;
+using ASC.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication.Messengers;
 
-namespace Hik.Communication.ScsServices.Communication {
+namespace ASC.Communication.ScsServices.Communication {
     /// <summary>
     ///     This class extends RemoteInvokeProxy to provide auto connect/disconnect mechanism
     ///     if client is not connected to the server when a service method is called.

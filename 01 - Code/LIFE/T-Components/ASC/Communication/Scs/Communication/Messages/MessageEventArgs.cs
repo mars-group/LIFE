@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.Scs.Communication.Messages {
+namespace ASC.Communication.Scs.Communication.Messages {
     /// <summary>
     ///     Stores message to be used by an event.
     /// </summary>

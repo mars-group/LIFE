@@ -1,4 +1,4 @@
-﻿namespace Hik.Communication.Scs.Communication {
+﻿namespace ASC.Communication.Scs.Communication {
     /// <summary>
     ///     Communication states.
     /// </summary>

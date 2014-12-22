@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Protocols;
-using Hik.Threading;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Protocols;
+using CustomUtilities.Threading;
 
-namespace Hik.Communication.Scs.Communication.Messengers {
+
+namespace ASC.Communication.Scs.Communication.Messengers {
     /// <summary>
     ///     This class adds SendMessageAndWaitForResponse(...) and SendAndReceiveMessage methods
     ///     to a IMessenger for synchronous request/response style messaging.

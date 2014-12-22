@@ -1,7 +1,7 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.EndPoints;
 
-namespace Hik.Communication.ScsServices.Client {
+namespace ASC.Communication.ScsServices.Client {
     /// <summary>
     ///     This class is used to build service clients to remotely invoke methods of a SCS service.
     /// </summary>

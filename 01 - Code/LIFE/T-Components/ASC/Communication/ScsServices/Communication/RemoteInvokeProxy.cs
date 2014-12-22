@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Messengers;
-using Hik.Communication.ScsServices.Communication.Messages;
-using Hik.Communication.ScsServices.Service;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messengers;
+using ASC.Communication.ScsServices.Communication.Messages;
+using ASC.Communication.ScsServices.Service;
 
-namespace Hik.Communication.ScsServices.Communication {
+namespace ASC.Communication.ScsServices.Communication {
     /// <summary>
     ///     This class is used to generate a dynamic proxy to invoke remote methods.
     ///     It translates method invocations to messaging.

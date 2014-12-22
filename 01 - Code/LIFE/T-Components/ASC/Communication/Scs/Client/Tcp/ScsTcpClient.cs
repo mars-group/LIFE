@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using Hik.Communication.Scs.Communication.Channels;
-using Hik.Communication.Scs.Communication.Channels.Tcp;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+using ASC.Communication.Scs.Communication.Channels;
+using ASC.Communication.Scs.Communication.Channels.Tcp;
+using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 
-namespace Hik.Communication.Scs.Client.Tcp {
+namespace ASC.Communication.Scs.Client.Tcp {
     /// <summary>
     ///     This class is used to communicate with server over TCP/IP protocol.
     /// </summary>

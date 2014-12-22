@@ -1,9 +1,8 @@
-﻿using ASC.Communication.Scs.Server;
-using Hik.Communication.Scs.Communication.Channels;
-using Hik.Communication.Scs.Communication.Channels.Tcp;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+﻿using ASC.Communication.Scs.Communication.Channels;
+using ASC.Communication.Scs.Communication.Channels.Tcp;
+using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 
-namespace Hik.Communication.Scs.Server.Tcp {
+namespace ASC.Communication.Scs.Server.Tcp {
     /// <summary>
     ///     This class is used to create a TCP server.
     /// </summary>

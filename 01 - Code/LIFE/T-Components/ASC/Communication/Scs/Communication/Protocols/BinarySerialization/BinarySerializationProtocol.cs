@@ -5,9 +5,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
-using Hik.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Messages;
+using Hik.Communication.Scs.Communication;
 
-namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
+namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
     /// <summary>
     ///     Default communication protocol between server and clients to send and receive a message.
     ///     It uses .NET binary serialization to write and read messages.

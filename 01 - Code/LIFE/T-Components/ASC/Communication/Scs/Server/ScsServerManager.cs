@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Hik.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     Provides some functionality that are used by servers.
     /// </summary>

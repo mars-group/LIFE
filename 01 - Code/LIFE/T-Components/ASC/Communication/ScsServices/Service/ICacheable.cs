@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Marks a Service Class as chacheable
     /// </summary>

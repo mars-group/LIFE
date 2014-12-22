@@ -1,8 +1,8 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication.EndPoints;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Represents a client that uses a SDS service.
     /// </summary>

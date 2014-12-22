@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hik.Communication.Scs.Communication.Channels {
+namespace ASC.Communication.Scs.Communication.Channels {
     /// <summary>
     ///     Represents a communication listener.
     ///     A connection listener is used to accept incoming client connection requests.

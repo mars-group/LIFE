@@ -1,11 +1,12 @@
 ﻿using System;
-using Hik.Communication.Scs.Communication;
-using Hik.Communication.Scs.Communication.Channels;
-using Hik.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication.Protocols;
-using Hik.Threading;
+using ASC.Communication.Scs.Communication;
+using ASC.Communication.Scs.Communication.Channels;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.Scs.Communication.Protocols;
+using CustomUtilities.Threading;
 
-namespace Hik.Communication.Scs.Client {
+
+namespace ASC.Communication.Scs.Client {
     /// <summary>
     ///     This class provides base functionality for client classes.
     /// </summary>

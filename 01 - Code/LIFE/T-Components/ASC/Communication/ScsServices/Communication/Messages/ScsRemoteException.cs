@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Hik.Communication.ScsServices.Communication.Messages {
+namespace ASC.Communication.ScsServices.Communication.Messages {
     /// <summary>
     ///     Represents a SCS Remote Exception.
     ///     This exception is used to send an exception from an application to another application.
