@@ -1,6 +1,7 @@
 ﻿using System;
+using CustomUtilities.Threading;
 using Hik.Communication.Scs.Communication;
-using Hik.Threading;
+
 
 namespace Hik.Communication.Scs.Client {
     /// <summary>

@@ -1,5 +1,5 @@
 ﻿using System;
-using CustomCollections.Collections;
+using CustomUtilities.Collections;
 using Hik.Communication.Scs.Communication.Protocols;
 
 namespace Hik.Communication.Scs.Server {

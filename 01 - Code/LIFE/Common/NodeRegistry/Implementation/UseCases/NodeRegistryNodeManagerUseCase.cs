@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using CustomCollections.Collections;
+using CustomUtilities.Collections;
 
 
 namespace NodeRegistry.Implementation.UseCases

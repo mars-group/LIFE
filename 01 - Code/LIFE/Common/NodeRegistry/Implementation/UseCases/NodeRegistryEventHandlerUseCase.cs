@@ -1,6 +1,6 @@
 ﻿using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using CustomCollections.Collections;
+using CustomUtilities.Collections;
 using NodeRegistry.Interface;
 
 namespace NodeRegistry.Implementation.UseCases

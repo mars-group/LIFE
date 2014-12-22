@@ -145,7 +145,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentShadowingService", "R-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASC", "T-Components\ASC\ASC.csproj", "{6BEC24D9-FD97-4D66-BCFF-8671343B798E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomCollections", "CustomCollections\CustomCollections.csproj", "{6124943B-80A6-4594-869E-5711E21F9AEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUtilities", "T-Components\CustomUtilities\CustomUtilities.csproj", "{6CD55EF4-32F2-4E99-8973-1625D6726344}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -712,16 +712,16 @@ Global
 		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6BEC24D9-FD97-4D66-BCFF-8671343B798E}.Release|x86.ActiveCfg = Release|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{6124943B-80A6-4594-869E-5711E21F9AEE}.Release|x86.ActiveCfg = Release|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6CD55EF4-32F2-4E99-8973-1625D6726344}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -783,7 +783,7 @@ Global
 		{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77} = {B43F18BD-D65F-4604-AC98-1A61DC77CDFE}
 		{17064DB2-8976-439F-A697-AD8ACDB975CC} = {E873F75D-2C07-4688-8635-075D60A32574}
 		{6BEC24D9-FD97-4D66-BCFF-8671343B798E} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
-		{6124943B-80A6-4594-869E-5711E21F9AEE} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
+		{6CD55EF4-32F2-4E99-8973-1625D6726344} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj

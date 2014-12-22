@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace CustomCollections.Collections {
+namespace CustomUtilities.Collections {
     /// <summary>
     ///     A ThreadSafe List
     /// </summary>

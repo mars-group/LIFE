@@ -118,8 +118,6 @@
     <Compile Include="Communication\Scs\Server\Tcp\ScsTcpServer.cs" />
     <Compile Include="Communication\Scs\Server\Udp\ScsUdpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Threading\SequentialItemProcessor.cs" />
-    <Compile Include="Threading\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Diagrams\ChannelsDiagram.cd" />
@@ -144,6 +142,10 @@
     <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
       <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
       <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CustomUtilities\CustomUtilities.csproj">
+      <Project>{6CD55EF4-32F2-4E99-8973-1625D6726344}</Project>
+      <Name>CustomUtilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>

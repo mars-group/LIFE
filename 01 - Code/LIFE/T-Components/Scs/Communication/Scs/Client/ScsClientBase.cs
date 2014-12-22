@@ -1,9 +1,10 @@
 ﻿using System;
+using CustomUtilities.Threading;
 using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.Channels;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Protocols;
-using Hik.Threading;
+
 
 namespace Hik.Communication.Scs.Client {
     /// <summary>

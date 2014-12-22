@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Hik.Threading {
+namespace CustomUtilities.Threading {
     /// <summary>
     ///     This class is a timer that performs some tasks periodically.
     /// </summary>

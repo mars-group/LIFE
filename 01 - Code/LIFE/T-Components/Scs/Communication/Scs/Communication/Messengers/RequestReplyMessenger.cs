@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using CustomUtilities.Threading;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Protocols;
-using Hik.Threading;
+
 
 namespace Hik.Communication.Scs.Communication.Messengers {
     /// <summary>
