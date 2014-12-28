@@ -8,9 +8,10 @@
 //  *******************************************************/
 
 using System;
+using Hik.Communication.ScsServices.Service;
 
 namespace TreeLayer.Agents {
-    public class Tree : ITree {
+    public class Tree : ScsService,ITree {
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
