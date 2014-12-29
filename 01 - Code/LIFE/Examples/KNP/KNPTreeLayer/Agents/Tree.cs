@@ -11,7 +11,7 @@ using System;
 using ASC.Communication.ScsServices.Service;
 
 namespace TreeLayer.Agents {
-    public class Tree : ScsService,ITree {
+    public class Tree : AscService, ITree {
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }

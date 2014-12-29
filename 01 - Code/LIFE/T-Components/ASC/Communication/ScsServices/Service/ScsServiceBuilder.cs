@@ -3,7 +3,7 @@ using ASC.Communication.Scs.Server;
 
 namespace ASC.Communication.ScsServices.Service {
     /// <summary>
-    ///     This class is used to build ScsService applications.
+    ///     This class is used to build AscService applications.
     /// </summary>
     public static class ScsServiceBuilder {
         /// <summary>

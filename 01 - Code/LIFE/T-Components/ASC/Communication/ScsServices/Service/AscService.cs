@@ -3,9 +3,9 @@
 namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Base class for all services that is serviced by IScsServiceApplication.
-    ///     A class must be derived from ScsService to serve as a SCS service.
+    ///     A class must be derived from AscService to serve as a SCS service.
     /// </summary>
-    public abstract class ScsService {
+    public abstract class AscService {
         /// <summary>
         ///     The current client for a thread that called service method.
         /// </summary>
@@ -33,10 +33,10 @@ namespace ASC.Communication.ScsServices.Service {
         }
 
         /// <summary>
-        ///     Initializes a new ScsService Class with a unique Guid
+        ///     Initializes a new AscService Class with a unique Guid
         /// </summary>
         /// <param name="serviceGuid">Optional parameter to set the Guid of this Service. Usually auto-generated.</param>
-        protected ScsService(byte[] serviceGuid = null) {
+        protected AscService(byte[] serviceGuid = null) {
             ServiceID = serviceGuid != null ? new Guid(serviceGuid) : Guid.NewGuid();
         }
 

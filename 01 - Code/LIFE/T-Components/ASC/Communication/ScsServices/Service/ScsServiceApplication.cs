@@ -95,14 +95,14 @@ namespace ASC.Communication.ScsServices.Service {
         /// </summary>
         /// <typeparam name="TServiceInterface">Service interface type</typeparam>
         /// <typeparam name="TServiceClass">
-        ///     Service class type. Must be delivered from ScsService and must implement
+        ///     Service class type. Must be delivered from AscService and must implement
         ///     TServiceInterface.
         /// </typeparam>
         /// <param name="service">An instance of TServiceClass.</param>
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if service argument is null</exception>
         /// <exception cref="Exception">Throws Exception if service is already added before</exception>
         public void AddService<TServiceInterface, TServiceClass>(TServiceClass service)
-            where TServiceClass : ScsService, TServiceInterface
+            where TServiceClass : AscService, TServiceInterface
             where TServiceInterface : class {
             if (service == null) throw new ArgumentNullException("service");
 
@@ -300,18 +300,18 @@ namespace ASC.Communication.ScsServices.Service {
 
         /// <summary>
         ///     Represents a user service object.
-        ///     It is used to invoke methods on a ScsService object.
+        ///     It is used to invoke methods on a AscService object.
         /// </summary>
         private class ServiceObject {
             /// <summary>
             ///     The service object that is used to invoke methods on.
             /// </summary>
-            public ScsService Service { get; private set; }
+            public AscService Service { get; private set; }
 
             /// <summary>
-            ///     ScsService attribute of Service object's class.
+            ///     AscService attribute of Service object's class.
             /// </summary>
-            public ScsServiceAttribute ServiceAttribute { get; private set; }
+            public AscServiceAttribute ServiceAttribute { get; private set; }
 
             /// <summary>
             ///     This collection stores a list of all methods of service object.
@@ -325,15 +325,15 @@ namespace ASC.Communication.ScsServices.Service {
             /// </summary>
             /// <param name="serviceInterfaceType">Type of service interface</param>
             /// <param name="service">The service object that is used to invoke methods on</param>
-            public ServiceObject(Type serviceInterfaceType, ScsService service) {
+            public ServiceObject(Type serviceInterfaceType, AscService service) {
                 Service = service;
-                var classAttributes = serviceInterfaceType.GetCustomAttributes(typeof (ScsServiceAttribute), true);
+                var classAttributes = serviceInterfaceType.GetCustomAttributes(typeof (AscServiceAttribute), true);
                 if (classAttributes.Length <= 0) {
                     throw new Exception("Service interface (" + serviceInterfaceType.Name +
-                                        ") must have ScsService attribute.");
+                                        ") must have AscService attribute.");
                 }
 
-                ServiceAttribute = classAttributes[0] as ScsServiceAttribute;
+                ServiceAttribute = classAttributes[0] as AscServiceAttribute;
                 _methods = new SortedList<string, MethodInfo>();
                 foreach (var methodInfo in serviceInterfaceType.GetMethods()) {
                     _methods.Add(methodInfo.Name, methodInfo);
@@ -363,7 +363,7 @@ namespace ASC.Communication.ScsServices.Service {
             private static ThreadSafeSortedList<long, IMessenger> _clients;
             private readonly IDictionary<string, PropertyInfo> _properties;
 
-            public CacheableServiceObject(Type serviceInterfaceType, ScsService service)
+            public CacheableServiceObject(Type serviceInterfaceType, AscService service)
                 : base(serviceInterfaceType, service) {
                 _clients = new ThreadSafeSortedList<long, IMessenger>();
 

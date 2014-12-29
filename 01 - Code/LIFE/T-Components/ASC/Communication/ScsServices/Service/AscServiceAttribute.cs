@@ -5,7 +5,7 @@ namespace ASC.Communication.ScsServices.Service {
     ///     Any SCS Service interface class must have this attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class)]
-    public class ScsServiceAttribute : Attribute {
+    public class AscServiceAttribute : Attribute {
         /// <summary>
         ///     Service Version. This property can be used to indicate the code version.
         ///     This value is sent to client application on an exception, so, client application can know that service version is
@@ -15,9 +15,9 @@ namespace ASC.Communication.ScsServices.Service {
         public string Version { get; set; }
 
         /// <summary>
-        ///     Creates a new ScsServiceAttribute object.
+        ///     Creates a new AscServiceAttribute object.
         /// </summary>
-        public ScsServiceAttribute() {
+        public AscServiceAttribute() {
             Version = "NO_VERSION";
         }
     }
