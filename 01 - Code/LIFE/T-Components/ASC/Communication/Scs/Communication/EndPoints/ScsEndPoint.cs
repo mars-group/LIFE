@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
@@ -8,7 +10,11 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
     /// <summary>
     ///     Represents a server side end point in SCS.
     /// </summary>
-    public abstract class ScsEndPoint {
+    public abstract class ScsEndPoint
+    {
+
+        private static IDictionary<string, ScsEndPoint> udpEndPointDictionary = new ConcurrentDictionary<string, ScsEndPoint>();
+
         /// <summary>
         ///     Create a Scs End Point from a string.
         ///     Address must be formatted as: protocol://address
@@ -37,7 +43,17 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
                 case "tcp":
                     return new ScsTcpEndPoint(address);
                 case "udp":
-                    return new ScsUdpEndPoint(address);
+                    // check if endpoint for that ip:port has already been created
+                    if (udpEndPointDictionary.ContainsKey(address))
+                    {
+                        // return if true
+                        return udpEndPointDictionary[address];
+                    }
+                    // create endpoint if not already present
+                    var endpoint = new ScsUdpEndPoint(address);
+                    udpEndPointDictionary[address] = endpoint;
+                    return endpoint;
+
                 default:
                     throw new ApplicationException("Unsupported protocol " + protocol + " in end point " +
                                                    endPointAddress);

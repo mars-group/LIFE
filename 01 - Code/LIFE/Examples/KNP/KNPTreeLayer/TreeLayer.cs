@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Hik.Communication.Scs.Communication.EndPoints.Tcp;
-using Hik.Communication.Scs.Communication.EndPoints.Udp;
-using Hik.Communication.Scs.Server;
-using Hik.Communication.ScsServices.Client;
-using Hik.Communication.ScsServices.Service;
+using ASC.Communication.Scs.Communication.EndPoints.Tcp;
+using ASC.Communication.Scs.Communication.EndPoints.Udp;
+using ASC.Communication.ScsServices.Client;
+using ASC.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
@@ -50,8 +49,7 @@ namespace KNPTreeLayer {
                     for (int i = 0; i < agentInitConfig.ShadowAgentCount; i++) {
                         trees.Add(
                                 ScsServiceClientBuilder.CreateClient<ITree>(
-                                    new ScsUdpEndPoint(
-                                        MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeof (Tree)) + ":6666"),
+                                        MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeof (Tree)) + ":6666",
                                     agentInitConfig.ShadowAgentsIds[i]).ServiceProxy
                                 );
                     }

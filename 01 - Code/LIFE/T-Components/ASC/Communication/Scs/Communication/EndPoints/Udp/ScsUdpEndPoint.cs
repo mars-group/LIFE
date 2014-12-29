@@ -23,6 +23,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
 
         internal override IScsClient CreateClient()
         {
+            // make sure only one ScsUdpClient ist present
             return new ScsUdpClient(this);
         }
     }

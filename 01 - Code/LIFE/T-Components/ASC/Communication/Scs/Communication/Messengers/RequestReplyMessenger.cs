@@ -204,7 +204,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 //Check for exceptions
                 switch (waitingMessage.State) {
                     case WaitingMessageStates.WaitingForResponse:
-                        throw new TimeoutException("Timeout occured. Can not received response.");
+                        throw new TimeoutException("Timeout occured. Can not receive response.");
                     case WaitingMessageStates.Cancelled:
                         throw new CommunicationException("Disconnected before response received.");
                 }
@@ -247,6 +247,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 }
             }
 
+            // raise OnMessageReceived Event via multi-threaded MessageProcessor
             _incomingMessageProcessor.EnqueueMessage(e.Message);
         }
 

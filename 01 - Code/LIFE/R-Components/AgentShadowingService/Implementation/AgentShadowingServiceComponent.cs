@@ -1,5 +1,6 @@
 ﻿using System;
 using AgentShadowingService.Interface;
+using LifeAPI.Agent;
 
 namespace AgentShadowingService.Implementation
 {
@@ -17,9 +18,9 @@ namespace AgentShadowingService.Implementation
             return _agentShadowingUseCase.CreateShadowAgent<T>(agentId);
         }
 
-        public void RegisterRealAgent()
+        public void RegisterRealAgent(IAgent agentToRegister)
         {
-            _agentShadowingUseCase.RegisterRealAgent();
+            _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
         }
     }
 }

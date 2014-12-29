@@ -1,7 +1,6 @@
 ﻿using System;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.Messengers;
-using Hik.Communication.Scs.Communication.Messengers;
 
 namespace ASC.Communication.Scs.Communication.Channels {
     /// <summary>

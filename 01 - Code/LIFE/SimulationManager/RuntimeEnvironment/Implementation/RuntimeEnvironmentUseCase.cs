@@ -7,7 +7,6 @@ using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
-using log4net.Config;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -145,7 +144,8 @@ namespace RuntimeEnvironment.Implementation {
                     ScsServiceClientBuilder.CreateClient<ILayerContainer>
                         (
                             nodeInformationType.NodeEndpoint.IpAddress + ":" +
-                            nodeInformationType.NodeEndpoint.Port),
+                            nodeInformationType.NodeEndpoint.Port
+                        ),
                     content,
                     i);
                 layerContainerClients[i] = client;

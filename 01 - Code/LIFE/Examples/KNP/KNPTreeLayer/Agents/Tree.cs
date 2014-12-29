@@ -8,7 +8,7 @@
 //  *******************************************************/
 
 using System;
-using Hik.Communication.ScsServices.Service;
+using ASC.Communication.ScsServices.Service;
 
 namespace TreeLayer.Agents {
     public class Tree : ScsService,ITree {

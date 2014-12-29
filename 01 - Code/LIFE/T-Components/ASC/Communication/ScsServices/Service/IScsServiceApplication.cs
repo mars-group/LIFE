@@ -31,7 +31,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// </summary>
         /// <typeparam name="TServiceInterface">Service interface type</typeparam>
         /// <typeparam name="TServiceClass">
-        ///     Service class type. Must be delivered from ScsService and must implement
+        ///     Service class type. Must be derived from ScsService and must implement
         ///     TServiceInterface.
         /// </typeparam>
         /// <param name="service">An instance of TServiceClass.</param>

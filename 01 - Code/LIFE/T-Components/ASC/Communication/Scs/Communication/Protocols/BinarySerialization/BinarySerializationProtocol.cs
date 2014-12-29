@@ -6,7 +6,6 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using ASC.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication;
 
 namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
     /// <summary>

@@ -20,6 +20,11 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         public ScsRemoteException RemoteException { get; set; }
 
         /// <summary>
+        /// The serviceObject's ID used to identify the target object
+        /// </summary>
+        public Guid ServiceID { get; set; }
+
+        /// <summary>
         ///     Represents this object as string.
         /// </summary>
         /// <returns>String representation of this object</returns>

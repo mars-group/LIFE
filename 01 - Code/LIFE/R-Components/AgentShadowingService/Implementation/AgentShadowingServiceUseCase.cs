@@ -1,5 +1,6 @@
 ﻿using System;
 using AgentShadowingService.Interface;
+using LifeAPI.Agent;
 
 namespace AgentShadowingService.Implementation
 {
@@ -10,7 +11,7 @@ namespace AgentShadowingService.Implementation
             throw new NotImplementedException();
         }
 
-        public void RegisterRealAgent()
+        public void RegisterRealAgent(IAgent agentToRegister)
         {
             throw new NotImplementedException();
         }

@@ -198,11 +198,15 @@ namespace ASC.Communication.ScsServices.Service {
 
                 //Get service object
                 ServiceObject serviceObject;
-                if (invokeMessage.ServiceID.Equals(Guid.Empty)) {
+                if (invokeMessage.ServiceID.Equals(Guid.Empty))
+                {
                     // we are not looking for a specific implementation, but just for any, so use first found
                     serviceObject = _serviceObjects[invokeMessage.ServiceClassName].GetAllItems().First();
                 }
-                else serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
+                else
+                {
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
+                }
 
                 if (serviceObject == null) {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
@@ -260,19 +264,16 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="requestMessage">Request message</param>
         /// <param name="returnValue">Return value to send</param>
         /// <param name="exception">Exception to send</param>
-        private static void SendInvokeResponse(IMessenger client, IScsMessage requestMessage, object returnValue,
-            ScsRemoteException exception) {
-            try {
-                client.SendMessage(
-                    new ScsRemoteInvokeReturnMessage {
-                        RepliedMessageId = requestMessage.MessageId,
-                        ReturnValue = returnValue,
-                        RemoteException = exception
-                    });
-            }
-            catch (Exception ex) {
-                throw;
-            }
+        private static void SendInvokeResponse(IMessenger client, ScsRemoteInvokeMessage requestMessage, object returnValue,
+            ScsRemoteException exception)
+        {
+            client.SendMessage(
+                new ScsRemoteInvokeReturnMessage {
+                    RepliedMessageId = requestMessage.MessageId,
+                    ReturnValue = returnValue,
+                    RemoteException = exception,
+                    ServiceID = requestMessage.ServiceID
+                });
         }
 
         /// <summary>

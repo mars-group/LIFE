@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 using ASC.Communication.Scs.Communication.Messages;
-using Hik.Communication.Scs.Communication;
 
 namespace ASC.Communication.Scs.Communication.Channels.Tcp {
     /// <summary>

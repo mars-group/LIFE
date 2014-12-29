@@ -1,5 +1,4 @@
 ﻿using ASC.Communication.Scs.Communication.Messengers;
-using Hik.Communication.Scs.Communication.Messengers;
 
 namespace ASC.Communication.Scs.Client {
     /// <summary>

@@ -12,6 +12,8 @@ namespace ASC.Communication.ScsServices.Communication {
     /// <summary>
     ///     This class is used to generate a dynamic proxy to invoke remote methods.
     ///     It translates method invocations to messaging.
+    ///     It also handles the Caching mechanism for properties and - if marked as Cacheable -
+    ///     even for method calls.
     /// </summary>
     /// <typeparam name="TProxy">Type of the proxy class/interface</typeparam>
     /// <typeparam name="TMessenger">Type of the messenger object that is used to send/receive messages</typeparam>
@@ -24,6 +26,7 @@ namespace ASC.Communication.ScsServices.Communication {
         private readonly Guid _serviceId;
 
         private readonly List<MethodInfo> _cacheableMethods;
+
         private readonly Type _typeOfTProxy;
 
         private readonly IDictionary<string, object> _cache;
