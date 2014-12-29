@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using ASC.Communication.Scs.Communication.EndPoints.Tcp;
-using ASC.Communication.Scs.Communication.EndPoints.Udp;
-using ASC.Communication.ScsServices.Client;
-using ASC.Communication.ScsServices.Service;
+using AgentShadowingService.Implementation;
+using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
-using LIFEUtilities.MulticastAddressGenerator;
 using Mono.Addins;
+using TreeLayer;
 using TreeLayer.Agents;
 
 [assembly: Addin]
@@ -15,18 +13,19 @@ using TreeLayer.Agents;
 
 namespace KNPTreeLayer {
     [Extension(typeof (ISteppedLayer))]
-    public class TreeLayer : ISteppedLayer {
+    public class TreeLayer : ScsService, IKnpTreeLayer
+    {
         private long _currentTick;
         private ElevationLayer _elevationLayer;
-        private readonly IScsServiceApplication _server;
 
         private readonly List<ITree> trees;
+        private readonly AgentShadowingServiceComponent<Tree> _agentShadowingService;
 
         public TreeLayer(ElevationLayer elevationLayer) {
             _elevationLayer = elevationLayer;
             trees = new List<ITree>();
-            //Create a Scs Service application that runs on 10048 TCP port.
-            _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(10048));
+
+            _agentShadowingService = new AgentShadowingServiceComponent<Tree>();
         }
 
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
@@ -40,24 +39,16 @@ namespace KNPTreeLayer {
                         var t = new Tree(4, 2, 10, 10, 500, 30, 22, agentInitConfig.RealAgentIds[i]);
                         registerAgentHandle(this, t);
                         trees.Add(t);
-                        //Add Phone Book Service to service application
-                        _server.AddService<ITree, Tree>(t);
-                        
+                        _agentShadowingService.RegisterRealAgent(t);
                     }
 
                     // instantiate Shadow Agents
                     for (int i = 0; i < agentInitConfig.ShadowAgentCount; i++) {
-                        trees.Add(
-                                ScsServiceClientBuilder.CreateClient<ITree>(
-                                        MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeof (Tree)) + ":6666",
-                                    agentInitConfig.ShadowAgentsIds[i]).ServiceProxy
-                                );
+                        trees.Add(_agentShadowingService.CreateShadowAgent(agentInitConfig.ShadowAgentsIds[i]));
                     }
 
                 }
             }
-
-            _server.Start();
             return true;
         }
 

@@ -4,21 +4,21 @@ using LifeAPI.Agent;
 
 namespace AgentShadowingService.Implementation
 {
-    class AgentShadowingServiceComponent : IAgentShadowingService
+    public class AgentShadowingServiceComponent<T> : IAgentShadowingService<T> where T : class, IAgent
     {
-        private readonly IAgentShadowingService _agentShadowingUseCase;
+        private readonly IAgentShadowingService<T> _agentShadowingUseCase;
 
         public AgentShadowingServiceComponent()
         {
-            _agentShadowingUseCase = new AgentShadowingServiceUseCase();
+            _agentShadowingUseCase = new AgentShadowingServiceUseCase<T>();
         }
 
-        public T CreateShadowAgent<T>(Guid agentId) where T : class
+        public T CreateShadowAgent(Guid agentId)
         {
-            return _agentShadowingUseCase.CreateShadowAgent<T>(agentId);
+            return _agentShadowingUseCase.CreateShadowAgent(agentId);
         }
 
-        public void RegisterRealAgent(IAgent agentToRegister)
+        public void RegisterRealAgent(T agentToRegister)
         {
             _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
         }

@@ -49,6 +49,10 @@
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LifeAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\LIFEUtilities\LIFEUtilities.csproj">
+      <Project>{09D5EB43-70C5-4E24-92CA-6C35548A0629}</Project>
+      <Name>LIFEUtilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\ASC\ASC.csproj">
       <Project>{6bec24d9-fd97-4d66-bcff-8671343b798e}</Project>
       <Name>ASC</Name>

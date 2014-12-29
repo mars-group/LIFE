@@ -14,5 +14,10 @@ namespace ASC.Communication.ScsServices.Service {
         public static IScsServiceApplication CreateService(ScsEndPoint endPoint) {
             return new ScsServiceApplication(ScsServerFactory.CreateServer(endPoint));
         }
+
+        public static IScsServiceApplication CreateService(string address)
+        {
+            return new ScsServiceApplication(ScsServerFactory.CreateServer(ScsEndPoint.CreateEndPoint(address)));
+        }
     }
 }
