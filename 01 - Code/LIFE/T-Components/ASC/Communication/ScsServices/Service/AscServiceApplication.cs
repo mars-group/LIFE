@@ -14,7 +14,7 @@ namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Implements IScsServiceApplication and provides all functionallity.
     /// </summary>
-    internal class ScsServiceApplication : IScsServiceApplication {
+    internal class AscServiceApplication : IScsServiceApplication {
         #region Public events
 
         /// <summary>
@@ -56,11 +56,11 @@ namespace ASC.Communication.ScsServices.Service {
         #region Constructors
 
         /// <summary>
-        ///     Creates a new ScsServiceApplication object.
+        ///     Creates a new AscServiceApplication object.
         /// </summary>
         /// <param name="scsServer">Underlying IScsServer object to accept and manage client connections</param>
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if scsServer argument is null</exception>
-        public ScsServiceApplication(IScsServer scsServer) {
+        public AscServiceApplication(IScsServer scsServer) {
             if (scsServer == null) throw new ArgumentNullException("scsServer");
 
             _scsServer = scsServer;
@@ -91,7 +91,6 @@ namespace ASC.Communication.ScsServices.Service {
 
         /// <summary>
         ///     Adds a service object to this service application.
-        ///     Only single service object can be added for a service interface type.
         /// </summary>
         /// <typeparam name="TServiceInterface">Service interface type</typeparam>
         /// <typeparam name="TServiceClass">
@@ -107,8 +106,6 @@ namespace ASC.Communication.ScsServices.Service {
             if (service == null) throw new ArgumentNullException("service");
 
             var type = typeof (TServiceInterface);
-            if (_serviceObjects[type.Name] != null)
-                throw new Exception("Service '" + type.Name + "' is already added before.");
 
             // check if service is cacheable
             var cacheableService = service as ICacheable;

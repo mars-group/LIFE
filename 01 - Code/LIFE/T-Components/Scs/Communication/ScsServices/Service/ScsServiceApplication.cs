@@ -107,8 +107,6 @@ namespace Hik.Communication.ScsServices.Service {
             if (service == null) throw new ArgumentNullException("service");
 
             var type = typeof (TServiceInterface);
-            if (_serviceObjects[type.Name] != null)
-                throw new Exception("Service '" + type.Name + "' is already added before.");
 
             // check if service is cacheable
             var cacheableService = service as ICacheable;

@@ -24,7 +24,6 @@ namespace KNPTreeLayer {
         public TreeLayer(ElevationLayer elevationLayer) {
             _elevationLayer = elevationLayer;
             trees = new List<ITree>();
-
             _agentShadowingService = new AgentShadowingServiceComponent<Tree>();
         }
 

@@ -25,7 +25,7 @@ namespace AgentShadowingService.Implementation
             _agentShadowingServer = ScsServiceBuilder.CreateService(_mcastAddress);
             _agentShadowingServer.Start();
 
-            // reflect type of Interface of T
+            // reflect type of Interface of T which has AscService Attribute
             Type interfaceType = null;
             foreach (var @interface in from @interface in typeof(T).GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(AscServiceAttribute) select @interface)
             {

@@ -58,7 +58,7 @@
     <Compile Include="Communication\ScsServices\Service\IScsServiceApplication.cs" />
     <Compile Include="Communication\ScsServices\Service\IScsServiceClient.cs" />
     <Compile Include="Communication\ScsServices\Service\AscService.cs" />
-    <Compile Include="Communication\ScsServices\Service\ScsServiceApplication.cs" />
+    <Compile Include="Communication\ScsServices\Service\AscServiceApplication.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceAttribute.cs" />
     <Compile Include="Communication\ScsServices\Service\ScsServiceBuilder.cs" />
     <Compile Include="Communication\ScsServices\Service\ScsServiceClient.cs" />
