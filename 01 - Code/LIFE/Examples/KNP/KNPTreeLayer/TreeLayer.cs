@@ -19,12 +19,12 @@ namespace KNPTreeLayer {
         private ElevationLayer _elevationLayer;
 
         private readonly List<ITree> trees;
-        private readonly AgentShadowingServiceComponent<Tree> _agentShadowingService;
+        private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
 
         public TreeLayer(ElevationLayer elevationLayer) {
             _elevationLayer = elevationLayer;
             trees = new List<ITree>();
-            _agentShadowingService = new AgentShadowingServiceComponent<Tree>();
+            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
         }
 
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {

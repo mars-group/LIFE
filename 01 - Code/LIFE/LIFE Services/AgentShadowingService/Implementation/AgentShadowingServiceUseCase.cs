@@ -11,33 +11,40 @@ using LIFEUtilities.MulticastAddressGenerator;
 
 namespace AgentShadowingService.Implementation
 {
-    internal class AgentShadowingServiceUseCase<T> : IAgentShadowingService<T> where T : class, IAgent
+    internal class AgentShadowingServiceUseCase<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
+        where TServiceClass : AscService, TServiceInterface
+        where TServiceInterface : class, IAgent
     {
-        private IDictionary<IScsServiceClient<T>, byte> shadowAgentClients;
+        private IDictionary<IScsServiceClient<TServiceClass>, byte> shadowAgentClients;
         private readonly string _mcastAddress;
         private readonly IScsServiceApplication _agentShadowingServer;
-        private readonly MethodInfo _genericAddServiceMethod;
+        //private readonly MethodInfo _genericAddServiceMethod;
+        //private Type _interfaceType;
 
-        public AgentShadowingServiceUseCase()
-        {
-            shadowAgentClients = new ConcurrentDictionary<IScsServiceClient<T>, byte>();
-            _mcastAddress = "udp://" + MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeof (T)) + ":6666";
+        public AgentShadowingServiceUseCase() {
+            var typeOfTServiceClass = typeof (TServiceClass);
+            shadowAgentClients = new ConcurrentDictionary<IScsServiceClient<TServiceClass>, byte>();
+            _mcastAddress = "udp://" + MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass) + ":6666";
             _agentShadowingServer = ScsServiceBuilder.CreateService(_mcastAddress);
             _agentShadowingServer.Start();
 
             // reflect type of Interface of T which has AscService Attribute
-            Type interfaceType = null;
-            foreach (var @interface in from @interface in typeof(T).GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(AscServiceAttribute) select @interface)
+            /* 
+            _interfaceType = null;
+            foreach (var @interface in from @interface in typeOfT.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(AscServiceAttribute) select @interface)
             {
-                interfaceType = @interface;
+                _interfaceType = @interface;
             }
-            var addServiceMethod = _agentShadowingServer.GetType().GetMethod("AddService");
-            _genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, typeof(T));
-        } 
 
-        public T CreateShadowAgent(Guid agentId)
+
+            var addServiceMethod = _agentShadowingServer.GetType().GetMethod("AddService");
+            _genericAddServiceMethod = addServiceMethod.MakeGenericMethod(_interfaceType, typeOfT);
+            */
+        }
+
+        public TServiceInterface CreateShadowAgent(Guid agentId)
         {
-            var shadowAgentClient = ScsServiceClientBuilder.CreateClient<T>(
+            var shadowAgentClient = ScsServiceClientBuilder.CreateClient<TServiceClass>(
                 _mcastAddress,
                 agentId
                 );
@@ -45,9 +52,9 @@ namespace AgentShadowingService.Implementation
             return shadowAgentClient.ServiceProxy;
         }
 
-        public void RegisterRealAgent(T agentToRegister)
+        public void RegisterRealAgent(TServiceClass agentToRegister)
         {
-            _genericAddServiceMethod.Invoke(_agentShadowingServer, new object[]{agentToRegister});
+            _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister);
         }
     }
 }

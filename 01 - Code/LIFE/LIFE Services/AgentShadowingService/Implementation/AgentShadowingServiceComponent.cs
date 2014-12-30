@@ -1,24 +1,27 @@
 ﻿using System;
 using AgentShadowingService.Interface;
+using ASC.Communication.ScsServices.Service;
 using LifeAPI.Agent;
 
 namespace AgentShadowingService.Implementation
 {
-    public class AgentShadowingServiceComponent<T> : IAgentShadowingService<T> where T : class, IAgent
+    public class AgentShadowingServiceComponent<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
+        where TServiceClass : AscService, TServiceInterface
+        where TServiceInterface : class, IAgent
     {
-        private readonly IAgentShadowingService<T> _agentShadowingUseCase;
+        private readonly IAgentShadowingService<TServiceInterface, TServiceClass> _agentShadowingUseCase;
 
         public AgentShadowingServiceComponent()
         {
-            _agentShadowingUseCase = new AgentShadowingServiceUseCase<T>();
+            _agentShadowingUseCase = new AgentShadowingServiceUseCase<TServiceInterface, TServiceClass>();
         }
 
-        public T CreateShadowAgent(Guid agentId)
+        public TServiceInterface CreateShadowAgent(Guid agentId)
         {
             return _agentShadowingUseCase.CreateShadowAgent(agentId);
         }
 
-        public void RegisterRealAgent(T agentToRegister)
+        public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
         }
