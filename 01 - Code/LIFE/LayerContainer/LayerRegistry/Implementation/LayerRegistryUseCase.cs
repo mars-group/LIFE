@@ -126,7 +126,7 @@ namespace LayerRegistry.Implementation {
         private ILayer GetRemoteLayerInstance(Type layerType)
         {
             var entry = _layerNameService.ResolveLayer(layerType);
-            MethodInfo createClientMethod = typeof (ScsServiceClientBuilder).GetMethod("CreateClient");
+            MethodInfo createClientMethod = typeof (ScsServiceClientBuilder).GetMethod("CreateClient", new []{typeof(String),typeof(int)});
             MethodInfo genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
             dynamic scsStub = genericCreateClientMethod.Invoke
                 (null,
