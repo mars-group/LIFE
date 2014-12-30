@@ -15,7 +15,7 @@ namespace AgentShadowingService.Implementation
         where TServiceClass : AscService, TServiceInterface
         where TServiceInterface : class, IAgent
     {
-        private IDictionary<IScsServiceClient<TServiceClass>, byte> shadowAgentClients;
+        private IDictionary<IScsServiceClient<TServiceInterface>, byte> shadowAgentClients;
         private readonly string _mcastAddress;
         private readonly IScsServiceApplication _agentShadowingServer;
         //private readonly MethodInfo _genericAddServiceMethod;
@@ -23,7 +23,7 @@ namespace AgentShadowingService.Implementation
 
         public AgentShadowingServiceUseCase() {
             var typeOfTServiceClass = typeof (TServiceClass);
-            shadowAgentClients = new ConcurrentDictionary<IScsServiceClient<TServiceClass>, byte>();
+            shadowAgentClients = new ConcurrentDictionary<IScsServiceClient<TServiceInterface>, byte>();
             _mcastAddress = "udp://" + MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass) + ":6666";
             _agentShadowingServer = ScsServiceBuilder.CreateService(_mcastAddress);
             _agentShadowingServer.Start();
@@ -44,7 +44,7 @@ namespace AgentShadowingService.Implementation
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {
-            var shadowAgentClient = ScsServiceClientBuilder.CreateClient<TServiceClass>(
+            var shadowAgentClient = ScsServiceClientBuilder.CreateClient<TServiceInterface>(
                 _mcastAddress,
                 agentId
                 );
