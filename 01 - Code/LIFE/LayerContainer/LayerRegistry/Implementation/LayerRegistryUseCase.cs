@@ -131,7 +131,7 @@ namespace LayerRegistry.Implementation {
             MethodInfo genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
             dynamic scsStub = genericCreateClientMethod.Invoke
                 (null,
-                    new[] {new ScsTcpEndPoint(entry.IpAddress, entry.Port)});
+                    new[] {new ScsTcpEndPoint(entry.IpAddress, entry.Port), null});
 
             return scsStub.ServiceProxy;
         }
