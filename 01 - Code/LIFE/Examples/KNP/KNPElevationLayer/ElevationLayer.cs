@@ -11,7 +11,7 @@ using Mono.Addins;
 namespace KNPElevationLayer
 {
     [Extension(typeof(ISteppedLayer))]
-    public class ElevationLayer : LIFEGisActiveLayer
+    public class ElevationLayer : LIFEGisActiveLayer, IKnpElevationLayer
     {
 
 
