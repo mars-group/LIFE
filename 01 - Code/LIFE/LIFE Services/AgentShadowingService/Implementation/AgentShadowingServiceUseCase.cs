@@ -13,7 +13,7 @@ namespace AgentShadowingService.Implementation
 {
     internal class AgentShadowingServiceUseCase<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface
-        where TServiceInterface : class, IAgent
+        where TServiceInterface : class
     {
         private IDictionary<IScsServiceClient<TServiceInterface>, byte> shadowAgentClients;
         private readonly string _mcastAddress;
@@ -25,6 +25,7 @@ namespace AgentShadowingService.Implementation
             var typeOfTServiceClass = typeof (TServiceClass);
             shadowAgentClients = new ConcurrentDictionary<IScsServiceClient<TServiceInterface>, byte>();
             _mcastAddress = "udp://" + MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass) + ":6666";
+            // TODO: May be moved into RegisterRealAgent, so as not to start the server, when no real agents are present
             _agentShadowingServer = ScsServiceBuilder.CreateService(_mcastAddress);
             _agentShadowingServer.Start();
 

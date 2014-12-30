@@ -7,7 +7,7 @@ namespace AgentShadowingService.Implementation
 {
     public class AgentShadowingServiceComponent<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface
-        where TServiceInterface : class, IAgent
+        where TServiceInterface : class
     {
         private readonly IAgentShadowingService<TServiceInterface, TServiceClass> _agentShadowingUseCase;
 

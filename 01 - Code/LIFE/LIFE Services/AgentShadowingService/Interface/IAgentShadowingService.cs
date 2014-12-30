@@ -6,7 +6,7 @@ namespace AgentShadowingService.Interface
 {
     public interface IAgentShadowingService<TServiceInterface, TServiceClass> 
         where TServiceClass : AscService, TServiceInterface
-            where TServiceInterface : class, IAgent
+            where TServiceInterface : class
     {
         /// <summary> 
         /// Create a ShadowAgent for a real agent with id <param name="agentId"/> and Type T.
