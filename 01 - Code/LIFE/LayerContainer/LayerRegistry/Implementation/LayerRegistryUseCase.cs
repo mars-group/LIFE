@@ -27,6 +27,7 @@ using NodeRegistry.Interface;
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
         private IDictionary<Type, ILayer> _localLayers;
+        private readonly IScsServiceClient<ILayerNameService> _layerNameServiceClient;
         private readonly ILayerNameService _layerNameService;
         private readonly NodeRegistryConfig _nodeRegistryConfig;
         private List<IScsServiceApplication> _layerServers;
@@ -48,10 +49,11 @@ namespace LayerRegistry.Implementation {
             }
 
             // now create layerNameService Stub
-            _layerNameService =
+            _layerNameServiceClient =
                 ScsServiceClientBuilder.CreateClient<ILayerNameService>(
                         new ScsTcpEndPoint(simManager.NodeEndpoint.IpAddress, simManager.NodeEndpoint.Port)
-                ).ServiceProxy;
+                );
+            _layerNameService = _layerNameServiceClient.ServiceProxy;
 
             _localLayers = new Dictionary<Type, ILayer>();
         }
