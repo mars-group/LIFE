@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommonTypes.Types;
+using Hik.Communication.Scs.Communication.EndPoints;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
 using Hik.Communication.ScsServices.Service;
@@ -126,7 +127,7 @@ namespace LayerRegistry.Implementation {
         private ILayer GetRemoteLayerInstance(Type layerType)
         {
             var entry = _layerNameService.ResolveLayer(layerType);
-            MethodInfo createClientMethod = typeof (ScsServiceClientBuilder).GetMethod("CreateClient", new []{typeof(String),typeof(int)});
+            MethodInfo createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
             MethodInfo genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
             dynamic scsStub = genericCreateClientMethod.Invoke
                 (null,
