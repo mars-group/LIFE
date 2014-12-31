@@ -130,7 +130,23 @@ namespace LayerRegistry.Implementation {
         {
             var entry = _layerNameService.ResolveLayer(layerType);
             MethodInfo createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
-            MethodInfo genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
+
+            // we need to use the layer's interface type and not the class type, so make sure
+            // layerType either is an interface type or reflect the correct interface type
+            MethodInfo genericCreateClientMethod;
+            if (layerType.IsInterface) {
+                genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
+            }
+            else {
+                Type interfaceType = null;
+                foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
+                {
+                    interfaceType = @interface;
+                }
+                genericCreateClientMethod = createClientMethod.MakeGenericMethod(interfaceType);
+            }
+
+
             dynamic scsStub = genericCreateClientMethod.Invoke
                 (null,
                     new[] {new ScsTcpEndPoint(entry.IpAddress, entry.Port), null});

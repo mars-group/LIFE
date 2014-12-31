@@ -170,7 +170,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
             }
             catch(Exception ex) {
                 Disconnect();
-                throw;
+                //throw;
             }
         }
 
