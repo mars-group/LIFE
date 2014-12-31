@@ -6,5 +6,6 @@ namespace TreeLayer
     [ScsService(Version = "0.1")]
     interface IKnpTreeLayer : ISteppedLayer
     {
+        string Name { get; }
     }
 }

@@ -58,5 +58,10 @@ namespace KNPTreeLayer {
         public void SetCurrentTick(long currentTick) {
             _currentTick = currentTick;
         }
+
+        public string Name
+        {
+            get { return "TreeLayer"; }
+        }
     }
 }

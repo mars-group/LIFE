@@ -6,5 +6,6 @@ namespace KNPElevationLayer
     [ScsService(Version = "0.1")]
     public interface IKnpElevationLayer
     {
+        string Name { get; }
     }
 }

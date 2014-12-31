@@ -39,6 +39,11 @@ namespace KNPElevationLayer
         {
 
         }
+
+        public string Name
+        {
+            get { return "ElevationLayer"; }
+        }
     }
 }
 
