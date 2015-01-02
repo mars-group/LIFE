@@ -53,6 +53,10 @@ namespace LayerRegistry.Implementation {
                 ScsServiceClientBuilder.CreateClient<ILayerNameService>(
                         new ScsTcpEndPoint(simManager.NodeEndpoint.IpAddress, simManager.NodeEndpoint.Port)
                 );
+
+            // connect the client!
+            _layerNameServiceClient.Connect();
+
             _layerNameService = _layerNameServiceClient.ServiceProxy;
 
             _localLayers = new Dictionary<Type, ILayer>();
@@ -64,7 +68,7 @@ namespace LayerRegistry.Implementation {
             if (!_localLayers.ContainsKey(layerType)) return;
             _layerNameService.RemoveLayer(layerType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType));
             _localLayers.Remove(layerType);
-            _layerServiceStartPort--;
+            _layerServiceStartPort--; // TODO: this won't work... need to manage a port array or something...
         }
 
         public void ResetLayerRegistry() {
@@ -151,6 +155,8 @@ namespace LayerRegistry.Implementation {
                 (null,
                     new[] {new ScsTcpEndPoint(entry.IpAddress, entry.Port), null});
 
+
+            scsStub.Connect();
             return scsStub.ServiceProxy;
         }
 

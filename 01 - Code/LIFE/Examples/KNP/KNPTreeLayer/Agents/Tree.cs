@@ -27,7 +27,7 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id) {
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id) : base(id.ToByteArray()) {
             ID = id;
             Height = height;
             Diameter = diameter;

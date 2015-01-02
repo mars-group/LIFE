@@ -39,6 +39,7 @@ namespace LayerContainer {
 
             // This will shutdown the log4net system
             LogManager.Shutdown();
+            Console.ReadKey();
         }
     }
 }

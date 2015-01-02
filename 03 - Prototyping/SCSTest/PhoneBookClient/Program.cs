@@ -13,7 +13,9 @@ namespace PhoneBookClient
 
         static void Main(string[] args)
         {
+            Console.WriteLine("BenchmarkWriteAndRead...");
             BenchmarkWriteAndRead();
+            Console.WriteLine("BenchmarkWriteAndReadWithChanges....");
             BenchmarkWriteAndReadWithChanges();
         }
 
@@ -75,6 +77,7 @@ namespace PhoneBookClient
                             Name = g.ToString(),
                             Phone = nr.ToString()
                         });
+                        Console.WriteLine(client.GetInformation());
                         
                         client.Title = "Titel";
                     }
