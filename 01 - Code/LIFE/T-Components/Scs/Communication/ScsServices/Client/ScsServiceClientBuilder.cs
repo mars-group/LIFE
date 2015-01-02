@@ -48,7 +48,6 @@ namespace Hik.Communication.ScsServices.Client {
         ///     Client-side object that handles remote method calls from server to client.
         ///     May be null if client has no methods to be invoked by server
         /// </param>
-        /// <param name="serviceID"></param>
         /// <returns>Created client object to connect to the server</returns>
         public static IScsServiceClient<T> CreateClient<T>(ScsEndPoint endpoint, object clientObject = null)
             where T : class {
@@ -60,7 +59,6 @@ namespace Hik.Communication.ScsServices.Client {
         /// </summary>
         /// <typeparam name="T">Type of service interface for remote method call</typeparam>
         /// <param name="endpointAddress">EndPoint address of the server</param>
-        /// <param name="serviceID">The serviceID of the specific serviceObject on the remote host.</param>
         /// <param name="clientObject">
         ///     Client-side object that handles remote method calls from server to client.
         ///     May be null if client has no methods to be invoked by server
@@ -68,7 +66,7 @@ namespace Hik.Communication.ScsServices.Client {
         /// <returns>Created client object to connect to the server</returns>
         public static IScsServiceClient<T> CreateClient<T>(string endpointAddress, object clientObject = null)
             where T : class {
-            return CreateClient<T>(ScsEndPoint.CreateEndPoint(endpointAddress), clientObject: clientObject);
+            return CreateClient<T>(ScsEndPoint.CreateEndPoint(endpointAddress), clientObject);
         }
     }
 }

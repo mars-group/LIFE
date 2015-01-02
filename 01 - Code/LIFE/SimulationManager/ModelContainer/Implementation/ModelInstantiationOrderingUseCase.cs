@@ -44,6 +44,11 @@ namespace ModelContainer.Implementation {
                 Directory.Delete
                     (_settings.AddinLibraryDirectoryPath + Path.DirectorySeparatorChar + "addin-db-001", true);
             }
+            if (Directory.Exists(_settings.AddinLibraryDirectoryPath + Path.DirectorySeparatorChar + "addin-db-002"))
+            {
+                Directory.Delete
+                    (_settings.AddinLibraryDirectoryPath + Path.DirectorySeparatorChar + "addin-db-002", true);
+            }
 
 
             // use AddinLoader from LIFEApi, because Mono.Addins may only load Plugins whose 

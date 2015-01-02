@@ -12,7 +12,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using Hik.Communication.Scs.Client;
 using Hik.Communication.Scs.Communication.EndPoints;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
@@ -21,7 +24,6 @@ using LayerRegistry.Interfaces;
 using LifeAPI.Layer;
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
-using NodeRegistry.Exceptions;
 using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
@@ -30,7 +32,7 @@ namespace LayerRegistry.Implementation {
         private readonly IScsServiceClient<ILayerNameService> _layerNameServiceClient;
         private readonly ILayerNameService _layerNameService;
         private readonly NodeRegistryConfig _nodeRegistryConfig;
-        private List<IScsServiceApplication> _layerServers;
+        private readonly List<IScsServiceApplication> _layerServers;
         private int _layerServiceStartPort;
 
         public LayerRegistryUseCase(INodeRegistry nodeRegistry, NodeRegistryConfig nodeRegistryConfig)
@@ -40,18 +42,27 @@ namespace LayerRegistry.Implementation {
             _layerServers = new List<IScsServiceApplication>();
 
             _layerServiceStartPort = nodeRegistryConfig.LayerServiceStartPort;
-
-            // fetch SimulationManager Node from registry
-            var simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
-            if (simManager == null)
+            TNodeInformation simManager = null;
+            while (simManager == null)
             {
-                throw new NoSimulationManagerPresentException("No SimulationManager is connected, please check your network configuration.");
+                simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
+                if (simManager != null) continue;
+
+                // No SimManager found so wait for 3 seconds and recheck
+                var manualEvent = new ManualResetEvent(false);
+                nodeRegistry.SimulationManagerConnected += (sender, information) =>
+                {
+                    simManager = information;
+                    manualEvent.Set();
+                };
+                manualEvent.WaitOne(3000);
             }
+
 
             // now create layerNameService Stub
             _layerNameServiceClient =
                 ScsServiceClientBuilder.CreateClient<ILayerNameService>(
-                        new ScsTcpEndPoint(simManager.NodeEndpoint.IpAddress, simManager.NodeEndpoint.Port)
+                        "tcp://" + simManager.NodeEndpoint.IpAddress + ":" + simManager.NodeEndpoint.Port
                 );
 
             // connect the client!
@@ -66,7 +77,7 @@ namespace LayerRegistry.Implementation {
 
         public void RemoveLayerInstance(Type layerType) {
             if (!_localLayers.ContainsKey(layerType)) return;
-            _layerNameService.RemoveLayer(layerType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType));
+            _layerNameServiceClient.ServiceProxy.RemoveLayer(layerType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType));
             _localLayers.Remove(layerType);
             _layerServiceStartPort--; // TODO: this won't work... need to manage a port array or something...
         }
@@ -74,16 +85,10 @@ namespace LayerRegistry.Implementation {
         public void ResetLayerRegistry() {
             foreach (var localLayer in _localLayers)
             {
-                _layerNameService.RemoveLayer(localLayer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType()));
+                _layerNameServiceClient.ServiceProxy.RemoveLayer(localLayer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType()));
             }
             _localLayers = new ConcurrentDictionary<Type, ILayer>();
         }
-
-        public ILayer GetLayerInstance(Type layerType)
-        {
-            return _localLayers.ContainsKey(layerType) ? _localLayers[layerType] : GetRemoteLayerInstance(layerType);
-        }
-
 
         public void RegisterLayer(ILayer layer) {
             // store in Dict for local usage
@@ -113,9 +118,14 @@ namespace LayerRegistry.Implementation {
                 server.Start();
                 _layerServers.Add(server);
 
-                // store LayerRegistryEntry in DHT for remote usage
-                _layerNameService.RegisterLayer(layer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
+                // store LayerRegistryEntry in LayerNameService for remote resolution
+                _layerNameServiceClient.ServiceProxy.RegisterLayer(layer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
             }
+        }
+
+        public ILayer GetLayerInstance(Type layerType)
+        {
+            return _localLayers.ContainsKey(layerType) ? _localLayers[layerType] : GetRemoteLayerInstance(layerType);
         }
 
         #endregion
@@ -132,17 +142,20 @@ namespace LayerRegistry.Implementation {
         /// <returns></returns>
         private ILayer GetRemoteLayerInstance(Type layerType)
         {
-            var entry = _layerNameService.ResolveLayer(layerType);
+            var entry = _layerNameServiceClient.ServiceProxy.ResolveLayer(layerType);
             MethodInfo createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
 
             // we need to use the layer's interface type and not the class type, so make sure
             // layerType either is an interface type or reflect the correct interface type
             MethodInfo genericCreateClientMethod;
-            if (layerType.IsInterface) {
-                genericCreateClientMethod = createClientMethod.MakeGenericMethod(layerType);
+            Type interfaceType = null;
+            if (layerType.IsInterface)
+            {
+                interfaceType = layerType;
+                genericCreateClientMethod = createClientMethod.MakeGenericMethod(interfaceType);
             }
             else {
-                Type interfaceType = null;
+
                 foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
                 {
                     interfaceType = @interface;
@@ -151,13 +164,16 @@ namespace LayerRegistry.Implementation {
             }
 
 
-            dynamic scsStub = genericCreateClientMethod.Invoke
-                (null,
-                    new[] {new ScsTcpEndPoint(entry.IpAddress, entry.Port), null});
+            dynamic scsStub = genericCreateClientMethod.Invoke(null, new[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port), null });
 
+            // cast to IConnectableClient since dynamic binding only exposes the statically implemented members
+            ((IConnectableClient)scsStub).Connect();
 
-            scsStub.Connect();
-            return scsStub.ServiceProxy;
+            Type typeOfScsStub = scsStub.GetType();
+            var serviceProxyProperty = typeOfScsStub.GetProperty("ServiceProxy");
+            
+            dynamic proxy = serviceProxyProperty.GetGetMethod().Invoke(scsStub,new object[]{});
+            return proxy;
         }
 
         #endregion
