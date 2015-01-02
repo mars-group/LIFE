@@ -169,10 +169,12 @@ namespace LayerRegistry.Implementation {
             // cast to IConnectableClient since dynamic binding only exposes the statically implemented members
             ((IConnectableClient)scsStub).Connect();
 
+              
             Type typeOfScsStub = scsStub.GetType();
             var serviceProxyProperty = typeOfScsStub.GetProperty("ServiceProxy");
             
-            dynamic proxy = serviceProxyProperty.GetGetMethod().Invoke(scsStub,new object[]{});
+            var proxy = serviceProxyProperty.GetGetMethod().Invoke(scsStub, new object[]{});
+            
             return proxy;
         }
 

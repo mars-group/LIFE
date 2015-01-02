@@ -50,6 +50,8 @@ namespace Hik.Communication.ScsServices.Client {
         /// </summary>
         public T ServiceProxy { get; private set; }
 
+        public object ExplicitServiceProxy { get { return ServiceProxy; } }
+
         /// <summary>
         ///     Timeout value when invoking a service method.
         ///     If timeout occurs before end of remote method call, an exception is thrown.
