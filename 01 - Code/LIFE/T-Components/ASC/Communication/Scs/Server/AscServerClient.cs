@@ -9,7 +9,7 @@ namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     This class represents a client in server side.
     /// </summary>
-    internal class ScsServerClient : IScsServerClient {
+    internal class AscServerClient : IAscServerClient {
         #region Public events
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Gets endpoint of remote application.
         /// </summary>
-        public ScsEndPoint RemoteEndPoint {
+        public AscEndPoint RemoteEndPoint {
             get { return _communicationChannel.RemoteEndPoint; }
         }
 
@@ -90,7 +90,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Creates a new ScsClient object.
         /// </summary>
         /// <param name="communicationChannel">The communication channel that is used by client to send and receive messages</param>
-        public ScsServerClient(ICommunicationChannel communicationChannel) {
+        public AscServerClient(ICommunicationChannel communicationChannel) {
             _communicationChannel = communicationChannel;
             _communicationChannel.MessageReceived += CommunicationChannel_MessageReceived;
             _communicationChannel.MessageSent += CommunicationChannel_MessageSent;

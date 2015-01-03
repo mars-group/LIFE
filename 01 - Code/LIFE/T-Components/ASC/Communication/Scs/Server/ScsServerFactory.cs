@@ -10,7 +10,7 @@ namespace ASC.Communication.Scs.Server {
         /// </summary>
         /// <param name="endPoint">Endpoint that represents address of the server</param>
         /// <returns>Created TCP server</returns>
-        public static IScsServer CreateServer(ScsEndPoint endPoint) {
+        public static IScsServer CreateServer(AscEndPoint endPoint) {
             return endPoint.CreateServer();
         }
     }

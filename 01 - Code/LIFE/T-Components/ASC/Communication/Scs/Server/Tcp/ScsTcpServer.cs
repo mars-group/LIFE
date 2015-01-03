@@ -10,13 +10,13 @@ namespace ASC.Communication.Scs.Server.Tcp {
         /// <summary>
         ///     The endpoint address of the server to listen incoming connections.
         /// </summary>
-        private readonly ScsTcpEndPoint _endPoint;
+        private readonly AscTcpEndPoint _endPoint;
 
         /// <summary>
         ///     Creates a new ScsTcpServer object.
         /// </summary>
         /// <param name="endPoint">The endpoint address of the server to listen incoming connections</param>
-        public ScsTcpServer(ScsTcpEndPoint endPoint) {
+        public ScsTcpServer(AscTcpEndPoint endPoint) {
             _endPoint = endPoint;
         }
 

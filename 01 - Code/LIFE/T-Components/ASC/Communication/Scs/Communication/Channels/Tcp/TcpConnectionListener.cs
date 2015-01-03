@@ -12,7 +12,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     The endpoint address of the server to listen incoming connections.
         /// </summary>
-        private readonly ScsTcpEndPoint _endPoint;
+        private readonly AscTcpEndPoint _endPoint;
 
         /// <summary>
         ///     Server socket to listen incoming connection requests.
@@ -33,7 +33,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         ///     Creates a new TcpConnectionListener for given endpoint.
         /// </summary>
         /// <param name="endPoint">The endpoint address of the server to listen incoming connections</param>
-        public TcpConnectionListener(ScsTcpEndPoint endPoint) {
+        public TcpConnectionListener(AscTcpEndPoint endPoint) {
             _endPoint = endPoint;
         }
 

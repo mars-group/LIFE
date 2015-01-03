@@ -32,7 +32,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     A collection of clients that are connected to the server.
         /// </summary>
-        public ThreadSafeSortedList<long, IScsServerClient> Clients { get; private set; }
+        public ThreadSafeSortedList<long, IAscServerClient> Clients { get; private set; }
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Constructor.
         /// </summary>
         protected ScsServerBase() {
-            Clients = new ThreadSafeSortedList<long, IScsServerClient>();
+            Clients = new ThreadSafeSortedList<long, IAscServerClient>();
             WireProtocolFactory = WireProtocolManager.GetDefaultWireProtocolFactory();
         }
 
@@ -100,7 +100,7 @@ namespace ASC.Communication.Scs.Server {
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void ConnectionListener_CommunicationChannelConnected(object sender, CommunicationChannelEventArgs e) {
-            var client = new ScsServerClient(e.Channel) {
+            var client = new AscServerClient(e.Channel) {
                 ClientId = ScsServerManager.GetClientId(),
                 WireProtocol = WireProtocolFactory.CreateWireProtocol()
             };
@@ -117,7 +117,7 @@ namespace ASC.Communication.Scs.Server {
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void Client_Disconnected(object sender, EventArgs e) {
-            var client = (IScsServerClient) sender;
+            var client = (IAscServerClient) sender;
             Clients.Remove(client.ClientId);
             OnClientDisconnected(client);
         }
@@ -130,7 +130,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Raises ClientConnected event.
         /// </summary>
         /// <param name="client">Connected client</param>
-        protected virtual void OnClientConnected(IScsServerClient client) {
+        protected virtual void OnClientConnected(IAscServerClient client) {
             var handler = ClientConnected;
             if (handler != null) handler(this, new ServerClientEventArgs(client));
         }
@@ -139,7 +139,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Raises ClientDisconnected event.
         /// </summary>
         /// <param name="client">Disconnected client</param>
-        protected virtual void OnClientDisconnected(IScsServerClient client) {
+        protected virtual void OnClientDisconnected(IAscServerClient client) {
             var handler = ClientDisconnected;
             if (handler != null) handler(this, new ServerClientEventArgs(client));
         }

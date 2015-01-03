@@ -10,7 +10,7 @@ namespace ASC.Communication.Scs.Client {
     /// <summary>
     ///     This class provides base functionality for client classes.
     /// </summary>
-    internal abstract class ScsClientBase : IScsClient {
+    internal abstract class AscClientBase : IScsClient {
         #region Public events
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Constructor.
         /// </summary>
-        protected ScsClientBase() {
+        protected AscClientBase() {
             _pingTimer = new Timer(30000);
             _pingTimer.Elapsed += PingTimer_Elapsed;
             ConnectTimeout = DefaultConnectionAttemptTimeout;

@@ -11,13 +11,13 @@ namespace ASC.Communication.ScsServices.Service {
         /// </summary>
         /// <param name="endPoint">EndPoint that represents address of the service</param>
         /// <returns>Created SCS service application</returns>
-        public static IScsServiceApplication CreateService(ScsEndPoint endPoint) {
+        public static IScsServiceApplication CreateService(AscEndPoint endPoint) {
             return new AscServiceApplication(ScsServerFactory.CreateServer(endPoint));
         }
 
         public static IScsServiceApplication CreateService(string address)
         {
-            return new AscServiceApplication(ScsServerFactory.CreateServer(ScsEndPoint.CreateEndPoint(address)));
+            return new AscServiceApplication(ScsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(address)));
         }
     }
 }

@@ -15,11 +15,11 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Gets the endpoint of remote application.
         /// </summary>
-        public override ScsEndPoint RemoteEndPoint {
+        public override AscEndPoint RemoteEndPoint {
             get { return _remoteEndPoint; }
         }
 
-        private readonly ScsTcpEndPoint _remoteEndPoint;
+        private readonly AscTcpEndPoint _remoteEndPoint;
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
             _clientSocket.NoDelay = true;
 
             var ipEndPoint = (IPEndPoint) _clientSocket.RemoteEndPoint;
-            _remoteEndPoint = new ScsTcpEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
+            _remoteEndPoint = new AscTcpEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
 
             _buffer = new byte[ReceiveBufferSize];
             _syncLock = new object();

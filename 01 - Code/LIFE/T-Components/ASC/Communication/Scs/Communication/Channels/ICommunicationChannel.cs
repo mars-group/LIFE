@@ -16,7 +16,7 @@ namespace ASC.Communication.Scs.Communication.Channels {
         /// <summary>
         ///     Gets endpoint of remote application.
         /// </summary>
-        ScsEndPoint RemoteEndPoint { get; }
+        AscEndPoint RemoteEndPoint { get; }
 
         /// <summary>
         ///     Gets the current communication state.

@@ -10,10 +10,10 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
     /// <summary>
     ///     Represents a server side end point in SCS.
     /// </summary>
-    public abstract class ScsEndPoint
+    public abstract class AscEndPoint
     {
 
-        private static IDictionary<string, ScsEndPoint> udpEndPointDictionary = new ConcurrentDictionary<string, ScsEndPoint>();
+        private static IDictionary<string, AscEndPoint> udpEndPointDictionary = new ConcurrentDictionary<string, AscEndPoint>();
 
         /// <summary>
         ///     Create a Scs End Point from a string.
@@ -23,7 +23,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
         /// </summary>
         /// <param name="endPointAddress">Address to create endpoint</param>
         /// <returns>Created end point</returns>
-        public static ScsEndPoint CreateEndPoint(string endPointAddress) {
+        public static AscEndPoint CreateEndPoint(string endPointAddress) {
             //Check if end point address is null
             if (string.IsNullOrEmpty(endPointAddress)) throw new ArgumentNullException("endPointAddress");
 
@@ -41,7 +41,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
             var address = splittedEndPoint[1].Trim();
             switch (protocol) {
                 case "tcp":
-                    return new ScsTcpEndPoint(address);
+                    return new AscTcpEndPoint(address);
                 case "udp":
                     // check if endpoint for that ip:port has already been created
                     if (udpEndPointDictionary.ContainsKey(address))
@@ -50,7 +50,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
                         return udpEndPointDictionary[address];
                     }
                     // create endpoint if not already present
-                    var endpoint = new ScsUdpEndPoint(address);
+                    var endpoint = new AscUdpEndPoint(address);
                     udpEndPointDictionary[address] = endpoint;
                     return endpoint;
 

@@ -7,17 +7,17 @@ namespace ASC.Communication.Scs.Client.Tcp {
     /// <summary>
     ///     This class is used to communicate with server over TCP/IP protocol.
     /// </summary>
-    internal class ScsTcpClient : ScsClientBase {
+    internal class AscTcpClient : AscClientBase {
         /// <summary>
         ///     The endpoint address of the server.
         /// </summary>
-        private readonly ScsTcpEndPoint _serverEndPoint;
+        private readonly AscTcpEndPoint _serverEndPoint;
 
         /// <summary>
-        ///     Creates a new ScsTcpClient object.
+        ///     Creates a new AscTcpClient object.
         /// </summary>
         /// <param name="serverEndPoint">The endpoint address to connect to the server</param>
-        public ScsTcpClient(ScsTcpEndPoint serverEndPoint) {
+        public AscTcpClient(AscTcpEndPoint serverEndPoint) {
             _serverEndPoint = serverEndPoint;
         }
 

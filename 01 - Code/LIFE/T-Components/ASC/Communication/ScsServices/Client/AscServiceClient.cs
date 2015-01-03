@@ -12,7 +12,7 @@ namespace ASC.Communication.ScsServices.Client {
     ///     Represents a service client that consumes a SCS service.
     /// </summary>
     /// <typeparam name="T">Type of service interface</typeparam>
-    internal class ScsServiceClient<T> : IScsServiceClient<T> where T : class {
+    internal class AscServiceClient<T> : IAscServiceClient<T> where T : class {
         #region Public events
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace ASC.Communication.ScsServices.Client {
         #region Constructor
 
         /// <summary>
-        ///     Creates a new ScsServiceClient object.
+        ///     Creates a new AscServiceClient object.
         /// </summary>
         /// <param name="client">Underlying IScsClient object to communicate with server</param>
         /// <param name="clientObject">
@@ -99,7 +99,7 @@ namespace ASC.Communication.ScsServices.Client {
         ///     May be null if client has no methods to be invoked by server.
         /// </param>
         /// <param name="serviceID"></param>
-        public ScsServiceClient(IScsClient client, object clientObject, Guid serviceID) {
+        public AscServiceClient(IScsClient client, object clientObject, Guid serviceID) {
             _client = client;
             _clientObject = clientObject;
 
@@ -113,7 +113,7 @@ namespace ASC.Communication.ScsServices.Client {
             ServiceProxy = (T) _realServiceProxy.GetTransparentProxy();
         }
 
-        public ScsServiceClient(IScsClient client, object clientObject) {
+        public AscServiceClient(IScsClient client, object clientObject) {
             _client = client;
             _clientObject = clientObject;
 

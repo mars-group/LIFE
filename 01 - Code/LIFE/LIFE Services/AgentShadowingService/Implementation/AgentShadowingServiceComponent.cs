@@ -1,7 +1,6 @@
 ﻿using System;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
-using LifeAPI.Agent;
 
 namespace AgentShadowingService.Implementation
 {
@@ -11,9 +10,9 @@ namespace AgentShadowingService.Implementation
     {
         private readonly IAgentShadowingService<TServiceInterface, TServiceClass> _agentShadowingUseCase;
 
-        public AgentShadowingServiceComponent()
+        public AgentShadowingServiceComponent(int port = 6666)
         {
-            _agentShadowingUseCase = new AgentShadowingServiceUseCase<TServiceInterface, TServiceClass>();
+            _agentShadowingUseCase = new AgentShadowingServiceUseCase<TServiceInterface, TServiceClass>(port);
         }
 
         public TServiceInterface CreateShadowAgent(Guid agentId)

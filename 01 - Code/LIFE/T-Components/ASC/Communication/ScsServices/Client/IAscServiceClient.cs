@@ -5,7 +5,7 @@ namespace ASC.Communication.ScsServices.Client {
     ///     Represents a service client that consumes a SCS service.
     /// </summary>
     /// <typeparam name="T">Type of service interface</typeparam>
-    public interface IScsServiceClient<out T> : IConnectableClient where T : class {
+    public interface IAscServiceClient<out T> : IConnectableClient where T : class {
         /// <summary>
         ///     Reference to the service proxy to invoke remote service methods.
         /// </summary>

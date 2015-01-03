@@ -25,7 +25,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     A collection of clients that are connected to the server.
         /// </summary>
-        ThreadSafeSortedList<long, IScsServerClient> Clients { get; }
+        ThreadSafeSortedList<long, IAscServerClient> Clients { get; }
 
         /// <summary>
         ///     Starts the server.

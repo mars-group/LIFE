@@ -49,7 +49,7 @@ namespace ASC.Communication.ScsServices.Service {
         ///     Key: Client's unique Id.
         ///     Value: Reference to the client.
         /// </summary>
-        private readonly ThreadSafeSortedList<long, IScsServiceClient> _serviceClients;
+        private readonly ThreadSafeSortedList<long, IAscServiceClient> _serviceClients;
 
         #endregion
 
@@ -68,7 +68,7 @@ namespace ASC.Communication.ScsServices.Service {
             _scsServer.ClientDisconnected += ScsServer_ClientDisconnected;
             _scsServer.ClientDisconnected += CacheableServiceObject.CacheableObject_OnClientDisconnected;
             _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
-            _serviceClients = new ThreadSafeSortedList<long, IScsServiceClient>();
+            _serviceClients = new ThreadSafeSortedList<long, IAscServiceClient>();
         }
 
         #endregion
@@ -148,12 +148,12 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void ScsServer_ClientConnected(object sender, ServerClientEventArgs e) {
-            var requestReplyMessenger = new RequestReplyMessenger<IScsServerClient>(e.Client);
+            var requestReplyMessenger = new RequestReplyMessenger<IAscServerClient>(e.Client);
             requestReplyMessenger.MessageReceived += Client_MessageReceived;
             requestReplyMessenger.Start();
 
 
-            var serviceClient = ScsServiceClientFactory.CreateServiceClient(e.Client, requestReplyMessenger);
+            var serviceClient = AscServiceClientFactory.CreateServiceClient(e.Client, requestReplyMessenger);
             _serviceClients[serviceClient.ClientId] = serviceClient;
             OnClientConnected(serviceClient);
         }
@@ -179,7 +179,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="e">Event arguments</param>
         private void Client_MessageReceived(object sender, MessageEventArgs e) {
             //Get RequestReplyMessenger object (sender of event) to get client
-            var requestReplyMessenger = (RequestReplyMessenger<IScsServerClient>) sender;
+            var requestReplyMessenger = (RequestReplyMessenger<IAscServerClient>) sender;
 
             //Cast message to ScsRemoteInvokeMessage and check it
             var invokeMessage = e.Message as ScsRemoteInvokeMessage;
@@ -277,7 +277,7 @@ namespace ASC.Communication.ScsServices.Service {
         ///     Raises ClientConnected event.
         /// </summary>
         /// <param name="client"></param>
-        private void OnClientConnected(IScsServiceClient client) {
+        private void OnClientConnected(IAscServiceClient client) {
             var handler = ClientConnected;
             if (handler != null) handler(this, new ServiceClientEventArgs(client));
         }
@@ -286,7 +286,7 @@ namespace ASC.Communication.ScsServices.Service {
         ///     Raises ClientDisconnected event.
         /// </summary>
         /// <param name="client"></param>
-        private void OnClientDisconnected(IScsServiceClient client) {
+        private void OnClientDisconnected(IAscServiceClient client) {
             var handler = ClientDisconnected;
             if (handler != null) handler(this, new ServiceClientEventArgs(client));
         }

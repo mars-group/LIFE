@@ -5,12 +5,12 @@ using ASC.Communication.Scs.Server;
 using ASC.Communication.Scs.Server.Udp;
 
 namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
-    public class ScsUdpEndPoint : ScsEndPoint {
+    public class AscUdpEndPoint : AscEndPoint {
         public string IpAddress { get; private set; }
 
         public int UdpPort { get; set; }
 
-        public ScsUdpEndPoint(string address) {
+        public AscUdpEndPoint(string address) {
             var splittedAddress = address.Trim().Split(':');
             IpAddress = splittedAddress[0].Trim();
             UdpPort = Convert.ToInt32(splittedAddress[1].Trim());
@@ -23,8 +23,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
 
         internal override IScsClient CreateClient()
         {
-            // make sure only one ScsUdpClient ist present
-            return new ScsUdpClient(this);
+            // make sure only one AscUdpClient ist present
+            return new AscUdpClient(this);
         }
     }
 }

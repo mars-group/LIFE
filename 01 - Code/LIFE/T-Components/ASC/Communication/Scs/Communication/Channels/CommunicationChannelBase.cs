@@ -33,7 +33,7 @@ namespace ASC.Communication.Scs.Communication.Channels {
         /// <summary>
         ///     Gets endpoint of remote application.
         /// </summary>
-        public abstract ScsEndPoint RemoteEndPoint { get; }
+        public abstract AscEndPoint RemoteEndPoint { get; }
 
         #endregion
 

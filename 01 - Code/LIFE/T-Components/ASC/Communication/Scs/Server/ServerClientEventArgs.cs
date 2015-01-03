@@ -8,13 +8,13 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Client that is associated with this event.
         /// </summary>
-        public IScsServerClient Client { get; private set; }
+        public IAscServerClient Client { get; private set; }
 
         /// <summary>
         ///     Creates a new ServerClientEventArgs object.
         /// </summary>
         /// <param name="client">Client that is associated with this event</param>
-        public ServerClientEventArgs(IScsServerClient client) {
+        public ServerClientEventArgs(IAscServerClient client) {
             Client = client;
         }
     }

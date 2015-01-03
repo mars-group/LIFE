@@ -10,7 +10,7 @@ using MulticastAdapter.Interface.Config;
 namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
     class UdpCommunicationChannel : CommunicationChannelBase {
-        private ScsUdpEndPoint _endPoint;
+        private AscUdpEndPoint _endPoint;
         private readonly MulticastAdapterComponent _multicastAdapter;
         private bool _running;
 
@@ -19,12 +19,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         /// </summary>
         private readonly object _syncLock;
 
-        public override ScsEndPoint RemoteEndPoint {
+        public override AscEndPoint RemoteEndPoint {
             get { throw new UdpCommunicationHasNoRemoteEndpointException(); }
         }
 
 
-        public UdpCommunicationChannel(ScsUdpEndPoint endPoint) {
+        public UdpCommunicationChannel(AscUdpEndPoint endPoint) {
             _endPoint = endPoint;
             _running = false;
             _multicastAdapter = new MulticastAdapterComponent(

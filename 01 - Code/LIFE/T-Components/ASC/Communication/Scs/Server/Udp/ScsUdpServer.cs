@@ -6,10 +6,10 @@ namespace ASC.Communication.Scs.Server.Udp
 {
     class ScsUdpServer : ScsServerBase
     {
-        private ScsUdpEndPoint _endpoint;
+        private AscUdpEndPoint _endpoint;
 
-        public ScsUdpServer(ScsUdpEndPoint scsUdpEndPoint) {
-            _endpoint = scsUdpEndPoint;
+        public ScsUdpServer(AscUdpEndPoint ascUdpEndPoint) {
+            _endpoint = ascUdpEndPoint;
         }
 
         protected override IConnectionListener CreateConnectionListener() {

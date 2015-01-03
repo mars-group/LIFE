@@ -6,7 +6,7 @@ namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Represents a client that uses a SDS service.
     /// </summary>
-    public interface IScsServiceClient {
+    public interface IAscServiceClient {
         /// <summary>
         ///     This event is raised when client is disconnected from service.
         /// </summary>
@@ -20,7 +20,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <summary>
         ///     Gets endpoint of remote application.
         /// </summary>
-        ScsEndPoint RemoteEndPoint { get; }
+        AscEndPoint RemoteEndPoint { get; }
 
         /// <summary>
         ///     Gets the communication state of the Client.

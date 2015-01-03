@@ -7,7 +7,7 @@ namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     Represents a client from a perspective of a server.
     /// </summary>
-    public interface IScsServerClient : IMessenger {
+    public interface IAscServerClient : IMessenger {
         /// <summary>
         ///     This event is raised when client disconnected from server.
         /// </summary>
@@ -21,7 +21,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Gets endpoint of remote application.
         /// </summary>
-        ScsEndPoint RemoteEndPoint { get; }
+        AscEndPoint RemoteEndPoint { get; }
 
         /// <summary>
         ///     Gets the current communication state.

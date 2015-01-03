@@ -44,9 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Communication\ScsServices\Client\IScsServiceClient.cs" />
-    <Compile Include="Communication\ScsServices\Client\ScsServiceClient.cs" />
-    <Compile Include="Communication\ScsServices\Client\ScsServiceClientBuilder.cs" />
+    <Compile Include="Communication\ScsServices\Client\IAscServiceClient.cs" />
+    <Compile Include="Communication\ScsServices\Client\AscServiceClient.cs" />
+    <Compile Include="Communication\ScsServices\Client\AscServiceClientBuilder.cs" />
     <Compile Include="Communication\ScsServices\Communication\AutoConnectRemoteInvokeProxy.cs" />
     <Compile Include="Communication\ScsServices\Communication\Messages\PropertyChangedMessage.cs" />
     <Compile Include="Communication\ScsServices\Communication\Messages\ScsRemoteException.cs" />
@@ -56,13 +56,13 @@
     <Compile Include="Communication\ScsServices\Service\CacheableAttribute.cs" />
     <Compile Include="Communication\ScsServices\Service\ICacheable.cs" />
     <Compile Include="Communication\ScsServices\Service\IScsServiceApplication.cs" />
-    <Compile Include="Communication\ScsServices\Service\IScsServiceClient.cs" />
+    <Compile Include="Communication\ScsServices\Service\IAscServiceClient.cs" />
     <Compile Include="Communication\ScsServices\Service\AscService.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceApplication.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceAttribute.cs" />
     <Compile Include="Communication\ScsServices\Service\ScsServiceBuilder.cs" />
-    <Compile Include="Communication\ScsServices\Service\ScsServiceClient.cs" />
-    <Compile Include="Communication\ScsServices\Service\ScsServiceClientFactory.cs" />
+    <Compile Include="Communication\ScsServices\Service\AscServiceClient.cs" />
+    <Compile Include="Communication\ScsServices\Service\AscServiceClientFactory.cs" />
     <Compile Include="Communication\ScsServices\Service\ServiceClientEventArgs.cs" />
     <Compile Include="Communication\Scs\Client\ClientReConnecter.cs" />
     <Compile Include="Communication\Scs\Client\IConnectableClient.cs" />
@@ -70,7 +70,7 @@
     <Compile Include="Communication\Scs\Client\SscClientBase.cs" />
     <Compile Include="Communication\Scs\Client\Tcp\ScsTcpClient.cs" />
     <Compile Include="Communication\Scs\Client\Tcp\TcpHelper.cs" />
-    <Compile Include="Communication\Scs\Client\Udp\ScsUdpClient.cs" />
+    <Compile Include="Communication\Scs\Client\Udp\AscUdpClient.cs" />
     <Compile Include="Communication\Scs\Communication\Channels\CommunicationChannelBase.cs" />
     <Compile Include="Communication\Scs\Communication\Channels\CommunicationChannelEventArgs.cs" />
     <Compile Include="Communication\Scs\Communication\Channels\ConnectionListenerBase.cs" />
@@ -83,9 +83,9 @@
     <Compile Include="Communication\Scs\Communication\CommunicationException.cs" />
     <Compile Include="Communication\Scs\Communication\CommunicationStateException.cs" />
     <Compile Include="Communication\Scs\Communication\CommunicationStates.cs" />
-    <Compile Include="Communication\Scs\Communication\EndPoints\ScsEndPoint.cs" />
-    <Compile Include="Communication\Scs\Communication\EndPoints\Tcp\ScsTcpEndPoint.cs" />
-    <Compile Include="Communication\Scs\Communication\EndPoints\Udp\ScsUdpEndPoint.cs" />
+    <Compile Include="Communication\Scs\Communication\EndPoints\AscEndPoint.cs" />
+    <Compile Include="Communication\Scs\Communication\EndPoints\Tcp\AscTcpEndPoint.cs" />
+    <Compile Include="Communication\Scs\Communication\EndPoints\Udp\AscUdpEndPoint.cs" />
     <Compile Include="Communication\Scs\Communication\Messages\IScsMessage.cs" />
     <Compile Include="Communication\Scs\Communication\Messages\MessageEventArgs.cs" />
     <Compile Include="Communication\Scs\Communication\Messages\PingMessage.cs" />
@@ -102,9 +102,9 @@
     <Compile Include="Communication\Scs\Communication\Protocols\ProtobufSerialization\ProtobufSerializationProtocolFactory.cs" />
     <Compile Include="Communication\Scs\Communication\Protocols\WireProtocolManager.cs" />
     <Compile Include="Communication\Scs\Server\IScsServer.cs" />
-    <Compile Include="Communication\Scs\Server\IScsServerClient.cs" />
+    <Compile Include="Communication\Scs\Server\IAscServerClient.cs" />
     <Compile Include="Communication\Scs\Server\ScsServerBase.cs" />
-    <Compile Include="Communication\Scs\Server\ScsServerClient.cs" />
+    <Compile Include="Communication\Scs\Server\AscServerClient.cs" />
     <Compile Include="Communication\Scs\Server\ScsServerFactory.cs" />
     <Compile Include="Communication\Scs\Server\ScsServerManager.cs" />
     <Compile Include="Communication\Scs\Server\ServerClientEventArgs.cs" />

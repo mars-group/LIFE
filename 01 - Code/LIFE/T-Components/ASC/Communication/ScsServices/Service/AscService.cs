@@ -9,7 +9,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <summary>
         ///     The current client for a thread that called service method.
         /// </summary>
-        [ThreadStatic] private static IScsServiceClient _currentClient;
+        [ThreadStatic] private static IAscServiceClient _currentClient;
 
         /// <summary>
         ///     Gets the current client which called this service method.
@@ -19,7 +19,7 @@ namespace ASC.Communication.ScsServices.Service {
         ///     called in a service method if the method is called by SCS system,
         ///     else throws exception.
         /// </remarks>
-        protected internal IScsServiceClient CurrentClient {
+        protected internal IAscServiceClient CurrentClient {
             get {
                 if (_currentClient == null) {
                     throw new Exception(

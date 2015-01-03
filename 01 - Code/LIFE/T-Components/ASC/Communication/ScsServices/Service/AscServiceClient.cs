@@ -8,10 +8,10 @@ using ASC.Communication.ScsServices.Communication;
 
 namespace ASC.Communication.ScsServices.Service {
     /// <summary>
-    ///     Implements IScsServiceClient.
+    ///     Implements IAscServiceClient.
     ///     It is used to manage and monitor a service client.
     /// </summary>
-    internal class ScsServiceClient : IScsServiceClient {
+    internal class AscServiceClient : IAscServiceClient {
         #region Public events
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <summary>
         ///     Gets endpoint of remote application.
         /// </summary>
-        public ScsEndPoint RemoteEndPoint {
+        public AscEndPoint RemoteEndPoint {
             get { return _serverClient.RemoteEndPoint; }
         }
 
@@ -49,14 +49,14 @@ namespace ASC.Communication.ScsServices.Service {
         #region Private fields
 
         /// <summary>
-        ///     Reference to underlying IScsServerClient object.
+        ///     Reference to underlying IAscServerClient object.
         /// </summary>
-        private readonly IScsServerClient _serverClient;
+        private readonly IAscServerClient _serverClient;
 
         /// <summary>
         ///     This object is used to send messages to client.
         /// </summary>
-        private readonly RequestReplyMessenger<IScsServerClient> _requestReplyMessenger;
+        private readonly RequestReplyMessenger<IAscServerClient> _requestReplyMessenger;
 
         /// <summary>
         ///     Last created proxy object to invoke remote medhods.
@@ -68,12 +68,12 @@ namespace ASC.Communication.ScsServices.Service {
         #region Constructor
 
         /// <summary>
-        ///     Creates a new ScsServiceClient object.
+        ///     Creates a new AscServiceClient object.
         /// </summary>
-        /// <param name="serverClient">Reference to underlying IScsServerClient object</param>
+        /// <param name="serverClient">Reference to underlying IAscServerClient object</param>
         /// <param name="requestReplyMessenger">RequestReplyMessenger to send messages</param>
-        public ScsServiceClient(IScsServerClient serverClient,
-            RequestReplyMessenger<IScsServerClient> requestReplyMessenger) {
+        public AscServiceClient(IAscServerClient serverClient,
+            RequestReplyMessenger<IAscServerClient> requestReplyMessenger) {
             _serverClient = serverClient;
             _serverClient.Disconnected += Client_Disconnected;
             _requestReplyMessenger = requestReplyMessenger;
@@ -96,7 +96,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <typeparam name="T">Type of client interface</typeparam>
         /// <returns>Client interface</returns>
         public T GetClientProxy<T>(Guid serviceID) where T : class {
-            _realProxy = new RemoteInvokeProxy<T, IScsServerClient>(_requestReplyMessenger, serviceID);
+            _realProxy = new RemoteInvokeProxy<T, IAscServerClient>(_requestReplyMessenger, serviceID);
             return (T) _realProxy.GetTransparentProxy();
         }
 

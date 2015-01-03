@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Client;
 using ASC.Communication.ScsServices.Service;
-using LifeAPI.Agent;
 using LIFEUtilities.MulticastAddressGenerator;
 
 namespace AgentShadowingService.Implementation
@@ -15,41 +12,30 @@ namespace AgentShadowingService.Implementation
         where TServiceClass : AscService, TServiceInterface
         where TServiceInterface : class
     {
-        private IDictionary<IScsServiceClient<TServiceInterface>, byte> shadowAgentClients;
+        private readonly IDictionary<IAscServiceClient<TServiceInterface>, byte> _shadowAgentClients;
         private readonly string _mcastAddress;
         private readonly IScsServiceApplication _agentShadowingServer;
-        //private readonly MethodInfo _genericAddServiceMethod;
-        //private Type _interfaceType;
 
-        public AgentShadowingServiceUseCase() {
+        public AgentShadowingServiceUseCase(int port = 6666) {
             var typeOfTServiceClass = typeof (TServiceClass);
-            shadowAgentClients = new ConcurrentDictionary<IScsServiceClient<TServiceInterface>, byte>();
-            _mcastAddress = "udp://" + MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass) + ":6666";
+            _shadowAgentClients = new ConcurrentDictionary<IAscServiceClient<TServiceInterface>, byte>();
+            _mcastAddress = "udp://" + MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass) + ":"+port;
             // TODO: May be moved into RegisterRealAgent, so as not to start the server, when no real agents are present
             _agentShadowingServer = ScsServiceBuilder.CreateService(_mcastAddress);
             _agentShadowingServer.Start();
-
-            // reflect type of Interface of T which has AscService Attribute
-            /* 
-            _interfaceType = null;
-            foreach (var @interface in from @interface in typeOfT.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(AscServiceAttribute) select @interface)
-            {
-                _interfaceType = @interface;
-            }
-
-
-            var addServiceMethod = _agentShadowingServer.GetType().GetMethod("AddService");
-            _genericAddServiceMethod = addServiceMethod.MakeGenericMethod(_interfaceType, typeOfT);
-            */
         }
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {
-            var shadowAgentClient = ScsServiceClientBuilder.CreateClient<TServiceInterface>(
+            var shadowAgentClient = AscServiceClientBuilder.CreateClient<TServiceInterface>(
                 _mcastAddress,
                 agentId
                 );
-            shadowAgentClients.Add(shadowAgentClient, new byte());
+            // connect the shadow agent
+            shadowAgentClient.Connect();
+            // store shadow agent client in list for later management and observation
+            _shadowAgentClients.Add(shadowAgentClient, new byte());
+            // return RealProxy interface wrapper as clientside reference to remote object
             return shadowAgentClient.ServiceProxy;
         }
 
