@@ -16,12 +16,13 @@ namespace KNPTreeLayer {
     public class TreeLayer : ScsService, IKnpTreeLayer
     {
         private long _currentTick;
-        private ElevationLayer _elevationLayer;
+        private IKnpElevationLayer _elevationLayer;
 
         private readonly List<ITree> trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
 
-        public TreeLayer(ElevationLayer elevationLayer) {
+        public TreeLayer(IKnpElevationLayer elevationLayer)
+        {
             _elevationLayer = elevationLayer;
             trees = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();

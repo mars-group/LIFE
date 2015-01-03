@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reflection;
 using Hik.Communication.Scs.Client;
 using Hik.Communication.Scs.Communication;
@@ -49,6 +50,11 @@ namespace Hik.Communication.ScsServices.Client {
         ///     Reference to the service proxy to invoke remote service methods.
         /// </summary>
         public T ServiceProxy { get; private set; }
+
+        public TO GetReflectedServiceProxy<TO>()
+        {
+            return (TO)_realServiceProxy.GetTransparentProxy();
+        }
 
         /// <summary>
         ///     Timeout value when invoking a service method.

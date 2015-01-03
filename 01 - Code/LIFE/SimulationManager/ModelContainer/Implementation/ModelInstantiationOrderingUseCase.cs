@@ -62,6 +62,16 @@ namespace ModelContainer.Implementation {
             foreach (TypeExtensionNode node in nodes) {
                 Type type = node.Type;
                 ConstructorInfo[] constructors = type.GetConstructors();
+                // make sure all parameters in all constructors are Interfaces, throw exception otherwise
+                if (
+                    constructors.Any(
+                        info => info.GetParameters().Any(parameterInfo => !parameterInfo.ParameterType.IsInterface)))
+                {
+                    throw new AllLayerConstructorParamtersNeedToBeInterfacesException(
+                        "Make sure all your parameters in your Layer's constructor are interface types." +
+                        "This is required for MARS LIFE's distribution to work properly."
+                        );
+                }
                 TLayerDescription layerDescription = new TLayerDescription
                     (type.Name,
                         type.Assembly.GetName().Version.Major,
@@ -77,6 +87,15 @@ namespace ModelContainer.Implementation {
             }
 
             return modelStructure.CalculateInstantiationOrder();
+        }
+    }
+
+    [Serializable]
+    internal class AllLayerConstructorParamtersNeedToBeInterfacesException : Exception
+    {
+        public AllLayerConstructorParamtersNeedToBeInterfacesException(string s) : base(s)
+        {
+            
         }
     }
 }

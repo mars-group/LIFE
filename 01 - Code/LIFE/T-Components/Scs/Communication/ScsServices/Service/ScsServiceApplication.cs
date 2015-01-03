@@ -316,6 +316,7 @@ namespace Hik.Communication.ScsServices.Service {
             ///     Value: Informations about method.
             /// </summary>
             private readonly SortedList<string, MethodInfo> _methods;
+            private readonly SortedList<string, MethodInfo> _internalMethods;
 
             /// <summary>
             ///     Creates a new ServiceObject.
@@ -335,6 +336,15 @@ namespace Hik.Communication.ScsServices.Service {
                 foreach (var methodInfo in serviceInterfaceType.GetMethods()) {
                     _methods.Add(methodInfo.Name, methodInfo);
                 }
+                _internalMethods = new SortedList<string, MethodInfo>();
+                foreach (var methodInfo in service.GetType().GetMethods())
+                {
+                    if (_internalMethods.ContainsKey(methodInfo.Name))
+                    {
+                        continue;
+                    }
+                    _internalMethods.Add(methodInfo.Name,methodInfo);
+                }
             }
 
             /// <summary>
@@ -343,13 +353,22 @@ namespace Hik.Communication.ScsServices.Service {
             /// <param name="methodName">Name of the method to invoke</param>
             /// <param name="parameters">Parameters of method</param>
             /// <returns>Return value of method</returns>
-            public object InvokeMethod(string methodName, params object[] parameters) {
+            public object InvokeMethod(string methodName, params object[] parameters)
+            {
+                MethodInfo method = null;
                 //Check if there is a method with name methodName
                 if (!_methods.ContainsKey(methodName))
-                    throw new Exception("There is not a method with name '" + methodName + "' in service class.");
-
-                //Get method
-                var method = _methods[methodName];
+                {
+                    if (!_internalMethods.ContainsKey(methodName))
+                    {
+                        throw new Exception("There is not a method with name '" + methodName + "' in service class.");
+                    }
+                    method = _internalMethods[methodName];
+                }
+                else
+                {
+                    method = _methods[methodName];
+                }
 
                 //Invoke method and return invoke result
                 return method.Invoke(Service, parameters);

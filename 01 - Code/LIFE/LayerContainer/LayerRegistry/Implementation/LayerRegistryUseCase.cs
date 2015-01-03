@@ -91,13 +91,19 @@ namespace LayerRegistry.Implementation {
         }
 
         public void RegisterLayer(ILayer layer) {
-            // store in Dict for local usage
+            // store in Dict for local usage, by its direct type
             _localLayers.Add(layer.GetType(), layer);
+            // and by its direct interface type if any
+            if (layer.GetType().GetInterfaces().Length > 0)
+            {
+                _localLayers.Add(layer.GetType().GetInterfaces().First(), layer);
+            }
+            // this is necessary in the case somebody is neither using distribution nor interfaces, but still has dependencies
+
 
             // check whether this layer should create a service endpoint and be remotely accessible or not
-            
             var layerType = layer.GetType();
-            // get first interface, is always the directly implemented interface
+            // check if an interface with ScsService Attribute is present
             Type interfaceType = null;
             foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
             {
@@ -119,7 +125,7 @@ namespace LayerRegistry.Implementation {
                 _layerServers.Add(server);
 
                 // store LayerRegistryEntry in LayerNameService for remote resolution
-                _layerNameServiceClient.ServiceProxy.RegisterLayer(layer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
+                _layerNameServiceClient.ServiceProxy.RegisterLayer(interfaceType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
             }
         }
 
@@ -142,8 +148,9 @@ namespace LayerRegistry.Implementation {
         /// <returns></returns>
         private ILayer GetRemoteLayerInstance(Type layerType)
         {
+            Console.WriteLine("lookin for: " + layerType);
             var entry = _layerNameServiceClient.ServiceProxy.ResolveLayer(layerType);
-            MethodInfo createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
+            var createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
 
             // we need to use the layer's interface type and not the class type, so make sure
             // layerType either is an interface type or reflect the correct interface type
@@ -154,8 +161,8 @@ namespace LayerRegistry.Implementation {
                 interfaceType = layerType;
                 genericCreateClientMethod = createClientMethod.MakeGenericMethod(interfaceType);
             }
-            else {
-
+            else 
+            {
                 foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
                 {
                     interfaceType = @interface;
@@ -171,10 +178,9 @@ namespace LayerRegistry.Implementation {
 
               
             Type typeOfScsStub = scsStub.GetType();
-            var serviceProxyProperty = typeOfScsStub.GetProperty("ServiceProxy");
-            
-            var proxy = serviceProxyProperty.GetGetMethod().Invoke(scsStub, new object[]{});
-            
+
+            var proxy = typeOfScsStub.GetProperty("ServiceProxy").GetValue(scsStub);
+
             return proxy;
         }
 
