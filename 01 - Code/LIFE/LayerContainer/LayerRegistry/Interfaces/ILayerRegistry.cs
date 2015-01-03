@@ -38,7 +38,7 @@ namespace LayerRegistry.Interfaces {
         /// </summary>
         /// <param name="layerType"></param>
         /// <returns></returns>
-        ILayer GetLayerInstance(Type layerType);
+        object GetLayerInstance(Type layerType);
 
         /// <summary>
         ///     Registers layer as being instantiated on this node.

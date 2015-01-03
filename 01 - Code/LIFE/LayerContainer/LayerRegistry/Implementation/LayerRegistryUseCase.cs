@@ -129,7 +129,7 @@ namespace LayerRegistry.Implementation {
             }
         }
 
-        public ILayer GetLayerInstance(Type layerType)
+        public object GetLayerInstance(Type layerType)
         {
             return _localLayers.ContainsKey(layerType) ? _localLayers[layerType] : GetRemoteLayerInstance(layerType);
         }
@@ -143,12 +143,11 @@ namespace LayerRegistry.Implementation {
         ///     and invokes it with parameters fetched from the retreived RegistryEntry.
         ///     The return value is retreived as 'dynamic' to be able to get the ServiceProxy of layerType.
         /// </summary>
-        /// <param name="registryEntries"></param>
         /// <param name="layerType"></param>
-        /// <returns></returns>
-        private ILayer GetRemoteLayerInstance(Type layerType)
+        /// <returns>A realproxy implementing the layerType's interface. Return type is object because of C# reflection bullshit. 
+        /// DONT. EVER. TOUCH. THIS!</returns>
+        private object GetRemoteLayerInstance(Type layerType)
         {
-            Console.WriteLine("lookin for: " + layerType);
             var entry = _layerNameServiceClient.ServiceProxy.ResolveLayer(layerType);
             var createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
 
@@ -171,7 +170,7 @@ namespace LayerRegistry.Implementation {
             }
 
 
-            dynamic scsStub = genericCreateClientMethod.Invoke(null, new[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port), null });
+            var scsStub = genericCreateClientMethod.Invoke(null, new[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port), null });
 
             // cast to IConnectableClient since dynamic binding only exposes the statically implemented members
             ((IConnectableClient)scsStub).Connect();

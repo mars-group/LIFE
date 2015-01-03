@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AgentShadowingService.Implementation;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
@@ -36,7 +37,7 @@ namespace KNPTreeLayer {
 
                     // instantiate real Agents
                     for (int i = 0; i < agentInitConfig.RealAgentCount; i++) {
-                        var t = new Tree(4, 2, 10, 10, 500, 30, 22, agentInitConfig.RealAgentIds[i]);
+                        var t = new Tree(4, 2, 10, i, 500, 30, 22, agentInitConfig.RealAgentIds[i], _elevationLayer, this);
                         registerAgentHandle(this, t);
                         trees.Add(t);
                         _agentShadowingService.RegisterRealAgent(t);
@@ -50,6 +51,11 @@ namespace KNPTreeLayer {
                 }
             }
             return true;
+        }
+
+        internal List<ITree> GetAllOtherTreesThanMe(ITree memyself)
+        {
+            return trees.FindAll(t => t != memyself);
         }
 
         public long GetCurrentTick() {

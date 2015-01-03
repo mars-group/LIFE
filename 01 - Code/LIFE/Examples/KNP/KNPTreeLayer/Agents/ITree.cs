@@ -13,5 +13,7 @@ namespace TreeLayer.Agents
         double Biomass { get; set; }
         double Lat { get; set; }
         double Lon { get; set; }
+
+        string GetIdentifiaction();
     }
 }
