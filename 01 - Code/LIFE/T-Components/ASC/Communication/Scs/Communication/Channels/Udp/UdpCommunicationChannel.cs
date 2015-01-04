@@ -28,7 +28,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             _endPoint = endPoint;
             _running = false;
             _multicastAdapter = new MulticastAdapterComponent(
-                new GlobalConfig(_endPoint.IpAddress, _endPoint.UdpPort, 50000, 4),
+                new GlobalConfig(_endPoint.McastGroup, _endPoint.UdpPort, _endPoint.UdpPort+1, 4),
                 new MulticastSenderConfig()
             );
             _syncLock = new object();

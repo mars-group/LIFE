@@ -41,7 +41,7 @@ namespace AppSettingsManager {
         public int IPVersion { get; set; }
 
         public GlobalConfig() {
-            MulticastGroupIp = "224.10.99.1";
+            MulticastGroupIp = "239.0.0.1";
             MulticastGroupListenPort = 50100;
             MulticastGroupSendingStartPort = 50500;
             DHTPort = 8500;

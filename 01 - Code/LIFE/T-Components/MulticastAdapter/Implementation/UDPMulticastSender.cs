@@ -34,7 +34,6 @@ namespace MulticastAdapter.Implementation
             _sendingPort = _generalSettings.MulticastGroupSendingStartPort;
             _listenPort = _generalSettings.MulticastGroupListenPort;
             _clients = GetSendingInterfaces();
-
         }
 
 		/// <summary>

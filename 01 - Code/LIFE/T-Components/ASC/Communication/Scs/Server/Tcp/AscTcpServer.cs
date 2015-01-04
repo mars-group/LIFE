@@ -6,17 +6,17 @@ namespace ASC.Communication.Scs.Server.Tcp {
     /// <summary>
     ///     This class is used to create a TCP server.
     /// </summary>
-    internal class ScsTcpServer : ScsServerBase {
+    internal class AscTcpServer : AscServerBase {
         /// <summary>
         ///     The endpoint address of the server to listen incoming connections.
         /// </summary>
         private readonly AscTcpEndPoint _endPoint;
 
         /// <summary>
-        ///     Creates a new ScsTcpServer object.
+        ///     Creates a new AscTcpServer object.
         /// </summary>
         /// <param name="endPoint">The endpoint address of the server to listen incoming connections</param>
-        public ScsTcpServer(AscTcpEndPoint endPoint) {
+        public AscTcpServer(AscTcpEndPoint endPoint) {
             _endPoint = endPoint;
         }
 

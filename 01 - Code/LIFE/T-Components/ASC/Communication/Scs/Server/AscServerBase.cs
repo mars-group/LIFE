@@ -7,7 +7,7 @@ namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     This class provides base functionality for server classes.
     /// </summary>
-    internal abstract class ScsServerBase : IScsServer {
+    internal abstract class AscServerBase : IScsServer {
         #region Public events
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Constructor.
         /// </summary>
-        protected ScsServerBase() {
+        protected AscServerBase() {
             Clients = new ThreadSafeSortedList<long, IAscServerClient>();
             WireProtocolFactory = WireProtocolManager.GetDefaultWireProtocolFactory();
         }
