@@ -11,6 +11,8 @@ namespace RuntimeEnvironment.Implementation.Entities {
             ModelContent content,
             int nr) {
             _layerContainer = layerContainer;
+			// set timeout to infinite
+			_layerContainer.Timeout = -1;
             _layerContainer.Connect();
 
             _layerContainer.ServiceProxy.LoadModelContent(content);
