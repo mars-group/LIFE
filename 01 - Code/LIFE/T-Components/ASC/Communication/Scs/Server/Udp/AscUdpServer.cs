@@ -4,11 +4,11 @@ using ASC.Communication.Scs.Communication.EndPoints.Udp;
 
 namespace ASC.Communication.Scs.Server.Udp
 {
-    class ScsUdpServer : ScsServerBase
+    class AscUdpServer : AscServerBase
     {
-        private AscUdpEndPoint _endpoint;
+        private readonly AscUdpEndPoint _endpoint;
 
-        public ScsUdpServer(AscUdpEndPoint ascUdpEndPoint) {
+        public AscUdpServer(AscUdpEndPoint ascUdpEndPoint) {
             _endpoint = ascUdpEndPoint;
         }
 

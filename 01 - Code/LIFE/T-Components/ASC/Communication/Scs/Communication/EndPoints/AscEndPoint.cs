@@ -22,8 +22,9 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
         ///     IP 89.43.104.179 and port 10048.
         /// </summary>
         /// <param name="endPointAddress">Address to create endpoint</param>
+        /// <param name="multicastGroup"></param>
         /// <returns>Created end point</returns>
-        public static AscEndPoint CreateEndPoint(string endPointAddress) {
+        public static AscEndPoint CreateEndPoint(string endPointAddress, string multicastGroup) {
             //Check if end point address is null
             if (string.IsNullOrEmpty(endPointAddress)) throw new ArgumentNullException("endPointAddress");
 
@@ -50,7 +51,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
                         return udpEndPointDictionary[address];
                     }
                     // create endpoint if not already present
-                    var endpoint = new AscUdpEndPoint(address);
+                    var endpoint = new AscUdpEndPoint(address, multicastGroup);
                     udpEndPointDictionary[address] = endpoint;
                     return endpoint;
 

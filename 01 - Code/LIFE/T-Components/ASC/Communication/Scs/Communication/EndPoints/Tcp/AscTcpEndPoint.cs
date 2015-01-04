@@ -54,7 +54,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         /// </summary>
         /// <returns>Scs Server</returns>
         internal override IScsServer CreateServer() {
-            return new ScsTcpServer(this);
+            return new AscTcpServer(this);
         }
 
         /// <summary>

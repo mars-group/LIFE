@@ -60,7 +60,7 @@
     <Compile Include="Communication\ScsServices\Service\AscService.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceApplication.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceAttribute.cs" />
-    <Compile Include="Communication\ScsServices\Service\ScsServiceBuilder.cs" />
+    <Compile Include="Communication\ScsServices\Service\AscServiceBuilder.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceClient.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceClientFactory.cs" />
     <Compile Include="Communication\ScsServices\Service\ServiceClientEventArgs.cs" />
@@ -103,13 +103,13 @@
     <Compile Include="Communication\Scs\Communication\Protocols\WireProtocolManager.cs" />
     <Compile Include="Communication\Scs\Server\IScsServer.cs" />
     <Compile Include="Communication\Scs\Server\IAscServerClient.cs" />
-    <Compile Include="Communication\Scs\Server\ScsServerBase.cs" />
+    <Compile Include="Communication\Scs\Server\AscServerBase.cs" />
     <Compile Include="Communication\Scs\Server\AscServerClient.cs" />
     <Compile Include="Communication\Scs\Server\ScsServerFactory.cs" />
     <Compile Include="Communication\Scs\Server\ScsServerManager.cs" />
     <Compile Include="Communication\Scs\Server\ServerClientEventArgs.cs" />
-    <Compile Include="Communication\Scs\Server\Tcp\ScsTcpServer.cs" />
-    <Compile Include="Communication\Scs\Server\Udp\ScsUdpServer.cs" />
+    <Compile Include="Communication\Scs\Server\Tcp\AscTcpServer.cs" />
+    <Compile Include="Communication\Scs\Server\Udp\AscUdpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

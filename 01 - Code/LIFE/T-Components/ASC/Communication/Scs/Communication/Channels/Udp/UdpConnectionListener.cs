@@ -8,7 +8,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
     /// </summary>
     class UdpConnectionListener : ConnectionListenerBase
     {
-        private AscUdpEndPoint _endPoint;
+        private readonly AscUdpEndPoint _endPoint;
 
         public UdpConnectionListener(AscUdpEndPoint endpoint) {
             _endPoint = endpoint;
