@@ -172,11 +172,13 @@ namespace LayerRegistry.Implementation {
 
             var scsStub = genericCreateClientMethod.Invoke(null, new[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port), null });
 
+            Type typeOfScsStub = scsStub.GetType();
+
+            // set timeout to infinite
+            typeOfScsStub.GetProperty("Timeout").SetValue(scsStub, -1);
+
             // cast to IConnectableClient since dynamic binding only exposes the statically implemented members
             ((IConnectableClient)scsStub).Connect();
-
-              
-            Type typeOfScsStub = scsStub.GetType();
 
             var proxy = typeOfScsStub.GetProperty("ServiceProxy").GetValue(scsStub);
 
