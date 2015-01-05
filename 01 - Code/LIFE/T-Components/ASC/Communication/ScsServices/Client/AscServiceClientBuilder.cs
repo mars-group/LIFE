@@ -33,9 +33,9 @@ namespace ASC.Communication.ScsServices.Client {
         ///     May be null if client has no methods to be invoked by server
         /// </param>
         /// <returns>Created client object to connect to the server</returns>
-        public static IAscServiceClient<T> CreateClient<T>(string endpointAddress, string multicastGroup, Guid serviceID,
+        public static IAscServiceClient<T> CreateClient<T>(int listenPort, string multicastGroup, Guid serviceID,
             object clientObject = null) where T : class {
-                return CreateClient<T>(AscEndPoint.CreateEndPoint(endpointAddress, multicastGroup), serviceID, clientObject);
+                return CreateClient<T>(AscEndPoint.CreateEndPoint(listenPort, multicastGroup), serviceID, clientObject);
         }
 
 
