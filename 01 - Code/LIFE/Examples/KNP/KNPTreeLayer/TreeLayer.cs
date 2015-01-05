@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using Hik.Communication.Scs.Communication.EndPoints.Udp;
-using Hik.Communication.ScsServices.Client;
+using System.Linq;
+using AgentShadowingService.Implementation;
+using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
-using LIFEUtilities.MulticastAddressGenerator;
 using Mono.Addins;
+using TreeLayer;
 using TreeLayer.Agents;
 
 [assembly: Addin]
@@ -13,43 +14,49 @@ using TreeLayer.Agents;
 
 namespace KNPTreeLayer {
     [Extension(typeof (ISteppedLayer))]
-    public class TreeLayer : ISteppedLayer {
+    public class TreeLayer : ScsService, IKnpTreeLayer
+    {
         private long _currentTick;
-        private ElevationLayer _elevationLayer;
+        private IKnpElevationLayer _elevationLayer;
 
         private readonly List<ITree> trees;
+        private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
 
-        public TreeLayer(ElevationLayer elevationLayer) {
+        public TreeLayer(IKnpElevationLayer elevationLayer)
+        {
             _elevationLayer = elevationLayer;
             trees = new List<ITree>();
+            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
         }
 
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
 
+
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName == "Tree") {
-
+                    // evil hack only for testing purposes
+                    bool sendingNote = _agentShadowingService.GetLayerContainerName() == "LC-1";
                     // instantiate real Agents
                     for (int i = 0; i < agentInitConfig.RealAgentCount; i++) {
-                        var t = new Tree(4, 2, 10, 10, 500, 30, 22, agentInitConfig.RealAgentIds[i]);
+                        var t = new Tree(4, 2, 10, i, 500, 30, 22, agentInitConfig.RealAgentIds[i], _elevationLayer, this, sendingNote);
                         registerAgentHandle(this, t);
                         trees.Add(t);
+                        _agentShadowingService.RegisterRealAgent(t);
                     }
 
                     // instantiate Shadow Agents
                     for (int i = 0; i < agentInitConfig.ShadowAgentCount; i++) {
-                        trees.Add(
-                                ScsServiceClientBuilder.CreateClient<ITree>(
-                                    new ScsUdpEndPoint(
-                                        MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeof (Tree)) + ":6666"),
-                                    agentInitConfig.ShadowAgentsIds[i]).ServiceProxy
-                                );
+                        trees.Add(_agentShadowingService.CreateShadowAgent(agentInitConfig.ShadowAgentsIds[i]));
                     }
 
                 }
             }
-
             return true;
+        }
+
+        internal List<ITree> GetAllOtherTreesThanMe(ITree memyself)
+        {
+            return trees.FindAll(t => t != memyself);
         }
 
         public long GetCurrentTick() {
@@ -58,6 +65,11 @@ namespace KNPTreeLayer {
 
         public void SetCurrentTick(long currentTick) {
             _currentTick = currentTick;
+        }
+
+        public string Name
+        {
+            get { return "TreeLayer"; }
         }
     }
 }

@@ -7,6 +7,9 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.Linq;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
@@ -45,10 +48,11 @@ namespace LayerFactory.Implementation {
 
                 var i = 0;
                 foreach (var parameterInfo in neededParameters) {
-                    actualParameters[i] = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
+                    var param = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
+                    actualParameters[i] = param;
                     i++;
                 }
-                result = (ILayer) currentConstructor.Invoke(actualParameters);
+                result = (ILayer) currentConstructor.Invoke(actualParameters.ToArray());
             }
             _layerRegistry.RegisterLayer(result);
             return result;

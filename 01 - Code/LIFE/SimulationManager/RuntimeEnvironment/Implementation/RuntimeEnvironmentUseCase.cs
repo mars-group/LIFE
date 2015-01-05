@@ -4,12 +4,9 @@ using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
-using log4net;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
-using log4net.Config;
-using LoggerFactory.Interface;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -25,8 +22,7 @@ namespace RuntimeEnvironment.Implementation {
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
         private readonly ISet<TNodeInformation> _idleLayerContainers;
         private readonly ISet<TNodeInformation> _busyLayerContainers;
-        private ILog _logger;
-
+      
         public RuntimeEnvironmentUseCase
             (
             IModelContainer modelContainer,
@@ -39,14 +35,11 @@ namespace RuntimeEnvironment.Implementation {
             _busyLayerContainers = new HashSet<TNodeInformation>();
 
             _nodeRegistry.SubscribeForNewNodeConnectedByType(NewNode, NodeType.LayerContainer);
-
-            _logger = LoggerInstanceFactory.GetLoggerInstance<RuntimeEnvironmentUseCase>();
-            }
+        }
 
         #region IRuntimeEnvironment Members
 
         public void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
-            _logger.Info("Starting simulation with model " + model.Name);
             lock (this) {
 				if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
 					throw new NoLayerContainersArePresentException ();
@@ -58,15 +51,11 @@ namespace RuntimeEnvironment.Implementation {
 
                 // download Model ZIP file from MARS WebSuite, extract and add it to the model repo
                 if (model.SourceURL != String.Empty) {
-                    _logger.Info("Downloading model ZIP file from MARS WebSuite...");
                     _modelContainer.AddModelFromURL(model.SourceURL);
-                    _logger.Info("Finished downloading model ZIP file. Initializing...");
                 }
 
                 IList<LayerContainerClient> clients = InitConnections(model, layerContainerNodes);
-                _logger.Info("Finished Initializing connections to LayerContainers.");
 
-                _logger.Info("Starting actual simulation.");
                 _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, startPaused);
             }
         }
@@ -84,7 +73,6 @@ namespace RuntimeEnvironment.Implementation {
         public void Pause(TModelDescription model) {
             if (!_steppedSimulations.ContainsKey(model))
             {
-                _logger.Error("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
                 throw new SimulationHasNotBeenStartedException
                     ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
             }
@@ -94,7 +82,6 @@ namespace RuntimeEnvironment.Implementation {
 
         public void Resume(TModelDescription model) {
             if (!_steppedSimulations.ContainsKey(model)) {
-                _logger.Error("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
                 throw new SimulationHasNotBeenStartedException
                     ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
             }
@@ -113,7 +100,6 @@ namespace RuntimeEnvironment.Implementation {
                 _steppedSimulations[model].StartVisualization(nrOfTicksToVisualize);
             }
             else {
-                _logger.Error("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
                 throw new SimulationHasNotBeenStartedException
                     ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
             }
@@ -125,7 +111,6 @@ namespace RuntimeEnvironment.Implementation {
                 _steppedSimulations[model].StopVisualization();
             }
             else {
-                _logger.Error("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
                 throw new SimulationHasNotBeenStartedException
                     ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
             }
@@ -159,7 +144,8 @@ namespace RuntimeEnvironment.Implementation {
                     ScsServiceClientBuilder.CreateClient<ILayerContainer>
                         (
                             nodeInformationType.NodeEndpoint.IpAddress + ":" +
-                            nodeInformationType.NodeEndpoint.Port),
+                            nodeInformationType.NodeEndpoint.Port
+                        ),
                     content,
                     i);
                 layerContainerClients[i] = client;
@@ -181,11 +167,7 @@ namespace RuntimeEnvironment.Implementation {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
                 // fetch layerConfig by layerName
-                var layerConfig = modelConfig.LayerConfigs.FirstOrDefault(cfg => cfg.LayerName == layerDescription.Name);
-                if (layerConfig == null)
-                {
-                    _logger.Error("Please provide a configuration for layer:" + layerDescription.Name + " in the ModelConfig file.");
-                    throw new LayerHasNoConfigurationException("Please provide a configuration for layer:" + layerDescription.Name + " in the ModelConfig file.");}
+                var layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
 
                 if (layerConfig.DistributionStrategy == DistributionStrategy.NO_DISTRIBUTION)
                 {
@@ -343,12 +325,5 @@ namespace RuntimeEnvironment.Implementation {
                 _idleLayerContainers.Add(newnode);
             }
         }
-    }
-
-    [Serializable]
-    internal class LayerHasNoConfigurationException : Exception
-    {
-        public LayerHasNoConfigurationException(string msg) : base(msg)
-        {}
     }
 }

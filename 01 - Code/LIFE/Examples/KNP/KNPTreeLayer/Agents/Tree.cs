@@ -8,9 +8,14 @@
 //  *******************************************************/
 
 using System;
+using ASC.Communication.ScsServices.Service;
+using KNPElevationLayer;
 
 namespace TreeLayer.Agents {
-    public class Tree : ITree {
+    public class Tree : AscService, ITree {
+        private readonly IKnpElevationLayer _elevationLayer;
+        private readonly KNPTreeLayer.TreeLayer _treeLayer;
+        private readonly bool _sendingNote;
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
@@ -19,6 +24,10 @@ namespace TreeLayer.Agents {
         public double Biomass { get; set; }
         public double Lat { get; set; }
         public double Lon { get; set; }
+        public string GetIdentifiaction()
+        {
+            return ID.ToString();
+        }
 
         private const double GParK = 0.18;
         private const double GmaxH = 600;
@@ -26,7 +35,13 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id) {
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat,
+            double lon, Guid id, IKnpElevationLayer elevationLayer,
+            KNPTreeLayer.TreeLayer treeLayer, bool sendingNote = false) : base(id.ToByteArray()) 
+        {
+            _elevationLayer = elevationLayer;
+            _treeLayer = treeLayer;
+            _sendingNote = sendingNote;
             ID = id;
             Height = height;
             Diameter = diameter;
@@ -39,7 +54,18 @@ namespace TreeLayer.Agents {
 
         #region IAgent Members
 
-        public void Tick() {
+        public void Tick()
+        {
+            if (_sendingNote) { 
+                var otherTrees = _treeLayer.GetAllOtherTreesThanMe(this);
+                //Console.Write("Tree " + ID + " reportin in, found " + otherTrees.Count + " other trees: ");
+                foreach (var tree in otherTrees) {
+                    tree.GetIdentifiaction();
+                    var tage = tree.Age;
+                    //Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has age: " + tree.Age);
+                }
+            }
+
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);
             // grow height

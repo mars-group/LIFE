@@ -118,11 +118,13 @@ namespace NodeRegistry.Implementation.UseCases
         /// <returns>Returns false if and only if nodeRegistryConnectionInfoMessage does not originate from this host
         /// and the nodeInformation Field contains a localhost Endpoint information. </returns>
         private bool CheckReasonableness(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {
+            // Heartbeat and Leave Messages are always ok
             if (nodeRegistryConnectionInfoMessage.MessageType == NodeRegistryMessageType.Leave
                 || nodeRegistryConnectionInfoMessage.MessageType == NodeRegistryMessageType.HeartBeat) {
                 return true;
             }
             
+            // if message cannot be cast to NodeRegistry ConnectionMessage, something's gone wrong
             var connectionInfoMessage = nodeRegistryConnectionInfoMessage as NodeRegistryConnectionInfoMessage;
             if (connectionInfoMessage == null) 
             {

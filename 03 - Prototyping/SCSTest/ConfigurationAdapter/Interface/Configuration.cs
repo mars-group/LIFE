@@ -11,13 +11,13 @@ using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-using log4net;
+
 
 [assembly: InternalsVisibleTo("MulticastAdapterTestProject")]
 
 namespace ConfigurationAdapter.Interface {
     public static class Configuration {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (Configuration));
+        //private static readonly ILog Logger = LogManager.GetLogger(typeof (Configuration));
 
         /// <summary>
         ///     Grants access to a config file. If no file exists, it will be uatomatically created.
@@ -47,7 +47,7 @@ namespace ConfigurationAdapter.Interface {
                 }
             }
             catch (Exception exception) {
-                Logger.Error(exception);
+                //Logger.Error(exception);
                 throw exception;
             }
 

@@ -82,10 +82,6 @@
       <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
       <Name>SMConnector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LayerContainer\LayerRegistry\LayerRegistry.csproj">
-      <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
-      <Name>LayerRegistry</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LifeAPI</Name>

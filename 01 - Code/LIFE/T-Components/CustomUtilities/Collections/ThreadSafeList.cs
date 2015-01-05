@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Hik.Threading {
+namespace CustomUtilities.Collections {
     /// <summary>
     ///     A ThreadSafe List
     /// </summary>

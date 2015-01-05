@@ -24,6 +24,11 @@ namespace LifeAPI.AddinLoader {
         private ExtensionNodeList _extensionNodes;
 
         private AddinLoader() {
+            var applicationName = AppDomain.CurrentDomain.FriendlyName.Split(new[] { '.' }, 2)[0];
+            if (applicationName == "LayerContainer")
+            {
+                if (Directory.Exists("./layers")) Directory.Delete("./layers", true);
+            }
             if (Directory.Exists("./layers/addins/tmp")) Directory.Delete("./layers/addins/tmp", true);
             AddinManager.Initialize("./layers");
         }

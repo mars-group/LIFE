@@ -31,7 +31,7 @@ namespace LayerRegistry.Implementation {
             _layerRegistryUseCase.ResetLayerRegistry();
         }
 
-        public ILayer GetLayerInstance(Type layerType) {
+        public object GetLayerInstance(Type layerType) {
             return _layerRegistryUseCase.GetLayerInstance(layerType);
         }
 

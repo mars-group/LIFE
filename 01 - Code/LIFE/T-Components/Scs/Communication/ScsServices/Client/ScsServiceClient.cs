@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reflection;
 using Hik.Communication.Scs.Client;
 using Hik.Communication.Scs.Communication;
@@ -203,15 +204,14 @@ namespace Hik.Communication.ScsServices.Client {
         /// <param name="returnValue">Return value to send</param>
         /// <param name="exception">Exception to send</param>
         private void SendInvokeResponse(IScsMessage requestMessage, object returnValue, ScsRemoteException exception) {
-            try {
-                _requestReplyMessenger.SendMessage(
+            _requestReplyMessenger.SendMessage(
                     new ScsRemoteInvokeReturnMessage {
                         RepliedMessageId = requestMessage.MessageId,
                         ReturnValue = returnValue,
                         RemoteException = exception
                     });
-            }
-            catch {}
+            
+            
         }
 
         /// <summary>

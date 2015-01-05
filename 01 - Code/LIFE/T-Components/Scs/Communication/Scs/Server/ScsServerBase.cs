@@ -1,5 +1,5 @@
 ﻿using System;
-using Hik.Collections;
+using CustomUtilities.Collections;
 using Hik.Communication.Scs.Communication.Channels;
 using Hik.Communication.Scs.Communication.Protocols;
 

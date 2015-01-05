@@ -69,6 +69,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\T-Components\CustomUtilities\CustomUtilities.csproj">
+      <Project>{6CD55EF4-32F2-4E99-8973-1625D6726344}</Project>
+      <Name>CustomUtilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
       <Name>MulticastAdapter</Name>

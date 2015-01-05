@@ -32,6 +32,10 @@ namespace PhoneBookServer {
             //Add Phone Book Service to service application
             _server.AddService<IPhoneBookService, PhoneBookService>(this);
 
+            // add another service
+            var yetanotherService = new YetAnotherService(GuidProvider.GetAnotherIdenticalGuid());
+            _server.AddService<IYetAnotherService, YetAnotherService>(yetanotherService);
+
             //Start server
             _server.Start();
         }

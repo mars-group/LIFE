@@ -1,7 +1,9 @@
-﻿using LifeAPI.Agent;
+﻿using ASC.Communication.ScsServices.Service;
+using LifeAPI.Agent;
 
 namespace TreeLayer.Agents
 {
+    [AscService(Version = "0.1")]
     interface ITree : IAgent
     {
         double Height { get; set; }
@@ -11,5 +13,7 @@ namespace TreeLayer.Agents
         double Biomass { get; set; }
         double Lat { get; set; }
         double Lon { get; set; }
+
+        string GetIdentifiaction();
     }
 }

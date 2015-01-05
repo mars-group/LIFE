@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using GeoAPI.Geometries;
+using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using LifeAPI.Layer.GIS;
@@ -22,7 +23,8 @@ using SharpMap.Data.Providers;
 using SharpMap.Layers;
 
 namespace LIFEGisLayerService.Implementation {
-    public abstract class LIFEGisActiveLayer : IGISActiveLayer {
+    public abstract class LIFEGisActiveLayer : ScsService, IGISActiveLayer
+    {
         private readonly Map _map;
         private ICanQueryLayer _layer;
         private long _currentTick;

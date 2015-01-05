@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using Hik.Collections;
+using CustomUtilities.Collections;
 using NodeRegistry.Interface;
 
 namespace NodeRegistry.Implementation.UseCases
 {
     public class NodeRegistryEventHandlerUseCase
     {
-        
+        public event EventHandler<TNodeInformation> SimulationManagerConnected;
 
         /// <summary>
         ///     Delegates for different subscriber types.
@@ -74,7 +70,10 @@ namespace NodeRegistry.Implementation.UseCases
                     break;
                 case NodeType.SimulationManager:
                     if (_newSimulationManagerConnectedHandler != null)
+                    {
                         _newSimulationManagerConnectedHandler.Invoke(nodeInformation);
+                    }
+                    OnSimulationManagerConnected(nodeInformation);
                     break;
             }
         }
@@ -89,6 +88,17 @@ namespace NodeRegistry.Implementation.UseCases
 
             }
 
+        }
+
+        private void OnSimulationManagerConnected(TNodeInformation nodeInformation)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<TNodeInformation> handler = SimulationManagerConnected;
+
+            // Event will be null if there are no subscribers
+            if (handler != null) handler(this, nodeInformation);
         }
 
 

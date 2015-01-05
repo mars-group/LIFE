@@ -15,7 +15,8 @@ namespace LayerContainer {
     public class LayerContainerStarter {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (LayerContainerStarter));
 
-        private static void Main(string[] args) {
+        private static void Main(string[] args)
+        {
             Logger.Info("LayerContainer trying to startup.");
             try {
                 Logger.Info("Initializing components and building application core...");
@@ -39,6 +40,7 @@ namespace LayerContainer {
 
             // This will shutdown the log4net system
             LogManager.Shutdown();
+            Console.ReadKey();
         }
     }
 }
