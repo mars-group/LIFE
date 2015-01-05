@@ -186,6 +186,12 @@ namespace ASC.Communication.ScsServices.Service {
             if (invokeMessage == null) return;
 
             try {
+                // check whether we are responsible for the real object
+                if (!_serviceObjects[invokeMessage.ServiceClassName].ContainsKey(invokeMessage.ServiceID))
+                {
+                    // we are not. So simply return. This is not an error condition, since the ServiceID field was set.
+                    return;
+                }
                 //Get client object
                 var client = _serviceClients[requestReplyMessenger.Messenger.ClientId];
                 if (client == null) {
@@ -202,11 +208,6 @@ namespace ASC.Communication.ScsServices.Service {
                 }
                 else
                 {
-                    // check whether we are responsible for the real object
-                    if (!_serviceObjects[invokeMessage.ServiceClassName].ContainsKey(invokeMessage.ServiceID)) {
-                        // we are not. So simply return. This is not an error condition, since the ServiceID field was set.
-                        return;
-                    }
                     serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
                 }
 
