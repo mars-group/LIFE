@@ -5,8 +5,8 @@ using ASC.Communication.Scs.Server.Udp;
 
 namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
     public class AscUdpEndPoint : AscEndPoint {
-        private IScsServer _ascUdpServer;
-        private IScsClient _ascUdpClient;
+        private readonly IScsServer _ascUdpServer;
+        private readonly IScsClient _ascUdpClient;
         public string McastGroup { get; private set; }
 
         public int UdpListenPort { get; set; }
@@ -14,16 +14,17 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
         public AscUdpEndPoint(int listenPort, string mcastGroup) {
             McastGroup = mcastGroup;
             UdpListenPort = listenPort;
+            _ascUdpClient = new AscUdpClient(this);
+            _ascUdpServer = new AscUdpServer(this);
         }
 
 
         internal override IScsServer CreateServer() {
-            return _ascUdpServer ?? (_ascUdpServer = new AscUdpServer(this));
+            return _ascUdpServer;
         }
 
-        internal override IScsClient CreateClient()
-        {
-            return _ascUdpClient ?? (_ascUdpClient = new AscUdpClient(this));
+        internal override IScsClient CreateClient() {
+            return _ascUdpClient;
         }
     }
 }
