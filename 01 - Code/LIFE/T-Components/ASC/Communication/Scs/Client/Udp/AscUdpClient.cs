@@ -7,6 +7,7 @@ namespace ASC.Communication.Scs.Client.Udp
     internal class AscUdpClient : AscClientBase
     {
         private readonly AscUdpEndPoint _endPoint;
+        private ICommunicationChannel _udpchannel;
 
         public AscUdpClient(AscUdpEndPoint endPoint)
         {
@@ -15,7 +16,7 @@ namespace ASC.Communication.Scs.Client.Udp
 
         protected override ICommunicationChannel CreateCommunicationChannel()
         {
-            return new UdpCommunicationChannel(_endPoint);
+            return _udpchannel ?? (_udpchannel = new UdpCommunicationChannel(_endPoint));
         }
     }
 }
