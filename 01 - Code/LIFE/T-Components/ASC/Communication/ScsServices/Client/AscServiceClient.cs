@@ -170,8 +170,9 @@ namespace ASC.Communication.ScsServices.Client {
 
             //Check client object.
             if (_clientObject == null) {
-                SendInvokeResponse(invokeMessage, null,
-                    new ScsRemoteException("Client does not wait for method invocations by server."));
+                // just don't do a thing here for now, since we don't intend to call methods on the client from the server
+                //SendInvokeResponse(invokeMessage, null,
+                //    new ScsRemoteException("Client does not wait for method invocations by server."));
                 return;
             }
 
