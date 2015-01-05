@@ -1,6 +1,7 @@
 ﻿using System;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
+using LayerContainerShared;
 
 namespace AgentShadowingService.Implementation
 {
@@ -9,10 +10,12 @@ namespace AgentShadowingService.Implementation
         where TServiceInterface : class
     {
         private readonly IAgentShadowingService<TServiceInterface, TServiceClass> _agentShadowingUseCase;
+        private LayerContainerSettings _config;
 
         public AgentShadowingServiceComponent(int port = 6666)
         {
             _agentShadowingUseCase = new AgentShadowingServiceUseCase<TServiceInterface, TServiceClass>(port);
+
         }
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
@@ -23,6 +26,10 @@ namespace AgentShadowingService.Implementation
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
+        }
+
+        public string GetLayerContainerName() {
+            return _agentShadowingUseCase.GetLayerContainerName();
         }
     }
 }

@@ -34,10 +34,11 @@ namespace KNPTreeLayer {
 
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName == "Tree") {
-
+                    // evil hack only for testing purposes
+                    bool sendingNote = _agentShadowingService.GetLayerContainerName() == "LC-1";
                     // instantiate real Agents
                     for (int i = 0; i < agentInitConfig.RealAgentCount; i++) {
-                        var t = new Tree(4, 2, 10, i, 500, 30, 22, agentInitConfig.RealAgentIds[i], _elevationLayer, this);
+                        var t = new Tree(4, 2, 10, i, 500, 30, 22, agentInitConfig.RealAgentIds[i], _elevationLayer, this, sendingNote);
                         registerAgentHandle(this, t);
                         trees.Add(t);
                         _agentShadowingService.RegisterRealAgent(t);

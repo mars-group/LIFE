@@ -43,7 +43,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         protected override void StartInternal() {
             _running = true;
-            _multicastAdapter.ReopenSocket();
+            //_multicastAdapter.ReopenSocket();
             Task.Run(() => ListenAndReceive());
         }
 

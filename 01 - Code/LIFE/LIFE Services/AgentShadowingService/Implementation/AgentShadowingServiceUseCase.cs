@@ -18,6 +18,7 @@ namespace AgentShadowingService.Implementation
         private readonly string _mcastAddress;
         private readonly IScsServiceApplication _agentShadowingServer;
         private int _listenPort;
+        private LayerContainerSettings _config;
 
         public AgentShadowingServiceUseCase(int port = 6666) {
             var typeOfTServiceClass = typeof (TServiceClass);
@@ -29,6 +30,7 @@ namespace AgentShadowingService.Implementation
             // TODO: May be moved into RegisterRealAgent, so as not to start the server, when no real agents are present
             _agentShadowingServer = AscServiceBuilder.CreateService(port, _mcastAddress);
             _agentShadowingServer.Start();
+            _config = Configuration.Load<LayerContainerSettings>();
         }
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
@@ -51,6 +53,10 @@ namespace AgentShadowingService.Implementation
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister);
+        }
+
+        public string GetLayerContainerName() {
+            return _config.NodeRegistryConfig.NodeIdentifier;
         }
     }
 }

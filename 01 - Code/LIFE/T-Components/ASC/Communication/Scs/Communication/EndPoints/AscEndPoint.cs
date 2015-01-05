@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using ASC.Communication.Scs.Client;
-using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Server;
 

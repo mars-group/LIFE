@@ -20,5 +20,7 @@ namespace AgentShadowingService.Interface
         /// </summary>
         /// <param name="agentToRegister"></param>
         void RegisterRealAgent(TServiceClass agentToRegister);
+
+        string GetLayerContainerName();
     }
 }
