@@ -58,10 +58,11 @@ namespace TreeLayer.Agents {
         {
             if (_sendingNote) { 
                 var otherTrees = _treeLayer.GetAllOtherTreesThanMe(this);
-                Console.Write("Tree " + ID + " reportin in, found " + otherTrees.Count + " other trees: ");
-                foreach (var tree in otherTrees)
-                {
-                    Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has age: " + tree.Age);
+                //Console.Write("Tree " + ID + " reportin in, found " + otherTrees.Count + " other trees: ");
+                foreach (var tree in otherTrees) {
+                    tree.GetIdentifiaction();
+                    var tage = tree.Age;
+                    //Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has age: " + tree.Age);
                 }
             }
 
