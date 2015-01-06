@@ -4,28 +4,28 @@ using LifeAPI.Spatial;
 
 namespace ESCTest.Entities {
 
-    internal class RectAgent : ISpatialEntity {
-        private readonly CollisionType _collisionType;
+    //internal class RectAgent : ISpatialEntity {
+    //    private readonly CollisionType _collisionType;
 
-        public RectAgent(double x, double y, CollisionType collisionType = CollisionType.MassiveAgent) {
-            _collisionType = collisionType;
-            Shape = new RectShape(TVector.Origin, new TVector(x, y));
-        }
+    //    public RectAgent(double x, double y, CollisionType collisionType = CollisionType.MassiveAgent) {
+    //        _collisionType = collisionType;
+    //        Shape = new RectShape(TVector.Origin, new TVector(x, y));
+    //    }
 
-        #region ISpatialEntity Members
+    //    #region ISpatialEntity Members
 
-        public IShapeOld Shape { get; set; }
+    //    public IShapeOld Shape { get; set; }
 
-        public Enum GetCollisionType() {
-            return _collisionType;
-        }
+    //    public Enum GetCollisionType() {
+    //        return _collisionType;
+    //    }
 
 
-        public Enum GetInformationType() {
-            throw new NotImplementedException();
-        }
+    //    public Enum GetInformationType() {
+    //        throw new NotImplementedException();
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 
 }
