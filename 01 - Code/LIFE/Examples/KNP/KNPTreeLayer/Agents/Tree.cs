@@ -36,10 +36,10 @@ namespace TreeLayer.Agents {
 
         public Tree
             (double height, double diameter, double crownDiameter, double age, double biomass, double lat,
-            double lon, Guid id, IKnpElevationLayer elevationLayer,
+            double lon, Guid id, 
             KNPTreeLayer.TreeLayer treeLayer, bool sendingNote = false) : base(id.ToByteArray()) 
         {
-            _elevationLayer = elevationLayer;
+            //_elevationLayer = elevationLayer;
             _treeLayer = treeLayer;
             _sendingNote = sendingNote;
             ID = id;

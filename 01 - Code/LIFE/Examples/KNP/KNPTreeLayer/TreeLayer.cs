@@ -17,14 +17,14 @@ namespace KNPTreeLayer {
     public class TreeLayer : ScsService, IKnpTreeLayer
     {
         private long _currentTick;
-        private IKnpElevationLayer _elevationLayer;
+        //private IKnpElevationLayer _elevationLayer;
 
         private readonly List<ITree> trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
 
-        public TreeLayer(IKnpElevationLayer elevationLayer)
+        public TreeLayer()
         {
-            _elevationLayer = elevationLayer;
+            //_elevationLayer = elevationLayer;
             trees = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
         }
@@ -38,7 +38,7 @@ namespace KNPTreeLayer {
                     bool sendingNote = _agentShadowingService.GetLayerContainerName() == "LC-1";
                     // instantiate real Agents
                     for (int i = 0; i < agentInitConfig.RealAgentCount; i++) {
-                        var t = new Tree(4, 2, 10, i, 500, 30, 22, agentInitConfig.RealAgentIds[i], _elevationLayer, this, sendingNote);
+                        var t = new Tree(4, 2, 10, i, 500, 30, 22, agentInitConfig.RealAgentIds[i], this, sendingNote);
                         registerAgentHandle(this, t);
                         trees.Add(t);
                         _agentShadowingService.RegisterRealAgent(t);

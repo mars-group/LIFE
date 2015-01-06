@@ -92,7 +92,7 @@ namespace ASC.Communication.Scs.Server {
         /// <param name="communicationChannel">The communication channel that is used by client to send and receive messages</param>
         public AscServerClient(ICommunicationChannel communicationChannel) {
             _communicationChannel = communicationChannel;
-            _communicationChannel.MessageReceived += CommunicationChannel_MessageReceived;
+            //_communicationChannel.MessageReceived += CommunicationChannel_MessageReceived;
             _communicationChannel.MessageSent += CommunicationChannel_MessageSent;
             _communicationChannel.Disconnected += CommunicationChannel_Disconnected;
         }
