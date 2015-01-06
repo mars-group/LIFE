@@ -87,6 +87,7 @@ namespace LifeAPI.Layer.GIS {
     ///     Gets thrown if a GIS file was tried to be loaded, but the format was not recognized
     ///     or is not supported.
     /// </summary>
+    [Serializable]
     public class GISFormatUnknownOrNotSupportedException : Exception {
         public GISFormatUnknownOrNotSupportedException(string msg) : base(msg) {}
     }
@@ -94,6 +95,7 @@ namespace LifeAPI.Layer.GIS {
     /// <summary>
     ///     Gets thrown if an operation is attempted on a GIS layer which has not yet loaded any data.
     /// </summary>
+    [Serializable]
     public class GISLayerHasNoDataException : Exception {
         public GISLayerHasNoDataException(string msg) : base(msg) {}
     }

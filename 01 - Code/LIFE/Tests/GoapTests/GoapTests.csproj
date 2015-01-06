@@ -64,29 +64,26 @@
     <Compile Include="GoapActionSystemComponentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomGaphNodeTest.cs" />
+    <Compile Include="WorldstateSymbolTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LIFE Services\Agents\GenericAgentArchitectureCommon\GenericAgentArchitectureCommon.csproj">
-      <Project>{FDADF460-19A7-443A-AEA6-EF24580DAF86}</Project>
-      <Name>GenericAgentArchitectureCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapModelTest\GoapModelTest.csproj">
-      <Project>{85340006-B073-47E6-9DBF-D0CB391A13AA}</Project>
+      <Project>{dd3b4dfd-fadf-43fc-a0eb-eea34d7c5c12}</Project>
       <Name>GoapModelTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapActionSystem\GoapActionSystem.csproj">
-      <Project>{62773ab7-47e9-42ad-96ae-d4241618199e}</Project>
+      <Project>{30dcdead-8053-4118-a811-e55c9106116c}</Project>
       <Name>GoapActionSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapCommon\GoapCommon.csproj">
-      <Project>{846C7C43-FC1B-4709-8A43-B2EE8213F63F}</Project>
+      <Project>{56103bf6-d58d-448f-9c7d-d05feb1d5a41}</Project>
       <Name>GoapCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\Agents\GoalOrientedActionPlanning\GoapSystem\GoapGraphConnector\GoapGraphConnector.csproj">
-      <Project>{2871F5A0-1375-48CE-998F-B90D3D2D1A95}</Project>
+      <Project>{eac55ea1-8f7c-45ed-8c74-31660f3e6ca5}</Project>
       <Name>GoapGraphConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\TypeSafeBlackboard\TypeSafeBlackboard.csproj">

@@ -121,6 +121,10 @@
   <ItemGroup>
     <Compile Include="AddinLoader\AddinLoader.cs" />
     <Compile Include="AddinLoader\IAddinLoader.cs" />
+    <Compile Include="Config\AgentConfig.cs" />
+    <Compile Include="Config\DistributionStrategy.cs" />
+    <Compile Include="Config\LayerConfig.cs" />
+    <Compile Include="Config\ModelConfig.cs" />
     <Compile Include="Environment\IEnvironment.cs" />
     <Compile Include="Layer\GIS\IGISAccess.cs" />
     <Compile Include="Agent\IAgent.cs" />

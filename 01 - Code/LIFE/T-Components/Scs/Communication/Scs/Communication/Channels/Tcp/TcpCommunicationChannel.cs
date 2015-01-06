@@ -132,7 +132,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
                 OnMessageSent(message);
             }
         }
-
+        
         #endregion
 
         #region Private methods
@@ -170,7 +170,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
             }
             catch(Exception ex) {
                 Disconnect();
-                //throw;
+                throw;
             }
         }
 

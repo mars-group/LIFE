@@ -39,6 +39,10 @@
     <ApplicationIcon>Resources\bitmap.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Atlassian.Jira, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Atlassian.SDK.2.5.0\lib\Atlassian.Jira.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -46,10 +50,10 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MessageWrappers">
-      <HintPath>..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
+      <HintPath>$(SolutionDir)Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +107,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\LNSConnector\LNSConnector.csproj">
+      <Project>{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}</Project>
+      <Name>LNSConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\SMConnector\SMConnector.csproj">
       <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
       <Name>SMConnector</Name>
@@ -110,6 +122,14 @@
     <ProjectReference Include="..\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj">
       <Project>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</Project>
       <Name>LayerContainerFacade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LIFE API\LifeAPI\LifeAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LifeAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LIFE Services\MarsErrorReporting\MarsErrorReporting.csproj">
+      <Project>{d2957897-135d-4e3c-93ea-9ffaf8607a82}</Project>
+      <Name>MarsErrorReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.csproj">
       <Project>{58149FF0-0801-46F8-A9C6-571B6030DC1E}</Project>
@@ -128,6 +148,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+using Hik.Communication.ScsServices.Client;
 using PhoneBookCommonLib;
 
 namespace PhoneBookClient
@@ -13,34 +15,19 @@ namespace PhoneBookClient
 
         static void Main(string[] args)
         {
+            Console.WriteLine("BenchmarkWriteAndRead...");
             BenchmarkWriteAndRead();
-            BenchmarkWriteAndReadWithChanges();
+            Console.WriteLine("BenchmarkWriteAndReadWithChanges....");
+           // BenchmarkWriteAndReadWithChanges();
         }
 
 
-        private static void TestCacheUpdates()
-        {
-            var client1 = new Client(GuidProvider.GetIdenticalGuid());
-            var client2 = new Client(GuidProvider.GetIdenticalGuid());
-
-            client1.Title = "ErsterTitel";
-
-            Console.WriteLine("Client1.Title = " + client1.Title);
-            Console.WriteLine("Client2.Title = " + client2.Title);
-
-            client2.Title = "ZweiterTitel";
-
-            Console.WriteLine("Client1.Title = " + client1.Title);
-            Console.WriteLine("Client2.Title = " + client2.Title);
-
-            client1.Disconnect();
-            client2.Disconnect();
-
-            Console.ReadLine();
-        }
         private static void BenchmarkWriteAndRead()
         {
-            var client = new Client(GuidProvider.GetIdenticalGuid());
+            var yac = ScsServiceClientBuilder.CreateClient<IYetAnotherService>(
+                //new ScsTcpEndPoint(IPAddress.Loopback.ToString(), BasePort), serviceID);
+                new ScsTcpEndPoint("192.168.178.31", 10048));
+            var client = new Client(yac.ServiceProxy,GuidProvider.GetIdenticalGuid());
 
 
             client.AddPerson(new PhoneBookRecord
@@ -75,6 +62,7 @@ namespace PhoneBookClient
                             Name = g.ToString(),
                             Phone = nr.ToString()
                         });
+                        Console.WriteLine(client.GetInformation());
                         
                         client.Title = "Titel";
                     }
@@ -135,6 +123,7 @@ namespace PhoneBookClient
             //Disconnect from server
             client.Disconnect();    
         }
+        /*
         private static void BenchmarkWriteAndReadWithChanges()
         {
 
@@ -210,5 +199,6 @@ namespace PhoneBookClient
 
 
         }
+         */
     }
 }

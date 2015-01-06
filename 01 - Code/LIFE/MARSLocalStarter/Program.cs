@@ -3,6 +3,9 @@ using System.Linq;
 using System.Threading;
 using LayerContainerFacade.Interfaces;
 using log4net;
+using log4net.Appender;
+using log4net.Repository.Hierarchy;
+using MarsErrorReporting;
 using MARSLocalStarter.WinForms;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
@@ -198,8 +201,8 @@ namespace MARSLocalStarter
             })).Start();
         }
 
-        private static void Main(string[] args)
-        {
+        private static void Main(string[] args) {
+
             log4net.Config.XmlConfigurator.Configure();
             Logger.Info("MARS LIFE trying to start up.");
 
@@ -227,9 +230,20 @@ namespace MARSLocalStarter
             }
             catch (Exception exception)
             {
-                Logger.Fatal("MARS LIFE crashed fatally. Exception:\n {0}", exception);
+                Logger.FatalFormat("MARS LIFE crashed fatally. Exception:\n {0}", exception);
+
+                //Get log file
+                var rootAppender = ((Hierarchy)LogManager.GetRepository())
+                    .Root.Appenders.OfType<FileAppender>()
+                    .FirstOrDefault();
+                var filename = rootAppender != null ? rootAppender.File : string.Empty;
+                LogManager.Shutdown();
+
+                //Report error to jira
+                JiraErrorReporter.ReportError(filename, exception);
 
                 throw;
+            
             }
 
 

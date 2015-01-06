@@ -11,6 +11,8 @@
 using AppSettingsManager;
 using Autofac;
 using ConfigurationAdapter.Interface;
+using LayerNameService.Implementation;
+using LNSConnector.Interface;
 using ModelContainer.Implementation;
 using ModelContainer.Interfaces;
 using MulticastAdapter.Implementation;
@@ -48,6 +50,10 @@ namespace SimulationManagerFacade.Interface {
 
                 builder.RegisterType<MulticastAdapterComponent>()
                     .As<IMulticastAdapter>()
+                    .InstancePerLifetimeScope();
+
+                builder.RegisterType<LayerNameServiceComponent>()
+                    .As<ILayerNameService>()
                     .InstancePerLifetimeScope();
 
                 builder.RegisterType<SimulationManagerApplicationCoreComponent>()

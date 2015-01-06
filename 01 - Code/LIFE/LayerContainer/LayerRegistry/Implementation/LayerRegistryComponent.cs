@@ -8,31 +8,30 @@
 //  *******************************************************/
 
 using System;
-using DistributedKeyValueStore.Interface;
 using LayerRegistry.Interfaces;
-using LayerRegistry.Interfaces.Config;
 using LifeAPI.Layer;
+using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
     public class LayerRegistryComponent : ILayerRegistry {
         private readonly ILayerRegistry _layerRegistryUseCase;
 
-        public LayerRegistryComponent
-            (IDistributedKeyValueStore distributedKeyValueStore, LayerRegistryConfig layerRegistryConfig) {
-            _layerRegistryUseCase = new LayerRegistryUseCase(distributedKeyValueStore, layerRegistryConfig);
+        public LayerRegistryComponent(INodeRegistry nodeRegistry, NodeRegistryConfig nodeRegistryConfig)
+        {
+            _layerRegistryUseCase = new LayerRegistryUseCase(nodeRegistry, nodeRegistryConfig);
         }
 
         #region ILayerRegistry Members
 
-        public ILayer RemoveLayerInstance(Type layerType) {
-            return _layerRegistryUseCase.RemoveLayerInstance(layerType);
+        public void RemoveLayerInstance(Type layerType) {
+            _layerRegistryUseCase.RemoveLayerInstance(layerType);
         }
 
         public void ResetLayerRegistry() {
             _layerRegistryUseCase.ResetLayerRegistry();
         }
 
-        public ILayer GetLayerInstance(Type layerType) {
+        public object GetLayerInstance(Type layerType) {
             return _layerRegistryUseCase.GetLayerInstance(layerType);
         }
 

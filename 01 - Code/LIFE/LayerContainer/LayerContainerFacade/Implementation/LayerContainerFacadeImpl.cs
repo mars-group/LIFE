@@ -9,6 +9,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using LayerContainerFacade.Interfaces;
@@ -28,11 +30,15 @@ namespace LayerContainerFacade.Implementation {
         private readonly IVisualizationAdapterPublic _visualizationAdapter;
         private IScsServiceApplication _server;
 
+
+
         public LayerContainerFacadeImpl
             (LayerContainerSettings settings,
                 IPartitionManager partitionManager,
                 IRTEManager rteManager,
                 IVisualizationAdapterInternal visualizationAdapter) {
+
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
             _partitionManager = partitionManager;
             _rteManager = rteManager;
             _visualizationAdapter = visualizationAdapter;
@@ -83,6 +89,18 @@ namespace LayerContainerFacade.Implementation {
         private void _visualizationAdapterInternalUseCase_VisualizationUpdated
             (object sender, List<BasicVisualizationMessage> e) {
             VisualizationUpdated(sender, e);
+        }
+
+
+    }
+
+    public static class AssemblyResolverFix
+    {
+        //Looks up the assembly in the set of currently loaded assemblies,
+        //and returns it if the name matches. Else returns null.
+        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
         }
     }
 }

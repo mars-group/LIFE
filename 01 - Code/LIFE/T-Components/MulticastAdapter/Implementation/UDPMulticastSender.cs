@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
-
-using log4net;
+using Common.Logging;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;
@@ -36,7 +34,6 @@ namespace MulticastAdapter.Implementation
             _sendingPort = _generalSettings.MulticastGroupSendingStartPort;
             _listenPort = _generalSettings.MulticastGroupListenPort;
             _clients = GetSendingInterfaces();
-
         }
 
 		/// <summary>

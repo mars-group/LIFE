@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 
@@ -8,7 +9,10 @@ namespace NodeRegistry.Interface {
     public delegate void NewNodeConnected(TNodeInformation newNode);
 	public delegate void NodeDisconnected(TNodeInformation oldNode);
 
-    public interface INodeRegistry {
+    public interface INodeRegistry
+    {
+        event EventHandler<TNodeInformation> SimulationManagerConnected;
+
         /// <summary>
         ///     Get all NodeEndpoints currently discovered
         /// </summary>

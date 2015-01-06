@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 using PlantLayer.Agents;
@@ -29,18 +30,20 @@ namespace PlantLayer {
 
         #region ISteppedLayer Members
 
-        public bool InitLayer<I>
-            (I layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer
+            (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             environment = new TwoDimEnvironmentUseCase<Plant>();
             _plants = new List<Plant>();
             // create a 100x100 playboard and add plants everywhere but in the middle
+            int i = 0;
             for (int x = 0; x < 100; x++) {
                 for (int y = 0; y < 100; y++) {
                     if ((x < 48 && y < 48) || (x > 52 && y > 52)) {
-                        Plant p = new Plant(x, y, new Size(1.0, 1.0));
+                        Plant p = new Plant(x, y, new Size(1.0, 1.0), new Guid());
                         registerAgentHandle.Invoke(this, p);
                         _plants.Add(p);
                         environment.Add(p);
+                        i++;
                     }
                 }
             }

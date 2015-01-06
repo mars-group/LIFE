@@ -10,10 +10,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using ConfigurationAdapter.Interface;
 using Ionic.Zip;
 using LCConnector.TransportTypes.ModelStructure;
+using LifeAPI.AddinLoader;
+using LifeAPI.Config;
 using log4net;
+using Mono.Addins;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 
@@ -120,6 +125,23 @@ namespace ModelContainer.Implementation {
             foreach (Action listener in _listeners) {
                 listener();
             }
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription model) {
+            var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name + Path.DirectorySeparatorChar + model.Name + ".cfg";
+            //config exists, so load it
+            if (File.Exists(path))
+            {
+                return Configuration.Load<ModelConfig>(path);
+            }
+            
+            // config does not exist, create the default one
+            var addinLoader = AddinLoader.Instance;
+            var nodes = addinLoader.LoadAllLayers(model.Name);
+            var layerConfigs = nodes.Cast<TypeExtensionNode>().Select(node => new LayerConfig(node.Type.Name, DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>())).ToList();
+            var mc = new ModelConfig(layerConfigs);
+            Configuration.Save(mc, path);
+            return mc;
         }
     }
 }

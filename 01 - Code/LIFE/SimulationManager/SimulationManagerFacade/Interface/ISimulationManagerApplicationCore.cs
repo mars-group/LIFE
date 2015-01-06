@@ -1,14 +1,14 @@
-﻿using SMConnector;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LNSConnector.Interface;
+using SMConnector;
 using SMConnector.TransportTypes;
-using CommonTypes.DataTypes;
 
 namespace SimulationManagerFacade.Interface {
     /// <summary>
     /// TODO: comment
     /// </summary>
     public interface ISimulationManagerApplicationCore :
-                            ISimulationManager
+                            ISimulationManager, ILayerNameService
     {
 		/// <summary>
 		///     Returns a list of TModelDescriptions, describing all available models on the

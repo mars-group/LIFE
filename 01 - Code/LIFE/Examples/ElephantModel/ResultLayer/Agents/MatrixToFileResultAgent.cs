@@ -84,5 +84,7 @@ namespace ResultLayer {
             string filepath = Path.Combine(dirpath, filename);
             File.WriteAllText(filepath, matrix);
         }
+
+        public Guid ID { get; set; }
     }
 }

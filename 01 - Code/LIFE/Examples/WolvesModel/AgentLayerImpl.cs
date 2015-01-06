@@ -1,4 +1,5 @@
 ﻿using DalskiAgent.Execution;
+using LCConnector.TransportTypes;
 using LifeAPI.Spatial;
 using LifeAPI.Layer;
 using Mono.Addins;
@@ -37,7 +38,7 @@ namespace WolvesModel {
     /// <param name="registerAgentHandle">Delegate for agent registration function.</param>
     /// <param name="unregisterAgentHandle">Delegate for agent unregistration function.</param>
     /// <returns></returns>
-    public bool InitLayer<T>(T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
+    public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
       // Create the environment, the execution container and an agent spawner.
       _env = new Grassland(new Vector(100, 100), true);

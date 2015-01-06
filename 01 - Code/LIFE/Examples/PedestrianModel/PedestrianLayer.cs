@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using DalskiAgent.Execution;
 using GeoAPI.Geometries;
+using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using LifeAPI.Layer.Visualization;
 using MessageWrappers;
@@ -27,7 +28,6 @@ namespace PedestrianModel {
         private ObstacleEnvironment _env; // Environment object for spatial agents. 
         private IExecution _exec; // Agent execution container reference.
 
-        #region ISteppedActiveLayer Members
 
         /// <summary>
         ///     Initializes this layer.
@@ -37,8 +37,7 @@ namespace PedestrianModel {
         /// <param name="registerAgentHandle">Delegate for agent registration function.</param>
         /// <param name="unregisterAgentHandle">Delegate for agent unregistration function.</param>
         /// <returns></returns>
-        public bool InitLayer<T>
-            (T layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+        public bool  InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _tick = 0;
             
             ChooseScenario();
@@ -67,7 +66,8 @@ namespace PedestrianModel {
 
         public void PostTick() {}
 
-        /// <summary>
+
+      /// <summary>
         ///     Returns the current tick.
         /// </summary>
         /// <returns>Current tick value.</returns>
@@ -79,7 +79,6 @@ namespace PedestrianModel {
             _tick = currentTick;
         }
 
-        #endregion
 
         private void ChooseScenario()
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using MulticastAdapter.Interface;
@@ -18,6 +19,7 @@ namespace NodeRegistry.Implementation
         private readonly NodeRegistryConfig _config;
 
 
+        public event EventHandler<TNodeInformation> SimulationManagerConnected;
 
         public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config) {
             _config = config;
@@ -25,6 +27,7 @@ namespace NodeRegistry.Implementation
             TNodeInformation locaNodeInformation = ParseNodeInformationTypeFromConfig();
 
             _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
+            _eventHandlerUseCase.SimulationManagerConnected += EventHandlerUseCaseOnSimulationManagerConnected;
             _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
             _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation, multicastAdapter, config.HeartBeatInterval, config.HeartBeatTimeOutmultiplier);
             _networkUseCase = new NodeRegistryNetworkUseCase(_nodeManagerUseCase, _heartBeatUseCase, locaNodeInformation, config.AddMySelfToActiveNodeList, multicastAdapter);
@@ -32,6 +35,18 @@ namespace NodeRegistry.Implementation
             _multicastAdapter = multicastAdapter;
           
         }
+
+        private void EventHandlerUseCaseOnSimulationManagerConnected(object sender, TNodeInformation nodeInformation)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<TNodeInformation> handler = this.SimulationManagerConnected;
+
+            // Event will be null if there are no subscribers
+            if (handler != null) handler(this, nodeInformation);
+        }
+
 
         public List<TNodeInformation> GetAllNodes() {
             return _nodeManagerUseCase.GetAllNodes();

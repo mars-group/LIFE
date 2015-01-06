@@ -18,11 +18,12 @@ namespace PlantLayer.Agents {
 
         private Rect _bounds;
 
-        public Plant(float x, float y, Size size) {
+        public Plant(float x, float y, Size size, Guid i) {
             _bounds.X = x;
             _bounds.Y = y;
             _bounds.Size = size;
             _health = 100;
+            ID = i;
         }
 
         #region IAgent Members
@@ -51,5 +52,8 @@ namespace PlantLayer.Agents {
         public void SubHealth(double x) {
             _health -= x;
         }
+
+        public Guid ID
+ { get; set; }
     }
 }

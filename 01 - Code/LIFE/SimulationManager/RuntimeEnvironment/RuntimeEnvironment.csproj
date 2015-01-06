@@ -70,6 +70,10 @@
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\LoggerFactory\LoggerFactory.csproj">
+      <Project>{F87E5894-0AB9-4DDC-8B96-D9ABBAD243AC}</Project>
+      <Name>LoggerFactory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
       <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
       <Name>NodeRegistry</Name>
@@ -78,9 +82,9 @@
       <Project>{277C3CC1-699D-417B-9D2C-A88B8CAF6957}</Project>
       <Name>SMConnector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LayerContainer\LayerRegistry\LayerRegistry.csproj">
-      <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
-      <Name>LayerRegistry</Name>
+    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>

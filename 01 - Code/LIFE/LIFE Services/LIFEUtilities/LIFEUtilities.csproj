@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Hashing\BigInteger.cs" />
     <Compile Include="Hashing\FnvHash.cs" />
+    <Compile Include="MulticastAddressGenerator\MulticastAddressGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Random\Xor128Random.cs" />
   </ItemGroup>

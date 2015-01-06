@@ -50,5 +50,7 @@ namespace WaterLayer {
         public Rect Bounds { get; set; }
 
         #endregion
+
+        public Guid ID { get; set; }
     }
 }

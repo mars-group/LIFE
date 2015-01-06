@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using LifeAPI.Config;
 using ModelContainer.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
@@ -37,6 +38,10 @@ namespace ModelContainer.Implementation {
 
         public ModelContent GetModel(TModelDescription modelID) {
             return _modelContainerUseCase.GetModel(modelID);
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription modelId) {
+            return _modelContainerUseCase.GetModelConfig(modelId);
         }
 
         public TModelDescription AddModelFromDirectory(string filePath) {

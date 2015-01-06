@@ -33,9 +33,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSharpQuadTree">
-      <HintPath>..\..\..\T-Components\CSharpQuadTree\bin\Debug\CSharpQuadTree.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
@@ -55,6 +52,10 @@
     <Compile Include="PlantLayerImpl.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\LCConnector\LCConnector.csproj">
+      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
+      <Name>LCConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LifeAPI</Name>
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\..\..\LIFE Services\TwoDimEnvironment\TwoDimEnvironment.csproj">
       <Project>{D7383AA1-FB90-4632-BB47-9388778C6D46}</Project>
       <Name>TwoDimEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
+      <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>
+      <Name>CSharpQuadTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
       <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>

@@ -7,14 +7,15 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.AddinLoader;
 using LifeAPI.Layer;
-using Mono.Addins;
 
 namespace LayerFactory.Implementation {
     internal class LayerFactoryUseCase : ILayerFactory {
@@ -31,26 +32,27 @@ namespace LayerFactory.Implementation {
         public ILayer GetLayer(string layerName) {
             ILayer result;
 
-            TypeExtensionNode typeExtensionNode = _addinLoader.LoadLayer(layerName);
+            var typeExtensionNode = _addinLoader.LoadLayer(layerName);
 
-            ConstructorInfo[] constructors = typeExtensionNode.Type.GetConstructors();
+            var constructors = typeExtensionNode.Type.GetConstructors();
 
             // check if there is an empty constructor
             if (constructors.Any(c => c.GetParameters().Length == 0))
                 result = (ILayer) typeExtensionNode.CreateInstance();
             else {
                 // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
-                ConstructorInfo currentConstructor = constructors[0];
-                ParameterInfo[] neededParameters = currentConstructor.GetParameters();
+                var currentConstructor = constructors[0];
+                var neededParameters = currentConstructor.GetParameters();
 
-                object[] actualParameters = new object[neededParameters.Length];
+                var actualParameters = new object[neededParameters.Length];
 
-                int i = 0;
-                foreach (ParameterInfo parameterInfo in neededParameters) {
-                    actualParameters[i] = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
+                var i = 0;
+                foreach (var parameterInfo in neededParameters) {
+                    var param = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
+                    actualParameters[i] = param;
                     i++;
                 }
-                result = (ILayer) currentConstructor.Invoke(actualParameters);
+                result = (ILayer) currentConstructor.Invoke(actualParameters.ToArray());
             }
             _layerRegistry.RegisterLayer(result);
             return result;

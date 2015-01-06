@@ -15,7 +15,7 @@
       <FileName>Communication\Scs\Server\IScsServerClient.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="Hik.Communication.Scs.Communication.IMessenger">
+  <Interface Name="Hik.Communication.Scs.Communication.Messengers">
     <Position X="0.5" Y="0.5" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAAIAQQACAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
