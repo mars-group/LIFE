@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using AppSettingsManager;
 using MulticastAdapter.Interface;
@@ -66,7 +67,7 @@ namespace MulticastAdapter.Implementation
             udpClient.ExclusiveAddressUse = false;
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
-
+            
             return udpClient;
 
         }

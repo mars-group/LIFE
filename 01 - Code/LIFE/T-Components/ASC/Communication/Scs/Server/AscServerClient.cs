@@ -92,7 +92,7 @@ namespace ASC.Communication.Scs.Server {
         /// <param name="communicationChannel">The communication channel that is used by client to send and receive messages</param>
         public AscServerClient(ICommunicationChannel communicationChannel) {
             _communicationChannel = communicationChannel;
-            //_communicationChannel.MessageReceived += CommunicationChannel_MessageReceived;
+            _communicationChannel.MessageReceived += CommunicationChannel_MessageReceived;
             _communicationChannel.MessageSent += CommunicationChannel_MessageSent;
             _communicationChannel.Disconnected += CommunicationChannel_Disconnected;
         }
@@ -137,7 +137,7 @@ namespace ASC.Communication.Scs.Server {
         private void CommunicationChannel_MessageReceived(object sender, MessageEventArgs e) {
             var message = e.Message;
             if (message is ScsPingMessage) {
-                _communicationChannel.SendMessage(new ScsPingMessage {RepliedMessageId = message.MessageId});
+                //_communicationChannel.SendMessage(new ScsPingMessage {RepliedMessageId = message.MessageId});
                 return;
             }
 
