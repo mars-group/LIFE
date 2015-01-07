@@ -39,7 +39,7 @@ namespace TreeLayer.Agents {
             double lon, Guid id, 
             KNPTreeLayer.TreeLayer treeLayer, bool sendingNote = false) : base(id.ToByteArray()) 
         {
-            //_elevationLayer = elevationLayer;
+            //_elevationLayer = elevationLayer; 
             _treeLayer = treeLayer;
             _sendingNote = sendingNote;
             ID = id;
@@ -58,11 +58,11 @@ namespace TreeLayer.Agents {
         {
             if (_sendingNote) { 
                 var otherTrees = _treeLayer.GetAllOtherTreesThanMe(this);
-                Console.Write("Tree " + ID + " reportin in, found " + otherTrees.Count + " other trees: ");
+                //Console.WriteLine("Tree " + ID + " reportin in, found " + otherTrees.Count + " other trees: ");
                 foreach (var tree in otherTrees) {
-                    //tree.GetIdentifiaction();
+                    tree.GetIdentifiaction();
                     //var tage = tree.Age;
-                    Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has age: " + tree.Age);
+                    //Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has age: " + tree.Age);
                 }
             }
 

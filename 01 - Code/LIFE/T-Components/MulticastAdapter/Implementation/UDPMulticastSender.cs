@@ -188,7 +188,13 @@ namespace MulticastAdapter.Implementation
         {
             foreach (var client in _clients)
             {
-				if (client.Client != null) client.Send(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort));
+                try {
+                    if (client.Client != null) client.Send(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort));
+                }
+                catch(Exception ex) {
+                    throw ex;
+                }
+
             }
         }
     }

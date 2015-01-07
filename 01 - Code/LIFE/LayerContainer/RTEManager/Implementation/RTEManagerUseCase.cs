@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -125,11 +126,14 @@ namespace RTEManager.Implementation {
                         )
                 );
 
+            Console.WriteLine("Tick finished: " + _currentTick);
+
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
             // increase Tick counter
             _currentTick++;
+
 
             // visualize all layers
             _visualizationAdapter.VisualizeTick(_currentTick);
