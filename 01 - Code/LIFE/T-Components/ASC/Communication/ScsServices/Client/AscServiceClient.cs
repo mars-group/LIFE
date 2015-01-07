@@ -122,7 +122,7 @@ namespace ASC.Communication.ScsServices.Client {
 
             _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
             // not necessary at the moment
-            //_requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
+            _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
             _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this);
             ServiceProxy = (T) _realServiceProxy.GetTransparentProxy();
