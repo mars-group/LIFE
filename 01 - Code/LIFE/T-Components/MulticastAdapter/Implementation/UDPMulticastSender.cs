@@ -91,10 +91,6 @@ namespace MulticastAdapter.Implementation
                 }
                 throw;
             }
-
-
-
-
         }
 			
 
