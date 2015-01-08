@@ -52,13 +52,22 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
             _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpListenPort);
             _udpReceivingClient = GetReceivingClient(_listenEndPoint);
-
+            JoinMulticastGroup();
             _udpSendingClients = GetSendingClients();
 
             _syncLock = new object();
         }
 
-
+        private void JoinMulticastGroup() {
+            foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
+            {
+                foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
+                {
+                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4))
+                        _udpReceivingClient.JoinMulticastGroup(_mcastGroupIpAddress, unicastAddr.Address);
+                }
+            }
+        }
 
 
         public override void Disconnect() {
