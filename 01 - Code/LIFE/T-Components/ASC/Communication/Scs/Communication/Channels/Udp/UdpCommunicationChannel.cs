@@ -58,16 +58,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             _syncLock = new object();
         }
 
-        private void JoinMulticastGroup() {
-            foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
-            {
-                foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
-                {
-                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4))
-                        _udpReceivingClient.JoinMulticastGroup(_mcastGroupIpAddress, unicastAddr.Address);
-                }
-            }
-        }
 
 
         public override void Disconnect() {
@@ -86,11 +76,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         }
 
 
-
-        #endregion
-
-
-        protected override void SendMessageInternal(IScsMessage message) {
+        protected override void SendMessageInternal(IScsMessage message)
+        {
             //Send message
 
             lock (_syncLock)
@@ -109,8 +96,27 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             }
         }
 
+        #endregion
+
+
+
 
         #region private Methods
+
+        /// <summary>
+        /// Joins the multicast group via all available interfaces
+        /// </summary>
+        private void JoinMulticastGroup()
+        {
+            foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
+            {
+                foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
+                {
+                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4))
+                        _udpReceivingClient.JoinMulticastGroup(_mcastGroupIpAddress, unicastAddr.Address);
+                }
+            }
+        }
 
         private UdpClient GetReceivingClient(IPEndPoint listenEndPoint)
         {
@@ -168,7 +174,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             try
             {
                 //Get received bytes
-                UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
+                //UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
                 IPEndPoint listenEndPoint = ((UdpState)(ar.AsyncState)).Endpoint;
                 var bytesRead = _udpReceivingClient.EndReceive(ar, ref listenEndPoint);
                 if (bytesRead.Length > 0)
