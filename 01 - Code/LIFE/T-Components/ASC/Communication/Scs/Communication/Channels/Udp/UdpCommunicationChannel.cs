@@ -38,21 +38,25 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         }
 
 
-        public UdpCommunicationChannel(AscUdpEndPoint endPoint) {
+        public UdpCommunicationChannel(AscUdpEndPoint endPoint, bool isServer) {
             _endPoint = endPoint;
             _running = false;
-            _sendingPort = endPoint.UdpListenPort + 1;
+
             _mcastGroupIpAddress = IPAddress.Parse(_endPoint.McastGroup);
+            if (isServer) {
+                _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpServerListenPort);
+                _sendingPort = endPoint.UdpClientListenPort;
+            }
+            else {
+                _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpClientListenPort);
+                _sendingPort = endPoint.UdpServerListenPort;
+            }
 
-            /*_multicastAdapter = new MulticastAdapterComponent(
-                new GlobalConfig(_endPoint.McastGroup, _endPoint.UdpListenPort, _endPoint.UdpListenPort+1, 4),
-                new MulticastSenderConfig()
-            );
-             */
 
-            _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpListenPort);
             _udpReceivingClient = GetReceivingClient(_listenEndPoint);
+
             JoinMulticastGroup();
+            
             _udpSendingClients = GetSendingClients();
 
             _syncLock = new object();
@@ -88,7 +92,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                 //Send all bytes to the remote application
                 Parallel.ForEach(_udpSendingClients, client =>
                 {
-                    client.Send(messageBytes, messageBytes.Length, new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpListenPort));
+                    client.Send(messageBytes, messageBytes.Length, new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpClientListenPort));
                 });
 
                 LastSentMessageTime = DateTime.Now;

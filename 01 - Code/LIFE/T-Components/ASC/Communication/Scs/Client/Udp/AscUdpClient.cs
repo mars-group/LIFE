@@ -12,7 +12,7 @@ namespace ASC.Communication.Scs.Client.Udp
         public AscUdpClient(AscUdpEndPoint endPoint)
         {
             _endPoint = endPoint;
-            _udpchannel = new UdpCommunicationChannel(_endPoint);
+            _udpchannel = new UdpCommunicationChannel(_endPoint, false);
         }
 
         protected override ICommunicationChannel CreateCommunicationChannel() {

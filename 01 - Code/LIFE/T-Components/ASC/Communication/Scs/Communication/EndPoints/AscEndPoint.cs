@@ -23,7 +23,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
         /// <param name="endPointAddress">Address to create endpoint</param>
         /// <param name="multicastGroup"></param>
         /// <returns>Created end point</returns>
-        public static AscEndPoint CreateEndPoint(int listenPort, string multicastGroup) {
+        public static AscEndPoint CreateEndPoint(int clientListenPort, int serverListenPort, string multicastGroup) {
             //Check if end point address is null
             if (string.IsNullOrEmpty(multicastGroup)) throw new ArgumentNullException("multicastGroup");
 
@@ -34,7 +34,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
                 return udpEndPointDictionary[multicastGroup];
             }
             // create endpoint if not already present
-            var endpoint = new AscUdpEndPoint(listenPort, multicastGroup);
+            var endpoint = new AscUdpEndPoint(clientListenPort, serverListenPort, multicastGroup);
             udpEndPointDictionary[multicastGroup] = endpoint;
             return endpoint;
         }

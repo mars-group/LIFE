@@ -11,7 +11,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         private readonly ICommunicationChannel _udpchannel;
 
         public UdpConnectionListener(AscUdpEndPoint endpoint) {
-            _udpchannel = new UdpCommunicationChannel(endpoint);
+            _udpchannel = new UdpCommunicationChannel(endpoint, true);
         }
 
         public override void Start() {

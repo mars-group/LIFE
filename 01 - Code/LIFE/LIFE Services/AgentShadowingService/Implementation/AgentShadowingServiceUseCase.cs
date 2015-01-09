@@ -17,18 +17,20 @@ namespace AgentShadowingService.Implementation
         private readonly IDictionary<IAscServiceClient<TServiceInterface>, byte> _shadowAgentClients;
         private readonly string _mcastAddress;
         private readonly IScsServiceApplication _agentShadowingServer;
-        private int _listenPort;
+        private readonly int _clientListenPort;
+        private readonly int _serverListenPort;
         private LayerContainerSettings _config;
 
-        public AgentShadowingServiceUseCase(int port = 6666) {
+        public AgentShadowingServiceUseCase(int clientListenPort = 6666, int serverListenPort = 7777) {
             var typeOfTServiceClass = typeof (TServiceClass);
             _shadowAgentClients = new ConcurrentDictionary<IAscServiceClient<TServiceInterface>, byte>();
-            _listenPort = port;
+            _clientListenPort = clientListenPort;
+            _serverListenPort = serverListenPort;
             // calculate MulticastAddress for this agentType
             _mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
 
             // TODO: May be moved into RegisterRealAgent, so as not to start the server, when no real agents are present
-            _agentShadowingServer = AscServiceBuilder.CreateService(port, _mcastAddress);
+            _agentShadowingServer = AscServiceBuilder.CreateService(clientListenPort, serverListenPort, _mcastAddress);
             _agentShadowingServer.Start();
             _config = Configuration.Load<LayerContainerSettings>();
         }
@@ -36,7 +38,8 @@ namespace AgentShadowingService.Implementation
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {
             var shadowAgentClient = AscServiceClientBuilder.CreateClient<TServiceInterface>(
-                _listenPort,
+                _clientListenPort,
+                _serverListenPort,
                 _mcastAddress,
                 agentId
                 );

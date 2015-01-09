@@ -9,14 +9,19 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
         private readonly IScsClient _ascUdpClient;
         public string McastGroup { get; private set; }
 
-        public int UdpListenPort { get; set; }
+        public int UdpClientListenPort { get; set; }
 
-        public AscUdpEndPoint(int listenPort, string mcastGroup) {
+        public int UdpServerListenPort { get; set; }
+
+        public AscUdpEndPoint(int clientListenPort, int serverListenPort, string mcastGroup) {
             McastGroup = mcastGroup;
-            UdpListenPort = listenPort;
+            UdpClientListenPort = clientListenPort;
+            UdpServerListenPort = serverListenPort;
             _ascUdpClient = new AscUdpClient(this);
             _ascUdpServer = new AscUdpServer(this);
         }
+
+
 
 
         internal override IScsServer CreateServer() {
