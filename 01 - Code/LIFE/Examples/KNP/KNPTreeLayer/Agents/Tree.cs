@@ -61,11 +61,12 @@ namespace TreeLayer.Agents {
                 Console.WriteLine("Tree " + ID + " reportin in, found " + otherTrees.Count + " other trees: ");
                 foreach (var tree in otherTrees) {
                     tree.GetIdentifiaction();
-                    //var tage = tree.Age;
-                    Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has age: " + tree.Age);
+                    var tage = tree.Age;
+                    Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has biomass: " + tree.Biomass);
                 }
             }
 
+            Age++;
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);
             // grow height

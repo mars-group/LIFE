@@ -21,7 +21,8 @@ namespace AgentShadowingService.Implementation
         private readonly int _serverListenPort;
         private LayerContainerSettings _config;
 
-        public AgentShadowingServiceUseCase(int clientListenPort = 6666, int serverListenPort = 6666) {
+        public AgentShadowingServiceUseCase(int clientListenPort = 6666) {
+            int serverListenPort = 6666;
             var typeOfTServiceClass = typeof (TServiceClass);
             _shadowAgentClients = new ConcurrentDictionary<IAscServiceClient<TServiceInterface>, byte>();
             _clientListenPort = clientListenPort;
