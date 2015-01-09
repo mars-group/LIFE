@@ -8,15 +8,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
     /// </summary>
     class UdpConnectionListener : ConnectionListenerBase
     {
-        private readonly AscUdpEndPoint _endPoint;
-        private ICommunicationChannel _udpchannel;
+        private readonly ICommunicationChannel _udpchannel;
 
         public UdpConnectionListener(AscUdpEndPoint endpoint) {
-            _endPoint = endpoint;
+            _udpchannel = new UdpCommunicationChannel(endpoint);
         }
 
         public override void Start() {
-            OnCommunicationChannelConnected(_udpchannel ?? (_udpchannel = new UdpCommunicationChannel(_endPoint)));
+            OnCommunicationChannelConnected(_udpchannel);
         }
 
         public override void Stop() {
