@@ -124,7 +124,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             // allow another client to bind to this port
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(listenEndPoint);
-
             return udpClient;
         }
 
@@ -139,10 +138,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                     {
                         var updClient = SetupSocket(unicastAddress.Address);
                         updClient.JoinMulticastGroup(_mcastGroupIpAddress, unicastAddress.Address);
+                        updClient.MulticastLoopback = false;
                         resultList.Add(updClient);
                     }
                 }
             }
+
             return resultList;
         }
 
