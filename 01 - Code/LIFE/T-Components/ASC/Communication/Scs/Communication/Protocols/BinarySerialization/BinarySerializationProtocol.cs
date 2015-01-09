@@ -97,7 +97,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
             var messages = new List<IScsMessage>();
 
             //since its udp, directly Deserialize
-            messages.Add(DeserializeMessage(receivedBytes));
+            //messages.Add(DeserializeMessage(receivedBytes));
 
             //Read all available messages and add to messages collection
             while (ReadSingleMessage(messages)) {}
