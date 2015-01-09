@@ -38,19 +38,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         }
 
 
-        public UdpCommunicationChannel(AscUdpEndPoint endPoint, bool isServer) {
+        public UdpCommunicationChannel(AscUdpEndPoint endPoint) {
             _endPoint = endPoint;
             _running = false;
 
             _mcastGroupIpAddress = IPAddress.Parse(_endPoint.McastGroup);
-            if (isServer) {
-                _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpServerListenPort);
-                _sendingPort = endPoint.UdpClientListenPort;
-            }
-            else {
-                _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpClientListenPort);
-                _sendingPort = endPoint.UdpServerListenPort;
-            }
+
+            _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpServerListenPort);
+            _sendingPort = endPoint.UdpClientListenPort;
 
 
             _udpReceivingClient = GetReceivingClient(_listenEndPoint);
