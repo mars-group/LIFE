@@ -171,8 +171,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         {
             if (!_running) return;
 
-            try
-            {
+            //try
+            //{
                 //Get received bytes
                 //UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
                 IPEndPoint listenEndPoint = ((UdpState)(ar.AsyncState)).Endpoint;
@@ -194,12 +194,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
                 //Read more bytes if still running
                 if (_running) _udpReceivingClient.BeginReceive(ReceiveCallback, ar.AsyncState);
-            }
+            /*}
             catch (Exception ex)
             {
                 Disconnect();
                 throw;
-            }
+            }*/
         }
 
         private class UdpState
