@@ -67,14 +67,14 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
             }
 
             //Create a byte array including the length of the message (4 bytes) and serialized message content
-            /*var bytes = new byte[messageLength + 4];
+            var bytes = new byte[messageLength + 4];
             WriteInt32(bytes, 0, messageLength);
             Array.Copy(serializedMessage, 0, bytes, 4, messageLength);
-             */
+             
 
             //Return serialized message by this protocol
-            // return bytes;
-            return serializedMessage;
+            return bytes;
+            //return serializedMessage;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
             messages.Add(DeserializeMessage(receivedBytes));
 
             //Read all available messages and add to messages collection
-            //while (ReadSingleMessage(messages)) {}
+            while (ReadSingleMessage(messages)) {}
             //Return message list
             return messages;
         }
@@ -217,16 +217,21 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
             var serializedMessageBytes = ReadByteArray(_receiveMemoryStream, messageLength);
             messages.Add(DeserializeMessage(serializedMessageBytes));
 
-            //Read remaining bytes to an array
-            var remainingBytes = ReadByteArray(_receiveMemoryStream,
-                (int) (_receiveMemoryStream.Length - (4 + messageLength)));
-
-            //Re-create the receive memory stream and write remaining bytes
-            _receiveMemoryStream = new MemoryStream();
-            _receiveMemoryStream.Write(remainingBytes, 0, remainingBytes.Length);
+            //Check for remaining bytes
+            var remainingLength = _receiveMemoryStream.Length - (4 + messageLength);
+            if (remainingLength > 0) {
+                var remainingBytes = ReadByteArray(_receiveMemoryStream, (int) remainingLength);
+                //Re-create the receive memory stream and write remaining bytes
+                _receiveMemoryStream = new MemoryStream();
+                _receiveMemoryStream.Write(remainingBytes, 0, remainingBytes.Length);
+            }
+            else {
+                // just recreate the memory stream
+                _receiveMemoryStream = new MemoryStream();
+            }
 
             //Return true to re-call this method to try to read next message
-            return (remainingBytes.Length > 4);
+            return (remainingLength > 4);
         }
 
         /// <summary>

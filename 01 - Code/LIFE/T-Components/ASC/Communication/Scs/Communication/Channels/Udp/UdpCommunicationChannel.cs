@@ -174,7 +174,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             //try
             //{
                 //Get received bytes
-                //UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
+                UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
+            
                 IPEndPoint listenEndPoint = ((UdpState)(ar.AsyncState)).Endpoint;
                 var bytesRead = _udpReceivingClient.EndReceive(ar, ref listenEndPoint);
                 if (bytesRead.Length > 0)
