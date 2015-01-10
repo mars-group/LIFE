@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Communication.Messages;
@@ -85,29 +84,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             var listenEndPoint = new IPEndPoint(IPAddress.Any, 0);
             var udpState = new UdpState {Endpoint = listenEndPoint, UdpClient = _udpReceivingClient};
             _udpReceivingClient.BeginReceive(ReceiveCallback, udpState);
-            /*Task.Run(() =>
-            {
-                while (_running)
-                {
-                    var recBytes = _udpReceivingClient.Receive(ref listenEndPoint);
-                    
-                    var stream = new MemoryStream(recBytes);
-                    stream.SetLength(recBytes.Length);
-                    IScsMessage msg;
-                    try
-                    {
-                        msg = (IScsMessage) new BinaryFormatter().Deserialize(stream);
-                    }
-                    finally
-                    {
-                        stream.Dispose();
-                    }
-                    
-                    
-                    OnMessageReceived(msg);
-                }
-
-            });*/
         }
 
 
