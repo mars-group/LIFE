@@ -4,11 +4,13 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Communication.Messages;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config.Types;
+
 
 namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
@@ -29,14 +31,36 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         /// </summary>
         private readonly object _syncLock;
 
+        /// <summary>
+        /// The UDP receiver client
+        /// </summary>
         private readonly UdpClient _udpReceivingClient;
-        private IPEndPoint _listenEndPoint;
 
+        /// <summary>
+        /// All UDP sending clients. One client per interface is created
+        /// </summary>
         private readonly List<UdpClient> _udpSendingClients;
+
+        /// <summary>
+        /// The multicast address being used for this communicationchannel
+        /// </summary>
         private readonly IPAddress _mcastGroupIpAddress;
-        private int _sendingPort;
+
+        /// <summary>
+        /// The port to start sending on. Will automatically be increased if already in use
+        /// </summary>
+        private int _sendingStartPort;
+
+        /// <summary>
+        /// The Formatter used to serialize and de-serialize
+        /// </summary>
+        private readonly BinaryFormatter _binaryFormatter;
+
         #endregion
 
+        /// <summary>
+        /// At the moment we don't need a remote endpoint to call methods on the other side.
+        /// </summary>
         public override AscEndPoint RemoteEndPoint {
             get { throw new UdpCommunicationHasNoRemoteEndpointException(); }
         }
@@ -44,22 +68,22 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         public UdpCommunicationChannel(AscUdpEndPoint endPoint) {
             _endPoint = endPoint;
-
+            // running is false, not yet
             _running = false;
-
+            // create multicast IPAddress
             _mcastGroupIpAddress = IPAddress.Parse(_endPoint.McastGroup);
-
-            _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpServerListenPort);
-
-            _sendingPort = endPoint.UdpClientListenPort+1;
-
-            _udpReceivingClient = GetReceivingClient(_listenEndPoint);
-
+            // sending port starts with listenport +1, will be increased if port is not availabel
+            _sendingStartPort = endPoint.UdpPort+1;
+            // get a receiving UDP client which listens on all interfaces and every port
+            _udpReceivingClient = GetReceivingClient(new IPEndPoint(IPAddress.Any, _endPoint.UdpPort));
+            // Join multicast groups with all receiving clients
             JoinMulticastGroup();
-            
+            // get all sending udpClients. One per active and multicast enabled interface
             _udpSendingClients = GetSendingClients();
-
+            // a lock object to be used for sending method
             _syncLock = new object();
+            //create BinaryFormatter
+            _binaryFormatter = new BinaryFormatter();
         }
 
 
@@ -67,6 +91,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         public override void Disconnect() {
             if (CommunicationState != CommunicationStates.Connected) return;
             _udpReceivingClient.Close();
+            Parallel.ForEach(_udpSendingClients, client => client.Close());
             CommunicationState = CommunicationStates.Disconnected;
             OnDisconnected();
         }
@@ -75,14 +100,17 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         protected override void StartInternal()
         {
+            // check if running so as to not call this multiple times from different client objects
             if (_running)
             {
+                // nothing to be done, so return
                 return;
             }
 
             _running = true;
             var listenEndPoint = new IPEndPoint(IPAddress.Any, 0);
             var udpState = new UdpState {Endpoint = listenEndPoint, UdpClient = _udpReceivingClient};
+            // start receiving in an asynchronous way
             _udpReceivingClient.BeginReceive(ReceiveCallback, udpState);
         }
 
@@ -100,9 +128,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                  
                 
                 var messageBytes = memoryStream.ToArray();
-                var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpClientListenPort);
+                var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpPort);
 
-                //Send all bytes to the remote application
+                //Send all bytes to the remote application asynchronously
                 _udpSendingClients.ForEach(client =>
                 {
                     client.BeginSend(
@@ -113,7 +141,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                         client
                         );
                 });
-
+                // store last time a message was sent
                 LastSentMessageTime = DateTime.Now;
                 OnMessageSent(message);
             }
@@ -121,6 +149,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         private void SendCallback(IAsyncResult ar)
         {
+            // nothing to be done here
         }
 
         #endregion
@@ -147,7 +176,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         private UdpClient GetReceivingClient(IPEndPoint listenEndPoint)
         {
-            //var udpClient = new UdpClient(listenEndPoint);
+            if (listenEndPoint == null) throw new ArgumentNullException("listenEndPoint");
             var udpClient = new UdpClient {ExclusiveAddressUse = false};
 
             // allow another client to bind to this port
@@ -175,36 +204,41 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             return resultList;
         }
 
+        /// <summary>
+        /// Sets up the sending socket.
+        /// Will increase the sending port, if it is already in use
+        /// </summary>
+        /// <param name="unicastAddress"></param>
+        /// <returns></returns>
         private UdpClient SetupSocket(IPAddress unicastAddress)
         {
             try
             {
-                return new UdpClient(new IPEndPoint(unicastAddress, _sendingPort));
+                return new UdpClient(new IPEndPoint(unicastAddress, _sendingStartPort));
             }
             catch (SocketException socketException)
             {
                 //if sending port is already in use increment port and try again.
                 if (socketException.ErrorCode != 10048) throw;
-                _sendingPort = _sendingPort + 1;
+                _sendingStartPort = _sendingStartPort + 1;
                 return SetupSocket(unicastAddress);
             }
         }
 
         /// <summary>
         ///     This method is used as callback method in _udpReceivingClient's BeginReceive method.
-        ///     It reveives bytes from udp socket.
+        ///     It receives bytes from udp socket.
         /// </summary>
         /// <param name="ar">Asyncronous call result</param>
         private void ReceiveCallback(IAsyncResult ar)
         {
             if (!_running) return;
 
-            //try
-            //{
-                //Get received bytes
-                UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
-            
-                IPEndPoint listenEndPoint = ((UdpState)(ar.AsyncState)).Endpoint;
+            try
+            {
+                // fetch listenendpoint from status object
+                var listenEndPoint = ((UdpState)(ar.AsyncState)).Endpoint;
+                // receive the complete datagram
                 var bytesRead = _udpReceivingClient.EndReceive(ar, ref listenEndPoint);
                 if (bytesRead.Length > 0)
                 {
@@ -212,29 +246,31 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
                     var stream = new MemoryStream(bytesRead);
                     stream.SetLength(bytesRead.Length);
+
+                    // deserialize
                     IScsMessage msg;
                     try
                     {
-                        msg = (IScsMessage) new BinaryFormatter().Deserialize(stream);
+                        msg = (IScsMessage) _binaryFormatter.Deserialize(stream);
                     }
                     finally
                     {
                         stream.Dispose();
                     }
 
-
+                    // inform all listeners about the new message
                     OnMessageReceived(msg);
                 }
                 else throw new CommunicationException("Udp socket is closed");
 
                 //Read more bytes if still running
                 if (_running) _udpReceivingClient.BeginReceive(ReceiveCallback, ar.AsyncState);
-            /*}
+            }
             catch (Exception ex)
             {
                 Disconnect();
                 throw;
-            }*/
+            }
         }
 
         private class UdpState
@@ -246,5 +282,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         #endregion
     }
 
+    [Serializable]
     internal class UdpCommunicationHasNoRemoteEndpointException : Exception {}
 }

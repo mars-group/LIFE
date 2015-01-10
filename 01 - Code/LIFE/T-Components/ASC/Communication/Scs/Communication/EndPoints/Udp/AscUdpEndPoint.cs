@@ -11,14 +11,11 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
         private readonly UdpCommunicationChannel _udpChannel;
         public string McastGroup { get; private set; }
 
-        public int UdpClientListenPort { get; set; }
+        public int UdpPort { get; set; }
 
-        public int UdpServerListenPort { get; set; }
-
-        public AscUdpEndPoint(int clientListenPort, int serverListenPort, string mcastGroup) {
+        public AscUdpEndPoint(int port, string mcastGroup) {
             McastGroup = mcastGroup;
-            UdpClientListenPort = clientListenPort;
-            UdpServerListenPort = serverListenPort;
+            UdpPort = port;
             _udpChannel = new UdpCommunicationChannel(this);
             _ascUdpClient = new AscUdpClient(_udpChannel);
             _ascUdpServer = new AscUdpServer(_udpChannel);
