@@ -36,8 +36,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// </param>
         /// <param name="endpointAddress">EndPoint address of the server</param>
         /// <returns>Created client object to connect to the server</returns>
-        public static IAscServiceClient<T> CreateClient<T>(int listenPort, int serverListenPort, string multicastGroup, Guid serviceID, object clientObject = null) where T : class {
-                return CreateClient<T>(AscEndPoint.CreateEndPoint(listenPort, serverListenPort, multicastGroup), serviceID, clientObject);
+        public static IAscServiceClient<T> CreateClient<T>(int listenPort, string multicastGroup, Guid serviceID, object clientObject = null) where T : class {
+                return CreateClient<T>(AscEndPoint.CreateEndPoint(listenPort, multicastGroup), serviceID, clientObject);
         }
 
 

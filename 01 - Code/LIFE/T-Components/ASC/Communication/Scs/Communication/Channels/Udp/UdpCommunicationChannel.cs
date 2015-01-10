@@ -73,9 +73,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             // create multicast IPAddress
             _mcastGroupIpAddress = IPAddress.Parse(_endPoint.McastGroup);
             // sending port starts with listenport +1, will be increased if port is not availabel
-            _sendingStartPort = endPoint.UdpClientListenPort+1;
+            _sendingStartPort = endPoint.UdpPort+1;
             // get a receiving UDP client which listens on all interfaces and every port
-            _udpReceivingClient = GetReceivingClient(new IPEndPoint(IPAddress.Any, _endPoint.UdpClientListenPort));
+            _udpReceivingClient = GetReceivingClient(new IPEndPoint(IPAddress.Any, _endPoint.UdpPort));
             // Join multicast groups with all receiving clients
             JoinMulticastGroup();
             // get all sending udpClients. One per active and multicast enabled interface
@@ -128,7 +128,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                  
                 
                 var messageBytes = memoryStream.ToArray();
-                var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpClientListenPort);
+                var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpPort);
 
                 //Send all bytes to the remote application asynchronously
                 _udpSendingClients.ForEach(client =>
