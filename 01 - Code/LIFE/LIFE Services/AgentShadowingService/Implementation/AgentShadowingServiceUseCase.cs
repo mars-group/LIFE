@@ -45,7 +45,7 @@ namespace AgentShadowingService.Implementation
                 agentId
                 );
             // set timeout to infinite
-            shadowAgentClient.Timeout = 2000;
+            shadowAgentClient.Timeout = 5000;
             // connect the shadow agent
             shadowAgentClient.Connect();
             // store shadow agent client in list for later management and observation

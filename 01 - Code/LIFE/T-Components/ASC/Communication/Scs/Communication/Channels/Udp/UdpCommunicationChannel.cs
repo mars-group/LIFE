@@ -13,7 +13,10 @@ using MulticastAdapter.Interface.Config.Types;
 
 namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
-    class UdpCommunicationChannel : CommunicationChannelBase {
+    class UdpCommunicationChannel : CommunicationChannelBase
+    {
+        #region private fields
+
         private readonly AscUdpEndPoint _endPoint;
         //private readonly MulticastAdapterComponent _multicastAdapter;
 
@@ -33,7 +36,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         private readonly List<UdpClient> _udpSendingClients;
         private readonly IPAddress _mcastGroupIpAddress;
         private int _sendingPort;
-
+        #endregion
 
         public override AscEndPoint RemoteEndPoint {
             get { throw new UdpCommunicationHasNoRemoteEndpointException(); }
@@ -42,13 +45,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         public UdpCommunicationChannel(AscUdpEndPoint endPoint) {
             _endPoint = endPoint;
+
             _running = false;
 
             _mcastGroupIpAddress = IPAddress.Parse(_endPoint.McastGroup);
 
             _listenEndPoint = new IPEndPoint(IPAddress.Any, _endPoint.UdpServerListenPort);
-            _sendingPort = endPoint.UdpClientListenPort;
 
+            _sendingPort = endPoint.UdpClientListenPort+1;
 
             _udpReceivingClient = GetReceivingClient(_listenEndPoint);
 
@@ -70,25 +74,40 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         #region protected Methods
 
-        protected override void StartInternal() {
+        protected override void StartInternal()
+        {
+            if (_running)
+            {
+                return;
+            }
+
             _running = true;
-            //var udpState = new UdpState {Endpoint = _listenEndPoint, UdpClient = _udpReceivingClient};
-            //_udpReceivingClient.BeginReceive(ReceiveCallback, udpState);
-            Task.Run(() =>
+            var listenEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            var udpState = new UdpState {Endpoint = listenEndPoint, UdpClient = _udpReceivingClient};
+            _udpReceivingClient.BeginReceive(ReceiveCallback, udpState);
+            /*Task.Run(() =>
             {
                 while (_running)
                 {
-                    var recBytes = _udpReceivingClient.Receive(ref _listenEndPoint);
-
+                    var recBytes = _udpReceivingClient.Receive(ref listenEndPoint);
+                    
                     var stream = new MemoryStream(recBytes);
                     stream.SetLength(recBytes.Length);
-
-                    var msg = (IScsMessage)new BinaryFormatter().Deserialize(stream);
+                    IScsMessage msg;
+                    try
+                    {
+                        msg = (IScsMessage) new BinaryFormatter().Deserialize(stream);
+                    }
+                    finally
+                    {
+                        stream.Dispose();
+                    }
+                    
                     
                     OnMessageReceived(msg);
                 }
 
-            });
+            });*/
         }
 
 
@@ -105,16 +124,27 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                  
                 
                 var messageBytes = memoryStream.ToArray();
+                var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpClientListenPort);
 
                 //Send all bytes to the remote application
-                Parallel.ForEach(_udpSendingClients, client =>
+                _udpSendingClients.ForEach(client =>
                 {
-                    client.Send(messageBytes, messageBytes.Length, new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpClientListenPort));
+                    client.BeginSend(
+                        messageBytes,
+                        messageBytes.Length,
+                        endpoint,
+                        SendCallback,
+                        client
+                        );
                 });
 
                 LastSentMessageTime = DateTime.Now;
                 OnMessageSent(message);
             }
+        }
+
+        private void SendCallback(IAsyncResult ar)
+        {
         }
 
         #endregion
@@ -141,6 +171,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         private UdpClient GetReceivingClient(IPEndPoint listenEndPoint)
         {
+            //var udpClient = new UdpClient(listenEndPoint);
             var udpClient = new UdpClient {ExclusiveAddressUse = false};
 
             // allow another client to bind to this port
@@ -159,7 +190,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                     if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4))
                     {
                         var updClient = SetupSocket(unicastAddress.Address);
-                        updClient.JoinMulticastGroup(_mcastGroupIpAddress, unicastAddress.Address);
                         updClient.MulticastLoopback = false;
                         resultList.Add(updClient);
                     }
@@ -199,19 +229,25 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                 UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
             
                 IPEndPoint listenEndPoint = ((UdpState)(ar.AsyncState)).Endpoint;
-                var bytesRead = _udpReceivingClient.EndReceive(ar, ref _listenEndPoint);
+                var bytesRead = _udpReceivingClient.EndReceive(ar, ref listenEndPoint);
                 if (bytesRead.Length > 0)
                 {
                     LastReceivedMessageTime = DateTime.Now;
 
-                    //Read messages according to current wire protocol
-                    var messages = WireProtocol.CreateMessages(bytesRead);
-
-                    //Raise MessageReceived event for all received messages
-                    foreach (var message in messages)
+                    var stream = new MemoryStream(bytesRead);
+                    stream.SetLength(bytesRead.Length);
+                    IScsMessage msg;
+                    try
                     {
-                        OnMessageReceived(message);
+                        msg = (IScsMessage) new BinaryFormatter().Deserialize(stream);
                     }
+                    finally
+                    {
+                        stream.Dispose();
+                    }
+
+
+                    OnMessageReceived(msg);
                 }
                 else throw new CommunicationException("Udp socket is closed");
 
