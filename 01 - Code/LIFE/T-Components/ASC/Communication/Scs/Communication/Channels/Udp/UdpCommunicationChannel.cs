@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
@@ -26,7 +28,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         private readonly object _syncLock;
 
         private readonly UdpClient _udpReceivingClient;
-        private readonly IPEndPoint _listenEndPoint;
+        private IPEndPoint _listenEndPoint;
 
         private readonly List<UdpClient> _udpSendingClients;
         private readonly IPAddress _mcastGroupIpAddress;
@@ -70,8 +72,23 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         protected override void StartInternal() {
             _running = true;
-            var udpState = new UdpState {Endpoint = _listenEndPoint, UdpClient = _udpReceivingClient};
-            _udpReceivingClient.BeginReceive(ReceiveCallback, udpState);
+            //var udpState = new UdpState {Endpoint = _listenEndPoint, UdpClient = _udpReceivingClient};
+            //_udpReceivingClient.BeginReceive(ReceiveCallback, udpState);
+            Task.Run(() =>
+            {
+                while (_running)
+                {
+                    var recBytes = _udpReceivingClient.Receive(ref _listenEndPoint);
+
+                    var stream = new MemoryStream(recBytes);
+                    stream.SetLength(recBytes.Length);
+
+                    var msg = (IScsMessage)new BinaryFormatter().Deserialize(stream);
+                    
+                    OnMessageReceived(msg);
+                }
+
+            });
         }
 
 
@@ -82,7 +99,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             lock (_syncLock)
             {
                 //Create a byte array from message according to current protocol
-                var messageBytes = WireProtocol.GetBytes(message);
+                var memoryStream = new MemoryStream();
+                
+                new BinaryFormatter().Serialize(memoryStream, message);
+                 
+                
+                var messageBytes = memoryStream.ToArray();
 
                 //Send all bytes to the remote application
                 Parallel.ForEach(_udpSendingClients, client =>
@@ -177,7 +199,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                 UdpClient udpClient = ((UdpState)(ar.AsyncState)).UdpClient;
             
                 IPEndPoint listenEndPoint = ((UdpState)(ar.AsyncState)).Endpoint;
-                var bytesRead = _udpReceivingClient.EndReceive(ar, ref listenEndPoint);
+                var bytesRead = _udpReceivingClient.EndReceive(ar, ref _listenEndPoint);
                 if (bytesRead.Length > 0)
                 {
                     LastReceivedMessageTime = DateTime.Now;

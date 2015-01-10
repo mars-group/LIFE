@@ -58,15 +58,16 @@ namespace TreeLayer.Agents {
         {
             if (_sendingNote) { 
                 var otherTrees = _treeLayer.GetAllOtherTreesThanMe(this);
-                Console.WriteLine("Tree " + ID + " reportin in, found " + otherTrees.Count + " other trees: ");
+                //Console.WriteLine("Local tree reportin in, found " + otherTrees.Count + " other trees: ");
                 foreach (var tree in otherTrees) {
                     tree.GetIdentifiaction();
-                    var tage = tree.Age;
-                    Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has biomass: " + tree.Biomass);
+                    var tage = tree.Biomass;
+                    
+                    //Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has biomass: " + tree.Biomass);
                 }
             }
 
-            Age++;
+            //Age++;
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);
             // grow height

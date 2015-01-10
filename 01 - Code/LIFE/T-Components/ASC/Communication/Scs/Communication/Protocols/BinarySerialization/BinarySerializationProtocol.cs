@@ -58,7 +58,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         public byte[] GetBytes(IScsMessage message) {
             //Serialize the message to a byte array
             var serializedMessage = SerializeMessage(message);
-
+            /*
             //Check for message length
             var messageLength = serializedMessage.Length;
             if (messageLength > MaxMessageLength) {
@@ -73,8 +73,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
              
 
             //Return serialized message by this protocol
-            return bytes;
-            //return serializedMessage;
+            return bytes;*/
+            return serializedMessage;
         }
 
         /// <summary>
@@ -92,15 +92,15 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         /// </returns>
         public IEnumerable<IScsMessage> CreateMessages(byte[] receivedBytes) {
             //Write all received bytes to the _receiveMemoryStream
-            _receiveMemoryStream.Write(receivedBytes, 0, receivedBytes.Length);
+            //_receiveMemoryStream.Write(receivedBytes, 0, receivedBytes.Length);
             //Create a list to collect messages
             var messages = new List<IScsMessage>();
 
             //since its udp, directly Deserialize
-            //messages.Add(DeserializeMessage(receivedBytes));
+            messages.Add(DeserializeMessage(receivedBytes));
 
             //Read all available messages and add to messages collection
-            while (ReadSingleMessage(messages)) {}
+            //while (ReadSingleMessage(messages)) {}
             //Return message list
             return messages;
         }
