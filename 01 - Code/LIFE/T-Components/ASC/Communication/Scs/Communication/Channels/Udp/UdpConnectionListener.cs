@@ -1,6 +1,4 @@
-﻿using ASC.Communication.Scs.Communication.EndPoints.Udp;
-
-namespace ASC.Communication.Scs.Communication.Channels.Udp
+﻿namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
     /// <summary>
     /// Will just raise the OnCommunicationChannelconnected Event to fullful the 
@@ -8,15 +6,15 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
     /// </summary>
     class UdpConnectionListener : ConnectionListenerBase
     {
-        private readonly AscUdpEndPoint _endPoint;
-        private ICommunicationChannel _udpchannel;
+        private readonly ICommunicationChannel _udpchannel;
 
-        public UdpConnectionListener(AscUdpEndPoint endpoint) {
-            _endPoint = endpoint;
+        public UdpConnectionListener(ICommunicationChannel udpchannel)
+        {
+            _udpchannel = udpchannel;
         }
 
         public override void Start() {
-            OnCommunicationChannelConnected(_udpchannel ?? (_udpchannel = new UdpCommunicationChannel(_endPoint)));
+            OnCommunicationChannelConnected(_udpchannel);
         }
 
         public override void Stop() {

@@ -205,6 +205,9 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 switch (waitingMessage.State) {
                     case WaitingMessageStates.WaitingForResponse:
                         throw new TimeoutException("Timeout occured. Can not receive response.");
+                        // ReSend Message
+                        //SendMessageAndWaitForResponse(message, timeoutMilliseconds);
+                        break;
                     case WaitingMessageStates.Cancelled:
                         throw new CommunicationException("Disconnected before response received.");
                 }

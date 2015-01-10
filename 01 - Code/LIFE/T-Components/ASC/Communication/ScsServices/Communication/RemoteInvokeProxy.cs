@@ -90,8 +90,10 @@ namespace ASC.Communication.ScsServices.Communication {
             // TODO Extend to support additional parameter for target agent. Was soll das ???
 
             // Answer request from cache if available
-            if (_cache.ContainsKey(message.MethodName))
+            if (_cache.ContainsKey(message.MethodName)) {
                 return new ReturnMessage(_cache[message.MethodName], null, 0, message.LogicalCallContext, message);
+            }
+
 
             var requestMessage = new ScsRemoteInvokeMessage {
                 ServiceClassName = _typeOfTProxy.Name,
@@ -102,7 +104,7 @@ namespace ASC.Communication.ScsServices.Communication {
 
             var responseMessage =
                 _clientMessenger.SendMessageAndWaitForResponse(requestMessage) as ScsRemoteInvokeReturnMessage;
-            if (responseMessage == null) return null;
+            if (responseMessage == null){ return null;}
 
             // Store result in cache if no exception was thrown and the method has been marked as cacheable
             if (responseMessage.RemoteException == null &&

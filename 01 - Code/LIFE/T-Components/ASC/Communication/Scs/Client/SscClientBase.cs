@@ -109,7 +109,7 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     This timer is used to send PingMessage messages to server periodically.
         /// </summary>
-        private readonly Timer _pingTimer;
+        //private readonly Timer _pingTimer;
 
         #endregion
 
@@ -119,8 +119,8 @@ namespace ASC.Communication.Scs.Client {
         ///     Constructor.
         /// </summary>
         protected AscClientBase() {
-            _pingTimer = new Timer(30000);
-            _pingTimer.Elapsed += PingTimer_Elapsed;
+            //_pingTimer = new Timer(30000);
+            //_pingTimer.Elapsed += PingTimer_Elapsed;
             ConnectTimeout = DefaultConnectionAttemptTimeout;
             WireProtocol = WireProtocolManager.GetDefaultWireProtocol();
         }
@@ -140,7 +140,7 @@ namespace ASC.Communication.Scs.Client {
             _communicationChannel.MessageReceived += CommunicationChannel_MessageReceived;
             _communicationChannel.MessageSent += CommunicationChannel_MessageSent;
             _communicationChannel.Start();
-            _pingTimer.Start();
+            //_pingTimer.Start();
             OnConnected();
         }
 
@@ -216,7 +216,7 @@ namespace ASC.Communication.Scs.Client {
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void CommunicationChannel_Disconnected(object sender, EventArgs e) {
-            _pingTimer.Stop();
+            //_pingTimer.Stop();
             OnDisconnected();
         }
 
