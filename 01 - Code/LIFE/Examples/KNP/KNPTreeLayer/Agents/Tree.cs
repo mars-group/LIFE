@@ -8,20 +8,41 @@
 //  *******************************************************/
 
 using System;
+using System.ComponentModel;
 using ASC.Communication.ScsServices.Service;
 using KNPElevationLayer;
 
 namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
+
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly KNPTreeLayer.TreeLayer _treeLayer;
         private readonly bool _sendingNote;
+
+        private double _biomass;
+
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
         public double CrownDiameter { get; set; }
         public double Age { get; set;}
-        public double Biomass { get; set; }
+
+        public double Biomass
+        {
+            get
+            {
+                return _biomass;
+            }
+            set
+            {
+                if (_biomass != value)
+                {
+                    _biomass = value;
+                    OnPropertyChanged("Biomass");
+                }
+            }
+        }
+
         public double Lat { get; set; }
         public double Lon { get; set; }
         public string GetIdentifiaction()
@@ -74,6 +95,23 @@ namespace TreeLayer.Agents {
             Height = Height + GParK*(GmaxH - Height);
             // grow biomass
             Biomass = Math.Pow(Math.E, -3.00682 + 1.56775*Math.Log(Diameter*Height));
+        }
+
+        #endregion
+
+        #region PropertyChanged Handling
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion
