@@ -4,7 +4,7 @@ using LifeAPI.Agent;
 namespace TreeLayer.Agents
 {
     [AscService(Version = "0.1")]
-    interface ITree : IAgent
+    interface ITree : IAgent, ICacheable
     {
         double Height { get; set; }
         double Diameter { get; set; }
