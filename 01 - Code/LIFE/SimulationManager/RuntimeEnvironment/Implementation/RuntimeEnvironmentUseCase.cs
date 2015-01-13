@@ -44,6 +44,9 @@ namespace RuntimeEnvironment.Implementation {
 				if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
 					throw new NoLayerContainersArePresentException ();
 				}
+
+                Console.WriteLine("Found and working with " + layerContainerNodes.Count + " Layercontainers.");
+
                 // if not all LayerContainers are idle throw exception
 				if (!layerContainerNodes.All (l => _idleLayerContainers.Any (c => c.Equals (l)))) {
 					throw new LayerContainerBusyException ();

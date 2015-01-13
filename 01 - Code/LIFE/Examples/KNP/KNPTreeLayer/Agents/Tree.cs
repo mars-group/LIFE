@@ -11,13 +11,14 @@ using System;
 using System.ComponentModel;
 using ASC.Communication.ScsServices.Service;
 using KNPElevationLayer;
+using NetTopologySuite.Geometries;
+using SharpMap.Data;
 
 namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
 
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly KNPTreeLayer.TreeLayer _treeLayer;
-        private readonly bool _sendingNote;
 
         private double _biomass;
 
@@ -43,6 +44,8 @@ namespace TreeLayer.Agents {
             }
         }
 
+        public double HeightAboveNN { get; set; }
+
         public double Lat { get; set; }
         public double Lon { get; set; }
         public string GetIdentifiaction()
@@ -56,13 +59,10 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat,
-            double lon, Guid id, 
-            KNPTreeLayer.TreeLayer treeLayer, bool sendingNote = false) : base(id.ToByteArray()) 
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) 
         {
-            //_elevationLayer = elevationLayer; 
+            _elevationLayer = elevationLayer; 
             _treeLayer = treeLayer;
-            _sendingNote = sendingNote;
             ID = id;
             Height = height;
             Diameter = diameter;
@@ -71,21 +71,20 @@ namespace TreeLayer.Agents {
             Biomass = biomass;
             Lat = lat;
             Lon = lon;
+            var result = _elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
+            HeightAboveNN = Double.Parse(result.Tables[0].Rows[0].ItemArray[2].ToString());
+
         }
 
         #region IAgent Members
 
         public void Tick()
         {
-            if (_sendingNote) { 
-                var otherTrees = _treeLayer.GetAllOtherTreesThanMe(this);
-                //Console.WriteLine("Local tree reportin in, found " + otherTrees.Count + " other trees: ");
-                foreach (var tree in otherTrees) {
-                    tree.GetIdentifiaction();
-                    var tage = tree.Biomass;
-                    
-                    //Console.WriteLine("OtherTree with ID: "+tree.GetIdentifiaction()+" has biomass: " + tree.Biomass);
-                }
+            var otherTrees = _treeLayer.GetAllOtherTreesThanMe(this);
+            //Console.WriteLine("Local tree reportin in, found " + otherTrees.Count + " other trees: ");
+            foreach (var tree in otherTrees) {
+                tree.GetIdentifiaction();
+                var tage = tree.Biomass;
             }
 
             //Age++;

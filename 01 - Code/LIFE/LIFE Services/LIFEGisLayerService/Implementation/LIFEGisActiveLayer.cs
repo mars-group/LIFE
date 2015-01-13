@@ -23,7 +23,7 @@ using SharpMap.Data.Providers;
 using SharpMap.Layers;
 
 namespace LIFEGisLayerService.Implementation {
-    public abstract class LIFEGisActiveLayer : ScsService, IGISActiveLayer
+    public abstract class LIFEGisActiveLayer : ScsService
     {
         private readonly Map _map;
         private ICanQueryLayer _layer;

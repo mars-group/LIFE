@@ -21,7 +21,7 @@ namespace KNPElevationLayer
             var filePath = Path.GetFullPath(path);
 
             LoadGISData(new Uri(filePath, UriKind.Absolute), "ElevationLayerKNP");
-            var e = GetEnvelope();
+            //var e = GetEnvelope();
             return true;
         }
 
