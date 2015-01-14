@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -109,12 +110,33 @@ namespace LIFEGisLayerService.Implementation {
             return _layer.Envelope;
         }
 
-        public object GetDataByGeometry(IGeometry geometry) {
+        public IGISQueryResult GetDataByGeometry(IGeometry geometry) {
             if (!_map.Layers.Any()) throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
             FeatureDataSet fds = new FeatureDataSet();
 
             _layer.ExecuteIntersectionQuery(geometry, fds);
-            return fds.Tables[0].Rows[0].ItemArray[2];
+            var result = new List<GISResultEntry>();
+            foreach (FeatureDataRow row in fds.Tables.SelectMany(table => table.Rows.Cast<FeatureDataRow>())) {
+                switch (row.ItemArray.Length) {
+                    case 3:
+                        result.Add(new GISResultEntry() {
+                            X = Double.Parse(row.ItemArray[0].ToString()),
+                            Y = Double.Parse(row.ItemArray[1].ToString()), 
+                            Value = row.ItemArray[2]
+                        });
+                        break;
+                    case 4:
+                        result.Add(new GISResultEntry()
+                        {
+                            X = Double.Parse(row.ItemArray[0].ToString()),
+                            Y = Double.Parse(row.ItemArray[1].ToString()),
+                            Z = Double.Parse(row.ItemArray[2].ToString()),
+                            Value = row.ItemArray[3]
+                        });
+                        break;
+                }
+            }
+            return new GISQueryResult(result);
         }
 
         #endregion

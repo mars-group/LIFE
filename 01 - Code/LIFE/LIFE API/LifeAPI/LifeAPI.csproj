@@ -81,6 +81,7 @@
     <Compile Include="Agent\IAgent.cs" />
     <Compile Include="Layer\GIS\IGISActiveLayer.cs" />
     <Compile Include="Layer\GIS\IGISPassiveLayer.cs" />
+    <Compile Include="Layer\GIS\IGISQueryResult.cs" />
     <Compile Include="Layer\ILayer.cs" />
     <Compile Include="Layer\ISteppedActiveLayer.cs" />
     <Compile Include="Layer\ISteppedLayer.cs" />
