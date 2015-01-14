@@ -137,8 +137,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\GISQueryResult.cs" />
-    <Compile Include="Implementation\GISResultEntry.cs" />
     <Compile Include="Implementation\LIFEGisActiveLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

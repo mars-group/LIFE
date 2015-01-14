@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LIFEGisLayerService.Implementation
+namespace LifeAPI.Layer.GIS.ResultTypes
 {
     [Serializable]
     public class GISResultEntry

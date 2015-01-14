@@ -9,6 +9,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using ASC.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using NetTopologySuite.Geometries;
@@ -72,7 +73,7 @@ namespace TreeLayer.Agents {
             Lat = lat;
             Lon = lon;
             var result = _elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
-            HeightAboveNN = Double.Parse(result.ToString());
+            HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
 
         }
 

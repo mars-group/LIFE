@@ -18,6 +18,7 @@ using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using LifeAPI.Layer.GIS;
+using LifeAPI.Layer.GIS.ResultTypes;
 using SharpMap;
 using SharpMap.Data;
 using SharpMap.Data.Providers;
@@ -110,7 +111,8 @@ namespace LIFEGisLayerService.Implementation {
             return _layer.Envelope;
         }
 
-        public IGISQueryResult GetDataByGeometry(IGeometry geometry) {
+        public GISQueryResult GetDataByGeometry(IGeometry geometry)
+        {
             if (!_map.Layers.Any()) throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
             FeatureDataSet fds = new FeatureDataSet();
 

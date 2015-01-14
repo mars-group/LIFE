@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using LifeAPI.Layer.GIS;
 
-namespace LIFEGisLayerService.Implementation
+namespace LifeAPI.Layer.GIS.ResultTypes
 {
     [Serializable]
-    public class GISQueryResult : IGISQueryResult
+    public class GISQueryResult
     {
         public List<GISResultEntry> ResultEntries { get; private set; }
 

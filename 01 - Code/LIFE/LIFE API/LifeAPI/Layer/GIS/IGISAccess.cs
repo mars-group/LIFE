@@ -9,7 +9,7 @@
 
 using System;
 using GeoAPI.Geometries;
-using SharpMap.Data;
+using LifeAPI.Layer.GIS.ResultTypes;
 
 namespace LifeAPI.Layer.GIS {
     /// <summary>
@@ -42,7 +42,7 @@ namespace LifeAPI.Layer.GIS {
         ///     , if no result.
         /// </returns>
         /// <exception cref="GISLayerHasNoDataException"></exception>
-        IGISQueryResult GetDataByGeometry(IGeometry geometry);
+        GISQueryResult GetDataByGeometry(IGeometry geometry);
 
         /// <summary>
         ///     Transforms the provided X and Y into a world coordinate.
