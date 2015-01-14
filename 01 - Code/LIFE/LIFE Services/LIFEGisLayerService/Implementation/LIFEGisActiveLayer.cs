@@ -109,12 +109,12 @@ namespace LIFEGisLayerService.Implementation {
             return _layer.Envelope;
         }
 
-        public FeatureDataSet GetDataByGeometry(IGeometry geometry) {
+        public object GetDataByGeometry(IGeometry geometry) {
             if (!_map.Layers.Any()) throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
             FeatureDataSet fds = new FeatureDataSet();
 
             _layer.ExecuteIntersectionQuery(geometry, fds);
-            return fds;
+            return fds.Tables[0].Rows[0].ItemArray[2];
         }
 
         #endregion

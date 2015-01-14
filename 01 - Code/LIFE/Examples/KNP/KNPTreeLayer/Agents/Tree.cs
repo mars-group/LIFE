@@ -12,7 +12,7 @@ using System.ComponentModel;
 using ASC.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using NetTopologySuite.Geometries;
-using SharpMap.Data;
+
 
 namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
@@ -72,7 +72,7 @@ namespace TreeLayer.Agents {
             Lat = lat;
             Lon = lon;
             var result = _elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
-            HeightAboveNN = Double.Parse(result.Tables[0].Rows[0].ItemArray[2].ToString());
+            HeightAboveNN = Double.Parse(result.ToString());
 
         }
 

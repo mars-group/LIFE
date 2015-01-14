@@ -42,7 +42,7 @@ namespace LifeAPI.Layer.GIS {
         ///     , if no result.
         /// </returns>
         /// <exception cref="GISLayerHasNoDataException"></exception>
-        FeatureDataSet GetDataByGeometry(IGeometry geometry);
+        object GetDataByGeometry(IGeometry geometry);
 
         /// <summary>
         ///     Transforms the provided X and Y into a world coordinate.

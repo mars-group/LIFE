@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AgentShadowingService.Implementation;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
