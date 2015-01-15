@@ -65,7 +65,7 @@ namespace RTEManager.Implementation {
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
             _currentTick = 0;
-
+            /*
             TNodeInformation simManager = null;
             while (simManager == null)
             {
@@ -85,6 +85,7 @@ namespace RTEManager.Implementation {
             var dmClient = ScsServiceClientBuilder.CreateClient<IDMConnector>(simManager.NodeEndpoint.IpAddress);
             dmClient.Connect();
             _distributionManager = dmClient.ServiceProxy;
+             * */
         }
 
         #region Public Methods
@@ -184,9 +185,6 @@ namespace RTEManager.Implementation {
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
                             })
                 );
-
-            // inform SimManager and thus all related LayerContainers about newly added and removed Agents
-
 
 
             // add all new TickClients which were registered during the run
