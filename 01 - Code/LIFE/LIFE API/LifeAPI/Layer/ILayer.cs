@@ -7,6 +7,9 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 
@@ -38,6 +41,15 @@ namespace LifeAPI.Layer {
         /// </summary>
         /// <returns>True if init finished successfully, false otherwise</returns>
         bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle);
+
+        /// <summary>
+        /// This method gets called by the MARS Framework when distributed ShadowAgents need to be added or removed
+        /// prior to the next tick. You will want to use the AgentShadowingService component to implement this method.
+        /// You may entirely ignore this method and implement it empty, if your are not distributing.
+        /// </summary>
+        /// <param name="agentsToAdd"></param>
+        /// <param name="agentsToRemove"></param>
+        void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove);
 
         /// <summary>
         ///     The current Tick this layer is in

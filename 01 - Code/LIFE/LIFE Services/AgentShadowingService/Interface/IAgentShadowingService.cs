@@ -15,11 +15,15 @@ namespace AgentShadowingService.Interface
         /// <returns>The ShadowAgent proxy object of type T</returns>
         TServiceInterface CreateShadowAgent(Guid agentId);
 
+        void RemoveShadowAgent(Guid agentId);
+
         /// <summary>
         /// Registers a real agent with the AgentShadowing System.
         /// </summary>
         /// <param name="agentToRegister"></param>
         void RegisterRealAgent(TServiceClass agentToRegister);
+
+        void RemoveRealAgent(TServiceClass agentToRemove);
 
         string GetLayerContainerName();
     }

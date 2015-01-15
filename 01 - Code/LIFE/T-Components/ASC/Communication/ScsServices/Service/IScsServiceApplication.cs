@@ -46,5 +46,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <typeparam name="TServiceInterface">Service interface type</typeparam>
         /// <returns>True: removed. False: no service object with this interface</returns>
         bool RemoveService<TServiceInterface>() where TServiceInterface : class;
+
+        bool RemoveService<TServiceInterface>(Guid serviceGuid) where TServiceInterface : class;
     }
 }
