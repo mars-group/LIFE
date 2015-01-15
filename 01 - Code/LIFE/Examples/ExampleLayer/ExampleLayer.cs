@@ -44,7 +44,10 @@ namespace ExampleLayer
             return true;
         }
 
-  
+        public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
+            
+        }
+
 
         public long GetCurrentTick()
         {

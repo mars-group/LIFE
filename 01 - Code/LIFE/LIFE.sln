@@ -129,6 +129,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUtilities", "T-Compon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentShadowingService", "LIFE Services\AgentShadowingService\AgentShadowingService.csproj", "{17064DB2-8976-439F-A697-AD8ACDB975CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMConnector", "Common\DMConnector\DMConnector.csproj", "{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -624,6 +626,16 @@ Global
 		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{17064DB2-8976-439F-A697-AD8ACDB975CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -677,6 +689,7 @@ Global
 		{6BEC24D9-FD97-4D66-BCFF-8671343B798E} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{6CD55EF4-32F2-4E99-8973-1625D6726344} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{17064DB2-8976-439F-A697-AD8ACDB975CC} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
+		{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5} = {B43F18BD-D65F-4604-AC98-1A61DC77CDFE}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj

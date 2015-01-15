@@ -26,6 +26,9 @@ namespace KNPElevationLayer
             return true;
         }
 
+        public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
+            
+        }
 
 
         public override void Tick()

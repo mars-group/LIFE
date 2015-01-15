@@ -54,9 +54,21 @@
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
+      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
+      <Name>ConfigurationAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\DMConnector\DMConnector.csproj">
+      <Project>{17E9610C-B528-4FDC-AA5D-9A7D59EF6AA5}</Project>
+      <Name>DMConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
+      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
+      <Name>NodeRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
@@ -65,6 +77,10 @@
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
       <Name>Scs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LayerContainerShared\LayerContainerShared.csproj">
+      <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
+      <Name>LayerContainerShared</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisualizationAdapter\VisualizationAdapter.csproj">
       <Project>{F6626674-3A9A-460B-A98B-A66B561FD811}</Project>

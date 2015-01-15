@@ -18,7 +18,7 @@ namespace AgentShadowingService.Implementation
         private readonly string _mcastAddress;
         private readonly IScsServiceApplication _agentShadowingServer;
         private readonly int _clientListenPort;
-        private LayerContainerSettings _config;
+        private readonly LayerContainerSettings _config;
 
         public AgentShadowingServiceUseCase(int port = 6666) {
             _clientListenPort = port;
