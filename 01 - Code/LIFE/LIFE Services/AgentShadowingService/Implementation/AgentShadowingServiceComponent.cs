@@ -23,9 +23,17 @@ namespace AgentShadowingService.Implementation
             return _agentShadowingUseCase.CreateShadowAgent(agentId);
         }
 
+        public void RemoveShadowAgent(Guid agentId) {
+            _agentShadowingUseCase.RemoveShadowAgent(agentId);
+        }
+
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
+        }
+
+        public void RemoveRealAgent(TServiceClass agentToRemove) {
+            _agentShadowingUseCase.RemoveRealAgent(agentToRemove);
         }
 
         public string GetLayerContainerName() {

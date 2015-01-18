@@ -138,6 +138,10 @@ namespace ASC.Communication.ScsServices.Service {
             return _serviceObjects.Remove(typeof (TServiceInterface).Name);
         }
 
+        public bool RemoveService<TServiceInterface>(Guid serviceGuid) where TServiceInterface : class {
+            return _serviceObjects[typeof (TServiceInterface).Name].Remove(serviceGuid);
+        }
+
         #endregion
 
         #region Private methods

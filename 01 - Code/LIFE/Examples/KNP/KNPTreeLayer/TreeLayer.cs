@@ -69,13 +69,24 @@ namespace KNPTreeLayer {
             return true;
         }
 
+        public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
+            foreach (var id in agentsToAdd[typeof(Tree)]) {
+                trees.Add(_agentShadowingService.CreateShadowAgent(id));
+            }
+
+            foreach (var id in agentsToRemove[typeof(Tree)])
+            {
+                _agentShadowingService.CreateShadowAgent(id);
+            }
+        }
+
         private double GetRandomNumber(double minimum, double maximum)
         { 
-            Random random = new Random();
+            var random = new Random();
             return random.NextDouble() * (maximum - minimum) + minimum;
         }
 
-        internal List<ITree> GetAllOtherTreesThanMe(ITree memyself)
+        internal IEnumerable<ITree> GetAllOtherTreesThanMe(ITree memyself)
         {
             return trees.FindAll(t => t != memyself);
         }
