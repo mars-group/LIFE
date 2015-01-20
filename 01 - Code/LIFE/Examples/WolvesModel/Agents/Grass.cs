@@ -47,7 +47,7 @@ namespace WolvesModel.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format("{0,3:00} | Gras  | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |     |       |         |",
-        ID, GetPosition().X, GetPosition().Y, _foodValue, FoodvalueMax);
+        Id, GetPosition().X, GetPosition().Y, _foodValue, FoodvalueMax);
     }
 
 

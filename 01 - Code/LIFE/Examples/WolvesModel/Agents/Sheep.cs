@@ -51,7 +51,7 @@ namespace WolvesModel.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        PrintMessage("["+GetTick()+"] Schaf "+ID+" ist verhungert!", ConsoleColor.DarkRed);
+        PrintMessage("["+GetTick()+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
         IsAlive = false;
         return null;
       }
@@ -89,7 +89,7 @@ namespace WolvesModel.Agents {
         // R1: Eat nearby grass.
         if (dist <= 1.4143 && hunger > 20) {
           _states += "R1";
-          PrintMessage("[" + GetTick() + "] Schaf " + ID + " frißt Gras " + nearest.ID + "!", ConsoleColor.Green);
+          PrintMessage("[" + GetTick() + "] Schaf " + Id + " frißt Gras " + nearest.Id + "!", ConsoleColor.Green);
           return new EatInteraction(this, nearest);
         }
 
@@ -126,7 +126,7 @@ namespace WolvesModel.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format("{0,3:00} | Schaf | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |" + _states,
-          ID, GetPosition().X, GetPosition().Y, _energy, EnergyMax);
+          Id, GetPosition().X, GetPosition().Y, _energy, EnergyMax);
     }
 
 

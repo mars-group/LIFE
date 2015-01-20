@@ -1,5 +1,7 @@
 ﻿using System;
 using DalskiAgent.Movement.Movers;
+using EnvironmentServiceComponent.Entities.Shape;
+using EnvironmentServiceComponent.Implementation;
 using LifeAPI.Environment;
 using LifeAPI.Layer;
 using LifeAPI.Spatial;
@@ -36,8 +38,6 @@ namespace DalskiAgent.Agents {
       
       // Create the base agent.
       base(layer, regFkt, unregFkt) {
-
-      /*** SpatialAgent additions: ***/
       
       // Check, if the agent already has a direction and a form. If not, create a cube facing north.
       if (dir == null) dir = new Direction();
@@ -87,12 +87,21 @@ namespace DalskiAgent.Agents {
 
 
     public Enum GetInformationType() {
-      throw new NotImplementedException();
+      return (CollisionType) 0;  //TODO ... 
     }
 
-    public IShapeOld Shape { get; set; }  //TODO not so fine here ...
+    public IShapeOld Shape {
+      get {
+        return new ExploreRectShape(MyRectFactory.Rectangle(1, 1));
+      }
+      set {
+        //TODO|  Here lies the error. The shape has to be reset by the ESC, because it holds 
+        //TODO|  the position data. So we don't get the random placement result => all (0,0,0)
+      }
+    }
+    
     public Enum GetCollisionType() {
-      throw new NotImplementedException();
+      return CollisionType.MassiveAgent;
     }
   }
 }
