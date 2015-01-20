@@ -76,5 +76,22 @@ namespace DalskiAgent.Agents {
     ///   Get or set an agent identifier.
     /// </summary>
     public Guid ID { get; set; }
+  
+  
+    /******************** Console output stuff. ***********************/
+    private static readonly object Obj = new object();     // Lock object for LC output.
+    
+    /// <summary>
+    ///   Print a (colored) message synchronized to the console window.
+    /// <param name="message">The message to display.</param>
+    /// <param name="color">The message color (default: gray).</param>
+    /// </summary>
+    public static void PrintMessage(string message, ConsoleColor color = ConsoleColor.Gray) {
+      lock(Obj) {
+        Console.ForegroundColor = color;
+        Console.WriteLine(message);
+        Console.ForegroundColor = ConsoleColor.Gray;          
+      }     
+    }  
   }
 }

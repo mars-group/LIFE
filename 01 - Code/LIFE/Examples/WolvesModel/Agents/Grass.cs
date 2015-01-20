@@ -1,9 +1,8 @@
 ﻿using System;
 using DalskiAgent.Agents;
-using DalskiAgent.Execution;
 using DalskiAgent.Reasoning;
-using LifeAPI.Spatial;
-using WolvesModel.Environment;
+using LifeAPI.Environment;
+using LifeAPI.Layer;
 using WolvesModel.Interactions;
 
 namespace WolvesModel.Agents {
@@ -21,11 +20,13 @@ namespace WolvesModel.Agents {
     /// <summary>
     ///   Create a new grass agent.
     /// </summary>
-    /// <param name="exec">Agent execution container reference.</param>
-    /// <param name="env">Grassland reference.</param>
-    /// <param name="pos">The initial position.</param>
-    public Grass(IExecution exec, Grassland env, Vector pos = null) : base(exec, env, CollisionType.SelfCollision, pos) {
-      _random = new Random(Id.GetHashCode());
+    /// <param name="layer">Layer reference needed for delegate calls.</param>
+    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="unregFkt"> Delegate for unregistration function.</param>
+    /// <param name="env">Environment implementation reference.</param> 
+    public Grass(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) :    
+      base(layer, regFkt, unregFkt, env) {
+      _random = new Random(base.GetHashCode());
     }
 
 
@@ -46,7 +47,7 @@ namespace WolvesModel.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format("{0,3:00} | Gras  | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |     |       |         |",
-        Id, Data.Position.X, Data.Position.Y, _foodValue, FoodvalueMax);
+        ID, GetPosition().X, GetPosition().Y, _foodValue, FoodvalueMax);
     }
 
 

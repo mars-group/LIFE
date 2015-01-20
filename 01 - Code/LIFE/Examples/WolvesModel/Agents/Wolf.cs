@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DalskiAgent.Agents;
-using DalskiAgent.Auxiliary;
-using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
-using DalskiAgent.Perception;
 using DalskiAgent.Reasoning;
-using EnvironmentServiceComponent.Implementation;
+using LifeAPI.Environment;
+using LifeAPI.Layer;
 using LifeAPI.Spatial;
-using LifeAPI.Perception;
-using WolvesModel.Environment;
 using WolvesModel.Interactions;
-using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
 
 namespace WolvesModel.Agents {
  
@@ -22,29 +16,28 @@ namespace WolvesModel.Agents {
   /// </summary>
   internal class Wolf : SpatialAgent, IAgentLogic, IEatInteractionSource {
     
-    private int _energy = 80;                 // Current energy (with initial value).
-    private const int EnergyMax = 100;        // Maximum health.
-    private readonly Random _random;          // Random number generator for energy loss.
-    private readonly Grassland _environment;  // Environment reference for random movement.
-    private string _states;                   // Output string for console.
-    private readonly GridMover _mover;        // Specific agent mover reference (to avoid casts).
+    private int _energy = 80;                   // Current energy (with initial value).
+    private const int EnergyMax = 100;          // Maximum health.
+    private readonly Random _random;            // Random number generator for energy loss.
+    private readonly IEnvironment _environment; // Environment reference for random movement.
+    private string _states;                     // Output string for console.
+    private readonly GridMover _mover;          // Specific agent mover reference (to avoid casts).
 
 
     /// <summary>
     ///   Create a new wolf agent.
     /// </summary>
-    /// <param name="exec">Agent execution container reference.</param>
-    /// <param name="env">Grassland reference.</param>
-    public Wolf(IExecution exec, Grassland env) : base(exec, env, CollisionType.MassiveAgent, null) {
-      _random = new Random(Id.GetHashCode() + (int) DateTime.Now.Ticks);
+    /// <param name="layer">Layer reference needed for delegate calls.</param>
+    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="unregFkt"> Delegate for unregistration function.</param>
+    /// <param name="env">Environment implementation reference.</param> 
+    public Wolf(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) : 
+      base(layer, regFkt, unregFkt, env) {
+      _random = new Random(base.GetHashCode());
       _environment = env;
-      
-      // Add perception sensor.
-      ISpecification halo = new SpatialHalo(MyGeometryFactory.Rectangle(100, 100), InformationTypes.AllAgents);
-      PerceptionUnit.AddSensor(new DataSensor(this, env, halo));
 
       // Add movement module.
-      Mover = new GridMover(env, this, Data);
+      Mover = new GridMover(env, this);
       _mover = (GridMover) Mover;  // Re-declaration to save casts.
     }
 
@@ -58,29 +51,20 @@ namespace WolvesModel.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        ConsoleView.AddMessage("["+GetTick()+"] Wolf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        PrintMessage("["+GetTick()+"] Wolf "+ID+" ist verhungert!", ConsoleColor.DarkRed);
         IsAlive = false;
         return null;
       }
 
+      // Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
+      var hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
+      var agents = _environment.ExploreAll().ToList();
+      agents.Remove(this);
 
-      // Calculate hunger percentage, read-out nearby agents.
-      var hunger = (int)(((double)(EnergyMax - _energy)/EnergyMax)*100);
-      var rawData = PerceptionUnit.GetData(InformationTypes.AllAgents).Data;
-      var agents = ((List<ISpatialObject>) rawData);
-
-      // Remove own agent from perception list.
-      for (var i = 0; i < agents.Count; i ++) {
-        if (agents[i] == this) {
-          agents.RemoveAt(i);
-          break;
-        }
-      }
-          
-      
+      // Differentiate between perceived agent types. 
       var sheeps = agents.OfType<Sheep>().ToList();
       var wolves = agents.OfType<Wolf>().ToList();
-      
+  
       // Create status output.
       _states = String.Format("{0,3:00}% |", hunger) + " - " +
         (sheeps.Count<10? sheeps.Count+"" : "+") + " " + 
@@ -89,12 +73,12 @@ namespace WolvesModel.Agents {
       if (sheeps.Count > 0) {
 
         // Get the nearest sheep and calculate the distance towards it.
-        var sheep = sheeps[0];
-        var dist = Data.Position.GetDistance(sheep.GetPosition());
-        foreach (var shp in sheeps) {
-          if (Data.Position.GetDistance(shp.GetPosition()) < dist) {
-            sheep = shp;
-            dist = Data.Position.GetDistance(sheep.GetPosition());
+        var nearest = sheeps[0];
+        var dist = GetPosition().GetDistance(nearest.GetPosition());
+        foreach (var sheep in sheeps) {
+          if (GetPosition().GetDistance(sheep.GetPosition()) < dist) {
+            nearest = sheep;
+            dist = GetPosition().GetDistance(sheep.GetPosition());
           }
         }
         _states += String.Format("E: {0,4:0.00} | ", dist);
@@ -102,21 +86,21 @@ namespace WolvesModel.Agents {
         // R1: If there is a sheep directly ahead and hunger > 20%, eat it!
         if (dist <= 1 && hunger >= 20) {
           _states += "R1";
-          ConsoleView.AddMessage("["+GetTick()+"] Wolf "+Id+" frißt Schaf "+sheep.Id+"!", ConsoleColor.Blue);
-          return new EatInteraction(this, sheep);
+          PrintMessage("["+GetTick()+"] Wolf "+ID+" frißt Schaf "+nearest.ID+"!", ConsoleColor.Blue);
+          return new EatInteraction(this, nearest);
         }
 
         // R2: Sheep at distance max. 5 and hunger > 40%? Move towards it!
         if (dist <= 5 && hunger > 40) {
           _states += "R2";
-          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          var options = _mover.GetMovementOptions(nearest.GetPosition());
           return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
 
         // R3: Very hungry wolf. You better watch out ...
         if (hunger > 60) {
           _states += "R3";
-          var options = _mover.GetMovementOptions(sheep.GetPosition());
+          var options = _mover.GetMovementOptions(nearest.GetPosition());
           return options.Count == 0 ? null : _mover.MoveInDirection(options[0].Direction);
         }
       }
@@ -126,7 +110,9 @@ namespace WolvesModel.Agents {
 
       // R4: Perform random movement.
       _states += "R4";
-      var rndOpts = _mover.GetMovementOptions(_environment.GetRandomPosition());
+      var x = _random.Next((int)_environment.MaxDimension.X);
+      var y = _random.Next((int)_environment.MaxDimension.Y);
+      var rndOpts = _mover.GetMovementOptions(new TVector(x, y));
       return rndOpts.Count == 0 ? null : _mover.MoveInDirection(rndOpts[0].Direction);
     }
 
@@ -137,7 +123,7 @@ namespace WolvesModel.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format("{0,3:00} | Wolf  | ({1,2:00},{2,2:00})  | {3,3:0}/{4,3:0} |" + _states,
-        Id, Data.Position.X, Data.Position.Y, _energy, EnergyMax);
+        ID, GetPosition().X, GetPosition().Y, _energy, EnergyMax);
     }
 
 

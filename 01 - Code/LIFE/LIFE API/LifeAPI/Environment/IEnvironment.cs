@@ -13,13 +13,13 @@ namespace LifeAPI.Environment {
         /// <summary>
         ///   Get the maximum extent (upper right position) of the environment. 
         /// </summary>
-        TVector MaxDimension { get; }
+        TVector MaxDimension { get; set; }
 
 
         /// <summary>
         ///   Tells, if this environment is rasterized or not.
         /// </summary>
-        bool IsGrid { get; }
+        bool IsGrid { get; set; }
         
 
         /// <summary>

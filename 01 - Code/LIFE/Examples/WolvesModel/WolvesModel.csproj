@@ -52,8 +52,7 @@
     <Compile Include="Agents\Grass.cs" />
     <Compile Include="Agents\Sheep.cs" />
     <Compile Include="Agents\Wolf.cs" />
-    <Compile Include="Environment\AgentSpawner.cs" />
-    <Compile Include="Environment\Grassland.cs" />
+    <Compile Include="Agents\AgentSpawner.cs" />
     <Compile Include="Interactions\EatInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
