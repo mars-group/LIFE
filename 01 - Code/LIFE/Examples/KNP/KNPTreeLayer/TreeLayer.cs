@@ -32,11 +32,6 @@ namespace KNPTreeLayer {
 
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
 
-
-            var env = _elevationLayer.GetEnvelope();
-            var randX = new Random();
-            var randY = new Random();
-
             var MinX = 31.331;
             var MinY = -25.292;
             var MaxX = 31.985;
@@ -45,8 +40,6 @@ namespace KNPTreeLayer {
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
                 // instantiate real Agents
-
-
 
                 for (var i = 0; i < agentInitConfig.RealAgentCount; i++) {
                     var t = new Tree(4, 2, 10, i, 500,
