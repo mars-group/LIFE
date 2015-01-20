@@ -20,7 +20,7 @@ namespace ConfigurationAdapter.Interface {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (Configuration));
 
         /// <summary>
-        ///     Grants access to a config file. If no file exists, it will be uatomatically created.
+        ///     Grants access to a config file. If no file exists, it will be created automatically.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="fileName"></param>
