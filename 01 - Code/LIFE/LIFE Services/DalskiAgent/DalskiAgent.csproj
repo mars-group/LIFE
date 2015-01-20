@@ -53,16 +53,6 @@
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Agents\SpatialAgent.cs" />
-    <Compile Include="Auxiliary\ConsoleView.cs" />
-    <Compile Include="Auxiliary\MessageServer.cs" />
-    <Compile Include="Environments\DataAccessor.cs" />
-    <Compile Include="Environments\ESCAdapter.cs" />
-    <Compile Include="Environments\ESCRectAdapter.cs" />
-    <Compile Include="Environments\IEnvironmentOld.cs" />
-    <Compile Include="Environments\ISpatialObject.cs" />
-    <Compile Include="Environments\SpatialData.cs" />
-    <Compile Include="Execution\IExecution.cs" />
-    <Compile Include="Execution\LayerExec.cs" />
     <Compile Include="Movement\Actions\ContinuousMovementAction.cs" />
     <Compile Include="Movement\Actions\DirectMovementAction.cs" />
     <Compile Include="Movement\Actions\GridMovementAction.cs" />
@@ -70,15 +60,6 @@
     <Compile Include="Movement\Movers\ContinuousMover.cs" />
     <Compile Include="Movement\Movers\DirectMover.cs" />
     <Compile Include="Movement\Movers\GridMover.cs" />
-    <Compile Include="Perception\CommunicationSensor.cs" />
-    <Compile Include="Perception\DataSensor.cs" />
-    <Compile Include="Perception\Halo.cs" />
-    <Compile Include="Perception\OmniHalo.cs" />
-    <Compile Include="Perception\PerceptionUnit.cs" />
-    <Compile Include="Perception\RadialHalo.cs" />
-    <Compile Include="Perception\Sensor.cs" />
-    <Compile Include="Perception\SensorInput.cs" />
-    <Compile Include="Perception\SpatialHalo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reasoning\IAgentLogic.cs" />
     <Compile Include="Reasoning\IInteraction.cs" />

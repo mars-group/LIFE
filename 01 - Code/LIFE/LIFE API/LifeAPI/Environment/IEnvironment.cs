@@ -9,6 +9,19 @@ namespace LifeAPI.Environment {
     /// </summary>
     public interface IEnvironment : IDataSource {
 
+
+        /// <summary>
+        ///   Get the maximum extent (upper right position) of the environment. 
+        /// </summary>
+        TVector MaxDimension { get; }
+
+
+        /// <summary>
+        ///   Tells, if this environment is rasterized or not.
+        /// </summary>
+        bool IsGrid { get; }
+        
+
         /// <summary>
         ///     Adds a new entity to the ESC at given position with given direction.
         /// </summary>

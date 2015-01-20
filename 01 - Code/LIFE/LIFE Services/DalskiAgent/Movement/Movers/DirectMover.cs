@@ -1,5 +1,5 @@
 ﻿using DalskiAgent.Agents;
-using DalskiAgent.Environments;
+using LifeAPI.Environment;
 using LifeAPI.Spatial;
 
 namespace DalskiAgent.Movement.Movers {
@@ -15,8 +15,7 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">R/O container for spatial data.</param>
-    public DirectMover(IEnvironmentOld env, SpatialAgent agent, DataAccessor data) : base(env, agent, data) {}
+    public DirectMover(IEnvironment env, SpatialAgent agent) : base(env, agent) {}
 
 
     /// <summary>
@@ -26,11 +25,11 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="dir">The new direction (optional).</param> 
     public void Move(Vector target, Direction dir = null) {
       MovementVector = new Vector(
-        target.X-Data.Position.X, 
-        target.Y-Data.Position.Y, 
-        target.Z-Data.Position.Z);
+        target.X - Agent.GetPosition().X, 
+        target.Y - Agent.GetPosition().Y, 
+        target.Z - Agent.GetPosition().Z);
       if (dir != null) TargetDir = dir;
-      else TargetDir = Data.Direction;
+      else TargetDir = Agent.GetDirection();
       Move();
     }
   }

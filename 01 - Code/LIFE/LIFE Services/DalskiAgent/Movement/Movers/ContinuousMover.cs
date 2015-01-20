@@ -1,7 +1,7 @@
 ﻿using System;
 using DalskiAgent.Agents;
-using DalskiAgent.Environments;
 using DalskiAgent.Movement.Actions;
+using LifeAPI.Environment;
 using LifeAPI.Spatial;
 
 namespace DalskiAgent.Movement.Movers {
@@ -12,8 +12,8 @@ namespace DalskiAgent.Movement.Movers {
   public class ContinuousMover : AgentMover {
 
     public double Speed  { get; private set; }  // Current movement speed.
-    public float PitchAS { get; private set; }  // Pitch changing angular speed.
-    public float YawAS   { get; private set; }  // Rotary speed (vertical axis).   
+    public float PitchAs { get; private set; }  // Pitch changing angular speed.
+    public float YawAs   { get; private set; }  // Rotary speed (vertical axis).   
 
 
     /// <summary>
@@ -21,24 +21,23 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">R/O container for spatial data.</param>
-    public ContinuousMover(IEnvironmentOld env, SpatialAgent agent, DataAccessor data) : base(env, agent, data) {}
+    public ContinuousMover(IEnvironment env, SpatialAgent agent) : base(env, agent) {}
 
 
     /// <summary>
     ///   Moves the agent. This version uses turning speeds.
     /// </summary>
     /// <param name="speed">The movement speed.</param>
-    /// <param name="pitchAS">Pitch changing angular speed.</param>
-    /// <param name="yawAS">Rotary speed (vertical axis).</param>
-    public void Move(double speed, float pitchAS, float yawAS) {
-      PitchAS = pitchAS;
-      YawAS = yawAS;
+    /// <param name="pitchAs">Pitch changing angular speed.</param>
+    /// <param name="yawAs">Rotary speed (vertical axis).</param>
+    public void Move(double speed, float pitchAs, float yawAs) {
+      PitchAs = pitchAs;
+      YawAs = yawAs;
       
       // Calculate pitch and yaw, then call lower Move() function.
       var dir = new Direction();
-      dir.SetPitch(Data.Direction.Pitch + TickLength*PitchAS);
-      dir.SetYaw(Data.Direction.Yaw + TickLength*YawAS);
+      dir.SetPitch(Agent.GetDirection().Pitch + TickLength*PitchAs);
+      dir.SetYaw(Agent.GetDirection().Yaw + TickLength*YawAs);
       Move(speed, dir);
     }
 
@@ -73,12 +72,12 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="targetPos">A point the agent shall go to.</param>
     /// <param name="speed">The agent's movement speed.</param>
     /// <returns>A movement action, ready for execution. </returns>
-    public ContinuousMovementAction MoveTowardsPosition (Vector targetPos, double speed) {
+    public ContinuousMovementAction MoveTowardsPosition (TVector targetPos, double speed) {
 
       // Check, if we are already there. Otherwise no need to move anyway.
-      var distance = Data.Position.GetDistance(targetPos);
+      var distance = Agent.GetPosition().GetDistance(targetPos);
       if (Math.Abs(distance) <= float.Epsilon) 
-        return new ContinuousMovementAction(this, 0f, Data.Direction);
+        return new ContinuousMovementAction(this, 0f, Agent.GetDirection());
 
       // Get the right direction.
       var dir = CalculateDirectionToTarget(targetPos);

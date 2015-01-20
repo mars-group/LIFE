@@ -19,7 +19,9 @@ namespace EnvironmentServiceComponent.Implementation {
 
         #region IEnvironment Members
 
-        public abstract bool Add(ISpatialEntity entity, TVector position, TVector rotation = new TVector());
+      public TVector MaxDimension { get; set; }
+      public bool IsGrid { get; set; }
+      public abstract bool Add(ISpatialEntity entity, TVector position, TVector rotation = new TVector());
 
         public bool AddWithRandomPosition(ISpatialEntity entity, TVector min, TVector max, bool grid) {
             for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {

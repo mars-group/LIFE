@@ -1,8 +1,7 @@
 ﻿using System;
-using DalskiAgent.Execution;
-using DalskiAgent.Perception;
 using DalskiAgent.Reasoning;
 using LifeAPI.Agent;
+using LifeAPI.Layer;
 
 namespace DalskiAgent.Agents {
 
@@ -11,25 +10,26 @@ namespace DalskiAgent.Agents {
   /// cycle and several extension points available for specialized agent implementations.
   /// </summary>
   public abstract class Agent : IAgent {
+    
+    private readonly ILayer _layerImpl;               // Layer reference needed for delegate calls. 
+    private readonly UnregisterAgent _unregFkt;       // Delegate for unregistration function.
+    protected IAgentLogic ReasoningComponent;         // The agent's reasoning logic.         
+    protected bool IsAlive;                           // Alive flag for execution and deletion checks.
 
-    private readonly IExecution _execution;            // Execution reference for add/remove and queries.     
-    protected readonly PerceptionUnit PerceptionUnit;  // Sensor container and input gathering. 
-    protected IAgentLogic ReasoningComponent;          // The agent's reasoning logic.         
-    protected bool IsAlive;                            // Alive flag for execution and deletion checks.
-    public readonly long Id;                           // Unique identifier. 
 
     /// <summary>
     /// Constructor for an abstract agent. It serves as a base class that is extended with
     /// domain specific sensors, actions and reasoning, optionally containing a knowledge base.  
     /// </summary>
-    /// <param name="exec">Execution container reference.</param>
-    protected Agent(IExecution exec) {
-      _execution = exec;
-      Id = exec.GetNewID();
+    /// <param name="layer">Layer reference needed for delegate calls.</param>
+    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="unregFkt"> Delegate for unregistration function.</param>
+    protected Agent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt) {
       IsAlive = true;
-      PerceptionUnit = new PerceptionUnit();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;  
-      _execution.AddAgent(this);
+      regFkt(layer, this);
+      _layerImpl = layer;
+      _unregFkt = unregFkt;
     }
 
 
@@ -39,7 +39,6 @@ namespace DalskiAgent.Agents {
     /// The execution is governed by some external runtime manager. 
     /// </summary>
     public void Tick() {
-      PerceptionUnit.SenseAll();                       // Phase 1: Perception
       var action = ReasoningComponent.Reason();        // Phase 2: Reasoning      
       if (IsAlive && action != null) action.Execute(); // Phase 3: Execution
       else if (!IsAlive) Remove();                     // Agent deletion.      
@@ -51,7 +50,7 @@ namespace DalskiAgent.Agents {
     ///   to be overridden by more specific methods calling down to this via 'base'. 
     /// </summary>
     protected virtual void Remove() {
-      _execution.RemoveAgent(this);
+      _unregFkt(_layerImpl, this);
     }
 
 
@@ -60,7 +59,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>Execution tick counter value.</returns>
     public long GetTick() {
-      return _execution.GetCurrentTick();
+      return _layerImpl.GetCurrentTick();
     }
 
 
@@ -69,9 +68,13 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public new virtual string ToString() {
-      return "Agent: " + Id + "\t  Cycle: " + GetTick();
+      return "Agent: " + ID + "\t  Tick: " + GetTick();
     }
 
+
+    /// <summary>
+    ///   Get or set an agent identifier.
+    /// </summary>
     public Guid ID { get; set; }
   }
 }

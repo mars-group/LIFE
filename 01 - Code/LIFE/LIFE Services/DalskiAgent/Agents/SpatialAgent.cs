@@ -1,9 +1,10 @@
 ﻿using System;
-using DalskiAgent.Environments;
-using DalskiAgent.Execution;
 using DalskiAgent.Movement.Movers;
+using LifeAPI.Environment;
+using LifeAPI.Layer;
 using LifeAPI.Spatial;
-using ISpatialObject = DalskiAgent.Environments.ISpatialObject;
+using LifeAPI.Spatial.Shape;
+
 
 namespace DalskiAgent.Agents {
 
@@ -12,54 +13,55 @@ namespace DalskiAgent.Agents {
   ///   is registered at an environment to provide collision detection. 
   ///   Per default it is immobile but it can be equipped with a movement module.
   /// </summary>
-  public abstract class SpatialAgent : Agent, ISpatialObject {
+  public abstract class SpatialAgent : Agent, ISpatialEntity {
 
-    private readonly IEnvironmentOld _env;   // IESC implementation for collision detection.
-    protected readonly DataAccessor Data; // R/O container for spatial data access.
-    protected AgentMover Mover;           // Class for agent movement. 
+    private readonly IShape _shape;      // Shape describing this agent's body.
+    private readonly IEnvironment _env;  // IESC implementation for collision detection.
+    protected AgentMover Mover;          // Class for agent movement. 
 
 
     /// <summary>
     ///   Instantiate a new agent with spatial data. Only available for specializations.
     /// </summary>
-    /// <param name="exec">Agent execution container reference.</param>
-    /// <param name="env">Environment implementation reference.</param>
-    /// <param name="collision">Collision type defines with whom the agent may collide.</param>
+    /// <param name="layer">Layer reference needed for delegate calls.</param>
+    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="unregFkt"> Delegate for unregistration function.</param>
+    /// <param name="env">Environment implementation reference.</param> 
+    /// <param name="shape">Shape describing this agent's body.</param>
     /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
-    /// <param name="dim">Dimension of the agent. If null, then (1,1,1).</param>
     /// <param name="dir">Direction of the agent. If null, then 0°.</param>
-    protected SpatialAgent(IExecution exec, IEnvironmentOld env, CollisionType collision, Vector pos, Vector dim = null, Direction dir = null): base(exec) {
-      _env = env;
-      _env.AddObject(this, collision, pos, out Data, dim, dir);  // Enlist the agent in environment.
-    }
+    protected SpatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, 
+                           IEnvironment env, IShape shape = null, 
+                           TVector pos = default(TVector), Direction dir = null) : 
+      
+      // Create the base agent.
+      base(layer, regFkt, unregFkt) {
 
-    
-    /// <summary>
-    ///   Instantiate a new agent with spatial data. Only available for specializations.
-    /// </summary>
-    /// <param name="exec">Agent execution container reference.</param>
-    /// <param name="env">Environment implementation reference.</param>
-    /// <param name="collision">Collision type defines with whom the agent may collide.</param>
-    /// <param name="minPos">Minimum coordinate for random position.</param>
-    /// <param name="maxPos">Maximum coordinate for random position.</param>
-    /// <param name="dim">Dimension of the agent. If null, then (1,1,1).</param>
-    /// <param name="dir">Direction of the agent. If null, then 0°.</param>
-    protected SpatialAgent(IExecution exec, IEnvironmentOld env, CollisionType collision, Vector minPos, Vector maxPos, Vector dim = null, Direction dir = null) : base(exec) {
-      if (env is ESCRectAdapter) {
-        _env = env;
-        ((ESCRectAdapter)_env).AddObject(this, collision, minPos, maxPos, out Data, dim, dir);  // Enlist the agent in environment.        
-      }
-      else throw new Exception("[SpatialAgent] Constructor error: Environment does not support interval placement. Use ESCAdapter instead!");
+      /*** SpatialAgent additions: ***/
+      
+      // Check, if the agent already has a direction and a form. If not, create a cube facing north.
+      if (dir == null) dir = new Direction();
+      if (shape == null) shape = new Quad(new TVector(1.0, 1.0, 1.0), pos, dir);
+
+      // Place the agent in the environment.
+      bool success;
+      if (!pos.IsNull()) success = env.Add(this, pos, dir.GetDirectionalVector().GetTVector());
+      else success = env.AddWithRandomPosition(this, TVector.Origin, env.MaxDimension, env.IsGrid);    
+      if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
+      
+      // Save references for later use.
+      _shape = shape;
+      _env = env;
     }
 
 
     /// <summary>
     ///   This function unbinds the agent from the environment.
-    ///   It is triggered by the base agent, when alive flag on 'false'.
+    ///   It is triggered by the base agent, when alive flag is 'false'.
     /// </summary>
     protected override void Remove() {
       base.Remove();
-      _env.RemoveObject(this);
+      _env.Remove(this);
     }
 
 
@@ -70,8 +72,8 @@ namespace DalskiAgent.Agents {
     ///   Returns the position of the agent.
     /// </summary>
     /// <returns>A position vector.</returns>
-    public Vector GetPosition() {
-      return Data.Position;
+    public TVector GetPosition() {
+      return _shape.GetPosition();
     }
 
 
@@ -80,16 +82,17 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A direction vector.</returns>
     public Direction GetDirection() {
-      return Data.Direction;
+      return _shape.GetRotation();
     }
 
 
-    /// <summary>
-    ///   Returns the agent's dimension.
-    /// </summary>
-    /// <returns>The dimension (as bounding box).</returns>
-    public Vector GetDimension() {
-      return Data.Dimension;
+    public Enum GetInformationType() {
+      throw new NotImplementedException();
+    }
+
+    public IShapeOld Shape { get; set; }  //TODO not so fine here ...
+    public Enum GetCollisionType() {
+      throw new NotImplementedException();
     }
   }
 }

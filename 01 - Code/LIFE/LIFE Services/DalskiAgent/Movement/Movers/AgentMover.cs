@@ -1,5 +1,5 @@
 ﻿using DalskiAgent.Agents;
-using DalskiAgent.Environments;
+using LifeAPI.Environment;
 using LifeAPI.Spatial;
 
 namespace DalskiAgent.Movement.Movers {
@@ -10,14 +10,10 @@ namespace DalskiAgent.Movement.Movers {
   /// </summary>
   public abstract class AgentMover {
 
-    private readonly IEnvironmentOld _env;    // Environment interaction interface.
-    private readonly SpatialAgent _agent;  // Agent reference, needed for movement execution.
-    protected readonly DataAccessor Data;  // The agent's movement data container.
-   
+    private readonly IEnvironment _env;    // Environment interaction interface.
+    protected readonly SpatialAgent Agent; // Agent reference, needed for movement execution.  
     protected Vector MovementVector;       // Target position to acquire. May be set or calculated.
     protected Direction TargetDir;         // Desired heading.
-
-    public const float Sqrt2 = 1.4142f;    // The square root of 2.
     public static float TickLength = 1.0f; // Timelength of a simulation tick.
     public MovementResult MovementResult;  // Result of last movement.
 
@@ -27,11 +23,9 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">R/O container for spatial data.</param>
-    protected AgentMover(IEnvironmentOld env, SpatialAgent agent, DataAccessor data) {
+    protected AgentMover(IEnvironment env, SpatialAgent agent) {
       _env = env;
-      _agent = agent;
-      Data = data;
+      Agent = agent;
       MovementResult = null;
     }
 
@@ -41,7 +35,8 @@ namespace DalskiAgent.Movement.Movers {
     ///   The adapter is responsible to set the checked (returned) data.
     /// </summary>
     protected void Move() {
-      MovementResult = _env.MoveObject(_agent, MovementVector, TargetDir);  //TODO !!!
+      MovementResult = _env.Move(Agent, MovementVector.GetTVector(), 
+        TargetDir.GetDirectionalVector().GetTVector());
     }
 
 
@@ -50,10 +45,10 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="target">The target to get orientation to.</param>
     /// <returns>The yaw (corrected to 0 - lt. 360). </returns>
-    public Direction CalculateDirectionToTarget(Vector target) {
-      var diff = new Vector(target.X - Data.Position.X, 
-                            target.Y - Data.Position.Y,
-                            target.Z - Data.Position.Z);
+    public Direction CalculateDirectionToTarget(TVector target) {
+      var diff = new Vector(target.X - Agent.GetPosition().X, 
+                            target.Y - Agent.GetPosition().Y,
+                            target.Z - Agent.GetPosition().Z);
       
       // Create new direction, set joint vector as reference and return.
       var dir = new Direction();

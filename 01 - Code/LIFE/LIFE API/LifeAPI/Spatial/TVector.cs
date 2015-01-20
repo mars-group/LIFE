@@ -8,9 +8,8 @@ namespace LifeAPI.Spatial {
         public static readonly TVector UnitVectorXAxis = new TVector(1.0d, 0.0d, 0.0d).Normalize();
         public static readonly TVector MaxVector = new TVector(double.MaxValue, double.MaxValue, double.MaxValue);
 
-        private readonly bool _is3D; // Dimension flag: false: 2D, true: 3D.
-        private readonly bool _isNull;
-
+        private readonly bool _is3D;    // Dimension flag: false: 2D, true: 3D.
+        private readonly bool _isNotSet;  
         public readonly double X, Y, Z;
 
 
@@ -25,23 +24,23 @@ namespace LifeAPI.Spatial {
         /// <summary>
         ///     Initialize a three-dimensional vector.
         /// </summary>
-        public TVector(double x, double y, double z) : this(x, y, z, false) {}
+        public TVector(double x, double y, double z) : this(x, y, z, true) {}
 
         /// <summary>
         ///     Initialize a three-dimensional vector.
         /// </summary>
-        private TVector(double x, double y, double z, bool isNull) : this() {
+        private TVector(double x, double y, double z, bool isNotSet) {
             X = x;
             Y = y;
             Z = z;
             _is3D = true;
-            _isNull = isNull;
+            _isNotSet = isNotSet;
         }
 
         #region IEquatable<TVector> Members
 
         public bool Equals(TVector other) {
-            return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && _isNull.Equals(other._isNull);
+            return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && _isNotSet.Equals(other._isNotSet);
         }
 
         #endregion
@@ -56,7 +55,7 @@ namespace LifeAPI.Spatial {
                 int hashCode = X.GetHashCode();
                 hashCode = (hashCode*397) ^ Y.GetHashCode();
                 hashCode = (hashCode*397) ^ Z.GetHashCode();
-                hashCode = (hashCode*397) ^ _isNull.GetHashCode();
+                hashCode = (hashCode*397) ^ _isNotSet.GetHashCode();
                 return hashCode;
             }
         }
@@ -132,7 +131,7 @@ namespace LifeAPI.Spatial {
         }
 
         public bool IsNull() {
-            return _isNull;
+            return !_isNotSet;
         }
 
         #region additionalMethods

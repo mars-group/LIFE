@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using DalskiAgent.Agents;
-using DalskiAgent.Environments;
 using DalskiAgent.Movement.Actions;
+using LifeAPI.Environment;
 using LifeAPI.Spatial;
 
 namespace DalskiAgent.Movement.Movers {
@@ -17,7 +17,7 @@ namespace DalskiAgent.Movement.Movers {
   /// </summary>
   public class GridMover : AgentMover {
 
-    private readonly bool _diagonalEnabled;     // This flag enables diagonal movement. 
+    private readonly bool _diagonalEnabled;  // This flag enables diagonal movement. 
 
 
     /// <summary>
@@ -25,10 +25,9 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="env">Environment interaction interface.</param>
     /// <param name="agent">Agent reference, needed for movement execution.</param>
-    /// <param name="data">R/O container for spatial data.</param>
     /// <param name="diagonal">'True': diagonal movement enabled (default value). 
     /// On 'false', only up, down, left and right are available.</param>
-    public GridMover(IEnvironmentOld env, SpatialAgent agent, DataAccessor data, bool diagonal = true) : base(env, agent, data) {
+    public GridMover(IEnvironment env, SpatialAgent agent, bool diagonal = true) : base(env, agent) {
       _diagonalEnabled = diagonal;
     }
 
@@ -70,10 +69,10 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="targetPos">The target position.</param>
     /// <returns>A list of available movement options. These are ordered 
     /// by angular offset to optimal heading (sorting value of struct).</returns>
-    public List<MovementOption> GetMovementOptions(Vector targetPos) {
+    public List<MovementOption> GetMovementOptions(TVector targetPos) {
 
       // Check, if we are already there. Otherwise no need to move anyway (empty list).
-      if (targetPos.Equals(Data.Position)) return new List<MovementOption>();
+      if (targetPos.Equals(Agent.GetPosition())) return new List<MovementOption>();
 
       // Calculate yaw to target position and create sorted list of movement options.
       var angle = CalculateDirectionToTarget(targetPos).Yaw;
