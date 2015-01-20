@@ -55,12 +55,6 @@ namespace ASC.Communication.ScsServices.Communication {
                 // store methodInfos
                 _cacheableMethods.Add(method);
             }
-
-            //retreive all properties of TProxy
-            var properties = _typeOfTProxy.GetProperties();
-            foreach (var propertyInfo in properties) {
-                _cacheableMethods.Add(propertyInfo.GetGetMethod());
-            }
         }
 
         /// <summary>
@@ -90,8 +84,10 @@ namespace ASC.Communication.ScsServices.Communication {
             // TODO Extend to support additional parameter for target agent. Was soll das ???
 
             // Answer request from cache if available
-            if (_cache.ContainsKey(message.MethodName))
+            if (_cache.ContainsKey(message.MethodName)) {
                 return new ReturnMessage(_cache[message.MethodName], null, 0, message.LogicalCallContext, message);
+            }
+
 
             var requestMessage = new ScsRemoteInvokeMessage {
                 ServiceClassName = _typeOfTProxy.Name,
@@ -102,14 +98,20 @@ namespace ASC.Communication.ScsServices.Communication {
 
             var responseMessage =
                 _clientMessenger.SendMessageAndWaitForResponse(requestMessage) as ScsRemoteInvokeReturnMessage;
-            if (responseMessage == null) return null;
+
+            if (responseMessage == null){ return null;}
 
             // Store result in cache if no exception was thrown and the method has been marked as cacheable
             if (responseMessage.RemoteException == null &&
                 _cacheableMethods.Exists(m => m.Name.Equals(message.MethodName))) {
-                if (!_cache.ContainsKey(message.MethodName))
-                    _cache.Add(message.MethodName, responseMessage.ReturnValue);
-                else _cache[message.MethodName] = responseMessage.ReturnValue;
+                    if (!_cache.ContainsKey(message.MethodName))
+                    {
+                        _cache.Add(message.MethodName, responseMessage.ReturnValue);
+                    }
+                    else
+                    {
+                        _cache[message.MethodName] = responseMessage.ReturnValue;
+                    }
             }
 
             return responseMessage.RemoteException != null

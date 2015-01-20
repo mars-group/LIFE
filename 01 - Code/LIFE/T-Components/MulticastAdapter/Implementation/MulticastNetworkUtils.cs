@@ -4,12 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
 using MulticastAdapter.Interface.Config.Types;
 
 namespace MulticastAdapter.Implementation
 {
-    internal class MulticastNetworkUtils
+    public class MulticastNetworkUtils
     {
         //TODO implement iterateOverAllNetworkInterfaces(delegate)
 

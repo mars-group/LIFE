@@ -20,10 +20,10 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
         ///     For example: tcp://89.43.104.179:10048 for a TCP endpoint with
         ///     IP 89.43.104.179 and listenPort 10048.
         /// </summary>
-        /// <param name="endPointAddress">Address to create endpoint</param>
+        /// <param name="port">Port to create endpoint</param>
         /// <param name="multicastGroup"></param>
         /// <returns>Created end point</returns>
-        public static AscEndPoint CreateEndPoint(int listenPort, string multicastGroup) {
+        public static AscEndPoint CreateEndPoint(int port, string multicastGroup) {
             //Check if end point address is null
             if (string.IsNullOrEmpty(multicastGroup)) throw new ArgumentNullException("multicastGroup");
 
@@ -34,7 +34,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
                 return udpEndPointDictionary[multicastGroup];
             }
             // create endpoint if not already present
-            var endpoint = new AscUdpEndPoint(listenPort, multicastGroup);
+            var endpoint = new AscUdpEndPoint(port, multicastGroup);
             udpEndPointDictionary[multicastGroup] = endpoint;
             return endpoint;
         }

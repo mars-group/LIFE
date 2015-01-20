@@ -7,14 +7,23 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using CommonTypes.DataTypes;
+using CommonTypes.Types;
+using DMConnector;
+using DMConnector.TransportTypes;
+using Hik.Communication.ScsServices.Client;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
 using LifeAPI.Layer.Visualization;
+using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 
@@ -43,8 +52,11 @@ namespace RTEManager.Implementation {
         // current Tick
         private int _currentTick;
 
+        // The DistributionManager client
+        private IDMConnector _distributionManager;
 
-        public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter) {
+
+        public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
             _visualizationAdapter = visualizationAdapter;
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
             _preAndPostTickLayer = new List<ISteppedActiveLayer>();
@@ -53,6 +65,27 @@ namespace RTEManager.Implementation {
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
             _currentTick = 0;
+            /*
+            TNodeInformation simManager = null;
+            while (simManager == null)
+            {
+                simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
+                if (simManager != null) continue;
+
+                // No SimManager found so wait for 3 seconds and recheck
+                var manualEvent = new ManualResetEvent(false);
+                nodeRegistry.SimulationManagerConnected += (sender, information) =>
+                {
+                    simManager = information;
+                    manualEvent.Set();
+                };
+                manualEvent.WaitOne(3000);
+            }
+
+            var dmClient = ScsServiceClientBuilder.CreateClient<IDMConnector>(simManager.NodeEndpoint.IpAddress);
+            dmClient.Connect();
+            _distributionManager = dmClient.ServiceProxy;
+             * */
         }
 
         #region Public Methods
@@ -89,8 +122,12 @@ namespace RTEManager.Implementation {
         }
 
         public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
-            if (!_isRunning) _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
-            else _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
+            if (!_isRunning) {
+                _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
+            }
+            else {
+                _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
+            }
         }
 
         public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
@@ -125,11 +162,14 @@ namespace RTEManager.Implementation {
                         )
                 );
 
+            Console.WriteLine("Tick finished: " + _currentTick);
+
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
             // increase Tick counter
             _currentTick++;
+
 
             // visualize all layers
             _visualizationAdapter.VisualizeTick(_currentTick);
@@ -145,6 +185,7 @@ namespace RTEManager.Implementation {
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
                             })
                 );
+
 
             // add all new TickClients which were registered during the run
             Parallel.ForEach

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
+using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 
@@ -18,8 +19,8 @@ namespace RTEManager.Implementation {
     public class RTEManagerComponent : IRTEManager {
         private readonly IRTEManager _rteManagerUseCase;
 
-        public RTEManagerComponent(IVisualizationAdapterInternal visualizationAdapter) {
-            _rteManagerUseCase = new RTEManagerUseCase(visualizationAdapter);
+        public RTEManagerComponent(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
+            _rteManagerUseCase = new RTEManagerUseCase(visualizationAdapter, nodeRegistry);
         }
 
         #region IRTEManager Members

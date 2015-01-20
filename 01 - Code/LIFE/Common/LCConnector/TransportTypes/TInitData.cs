@@ -11,16 +11,39 @@ using System;
 using System.Collections.Generic;
 
 namespace LCConnector.TransportTypes {
+    /// <summary>
+    /// Will be passed to each Layer in its InitLayer(...) method.
+    /// Contains all relevant information to properly initialize this layer.
+    /// </summary>
     [Serializable]
     public class TInitData
     {
+        /// <summary>
+        /// A list of configurations for each agent type in the layer
+        /// </summary>
         public List<AgentInitConfig> AgentInitConfigs { get; private set; }
 
+        /// <summary>
+        /// The 
+        /// </summary>
+        public TimeSpan OneTickTimeSpan { get; private set; }
+
+        /// <summary>
+        /// Creates a new TInitData object, with an empty list of AgentInitConfigs
+        /// </summary>
         public TInitData()
         {
             AgentInitConfigs = new List<AgentInitConfig>();
         }
 
+        /// <summary>
+        /// Adds a new AgentInitConfig by providing all necessary information
+        /// </summary>
+        /// <param name="agentName">The name of the agent's class (not interface)</param>
+        /// <param name="agentAmount">The amount of rel agents to be initialized</param>
+        /// <param name="shadowAgentAmount">The amount of shadow agents to be initialized</param>
+        /// <param name="realAgentIds">A Guid[] with ids to be used by the real agents</param>
+        /// <param name="shadowAgentsIds">A Guid[] with ids to be used by the shadow agents</param>
         public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds)
         {
             AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds));

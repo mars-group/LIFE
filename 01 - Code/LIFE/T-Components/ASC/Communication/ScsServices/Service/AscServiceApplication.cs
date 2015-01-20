@@ -138,6 +138,10 @@ namespace ASC.Communication.ScsServices.Service {
             return _serviceObjects.Remove(typeof (TServiceInterface).Name);
         }
 
+        public bool RemoveService<TServiceInterface>(Guid serviceGuid) where TServiceInterface : class {
+            return _serviceObjects[typeof (TServiceInterface).Name].Remove(serviceGuid);
+        }
+
         #endregion
 
         #region Private methods
@@ -387,7 +391,6 @@ namespace ASC.Communication.ScsServices.Service {
             /// <param name="propertyChangedEventArgs"></param>
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs) {
                 // send PropertyChangedMessage to all subscribed clients
-                // TODO: change or adapt this for Multicast Messaging (maybe not possible...)
                 Parallel.ForEach(_clients.GetAllItems(), messenger => {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod()
                         .Invoke(Service, null);

@@ -1,4 +1,6 @@
-﻿using EnvironmentServiceComponent.Implementation;
+﻿using System;
+using System.Collections.Generic;
+using EnvironmentServiceComponent.Implementation;
 using LCConnector.TransportTypes;
 using LifeAPI.Environment;
 using LifeAPI.Spatial;
@@ -8,7 +10,6 @@ using WolvesModel.Agents;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
-
 
 namespace WolvesModel {    
 
@@ -46,6 +47,16 @@ namespace WolvesModel {
       
       // ReSharper restore ObjectCreationAsStatement
       return true;
+    }
+
+
+    /// <summary>
+    ///   Updates all shadow agents.
+    /// </summary>
+    /// <param name="agentsToAdd">Agents to add.</param>
+    /// <param name="agentsToRemove">Agent to remove.</param>
+    public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
+      throw new NotImplementedException();
     }
 
 

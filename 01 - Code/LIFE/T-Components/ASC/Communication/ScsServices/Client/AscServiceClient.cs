@@ -121,6 +121,7 @@ namespace ASC.Communication.ScsServices.Client {
             _client.Disconnected += Client_Disconnected;
 
             _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
+            // not necessary at the moment
             _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
             _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this);

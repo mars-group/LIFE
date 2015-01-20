@@ -49,7 +49,7 @@ namespace ModelContainer.Implementation.Entities {
         /// </summary>
         /// <param name="newNode"></param>
         public void UpdateEdges(ModelNode newNode) {
-            if (Dependencies.Any(d => d == newNode.Layer)) _edges.Add(newNode);
+            if (Dependencies.Any(d => d.IsAssignableFrom(newNode.Layer))) _edges.Add(newNode);
         }
 
         public override bool Equals(object obj) {

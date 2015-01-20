@@ -96,7 +96,8 @@ namespace LayerRegistry.Implementation {
             // and by its direct interface type if any
             if (layer.GetType().GetInterfaces().Length > 0)
             {
-                _localLayers.Add(layer.GetType().GetInterfaces().First(), layer);
+                var infs = layer.GetType().GetInterfaces();
+                _localLayers.Add(infs.First(), layer);
             }
             // this is necessary in the case somebody is neither using distribution nor interfaces, but still has dependencies
 

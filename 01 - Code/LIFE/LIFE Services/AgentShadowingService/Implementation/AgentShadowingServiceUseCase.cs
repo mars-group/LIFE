@@ -14,16 +14,16 @@ namespace AgentShadowingService.Implementation
         where TServiceClass : AscService, TServiceInterface
         where TServiceInterface : class
     {
-        private readonly IDictionary<IAscServiceClient<TServiceInterface>, byte> _shadowAgentClients;
+        private readonly IDictionary<Guid, IAscServiceClient<TServiceInterface>> _shadowAgentClients;
         private readonly string _mcastAddress;
         private readonly IScsServiceApplication _agentShadowingServer;
-        private int _listenPort;
-        private LayerContainerSettings _config;
+        private readonly int _clientListenPort;
+        private readonly LayerContainerSettings _config;
 
         public AgentShadowingServiceUseCase(int port = 6666) {
+            _clientListenPort = port;
             var typeOfTServiceClass = typeof (TServiceClass);
-            _shadowAgentClients = new ConcurrentDictionary<IAscServiceClient<TServiceInterface>, byte>();
-            _listenPort = port;
+            _shadowAgentClients = new ConcurrentDictionary<Guid, IAscServiceClient<TServiceInterface>>();
             // calculate MulticastAddress for this agentType
             _mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
 
@@ -36,7 +36,7 @@ namespace AgentShadowingService.Implementation
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {
             var shadowAgentClient = AscServiceClientBuilder.CreateClient<TServiceInterface>(
-                _listenPort,
+                _clientListenPort,
                 _mcastAddress,
                 agentId
                 );
@@ -45,14 +45,23 @@ namespace AgentShadowingService.Implementation
             // connect the shadow agent
             shadowAgentClient.Connect();
             // store shadow agent client in list for later management and observation
-            _shadowAgentClients.Add(shadowAgentClient, new byte());
+            _shadowAgentClients.Add(agentId, shadowAgentClient);
             // return RealProxy interface wrapper as clientside reference to remote object
             return shadowAgentClient.ServiceProxy;
+        }
+
+        public void RemoveShadowAgent(Guid agentId) {
+            _shadowAgentClients[agentId].Disconnect();
+            _shadowAgentClients.Remove(agentId);
         }
 
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister);
+        }
+
+        public void RemoveRealAgent(TServiceClass agentToRemove) {
+            _agentShadowingServer.RemoveService<TServiceInterface>(agentToRemove.ServiceID);
         }
 
         public string GetLayerContainerName() {

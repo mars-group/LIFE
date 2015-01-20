@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using AgentShadowingService.Implementation;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
@@ -17,10 +17,11 @@ namespace KNPTreeLayer {
     public class TreeLayer : ScsService, IKnpTreeLayer
     {
         private long _currentTick;
-        private IKnpElevationLayer _elevationLayer;
+        //private IKnpElevationLayer _elevationLayer;
 
         private readonly List<ITree> trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
+        private readonly IKnpElevationLayer _elevationLayer;
 
         public TreeLayer(IKnpElevationLayer elevationLayer)
         {
@@ -32,29 +33,60 @@ namespace KNPTreeLayer {
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
 
 
+            var env = _elevationLayer.GetEnvelope();
+            var randX = new Random();
+            var randY = new Random();
+
+            var MinX = 31.331;
+            var MinY = -25.292;
+            var MaxX = 31.985;
+            var MaxY = -24.997;
+
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
-                if (agentInitConfig.AgentName == "Tree") {
-                    // evil hack only for testing purposes
-                    bool sendingNote = _agentShadowingService.GetLayerContainerName() == "LC-1";
-                    // instantiate real Agents
-                    for (int i = 0; i < agentInitConfig.RealAgentCount; i++) {
-                        var t = new Tree(4, 2, 10, i, 500, 30, 22, agentInitConfig.RealAgentIds[i], _elevationLayer, this, sendingNote);
-                        registerAgentHandle(this, t);
-                        trees.Add(t);
-                        _agentShadowingService.RegisterRealAgent(t);
-                    }
+                if (agentInitConfig.AgentName != "Tree") continue;
+                // instantiate real Agents
 
-                    // instantiate Shadow Agents
-                    for (int i = 0; i < agentInitConfig.ShadowAgentCount; i++) {
-                        trees.Add(_agentShadowingService.CreateShadowAgent(agentInitConfig.ShadowAgentsIds[i]));
-                    }
 
+
+                for (var i = 0; i < agentInitConfig.RealAgentCount; i++) {
+                    var t = new Tree(4, 2, 10, i, 500,
+                        GetRandomNumber(MinX, MaxX),
+                        GetRandomNumber(MinY, MaxY),
+                        agentInitConfig.RealAgentIds[i],
+                        this,
+                        _elevationLayer
+                     );
+                    registerAgentHandle(this, t);
+                    trees.Add(t);
+                    _agentShadowingService.RegisterRealAgent(t);
+                }
+
+                // instantiate Shadow Agents
+                for (int i = 0; i < agentInitConfig.ShadowAgentCount; i++) {
+                    trees.Add(_agentShadowingService.CreateShadowAgent(agentInitConfig.ShadowAgentsIds[i]));
                 }
             }
             return true;
         }
 
-        internal List<ITree> GetAllOtherTreesThanMe(ITree memyself)
+        public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
+            foreach (var id in agentsToAdd[typeof(Tree)]) {
+                trees.Add(_agentShadowingService.CreateShadowAgent(id));
+            }
+
+            foreach (var id in agentsToRemove[typeof(Tree)])
+            {
+                _agentShadowingService.CreateShadowAgent(id);
+            }
+        }
+
+        private double GetRandomNumber(double minimum, double maximum)
+        { 
+            var random = new Random();
+            return random.NextDouble() * (maximum - minimum) + minimum;
+        }
+
+        internal IEnumerable<ITree> GetAllOtherTreesThanMe(ITree memyself)
         {
             return trees.FindAll(t => t != memyself);
         }

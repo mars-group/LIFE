@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,13 +18,14 @@ using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using LifeAPI.Layer.GIS;
+using LifeAPI.Layer.GIS.ResultTypes;
 using SharpMap;
 using SharpMap.Data;
 using SharpMap.Data.Providers;
 using SharpMap.Layers;
 
 namespace LIFEGisLayerService.Implementation {
-    public abstract class LIFEGisActiveLayer : ScsService, IGISActiveLayer
+    public abstract class LIFEGisActiveLayer : ScsService
     {
         private readonly Map _map;
         private ICanQueryLayer _layer;
@@ -109,12 +111,34 @@ namespace LIFEGisLayerService.Implementation {
             return _layer.Envelope;
         }
 
-        public FeatureDataSet GetDataByGeometry(IGeometry geometry) {
+        public GISQueryResult GetDataByGeometry(IGeometry geometry)
+        {
             if (!_map.Layers.Any()) throw new GISLayerHasNoDataException("Please call LoadGisData() first.");
             FeatureDataSet fds = new FeatureDataSet();
 
             _layer.ExecuteIntersectionQuery(geometry, fds);
-            return fds;
+            var result = new List<GISResultEntry>();
+            foreach (FeatureDataRow row in fds.Tables.SelectMany(table => table.Rows.Cast<FeatureDataRow>())) {
+                switch (row.ItemArray.Length) {
+                    case 3:
+                        result.Add(new GISResultEntry() {
+                            X = Double.Parse(row.ItemArray[0].ToString()),
+                            Y = Double.Parse(row.ItemArray[1].ToString()), 
+                            Value = row.ItemArray[2]
+                        });
+                        break;
+                    case 4:
+                        result.Add(new GISResultEntry()
+                        {
+                            X = Double.Parse(row.ItemArray[0].ToString()),
+                            Y = Double.Parse(row.ItemArray[1].ToString()),
+                            Z = Double.Parse(row.ItemArray[2].ToString()),
+                            Value = row.ItemArray[3]
+                        });
+                        break;
+                }
+            }
+            return new GISQueryResult(result);
         }
 
         #endregion
