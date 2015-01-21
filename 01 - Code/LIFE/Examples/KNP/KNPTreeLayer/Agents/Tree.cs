@@ -85,7 +85,7 @@ namespace TreeLayer.Agents {
             //Console.WriteLine("Local tree reportin in, found " + otherTrees.Count + " other trees: ");
             foreach (var tree in otherTrees) {
                 tree.GetIdentifiaction();
-                Console.WriteLine("Biomass of other tree:" + tree.Biomass);
+                //Console.WriteLine("Biomass of other tree:" + tree.Biomass);
             }
 
             //Age++;
