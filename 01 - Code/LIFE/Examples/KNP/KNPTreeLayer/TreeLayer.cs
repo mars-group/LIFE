@@ -39,8 +39,8 @@ namespace KNPTreeLayer {
 
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
-                // instantiate real Agents
 
+                // instantiate real Agents
                 for (var i = 0; i < agentInitConfig.RealAgentCount; i++) {
                     var t = new Tree(4, 2, 10, i, 500,
                         GetRandomNumber(MinX, MaxX),
