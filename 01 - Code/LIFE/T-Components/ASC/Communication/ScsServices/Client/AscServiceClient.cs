@@ -107,6 +107,7 @@ namespace ASC.Communication.ScsServices.Client {
             _client.Disconnected += Client_Disconnected;
 
             _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
+            _requestReplyMessenger.Start();
             _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
             _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this, serviceID);
@@ -222,7 +223,7 @@ namespace ASC.Communication.ScsServices.Client {
         /// <param name="sender">Source of object</param>
         /// <param name="e">Event arguments</param>
         private void Client_Connected(object sender, EventArgs e) {
-            _requestReplyMessenger.Start();
+
             OnConnected();
         }
 

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AgentShadowingService.Implementation;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
@@ -23,19 +26,20 @@ namespace KNPTreeLayer {
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
         private readonly IKnpElevationLayer _elevationLayer;
 
+
+        public TreeLayer() {
+            trees = new List<ITree>();
+            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
+        }
+        /*
         public TreeLayer(IKnpElevationLayer elevationLayer)
         {
             _elevationLayer = elevationLayer;
             trees = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
         }
-
+        */
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
-
-
-            var env = _elevationLayer.GetEnvelope();
-            var randX = new Random();
-            var randY = new Random();
 
             var MinX = 31.331;
             var MinY = -25.292;
@@ -44,27 +48,40 @@ namespace KNPTreeLayer {
 
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
+                var agentBag = new ConcurrentBag<Tree>();
                 // instantiate real Agents
-
-
-
-                for (var i = 0; i < agentInitConfig.RealAgentCount; i++) {
+                var config = agentInitConfig;
+                Parallel.For(0, agentInitConfig.RealAgentCount, i => {
                     var t = new Tree(4, 2, 10, i, 500,
                         GetRandomNumber(MinX, MaxX),
                         GetRandomNumber(MinY, MaxY),
-                        agentInitConfig.RealAgentIds[i],
-                        this,
-                        _elevationLayer
-                     );
+                        config.RealAgentIds[i],
+                        this
+                        //_elevationLayer
+                    );
+                    agentBag.Add(t);
                     registerAgentHandle(this, t);
-                    trees.Add(t);
-                    _agentShadowingService.RegisterRealAgent(t);
+                });
+
+                Console.WriteLine("Finished: Realagents instantiated.");
+
+                if (layerInitData.Distribute)
+                {
+                    //_agentShadowingService.RegisterRealAgent(t);
+                    _agentShadowingService.RegisterRealAgents(agentBag.ToArray());
                 }
 
-                // instantiate Shadow Agents
-                for (int i = 0; i < agentInitConfig.ShadowAgentCount; i++) {
-                    trees.Add(_agentShadowingService.CreateShadowAgent(agentInitConfig.ShadowAgentsIds[i]));
+                Console.WriteLine("Finished: Realagents registered.");
+
+                trees.AddRange(agentBag);
+               
+                if (layerInitData.Distribute) {
+                    // instantiate Shadow Agents
+
+                    _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
                 }
+
+                Console.WriteLine("Finished: ShadowAgents created.");
             }
             return true;
         }
@@ -86,9 +103,9 @@ namespace KNPTreeLayer {
             return random.NextDouble() * (maximum - minimum) + minimum;
         }
 
-        internal IEnumerable<ITree> GetAllOtherTreesThanMe(ITree memyself)
+        internal ITree GetOneOtherTreesThanMe(ITree memyself)
         {
-            return trees.FindAll(t => t != memyself);
+            return trees.Find(t => t != memyself);
         }
 
         public long GetCurrentTick() {

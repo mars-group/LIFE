@@ -18,7 +18,7 @@ using NetTopologySuite.Geometries;
 namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
 
-        private readonly IKnpElevationLayer _elevationLayer;
+       // private readonly IKnpElevationLayer _elevationLayer;
         private readonly KNPTreeLayer.TreeLayer _treeLayer;
 
         private double _biomass;
@@ -60,9 +60,9 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) 
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer=null) : base(id.ToByteArray()) 
         {
-            _elevationLayer = elevationLayer; 
+           // _elevationLayer = elevationLayer; 
             _treeLayer = treeLayer;
             ID = id;
             Height = height;
@@ -72,27 +72,20 @@ namespace TreeLayer.Agents {
             Biomass = biomass;
             Lat = lat;
             Lon = lon;
-            var result = _elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
-            HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
+            //var result = _elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
+            //HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
 
         }
 
         #region IAgent Members
 
-        public void Tick()
-        {
-            var otherTrees = _treeLayer.GetAllOtherTreesThanMe(this);
-            //Console.WriteLine("Local tree reportin in, found " + otherTrees.Count + " other trees: ");
-            foreach (var tree in otherTrees) {
-                tree.GetIdentifiaction();
-                Console.WriteLine("Biomass of other tree:" + tree.Biomass);
-            }
-
+        public void Tick() {
+            var biomass = _treeLayer.GetOneOtherTreesThanMe(this).Biomass;
             //Age++;
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);
             // grow height
-            Height = Height + GParK*(GmaxH - Height);
+            Height = Height + GParK*(GmaxH - Height);//*(HeightAboveNN/0.001);
             // grow biomass
             Biomass = Math.Pow(Math.E, -3.00682 + 1.56775*Math.Log(Diameter*Height));
         }

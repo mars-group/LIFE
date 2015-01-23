@@ -67,7 +67,7 @@
     <Compile Include="Communication\Scs\Client\ClientReConnecter.cs" />
     <Compile Include="Communication\Scs\Client\IConnectableClient.cs" />
     <Compile Include="Communication\Scs\Client\IScsClient.cs" />
-    <Compile Include="Communication\Scs\Client\SscClientBase.cs" />
+    <Compile Include="Communication\Scs\Client\AscClientBase.cs" />
     <Compile Include="Communication\Scs\Client\Tcp\ScsTcpClient.cs" />
     <Compile Include="Communication\Scs\Client\Tcp\TcpHelper.cs" />
     <Compile Include="Communication\Scs\Client\Udp\AscUdpClient.cs" />

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Client;
 using ASC.Communication.ScsServices.Service;
@@ -50,6 +52,14 @@ namespace AgentShadowingService.Implementation
             return shadowAgentClient.ServiceProxy;
         }
 
+        public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds) {
+            var result = new ConcurrentBag<TServiceInterface>();
+            Parallel.ForEach(agentIds, id => {
+                result.Add(CreateShadowAgent(id));
+            });
+            return result.ToList();
+        } 
+
         public void RemoveShadowAgent(Guid agentId) {
             _shadowAgentClients[agentId].Disconnect();
             _shadowAgentClients.Remove(agentId);
@@ -58,6 +68,10 @@ namespace AgentShadowingService.Implementation
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister);
+        }
+
+        public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
+            Parallel.ForEach(agentsToRegister, RegisterRealAgent);
         }
 
         public void RemoveRealAgent(TServiceClass agentToRemove) {

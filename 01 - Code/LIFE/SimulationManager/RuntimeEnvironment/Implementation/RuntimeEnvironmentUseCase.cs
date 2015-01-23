@@ -178,7 +178,7 @@ namespace RuntimeEnvironment.Implementation {
                     layerContainerClients[0].Instantiate(layerInstanceId);
 
                     //...fetch all agentTypes and amounts...
-                    var initData = new TInitData();
+                    var initData = new TInitData(false, modelConfig.OneTickTimeSpan);
                     foreach (var agentConfig in layerConfig.AgentConfigs)
                     {
                         var ids = new Guid[agentConfig.AgentCount];
@@ -193,7 +193,7 @@ namespace RuntimeEnvironment.Implementation {
                 }
                 else {
                     // get initData by layerConfig and LayerContainers
-                    var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients);
+                    var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients, modelConfig);
 
                     foreach (var layerContainerClient in layerContainerClients)
                     {
@@ -214,7 +214,7 @@ namespace RuntimeEnvironment.Implementation {
         /// <param name="layerConfig"></param>
         /// <param name="layerContainerClients"></param>
         /// <returns></returns>
-        private IDictionary<LayerContainerClient, TInitData> GetInitDataByLayerConfig(LayerConfig layerConfig, LayerContainerClient[] layerContainerClients)
+        private IDictionary<LayerContainerClient, TInitData> GetInitDataByLayerConfig(LayerConfig layerConfig, LayerContainerClient[] layerContainerClients, ModelConfig modelConfig)
         {
             if (layerContainerClients == null) throw new ArgumentNullException("layerContainerClients");
             
@@ -228,7 +228,7 @@ namespace RuntimeEnvironment.Implementation {
                     // initialize result Dictionary
                     foreach (var layerContainerClient in layerContainerClients)
                     {
-                        result.Add(layerContainerClient, new TInitData());
+                        result.Add(layerContainerClient, new TInitData(true, modelConfig.OneTickTimeSpan));
                     }
 
                     var lcCount = layerContainerClients.Length;
