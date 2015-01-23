@@ -3,8 +3,6 @@ using ASC.Communication.Scs.Communication;
 using ASC.Communication.Scs.Communication.Channels;
 using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Protocols;
-using CustomUtilities.Threading;
-
 
 namespace ASC.Communication.Scs.Client {
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ASC.Communication.ScsServices.Service;
 using LifeAPI.Agent;
 
@@ -16,6 +17,15 @@ namespace AgentShadowingService.Interface
         TServiceInterface CreateShadowAgent(Guid agentId);
 
         /// <summary>
+        /// Creates all ShadowAgents for agentIds.
+        /// Uses parallelism, so use this method, whenever you have more than a few ShadowAgents to create.
+        /// e.g.: at first Initialization!
+        /// </summary>
+        /// <param name="agentIds"></param>
+        /// <returns>List of TSerivceInterface</returns>
+        List<TServiceInterface> CreateShadowAgents(Guid[] agentIds); 
+
+        /// <summary>
         /// Removes the Shadow Agent with id agentId from the Service.
         /// Calls disconnect() prior to removal.
         /// </summary>
@@ -27,6 +37,12 @@ namespace AgentShadowingService.Interface
         /// </summary>
         /// <param name="agentToRegister"></param>
         void RegisterRealAgent(TServiceClass agentToRegister);
+
+        /// <summary>
+        /// Registers all agents from the provided array.
+        /// </summary>
+        /// <param name="agentsToRegister">all agents to register</param>
+        void RegisterRealAgents(TServiceClass[] agentsToRegister);
 
         /// <summary>
         /// Removes the real agent agentToRemove from the AgentShadowing Service

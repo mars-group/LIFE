@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
 using LayerContainerShared;
@@ -23,6 +24,10 @@ namespace AgentShadowingService.Implementation
             return _agentShadowingUseCase.CreateShadowAgent(agentId);
         }
 
+        public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds) {
+            return _agentShadowingUseCase.CreateShadowAgents(agentIds);
+        }
+
         public void RemoveShadowAgent(Guid agentId) {
             _agentShadowingUseCase.RemoveShadowAgent(agentId);
         }
@@ -30,6 +35,10 @@ namespace AgentShadowingService.Implementation
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
+        }
+
+        public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
+            _agentShadowingUseCase.RegisterRealAgents(agentsToRegister);
         }
 
         public void RemoveRealAgent(TServiceClass agentToRemove) {

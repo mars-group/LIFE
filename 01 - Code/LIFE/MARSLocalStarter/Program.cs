@@ -230,7 +230,7 @@ namespace MARSLocalStarter
             }
             catch (Exception exception)
             {
-                Logger.FatalFormat("MARS LIFE crashed fatally. Exception:\n {0}", exception);
+                Logger.FatalFormat("MARS LIFE crashed fatally. Exception:\n {0}.\n InnerException:\n {1}", exception, exception.InnerException);
                 
                 //Get log file
                 var rootAppender = ((Hierarchy)LogManager.GetRepository())

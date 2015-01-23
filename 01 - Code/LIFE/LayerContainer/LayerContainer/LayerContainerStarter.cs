@@ -15,12 +15,11 @@ using log4net;
 namespace LayerContainer {
     public class LayerContainerStarter {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (LayerContainerStarter));
-        private static bool aborted;
+
 
 
         private static void Main(string[] args) {
-            aborted = false;
-            while (!aborted) {
+
                 Logger.Info("LayerContainer trying to startup.");
                 try {
                     Logger.Info("Initializing components and building application core...");
@@ -35,13 +34,13 @@ namespace LayerContainer {
                     while (info.Key != ConsoleKey.Q) {
                         info = Console.ReadKey();
                     }
-                    aborted = true;
+
                 }
                 catch (Exception exception) {
                     Logger.Fatal("LayerContainer crashed fatally. Exception:\n {0}. Restarting LayerContainer...", exception);
                 }
 
-            }
+    
             Logger.Info("LayerContainer shutting down.");
 
             // This will shutdown the log4net system
