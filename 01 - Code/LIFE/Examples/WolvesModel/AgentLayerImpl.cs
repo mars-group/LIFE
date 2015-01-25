@@ -34,7 +34,7 @@ namespace WolvesModel {
     public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
       // Create the environment, the execution container and an agent spawner.
-      _env = new GeometryESC {IsGrid = true, MaxDimension = new TVector(30, 20)};
+      _env = new RectESC {IsGrid = true, MaxDimension = new TVector(30, 20)};
 
       // ReSharper disable ObjectCreationAsStatement
       new AgentSpawner(this, registerAgentHandle, unregisterAgentHandle, _env);

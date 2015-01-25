@@ -17,9 +17,10 @@ namespace DalskiAgent.Agents {
   /// </summary>
   public abstract class SpatialAgent : Agent, ISpatialEntity {
 
-    private readonly IShape _shape;      // Shape describing this agent's body.
-    private readonly IEnvironment _env;  // IESC implementation for collision detection.
-    protected AgentMover Mover;          // Class for agent movement. 
+    private IShape _shape;                  // Shape describing this agent's body.
+    private readonly IEnvironment _env;     // IESC implementation for collision detection.
+    protected AgentMover Mover;             // Class for agent movement. 
+    protected CollisionType CollisionType;  // The agent's collision type.      
 
 
     /// <summary>
@@ -36,12 +37,14 @@ namespace DalskiAgent.Agents {
                            IEnvironment env, IShape shape = null, 
                            TVector pos = default(TVector), Direction dir = null) : 
       
-      // Create the base agent.
+      // Create the base agent. Per default it is collidable.
       base(layer, regFkt, unregFkt) {
+      CollisionType = CollisionType.MassiveAgent;
       
       // Check, if the agent already has a direction and a form. If not, create a cube facing north.
       if (dir == null) dir = new Direction();
       if (shape == null) shape = new Quad(new TVector(1.0, 1.0, 1.0), pos, dir);
+      _shape = shape;
 
       // Place the agent in the environment.
       bool success;
@@ -49,8 +52,7 @@ namespace DalskiAgent.Agents {
       else success = env.AddWithRandomPosition(this, TVector.Origin, env.MaxDimension, env.IsGrid);    
       if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
       
-      // Save references for later use.
-      _shape = shape;
+      // Save references for later use.    
       _env = env;
     }
 
@@ -65,7 +67,7 @@ namespace DalskiAgent.Agents {
     }
 
 
-    //-------------------------------------------------------------------------
+    //_________________________________________________________________________
     // GET methods. The direction is probably not used.
 
     /// <summary>
@@ -86,22 +88,30 @@ namespace DalskiAgent.Agents {
     }
 
 
-    public Enum GetInformationType() {
-      return (CollisionType) 0;  //TODO ... 
+    /// <summary>
+    ///   Returns this agent's collision type.
+    /// </summary>
+    /// <returns>A collision type enum (default: 'MassiveAgent').</returns>
+    public Enum GetCollisionType() {
+      return CollisionType;
     }
 
+
+
+    //TODO| Here lies the error. The shape has to be reset by the ESC, because it holds 
+    //TODO| the position data. So we don't get the random placement result => all (0,0,0)
     public IShapeOld Shape {
       get {
-        return new ExploreRectShape(MyRectFactory.Rectangle(1, 1));
+        return new ExploreRectShape(MyRectFactory.Rectangle(GetPosition(), new TVector(1,1,1)));
       }
       set {
-        //TODO|  Here lies the error. The shape has to be reset by the ESC, because it holds 
-        //TODO|  the position data. So we don't get the random placement result => all (0,0,0)
+        _shape = new Quad(new TVector(1,1,1), value.GetPosition(), new Direction());
       }
     }
     
-    public Enum GetCollisionType() {
-      return CollisionType.MassiveAgent;
+
+    public Enum GetInformationType() {
+      return CollisionType.MassiveAgent;  //TODO ...
     }
   }
 }
