@@ -47,6 +47,9 @@
     <Reference Include="PowerCollections">
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
     </Reference>
+    <Reference Include="SpatialCommon">
+      <HintPath>..\..\LIFE API\LifeAPI\Spatial\SpatialCommon.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -86,10 +89,6 @@
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LifeAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
-      <Project>{c91776d6-d84c-4183-bd68-d6fa663e3c1c}</Project>
-      <Name>CSharpQuadTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
       <Project>{4ca49432-e852-40b5-9f37-0f5cba61c613}</Project>

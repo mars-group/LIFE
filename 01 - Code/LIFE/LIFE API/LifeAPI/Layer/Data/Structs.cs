@@ -1,4 +1,5 @@
 ﻿using LifeAPI.Spatial;
+using SpatialCommon.Transformation;
 
 namespace LifeAPI.Layer.Data {
 
@@ -55,16 +56,16 @@ namespace LifeAPI.Layer.Data {
     /// <summary>
     ///   Center point of this shape.
     /// </summary>
-    public Vector Position;
+    public Vector3 Position;
     
     /// <summary>
     ///   Alignment of shape.
     /// </summary>
-    public Vector Orientation;
+    public Vector3 Orientation;
     
     /// <summary>
     ///   This shape's geometric form.
     /// </summary>
-    public ISpatialObject QueryMask;
+    public ISpatialEntity QueryMask;
   }
 }

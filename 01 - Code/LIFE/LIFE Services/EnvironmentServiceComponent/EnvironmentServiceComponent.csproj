@@ -43,6 +43,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
     </Reference>
+    <Reference Include="SpatialCommon">
+      <HintPath>..\..\LIFE API\LifeAPI\Spatial\SpatialCommon.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,20 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CollisionMatrix.cs" />
-    <Compile Include="Entities\Shape\ExploreRectShape.cs" />
-    <Compile Include="Entities\Shape\ExploreShape.cs" />
-    <Compile Include="Entities\Shape\GeometryShape.cs" />
     <Compile Include="Entities\CollidableElement.cs" />
-    <Compile Include="Entities\Shape\RectShape.cs" />
-    <Compile Include="Factory\MyRectFactory.cs" />
-    <Compile Include="Factory\MyGeometryFactory.cs" />
     <Compile Include="Implementation\ACollisionESC.cs" />
     <Compile Include="Implementation\RectESC.cs" />
-    <Compile Include="Implementation\GeometryESC.cs" />
-    <Compile Include="Implementation\DeprecatedESC.cs" />
     <Compile Include="Entities\AxisAlignedBoundingInterval.cs" />
-    <Compile Include="Implementation\InternetOctree.cs" />
-    <Compile Include="Interface\IDeprecatedESC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

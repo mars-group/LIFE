@@ -7,10 +7,10 @@ namespace LifeAPI.Perception {
   /// </summary>
   public interface ISpecification {
 
-    /// <summary>
-    ///   Return the information type specified by this object.
-    /// </summary>
-    /// <returns>Information type (as enum value).</returns>
-    Enum GetInformationType();
+      /// <summary>
+      ///   Return the information type specified by this object.
+      /// </summary>
+      /// <returns>Information type (as enum value).</returns>
+      Enum InformationType { get; }
   }
 }

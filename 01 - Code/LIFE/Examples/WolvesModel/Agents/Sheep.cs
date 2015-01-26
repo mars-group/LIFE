@@ -6,6 +6,7 @@ using DalskiAgent.Reasoning;
 using LifeAPI.Environment;
 using LifeAPI.Layer;
 using LifeAPI.Spatial;
+using SpatialCommon.Transformation;
 using WolvesModel.Interactions;
 
 namespace WolvesModel.Agents {
@@ -115,7 +116,7 @@ namespace WolvesModel.Agents {
       _states += "R4";
       var x = _random.Next((int)_environment.MaxDimension.X);
       var y = _random.Next((int)_environment.MaxDimension.Y);
-      var rndOpts = _mover.GetMovementOptions(new TVector(x, y));
+      var rndOpts = _mover.GetMovementOptions(new Vector3(x, y));
       return rndOpts.Count == 0 ? null : _mover.MoveInDirection(rndOpts[0].Direction);
     }
 

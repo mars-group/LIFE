@@ -1,5 +1,5 @@
 ﻿
-using LifeAPI.Spatial;
+using SpatialCommon.Transformation;
 
 namespace EnvironmentServiceComponent.Entities
 {
@@ -9,11 +9,11 @@ namespace EnvironmentServiceComponent.Entities
 
         public int Type;
 
-        public TVector Dimension;
+        public Vector3 Dimension;
 
-        public TVector Position;
+        public Vector3 Position;
 
-        public TVector Direction;
+        public Vector3 Direction;
 
     }
 }

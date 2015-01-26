@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LifeAPI.Layer.Data;
 using LifeAPI.Spatial;
+using SpatialCommon.Transformation;
 
 namespace LifeAPI.Perception.Sensors {
 
@@ -16,12 +17,12 @@ namespace LifeAPI.Perception.Sensors {
     /// <summary>
     ///   Position vector reference (needed for relative queries).
     /// </summary>
-    public Vector Position = null; 
+    public Vector3 Position = default(Vector3); 
     
     /// <summary>
     ///   Direction vector reference (needed for relative queries).
     /// </summary>
-    public Vector Direction = null;
+    public Vector3 Direction = default(Vector3);
 
 
     /// <summary>
@@ -39,7 +40,7 @@ namespace LifeAPI.Perception.Sensors {
     /// </summary>
     /// <param name="shape">Query shape.</param>
     /// <returns>Set of data objects in query range.</returns>
-    public ICollection<T> GetAll(ISpatialObject shape) {
+    public ICollection<T> GetAll(ISpatialEntity shape) {
       if (Position == null || Direction == null) {
         throw new Exception("[ObjectCloudSensor] Error on GetAll(): Position / direction references not set!");
       }

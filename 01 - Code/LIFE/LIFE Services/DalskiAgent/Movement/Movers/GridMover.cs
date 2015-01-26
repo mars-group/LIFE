@@ -4,6 +4,8 @@ using DalskiAgent.Agents;
 using DalskiAgent.Movement.Actions;
 using LifeAPI.Environment;
 using LifeAPI.Spatial;
+using NetTopologySuite.Algorithm;
+using SpatialCommon.Transformation;
 
 namespace DalskiAgent.Movement.Movers {
 
@@ -37,17 +39,16 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="direction">The direction to move (enumeration value).</param>
     public void Move(GridDir direction) {
-      MovementVector = new Vector(0, 0);
       TargetDir = new Direction();
       switch (direction) {
-        case GridDir.Up       :                      MovementVector.Y ++;  TargetDir.SetYaw(  0);  break;
-        case GridDir.Down     :                      MovementVector.Y --;  TargetDir.SetYaw(180);  break;
-        case GridDir.Left     : MovementVector.X --;                       TargetDir.SetYaw(270);  break;
-        case GridDir.Right    : MovementVector.X ++;                       TargetDir.SetYaw( 90);  break;
-        case GridDir.UpLeft   : MovementVector.X --; MovementVector.Y ++;  TargetDir.SetYaw(  0);  break;  //315 | Diagonal 
-        case GridDir.UpRight  : MovementVector.X ++; MovementVector.Y ++;  TargetDir.SetYaw(  0);  break;  //45  | placement
-        case GridDir.DownLeft : MovementVector.X --; MovementVector.Y --;  TargetDir.SetYaw(180);  break;  //225 | causes
-        case GridDir.DownRight: MovementVector.X ++; MovementVector.Y --;  TargetDir.SetYaw(180);  break;  //135 | overlapping!   
+        case GridDir.Up       : MovementVector = Vector3.Up;                     TargetDir.SetYaw(  0); break;
+        case GridDir.Down     : MovementVector = Vector3.Down;                   TargetDir.SetYaw(180); break;
+        case GridDir.Left     : MovementVector = Vector3.Left;                   TargetDir.SetYaw(270); break;
+        case GridDir.Right    : MovementVector = Vector3.Right;                  TargetDir.SetYaw( 90); break;
+        case GridDir.UpLeft   : MovementVector = (Vector3.Up + Vector3.Left);    TargetDir.SetYaw(  0); break;  //315 | Diagonal 
+        case GridDir.UpRight  : MovementVector = (Vector3.Up + Vector3.Right);   TargetDir.SetYaw(  0); break;  //45  | placement
+        case GridDir.DownLeft : MovementVector = (Vector3.Down + Vector3.Left);  TargetDir.SetYaw(180); break;  //225 | causes
+        case GridDir.DownRight: MovementVector = (Vector3.Down + Vector3.Right); TargetDir.SetYaw(180); break;  //135 | overlapping!   
       }
       Move();  // Execute movement (call to L0-Move()).
     }
@@ -69,8 +70,8 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="targetPos">The target position.</param>
     /// <returns>A list of available movement options. These are ordered 
     /// by angular offset to optimal heading (sorting value of struct).</returns>
-    public List<MovementOption> GetMovementOptions(TVector targetPos) {
-
+    public List<MovementOption> GetMovementOptions(Vector3 targetPos)
+    {
       // Check, if we are already there. Otherwise no need to move anyway (empty list).
       if (targetPos.Equals(Agent.GetPosition())) return new List<MovementOption>();
 

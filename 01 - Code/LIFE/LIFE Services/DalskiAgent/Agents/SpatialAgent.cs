@@ -1,11 +1,10 @@
 ﻿using System;
 using DalskiAgent.Movement.Movers;
-using EnvironmentServiceComponent.Entities.Shape;
-using EnvironmentServiceComponent.Implementation;
 using LifeAPI.Environment;
 using LifeAPI.Layer;
 using LifeAPI.Spatial;
-using LifeAPI.Spatial.Shape;
+using SpatialCommon.Shape;
+using SpatialCommon.Transformation;
 
 
 namespace DalskiAgent.Agents {
@@ -17,10 +16,10 @@ namespace DalskiAgent.Agents {
   /// </summary>
   public abstract class SpatialAgent : Agent, ISpatialEntity {
 
-    private IShape _shape;                  // Shape describing this agent's body.
+    public IShape Shape { get; set; }      // Shape describing this agent's body.
     private readonly IEnvironment _env;     // IESC implementation for collision detection.
     protected AgentMover Mover;             // Class for agent movement. 
-    protected CollisionType CollisionType;  // The agent's collision type.      
+    protected CollisionType _collisionType;  // The agent's collision type.      
 
 
     /// <summary>
@@ -35,21 +34,21 @@ namespace DalskiAgent.Agents {
     /// <param name="dir">Direction of the agent. If null, then 0°.</param>
     protected SpatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, 
                            IEnvironment env, IShape shape = null, 
-                           TVector pos = default(TVector), Direction dir = null) : 
+                           Vector3 pos = default(Vector3), Direction dir = null) : 
       
       // Create the base agent. Per default it is collidable.
       base(layer, regFkt, unregFkt) {
-      CollisionType = CollisionType.MassiveAgent;
+      _collisionType = LifeAPI.Spatial.CollisionType.MassiveAgent;
       
       // Check, if the agent already has a direction and a form. If not, create a cube facing north.
       if (dir == null) dir = new Direction();
-      if (shape == null) shape = new Quad(new TVector(1.0, 1.0, 1.0), pos, dir);
-      _shape = shape;
+      if (shape == null) shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), pos, dir);
+      Shape = shape;
 
       // Place the agent in the environment.
       bool success;
-      if (!pos.IsNull()) success = env.Add(this, pos, dir.GetDirectionalVector().GetTVector());
-      else success = env.AddWithRandomPosition(this, TVector.Origin, env.MaxDimension, env.IsGrid);    
+      if (!pos.IsNull()) success = env.Add(this, pos, dir);
+      else success = env.AddWithRandomPosition(this, Vector3.Zero, env.MaxDimension, env.IsGrid);    
       if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
       
       // Save references for later use.    
@@ -74,8 +73,8 @@ namespace DalskiAgent.Agents {
     ///   Returns the position of the agent.
     /// </summary>
     /// <returns>A position vector.</returns>
-    public TVector GetPosition() {
-      return _shape.GetPosition();
+    public Vector3 GetPosition() {
+        return Shape.Position;
     }
 
 
@@ -84,34 +83,33 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A direction vector.</returns>
     public Direction GetDirection() {
-      return _shape.GetRotation();
+        return Shape.Rotation;
     }
 
 
-    /// <summary>
-    ///   Returns this agent's collision type.
-    /// </summary>
-    /// <returns>A collision type enum (default: 'MassiveAgent').</returns>
-    public Enum GetCollisionType() {
-      return CollisionType;
-    }
+      /// <summary>
+      ///   Returns this agent's collision type.
+      /// </summary>
+      /// <returns>A collision type enum (default: 'MassiveAgent').</returns>
+      public Enum CollisionType { get { return _collisionType; } }
 
 
 
-    //TODO| Here lies the error. The shape has to be reset by the ESC, because it holds 
-    //TODO| the position data. So we don't get the random placement result => all (0,0,0)
-    public IShapeOld Shape {
-      get {
-        return new ExploreRectShape(MyRectFactory.Rectangle(GetPosition(), new TVector(1,1,1)));
+//    //TODO| Here lies the error. The shape has to be reset by the ESC, because it holds 
+//    //TODO| the position data. So we don't get the random placement result => all (0,0,0)
+//    public IShapeOld Shape {
+//      get {
+//        return new ExploreRectShape(MyRectFactory.Rectangle(GetPosition(), new Vector3(1,1,1)));
+//      }
+//      set {
+//        _shape = new Quad(new Vector3(1,1,1), value.GetPosition(), new Direction());
+//      }
+//    }
+
+
+      public Enum InformationType {
+          get { return CollisionType; //TODO ...
+          }
       }
-      set {
-        _shape = new Quad(new TVector(1,1,1), value.GetPosition(), new Direction());
-      }
-    }
-    
-
-    public Enum GetInformationType() {
-      return CollisionType.MassiveAgent;  //TODO ...
-    }
   }
 }

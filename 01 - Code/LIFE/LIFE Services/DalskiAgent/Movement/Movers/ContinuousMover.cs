@@ -3,6 +3,7 @@ using DalskiAgent.Agents;
 using DalskiAgent.Movement.Actions;
 using LifeAPI.Environment;
 using LifeAPI.Spatial;
+using SpatialCommon.Transformation;
 
 namespace DalskiAgent.Movement.Movers {
   
@@ -58,7 +59,7 @@ namespace DalskiAgent.Movement.Movers {
       var x = factor * Math.Cos(pitchRad) * Math.Sin(yawRad);
       var y = factor * Math.Cos(pitchRad) * Math.Cos(yawRad);
       var z = factor * Math.Sin(pitchRad);    
-      MovementVector = new Vector(x, y, z);
+      MovementVector = new Vector3(x, y, z);
 
       // Execute L0 call. 
       Move();
@@ -72,7 +73,7 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="targetPos">A point the agent shall go to.</param>
     /// <param name="speed">The agent's movement speed.</param>
     /// <returns>A movement action, ready for execution. </returns>
-    public ContinuousMovementAction MoveTowardsPosition (TVector targetPos, double speed) {
+    public ContinuousMovementAction MoveTowardsPosition (Vector3 targetPos, double speed) {
 
       // Check, if we are already there. Otherwise no need to move anyway.
       var distance = Agent.GetPosition().GetDistance(targetPos);

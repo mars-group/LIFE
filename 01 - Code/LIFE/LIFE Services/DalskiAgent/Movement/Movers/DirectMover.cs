@@ -1,6 +1,6 @@
 ﻿using DalskiAgent.Agents;
 using LifeAPI.Environment;
-using LifeAPI.Spatial;
+using SpatialCommon.Transformation;
 
 namespace DalskiAgent.Movement.Movers {
 
@@ -23,8 +23,8 @@ namespace DalskiAgent.Movement.Movers {
     /// </summary>
     /// <param name="target">The target position.</param>
     /// <param name="dir">The new direction (optional).</param> 
-    public void Move(Vector target, Direction dir = null) {
-      MovementVector = new Vector(
+    public void Move(Vector3 target, Direction dir = null) {
+      MovementVector = new Vector3(
         target.X - Agent.GetPosition().X, 
         target.Y - Agent.GetPosition().Y, 
         target.Z - Agent.GetPosition().Z);

@@ -6,6 +6,7 @@ using LifeAPI.Environment;
 using LifeAPI.Spatial;
 using LifeAPI.Layer;
 using Mono.Addins;
+using SpatialCommon.Transformation;
 using WolvesModel.Agents;
 
 [assembly: Addin]
@@ -34,7 +35,7 @@ namespace WolvesModel {
     public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
       // Create the environment, the execution container and an agent spawner.
-      _env = new RectESC {IsGrid = true, MaxDimension = new TVector(30, 20)};
+      _env = new EnviromentServiceComponent {IsGrid = true, MaxDimension = new Vector3(30, 20)};
 
       // ReSharper disable ObjectCreationAsStatement
       new AgentSpawner(this, registerAgentHandle, unregisterAgentHandle, _env);

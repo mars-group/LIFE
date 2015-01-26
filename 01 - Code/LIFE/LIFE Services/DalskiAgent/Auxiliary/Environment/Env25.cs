@@ -1,6 +1,4 @@
-﻿using CSharpQuadTree;
-using DalskiAgent.Auxiliary.OpenGL;
-using LifeAPI.Spatial;
+﻿using DalskiAgent.Auxiliary.OpenGL;
 using OpenTK.Graphics.OpenGL;
 
 namespace DalskiAgent.Auxiliary.Environment {
