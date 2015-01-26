@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Threading;
+using DalskiAgent.Auxiliary.Environment;
 using DalskiAgent.Auxiliary.OpenGL;
 
 namespace DalskiAgent.Auxiliary {
 
   public class TestStart {
-
     private readonly OpenGLEngine _engine;
 
     public TestStart() {
-      _engine = new OpenGLEngine();   
+      _engine = new OpenGLEngine(640, 480);
+      var env = new Env25(30, 20);
+      _engine.Objects.Add(env);
     }
 
 

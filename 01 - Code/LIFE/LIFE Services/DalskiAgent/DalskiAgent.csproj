@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Agents\SpatialAgent.cs" />
+    <Compile Include="Auxiliary\Environment\Env25.cs" />
     <Compile Include="Auxiliary\OpenGL\Camera.cs" />
     <Compile Include="Auxiliary\OpenGL\IDrawable.cs" />
     <Compile Include="Auxiliary\OpenGL\OpenGLEngine.cs" />
@@ -99,9 +100,7 @@
     <None Include="DalskiAgent.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Auxiliary\Env25\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

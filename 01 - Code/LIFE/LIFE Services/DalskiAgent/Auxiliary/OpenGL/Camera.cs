@@ -215,7 +215,6 @@ namespace DalskiAgent.Auxiliary.OpenGL {
     }
 
 
-
     /// <summary>
     ///   Camera update function.
     /// </summary>
@@ -234,7 +233,6 @@ namespace DalskiAgent.Auxiliary.OpenGL {
       var target = new Vector3(_position.X+x, _position.Y+y, _position.Z+z);
       cameraMatrix = Matrix4.LookAt(_position, target, Vector3.UnitZ);
      
-
       // Write positioning data also directly to screen.
       var l1 = "Position: ("+(int)_position.X+","+(int)_position.Y+","+(int)_position.Z+")";
       var l2 = "Drehung: "+(int)_yaw+"°";
@@ -246,25 +244,5 @@ namespace DalskiAgent.Auxiliary.OpenGL {
       _textWriter.AddLine(l3,new PointF(5,35), Brushes.White);
       _textWriter.AddLine(l4,new PointF(5,50), Brushes.White);
     }
-  }
-
-
-
-  static class FPSCounter {
-	  static double _time = 0.0;
-	  static int _frames = 0;
-
-    public static void Tick(double time) {
-		  _time += time;
-      if (_time < 1.0) _frames++;
-      else {
-			  _time -= 1.0;
-			  _frames = 0;        
-      }    
-    }
-
-	  public static int GetFps() {
-	    return (int) (_frames / _time);  
-	  }    
   }
 }
