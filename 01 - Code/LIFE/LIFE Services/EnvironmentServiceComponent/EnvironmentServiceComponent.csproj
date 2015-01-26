@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\NetTopologySuite.dll</HintPath>
     </Reference>
+    <Reference Include="OctreeFlo">
+      <HintPath>..\..\LIFE API\LifeAPI\Spatial\OctreeFlo.dll</HintPath>
+    </Reference>
     <Reference Include="PowerCollections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2573bf8a1bdddcd5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
@@ -58,8 +61,7 @@
   <ItemGroup>
     <Compile Include="Entities\CollisionMatrix.cs" />
     <Compile Include="Entities\CollidableElement.cs" />
-    <Compile Include="Implementation\ACollisionESC.cs" />
-    <Compile Include="Implementation\RectESC.cs" />
+    <Compile Include="Implementation\EnviromentServiceComponent.cs" />
     <Compile Include="Entities\AxisAlignedBoundingInterval.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

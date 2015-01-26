@@ -40,29 +40,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\GeoAPI.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="MessageWrappers">
       <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
-    <Reference Include="NetTopologySuite, Version=1.13.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\NetTopologySuite.dll</HintPath>
-    </Reference>
     <Reference Include="OctreeFlo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Spatial\OctreeFlo.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpMap, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\SharpMap.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpMap.Extensions">
-      <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\SharpMap.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="SpatialCommon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -70,11 +56,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +84,6 @@
     <Compile Include="Agent\ITickClient.cs" />
     <Compile Include="Layer\Visualization\IVisualizable.cs" />
     <Compile Include="Layer\LayerStatus.cs" />
-    <Compile Include="Perception\IDataSource.cs" />
     <Compile Include="Perception\ISpecification.cs" />
     <Compile Include="Perception\Sensors\NumericRasterSensor.cs" />
     <Compile Include="Perception\Sensors\ObjectCloudSensor.cs" />
@@ -116,10 +96,6 @@
     <Compile Include="Spatial\MovementResult.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
-      <Name>CommonTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
