@@ -17,9 +17,8 @@ namespace DalskiAgent.Agents {
   public abstract class SpatialAgent : Agent, ISpatialEntity {
 
     public IShape Shape { get; set; }      // Shape describing this agent's body.
-    private readonly IEnvironment _env;     // IESC implementation for collision detection.
-    protected AgentMover Mover;             // Class for agent movement. 
-    protected CollisionType _collisionType;  // The agent's collision type.      
+    private readonly IEnvironment _env;    // IESC implementation for collision detection.
+    protected AgentMover Mover;            // Class for agent movement. 
 
 
     /// <summary>
@@ -38,7 +37,7 @@ namespace DalskiAgent.Agents {
       
       // Create the base agent. Per default it is collidable.
       base(layer, regFkt, unregFkt) {
-      _collisionType = LifeAPI.Spatial.CollisionType.MassiveAgent;
+      CollisionType = LifeAPI.Spatial.CollisionType.MassiveAgent;
       
       // Check, if the agent already has a direction and a form. If not, create a cube facing north.
       if (dir == null) dir = new Direction();
@@ -74,7 +73,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A position vector.</returns>
     public Vector3 GetPosition() {
-        return Shape.Position;
+      return Shape.Position;
     }
 
 
@@ -83,33 +82,19 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A direction vector.</returns>
     public Direction GetDirection() {
-        return Shape.Rotation;
+      return Shape.Rotation;
     }
 
 
-      /// <summary>
-      ///   Returns this agent's collision type.
-      /// </summary>
-      /// <returns>A collision type enum (default: 'MassiveAgent').</returns>
-      public Enum CollisionType { get { return _collisionType; } }
+    /// <summary>
+    ///   This agent's collision type.
+    /// </summary>
+    public Enum CollisionType { get; protected set; }
 
 
-
-//    //TODO| Here lies the error. The shape has to be reset by the ESC, because it holds 
-//    //TODO| the position data. So we don't get the random placement result => all (0,0,0)
-//    public IShapeOld Shape {
-//      get {
-//        return new ExploreRectShape(MyRectFactory.Rectangle(GetPosition(), new Vector3(1,1,1)));
-//      }
-//      set {
-//        _shape = new Quad(new Vector3(1,1,1), value.GetPosition(), new Direction());
-//      }
-//    }
-
-
-      public Enum InformationType {
-          get { return CollisionType; //TODO ...
-          }
-      }
+    /// <summary>
+    ///   The information type of this agent (e.g. its classname).
+    /// </summary>
+    public Enum InformationType { get; protected set; }
   }
 }

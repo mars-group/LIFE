@@ -19,7 +19,7 @@ namespace DalskiAgent.Auxiliary.OpenGL {
     private readonly TextWriter _textWriter; // Text writer reference for data output.
     private Vector3 _position;               // Coordinates of the camera position.
     private float _pitch, _yaw;              // Pitch (up/down) and yaw (turn around).
-    private Point _mousePrev;               // Coordinates of mouse position for locking. 
+    private Point _mousePrev;                // Coordinates of mouse position for locking. 
     private readonly MouseButton _rotButton; // Button used for camera rotation.
 
     private const float SpeedMovement = 0.05f;  // Movement (displacement) factor.

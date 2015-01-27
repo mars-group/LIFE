@@ -11,7 +11,7 @@ namespace DalskiAgent.Movement.Actions {
   public class DirectMovementAction : IInteraction {
 
     private readonly DirectMover _mover;    // The agent movement module.
-    private readonly Vector3 _targetPos;     // The new target position.
+    private readonly Vector3 _targetPos;    // The new target position.
     private readonly Direction _targetDir;  // The new direction (optional).
 
 
