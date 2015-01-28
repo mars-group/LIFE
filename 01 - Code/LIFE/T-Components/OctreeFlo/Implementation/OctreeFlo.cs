@@ -20,7 +20,7 @@ namespace OctreeFlo.Implementation {
             Root = null;
             this.minLeafSize = minLeafSize;
             this.maxObjectsPerLeaf = maxObjectsPerLeaf;
-        }
+        }//TODO Octree muss ISpatialEntity verstehen und nicht IShape
 
         /// <summary>
         /// </summary>

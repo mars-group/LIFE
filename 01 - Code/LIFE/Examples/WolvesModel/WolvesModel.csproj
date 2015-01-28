@@ -39,10 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
-    <Reference Include="SpatialCommon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\T-Components\SpatialCommon\obj\Debug\SpatialCommon.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -79,6 +75,10 @@
     <ProjectReference Include="..\..\LIFE Services\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
       <Project>{4ca49432-e852-40b5-9f37-0f5cba61c613}</Project>
       <Name>EnvironmentServiceComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\SpatialCommon\SpatialCommon.csproj">
+      <Project>{339ffd35-24a5-4637-9848-3873e822be17}</Project>
+      <Name>SpatialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
