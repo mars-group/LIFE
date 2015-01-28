@@ -4,37 +4,36 @@ using System.Linq;
 using EnvironmentServiceComponent.Entities;
 using LifeAPI.Environment;
 using LifeAPI.Spatial;
+using OctreeFlo.Implementation;
+using OctreeFlo.Interface;
 using SpatialCommon.Shape;
 using SpatialCommon.Transformation;
+using Direction = SpatialCommon.Transformation.Direction;
 
 namespace EnvironmentServiceComponent.Implementation {
 
-    public class EnviromentServiceComponent :IEnvironment{
+    public class EnviromentServiceComponent : IEnvironment {
         private const int MaxAttempsToAddRandom = 100;
-        private readonly Random _random;
         private readonly bool[,] _collisionMatrix;
         private readonly Dictionary<IShape, ISpatialEntity> _entities;
-//        private readonly OctreeFlo<IShape> _quadTree;
-
+        private readonly IOctreeFlo<IShape> _octree;
+        private readonly Random _random;
 
         public EnviromentServiceComponent(bool[,] collisionMatrix = null) {
             _random = new Random();
             _collisionMatrix = collisionMatrix ?? CollisionMatrix.Get();
 
             _entities = new Dictionary<IShape, ISpatialEntity>();
-//            _quadTree = new OctreeFlo<IShape>(new Vector3(25, 25, 25), 1, true);
+            _octree = new OctreeFlo<IShape>(new Vector3(25, 25, 25), 1, true);
         }
-
 
         public Vector3 MaxDimension { get; set; }
         public bool IsGrid { get; set; }
 
         public bool Add(ISpatialEntity entity, Vector3 position, Direction rotation = null) {
             IShape shape = entity.Shape;
-            if (rotation != null) {
-                Vector3 initRotation = rotation.GetDirectionalVector() - shape.Rotation.GetDirectionalVector();
-                rotation.SetDirectionalVector(initRotation);
-            }
+
+            rotation = rotation ?? new Direction();
             Vector3 newPosition = position - shape.Position;
 
             //move to position
@@ -43,6 +42,7 @@ namespace EnvironmentServiceComponent.Implementation {
                 return false;
             }
             IShape newShape = entity.Shape.Transform(newPosition, rotation);
+//            Console.WriteLine(String.Format("set shapes old {0}    and new {1}",entity.Shape.Bounds,newShape.Bounds));
             entity.Shape = newShape;
             _entities.Add(newShape, entity);
             return true;
@@ -61,7 +61,7 @@ namespace EnvironmentServiceComponent.Implementation {
 
         public void Remove(ISpatialEntity entity) {
             _entities.Remove(entity.Shape);
-//                _quadTree.Remove(shape);
+            _octree.Remove(entity.Shape);
         }
 
         public bool Resize(ISpatialEntity entity, IShape shape) {
@@ -71,28 +71,10 @@ namespace EnvironmentServiceComponent.Implementation {
             if (result.Any()) {
                 return false;
             }
-//            _quadTree.Remove(oldShape);
-//            _quadTree.Insert(newShape);
+            _octree.Remove(entity.Shape);
+            _octree.Insert(shape);
             entity.Shape = shape;
             return true;
-        }
-
-        private MovementResult Move
-            (bool calledByAdd, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
-            IShape newShape = entity.Shape.Transform(movementVector, rotation);
-            ExploreEntity exploreEntity = new ExploreEntity(newShape, entity.CollisionType);
-
-            List<ISpatialEntity> collisions = Explore(exploreEntity).ToList();
-            collisions.Remove(entity);
-            if (collisions.Any()) {
-                return new MovementResult(collisions);
-            }
-            if (!calledByAdd) {
-//                _quadTree.Remove(rectShape);
-            }
-//            _quadTree.Insert(rectShape);
-            entity.Shape = newShape;
-            return new MovementResult();
         }
 
         public MovementResult Move
@@ -102,13 +84,20 @@ namespace EnvironmentServiceComponent.Implementation {
 
         public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial) {
             List<ISpatialEntity> result = new List<ISpatialEntity>();
-//            foreach (IShape rectShape in _quadTree.Query(exploreShape.Bounds)) {
-//                int givenCollisionType = spatial.GetCollisionType().GetHashCode();
-//                int foundCollisionType = _entities[rectShape].GetCollisionType().GetHashCode();
-//                if (Collides(givenCollisionType, foundCollisionType)) {
-//                    result.Add(_entities[rectShape]);
-//                }
-//            }
+            var shape = spatial.Shape;
+
+            Console.WriteLine(" Explore "+shape);
+            foreach (IShape foundShape in _octree.Query(shape.Bounds)) {
+                int givenCollisionType = spatial.CollisionType.GetHashCode();
+                int foundCollisionType = _entities[foundShape].CollisionType.GetHashCode();
+                if (Collides(givenCollisionType, foundCollisionType) && shape.IntersectsWith(foundShape)) {
+                    result.Add(_entities[foundShape]);
+                }
+                Console.WriteLine(" shape" + shape + " foundShape" + foundShape);
+                Console.WriteLine("Collides(givenCollisionType, foundCollisionType)" + Collides(givenCollisionType, foundCollisionType));
+                Console.WriteLine("shape.IntersectsWith(foundShape)" + shape.IntersectsWith(foundShape));
+
+            }
             return result;
         }
 
@@ -116,6 +105,32 @@ namespace EnvironmentServiceComponent.Implementation {
             return _entities.Values.ToList();
         }
 
+        private MovementResult Move
+            (bool calledByAdd, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
+            rotation = rotation ?? new Direction();
+            Console.WriteLine("Move movementVector " + movementVector);
+            Console.WriteLine("Move rotation " + rotation.GetDirectionalVector());
+            IShape newShape = entity.Shape.Transform(movementVector, rotation);
+            ExploreEntity exploreEntity = new ExploreEntity(newShape, entity.CollisionType);
+            Console.WriteLine(String.Format("Move shapes old {0}    and new {1}", entity.Shape.Bounds, newShape.Bounds));
+
+            Console.WriteLine("Move 1");
+            List<ISpatialEntity> collisions = Explore(exploreEntity).ToList();
+            collisions.Remove(entity);
+            Console.WriteLine("Move 2");
+            if (collisions.Any()) {
+                return new MovementResult(collisions);
+            }
+            Console.WriteLine("Move 3");
+            if (!calledByAdd) {
+                _octree.Remove(entity.Shape);
+            }
+            Console.WriteLine("Move 4 Insert into octree "+newShape);
+            _octree.Insert(newShape);
+            Console.WriteLine("Move 5");
+            entity.Shape = newShape;
+            return new MovementResult();
+        }
 
         protected bool Collides(int givenCollisionType, int foundCollisionType) {
             return _collisionMatrix[givenCollisionType, foundCollisionType];

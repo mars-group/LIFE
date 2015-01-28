@@ -41,7 +41,7 @@
     </Reference>
     <Reference Include="SpatialCommon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LIFE API\LifeAPI\Spatial\SpatialCommon.dll</HintPath>
+      <HintPath>..\..\T-Components\SpatialCommon\obj\Debug\SpatialCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
