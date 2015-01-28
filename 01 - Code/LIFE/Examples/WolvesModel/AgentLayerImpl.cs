@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using EnvironmentServiceComponent.Implementation;
 using LCConnector.TransportTypes;
 using LifeAPI.Environment;
-using LifeAPI.Spatial;
 using LifeAPI.Layer;
 using Mono.Addins;
 using SpatialCommon.Transformation;

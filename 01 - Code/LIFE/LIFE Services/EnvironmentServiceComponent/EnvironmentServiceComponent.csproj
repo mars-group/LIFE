@@ -39,15 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\NetTopologySuite.dll</HintPath>
     </Reference>
-    <Reference Include="OctreeFlo">
-      <HintPath>..\..\LIFE API\LifeAPI\Spatial\OctreeFlo.dll</HintPath>
-    </Reference>
     <Reference Include="PowerCollections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2573bf8a1bdddcd5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
-    </Reference>
-    <Reference Include="SpatialCommon">
-      <HintPath>..\..\LIFE API\LifeAPI\Spatial\SpatialCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,6 +71,14 @@
     <ProjectReference Include="..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
       <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>
       <Name>CSharpQuadTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\OctreeFlo\OctreeFlo.csproj">
+      <Project>{995635b1-37a0-4c60-8d19-0bf38dbccfe7}</Project>
+      <Name>OctreeFlo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\SpatialCommon\SpatialCommon.csproj">
+      <Project>{339ffd35-24a5-4637-9848-3873e822be17}</Project>
+      <Name>SpatialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
