@@ -5,7 +5,6 @@ using DalskiAgent.Movement.Movers;
 using DalskiAgent.Reasoning;
 using LifeAPI.Environment;
 using LifeAPI.Layer;
-using LifeAPI.Spatial;
 using SpatialCommon.Transformation;
 using WolvesModel.Interactions;
 
@@ -48,6 +47,8 @@ namespace WolvesModel.Agents {
     /// </summary>
     /// <returns>The interaction to execute.</returns>
     public IInteraction Reason() {
+      PrintMessage(ToString(), ConsoleColor.DarkMagenta);
+
 
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);

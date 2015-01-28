@@ -29,8 +29,12 @@ namespace DalskiAgent.Auxiliary {
 
 
     public static void Main() {
-      new TestStart().Run(50);
-      Console.WriteLine("OpenGL engine has ended. Press return to exit.");
+      //new TestStart().Run(50);
+
+      var env = new Env25(30, 20);
+
+
+      //Console.WriteLine("OpenGL engine has ended. Press return to exit.");
       Console.ReadLine();
     }
   }

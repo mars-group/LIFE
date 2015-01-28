@@ -5,7 +5,6 @@ using DalskiAgent.Movement.Movers;
 using DalskiAgent.Reasoning;
 using LifeAPI.Environment;
 using LifeAPI.Layer;
-using LifeAPI.Spatial;
 using SpatialCommon.Transformation;
 using WolvesModel.Interactions;
 

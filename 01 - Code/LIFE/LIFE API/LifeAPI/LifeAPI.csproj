@@ -92,7 +92,7 @@
     <Compile Include="Perception\Sensors\SingleValueSensor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spatial\CollisionType.cs" />
-    <Compile Include="Spatial\ISpatialObject.cs" />
+    <Compile Include="Spatial\ISpatialEntity.cs" />
     <Compile Include="Spatial\MovementResult.cs" />
   </ItemGroup>
   <ItemGroup>
