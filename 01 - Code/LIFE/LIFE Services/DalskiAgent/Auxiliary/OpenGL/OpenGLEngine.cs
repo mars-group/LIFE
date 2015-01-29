@@ -24,7 +24,7 @@ namespace DalskiAgent.Auxiliary.OpenGL {
     public OpenGLEngine(int width, int height) {
       _window = new GameWindow(width, height, new GraphicsMode(), "3D Engine V2");
       _writer = new TextWriter(_window);
-      _camera = new Camera(_window, _writer, 15, 10, 20, -90);
+      _camera = new Camera(_window, _writer, 15, 10, 21, -90);
       Objects = new List<IDrawable>();
 
       // OpenGL initialization.

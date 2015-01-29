@@ -4,19 +4,7 @@ using System.Drawing;
 using LifeAPI.Spatial;
 using OpenTK.Graphics.OpenGL;
 
-namespace DalskiAgent.Auxiliary.Environment {
-  
-  /// <summary>
-  ///   Two-dimensional float structure.
-  /// </summary>
-  public struct Float2 {
-    public readonly float X, Y;
-    public Float2(float x, float y) {
-      X = x;
-      Y = y;
-    }
-  };
-
+namespace DalskiAgent.Auxiliary.Environment { 
 
   /// <summary>
   ///   Yet another quad tree.
@@ -98,10 +86,10 @@ namespace DalskiAgent.Auxiliary.Environment {
       if (!fitsTop && !fitsBottom) return -1;
 
       // Object can completely fit within the left quadrants.
-      if (pos.X+span.X < center.X) index = fitsTop? 1 : 2;    
+      if (pos.X+span.X <= center.X) index = fitsTop? 1 : 2;    
 
       // Object can completely fit within the right quadrants.
-      else if (pos.X > center.X) index = fitsTop? 0 : 3;   
+      else if (pos.X >= center.X) index = fitsTop? 0 : 3;   
 
       return index;
     }
@@ -115,7 +103,6 @@ namespace DalskiAgent.Auxiliary.Environment {
       Float2 pos  = new Float2((float) obj.Shape.Position.X,   (float) obj.Shape.Position.Y);
       Float2 span = new Float2((float) obj.Shape.Bounds.Width, (float) obj.Shape.Bounds.Height);        
         
-
       if (_childNodes[0] != null) {       // If this node has subnodes ...
         int index = GetIndex(pos, span);  // find the right node ...
         if (index != -1) {                // and if found ...
@@ -155,38 +142,28 @@ namespace DalskiAgent.Auxiliary.Environment {
     /// <param name="span">Its width and height.</param>
     /// <returns></returns>
     public List<ISpatialEntity> Retrieve(List<ISpatialEntity> retList, Float2 pos, Float2 span) {
+      
+      // Intersect query area with current scope [collision detection]. Skip, if it's outside!
+      if (!CDF.IntersectRects(_position, _span, pos, span)) return retList;
       int index = GetIndex(pos, span);
-      
-      // If query area is managed by a child node, redirect call.
-      if (index != -1 && _childNodes[0] != null) _childNodes[index].Retrieve(retList, pos, span);
-      
-      // Otherwise get all contained objects from here on.
-      else RetrieveAll(retList);
 
-/* wenn -1: liegt auf irgendner grenze -> ist hier in den objects
- * wenn 0-3: gehört in nen quadrantknoten
- *   wenn kinder == null: muß trotzdem hier sein!
- *   wenn kinder != null: in in nem kindknoten!
- * 
- * grenzüberschreitungsproblem!
- *
- */
-      // -1 müßt heißen: Ist auf dieser Ebene: also alles hier + alle Kinder!
-      //if (index == -1 || _childNodes[0] == null) {
-        //for (int i = 0; i < _objects.Count; i ++) retList.Add(_objects[i]);
-        // downrouting!
-      //}
+      // If this node is responsible or has no child nodes, get all contained objects.
+      if (index == -1 || _childNodes[0] == null) {
+        for (int i = 0; i < _objects.Count; i ++) {
+          if (CDF.IntersectRects(
+            new Float2((float) _objects[i].Shape.Position.X, (float) _objects[i].Shape.Position.Y), 
+            new Float2((float) _objects[i].Shape.Bounds.Width, (float) _objects[i].Shape.Bounds.Height), 
+            pos, span)) retList.Add(_objects[i]);
+        }
+      }
 
-      //if (index != -1 && _childNodes[0] != null) _childNodes[index].Retrieve(retList, pos, span);
-      //for (int i = 0; i < _objects.Count; i ++) retList.Add(_objects[i]);
+      // If query area is [also] managed by a child node, redirect call.
+      if (_childNodes[0] != null) {
+        for (int i = 0; i < 4; i ++) _childNodes[i].Retrieve(retList, pos, span);
+      }
+
       return retList;
     }
-
-
-    private void RetrieveAll(List<ISpatialEntity> list) {
-      for (int i = 0; i < _objects.Count; i ++) list.Add(_objects[i]);
-      if (_childNodes[0] != null) for (int i = 0; i < 4; i ++) _childNodes[i].RetrieveAll(list);
-    } 
 
 
     /// <summary>
@@ -195,8 +172,7 @@ namespace DalskiAgent.Auxiliary.Environment {
     public void Print(int index) {
       for (int i = 0; i < _level; i ++) Console.Write(" -");
       Console.WriteLine("[Node "+(index+1)+"]: Pos: ("+_position.X+","+_position.Y+
-                        ")  Size: ("+_span.X+","+_span.Y+
-                        ")  Objects: "+_objects.Count);
+                        ") Size: ("+_span.X+","+_span.Y+") Objects: "+_objects.Count);
 
       if (_childNodes[0] != null) {
         for (int i = 0; i < 4; i++) _childNodes[i].Print(i);

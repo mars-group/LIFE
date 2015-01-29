@@ -40,51 +40,48 @@ namespace DalskiAgent.Auxiliary.Environment {
       _quadtree = new Quadtree(0, new Float2(0,0), new Float2(width, height));
       _heightmap = new Heightmap();
 
-
-      _quadtree.Insert(new Obj(new Float2(0,1), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(1,5), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(0,4), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(1,0), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(3,2), new Float2(1,1)));
-      
-      _quadtree.Insert(new Obj(new Float2(1,3), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(5,4), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(1,2), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(7,2), new Float2(1,1)));
-      _quadtree.Insert(new Obj(new Float2(0,6), new Float2(1,1)));
-      
-      _quadtree.Insert(new Obj(new Float2(22,13), new Float2(1,1)));
-
+      for (int i = 0; i < 50; i ++) AddWithRandomPosition(new Obj(new Float2(), new Float2(1, 1)));  
       _quadtree.Print(-1);
 
-
-      
-      var ret = Explore(new Obj(new Float2(7,0), new Float2(5,5)));
+      var ret = ExploreAll();
       Console.WriteLine("\nOutput return all ["+ret.Count()+"]:");
-      foreach (var se in ret) Console.WriteLine(se.Shape.Position);    
+      foreach (var se in ret) Console.WriteLine(se.Shape.Position);  
     }
     
+
 
     /// <summary>
     ///   Renders this environment.
     /// </summary>
     public void Draw() {
-      _heightmap.Draw();
+      //_heightmap.Draw();
       _quadtree.Draw(true);
     }
 
 
-    //TODO Span check for AddRandom::end.
 
-    //TODO CollisionDetection Klasse? Für AddRandom und die Moves 
-
-    //TODO Sichtbereichsprüfung: Retrieve (0,0)(width,height) oder halt mit Objektdaten
-    //TODO Mit den Obj. von oben testen -> und erst wenn's geht, weitermachen!
-
-
-
+    /// <summary>
+    ///   Adds an object with a given position to the environment. 
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
+    /// <param name="position">The target position.</param>
+    /// <param name="rotation">A initial heading.</param>
+    /// <returns>Boolean to indicate whether the insert succeededor not.</returns>
     public bool Add(ISpatialEntity entity, Vector3 position, Direction rotation = null) {
-      throw new NotImplementedException();
+
+      // If the selected area is already occupied, cancel object placement. 
+      List<ISpatialEntity> list = _quadtree.Retrieve(new List<ISpatialEntity>(),
+        new Float2((float) position.X, (float) position.Y),
+        new Float2((float) entity.Shape.Bounds.Width, (float) entity.Shape.Bounds.Height));
+      if (list.Count > 0) {
+        Console.WriteLine("Error, placement at "+position+" failed!");
+        return false;
+      }
+
+      // All is fine. Set values to entity and insert into quadtree.
+      entity.Shape = new Cuboid(entity.Shape.Bounds.Dimension, position, rotation);
+      _quadtree.Insert(entity);
+      return true;
     }
 
 

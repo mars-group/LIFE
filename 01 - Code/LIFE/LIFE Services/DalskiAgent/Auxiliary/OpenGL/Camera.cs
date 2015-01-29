@@ -159,7 +159,7 @@ namespace DalskiAgent.Auxiliary.OpenGL {
 
       // Zooming mode.
       if (zIn != 0) {
-        _pos.Z += zIn*SpeedZoom;
+        _pos.Z -= zIn*SpeedZoom;
       }
     }
 
