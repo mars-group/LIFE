@@ -13,7 +13,6 @@ namespace DalskiAgent.Auxiliary.OpenGL {
 
     private readonly Camera _camera;          // The user's view.
     private readonly GameWindow _window;      // The main window.
-    private Matrix4 _cameraMatrix;            // Camera projection matrix.
     private readonly TextWriter _writer;      // Text writer class. 
     public readonly List<IDrawable> Objects;  // The objects to draw.
 
@@ -25,7 +24,7 @@ namespace DalskiAgent.Auxiliary.OpenGL {
     public OpenGLEngine(int width, int height) {
       _window = new GameWindow(width, height, new GraphicsMode(), "3D Engine V2");
       _writer = new TextWriter(_window);
-      _camera = new Camera(_window, _writer, -2, -1, 4, -24, 50);
+      _camera = new Camera(_window, _writer, 15, 10, 20, -90);
       Objects = new List<IDrawable>();
 
       // OpenGL initialization.
@@ -36,7 +35,6 @@ namespace DalskiAgent.Auxiliary.OpenGL {
       GL.DepthFunc(DepthFunction.Lequal);   // Only render points with less or equal depth (def.: GL_LESS). 
       GL.ClearDepth(1.0f);                  // Set depth buffer clearing value to maximum. 
       _window.VSync = VSyncMode.On;         // Enable screen V-sync.
-      _cameraMatrix = Matrix4.Identity;     // Initialize camera with identity matrix.
       _window.Visible = true;               // Set window to visible.
       SetResolution(width, height);         // Initialize window with desired resolution.
     }
@@ -89,7 +87,6 @@ namespace DalskiAgent.Auxiliary.OpenGL {
       if (_window.Keyboard[Key.Number1]) SetResolution(640, 480);
       if (_window.Keyboard[Key.Number2]) SetResolution(1024, 600);
       if (_window.Keyboard[Key.Number3]) SetResolution(-1, -1, true);
-      _camera.Update(out _cameraMatrix);      
     }
 
 
@@ -100,7 +97,8 @@ namespace DalskiAgent.Auxiliary.OpenGL {
       GL.Clear(ClearBufferMask.ColorBufferBit | // Clear current buffer. 
                ClearBufferMask.DepthBufferBit); // Clear depth buffer.
       GL.MatrixMode(MatrixMode.Modelview);      // Change to model view.
-      GL.LoadMatrix(ref _cameraMatrix);         // Load camera view.
+      GL.LoadIdentity();                        // Reset model matrix.
+      _camera.Update();                         // Load camera view.
       foreach (var obj in Objects) obj.Draw();  // Draw the world.
       _writer.Draw();                           // Write text to screen.
       _window.SwapBuffers();                    // Swap active and standby buffers.       

@@ -46,7 +46,7 @@ namespace DalskiAgent.Agents {
 
       // Place the agent in the environment.
       bool success;
-      if (!pos.Equals(new Vector3(0,0,0)) /*!pos.IsNull()*/) success = env.Add(this, pos, dir);
+      if (!pos.IsNull()) success = env.Add(this, pos, dir);
       else success = env.AddWithRandomPosition(this, Vector3.Zero, env.MaxDimension, env.IsGrid);    
       if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
       

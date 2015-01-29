@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
 namespace DalskiAgent.Auxiliary.OpenGL {
@@ -17,7 +18,7 @@ namespace DalskiAgent.Auxiliary.OpenGL {
 
     private readonly GameWindow _window;     // Pointer to the window.
     private readonly TextWriter _textWriter; // Text writer reference for data output.
-    private Vector3 _position;               // Coordinates of the camera position.
+    private Vector3 _pos;                    // Coordinates of the camera position.
     private float _pitch, _yaw;              // Pitch (up/down) and yaw (turn around).
     private Point _mousePrev;                // Coordinates of mouse position for locking. 
     private readonly MouseButton _rotButton; // Button used for camera rotation.
@@ -48,7 +49,7 @@ namespace DalskiAgent.Auxiliary.OpenGL {
     public Camera (GameWindow win, TextWriter tw, float x = 0f, float y = 0f, float z = 0f, float pitch = 0f, float yaw = 0.0f) {
       _window = win;
       _textWriter = tw;
-      _position = new Vector3(x, y, z);
+      _pos = new Vector3(x, y, z);
       _pitch = pitch;
       _yaw = yaw;
       _rotButton = MouseButton.Right;
@@ -109,9 +110,9 @@ namespace DalskiAgent.Auxiliary.OpenGL {
         _yaw += dx*SpeedYaw;
 
         // Check calculated values and adjust, if out of valid range.
-        if (_pitch > 45f) _pitch = 45f;
-        if (_pitch <= -90f) _pitch = -89.99f; //TODO Zeichenfehler bei -90°. Warum???
-        if (_yaw < 0f) _yaw += 360f;
+        if (_pitch >  45f) _pitch =  45f;
+        if (_pitch < -90f) _pitch = -90f;
+        if (_yaw < 0f)    _yaw += 360f;
         if (_yaw >= 360f) _yaw -= 360f;
 
         // Reset mouse pointer to locked position.
@@ -152,13 +153,13 @@ namespace DalskiAgent.Auxiliary.OpenGL {
          */
 
         float yawRad = _yaw*DegToRad;
-        _position.X += (float) (SpeedMovement*( xIn*Math.Cos(yawRad) + yIn*Math.Sin(yawRad)));
-        _position.Y += (float) (SpeedMovement*(-xIn*Math.Sin(yawRad) + yIn*Math.Cos(yawRad)));
+        _pos.X += (float) (SpeedMovement*( xIn*Math.Cos(yawRad) + yIn*Math.Sin(yawRad)));
+        _pos.Y += (float) (SpeedMovement*(-xIn*Math.Sin(yawRad) + yIn*Math.Cos(yawRad)));
       }
 
       // Zooming mode.
       if (zIn != 0) {
-        _position.Z += zIn*SpeedZoom;
+        _pos.Z += zIn*SpeedZoom;
       }
     }
 
@@ -218,23 +219,15 @@ namespace DalskiAgent.Auxiliary.OpenGL {
     /// <summary>
     ///   Camera update function.
     /// </summary>
-    /// <param name="cameraMatrix">Camera matrix to set.</param>
-    public void Update (out Matrix4 cameraMatrix) {
+    public void Update () {
       KeyboardHandler();
       
-      // Calculate target view point of position and rotation.
-      var pitchRad = _pitch*DegToRad;
-      var yawRad = _yaw*DegToRad;
-      
-      var x = (float)(Math.Cos(pitchRad)*Math.Sin(yawRad));
-      var y = (float)(Math.Cos(pitchRad)*Math.Cos(yawRad));
-      var z = (float)(Math.Sin(pitchRad));    
- 
-      var target = new Vector3(_position.X+x, _position.Y+y, _position.Z+z);
-      cameraMatrix = Matrix4.LookAt(_position, target, Vector3.UnitZ);
-     
+      GL.Rotate (_pitch+90, -1.0f, 0.0f, 0.0f);  // Rotate on x-Axis (set height).
+      GL.Rotate (_yaw,       0.0f, 0.0f, 1.0f);  // Rotate on z-Axis (set spin).
+      GL.Translate (-_pos.X, -_pos.Y, -_pos.Z);  // Set the camera position.
+
       // Write positioning data also directly to screen.
-      var l1 = "Position: ("+(int)_position.X+","+(int)_position.Y+","+(int)_position.Z+")";
+      var l1 = "Position: ("+(int)_pos.X+","+(int)_pos.Y+","+(int)_pos.Z+")";
       var l2 = "Drehung: "+(int)_yaw+"°";
       var l3 = "Steigung: "+(int)_pitch+"°";
       var l4 = "Auflösung: " + _window.Width + " x " + _window.Height;//+" @ "+FPSCounter.GetFps()+" FPS";

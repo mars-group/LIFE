@@ -8,7 +8,7 @@ namespace DalskiAgent.Auxiliary {
   public class TestStart {
     private readonly OpenGLEngine _engine;
 
-    public TestStart() {
+    private TestStart() {
       _engine = new OpenGLEngine(640, 480);
       var env = new Env25(30, 20);
       _engine.Objects.Add(env);
@@ -27,15 +27,12 @@ namespace DalskiAgent.Auxiliary {
     }
 
 
-
+    /// <summary>
+    ///   Main function for sequential execution.
+    ///   Yep, it's the ultimate evil ...
+    /// </summary>
     public static void Main() {
-      //new TestStart().Run(50);
-
-      var env = new Env25(30, 20);
-
-
-      //Console.WriteLine("OpenGL engine has ended. Press return to exit.");
-      Console.ReadLine();
+      new TestStart().Run(50);
     }
   }
 }

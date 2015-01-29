@@ -62,6 +62,7 @@
     <Compile Include="Agents\Agent.cs" />
     <Compile Include="Agents\SpatialAgent.cs" />
     <Compile Include="Auxiliary\Environment\Env25.cs" />
+    <Compile Include="Auxiliary\Environment\Heightmap.cs" />
     <Compile Include="Auxiliary\Environment\Quadtree.cs" />
     <Compile Include="Auxiliary\OpenGL\Camera.cs" />
     <Compile Include="Auxiliary\OpenGL\IDrawable.cs" />
