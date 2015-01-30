@@ -91,6 +91,10 @@
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LifeAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\CustomUtilities\CustomUtilities.csproj">
+      <Project>{6cd55ef4-32f2-4e99-8973-1625d6726344}</Project>
+      <Name>CustomUtilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\SpatialCommon\SpatialCommon.csproj">
       <Project>{339FFD35-24A5-4637-9848-3873E822BE17}</Project>
       <Name>SpatialCommon</Name>

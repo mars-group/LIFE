@@ -25,6 +25,8 @@ namespace DalskiAgent.Auxiliary.Environment {
     private readonly Quadtree[] _childNodes;        // Sub nodes (if quadtree is segmented).  
     private const int MaxObjects = 4;               // Maximum object count before node is split.
 
+    private readonly object _lock = new object();
+
 
     /// <summary>
     ///   Create a new quadtree.
@@ -100,35 +102,38 @@ namespace DalskiAgent.Auxiliary.Environment {
     /// </summary>
     /// <param name="obj"></param>
     public void Insert(ISpatialEntity obj) {
-      Float2 pos  = new Float2((float) obj.Shape.Position.X,   (float) obj.Shape.Position.Y);
-      Float2 span = new Float2((float) obj.Shape.Bounds.Width, (float) obj.Shape.Bounds.Height);        
+      lock (_lock) {
         
-      if (HasChildNodes()) {              // If this node has subnodes ...
-        int index = GetIndex(pos, span);  // find the right node ...
-        if (index != -1) {                // and if found ...
-          _childNodes[index].Insert(obj); // insert it there!
-          return;
-        }
-      }
-
-      // The object has to be inserted here.
-      _objects.Add(obj);
-      if (_objects.Count > MaxObjects) {
-        if (!HasChildNodes()) Split();
-
-        int i = 0;
-        while (i < _objects.Count) {
-          Float2 p2 = new Float2((float) _objects[i].Shape.Position.X,   (float) _objects[i].Shape.Position.Y);
-          Float2 s2 = new Float2((float) _objects[i].Shape.Bounds.Width, (float) _objects[i].Shape.Bounds.Height);        
-    
-          int index = GetIndex(p2, s2);
-          if (index != -1) {
-            ISpatialEntity tmp = _objects[i];
-            _objects.Remove(tmp);
-            _childNodes[index].Insert(tmp);
-            
+        Float2 pos  = new Float2((float) obj.Shape.Position.X,   (float) obj.Shape.Position.Y);
+        Float2 span = new Float2((float) obj.Shape.Bounds.Width, (float) obj.Shape.Bounds.Height);        
+        
+        if (HasChildNodes()) {              // If this node has subnodes ...
+          int index = GetIndex(pos, span);  // find the right node ...
+          if (index != -1) {                // and if found ...
+            _childNodes[index].Insert(obj); // insert it there!
+            return;
           }
-          else i ++;  // We can't move this object to a sub node.
+        }
+
+        // The object has to be inserted here.
+        _objects.Add(obj);
+        if (_objects.Count > MaxObjects) {
+          if (!HasChildNodes()) Split();
+
+          int i = 0;
+          while (i < _objects.Count) {
+            Float2 p2 = new Float2((float) _objects[i].Shape.Position.X,   (float) _objects[i].Shape.Position.Y);
+            Float2 s2 = new Float2((float) _objects[i].Shape.Bounds.Width, (float) _objects[i].Shape.Bounds.Height);        
+    
+            int index = GetIndex(p2, s2);
+            if (index != -1) {
+              ISpatialEntity tmp = _objects[i];
+              _objects.Remove(tmp);
+              _childNodes[index].Insert(tmp);
+            
+            }
+            else i ++;  // We can't move this object to a sub node.
+          }
         }
       }
     }
@@ -169,27 +174,29 @@ namespace DalskiAgent.Auxiliary.Environment {
     /// <param name="span">Its width and height.</param>
     /// <returns></returns>
     public List<ISpatialEntity> Retrieve(List<ISpatialEntity> retList, Float2 pos, Float2 span) {
-      
+       
       // Intersect query area with current scope [collision detection]. Skip, if it's outside!
       if (!CDF.IntersectRects(_position, _span, pos, span)) return retList;
       int index = GetIndex(pos, span);
 
-      // If this node is responsible or has no child nodes, get all contained objects.
-      if (index == -1 || !HasChildNodes()) {
-        for (int i = 0; i < _objects.Count; i ++) {
-          if (CDF.IntersectRects(
-            new Float2((float) _objects[i].Shape.Position.X, (float) _objects[i].Shape.Position.Y), 
-            new Float2((float) _objects[i].Shape.Bounds.Width, (float) _objects[i].Shape.Bounds.Height), 
-            pos, span)) retList.Add(_objects[i]);
+      lock (_lock) { 
+        // If this node is responsible or has no child nodes, get all contained objects.
+        if (index == -1 || !HasChildNodes()) {
+          for (int i = 0; i < _objects.Count; i ++) {
+            if (CDF.IntersectRects(
+              new Float2((float) _objects[i].Shape.Position.X, (float) _objects[i].Shape.Position.Y), 
+              new Float2((float) _objects[i].Shape.Bounds.Width, (float) _objects[i].Shape.Bounds.Height), 
+              pos, span)) retList.Add(_objects[i]);
+          }
         }
-      }
 
-      // If query area is [also] managed by a child node, redirect call.
-      if (HasChildNodes()) {
-        for (int i = 0; i < 4; i ++) _childNodes[i].Retrieve(retList, pos, span);
-      }
+        // If query area is [also] managed by a child node, redirect call.
+        if (HasChildNodes()) {
+          for (int i = 0; i < 4; i ++) _childNodes[i].Retrieve(retList, pos, span);
+        }
 
-      return retList;
+        return retList;
+      }
     }
 
 

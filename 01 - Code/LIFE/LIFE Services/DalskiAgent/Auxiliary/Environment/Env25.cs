@@ -40,10 +40,8 @@ namespace DalskiAgent.Auxiliary.Environment {
       _quadtree = new Quadtree(0, new Float2(0,0), new Float2(width, height));
       _heightmap = new Heightmap();
 
-
+      /*
       for (int i = 0; i < 20; i ++) AddWithRandomPosition(new Obj(new Float2(), new Float2(1, 1)));
-
-
 
       ISpatialEntity obj1 = new Obj(new Float2(), new Float2(1, 1));
       ISpatialEntity obj2 = new Obj(new Float2(), new Float2(1, 1));
@@ -53,7 +51,7 @@ namespace DalskiAgent.Auxiliary.Environment {
 
       Move(obj2, new Vector3(4, 7));
 
-      /*
+      
       List<ISpatialEntity> objs = new List<ISpatialEntity>();
       objs.Add());
 
@@ -67,10 +65,11 @@ namespace DalskiAgent.Auxiliary.Environment {
 
       Console.WriteLine(_quadtree.Remove(objs[0]));
       Console.WriteLine(_quadtree.Remove(objs[0]));
-      */
+      
       var ret = ExploreAll();
       Console.WriteLine("\nOutput return all ["+ret.Count()+"]:");
       foreach (var se in ret) Console.WriteLine(se.Shape.Position);  
+      */
     }
     
 
@@ -95,8 +94,10 @@ namespace DalskiAgent.Auxiliary.Environment {
     public bool Add(ISpatialEntity entity, Vector3 position, Direction rotation = null) {
 
       // If the selected area is already occupied, cancel object placement. 
-      if (RetrieveFromQuadtree(entity).Count > 0) {
-        Console.WriteLine("Error, placement at "+position+" failed!");
+      Float2 pos  = new Float2((float) position.X, (float) position.Y);
+      Float2 span = new Float2((float) entity.Shape.Bounds.Width, (float) entity.Shape.Bounds.Height);
+      if (RetrieveFromQuadtree(pos, span).Count > 0) {
+        //Console.WriteLine("Error, placement at "+position+" failed!");
         return false;        
       }
 
