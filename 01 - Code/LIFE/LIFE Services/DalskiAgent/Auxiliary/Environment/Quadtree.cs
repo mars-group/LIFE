@@ -48,7 +48,7 @@ namespace DalskiAgent.Auxiliary.Environment {
     public void Clear() {
       _objects.Clear();
       for (int i = 0; i < 4; i++) {
-        if (_childNodes[i] != null) {
+        if (HasChildNodes()) {
           _childNodes[i].Clear();
           _childNodes[i] = null;
         }
@@ -103,7 +103,7 @@ namespace DalskiAgent.Auxiliary.Environment {
       Float2 pos  = new Float2((float) obj.Shape.Position.X,   (float) obj.Shape.Position.Y);
       Float2 span = new Float2((float) obj.Shape.Bounds.Width, (float) obj.Shape.Bounds.Height);        
         
-      if (_childNodes[0] != null) {       // If this node has subnodes ...
+      if (HasChildNodes()) {              // If this node has subnodes ...
         int index = GetIndex(pos, span);  // find the right node ...
         if (index != -1) {                // and if found ...
           _childNodes[index].Insert(obj); // insert it there!
@@ -114,7 +114,7 @@ namespace DalskiAgent.Auxiliary.Environment {
       // The object has to be inserted here.
       _objects.Add(obj);
       if (_objects.Count > MaxObjects) {
-        if (_childNodes[0] == null) Split();
+        if (!HasChildNodes()) Split();
 
         int i = 0;
         while (i < _objects.Count) {
@@ -134,6 +134,33 @@ namespace DalskiAgent.Auxiliary.Environment {
     }
 
 
+
+    /// <summary>
+    ///   Removes an object from to quadtree.
+    /// </summary>
+    /// <param name="obj">The object to remove.</param>
+    /// <returns>'True' on successful deletion, 'false', if object was not found.</returns>
+    public bool Remove(ISpatialEntity obj) {
+      Float2 pos  = new Float2((float) obj.Shape.Position.X,   (float) obj.Shape.Position.Y);
+      Float2 span = new Float2((float) obj.Shape.Bounds.Width, (float) obj.Shape.Bounds.Height);
+      
+      int index = GetIndex(pos, span);                                  // Determine quadrant.
+      if (index == -1 || !HasChildNodes()) return _objects.Remove(obj); // Object is on this level.
+      return _childNodes[index].Remove(obj);                            // Else go down recursively.
+    }
+
+
+
+    /// <summary>
+    ///   Helper function to determine if this node has subnodes or not.
+    /// </summary>
+    /// <returns>'True', if node is further splitted, 'false', if it is a leaf.</returns>
+    private bool HasChildNodes() {
+      return (_childNodes[0] != null);
+    }
+
+
+
     /// <summary>
     ///   Returns all objects that could collide with the given object.
     /// </summary>
@@ -148,7 +175,7 @@ namespace DalskiAgent.Auxiliary.Environment {
       int index = GetIndex(pos, span);
 
       // If this node is responsible or has no child nodes, get all contained objects.
-      if (index == -1 || _childNodes[0] == null) {
+      if (index == -1 || !HasChildNodes()) {
         for (int i = 0; i < _objects.Count; i ++) {
           if (CDF.IntersectRects(
             new Float2((float) _objects[i].Shape.Position.X, (float) _objects[i].Shape.Position.Y), 
@@ -158,7 +185,7 @@ namespace DalskiAgent.Auxiliary.Environment {
       }
 
       // If query area is [also] managed by a child node, redirect call.
-      if (_childNodes[0] != null) {
+      if (HasChildNodes()) {
         for (int i = 0; i < 4; i ++) _childNodes[i].Retrieve(retList, pos, span);
       }
 
@@ -174,7 +201,7 @@ namespace DalskiAgent.Auxiliary.Environment {
       Console.WriteLine("[Node "+(index+1)+"]: Pos: ("+_position.X+","+_position.Y+
                         ") Size: ("+_span.X+","+_span.Y+") Objects: "+_objects.Count);
 
-      if (_childNodes[0] != null) {
+      if (HasChildNodes()) {
         for (int i = 0; i < 4; i++) _childNodes[i].Print(i);
       }
     }
@@ -209,7 +236,7 @@ namespace DalskiAgent.Auxiliary.Environment {
         GL.End(); 
       }
 
-      if (_childNodes[0] != null) {
+      if (HasChildNodes()) {
         for (int i = 0; i < 4; i ++) _childNodes[i].Draw(lines);
       }    
     }

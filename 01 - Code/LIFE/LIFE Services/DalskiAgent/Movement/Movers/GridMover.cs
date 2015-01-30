@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement.Actions;
 using LifeAPI.Environment;
-using LifeAPI.Spatial;
-using NetTopologySuite.Algorithm;
 using SpatialCommon.Transformation;
 
 namespace DalskiAgent.Movement.Movers {

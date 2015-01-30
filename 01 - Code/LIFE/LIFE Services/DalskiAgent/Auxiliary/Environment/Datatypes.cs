@@ -13,10 +13,51 @@
 
 
   /// <summary>
+  ///   Float structure for three-dimensional data.
+  /// </summary>
+  public struct Float3 {
+    public readonly float X, Y, Z;  
+    public Float3(float x, float y, float z) {
+      X = x;
+      Y = y;
+      Z = z;
+    }
+  };
+
+
+  /// <summary>
+  ///   3D vertex, consisting of coordinate point, texture- and normal vector.
+  /// </summary>
+  public struct Vertex {
+    public readonly Float3 Point;     // Coordinate of this vertex.
+    public readonly Float2 Texture;   // Vector to the texture slice of this point.  
+    public readonly Float3 Normal;    // Normal vector that shows this vertex' orientation.
+
+    public Vertex(Float3 point) {
+      Point = point;
+      Texture = new Float2();
+      Normal = new Float3();
+    }
+
+    public Vertex(Float3 point, Float2 texture) {
+      Point = point;
+      Texture = texture;
+      Normal = new Float3();
+    }
+
+    public Vertex(Float3 point, Float2 texture, Float3 normal) {
+      Point = point;
+      Texture = texture;
+      Normal = normal;
+    }
+  };
+
+
+  /// <summary>
   ///   Utility class with various collision detection functions.
   /// </summary>
   public static class CDF {
-    
+
     /// <summary>
     ///   Function to check the intersection of two rectangles.
     /// </summary>
@@ -40,5 +81,5 @@
     public static bool IntervalsCollide(Float2 intv1, Float2 intv2) {
       return !(intv2.X >= intv1.Y || intv1.X >= intv2.Y);
     }
-  }
+  };
 }
