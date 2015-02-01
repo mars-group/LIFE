@@ -29,6 +29,7 @@ namespace DalskiAgent.Auxiliary.Environment {
 
 
     public void Draw() {
+      /*
       GL.Color3(Color.White);
       GL.Begin(PrimitiveType.Lines);
       for (var i = 0; i <= _heights.GetLength(0); i ++) {
@@ -40,7 +41,7 @@ namespace DalskiAgent.Auxiliary.Environment {
         GL.Vertex3(i,_heights.GetLength(0),-0.1);
       }
       GL.End();
-      
+      */
     }
   }
 }

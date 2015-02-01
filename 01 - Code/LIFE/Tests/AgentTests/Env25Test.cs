@@ -1,27 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DalskiAgent.Auxiliary.Environment;
-using LifeAPI.Spatial;
 using NUnit.Framework;
-using SpatialCommon.Shape;
-using SpatialCommon.Transformation;
 
 namespace AgentTests {
 
   [TestFixture]
   public class Env25Test {
-
-
-
-    private class Obj : ISpatialEntity {
-      public Enum InformationType { get; private set; }
-      public IShape Shape { get; set; }
-      public Enum CollisionType { get; private set; }
-      public Obj(Float2 pos, Float2 size) {
-        Shape = new Cuboid(new Vector3(size.X, size.Y), new Vector3(pos.X, pos.Y), new Direction());
-      }
-    }
 
 
     [Test]
@@ -32,9 +16,7 @@ namespace AgentTests {
 
       // Create environment and desired number of spatial entities (unpositioned, 1x1 dimension).
       Env25 env = new Env25(envWidth, envHeight);
-      Vector3 pos;
       Parallel.For(0, nrAgents, i1 => env.AddWithRandomPosition(new Obj(new Float2(0, 0), new Float2(1, 1))));
- 
     }
 
 

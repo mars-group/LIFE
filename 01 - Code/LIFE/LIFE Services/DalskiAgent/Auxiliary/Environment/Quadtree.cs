@@ -146,12 +146,14 @@ namespace DalskiAgent.Auxiliary.Environment {
     /// <param name="obj">The object to remove.</param>
     /// <returns>'True' on successful deletion, 'false', if object was not found.</returns>
     public bool Remove(ISpatialEntity obj) {
-      Float2 pos  = new Float2((float) obj.Shape.Position.X,   (float) obj.Shape.Position.Y);
-      Float2 span = new Float2((float) obj.Shape.Bounds.Width, (float) obj.Shape.Bounds.Height);
+      lock (_lock) { 
+        Float2 pos  = new Float2((float) obj.Shape.Position.X,   (float) obj.Shape.Position.Y);
+        Float2 span = new Float2((float) obj.Shape.Bounds.Width, (float) obj.Shape.Bounds.Height);
       
-      int index = GetIndex(pos, span);                                  // Determine quadrant.
-      if (index == -1 || !HasChildNodes()) return _objects.Remove(obj); // Object is on this level.
-      return _childNodes[index].Remove(obj);                            // Else go down recursively.
+        int index = GetIndex(pos, span);                                  // Determine quadrant.
+        if (index == -1 || !HasChildNodes()) return _objects.Remove(obj); // Object is on this level.
+        return _childNodes[index].Remove(obj);                            // Else go down recursively.
+      }
     }
 
 
@@ -180,6 +182,7 @@ namespace DalskiAgent.Auxiliary.Environment {
       int index = GetIndex(pos, span);
 
       lock (_lock) { 
+        
         // If this node is responsible or has no child nodes, get all contained objects.
         if (index == -1 || !HasChildNodes()) {
           for (int i = 0; i < _objects.Count; i ++) {

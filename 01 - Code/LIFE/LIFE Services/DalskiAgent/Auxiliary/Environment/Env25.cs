@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DalskiAgent.Auxiliary.OpenGL;
 using LifeAPI.Environment;
 using LifeAPI.Spatial;
@@ -22,64 +21,17 @@ namespace DalskiAgent.Auxiliary.Environment {
     private readonly int _height;          // Height of environment map (y value).
 
 
-    private class Obj : ISpatialEntity {
-      public Enum InformationType { get; private set; }
-      public IShape Shape { get; set; }
-      public Enum CollisionType { get; private set; }
-      public Obj(Float2 pos, Float2 size) {
-        Shape = new Cuboid(new Vector3(size.X, size.Y), new Vector3(pos.X, pos.Y), new Direction());
-      }
-    }
-
-
-
+    /// <summary>
+    ///   Create a new 2.5D environment.
+    /// </summary>
+    /// <param name="width">Width of the area (x-axis extent).</param>
+    /// <param name="height">Height (or depth) of the area (y-axis extent).</param>
     public Env25(int width, int height) {
       _width = width;
       _height = height;
       _random = new Random((int) DateTime.Now.Ticks);
       _quadtree = new Quadtree(0, new Float2(0,0), new Float2(width, height));
       _heightmap = new Heightmap();
-
-      /*
-      for (int i = 0; i < 20; i ++) AddWithRandomPosition(new Obj(new Float2(), new Float2(1, 1)));
-
-      ISpatialEntity obj1 = new Obj(new Float2(), new Float2(1, 1));
-      ISpatialEntity obj2 = new Obj(new Float2(), new Float2(1, 1));
-
-      Add(obj1, new Vector3(3, 5));
-      Add(obj2, new Vector3(0, 0));
-
-      Move(obj2, new Vector3(4, 7));
-
-      
-      List<ISpatialEntity> objs = new List<ISpatialEntity>();
-      objs.Add());
-
-      
-      Add(new Obj(new Float2(), new Float2(1, 1)), new Vector3(5, 1));
-      Add(new Obj(new Float2(), new Float2(1, 1)), new Vector3(2, 3));
-      Add(new Obj(new Float2(), new Float2(1, 1)), new Vector3(3, 4));
-        
-      
-      _quadtree.Print(-1);
-
-      Console.WriteLine(_quadtree.Remove(objs[0]));
-      Console.WriteLine(_quadtree.Remove(objs[0]));
-      
-      var ret = ExploreAll();
-      Console.WriteLine("\nOutput return all ["+ret.Count()+"]:");
-      foreach (var se in ret) Console.WriteLine(se.Shape.Position);  
-      */
-    }
-    
-
-
-    /// <summary>
-    ///   Renders this environment.
-    /// </summary>
-    public void Draw() {
-      //_heightmap.Draw();
-      _quadtree.Draw(true);
     }
 
 
@@ -195,6 +147,16 @@ namespace DalskiAgent.Auxiliary.Environment {
     /// <returns>A list of all contained spatial objects.</returns>
     public IEnumerable<ISpatialEntity> ExploreAll() {
       return RetrieveFromQuadtree(new Float2(0, 0), new Float2(_width, _height));
+    }
+
+
+
+    /// <summary>
+    ///   OpenGL rendering delegation function.
+    /// </summary>
+    public void Draw() {
+      _heightmap.Draw();
+      _quadtree.Draw(true);
     }
 
 

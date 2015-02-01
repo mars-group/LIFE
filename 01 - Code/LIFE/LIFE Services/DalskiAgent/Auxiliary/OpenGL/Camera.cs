@@ -23,8 +23,8 @@ namespace DalskiAgent.Auxiliary.OpenGL {
     private Point _mousePrev;                // Coordinates of mouse position for locking. 
     private readonly MouseButton _rotButton; // Button used for camera rotation.
 
-    private const float SpeedMovement = 0.05f;  // Movement (displacement) factor.
-    private const float SpeedZoom     = 0.20f;  // Zooming factor (mousewheel adjustment).
+    private const float SpeedMovement = 0.45f;  // Movement (displacement) factor.
+    private const float SpeedZoom     = 0.45f;  // Zooming factor (mousewheel adjustment).
     private const float SpeedPitch    = 0.30f;  // Pitch adjustment factor.
     private const float SpeedYaw      = 0.45f;  // Turning (yaw) factor.
 

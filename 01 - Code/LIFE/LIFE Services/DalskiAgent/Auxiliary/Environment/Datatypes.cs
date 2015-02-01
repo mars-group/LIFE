@@ -1,4 +1,9 @@
-﻿namespace DalskiAgent.Auxiliary.Environment {
+﻿using System;
+using LifeAPI.Spatial;
+using SpatialCommon.Shape;
+using SpatialCommon.Transformation;
+
+namespace DalskiAgent.Auxiliary.Environment {
   
   /// <summary>
   ///   Two-dimensional float structure.
@@ -21,6 +26,19 @@
       X = x;
       Y = y;
       Z = z;
+    }
+  };
+
+
+  /// <summary>
+  ///   Test object that suffices the ISpatialEntity interface.
+  /// </summary>
+  public class Obj : ISpatialEntity {
+    public Enum InformationType { get; private set; }
+    public IShape Shape { get; set; }
+    public Enum CollisionType { get; private set; }
+    public Obj(Float2 pos, Float2 size) {
+      Shape = new Cuboid(new Vector3(size.X, size.Y), new Vector3(pos.X, pos.Y), new Direction());
     }
   };
 

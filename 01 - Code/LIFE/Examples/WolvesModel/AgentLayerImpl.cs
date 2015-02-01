@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using EnvironmentServiceComponent.Implementation;
+using DalskiAgent.Auxiliary.Environment;
 using LCConnector.TransportTypes;
 using LifeAPI.Environment;
 using LifeAPI.Layer;
 using Mono.Addins;
-using SpatialCommon.Transformation;
 using WolvesModel.Agents;
 
 [assembly: Addin]
@@ -33,8 +32,8 @@ namespace WolvesModel {
     /// <returns></returns>
     public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
-      // Create the environment, the execution container and an agent spawner.
-      _env = new EnviromentServiceComponent {IsGrid = true, MaxDimension = new Vector3(30, 20)};
+      // Create the environment, the execution container and an agent spawner.    
+      _env = new Env25(30, 20);
 
       // ReSharper disable ObjectCreationAsStatement
       new AgentSpawner(this, registerAgentHandle, unregisterAgentHandle, _env);

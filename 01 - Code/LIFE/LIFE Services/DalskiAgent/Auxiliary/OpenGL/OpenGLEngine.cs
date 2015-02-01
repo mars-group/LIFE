@@ -13,7 +13,7 @@ namespace DalskiAgent.Auxiliary.OpenGL {
 
     private readonly Camera _camera;          // The user's view.
     private readonly GameWindow _window;      // The main window.
-    private readonly TextWriter _writer;      // Text writer class. 
+    private TextWriter _writer;               // Text writer class. 
     public readonly List<IDrawable> Objects;  // The objects to draw.
 
 
@@ -64,9 +64,12 @@ namespace DalskiAgent.Auxiliary.OpenGL {
       else {
         _window.WindowState = WindowState.Normal;
         _window.Width = width + 16;
-        _window.Height = height + 38;
-        
+        _window.Height = height + 38;       
       }
+
+      // Create new writer.
+      //TODO Not so great! The resize function isn't either!
+      //_writer = new TextWriter(_window);
 
       // Update the OpenGL viewport and adjust the user perspective.
       GL.Viewport(_window.ClientRectangle);
