@@ -145,7 +145,7 @@ namespace ESCTest.Tests {
         public void TestPerfomanceMove50ElementsFor100Ticks()
         {
             IEnvironment _esc = new EnviromentServiceComponent();
-            int amount = 50;
+            int amount = 3;
             int ticks = 500;
             Stopwatch initTime = Stopwatch.StartNew();
             List<ISpatialEntity> agents = new List<ISpatialEntity>();
