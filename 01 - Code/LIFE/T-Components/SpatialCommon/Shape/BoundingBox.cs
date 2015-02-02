@@ -154,17 +154,17 @@ namespace SpatialCommon.Shape {
             return String.Format("BoundingBox({0}->{1})", LeftBottomFront, RightTopRear);
         }
 
-        public override bool Equals(object obj) {
-            if (obj == null || GetType() != obj.GetType()) {
-                return false;
-            }
-            var other = (BoundingBox) obj;
-            return LeftBottomFront.Equals(other.LeftBottomFront) && RightTopRear.Equals(other.RightTopRear);
-        }
-
-        public override int GetHashCode() {
-            return LeftBottomFront.GetHashCode() + RightTopRear.GetHashCode();
-        }
+//        public override bool Equals(object obj) {
+//            if (obj == null || GetType() != obj.GetType()) {
+//                return false;
+//            }
+//            var other = (BoundingBox) obj;
+//            return LeftBottomFront.Equals(other.LeftBottomFront) && RightTopRear.Equals(other.RightTopRear);
+//        }
+//
+//        public override int GetHashCode() {
+//            return LeftBottomFront.GetHashCode() + RightTopRear.GetHashCode();
+//        }
 
         #region IEnumerable<Vector3> Members
 
