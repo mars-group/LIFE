@@ -25,7 +25,7 @@ namespace SpatialCommon.Transformation {
 
         private static readonly Random random = new Random();
         private readonly bool _is3D; // Dimension flag: false: 2D, true: 3D.
-        private readonly bool _isNull;
+        private readonly bool _isSet;
 
         public readonly double X, Y, Z;
 
@@ -42,24 +42,24 @@ namespace SpatialCommon.Transformation {
         /// <summary>
         ///     Initialize a three-dimensional vector.
         /// </summary>
-        public Vector3(double x, double y, double z) : this(x, y, z, false) {}
+        public Vector3(double x, double y, double z) : this(x, y, z, true) {}
 
         /// <summary>
         ///     Initialize a three-dimensional vector.
         /// </summary>
-        private Vector3(double x, double y, double z, bool isNull)
+        private Vector3(double x, double y, double z, bool isSet)
             : this() {
             X = x;
             Y = y;
             Z = z;
             _is3D = true;
-            _isNull = isNull;
+            _isSet = isSet;
         }
 
         #region IEquatable<Vector3> Members
 
         public bool Equals(Vector3 other) {
-            return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && _isNull.Equals(other._isNull);
+            return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && _isSet.Equals(other._isSet);
         }
 
         #endregion
@@ -76,7 +76,7 @@ namespace SpatialCommon.Transformation {
                 int hashCode = X.GetHashCode();
                 hashCode = (hashCode*397) ^ Y.GetHashCode();
                 hashCode = (hashCode*397) ^ Z.GetHashCode();
-                hashCode = (hashCode*397) ^ _isNull.GetHashCode();
+                hashCode = (hashCode*397) ^ _isSet.GetHashCode();
                 return hashCode;
             }
         }
@@ -168,7 +168,7 @@ namespace SpatialCommon.Transformation {
         }
 
         public bool IsNull() {
-            return _isNull;
+            return !_isSet;
         }
 
         #region additionalMethods

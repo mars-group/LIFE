@@ -13,7 +13,7 @@ namespace DalskiAgent.Movement.Movers {
 
     private readonly IEnvironment _env;    // Environment interaction interface.
     protected readonly SpatialAgent Agent; // Agent reference, needed for movement execution.  
-    protected Vector3 MovementVector;       // Target position to acquire. May be set or calculated.
+    protected Vector3 MovementVector;      // Target position to acquire. May be set or calculated.
     protected Direction TargetDir;         // Desired heading.
     public static float TickLength = 1.0f; // Timelength of a simulation tick.
     public MovementResult MovementResult;  // Result of last movement.
@@ -36,8 +36,7 @@ namespace DalskiAgent.Movement.Movers {
     ///   The adapter is responsible to set the checked (returned) data.
     /// </summary>
     protected void Move() {
-      MovementResult = _env.Move(Agent, MovementVector, 
-        TargetDir);
+      MovementResult = _env.Move(Agent, MovementVector, TargetDir);
     }
 
 
@@ -48,8 +47,8 @@ namespace DalskiAgent.Movement.Movers {
     /// <returns>The yaw (corrected to 0 - lt. 360). </returns>
     public Direction CalculateDirectionToTarget(Vector3 target) {
       var diff = new Vector3(target.X - Agent.GetPosition().X, 
-                            target.Y - Agent.GetPosition().Y,
-                            target.Z - Agent.GetPosition().Z);
+                             target.Y - Agent.GetPosition().Y,
+                             target.Z - Agent.GetPosition().Z);
       
       // Create new direction, set joint vector as reference and return.
       var dir = new Direction();

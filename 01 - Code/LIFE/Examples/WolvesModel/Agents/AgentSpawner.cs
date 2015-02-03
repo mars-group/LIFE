@@ -35,9 +35,6 @@ namespace WolvesModel.Agents {
       _unregFkt = unregFkt;
       _env = env;
       _random = new Random();
-
-      // Add perception sensor.
-      //TODO
     }
 
 
@@ -56,7 +53,6 @@ namespace WolvesModel.Agents {
         var g = new Grass(_layer, _regFkt, _unregFkt, _env);
         PrintMessage("["+GetTick()+"] Neues Gras auf Position "+g.GetPosition(), ConsoleColor.Cyan);
       }
-
       return null;
     }
   }

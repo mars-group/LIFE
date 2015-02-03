@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement.Actions;
 using LifeAPI.Environment;
-using LifeAPI.Spatial;
-using NetTopologySuite.Algorithm;
 using SpatialCommon.Transformation;
 
 namespace DalskiAgent.Movement.Movers {
@@ -70,8 +68,8 @@ namespace DalskiAgent.Movement.Movers {
     /// <param name="targetPos">The target position.</param>
     /// <returns>A list of available movement options. These are ordered 
     /// by angular offset to optimal heading (sorting value of struct).</returns>
-    public List<MovementOption> GetMovementOptions(Vector3 targetPos)
-    {
+    public List<MovementOption> GetMovementOptions(Vector3 targetPos) {
+
       // Check, if we are already there. Otherwise no need to move anyway (empty list).
       if (targetPos.Equals(Agent.GetPosition())) return new List<MovementOption>();
 

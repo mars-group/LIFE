@@ -139,6 +139,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialCommon", "T-Componen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialObjectOctree", "T-Components\SpatialObjectOctree\SpatialObjectOctree.csproj", "{995635B1-37A0-4C60-8D19-0BF38DBCCFE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentTests", "Tests\AgentTests\AgentTests.csproj", "{28DB2FA3-7495-43DC-998A-023712802730}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -684,6 +686,16 @@ Global
 		{995635B1-37A0-4C60-8D19-0BF38DBCCFE7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{995635B1-37A0-4C60-8D19-0BF38DBCCFE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{995635B1-37A0-4C60-8D19-0BF38DBCCFE7}.Release|x86.ActiveCfg = Release|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{28DB2FA3-7495-43DC-998A-023712802730}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -742,6 +754,7 @@ Global
 		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{339FFD35-24A5-4637-9848-3873E822BE17} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{995635B1-37A0-4C60-8D19-0BF38DBCCFE7} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
+		{28DB2FA3-7495-43DC-998A-023712802730} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj
