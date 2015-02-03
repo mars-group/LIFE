@@ -89,11 +89,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 
         public override void Disconnect() {
-            if (CommunicationState != CommunicationStates.Connected) return;
+            // do nothing atm... TODO: think about it
+
+            /*if (CommunicationState != CommunicationStates.Connected) return;
             _udpReceivingClient.Close();
             Parallel.ForEach(_udpSendingClients, client => client.Close());
             CommunicationState = CommunicationStates.Disconnected;
             OnDisconnected();
+            */
         }
 
         #region protected Methods
@@ -115,7 +118,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         }
 
 
-        protected override void SendMessageInternal(IScsMessage message)
+        protected override void SendMessageInternal(IAscMessage message)
         {
             //Send message
 
@@ -248,10 +251,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                     stream.SetLength(bytesRead.Length);
 
                     // deserialize
-                    IScsMessage msg;
+                    IAscMessage msg;
                     try
                     {
-                        msg = (IScsMessage) _binaryFormatter.Deserialize(stream);
+                        msg = (IAscMessage) _binaryFormatter.Deserialize(stream);
                     }
                     finally
                     {

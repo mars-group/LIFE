@@ -43,7 +43,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
         ///     Creates a Scs Server that uses this end point to listen incoming connections.
         /// </summary>
         /// <returns>Scs Server</returns>
-        internal abstract IScsServer CreateServer();
+        internal abstract IAscServer CreateServer();
 
         /// <summary>
         ///     Creates a Scs Server that uses this end point to connect to server.

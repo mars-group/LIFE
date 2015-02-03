@@ -167,7 +167,7 @@ namespace ASC.Communication.Scs.Client {
         ///     Throws a CommunicationStateException if client is not connected to the
         ///     server.
         /// </exception>
-        public void SendMessage(IScsMessage message) {
+        public void SendMessage(IAscMessage message) {
             if (CommunicationState != CommunicationStates.Connected)
                 throw new CommunicationStateException("Client is not connected to the server.");
 
@@ -194,7 +194,7 @@ namespace ASC.Communication.Scs.Client {
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void CommunicationChannel_MessageReceived(object sender, MessageEventArgs e) {
-            if (e.Message is ScsPingMessage) return;
+            if (e.Message is AscPingMessage) return;
 
             OnMessageReceived(e.Message);
         }
@@ -231,7 +231,7 @@ namespace ASC.Communication.Scs.Client {
                 if (_communicationChannel.LastReceivedMessageTime > lastMinute ||
                     _communicationChannel.LastSentMessageTime > lastMinute) return;
 
-                _communicationChannel.SendMessage(new ScsPingMessage());
+                _communicationChannel.SendMessage(new AscPingMessage());
             }
             catch {}
         }
@@ -260,7 +260,7 @@ namespace ASC.Communication.Scs.Client {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageReceived(IScsMessage message) {
+        protected virtual void OnMessageReceived(IAscMessage message) {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -269,7 +269,7 @@ namespace ASC.Communication.Scs.Client {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IScsMessage message) {
+        protected virtual void OnMessageSent(IAscMessage message) {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }

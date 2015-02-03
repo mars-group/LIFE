@@ -2,7 +2,7 @@
 
 namespace ASC.Communication.ScsServices.Service {
     /// <summary>
-    ///     Base class for all services that is serviced by IScsServiceApplication.
+    ///     Base class for all services that is serviced by IAscServiceApplication.
     ///     A class must be derived from AscService to serve as a SCS service.
     /// </summary>
     public abstract class AscService {

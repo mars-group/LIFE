@@ -42,6 +42,7 @@
     <Compile Include="Implementation\AgentShadowingServiceComponent.cs" />
     <Compile Include="Implementation\AgentShadowingServiceUseCase.cs" />
     <Compile Include="Interface\IAgentShadowingService.cs" />
+    <Compile Include="Interface\LIFEAgentEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

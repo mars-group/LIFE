@@ -99,7 +99,7 @@ namespace ASC.Communication.Scs.Communication.Channels {
         /// </summary>
         /// <param name="message">Message to be sent</param>
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if message is null</exception>
-        public void SendMessage(IScsMessage message) {
+        public void SendMessage(IAscMessage message) {
             if (message == null) throw new ArgumentNullException("message");
 
             SendMessageInternal(message);
@@ -119,7 +119,7 @@ namespace ASC.Communication.Scs.Communication.Channels {
         ///     This method is overrided by derived classes to really send to message.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        protected abstract void SendMessageInternal(IScsMessage message);
+        protected abstract void SendMessageInternal(IAscMessage message);
 
         #endregion
 
@@ -137,7 +137,7 @@ namespace ASC.Communication.Scs.Communication.Channels {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageReceived(IScsMessage message) {
+        protected virtual void OnMessageReceived(IAscMessage message) {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -146,7 +146,7 @@ namespace ASC.Communication.Scs.Communication.Channels {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IScsMessage message) {
+        protected virtual void OnMessageSent(IAscMessage message) {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }

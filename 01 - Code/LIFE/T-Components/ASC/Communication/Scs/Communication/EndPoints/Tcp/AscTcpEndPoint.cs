@@ -53,7 +53,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Creates a Scs Server that uses this end point to listen incoming connections.
         /// </summary>
         /// <returns>Scs Server</returns>
-        internal override IScsServer CreateServer() {
+        internal override IAscServer CreateServer() {
             return new AscTcpServer(this);
         }
 

@@ -6,7 +6,7 @@ namespace ASC.Communication.Scs.Communication.Messages {
     ///     This is the base class for all messages.
     /// </summary>
     [Serializable]
-    public class ScsMessage : IScsMessage {
+    public class AscMessage : IAscMessage {
         /// <summary>
         ///     Unique identified for this message.
         ///     Default value: New GUID.
@@ -23,20 +23,20 @@ namespace ASC.Communication.Scs.Communication.Messages {
         public string RepliedMessageId { get; set; }
 
         /// <summary>
-        ///     Creates a new ScsMessage.
+        ///     Creates a new AscMessage.
         /// </summary>
-        public ScsMessage() {
+        public AscMessage() {
             MessageId = Guid.NewGuid().ToString();
         }
 
         /// <summary>
-        ///     Creates a new reply ScsMessage.
+        ///     Creates a new reply AscMessage.
         /// </summary>
         /// <param name="repliedMessageId">
         ///     Replied message id if this is a reply for
         ///     a message.
         /// </param>
-        public ScsMessage(string repliedMessageId)
+        public AscMessage(string repliedMessageId)
             : this() {
             RepliedMessageId = repliedMessageId;
         }
@@ -47,8 +47,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         /// <returns>A string to represents this object</returns>
         public override string ToString() {
             return string.IsNullOrEmpty(RepliedMessageId)
-                ? string.Format("ScsMessage [{0}]", MessageId)
-                : string.Format("ScsMessage [{0}] Replied To [{1}]", MessageId, RepliedMessageId);
+                ? string.Format("AscMessage [{0}]", MessageId)
+                : string.Format("AscMessage [{0}] Replied To [{1}]", MessageId, RepliedMessageId);
         }
     }
 }

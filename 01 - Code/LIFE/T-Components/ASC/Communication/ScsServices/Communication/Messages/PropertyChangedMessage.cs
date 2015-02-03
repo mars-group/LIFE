@@ -6,7 +6,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
     ///     Represents the update of a property in a remote stub
     /// </summary>
     [Serializable]
-    public class PropertyChangedMessage : ScsMessage {
+    public class PropertyChangedMessage : AscMessage {
         /// <summary>
         ///     The new value which is to be updated in the stub
         /// </summary>

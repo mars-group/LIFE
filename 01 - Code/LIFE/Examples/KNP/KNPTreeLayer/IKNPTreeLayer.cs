@@ -4,7 +4,7 @@ using LifeAPI.Layer;
 namespace TreeLayer
 {
     [ScsService(Version = "0.1")]
-    interface IKnpTreeLayer : ISteppedLayer
+    interface IKnpTreeLayer : ISteppedActiveLayer
     {
         string Name { get; }
     }

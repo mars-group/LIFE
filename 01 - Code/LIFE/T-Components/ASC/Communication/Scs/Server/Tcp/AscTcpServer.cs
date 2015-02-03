@@ -1,6 +1,7 @@
 ﻿using ASC.Communication.Scs.Communication.Channels;
 using ASC.Communication.Scs.Communication.Channels.Tcp;
 using ASC.Communication.Scs.Communication.EndPoints.Tcp;
+using ASC.Communication.Scs.Communication.Messengers;
 
 namespace ASC.Communication.Scs.Server.Tcp {
     /// <summary>
@@ -18,6 +19,10 @@ namespace ASC.Communication.Scs.Server.Tcp {
         /// <param name="endPoint">The endpoint address of the server to listen incoming connections</param>
         public AscTcpServer(AscTcpEndPoint endPoint) {
             _endPoint = endPoint;
+        }
+
+        public override IMessenger GetMessenger() {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>

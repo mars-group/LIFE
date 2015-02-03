@@ -6,7 +6,7 @@ using ASC.Communication.Scs.Server.Udp;
 
 namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
     public class AscUdpEndPoint : AscEndPoint {
-        private readonly IScsServer _ascUdpServer;
+        private readonly IAscServer _ascUdpServer;
         private readonly IScsClient _ascUdpClient;
         private readonly UdpCommunicationChannel _udpChannel;
         public string McastGroup { get; private set; }
@@ -24,7 +24,7 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
 
 
 
-        internal override IScsServer CreateServer() {
+        internal override IAscServer CreateServer() {
             return _ascUdpServer;
         }
 

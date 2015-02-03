@@ -85,7 +85,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     This object is used to process incoming messages sequentially.
         /// </summary>
-        private readonly SequentialItemProcessor<IScsMessage> _incomingMessageProcessor;
+        private readonly SequentialItemProcessor<IAscMessage> _incomingMessageProcessor;
 
         /// <summary>
         ///     This object is used for thread synchronization.
@@ -104,7 +104,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             Messenger = messenger;
             messenger.MessageReceived += Messenger_MessageReceived;
             messenger.MessageSent += Messenger_MessageSent;
-            _incomingMessageProcessor = new SequentialItemProcessor<IScsMessage>(OnMessageReceived);
+            _incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(OnMessageReceived);
             _waitingMessages = new SortedList<string, WaitingMessage>();
             Timeout = DefaultTimeout;
         }
@@ -152,7 +152,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Sends a message.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        public void SendMessage(IScsMessage message) {
+        public void SendMessage(IAscMessage message) {
             Messenger.SendMessage(message);
         }
 
@@ -168,7 +168,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// </remarks>
         /// <param name="message">message to send</param>
         /// <returns>Response message</returns>
-        public IScsMessage SendMessageAndWaitForResponse(IScsMessage message) {
+        public IAscMessage SendMessageAndWaitForResponse(IAscMessage message) {
             return SendMessageAndWaitForResponse(message, Timeout);
         }
 
@@ -187,7 +187,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <returns>Response message</returns>
         /// <exception cref="TimeoutException">Throws TimeoutException if can not receive reply message in timeout value</exception>
         /// <exception cref="CommunicationException">Throws CommunicationException if communication fails before reply message.</exception>
-        public IScsMessage SendMessageAndWaitForResponse(IScsMessage message, int timeoutMilliseconds) {
+        public IAscMessage SendMessageAndWaitForResponse(IAscMessage message, int timeoutMilliseconds) {
             //Create a waiting message record and add to list
             var waitingMessage = new WaitingMessage();
             lock (_syncObj) {
@@ -271,7 +271,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageReceived(IScsMessage message) {
+        protected virtual void OnMessageReceived(IAscMessage message) {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -280,7 +280,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IScsMessage message) {
+        protected virtual void OnMessageSent(IAscMessage message) {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -298,7 +298,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             ///     Response message for request message
             ///     (null if response is not received yet).
             /// </summary>
-            public IScsMessage ResponseMessage { get; set; }
+            public IAscMessage ResponseMessage { get; set; }
 
             /// <summary>
             ///     ManualResetEvent to block thread until response is received.

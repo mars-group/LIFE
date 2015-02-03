@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Client;
+using ASC.Communication.ScsServices.Communication.Messages;
 using ASC.Communication.ScsServices.Service;
 using ConfigurationAdapter.Interface;
 using LayerContainerShared;
@@ -16,11 +17,16 @@ namespace AgentShadowingService.Implementation
         where TServiceClass : AscService, TServiceInterface
         where TServiceInterface : class
     {
+
+        // The dictionary of ShadowAgents, sorted by their Guid
         private readonly IDictionary<Guid, IAscServiceClient<TServiceInterface>> _shadowAgentClients;
+        // the Multicast Address derived from agent type
         private readonly string _mcastAddress;
-        private readonly IScsServiceApplication _agentShadowingServer;
+        private readonly IAscServiceApplication _agentShadowingServer;
         private readonly int _clientListenPort;
         private readonly LayerContainerSettings _config;
+
+        public event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
         public AgentShadowingServiceUseCase(int port = 6666) {
             _clientListenPort = port;
@@ -28,12 +34,43 @@ namespace AgentShadowingService.Implementation
             _shadowAgentClients = new ConcurrentDictionary<Guid, IAscServiceClient<TServiceInterface>>();
             // calculate MulticastAddress for this agentType
             _mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
-
-            // TODO: May be moved into RegisterRealAgent, so as not to start the server, when no real agents are present
             _agentShadowingServer = AscServiceBuilder.CreateService(port, _mcastAddress);
             _agentShadowingServer.Start();
+
+            // subscribe for remote events
+            _agentShadowingServer.AddShadowAgentMessageReceived += OnAddShadowAgentMessageReceived;
+            _agentShadowingServer.RemoveShadowAgentMessageReceived += OnRemoveShadowAgentMessageReceived;
+
+            // load config
             _config = Configuration.Load<LayerContainerSettings>();
         }
+
+        private void OnRemoveShadowAgentMessageReceived(object sender, RemoveShadowAgentEventArgs e) {
+            var handler = AgentUpdates;
+            if(handler!=null) handler(this, new LIFEAgentEventArgs<TServiceInterface>(
+                new List<TServiceInterface>{_shadowAgentClients[e.RemoveShadowAgentMessage.AgentID].ServiceProxy},
+                new List<TServiceInterface>()
+                ));
+            RemoveShadowAgent(e.RemoveShadowAgentMessage.AgentID);
+        }
+
+        private void OnAddShadowAgentMessageReceived(object sender, AddShadowAgentEventArgs e) {
+            var agentId = e.AddShadowAgentMessage.AgentID;
+            // break if we already have that agent
+            if (_shadowAgentClients.ContainsKey(agentId)) return;
+
+            var handler = AgentUpdates;
+            if (handler != null) handler(this, new LIFEAgentEventArgs<TServiceInterface>(
+                   // remove list is empty
+                   new List<TServiceInterface>(),
+                   // add list contains new agent
+                   new List<TServiceInterface> {
+                       CreateShadowAgent(agentId)
+                   }
+            ));
+        }
+
+
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {
@@ -68,6 +105,8 @@ namespace AgentShadowingService.Implementation
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister);
+            // send Message to other hosts to trigger Shadow Agent creation
+            _agentShadowingServer.SendMessage(new AddShadowAgentMessage {AgentID = agentToRegister.ServiceID});
         }
 
         public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
@@ -76,6 +115,8 @@ namespace AgentShadowingService.Implementation
 
         public void RemoveRealAgent(TServiceClass agentToRemove) {
             _agentShadowingServer.RemoveService<TServiceInterface>(agentToRemove.ServiceID);
+            // send message to other hosts to trigger Shadow Agent removal
+            _agentShadowingServer.SendMessage(new RemoveShadowAgentMessage {AgentID = agentToRemove.ServiceID});
         }
 
         public string GetLayerContainerName() {
