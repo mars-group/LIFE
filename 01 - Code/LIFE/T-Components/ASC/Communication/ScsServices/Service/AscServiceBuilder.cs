@@ -12,7 +12,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="port">The endpoint port to be used for the udp socket</param>
         /// <param name="multicastGroup">The mcastaddress to use for communication</param>
         /// <returns></returns>
-        public static IScsServiceApplication CreateService(int port, string multicastGroup)
+        public static IAscServiceApplication CreateService(int port, string multicastGroup)
         {
             return new AscServiceApplication(ScsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, multicastGroup)));
         }

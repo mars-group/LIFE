@@ -112,7 +112,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Sends a message to the client.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        public void SendMessage(IScsMessage message) {
+        public void SendMessage(IAscMessage message) {
             _communicationChannel.SendMessage(message);
         }
 
@@ -136,8 +136,8 @@ namespace ASC.Communication.Scs.Server {
         /// <param name="e">Event arguments</param>
         private void CommunicationChannel_MessageReceived(object sender, MessageEventArgs e) {
             var message = e.Message;
-            if (message is ScsPingMessage) {
-                //_communicationChannel.SendMessage(new ScsPingMessage {RepliedMessageId = message.MessageId});
+            if (message is AscPingMessage) {
+                //_communicationChannel.SendMessage(new AscPingMessage {RepliedMessageId = message.MessageId});
                 return;
             }
 
@@ -169,7 +169,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        private void OnMessageReceived(IScsMessage message) {
+        private void OnMessageReceived(IAscMessage message) {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -178,7 +178,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IScsMessage message) {
+        protected virtual void OnMessageSent(IAscMessage message) {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }

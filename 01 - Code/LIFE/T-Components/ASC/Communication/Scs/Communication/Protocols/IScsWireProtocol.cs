@@ -11,7 +11,7 @@ namespace ASC.Communication.Scs.Communication.Protocols {
         ///     This method is synchronized. So, only one thread can call it concurrently.
         /// </summary>
         /// <param name="message">Message to be serialized</param>
-        byte[] GetBytes(IScsMessage message);
+        byte[] GetBytes(IAscMessage message);
 
         /// <summary>
         ///     Builds messages from a byte array that is received from remote application.
@@ -26,7 +26,7 @@ namespace ASC.Communication.Scs.Communication.Protocols {
         ///     Also, if received bytes are not sufficient to build a message, the protocol
         ///     may return an empty list (and save bytes to combine with next method call).
         /// </returns>
-        IEnumerable<IScsMessage> CreateMessages(byte[] receivedBytes);
+        IEnumerable<IAscMessage> CreateMessages(byte[] receivedBytes);
 
         /// <summary>
         ///     This method is called when connection with remote application is reset (connection is renewing or first

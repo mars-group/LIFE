@@ -166,8 +166,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void RequestReplyMessenger_MessageReceived(object sender, MessageEventArgs e) {
-            //Cast message to ScsRemoteInvokeMessage and check it
-            var invokeMessage = e.Message as ScsRemoteInvokeMessage;
+            //Cast message to AscRemoteInvokeMessage and check it
+            var invokeMessage = e.Message as AscRemoteInvokeMessage;
             if (invokeMessage == null) return;
 
             //Check client object.
@@ -205,10 +205,10 @@ namespace ASC.Communication.ScsServices.Client {
         /// <param name="requestMessage">Request message</param>
         /// <param name="returnValue">Return value to send</param>
         /// <param name="exception">Exception to send</param>
-        private void SendInvokeResponse(IScsMessage requestMessage, object returnValue, ScsRemoteException exception) {
+        private void SendInvokeResponse(IAscMessage requestMessage, object returnValue, ScsRemoteException exception) {
             try {
                 _requestReplyMessenger.SendMessage(
-                    new ScsRemoteInvokeReturnMessage {
+                    new AscRemoteInvokeReturnMessage {
                         RepliedMessageId = requestMessage.MessageId,
                         ReturnValue = returnValue,
                         RemoteException = exception

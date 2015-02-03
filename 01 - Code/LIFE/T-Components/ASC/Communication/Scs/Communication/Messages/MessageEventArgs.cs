@@ -8,13 +8,13 @@ namespace ASC.Communication.Scs.Communication.Messages {
         /// <summary>
         ///     Message object that is associated with this event.
         /// </summary>
-        public IScsMessage Message { get; private set; }
+        public IAscMessage Message { get; private set; }
 
         /// <summary>
         ///     Creates a new MessageEventArgs object.
         /// </summary>
         /// <param name="message">Message object that is associated with this event</param>
-        public MessageEventArgs(IScsMessage message) {
+        public MessageEventArgs(IAscMessage message) {
             Message = message;
         }
     }

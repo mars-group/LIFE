@@ -115,7 +115,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         }
 
 
-        protected override void SendMessageInternal(IScsMessage message)
+        protected override void SendMessageInternal(IAscMessage message)
         {
             //Send message
 
@@ -248,10 +248,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                     stream.SetLength(bytesRead.Length);
 
                     // deserialize
-                    IScsMessage msg;
+                    IAscMessage msg;
                     try
                     {
-                        msg = (IScsMessage) _binaryFormatter.Deserialize(stream);
+                        msg = (IAscMessage) _binaryFormatter.Deserialize(stream);
                     }
                     finally
                     {

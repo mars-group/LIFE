@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AgentShadowingService.Implementation;
 using Hik.Communication.ScsServices.Service;
@@ -67,7 +66,6 @@ namespace KNPTreeLayer {
 
                 if (layerInitData.Distribute)
                 {
-                    //_agentShadowingService.RegisterRealAgent(t);
                     _agentShadowingService.RegisterRealAgents(agentBag.ToArray());
                 }
 
@@ -77,7 +75,6 @@ namespace KNPTreeLayer {
                
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
-
                     _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
                 }
 

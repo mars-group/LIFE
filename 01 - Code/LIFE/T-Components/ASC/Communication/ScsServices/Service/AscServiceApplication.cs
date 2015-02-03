@@ -12,9 +12,9 @@ using CustomUtilities.Collections;
 
 namespace ASC.Communication.ScsServices.Service {
     /// <summary>
-    ///     Implements IScsServiceApplication and provides all functionallity.
+    ///     Implements IAscServiceApplication and provides all functionallity.
     /// </summary>
-    internal class AscServiceApplication : IScsServiceApplication {
+    internal class AscServiceApplication : IAscServiceApplication {
         #region Public events
 
         /// <summary>
@@ -27,14 +27,18 @@ namespace ASC.Communication.ScsServices.Service {
         /// </summary>
         public event EventHandler<ServiceClientEventArgs> ClientDisconnected;
 
+        public event EventHandler<AddShadowAgentEventArgs> AddShadowAgentMessageReceived;
+
+        public event EventHandler<RemoveShadowAgentEventArgs> RemoveShadowAgentMessageReceived;
+
         #endregion
 
         #region Private fields
 
         /// <summary>
-        ///     Underlying IScsServer object to accept and manage client connections.
+        ///     Underlying IAscServer object to accept and manage client connections.
         /// </summary>
-        private readonly IScsServer _scsServer;
+        private readonly IAscServer _ascServer;
 
         /// <summary>
         ///     User service objects that is used to invoke incoming method invocation requests.
@@ -58,17 +62,40 @@ namespace ASC.Communication.ScsServices.Service {
         /// <summary>
         ///     Creates a new AscServiceApplication object.
         /// </summary>
-        /// <param name="scsServer">Underlying IScsServer object to accept and manage client connections</param>
-        /// <exception cref="ArgumentNullException">Throws ArgumentNullException if scsServer argument is null</exception>
-        public AscServiceApplication(IScsServer scsServer) {
-            if (scsServer == null) throw new ArgumentNullException("scsServer");
+        /// <param name="ascServer">Underlying IAscServer object to accept and manage client connections</param>
+        /// <exception cref="ArgumentNullException">Throws ArgumentNullException if ascServer argument is null</exception>
+        public AscServiceApplication(IAscServer ascServer) {
+            if (ascServer == null) throw new ArgumentNullException("ascServer");
 
-            _scsServer = scsServer;
-            _scsServer.ClientConnected += ScsServer_ClientConnected;
-            _scsServer.ClientDisconnected += ScsServer_ClientDisconnected;
-            _scsServer.ClientDisconnected += CacheableServiceObject.CacheableObject_OnClientDisconnected;
+            _ascServer = ascServer;
+            _ascServer.GetMessenger().MessageReceived += SASControl_OnMessageReceived;
+            _ascServer.ClientConnected += AscServerClientConnected;
+            _ascServer.ClientDisconnected += AscServerClientDisconnected;
+            _ascServer.ClientDisconnected += CacheableServiceObject.CacheableObject_OnClientDisconnected;
             _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
             _serviceClients = new ThreadSafeSortedList<long, IAscServiceClient>();
+        }
+
+        /// <summary>
+        /// Casts received messages, and fires corresponding events if messages
+        /// SAS control messages
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SASControl_OnMessageReceived(object sender, MessageEventArgs e) {
+            var addShadowAgentMessage = e.Message as AddShadowAgentMessage;
+            if (addShadowAgentMessage != null) {
+                var handler = AddShadowAgentMessageReceived;
+                if (handler != null) handler(this, new AddShadowAgentEventArgs(addShadowAgentMessage));
+            }
+
+
+            var removeShadowAgentMessage = e.Message as RemoveShadowAgentMessage;
+            if (removeShadowAgentMessage != null) {
+                var handler = RemoveShadowAgentMessageReceived;
+                if (handler != null) handler(this, new RemoveShadowAgentEventArgs(removeShadowAgentMessage));
+            }
+
         }
 
         #endregion
@@ -79,14 +106,18 @@ namespace ASC.Communication.ScsServices.Service {
         ///     Starts service application.
         /// </summary>
         public void Start() {
-            _scsServer.Start();
+            _ascServer.Start();
         }
 
         /// <summary>
         ///     Stops service application.
         /// </summary>
         public void Stop() {
-            _scsServer.Stop();
+            _ascServer.Stop();
+        }
+
+        public void SendMessage(IAscMessage message) {
+            _ascServer.GetMessenger().SendMessage(message);
         }
 
         /// <summary>
@@ -147,11 +178,11 @@ namespace ASC.Communication.ScsServices.Service {
         #region Private methods
 
         /// <summary>
-        ///     Handles ClientConnected event of _scsServer object.
+        ///     Handles ClientConnected event of _ascServer object.
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void ScsServer_ClientConnected(object sender, ServerClientEventArgs e) {
+        private void AscServerClientConnected(object sender, ServerClientEventArgs e) {
             var requestReplyMessenger = new RequestReplyMessenger<IAscServerClient>(e.Client);
             requestReplyMessenger.MessageReceived += Client_MessageReceived;
             requestReplyMessenger.Start();
@@ -163,11 +194,11 @@ namespace ASC.Communication.ScsServices.Service {
         }
 
         /// <summary>
-        ///     Handles ClientDisconnected event of _scsServer object.
+        ///     Handles ClientDisconnected event of _ascServer object.
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void ScsServer_ClientDisconnected(object sender, ServerClientEventArgs e) {
+        private void AscServerClientDisconnected(object sender, ServerClientEventArgs e) {
             var serviceClient = _serviceClients[e.Client.ClientId];
             if (serviceClient == null) return;
 
@@ -185,8 +216,8 @@ namespace ASC.Communication.ScsServices.Service {
             //Get RequestReplyMessenger object (sender of event) to get client
             var requestReplyMessenger = (RequestReplyMessenger<IAscServerClient>) sender;
 
-            //Cast message to ScsRemoteInvokeMessage and check it
-            var invokeMessage = e.Message as ScsRemoteInvokeMessage;
+            //Cast message to AscRemoteInvokeMessage and check it
+            var invokeMessage = e.Message as AscRemoteInvokeMessage;
             if (invokeMessage == null) return;
 
             try {
@@ -271,11 +302,11 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="requestMessage">Request message</param>
         /// <param name="returnValue">Return value to send</param>
         /// <param name="exception">Exception to send</param>
-        private static void SendInvokeResponse(IMessenger client, ScsRemoteInvokeMessage requestMessage, object returnValue,
+        private static void SendInvokeResponse(IMessenger client, AscRemoteInvokeMessage requestMessage, object returnValue,
             ScsRemoteException exception)
         {
             client.SendMessage(
-                new ScsRemoteInvokeReturnMessage {
+                new AscRemoteInvokeReturnMessage {
                     RepliedMessageId = requestMessage.MessageId,
                     ReturnValue = returnValue,
                     RemoteException = exception,

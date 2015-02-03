@@ -8,18 +8,18 @@ using ProtoBuf.Meta;
 namespace ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization {
     internal class ProtobufSerializationProtocol : IScsWireProtocol {
         public ProtobufSerializationProtocol() {
-            RuntimeTypeModel.Default.Add(typeof (IScsMessage), true);
-            RuntimeTypeModel.Default.Add(typeof (ScsRemoteInvokeMessage), false)
+            RuntimeTypeModel.Default.Add(typeof (IAscMessage), true);
+            RuntimeTypeModel.Default.Add(typeof (AscRemoteInvokeMessage), false)
                 .Add("ServiceClassName", "MethodName", "Parameters");
-            RuntimeTypeModel.Default.Add(typeof (ScsRemoteInvokeReturnMessage), false)
+            RuntimeTypeModel.Default.Add(typeof (AscRemoteInvokeReturnMessage), false)
                 .Add("ReturnValue", "RemoteException");
             RuntimeTypeModel.Default.Add(typeof (ScsRemoteException), true);
         }
 
-        public byte[] GetBytes(IScsMessage message) {
+        public byte[] GetBytes(IAscMessage message) {
             var stream = new MemoryStream();
-            if (message is ScsRemoteInvokeMessage) {
-                var msg = message as ScsRemoteInvokeMessage;
+            if (message is AscRemoteInvokeMessage) {
+                var msg = message as AscRemoteInvokeMessage;
                 var t = msg.Parameters[0].GetType();
                 RuntimeTypeModel.Default.Add(t, true);
             }
@@ -28,9 +28,9 @@ namespace ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization {
             return stream.ToArray();
         }
 
-        public IEnumerable<IScsMessage> CreateMessages(byte[] receivedBytes) {
-            var msg = Serializer.Deserialize<IScsMessage>(new MemoryStream(receivedBytes));
-            var list = new List<IScsMessage>();
+        public IEnumerable<IAscMessage> CreateMessages(byte[] receivedBytes) {
+            var msg = Serializer.Deserialize<IAscMessage>(new MemoryStream(receivedBytes));
+            var list = new List<IAscMessage>();
             if (msg != null) list.Add(msg);
             return list;
         }

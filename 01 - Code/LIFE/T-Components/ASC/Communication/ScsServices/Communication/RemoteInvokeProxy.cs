@@ -89,7 +89,7 @@ namespace ASC.Communication.ScsServices.Communication {
             }
 
 
-            var requestMessage = new ScsRemoteInvokeMessage {
+            var requestMessage = new AscRemoteInvokeMessage {
                 ServiceClassName = _typeOfTProxy.Name,
                 MethodName = message.MethodName,
                 Parameters = message.InArgs,
@@ -97,7 +97,7 @@ namespace ASC.Communication.ScsServices.Communication {
             };
 
             var responseMessage =
-                _clientMessenger.SendMessageAndWaitForResponse(requestMessage) as ScsRemoteInvokeReturnMessage;
+                _clientMessenger.SendMessageAndWaitForResponse(requestMessage) as AscRemoteInvokeReturnMessage;
 
             if (responseMessage == null){ return null;}
 

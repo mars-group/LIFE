@@ -7,7 +7,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
     /// </summary>
     // TODO Extend to support additional parameter for target agent
     [Serializable]
-    public class ScsRemoteInvokeMessage : ScsMessage {
+    public class AscRemoteInvokeMessage : AscMessage {
         /// <summary>
         ///     Name of the remove service class.
         /// </summary>
@@ -33,7 +33,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         /// </summary>
         /// <returns>String representation of this object</returns>
         public override string ToString() {
-            return string.Format("ScsRemoteInvokeMessage: {0}.{1}(...)", ServiceClassName, MethodName);
+            return string.Format("AscRemoteInvokeMessage: {0}.{1}(...)", ServiceClassName, MethodName);
         }
     }
 }
