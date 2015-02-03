@@ -13,11 +13,20 @@ namespace AgentShadowingService.Implementation
         private readonly IAgentShadowingService<TServiceInterface, TServiceClass> _agentShadowingUseCase;
         private LayerContainerSettings _config;
 
+        public event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
+
         public AgentShadowingServiceComponent(int port = 6666)
         {
             _agentShadowingUseCase = new AgentShadowingServiceUseCase<TServiceInterface, TServiceClass>(port);
+            _agentShadowingUseCase.AgentUpdates += OnAgentUpdates;
 
         }
+
+        private void OnAgentUpdates(object sender, LIFEAgentEventArgs<TServiceInterface> e) {
+            var handler = AgentUpdates;
+            if (handler != null) handler(this, e);
+        }
+
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {

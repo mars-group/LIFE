@@ -89,11 +89,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 
         public override void Disconnect() {
-            if (CommunicationState != CommunicationStates.Connected) return;
+            // do nothing atm... TODO: think about it
+
+            /*if (CommunicationState != CommunicationStates.Connected) return;
             _udpReceivingClient.Close();
             Parallel.ForEach(_udpSendingClients, client => client.Close());
             CommunicationState = CommunicationStates.Disconnected;
             OnDisconnected();
+            */
         }
 
         #region protected Methods

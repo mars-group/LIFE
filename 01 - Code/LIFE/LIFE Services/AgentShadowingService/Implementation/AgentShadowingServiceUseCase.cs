@@ -20,11 +20,13 @@ namespace AgentShadowingService.Implementation
 
         // The dictionary of ShadowAgents, sorted by their Guid
         private readonly IDictionary<Guid, IAscServiceClient<TServiceInterface>> _shadowAgentClients;
-        // the Multicast Addresse derived from agent type
+        // the Multicast Address derived from agent type
         private readonly string _mcastAddress;
         private readonly IAscServiceApplication _agentShadowingServer;
         private readonly int _clientListenPort;
         private readonly LayerContainerSettings _config;
+
+        public event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
         public AgentShadowingServiceUseCase(int port = 6666) {
             _clientListenPort = port;
@@ -44,14 +46,31 @@ namespace AgentShadowingService.Implementation
         }
 
         private void OnRemoveShadowAgentMessageReceived(object sender, RemoveShadowAgentEventArgs e) {
+            var handler = AgentUpdates;
+            if(handler!=null) handler(this, new LIFEAgentEventArgs<TServiceInterface>(
+                new List<TServiceInterface>{_shadowAgentClients[e.RemoveShadowAgentMessage.AgentID].ServiceProxy},
+                new List<TServiceInterface>()
+                ));
             RemoveShadowAgent(e.RemoveShadowAgentMessage.AgentID);
-            // TODO: trigger event to Layer
         }
 
         private void OnAddShadowAgentMessageReceived(object sender, AddShadowAgentEventArgs e) {
-            CreateShadowAgent(e.AddShadowAgentMessage.AgentID);
-            // TODO: trigger event to layer
+            var agentId = e.AddShadowAgentMessage.AgentID;
+            // break if we already have that agent
+            if (_shadowAgentClients.ContainsKey(agentId)) return;
+
+            var handler = AgentUpdates;
+            if (handler != null) handler(this, new LIFEAgentEventArgs<TServiceInterface>(
+                   // remove list is empty
+                   new List<TServiceInterface>(),
+                   // add list contains new agent
+                   new List<TServiceInterface> {
+                       CreateShadowAgent(agentId)
+                   }
+            ));
         }
+
+
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {

@@ -7,9 +7,11 @@ namespace AgentShadowingService.Interface
 {
     public interface IAgentShadowingService<TServiceInterface, TServiceClass> 
         where TServiceClass : AscService, TServiceInterface
-            where TServiceInterface : class
-    {
-        /// <summary> 
+            where TServiceInterface : class {
+
+        event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
+
+            /// <summary> 
         /// Create a ShadowAgent for a real agent with id <param name="agentId"/> and Type T.
         /// </summary>
         /// <typeparam name="T"></typeparam>
