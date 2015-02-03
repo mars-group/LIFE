@@ -72,13 +72,13 @@
       <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>
       <Name>CSharpQuadTree</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\OctreeFlo\OctreeFlo.csproj">
-      <Project>{995635b1-37a0-4c60-8d19-0bf38dbccfe7}</Project>
-      <Name>OctreeFlo</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\SpatialCommon\SpatialCommon.csproj">
       <Project>{339ffd35-24a5-4637-9848-3873e822be17}</Project>
       <Name>SpatialCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\SpatialObjectOctree\SpatialObjectOctree.csproj">
+      <Project>{995635B1-37A0-4C60-8D19-0BF38DBCCFE7}</Project>
+      <Name>SpatialObjectOctree</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

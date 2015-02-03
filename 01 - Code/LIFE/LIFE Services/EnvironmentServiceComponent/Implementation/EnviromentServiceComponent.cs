@@ -4,10 +4,10 @@ using System.Linq;
 using EnvironmentServiceComponent.Entities;
 using LifeAPI.Environment;
 using LifeAPI.Spatial;
-using OctreeFlo.Implementation;
-using OctreeFlo.Interface;
 using SpatialCommon.Shape;
 using SpatialCommon.Transformation;
+using SpatialObjectOctree.Implementation;
+using SpatialObjectOctree.Interface;
 using Direction = SpatialCommon.Transformation.Direction;
 
 namespace EnvironmentServiceComponent.Implementation {
@@ -15,38 +15,94 @@ namespace EnvironmentServiceComponent.Implementation {
     public class EnviromentServiceComponent : IEnvironment {
         private const int MaxAttempsToAddRandom = 100;
         private readonly bool[,] _collisionMatrix;
-        private readonly Dictionary<IShape, ISpatialEntity> _entities;
-        private readonly IOctreeFlo<IShape> _octree;
+        private readonly IOctree<ISpatialEntity> _octree;
         private readonly Random _random;
+        private readonly object syncLock = new object();
 
         public EnviromentServiceComponent(bool[,] collisionMatrix = null) {
             _random = new Random();
             _collisionMatrix = collisionMatrix ?? CollisionMatrix.Get();
-
-            _entities = new Dictionary<IShape, ISpatialEntity>();
-            _octree = new OctreeFlo<IShape>(new Vector3(25, 25, 25), 1, true);
+            _octree = new SpatialObjectOctree<ISpatialEntity>(new Vector3(25, 25, 25), 1, true);
         }
+
+        #region IEnvironment Members
+
+        public Vector3 MaxDimension { get; set; }
+        public bool IsGrid { get; set; }
+
+        public bool Add(ISpatialEntity entity, Vector3 position, Direction rotation = null) {
+            IShape shape = entity.Shape;
+
+            rotation = rotation ?? new Direction();
+            Vector3 newPosition = position - shape.Position;
+
+            MovementResult result = Move(true, entity, newPosition, rotation);
+            if (!result.Success) {
+                return false;
+            }
+            return true;
+        }
+
+        public bool AddWithRandomPosition(ISpatialEntity entity, Vector3 min, Vector3 max, bool grid) {
+            for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {
+                Vector3 position = GenerateRandomPosition(min, max, grid);
+                bool result = Add(entity, position);
+                if (result) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Remove(ISpatialEntity entity) {
+            _octree.Remove(entity);
+        }
+
+        public bool Resize(ISpatialEntity entity, IShape shape) {
+            List<ISpatialEntity> result = Explore(shape, entity.CollisionType).ToList();
+            result.Remove(entity);
+            if (result.Any()) {
+                return false;
+            }
+            _octree.Remove(entity);
+            entity.Shape = shape;
+            _octree.Insert(entity);
+            return true;
+        }
+
+        public MovementResult Move
+            (ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
+            return Move(false, entity, movementVector, rotation);
+        }
+
+        public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial) {
+            return Explore(spatial.Shape, spatial.CollisionType);
+        }
+
+        public IEnumerable<ISpatialEntity> ExploreAll() {
+            return _octree.GetAll();
+        }
+
+        #endregion
 
         private MovementResult Move
             (bool calledByAdd, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
             rotation = rotation ?? new Direction();
             IShape newShape = entity.Shape.Transform(movementVector, rotation);
+            lock (syncLock) {
+                List<ISpatialEntity> collisions = Explore(newShape, entity.CollisionType).ToList();
+                collisions.Remove(entity);
 
-            List<ISpatialEntity> collisions = Explore(newShape, entity.CollisionType).ToList();
-            collisions.Remove(entity);
-
-            if (collisions.Any()) {
-                return new MovementResult(collisions);
+                if (collisions.Any()) {
+                    return new MovementResult(collisions);
+                }
+                if (!calledByAdd) {
+                    _octree.Remove(entity);
+                }
+                entity.Shape = newShape;
+                _octree.Insert(entity);
+                return new MovementResult();
             }
-            if (!calledByAdd) {
-                _octree.Remove(entity.Shape);
-                _entities.Remove(entity.Shape);
-            }
-            _entities.Add(newShape, entity);
-
-            _octree.Insert(newShape);
-            entity.Shape = newShape;
-            return new MovementResult();
         }
 
         private bool Collides(int givenCollisionType, int foundCollisionType) {
@@ -72,79 +128,18 @@ namespace EnvironmentServiceComponent.Implementation {
             return _random.NextDouble()*(max - min) + min;
         }
 
-        #region IEnvironment Members
-
-        public Vector3 MaxDimension { get; set; }
-        public bool IsGrid { get; set; }
-
-        public bool Add(ISpatialEntity entity, Vector3 position, Direction rotation = null) {
-            IShape shape = entity.Shape;
-
-            rotation = rotation ?? new Direction();
-            Vector3 newPosition = position - shape.Position;
-
-            //move to position
-            MovementResult result = Move(true, entity, newPosition, rotation);
-            if (!result.Success) {
-                return false;
-            }
-            return true;
-        }
-
-        public bool AddWithRandomPosition(ISpatialEntity entity, Vector3 min, Vector3 max, bool grid) {
-            for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {
-                Vector3 position = GenerateRandomPosition(min, max, grid);
-                bool result = Add(entity, position);
-                if (result) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void Remove(ISpatialEntity entity) {
-            _entities.Remove(entity.Shape);
-            _octree.Remove(entity.Shape);
-        }
-
-        public bool Resize(ISpatialEntity entity, IShape shape) {
-            List<ISpatialEntity> result = Explore(shape, entity.CollisionType).ToList();
-            result.Remove(entity);
-            if (result.Any()) {
-                return false;
-            }
-            _octree.Remove(entity.Shape);
-            _octree.Insert(shape);
-            entity.Shape = shape;
-            return true;
-        }
-
-        public MovementResult Move
-            (ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
-            return Move(false, entity, movementVector, rotation);
-        }
-
         private IEnumerable<ISpatialEntity> Explore(IShape shape, Enum collisionType) {
             List<ISpatialEntity> result = new List<ISpatialEntity>();
 
-            foreach (IShape foundShape in _octree.Query(shape.Bounds)) {
-                int foundCollisionType = _entities[foundShape].CollisionType.GetHashCode();
-                if (Collides(collisionType.GetHashCode(), foundCollisionType) && shape.IntersectsWith(foundShape)) {
-                    result.Add(_entities[foundShape]);
+            foreach (ISpatialEntity foundSpatialObject in _octree.Query(shape.Bounds)) {
+                int foundCollisionType = foundSpatialObject.CollisionType.GetHashCode();
+                if (Collides(collisionType.GetHashCode(), foundCollisionType)
+                    && shape.IntersectsWith(foundSpatialObject.Shape)) {
+                    result.Add(foundSpatialObject);
                 }
             }
             return result;
         }
-
-        public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial) {
-            return Explore(spatial.Shape, spatial.CollisionType);
-        }
-
-        public IEnumerable<ISpatialEntity> ExploreAll() {
-            return _entities.Values.ToList();
-        }
-
-        #endregion
     }
 
 }

@@ -1,12 +1,11 @@
 ﻿using System;
 using LifeAPI.Perception;
-using SpatialCommon.Shape;
+using SpatialCommon.SpatialObject;
 
 namespace LifeAPI.Spatial {
 
-    public interface ISpatialEntity : ISpecification
+    public interface ISpatialEntity : ISpatialObject, ISpecification
     {
-        IShape Shape { get; set; }
 
         /// <summary>
         ///     Return the information type specified by this object.

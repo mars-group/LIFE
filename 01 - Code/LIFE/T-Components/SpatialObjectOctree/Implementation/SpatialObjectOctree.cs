@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using OctreeFlo.Interface;
+using System.Linq;
 using SpatialCommon.Shape;
+using SpatialCommon.SpatialObject;
 using SpatialCommon.Transformation;
+using SpatialObjectOctree.Interface;
 
-namespace OctreeFlo.Implementation {
+namespace SpatialObjectOctree.Implementation {
 
-    public class OctreeFlo<T> : IOctreeFlo<T> where T : class, IShape {
+    public class SpatialObjectOctree<T> : IOctree<T> where T : class, ISpatialObject {
+        public Ocnode Root { get; private set; }
         private readonly int maxObjectsPerLeaf;
         private readonly Vector3 minLeafSize;
         private readonly Dictionary<T, int> objectSortOrder = new Dictionary<T, int>();
@@ -16,38 +19,38 @@ namespace OctreeFlo.Implementation {
         private readonly object syncLock = new object();
         private int objectSortId;
 
-        public OctreeFlo(Vector3 minLeafSize, int maxObjectsPerLeaf) {
+        public SpatialObjectOctree(Vector3 minLeafSize, int maxObjectsPerLeaf) {
             Root = null;
             this.minLeafSize = minLeafSize;
             this.maxObjectsPerLeaf = maxObjectsPerLeaf;
-        }//TODO Octree muss ISpatialEntity verstehen und nicht IShape
+        } 
 
         /// <summary>
         /// </summary>
         /// <param name="minLeafSize">The smallest size a leaf will split into</param>
         /// <param name="maxObjectsPerLeaf">Maximum number of objects per leaf before it forces a split into sub quadrants</param>
         /// <param name="sort">Whether or not queries will return objects in the order in which they were added</param>
-        public OctreeFlo(Vector3 minLeafSize, int maxObjectsPerLeaf, bool sort)
+        public SpatialObjectOctree(Vector3 minLeafSize, int maxObjectsPerLeaf, bool sort)
             : this(minLeafSize, maxObjectsPerLeaf) {
             this.sort = sort;
         }
 
-        public Ocnode Root { get; private set; }
+        #region IOctree<T> Members
 
-        public void Insert(T shape) {
+        public void Insert(T spatialObject) {
             //TODO does not undestand shapes with no dimension (at least as first added shape)
             lock (syncLock) {
-                if (sort & !objectSortOrder.ContainsKey(shape)) {
-                    objectSortOrder.Add(shape, objectSortId++);
+                if (sort & !objectSortOrder.ContainsKey(spatialObject)) {
+                    objectSortOrder.Add(spatialObject, objectSortId++);
                 }
-                var bounds = shape.Bounds;
+                BoundingBox bounds = spatialObject.Shape.Bounds;
                 if (Root == null) {
-                    var rootSize = new Vector3
+                    Vector3 rootSize = new Vector3
                         (Math.Ceiling(bounds.Dimension.X/minLeafSize.X),
                             Math.Ceiling(bounds.Dimension.Y/minLeafSize.Y),
                             Math.Ceiling(bounds.Dimension.Z/minLeafSize.Z));
 
-                    var multiplier = Math.Max(Math.Max(rootSize.X, rootSize.Y), rootSize.Z);
+                    double multiplier = Math.Max(Math.Max(rootSize.X, rootSize.Y), rootSize.Z);
                     rootSize = rootSize*multiplier;
 
                     Root =
@@ -60,13 +63,13 @@ namespace OctreeFlo.Implementation {
                     ExpandRoot(bounds);
                 }
 
-                InsertNodeObject(Root, shape);
+                InsertNodeObject(Root, spatialObject);
             }
         }
 
         public List<T> Query(BoundingBox bounds) {
             lock (syncLock) {
-                var results = new List<T>();
+                List<T> results = new List<T>();
                 if (Root != null) {
                     Query(bounds, Root, results);
                 }
@@ -87,7 +90,7 @@ namespace OctreeFlo.Implementation {
                     throw new KeyNotFoundException("QuadObject not found in dictionary for removal");
                 }
 
-                var containingNode = objectToNodeLookup[shape];
+                Ocnode containingNode = objectToNodeLookup[shape];
                 RemoveQuadObjectFromNode(shape);
 
                 if (containingNode.Parent != null) {
@@ -101,12 +104,14 @@ namespace OctreeFlo.Implementation {
                 if (Root == null) {
                     return 0;
                 }
-                var count = GetQuadObjectCount(Root);
+                int count = GetQuadObjectCount(Root);
                 return count;
             }
         }
 
-        public int GetSortOrder(T quadObject) {
+        #endregion
+
+        private int GetSortOrder(T quadObject) {
             lock (objectSortOrder) {
                 if (!objectSortOrder.ContainsKey(quadObject)) {
                     return -1;
@@ -115,9 +120,13 @@ namespace OctreeFlo.Implementation {
             }
         }
 
-        public List<Ocnode> GetAllNodes() {
+        public List<T> GetAll() {
+            return objectSortOrder.Keys.ToList();
+        }
+
+        private List<Ocnode> GetAllNodes() {
             lock (syncLock) {
-                var results = new List<Ocnode>();
+                List<Ocnode> results = new List<Ocnode>();
                 if (Root != null) {
                     results.Add(Root);
                     GetChildNodes(Root, results);
@@ -126,39 +135,358 @@ namespace OctreeFlo.Implementation {
             }
         }
 
-        public int GetQuadNodeCount() {
+        private int GetQuadNodeCount() {
             lock (syncLock) {
                 if (Root == null) {
                     return 0;
                 }
-                var count = GetQuadNodeCount(Root, 1);
+                int count = GetQuadNodeCount(Root, 1);
                 return count;
             }
         }
 
+        #region Private Methods
+
+        private void Query(BoundingBox bounds, Ocnode node, List<T> results) {
+            lock (syncLock) {
+                if (node == null) {
+                    return;
+                }
+                if (bounds.IntersectsWith(node.Bounds)) {
+                    foreach (T quadObject in node.Objects) {
+                        if (bounds.IntersectsWith(quadObject.Shape.Bounds)) {
+                            results.Add(quadObject);
+                        }
+                    }
+
+                    foreach (Ocnode childNode in node.Nodes) {
+                        Query(bounds, childNode, results);
+                    }
+                }
+            }
+        }
+
+
+        private void ExpandRoot(BoundingBox newChildBounds) {
+            lock (syncLock) {
+                bool isNorth = Root.Bounds.LeftBottomFront.Y < newChildBounds.LeftBottomFront.Y;
+                bool isWest = Root.Bounds.LeftBottomFront.X < newChildBounds.LeftBottomFront.X;
+                bool isBottom = Root.Bounds.LeftBottomFront.Z < newChildBounds.LeftBottomFront.Z;
+
+                Direction rootDirection;
+                if (isBottom) {
+                    if (isNorth) {
+                        rootDirection = isWest ? Direction.NWB : Direction.NEB;
+                    }
+                    else {
+                        rootDirection = isWest ? Direction.SWB : Direction.SEB;
+                    }
+                }
+                else {
+                    if (isNorth) {
+                        rootDirection = isWest ? Direction.NWT : Direction.NET;
+                    }
+                    else {
+                        rootDirection = isWest ? Direction.SWT : Direction.SET;
+                    }
+                }
+
+                double newX = (rootDirection == Direction.NWB || rootDirection == Direction.SWB ||
+                               rootDirection == Direction.NWT || rootDirection == Direction.SWT)
+                    ? Root.Bounds.LeftBottomFront.X
+                    : Root.Bounds.LeftBottomFront.X - Root.Bounds.Width;
+                double newY = (rootDirection == Direction.NWB || rootDirection == Direction.NEB ||
+                               rootDirection == Direction.NWT || rootDirection == Direction.NET)
+                    ? Root.Bounds.LeftBottomFront.Y
+                    : Root.Bounds.LeftBottomFront.Y - Root.Bounds.Height;
+                double newZ = (rootDirection == Direction.NWT || rootDirection == Direction.NET ||
+                               rootDirection == Direction.SWT || rootDirection == Direction.SET)
+                    ? Root.Bounds.LeftBottomFront.Z
+                    : Root.Bounds.LeftBottomFront.Z - Root.Bounds.Width;
+
+                BoundingBox newRootBounds = BoundingBox.GenerateByDimension
+                    (
+                        new Vector3(newX + Root.Bounds.Width, newY + Root.Bounds.Height, newZ + Root.Bounds.Length),
+                        new Vector3(Root.Bounds.Width*2, Root.Bounds.Height*2, Root.Bounds.Length*2));
+                Ocnode newRoot = new Ocnode(newRootBounds);
+                SetupChildNodes(newRoot);
+                newRoot[rootDirection] = Root;
+                Root = newRoot;
+            }
+        }
+
+        private void InsertNodeObject(Ocnode node, T quadObject) {
+            lock (syncLock) {
+                if (!node.Bounds.Contains(quadObject.Shape.Bounds)) {
+                    throw new Exception("This should not happen, child does not fit within node bounds");
+                }
+
+                if (!node.HasChildNodes() && node.Objects.Count + 1 > maxObjectsPerLeaf) {
+                    SetupChildNodes(node);
+
+                    List<T> childObjects = new List<T>(node.Objects);
+                    List<T> childrenToRelocate = new List<T>();
+
+                    foreach (T childObject in childObjects) {
+                        foreach (Ocnode childNode in node.Nodes) {
+                            if (childNode == null) {
+                                continue;
+                            }
+
+                            if (childNode.Bounds.Contains(childObject.Shape.Bounds)) {
+                                childrenToRelocate.Add(childObject);
+                            }
+                        }
+                    }
+
+                    foreach (T childObject in childrenToRelocate) {
+                        RemoveQuadObjectFromNode(childObject);
+                        InsertNodeObject(node, childObject);
+                    }
+                }
+
+                foreach (Ocnode childNode in node.Nodes) {
+                    if (childNode != null) {
+                        if (childNode.Bounds.Contains(quadObject.Shape.Bounds)) {
+                            InsertNodeObject(childNode, quadObject);
+                            return;
+                        }
+                    }
+                }
+
+                AddQuadObjectToNode(node, quadObject);
+            }
+        }
+
+        private void ClearQuadObjectsFromNode(Ocnode node) {
+            lock (syncLock) {
+                List<T> quadObjects = new List<T>(node.Objects);
+                foreach (T quadObject in quadObjects) {
+                    RemoveQuadObjectFromNode(quadObject);
+                }
+            }
+        }
+
+        private void RemoveQuadObjectFromNode(T quadObject) {
+            lock (syncLock) {
+                Ocnode node = objectToNodeLookup[quadObject];
+                node.Shapes.Remove(quadObject);
+                objectToNodeLookup.Remove(quadObject);
+//                quadObject.BoundsChanged -= quadObject_BoundsChanged;
+            }
+        }
+
+        private void AddQuadObjectToNode(Ocnode node, T quadObject) {
+            lock (syncLock) {
+                node.Shapes.Add(quadObject);
+                objectToNodeLookup.Add(quadObject, node);
+//                quadObject.BoundsChanged += quadObject_BoundsChanged;
+            }
+        }
+
+        private void quadObject_BoundsChanged(object sender, EventArgs e) {
+            lock (syncLock) {
+                T quadObject = sender as T;
+                if (quadObject != null) {
+                    Ocnode node = objectToNodeLookup[quadObject];
+                    if (!node.Bounds.Contains(quadObject.Shape.Bounds) || node.HasChildNodes()) {
+                        RemoveQuadObjectFromNode(quadObject);
+                        Insert(quadObject);
+                        if (node.Parent != null) {
+                            CheckChildNodes(node.Parent);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetupChildNodes(Ocnode node) {
+            lock (syncLock) {
+                if (minLeafSize.X <= node.Bounds.Width/2 && minLeafSize.Y <= node.Bounds.Height/2 &&
+                    minLeafSize.Z <= node.Bounds.Length/2) {
+                    Vector3 dimension = new Vector3
+                        (node.Bounds.Width/2,
+                            node.Bounds.Height/2,
+                            node.Bounds.Length/2);
+
+                    node[Direction.NWT] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X,
+                            node.Bounds.LeftBottomFront.Y,
+                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
+                            dimension);
+                    node[Direction.NET] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
+                            node.Bounds.LeftBottomFront.Y,
+                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
+                            dimension);
+                    node[Direction.SWT] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X,
+                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
+                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
+                            dimension);
+                    node[Direction.SET] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
+                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
+                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
+                            dimension);
+                    node[Direction.NWB] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X,
+                            node.Bounds.LeftBottomFront.Y,
+                            node.Bounds.LeftBottomFront.Z,
+                            dimension);
+                    node[Direction.NEB] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
+                            node.Bounds.LeftBottomFront.Y,
+                            node.Bounds.LeftBottomFront.Z,
+                            dimension);
+                    node[Direction.SWB] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X,
+                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
+                            node.Bounds.LeftBottomFront.Z,
+                            dimension);
+                    node[Direction.SEB] = new Ocnode
+                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
+                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
+                            node.Bounds.LeftBottomFront.Z,
+                            dimension);
+                }
+            }
+        }
+
+
+        private void CheckChildNodes(Ocnode node) {
+            lock (syncLock) {
+                if (GetQuadObjectCount(node) <= maxObjectsPerLeaf) {
+                    // Move child objects into this node, and delete sub nodes
+                    List<T> subChildObjects = GetChildObjects(node);
+                    foreach (T childObject in subChildObjects) {
+                        if (!node.Objects.Contains(childObject)) {
+                            RemoveQuadObjectFromNode(childObject);
+                            AddQuadObjectToNode(node, childObject);
+                        }
+                    }
+                    if (node[Direction.NWT] != null) {
+                        node[Direction.NWT].Parent = null;
+                        node[Direction.NWT] = null;
+                    }
+                    if (node[Direction.NET] != null) {
+                        node[Direction.NET].Parent = null;
+                        node[Direction.NET] = null;
+                    }
+                    if (node[Direction.SWT] != null) {
+                        node[Direction.SWT].Parent = null;
+                        node[Direction.SWT] = null;
+                    }
+                    if (node[Direction.SET] != null) {
+                        node[Direction.SET].Parent = null;
+                        node[Direction.SET] = null;
+                    }
+                    if (node[Direction.NWB] != null) {
+                        node[Direction.NWB].Parent = null;
+                        node[Direction.NWB] = null;
+                    }
+                    if (node[Direction.NEB] != null) {
+                        node[Direction.NEB].Parent = null;
+                        node[Direction.NEB] = null;
+                    }
+                    if (node[Direction.SWB] != null) {
+                        node[Direction.SWB].Parent = null;
+                        node[Direction.SWB] = null;
+                    }
+                    if (node[Direction.SEB] != null) {
+                        node[Direction.SEB].Parent = null;
+                        node[Direction.SEB] = null;
+                    }
+
+                    if (node.Parent != null) {
+                        CheckChildNodes(node.Parent);
+                    }
+                    else {
+                        // Its the root node, see if we're down to one quadrant, with none in local storage - if so, ditch the other three
+                        int numQuadrantsWithObjects = 0;
+                        Ocnode nodeWithObjects = null;
+                        foreach (Ocnode childNode in node.Nodes) {
+                            if (childNode != null && GetQuadObjectCount(childNode) > 0) {
+                                numQuadrantsWithObjects++;
+                                nodeWithObjects = childNode;
+                                if (numQuadrantsWithObjects > 1) {
+                                    break;
+                                }
+                            }
+                        }
+                        if (numQuadrantsWithObjects == 1) {
+                            foreach (Ocnode childNode in node.Nodes) {
+                                if (childNode != nodeWithObjects) {
+                                    childNode.Parent = null;
+                                }
+                            }
+                            Root = nodeWithObjects;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private List<T> GetChildObjects(Ocnode node) {
+            lock (syncLock) {
+                List<T> results = new List<T>();
+                results.AddRange(node.Shapes);
+                foreach (Ocnode childNode in node.Nodes) {
+                    if (childNode != null) {
+                        results.AddRange(GetChildObjects(childNode));
+                    }
+                }
+                return results;
+            }
+        }
+
+
+        private int GetQuadObjectCount(Ocnode node) {
+            lock (syncLock) {
+                int count = node.Objects.Count;
+                foreach (Ocnode childNode in node.Nodes) {
+                    if (childNode != null) {
+                        count += GetQuadObjectCount(childNode);
+                    }
+                }
+                return count;
+            }
+        }
+
+
+        private int GetQuadNodeCount(Ocnode node, int count) {
+            lock (syncLock) {
+                if (node == null) {
+                    return count;
+                }
+
+                foreach (Ocnode childNode in node.Nodes) {
+                    if (childNode != null) {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+
+
+        private void GetChildNodes(Ocnode node, ICollection<Ocnode> results) {
+            lock (syncLock) {
+                foreach (Ocnode childNode in node.Nodes) {
+                    if (childNode != null) {
+                        results.Add(childNode);
+                        GetChildNodes(childNode, results);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region Nested type: Ocnode
 
         public class Ocnode {
-            private static int _id;
-            private readonly Ocnode[] _nodes = new Ocnode[8];
-            public readonly int ID = _id++;
-            internal readonly List<T> Shapes = new List<T>();
-            public ReadOnlyCollection<Ocnode> Nodes;
-            public ReadOnlyCollection<T> Objects;
-
-            public Ocnode(BoundingBox bounds) {
-                Bounds = bounds;
-                Nodes = new ReadOnlyCollection<Ocnode>(_nodes);
-                Objects = new ReadOnlyCollection<T>(Shapes);
-            }
-
-            public Ocnode(double x, double y, double z, Vector3 dimension)
-                : this(
-                    BoundingBox.GenerateByDimension
-                        (
-                            new Vector3(x + dimension.X/2, y + dimension.Y/2, z + dimension.Z/2),
-                            new Vector3(dimension.X, dimension.Y, dimension.Z))) {}
-
             public Ocnode Parent { get; internal set; }
 
             public Ocnode this[Direction direction] {
@@ -218,348 +546,28 @@ namespace OctreeFlo.Implementation {
             }
 
             public BoundingBox Bounds { get; private set; }
+            private static int _id;
+            private readonly Ocnode[] _nodes = new Ocnode[8];
+            public readonly int ID = _id++;
+            internal readonly List<T> Shapes = new List<T>();
+            public ReadOnlyCollection<Ocnode> Nodes;
+            public ReadOnlyCollection<T> Objects;
+
+            public Ocnode(BoundingBox bounds) {
+                Bounds = bounds;
+                Nodes = new ReadOnlyCollection<Ocnode>(_nodes);
+                Objects = new ReadOnlyCollection<T>(Shapes);
+            }
+
+            public Ocnode(double x, double y, double z, Vector3 dimension)
+                : this(
+                    BoundingBox.GenerateByDimension
+                        (
+                            new Vector3(x + dimension.X/2, y + dimension.Y/2, z + dimension.Z/2),
+                            new Vector3(dimension.X, dimension.Y, dimension.Z))) {}
 
             public bool HasChildNodes() {
                 return _nodes[0] != null;
-            }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void Query(BoundingBox bounds, Ocnode node, List<T> results) {
-            lock (syncLock) {
-                if (node == null) {
-                    return;
-                }
-                if (bounds.IntersectsWith(node.Bounds)) {
-                    foreach (var quadObject in node.Objects) {
-                        if (bounds.IntersectsWith(quadObject.Bounds)) {
-                            results.Add(quadObject);
-                        }
-                    }
-
-                    foreach (var childNode in node.Nodes) {
-                        Query(bounds, childNode, results);
-                    }
-                }
-            }
-        }
-
-
-        private void ExpandRoot(BoundingBox newChildBounds) {
-            lock (syncLock) {
-                var isNorth = Root.Bounds.LeftBottomFront.Y < newChildBounds.LeftBottomFront.Y;
-                var isWest = Root.Bounds.LeftBottomFront.X < newChildBounds.LeftBottomFront.X;
-                var isBottom = Root.Bounds.LeftBottomFront.Z < newChildBounds.LeftBottomFront.Z;
-
-                Direction rootDirection;
-                if (isBottom) {
-                    if (isNorth) {
-                        rootDirection = isWest ? Direction.NWB : Direction.NEB;
-                    }
-                    else {
-                        rootDirection = isWest ? Direction.SWB : Direction.SEB;
-                    }
-                }
-                else {
-                    if (isNorth) {
-                        rootDirection = isWest ? Direction.NWT : Direction.NET;
-                    }
-                    else {
-                        rootDirection = isWest ? Direction.SWT : Direction.SET;
-                    }
-                }
-
-                var newX = (rootDirection == Direction.NWB || rootDirection == Direction.SWB ||
-                            rootDirection == Direction.NWT || rootDirection == Direction.SWT)
-                    ? Root.Bounds.LeftBottomFront.X
-                    : Root.Bounds.LeftBottomFront.X - Root.Bounds.Width;
-                var newY = (rootDirection == Direction.NWB || rootDirection == Direction.NEB ||
-                            rootDirection == Direction.NWT || rootDirection == Direction.NET)
-                    ? Root.Bounds.LeftBottomFront.Y
-                    : Root.Bounds.LeftBottomFront.Y - Root.Bounds.Height;
-                var newZ = (rootDirection == Direction.NWT || rootDirection == Direction.NET ||
-                            rootDirection == Direction.SWT || rootDirection == Direction.SET)
-                    ? Root.Bounds.LeftBottomFront.Z
-                    : Root.Bounds.LeftBottomFront.Z - Root.Bounds.Width;
-
-                var newRootBounds = BoundingBox.GenerateByDimension
-                    (
-                        new Vector3(newX + Root.Bounds.Width, newY + Root.Bounds.Height, newZ + Root.Bounds.Length),
-                        new Vector3(Root.Bounds.Width*2, Root.Bounds.Height*2, Root.Bounds.Length*2));
-                var newRoot = new Ocnode(newRootBounds);
-                SetupChildNodes(newRoot);
-                newRoot[rootDirection] = Root;
-                Root = newRoot;
-            }
-        }
-
-        private void InsertNodeObject(Ocnode node, T quadObject) {
-            lock (syncLock) {
-                if (!node.Bounds.Contains(quadObject.Bounds)) {
-                    throw new Exception("This should not happen, child does not fit within node bounds");
-                }
-
-                if (!node.HasChildNodes() && node.Objects.Count + 1 > maxObjectsPerLeaf) {
-                    SetupChildNodes(node);
-
-                    var childObjects = new List<T>(node.Objects);
-                    var childrenToRelocate = new List<T>();
-
-                    foreach (var childObject in childObjects) {
-                        foreach (var childNode in node.Nodes) {
-                            if (childNode == null) {
-                                continue;
-                            }
-
-                            if (childNode.Bounds.Contains(childObject.Bounds)) {
-                                childrenToRelocate.Add(childObject);
-                            }
-                        }
-                    }
-
-                    foreach (var childObject in childrenToRelocate) {
-                        RemoveQuadObjectFromNode(childObject);
-                        InsertNodeObject(node, childObject);
-                    }
-                }
-
-                foreach (var childNode in node.Nodes) {
-                    if (childNode != null) {
-                        if (childNode.Bounds.Contains(quadObject.Bounds)) {
-                            InsertNodeObject(childNode, quadObject);
-                            return;
-                        }
-                    }
-                }
-
-                AddQuadObjectToNode(node, quadObject);
-            }
-        }
-
-        private void ClearQuadObjectsFromNode(Ocnode node) {
-            lock (syncLock) {
-                var quadObjects = new List<T>(node.Objects);
-                foreach (var quadObject in quadObjects) {
-                    RemoveQuadObjectFromNode(quadObject);
-                }
-            }
-        }
-
-        private void RemoveQuadObjectFromNode(T quadObject) {
-            lock (syncLock) {
-                var node = objectToNodeLookup[quadObject];
-                node.Shapes.Remove(quadObject);
-                objectToNodeLookup.Remove(quadObject);
-                quadObject.BoundsChanged -= quadObject_BoundsChanged;
-            }
-        }
-
-        private void AddQuadObjectToNode(Ocnode node, T quadObject) {
-            lock (syncLock) {
-                node.Shapes.Add(quadObject);
-                objectToNodeLookup.Add(quadObject, node);
-                quadObject.BoundsChanged += quadObject_BoundsChanged;
-            }
-        }
-
-        private void quadObject_BoundsChanged(object sender, EventArgs e) {
-            lock (syncLock) {
-                var quadObject = sender as T;
-                if (quadObject != null) {
-                    var node = objectToNodeLookup[quadObject];
-                    if (!node.Bounds.Contains(quadObject.Bounds) || node.HasChildNodes()) {
-                        RemoveQuadObjectFromNode(quadObject);
-                        Insert(quadObject);
-                        if (node.Parent != null) {
-                            CheckChildNodes(node.Parent);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void SetupChildNodes(Ocnode node) {
-            lock (syncLock) {
-                if (minLeafSize.X <= node.Bounds.Width/2 && minLeafSize.Y <= node.Bounds.Height/2 &&
-                    minLeafSize.Z <= node.Bounds.Length/2) {
-                    var dimension = new Vector3
-                        (node.Bounds.Width/2,
-                            node.Bounds.Height/2,
-                            node.Bounds.Length/2);
-
-                    node[Direction.NWT] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X,
-                            node.Bounds.LeftBottomFront.Y,
-                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                            dimension);
-                    node[Direction.NET] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                            node.Bounds.LeftBottomFront.Y,
-                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                            dimension);
-                    node[Direction.SWT] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X,
-                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                            dimension);
-                    node[Direction.SET] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                            node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                            dimension);
-                    node[Direction.NWB] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X,
-                            node.Bounds.LeftBottomFront.Y,
-                            node.Bounds.LeftBottomFront.Z,
-                            dimension);
-                    node[Direction.NEB] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                            node.Bounds.LeftBottomFront.Y,
-                            node.Bounds.LeftBottomFront.Z,
-                            dimension);
-                    node[Direction.SWB] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X,
-                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                            node.Bounds.LeftBottomFront.Z,
-                            dimension);
-                    node[Direction.SEB] = new Ocnode
-                        (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                            node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                            node.Bounds.LeftBottomFront.Z,
-                            dimension);
-                }
-            }
-        }
-
-
-        private void CheckChildNodes(Ocnode node) {
-            lock (syncLock) {
-                if (GetQuadObjectCount(node) <= maxObjectsPerLeaf) {
-                    // Move child objects into this node, and delete sub nodes
-                    var subChildObjects = GetChildObjects(node);
-                    foreach (var childObject in subChildObjects) {
-                        if (!node.Objects.Contains(childObject)) {
-                            RemoveQuadObjectFromNode(childObject);
-                            AddQuadObjectToNode(node, childObject);
-                        }
-                    }
-                    if (node[Direction.NWT] != null) {
-                        node[Direction.NWT].Parent = null;
-                        node[Direction.NWT] = null;
-                    }
-                    if (node[Direction.NET] != null) {
-                        node[Direction.NET].Parent = null;
-                        node[Direction.NET] = null;
-                    }
-                    if (node[Direction.SWT] != null) {
-                        node[Direction.SWT].Parent = null;
-                        node[Direction.SWT] = null;
-                    }
-                    if (node[Direction.SET] != null) {
-                        node[Direction.SET].Parent = null;
-                        node[Direction.SET] = null;
-                    }
-                    if (node[Direction.NWB] != null) {
-                        node[Direction.NWB].Parent = null;
-                        node[Direction.NWB] = null;
-                    }
-                    if (node[Direction.NEB] != null) {
-                        node[Direction.NEB].Parent = null;
-                        node[Direction.NEB] = null;
-                    }
-                    if (node[Direction.SWB] != null) {
-                        node[Direction.SWB].Parent = null;
-                        node[Direction.SWB] = null;
-                    }
-                    if (node[Direction.SEB] != null) {
-                        node[Direction.SEB].Parent = null;
-                        node[Direction.SEB] = null;
-                    }
-
-                    if (node.Parent != null) {
-                        CheckChildNodes(node.Parent);
-                    }
-                    else {
-                        // Its the root node, see if we're down to one quadrant, with none in local storage - if so, ditch the other three
-                        var numQuadrantsWithObjects = 0;
-                        Ocnode nodeWithObjects = null;
-                        foreach (var childNode in node.Nodes) {
-                            if (childNode != null && GetQuadObjectCount(childNode) > 0) {
-                                numQuadrantsWithObjects++;
-                                nodeWithObjects = childNode;
-                                if (numQuadrantsWithObjects > 1) {
-                                    break;
-                                }
-                            }
-                        }
-                        if (numQuadrantsWithObjects == 1) {
-                            foreach (var childNode in node.Nodes) {
-                                if (childNode != nodeWithObjects) {
-                                    childNode.Parent = null;
-                                }
-                            }
-                            Root = nodeWithObjects;
-                        }
-                    }
-                }
-            }
-        }
-
-
-        private List<T> GetChildObjects(Ocnode node) {
-            lock (syncLock) {
-                var results = new List<T>();
-                results.AddRange(node.Shapes);
-                foreach (var childNode in node.Nodes) {
-                    if (childNode != null) {
-                        results.AddRange(GetChildObjects(childNode));
-                    }
-                }
-                return results;
-            }
-        }
-
-
-        private int GetQuadObjectCount(Ocnode node) {
-            lock (syncLock) {
-                var count = node.Objects.Count;
-                foreach (var childNode in node.Nodes) {
-                    if (childNode != null) {
-                        count += GetQuadObjectCount(childNode);
-                    }
-                }
-                return count;
-            }
-        }
-
-
-        private int GetQuadNodeCount(Ocnode node, int count) {
-            lock (syncLock) {
-                if (node == null) {
-                    return count;
-                }
-
-                foreach (var childNode in node.Nodes) {
-                    if (childNode != null) {
-                        count++;
-                    }
-                }
-                return count;
-            }
-        }
-
-
-        private void GetChildNodes(Ocnode node, ICollection<Ocnode> results) {
-            lock (syncLock) {
-                foreach (var childNode in node.Nodes) {
-                    if (childNode != null) {
-                        results.Add(childNode);
-                        GetChildNodes(childNode, results);
-                    }
-                }
             }
         }
 

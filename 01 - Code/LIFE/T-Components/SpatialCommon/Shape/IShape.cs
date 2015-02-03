@@ -34,7 +34,6 @@ namespace SpatialCommon.Shape {
         /// <returns>The new shape as result of transformation.</returns>
         IShape Transform(Vector3 movement, Direction rotation);
 
-        event EventHandler BoundsChanged;
     }
 
 }

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AABB.cs" />
+    <Compile Include="SpatialObject\ISpatialObject.cs" />
     <Compile Include="Mask\Cube.cs" />
     <Compile Include="Mask\IMask.cs" />
     <Compile Include="Mask\Sphere.cs" />

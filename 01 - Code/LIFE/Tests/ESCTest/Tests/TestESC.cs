@@ -12,7 +12,6 @@ using SpatialCommon.Transformation;
 namespace ESCTest.Tests {
 
     public class TestESC {
-
         [Test]
         public void TestAddFirstAgent() {
             IEnvironment _esc = new EnviromentServiceComponent();
@@ -21,9 +20,8 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestAddTwoAgentsAtAdjacentPositions()
-        {
-         IEnvironment _esc;
+        public void TestAddTwoAgentsAtAdjacentPositions() {
+            IEnvironment _esc;
             _esc = new EnviromentServiceComponent();
             ISpatialEntity a1 = GenerateAgent(1, 1);
             ISpatialEntity a2 = GenerateAgent(1, 1);
@@ -33,8 +31,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestAddTwoAgentsAtSamePosition()
-        {
+        public void TestAddTwoAgentsAtSamePosition() {
             IEnvironment _esc = new EnviromentServiceComponent();
             ISpatialEntity a1 = GenerateAgent(1, 1);
             ISpatialEntity a2 = GenerateAgent(1, 1);
@@ -45,8 +42,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestMoveAgentForCollision()
-        {
+        public void TestMoveAgentForCollision() {
             IEnvironment _esc = new EnviromentServiceComponent();
             ISpatialEntity a1 = GenerateAgent(1, 1);
             ISpatialEntity a2 = GenerateAgent(1, 1);
@@ -58,8 +54,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestPlaceEnvironmentAtSamePosition()
-        {
+        public void TestPlaceEnvironmentAtSamePosition() {
             IEnvironment _esc = new EnviromentServiceComponent();
             ISpatialEntity a1 = GenerateAgent(10, 10, CollisionType.StaticEnvironment);
             ISpatialEntity a2 = GenerateAgent(10, 10, CollisionType.StaticEnvironment);
@@ -68,14 +63,13 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestAddWithRandomPositionToFillRoom()
-        {
+        public void TestAddWithRandomPositionToFillRoom() {
             IEnvironment _esc = new EnviromentServiceComponent();
             for (int i = 0; i < 4; i++) {
-                ISpatialEntity a = GenerateAgent(1,1);
+                ISpatialEntity a = GenerateAgent(1, 1);
                 Assert.True(_esc.AddWithRandomPosition(a, new Vector3(0, 0), new Vector3(1, 1), true));
 
-                Console.WriteLine("====> "+a.Shape.Bounds);
+                Console.WriteLine("====> " + a.Shape.Bounds);
 //                PrintAllAgents();
             }
             Assert.True(_esc.ExploreAll().Count() == 4);
@@ -85,8 +79,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestManyAgentsWithRandomPosition()
-        {
+        public void TestManyAgentsWithRandomPosition() {
             IEnvironment _esc = new EnviromentServiceComponent();
             for (int i = 0; i < 100; i++) {
                 ISpatialEntity a = GenerateAgent(1, 1);
@@ -99,8 +92,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestCorrectPlacement2D()
-        {
+        public void TestCorrectPlacement2D() {
             IEnvironment _esc = new EnviromentServiceComponent();
             ISpatialEntity a1 = GenerateAgent(0.9, 0.9);
             ISpatialEntity a2 = GenerateAgent(0.9, 0.9);
@@ -129,8 +121,7 @@ namespace ESCTest.Tests {
 //        }
 
         [Test]
-        public void TestPerfomanceAdd500Elements()
-        {
+        public void TestPerfomanceAdd500Elements() {
             IEnvironment _esc = new EnviromentServiceComponent();
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < 500; i++) {
@@ -142,8 +133,7 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestPerfomanceMove50ElementsFor100Ticks()
-        {
+        public void TestPerfomanceMove50ElementsFor100Ticks() {
             IEnvironment _esc = new EnviromentServiceComponent();
             int amount = 3;
             int ticks = 500;
