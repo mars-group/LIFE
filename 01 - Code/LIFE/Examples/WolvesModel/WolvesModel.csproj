@@ -64,6 +64,10 @@
       <Project>{9dc34799-0130-4a2b-962d-946cca54dd9e}</Project>
       <Name>DalskiAgent</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
+      <Project>{4ca49432-e852-40b5-9f37-0f5cba61c613}</Project>
+      <Name>EnvironmentServiceComponent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\SpatialAPI\SpatialAPI.csproj">
       <Project>{a2ade928-8504-43b5-8920-e878cad996c9}</Project>
       <Name>SpatialAPI</Name>
