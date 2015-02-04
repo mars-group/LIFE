@@ -46,11 +46,15 @@ namespace AgentShadowingService.Implementation
         }
 
         private void OnRemoveShadowAgentMessageReceived(object sender, RemoveShadowAgentEventArgs e) {
+            var agentId = e.RemoveShadowAgentMessage.AgentID;
+            // break if we don't have that agent
+            if (!_shadowAgentClients.ContainsKey(agentId)) return;
             var handler = AgentUpdates;
             if(handler!=null) handler(this, new LIFEAgentEventArgs<TServiceInterface>(
                 new List<TServiceInterface>{_shadowAgentClients[e.RemoveShadowAgentMessage.AgentID].ServiceProxy},
                 new List<TServiceInterface>()
                 ));
+            // TODO: Collect agents to remove and remove them after tick (that is: layer controlled)
             RemoveShadowAgent(e.RemoveShadowAgentMessage.AgentID);
         }
 
