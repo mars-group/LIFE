@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Shape;
+using NUnit.Framework;
 
-namespace SpatialTests {
+namespace SpatialAPITests {
 
-    [TestClass]
     public class BoundingBoxTest {
         private const double Epsilon = 0.00001;
 
 
-        [TestMethod]
+        [Test]
         public void TestBoundingBoxPerformance() {
             BoundingBox b1 = BoundingBox.GenerateByCorners(Vector3.Random, Vector3.Random);
             BoundingBox b2 = BoundingBox.GenerateByCorners(Vector3.Random, Vector3.Random);
@@ -22,7 +21,7 @@ namespace SpatialTests {
             Console.WriteLine(initTime.ElapsedMilliseconds + " ms");
         }
 
-        [TestMethod]
+        [Test]
         public void TestQuadPerformance() {
             Cuboid b1 = new Cuboid(Vector3.Random, Vector3.Random, new Direction());
             Cuboid b2 = new Cuboid(Vector3.Random, Vector3.Random, new Direction());
@@ -34,7 +33,7 @@ namespace SpatialTests {
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestInner() {
             BoundingBox b1 = BoundingBox.GenerateByDimension(new Vector3(0, 0), new Vector3(2, 2));
             BoundingBox b2 = BoundingBox.GenerateByDimension(new Vector3(0, 0), new Vector3(1, 1));
@@ -42,7 +41,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestOuter() {
             BoundingBox b1 = BoundingBox.GenerateByDimension(new Vector3(0, 0), new Vector3(2, 2));
             BoundingBox b2 = BoundingBox.GenerateByDimension(new Vector3(0, 0), new Vector3(4, 4));
@@ -50,7 +49,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIntersectionByPart() {
             BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0, 0), new Vector3(100,100));
             BoundingBox b2 = BoundingBox.GenerateByCorners(new Vector3(-11.5, -11.5), new Vector3(13.5, 13.5));
@@ -58,7 +57,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTouching() {
             BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0, 0), new Vector3(2, 2));
             BoundingBox b2 = BoundingBox.GenerateByCorners(new Vector3(2, 0), new Vector3(4, 2));
@@ -66,7 +65,7 @@ namespace SpatialTests {
             Assert.IsFalse(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEquals() {
             BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0, 0), new Vector3(2, 2));
             BoundingBox b2 = BoundingBox.GenerateByCorners(new Vector3(0, 0), new Vector3(2, 2));
@@ -74,7 +73,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestContains() {
             BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0.5, 0.5), new Vector3(1.5, 1.5));
             BoundingBox b2 = BoundingBox.GenerateByCorners(new Vector3(-23.5, -23.5), new Vector3(1.5, 1.5));

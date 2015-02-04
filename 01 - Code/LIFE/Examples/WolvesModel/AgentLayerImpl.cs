@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DalskiAgent.Auxiliary.Environment;
-using LCConnector.TransportTypes;
+﻿using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 using SpatialAPI.Entities.Transformation;
@@ -51,15 +48,6 @@ namespace WolvesModel {
       return true;
     }
 
-
-    /// <summary>
-    ///   Updates all shadow agents.
-    /// </summary>
-    /// <param name="agentsToAdd">Agents to add.</param>
-    /// <param name="agentsToRemove">Agent to remove.</param>
-    public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
-      throw new NotImplementedException();
-    }
 
 
     /// <summary>

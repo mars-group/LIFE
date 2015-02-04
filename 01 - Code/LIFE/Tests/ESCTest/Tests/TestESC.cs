@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using EnvironmentServiceComponent.Implementation;
 using ESCTest.Entities;
 using NUnit.Framework;
 using SpatialAPI.Entities;

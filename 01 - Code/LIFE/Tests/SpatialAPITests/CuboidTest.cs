@@ -1,14 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Shape;
 
-namespace SpatialTests {
+namespace SpatialAPITests {
 
-    [TestClass]
+
     public class CuboidTest {
         private const double Epsilon = 0.00001;
         //TODO add 3rd dimension and rotation to tests
-        [TestMethod]
+        [Test]
         public void TestInner() {
             Cuboid b1 = new Cuboid(new Vector3(2, 2), Vector3.Zero);
             Cuboid b2 = new Cuboid(new Vector3(1, 1), Vector3.Zero);
@@ -17,7 +17,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestOuter() {
             Cuboid b1 = new Cuboid(new Vector3(2, 2), Vector3.Zero);
             Cuboid b2 = new Cuboid(new Vector3(4, 4), Vector3.Zero);
@@ -25,7 +25,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIntersectionByPart() {
             Cuboid b1 = new Cuboid(new Vector3(100, 100), new Vector3(50, 50));
             Cuboid b2 = new Cuboid(new Vector3(25, 25), new Vector3(1, 1));
@@ -33,7 +33,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTouching() {
             Cuboid b1 = new Cuboid(new Vector3(1, 1), Vector3.Zero);
             Cuboid b2 = new Cuboid(new Vector3(1, 1), new Vector3(2, 0));
@@ -41,7 +41,7 @@ namespace SpatialTests {
             Assert.IsFalse(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEquals() {
             Cuboid b1 = new Cuboid(new Vector3(2, 2), Vector3.Zero);
             Cuboid b2 = new Cuboid(new Vector3(2, 2), Vector3.Zero);
@@ -49,7 +49,7 @@ namespace SpatialTests {
             Assert.IsTrue(b2.IntersectsWith(b1));
         }
 
-        [TestMethod]
+        [Test]
         public void TestContains() {
             Cuboid b1 = new Cuboid(new Vector3(1, 1), Vector3.Zero);
             Cuboid b2 = new Cuboid(new Vector3(2, 2), Vector3.Zero);
