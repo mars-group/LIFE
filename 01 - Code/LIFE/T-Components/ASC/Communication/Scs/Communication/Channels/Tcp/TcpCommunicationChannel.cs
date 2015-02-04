@@ -110,7 +110,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         ///     Sends a message to the remote application.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        protected override void SendMessageInternal(IScsMessage message) {
+        protected override void SendMessageInternal(IAscMessage message) {
             //Send message
             var totalSent = 0;
             lock (_syncLock) {

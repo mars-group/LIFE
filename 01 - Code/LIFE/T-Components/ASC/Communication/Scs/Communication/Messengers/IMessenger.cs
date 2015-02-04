@@ -37,6 +37,6 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Sends a message to the remote application.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        void SendMessage(IScsMessage message);
+        void SendMessage(IAscMessage message);
     }
 }

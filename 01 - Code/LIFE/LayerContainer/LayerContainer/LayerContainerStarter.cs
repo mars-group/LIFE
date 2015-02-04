@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using System.Data;
 using LayerContainerFacade.Interfaces;
 using log4net;
 
@@ -15,27 +16,31 @@ namespace LayerContainer {
     public class LayerContainerStarter {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (LayerContainerStarter));
 
-        private static void Main(string[] args)
-        {
-            Logger.Info("LayerContainer trying to startup.");
-            try {
-                Logger.Info("Initializing components and building application core...");
 
-                ILayerContainerFacade _facade = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
 
-                Logger.Info("LayerContainer successfully started.");
+        private static void Main(string[] args) {
 
-                Console.WriteLine("LayerContainer up and running. Press 'q' to quit.");
+                Logger.Info("LayerContainer trying to startup.");
+                try {
+                    Logger.Info("Initializing components and building application core...");
 
-                ConsoleKeyInfo info = Console.ReadKey();
-                while (info.Key != ConsoleKey.Q) {
-                    info = Console.ReadKey();
+                    ILayerContainerFacade _facade = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+
+                    Logger.Info("LayerContainer successfully started.");
+
+                    Console.WriteLine("LayerContainer up and running. Press 'q' to quit.");
+
+                    ConsoleKeyInfo info = Console.ReadKey();
+                    while (info.Key != ConsoleKey.Q) {
+                        info = Console.ReadKey();
+                    }
+
                 }
-            }
-            catch (Exception exception) {
-                Logger.Fatal("LayerContainer crashed fatally. Exception:\n {0}", exception);
-            }
+                catch (Exception exception) {
+                    Logger.Fatal("LayerContainer crashed fatally. Exception:\n {0}. Restarting LayerContainer...", exception);
+                }
 
+    
             Logger.Info("LayerContainer shutting down.");
 
             // This will shutdown the log4net system

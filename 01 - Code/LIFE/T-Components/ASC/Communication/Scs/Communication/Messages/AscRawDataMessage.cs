@@ -5,7 +5,7 @@ namespace ASC.Communication.Scs.Communication.Messages {
     ///     This message is used to send/receive a raw byte array as message data.
     /// </summary>
     [Serializable]
-    public class ScsRawDataMessage : ScsMessage {
+    public class AscRawDataMessage : AscMessage {
         /// <summary>
         ///     Message data that is being transmitted.
         /// </summary>
@@ -14,25 +14,25 @@ namespace ASC.Communication.Scs.Communication.Messages {
         /// <summary>
         ///     Default empty constructor.
         /// </summary>
-        public ScsRawDataMessage() {}
+        public AscRawDataMessage() {}
 
         /// <summary>
-        ///     Creates a new ScsRawDataMessage object with MessageData property.
+        ///     Creates a new AscRawDataMessage object with MessageData property.
         /// </summary>
         /// <param name="messageData">Message data that is being transmitted</param>
-        public ScsRawDataMessage(byte[] messageData) {
+        public AscRawDataMessage(byte[] messageData) {
             MessageData = messageData;
         }
 
         /// <summary>
-        ///     Creates a new reply ScsRawDataMessage object with MessageData property.
+        ///     Creates a new reply AscRawDataMessage object with MessageData property.
         /// </summary>
         /// <param name="messageData">Message data that is being transmitted</param>
         /// <param name="repliedMessageId">
         ///     Replied message id if this is a reply for
         ///     a message.
         /// </param>
-        public ScsRawDataMessage(byte[] messageData, string repliedMessageId)
+        public AscRawDataMessage(byte[] messageData, string repliedMessageId)
             : this(messageData) {
             RepliedMessageId = repliedMessageId;
         }
@@ -44,8 +44,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         public override string ToString() {
             var messageLength = MessageData == null ? 0 : MessageData.Length;
             return string.IsNullOrEmpty(RepliedMessageId)
-                ? string.Format("ScsRawDataMessage [{0}]: {1} bytes", MessageId, messageLength)
-                : string.Format("ScsRawDataMessage [{0}] Replied To [{1}]: {2} bytes", MessageId, RepliedMessageId,
+                ? string.Format("AscRawDataMessage [{0}]: {1} bytes", MessageId, messageLength)
+                : string.Format("AscRawDataMessage [{0}] Replied To [{1}]: {2} bytes", MessageId, RepliedMessageId,
                     messageLength);
         }
     }

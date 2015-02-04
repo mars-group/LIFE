@@ -3,11 +3,11 @@ using ASC.Communication.Scs.Communication.Messages;
 
 namespace ASC.Communication.ScsServices.Communication.Messages {
     /// <summary>
-    ///     This message is sent as response message to a ScsRemoteInvokeMessage.
+    ///     This message is sent as response message to a AscRemoteInvokeMessage.
     ///     It is used to send return value of method invocation.
     /// </summary>
     [Serializable]
-    public class ScsRemoteInvokeReturnMessage : ScsMessage {
+    public class AscRemoteInvokeReturnMessage : AscMessage {
         /// <summary>
         ///     Return value of remote method invocation.
         /// </summary>
@@ -29,7 +29,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         /// </summary>
         /// <returns>String representation of this object</returns>
         public override string ToString() {
-            return string.Format("ScsRemoteInvokeReturnMessage: Returns {0}, Exception = {1}", ReturnValue,
+            return string.Format("AscRemoteInvokeReturnMessage: Returns {0}, Exception = {1}", ReturnValue,
                 RemoteException);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using ASC.Communication.Scs.Communication.Channels;
+using ASC.Communication.Scs.Communication.Messengers;
 using ASC.Communication.Scs.Communication.Protocols;
 using CustomUtilities.Collections;
 
@@ -7,7 +8,7 @@ namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     This class provides base functionality for server classes.
     /// </summary>
-    internal abstract class AscServerBase : IScsServer {
+    internal abstract class AscServerBase : IAscServer {
         #region Public events
 
         /// <summary>
@@ -78,6 +79,8 @@ namespace ASC.Communication.Scs.Server {
                 client.Disconnect();
             }
         }
+
+        public abstract IMessenger GetMessenger();
 
         #endregion
 

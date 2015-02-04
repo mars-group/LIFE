@@ -55,7 +55,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         ///     Throws CommunicationException if message is bigger than maximum allowed
         ///     message length.
         /// </exception>
-        public byte[] GetBytes(IScsMessage message) {
+        public byte[] GetBytes(IAscMessage message) {
             //Serialize the message to a byte array
             var serializedMessage = SerializeMessage(message);
             /*
@@ -90,11 +90,11 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         ///     Also, if received bytes are not sufficient to build a message, the protocol
         ///     may return an empty list (and save bytes to combine with next method call).
         /// </returns>
-        public IEnumerable<IScsMessage> CreateMessages(byte[] receivedBytes) {
+        public IEnumerable<IAscMessage> CreateMessages(byte[] receivedBytes) {
             //Write all received bytes to the _receiveMemoryStream
             //_receiveMemoryStream.Write(receivedBytes, 0, receivedBytes.Length);
             //Create a list to collect messages
-            var messages = new List<IScsMessage>();
+            var messages = new List<IAscMessage>();
 
             //since its udp, directly Deserialize
             messages.Add(DeserializeMessage(receivedBytes));
@@ -119,7 +119,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         #region Proptected virtual methods
 
         /// <summary>
-        ///     This method is used to serialize a IScsMessage to a byte array.
+        ///     This method is used to serialize a IAscMessage to a byte array.
         ///     This method can be overrided by derived classes to change serialization strategy.
         ///     It is a couple with DeserializeMessage method and must be overrided together.
         /// </summary>
@@ -128,7 +128,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         ///     Serialized message bytes.
         ///     Does not include length of the message.
         /// </returns>
-        protected virtual byte[] SerializeMessage(IScsMessage message) {
+        protected virtual byte[] SerializeMessage(IAscMessage message) {
             using (var memoryStream = new MemoryStream()) {
                 new BinaryFormatter().Serialize(memoryStream, message);
                 return memoryStream.ToArray();
@@ -136,7 +136,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         }
 
         /// <summary>
-        ///     This method is used to deserialize a IScsMessage from it's bytes.
+        ///     This method is used to deserialize a IAscMessage from it's bytes.
         ///     This method can be overrided by derived classes to change deserialization strategy.
         ///     It is a couple with SerializeMessage method and must be overrided together.
         /// </summary>
@@ -145,7 +145,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         ///     of a single whole message)
         /// </param>
         /// <returns>Deserialized message</returns>
-        protected virtual IScsMessage DeserializeMessage(byte[] bytes) {
+        protected virtual IAscMessage DeserializeMessage(byte[] bytes) {
             //Create a MemoryStream to convert bytes to a stream
             using (var deserializeMemoryStream = new MemoryStream(bytes)) {
                 //Go to head of the stream
@@ -158,7 +158,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
                 };
 
                 //Return the deserialized message
-                return (IScsMessage) binaryFormatter.Deserialize(deserializeMemoryStream);
+                return (IAscMessage) binaryFormatter.Deserialize(deserializeMemoryStream);
             }
         }
 
@@ -177,7 +177,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         ///     Throws CommunicationException if message is bigger than maximum allowed
         ///     message length.
         /// </exception>
-        private bool ReadSingleMessage(ICollection<IScsMessage> messages) {
+        private bool ReadSingleMessage(ICollection<IAscMessage> messages) {
             //Go to the begining of the stream
             _receiveMemoryStream.Position = 0;
 

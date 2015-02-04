@@ -28,11 +28,14 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public TimeSpan OneTickTimeSpan { get; private set; }
 
+        public bool Distribute { get; private set; }
+
         /// <summary>
         /// Creates a new TInitData object, with an empty list of AgentInitConfigs
         /// </summary>
-        public TInitData()
-        {
+        public TInitData(bool distribute, TimeSpan oneTickTimeSpan) {
+            Distribute = distribute;
+            OneTickTimeSpan = oneTickTimeSpan;
             AgentInitConfigs = new List<AgentInitConfig>();
         }
 

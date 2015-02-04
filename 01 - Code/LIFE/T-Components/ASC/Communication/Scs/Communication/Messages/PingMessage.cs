@@ -6,11 +6,11 @@ namespace ASC.Communication.Scs.Communication.Messages {
     ///     Ping messages is used to keep connection alive between server and client.
     /// </summary>
     [Serializable]
-    public sealed class ScsPingMessage : ScsMessage {
+    public sealed class AscPingMessage : AscMessage {
         /// <summary>
         ///     Creates a new PingMessage object.
         /// </summary>
-        public ScsPingMessage() {}
+        public AscPingMessage() {}
 
         /// <summary>
         ///     Creates a new reply PingMessage object.
@@ -19,7 +19,7 @@ namespace ASC.Communication.Scs.Communication.Messages {
         ///     Replied message id if this is a reply for
         ///     a message.
         /// </param>
-        public ScsPingMessage(string repliedMessageId)
+        public AscPingMessage(string repliedMessageId)
             : this() {
             RepliedMessageId = repliedMessageId;
         }
@@ -30,8 +30,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         /// <returns>A string to represents this object</returns>
         public override string ToString() {
             return string.IsNullOrEmpty(RepliedMessageId)
-                ? string.Format("ScsPingMessage [{0}]", MessageId)
-                : string.Format("ScsPingMessage [{0}] Replied To [{1}]", MessageId, RepliedMessageId);
+                ? string.Format("AscPingMessage [{0}]", MessageId)
+                : string.Format("AscPingMessage [{0}] Replied To [{1}]", MessageId, RepliedMessageId);
         }
     }
 }

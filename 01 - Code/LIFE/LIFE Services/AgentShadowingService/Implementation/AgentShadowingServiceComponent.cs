@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
 using LayerContainerShared;
@@ -12,15 +13,28 @@ namespace AgentShadowingService.Implementation
         private readonly IAgentShadowingService<TServiceInterface, TServiceClass> _agentShadowingUseCase;
         private LayerContainerSettings _config;
 
+        public event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
+
         public AgentShadowingServiceComponent(int port = 6666)
         {
             _agentShadowingUseCase = new AgentShadowingServiceUseCase<TServiceInterface, TServiceClass>(port);
+            _agentShadowingUseCase.AgentUpdates += OnAgentUpdates;
 
         }
+
+        private void OnAgentUpdates(object sender, LIFEAgentEventArgs<TServiceInterface> e) {
+            var handler = AgentUpdates;
+            if (handler != null) handler(this, e);
+        }
+
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {
             return _agentShadowingUseCase.CreateShadowAgent(agentId);
+        }
+
+        public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds) {
+            return _agentShadowingUseCase.CreateShadowAgents(agentIds);
         }
 
         public void RemoveShadowAgent(Guid agentId) {
@@ -30,6 +44,10 @@ namespace AgentShadowingService.Implementation
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
             _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
+        }
+
+        public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
+            _agentShadowingUseCase.RegisterRealAgents(agentsToRegister);
         }
 
         public void RemoveRealAgent(TServiceClass agentToRemove) {
