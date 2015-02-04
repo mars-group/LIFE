@@ -1,9 +1,8 @@
 ﻿using System;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement.Actions;
-using LifeAPI.Environment;
-using LifeAPI.Spatial;
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Environment;
 
 namespace DalskiAgent.Movement.Movers {
   

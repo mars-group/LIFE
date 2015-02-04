@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using DalskiAgent.Auxiliary.OpenGL;
-using LifeAPI.Environment;
-using LifeAPI.Spatial;
-using SpatialCommon.Shape;
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities;
+using SpatialAPI.Entities.Movement;
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Environment;
+using SpatialAPI.Shape;
 
 namespace DalskiAgent.Auxiliary.Environment {
   

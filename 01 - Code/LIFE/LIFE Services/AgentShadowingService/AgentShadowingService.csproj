@@ -32,11 +32,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\AgentShadowingServiceComponent.cs" />
@@ -56,10 +51,6 @@
     <ProjectReference Include="..\..\LayerContainer\LayerContainerShared\LayerContainerShared.csproj">
       <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
       <Name>LayerContainerShared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
-      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE Services\LIFEUtilities\LIFEUtilities.csproj">
       <Project>{09D5EB43-70C5-4E24-92CA-6C35548A0629}</Project>

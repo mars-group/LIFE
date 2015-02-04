@@ -1,10 +1,10 @@
 ﻿using System;
 using DalskiAgent.Movement.Movers;
-using LifeAPI.Environment;
 using LifeAPI.Layer;
-using LifeAPI.Spatial;
-using SpatialCommon.Shape;
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities;
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Environment;
+using SpatialAPI.Shape;
 
 
 namespace DalskiAgent.Agents {
@@ -37,7 +37,7 @@ namespace DalskiAgent.Agents {
       
       // Create the base agent. Per default it is collidable.
       base(layer, regFkt, unregFkt) {
-      CollisionType = LifeAPI.Spatial.CollisionType.MassiveAgent;
+      CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;
       
       // Check, if the agent already has a direction and a form. If not, create a cube facing north.
       if (dir == null) dir = new Direction();

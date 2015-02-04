@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using LifeAPI.Spatial;
 using OpenTK.Graphics.OpenGL;
+using SpatialAPI.Entities;
 
 namespace DalskiAgent.Auxiliary.Environment { 
 

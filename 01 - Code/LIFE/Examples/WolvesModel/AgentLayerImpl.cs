@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using DalskiAgent.Auxiliary.Environment;
 using LCConnector.TransportTypes;
-using LifeAPI.Environment;
 using LifeAPI.Layer;
 using Mono.Addins;
+using SpatialAPI.Environment;
 using WolvesModel.Agents;
 
 [assembly: Addin]

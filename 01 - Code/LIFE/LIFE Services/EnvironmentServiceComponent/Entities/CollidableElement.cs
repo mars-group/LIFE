@@ -1,5 +1,5 @@
 ﻿
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities.Transformation;
 
 namespace EnvironmentServiceComponent.Entities
 {

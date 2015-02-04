@@ -2,8 +2,8 @@
 using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Reasoning;
-using LifeAPI.Environment;
 using LifeAPI.Layer;
+using SpatialAPI.Environment;
 
 namespace WolvesModel.Agents {
   

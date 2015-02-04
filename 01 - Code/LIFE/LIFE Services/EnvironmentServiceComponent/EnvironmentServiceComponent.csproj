@@ -32,53 +32,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GeoAPI">
-      <HintPath>..\..\packages\GeoAPI.1.7.3.1\lib\net45\GeoAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="NetTopologySuite, Version=1.13.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\NetTopologySuite.dll</HintPath>
-    </Reference>
-    <Reference Include="PowerCollections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2573bf8a1bdddcd5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CollisionMatrix.cs" />
     <Compile Include="Entities\CollidableElement.cs" />
-    <Compile Include="Implementation\EnviromentServiceComponent.cs" />
+    <Compile Include="Implementation\EnvironmentServiceComponent.cs" />
     <Compile Include="Entities\AxisAlignedBoundingInterval.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
-      <Name>CommonTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
-      <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
-      <Name>LifeAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\CSharpQuadTree\CSharpQuadTree.csproj">
-      <Project>{C91776D6-D84C-4183-BD68-D6FA663E3C1C}</Project>
-      <Name>CSharpQuadTree</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\SpatialCommon\SpatialCommon.csproj">
-      <Project>{339ffd35-24a5-4637-9848-3873e822be17}</Project>
-      <Name>SpatialCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\SpatialObjectOctree\SpatialObjectOctree.csproj">
-      <Project>{995635B1-37A0-4C60-8D19-0BF38DBCCFE7}</Project>
+      <Project>{f66e0e91-6c1e-41a9-87f3-c90ebf3e7ca6}</Project>
       <Name>SpatialObjectOctree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpatialAPI\SpatialAPI.csproj">
+      <Project>{a2ade928-8504-43b5-8920-e878cad996c9}</Project>
+      <Name>SpatialAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

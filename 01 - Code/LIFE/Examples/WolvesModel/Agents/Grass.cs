@@ -1,8 +1,8 @@
 ﻿using System;
 using DalskiAgent.Agents;
 using DalskiAgent.Reasoning;
-using LifeAPI.Environment;
 using LifeAPI.Layer;
+using SpatialAPI.Environment;
 using WolvesModel.Interactions;
 
 namespace WolvesModel.Agents {

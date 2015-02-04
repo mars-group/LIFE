@@ -57,13 +57,8 @@
     <Compile Include="Config\DistributionStrategy.cs" />
     <Compile Include="Config\LayerConfig.cs" />
     <Compile Include="Config\ModelConfig.cs" />
-    <Compile Include="Environment\IEnvironment.cs" />
-    <Compile Include="Layer\Data\INumericRasterLayer.cs" />
-    <Compile Include="Layer\Data\IObjectRasterLayer.cs" />
     <Compile Include="Layer\Data\IQueryLayer.cs" />
     <Compile Include="Layer\Data\ISingleValueLayer.cs" />
-    <Compile Include="Layer\Data\Structs.cs" />
-    <Compile Include="Layer\Data\IObjectCloudLayer.cs" />
     <Compile Include="Layer\GIS\IGISAccess.cs" />
     <Compile Include="Agent\IAgent.cs" />
     <Compile Include="Layer\GIS\IGISActiveLayer.cs" />
@@ -76,25 +71,14 @@
     <Compile Include="Agent\ITickClient.cs" />
     <Compile Include="Layer\Visualization\IVisualizable.cs" />
     <Compile Include="Layer\LayerStatus.cs" />
-    <Compile Include="Perception\ISpecification.cs" />
-    <Compile Include="Perception\Sensors\NumericRasterSensor.cs" />
-    <Compile Include="Perception\Sensors\ObjectCloudSensor.cs" />
-    <Compile Include="Perception\Sensors\ObjectRasterSensor.cs" />
     <Compile Include="Perception\Sensors\QuerySensor.cs" />
     <Compile Include="Perception\Sensors\SingleValueSensor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Spatial\CollisionType.cs" />
-    <Compile Include="Spatial\ISpatialEntity.cs" />
-    <Compile Include="Spatial\MovementResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\SpatialCommon\SpatialCommon.csproj">
-      <Project>{339ffd35-24a5-4637-9848-3873e822be17}</Project>
-      <Name>SpatialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

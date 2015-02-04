@@ -40,20 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\AABB.cs" />
-    <Compile Include="SpatialObject\ISpatialObject.cs" />
     <Compile Include="Mask\Cube.cs" />
     <Compile Include="Mask\IMask.cs" />
     <Compile Include="Mask\Sphere.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shape\BoundingBox.cs" />
-    <Compile Include="Shape\Cuboid.cs" />
-    <Compile Include="Shape\IPosition.cs" />
-    <Compile Include="Shape\IShape.cs" />
-    <Compile Include="Transformation\Direction.cs" />
-    <Compile Include="Transformation\Vector3.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SpatialObject\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

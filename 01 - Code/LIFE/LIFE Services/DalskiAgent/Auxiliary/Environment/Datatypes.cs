@@ -1,7 +1,7 @@
 ﻿using System;
-using LifeAPI.Spatial;
-using SpatialCommon.Shape;
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities;
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Shape;
 
 namespace DalskiAgent.Auxiliary.Environment {
   

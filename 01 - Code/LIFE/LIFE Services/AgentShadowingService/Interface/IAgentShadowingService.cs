@@ -1,6 +1,5 @@
 ﻿using System;
 using ASC.Communication.ScsServices.Service;
-using LifeAPI.Agent;
 
 namespace AgentShadowingService.Interface
 {

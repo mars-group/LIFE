@@ -1,7 +1,7 @@
 ﻿using System;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Reasoning;
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities.Transformation;
 
 namespace DalskiAgent.Movement.Actions {
   

@@ -64,9 +64,9 @@
       <Project>{9dc34799-0130-4a2b-962d-946cca54dd9e}</Project>
       <Name>DalskiAgent</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\SpatialCommon\SpatialCommon.csproj">
-      <Project>{339ffd35-24a5-4637-9848-3873e822be17}</Project>
-      <Name>SpatialCommon</Name>
+    <ProjectReference Include="..\..\LIFE Services\SpatialAPI\SpatialAPI.csproj">
+      <Project>{a2ade928-8504-43b5-8920-e878cad996c9}</Project>
+      <Name>SpatialAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

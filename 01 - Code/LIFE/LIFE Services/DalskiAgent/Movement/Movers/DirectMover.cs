@@ -1,6 +1,6 @@
 ﻿using DalskiAgent.Agents;
-using LifeAPI.Environment;
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Environment;
 
 namespace DalskiAgent.Movement.Movers {
 

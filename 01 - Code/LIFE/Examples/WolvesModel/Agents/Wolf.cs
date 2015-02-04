@@ -3,9 +3,9 @@ using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Reasoning;
-using LifeAPI.Environment;
 using LifeAPI.Layer;
-using SpatialCommon.Transformation;
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Environment;
 using WolvesModel.Interactions;
 
 namespace WolvesModel.Agents {

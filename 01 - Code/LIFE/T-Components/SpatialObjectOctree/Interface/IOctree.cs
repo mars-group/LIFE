@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using SpatialCommon.Shape;
-using SpatialCommon.SpatialObject;
+using SpatialAPI.Entities;
+using SpatialAPI.Shape;
 
-namespace SpatialObjectOctree.Interface {
+namespace SpatialObjectOctree.Interface
+{
 
     /// <summary>
     ///     Implements an unbalanced, 3-dimensonal tree.
@@ -14,7 +15,8 @@ namespace SpatialObjectOctree.Interface {
     ///     The described structure allows for all operations to need only computing time O(log(n)) with n being the <br />
     ///     number of items within the tree.
     /// </remarks>
-    public interface IOctree<T> where T : class, ISpatialObject {
+    public interface IOctree<T> where T : class, ISpatialObject
+    {
         void Insert(T spatialObject);
         void Remove(T shape);
         List<T> Query(BoundingBox bounds);
