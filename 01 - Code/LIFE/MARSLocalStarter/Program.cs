@@ -240,7 +240,7 @@ namespace MARSLocalStarter
                 LogManager.Shutdown();
 
                 //Report error to jira
-               // JiraErrorReporter.ReportError(filename, exception);
+                JiraErrorReporter.ReportError(filename, exception);
                 
                 throw;
             
