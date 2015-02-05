@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vcs-root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="3f15b8b5-d484-4e6c-bed5-d8c68d1984dd" type="jetbrains.git" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+  <name>MARS LIFE DEVELOPMENT</name>
+  <param name="agentCleanFilesPolicy" value="ALL_UNTRACKED" />
+  <param name="agentCleanPolicy" value="ON_BRANCH_CHANGE" />
+  <param name="authMethod" value="PASSWORD" />
+  <param name="branch" value="refs/heads/Development" />
+  <param name="ignoreKnownHosts" value="true" />
+  <param name="secure:password" value="zxx420946977d06d7f6d553e0b306a6b630" />
+  <param name="submoduleCheckout" value="CHECKOUT" />
+  <param name="url" value="http://christian@scm.3ten.de/scm/git/LIFE" />
+  <param name="username" value="christian" />
+  <param name="usernameStyle" value="USERID" />
+</vcs-root>
+
