@@ -20,13 +20,12 @@ namespace KNPTreeLayer {
     public class TreeLayer : ScsService, IKnpTreeLayer
     {
         private long _currentTick;
-        //private IKnpElevationLayer _elevationLayer;
 
         private readonly List<ITree> trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
         private readonly IKnpElevationLayer _elevationLayer;
-        private List<ITree> _agentsToRemoveInPostTick;
-        private List<ITree> _agentsToAddInPostTick;
+        private readonly List<ITree> _agentsToRemoveInPostTick;
+        private readonly List<ITree> _agentsToAddInPostTick;
 
         private double MinX = 31.331;
         private double MinY = -25.292;
@@ -34,7 +33,9 @@ namespace KNPTreeLayer {
         private double MaxY = -24.997;
         private UnregisterAgent _unregisterAgentHandle;
 
-        public TreeLayer() {
+        public TreeLayer(IKnpElevationLayer elevationLayer)
+        {
+            _elevationLayer = elevationLayer;
             trees = new List<ITree>();
             _agentsToRemoveInPostTick = new List<ITree>();
             _agentsToAddInPostTick = new List<ITree>();
@@ -69,8 +70,8 @@ namespace KNPTreeLayer {
                         GetRandomNumber(MinX, MaxX),
                         GetRandomNumber(MinY, MaxY),
                         config.RealAgentIds[i],
-                        this
-                        //_elevationLayer
+                        this,
+                        _elevationLayer
                     );
                     agentBag.Add(t);
                     registerAgentHandle(this, t);
@@ -97,19 +98,9 @@ namespace KNPTreeLayer {
             return true;
         }
 
-        public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
-            foreach (var id in agentsToAdd[typeof(Tree)]) {
-                trees.Add(_agentShadowingService.CreateShadowAgent(id));
-            }
-
-            foreach (var id in agentsToRemove[typeof(Tree)])
-            {
-                _agentShadowingService.CreateShadowAgent(id);
-            }
-        }
-
 
         public void PreTick() {
+            /*
             // remove an agent
             var tRemove = trees[0];
             _unregisterAgentHandle.Invoke(this, tRemove);
@@ -124,6 +115,7 @@ namespace KNPTreeLayer {
                     );
             trees.Add(t);
             _agentShadowingService.CreateShadowAgent(t.ID);
+             * */
         }
 
         public void Tick() {
@@ -133,8 +125,8 @@ namespace KNPTreeLayer {
 
         public void PostTick() {
             // update internal agent lists with information from AgentUpdates event
-            trees.RemoveAll(t => _agentsToRemoveInPostTick.Contains(t));
-            trees.AddRange(_agentsToAddInPostTick);
+            //trees.RemoveAll(t => _agentsToRemoveInPostTick.Contains(t));
+            //trees.AddRange(_agentsToAddInPostTick);
             // since the added agents are all ShadowAgents, we don't need to register them for execution
         }
 
