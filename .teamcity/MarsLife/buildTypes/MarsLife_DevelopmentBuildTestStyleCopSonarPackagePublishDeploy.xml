@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="0955c8f7-710e-4818-ad28-53a196fc2f2b" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+  <name>DEVELOPMENT Build, Test, StyleCop, Sonar, Package, Publish, Deploy</name>
+  <description />
+  <settings>
+    <options>
+      <option name="buildNumberPattern" value="0.2.%build.counter%" />
+      <option name="cleanBuild" value="true" />
+    </options>
+    <disabled-settings>
+      <setting-ref ref="RUNNER_13" />
+      <setting-ref ref="RUNNER_3" />
+      <setting-ref ref="RUNNER_4" />
+    </disabled-settings>
+    <parameters />
+    <build-runners>
+      <runner id="RUNNER_6" name="Restore NuGet" type="jb.nuget.installer">
+        <parameters>
+          <param name="nuget.path" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nuget.sources"><![CDATA[http://packages.nuget.org
+http://nuget.3ten.de/nuget]]></param>
+          <param name="nuget.updatePackages.mode" value="sln" />
+          <param name="nuget.use.restore" value="restore" />
+          <param name="nugetCustomPath" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nugetPathSelector" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="sln.path" value="01 - Code/LIFE/LIFE.sln" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_2" name="Build" type="VS.Solution">
+        <parameters>
+          <param name="build-file-path" value="01 - Code/LIFE/LIFE.sln" />
+          <param name="msbuild.prop.Configuration" value="Release" />
+          <param name="msbuild_version" value="12.0" />
+          <param name="octopus_octopack_package_version" value="%build.number%" />
+          <param name="run-platform" value="x86" />
+          <param name="targets" value="Rebuild" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="toolsVersion" value="12.0" />
+          <param name="vs.version" value="vs2013" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_5" name="" type="NUnit">
+        <parameters>
+          <param name="dotNetCoverage.NCover.HTMLReport.File.Sort" value="0" />
+          <param name="dotNetCoverage.NCover.HTMLReport.File.Type" value="1" />
+          <param name="dotNetCoverage.NCover.Reg" value="selected" />
+          <param name="dotNetCoverage.NCover.platformBitness" value="x86" />
+          <param name="dotNetCoverage.NCover.platformVersion" value="v2.0" />
+          <param name="dotNetCoverage.NCover3.Reg" value="selected" />
+          <param name="dotNetCoverage.NCover3.args" value="//ias .*" />
+          <param name="dotNetCoverage.NCover3.platformBitness" value="x86" />
+          <param name="dotNetCoverage.NCover3.platformVersion" value="v2.0" />
+          <param name="dotNetCoverage.NCover3.reporter.executable.args" value="//or FullCoverageReport:Html:{teamcity.report.path}" />
+          <param name="dotNetCoverage.PartCover.Reg" value="selected" />
+          <param name="dotNetCoverage.PartCover.includes" value="[*]*" />
+          <param name="dotNetCoverage.PartCover.platformBitness" value="x86" />
+          <param name="dotNetCoverage.PartCover.platformVersion" value="v2.0" />
+          <param name="dotNetTestRunner.Type" value="NUnit" />
+          <param name="nunit_enabled" value="checked" />
+          <param name="nunit_environment" value="v4.0" />
+          <param name="nunit_include" value="01 - Code\LIFE\Tests\*\bin\Release\*.dll" />
+          <param name="nunit_platform" value="MSIL" />
+          <param name="nunit_version" value="NUnit-2.6.3" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_3" name="Publish to OctopusDeploy NuGet Feed" type="jb.nuget.publish">
+        <parameters>
+          <param name="nuget.path" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nuget.publish.files"><![CDATA[01 - Code/LIFE/SimulationManager/SimulationManager/bin/Release/SimulationManager.%build.number%.nupkg
+01 - Code/LIFE/LayerContainer/LayerContainer/bin/Release/LayerContainer.%build.number%.nupkg]]></param>
+          <param name="nuget.publish.source" value="http://localhost:9100/nuget/packages" />
+          <param name="nugetCustomPath" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nugetPathSelector" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="secure:nuget.api.key" value="zxxe36f42bc0165fbd4b573cb1ecc0ffcb81f49b2ce618f3123c3a9bb5939c13d75" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_13" name="Deploy SimManager" type="octopus.create.release">
+        <parameters>
+          <param name="octopus_deployto" value="SimPC" />
+          <param name="octopus_host" value="http://localhost:9100" />
+          <param name="octopus_project_name" value="MARS SimulationManager" />
+          <param name="octopus_releasenumber" value="%build.number%" />
+          <param name="octopus_version" value="2.0+" />
+          <param name="octopus_waitfordeployments" value="true" />
+          <param name="secure:octopus_apikey" value="zxxe36f42bc0165fbd4b573cb1ecc0ffcb81f49b2ce618f3123c3a9bb5939c13d75" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_4" name="Deploy LayerContainer" type="octopus.create.release">
+        <parameters>
+          <param name="octopus_deployto" value="SimPC" />
+          <param name="octopus_host" value="http://localhost:9100" />
+          <param name="octopus_project_name" value="MARS LayerContainer" />
+          <param name="octopus_releasenumber" value="%build.number%" />
+          <param name="octopus_version" value="2.0+" />
+          <param name="octopus_waitfordeployments" value="true" />
+          <param name="secure:octopus_apikey" value="zxxe36f42bc0165fbd4b573cb1ecc0ffcb81f49b2ce618f3123c3a9bb5939c13d75" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_17" name="Run SonarQube" type="simpleRunner">
+        <parameters>
+          <param name="command.executable" value="C:\sonar-runner\bin\sonar-runner.bat" />
+          <param name="teamcity.build.workingDir" value="01 - Code/LIFE" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_15" name="Pack NuGET Packages from projects" type="jb.nuget.pack">
+        <parameters>
+          <param name="nuget.pack.as.artifact" value="true" />
+          <param name="nuget.pack.commandline" value="-IncludeReferencedProjects" />
+          <param name="nuget.pack.output.clean" value="true" />
+          <param name="nuget.pack.output.directory" value="Release/Stable/" />
+          <param name="nuget.pack.project.dir" value="as_is" />
+          <param name="nuget.pack.properties" value="Configuration=Release" />
+          <param name="nuget.pack.specFile"><![CDATA[01 - Code/LIFE/LayerContainer/**/*.nuspec
+01 - Code/LIFE/LIFE Services/**/*.nuspec
+01 - Code/LIFE/LIFE API/**/*.nuspec
+01 - Code/LIFE/SimulationManager/**/*.nuspec]]></param>
+          <param name="nuget.pack.version" value="%build.number%" />
+          <param name="nuget.path" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nugetCustomPath" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nugetPathSelector" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_16" name="Publish Packages to 3ten.de NuGET" type="jb.nuget.publish">
+        <parameters>
+          <param name="nuget.path" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nuget.publish.files" value="/Release/Stable/*" />
+          <param name="nuget.publish.source" value="http://nuget.3ten.de/" />
+          <param name="nugetCustomPath" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nugetPathSelector" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="secure:nuget.api.key" value="zxx7136704e29c9f70d93151a31ad9a5ad78f491db7e47fd892" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings>
+      <vcs-entry-ref root-id="MarsLife_HttpChristianScm3tenDeScmGitLife1" />
+    </vcs-settings>
+    <requirements />
+    <build-triggers>
+      <build-trigger id="vcsTrigger" type="vcsTrigger">
+        <parameters>
+          <param name="groupCheckinsByCommitter" value="true" />
+          <param name="perCheckinTriggering" value="true" />
+        </parameters>
+      </build-trigger>
+    </build-triggers>
+    <build-extensions>
+      <extension id="BUILD_EXT_1" type="VcsLabeling">
+        <parameters>
+          <param name="labelingPattern" value="build-%system.build.number%" />
+          <param name="successfulOnly" value="true" />
+          <param name="vcsRootId" value="MarsLife_HttpChristianScm3tenDeScmGitLife1" />
+        </parameters>
+      </extension>
+    </build-extensions>
+    <cleanup />
+  </settings>
+</build-type>
+
