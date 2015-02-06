@@ -52,7 +52,7 @@ namespace DalskiAgent.Agents {
     ///   Returns the current simulation tick.
     /// </summary>
     /// <returns>Execution tick counter value.</returns>
-    protected long GetTick() {
+    public long GetTick() {
       return _layerImpl.GetCurrentTick();
     }
 

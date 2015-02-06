@@ -28,31 +28,36 @@ namespace DalskiAgent.Agents {
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">Environment implementation reference.</param> 
-    /// <param name="shape">Shape describing this agent's body.</param>
-    /// <param name="pos">The initial position. If null, it is tried to be set randomly.</param>
-    /// <param name="dir">Direction of the agent. If null, then 0°.</param>
-    protected SpatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, 
-                           IEnvironment env, IShape shape = null, 
-                           Vector3 pos = default(Vector3), Direction dir = null) : 
+    /// <param name="shape">Shape describing this agent's body and initial parameters.</param>
+    /// <param name="minPos">Minimum position for random placement [default: origin].</param>
+    /// <param name="maxPos">Maximal random position [default: environmental extent].</param>
+    protected SpatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env, 
+                           IShape shape = null, Vector3 minPos = default(Vector3), Vector3 maxPos = default(Vector3)) : 
       
       // Create the base agent. Per default it is collidable.
       base(layer, regFkt, unregFkt) {
-      CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;
-      
-      // Check, if the agent already has a direction and a form. If not, create a cube facing north.
-      if (dir == null) dir = new Direction();
-      if (shape == null) shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), pos, dir);
-      Shape = shape;
+      CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;      
 
       // Place the agent in the environment.
       bool success;
-      if (!pos.IsNull()) success = env.Add(this, pos, dir);
-      else success = env.AddWithRandomPosition(this, Vector3.Zero, env.MaxDimension, env.IsGrid);    
-      if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
+      if (shape != null) {
+        Shape = shape;
+        success = env.Add(this, Shape.Position, Shape.Rotation);
+      }
       
-      // Save references for later use.    
-      _env = env;
+      // If the agent has no shape yet, create a cube facing north and add at a random position. 
+      else {   
+        Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
+        if (minPos.IsNull()) minPos = Vector3.Zero;
+        if (maxPos.IsNull()) maxPos = env.MaxDimension;
+        success = env.AddWithRandomPosition(this, minPos, maxPos, env.IsGrid); 
+      }
+      
+      if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
+      _env = env;  // Save environment reference.       
     }
+
+
 
 
     /// <summary>
@@ -74,6 +79,15 @@ namespace DalskiAgent.Agents {
     /// <returns>A position vector.</returns>
     public Vector3 GetPosition() {
       return Shape.Position;
+    }
+
+
+    /// <summary>
+    ///   Returns the dimension of this agent's bounding box.
+    /// </summary>
+    /// <returns>A dimension vector.</returns>
+    public Vector3 GetDimension() {
+      return Shape.Bounds.Dimension;
     }
 
 
