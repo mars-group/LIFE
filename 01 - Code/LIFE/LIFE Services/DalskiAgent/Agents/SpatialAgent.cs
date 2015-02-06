@@ -38,21 +38,19 @@ namespace DalskiAgent.Agents {
       base(layer, regFkt, unregFkt) {
       CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;      
 
+      // Set agent shape. If the agent has no shape yet, create a cube facing north and add at a random position. 
+      if (shape != null) Shape = shape;
+      else Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
+
       // Place the agent in the environment.
       bool success;
-      if (shape != null) {
-        Shape = shape;
-        success = env.Add(this, Shape.Position, Shape.Rotation);
-      }
-      
-      // If the agent has no shape yet, create a cube facing north and add at a random position. 
-      else {   
-        Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
+      if (shape != null && minPos.IsNull() && maxPos.IsNull()) success = env.Add(this, Shape.Position, Shape.Rotation);
+      else {
         if (minPos.IsNull()) minPos = Vector3.Zero;
         if (maxPos.IsNull()) maxPos = env.MaxDimension;
-        success = env.AddWithRandomPosition(this, minPos, maxPos, env.IsGrid); 
+        success = env.AddWithRandomPosition(this, minPos, maxPos, env.IsGrid);         
       }
-      
+
       if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
       _env = env;  // Save environment reference.       
     }
