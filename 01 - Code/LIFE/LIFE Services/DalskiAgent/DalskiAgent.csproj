@@ -76,6 +76,10 @@
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LifeAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\ASC\ASC.csproj">
+      <Project>{6bec24d9-fd97-4d66-bcff-8671343b798e}</Project>
+      <Name>ASC</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SpatialAPI\SpatialAPI.csproj">
       <Project>{a2ade928-8504-43b5-8920-e878cad996c9}</Project>
       <Name>SpatialAPI</Name>

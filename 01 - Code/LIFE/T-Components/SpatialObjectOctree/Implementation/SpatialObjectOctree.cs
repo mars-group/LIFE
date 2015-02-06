@@ -135,7 +135,10 @@ namespace SpatialObjectOctree.Implementation
 
         public List<T> GetAll()
         {
+          lock (syncLock) {
             return objectSortOrder.Keys.ToList();
+          }
+            
         }
 
         #endregion

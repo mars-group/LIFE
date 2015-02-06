@@ -1,4 +1,5 @@
 ﻿using System;
+using ASC.Communication.ScsServices.Service;
 using DalskiAgent.Reasoning;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
@@ -9,7 +10,7 @@ namespace DalskiAgent.Agents {
   /// The abstract agent. This is the most generic agent form, it specifies the main execution
   /// cycle and several extension points available for specialized agent implementations.
   /// </summary>
-  public abstract class Agent : IAgent {
+  public abstract class Agent : AscService, IAgent {
     
     private readonly ILayer _layerImpl;               // Layer reference needed for delegate calls. 
     private readonly UnregisterAgent _unregFkt;       // Delegate for unregistration function.

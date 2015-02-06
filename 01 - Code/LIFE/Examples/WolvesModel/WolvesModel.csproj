@@ -72,6 +72,10 @@
       <Project>{a2ade928-8504-43b5-8920-e878cad996c9}</Project>
       <Name>SpatialAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\ASC\ASC.csproj">
+      <Project>{6bec24d9-fd97-4d66-bcff-8671343b798e}</Project>
+      <Name>ASC</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
