@@ -40,6 +40,6 @@ namespace ASC.Communication.ScsServices.Service {
             ServiceID = serviceGuid != null ? new Guid(serviceGuid) : Guid.NewGuid();
         }
 
-        public Guid ServiceID { get; private set; }
+        public Guid ServiceID { get; set; }
     }
 }

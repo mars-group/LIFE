@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
+using DalskiAgent.Auxiliary.Environment;
+using GeoAPI.Geometries;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
+using SpatialAPI.Environment;
 using TreeLayer;
 using TreeLayer.Agents;
 
@@ -32,11 +35,13 @@ namespace KNPTreeLayer {
         private double MaxX = 31.985;
         private double MaxY = -24.997;
         private UnregisterAgent _unregisterAgentHandle;
+        private IEnvironment _environment;
 
         public TreeLayer(IKnpElevationLayer elevationLayer)
         {
             _elevationLayer = elevationLayer;
-            trees = new List<ITree>();
+            var envelope = elevationLayer.GetEnvelope();
+            _environment = new Env25((int) envelope.MaxX, (int) envelope.MaxY);
             _agentsToRemoveInPostTick = new List<ITree>();
             _agentsToAddInPostTick = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
@@ -48,14 +53,7 @@ namespace KNPTreeLayer {
             _agentsToAddInPostTick.AddRange(e.NewAgents);
         }
 
-        /*
-        public TreeLayer(IKnpElevationLayer elevationLayer)
-        {
-            _elevationLayer = elevationLayer;
-            trees = new List<ITree>();
-            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
-        }
-        */
+
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _unregisterAgentHandle = unregisterAgentHandle;
 
@@ -71,10 +69,12 @@ namespace KNPTreeLayer {
                         GetRandomNumber(MinY, MaxY),
                         config.RealAgentIds[i],
                         this,
-                        _elevationLayer
+                        _elevationLayer,
+                        registerAgentHandle,
+                        unregisterAgentHandle,
+                        _environment
                     );
                     agentBag.Add(t);
-                    registerAgentHandle(this, t);
                 });
 
                 Console.WriteLine("Finished: Realagents instantiated.");
@@ -90,7 +90,10 @@ namespace KNPTreeLayer {
                
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
-                    _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
+                    var shadowTrees = _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
+                    foreach (var shadowTree in shadowTrees) {
+                        _environment.Add(shadowTree, )
+                    }
                 }
 
                 Console.WriteLine("Finished: ShadowAgents created.");
@@ -155,5 +158,8 @@ namespace KNPTreeLayer {
             get { return "TreeLayer"; }
         }
 
+        public ITree GetTreeById(Guid id) {
+            return trees.Find(t => t.ID == id);
+        }
     }
 }
