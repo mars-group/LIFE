@@ -14,11 +14,16 @@ namespace DalskiAgent.Agents {
   ///   is registered at an environment to provide collision detection. 
   ///   Per default it is immobile but it can be equipped with a movement module.
   /// </summary>
-  public abstract class SpatialAgent : Agent, ISpatialEntity {
+  public abstract class SpatialAgent : Agent, ISpatialAgent {
 
-    public IShape Shape { get; set; }      // Shape describing this agent's body.
-    private readonly IEnvironment _env;    // IESC implementation for collision detection.
-    protected AgentMover Mover;            // Class for agent movement. 
+    private readonly IEnvironment _env; // IESC implementation for collision detection.
+    protected AgentMover Mover; // Class for agent movement. 
+
+
+    /// <summary>
+    ///   Spatial entity describing this agent's body.
+    /// </summary>
+    public ISpatialEntity Entity { get; private set; }
 
 
     /// <summary>
@@ -31,28 +36,39 @@ namespace DalskiAgent.Agents {
     /// <param name="shape">Shape describing this agent's body and initial parameters.</param>
     /// <param name="minPos">Minimum position for random placement [default: origin].</param>
     /// <param name="maxPos">Maximal random position [default: environmental extent].</param>
-    protected SpatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env, 
-                           IShape shape = null, Vector3 minPos = default(Vector3), Vector3 maxPos = default(Vector3)) : 
-      
-      // Create the base agent. Per default it is collidable.
-      base(layer, regFkt, unregFkt) {
-      CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;      
+    /// <param name="collisionType">Agent collision type [default: 'MassiveAgent'].</param>
+    protected SpatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env,
+      IShape shape = null, Vector3 minPos = default(Vector3), Vector3 maxPos = default(Vector3),
+      Enum collisionType = null) :
+
+        // Create the base agent. 
+        base(layer, regFkt, unregFkt) {
+
+      // Set up the agent entity. Per default it is collidable.  
+      AgentEntity entity = new AgentEntity();
+      if (collisionType != null) entity.CollisionType = collisionType;
+      else entity.CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;
+      entity.AgentGuid = ID;  // Insert ID of base agent.
+      Entity = entity;        // Set entity object to generic ISpatialEntity reference.
 
       // Set agent shape. If the agent has no shape yet, create a cube facing north and add at a random position. 
-      if (shape != null) Shape = shape;
-      else Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
+      if (shape != null) Entity.Shape = shape;
+      else Entity.Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
 
       // Place the agent in the environment.
       bool success;
-      if (shape != null && minPos.IsNull() && maxPos.IsNull()) success = env.Add(this, Shape.Position, Shape.Rotation);
+      if (shape != null && minPos.IsNull() && maxPos.IsNull()) {
+        success = env.Add(Entity, Entity.Shape.Position, Entity.Shape.Rotation);
+      }
       else {
+        // Random position shall be used. 
         if (minPos.IsNull()) minPos = Vector3.Zero;
         if (maxPos.IsNull()) maxPos = env.MaxDimension;
-        success = env.AddWithRandomPosition(this, minPos, maxPos, env.IsGrid);         
+        success = env.AddWithRandomPosition(Entity, minPos, maxPos, env.IsGrid);
       }
 
       if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
-      _env = env;  // Save environment reference.       
+      _env = env; // Save environment reference.       
     }
 
 
@@ -64,7 +80,40 @@ namespace DalskiAgent.Agents {
     /// </summary>
     protected override void Remove() {
       base.Remove();
-      _env.Remove(this);
+      _env.Remove(Entity);
+    }
+
+
+    //_________________________________________________________________________
+    // IEnvironment related methods and internal spatial object implementation.
+
+    /// <summary>
+    ///   The information type of this agent (e.g. its classname).
+    /// </summary>
+    public Enum InformationType { get; protected set; }
+
+
+    /// <summary>
+    ///   Agent-internal ISpatialEntity implementation.
+    /// </summary>
+    internal class AgentEntity : ISpatialEntity {
+
+      /// <summary>
+      ///   A geometric shape describing this agent's body.
+      /// </summary>
+      public IShape Shape { get; set; }
+
+
+      /// <summary>
+      ///   This agent's collision type.
+      /// </summary>
+      public Enum CollisionType { get; set; }
+
+
+      /// <summary>
+      ///   The ID of the base agent.
+      /// </summary>
+      public Guid AgentGuid { get; set; }
     }
 
 
@@ -76,7 +125,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A position vector.</returns>
     public Vector3 GetPosition() {
-      return Shape.Position;
+      return Entity.Shape.Position;
     }
 
 
@@ -85,7 +134,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A dimension vector.</returns>
     public Vector3 GetDimension() {
-      return Shape.Bounds.Dimension;
+      return Entity.Shape.Bounds.Dimension;
     }
 
 
@@ -94,19 +143,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A direction vector.</returns>
     public Direction GetDirection() {
-      return Shape.Rotation;
+      return Entity.Shape.Rotation;
     }
-
-
-    /// <summary>
-    ///   This agent's collision type.
-    /// </summary>
-    public Enum CollisionType { get; protected set; }
-
-
-    /// <summary>
-    ///   The information type of this agent (e.g. its classname).
-    /// </summary>
-    public Enum InformationType { get; protected set; }
   }
 }

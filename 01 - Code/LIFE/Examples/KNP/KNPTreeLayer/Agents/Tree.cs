@@ -98,7 +98,7 @@ namespace TreeLayer.Agents {
             // grow biomass
             Biomass = Math.Pow(Math.E, -3.00682 + 1.56775 * Math.Log(Diameter * Height));
 
-            ITree otherTree = _treeLayer.GetTreeById(result.First().AgentID);
+            ITree otherTree = _treeLayer.GetTreeById(result.First().AgentGuid);
 
             return new ConsumeTreeInteraction(this, otherTree);
         }

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
+    <Compile Include="Agents\ISpatialAgent.cs" />
     <Compile Include="Agents\SpatialAgent.cs" />
     <Compile Include="Auxiliary\Environment\Env25.cs" />
     <Compile Include="Auxiliary\Environment\Heightmap.cs" />

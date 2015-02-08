@@ -92,7 +92,7 @@ namespace KNPTreeLayer {
                     // instantiate Shadow Agents
                     var shadowTrees = _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
                     foreach (var shadowTree in shadowTrees) {
-                        _environment.Add(shadowTree, )
+                        //_environment.Add(shadowTree.)
                     }
                 }
 
