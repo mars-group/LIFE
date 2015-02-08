@@ -10,6 +10,6 @@ namespace DalskiAgent.Agents {
     /// <summary>
     ///   Return the spatial entity of this agent.
     /// </summary>
-    ISpatialEntity Entity { get; }    
+    ISpatialEntity SpatialEntity { get; }    
   }
 }

@@ -59,7 +59,7 @@ namespace WolvesModel.Agents {
       // Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
       var hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
       var agents = _environment.ExploreAll().ToList();
-      agents.Remove(Entity);
+      agents.Remove(SpatialEntity);
 
       // Differentiate between perceived agent types. 
       var sheeps = agents.OfType<Sheep>().ToList();

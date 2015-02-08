@@ -23,7 +23,7 @@ namespace DalskiAgent.Agents {
     /// <summary>
     ///   Spatial entity describing this agent's body.
     /// </summary>
-    public ISpatialEntity Entity { get; private set; }
+    public ISpatialEntity SpatialEntity { get; private set; }
 
 
     /// <summary>
@@ -49,22 +49,22 @@ namespace DalskiAgent.Agents {
       if (collisionType != null) entity.CollisionType = collisionType;
       else entity.CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;
       entity.AgentGuid = ID;  // Insert ID of base agent.
-      Entity = entity;        // Set entity object to generic ISpatialEntity reference.
+      SpatialEntity = entity;        // Set entity object to generic ISpatialEntity reference.
 
       // Set agent shape. If the agent has no shape yet, create a cube facing north and add at a random position. 
-      if (shape != null) Entity.Shape = shape;
-      else Entity.Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
+      if (shape != null) SpatialEntity.Shape = shape;
+      else SpatialEntity.Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
 
       // Place the agent in the environment.
       bool success;
       if (shape != null && minPos.IsNull() && maxPos.IsNull()) {
-        success = env.Add(Entity, Entity.Shape.Position, Entity.Shape.Rotation);
+        success = env.Add(SpatialEntity, SpatialEntity.Shape.Position, SpatialEntity.Shape.Rotation);
       }
       else {
         // Random position shall be used. 
         if (minPos.IsNull()) minPos = Vector3.Zero;
         if (maxPos.IsNull()) maxPos = env.MaxDimension;
-        success = env.AddWithRandomPosition(Entity, minPos, maxPos, env.IsGrid);
+        success = env.AddWithRandomPosition(SpatialEntity, minPos, maxPos, env.IsGrid);
       }
 
       if (!success) throw new Exception("[SpatialAgent] Agent placement in environment failed (ESC returned 'false')!");
@@ -80,7 +80,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     protected override void Remove() {
       base.Remove();
-      _env.Remove(Entity);
+      _env.Remove(SpatialEntity);
     }
 
 
@@ -125,7 +125,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A position vector.</returns>
     public Vector3 GetPosition() {
-      return Entity.Shape.Position;
+      return SpatialEntity.Shape.Position;
     }
 
 
@@ -134,7 +134,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A dimension vector.</returns>
     public Vector3 GetDimension() {
-      return Entity.Shape.Bounds.Dimension;
+      return SpatialEntity.Shape.Bounds.Dimension;
     }
 
 
@@ -143,7 +143,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>A direction vector.</returns>
     public Direction GetDirection() {
-      return Entity.Shape.Rotation;
+      return SpatialEntity.Shape.Rotation;
     }
   }
 }

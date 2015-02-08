@@ -36,7 +36,7 @@ namespace DalskiAgent.Movement.Movers {
     ///   The adapter is responsible to set the checked (returned) data.
     /// </summary>
     protected void Move() {
-      MovementResult = _env.Move(Agent.Entity, MovementVector, TargetDir);
+      MovementResult = _env.Move(Agent.SpatialEntity, MovementVector, TargetDir);
     }
 
 
