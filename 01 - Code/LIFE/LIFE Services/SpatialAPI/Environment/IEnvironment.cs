@@ -43,9 +43,6 @@ namespace SpatialAPI.Environment {
         /// <returns>True, if the entity could be added within range. False, otherwise.</returns>
         bool AddWithRandomPosition(ISpatialEntity entity, Vector3 min, Vector3 max, bool grid);
 
-        //TODO auch mit zufälliger Rotation und ohne grid option
-
-
         /// <summary>
         ///     Removes given entity from the ESC.
         /// </summary>

@@ -43,6 +43,7 @@ namespace EnvironmentServiceComponent.Implementation {
             return true;
         }
 
+        //TODO auch mit zufälliger Rotation und ohne grid option
         public bool AddWithRandomPosition(ISpatialEntity entity, Vector3 min, Vector3 max, bool grid) {
             for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {
                 Vector3 position = GenerateRandomPosition(min, max, grid);

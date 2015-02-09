@@ -34,7 +34,7 @@ namespace SpatialAPI.Shape {
 
 
         public bool IntersectsWith(IShape shape) {
-            return shape.Bounds.IntersectsWith(Bounds);
+            return shape.Bounds.IntersectsWith((IShape) Bounds);
         }
 
         public IShape Transform(Vector3 movement, Direction rotation) {

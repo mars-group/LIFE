@@ -95,7 +95,7 @@ namespace SpatialAPI.Shape {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Intersects(BoundingBox other) {
+        public bool IntersectsWith(BoundingBox other) {
             return _aabb.IntersectsWith(other._aabb);
         }
 
@@ -189,9 +189,9 @@ namespace SpatialAPI.Shape {
         public bool IntersectsWith(IShape shape) {
             var boundingBox = shape as BoundingBox;
             if (boundingBox == null) {
-                return IntersectsWith(shape.Bounds);
+                return IntersectsWith((IShape) shape.Bounds);
             }
-            return Intersects(boundingBox);
+            return IntersectsWith(boundingBox);
         }
 
         public IShape Transform(Vector3 movement, Direction rotation) {

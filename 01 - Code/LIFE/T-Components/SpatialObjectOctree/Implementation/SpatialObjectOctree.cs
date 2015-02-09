@@ -202,11 +202,11 @@ namespace SpatialObjectOctree.Implementation
                 {
                     return;
                 }
-                if (bounds.IntersectsWith(node.Bounds))
+                if (bounds.IntersectsWith((IShape) node.Bounds))
                 {
                     foreach (T quadObject in node.Objects)
                     {
-                        if (bounds.IntersectsWith(quadObject.Shape.Bounds))
+                        if (bounds.IntersectsWith((IShape) quadObject.Shape.Bounds))
                         {
                             results.Add(quadObject);
                         }
