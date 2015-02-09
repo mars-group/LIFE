@@ -40,7 +40,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgentLayerImpl.cs" />
+    <Compile Include="WolvesLayer.cs" />
     <Compile Include="Agents\Grass.cs" />
     <Compile Include="Agents\Sheep.cs" />
     <Compile Include="Agents\Wolf.cs" />

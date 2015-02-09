@@ -16,7 +16,7 @@ namespace DalskiAgent.Agents {
     private readonly UnregisterAgent _unregFkt;       // Delegate for unregistration function.
     protected IAgentLogic ReasoningComponent;         // The agent's reasoning logic.         
     protected bool IsAlive;                           // Alive flag for execution and deletion checks.
-    public readonly long Id;                          // Unique identifier. 
+    public readonly long AgentNumber;                 // Unique agent number. 
 
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace DalskiAgent.Agents {
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     protected Agent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt) {
       IsAlive = true;
-      Id = GetNewId();
+      AgentNumber = GetNewId();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;  
       regFkt(layer, this);
       _layerImpl = layer;
@@ -79,7 +79,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public new virtual string ToString() {
-      return "Agent: " + Id + "\t  Tick: " + GetTick();
+      return "Agent: " + AgentNumber + "\t  Tick: " + GetTick();
     }
 
 

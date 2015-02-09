@@ -65,10 +65,9 @@ namespace TreeLayer.Agents {
             (double height, double diameter, double crownDiameter, double age, double biomass,
             double lat, double lon, Guid id, 
             KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer, RegisterAgent registerAgent, UnregisterAgent unregisterAgent, IEnvironment env)
-            : base(treeLayer, registerAgent, unregisterAgent, env,
-            new Cuboid(new Vector3(1,1,1),new Vector3(lat, lon, 0))) 
-        {
-            _treeLayer = treeLayer;
+            : base(treeLayer, registerAgent, unregisterAgent, env, id, new Cuboid(new Vector3(1,1,1),new Vector3(lat, lon, 0))) {
+            
+          _treeLayer = treeLayer;
             _environment = env;
 
             // AscService ID

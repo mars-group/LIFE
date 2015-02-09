@@ -17,7 +17,7 @@ namespace DalskiAgent.Agents {
   public abstract class SpatialAgent : Agent, ISpatialAgent {
 
     private readonly IEnvironment _env; // IESC implementation for collision detection.
-    protected AgentMover Mover; // Class for agent movement. 
+    protected AgentMover Mover;         // Class for agent movement. 
 
 
     /// <summary>
@@ -32,24 +32,27 @@ namespace DalskiAgent.Agents {
     /// <param name="layer">Layer reference needed for delegate calls.</param>
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
-    /// <param name="env">Environment implementation reference.</param> 
+    /// <param name="env">Environment implementation reference.</param>
+    /// <param name="id">Globally-unique ID (is written to the ISpatialEntity).</param>
     /// <param name="shape">Shape describing this agent's body and initial parameters.</param>
     /// <param name="minPos">Minimum position for random placement [default: origin].</param>
     /// <param name="maxPos">Maximal random position [default: environmental extent].</param>
     /// <param name="collisionType">Agent collision type [default: 'MassiveAgent'].</param>
     protected SpatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env,
-      IShape shape = null, Vector3 minPos = default(Vector3), Vector3 maxPos = default(Vector3),
+      Guid id, IShape shape = null, Vector3 minPos = default(Vector3), Vector3 maxPos = default(Vector3),
       Enum collisionType = null) :
 
-        // Create the base agent. 
-        base(layer, regFkt, unregFkt) {
+      // Create the base agent. 
+      base(layer, regFkt, unregFkt) {
 
       // Set up the agent entity. Per default it is collidable.  
       AgentEntity entity = new AgentEntity();
       if (collisionType != null) entity.CollisionType = collisionType;
       else entity.CollisionType = SpatialAPI.Entities.Movement.CollisionType.MassiveAgent;
-      entity.AgentGuid = ID;  // Insert ID of base agent.
-      SpatialEntity = entity;        // Set entity object to generic ISpatialEntity reference.
+
+      ID = id;                // Set the supplied GUID.
+      entity.AgentGuid = id;  // Insert it also in the spatial entity.
+      SpatialEntity = entity; // Set entity object to generic ISpatialEntity reference.
 
       // Set agent shape. If the agent has no shape yet, create a cube facing north and add at a random position. 
       if (shape != null) SpatialEntity.Shape = shape;

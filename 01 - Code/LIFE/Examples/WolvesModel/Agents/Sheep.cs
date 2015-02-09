@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Movement.Movers;
 using DalskiAgent.Reasoning;
+using LifeAPI.Agent;
 using LifeAPI.Layer;
 using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Environment;
@@ -22,6 +24,7 @@ namespace WolvesModel.Agents {
     private readonly IEnvironment _environment; // Environment reference for random movement.   
     private string _states;                     // Output string for console.
     private readonly GridMover _mover;          // Specific agent mover reference (to avoid casts).
+    private readonly WolvesLayer _layer;        // WolvesLayer reference.
 
 
     /// <summary>
@@ -31,10 +34,12 @@ namespace WolvesModel.Agents {
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">Environment implementation reference.</param> 
-    public Sheep(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) : 
-      base(layer, regFkt, unregFkt, env) {
+    public Sheep(WolvesLayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) : 
+      base(layer, regFkt, unregFkt, env, Guid.NewGuid()) {
       _random = new Random(base.GetHashCode());
       _environment = env;
+      layer.Agents[ID] = this;
+      _layer = layer;
 
       // Add movement module.
       Mover = new GridMover(env, this);
@@ -51,15 +56,17 @@ namespace WolvesModel.Agents {
       // Energy substraction is made first. 
       _energy -= 1 + _random.Next(3);
       if (_energy <= 0) {
-        PrintMessage("["+GetTick()+"] Schaf "+Id+" ist verhungert!", ConsoleColor.DarkRed);
+        PrintMessage("["+GetTick()+"] Schaf "+AgentNumber+" ist verhungert!", ConsoleColor.DarkRed);
         IsAlive = false;
         return null;
       }
 
       // Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
       var hunger = (int) (((double) (EnergyMax - _energy)/EnergyMax)*100);
-      var agents = _environment.ExploreAll().ToList();
-      agents.Remove(SpatialEntity);
+      var spatials = _environment.ExploreAll().ToList();
+      spatials.Remove(SpatialEntity);
+      var agents = new List<IAgent>();
+      foreach(var spatial in spatials) agents.Add(_layer.Agents[spatial.AgentGuid]);
 
       // Differentiate between perceived agent types. 
       var grass = agents.OfType<Grass>().ToList();
@@ -89,7 +96,7 @@ namespace WolvesModel.Agents {
         // R1: Eat nearby grass.
         if (dist <= 1.4143 && hunger > 20) {
           _states += "R1";
-          PrintMessage("[" + GetTick() + "] Schaf " + Id + " frißt Gras " + nearest.Id + "!", ConsoleColor.Green);
+          PrintMessage("[" + GetTick() + "] Schaf " + AgentNumber + " frißt Gras " + nearest.AgentNumber + "!", ConsoleColor.Green);
           return new EatInteraction(this, nearest);
         }
 
@@ -126,7 +133,7 @@ namespace WolvesModel.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format("{0,3:00} | Schaf | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |" + _states,
-          Id, GetPosition().X, GetPosition().Y, _energy, EnergyMax);
+          AgentNumber, GetPosition().X, GetPosition().Y, _energy, EnergyMax);
     }
 
 
