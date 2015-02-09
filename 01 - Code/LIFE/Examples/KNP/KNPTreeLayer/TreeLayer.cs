@@ -24,7 +24,7 @@ namespace KNPTreeLayer {
     {
         private long _currentTick;
 
-        private readonly List<ITree> trees;
+        private readonly List<ITree> _trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly List<ITree> _agentsToRemoveInPostTick;
@@ -46,6 +46,7 @@ namespace KNPTreeLayer {
             _agentsToAddInPostTick = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
             _agentShadowingService.AgentUpdates += OnAgentUpdates;
+            _trees = new List<ITree>();
         }
 
         private void OnAgentUpdates(object sender, LIFEAgentEventArgs<ITree> e) {
@@ -86,13 +87,13 @@ namespace KNPTreeLayer {
 
                 Console.WriteLine("Finished: Realagents registered.");
 
-                trees.AddRange(agentBag);
+                _trees.AddRange(agentBag);
                
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
                     var shadowTrees = _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
                     foreach (var shadowTree in shadowTrees) {
-                        //_environment.Add(shadowTree.)
+                        //_environment.Add(shadowTree)
                     }
                 }
 
@@ -122,7 +123,7 @@ namespace KNPTreeLayer {
         }
 
         public void Tick() {
-            Console.WriteLine("Agents present on this node: " + trees.Count);
+            Console.WriteLine("Agents present on this node: " + _trees.Count);
         }
 
 
@@ -142,7 +143,7 @@ namespace KNPTreeLayer {
 
         internal ITree GetOneOtherTreesThanMe(ITree memyself)
         {
-            return trees.Find(t => t != memyself);
+            return _trees.Find(t => t != memyself);
         }
 
         public long GetCurrentTick() {
@@ -159,7 +160,7 @@ namespace KNPTreeLayer {
         }
 
         public ITree GetTreeById(Guid id) {
-            return trees.Find(t => t.ID == id);
+            return _trees.Find(t => t.ID == id);
         }
     }
 }
