@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MessageWrappers</RootNamespace>
+    <AssemblyName>MessageWrappers</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\MessageWrappers.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\GeoAPI.1.7.3.1\lib\net35-client\GeoAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite, Version=1.13.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NetTopologySuite.1.13.3.2\lib\net35-client\NetTopologySuite.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2573bf8a1bdddcd5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NetTopologySuite.1.13.3.2\lib\net35-client\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net30\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\CommitMessage.cs" />
+    <Compile Include="AgentsAndEvents\EnvironmentEvent.cs" />
+    <Compile Include="Actions\RemoveMessage.cs" />
+    <Compile Include="Actions\ServerControlMessage.cs" />
+    <Compile Include="Objects\PrimitiveObject.cs" />
+    <Compile Include="Helper\Utilities.cs" />
+    <Compile Include="Actions\VisualizationControlMessage.cs" />
+    <Compile Include="Helper\Definitions.cs" />
+    <Compile Include="Helper\AgentDefinition.cs" />
+    <Compile Include="Terrain\AreaDataWrapper.cs" />
+    <Compile Include="Helper\AreaDescriptor.cs" />
+    <Compile Include="Basics\BasicPassiveObject.cs" />
+    <Compile Include="Basics\BasicVisualizationMessage.cs" />
+    <Compile Include="Basics\BasicAgent.cs" />
+    <Compile Include="Helper\ClientCameraViewMessage.cs" />
+    <Compile Include="Helper\DataSetMessage.cs" />
+    <Compile Include="Helper\GroupDefinition.cs" />
+    <Compile Include="Actions\InitializationMessage.cs" />
+    <Compile Include="Objects\NonMovingPassiveObject.cs" />
+    <Compile Include="Objects\Polygon.cs" />
+    <Compile Include="Terrain\TileArray2D.cs" />
+    <Compile Include="Helper\FloatArray2D.cs" />
+    <Compile Include="Objects\MovingPassiveObject.cs" />
+    <Compile Include="AgentsAndEvents\NonMovingBasicAgent.cs" />
+    <Compile Include="Terrain\TerrainDataMessage.cs" />
+    <Compile Include="AgentsAndEvents\MovingBasicAgent.cs" />
+    <Compile Include="Helper\Point3D.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Actions\RegisterMessage.cs" />
+    <Compile Include="Actions\RequestMessage.cs" />
+    <Compile Include="Terrain\TiledTerrainData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LIFEViewProtocol.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName) == Release (
+ cd "$(ProjectDir)"
+ del *.nupkg
+ nuget pack $(ProjectFileName) -Prop Configuration=Release
+ forfiles /P . /m *.nupkg /c "cmd /c nuget push @FILE -s http://nuget.3ten.de/ pcBHVXRswcR3q8Nuv
+)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
