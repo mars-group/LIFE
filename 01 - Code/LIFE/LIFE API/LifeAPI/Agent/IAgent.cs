@@ -10,8 +10,15 @@
 using System;
 
 namespace LifeAPI.Agent {
+    /// <summary>
+    /// The basic IAgent interface.
+    /// </summary>
     public interface IAgent : ITickClient
     {
+        /// <summary>
+        /// The agent's main ID. Will be unique across the whole simulation.
+        /// Use this to reference the agent by ID.
+        /// </summary>
         Guid ID { get; set; }
     }
 }

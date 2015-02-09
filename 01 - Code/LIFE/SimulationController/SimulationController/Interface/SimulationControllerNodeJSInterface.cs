@@ -107,7 +107,11 @@ namespace SimulationController.Interface {
         }
     }
 
-
+    /// <summary>
+    /// Resolves an issue which occurs when an assembly should be loaded triggered by an external process.
+    /// By default the assembly is only being searched for in the current context and not in all
+    /// currently loaded assemblies. This is fixed here.
+    /// </summary>
     public static class AssemblyResolverFix
     {
         //Looks up the assembly in the set of currently loaded assemblies,

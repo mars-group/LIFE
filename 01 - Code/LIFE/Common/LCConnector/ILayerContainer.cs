@@ -12,9 +12,12 @@ using System.Collections.Generic;
 using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
-using MessageWrappers;
+using MessageWrappers.Basics;
 
 namespace LCConnector {
+    /// <summary>
+    /// The LayerContainer's public interface. This may be jused locally or via the provided SCS service.
+    /// </summary>
     [ScsService(Version = "0.1")]
     public interface ILayerContainer {
         /// <summary>
@@ -24,7 +27,7 @@ namespace LCConnector {
         void LoadModelContent(ModelContent content);
 
         /// <summary>
-        ///     Orders the LayerContainerClient to instantiate a version of the given layer id from the model content.
+        ///     Orders the LayerContainer to instantiate a version of the given layer id from the model content.
         ///     If there already was an instance of that type instantiated, it will be overwritten by the new one.
         /// </summary>
         /// <param name="instanceId">A simulation wide unique layer identification.</param>

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using MessageWrappers.AgentsAndEvents;
+using MessageWrappers.Basics;
+using MessageWrappers.Objects;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.Helper {
 	[ProtoContract]
 	public class DataSetMessage : BasicVisualizationMessage {
 		[ProtoMember(1)]

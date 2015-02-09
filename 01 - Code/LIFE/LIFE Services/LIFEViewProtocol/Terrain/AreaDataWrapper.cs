@@ -1,4 +1,6 @@
-﻿using ProtoBuf;
+﻿using MessageWrappers.Basics;
+using MessageWrappers.Terrain;
+using ProtoBuf;
 
 namespace MessageWrappers {
 	[ProtoContract]

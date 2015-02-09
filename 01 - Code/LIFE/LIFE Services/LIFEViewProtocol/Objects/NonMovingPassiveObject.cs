@@ -1,6 +1,7 @@
-﻿using ProtoBuf;
+﻿using MessageWrappers.Basics;
+using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.Objects {
 	[ProtoContract]
 	public class NonMovingPassiveObject : BasicPassiveObject {
 		[ProtoMember(1)]

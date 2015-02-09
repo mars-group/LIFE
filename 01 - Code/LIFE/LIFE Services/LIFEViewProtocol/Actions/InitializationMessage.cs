@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using MessageWrappers.Basics;
+using MessageWrappers.Terrain;
 using ProtoBuf;
 
 namespace MessageWrappers {

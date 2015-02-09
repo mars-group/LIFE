@@ -52,9 +52,6 @@
     <Reference Include="log4net">
       <HintPath>$(SolutionDir)packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MessageWrappers">
-      <HintPath>$(SolutionDir)Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WinForms\MarsMC.cs">
@@ -126,6 +123,10 @@
     <ProjectReference Include="..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LifeAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LIFE Services\LIFEViewProtocol\LIFEViewProtocol.csproj">
+      <Project>{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}</Project>
+      <Name>LIFEViewProtocol</Name>
     </ProjectReference>
     <ProjectReference Include="..\LIFE Services\MarsErrorReporting\MarsErrorReporting.csproj">
       <Project>{d2957897-135d-4e3c-93ea-9ffaf8607a82}</Project>

@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.Terrain {
 	[ProtoContract]
 	public class TileArray2D {
 		[ProtoMember(1)]

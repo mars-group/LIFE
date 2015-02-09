@@ -2,7 +2,7 @@
 using MessageWrappers.Objects;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.Basics {
 	/// <summary>
 	///     Basic type for passive, non-simulated objects which are part of the simulation like buildings or vegetation.
 	/// </summary>

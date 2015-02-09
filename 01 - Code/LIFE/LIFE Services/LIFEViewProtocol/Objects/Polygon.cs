@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GeoAPI.Geometries;
+using MessageWrappers.Basics;
 using NetTopologySuite.Geometries;
 using ProtoBuf;
 

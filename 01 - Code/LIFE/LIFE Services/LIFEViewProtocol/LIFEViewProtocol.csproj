@@ -52,9 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\CommitMessage.cs" />
-    <Compile Include="AgentsAndEvents\EnvironmentEvent.cs" />
     <Compile Include="Actions\RemoveMessage.cs" />
     <Compile Include="Actions\ServerControlMessage.cs" />
+    <Compile Include="AgentsAndEvents\EnvironmentEvent.cs" />
     <Compile Include="Objects\PrimitiveObject.cs" />
     <Compile Include="Helper\Utilities.cs" />
     <Compile Include="Actions\VisualizationControlMessage.cs" />

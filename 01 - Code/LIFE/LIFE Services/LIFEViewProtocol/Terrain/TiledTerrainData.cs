@@ -1,6 +1,7 @@
-﻿using ProtoBuf;
+﻿using MessageWrappers.Basics;
+using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.Terrain {
 	/// <summary>
 	///     Data of one terrain tile
 	/// </summary>

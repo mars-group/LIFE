@@ -1,6 +1,9 @@
-﻿using ProtoBuf;
+﻿using MessageWrappers.AgentsAndEvents;
+using MessageWrappers.Helper;
+using MessageWrappers.Terrain;
+using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.Basics {
 	[ProtoContract]
 	[ProtoInclude(100, typeof (BasicAgent))]
 	[ProtoInclude(101, typeof (ClientCameraViewMessage))]

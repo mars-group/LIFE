@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MessageWrappers.Basics;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.AgentsAndEvents {
 	[ProtoContract]
 	public class EnvironmentEvent : BasicVisualizationMessage {
 		[ProtoMember(1)]
@@ -30,7 +30,7 @@ namespace MessageWrappers {
 		public float Size_Z { get; private set; }
 
 		[ProtoMember(9)]
-		public Dictionary<String, String> Attributes { get; private set; }
+		public Dictionary<string, string> Attributes { get; private set; }
 
 		protected EnvironmentEvent() {
 			GetInheritancePath();

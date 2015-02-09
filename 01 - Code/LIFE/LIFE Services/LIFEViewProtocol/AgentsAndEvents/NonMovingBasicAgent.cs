@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using MessageWrappers.Basics;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace MessageWrappers.AgentsAndEvents {
 	[ProtoContract]
 	public class NonMovingBasicAgent : BasicAgent {
 		[ProtoMember(1)]
