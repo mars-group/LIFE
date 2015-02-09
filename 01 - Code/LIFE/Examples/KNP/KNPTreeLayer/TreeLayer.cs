@@ -29,6 +29,7 @@ namespace KNPTreeLayer {
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly List<ITree> _agentsToRemoveInPostTick;
         private readonly List<ITree> _agentsToAddInPostTick;
+        private readonly Random _random = new Random();
 
         private double MinX = 31.331;
         private double MinY = -25.292;
@@ -37,16 +38,20 @@ namespace KNPTreeLayer {
         private UnregisterAgent _unregisterAgentHandle;
         private IEnvironment _environment;
 
-        public TreeLayer(IKnpElevationLayer elevationLayer)
-        {
-            _elevationLayer = elevationLayer;
-            var envelope = elevationLayer.GetEnvelope();
-            _environment = new Env25((int) envelope.MaxX, (int) envelope.MaxY);
-            _agentsToRemoveInPostTick = new List<ITree>();
-            _agentsToAddInPostTick = new List<ITree>();
-            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
-            _agentShadowingService.AgentUpdates += OnAgentUpdates;
-            _trees = new List<ITree>();
+        public TreeLayer(IKnpElevationLayer elevationLayer) {
+          _elevationLayer = elevationLayer;
+          
+          // Create the environment. It works with an positive extent.
+          var envelope = elevationLayer.GetEnvelope();
+          Coordinate coord = elevationLayer.TransformToImage(envelope.MaxX, envelope.MaxY);
+          _environment = new Env25((float) coord.X, (float) coord.Y);
+
+
+          _agentsToRemoveInPostTick = new List<ITree>();
+          _agentsToAddInPostTick = new List<ITree>();
+          _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
+          _agentShadowingService.AgentUpdates += OnAgentUpdates;
+          _trees = new List<ITree>();
         }
 
         private void OnAgentUpdates(object sender, LIFEAgentEventArgs<ITree> e) {
@@ -58,24 +63,19 @@ namespace KNPTreeLayer {
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _unregisterAgentHandle = unregisterAgentHandle;
 
-
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
                 var agentBag = new ConcurrentBag<Tree>();
                 // instantiate real Agents
                 var config = agentInitConfig;
                 Parallel.For(0, agentInitConfig.RealAgentCount, i => {
-                    var t = new Tree(4, 2, 10, i, 500,
-                        GetRandomNumber(MinX, MaxX),
-                        GetRandomNumber(MinY, MaxY),
-                        config.RealAgentIds[i],
-                        this,
-                        _elevationLayer,
-                        registerAgentHandle,
-                        unregisterAgentHandle,
-                        _environment
-                    );
-                    agentBag.Add(t);
+                  var t = new Tree(4, 2, 10, i, 500, 
+                    GetRandomNumber(0, _environment.MaxDimension.X), 
+                    GetRandomNumber(0, _environment.MaxDimension.Y), 
+                    config.RealAgentIds[i], this,
+                    _elevationLayer, registerAgentHandle, unregisterAgentHandle, _environment
+                  );
+                  agentBag.Add(t);
                 });
 
                 Console.WriteLine("Finished: Realagents instantiated.");
@@ -135,11 +135,10 @@ namespace KNPTreeLayer {
         }
 
 
-        private double GetRandomNumber(double minimum, double maximum)
-        { 
-            var random = new Random();
-            return random.NextDouble() * (maximum - minimum) + minimum;
+        private double GetRandomNumber(double minimum, double maximum) {        
+          return _random.NextDouble() * (maximum - minimum) + minimum;
         }
+
 
         internal ITree GetOneOtherTreesThanMe(ITree memyself)
         {
