@@ -1,4 +1,7 @@
-﻿using LCConnector.TransportTypes;
+﻿using System;
+using System.Collections.Generic;
+using LCConnector.TransportTypes;
+using LifeAPI.Agent;
 using LifeAPI.Layer;
 using Mono.Addins;
 using SpatialAPI.Entities.Transformation;
@@ -16,10 +19,12 @@ namespace WolvesModel {
   ///   It uses the Generic Agent Architecture and serves as an example for other agent models.
   /// </summary>
   [Extension(typeof (ISteppedLayer))]
-  public class AgentLayerImpl : ISteppedLayer {
+  public class WolvesLayer : ISteppedLayer {
 
-    private IEnvironment _env;  // Grassland (environment) object for spatial agents. 
-    private long _tick;         // Current tick.
+    private IEnvironment _env;              // Grassland (environment) object for spatial agents. 
+    private long _tick;                     // Current tick.   
+    public Dictionary<Guid, IAgent> Agents; // ID-to-agent mapping.
+ 
 
 
     /// <summary>
@@ -31,8 +36,9 @@ namespace WolvesModel {
     /// <returns></returns>
     public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {  
 
-      // Create the environment, the execution container and an agent spawner.    
+      // Create the environment and the agent listing.    
       _env = new ESC{IsGrid = true, MaxDimension = new Vector3(30,20)}; //new Env25(30, 20));
+      Agents = new Dictionary<Guid, IAgent>();
 
 
       // ReSharper disable ObjectCreationAsStatement

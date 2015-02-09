@@ -15,6 +15,7 @@ namespace WolvesModel.Agents {
     private int _foodValue = 2;           // Nutrition value (energy).
     private const int FoodvalueMax = 60;  // Maximum food value.
     private readonly Random _random;      // Random number generator for unequal growing.
+    private readonly WolvesLayer _layer;        // WolvesLayer reference.
 
 
     /// <summary>
@@ -24,9 +25,11 @@ namespace WolvesModel.Agents {
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">Environment implementation reference.</param> 
-    public Grass(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) :    
-      base(layer, regFkt, unregFkt, env) {
+    public Grass(WolvesLayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) :    
+      base(layer, regFkt, unregFkt, env, Guid.NewGuid()) {
       _random = new Random(base.GetHashCode());
+      layer.Agents[ID] = this;
+      _layer = layer;
     }
 
 
@@ -47,7 +50,7 @@ namespace WolvesModel.Agents {
     /// <returns>Console output string.</returns>
     public override string ToString() {
       return String.Format("{0,3:00} | Gras  | ({1,2:00},{2,2:00})  |  {3,2:0}/{4,2:00}  |     |       |         |",
-        Id, GetPosition().X, GetPosition().Y, _foodValue, FoodvalueMax);
+        AgentNumber, GetPosition().X, GetPosition().Y, _foodValue, FoodvalueMax);
     }
 
 

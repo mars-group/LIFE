@@ -17,7 +17,8 @@ namespace ESCTest.Entities {
 
         public IShape Shape { get; set; }
         public Enum CollisionType { get { return _collisionType; } }
-        public Enum InformationType { get { return CollisionType; } }
+      public Guid AgentGuid { get; private set; }
+      public Enum InformationType { get { return CollisionType; } }
 
         public override string ToString() {
             return Shape.Bounds.ToString();
