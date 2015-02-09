@@ -15,12 +15,10 @@ namespace SpatialAPI.Environment {
         /// </summary>
         Vector3 MaxDimension { get; set; }
 
-
         /// <summary>
         ///     Tells, if this environment is rasterized or not.
         /// </summary>
         bool IsGrid { get; set; }
-
 
         /// <summary>
         ///     Adds a new entity to the ESC at given position with given direction.
