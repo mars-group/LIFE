@@ -10,48 +10,44 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
-using ASC.Communication.ScsServices.Service;
+using DalskiAgent.Agents;
+using DalskiAgent.Reasoning;
+using GeoAPI.Geometries;
 using KNPElevationLayer;
+using LifeAPI.Layer;
 using NetTopologySuite.Geometries;
-
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Environment;
+using SpatialAPI.Shape;
 
 namespace TreeLayer.Agents {
-    public class Tree : AscService, ITree {
-
-        private readonly IKnpElevationLayer _elevationLayer;
-        private readonly KNPTreeLayer.TreeLayer _treeLayer;
+    public class Tree : SpatialAgent, ITree {
 
         private double _biomass;
+        private readonly KNPTreeLayer.TreeLayer _treeLayer;
+        private IEnvironment _environment;
 
-        public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
         public double CrownDiameter { get; set; }
         public double Age { get; set;}
 
-        public double Biomass
-        {
-            get
-            {
-                return _biomass;
+        public double Biomass {
+          get { return _biomass; }
+          set {
+            if (_biomass != value) {
+              _biomass = value;
+              OnPropertyChanged("Biomass");
             }
-            set
-            {
-                if (_biomass != value)
-                {
-                    _biomass = value;
-                    OnPropertyChanged("Biomass");
-                }
-            }
+          }
         }
 
         public double HeightAboveNN { get; set; }
 
         public double Lat { get; set; }
         public double Lon { get; set; }
-        public string GetIdentifiaction()
-        {
-            return ID.ToString();
+        public string GetIdentification() {
+          return ID.ToString();
         }
 
         private const double GParK = 0.18;
@@ -60,11 +56,19 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) 
-        {
-            _elevationLayer = elevationLayer; 
-            _treeLayer = treeLayer;
-            ID = id;
+            (double height, double diameter, double crownDiameter, double age, double biomass,
+            double lat, double lon, Guid id, 
+            KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer, RegisterAgent registerAgent, UnregisterAgent unregisterAgent, IEnvironment env)
+            : base(treeLayer, registerAgent, unregisterAgent, env, id, new Cuboid(new Vector3(1,1,1),new Vector3(lat, lon, 0))) {
+            
+          _treeLayer = treeLayer;
+            _environment = env;
+
+            // AscService ID
+            ServiceID = id;
+            // DalskiAgent ID
+            ID = ServiceID;
+
             Height = height;
             Diameter = diameter;
             CrownDiameter = crownDiameter;
@@ -72,25 +76,31 @@ namespace TreeLayer.Agents {
             Biomass = biomass;
             Lat = lat;
             Lon = lon;
-            var result = _elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
+
+          Coordinate coord = elevationLayer.TransformToWorld(lat, lon);
+
+            var result = elevationLayer.GetDataByGeometry(new Point(coord.X, coord.Y));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
-
         }
 
-        #region IAgent Members
+        public IInteraction Reason() {
+            var result = _environment.ExploreAll();
+            //Console.WriteLine("["+AgentNumber+"] I see "+result.Count()+" other trees.");
 
-        public void Tick() {
-            var biomass = _treeLayer.GetOneOtherTreesThanMe(this).Biomass;
-            //Age++;
+
             // grow diameter
-            Diameter = Diameter + GParK*(GmaxD - Diameter);
+            Diameter = Diameter + GParK * (GmaxD - Diameter);
             // grow height
-            Height = Height + GParK*(GmaxH - Height)*(HeightAboveNN/0.001);
+            Height = Height + GParK * (GmaxH - Height) * (HeightAboveNN / 0.001);
             // grow biomass
-            Biomass = Math.Pow(Math.E, -3.00682 + 1.56775*Math.Log(Diameter*Height));
+            Biomass = Math.Pow(Math.E, -3.00682 + 1.56775 * Math.Log(Diameter * Height));
+
+            
+            //ITree otherTree = _treeLayer.GetTreeById(result.First().AgentGuid);
+
+          return null;//new ConsumeTreeInteraction(this, otherTree);
         }
 
-        #endregion
 
         #region PropertyChanged Handling
         public event PropertyChangedEventHandler PropertyChanged;

@@ -37,7 +37,7 @@ namespace DalskiAgentTests {
       for (int t = 0; t < tests.Length; t++) {
         Env25 env = new Env25(envWidth, envHeight);
         for (int i = 0; i < tests[t]; i++) {
-          Assert.True(env.Add(new Obj(new Float2(0, 0), new Float2(0.9f, 0.9f)), new Vector3(i%envWidth, (float)i/envWidth)));
+          Assert.True(env.Add(new Obj(new Float2(0, 0), new Float2(0.9f, 0.9f)), new Vector3(i%envWidth, (int)(i/envWidth))));
         } 
         Console.WriteLine("["+tests[t]+" agents]: "+stopwatch.ElapsedMilliseconds + " ms");
         stopwatch.Restart();  // Reset stopwatch.
