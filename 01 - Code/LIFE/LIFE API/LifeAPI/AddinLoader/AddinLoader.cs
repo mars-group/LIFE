@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -67,7 +68,7 @@ namespace LifeAPI.AddinLoader {
         public TypeExtensionNode LoadLayer(string layerName) {
             WaitForAddinManagerToBeInitialized();
             UpdateAddinRegistry();
-            return _extensionNodes.Cast<TypeExtensionNode>().First(node => node.Type.Name == layerName);
+            return _extensionNodes.Cast<TypeExtensionNode>().First(node => node.TypeName == layerName);
         }
 
         public ExtensionNodeList LoadAllLayers() {
