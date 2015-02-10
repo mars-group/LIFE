@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using MessageWrappers;
-using MessageWrappers.AgentsAndEvents;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.AgentsAndEvents;
+using LIFEViewProtocol.Basics;
 
 
 namespace MARSLocalStarter.WinForms

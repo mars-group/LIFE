@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using MessageWrappers.Terrain;
+using LIFEViewProtocol.Terrain;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Helper {
 	public static class Utilities {
 		public static void GenerateMapFromData(float[,] map, double height, out TiledTerrainData[,] ttd,
 			out TerrainDataMessage tdm) {

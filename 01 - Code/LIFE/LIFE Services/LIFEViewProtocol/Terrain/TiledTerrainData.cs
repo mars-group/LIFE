@@ -1,7 +1,8 @@
-﻿using MessageWrappers.Basics;
+﻿using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
 using ProtoBuf;
 
-namespace MessageWrappers.Terrain {
+namespace LIFEViewProtocol.Terrain {
 	/// <summary>
 	///     Data of one terrain tile
 	/// </summary>

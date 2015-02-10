@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using GeoAPI.Geometries;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
 using NetTopologySuite.Geometries;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Objects {
 	[ProtoContract]
 	public class Polygon : BasicVisualizationMessage {
 		[ProtoMember(1)]

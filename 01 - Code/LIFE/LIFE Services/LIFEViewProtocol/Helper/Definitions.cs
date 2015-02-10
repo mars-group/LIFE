@@ -1,4 +1,4 @@
-﻿namespace MessageWrappers {
+﻿namespace LIFEViewProtocol.Helper {
 	public class Definitions {
 		/// <summary>
 		///     Known types of agents.

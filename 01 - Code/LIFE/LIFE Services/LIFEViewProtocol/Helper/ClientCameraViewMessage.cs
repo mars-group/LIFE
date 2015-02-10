@@ -1,7 +1,7 @@
-﻿using MessageWrappers.Basics;
+﻿using LIFEViewProtocol.Basics;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Helper {
 	[ProtoContract]
 	public class ClientCameraViewMessage : BasicVisualizationMessage {
 		[ProtoMember(1)]
