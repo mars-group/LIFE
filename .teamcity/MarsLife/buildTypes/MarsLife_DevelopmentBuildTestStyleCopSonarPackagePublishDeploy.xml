@@ -103,7 +103,7 @@ http://nuget.3ten.de/nuget]]></param>
       </runner>
       <runner id="RUNNER_17" name="Run SonarQube" type="simpleRunner">
         <parameters>
-          <param name="command.executable" value="C:\sonar-runner\bin\sonar-runner.bat" />
+          <param name="command.executable" value="D:\sonar-runner-2.4\bin\sonar-runner.bat" />
           <param name="teamcity.build.workingDir" value="01 - Code/LIFE" />
           <param name="teamcity.step.mode" value="default" />
         </parameters>

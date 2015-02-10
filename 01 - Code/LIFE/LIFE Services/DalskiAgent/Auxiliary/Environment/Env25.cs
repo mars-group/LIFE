@@ -18,8 +18,9 @@ namespace DalskiAgent.Auxiliary.Environment {
     private readonly Quadtree _quadtree;   // Quadtree to store objects.
     private readonly Heightmap _heightmap; // Map with height values. 
     private readonly Random _random;       // Random number generator.
-    private readonly int _width;           // Width of environment map (x value).
-    private readonly int _height;          // Height of environment map (y value).
+    private readonly Float2 _minExtent;    // Minimum extent of the environment.
+    private readonly Float2 _maxExtent;    // Maximum extent of the environment.
+
 
 
     /// <summary>
@@ -27,12 +28,19 @@ namespace DalskiAgent.Auxiliary.Environment {
     /// </summary>
     /// <param name="width">Width of the area (x-axis extent).</param>
     /// <param name="height">Height (or depth) of the area (y-axis extent).</param>
-    public Env25(int width, int height) {
-      _width = width;
-      _height = height;
+    /// <param name="minWidth">Minimum extent in x-axis [default 0].</param>
+    /// <param name="minHeight">Minimum extent in y-axis [default 0].</param>
+    public Env25(float width, float height, float minWidth=0f, float minHeight=0f) {
+      _minExtent = new Float2(minWidth, minHeight);
+      _maxExtent = new Float2(width, height);
       _random = new Random((int) DateTime.Now.Ticks);
-      _quadtree = new Quadtree(0, new Float2(0,0), new Float2(width, height));
+
+      float spanX = _maxExtent.X - _minExtent.X;
+      float spanY = _maxExtent.Y - _minExtent.Y;
+      _quadtree = new Quadtree(0, new Float2(_minExtent.X, _minExtent.Y), new Float2(spanX, spanY));
       _heightmap = new Heightmap();
+      Console.WriteLine("[Env25] Created with min: (" + _minExtent.X + ", " + _minExtent.Y + ")"+
+                        " => max: (" + _maxExtent.X + ", " + _maxExtent.Y + ").");
     }
 
 
@@ -57,6 +65,7 @@ namespace DalskiAgent.Auxiliary.Environment {
       // All is fine. Set values to entity and insert into quadtree.
       entity.Shape = new Cuboid(entity.Shape.Bounds.Dimension, position, rotation);
       _quadtree.Insert(entity);
+      Console.WriteLine("Entity added at ("+pos.X+", "+pos.Y+").");  
       return true;
     }
 
@@ -75,16 +84,16 @@ namespace DalskiAgent.Auxiliary.Environment {
 
       // Read out minimum and maximum values for random placement. If not set, use defaults.
       int[] start = {(int) min.X, (int) min.Y};
-      int[] end   = {_width, _height};
-      if (!max.IsNull() && max.X < _width && max.Y < _height) {
-        end[0] = (int) max.X;
-        end[1] = (int) max.Y;
+      float[] end   = {_maxExtent.X, _maxExtent.Y};
+      if (!max.IsNull() && max.X < _maxExtent.X && max.Y < _maxExtent.Y) {
+        end[0] = (float) max.X;
+        end[1] = (float) max.Y;
       }
 
       // Generate random position and try to place object there.
       for (int i = 0; i < 25; i++) {
-        int x = _random.Next(start[0], end[0]);
-        int y = _random.Next(start[1], end[1]);
+        int x = _random.Next(start[0], (int) end[0]);
+        int y = _random.Next(start[1], (int) end[1]);
         bool success = Add(entity, new Vector3(x, y));
         if (success) return true;
       }
@@ -147,7 +156,7 @@ namespace DalskiAgent.Auxiliary.Environment {
     /// </summary>
     /// <returns>A list of all contained spatial objects.</returns>
     public IEnumerable<ISpatialEntity> ExploreAll() {
-      return RetrieveFromQuadtree(new Float2(0, 0), new Float2(_width, _height));
+      return RetrieveFromQuadtree(_minExtent, _maxExtent);
     }
 
 
@@ -194,7 +203,7 @@ namespace DalskiAgent.Auxiliary.Environment {
     // Unneeded stuff from interface contract follows here:
 
     public Vector3 MaxDimension {
-      get { return new Vector3(_width, _height); } 
+      get { return new Vector3(_maxExtent.X, _maxExtent.Y); } 
       set { throw new Exception("[Env25] Error setting 'MaxDimension'. Not supported, use constructor instead!"); }
     }
     public bool IsGrid { get; set; }

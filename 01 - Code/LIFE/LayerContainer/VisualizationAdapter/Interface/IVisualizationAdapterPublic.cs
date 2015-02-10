@@ -9,16 +9,39 @@
 
 using System;
 using System.Collections.Generic;
-using MessageWrappers;
+using LIFEViewProtocol.Basics;
 
 namespace VisualizationAdapter.Interface {
+    /// <summary>
+    /// The public interface of the VisualizationAdapter
+    /// </summary>
     public interface IVisualizationAdapterPublic {
+        /// <summary>
+        /// An event indicating that the Visualization has been updated.
+        /// The event args will contain all changes.
+        /// </summary>
         event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
+        /// <summary>
+        /// Starts the visualization. Takes optional parameter to 
+        /// set the number of ticks to visualize at once.
+        /// </summary>
+        /// <param name="nrOfTicksToVisualize">The # of ticks to visualize.</param>
         void StartVisualization(int? nrOfTicksToVisualize = null);
 
+        /// <summary>
+        /// Stops the visualization.
+        /// </summary>
         void StopVisualization();
 
+        /// <summary>
+        /// NOT IMPLEMENTED YET!
+        /// Adjusts the visualization's camera view. 
+        /// </summary>
+        /// <param name="topLeft">The topleft corner of the view angle</param>
+        /// <param name="topRight">The topright corner of the view angle</param>
+        /// <param name="bottomLeft">The bottomLeft corner of the view angle</param>
+        /// <param name="bottomRight">The bottomright corner of the view angle</param>
         void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight);
     }
 }

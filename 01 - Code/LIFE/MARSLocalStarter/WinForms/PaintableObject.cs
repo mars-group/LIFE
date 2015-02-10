@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MessageWrappers;
+using LIFEViewProtocol.AgentsAndEvents;
+using LIFEViewProtocol.Basics;
+
 
 namespace MARSLocalStarter.WinForms
 {
@@ -29,14 +29,13 @@ namespace MARSLocalStarter.WinForms
             foreach (var passivObject in passivObjectData)
             {
                 var basicPassiveObject = passivObject as BasicPassiveObject;
-                var vegetationPassivObject = passivObject as VegetationPassiveObject;
                 if (basicPassiveObject == null) continue;
 
                 var agentPoint = new PaintableObject()
                 {
                     Rectangle = new RectangleF(
-                        new PointF(basicPassiveObject.X, basicPassiveObject.Y),
-                        new SizeF(vegetationPassivObject != null ? vegetationPassivObject.Width : 1, vegetationPassivObject != null ? vegetationPassivObject.Height : 1)),
+                        new PointF((float)basicPassiveObject.X, (float)basicPassiveObject.Y),
+                        new SizeF(1, 1)),
                     Color = Color.FromArgb(200, Color.FromArgb(basicPassiveObject.Description.GetHashCode())),
                 };
                 result.Add(agentPoint);
@@ -50,8 +49,8 @@ namespace MARSLocalStarter.WinForms
 
                 var agentPoint = new PaintableObject()
                 {
-                    Rectangle = new RectangleF(new PointF(basicAgent.X, basicAgent.Y),
-                        new SizeF(movingBasicAgent != null ? movingBasicAgent.Width : 1, movingBasicAgent != null ? movingBasicAgent.Height : 1)),
+                    Rectangle = new RectangleF(new PointF((float)basicAgent.X, (float)basicAgent.Y),
+                        new SizeF(movingBasicAgent != null ? movingBasicAgent.Size_X : 1, movingBasicAgent != null ? movingBasicAgent.Size_Y : 1)),
                     Color = Color.FromArgb(255, 204, 134, 29)
                 };
                 result.Add(agentPoint);

@@ -7,9 +7,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using LayerContainerFacade.Interfaces;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Terrain;
 using log4net;
 using MARSLocalStarter.Properties;
-using MessageWrappers;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 
@@ -189,7 +190,7 @@ namespace MARSLocalStarter.WinForms
                 default:
                     if (_currentVisState != null)
                     {
-                        DrawGrid(e, new Size(_terrainData.SizeX, _terrainData.SizeY), _currentVisState);
+                        DrawGrid(e, new Size(_terrainData.TileCountX, _terrainData.TileCountY), _currentVisState);
                         DrawText(e, string.Format("t={0}\nzoom={1}x", _visCurrentTick - 1, _zoom));
                     }
                     else

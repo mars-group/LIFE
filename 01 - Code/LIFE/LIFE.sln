@@ -143,7 +143,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalskiAgentTests", "Tests\D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialAPITests", "Tests\SpatialAPITests\SpatialAPITests.csproj", "{4B75B6D3-B7A1-4C71-A227-6F0079749DF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctreeTest", "Tests\OctreeTest\OctreeTest.csproj", "{8232FB05-7E79-4655-872B-B23D41324B19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIFEViewProtocol", "LIFE Services\LIFEViewProtocol\LIFEViewProtocol.csproj", "{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -710,16 +710,16 @@ Global
 		{4B75B6D3-B7A1-4C71-A227-6F0079749DF2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4B75B6D3-B7A1-4C71-A227-6F0079749DF2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4B75B6D3-B7A1-4C71-A227-6F0079749DF2}.Release|x86.ActiveCfg = Release|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{8232FB05-7E79-4655-872B-B23D41324B19}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -780,7 +780,7 @@ Global
 		{F66E0E91-6C1E-41A9-87F3-C90EBF3E7CA6} = {F18E0ED6-19F6-4353-9AF1-218DFD840AC1}
 		{0CD7F422-2945-40FD-90EE-483FA784F2D0} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
 		{4B75B6D3-B7A1-4C71-A227-6F0079749DF2} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
-		{8232FB05-7E79-4655-872B-B23D41324B19} = {2894E98B-0CAF-47F4-A7E0-1AF9FA565906}
+		{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC} = {5BF046F2-CC5D-47DD-AAC9-AD021E984031}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj

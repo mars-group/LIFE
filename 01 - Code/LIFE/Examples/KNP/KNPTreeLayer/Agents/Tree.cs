@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using DalskiAgent.Agents;
 using DalskiAgent.Reasoning;
+using GeoAPI.Geometries;
 using KNPElevationLayer;
 using LifeAPI.Layer;
 using NetTopologySuite.Geometries;
@@ -31,29 +32,22 @@ namespace TreeLayer.Agents {
         public double CrownDiameter { get; set; }
         public double Age { get; set;}
 
-        public double Biomass
-        {
-            get
-            {
-                return _biomass;
+        public double Biomass {
+          get { return _biomass; }
+          set {
+            if (_biomass != value) {
+              _biomass = value;
+              OnPropertyChanged("Biomass");
             }
-            set
-            {
-                if (_biomass != value)
-                {
-                    _biomass = value;
-                    OnPropertyChanged("Biomass");
-                }
-            }
+          }
         }
 
         public double HeightAboveNN { get; set; }
 
         public double Lat { get; set; }
         public double Lon { get; set; }
-        public string GetIdentifiaction()
-        {
-            return ID.ToString();
+        public string GetIdentification() {
+          return ID.ToString();
         }
 
         private const double GParK = 0.18;
@@ -75,7 +69,6 @@ namespace TreeLayer.Agents {
             // DalskiAgent ID
             ID = ServiceID;
 
-
             Height = height;
             Diameter = diameter;
             CrownDiameter = crownDiameter;
@@ -83,12 +76,18 @@ namespace TreeLayer.Agents {
             Biomass = biomass;
             Lat = lat;
             Lon = lon;
-            var result = elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
+
+          Coordinate coord = elevationLayer.TransformToWorld(lat, lon);
+
+            var result = elevationLayer.GetDataByGeometry(new Point(coord.X, coord.Y));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
         }
 
-        protected IInteraction Reason() {
+        public IInteraction Reason() {
             var result = _environment.ExploreAll();
+            //Console.WriteLine("["+AgentNumber+"] I see "+result.Count()+" other trees.");
+
+
             // grow diameter
             Diameter = Diameter + GParK * (GmaxD - Diameter);
             // grow height
@@ -96,9 +95,10 @@ namespace TreeLayer.Agents {
             // grow biomass
             Biomass = Math.Pow(Math.E, -3.00682 + 1.56775 * Math.Log(Diameter * Height));
 
-            ITree otherTree = _treeLayer.GetTreeById(result.First().AgentGuid);
+            
+            //ITree otherTree = _treeLayer.GetTreeById(result.First().AgentGuid);
 
-            return new ConsumeTreeInteraction(this, otherTree);
+          return null;//new ConsumeTreeInteraction(this, otherTree);
         }
 
 

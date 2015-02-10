@@ -37,9 +37,6 @@
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MessageWrappers">
-      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -73,6 +70,10 @@
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LifeAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\LIFEViewProtocol\LIFEViewProtocol.csproj">
+      <Project>{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}</Project>
+      <Name>LIFEViewProtocol</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
       <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>

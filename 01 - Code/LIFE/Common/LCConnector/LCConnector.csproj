@@ -34,9 +34,6 @@
     <DocumentationFile>bin\Release\LCConnector.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MessageWrappers">
-      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +57,10 @@
     <Compile Include="TransportTypes\TLayerInstanceId.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LIFE Services\LIFEViewProtocol\LIFEViewProtocol.csproj">
+      <Project>{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}</Project>
+      <Name>LIFEViewProtocol</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
       <Name>Scs</Name>

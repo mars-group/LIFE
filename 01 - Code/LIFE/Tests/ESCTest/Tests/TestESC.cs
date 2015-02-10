@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using EnvironmentServiceComponent.Entities;
 using ESCTest.Entities;
@@ -36,6 +37,33 @@ namespace ESCTest.Tests {
                 stopwatch.Restart(); // Reset stopwatch.
             }
         }
+
+//        [Test]
+//        public void TestSkukuza() {
+//            var dim = 0.0000000000000001;
+//            IEnvironment esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
+//            int counter = 0;
+//            string line;
+//
+//            StreamReader file = new StreamReader(@"C:\Users\Olfi\Desktop\Skukuza_Trees_LatLon.txt");
+//
+//            while ((line = file.ReadLine()) != null) {
+//                Console.WriteLine(line);
+//                var split = line.Split(';');
+//                try {
+//                    var x = Convert.ToDouble(split[0]);
+//                    var y = Convert.ToDouble(split[1]);
+//                    ISpatialEntity a1 = GenerateAgent(dim, dim);
+//                    Assert.True(esc.Add(a1, new Vector3(x, y)));
+//                }
+//                catch (System.FormatException e) {
+//                    //no usable values in this row
+//                }
+//                counter++;
+//            }
+//            Console.WriteLine(esc.ExploreAll().Count());
+//            file.Close();
+//        }
 
         [Test]
         public void TestExploreEntity() {

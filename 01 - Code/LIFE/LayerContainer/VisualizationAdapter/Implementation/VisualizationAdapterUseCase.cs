@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LifeAPI.Layer.Visualization;
-using MessageWrappers;
+using LIFEViewProtocol.Basics;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation {
