@@ -37,7 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CollisionMatrix.cs" />
-    <Compile Include="Entities\CollidableElement.cs" />
+    <Compile Include="Entities\ExploreEntity.cs" />
     <Compile Include="Implementation\EnvironmentServiceComponent.cs" />
     <Compile Include="Entities\AxisAlignedBoundingInterval.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
