@@ -35,9 +35,6 @@
     <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <HintPath>..\..\packages\GeoAPI.1.7.3.1\lib\net45\GeoAPI.dll</HintPath>
     </Reference>
-    <Reference Include="MessageWrappers">
-      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
-    </Reference>
     <Reference Include="NetTopologySuite">
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\NetTopologySuite.dll</HintPath>
     </Reference>
@@ -66,6 +63,10 @@
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
       <Name>LifeAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\LIFEViewProtocol\LIFEViewProtocol.csproj">
+      <Project>{0b14ac8c-4c48-48e4-b9c0-8aa019db99dc}</Project>
+      <Name>LIFEViewProtocol</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

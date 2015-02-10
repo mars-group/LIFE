@@ -1,4 +1,5 @@
 ﻿using System;
+using ASC.Communication.ScsServices.Service;
 using DalskiAgent.Reasoning;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
@@ -9,13 +10,13 @@ namespace DalskiAgent.Agents {
   /// The abstract agent. This is the most generic agent form, it specifies the main execution
   /// cycle and several extension points available for specialized agent implementations.
   /// </summary>
-  public abstract class Agent : IAgent {
+  public abstract class Agent : AscService, IAgent {
     
     private readonly ILayer _layerImpl;               // Layer reference needed for delegate calls. 
     private readonly UnregisterAgent _unregFkt;       // Delegate for unregistration function.
     protected IAgentLogic ReasoningComponent;         // The agent's reasoning logic.         
     protected bool IsAlive;                           // Alive flag for execution and deletion checks.
-    public readonly long Id;                          // Unique identifier. 
+    public readonly long AgentNumber;                 // Unique agent number. 
 
 
     /// <summary>
@@ -27,7 +28,7 @@ namespace DalskiAgent.Agents {
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     protected Agent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt) {
       IsAlive = true;
-      Id = GetNewId();
+      AgentNumber = GetNewId();
       if (this is IAgentLogic) ReasoningComponent = (IAgentLogic) this;  
       regFkt(layer, this);
       _layerImpl = layer;
@@ -52,7 +53,7 @@ namespace DalskiAgent.Agents {
     ///   Returns the current simulation tick.
     /// </summary>
     /// <returns>Execution tick counter value.</returns>
-    protected long GetTick() {
+    public long GetTick() {
       return _layerImpl.GetCurrentTick();
     }
 
@@ -78,7 +79,7 @@ namespace DalskiAgent.Agents {
     /// </summary>
     /// <returns>Console output string.</returns>
     public new virtual string ToString() {
-      return "Agent: " + Id + "\t  Tick: " + GetTick();
+      return "Agent: " + AgentNumber + "\t  Tick: " + GetTick();
     }
 
 

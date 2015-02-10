@@ -27,10 +27,19 @@ using VisualizationAdapter.Implementation;
 using VisualizationAdapter.Interface;
 
 namespace LayerContainerFacade.Interfaces {
+    /// <summary>
+    /// The LayerContainerCore factory constructs a layer container instance 
+    /// via an IoC container and provides a reference.
+    /// </summary>
     public static class LayerContainerApplicationCoreFactory {
         private static IContainer _container;
         private static ContainerBuilder _containerBuilder;
 
+        /// <summary>
+        /// Instantiates a LayercontainerFacade instance and returns the reference. Use this to
+        /// retreive a new LayerContainer or to reset an old one.
+        /// </summary>
+        /// <returns>A reference to an ILayerContainerFacade instance.</returns>
         public static ILayerContainerFacade GetLayerContainerFacade() {
             if (_container == null) {
                 if (_containerBuilder == null) _containerBuilder = new ContainerBuilder();

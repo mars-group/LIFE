@@ -10,5 +10,9 @@
 using LCConnector;
 
 namespace LayerContainerFacade.Interfaces {
+    /// <summary>
+    /// The marker interface for the LayerContainerFacade. 
+    /// For now it just implements ILayerContainer
+    /// </summary>
     public interface ILayerContainerFacade : ILayerContainer {}
 }

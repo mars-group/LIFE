@@ -13,7 +13,7 @@ namespace WolvesModel.Agents {
   internal class AgentSpawner : Agent, IAgentLogic {
 
     // Normally, you don't save this references. But in this case we need them to pass along.
-    private readonly ILayer _layer;             // Layer reference needed for delegate calls.
+    private readonly WolvesLayer _layer;        // Layer reference needed for delegate calls.
     private readonly RegisterAgent _regFkt;     // Agent registration function pointer.
     private readonly UnregisterAgent _unregFkt; // Delegate for unregistration function.
     private readonly IEnvironment _env;         // Environment reference.
@@ -28,7 +28,7 @@ namespace WolvesModel.Agents {
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">Environment implementation reference.</param> 
-    public AgentSpawner(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) : 
+    public AgentSpawner(WolvesLayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IEnvironment env) : 
       base(layer, regFkt, unregFkt) {
       _layer = layer;
       _regFkt = regFkt;
@@ -45,7 +45,10 @@ namespace WolvesModel.Agents {
     public IInteraction Reason() {
 
       // Output numbers.
-      var grass = _env.ExploreAll().OfType<Grass>().Count();
+      var spatials = _env.ExploreAll().ToList();
+      var agents = spatials.Select(spatial => _layer.Agents[spatial.AgentGuid]).ToList();
+      var grass = agents.OfType<Grass>().Count();
+
 
       // Grass spawning.
       var create = _random.Next(50 + grass*2) < 20;

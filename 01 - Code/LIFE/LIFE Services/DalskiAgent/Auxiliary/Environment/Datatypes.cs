@@ -35,8 +35,10 @@ namespace DalskiAgent.Auxiliary.Environment {
   /// </summary>
   public class Obj : ISpatialEntity {
     public Enum InformationType { get; private set; }
-    public IShape Shape { get; set; }
-    public Enum CollisionType { get; private set; }
+    public Enum CollisionType   { get; private set; }
+    public Guid AgentGuid       { get; private set; }
+    public IShape Shape         { get; set; }
+
     public Obj(Float2 pos, Float2 size) {
       Shape = new Cuboid(new Vector3(size.X, size.Y), new Vector3(pos.X, pos.Y), new Direction());
     }

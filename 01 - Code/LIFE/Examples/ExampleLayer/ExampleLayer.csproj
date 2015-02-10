@@ -36,10 +36,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\GeoAPI.1.7.3.1\lib\net45\GeoAPI.dll</HintPath>
     </Reference>
-    <Reference Include="MessageWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Addins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
@@ -77,6 +73,10 @@
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2caf4351-eb6f-4a54-b8f2-cb1588b00a81}</Project>
       <Name>LifeAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\LIFEViewProtocol\LIFEViewProtocol.csproj">
+      <Project>{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}</Project>
+      <Name>LIFEViewProtocol</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>

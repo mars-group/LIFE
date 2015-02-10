@@ -40,9 +40,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\GeoAPI.dll</HintPath>
     </Reference>
-    <Reference Include="MessageWrappers">
-      <HintPath>..\..\Libraries\MARSViewMessages\MessageWrappers.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
@@ -79,6 +76,10 @@
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\LIFEViewProtocol\LIFEViewProtocol.csproj">
+      <Project>{0B14AC8C-4C48-48E4-B9C0-8AA019DB99DC}</Project>
+      <Name>LIFEViewProtocol</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

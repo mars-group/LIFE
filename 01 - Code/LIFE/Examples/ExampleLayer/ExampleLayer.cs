@@ -9,7 +9,11 @@ using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using MessageWrappers;
+using MessageWrappers.AgentsAndEvents;
+using MessageWrappers.Basics;
+using MessageWrappers.Terrain;
 using Mono.Addins;
+
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -22,7 +26,7 @@ namespace ExampleLayer
         private const int TerrainSizeX = 100;
         private const int TerrainSizeY = 100;
         private const int AgentCount = TerrainSizeX * TerrainSizeY;
-        private readonly TerrainDataMessage _terrainMessage = new TerrainDataMessage(TerrainSizeX, TerrainSizeY, 0);
+        private readonly TerrainDataMessage _terrainMessage = new TerrainDataMessage(TerrainSizeX, TerrainSizeY, 0.0, 1);
         private _2DEnvironment _environment;
         private long _currentTick;
 
@@ -65,14 +69,12 @@ namespace ExampleLayer
             Parallel.ForEach(_agents.Where(a => !a.Dead), delegate(AgentSmith a)
             {
                 var pos = _environment.GetPosition(a);
-                result.Add(new BasicAgent()
-                {
-                    Id = a.AgentID.ToString(),
-                    Description = "AgentSmith",
-                    State = a.Dead ? "Dead" : "Alive",
-                    X = (float)pos.X,
-                    Y = (float)pos.Y
-                });
+                result.Add(new NonMovingBasicAgent(
+                    Definitions.AgentTypes.MovingBasicAgent,
+                    null,
+                    a.AgentID.ToString(),
+                    _currentTick,
+                    null, "Agentsmith"));
             });
 
             return result.ToList();

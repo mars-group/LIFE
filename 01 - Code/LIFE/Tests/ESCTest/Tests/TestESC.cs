@@ -243,6 +243,29 @@ namespace ESCTest.Tests {
         protected TestEntity GenerateAgent(double x, double y, CollisionType collisionType) {
             return new TestEntity(x, y, collisionType);
         }
+
+
+
+
+
+        [Test]  // Do a number of insertion tests to measure general performance.
+        public void PerformanceTest() {
+          
+          // Test series.
+          int[] tests = {1000, 2000, 4000, 8000, 16000};
+
+          Stopwatch stopwatch = Stopwatch.StartNew();
+
+          // Perform tests and output elapsed time.
+          for (int t = 0; t < tests.Length; t++) {
+            IEnvironment esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
+            for (int i = 0; i < tests[t]; i++) {
+              Assert.True(esc.Add(GenerateAgent(0.9, 0.9), new Vector3(i, 0)));
+            } 
+            Console.WriteLine("["+tests[t]+" agents]: "+stopwatch.ElapsedMilliseconds + " ms");
+            stopwatch.Restart();  // Reset stopwatch.
+          }        
+        }
     }
 
 }

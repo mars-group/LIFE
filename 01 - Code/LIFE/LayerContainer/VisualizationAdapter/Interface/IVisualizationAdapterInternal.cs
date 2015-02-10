@@ -10,8 +10,22 @@
 using LifeAPI.Layer.Visualization;
 
 namespace VisualizationAdapter.Interface {
+
+    /// <summary>
+    /// The internal interface for the visualization adapter. Its method's won't be avaibale via the ILayercontainer interface.
+    /// </summary>
     public interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {
+
+        /// <summary>
+        /// Registers a new visualizable  compoenent
+        /// </summary>
+        /// <param name="visualizable">The IVisualizable object to be visualized.</param>
         void RegisterVisualizable(IVisualizable visualizable);
-        void VisualizeTick(int currentTime);
+
+        /// <summary>
+        /// Visualizes one tick.
+        /// </summary>
+        /// <param name="currentTick">The current tick. Needed for sanity check.</param>
+        void VisualizeTick(int currentTick);
     }
 }

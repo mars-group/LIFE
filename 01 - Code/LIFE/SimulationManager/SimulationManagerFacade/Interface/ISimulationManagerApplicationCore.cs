@@ -5,7 +5,7 @@ using SMConnector.TransportTypes;
 
 namespace SimulationManagerFacade.Interface {
     /// <summary>
-    /// TODO: comment
+    /// The SimulationManager main core.
     /// </summary>
     public interface ISimulationManagerApplicationCore :
                             ISimulationManager, ILayerNameService

@@ -11,6 +11,9 @@ using LCConnector.TransportTypes.ModelStructure;
 using Mono.Addins;
 
 namespace LifeAPI.AddinLoader {
+    /// <summary>
+    /// The AddinLoader used to load MARS LIFE models.
+    /// </summary>
     public interface IAddinLoader {
         /// <summary>
         ///     Loads a ModelContent. Will write out all assemblies from
@@ -27,9 +30,17 @@ namespace LifeAPI.AddinLoader {
         /// <returns>A TypeExtensionNode object. May be used to directly instanciate the layer or to reflect its dependencies</returns>
         TypeExtensionNode LoadLayer(string layerName);
 
-
+        /// <summary>
+        /// Loads all layers found in the layers folder
+        /// </summary>
+        /// <returns>An ExtensionNodeList</returns>
         ExtensionNodeList LoadAllLayers();
 
+        /// <summary>
+        /// Loads all layers found in the subfolder defined by <param name="modelName"/>. 
+        /// </summary>
+        /// <param name="modelName">The models name. Will be used as subfolder to layers/addins/</param>
+        /// <returns></returns>
         ExtensionNodeList LoadAllLayers(string modelName);
     }
 }

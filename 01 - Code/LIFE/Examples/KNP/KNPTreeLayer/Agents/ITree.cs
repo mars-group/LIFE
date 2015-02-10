@@ -1,10 +1,11 @@
 ﻿using ASC.Communication.ScsServices.Service;
+using DalskiAgent.Reasoning;
 using LifeAPI.Agent;
 
 namespace TreeLayer.Agents
 {
     [AscService(Version = "0.1")]
-    interface ITree : IAgent, ICacheable
+    public interface ITree : IAgent, ICacheable, IAgentLogic
     {
         double Height { get; set; }
         double Diameter { get; set; }
@@ -14,6 +15,6 @@ namespace TreeLayer.Agents
         double Lat { get; set; }
         double Lon { get; set; }
 
-        string GetIdentifiaction();
+        string GetIdentification();
     }
 }
