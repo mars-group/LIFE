@@ -15,6 +15,11 @@ namespace LifeAPI.Config
         /// </summary>
         public List<LayerConfig> LayerConfigs { get; set; }
 
+        /// <summary>
+        /// The wall clock date which marks the start of the simulation.
+        /// </summary>
+        public DateTime SimulationWallClockStartDate { get; set; }
+
         private TimeSpan _oneTickTimeSpan { get; set; }
 
         // Public Property - XmlIgnore as it doesn't serialize anyway
@@ -43,6 +48,7 @@ namespace LifeAPI.Config
         /// <param name="layerConfigs"></param>
         public ModelConfig(List<LayerConfig> layerConfigs)
         {
+            SimulationWallClockStartDate = DateTime.Now;
             _oneTickTimeSpan = new TimeSpan(0, 0, 0, 1, 0);
             LayerConfigs = layerConfigs;
         }
@@ -52,6 +58,7 @@ namespace LifeAPI.Config
         /// and empty LayerConfigs.
         /// </summary>
         public ModelConfig() {
+            SimulationWallClockStartDate = DateTime.Now;
             _oneTickTimeSpan = new TimeSpan(0, 0, 0, 1, 0);
             LayerConfigs = new List<LayerConfig>();
         }

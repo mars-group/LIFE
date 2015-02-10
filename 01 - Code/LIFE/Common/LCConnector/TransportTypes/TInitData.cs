@@ -24,18 +24,27 @@ namespace LCConnector.TransportTypes {
         public List<AgentInitConfig> AgentInitConfigs { get; private set; }
 
         /// <summary>
-        /// The 
+        /// The amount of real-time which passes during one tick
         /// </summary>
         public TimeSpan OneTickTimeSpan { get; private set; }
 
+        /// <summary>
+        /// The wall clock date which marks the start of the simulation.
+        /// </summary>
+        public DateTime SimulationWallClockStartDate { get; private set; }
+
+        /// <summary>
+        /// Determines whethers this layer should be distributed or not.
+        /// </summary>
         public bool Distribute { get; private set; }
 
         /// <summary>
         /// Creates a new TInitData object, with an empty list of AgentInitConfigs
         /// </summary>
-        public TInitData(bool distribute, TimeSpan oneTickTimeSpan) {
+        public TInitData(bool distribute, TimeSpan oneTickTimeSpan, DateTime simulationWallClockStartDate) {
             Distribute = distribute;
             OneTickTimeSpan = oneTickTimeSpan;
+            SimulationWallClockStartDate = simulationWallClockStartDate;
             AgentInitConfigs = new List<AgentInitConfig>();
         }
 
