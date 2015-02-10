@@ -1,7 +1,7 @@
-﻿using MessageWrappers.Basics;
+﻿using LIFEViewProtocol.Basics;
 using ProtoBuf;
 
-namespace MessageWrappers.Terrain {
+namespace LIFEViewProtocol.Terrain {
 	/// <summary>
 	///     Message containing basic informations about the tiled terrain
 	/// </summary>

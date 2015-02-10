@@ -7,11 +7,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using LayerContainerFacade.Interfaces;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Terrain;
 using log4net;
 using MARSLocalStarter.Properties;
-using MessageWrappers;
-using MessageWrappers.Basics;
-using MessageWrappers.Terrain;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 

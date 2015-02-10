@@ -1,8 +1,7 @@
-﻿using MessageWrappers.Basics;
-using MessageWrappers.Terrain;
+﻿using LIFEViewProtocol.Basics;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Terrain {
 	[ProtoContract]
 	public class AreaDataWrapper : BasicVisualizationMessage {
 		[ProtoMember(1)]

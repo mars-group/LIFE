@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Helper {
 	[ProtoContract]
 	public class FloatArray2D {
 		[ProtoMember(1)]

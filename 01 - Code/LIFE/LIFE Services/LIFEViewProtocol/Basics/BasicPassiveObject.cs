@@ -1,8 +1,9 @@
 ﻿using GeoAPI.Geometries;
-using MessageWrappers.Objects;
+using LIFEViewProtocol.Helper;
+using LIFEViewProtocol.Objects;
 using ProtoBuf;
 
-namespace MessageWrappers.Basics {
+namespace LIFEViewProtocol.Basics {
 	/// <summary>
 	///     Basic type for passive, non-simulated objects which are part of the simulation like buildings or vegetation.
 	/// </summary>

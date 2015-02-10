@@ -1,7 +1,8 @@
-﻿using MessageWrappers.Basics;
+﻿using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Actions {
 	[ProtoContract]
 	public class ServerControlMessage : BasicVisualizationMessage {
 		[ProtoMember(1)]

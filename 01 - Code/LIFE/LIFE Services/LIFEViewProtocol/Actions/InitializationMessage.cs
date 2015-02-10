@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using MessageWrappers.Basics;
-using MessageWrappers.Terrain;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
+using LIFEViewProtocol.Terrain;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Actions {
 	/// <summary>
 	/// </summary>
 	[ProtoContract]

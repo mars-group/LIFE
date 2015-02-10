@@ -1,7 +1,7 @@
-﻿using MessageWrappers.Basics;
+﻿using LIFEViewProtocol.Basics;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Actions {
 	[ProtoContract]
 	public class RequestMessage : BasicVisualizationMessage {
 		/*

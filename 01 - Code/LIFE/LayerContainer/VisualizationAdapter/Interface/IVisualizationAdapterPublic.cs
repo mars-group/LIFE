@@ -9,8 +9,7 @@
 
 using System;
 using System.Collections.Generic;
-using MessageWrappers;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
 
 namespace VisualizationAdapter.Interface {
     /// <summary>

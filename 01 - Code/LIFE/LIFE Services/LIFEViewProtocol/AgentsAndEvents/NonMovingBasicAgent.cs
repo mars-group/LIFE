@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
 using ProtoBuf;
 
-namespace MessageWrappers.AgentsAndEvents {
+namespace LIFEViewProtocol.AgentsAndEvents {
 	[ProtoContract]
 	public class NonMovingBasicAgent : BasicAgent {
 		[ProtoMember(1)]

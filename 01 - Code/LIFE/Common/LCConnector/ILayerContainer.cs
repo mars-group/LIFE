@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
 
 namespace LCConnector {
     /// <summary>

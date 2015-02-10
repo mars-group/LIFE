@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>LIFEViewProtocol</id>
-    <version>0.9</version>
+    <version>0.1</version>
     <title>LIFEViewProtocol</title>
     <authors>Alexander Schnoor</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
