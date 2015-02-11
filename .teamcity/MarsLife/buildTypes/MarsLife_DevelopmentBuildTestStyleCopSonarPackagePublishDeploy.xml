@@ -9,6 +9,8 @@
     </options>
     <disabled-settings>
       <setting-ref ref="RUNNER_13" />
+      <setting-ref ref="RUNNER_16" />
+      <setting-ref ref="RUNNER_17" />
       <setting-ref ref="RUNNER_3" />
       <setting-ref ref="RUNNER_4" />
     </disabled-settings>
@@ -103,7 +105,7 @@ http://nuget.3ten.de/nuget]]></param>
       </runner>
       <runner id="RUNNER_17" name="Run SonarQube" type="simpleRunner">
         <parameters>
-          <param name="command.executable" value="D:\sonar-runner-2.4\bin\sonar-runner.bat" />
+          <param name="command.executable" value="C:\sonar-runner\bin\sonar-runner.bat" />
           <param name="teamcity.build.workingDir" value="01 - Code/LIFE" />
           <param name="teamcity.step.mode" value="default" />
         </parameters>

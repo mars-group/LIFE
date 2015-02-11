@@ -178,7 +178,7 @@ namespace RuntimeEnvironment.Implementation {
                     layerContainerClients[0].Instantiate(layerInstanceId);
 
                     //...fetch all agentTypes and amounts...
-                    var initData = new TInitData(false, modelConfig.OneTickTimeSpan);
+                    var initData = new TInitData(false, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate);
                     foreach (var agentConfig in layerConfig.AgentConfigs)
                     {
                         var ids = new Guid[agentConfig.AgentCount];
@@ -228,7 +228,7 @@ namespace RuntimeEnvironment.Implementation {
                     // initialize result Dictionary
                     foreach (var layerContainerClient in layerContainerClients)
                     {
-                        result.Add(layerContainerClient, new TInitData(true, modelConfig.OneTickTimeSpan));
+                        result.Add(layerContainerClient, new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate));
                     }
 
                     var lcCount = layerContainerClients.Length;
