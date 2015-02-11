@@ -190,7 +190,7 @@ namespace MARSLocalStarter.WinForms
                 default:
                     if (_currentVisState != null)
                     {
-                        DrawGrid(e, new Size(_terrainData.TileCountX, _terrainData.TileCountY), _currentVisState);
+                        DrawGrid(e, new Size(_terrainData.TileCountX, _terrainData.TileCountZ), _currentVisState);
                         DrawText(e, string.Format("t={0}\nzoom={1}x", _visCurrentTick - 1, _zoom));
                     }
                     else

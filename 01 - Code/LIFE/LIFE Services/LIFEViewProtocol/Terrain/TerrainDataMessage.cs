@@ -14,10 +14,10 @@ namespace LIFEViewProtocol.Terrain {
 		public int TileCountX { get; private set; }
 
 		/// <summary>
-		///     Overall depth of the terrain (y-axis)
+		///     Overall depth of the terrain (z-axis)
 		/// </summary>
 		[ProtoMember(2)]
-		public int TileCountY { get; private set; }
+		public int TileCountZ { get; private set; }
 
 		/// <summary>
 		///     Overall height of the terrain (z-axis)
@@ -65,7 +65,7 @@ namespace LIFEViewProtocol.Terrain {
 		///     Constructor for a terrain using coordinates
 		/// </summary>
 		/// <param name="tileCountX"></param>
-		/// <param name="tileCountY"></param>
+		/// <param name="tileCountZ"></param>
 		/// <param name="height"></param>
 		/// <param name="tileSize"></param>
 		/// <param name="epsgCode"></param>
@@ -74,10 +74,10 @@ namespace LIFEViewProtocol.Terrain {
 		/// <param name="eastCoordinate"></param>
 		/// <param name="northCoordinate"></param>
 		/// <param name="cellSize"></param>
-		public TerrainDataMessage(int tileCountX, int tileCountY, double height, int tileSize, int epsgCode,
+		public TerrainDataMessage(int tileCountX, int tileCountZ, double height, int tileSize, int epsgCode,
 			double westCoordinate, double southCoordinate, double eastCoordinate, double northCoordinate, double cellSize) {
 			TileCountX = tileCountX;
-			TileCountY = tileCountY;
+			TileCountZ = tileCountZ;
 			Height = height;
 			TileSize = tileSize;
 			EPSGCode = epsgCode;
@@ -92,19 +92,21 @@ namespace LIFEViewProtocol.Terrain {
 		///     Constructor
 		/// </summary>
 		/// <param name="tileCountX">Number of tiles in width (x-axis)</param>
-		/// <param name="tileCountY">Number of tiles in depth (y-axis)</param>
+		/// <param name="tileCountZ">Number of tiles in depth (y-axis)</param>
 		/// <param name="height">Overall height (z-axis)</param>
 		/// <param name="tileSize">Size of a single tile</param>
-		public TerrainDataMessage(int tileCountX, int tileCountY, double height, int tileSize) {
+		public TerrainDataMessage(int tileCountX, int tileCountZ, double height, int tileSize) {
 			TileCountX = tileCountX;
-			TileCountY = tileCountY;
+			TileCountZ = tileCountZ;
 			Height = height;
 			TileSize = tileSize;
 			GetInheritancePath();
 		}
 
+		
+
 		public override string ToString() {
-			return "Sizes X: " + TileCountX + " Z: " + TileCountY + " Y: " + Height + " Heightmap: " + TileSize;
+			return "Sizes X: " + TileCountX + " Z: " + TileCountZ + " Y: " + Height + " Heightmap: " + TileSize;
 		}
 	}
 }
