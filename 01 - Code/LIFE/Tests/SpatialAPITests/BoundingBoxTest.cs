@@ -1,14 +1,31 @@
 ﻿using System;
 using System.Diagnostics;
+using NUnit.Framework;
 using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Shape;
-using NUnit.Framework;
 
 namespace SpatialAPITests {
 
     public class BoundingBoxTest {
         private const double Epsilon = 0.00001;
 
+        [Test]
+        public void TestTransformWithZeroMovement() {
+            BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0, 10, -0.2), new Vector3(10, 10.5, 0.2));
+            var transformed = b1.Transform(Vector3.Zero, new Direction());
+            Assert.IsTrue(b1.Position.Equals(transformed.Position));
+        }
+
+        [Test]
+        public void TestTransform() {
+            BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0, 10, -0.2), new Vector3(10, 10.5, 0.2));
+            var transformed = b1.Transform(Vector3.Right, new Direction());
+            Assert.IsTrue(transformed.Position.Equals(b1.Position + Vector3.Right));
+
+            var movementVector = Vector3.Random;
+            transformed = b1.Transform(movementVector, new Direction());
+            Assert.IsTrue(transformed.Position.Equals(b1.Position + movementVector));
+        }
 
         [Test]
         public void TestBoundingBoxPerformance() {
@@ -32,7 +49,6 @@ namespace SpatialAPITests {
             Console.WriteLine(initTime.ElapsedMilliseconds + " ms");
         }
 
-
         [Test]
         public void TestInner() {
             BoundingBox b1 = BoundingBox.GenerateByDimension(new Vector3(0, 0), new Vector3(2, 2));
@@ -51,7 +67,7 @@ namespace SpatialAPITests {
 
         [Test]
         public void TestIntersectionByPart() {
-            BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0, 0), new Vector3(100,100));
+            BoundingBox b1 = BoundingBox.GenerateByCorners(new Vector3(0, 0), new Vector3(100, 100));
             BoundingBox b2 = BoundingBox.GenerateByCorners(new Vector3(-11.5, -11.5), new Vector3(13.5, 13.5));
             Assert.IsTrue(b1.IntersectsWith((IShape) b2));
             Assert.IsTrue(b2.IntersectsWith((IShape) b1));
@@ -80,7 +96,6 @@ namespace SpatialAPITests {
             Assert.IsTrue(b1.IntersectsWith((IShape) b2));
             Assert.IsTrue(b2.IntersectsWith((IShape) b1));
         }
-
     }
 
 }

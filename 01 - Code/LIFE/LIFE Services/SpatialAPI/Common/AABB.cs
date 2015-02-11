@@ -46,7 +46,7 @@ namespace SpatialAPI.Common {
             // Create axis-aligned bounding box (AABB) and assign values.
             return new AABB {
                 XIntv = new AxisAlignedBoundingInterval(position.X - diffX, position.X + diffX),
-                YIntv = new AxisAlignedBoundingInterval(position.Y - diffY, position.Y + diffX),
+                YIntv = new AxisAlignedBoundingInterval(position.Y - diffY, position.Y + diffY),
                 ZIntv = new AxisAlignedBoundingInterval(position.Z - diffZ, position.Z + diffZ)
             };
         }

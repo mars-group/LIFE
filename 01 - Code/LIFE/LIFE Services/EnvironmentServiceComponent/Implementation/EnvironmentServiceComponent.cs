@@ -34,7 +34,7 @@ namespace EnvironmentServiceComponent.Implementation {
         /// <summary>
         ///     Tries to move given entity relatively from it's current position.
         /// </summary>
-        /// <param name="calledByAdd">Indicates if the entity is already in the system.</param>
+        /// <param name="entityIsAdded">Indicates if the entity is already in the system.</param>
         /// <param name="entity">That will be moved.</param>
         /// <param name="movementVector">The vector defines a relative transition towards the goal.</param>
         /// <param name="rotation">
@@ -43,7 +43,7 @@ namespace EnvironmentServiceComponent.Implementation {
         /// </param>
         /// <returns>A MovementResult that defines the success of the operation and possible collisions.</returns>
         private MovementResult Move
-            (bool calledByAdd, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
+            (bool entityIsAdded, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
             rotation = rotation ?? new Direction();
             IShape newShape = entity.Shape.Transform(movementVector, rotation);
             lock (_syncLock) {
@@ -53,7 +53,7 @@ namespace EnvironmentServiceComponent.Implementation {
                 if (collisions.Any()) {
                     return new MovementResult(collisions);
                 }
-                if (!calledByAdd) {
+                if (entityIsAdded) {
                     _octree.Remove(entity);
                 }
                 entity.Shape = newShape;
@@ -110,7 +110,7 @@ namespace EnvironmentServiceComponent.Implementation {
         /// <param name="shape">Defines area that should be explored.</param>
         /// <param name="collisionType">Defines, which found spatial entities in intersecting shape should be explored.</param>
         /// <returns>All spatial entities with intersecting shape and collision type of the ESC.</returns>
-        private IEnumerable<ISpatialEntity> Explore(IShape shape, Enum collisionType) {
+        private List<ISpatialEntity> Explore(IShape shape, Enum collisionType) {
             List<ISpatialEntity> result = new List<ISpatialEntity>();
 
             foreach (ISpatialEntity foundSpatialObject in _octree.Query(shape.Bounds)) {
@@ -130,11 +130,8 @@ namespace EnvironmentServiceComponent.Implementation {
 
         public bool Add(ISpatialEntity entity, Vector3 position, Direction rotation = null) {
             IShape shape = entity.Shape;
-
-            rotation = rotation ?? new Direction();
-            Vector3 newPosition = position - shape.Position;
-
-            MovementResult result = Move(true, entity, newPosition, rotation);
+            Vector3 movementVector = position - shape.Position;
+            MovementResult result = Move(false, entity, movementVector, rotation);
             if (!result.Success) {
                 return false;
             }
@@ -158,7 +155,7 @@ namespace EnvironmentServiceComponent.Implementation {
         }
 
         public bool Resize(ISpatialEntity entity, IShape shape) {
-            List<ISpatialEntity> result = Explore(shape, entity.CollisionType).ToList();
+            List<ISpatialEntity> result = Explore(shape, entity.CollisionType);
             result.Remove(entity);
             if (result.Any()) {
                 return false;
@@ -169,9 +166,8 @@ namespace EnvironmentServiceComponent.Implementation {
             return true;
         }
 
-        public MovementResult Move
-            (ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
-            return Move(false, entity, movementVector, rotation);
+        public MovementResult Move(ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
+            return Move(true, entity, movementVector, rotation);
         }
 
         public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial) {
