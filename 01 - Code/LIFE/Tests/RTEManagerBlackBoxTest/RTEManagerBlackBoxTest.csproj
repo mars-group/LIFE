@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRTEManagerBlackBoxTest.cs" />
+    <Compile Include="RTEManagerBlackBoxTest.cs" />
     <Compile Include="Mocks\NodeRegistryMock.cs" />
     <Compile Include="Mocks\VisualizationAdapterInternalMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

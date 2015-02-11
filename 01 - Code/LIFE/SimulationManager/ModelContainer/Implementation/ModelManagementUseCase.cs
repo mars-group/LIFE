@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -51,7 +52,10 @@ namespace ModelContainer.Implementation {
                 Directory.CreateDirectory(_settings.ModelDirectoryPath);
                 _systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
             }
-
+            if (true)
+            {
+                Console.WriteLine("test123");
+            }
 
             //Reload model folder contents if file system has changed. (Also of course once, initially)
             _systemWatcher.Changed += UpdateModelList;

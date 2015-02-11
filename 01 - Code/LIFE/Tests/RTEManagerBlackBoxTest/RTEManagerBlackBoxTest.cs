@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,17 +16,17 @@ using RTEManagerBlackBoxTest.Mocks;
 
 namespace RTEManagerBlackBoxTest
 {
-    public class IRTEManagerBlackBoxTest
+    public class RTEManagerBlackBoxTest
     {
-        
+
 
         [Test]
         public void TickLayerTest()
         {
-            IRTEManager rteManager = new RTEManagerComponent(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
+            IRTEManager rteManager = new RTEManagerUseCase(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
             var mockLayer = new SimpleSteppedActiveLayerMock();
 
-            var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1,0,"MockLayer"), 1);
+            var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer"), 1);
 
             Assert.DoesNotThrow(() => rteManager.RegisterLayer(layerId, mockLayer));
 
@@ -43,18 +44,18 @@ namespace RTEManagerBlackBoxTest
         [Test]
         public void RegisterAndUnregisterLayerTest()
         {
-            IRTEManager rteManager = new RTEManagerComponent(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
+            RTEManagerUseCase rteManager = new RTEManagerUseCase(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
             var mockLayer = new SimpleSteppedActiveLayerMock();
 
             var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer"), 1);
 
             Assert.DoesNotThrow(() => rteManager.RegisterLayer(layerId, mockLayer));
 
-            Assert.IsTrue(rteManager.GetRegisteredLayers().Contains(mockLayer));
+            Assert.IsTrue(rteManager.GetLayers().Contains(mockLayer));
 
             Assert.DoesNotThrow(() => rteManager.UnregisterLayer(layerId));
 
-            Assert.IsFalse(rteManager.GetRegisteredLayers().Contains(mockLayer));
+            Assert.IsFalse(rteManager.GetLayers().Contains(mockLayer));
         }
         
 

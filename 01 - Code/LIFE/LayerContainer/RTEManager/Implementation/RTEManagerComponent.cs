@@ -8,12 +8,16 @@
 //  *******************************************************/
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
 using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
+
+
+
 
 namespace RTEManager.Implementation {
     public class RTEManagerComponent : IRTEManager {
@@ -24,11 +28,7 @@ namespace RTEManager.Implementation {
         }
 
         #region IRTEManager Members
-
-        public ICollection<ILayer> GetRegisteredLayers()
-        {
-            return _rteManagerUseCase.GetRegisteredLayers();
-        }
+       
 
         public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {
             _rteManagerUseCase.RegisterLayer(instanceId, layer);

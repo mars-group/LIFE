@@ -20,11 +20,7 @@ namespace RTEManager.Interfaces {
     /// </summary>
     public interface IRTEManager
     {
-        /// <summary>
-        /// Propertie that displays all registered layers all
-        /// </summary>
-        ICollection<ILayer> GetRegisteredLayers(); 
-
+        
         /// <summary>
         ///     Registers a layer with the RuntimeEvironment
         ///     Hint: To retreive a layer instance, use the LayerRegistry-Component
