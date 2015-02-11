@@ -1,81 +1,83 @@
-﻿using System;
-using System.Threading;
-using LayerContainerFacade.Interfaces;
+﻿using LayerContainerFacade.Interfaces;
 using NUnit.Framework;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 
 namespace LayerContainerFassadeTest.LayerContainerBlackBoxTest
 {
-    internal class ISimulationManagerApplicationCoreTests
+   
+    public class ISimulationManagerApplicationCoreTests
     {
-        private ISimulationManagerApplicationCore _simCore;
-        private ILayerContainerFacade _layerCountainerCore;
+        //private ISimulationManagerApplicationCore _simcCore;
+        //private ILayerContainerFacade _layerContainerFacade;
 
 
-        private TModelDescription GetMockModel()
-        {
-            string modelName = "ModelMock";
+        //[TestFixtureSetUp]
+        //public void InitSimCore()
+        //{
+        //    _simcCore = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
+        //    _layerContainerFacade = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+        //}
 
-            TModelDescription model = null;
-            foreach (var modelDescription in _simCore.GetAllModels())
-            {
-                if (modelDescription.Name.Equals(modelName))
-                {
-                    model = modelDescription;
-                }
-            }
+        //[TestFixtureTearDown]
+        //public void TearDownSimCore()
+        //{
+        //    //no way to shut down simcore...    
+        //}
 
-            return model;
-        }
+        //private TModelDescription GetMockModel()
+        //{
+        //    string modelName = "ModelMock";
 
-        [SetUp]
-        public void InitCore()
-        {
-            Console.WriteLine("try to init simcore");
-            _simCore = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
-            Console.WriteLine("simcore init done.");
-            _layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+        //    TModelDescription model = null;
+        //    foreach (var modelDescription in _simcCore.GetAllModels())
+        //    {
+        //        if (modelDescription.Name.Equals(modelName))
+        //        {
+        //            model = modelDescription;
+        //        }
+        //    }
 
-            // parse for any given parameters and act accordingly
-        }
-
-        [Test]
-        public void TickSimulationTest()
-        {
-           Assert.DoesNotThrow(() =>_simCore.StartSimulationWithModel(GetMockModel(), 1));   
-        }
-
-        [Test]
-        public void LoadModelFromDirectoryTest()
-        {
-            var model = GetMockModel();
-
-            Assert.AreEqual("ModelMock", model.Name);
-        }
+        //    return model;
+        //}
 
 
-        /// <summary>
-        /// Test is not active because api does not set running flag.
-        /// </summary>
+        //[Test]
+        //public void TickSimulationTest()
+        //{
+        //    Assert.DoesNotThrow(() => _simcCore.StartSimulationWithModel(GetMockModel(), 1));
+        //}
+
+        //[Test]
+        //public void LoadModelFromDirectoryTest()
+        //{
+        //    var model = GetMockModel();
+
+        //    Assert.AreEqual("ModelMock", model.Name);
+        //}
+
+
+        //<summary>
+        //Test is not active because api does not set running flag.
+        //</summary>
         //[Test]
         //public void StopSimulationTest()
         //{
-        //    _simCore.StartSimulationWithModel(GetMockModel(),100);
-            
+        //    
+
+        //    _simcCore.StartSimulationWithModel(GetMockModel(), 100);
+
         //    Thread.Sleep(100);
 
         //    Assert.IsTrue(GetMockModel().Running);
 
-        //    _simCore.PauseSimulation(GetMockModel());
+        //    _simcCore.PauseSimulation(GetMockModel());
 
         //    Thread.Sleep(100);
 
         //    Assert.IsFalse(GetMockModel().Running);
 
-        //    _simCore.AbortSimulation(GetMockModel());
-
+        //    _simcCore.AbortSimulation(GetMockModel());
         //}
-
     }
 }
