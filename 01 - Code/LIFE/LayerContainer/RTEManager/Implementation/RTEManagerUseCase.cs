@@ -22,7 +22,6 @@ using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 
 [assembly: InternalsVisibleTo("RTEManagerBlackBoxTest")]
-[assembly: PrivateVisibleTo("RTEManagerBlackBoxTest")]
 
 namespace RTEManager.Implementation {
 

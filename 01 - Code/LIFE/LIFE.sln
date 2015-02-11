@@ -153,6 +153,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelMock", "Tests\ModelMoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTEManagerBlackBoxTest", "Tests\RTEManagerBlackBoxTest\RTEManagerBlackBoxTest.csproj", "{14B4B90A-ACE9-4869-A4B8-97E4D42C3BF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GisCoordinatesLayer", "Examples\ArsAfrika\GisCoordinatesLayer\GisCoordinatesLayer.csproj", "{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -998,6 +1000,20 @@ Global
 		{14B4B90A-ACE9-4869-A4B8-97E4D42C3BF1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{14B4B90A-ACE9-4869-A4B8-97E4D42C3BF1}.Release|x64.ActiveCfg = Release|Any CPU
 		{14B4B90A-ACE9-4869-A4B8-97E4D42C3BF1}.Release|x86.ActiveCfg = Release|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Release|x64.ActiveCfg = Release|Any CPU
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1062,6 +1078,7 @@ Global
 		{0CD7F422-2945-40FD-90EE-483FA784F2D0} = {BD61A1D4-0C96-4006-916A-FA2F6262BF47}
 		{4B75B6D3-B7A1-4C71-A227-6F0079749DF2} = {BD61A1D4-0C96-4006-916A-FA2F6262BF47}
 		{6DD0AA91-7D38-4B88-927C-AF76CEE5C52D} = {BD61A1D4-0C96-4006-916A-FA2F6262BF47}
+		{678F2A25-A4F2-47D4-A083-A066F4E6D9E5} = {AFDB2EF7-ECBF-43E6-95F8-43C45EFABFEB}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MARSLocalStarter\MARSLocalStarter.csproj
