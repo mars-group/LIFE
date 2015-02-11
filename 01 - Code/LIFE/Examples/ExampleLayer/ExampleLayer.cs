@@ -72,9 +72,12 @@ namespace ExampleLayer
                 result.Add(new NonMovingBasicAgent(
                     Definitions.AgentTypes.MovingBasicAgent,
                     null,
+                    1,1,1, 90,
                     a.AgentID.ToString(),
                     _currentTick,
-                    null, "Agentsmith"));
+                    1,1,1,
+                    "Agentsmith"
+                    ));
             });
 
             return result.ToList();
