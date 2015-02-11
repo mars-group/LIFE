@@ -20,17 +20,21 @@ namespace Savanne.Agents {
         private int _damageType;
         private int _stemDiameterInMm ;
         private Sex _sex;
+        public  double PosX;
+        public  double PosY;
 
 
-        public Marula(double x, double y, IEnvironment esc, int heightInCm, int age, int damageType, int stemDiameterInMm, Sex sex) {
+        public Marula(IEnvironment esc, int heightInCm, int age, int damageType, int stemDiameterInMm, Sex sex, double posX, double posY) {
             _heigthInCm = heightInCm;
             _age = age;
             _damageType = damageType;
             _stemDiameterInMm = stemDiameterInMm;
             _sex = sex;
+            PosX = posX;
+            PosY = posY;
             ID = Guid.NewGuid();
-            SpacialTreeEntity = new SpatialTreeEntity(x, y, CollisionType.SelfCollision);
-          //var perceptionArea =  BoundingBox.GenerateByDimension(x*10.0, y*10.0);
+            //SpacialTreeEntity = new SpatialTreeEntity(0.000000000000001, 0.000000000000001, CollisionType.SelfCollision);
+          
             _esc = esc;
         }
 
@@ -40,7 +44,7 @@ namespace Savanne.Agents {
 
 
         public void Tick() {
-            Console.WriteLine("Hello Tree");
+            //Console.WriteLine("Hello Tree");
         }
 
         #endregion
