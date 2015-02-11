@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("Environment")]
+[assembly: AssemblyTitle("GisCoordinatesLayer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Environment")]
+[assembly: AssemblyProduct("GisCoordinatesLayer")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("92c23e54-cb1b-4096-a44d-00817ee012ce")]
+[assembly: Guid("72fe00b5-ee22-45ac-bf7d-5b13bef3dea3")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

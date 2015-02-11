@@ -29,7 +29,7 @@
                 ModelContent deserialized = (ModelContent) formatter.Deserialize(stream);
                 deserialized.Write("./copiedOrdner");
             }
-
+            //TODO assertion is not active, who ever did this fix it!
             //Assert.AreEqual(Directory.GetFileSystemEntries("./testOrdner"), Directory.GetFileSystemEntries("./copiedOrdner"));
         }
 
@@ -99,5 +99,20 @@
             Assert.IsTrue(order.IndexOf(descriptions[7]) > order.IndexOf(descriptions[6]),
                 "description[7] too early in the order.");
         }
+
+        [Test]
+        public void ModelListChangeTest()
+        {
+            
+        }
+
+
+        [Test]
+        public void LoadModelFromUrlTest()
+        {
+            //TODO write method
+
+        }
+
     }
 }

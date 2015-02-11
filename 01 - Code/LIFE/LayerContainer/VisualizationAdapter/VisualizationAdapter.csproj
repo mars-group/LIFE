@@ -41,6 +41,10 @@
     <Reference Include="PowerCollections">
       <HintPath>..\..\packages\NetTopologySuite.1.13.3.2\lib\net45\PowerCollections.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\..\packages\RabbitMQ.Client.3.4.3\lib\net35\RabbitMQ.Client.dll</HintPath>
     </Reference>

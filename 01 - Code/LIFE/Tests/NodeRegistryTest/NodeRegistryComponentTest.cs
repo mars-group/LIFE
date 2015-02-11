@@ -191,7 +191,7 @@ namespace NodeRegistryTest {
                     otherNodeinfo.NodeEndpoint.Port,
                     true));
 
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
 
 
             Assert.True(newNodeSubscriberFired);

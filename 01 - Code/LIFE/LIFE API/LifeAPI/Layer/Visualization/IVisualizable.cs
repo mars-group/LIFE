@@ -10,12 +10,14 @@
 using System.Collections.Generic;
 using GeoAPI.Geometries;
 using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
 
 namespace LifeAPI.Layer.Visualization {
     /// <summary>
     ///     Implement this interface if you want your Layer to be visualized after each tick
     /// </summary>
     public interface IVisualizable {
+
         /// <summary>
         ///     Returns every entity in the whole environment
         /// </summary>

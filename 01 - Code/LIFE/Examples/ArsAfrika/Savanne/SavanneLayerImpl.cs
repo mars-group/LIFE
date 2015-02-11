@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using GeoAPI.Geometries;
+using GisCoordinatesLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
@@ -22,38 +21,51 @@ using SpatialAPI.Environment;
 [assembly: AddinDependency("LayerContainer", "0.1")]
 
 namespace Savanne {
+
     [Extension(typeof (ISteppedLayer))]
-    internal class SavanneLayerImpl : ISteppedActiveLayer, IVisualizable {
-        
+    public class SavanneLayerImpl : ISteppedActiveLayer, IVisualizable {
+        private const string CoordinatesFile = "..\\..\\..\\Examples\\ArsAfrika\\Savanne\\Skukuza_Trees_LatLon.txt";
+           
+
+        private const int CountOfAgents = 4000;
         private readonly List<IAgent> _allAgentsOnLayer = new List<IAgent>();
-        private const string CoordinatesFile = "C:\\GITVerzeichnis\\LIFE\\01 - Code\\LIFE\\Examples\\ArsAfrika\\Savanne\\Skukuza_Trees_LatLon.txt";
-        
+
         private readonly IEnvironment _esc =
             new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
 
         private readonly TerrainDataMessage _terrainMessage = new TerrainDataMessage(1, 1, 0.0, 1);
 
+        private readonly IGisCoordinatesLayer _coordinatesLayer;
         private long _tick;
+
+        public SavanneLayerImpl(IGisCoordinatesLayer coordinateLayer) {
+            _coordinatesLayer = coordinateLayer;
+        }
 
         #region ISteppedActiveLayer Members
 
-        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle,
-            UnregisterAgent unregisterAgentHandle) {
+        public bool InitLayer (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
+
             List<Tuple<double, double>> coordinates = HelperUtil.ReadKoordinatesFromFile(CoordinatesFile);
             
-            Console.WriteLine("Starting 1 agent ...");
+            Console.WriteLine("Starting agents ...");
 
-            for (int i = 0; i < 4000; i++) {
-                Marula ourAwesomeMarula = new Marula(_esc, 500, 5, 0, 1000, Marula.Sex.Male, coordinates[i].Item1,
-                    coordinates[i].Item2);
+            for (int i = 0; i < CountOfAgents; i++) {
+                Marula ourAwesomeMarula = new Marula
+                    (_esc,
+                        500,
+                        5,
+                        0,
+                        1000,
+                        Marula.Sex.Male,
+                        coordinates[i].Item1,
+                        coordinates[i].Item2,
+                        _coordinatesLayer);
                 _allAgentsOnLayer.Add(ourAwesomeMarula);
                 registerAgentHandle.Invoke(this, ourAwesomeMarula);
-
-                //_esc.Add(ourAwesomeMarula.SpacialTreeEntity, new Vector3(coordinates[i].Item1, coordinates[i].Item2));
-                // int countOfAgents = _esc.ExploreAll().Count();
             }
 
-            Console.WriteLine("Finished agent...");
+            Console.WriteLine("Finished agents...");
             return true;
         }
 
@@ -69,38 +81,39 @@ namespace Savanne {
 
         public void PreTick() {}
 
-        public void PostTick() {
-            //TODO log stuff: sum of trees
-        }
+        public void PostTick() {}
 
         #endregion
 
         #region IVisualizable Members
 
+        /// <summary>
+        ///     Here the data for the visualisation is constucted in a message format which is pushed to the rabbitMQ.
+        /// </summary>
+        /// <returns></returns>
         public List<BasicVisualizationMessage> GetVisData() {
             ConcurrentBag<BasicVisualizationMessage> result = new ConcurrentBag<BasicVisualizationMessage> {
                 _terrainMessage
             };
             foreach (Marula agent in _allAgentsOnLayer) {
-                result.Add(new NonMovingBasicAgent(
-                    Definitions.AgentTypes.TreeAgent,
-                    agent.PosX,
-                    0,
-                    agent.PosY,
-                    0,
-                    agent.ID.ToString(),
-                    _tick,
-                    1, 1, 1,
-                    new Dictionary<string, string> {{"Stage", "Adult"}},
-                    "Marula"));
+                result.Add
+                    (new NonMovingBasicAgent
+                        (
+                        Definitions.AgentTypes.TreeAgent,
+                        new Dictionary<string, string> {{"Stage", "Adult"}},
+                        agent.visualisationPosX,
+                        0,
+                        agent.visualisationPosY,
+                        0,
+                        agent.ID.ToString(),
+                        _tick,
+                        1,
+                        1,
+                        1,
+                        "Marula"));
             }
-
             return result.ToList();
         }
-
-        //(Definitions.AgentTypes type, double x, double y, double z, float rotation, string id,
-        //	long ticknumber, float sizeX, float sizeY, float sizeZ, Dictionary<string, string> attributes, string species,
-        //		List<GroupDefinition> groups = null)
 
         public List<BasicVisualizationMessage> GetVisData(IGeometry geometry) {
             throw new NotImplementedException();
@@ -108,4 +121,5 @@ namespace Savanne {
 
         #endregion
     }
+
 }

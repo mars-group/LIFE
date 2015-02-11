@@ -25,6 +25,11 @@ namespace RTEManager.Implementation {
 
         #region IRTEManager Members
 
+        public ICollection<ILayer> GetRegisteredLayers()
+        {
+            return _rteManagerUseCase.GetRegisteredLayers();
+        }
+
         public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {
             _rteManagerUseCase.RegisterLayer(instanceId, layer);
         }

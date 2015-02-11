@@ -31,7 +31,8 @@ namespace Savanne {
 
                 double x = Double.Parse(coordArray[0], CultureInfo.InvariantCulture);
                 double y = Double.Parse(coordArray[1], CultureInfo.InvariantCulture);
-                coordinates.Add(new Tuple<double, double>(x, y));
+                //The file contains x and y switched
+                coordinates.Add(new Tuple<double, double>(y,x));
             }
             return coordinates;
         }

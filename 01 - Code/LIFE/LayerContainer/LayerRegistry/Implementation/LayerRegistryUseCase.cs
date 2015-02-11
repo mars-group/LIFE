@@ -171,7 +171,7 @@ namespace LayerRegistry.Implementation {
             }
 
 
-            var scsStub = genericCreateClientMethod.Invoke(null, new[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port), null });
+            var scsStub = genericCreateClientMethod.Invoke(null, new object[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port), null });
 
             Type typeOfScsStub = scsStub.GetType();
 

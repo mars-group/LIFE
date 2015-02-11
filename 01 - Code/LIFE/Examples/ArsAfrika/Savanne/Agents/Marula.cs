@@ -1,30 +1,48 @@
 ﻿using System;
+using GeoAPI.Geometries;
+using GisCoordinatesLayer;
 using LifeAPI.Agent;
-using SpatialAPI.Entities;
-using SpatialAPI.Entities.Movement;
-using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Environment;
-using SpatialAPI.Shape;
 
 namespace Savanne.Agents {
+
+    /// <summary>
+    ///     the marula attributes are disigned by ulfias first diagramms
+    /// </summary>
     internal class Marula : IAgent {
+        #region Sex enum
+
         public enum Sex {
-            Male, Female  
+            Male,
+            Female
         }
 
-        public ISpatialEntity SpacialTreeEntity;
-        private IEnvironment _esc;
+        #endregion
+
+        private readonly IGisCoordinatesLayer _gisCoordinatesLayer;
 
         private int _heigthInCm;
         private int _age;
         private int _damageType;
-        private int _stemDiameterInMm ;
+        private int _stemDiameterInMm;
         private Sex _sex;
-        public  double PosX;
-        public  double PosY;
+        public double PosX;
+        public double PosY;
+        public double visualisationPosX;
+        public double visualisationPosY;
 
 
-        public Marula(IEnvironment esc, int heightInCm, int age, int damageType, int stemDiameterInMm, Sex sex, double posX, double posY) {
+
+        public Marula
+            (IEnvironment esc,
+                int heightInCm,
+                int age,
+                int damageType,
+                int stemDiameterInMm,
+                Sex sex,
+                double posX,
+                double posY,
+                IGisCoordinatesLayer gisCoordinatesLayer) {
             _heigthInCm = heightInCm;
             _age = age;
             _damageType = damageType;
@@ -32,11 +50,16 @@ namespace Savanne.Agents {
             _sex = sex;
             PosX = posX;
             PosY = posY;
+            _gisCoordinatesLayer = gisCoordinatesLayer;
             ID = Guid.NewGuid();
-            //SpacialTreeEntity = new SpatialTreeEntity(0.000000000000001, 0.000000000000001, CollisionType.SelfCollision);
-          
-            _esc = esc;
-        }
+
+            Coordinate transformedFromGpsToVisualisationData = _gisCoordinatesLayer.TransformToImage(PosX, PosY);
+            visualisationPosX = transformedFromGpsToVisualisationData.X;
+            visualisationPosY = transformedFromGpsToVisualisationData.Y;
+
+            Console.WriteLine("My visualisation coords are: " + visualisationPosX + ", " + visualisationPosY);
+            
+            }
 
         #region IAgent Members
 
@@ -44,9 +67,12 @@ namespace Savanne.Agents {
 
 
         public void Tick() {
-            //Console.WriteLine("Hello Tree");
+            //Coordinate transformedFromGpsToVisualisationData = _gisCoordinatesLayer.TransformToImage(PosX, PosY);
+            //Console.WriteLine(transformedFromGpsToVisualisationData);
+            
         }
 
         #endregion
     }
+
 }
