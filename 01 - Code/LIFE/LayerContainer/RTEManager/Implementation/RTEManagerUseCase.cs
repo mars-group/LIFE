@@ -21,8 +21,11 @@ using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 
-namespace RTEManager.Implementation {
-    internal class RTEManagerUseCase : IRTEManager {
+namespace RTEManager.Implementation
+{
+    internal class RTEManagerUseCase : IRTEManager
+    {
+      
         private readonly IVisualizationAdapterInternal _visualizationAdapter;
 
         // the tickClients being executed per Layer
@@ -50,7 +53,8 @@ namespace RTEManager.Implementation {
         private IDMConnector _distributionManager;
 
 
-        public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
+        public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry)
+        {
             _visualizationAdapter = visualizationAdapter;
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
             _preAndPostTickLayer = new List<ISteppedActiveLayer>();
@@ -84,8 +88,15 @@ namespace RTEManager.Implementation {
 
         #region Public Methods
 
-        public void RegisterLayer(TLayerInstanceId layerInstanceId, ILayer layer) {
-            if (!_tickClientsPerLayer.ContainsKey(layer)) {
+        public ICollection<ILayer> GetRegisteredLayers()
+        {
+            return _layers.Values;
+        }
+
+        public void RegisterLayer(TLayerInstanceId layerInstanceId, ILayer layer)
+        {
+            if (!_tickClientsPerLayer.ContainsKey(layer))
+            {
                 _tickClientsPerLayer.Add(layer, new ConcurrentDictionary<ITickClient, byte>());
                 _tickClientsMarkedForDeletionPerLayer.Add(layer, new ConcurrentBag<ITickClient>());
                 _tickClientsMarkedForRegistrationPerLayer.Add(layer, new ConcurrentBag<ITickClient>());
@@ -105,34 +116,42 @@ namespace RTEManager.Implementation {
             if (activeLayer != null) _preAndPostTickLayer.Add(activeLayer);
         }
 
-        public void UnregisterLayer(TLayerInstanceId layerInstanceId) {
+        public void UnregisterLayer(TLayerInstanceId layerInstanceId)
+        {
             _tickClientsPerLayer.Remove(_layers[layerInstanceId]);
             _layers.Remove(layerInstanceId);
         }
 
-        public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
+        public void UnregisterTickClient(ILayer layer, ITickClient tickClient)
+        {
             if (_tickClientsMarkedForDeletionPerLayer.ContainsKey(layer))
                 _tickClientsMarkedForDeletionPerLayer[layer].Add(tickClient);
         }
 
-        public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
-            if (!_isRunning) {
+        public void RegisterTickClient(ILayer layer, ITickClient tickClient)
+        {
+            if (!_isRunning)
+            {
                 _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
             }
-            else {
+            else
+            {
                 _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
             }
         }
 
-        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData)
+        {
             _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
         }
 
-        public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
+        public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer)
+        {
             return _tickClientsPerLayer[_layers[layer]].Keys;
         }
 
-        public long AdvanceOneTick() {
+        public long AdvanceOneTick()
+        {
             _isRunning = true;
 
             Stopwatch stopWatch = Stopwatch.StartNew();
@@ -151,13 +170,12 @@ namespace RTEManager.Implementation {
                 (
                     _tickClientsPerLayer.Keys,
                     layer => Parallel.ForEach
-                        (_tickClientsPerLayer[layer],
+                        (
+                            _tickClientsPerLayer[layer],
                             client => client.Key.Tick()
                         )
                 );
-
-            Console.WriteLine("Tick finished: " + _currentTick);
-
+            
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
@@ -173,8 +191,10 @@ namespace RTEManager.Implementation {
                 (
                     _tickClientsMarkedForDeletionPerLayer.Keys,
                     layer => Parallel.ForEach
-                        (_tickClientsMarkedForDeletionPerLayer[layer],
-                            tickClientToBeRemoved => {
+                        (
+                            _tickClientsMarkedForDeletionPerLayer[layer],
+                            tickClientToBeRemoved =>
+                            {
                                 byte trash;
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
                             })
@@ -186,7 +206,8 @@ namespace RTEManager.Implementation {
                 (
                     _tickClientsMarkedForRegistrationPerLayer.Keys,
                     layer => Parallel.ForEach
-                        (_tickClientsMarkedForRegistrationPerLayer[layer],
+                        (
+                            _tickClientsMarkedForRegistrationPerLayer[layer],
                             tickClientToBeRegistered =>
                                 _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte()))
                 );
@@ -195,7 +216,8 @@ namespace RTEManager.Implementation {
             Parallel.ForEach
                 (
                     _tickClientsPerLayer.Keys,
-                    layer => {
+                    layer =>
+                    {
                         _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentBag<ITickClient>();
                         _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentBag<ITickClient>();
                     }

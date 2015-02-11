@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LCConnector.TransportTypes;
+using LifeAPI.Agent;
 using LifeAPI.Layer;
 using Mono.Addins;
 
@@ -13,7 +14,7 @@ namespace ModelMock
 
     [assembly: Addin]
     [assembly: AddinDependency("LayerContainer", "0.1")]
-    class SimpleSteppedActiveLayerMock : ISteppedActiveLayer
+    public class SimpleSteppedActiveLayerMock : ISteppedActiveLayer
     {
         
         private long _tick;

@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System.Collections.Generic;
+using System.Dynamic;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
@@ -17,7 +18,13 @@ namespace RTEManager.Interfaces {
     ///     The RunTimeEnvironment Manager manages the ressources available within this
     ///     LayerContainer and triggers each layer's Tick client according to the available ressources.
     /// </summary>
-    public interface IRTEManager {
+    public interface IRTEManager
+    {
+        /// <summary>
+        /// Propertie that displays all registered layers all
+        /// </summary>
+        ICollection<ILayer> GetRegisteredLayers(); 
+
         /// <summary>
         ///     Registers a layer with the RuntimeEvironment
         ///     Hint: To retreive a layer instance, use the LayerRegistry-Component
