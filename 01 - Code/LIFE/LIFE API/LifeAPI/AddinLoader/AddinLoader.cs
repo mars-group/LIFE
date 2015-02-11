@@ -68,7 +68,10 @@ namespace LifeAPI.AddinLoader {
         public TypeExtensionNode LoadLayer(string layerName) {
             WaitForAddinManagerToBeInitialized();
             UpdateAddinRegistry();
-            return _extensionNodes.Cast<TypeExtensionNode>().First(node => node.TypeName == layerName);
+
+            //TODO fix BUG JIRA http://jira.3ten.de/browse/MARS-53?jql=text%20~%20%22addin%22
+            //If more then one model is present in the addin-folder/-db an exception is thrown here.
+            return _extensionNodes.Cast<TypeExtensionNode>().First(node => node.Type.Name == layerName);
         }
 
         public ExtensionNodeList LoadAllLayers() {

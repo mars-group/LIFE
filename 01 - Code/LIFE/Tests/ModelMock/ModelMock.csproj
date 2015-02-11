@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9750AEFD-1F7E-4F2B-930B-0982E29147CA}</ProjectGuid>
+    <ProjectGuid>{2C331DBA-0B33-4D2A-BE8B-CD135FAC4523}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayerContainerFassadeTest</RootNamespace>
-    <AssemblyName>LayerContainerFassadeTest</AssemblyName>
+    <RootNamespace>ModelMock</RootNamespace>
+    <AssemblyName>ModelMock</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\LayerContainerFassadeTest\bin\Debug\layers\addins\ModelMock\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,10 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="Mono.Addins">
+      <HintPath>..\..\packages\Mono.Addins.1.2\lib\net40\Mono.Addins.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,24 +45,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LayerContainerBlackBoxTest\LayeContainerFassadeTest.cs" />
+    <Compile Include="SimpleSteppedActiveLayerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj">
-      <Project>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</Project>
-      <Name>LayerContainerFacade</Name>
+    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LifeAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
