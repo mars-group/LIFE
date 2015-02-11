@@ -9,7 +9,7 @@ namespace LIFEViewProtocol.Basics {
 	[ProtoContract]
 	[ProtoInclude(100, typeof (BasicAgent))]
 	[ProtoInclude(101, typeof (ClientCameraViewMessage))]
-	[ProtoInclude(102, typeof (RequestMessage))]
+	[ProtoInclude(102, typeof (TerrainInformationRequestMessage))]
 	[ProtoInclude(103, typeof (TerrainDataMessage))]
 	[ProtoInclude(104, typeof (RegisterMessage))]
 	[ProtoInclude(105, typeof (InitializationMessage))]
@@ -24,7 +24,7 @@ namespace LIFEViewProtocol.Basics {
 	public abstract class BasicVisualizationMessage {
 		/*
 		 * Supported types:
-		 * - RequestMessage
+		 * - TerrainInformationRequestMessage
 		 * - BasicAgent
 		 * - AreaDescriptor
 		 * - AreaDataWrapper

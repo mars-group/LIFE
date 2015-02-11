@@ -11,13 +11,11 @@ namespace LIFEViewProtocol.Helper {
 			GenerateMapFromData(map, 1025, height, out tiled, out dataMessage);
 			ttd = tiled;
 			tdm = dataMessage;
-			// Trace.WriteLine("X: "+dataMessage.TileCountX+" Y: "+dataMessage.TileCountY);
+			// Trace.WriteLine("X: "+dataMessage.TileCountX+" Y: "+dataMessage.TileCountZ);
 		}
 
 		public static void GenerateMapFromData(float[,] map, double tilesize, double height, out TiledTerrainData[,] ttd,
 			out TerrainDataMessage tdm) {
-			Trace.WriteLine("map[" + map.GetLength(0) + "," + map.GetLength(1) + "] xCount: " + map.GetLength(0)/tilesize +
-			                " yCount: " + map.GetLength(1)/tilesize);
 			int xCount = Convert.ToInt32(Math.Ceiling((map.GetLength(0)/tilesize)));
 			int yCount = Convert.ToInt32(Math.Ceiling((map.GetLength(1)/tilesize)));
 			ttd = new TiledTerrainData[xCount, yCount];
@@ -41,8 +39,6 @@ namespace LIFEViewProtocol.Helper {
 
 		public static void GenerateMapFromData(float[,] map, double tilesize, double height, double cellsize, int epsg,
 			double west, double south, double east, double north, out TiledTerrainData[,] ttd, out TerrainDataMessage tdm) {
-			Trace.WriteLine("map[" + map.GetLength(0) + "," + map.GetLength(1) + "] xCount: " + map.GetLength(0)/tilesize +
-			                " yCount: " + map.GetLength(1)/tilesize);
 			int xCount = Convert.ToInt32(Math.Ceiling((map.GetLength(0)/tilesize)));
 			int yCount = Convert.ToInt32(Math.Ceiling((map.GetLength(1)/tilesize)));
 			ttd = new TiledTerrainData[xCount, yCount];

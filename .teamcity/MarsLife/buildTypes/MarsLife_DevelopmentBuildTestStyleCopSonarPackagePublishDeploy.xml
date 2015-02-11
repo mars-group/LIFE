@@ -13,6 +13,7 @@
       <setting-ref ref="RUNNER_17" />
       <setting-ref ref="RUNNER_3" />
       <setting-ref ref="RUNNER_4" />
+      <setting-ref ref="RUNNER_5" />
     </disabled-settings>
     <parameters />
     <build-runners>
@@ -63,7 +64,7 @@ http://nuget.3ten.de/nuget]]></param>
           <param name="nunit_environment" value="v4.0" />
           <param name="nunit_include" value="01 - Code\LIFE\Tests\*\bin\Release\*.dll" />
           <param name="nunit_platform" value="MSIL" />
-          <param name="nunit_version" value="NUnit-2.6.3" />
+          <param name="nunit_version" value="NUnit-2.6.1" />
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
