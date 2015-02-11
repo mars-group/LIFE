@@ -1,7 +1,8 @@
-﻿using MessageWrappers.Basics;
+﻿using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
 using ProtoBuf;
 
-namespace MessageWrappers.Objects {
+namespace LIFEViewProtocol.Objects {
 	[ProtoContract]
 	public class NonMovingPassiveObject : BasicPassiveObject {
 		[ProtoMember(1)]

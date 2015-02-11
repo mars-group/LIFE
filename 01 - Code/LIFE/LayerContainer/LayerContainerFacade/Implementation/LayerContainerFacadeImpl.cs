@@ -18,7 +18,7 @@ using LayerContainerShared;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;

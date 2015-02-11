@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using MessageWrappers.AgentsAndEvents;
-using MessageWrappers.Basics;
-using MessageWrappers.Objects;
+using LIFEViewProtocol.AgentsAndEvents;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Objects;
 using ProtoBuf;
 
-namespace MessageWrappers.Helper {
+namespace LIFEViewProtocol.Helper {
 	[ProtoContract]
 	public class DataSetMessage : BasicVisualizationMessage {
 		[ProtoMember(1)]

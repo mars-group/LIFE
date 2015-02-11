@@ -29,7 +29,7 @@ namespace SpatialAPI.Shape {
         ///     Generates a new shape by applying given parameters to this shape.
         /// </summary>
         /// <param name="movement">A relative vector to the current position.</param>
-        /// <param name="rotation">A relative rotation to current rotation.</param>
+        /// <param name="rotation">The newly set absolute rotation of the shape.</param>
         /// <returns>The new shape as result of transformation.</returns>
         IShape Transform(Vector3 movement, Direction rotation);
 

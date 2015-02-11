@@ -1,9 +1,11 @@
-﻿using MessageWrappers.AgentsAndEvents;
-using MessageWrappers.Helper;
-using MessageWrappers.Terrain;
+﻿using LIFEViewProtocol.Actions;
+using LIFEViewProtocol.AgentsAndEvents;
+using LIFEViewProtocol.Helper;
+using LIFEViewProtocol.Objects;
+using LIFEViewProtocol.Terrain;
 using ProtoBuf;
 
-namespace MessageWrappers.Basics {
+namespace LIFEViewProtocol.Basics {
 	[ProtoContract]
 	[ProtoInclude(100, typeof (BasicAgent))]
 	[ProtoInclude(101, typeof (ClientCameraViewMessage))]

@@ -2,7 +2,7 @@
 using GeoAPI.Geometries;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Helper {
 	[ProtoContract]
 	public class Point3D : IEquatable<Point3D>, IComparable {
 		[ProtoMember(1)]

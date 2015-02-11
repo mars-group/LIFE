@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Helper {
 	/// <summary>
 	///     Helper class for storing the attributes of an agent
 	/// </summary>

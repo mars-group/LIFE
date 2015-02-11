@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
   <versionedSettings rootId="MarsLife_HttpChristianScm3tenDeScmGitLife1" enabled="true" showChanges="false" />
+  <issueTrackers>
+    <trackerConnection key="jira1" type="jira">
+      <param name="secure:password" value="zxx420946977d06d7f6d553e0b306a6b630" />
+      <param name="username" value="christian" />
+      <param name="host" value="http://jira.3ten.de" />
+      <param name="idPrefix" value="MARS" />
+      <param name="name" value="3ten JIRA" />
+    </trackerConnection>
+  </issueTrackers>
 </settings>
 

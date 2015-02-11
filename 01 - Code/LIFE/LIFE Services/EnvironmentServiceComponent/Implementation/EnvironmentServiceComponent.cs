@@ -7,22 +7,120 @@ using SpatialAPI.Entities.Movement;
 using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Environment;
 using SpatialAPI.Shape;
-using SpatialObjectOctree.Interface;
 using SpatialObjectOctree.Implementation;
+using SpatialObjectOctree.Interface;
 
 namespace EnvironmentServiceComponent.Implementation {
 
+    /// <summary>
+    ///     3-dimensional implementation of the IEnvironment interface.
+    /// </summary>
     public class EnvironmentServiceComponent : IEnvironment {
         private const int MaxAttempsToAddRandom = 100;
         private readonly bool[,] _collisionMatrix;
         private readonly IOctree<ISpatialEntity> _octree;
-        private readonly Random _random;
+        private readonly Random _random = new Random();
         private readonly object _syncLock = new object();
 
+        /// <summary>
+        ///     Initializes the environemt.
+        /// </summary>
+        /// <param name="collisionMatrix">Defines the collision behaviour of added ISpatialEntities.</param>
         public EnvironmentServiceComponent(bool[,] collisionMatrix = null) {
-            _random = new Random();
-            _collisionMatrix = collisionMatrix ?? CollisionMatrix.Get();
+            _collisionMatrix = collisionMatrix ?? CollisionMatrix.Get(); // if null use standard behaviour instead
             _octree = new SpatialObjectOctree<ISpatialEntity>(new Vector3(25, 25, 25), 1, true);
+        }
+
+        /// <summary>
+        ///     Tries to move given entity relatively from it's current position.
+        /// </summary>
+        /// <param name="calledByAdd">Indicates if the entity is already in the system.</param>
+        /// <param name="entity">That will be moved.</param>
+        /// <param name="movementVector">The vector defines a relative transition towards the goal.</param>
+        /// <param name="rotation">
+        ///     The rotation defines the absolute orientation of the entity. If null, the previous rotation is used but
+        ///     not modified.
+        /// </param>
+        /// <returns>A MovementResult that defines the success of the operation and possible collisions.</returns>
+        private MovementResult Move
+            (bool calledByAdd, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
+            rotation = rotation ?? new Direction();
+            IShape newShape = entity.Shape.Transform(movementVector, rotation);
+            lock (_syncLock) {
+                List<ISpatialEntity> collisions = Explore(newShape, entity.CollisionType).ToList();
+                collisions.Remove(entity);
+
+                if (collisions.Any()) {
+                    return new MovementResult(collisions);
+                }
+                if (!calledByAdd) {
+                    _octree.Remove(entity);
+                }
+                entity.Shape = newShape;
+                _octree.Insert(entity);
+                return new MovementResult();
+            }
+        }
+
+        /// <summary>
+        ///     Indicates if the combination of collision types causes a collision. Respect the order.
+        /// </summary>
+        /// <param name="givenCollisionType">The collision type that may collide with the other.</param>
+        /// <param name="foundCollisionType">The collision type of which the correspondency is checked.</param>
+        /// <returns>True, if the combination results in a collision, false otherwise.</returns>
+        private bool Collides(int givenCollisionType, int foundCollisionType) {
+            return _collisionMatrix[givenCollisionType, foundCollisionType];
+        }
+
+        /// <summary>
+        ///     Generates a random position within the given bounds.
+        /// </summary>
+        /// <param name="min">Lower boundary.</param>
+        /// <param name="max">Upper boundary.</param>
+        /// <param name="grid">Defines, if position only holds integer values.</param>
+        /// <returns>The generated position.</returns>
+        private Vector3 GenerateRandomPosition(Vector3 min, Vector3 max, bool grid) {
+            if (grid) {
+                int x = _random.Next((int) min.X, (int) max.X + 1);
+                int y = _random.Next((int) min.Y, (int) max.Y + 1);
+                int z = _random.Next((int) min.Z, (int) max.Z + 1);
+                return new Vector3(x, y, z);
+            }
+            else {
+                double x = GetRandomNumber(min.X, max.X);
+                double y = GetRandomNumber(min.Y, max.Y);
+                double z = GetRandomNumber(min.Z, max.Z);
+                return new Vector3(x, y, z);
+            }
+        }
+
+        /// <summary>
+        ///     Provides a random number within the given range.
+        /// </summary>
+        /// <param name="min">Lower boundary.</param>
+        /// <param name="max">Upper boundary.</param>
+        /// <returns>The generated random number.</returns>
+        private double GetRandomNumber(double min, double max) {
+            return _random.NextDouble()*(max - min) + min;
+        }
+
+        /// <summary>
+        ///     Get spatial entities that corresponds with given parameters.
+        /// </summary>
+        /// <param name="shape">Defines area that should be explored.</param>
+        /// <param name="collisionType">Defines, which found spatial entities in intersecting shape should be explored.</param>
+        /// <returns>All spatial entities with intersecting shape and collision type of the ESC.</returns>
+        private IEnumerable<ISpatialEntity> Explore(IShape shape, Enum collisionType) {
+            List<ISpatialEntity> result = new List<ISpatialEntity>();
+
+            foreach (ISpatialEntity foundSpatialObject in _octree.Query(shape.Bounds)) {
+                int foundCollisionType = foundSpatialObject.CollisionType.GetHashCode();
+                if (Collides(collisionType.GetHashCode(), foundCollisionType)
+                    && shape.IntersectsWith(foundSpatialObject.Shape)) {
+                    result.Add(foundSpatialObject);
+                }
+            }
+            return result;
         }
 
         #region IEnvironment Members
@@ -43,6 +141,7 @@ namespace EnvironmentServiceComponent.Implementation {
             return true;
         }
 
+        //TODO auch mit zufälliger Rotation und ohne grid option
         public bool AddWithRandomPosition(ISpatialEntity entity, Vector3 min, Vector3 max, bool grid) {
             for (int attempt = 0; attempt < MaxAttempsToAddRandom; attempt++) {
                 Vector3 position = GenerateRandomPosition(min, max, grid);
@@ -84,62 +183,6 @@ namespace EnvironmentServiceComponent.Implementation {
         }
 
         #endregion
-
-        private MovementResult Move
-            (bool calledByAdd, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
-            rotation = rotation ?? new Direction();
-            IShape newShape = entity.Shape.Transform(movementVector, rotation);
-            lock (_syncLock) {
-                List<ISpatialEntity> collisions = Explore(newShape, entity.CollisionType).ToList();
-                collisions.Remove(entity);
-
-                if (collisions.Any()) {
-                    return new MovementResult(collisions);
-                }
-                if (!calledByAdd) {
-                    _octree.Remove(entity);
-                }
-                entity.Shape = newShape;
-                _octree.Insert(entity);
-                return new MovementResult();
-            }
-        }
-
-        private bool Collides(int givenCollisionType, int foundCollisionType) {
-            return _collisionMatrix[givenCollisionType, foundCollisionType];
-        }
-
-        private Vector3 GenerateRandomPosition(Vector3 min, Vector3 max, bool grid) {
-            if (grid) {
-                int x = _random.Next((int) min.X, (int) max.X + 1);
-                int y = _random.Next((int) min.Y, (int) max.Y + 1);
-                int z = _random.Next((int) min.Z, (int) max.Z + 1);
-                return new Vector3(x, y, z);
-            }
-            else {
-                double x = GetRandomNumber(min.X, max.X);
-                double y = GetRandomNumber(min.Y, max.Y);
-                double z = GetRandomNumber(min.Z, max.Z);
-                return new Vector3(x, y, z);
-            }
-        }
-
-        private double GetRandomNumber(double min, double max) {
-            return _random.NextDouble()*(max - min) + min;
-        }
-
-        private IEnumerable<ISpatialEntity> Explore(IShape shape, Enum collisionType) {
-            List<ISpatialEntity> result = new List<ISpatialEntity>();
-
-            foreach (ISpatialEntity foundSpatialObject in _octree.Query(shape.Bounds)) {
-                int foundCollisionType = foundSpatialObject.CollisionType.GetHashCode();
-                if (Collides(collisionType.GetHashCode(), foundCollisionType)
-                    && shape.IntersectsWith(foundSpatialObject.Shape)) {
-                    result.Add(foundSpatialObject);
-                }
-            }
-            return result;
-        }
     }
 
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Helper {
 	[ProtoContract]
 	public class AreaDescriptor : IEquatable<AreaDescriptor> {
 		[ProtoMember(1)]

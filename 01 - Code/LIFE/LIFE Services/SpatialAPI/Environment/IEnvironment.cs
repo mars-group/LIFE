@@ -15,12 +15,10 @@ namespace SpatialAPI.Environment {
         /// </summary>
         Vector3 MaxDimension { get; set; }
 
-
         /// <summary>
         ///     Tells, if this environment is rasterized or not.
         /// </summary>
         bool IsGrid { get; set; }
-
 
         /// <summary>
         ///     Adds a new entity to the ESC at given position with given direction.
@@ -42,9 +40,6 @@ namespace SpatialAPI.Environment {
         /// <param name="grid">If true, the random position will only contain integer.</param>
         /// <returns>True, if the entity could be added within range. False, otherwise.</returns>
         bool AddWithRandomPosition(ISpatialEntity entity, Vector3 min, Vector3 max, bool grid);
-
-        //TODO auch mit zufälliger Rotation und ohne grid option
-
 
         /// <summary>
         ///     Removes given entity from the ESC.

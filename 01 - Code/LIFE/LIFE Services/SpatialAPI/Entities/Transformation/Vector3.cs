@@ -3,32 +3,9 @@
 namespace SpatialAPI.Entities.Transformation {
 
     public struct Vector3 : IEquatable<Vector3> {
-        /// <summary>
-        ///     Calculate the vector length.
-        /// </summary>
-        /// <returns>Length of this vector.</returns>
-        public double Length { get { return GetDistance(Zero, this); } }
-
-        public static Vector3 Random { get { return new Vector3(random.Next(), random.Next(), random.Next()); } }
-
-        public static readonly Vector3 One = new Vector3(1.0d, 1.0d, 1.0d);
-        public static readonly Vector3 Zero = new Vector3(0.0d, 0.0d, 0.0d);
-        public static readonly Vector3 Forward = new Vector3(0.0d, 0.0d, 1.0d);
-        public static readonly Vector3 Backward = new Vector3(0.0d, 0.0d, -1.0d);
-        public static readonly Vector3 Up = new Vector3(0.0d, 1.0d, 0.0d);
-        public static readonly Vector3 Down = new Vector3(0.0d, -1.0d, 0.0d);
-        public static readonly Vector3 Left = new Vector3(-1.0d, 0.0d, 0.0d);
-        public static readonly Vector3 Right = new Vector3(1.0d, 0.0d, 0.0d);
-        public static readonly Vector3 Null = new Vector3(0.0d, 0.0d, 0.0d, true);
-        public static readonly Vector3 UniVector3XAxis = new Vector3(1.0d, 0.0d, 0.0d).Normalize();
-        public static readonly Vector3 MaxVector = new Vector3(double.MaxValue, double.MaxValue, double.MaxValue);
-
-        private static readonly Random random = new Random();
         private readonly bool _is3D; // Dimension flag: false: 2D, true: 3D.
         private readonly bool _isSet;
-
         public readonly double X, Y, Z;
-
 
         /// <summary>
         ///     Initialize a two-dimensional vector (height is set to zero).
@@ -38,7 +15,6 @@ namespace SpatialAPI.Entities.Transformation {
             _is3D = false;
         }
 
-
         /// <summary>
         ///     Initialize a three-dimensional vector.
         /// </summary>
@@ -47,14 +23,21 @@ namespace SpatialAPI.Entities.Transformation {
         /// <summary>
         ///     Initialize a three-dimensional vector.
         /// </summary>
-        private Vector3(double x, double y, double z, bool isSet)
-            : this() {
+        private Vector3(double x, double y, double z, bool isSet) {
             X = x;
             Y = y;
             Z = z;
             _is3D = true;
             _isSet = isSet;
         }
+
+        /// <summary>
+        ///     Calculate the vector length.
+        /// </summary>
+        /// <returns>Length of this vector.</returns>
+        public double Length { get { return GetDistance(Zero, this); } }
+
+        public static Vector3 Random { get { return new Vector3(random.Next(), random.Next(), random.Next()); } }
 
         #region IEquatable<Vector3> Members
 
@@ -121,7 +104,6 @@ namespace SpatialAPI.Entities.Transformation {
                 : String.Format("({0,5:0.00}|{1,5:0.00}|{2,5:0.00})", X, Y, Z);
         }
 
-
         /// <summary>
         ///     Calculate point-to-point distance.
         /// </summary>
@@ -170,6 +152,19 @@ namespace SpatialAPI.Entities.Transformation {
         public bool IsNull() {
             return !_isSet;
         }
+
+        public static readonly Vector3 One = new Vector3(1.0d, 1.0d, 1.0d);
+        public static readonly Vector3 Zero = new Vector3(0.0d, 0.0d, 0.0d);
+        public static readonly Vector3 Forward = new Vector3(0.0d, 0.0d, 1.0d);
+        public static readonly Vector3 Backward = new Vector3(0.0d, 0.0d, -1.0d);
+        public static readonly Vector3 Up = new Vector3(0.0d, 1.0d, 0.0d);
+        public static readonly Vector3 Down = new Vector3(0.0d, -1.0d, 0.0d);
+        public static readonly Vector3 Left = new Vector3(-1.0d, 0.0d, 0.0d);
+        public static readonly Vector3 Right = new Vector3(1.0d, 0.0d, 0.0d);
+        public static readonly Vector3 Null = new Vector3(0.0d, 0.0d, 0.0d, true);
+        public static readonly Vector3 UniVector3XAxis = new Vector3(1.0d, 0.0d, 0.0d).Normalize();
+        public static readonly Vector3 MaxVector = new Vector3(double.MaxValue, double.MaxValue, double.MaxValue);
+        private static readonly Random random = new Random();
 
         #region additionalMethods
 

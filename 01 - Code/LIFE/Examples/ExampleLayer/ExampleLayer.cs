@@ -8,10 +8,10 @@ using GeoAPI.Geometries;
 using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
-using MessageWrappers;
-using MessageWrappers.AgentsAndEvents;
-using MessageWrappers.Basics;
-using MessageWrappers.Terrain;
+using LIFEViewProtocol.AgentsAndEvents;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
+using LIFEViewProtocol.Terrain;
 using Mono.Addins;
 
 

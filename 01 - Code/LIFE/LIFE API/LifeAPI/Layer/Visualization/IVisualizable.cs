@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 using GeoAPI.Geometries;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
 
 namespace LifeAPI.Layer.Visualization {
     /// <summary>

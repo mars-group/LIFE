@@ -10,8 +10,7 @@
 using System;
 using System.Collections.Generic;
 using LifeAPI.Layer.Visualization;
-using MessageWrappers;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation {

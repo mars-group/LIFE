@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
 using ProtoBuf;
 
-namespace MessageWrappers {
+namespace LIFEViewProtocol.Helper {
 	[ProtoContract]
 	public class GroupDefinition : BasicVisualizationMessage {
 		[ProtoMember(1)]

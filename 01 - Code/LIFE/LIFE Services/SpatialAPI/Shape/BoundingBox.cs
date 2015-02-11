@@ -95,7 +95,7 @@ namespace SpatialAPI.Shape {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Intersects(BoundingBox other) {
+        public bool IntersectsWith(BoundingBox other) {
             return _aabb.IntersectsWith(other._aabb);
         }
 
@@ -154,17 +154,21 @@ namespace SpatialAPI.Shape {
             return String.Format("BoundingBox({0}->{1})", LeftBottomFront, RightTopRear);
         }
 
-//        public override bool Equals(object obj) {
-//            if (obj == null || GetType() != obj.GetType()) {
-//                return false;
-//            }
-//            var other = (BoundingBox) obj;
-//            return LeftBottomFront.Equals(other.LeftBottomFront) && RightTopRear.Equals(other.RightTopRear);
-//        }
-//
-//        public override int GetHashCode() {
-//            return LeftBottomFront.GetHashCode() + RightTopRear.GetHashCode();
-//        }
+        public static BoundingBox operator *(BoundingBox left, double right) {
+            return GenerateByDimension(left.Position, left.Dimension*right);
+        }
+
+        public static BoundingBox operator /(BoundingBox left, double right) {
+            return GenerateByDimension(left.Position, left.Dimension/right);
+        }
+
+        public static BoundingBox operator +(BoundingBox left, Vector3 right) {
+            return GenerateByDimension(left.Position, left.Dimension + right);
+        }
+
+        public static BoundingBox operator -(BoundingBox left, Vector3 right) {
+            return GenerateByDimension(left.Position, left.Dimension - right);
+        }
 
         #region IEnumerable<Vector3> Members
 
@@ -189,9 +193,9 @@ namespace SpatialAPI.Shape {
         public bool IntersectsWith(IShape shape) {
             var boundingBox = shape as BoundingBox;
             if (boundingBox == null) {
-                return IntersectsWith(shape.Bounds);
+                return IntersectsWith((IShape) shape.Bounds);
             }
-            return Intersects(boundingBox);
+            return IntersectsWith(boundingBox);
         }
 
         public IShape Transform(Vector3 movement, Direction rotation) {

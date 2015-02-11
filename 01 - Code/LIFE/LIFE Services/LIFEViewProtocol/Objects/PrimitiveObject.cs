@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GeoAPI.Geometries;
-using MessageWrappers.Basics;
+﻿using GeoAPI.Geometries;
+using LIFEViewProtocol.Basics;
+using LIFEViewProtocol.Helper;
 using ProtoBuf;
 
-namespace MessageWrappers.Objects
+namespace LIFEViewProtocol.Objects
 {
 	[ProtoContract]
 	class PrimitiveObject : BasicVisualizationMessage

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using GeoAPI.Geometries;
-using MessageWrappers.AgentsAndEvents;
+using LIFEViewProtocol.AgentsAndEvents;
+using LIFEViewProtocol.Helper;
 using ProtoBuf;
 
-namespace MessageWrappers.Basics {
+namespace LIFEViewProtocol.Basics {
 	[ProtoContract]
 	[ProtoInclude(100, typeof (NonMovingBasicAgent))]
 	[ProtoInclude(101, typeof (MovingBasicAgent))]

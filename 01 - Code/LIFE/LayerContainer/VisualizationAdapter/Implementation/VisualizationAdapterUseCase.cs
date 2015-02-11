@@ -9,10 +9,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using LifeAPI.Layer.Visualization;
-using MessageWrappers;
-using MessageWrappers.Basics;
+using LIFEViewProtocol.Basics;
+using RabbitMQ.Client;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation {
@@ -45,7 +46,7 @@ namespace VisualizationAdapter.Implementation {
                         OnRaiseVisualizationUpdated(visMessages);
 
                         // Send via Queue if possible
-                        // TODO: Send via Queue
+                        // TODO : Send to Queue
                     });
         }
 

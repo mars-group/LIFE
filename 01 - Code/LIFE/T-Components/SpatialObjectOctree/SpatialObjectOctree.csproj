@@ -34,6 +34,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Datatypes.cs" />
+    <Compile Include="Implementation\Octree.cs" />
+    <Compile Include="Implementation\Quadtree.cs" />
     <Compile Include="Implementation\SpatialObjectOctree.cs" />
     <Compile Include="Interface\IOctree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
