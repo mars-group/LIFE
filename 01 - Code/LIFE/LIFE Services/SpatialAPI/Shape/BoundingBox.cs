@@ -13,13 +13,12 @@ namespace SpatialAPI.Shape {
     ///     Notice, that the LeftBottomFront boundary values are inclusive, while the RightTopRear are exclusive.
     ///     This is to avoid ambiguity in Oct responsibility.
     /// </remarks>
-    public class BoundingBox : IEnumerable<Vector3>, IShape {
+    public class BoundingBox : IShape {
         private readonly AABB _aabb;
         private readonly Vector3 _dimension;
         private readonly Vector3 _leftBottomFront;
         private readonly Vector3 _position;
         private readonly Vector3 _rightTopRear;
-        private readonly Vector3[] _vertices;
 
         /// <summary>
         ///     Creates a new bounding box by using it's edges.
@@ -28,18 +27,8 @@ namespace SpatialAPI.Shape {
         /// <param name="rightTopRear">The edge at right, top and rear.</param>
         /// <returns>The created bounding box.</returns>
         private BoundingBox(Vector3 leftBottomFront, Vector3 rightTopRear) {
-            _vertices = new Vector3[8];
             _leftBottomFront = leftBottomFront;
             _rightTopRear = rightTopRear;
-
-            _vertices[0] = LeftBottomFront;
-            _vertices[1] = new Vector3(RightTopRear.X, LeftBottomFront.Y, LeftBottomFront.Z);
-            _vertices[2] = new Vector3(LeftBottomFront.X, RightTopRear.Y, LeftBottomFront.Z);
-            _vertices[3] = new Vector3(RightTopRear.X, RightTopRear.Y, LeftBottomFront.Z);
-            _vertices[4] = new Vector3(LeftBottomFront.X, LeftBottomFront.Y, RightTopRear.Z);
-            _vertices[5] = new Vector3(RightTopRear.X, LeftBottomFront.Y, RightTopRear.Z);
-            _vertices[6] = new Vector3(LeftBottomFront.X, RightTopRear.Y, RightTopRear.Z);
-            _vertices[7] = RightTopRear;
 
             var dx = RightTopRear.X - LeftBottomFront.X;
             var dy = RightTopRear.Y - LeftBottomFront.Y;
@@ -51,7 +40,6 @@ namespace SpatialAPI.Shape {
             _aabb = AABB.Generate(Position, Rotation.GetDirectionalVector(), Dimension);
         }
 
-        private AABB AABB { get { return _aabb; } }
         public Vector3 LeftBottomFront { get { return _leftBottomFront; } }
         public Vector3 RightTopRear { get { return _rightTopRear; } }
         public Vector3 Dimension { get { return _dimension; } }
@@ -80,12 +68,12 @@ namespace SpatialAPI.Shape {
         }
 
         /// <summary>
-        ///     Returns if the other bounding box intersects with this bounding box.
+        ///     Indicates intersection between this and the other bounding box.
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">The bounding box that is checked for intersection.</param>
+        /// <returns>True, if the other bounding box intersects with this bounding box. False otherwise.</returns>
         public bool IntersectsWith(BoundingBox other) {
-            return AABB.IntersectsWith(other.AABB);
+            return AABB.Intersects(_aabb, other._aabb);
         }
 
         /// <summary>
@@ -159,18 +147,6 @@ namespace SpatialAPI.Shape {
             return GenerateByDimension(left.Position, left.Dimension - right);
         }
 
-        #region IEnumerable<Vector3> Members
-
-        public IEnumerator<Vector3> GetEnumerator() {
-            return ((IEnumerable<Vector3>) _vertices).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
-        }
-
-        #endregion
-
         #region IShape Members
 
         public Vector3 Position { get { return _position; } }
@@ -180,11 +156,7 @@ namespace SpatialAPI.Shape {
         public BoundingBox Bounds { get { return this; } }
 
         public bool IntersectsWith(IShape shape) {
-            var boundingBox = shape as BoundingBox;
-            if (boundingBox == null) {
-                return IntersectsWith((IShape) shape.Bounds);
-            }
-            return IntersectsWith(boundingBox);
+            return IntersectsWith(shape.Bounds);
         }
 
         public IShape Transform(Vector3 movement, Direction rotation) {

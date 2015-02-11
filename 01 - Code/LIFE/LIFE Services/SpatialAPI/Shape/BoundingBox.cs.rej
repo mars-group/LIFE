@@ -1,0 +1,109 @@
+diff a/01 - Code/LIFE/LIFE Services/SpatialAPI/Shape/BoundingBox.cs b/01 - Code/LIFE/LIFE Services/SpatialAPI/Shape/BoundingBox.cs	(rejected hunks)
+@@ -14,10 +14,12 @@
+     ///     This is to avoid ambiguity in Oct responsibility.
+     /// </remarks>
+     public class BoundingBox : IEnumerable<Vector3>, IShape {
++        private readonly AABB _aabb;
++        private readonly Vector3 _dimension;
++        private readonly Vector3 _leftBottomFront;
++        private readonly Vector3 _position;
++        private readonly Vector3 _rightTopRear;
+         private readonly Vector3[] _vertices;
+-        private AABB _aabb;
+-        private Vector3 _leftBottomFront;
+-        private Vector3 _rightTopRear;
+ 
+         /// <summary>
+         ///     Creates a new bounding box by using it's edges.
+@@ -27,27 +29,32 @@
+         /// <returns>The created bounding box.</returns>
+         private BoundingBox(Vector3 leftBottomFront, Vector3 rightTopRear) {
+             _vertices = new Vector3[8];
+-            LeftBottomFront = leftBottomFront;
+-            RightTopRear = rightTopRear;
+-        }
++            _leftBottomFront = leftBottomFront;
++            _rightTopRear = rightTopRear;
+ 
+-        public Vector3 LeftBottomFront {
+-            get { return _leftBottomFront; }
+-            private set {
+-                _leftBottomFront = value;
+-                RecalculateVertices();
+-            }
+-        }
++            _vertices[0] = LeftBottomFront;
++            _vertices[1] = new Vector3(RightTopRear.X, LeftBottomFront.Y, LeftBottomFront.Z);
++            _vertices[2] = new Vector3(LeftBottomFront.X, RightTopRear.Y, LeftBottomFront.Z);
++            _vertices[3] = new Vector3(RightTopRear.X, RightTopRear.Y, LeftBottomFront.Z);
++            _vertices[4] = new Vector3(LeftBottomFront.X, LeftBottomFront.Y, RightTopRear.Z);
++            _vertices[5] = new Vector3(RightTopRear.X, LeftBottomFront.Y, RightTopRear.Z);
++            _vertices[6] = new Vector3(LeftBottomFront.X, RightTopRear.Y, RightTopRear.Z);
++            _vertices[7] = RightTopRear;
+ 
+-        public Vector3 RightTopRear {
+-            get { return _rightTopRear; }
+-            private set {
+-                _rightTopRear = value;
+-                RecalculateVertices();
+-            }
++            var dx = RightTopRear.X - LeftBottomFront.X;
++            var dy = RightTopRear.Y - LeftBottomFront.Y;
++            var dz = RightTopRear.Z - LeftBottomFront.Z;
++
++            _dimension = new Vector3(dx, dy, dz);
++            _position = LeftBottomFront + new Vector3(dx/2, dy/2, dz/2);
++
++            _aabb = AABB.Generate(Position, Rotation.GetDirectionalVector(), Dimension);
+         }
+ 
+-        public Vector3 Dimension { get; private set; }
++        private AABB AABB { get { return _aabb; } }
++        public Vector3 LeftBottomFront { get { return _leftBottomFront; } }
++        public Vector3 RightTopRear { get { return _rightTopRear; } }
++        public Vector3 Dimension { get { return _dimension; } }
+         public double Width { get { return Dimension.X; } }
+         public double Height { get { return Dimension.Y; } }
+         public double Length { get { return Dimension.Z; } }
+@@ -72,31 +79,13 @@
+             return new BoundingBox(position - dimension/2, position + dimension/2);
+         }
+ 
+-        private void RecalculateVertices() {
+-            _vertices[0] = LeftBottomFront;
+-            _vertices[1] = new Vector3(RightTopRear.X, LeftBottomFront.Y, LeftBottomFront.Z);
+-            _vertices[2] = new Vector3(LeftBottomFront.X, RightTopRear.Y, LeftBottomFront.Z);
+-            _vertices[3] = new Vector3(RightTopRear.X, RightTopRear.Y, LeftBottomFront.Z);
+-            _vertices[4] = new Vector3(LeftBottomFront.X, LeftBottomFront.Y, RightTopRear.Z);
+-            _vertices[5] = new Vector3(RightTopRear.X, LeftBottomFront.Y, RightTopRear.Z);
+-            _vertices[6] = new Vector3(LeftBottomFront.X, RightTopRear.Y, RightTopRear.Z);
+-            _vertices[7] = RightTopRear;
+-
+-            var dx = RightTopRear.X - LeftBottomFront.X;
+-            var dy = RightTopRear.Y - LeftBottomFront.Y;
+-            var dz = RightTopRear.Z - LeftBottomFront.Z;
+-            Dimension = new Vector3(dx, dy, dz);
+-            Position = LeftBottomFront + new Vector3(dx/2, dy/2, dz/2);
+-            _aabb = AABB.Generate(Position, Rotation.GetDirectionalVector(), Dimension);
+-        }
+-
+         /// <summary>
+         ///     Returns if the other bounding box intersects with this bounding box.
+         /// </summary>
+         /// <param name="other"></param>
+         /// <returns></returns>
+         public bool IntersectsWith(BoundingBox other) {
+-            return _aabb.IntersectsWith(other._aabb);
++            return AABB.IntersectsWith(other.AABB);
+         }
+ 
+         /// <summary>
+@@ -184,7 +173,7 @@
+ 
+         #region IShape Members
+ 
+-        public Vector3 Position { get; private set; }
++        public Vector3 Position { get { return _position; } }
+ 
+         public Direction Rotation { get { return new Direction(); } }
+ 

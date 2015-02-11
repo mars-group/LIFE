@@ -55,23 +55,12 @@ namespace SpatialAPI.Common {
             return "X-Inv: " + XIntv + "\nY-Inv: " + YIntv + "\nZ-Inv: " + ZIntv;
         }
 
-        public bool IntersectsWith(AABB aabb) {
+        public bool IntersectsWith( AABB aabb) {
             return XIntv.IntersectWith(aabb.XIntv) && YIntv.IntersectWith(aabb.YIntv) && ZIntv.IntersectWith(aabb.ZIntv);
         }
 
         public static bool Intersects(AABB a, AABB b) {
-            if (Math.Abs(a.XIntv._min - b.XIntv._min) > (a.XIntv._max + a.XIntv._max)) {
-                return false;
-            }
-            if (Math.Abs(a.YIntv._min - b.YIntv._min) > (a.YIntv._max + a.YIntv._max)) {
-                return false;
-            }
-            if (Math.Abs(a.ZIntv._min - b.ZIntv._min) > (a.ZIntv._max + a.ZIntv._max)) {
-                return false;
-            }
-
-            // We have an overlap
-            return true;
+            return a.IntersectsWith(b);
         }
 
         #region Nested type: AxisAlignedBoundingInterval
@@ -104,14 +93,10 @@ namespace SpatialAPI.Common {
                 if (ReferenceEquals(this, other)) {
                     return true; //| Overlap with ...  
                 }
-                if ((_min >= other._min && _min < other._max) || //| 1) left interval
-                    (other._min >= _min && other._min < _max) || //| 2) right interval
-                    (_min <= other._min && _max >= other._max) || //| 3) inner interval
-                    (other._min <= _min && other._max >= _max)) //| 4) outer interval.
-                {
-                    return true;
-                }
-                return false;
+                return (_min >= other._min && _min < other._max) || //| 1) left interval
+                       (other._min >= _min && other._min < _max) || //| 2) right interval
+                       (_min <= other._min && _max >= other._max) || //| 3) inner interval
+                       (other._min <= _min && other._max >= _max); //| 4) outer interval.
             }
 
 

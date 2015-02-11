@@ -17,7 +17,7 @@ namespace ESCTest.Tests {
         [Test] // Do a number of insertion tests to measure general performance.
         public void PerformanceTest() {
             // Test series.
-            int[] tests = {1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000};
+            int[] tests = {/*1000, 2000, 4000, 8000, 16000, 32000,*/ 64000/*, 128000 */};
             const int envWidth = 1000; // Important: Ensure that width*height
             const int envHeight = 1000; // is sufficient to store max. number of agents!
 
