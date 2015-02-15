@@ -45,8 +45,8 @@ namespace SpatialAPI.Common {
 
             // Create axis-aligned bounding box (AABB) and assign values.
             return new AABB {
-                XIntv = new AxisAlignedBoundingInterval(position.X - diffX, position.X + diffX),
-                YIntv = new AxisAlignedBoundingInterval(position.Y - diffY, position.Y + diffY),
+                XIntv = new AxisAlignedBoundingInterval(position.X - diffY, position.X + diffY),
+                YIntv = new AxisAlignedBoundingInterval(position.Y - diffX, position.Y + diffX),
                 ZIntv = new AxisAlignedBoundingInterval(position.Z - diffZ, position.Z + diffZ)
             };
         }
@@ -55,7 +55,7 @@ namespace SpatialAPI.Common {
             return "X-Inv: " + XIntv + "\nY-Inv: " + YIntv + "\nZ-Inv: " + ZIntv;
         }
 
-        public bool IntersectsWith( AABB aabb) {
+        public bool IntersectsWith(AABB aabb) {
             return XIntv.IntersectWith(aabb.XIntv) && YIntv.IntersectWith(aabb.YIntv) && ZIntv.IntersectWith(aabb.ZIntv);
         }
 
@@ -66,8 +66,8 @@ namespace SpatialAPI.Common {
         #region Nested type: AxisAlignedBoundingInterval
 
         public class AxisAlignedBoundingInterval {
-            public readonly double _min;
             public readonly double _max;
+            public readonly double _min;
 
             public AxisAlignedBoundingInterval(double val1, double val2) {
                 // Set smaller value as minimum.
@@ -80,7 +80,6 @@ namespace SpatialAPI.Common {
                     _max = val1;
                 }
             }
-
 
             /// <summary>
             ///     Checks for a collision of this and another axis interval.
@@ -98,7 +97,6 @@ namespace SpatialAPI.Common {
                        (_min <= other._min && _max >= other._max) || //| 3) inner interval
                        (other._min <= _min && other._max >= _max); //| 4) outer interval.
             }
-
 
             public bool Equals(AxisAlignedBoundingInterval other) {
                 if (ReferenceEquals(null, other)) {
