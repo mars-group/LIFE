@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using EnvironmentServiceComponent.Entities;
 using ESCTest.Entities;
@@ -18,7 +17,7 @@ namespace ESCTest.Tests {
         [Test] // Do a number of insertion tests to measure general performance.
         public void PerformanceTest() {
             // Test series.
-            int[] tests = {1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000};
+            int[] tests = {/*1000, 2000, 4000, 8000, 16000, 32000,*/ 64000/*, 128000 */};
             const int envWidth = 1000; // Important: Ensure that width*height
             const int envHeight = 1000; // is sufficient to store max. number of agents!
 
@@ -31,7 +30,7 @@ namespace ESCTest.Tests {
                     var b1 = BoundingBox.GenerateByDimension
                         (Vector3.Zero, new Vector3(0.9, 0.9, 0.9));
                     var t1 = new TestEntity(b1);
-                    Assert.IsTrue(esc.Add(t1, new Vector3(i%envWidth, i/envWidth)));
+                    Assert.IsTrue(esc.Add(t1, new Vector3(i % envWidth, i / envHeight)));
                 }
                 Console.WriteLine("[" + tests[t] + " agents]: " + stopwatch.ElapsedMilliseconds + " ms");
                 stopwatch.Restart(); // Reset stopwatch.
@@ -172,14 +171,6 @@ namespace ESCTest.Tests {
             Assert.True(esc.Add(a4, pos));
         }
 
-//        protected void PrintAllAgents() {
-//            Console.WriteLine(esc.ExploreAll().Count() + " Agents found.");
-//            foreach (ISpatialEntity entity in esc.ExploreAll()) {
-//                Console.WriteLine(entity + " " + entity.Shape.Position);
-//            }
-//            Console.WriteLine("---");
-//        }
-
         [Test]
         public void TestPerfomanceAdd500Elements() {
             IEnvironment esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
@@ -193,18 +184,23 @@ namespace ESCTest.Tests {
         }
 
         [Test]
-        public void TestPerfomanceMove50ElementsFor100Ticks() {
+        public void TestPerfomanceMovement() {
             IEnvironment esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
-            int amount = 3;
-            int ticks = 500;
+            const int agentCount = 10000;
+            const int ticks = 10;
+
+            double maxEnvDim = Math.Sqrt(agentCount)*1.7;
+            var maxEnvVector = new Vector3(maxEnvDim, maxEnvDim);
+            Console.WriteLine("Maximal environment dimension: " + maxEnvVector);
+
             Stopwatch initTime = Stopwatch.StartNew();
             List<ISpatialEntity> agents = new List<ISpatialEntity>();
-            for (int i = 0; i < amount; i++) {
+            for (int tick = 0; tick < agentCount; tick++) {
                 ISpatialEntity a1 = GenerateAgent(1, 1);
                 agents.Add(a1);
-                Assert.True(esc.AddWithRandomPosition(a1, new Vector3(0, 0), new Vector3(70, 70), false));
+                Assert.True(esc.AddWithRandomPosition(a1, Vector3.Zero, maxEnvVector, false));
             }
-            Console.WriteLine(initTime.ElapsedMilliseconds + " ms");
+            Console.WriteLine("Time for adding " + agentCount + " agents:" + initTime.ElapsedMilliseconds + "ms");
 
             Stopwatch moveTime = Stopwatch.StartNew();
             Random random = new Random();
@@ -212,6 +208,7 @@ namespace ESCTest.Tests {
             int collisions = 0;
             int movementSucess = 0;
             for (int i = 0; i < ticks; i++) {
+                Stopwatch tickTime = Stopwatch.StartNew();
                 foreach (ISpatialEntity agent in agents) {
                     if (esc.Move(agent, new Vector3(random.Next(-2, 2), random.Next(-2, 2))).Success) {
                         movementSucess++;
@@ -220,27 +217,43 @@ namespace ESCTest.Tests {
                         collisions++;
                     }
                 }
+                Console.WriteLine("Tick " + i + " required " + tickTime.ElapsedMilliseconds + "ms");
             }
             Console.WriteLine("Collisions: " + collisions);
             Console.WriteLine("Movement succeeded: " + movementSucess);
-            Console.WriteLine(moveTime.ElapsedMilliseconds + " ms");
+            Console.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");
         }
 
-//        [Test]
-//        public void TestIntersections() {
-//            IEnvironment esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
-//
-//            Vector3 pos1 = new Vector3(5d, 10.025d, 0d);
-//            Vector3 pos2 = new Vector3(10.026d, 7.76d, 0d);
-//            // The agents do not collide. They touch at point (10,10). Exception is thrown if ESC thinks there is a collision.
-//            TestEntity a1 = new TestEntity
-//                (pos1, new Vector3(10d, 0.05d, 0.4d), new Direction());
-//            TestEntity a2 = new TestEntity
-//                (pos2, new Vector3(0.05d, 4.5d, 0.4d), new Direction());
-//
-//            Assert.True(a1.Position.Equals(pos1));
-//            Assert.True(a2.Position.Equals(pos2));
-//        }
+        [Test]
+        public void TestMoveToPosition() {
+            IEnvironment esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
+
+            Vector3 pos1 = new Vector3(5d, 10.025d, 0d);
+            TestEntity a1 = new TestEntity(BoundingBox.GenerateByDimension(pos1, new Vector3(10d, 0.05d, 0.4d)));
+            Assert.True(a1.Shape.Position.Equals(pos1));
+            Assert.True(esc.Add(a1, pos1));
+            Assert.True(a1.Shape.Position.Equals(pos1));
+            esc.Remove(a1);
+
+            TestEntity a2 = new TestEntity(BoundingBox.GenerateByDimension(Vector3.Zero, new Vector3(10d, 0.05d, 0.4d)));
+            Assert.True(a2.Shape.Position.Equals(Vector3.Zero));
+            Assert.True(esc.Add(a2, pos1));
+            Assert.True(a2.Shape.Position.Equals(pos1));
+        }
+
+        [Test]
+        public void TestTouching() {
+            IEnvironment esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
+
+            Vector3 pos1 = new Vector3(5d, 10.025d, 0d);
+            Vector3 pos2 = new Vector3(10.026d, 7.76d, 0d);
+            // The agents do not collide. They touch at point (10,10). Exception is thrown if ESC thinks there is a collision.
+            TestEntity a1 = new TestEntity(BoundingBox.GenerateByDimension(pos1, new Vector3(10d, 0.05d, 0.4d)));
+            TestEntity a2 = new TestEntity(BoundingBox.GenerateByDimension(pos2, new Vector3(0.05d, 4.5d, 0.4d)));
+
+            Assert.True(esc.Add(a1, pos1));
+            Assert.True(esc.Add(a2, pos2));
+        }
 
 //                [Test]
 //                public void TestSpatialAgentPlacementAboveAndBelowObstacle()
@@ -282,11 +295,7 @@ namespace ESCTest.Tests {
             Assert.True(esc.Move(a1, new Vector3(15, 15)).Success);
         }
 
-        protected TestEntity GenerateAgent(double x, double y) {
-            return GenerateAgent(x, y, CollisionType.MassiveAgent);
-        }
-
-        protected TestEntity GenerateAgent(double x, double y, CollisionType collisionType) {
+        private TestEntity GenerateAgent(double x, double y, CollisionType collisionType = CollisionType.MassiveAgent) {
             return new TestEntity(x, y, collisionType);
         }
     }

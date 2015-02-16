@@ -13,11 +13,12 @@ namespace SpatialAPI.Shape {
     ///     Notice, that the LeftBottomFront boundary values are inclusive, while the RightTopRear are exclusive.
     ///     This is to avoid ambiguity in Oct responsibility.
     /// </remarks>
-    public class BoundingBox : IEnumerable<Vector3>, IShape {
-        private readonly Vector3[] _vertices;
-        private AABB _aabb;
-        private Vector3 _leftBottomFront;
-        private Vector3 _rightTopRear;
+    public class BoundingBox : IShape {
+        private readonly AABB _aabb;
+        private readonly Vector3 _dimension;
+        private readonly Vector3 _leftBottomFront;
+        private readonly Vector3 _position;
+        private readonly Vector3 _rightTopRear;
 
         /// <summary>
         ///     Creates a new bounding box by using it's edges.
@@ -26,28 +27,22 @@ namespace SpatialAPI.Shape {
         /// <param name="rightTopRear">The edge at right, top and rear.</param>
         /// <returns>The created bounding box.</returns>
         private BoundingBox(Vector3 leftBottomFront, Vector3 rightTopRear) {
-            _vertices = new Vector3[8];
-            LeftBottomFront = leftBottomFront;
-            RightTopRear = rightTopRear;
+            _leftBottomFront = leftBottomFront;
+            _rightTopRear = rightTopRear;
+
+            var dx = RightTopRear.X - LeftBottomFront.X;
+            var dy = RightTopRear.Y - LeftBottomFront.Y;
+            var dz = RightTopRear.Z - LeftBottomFront.Z;
+
+            _dimension = new Vector3(dx, dy, dz);
+            _position = LeftBottomFront + new Vector3(dx/2, dy/2, dz/2);
+
+            _aabb = AABB.Generate(Position, Rotation.GetDirectionalVector(), Dimension);
         }
 
-        public Vector3 LeftBottomFront {
-            get { return _leftBottomFront; }
-            private set {
-                _leftBottomFront = value;
-                RecalculateVertices();
-            }
-        }
-
-        public Vector3 RightTopRear {
-            get { return _rightTopRear; }
-            private set {
-                _rightTopRear = value;
-                RecalculateVertices();
-            }
-        }
-
-        public Vector3 Dimension { get; private set; }
+        public Vector3 LeftBottomFront { get { return _leftBottomFront; } }
+        public Vector3 RightTopRear { get { return _rightTopRear; } }
+        public Vector3 Dimension { get { return _dimension; } }
         public double Width { get { return Dimension.X; } }
         public double Height { get { return Dimension.Y; } }
         public double Length { get { return Dimension.Z; } }
@@ -72,31 +67,13 @@ namespace SpatialAPI.Shape {
             return new BoundingBox(position - dimension/2, position + dimension/2);
         }
 
-        private void RecalculateVertices() {
-            _vertices[0] = LeftBottomFront;
-            _vertices[1] = new Vector3(RightTopRear.X, LeftBottomFront.Y, LeftBottomFront.Z);
-            _vertices[2] = new Vector3(LeftBottomFront.X, RightTopRear.Y, LeftBottomFront.Z);
-            _vertices[3] = new Vector3(RightTopRear.X, RightTopRear.Y, LeftBottomFront.Z);
-            _vertices[4] = new Vector3(LeftBottomFront.X, LeftBottomFront.Y, RightTopRear.Z);
-            _vertices[5] = new Vector3(RightTopRear.X, LeftBottomFront.Y, RightTopRear.Z);
-            _vertices[6] = new Vector3(LeftBottomFront.X, RightTopRear.Y, RightTopRear.Z);
-            _vertices[7] = RightTopRear;
-
-            var dx = RightTopRear.X - LeftBottomFront.X;
-            var dy = RightTopRear.Y - LeftBottomFront.Y;
-            var dz = RightTopRear.Z - LeftBottomFront.Z;
-            Dimension = new Vector3(dx, dy, dz);
-            Position = LeftBottomFront + new Vector3(dx/2, dy/2, dz/2);
-            _aabb = AABB.Generate(Position, Rotation.GetDirectionalVector(), Dimension);
-        }
-
         /// <summary>
-        ///     Returns if the other bounding box intersects with this bounding box.
+        ///     Indicates intersection between this and the other bounding box.
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">The bounding box that is checked for intersection.</param>
+        /// <returns>True, if the other bounding box intersects with this bounding box. False otherwise.</returns>
         public bool IntersectsWith(BoundingBox other) {
-            return _aabb.IntersectsWith(other._aabb);
+            return AABB.Intersects(_aabb, other._aabb);
         }
 
         /// <summary>
@@ -170,32 +147,16 @@ namespace SpatialAPI.Shape {
             return GenerateByDimension(left.Position, left.Dimension - right);
         }
 
-        #region IEnumerable<Vector3> Members
-
-        public IEnumerator<Vector3> GetEnumerator() {
-            return ((IEnumerable<Vector3>) _vertices).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
-        }
-
-        #endregion
-
         #region IShape Members
 
-        public Vector3 Position { get; private set; }
+        public Vector3 Position { get { return _position; } }
 
         public Direction Rotation { get { return new Direction(); } }
 
         public BoundingBox Bounds { get { return this; } }
 
         public bool IntersectsWith(IShape shape) {
-            var boundingBox = shape as BoundingBox;
-            if (boundingBox == null) {
-                return IntersectsWith((IShape) shape.Bounds);
-            }
-            return IntersectsWith(boundingBox);
+            return IntersectsWith(shape.Bounds);
         }
 
         public IShape Transform(Vector3 movement, Direction rotation) {
