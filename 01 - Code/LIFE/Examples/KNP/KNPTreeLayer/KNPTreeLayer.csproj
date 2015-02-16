@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="Agents\ITree.cs" />
     <Compile Include="Agents\Tree.cs" />
-    <Compile Include="ConsumeTreeInteraction.cs" />
     <Compile Include="IKNPTreeLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TreeLayer.cs" />
@@ -70,14 +69,6 @@
       <Project>{17064DB2-8976-439F-A697-AD8ACDB975CC}</Project>
       <Name>AgentShadowingService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\DalskiAgent\DalskiAgent.csproj">
-      <Project>{9DC34799-0130-4A2B-962D-946CCA54DD9E}</Project>
-      <Name>DalskiAgent</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
-      <Project>{4CA49432-E852-40B5-9F37-0F5CBA61C613}</Project>
-      <Name>EnvironmentServiceComponent</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE Services\LIFEGisLayerService\LIFEGisLayerService.csproj">
       <Project>{6CB066D7-A187-4EDA-A059-44C6121FAC56}</Project>
       <Name>LIFEGisLayerService</Name>
@@ -85,10 +76,6 @@
     <ProjectReference Include="..\..\..\LIFE Services\LIFEUtilities\LIFEUtilities.csproj">
       <Project>{09D5EB43-70C5-4E24-92CA-6C35548A0629}</Project>
       <Name>LIFEUtilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\SpatialAPI\SpatialAPI.csproj">
-      <Project>{A2ADE928-8504-43B5-8920-E878CAD996C9}</Project>
-      <Name>SpatialAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\T-Components\ASC\ASC.csproj">
       <Project>{6BEC24D9-FD97-4D66-BCFF-8671343B798E}</Project>

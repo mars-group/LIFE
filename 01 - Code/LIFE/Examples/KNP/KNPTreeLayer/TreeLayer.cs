@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
-using GeoAPI.Geometries;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
-using SpatialAPI.Environment;
 using TreeLayer;
 using TreeLayer.Agents;
 
@@ -23,34 +21,26 @@ namespace KNPTreeLayer {
     {
         private long _currentTick;
 
-        private readonly List<ITree> _trees;
+        private readonly List<ITree> trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly List<ITree> _agentsToRemoveInPostTick;
         private readonly List<ITree> _agentsToAddInPostTick;
-        private readonly Random _random = new Random();
 
         private double MinX = 31.331;
         private double MinY = -25.292;
         private double MaxX = 31.985;
         private double MaxY = -24.997;
         private UnregisterAgent _unregisterAgentHandle;
-        private IEnvironment _environment;
 
-        public TreeLayer(IKnpElevationLayer elevationLayer) {
-          _elevationLayer = elevationLayer;
-          
-          // Create the environment. It works with an positive extent.
-          var envelope = elevationLayer.GetEnvelope();
-          Coordinate coord = elevationLayer.TransformToImage(envelope.MaxX, envelope.MaxY);
-          _environment = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
-
-
-          _agentsToRemoveInPostTick = new List<ITree>();
-          _agentsToAddInPostTick = new List<ITree>();
-          _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
-          _agentShadowingService.AgentUpdates += OnAgentUpdates;
-          _trees = new List<ITree>();
+        public TreeLayer(IKnpElevationLayer elevationLayer)
+        {
+            _elevationLayer = elevationLayer;
+            trees = new List<ITree>();
+            _agentsToRemoveInPostTick = new List<ITree>();
+            _agentsToAddInPostTick = new List<ITree>();
+            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
+            _agentShadowingService.AgentUpdates += OnAgentUpdates;
         }
 
         private void OnAgentUpdates(object sender, LIFEAgentEventArgs<ITree> e) {
@@ -58,9 +48,17 @@ namespace KNPTreeLayer {
             _agentsToAddInPostTick.AddRange(e.NewAgents);
         }
 
-
+        /*
+        public TreeLayer(IKnpElevationLayer elevationLayer)
+        {
+            _elevationLayer = elevationLayer;
+            trees = new List<ITree>();
+            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
+        }
+        */
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _unregisterAgentHandle = unregisterAgentHandle;
+
 
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
@@ -68,13 +66,15 @@ namespace KNPTreeLayer {
                 // instantiate real Agents
                 var config = agentInitConfig;
                 Parallel.For(0, agentInitConfig.RealAgentCount, i => {
-                  var t = new Tree(4, 2, 10, i, 500, 
-                    GetRandomNumber(0, _environment.MaxDimension.X), 
-                    GetRandomNumber(0, _environment.MaxDimension.Y), 
-                    config.RealAgentIds[i], this,
-                    _elevationLayer, registerAgentHandle, unregisterAgentHandle, _environment
-                  );
-                  agentBag.Add(t);
+                    var t = new Tree(4, 2, 10, i, 500,
+                        GetRandomNumber(MinX, MaxX),
+                        GetRandomNumber(MinY, MaxY),
+                        config.RealAgentIds[i],
+                        this,
+                        _elevationLayer
+                    );
+                    agentBag.Add(t);
+                    registerAgentHandle(this, t);
                 });
 
                 Console.WriteLine("Finished: Realagents instantiated.");
@@ -86,14 +86,11 @@ namespace KNPTreeLayer {
 
                 Console.WriteLine("Finished: Realagents registered.");
 
-                _trees.AddRange(agentBag);
+                trees.AddRange(agentBag);
                
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
-                    var shadowTrees = _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
-                    foreach (var shadowTree in shadowTrees) {
-                        //_environment.Add(shadowTree)
-                    }
+                    _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
                 }
 
                 Console.WriteLine("Finished: ShadowAgents created.");
@@ -122,7 +119,7 @@ namespace KNPTreeLayer {
         }
 
         public void Tick() {
-            Console.WriteLine("Agents present on this node: " + _trees.Count);
+            Console.WriteLine("Agents present on this node: " + trees.Count);
         }
 
 
@@ -134,14 +131,15 @@ namespace KNPTreeLayer {
         }
 
 
-        private double GetRandomNumber(double minimum, double maximum) {        
-          return _random.NextDouble() * (maximum - minimum) + minimum;
+        private double GetRandomNumber(double minimum, double maximum)
+        { 
+            var random = new Random();
+            return random.NextDouble() * (maximum - minimum) + minimum;
         }
-
 
         internal ITree GetOneOtherTreesThanMe(ITree memyself)
         {
-            return _trees.Find(t => t != memyself);
+            return trees.Find(t => t != memyself);
         }
 
         public long GetCurrentTick() {
@@ -157,8 +155,5 @@ namespace KNPTreeLayer {
             get { return "TreeLayer"; }
         }
 
-        public ITree GetTreeById(Guid id) {
-            return _trees.Find(t => t.ID == id);
-        }
     }
 }
