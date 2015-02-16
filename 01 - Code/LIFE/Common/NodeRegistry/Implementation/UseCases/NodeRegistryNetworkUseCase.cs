@@ -89,9 +89,11 @@ namespace NodeRegistry.Implementation.UseCases
         }
 
         private void ComputeMessage(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {
+
+            if (nodeRegistryConnectionInfoMessage == null) return;
             // check for Reasonableness of incoming message
             if (!CheckReasonableness(nodeRegistryConnectionInfoMessage)) return;
-
+          
             switch (nodeRegistryConnectionInfoMessage.MessageType)
             {
                 case NodeRegistryMessageType.Answer:

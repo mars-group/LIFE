@@ -124,6 +124,7 @@ namespace NodeRegistryTest {
 
             Thread.Sleep(300);
             //check if this node has joined the cluster
+            
             Assert.True(localNodeRegistry.GetAllNodes().Contains(localNodeInfo));
 
             localNodeRegistry.LeaveCluster();
@@ -193,6 +194,10 @@ namespace NodeRegistryTest {
 
             Thread.Sleep(500);
 
+            if (!newNodeSubscriberFired || !newNodeOftypeSubscriberFired)
+            {
+                Thread.Sleep(500);
+            }
 
             Assert.True(newNodeSubscriberFired);
             Assert.True(newNodeOftypeSubscriberFired);
