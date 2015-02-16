@@ -80,7 +80,7 @@ namespace TreeLayer.Agents {
         #region IAgent Members
 
         public void Tick() {
-            var biomass = _treeLayer.GetOneOtherTreesThanMe(this).Biomass;
+            //var biomass = _treeLayer.GetOneOtherTreesThanMe(this).Biomass;
             //Age++;
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);

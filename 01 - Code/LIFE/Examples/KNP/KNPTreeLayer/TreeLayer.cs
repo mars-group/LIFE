@@ -12,6 +12,7 @@ using Mono.Addins;
 using TreeLayer;
 using TreeLayer.Agents;
 
+
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
 
@@ -20,7 +21,6 @@ namespace KNPTreeLayer {
     public class TreeLayer : ScsService, IKnpTreeLayer
     {
         private long _currentTick;
-
         private readonly List<ITree> trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
         private readonly IKnpElevationLayer _elevationLayer;
@@ -90,7 +90,7 @@ namespace KNPTreeLayer {
                
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
-                    _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
+                    trees.AddRange(_agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds));
                 }
 
                 Console.WriteLine("Finished: ShadowAgents created.");
@@ -119,7 +119,6 @@ namespace KNPTreeLayer {
         }
 
         public void Tick() {
-            Console.WriteLine("Agents present on this node: " + trees.Count);
         }
 
 
