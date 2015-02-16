@@ -61,7 +61,7 @@ namespace TreeLayer.Agents {
             KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer, RegisterAgent registerAgent, UnregisterAgent unregisterAgent, IEnvironment env)
             : base(treeLayer, registerAgent, unregisterAgent, env, id, new Cuboid(new Vector3(1,1,1),new Vector3(lat, lon, 0))) {
             
-          _treeLayer = treeLayer;
+            _treeLayer = treeLayer;
             _environment = env;
 
             // AscService ID
@@ -77,14 +77,14 @@ namespace TreeLayer.Agents {
             Lat = lat;
             Lon = lon;
 
-          Coordinate coord = elevationLayer.TransformToWorld(lat, lon);
+            Coordinate coord = elevationLayer.TransformToWorld(lat, lon);
 
             var result = elevationLayer.GetDataByGeometry(new Point(coord.X, coord.Y));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
         }
 
         public IInteraction Reason() {
-            var result = _environment.ExploreAll();
+           // var result = _environment.ExploreAll();
             //Console.WriteLine("["+AgentNumber+"] I see "+result.Count()+" other trees.");
 
 

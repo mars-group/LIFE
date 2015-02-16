@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
-using DalskiAgent.Auxiliary.Environment;
 using GeoAPI.Geometries;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
@@ -44,7 +43,7 @@ namespace KNPTreeLayer {
           // Create the environment. It works with an positive extent.
           var envelope = elevationLayer.GetEnvelope();
           Coordinate coord = elevationLayer.TransformToImage(envelope.MaxX, envelope.MaxY);
-          _environment = new Env25((float) coord.X, (float) coord.Y);
+          _environment = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
 
 
           _agentsToRemoveInPostTick = new List<ITree>();

@@ -74,6 +74,10 @@
       <Project>{9DC34799-0130-4A2B-962D-946CCA54DD9E}</Project>
       <Name>DalskiAgent</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\LIFE Services\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj">
+      <Project>{4CA49432-E852-40B5-9F37-0F5CBA61C613}</Project>
+      <Name>EnvironmentServiceComponent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\LIFE Services\LIFEGisLayerService\LIFEGisLayerService.csproj">
       <Project>{6CB066D7-A187-4EDA-A059-44C6121FAC56}</Project>
       <Name>LIFEGisLayerService</Name>
