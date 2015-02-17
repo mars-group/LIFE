@@ -60,7 +60,9 @@ http://nuget.3ten.de/nuget]]></param>
           <param name="dotNetTestRunner.Type" value="NUnit" />
           <param name="nunit_enabled" value="checked" />
           <param name="nunit_environment" value="v4.0" />
-          <param name="nunit_exclude" value="01 - Code\LIFE\Tests\*\bin\Release\NodeRegistryTes.dll" />
+          <param name="nunit_exclude"><![CDATA[01 - Code\LIFE\Tests\*\bin\Release\NodeRegistryTest.dll,
+01 - Code\LIFE\Tests\*\bin\Release\MulticastAdapterTest .dll,
+01 - Code\LIFE\Tests\*\bin\Release\DMConnector.dll,]]></param>
           <param name="nunit_include" value="01 - Code\LIFE\Tests\*\bin\Release\*.dll" />
           <param name="nunit_platform" value="MSIL" />
           <param name="nunit_version" value="NUnit-2.6.3" />
