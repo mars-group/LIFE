@@ -233,7 +233,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void Messenger_MessageReceived(object sender, MessageEventArgs e) {
-            //Check if there is a waiting thread for this message in SendMessageAndWaitForResponse method
+            // Check if there is a waiting thread for this message in SendMessageAndWaitForResponse method
             if (!string.IsNullOrEmpty(e.Message.RepliedMessageId)) {
                 WaitingMessage waitingMessage = null;
                 lock (_syncObj) {
@@ -241,7 +241,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                         waitingMessage = _waitingMessages[e.Message.RepliedMessageId];
                 }
 
-                //If there is a thread waiting for this response message, pulse it
+                // If there is a thread waiting for this response message, pulse it
                 if (waitingMessage != null) {
                     waitingMessage.ResponseMessage = e.Message;
                     waitingMessage.State = WaitingMessageStates.ResponseReceived;

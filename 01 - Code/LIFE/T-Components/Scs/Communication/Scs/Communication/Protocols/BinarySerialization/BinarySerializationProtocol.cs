@@ -24,7 +24,7 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
         /// <summary>
         ///     Maximum length of a message.
         /// </summary>
-        private const int MaxMessageLength = 128*1024*1024; //128 Megabytes.
+        private const int MaxMessageLength = 256*1024*1024; //128 Megabytes.
 
         /// <summary>
         ///     This MemoryStream object is used to collect receiving bytes to build messages.
@@ -61,10 +61,11 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
 
             //Check for message length
             var messageLength = serializedMessage.Length;
-            if (messageLength > MaxMessageLength) {
+            /*if (messageLength > MaxMessageLength) {
                 throw new CommunicationException("Message is too big (" + messageLength +
                                                  " bytes). Max allowed length is " + MaxMessageLength + " bytes.");
             }
+            */
 
             //Create a byte array including the length of the message (4 bytes) and serialized message content
             var bytes = new byte[messageLength + 4];
