@@ -17,6 +17,6 @@
   </metadata>
 	<files>
 		<file src="bin\Release\*.dll" target="lib\net45\"/>
-		<file src="..\..\Libraries\SharpMap\gdal\**" target="output\gdal"/>
+		<file src="..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\gdal\**" target="output\gdal"/>
 	</files>	
 </package>
