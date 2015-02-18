@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="4087669e-d19b-43c3-a843-1cceda2de929" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+  <name>&lt;Root project&gt;</name>
+  <description>Contains all other projects</description>
+  <parameters />
+  <cleanup>
+    <options>
+      <option name="preventDependenciesArtifactsFromCleanup" value="false" />
+    </options>
+  </cleanup>
+</project>
+
