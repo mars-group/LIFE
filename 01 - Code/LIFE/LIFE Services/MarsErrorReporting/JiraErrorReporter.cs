@@ -11,7 +11,7 @@ namespace MarsErrorReporting
 {
     public static class JiraErrorReporter
     {
-        private const string JiraUrl = "http://jira.3ten.de";
+        private const string JiraUrl = "http://jira.mars.haw-hamburg.de";
         private const string JiraProjectName = "MARS";
         private const string JiraUser = "MMDEIssueReporter";
         private const string JiraPassword = "US7vjOK3p9j2rPIACSGw";

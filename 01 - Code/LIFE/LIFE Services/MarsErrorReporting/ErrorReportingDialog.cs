@@ -12,6 +12,8 @@ namespace MarsErrorReporting
 {
     public partial class ErrorReportingDialog : Form
     {
+        private int _btnSwitchCount;
+
         public string Title
         {
             get { return txtTitle.Text.Trim(); }
@@ -53,11 +55,22 @@ namespace MarsErrorReporting
 
         private void btnClose_MouseEnter(object sender, EventArgs e)
         {
-            var closeLoc = btnClose.Location;
-            var sendLoc = btnSend.Location;
+            if (_btnSwitchCount < 4)
+            {
+                var closeLoc = btnClose.Location;
+                var sendLoc = btnSend.Location;
 
-            btnClose.Location = sendLoc;
-            btnSend.Location = closeLoc;
+                btnClose.Location = sendLoc;
+                btnSend.Location = closeLoc;
+
+                _btnSwitchCount++;
+            }
+            else if (_btnSwitchCount == 4)
+            {
+                MessageBox.Show("Okay, you won...\n\rBut your karma has been lowered for not reporting an issue!!",
+                    "The evil cancel button");
+                _btnSwitchCount++;
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
