@@ -110,7 +110,7 @@ namespace AgentShadowingService.Implementation
         {
             _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister);
             // send Message to other hosts to trigger Shadow Agent creation
-            _agentShadowingServer.SendMessage(new AddShadowAgentMessage {AgentID = agentToRegister.ServiceID});
+            //_agentShadowingServer.SendMessage(new AddShadowAgentMessage {AgentID = agentToRegister.ServiceID});
         }
 
         public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
@@ -120,7 +120,7 @@ namespace AgentShadowingService.Implementation
         public void RemoveRealAgent(TServiceClass agentToRemove) {
             _agentShadowingServer.RemoveService<TServiceInterface>(agentToRemove.ServiceID);
             // send message to other hosts to trigger Shadow Agent removal
-            _agentShadowingServer.SendMessage(new RemoveShadowAgentMessage {AgentID = agentToRemove.ServiceID});
+            //_agentShadowingServer.SendMessage(new RemoveShadowAgentMessage {AgentID = agentToRemove.ServiceID});
         }
 
         public string GetLayerContainerName() {

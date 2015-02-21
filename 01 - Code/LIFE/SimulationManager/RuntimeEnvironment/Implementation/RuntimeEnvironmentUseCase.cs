@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
@@ -57,8 +58,13 @@ namespace RuntimeEnvironment.Implementation {
                     _modelContainer.AddModelFromURL(model.SourceURL);
                 }
 
-                IList<LayerContainerClient> clients = InitConnections(model, layerContainerNodes);
+                Console.WriteLine("Setting up SimulationRun...");
+                var sw = Stopwatch.StartNew();
 
+                IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes);
+
+                sw.Stop();
+                Console.WriteLine("...done in " + sw.ElapsedMilliseconds + "ms or " + sw.Elapsed);
                 _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, startPaused);
             }
         }
@@ -130,7 +136,7 @@ namespace RuntimeEnvironment.Implementation {
         /// <param name="modelDescription">not null</param>
         /// <param name="layerContainers">not null</param>
         /// <returns></returns>
-        private LayerContainerClient[] InitConnections(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
+        private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
             var content = _modelContainer.GetModel(modelDescription);
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);

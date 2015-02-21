@@ -40,7 +40,6 @@ namespace TreeLayer.Agents {
                 if (_biomass != value)
                 {
                     _biomass = value;
-                    OnPropertyChanged("Biomass");
                 }
             }
         }
@@ -92,21 +91,6 @@ namespace TreeLayer.Agents {
 
         #endregion
 
-        #region PropertyChanged Handling
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-                handler(this, e);
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 }
