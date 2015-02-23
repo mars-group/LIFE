@@ -182,10 +182,10 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
 
             //Read length of the message
             var messageLength = ReadInt32(_receiveMemoryStream);
-            if (messageLength > MaxMessageLength) {
+            /*if (messageLength > MaxMessageLength) {
                 throw new Exception("Message is too big (" + messageLength + " bytes). Max allowed length is " +
                                     MaxMessageLength + " bytes.");
-            }
+            }*/
 
             //If message is zero-length (It must not be but good approach to check it)
             if (messageLength == 0) {
