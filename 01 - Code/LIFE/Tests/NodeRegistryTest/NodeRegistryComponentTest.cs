@@ -89,7 +89,7 @@ namespace NodeRegistryTest {
 
         [Test]
         public void TestJoinAndLeaveClusterLocal() {
-            var localMulticastGrp = "239.0.0.1";
+            var localMulticastGrp = "239.0.0.2";
 
             var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
@@ -131,7 +131,7 @@ namespace NodeRegistryTest {
 
         [Test]
         public void TestNewNodeSubscrition() {
-            var localMulticastGrp = "239.0.0.1";
+            var localMulticastGrp = "239.0.0.3";
 
             var localNodeInfo = _information;
 
@@ -211,7 +211,7 @@ namespace NodeRegistryTest {
 
             var localMulticastAdapter =
                 new MulticastAdapterComponent(
-                    new GlobalConfig("239.0.0.2", localListenPort, localSendingPort, 4),
+                    new GlobalConfig("239.0.0.4", localListenPort, localSendingPort, 4),
                     new MulticastSenderConfig());
 
             var localNodeRegistry = new NodeRegistryComponent(
@@ -272,7 +272,7 @@ namespace NodeRegistryTest {
             var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            var mcastGrp = "239.0.1.3";
+            var mcastGrp = "239.0.0.5";
 
             var localMulticastAdapter =
                 new MulticastAdapterComponent(
@@ -333,7 +333,7 @@ namespace NodeRegistryTest {
 
             var localMulticastAdapter =
                 new MulticastAdapterComponent(
-                    new GlobalConfig("239.0.0.4", localListenPort, _sendingStartPortSeed, 4),
+                    new GlobalConfig("239.0.0.6", localListenPort, _sendingStartPortSeed, 4),
                     new MulticastSenderConfig());
 
             var localNodeRegistry = new NodeRegistryComponent(
