@@ -33,8 +33,6 @@ namespace NodeRegistryTest {
         private int _sendingStartPortSeed = 52500;
 
 
-        public NodeRegistryComponentTest() {}
-
         /*
         [Test]
         public void NodeShutDownAndTimeOutMessage() {
