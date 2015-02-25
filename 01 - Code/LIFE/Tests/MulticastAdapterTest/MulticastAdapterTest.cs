@@ -56,6 +56,11 @@ namespace MulticastAdapterTest
             Assert.GreaterOrEqual(messageCounter.NumberOfmessages, numberOfMulticastComponents);
 
             listenThread.Interrupt();
+
+            foreach (var adapter in multicastAdapters) {
+                adapter.CloseSocket();
+            }
+
         }
 
 
@@ -92,6 +97,9 @@ namespace MulticastAdapterTest
             Assert.GreaterOrEqual(msgNr, 1);
 
             listenThread.Interrupt();
+
+            sender.CloseSocket();
+            reciever.CloseSocket();
         }
 
         #region Nested type: MessageCounter
