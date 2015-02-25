@@ -9,11 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using LifeAPI.Layer.Visualization;
 using LIFEViewProtocol.Basics;
-using RabbitMQ.Client;
 using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation {
