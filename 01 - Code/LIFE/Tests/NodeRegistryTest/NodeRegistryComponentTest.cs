@@ -312,6 +312,7 @@ namespace NodeRegistryTest {
 
             otherNodeRegistry.ShutDownNodeRegistry();
             localNodeRegistry.ShutDownNodeRegistry();
+            
 
         }
 

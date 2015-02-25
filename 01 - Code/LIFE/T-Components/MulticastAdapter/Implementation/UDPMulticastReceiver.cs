@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using AppSettingsManager;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config.Types;
+
+[assembly: InternalsVisibleTo("MulticastAdapterTest")]
 
 namespace MulticastAdapter.Implementation
 {
@@ -72,6 +75,10 @@ namespace MulticastAdapter.Implementation
 
         }
 
+        internal UdpClient GetSocket()
+        {
+            return _receiverClient;
+        }
 
         /// <summary>
 		///     Listens to the multicastgroup on the defined interface and waits for messages. Returns the bytestream for the message as
