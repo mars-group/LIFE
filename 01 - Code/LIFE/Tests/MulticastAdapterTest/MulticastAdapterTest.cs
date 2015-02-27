@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net;
+using System.Net.Mail;
 using System.Threading;
+using System.Threading.Tasks;
 using AppSettingsManager;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
@@ -42,8 +45,10 @@ namespace MulticastAdapterTest
 
             var messageCounter = new MessageCounter(reciever);
 
-            var listenThread = new Thread(
-                messageCounter.ListenAndCount);
+
+            
+            var listenThread = new Thread(new ThreadStart(
+                messageCounter.ListenAndCount));
             listenThread.Start();
 
             foreach (var adapter in multicastAdapters)
@@ -54,13 +59,23 @@ namespace MulticastAdapterTest
             Thread.Sleep(200);
 
             Assert.GreaterOrEqual(messageCounter.NumberOfmessages, numberOfMulticastComponents);
+       
 
-            listenThread.Interrupt();
+            messageCounter.StopRunning();
+            
+            foreach (var adapter in multicastAdapters)
+            {
+                adapter.SendMessageToMulticastGroup(new byte[0]);
+            }
 
-            foreach (var adapter in multicastAdapters) {
+            Thread.Sleep(50);
+
+            foreach (var adapter in multicastAdapters)
+            {
                 adapter.CloseSocket();
             }
 
+            
         }
 
 
@@ -96,34 +111,81 @@ namespace MulticastAdapterTest
             
             Assert.GreaterOrEqual(msgNr, 1);
 
-            listenThread.Interrupt();
+            messageCounter.StopRunning();
+
+            sender.SendMessageToMulticastGroup(new byte[0]);
+
+            Thread.Sleep(50);
 
             sender.CloseSocket();
             reciever.CloseSocket();
         }
 
+        [Test]
+        public void UDPSenderShutDownTest() {
+            var testListenPort = 60055;
+            var testSendIngPortStartSeed = 60066;
+            var mcastAddress = "224.50.50.50";
+
+            var sender =
+                new UDPMulticastSender(
+                    new GlobalConfig(mcastAddress, testListenPort, testSendIngPortStartSeed, 4),
+                    new MulticastSenderConfig());
+            sender.CloseSocket();
+
+            foreach (var socket in sender.GetSockets())
+            {
+                Assert.IsTrue(socket.Client == null);
+            }   
+
+        }
+
+        [Test]
+        public void UDPRecieverShutDownTest() 
+        {
+            var mcastAddress = "224.50.50.50";
+            var testListenPort = 60060;
+            var reciever = new UDPMulticastReceiver(IPAddress.Parse(mcastAddress), testListenPort);
+            
+            reciever.CloseSocket();
+
+            Assert.IsTrue(reciever.GetSocket().Client == null);
+
+        }
+
         #region Nested type: MessageCounter
 
-        public class MessageCounter
-        {
+        public class MessageCounter {
+
+            private bool _stopRunning;
+
+          
             public int NumberOfmessages { get; private set; }
             private readonly UDPMulticastReceiver _receiver;
 
 
-            public MessageCounter(UDPMulticastReceiver receiver)
-            {
+            public MessageCounter(UDPMulticastReceiver receiver) {
+                _stopRunning = false;
                 _receiver = receiver;
                 NumberOfmessages = 0;
+              
+
             }
 
+            public void StopRunning() {
+                _stopRunning = true;
+               
+            }
+           
 
             public void ListenAndCount()
             {
-                while (Thread.CurrentThread.IsAlive)
+                while (!_stopRunning)
                 {
                     _receiver.readMulticastGroupMessage();
                     NumberOfmessages++;
                 }
+                Console.WriteLine("thread counter thread is down");
             }
         }
 
