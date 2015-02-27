@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using AppSettingsManager;
-using Common.Logging;
+using log4net;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;

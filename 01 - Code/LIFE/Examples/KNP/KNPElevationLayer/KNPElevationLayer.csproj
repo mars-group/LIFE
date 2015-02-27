@@ -74,10 +74,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\LifeGISLayer.0.3.22\lib\net45\LCConnector.dll</HintPath>
     </Reference>
-    <Reference Include="LifeAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LIFE API\LifeAPI\bin\Release\LifeAPI.dll</HintPath>
-    </Reference>
     <Reference Include="LIFEGisLayerService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\LifeGISLayer.0.3.22\lib\net45\LIFEGisLayerService.dll</HintPath>
@@ -185,6 +181,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE API\LifeAPI\LifeAPI.csproj">
+      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
+      <Name>LifeAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
