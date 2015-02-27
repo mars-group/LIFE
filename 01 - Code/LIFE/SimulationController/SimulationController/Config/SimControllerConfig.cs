@@ -14,9 +14,7 @@ namespace SimulationController
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
 
 
-        public SimControllerConfig() {
-            this.NodeRegistryConfig = new NodeRegistryConfig();    
-        }
+       
 
         public SimControllerConfig(NodeRegistryConfig nodeRegistryConfig) {
             this.NodeRegistryConfig = nodeRegistryConfig;
