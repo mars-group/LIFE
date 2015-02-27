@@ -69,14 +69,6 @@
       <Project>{17064DB2-8976-439F-A697-AD8ACDB975CC}</Project>
       <Name>AgentShadowingService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\LIFEGisLayerService\LIFEGisLayerService.csproj">
-      <Project>{6CB066D7-A187-4EDA-A059-44C6121FAC56}</Project>
-      <Name>LIFEGisLayerService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\LIFE Services\LIFEUtilities\LIFEUtilities.csproj">
-      <Project>{09D5EB43-70C5-4E24-92CA-6C35548A0629}</Project>
-      <Name>LIFEUtilities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\T-Components\ASC\ASC.csproj">
       <Project>{6BEC24D9-FD97-4D66-BCFF-8671343B798E}</Project>
       <Name>ASC</Name>

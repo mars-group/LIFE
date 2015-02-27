@@ -53,12 +53,19 @@ namespace CommonTypes.DataTypes {
 
 
         public override bool Equals(object obj) {
-            TNodeInformation type = obj as TNodeInformation;
-            if (type != null) {
-                TNodeInformation otherNodeInfo = type;
-                return (otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType));
+
+
+            TNodeInformation otherNodeInfo = obj as TNodeInformation;
+            if (otherNodeInfo == null)
+            {
+                return false;    
             }
-            return false;
+            if (otherNodeInfo.NodeIdentifier == null || otherNodeInfo.NodeType == null) {
+                return false;
+            }
+
+           return (otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType));
+
         }
 
         public override int GetHashCode() {

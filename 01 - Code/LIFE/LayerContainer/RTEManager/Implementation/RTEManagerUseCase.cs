@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using DMConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
@@ -48,9 +47,6 @@ namespace RTEManager.Implementation {
 
         // current Tick
         private int _currentTick;
-
-        // The DistributionManager client
-        private IDMConnector _distributionManager;
 
 
         public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
