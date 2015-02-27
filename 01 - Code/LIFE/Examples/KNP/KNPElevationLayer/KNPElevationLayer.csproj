@@ -76,7 +76,7 @@
     </Reference>
     <Reference Include="LifeAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\LifeGISLayer.0.3.22\lib\net45\LifeAPI.dll</HintPath>
+      <HintPath>..\..\..\LIFE API\LifeAPI\bin\Release\LifeAPI.dll</HintPath>
     </Reference>
     <Reference Include="LIFEGisLayerService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
