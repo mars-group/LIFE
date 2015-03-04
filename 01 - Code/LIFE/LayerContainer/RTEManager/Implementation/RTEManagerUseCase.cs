@@ -58,27 +58,6 @@ namespace RTEManager.Implementation {
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
             _currentTick = 0;
-            /*
-            TNodeInformation simManager = null;
-            while (simManager == null)
-            {
-                simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
-                if (simManager != null) continue;
-
-                // No SimManager found so wait for 3 seconds and recheck
-                var manualEvent = new ManualResetEvent(false);
-                nodeRegistry.SimulationManagerConnected += (sender, information) =>
-                {
-                    simManager = information;
-                    manualEvent.Set();
-                };
-                manualEvent.WaitOne(3000);
-            }
-
-            var dmClient = ScsServiceClientBuilder.CreateClient<IDMConnector>(simManager.NodeEndpoint.IpAddress);
-            dmClient.Connect();
-            _distributionManager = dmClient.ServiceProxy;
-             * */
         }
 
         #region Public Methods
