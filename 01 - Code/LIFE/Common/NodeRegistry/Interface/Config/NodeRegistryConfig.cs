@@ -40,6 +40,13 @@ namespace NodeRegistry.Interface {
             HeartBeatTimeOutmultiplier = heartbeatTimeoutMultiplier;
         }
 
+        /// <summary>
+        /// Empty constructor for reflektion purpose only. 
+        /// Do not use this constructor unless you know what you are doing.
+        /// </summary>
+        private NodeRegistryConfig() {
+            
+        }
       
     }
 }
