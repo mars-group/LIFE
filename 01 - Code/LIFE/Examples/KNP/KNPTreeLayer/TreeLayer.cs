@@ -15,7 +15,6 @@ using TreeLayer.Agents;
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
-
 namespace KNPTreeLayer {
     [Extension(typeof (ISteppedLayer))]
     public class TreeLayer : ScsService, IKnpTreeLayer
@@ -48,14 +47,6 @@ namespace KNPTreeLayer {
             _agentsToAddInPostTick.AddRange(e.NewAgents);
         }
 
-        /*
-        public TreeLayer(IKnpElevationLayer elevationLayer)
-        {
-            _elevationLayer = elevationLayer;
-            trees = new List<ITree>();
-            _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
-        }
-        */
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _unregisterAgentHandle = unregisterAgentHandle;
 
@@ -63,12 +54,13 @@ namespace KNPTreeLayer {
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
                 var agentBag = new ConcurrentBag<Tree>();
+
                 // instantiate real Agents
                 var config = agentInitConfig;
                 Parallel.For(0, agentInitConfig.RealAgentCount, i => {
                     var t = new Tree(4, 2, 10, i, 500,
-                        GetRandomNumber(MinX, MaxX),
-                        GetRandomNumber(MinY, MaxY),
+                        GetRandomDouble(MinX, MaxX),
+                        GetRandomDouble(MinY, MaxY),
                         config.RealAgentIds[i],
                         this,
                         _elevationLayer
@@ -99,46 +91,18 @@ namespace KNPTreeLayer {
         }
 
 
-        public void PreTick() {
-            /*
-            // remove an agent
-            var tRemove = trees[0];
-            _unregisterAgentHandle.Invoke(this, tRemove);
-            trees.RemoveAt(0);
-            _agentShadowingService.RemoveRealAgent((Tree)tRemove);
-            // create new agent
-            var t = new Tree(4, 2, 10, 7, 500,
-                        GetRandomNumber(MinX, MaxX),
-                        GetRandomNumber(MinY, MaxY),
-                        Guid.NewGuid(),
-                        this
-                    );
-            trees.Add(t);
-            _agentShadowingService.CreateShadowAgent(t.ID);
-             * */
-        }
+        public void PreTick() {}
 
-        public void Tick() {
-        }
+        public void Tick() {}
 
 
-        public void PostTick() {
-            // update internal agent lists with information from AgentUpdates event
-            //trees.RemoveAll(t => _agentsToRemoveInPostTick.Contains(t));
-            //trees.AddRange(_agentsToAddInPostTick);
-            // since the added agents are all ShadowAgents, we don't need to register them for execution
-        }
+        public void PostTick() {}
 
 
-        private double GetRandomNumber(double minimum, double maximum)
+        private double GetRandomDouble(double minimum, double maximum)
         { 
             var random = new Random();
             return random.NextDouble() * (maximum - minimum) + minimum;
-        }
-
-        internal ITree GetOneOtherTreesThanMe(ITree memyself)
-        {
-            return trees.Find(t => t != memyself);
         }
 
         public long GetCurrentTick() {

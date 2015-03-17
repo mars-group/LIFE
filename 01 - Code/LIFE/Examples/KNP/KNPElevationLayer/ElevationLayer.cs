@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using LCConnector.TransportTypes;
@@ -25,11 +24,6 @@ namespace KNPElevationLayer
             //var e = GetEnvelope();
             return true;
         }
-
-        public void UpdateShadowAgents(IDictionary<Type, List<Guid>> agentsToAdd, IDictionary<Type, List<Guid>> agentsToRemove) {
-            
-        }
-
 
         public override void Tick()
         {

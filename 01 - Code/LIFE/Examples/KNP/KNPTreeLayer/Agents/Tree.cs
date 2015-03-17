@@ -8,21 +8,14 @@
 //  *******************************************************/
 
 using System;
-using System.ComponentModel;
 using System.Linq;
 using ASC.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using NetTopologySuite.Geometries;
 
-
 namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
-
-        private readonly IKnpElevationLayer _elevationLayer;
-        private readonly KNPTreeLayer.TreeLayer _treeLayer;
-
         private double _biomass;
-
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
@@ -61,8 +54,6 @@ namespace TreeLayer.Agents {
         public Tree
             (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) 
         {
-            _elevationLayer = elevationLayer; 
-            _treeLayer = treeLayer;
             ID = id;
             Height = height;
             Diameter = diameter;
@@ -71,7 +62,7 @@ namespace TreeLayer.Agents {
             Biomass = biomass;
             Lat = lat;
             Lon = lon;
-            var result = _elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
+            var result = elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
 
         }
@@ -79,8 +70,6 @@ namespace TreeLayer.Agents {
         #region IAgent Members
 
         public void Tick() {
-            //var biomass = _treeLayer.GetOneOtherTreesThanMe(this).Biomass;
-            //Age++;
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);
             // grow height
