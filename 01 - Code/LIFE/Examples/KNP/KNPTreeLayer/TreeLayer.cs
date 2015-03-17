@@ -7,6 +7,7 @@ using AgentShadowingService.Interface;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using KNPEnvironmentLayer;
+using LCConnector.Exceptions;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
@@ -53,13 +54,16 @@ namespace KNPTreeLayer {
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _unregisterAgentHandle = unregisterAgentHandle;
 
-
+            var env = _elevationLayer.GetEnvelope();
+            var maxCoords = _elevationLayer.TransformToImage(env.MaxX, env.MaxY);
+            var minCoords = _elevationLayer.TransformToImage(env.MinX, env.MinY);
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
                 var agentBag = new ConcurrentBag<Tree>();
 
                 // instantiate real Agents
                 var config = agentInitConfig;
+                var placementError = false;
                 Parallel.For(0, agentInitConfig.RealAgentCount, i => {
                     var t = new Tree(4, 2, 10, i, 500,
                         GetRandomDouble(MinX, MaxX),
@@ -68,10 +72,16 @@ namespace KNPTreeLayer {
                         this,
                         _elevationLayer
                     );
+
+                    // add to ESC 
+                    if (!_environmentLayer.Add(t.SpatialEntity, t.SpatialEntity.Shape.Position)) placementError = true;
                     
                     agentBag.Add(t);
+
                     registerAgentHandle(this, t);
                 });
+
+                if (placementError) return false;
 
                 Console.WriteLine("Finished: Realagents instantiated.");
 
@@ -93,16 +103,13 @@ namespace KNPTreeLayer {
             }
             return true;
         }
-
-
+        
         public void PreTick() {}
 
         public void Tick() {}
-
-
+        
         public void PostTick() {}
-
-
+        
         private double GetRandomDouble(double minimum, double maximum)
         { 
             var random = new Random();

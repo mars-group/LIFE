@@ -69,6 +69,7 @@
     <Compile Include="Implementation\RuntimeEnvironmentUseCase.cs" />
     <Compile Include="Implementation\SteppedSimulationExecutionUseCase.cs" />
     <Compile Include="Interfaces\IRuntimeEnvironment.cs" />
+    <Compile Include="Interfaces\Exceptions\NoLayerConfigurationPresentException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

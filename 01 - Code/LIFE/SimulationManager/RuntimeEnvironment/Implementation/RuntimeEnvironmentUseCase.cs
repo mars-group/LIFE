@@ -176,7 +176,16 @@ namespace RuntimeEnvironment.Implementation {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
                 // fetch layerConfig by layerName
-                var layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
+                LayerConfig layerConfig;
+                try {
+                    layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
+                }
+                catch {
+                    throw new NoLayerConfigurationPresentException(
+                        "Please specify an appropriate LayerConfig in your config file: " + modelDescription.Name +
+                        ".cfg");
+                }
+
 
                 if (layerConfig.DistributionStrategy == DistributionStrategy.NO_DISTRIBUTION)
                 {
@@ -190,7 +199,7 @@ namespace RuntimeEnvironment.Implementation {
                         var ids = new Guid[agentConfig.AgentCount];
                         for (int j = 0; j < agentConfig.AgentCount; j++)
                         {
-                            ids[0] = Guid.NewGuid();
+                            ids[j] = Guid.NewGuid();
                         }
                         initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, 0, ids, new Guid[0]);
                     }

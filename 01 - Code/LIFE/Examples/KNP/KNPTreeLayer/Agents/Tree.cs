@@ -10,6 +10,7 @@
 using System;
 using System.Linq;
 using ASC.Communication.ScsServices.Service;
+using GeoAPI.Geometries;
 using KNPElevationLayer;
 using NetTopologySuite.Geometries;
 using SpatialAPI.Entities;
@@ -19,6 +20,7 @@ using SpatialAPI.Shape;
 namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
         private double _biomass;
+        private Coordinate _imageCoordinates;
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
@@ -45,7 +47,7 @@ namespace TreeLayer.Agents {
         public double Lat { get; set; }
         public double Lon { get; set; }
 
-        public ISpatialEntity SpatialEntity { get; private set; }
+        public ISpatialEntity SpatialEntity { get; set; }
 
         public string GetIdentifiaction()
         {
@@ -59,7 +61,8 @@ namespace TreeLayer.Agents {
 
         public Tree
             (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) {
-            SpatialEntity = new Cuboid(new Vector3(1, 2, 1), new Vector3(lon, lat)).;
+            _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
+            SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X,_imageCoordinates.Y,id);
             ID = id;
             Height = height;
             Diameter = diameter;
@@ -86,6 +89,23 @@ namespace TreeLayer.Agents {
 
         #endregion
 
+        private class SpatialTreeEntity : ISpatialEntity {
+
+            public SpatialTreeEntity(double x, double y, Guid id) {
+                Shape = new Cuboid(new Vector3(1, 2, 1), new Vector3(x, y));
+                AgentGuid = id;
+            }
+
+            public IShape Shape { get; set; }
+
+            public Enum CollisionType {
+                get { return SpatialAPI.Entities.Movement.CollisionType.MassiveAgent; }
+            }
+
+            public Guid AgentGuid { get; set; }
+        }
 
     }
+
+
 }

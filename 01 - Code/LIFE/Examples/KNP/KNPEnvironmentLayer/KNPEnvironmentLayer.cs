@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
+using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
+using Mono.Addins;
 using SpatialAPI.Entities;
 using SpatialAPI.Entities.Movement;
 using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Environment;
 using SpatialAPI.Shape;
 
+[assembly: Addin]
+[assembly: AddinDependency("LayerContainer", "0.1")]
 namespace KNPEnvironmentLayer
 {
-    public class KNPEnvironmentLayer : IKNPEnvironmentLayer
+    [Extension(typeof(ISteppedLayer))]
+    public class KNPEnvironmentLayer : ScsService, IKNPEnvironmentLayer
     {
         private IEnvironment _esc;
         private long _currentTick;
