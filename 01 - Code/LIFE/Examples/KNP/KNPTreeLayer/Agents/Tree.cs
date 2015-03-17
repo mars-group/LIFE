@@ -12,6 +12,9 @@ using System.Linq;
 using ASC.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using NetTopologySuite.Geometries;
+using SpatialAPI.Entities;
+using SpatialAPI.Entities.Transformation;
+using SpatialAPI.Shape;
 
 namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
@@ -41,6 +44,9 @@ namespace TreeLayer.Agents {
 
         public double Lat { get; set; }
         public double Lon { get; set; }
+
+        public ISpatialEntity SpatialEntity { get; private set; }
+
         public string GetIdentifiaction()
         {
             return ID.ToString();
@@ -52,8 +58,8 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) 
-        {
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) {
+            SpatialEntity = new Cuboid(new Vector3(1, 2, 1), new Vector3(lon, lat)).;
             ID = id;
             Height = height;
             Diameter = diameter;

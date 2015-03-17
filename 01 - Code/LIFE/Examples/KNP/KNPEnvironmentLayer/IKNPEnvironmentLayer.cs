@@ -3,7 +3,7 @@ using SpatialAPI.Environment;
 
 namespace KNPEnvironmentLayer
 {
-    interface IKNPEnvironmentLayer : ISteppedLayer, IEnvironment
+    public interface IKNPEnvironmentLayer : ISteppedLayer, IEnvironment
     {
 
     }

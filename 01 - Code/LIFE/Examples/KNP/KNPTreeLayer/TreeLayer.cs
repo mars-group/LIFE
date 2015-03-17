@@ -6,6 +6,7 @@ using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
+using KNPEnvironmentLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
@@ -31,10 +32,12 @@ namespace KNPTreeLayer {
         private double MaxX = 31.985;
         private double MaxY = -24.997;
         private UnregisterAgent _unregisterAgentHandle;
+        private IKNPEnvironmentLayer _environmentLayer;
 
-        public TreeLayer(IKnpElevationLayer elevationLayer)
+        public TreeLayer(IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer knpEnvironmentLayer)
         {
             _elevationLayer = elevationLayer;
+            _environmentLayer = knpEnvironmentLayer;
             trees = new List<ITree>();
             _agentsToRemoveInPostTick = new List<ITree>();
             _agentsToAddInPostTick = new List<ITree>();
@@ -65,6 +68,7 @@ namespace KNPTreeLayer {
                         this,
                         _elevationLayer
                     );
+                    
                     agentBag.Add(t);
                     registerAgentHandle(this, t);
                 });
