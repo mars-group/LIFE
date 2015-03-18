@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EnvironmentLayer")]
+[assembly: AssemblyTitle("KNPFarmerLayer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EnvironmentLayer")]
+[assembly: AssemblyProduct("KNPFarmerLayer")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c908939d-eddb-45c1-ae5a-099d29aaae7c")]
+[assembly: Guid("96a9ba24-23da-40ce-8214-92f47ff1cd53")]
 
 // Version information for an assembly consists of the following four values:
 //

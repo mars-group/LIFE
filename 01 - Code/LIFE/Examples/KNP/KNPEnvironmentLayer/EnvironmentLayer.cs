@@ -14,7 +14,7 @@ using SpatialAPI.Shape;
 namespace KNPEnvironmentLayer
 {
     [Extension(typeof(ISteppedLayer))]
-    public class KNPEnvironmentLayer : ScsService, IKNPEnvironmentLayer
+    public class EnvironmentLayer : ScsService, IKNPEnvironmentLayer
     {
         private IEnvironment _esc;
         private long _currentTick;

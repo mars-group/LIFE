@@ -1,11 +1,13 @@
-﻿using Hik.Communication.ScsServices.Service;
+﻿using System;
+using Hik.Communication.ScsServices.Service;
 using LifeAPI.Layer;
+using TreeLayer.Agents;
 
 namespace TreeLayer
 {
     [ScsService(Version = "0.1")]
-    interface IKnpTreeLayer : ISteppedActiveLayer
-    {
-        string Name { get; }
+    public interface IKnpTreeLayer : ISteppedLayer {
+        double ChopTree(Guid id);
+        ITree GetTreeById(Guid id);
     }
 }

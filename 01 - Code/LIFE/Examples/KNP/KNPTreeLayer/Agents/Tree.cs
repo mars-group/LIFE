@@ -12,6 +12,7 @@ using System.Linq;
 using ASC.Communication.ScsServices.Service;
 using GeoAPI.Geometries;
 using KNPElevationLayer;
+using KNPEnvironmentLayer;
 using NetTopologySuite.Geometries;
 using SpatialAPI.Entities;
 using SpatialAPI.Entities.Transformation;
@@ -21,6 +22,9 @@ namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
         private double _biomass;
         private Coordinate _imageCoordinates;
+        private IKNPEnvironmentLayer _environment;
+        private SpatialTreeEntity _explorationEntity;
+        private IKnpTreeLayer _treeLayer;
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
@@ -60,8 +64,10 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer) : base(id.ToByteArray()) {
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer environmentLayer) : base(id.ToByteArray()) {
             _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
+            _environment = environmentLayer;
+            _treeLayer = treeLayer;
             SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X,_imageCoordinates.Y,id);
             ID = id;
             Height = height;
@@ -73,12 +79,20 @@ namespace TreeLayer.Agents {
             Lon = lon;
             var result = elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
-
+            _explorationEntity = new SpatialTreeEntity(this._imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
+            _explorationEntity.Shape = new Cuboid(new Vector3(50,50,50), new Vector3(_imageCoordinates.X,_imageCoordinates.Y));
         }
 
         #region IAgent Members
 
         public void Tick() {
+            var result = _environment.Explore(_explorationEntity);
+            
+            foreach (var spatialEntity in result) {
+                var otherTree = _treeLayer.GetTreeById(spatialEntity.AgentGuid);
+                var otherTreesHeight = otherTree.Height;
+            }
+
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);
             // grow height

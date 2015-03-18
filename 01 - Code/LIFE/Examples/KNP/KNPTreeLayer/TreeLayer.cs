@@ -34,6 +34,7 @@ namespace KNPTreeLayer {
         private double MaxY = -24.997;
         private UnregisterAgent _unregisterAgentHandle;
         private IKNPEnvironmentLayer _environmentLayer;
+        private ConcurrentDictionary<Guid, ITree> _localTreeMap;
 
         public TreeLayer(IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer knpEnvironmentLayer)
         {
@@ -54,13 +55,10 @@ namespace KNPTreeLayer {
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _unregisterAgentHandle = unregisterAgentHandle;
 
-            var env = _elevationLayer.GetEnvelope();
-            var maxCoords = _elevationLayer.TransformToImage(env.MaxX, env.MaxY);
-            var minCoords = _elevationLayer.TransformToImage(env.MinX, env.MinY);
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
                 var agentBag = new ConcurrentBag<Tree>();
-
+                _localTreeMap = new ConcurrentDictionary<Guid, ITree>();
                 // instantiate real Agents
                 var config = agentInitConfig;
                 var placementError = false;
@@ -70,14 +68,13 @@ namespace KNPTreeLayer {
                         GetRandomDouble(MinY, MaxY),
                         config.RealAgentIds[i],
                         this,
-                        _elevationLayer
+                        _elevationLayer,
+                        _environmentLayer
                     );
 
                     // add to ESC 
                     if (!_environmentLayer.Add(t.SpatialEntity, t.SpatialEntity.Shape.Position)) placementError = true;
-                    
-                    agentBag.Add(t);
-
+                    _localTreeMap.TryAdd(config.RealAgentIds[i], t);
                     registerAgentHandle(this, t);
                 });
 
@@ -92,24 +89,31 @@ namespace KNPTreeLayer {
 
                 Console.WriteLine("Finished: Realagents registered.");
 
-                trees.AddRange(agentBag);
-               
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
-                    trees.AddRange(_agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds));
+                    _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
                 }
 
                 Console.WriteLine("Finished: ShadowAgents created.");
             }
             return true;
         }
-        
-        public void PreTick() {}
 
-        public void Tick() {}
-        
-        public void PostTick() {}
-        
+        public double ChopTree(Guid id) {
+            ITree choppedTree;
+            if (_localTreeMap.TryRemove(id, out choppedTree)) {
+                _unregisterAgentHandle(this,choppedTree);
+                return choppedTree.Biomass;
+            }
+            return 0;
+        }
+
+        public ITree GetTreeById(Guid id) {
+            ITree tree;
+            _localTreeMap.TryGetValue(id, out tree);
+            return tree;
+        }
+
         private double GetRandomDouble(double minimum, double maximum)
         { 
             var random = new Random();
@@ -124,10 +128,6 @@ namespace KNPTreeLayer {
             _currentTick = currentTick;
         }
 
-        public string Name
-        {
-            get { return "TreeLayer"; }
-        }
 
     }
 }
