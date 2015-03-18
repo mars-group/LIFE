@@ -116,7 +116,7 @@ namespace KNPTreeLayer {
 
         private double GetRandomDouble(double minimum, double maximum)
         { 
-            var random = new Random();
+            var random = new Random(28937892);
             return random.NextDouble() * (maximum - minimum) + minimum;
         }
 

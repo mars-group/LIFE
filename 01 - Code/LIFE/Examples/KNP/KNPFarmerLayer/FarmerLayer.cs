@@ -71,7 +71,7 @@ namespace KNPFarmerLayer
 
         private double GetRandomDouble(double minimum, double maximum)
         {
-            var random = new Random();
+            var random = new Random(54897439);
             return random.NextDouble() * (maximum - minimum) + minimum;
         }
     }

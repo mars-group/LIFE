@@ -15,6 +15,7 @@ namespace KNPFarmerLayer.Agents
         private readonly IKNPEnvironmentLayer _environmentLayer;
         private readonly IKnpTreeLayer _treeLayer;
         private Coordinate _imageCoordinates;
+        private SpatialFarmerEntity _explorationEntity;
 
         public Farmer(IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer environmentLayer, IKnpTreeLayer treeLayer, Guid id, double lat, double lon)
         {
@@ -25,12 +26,19 @@ namespace KNPFarmerLayer.Agents
 
             _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
             SpatialEntity = new SpatialFarmerEntity(_imageCoordinates.X, _imageCoordinates.Y, id);
+
+            _explorationEntity = new SpatialFarmerEntity(this._imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
+            _explorationEntity.Shape = new Cuboid(new Vector3(50, 50, 50), new Vector3(_imageCoordinates.X, _imageCoordinates.Y));
         }
 
         public ISpatialEntity SpatialEntity { get; set; }
 
         public void Tick() {
-            throw new NotImplementedException();
+            var result = _environmentLayer.Explore(_explorationEntity);
+            
+            foreach (var spatialEntity in result) {
+                spatialEntity
+            }
         }
 
         public Guid ID { get; set; }
