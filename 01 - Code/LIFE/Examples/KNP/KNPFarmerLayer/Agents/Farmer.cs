@@ -6,6 +6,7 @@ using SpatialAPI.Entities;
 using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Shape;
 using TreeLayer;
+using TreeLayer.Agents;
 
 namespace KNPFarmerLayer.Agents
 {
@@ -16,6 +17,7 @@ namespace KNPFarmerLayer.Agents
         private readonly IKnpTreeLayer _treeLayer;
         private Coordinate _imageCoordinates;
         private SpatialFarmerEntity _explorationEntity;
+        private double _myBiomass;
 
         public Farmer(IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer environmentLayer, IKnpTreeLayer treeLayer, Guid id, double lat, double lon)
         {
@@ -24,11 +26,13 @@ namespace KNPFarmerLayer.Agents
             _treeLayer = treeLayer;
             ID = id;
 
+            _myBiomass = 0;
+
             _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
             SpatialEntity = new SpatialFarmerEntity(_imageCoordinates.X, _imageCoordinates.Y, id);
 
-            _explorationEntity = new SpatialFarmerEntity(this._imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
-            _explorationEntity.Shape = new Cuboid(new Vector3(50, 50, 50), new Vector3(_imageCoordinates.X, _imageCoordinates.Y));
+            _explorationEntity = new SpatialFarmerEntity(_imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
+            _explorationEntity.Shape = new Cuboid(new Vector3(500, 500, 500), new Vector3(_imageCoordinates.X, _imageCoordinates.Y));
         }
 
         public ISpatialEntity SpatialEntity { get; set; }
@@ -36,8 +40,16 @@ namespace KNPFarmerLayer.Agents
         public void Tick() {
             var result = _environmentLayer.Explore(_explorationEntity);
             
-            foreach (var spatialEntity in result) {
-                spatialEntity
+            foreach (var spatialEntity in result)
+            {
+                ITree tree;
+                if (_treeLayer.GetTreeById(spatialEntity.AgentGuid, out tree))
+                {
+                    if (tree.Biomass > 10)
+                    {
+                        _myBiomass += _treeLayer.ChopTree(tree.ID);
+                    }
+                }
             }
         }
 

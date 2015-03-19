@@ -108,10 +108,9 @@ namespace KNPTreeLayer {
             return 0;
         }
 
-        public ITree GetTreeById(Guid id) {
-            ITree tree;
-            _localTreeMap.TryGetValue(id, out tree);
-            return tree;
+        public bool GetTreeById(Guid id, out ITree tree)
+        {
+            return _localTreeMap.TryGetValue(id, out tree);
         }
 
         private double GetRandomDouble(double minimum, double maximum)

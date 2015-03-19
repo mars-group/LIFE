@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using KNPEnvironmentLayer;
 using KNPFarmerLayer.Agents;
@@ -14,7 +15,7 @@ using TreeLayer;
 namespace KNPFarmerLayer
 {
     [Extension(typeof(ISteppedLayer))]
-    public class FarmerLayer : IKNPFarmerLayer
+    public class FarmerLayer : ScsService, IKNPFarmerLayer
     {
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly IKNPEnvironmentLayer _environmentLayer;

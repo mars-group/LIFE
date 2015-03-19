@@ -65,10 +65,8 @@ namespace TreeLayer.Agents {
 
         public Tree
             (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer environmentLayer) : base(id.ToByteArray()) {
-            _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
             _environment = environmentLayer;
             _treeLayer = treeLayer;
-            SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X,_imageCoordinates.Y,id);
             ID = id;
             Height = height;
             Diameter = diameter;
@@ -77,9 +75,18 @@ namespace TreeLayer.Agents {
             Biomass = biomass;
             Lat = lat;
             Lon = lon;
+
+            // get coordinates as image coords
+            _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
+            //create SpatialEntity to be usable in the OctTree
+            SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, id);
+
+            // fetch and parse HeightAboveNN data from ElevationLayer
             var result = elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
-            _explorationEntity = new SpatialTreeEntity(this._imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
+
+            // Create SpatialEntity for exploration in the tree
+            _explorationEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
             _explorationEntity.Shape = new Cuboid(new Vector3(50,50,50), new Vector3(_imageCoordinates.X,_imageCoordinates.Y));
         }
 
@@ -88,9 +95,13 @@ namespace TreeLayer.Agents {
         public void Tick() {
             var result = _environment.Explore(_explorationEntity);
             
-            foreach (var spatialEntity in result) {
-                var otherTree = _treeLayer.GetTreeById(spatialEntity.AgentGuid);
-                var otherTreesHeight = otherTree.Height;
+            foreach (var spatialEntity in result)
+            {
+                ITree otherTree;
+                if (_treeLayer.GetTreeById(spatialEntity.AgentGuid, out otherTree))
+                {
+                    var otherTreesHeight = otherTree.Height;
+                }
             }
 
             // grow diameter
