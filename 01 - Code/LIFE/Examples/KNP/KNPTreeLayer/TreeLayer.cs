@@ -22,7 +22,6 @@ namespace KNPTreeLayer {
     public class TreeLayer : ScsService, IKnpTreeLayer
     {
         private long _currentTick;
-        private readonly List<ITree> trees;
         private readonly AgentShadowingServiceComponent<ITree, Tree> _agentShadowingService;
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly List<ITree> _agentsToRemoveInPostTick;
@@ -33,14 +32,13 @@ namespace KNPTreeLayer {
         private double MaxX = 31.985;
         private double MaxY = -24.997;
         private UnregisterAgent _unregisterAgentHandle;
-        private IKNPEnvironmentLayer _environmentLayer;
+        private readonly IKNPEnvironmentLayer _environmentLayer;
         private ConcurrentDictionary<Guid, ITree> _localTreeMap;
 
         public TreeLayer(IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer knpEnvironmentLayer)
         {
             _elevationLayer = elevationLayer;
             _environmentLayer = knpEnvironmentLayer;
-            trees = new List<ITree>();
             _agentsToRemoveInPostTick = new List<ITree>();
             _agentsToAddInPostTick = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();

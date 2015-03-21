@@ -100,6 +100,7 @@ namespace TreeLayer.Agents {
                 ITree otherTree;
                 if (_treeLayer.GetTreeById(spatialEntity.AgentGuid, out otherTree))
                 {
+                    // obtain other tree's height - symbolic handshake operation
                     var otherTreesHeight = otherTree.Height;
                 }
             }
