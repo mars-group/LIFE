@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
@@ -182,7 +183,7 @@ namespace RuntimeEnvironment.Implementation {
                 }
                 catch {
                     throw new NoLayerConfigurationPresentException(
-                        "Please specify an appropriate LayerConfig in your config file: " + modelDescription.Name +
+                        "Please specify an appropriate LayerConfig for " + layerDescription.Name + " in your config file: " + modelDescription.Name +
                         ".cfg");
                 }
 
@@ -209,12 +210,12 @@ namespace RuntimeEnvironment.Implementation {
                 else {
                     // get initData by layerConfig and LayerContainers
                     var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients, modelConfig);
-
-                    foreach (var layerContainerClient in layerContainerClients)
-                    {
-                        layerContainerClient.Instantiate(layerInstanceId);
-                        layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
-                    }
+                    Parallel.ForEach(layerContainerClients, layerContainerClient =>
+                        {
+                            layerContainerClient.Instantiate(layerInstanceId);
+                            layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
+                        }
+                    );
                 }
 
                 layerId++;
