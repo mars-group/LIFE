@@ -8,6 +8,8 @@
 //  *******************************************************/
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using ASC.Communication.ScsServices.Service;
 using GeoAPI.Geometries;
@@ -22,9 +24,8 @@ namespace TreeLayer.Agents {
     public class Tree : AscService, ITree {
         private double _biomass;
         private Coordinate _imageCoordinates;
-        private IKNPEnvironmentLayer _environment;
-        private SpatialTreeEntity _explorationEntity;
-        private IKnpTreeLayer _treeLayer;
+        private readonly IKnpTreeLayer _treeLayer;
+        private Guid[] _clusterGroup;
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
@@ -64,9 +65,11 @@ namespace TreeLayer.Agents {
 
 
         public Tree
-            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon, Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer environmentLayer) : base(id.ToByteArray()) {
-            _environment = environmentLayer;
+            (double height, double diameter, double crownDiameter, double age, double biomass, double lat, double lon,
+            Guid id, KNPTreeLayer.TreeLayer treeLayer, IKnpElevationLayer elevationLayer, Guid[] clusterGroup) 
+            : base(id.ToByteArray()) {
             _treeLayer = treeLayer;
+            _clusterGroup = clusterGroup;
             ID = id;
             Height = height;
             Diameter = diameter;
@@ -84,21 +87,15 @@ namespace TreeLayer.Agents {
             // fetch and parse HeightAboveNN data from ElevationLayer
             var result = elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
-
-            // Create SpatialEntity for exploration in the tree
-            _explorationEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
-            _explorationEntity.Shape = new Cuboid(new Vector3(50,50,50), new Vector3(_imageCoordinates.X,_imageCoordinates.Y));
         }
 
         #region IAgent Members
 
         public void Tick() {
-            var result = _environment.Explore(_explorationEntity);
-            
-            foreach (var spatialEntity in result)
+            foreach (var agentId in _clusterGroup)
             {
                 ITree otherTree;
-                if (_treeLayer.GetTreeById(spatialEntity.AgentGuid, out otherTree))
+                if (_treeLayer.GetTreeById(agentId, out otherTree))
                 {
                     // obtain other tree's height - symbolic handshake operation
                     var otherTreesHeight = otherTree.Height;

@@ -35,10 +35,9 @@ namespace KNPTreeLayer {
         private readonly IKNPEnvironmentLayer _environmentLayer;
         private ConcurrentDictionary<Guid, ITree> _localTreeMap;
 
-        public TreeLayer(IKnpElevationLayer elevationLayer, IKNPEnvironmentLayer knpEnvironmentLayer)
+        public TreeLayer(IKnpElevationLayer elevationLayer)
         {
             _elevationLayer = elevationLayer;
-            _environmentLayer = knpEnvironmentLayer;
             _agentsToRemoveInPostTick = new List<ITree>();
             _agentsToAddInPostTick = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
@@ -57,26 +56,88 @@ namespace KNPTreeLayer {
                 if (agentInitConfig.AgentName != "Tree") continue;
                 var agentBag = new ConcurrentBag<Tree>();
                 _localTreeMap = new ConcurrentDictionary<Guid, ITree>();
+
                 // instantiate real Agents
+                
                 var config = agentInitConfig;
-                var placementError = false;
-                Parallel.For(0, agentInitConfig.RealAgentCount, i => {
+                Parallel.For(0, agentInitConfig.RealAgentCount, i =>
+                {
+
+                    var clusterGroup = new Guid[4];
+                    // create interaction cluster group
+                    if (i == 0)
+                    {
+                        clusterGroup[0] = config.RealAgentIds[config.RealAgentCount - 1];
+                        clusterGroup[1] = config.RealAgentIds[i + 1];
+                        if (layerInitData.Distribute)
+                        {
+                            clusterGroup[2] = config.ShadowAgentsIds[config.RealAgentCount - 1];
+                            clusterGroup[3] = config.ShadowAgentsIds[i + 1];
+                        }
+                        else
+                        {
+                            clusterGroup[2] = config.RealAgentIds[config.RealAgentCount - 2];
+                            clusterGroup[3] = config.RealAgentIds[i + 2];
+                        }
+                    }
+                    else if (i == 1 && !layerInitData.Distribute)
+                    {
+                        clusterGroup[0] = config.RealAgentIds[i - 1];
+                        clusterGroup[1] = config.RealAgentIds[i + 1];
+                        clusterGroup[2] = config.RealAgentIds[config.RealAgentCount - 1];
+                        clusterGroup[3] = config.RealAgentIds[i + 2];
+                    }
+                    else if (i == config.RealAgentCount-2 && !layerInitData.Distribute)
+                    {
+                        clusterGroup[0] = config.RealAgentIds[i - 1];
+                        clusterGroup[1] = config.RealAgentIds[i + 1];
+                        clusterGroup[2] = config.RealAgentIds[i - 2];
+                        clusterGroup[3] = config.RealAgentIds[0];
+                    }
+                    else if (i == config.RealAgentCount - 1)
+                    {
+                        clusterGroup[0] = config.RealAgentIds[i - 1];
+                        clusterGroup[1] = config.RealAgentIds[0];
+                        if (layerInitData.Distribute)
+                        {
+                            clusterGroup[2] = config.ShadowAgentsIds[i - 1];
+                            clusterGroup[3] = config.ShadowAgentsIds[0];
+                        }
+                        else
+                        {
+                            clusterGroup[2] = config.RealAgentIds[i - 2];
+                            clusterGroup[3] = config.RealAgentIds[1];
+                        }
+                    }
+                    else
+                    {
+                        clusterGroup[0] = config.RealAgentIds[i - 1];
+                        clusterGroup[1] = config.RealAgentIds[i + 1];
+                        if (layerInitData.Distribute)
+                        {
+                            clusterGroup[2] = config.ShadowAgentsIds[i - 1];
+                            clusterGroup[3] = config.ShadowAgentsIds[i + 1];
+                        }
+                        else
+                        {
+                            clusterGroup[2] = config.RealAgentIds[i - 2];
+                            clusterGroup[3] = config.RealAgentIds[i + 2];
+                        }
+                    }
+
+
                     var t = new Tree(4, 2, 10, i, 500,
                         GetRandomDouble(MinX, MaxX),
                         GetRandomDouble(MinY, MaxY),
                         config.RealAgentIds[i],
                         this,
                         _elevationLayer,
-                        _environmentLayer
+                        clusterGroup
                     );
 
-                    // add to ESC 
-                    if (!_environmentLayer.Add(t.SpatialEntity, t.SpatialEntity.Shape.Position)) placementError = true;
                     _localTreeMap.TryAdd(config.RealAgentIds[i], t);
                     registerAgentHandle(this, t);
                 });
-
-                if (placementError) return false;
 
                 Console.WriteLine("Finished: Realagents instantiated.");
 
