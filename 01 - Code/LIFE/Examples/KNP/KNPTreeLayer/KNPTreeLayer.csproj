@@ -85,10 +85,6 @@
       <Project>{1C6D432C-DD8A-4B0F-B219-075872AC5B6A}</Project>
       <Name>KNPElevationLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KNPEnvironmentLayer\KNPEnvironmentLayer.csproj">
-      <Project>{b21f3130-ab1b-4932-ab8f-8b00e8e0ffe7}</Project>
-      <Name>KNPEnvironmentLayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

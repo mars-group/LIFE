@@ -6,7 +6,6 @@ using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
-using KNPEnvironmentLayer;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
@@ -29,7 +28,6 @@ namespace TreeLayer {
         private double MaxX = 31.985;
         private double MaxY = -24.997;
         private UnregisterAgent _unregisterAgentHandle;
-        private readonly IKNPEnvironmentLayer _environmentLayer;
         private ConcurrentDictionary<Guid, ITree> _localTreeMap;
 
         public TreeLayer(IKnpElevationLayer elevationLayer)
