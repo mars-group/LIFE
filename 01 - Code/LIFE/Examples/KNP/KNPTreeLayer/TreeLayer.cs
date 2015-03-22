@@ -144,16 +144,18 @@ namespace KNPTreeLayer {
                 if (layerInitData.Distribute)
                 {
                     _agentShadowingService.RegisterRealAgents(agentBag.ToArray());
+                    Console.WriteLine("Finished: Realagents registered.");
                 }
-
-                Console.WriteLine("Finished: Realagents registered.");
 
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
-                    _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
+                    var shadowTrees = _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds).ToArray();
+                    for (int i = 0; i < agentInitConfig.ShadowAgentsIds.Length; i++) {
+                        _localTreeMap.TryAdd(agentInitConfig.ShadowAgentsIds[i], shadowTrees[i]);
+                    }
+                    Console.WriteLine("Finished: ShadowAgents created.");
                 }
 
-                Console.WriteLine("Finished: ShadowAgents created.");
             }
             return true;
         }
