@@ -7,17 +7,14 @@ using AgentShadowingService.Interface;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using KNPEnvironmentLayer;
-using LCConnector.Exceptions;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
-using TreeLayer;
 using TreeLayer.Agents;
-
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
-namespace KNPTreeLayer {
+namespace TreeLayer {
     [Extension(typeof (ISteppedLayer))]
     public class TreeLayer : ScsService, IKnpTreeLayer
     {
@@ -64,6 +61,7 @@ namespace KNPTreeLayer {
                 {
 
                     var clusterGroup = new Guid[4];
+                    #region ClusterGroup creation
                     // create interaction cluster group
                     if (i == 0)
                     {
@@ -124,7 +122,7 @@ namespace KNPTreeLayer {
                             clusterGroup[3] = config.RealAgentIds[i + 2];
                         }
                     }
-
+                    #endregion
 
                     var t = new Tree(4, 2, 10, i, 500,
                         GetRandomDouble(MinX, MaxX),
@@ -134,7 +132,7 @@ namespace KNPTreeLayer {
                         _elevationLayer,
                         clusterGroup
                     );
-
+                    agentBag.Add(t);
                     _localTreeMap.TryAdd(config.RealAgentIds[i], t);
                     registerAgentHandle(this, t);
                 });
