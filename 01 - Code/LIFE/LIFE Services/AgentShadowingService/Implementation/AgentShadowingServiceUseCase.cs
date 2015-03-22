@@ -95,9 +95,13 @@ namespace AgentShadowingService.Implementation
 
         public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds) {
             var result = new ConcurrentBag<TServiceInterface>();
-            Parallel.ForEach(agentIds, id => {
-                result.Add(CreateShadowAgent(id));
-            });
+            //Parallel.ForEach(agentIds, id => {
+            foreach (var id in agentIds)
+            {
+            result.Add(CreateShadowAgent(id));
+            }
+
+            //});
             return result.ToList();
         } 
 

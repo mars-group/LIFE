@@ -36,7 +36,7 @@ namespace TreeLayer {
             _agentsToRemoveInPostTick = new List<ITree>();
             _agentsToAddInPostTick = new List<ITree>();
             _agentShadowingService = new AgentShadowingServiceComponent<ITree, Tree>();
-            _agentShadowingService.AgentUpdates += OnAgentUpdates;
+            //_agentShadowingService.AgentUpdates += OnAgentUpdates;
         }
 
         private void OnAgentUpdates(object sender, LIFEAgentEventArgs<ITree> e) {
@@ -130,8 +130,11 @@ namespace TreeLayer {
                         _elevationLayer,
                         clusterGroup
                     );
+
                     agentBag.Add(t);
+
                     _localTreeMap.TryAdd(config.RealAgentIds[i], t);
+
                     registerAgentHandle(this, t);
                 });
 
@@ -146,9 +149,11 @@ namespace TreeLayer {
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
                     var shadowTrees = _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds).ToArray();
+                    
                     for (int i = 0; i < agentInitConfig.ShadowAgentsIds.Length; i++) {
                         _localTreeMap.TryAdd(agentInitConfig.ShadowAgentsIds[i], shadowTrees[i]);
                     }
+                     
                     Console.WriteLine("Finished: ShadowAgents created.");
                 }
 

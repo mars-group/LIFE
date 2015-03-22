@@ -211,10 +211,10 @@ namespace RuntimeEnvironment.Implementation {
                     // get initData by layerConfig and LayerContainers
                     var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients, modelConfig);
                     foreach (var layerContainerClient in layerContainerClients)
-                        {
-                            layerContainerClient.Instantiate(layerInstanceId);
-                            layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
-                        }
+                    {
+                        layerContainerClient.Instantiate(layerInstanceId);
+                        layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
+                    }
                 }
 
                 layerId++;

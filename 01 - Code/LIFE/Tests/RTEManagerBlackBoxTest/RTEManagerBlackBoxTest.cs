@@ -51,11 +51,7 @@ namespace RTEManagerBlackBoxTest
 
             Assert.DoesNotThrow(() => rteManager.RegisterLayer(layerId, mockLayer));
 
-            Assert.IsTrue(rteManager.GetLayers().Contains(mockLayer));
-
             Assert.DoesNotThrow(() => rteManager.UnregisterLayer(layerId));
-
-            Assert.IsFalse(rteManager.GetLayers().Contains(mockLayer));
         }
         
 

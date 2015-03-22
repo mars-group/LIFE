@@ -54,6 +54,7 @@ namespace TreeLayer.Agents {
         #region IAgent Members
 
         public void Tick() {
+            
             foreach (var agentId in _clusterGroup)
             {
                 ITree otherTree;
@@ -63,7 +64,7 @@ namespace TreeLayer.Agents {
                     var otherTreesHeight = otherTree.Height;
                 }
             }
-
+            
             // grow diameter
             Diameter = Diameter + GParK*(GmaxD - Diameter);
             // grow height

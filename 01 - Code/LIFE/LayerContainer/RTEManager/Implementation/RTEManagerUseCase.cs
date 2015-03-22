@@ -198,11 +198,6 @@ namespace RTEManager.Implementation {
             return stopWatch.ElapsedMilliseconds;
         }
 
-
-        internal ICollection<ILayer> GetLayers() {
-            return _layers.Values;
-        }
-
         #endregion
     }
 
