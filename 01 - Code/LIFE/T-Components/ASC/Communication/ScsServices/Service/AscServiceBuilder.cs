@@ -14,7 +14,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <returns></returns>
         public static IAscServiceApplication CreateService(int port, string multicastGroup)
         {
-            return new AscServiceApplication(ScsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, multicastGroup)));
+            return new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, multicastGroup)));
         }
     }
 }

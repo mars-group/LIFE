@@ -1,5 +1,4 @@
 ﻿using System;
-using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.ScsServices.Communication.Messages;
 
 namespace ASC.Communication.ScsServices.Service {
@@ -7,16 +6,6 @@ namespace ASC.Communication.ScsServices.Service {
     ///     Represents a SCS Service Application that is used to construct and manage a SCS service.
     /// </summary>
     public interface IAscServiceApplication {
-        /// <summary>
-        ///     This event is raised when a new client connected to the service.
-        /// </summary>
-        event EventHandler<ServiceClientEventArgs> ClientConnected;
-
-        /// <summary>
-        ///     This event is raised when a client disconnected from the service.
-        /// </summary>
-        event EventHandler<ServiceClientEventArgs> ClientDisconnected;
-
         /// <summary>
         ///     This event is raised when an AddShadowAgentMessage has been received
         /// </summary>
@@ -36,8 +25,6 @@ namespace ASC.Communication.ScsServices.Service {
         ///     Stops service application.
         /// </summary>
         void Stop();
-
-        void SendMessage(IAscMessage message);
 
         /// <summary>
         ///     Adds a service object to this service application.

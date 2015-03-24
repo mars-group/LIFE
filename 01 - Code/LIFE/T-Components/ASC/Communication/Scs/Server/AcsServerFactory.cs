@@ -4,7 +4,7 @@ namespace ASC.Communication.Scs.Server {
     /// <summary>
     ///     This class is used to create SCS servers.
     /// </summary>
-    public static class ScsServerFactory {
+    public static class AcsServerFactory {
         /// <summary>
         ///     Creates a new SCS Server using an EndPoint.
         /// </summary>

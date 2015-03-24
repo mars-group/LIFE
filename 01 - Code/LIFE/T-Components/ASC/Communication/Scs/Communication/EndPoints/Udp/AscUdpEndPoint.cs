@@ -8,7 +8,6 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
     public class AscUdpEndPoint : AscEndPoint {
         private readonly IAscServer _ascUdpServer;
         private readonly IScsClient _ascUdpClient;
-        private readonly UdpCommunicationChannel _udpChannel;
         public string McastGroup { get; private set; }
 
         public int UdpPort { get; set; }
@@ -16,9 +15,10 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Udp {
         public AscUdpEndPoint(int port, string mcastGroup) {
             McastGroup = mcastGroup;
             UdpPort = port;
-            _udpChannel = new UdpCommunicationChannel(this);
-            _ascUdpClient = new AscUdpClient(_udpChannel);
-            _ascUdpServer = new AscUdpServer(_udpChannel);
+            var udpChannel = new UdpCommunicationChannel(this);
+            udpChannel.Start();
+            _ascUdpClient = new AscUdpClient(udpChannel);
+            _ascUdpServer = new AscUdpServer(udpChannel);
         }
 
 

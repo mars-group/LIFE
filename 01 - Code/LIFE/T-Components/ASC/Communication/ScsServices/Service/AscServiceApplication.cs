@@ -9,6 +9,7 @@ using ASC.Communication.Scs.Communication.Messengers;
 using ASC.Communication.Scs.Server;
 using ASC.Communication.ScsServices.Communication.Messages;
 using CustomUtilities.Collections;
+using CustomUtilities.Threading;
 
 namespace ASC.Communication.ScsServices.Service {
     /// <summary>
@@ -16,16 +17,6 @@ namespace ASC.Communication.ScsServices.Service {
     /// </summary>
     internal class AscServiceApplication : IAscServiceApplication {
         #region Public events
-
-        /// <summary>
-        ///     This event is raised when a new client connected to the service.
-        /// </summary>
-        public event EventHandler<ServiceClientEventArgs> ClientConnected;
-
-        /// <summary>
-        ///     This event is raised when a client disconnected from the service.
-        /// </summary>
-        public event EventHandler<ServiceClientEventArgs> ClientDisconnected;
 
         public event EventHandler<AddShadowAgentEventArgs> AddShadowAgentMessageReceived;
 
@@ -48,13 +39,9 @@ namespace ASC.Communication.ScsServices.Service {
         /// </summary>
         private readonly ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>> _serviceObjects;
 
-        /// <summary>
-        ///     All connected clients to service.
-        ///     Key: Client's unique Id.
-        ///     Value: Reference to the client.
-        /// </summary>
-        private readonly ThreadSafeSortedList<long, IAscServiceClient> _serviceClients;
-
+        private readonly SequentialItemProcessor<IAscMessage> _incomingMessageProcessor;
+        private readonly IMessenger _messenger;
+        private object _lock;
         #endregion
 
         #region Constructors
@@ -67,13 +54,16 @@ namespace ASC.Communication.ScsServices.Service {
         public AscServiceApplication(IAscServer ascServer) {
             if (ascServer == null) throw new ArgumentNullException("ascServer");
 
+            _lock = new object();
+            _incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(ProcessRemoteInvokeMessage);
+            _incomingMessageProcessor.Start();
+
             _ascServer = ascServer;
-            _ascServer.GetMessenger().MessageReceived += SASControl_OnMessageReceived;
-            _ascServer.ClientConnected += AscServerClientConnected;
-            _ascServer.ClientDisconnected += AscServerClientDisconnected;
-            _ascServer.ClientDisconnected += CacheableServiceObject.CacheableObject_OnClientDisconnected;
+            _messenger = _ascServer.GetMessenger();
+           // _messenger.MessageReceived += SASControl_OnMessageReceived;
+            _messenger.MessageReceived += Client_MessageReceived;
+
             _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
-            _serviceClients = new ThreadSafeSortedList<long, IAscServiceClient>();
         }
 
         /// <summary>
@@ -114,10 +104,6 @@ namespace ASC.Communication.ScsServices.Service {
         /// </summary>
         public void Stop() {
             _ascServer.Stop();
-        }
-
-        public void SendMessage(IAscMessage message) {
-            _ascServer.GetMessenger().SendMessage(message);
         }
 
         /// <summary>
@@ -177,52 +163,15 @@ namespace ASC.Communication.ScsServices.Service {
 
         #region Private methods
 
-        /// <summary>
-        ///     Handles ClientConnected event of _ascServer object.
-        /// </summary>
-        /// <param name="sender">Source of event</param>
-        /// <param name="e">Event arguments</param>
-        private void AscServerClientConnected(object sender, ServerClientEventArgs e) {
-            var requestReplyMessenger = new RequestReplyMessenger<IAscServerClient>(e.Client);
-            requestReplyMessenger.MessageReceived += Client_MessageReceived;
-           
-            requestReplyMessenger.Start();
 
-            /*
-            var serviceClient = AscServiceClientFactory.CreateServiceClient(e.Client, requestReplyMessenger);
-            _serviceClients[serviceClient.ClientId] = serviceClient;
-            OnClientConnected(serviceClient);
-             * */
-        }
-
-        /// <summary>
-        ///     Handles ClientDisconnected event of _ascServer object.
-        /// </summary>
-        /// <param name="sender">Source of event</param>
-        /// <param name="e">Event arguments</param>
-        private void AscServerClientDisconnected(object sender, ServerClientEventArgs e) {
-            var serviceClient = _serviceClients[e.Client.ClientId];
-            if (serviceClient == null) return;
-
-            _serviceClients.Remove(e.Client.ClientId);
-            OnClientDisconnected(serviceClient);
-        }
-
-        /// <summary>
-        ///     Handles MessageReceived events of all clients, evaluates each message,
-        ///     finds appropriate service object and invokes appropriate method.
-        /// </summary>
-        /// <param name="sender">Source of event</param>
-        /// <param name="e">Event arguments</param>
-        private void Client_MessageReceived(object sender, MessageEventArgs e) {
-            //Get RequestReplyMessenger object (sender of event) to get client
-            var requestReplyMessenger = (RequestReplyMessenger<IAscServerClient>) sender;
-
+        private void ProcessRemoteInvokeMessage(IAscMessage msg) {
+            lock (_lock) { 
             //Cast message to AscRemoteInvokeMessage and check it
-            var invokeMessage = e.Message as AscRemoteInvokeMessage;
+            var invokeMessage = msg as AscRemoteInvokeMessage;
             if (invokeMessage == null) return;
 
-            try {
+            try
+            {
                 // check whether we are responsible for the real object
                 if (!_serviceObjects[invokeMessage.ServiceClassName].ContainsKey(invokeMessage.ServiceID))
                 {
@@ -230,12 +179,6 @@ namespace ASC.Communication.ScsServices.Service {
                     return;
                 }
 
-                //Get client object
-               /* var client = _serviceClients[requestReplyMessenger.Messenger.ClientId];
-                if (client == null) {
-                    requestReplyMessenger.Messenger.Disconnect();
-                    return;
-                }*/
 
                 //Get service object
                 ServiceObject serviceObject;
@@ -249,52 +192,68 @@ namespace ASC.Communication.ScsServices.Service {
                     serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
                 }
 
-                if (serviceObject == null) {
-                    SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
+                if (serviceObject == null)
+                {
+                    SendInvokeResponse(_messenger, invokeMessage, null,
                         new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
                     return;
                 }
 
                 //Invoke method
-                try {
+                try
+                {
                     // store RequestReplyMessenger in ServiceObject to publish changes in its properties
                     /*var cacheableServiceObject = serviceObject as CacheableServiceObject;
                     if (cacheableServiceObject != null)
                         cacheableServiceObject.AddClient(client.ClientId, requestReplyMessenger.Messenger);
                     */
                     object returnValue;
-                    //Set client to service, so user service can get client
-                    //in service method using CurrentClient property.
-                    //serviceObject.Service.CurrentClient = client;
-                    try {
+
+                    try
+                    {
                         returnValue = serviceObject.InvokeMethod(invokeMessage.MethodName, invokeMessage.Parameters);
                     }
-                    finally {
+                    finally
+                    {
                         //Set CurrentClient as null since method call completed
-                        serviceObject.Service.CurrentClient = null;
+                        //serviceObject.Service.CurrentClient = null;
                     }
-
+                    Console.WriteLine("Return value found : " + returnValue);
                     //Send method invocation return value to the client
-                    SendInvokeResponse(requestReplyMessenger, invokeMessage, returnValue, null);
+                    SendInvokeResponse(_messenger, invokeMessage, returnValue, null);
                 }
-                catch (TargetInvocationException ex) {
+                catch (TargetInvocationException ex)
+                {
                     var innerEx = ex.InnerException;
-                    SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
+                    SendInvokeResponse(_messenger, invokeMessage, null,
                         new ScsRemoteException(
                             innerEx.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, innerEx));
                 }
-                catch (Exception ex) {
-                    SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
+                catch (Exception ex)
+                {
+                    SendInvokeResponse(_messenger, invokeMessage, null,
                         new ScsRemoteException(
                             ex.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, ex));
                 }
             }
-            catch (Exception ex) {
-                SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
+            catch (Exception ex)
+            {
+                SendInvokeResponse(_messenger, invokeMessage, null,
                     new ScsRemoteException("An error occured during remote service method call.", ex));
             }
+            }
+        }
+
+        /// <summary>
+        ///     Handles MessageReceived events of all clients, evaluates each message,
+        ///     finds appropriate service object and invokes appropriate method.
+        /// </summary>
+        /// <param name="sender">Source of event</param>
+        /// <param name="e">Event arguments</param>
+        private void Client_MessageReceived(object sender, MessageEventArgs e) {
+            _incomingMessageProcessor.EnqueueMessage(e.Message);
         }
 
 
@@ -315,24 +274,6 @@ namespace ASC.Communication.ScsServices.Service {
                     RemoteException = exception,
                     ServiceID = requestMessage.ServiceID
                 });
-        }
-
-        /// <summary>
-        ///     Raises ClientConnected event.
-        /// </summary>
-        /// <param name="client"></param>
-        private void OnClientConnected(IAscServiceClient client) {
-            var handler = ClientConnected;
-            if (handler != null) handler(this, new ServiceClientEventArgs(client));
-        }
-
-        /// <summary>
-        ///     Raises ClientDisconnected event.
-        /// </summary>
-        /// <param name="client"></param>
-        private void OnClientDisconnected(IAscServiceClient client) {
-            var handler = ClientDisconnected;
-            if (handler != null) handler(this, new ServiceClientEventArgs(client));
         }
 
         #endregion

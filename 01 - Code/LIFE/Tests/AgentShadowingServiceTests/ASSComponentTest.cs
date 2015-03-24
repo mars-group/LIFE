@@ -24,7 +24,7 @@ namespace AgentShadowingServiceTests
         public void TestCommunication() {
             // create and register RealAgents in serviceA
             var agentsA = new List<MockAgent>();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 2; i++) {
                 agentsA.Add(new MockAgent());
             }
 

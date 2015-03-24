@@ -10,6 +10,7 @@ namespace ASC.Communication.Scs.Server.Udp
 
         public AscUdpServer(ICommunicationChannel udpChannel) {
             _udpChannel = udpChannel;
+            _udpChannel.WireProtocol = WireProtocolFactory.CreateWireProtocol();
         }
 
         public override IMessenger GetMessenger() {

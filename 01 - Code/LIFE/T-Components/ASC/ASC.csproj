@@ -108,8 +108,7 @@
     <Compile Include="Communication\Scs\Server\IAscServer.cs" />
     <Compile Include="Communication\Scs\Server\IAscServerClient.cs" />
     <Compile Include="Communication\Scs\Server\AscServerBase.cs" />
-    <Compile Include="Communication\Scs\Server\AscServerClient.cs" />
-    <Compile Include="Communication\Scs\Server\ScsServerFactory.cs" />
+    <Compile Include="Communication\Scs\Server\AcsServerFactory.cs" />
     <Compile Include="Communication\Scs\Server\ScsServerManager.cs" />
     <Compile Include="Communication\Scs\Server\ServerClientEventArgs.cs" />
     <Compile Include="Communication\Scs\Server\Tcp\AscTcpServer.cs" />

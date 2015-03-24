@@ -10,16 +10,6 @@ namespace ASC.Communication.Scs.Server {
     ///     Represents a SCS server that is used to accept and manage client connections.
     /// </summary>
     public interface IAscServer {
-        /// <summary>
-        ///     This event is raised when a new client connected to the server.
-        /// </summary>
-        event EventHandler<ServerClientEventArgs> ClientConnected;
-
-
-        /// <summary>
-        ///     This event is raised when a client disconnected from the server.
-        /// </summary>
-        event EventHandler<ServerClientEventArgs> ClientDisconnected;
 
         /// <summary>
         ///     Gets/sets wire protocol factory to create IWireProtocol objects.
@@ -27,11 +17,6 @@ namespace ASC.Communication.Scs.Server {
         IScsWireProtocolFactory WireProtocolFactory { get; set; }
 
         IMessenger GetMessenger();
-
-        /// <summary>
-        ///     A collection of clients that are connected to the server.
-        /// </summary>
-        ThreadSafeSortedList<long, IAscServerClient> Clients { get; }
 
         /// <summary>
         ///     Starts the server.
