@@ -148,7 +148,10 @@ namespace ASC.Communication.Scs.Communication.Channels {
         /// <param name="message">Received message</param>
         protected virtual void OnMessageSent(IAscMessage message) {
             var handler = MessageSent;
-            if (handler != null) handler(this, new MessageEventArgs(message));
+
+            if (handler != null) {
+                handler(this, new MessageEventArgs(message));
+            }
         }
 
         #endregion

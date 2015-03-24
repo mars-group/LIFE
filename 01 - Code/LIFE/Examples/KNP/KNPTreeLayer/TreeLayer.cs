@@ -59,6 +59,7 @@ namespace TreeLayer {
                 {
 
                     var clusterGroup = new Guid[4];
+
                     #region ClusterGroup creation
                     // create interaction cluster group
                     if (i == 0)

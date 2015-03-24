@@ -81,7 +81,7 @@ namespace ASC.Communication.ScsServices.Communication {
             var message = msg as IMethodCallMessage;
             if (message == null) return null;
 
-            // TODO Extend to support additional parameter for target agent. Was soll das ???
+            // TODO Extend to support additional parameter for target agent. <<--- Was soll das ???
 
             // Answer request from cache if available
             if (_cache.ContainsKey(message.MethodName)) {

@@ -185,12 +185,14 @@ namespace ASC.Communication.ScsServices.Service {
         private void AscServerClientConnected(object sender, ServerClientEventArgs e) {
             var requestReplyMessenger = new RequestReplyMessenger<IAscServerClient>(e.Client);
             requestReplyMessenger.MessageReceived += Client_MessageReceived;
+           
             requestReplyMessenger.Start();
 
-
+            /*
             var serviceClient = AscServiceClientFactory.CreateServiceClient(e.Client, requestReplyMessenger);
             _serviceClients[serviceClient.ClientId] = serviceClient;
             OnClientConnected(serviceClient);
+             * */
         }
 
         /// <summary>
@@ -227,12 +229,13 @@ namespace ASC.Communication.ScsServices.Service {
                     // we are not. So simply return. This is not an error condition, since the ServiceID field was set.
                     return;
                 }
+
                 //Get client object
-                var client = _serviceClients[requestReplyMessenger.Messenger.ClientId];
+               /* var client = _serviceClients[requestReplyMessenger.Messenger.ClientId];
                 if (client == null) {
                     requestReplyMessenger.Messenger.Disconnect();
                     return;
-                }
+                }*/
 
                 //Get service object
                 ServiceObject serviceObject;
@@ -255,14 +258,14 @@ namespace ASC.Communication.ScsServices.Service {
                 //Invoke method
                 try {
                     // store RequestReplyMessenger in ServiceObject to publish changes in its properties
-                    var cacheableServiceObject = serviceObject as CacheableServiceObject;
+                    /*var cacheableServiceObject = serviceObject as CacheableServiceObject;
                     if (cacheableServiceObject != null)
                         cacheableServiceObject.AddClient(client.ClientId, requestReplyMessenger.Messenger);
-
+                    */
                     object returnValue;
                     //Set client to service, so user service can get client
                     //in service method using CurrentClient property.
-                    serviceObject.Service.CurrentClient = client;
+                    //serviceObject.Service.CurrentClient = client;
                     try {
                         returnValue = serviceObject.InvokeMethod(invokeMessage.MethodName, invokeMessage.Parameters);
                     }

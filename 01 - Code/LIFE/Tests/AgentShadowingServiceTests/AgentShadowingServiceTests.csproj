@@ -1,21 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{528AB6AF-7217-4603-BC96-4893D9FD9C65}</ProjectGuid>
+    <ProjectGuid>{3FB2FD1D-9A3F-461B-8F24-01C14EC0E48D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayerContainerComponentTests</RootNamespace>
-    <AssemblyName>LayerContainerComponentTests</AssemblyName>
+    <RootNamespace>AgentShadowingServiceTests</RootNamespace>
+    <AssemblyName>AgentShadowingServiceTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,7 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,18 +42,26 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASSComponentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIFE Services\AgentShadowingService\AgentShadowingService.csproj">
+      <Project>{17064DB2-8976-439F-A697-AD8ACDB975CC}</Project>
+      <Name>AgentShadowingService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\ASC\ASC.csproj">
+      <Project>{6BEC24D9-FD97-4D66-BCFF-8671343B798E}</Project>
+      <Name>ASC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -70,40 +78,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
-      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
-      <Name>ConfigurationAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj">
-      <Project>{C07BBB5F-A159-41AD-933D-6B1F10913ED7}</Project>
-      <Name>NodeRegistry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LayerContainer\LayerRegistry\LayerRegistry.csproj">
-      <Project>{ED325614-0B70-4C46-8282-C4DA02A974AC}</Project>
-      <Name>LayerRegistry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
-      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LifeAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj">
-      <Project>{20A316C2-8779-474D-98FB-A13DAC9043AB}</Project>
-      <Name>MulticastAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj">
-      <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
-      <Name>Scs</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LayerContainerBlackBoxTest\" />
-    <Folder Include="MockComponents\" />
-  </ItemGroup>
 </Project>

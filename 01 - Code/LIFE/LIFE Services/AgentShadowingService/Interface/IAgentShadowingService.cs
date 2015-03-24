@@ -10,7 +10,7 @@ namespace AgentShadowingService.Interface
 
         event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
-            /// <summary> 
+        /// <summary> 
         /// Create a ShadowAgent for a real agent with id <param name="agentId"/> and Type T.
         /// </summary>
         /// <typeparam name="T"></typeparam>

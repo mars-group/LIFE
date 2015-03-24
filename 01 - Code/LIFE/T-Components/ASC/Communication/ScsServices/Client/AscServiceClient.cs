@@ -9,7 +9,7 @@ using ASC.Communication.ScsServices.Communication.Messages;
 
 namespace ASC.Communication.ScsServices.Client {
     /// <summary>
-    ///     Represents a service client that consumes a SCS service.
+    ///     Represents a service client that consumes a ACS service.
     /// </summary>
     /// <typeparam name="T">Type of service interface</typeparam>
     internal class AscServiceClient<T> : IAscServiceClient<T> where T : class {
@@ -108,24 +108,9 @@ namespace ASC.Communication.ScsServices.Client {
 
             _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
             _requestReplyMessenger.Start();
-            _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
+            //_requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
             _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this, serviceID);
-            ServiceProxy = (T) _realServiceProxy.GetTransparentProxy();
-        }
-
-        public AscServiceClient(IScsClient client, object clientObject) {
-            _client = client;
-            _clientObject = clientObject;
-
-            _client.Connected += Client_Connected;
-            _client.Disconnected += Client_Disconnected;
-
-            _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
-            // not necessary at the moment
-            _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
-
-            _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this);
             ServiceProxy = (T) _realServiceProxy.GetTransparentProxy();
         }
 
@@ -158,64 +143,6 @@ namespace ASC.Communication.ScsServices.Client {
         #endregion
 
         #region Private methods
-
-        /// <summary>
-        ///     Handles MessageReceived event of messenger.
-        ///     It gets messages from server and invokes appropriate method.
-        /// </summary>
-        /// <param name="sender">Source of event</param>
-        /// <param name="e">Event arguments</param>
-        private void RequestReplyMessenger_MessageReceived(object sender, MessageEventArgs e) {
-            //Cast message to AscRemoteInvokeMessage and check it
-            var invokeMessage = e.Message as AscRemoteInvokeMessage;
-            if (invokeMessage == null) return;
-
-            //Check client object.
-            if (_clientObject == null) {
-                // just don't do a thing here for now, since we don't intend to call methods on the client from the server
-                //SendInvokeResponse(invokeMessage, null,
-                //    new ScsRemoteException("Client does not wait for method invocations by server."));
-                return;
-            }
-
-            //Invoke method
-            object returnValue;
-            try {
-                var type = _clientObject.GetType();
-                var method = type.GetMethod(invokeMessage.MethodName);
-                returnValue = method.Invoke(_clientObject, invokeMessage.Parameters);
-            }
-            catch (TargetInvocationException ex) {
-                var innerEx = ex.InnerException;
-                SendInvokeResponse(invokeMessage, null, new ScsRemoteException(innerEx.Message, innerEx));
-                return;
-            }
-            catch (Exception ex) {
-                SendInvokeResponse(invokeMessage, null, new ScsRemoteException(ex.Message, ex));
-                return;
-            }
-
-            //Send return value
-            SendInvokeResponse(invokeMessage, returnValue, null);
-        }
-
-        /// <summary>
-        ///     Sends response to the remote application that invoked a service method.
-        /// </summary>
-        /// <param name="requestMessage">Request message</param>
-        /// <param name="returnValue">Return value to send</param>
-        /// <param name="exception">Exception to send</param>
-        private void SendInvokeResponse(IAscMessage requestMessage, object returnValue, ScsRemoteException exception) {
-            try {
-                _requestReplyMessenger.SendMessage(
-                    new AscRemoteInvokeReturnMessage {
-                        RepliedMessageId = requestMessage.MessageId,
-                        ReturnValue = returnValue,
-                        RemoteException = exception
-                    });
-            }
-            catch {}
-        }
 
         /// <summary>
         ///     Handles Connected event of _client object.
