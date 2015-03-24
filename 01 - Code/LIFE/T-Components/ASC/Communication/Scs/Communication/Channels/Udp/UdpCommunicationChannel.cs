@@ -122,17 +122,18 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         {
             //Send message
 
-            lock (_syncLock)
-            {
-                //Create a byte array from message according to current protocol
-                var memoryStream = new MemoryStream();
+
+            //Create a byte array from message according to current protocol
+            var memoryStream = new MemoryStream();
                 
-                _binaryFormatter.Serialize(memoryStream, message);
+            new BinaryFormatter().Serialize(memoryStream, message);
                  
                 
-                var messageBytes = memoryStream.ToArray();
-                var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpPort);
+            var messageBytes = memoryStream.ToArray();
+            var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpPort);
 
+            lock (_syncLock)
+                {
                 //Send all bytes to the remote application asynchronously
                 _udpSendingClients.ForEach(client =>
                 {
