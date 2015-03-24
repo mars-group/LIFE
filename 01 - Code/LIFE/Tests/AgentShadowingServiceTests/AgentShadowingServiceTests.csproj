@@ -59,6 +59,10 @@
       <Project>{6BEC24D9-FD97-4D66-BCFF-8671343B798E}</Project>
       <Name>ASC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\CustomUtilities\CustomUtilities.csproj">
+      <Project>{6CD55EF4-32F2-4E99-8973-1625D6726344}</Project>
+      <Name>CustomUtilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

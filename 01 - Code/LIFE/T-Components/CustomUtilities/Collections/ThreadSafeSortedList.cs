@@ -9,6 +9,19 @@ namespace CustomUtilities.Collections {
     /// <typeparam name="TK">Key type</typeparam>
     /// <typeparam name="TV">Value type</typeparam>
     public class ThreadSafeSortedList<TK, TV> {
+
+
+
+        /// <summary>
+        ///     Internal collection to store items.
+        /// </summary>
+        protected readonly SortedList<TK, TV> _items;
+
+        /// <summary>
+        ///     Used to synchronize access to _items list.
+        /// </summary>
+        protected readonly ReaderWriterLockSlim _lock;
+
         /// <summary>
         ///     Gets/adds/replaces an item by key.
         /// </summary>
@@ -51,15 +64,6 @@ namespace CustomUtilities.Collections {
             }
         }
 
-        /// <summary>
-        ///     Internal collection to store items.
-        /// </summary>
-        protected readonly SortedList<TK, TV> _items;
-
-        /// <summary>
-        ///     Used to synchronize access to _items list.
-        /// </summary>
-        protected readonly ReaderWriterLockSlim _lock;
 
         /// <summary>
         ///     Creates a new ThreadSafeSortedList object.
@@ -129,6 +133,19 @@ namespace CustomUtilities.Collections {
                 _lock.ExitReadLock();
             }
         }
+
+        public List<TK> GetAllKeys()
+        {
+            _lock.EnterReadLock();
+            try
+            {
+                return new List<TK>(_items.Keys);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        } 
 
         /// <summary>
         ///     Removes all items from list.

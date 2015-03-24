@@ -61,7 +61,8 @@ namespace ASC.Communication.ScsServices.Service {
             _ascServer = ascServer;
             _messenger = _ascServer.GetMessenger();
            // _messenger.MessageReceived += SASControl_OnMessageReceived;
-            _messenger.MessageReceived += Client_MessageReceived;
+            //_messenger.MessageReceived += Client_MessageReceived;
+            _messenger.MessageReceived += Msg_Received;
 
             _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
         }
@@ -165,7 +166,7 @@ namespace ASC.Communication.ScsServices.Service {
 
 
         private void ProcessRemoteInvokeMessage(IAscMessage msg) {
-            lock (_lock) { 
+ 
             //Cast message to AscRemoteInvokeMessage and check it
             var invokeMessage = msg as AscRemoteInvokeMessage;
             if (invokeMessage == null) return;
@@ -177,8 +178,8 @@ namespace ASC.Communication.ScsServices.Service {
                 {
                     // we are not. So simply return. This is not an error condition, since the ServiceID field was set.
                     return;
-                }
 
+                }
 
                 //Get service object
                 ServiceObject serviceObject;
@@ -212,13 +213,14 @@ namespace ASC.Communication.ScsServices.Service {
                     try
                     {
                         returnValue = serviceObject.InvokeMethod(invokeMessage.MethodName, invokeMessage.Parameters);
+
                     }
                     finally
                     {
                         //Set CurrentClient as null since method call completed
                         //serviceObject.Service.CurrentClient = null;
                     }
-                    Console.WriteLine("Return value found : " + returnValue);
+
                     //Send method invocation return value to the client
                     SendInvokeResponse(_messenger, invokeMessage, returnValue, null);
                 }
@@ -243,7 +245,7 @@ namespace ASC.Communication.ScsServices.Service {
                 SendInvokeResponse(_messenger, invokeMessage, null,
                     new ScsRemoteException("An error occured during remote service method call.", ex));
             }
-            }
+            
         }
 
         /// <summary>
@@ -254,6 +256,89 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="e">Event arguments</param>
         private void Client_MessageReceived(object sender, MessageEventArgs e) {
             _incomingMessageProcessor.EnqueueMessage(e.Message);
+        }
+
+        private void Msg_Received(object sender, MessageEventArgs e)
+        {
+
+            //Cast message to AscRemoteInvokeMessage and check it
+            var invokeMessage = e.Message as AscRemoteInvokeMessage;
+            if (invokeMessage == null) return;
+
+            try
+            {
+                // check whether we are responsible for the real object
+                if (!_serviceObjects[invokeMessage.ServiceClassName].ContainsKey(invokeMessage.ServiceID))
+                {
+                    // we are not. So simply return. This is not an error condition, since the ServiceID field was set.
+                    return;
+
+                }
+
+                //Get service object
+                ServiceObject serviceObject;
+                if (invokeMessage.ServiceID.Equals(Guid.Empty))
+                {
+                    // we are not looking for a specific implementation, but just for any, so use first found
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].GetAllItems().First();
+                }
+                else
+                {
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
+                }
+
+                if (serviceObject == null)
+                {
+                    SendInvokeResponse(_messenger, invokeMessage, null,
+                        new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
+                    return;
+                }
+
+                //Invoke method
+                try
+                {
+                    // store RequestReplyMessenger in ServiceObject to publish changes in its properties
+                    /*var cacheableServiceObject = serviceObject as CacheableServiceObject;
+                    if (cacheableServiceObject != null)
+                        cacheableServiceObject.AddClient(client.ClientId, requestReplyMessenger.Messenger);
+                    */
+                    object returnValue;
+
+                    try
+                    {
+                        returnValue = serviceObject.InvokeMethod(invokeMessage.MethodName, invokeMessage.Parameters);
+
+                    }
+                    finally
+                    {
+                        //Set CurrentClient as null since method call completed
+                        //serviceObject.Service.CurrentClient = null;
+                    }
+
+                    //Send method invocation return value to the client
+                    SendInvokeResponse(_messenger, invokeMessage, returnValue, null);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    var innerEx = ex.InnerException;
+                    SendInvokeResponse(_messenger, invokeMessage, null,
+                        new ScsRemoteException(
+                            innerEx.Message + Environment.NewLine + "Service Version: " +
+                            serviceObject.ServiceAttribute.Version, innerEx));
+                }
+                catch (Exception ex)
+                {
+                    SendInvokeResponse(_messenger, invokeMessage, null,
+                        new ScsRemoteException(
+                            ex.Message + Environment.NewLine + "Service Version: " +
+                            serviceObject.ServiceAttribute.Version, ex));
+                }
+            }
+            catch (Exception ex)
+            {
+                SendInvokeResponse(_messenger, invokeMessage, null,
+                    new ScsRemoteException("An error occured during remote service method call.", ex));
+            }
         }
 
 

@@ -93,17 +93,10 @@ namespace AgentShadowingService.Implementation
             return shadowAgentClient.ServiceProxy;
         }
 
-        public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds) {
-            var result = new ConcurrentBag<TServiceInterface>();
-            //Parallel.ForEach(agentIds, id => {
-            foreach (var id in agentIds)
-            {
-            result.Add(CreateShadowAgent(id));
-            }
-
-            //});
-            return result.ToList();
-        } 
+        public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds)
+        {
+            return agentIds.Select(CreateShadowAgent).ToList();
+        }
 
         public void RemoveShadowAgent(Guid agentId) {
             _shadowAgentClients[agentId].Disconnect();
@@ -118,7 +111,10 @@ namespace AgentShadowingService.Implementation
         }
 
         public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
-            Parallel.ForEach(agentsToRegister, RegisterRealAgent);
+            foreach (var agent in agentsToRegister)
+            {
+                RegisterRealAgent(agent);
+            }
         }
 
         public void RemoveRealAgent(TServiceClass agentToRemove) {

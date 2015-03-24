@@ -4,6 +4,7 @@ using System.Linq;
 using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
+using CustomUtilities.Collections;
 using NUnit.Framework;
 
 namespace AgentShadowingServiceTests
@@ -24,7 +25,7 @@ namespace AgentShadowingServiceTests
         public void TestCommunication() {
             // create and register RealAgents in serviceA
             var agentsA = new List<MockAgent>();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 200; i++) {
                 agentsA.Add(new MockAgent());
             }
 
@@ -33,7 +34,7 @@ namespace AgentShadowingServiceTests
 
             // create and register RealAgents in serviceB
             var agentsB = new List<MockAgent>();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 200; i++) {
                 agentsB.Add(new MockAgent());
             }
 
@@ -41,10 +42,11 @@ namespace AgentShadowingServiceTests
             _serviceB.RegisterRealAgents(agentsB.ToArray());
 
             // create Shadowagents
-            var shadowsOfB = _serviceA.CreateShadowAgents(agentsB.Select(a => a.ID).ToArray());
-            var shadowsOfA = _serviceB.CreateShadowAgents(agentsA.Select(a => a.ID).ToArray());
+            List<IMockAgent> shadows = new List<IMockAgent>();
+            shadows.AddRange(_serviceA.CreateShadowAgents(agentsB.Select(a => a.ID).ToArray()));
+            shadows.AddRange(_serviceB.CreateShadowAgents(agentsA.Select(a => a.ID).ToArray()));
 
-            foreach (var mockAgent in shadowsOfA) {
+            foreach (var mockAgent in shadows) {
                 mockAgent.DoCrazyShit();
             }
             //shadowsOfA.ToArray()[0].DoCrazyShit();

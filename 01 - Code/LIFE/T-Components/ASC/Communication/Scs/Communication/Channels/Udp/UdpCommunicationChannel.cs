@@ -146,7 +146,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                 });
                 // store last time a message was sent
                 LastSentMessageTime = DateTime.Now;
-                Console.WriteLine("Send message: " + message.MessageId);
                 OnMessageSent(message);
             }
         }
@@ -262,7 +261,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                         stream.Dispose();
                     }
                     // inform all listeners about the new message
-                    Console.WriteLine("Received message: " + msg.MessageId);
                     OnMessageReceived(msg);
                 }
                 else throw new CommunicationException("Udp socket is closed");
