@@ -93,20 +93,20 @@ namespace ASC.Communication.ScsServices.Client {
         /// <summary>
         ///     Creates a new AscServiceClient object.
         /// </summary>
-        /// <param name="client">Underlying IScsClient object to communicate with server</param>
+        /// <param name="requestReplyMessenger">Underlying IScsClient object to communicate with server</param>
         /// <param name="clientObject">
         ///     The client object that is used to call method invokes in client side.
         ///     May be null if client has no methods to be invoked by server.
         /// </param>
         /// <param name="serviceID"></param>
-        public AscServiceClient(IScsClient client, object clientObject, Guid serviceID) {
-            _client = client;
+        public AscServiceClient(RequestReplyMessenger<IScsClient> requestReplyMessenger, object clientObject, Guid serviceID) {
+            _client = requestReplyMessenger.Messenger;
             _clientObject = clientObject;
 
             _client.Connected += Client_Connected;
             _client.Disconnected += Client_Disconnected;
 
-            _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
+            _requestReplyMessenger = requestReplyMessenger;
             _requestReplyMessenger.Start();
             //_requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 

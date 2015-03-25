@@ -69,7 +69,7 @@ namespace CustomUtilities.Threading {
 
                 _queue.Enqueue(item);
 
-                if (!_isProcessing) _currentProcessTask = Task.Factory.StartNew(ProcessItem);
+                if (!_isProcessing) _currentProcessTask = Task.Run(new Action(ProcessItem));
             }
         }
 
@@ -130,7 +130,7 @@ namespace CustomUtilities.Threading {
                 if (!_isRunning || _queue.Count <= 0) return;
 
                 //Start a new task
-                _currentProcessTask = Task.Factory.StartNew(ProcessItem);
+                _currentProcessTask = Task.Run(new Action(ProcessItem));
             }
         }
 

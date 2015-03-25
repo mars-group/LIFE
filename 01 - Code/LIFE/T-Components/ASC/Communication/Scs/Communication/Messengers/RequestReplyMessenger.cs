@@ -104,7 +104,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             Messenger = messenger;
             messenger.MessageReceived += Messenger_MessageReceived;
             messenger.MessageSent += Messenger_MessageSent;
-            _incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(OnMessageReceived);
+            //_incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(OnMessageReceived);
             _waitingMessages = new SortedList<string, WaitingMessage>();
             Timeout = DefaultTimeout;
         }
@@ -117,7 +117,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Starts the messenger.
         /// </summary>
         public virtual void Start() {
-            _incomingMessageProcessor.Start();
+            //_incomingMessageProcessor.Start();
         }
 
         /// <summary>
@@ -205,8 +205,6 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 switch (waitingMessage.State) {
                     case WaitingMessageStates.WaitingForResponse:
                         throw new TimeoutException("Timeout occured. Can not receive response.");
-                        // ReSend Message
-                        //SendMessageAndWaitForResponse(message, timeoutMilliseconds);
                         break;
                     case WaitingMessageStates.Cancelled:
                         throw new CommunicationException("Disconnected before response received.");
@@ -251,7 +249,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             }
 
             // raise OnMessageReceived Event via multi-threaded MessageProcessor
-            _incomingMessageProcessor.EnqueueMessage(e.Message);
+            //_incomingMessageProcessor.EnqueueMessage(e.Message);
         }
 
         /// <summary>

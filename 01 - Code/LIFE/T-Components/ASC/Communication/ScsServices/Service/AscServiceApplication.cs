@@ -41,7 +41,7 @@ namespace ASC.Communication.ScsServices.Service {
 
         private readonly SequentialItemProcessor<IAscMessage> _incomingMessageProcessor;
         private readonly IMessenger _messenger;
-        private object _lock;
+
         #endregion
 
         #region Constructors
@@ -54,9 +54,8 @@ namespace ASC.Communication.ScsServices.Service {
         public AscServiceApplication(IAscServer ascServer) {
             if (ascServer == null) throw new ArgumentNullException("ascServer");
 
-            _lock = new object();
-            _incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(ProcessRemoteInvokeMessage);
-            _incomingMessageProcessor.Start();
+            //_incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(ProcessRemoteInvokeMessage);
+            //_incomingMessageProcessor.Start();
 
             _ascServer = ascServer;
             _messenger = _ascServer.GetMessenger();
@@ -67,27 +66,7 @@ namespace ASC.Communication.ScsServices.Service {
             _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
         }
 
-        /// <summary>
-        /// Casts received messages, and fires corresponding events if messages
-        /// SAS control messages
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SASControl_OnMessageReceived(object sender, MessageEventArgs e) {
-            var addShadowAgentMessage = e.Message as AddShadowAgentMessage;
-            if (addShadowAgentMessage != null) {
-                var handler = AddShadowAgentMessageReceived;
-                if (handler != null) handler(this, new AddShadowAgentEventArgs(addShadowAgentMessage));
-            }
 
-
-            var removeShadowAgentMessage = e.Message as RemoveShadowAgentMessage;
-            if (removeShadowAgentMessage != null) {
-                var handler = RemoveShadowAgentMessageReceived;
-                if (handler != null) handler(this, new RemoveShadowAgentEventArgs(removeShadowAgentMessage));
-            }
-
-        }
 
         #endregion
 
@@ -164,6 +143,30 @@ namespace ASC.Communication.ScsServices.Service {
 
         #region Private methods
 
+        /// <summary>
+        /// Casts received messages, and fires corresponding events if messages
+        /// SAS control messages
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SASControl_OnMessageReceived(object sender, MessageEventArgs e)
+        {
+            var addShadowAgentMessage = e.Message as AddShadowAgentMessage;
+            if (addShadowAgentMessage != null)
+            {
+                var handler = AddShadowAgentMessageReceived;
+                if (handler != null) handler(this, new AddShadowAgentEventArgs(addShadowAgentMessage));
+            }
+
+
+            var removeShadowAgentMessage = e.Message as RemoveShadowAgentMessage;
+            if (removeShadowAgentMessage != null)
+            {
+                var handler = RemoveShadowAgentMessageReceived;
+                if (handler != null) handler(this, new RemoveShadowAgentEventArgs(removeShadowAgentMessage));
+            }
+
+        }
 
         private void ProcessRemoteInvokeMessage(IAscMessage msg) {
  

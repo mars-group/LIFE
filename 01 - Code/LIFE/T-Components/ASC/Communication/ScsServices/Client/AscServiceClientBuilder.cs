@@ -1,5 +1,7 @@
 ﻿using System;
+using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Communication.EndPoints;
+using ASC.Communication.Scs.Communication.Messengers;
 
 namespace ASC.Communication.ScsServices.Client {
     /// <summary>
@@ -19,7 +21,7 @@ namespace ASC.Communication.ScsServices.Client {
         /// <returns>Created client object to connect to the server</returns>
         private static IAscServiceClient<T> CreateClient<T>(AscEndPoint endpoint, Guid serviceID,
             object clientObject = null) where T : class {
-            return new AscServiceClient<T>(endpoint.CreateClient(), clientObject, serviceID);
+            return new AscServiceClient<T>(new RequestReplyMessenger<IScsClient>(endpoint.CreateClient()), clientObject, serviceID);
         }
 
         /// <summary>

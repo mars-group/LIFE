@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
@@ -25,7 +26,7 @@ namespace AgentShadowingServiceTests
         public void TestCommunication() {
             // create and register RealAgents in serviceA
             var agentsA = new List<MockAgent>();
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 200; i++) {
                 agentsA.Add(new MockAgent());
             }
 
@@ -34,7 +35,7 @@ namespace AgentShadowingServiceTests
 
             // create and register RealAgents in serviceB
             var agentsB = new List<MockAgent>();
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 200; i++) {
                 agentsB.Add(new MockAgent());
             }
 
@@ -45,10 +46,12 @@ namespace AgentShadowingServiceTests
             List<IMockAgent> shadows = new List<IMockAgent>();
             shadows.AddRange(_serviceA.CreateShadowAgents(agentsB.Select(a => a.ID).ToArray()));
             shadows.AddRange(_serviceB.CreateShadowAgents(agentsA.Select(a => a.ID).ToArray()));
-
+            var sw = Stopwatch.StartNew();
             foreach (var mockAgent in shadows) {
                 mockAgent.DoCrazyShit();
             }
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
             //shadowsOfA.ToArray()[0].DoCrazyShit();
             //Assert.Contains(shadowsOfA.ToArray()[0].DoCrazyShit(), agentsA.Select(a => a.ID).ToArray());
             //Assert.AreEqual(agentsA.ToArray()[0].ID, shadowsOfA.ToArray()[0].DoCrazyShit());

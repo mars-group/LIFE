@@ -37,8 +37,8 @@ namespace ASC.Communication.ScsServices.Communication {
             _clientMessenger = clientMessenger;
             // subscribe for new PropertyChangedMessages. Will work since
             // SendAndWaitForReply() does not raise MessageReceived Event
-            _clientMessenger.MessageReceived += ClientMessengerOnMessageReceived;
-
+            //_clientMessenger.MessageReceived += ClientMessengerOnMessageReceived;
+            
             _cache = new Dictionary<string, object>();
 
             _typeOfTProxy = typeof (TProxy);
@@ -87,7 +87,6 @@ namespace ASC.Communication.ScsServices.Communication {
             if (_cache.ContainsKey(message.MethodName)) {
                 return new ReturnMessage(_cache[message.MethodName], null, 0, message.LogicalCallContext, message);
             }
-
 
             var requestMessage = new AscRemoteInvokeMessage {
                 ServiceClassName = _typeOfTProxy.Name,
