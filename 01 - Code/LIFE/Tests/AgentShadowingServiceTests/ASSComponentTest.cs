@@ -18,8 +18,8 @@ namespace AgentShadowingServiceTests
 
         [SetUp]
         public void SetupTest() {
-            _serviceA = new AgentShadowingServiceComponent<IMockAgent, MockAgent>(6666);
-            _serviceB = new AgentShadowingServiceComponent<IMockAgent, MockAgent>(6666);
+            _serviceA = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
+            _serviceB = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
         }
 
         [Test]
@@ -69,13 +69,13 @@ namespace AgentShadowingServiceTests
 
         public Guid ID { get; set; }
 
-        public Guid DoCrazyShit() {
-            return ID;
+        public int DoCrazyShit() {
+            return 42;
         }
     }
 
     [AscService(Version = "0.1")]
     internal interface IMockAgent {
-        Guid DoCrazyShit();
+        int DoCrazyShit();
     }
 }

@@ -262,11 +262,11 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                     // deserialize
                     IAscMessage msg;
                     try {
-                        stream.Position = 0;
+                        
                         var baseMessage = _mspPackSerializer.Unpack(stream);
-
                         stream.Position = 0;
-                        var actualSerializer = MessagePackSerializer.Get(Type.GetType(baseMessage.ActualMessageType));
+                        var msgType = Type.GetType(baseMessage.ActualMessageType);
+                        var actualSerializer = MessagePackSerializer.Get(msgType);
                         msg = (IAscMessage) actualSerializer.Unpack(stream);
                     }
                     finally
