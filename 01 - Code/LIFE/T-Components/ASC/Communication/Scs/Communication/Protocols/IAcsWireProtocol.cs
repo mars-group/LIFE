@@ -5,7 +5,7 @@ namespace ASC.Communication.Scs.Communication.Protocols {
     /// <summary>
     ///     Represents a byte-level communication protocol between applications.
     /// </summary>
-    public interface IScsWireProtocol {
+    public interface IAcsWireProtocol {
         /// <summary>
         ///     Serializes a message to a byte array to send to remote application.
         ///     This method is synchronized. So, only one thread can call it concurrently.

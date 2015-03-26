@@ -1,4 +1,6 @@
-﻿namespace ASC.Communication.Scs.Communication.Messages {
+﻿using System;
+
+namespace ASC.Communication.Scs.Communication.Messages {
     /// <summary>
     ///     Represents a message that is sent and received by server and client.
     /// </summary>
@@ -12,5 +14,7 @@
         ///     Unique identified for this message.
         /// </summary>
         string RepliedMessageId { get; set; }
+
+        string ActualMessageType { get; set; }
     }
 }

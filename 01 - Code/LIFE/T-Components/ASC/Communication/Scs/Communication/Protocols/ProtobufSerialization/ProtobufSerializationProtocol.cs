@@ -6,7 +6,7 @@ using ProtoBuf;
 using ProtoBuf.Meta;
 
 namespace ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization {
-    internal class ProtobufSerializationProtocol : IScsWireProtocol {
+    internal class ProtobufSerializationProtocol : IAcsWireProtocol {
         public ProtobufSerializationProtocol() {
             RuntimeTypeModel.Default.Add(typeof (IAscMessage), true);
             RuntimeTypeModel.Default.Add(typeof (AscRemoteInvokeMessage), false)

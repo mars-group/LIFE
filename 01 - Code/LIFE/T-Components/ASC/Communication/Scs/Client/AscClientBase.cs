@@ -45,7 +45,7 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Gets/sets wire protocol that is used while reading and writing messages.
         /// </summary>
-        public IScsWireProtocol WireProtocol {
+        public IAcsWireProtocol WireProtocol {
             get { return _wireProtocol; }
             set {
                 if (CommunicationState == CommunicationStates.Connected)
@@ -55,7 +55,7 @@ namespace ASC.Communication.Scs.Client {
             }
         }
 
-        private IScsWireProtocol _wireProtocol;
+        private IAcsWireProtocol _wireProtocol;
 
         /// <summary>
         ///     Gets the communication state of the Client.

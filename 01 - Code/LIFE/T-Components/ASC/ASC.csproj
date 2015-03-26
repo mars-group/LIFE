@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MsgPack">
+      <HintPath>..\..\packages\MsgPack.Cli.0.5.11\lib\net45\MsgPack.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
@@ -100,8 +103,10 @@
     <Compile Include="Communication\Scs\Communication\Messengers\RequestReplyMessenger.cs" />
     <Compile Include="Communication\Scs\Communication\Protocols\BinarySerialization\BinarySerializationProtocol.cs" />
     <Compile Include="Communication\Scs\Communication\Protocols\BinarySerialization\BinarySerializationProtocolFactory.cs" />
-    <Compile Include="Communication\Scs\Communication\Protocols\IScsWireProtocol.cs" />
-    <Compile Include="Communication\Scs\Communication\Protocols\IScsWireProtocolFactory.cs" />
+    <Compile Include="Communication\Scs\Communication\Protocols\IAcsWireProtocol.cs" />
+    <Compile Include="Communication\Scs\Communication\Protocols\IAcsWireProtocolFactory.cs" />
+    <Compile Include="Communication\Scs\Communication\Protocols\MsgPackSerialization\MsgPackSerializationProtocol.cs" />
+    <Compile Include="Communication\Scs\Communication\Protocols\MsgPackSerialization\MsgPackSerializationProtocolFactory.cs" />
     <Compile Include="Communication\Scs\Communication\Protocols\ProtobufSerialization\ProtobufSerializationProtocol.cs" />
     <Compile Include="Communication\Scs\Communication\Protocols\ProtobufSerialization\ProtobufSerializationProtocolFactory.cs" />
     <Compile Include="Communication\Scs\Communication\Protocols\WireProtocolManager.cs" />

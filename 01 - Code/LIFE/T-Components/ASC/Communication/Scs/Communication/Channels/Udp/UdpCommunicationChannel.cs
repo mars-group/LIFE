@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.ScsServices.Communication.Messages;
+using MsgPack.Serialization;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config.Types;
 
@@ -56,6 +58,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         /// </summary>
         private readonly BinaryFormatter _binaryFormatter;
 
+        private MessagePackSerializer<AscMessage> _mspPackSerializer;
+
         #endregion
 
         /// <summary>
@@ -82,8 +86,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             _udpSendingClients = GetSendingClients();
             // a lock object to be used for sending method
             _syncLock = new object();
-            //create BinaryFormatter
-            _binaryFormatter = new BinaryFormatter();
+
+            _mspPackSerializer = MessagePackSerializer.Get<AscMessage>();
         }
 
 
@@ -120,13 +124,17 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         protected override void SendMessageInternal(IAscMessage message)
         {
-            //Send message
-
-
             //Create a byte array from message according to current protocol
             var memoryStream = new MemoryStream();
-                
-            new BinaryFormatter().Serialize(memoryStream, message);
+
+            var msgType = message.GetType();
+            var serializer = MessagePackSerializer.Get(msgType);
+            //if (msgType == typeof (AscRemoteInvokeMessage)) {
+
+                //var serializer = MessagePackSerializer.Get<AscMessage>();
+                serializer.Pack(memoryStream, message);
+            //}
+
                  
                 
             var messageBytes = memoryStream.ToArray();
@@ -253,9 +261,13 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
                     // deserialize
                     IAscMessage msg;
-                    try
-                    {
-                        msg = (IAscMessage) _binaryFormatter.Deserialize(stream);
+                    try {
+                        stream.Position = 0;
+                        var baseMessage = _mspPackSerializer.Unpack(stream);
+
+                        stream.Position = 0;
+                        var actualSerializer = MessagePackSerializer.Get(Type.GetType(baseMessage.ActualMessageType));
+                        msg = (IAscMessage) actualSerializer.Unpack(stream);
                     }
                     finally
                     {

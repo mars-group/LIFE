@@ -14,7 +14,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Gets/sets wire protocol that is used while reading and writing messages.
         /// </summary>
-        public IScsWireProtocolFactory WireProtocolFactory { get; set; }
+        public IAcsWireProtocolFactory WireProtocolFactory { get; set; }
 
         /// <summary>
         ///     A collection of clients that are connected to the server.

@@ -58,7 +58,7 @@ namespace ASC.Communication.Scs.Communication.Channels {
         ///     Gets/sets wire protocol that the channel uses.
         ///     This property must set before first communication.
         /// </summary>
-        public IScsWireProtocol WireProtocol { get; set; }
+        public IAcsWireProtocol WireProtocol { get; set; }
 
         #endregion
 

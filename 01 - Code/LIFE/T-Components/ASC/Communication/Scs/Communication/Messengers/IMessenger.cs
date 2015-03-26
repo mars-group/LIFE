@@ -21,7 +21,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     Gets/sets wire protocol that is used while reading and writing messages.
         /// </summary>
-        IScsWireProtocol WireProtocol { get; set; }
+        IAcsWireProtocol WireProtocol { get; set; }
 
         /// <summary>
         ///     Gets the time of the last succesfully received message.

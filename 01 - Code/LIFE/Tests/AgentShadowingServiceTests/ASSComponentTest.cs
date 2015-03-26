@@ -26,7 +26,7 @@ namespace AgentShadowingServiceTests
         public void TestCommunication() {
             // create and register RealAgents in serviceA
             var agentsA = new List<MockAgent>();
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < 1; i++) {
                 agentsA.Add(new MockAgent());
             }
 
@@ -35,7 +35,7 @@ namespace AgentShadowingServiceTests
 
             // create and register RealAgents in serviceB
             var agentsB = new List<MockAgent>();
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < 1; i++) {
                 agentsB.Add(new MockAgent());
             }
 

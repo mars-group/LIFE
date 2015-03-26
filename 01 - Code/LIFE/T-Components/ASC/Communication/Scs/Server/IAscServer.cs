@@ -14,7 +14,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Gets/sets wire protocol factory to create IWireProtocol objects.
         /// </summary>
-        IScsWireProtocolFactory WireProtocolFactory { get; set; }
+        IAcsWireProtocolFactory WireProtocolFactory { get; set; }
 
         IMessenger GetMessenger();
 

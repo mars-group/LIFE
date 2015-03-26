@@ -1,6 +1,6 @@
 ﻿namespace ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization {
-    internal class ProtobufSerializationProtocolFactory : IScsWireProtocolFactory {
-        public IScsWireProtocol CreateWireProtocol() {
+    internal class ProtobufSerializationProtocolFactory : IAcsWireProtocolFactory {
+        public IAcsWireProtocol CreateWireProtocol() {
             return new ProtobufSerializationProtocol();
         }
     }

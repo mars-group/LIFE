@@ -18,7 +18,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
     ///     This class can be derived to change serializer (default: BinaryFormatter). To do this,
     ///     SerializeMessage and DeserializeMessage methods must be overrided.
     /// </summary>
-    public class BinarySerializationProtocol : IScsWireProtocol {
+    public class BinarySerializationProtocol : IAcsWireProtocol {
         #region Private fields
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
 
         #endregion
 
-        #region IScsWireProtocol implementation
+        #region IAcsWireProtocol implementation
 
         /// <summary>
         ///     Serializes a message to a byte array to send to remote application.

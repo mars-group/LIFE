@@ -34,7 +34,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     Gets/sets wire protocol that is used while reading and writing messages.
         /// </summary>
-        public IScsWireProtocol WireProtocol {
+        public IAcsWireProtocol WireProtocol {
             get { return Messenger.WireProtocol; }
             set { Messenger.WireProtocol = value; }
         }
