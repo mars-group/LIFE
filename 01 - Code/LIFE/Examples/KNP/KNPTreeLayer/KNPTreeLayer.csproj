@@ -48,7 +48,7 @@
     </Reference>
     <Reference Include="SpatialAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\ESC.0.3.22\lib\net45\SpatialAPI.dll</HintPath>
+      <HintPath>..\..\..\packages\SpatialAPI.0.3.22\lib\net45\SpatialAPI.dll</HintPath>
     </Reference>
     <Reference Include="SpatialObjectOctree">
       <HintPath>..\..\..\packages\ESC.0.3.22\lib\net45\SpatialObjectOctree.dll</HintPath>
