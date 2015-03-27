@@ -22,16 +22,11 @@ namespace ASC.Communication.Scs.Communication.Messages {
         /// </summary>
         public string RepliedMessageId { get; set; }
 
-        public string ActualMessageType { get;
-            set;
-        }
-
         /// <summary>
         ///     Creates a new AscMessage.
         /// </summary>
         public AscMessage() {
             MessageId = Guid.NewGuid().ToString();
-            ActualMessageType = this.GetType().ToString();
         }
 
         /// <summary>

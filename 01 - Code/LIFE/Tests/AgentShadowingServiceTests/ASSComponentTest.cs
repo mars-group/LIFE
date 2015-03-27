@@ -16,6 +16,8 @@ namespace AgentShadowingServiceTests
         private IAgentShadowingService<IMockAgent,MockAgent> _serviceA;
         private IAgentShadowingService<IMockAgent, MockAgent> _serviceB;
 
+        public int AgentsPerNode = 500;
+
         [SetUp]
         public void SetupTest() {
             _serviceA = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
@@ -26,7 +28,7 @@ namespace AgentShadowingServiceTests
         public void TestCommunication() {
             // create and register RealAgents in serviceA
             var agentsA = new List<MockAgent>();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < AgentsPerNode; i++) {
                 agentsA.Add(new MockAgent());
             }
 
@@ -35,7 +37,8 @@ namespace AgentShadowingServiceTests
 
             // create and register RealAgents in serviceB
             var agentsB = new List<MockAgent>();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < AgentsPerNode; i++)
+            {
                 agentsB.Add(new MockAgent());
             }
 
@@ -57,6 +60,7 @@ namespace AgentShadowingServiceTests
             //Assert.AreEqual(agentsA.ToArray()[0].ID, shadowsOfA.ToArray()[0].DoCrazyShit());
 
         }
+
 
     }
 

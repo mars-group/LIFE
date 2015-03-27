@@ -4,15 +4,11 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Communication.Messages;
-using ASC.Communication.ScsServices.Communication.Messages;
-using MsgPack.Serialization;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config.Types;
-
 
 namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
@@ -58,8 +54,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         /// </summary>
         private readonly BinaryFormatter _binaryFormatter;
 
-        private MessagePackSerializer<AscMessage> _mspPackSerializer;
-
         #endregion
 
         /// <summary>
@@ -86,21 +80,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             _udpSendingClients = GetSendingClients();
             // a lock object to be used for sending method
             _syncLock = new object();
-
-            _mspPackSerializer = MessagePackSerializer.Get<AscMessage>();
+            
+            _binaryFormatter = new BinaryFormatter();
         }
 
 
 
         public override void Disconnect() {
-            // do nothing atm... TODO: think about it
-
-            /*if (CommunicationState != CommunicationStates.Connected) return;
-            _udpReceivingClient.Close();
-            Parallel.ForEach(_udpSendingClients, client => client.Close());
-            CommunicationState = CommunicationStates.Disconnected;
-            OnDisconnected();
-            */
+            // do nothing atm...
         }
 
         #region protected Methods
@@ -127,15 +114,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             //Create a byte array from message according to current protocol
             var memoryStream = new MemoryStream();
 
-            var msgType = message.GetType();
-            var serializer = MessagePackSerializer.Get(msgType);
-            //if (msgType == typeof (AscRemoteInvokeMessage)) {
-
-                //var serializer = MessagePackSerializer.Get<AscMessage>();
-                serializer.Pack(memoryStream, message);
-            //}
-
-                 
+            new BinaryFormatter().Serialize(memoryStream, message);
                 
             var messageBytes = memoryStream.ToArray();
             var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpPort);
@@ -165,9 +144,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         }
 
         #endregion
-
-
-
 
         #region private Methods
 
@@ -262,12 +238,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                     // deserialize
                     IAscMessage msg;
                     try {
-                        
-                        var baseMessage = _mspPackSerializer.Unpack(stream);
-                        stream.Position = 0;
-                        var msgType = Type.GetType(baseMessage.ActualMessageType);
-                        var actualSerializer = MessagePackSerializer.Get(msgType);
-                        msg = (IAscMessage) actualSerializer.Unpack(stream);
+                        msg = (IAscMessage) _binaryFormatter.Deserialize(stream);
                     }
                     finally
                     {

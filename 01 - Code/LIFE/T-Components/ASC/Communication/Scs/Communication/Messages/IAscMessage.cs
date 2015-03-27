@@ -14,7 +14,5 @@ namespace ASC.Communication.Scs.Communication.Messages {
         ///     Unique identified for this message.
         /// </summary>
         string RepliedMessageId { get; set; }
-
-        string ActualMessageType { get; set; }
     }
 }
