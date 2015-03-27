@@ -16,7 +16,7 @@ namespace AgentShadowingServiceTests
         private IAgentShadowingService<IMockAgent,MockAgent> _serviceA;
         private IAgentShadowingService<IMockAgent, MockAgent> _serviceB;
 
-        public int AgentsPerNode = 500;
+        public int AgentsPerNode = 200;
 
         [SetUp]
         public void SetupTest() {

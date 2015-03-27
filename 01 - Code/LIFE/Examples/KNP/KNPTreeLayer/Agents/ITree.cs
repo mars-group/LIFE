@@ -1,5 +1,4 @@
-﻿using System;
-using ASC.Communication.ScsServices.Service;
+﻿using ASC.Communication.ScsServices.Service;
 using LifeAPI.Agent;
 using SpatialAPI.Entities;
 
@@ -15,5 +14,8 @@ namespace TreeLayer.Agents
         double Biomass { get; set; }
         double Lat { get; set; }
         double Lon { get; set; }
+        ISpatialEntity SpatialEntity { get; set; }
+
+        string GetIdentifiaction();
     }
 }
