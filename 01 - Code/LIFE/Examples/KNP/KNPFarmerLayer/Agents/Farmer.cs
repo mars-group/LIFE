@@ -72,6 +72,9 @@ namespace KNPFarmerLayer.Agents
             }
 
             public Guid AgentGuid { get; set; }
+
+            public Type AgentType { get; set; }
+            
         }
     }
 }

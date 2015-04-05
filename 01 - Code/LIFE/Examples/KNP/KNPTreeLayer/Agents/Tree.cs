@@ -79,18 +79,17 @@ namespace TreeLayer.Agents {
             // get coordinates as image coords
             _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
             //create SpatialEntity to be usable in the OctTree
-            SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, id);
+            SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, id, typeof(Tree));
 
             // fetch and parse HeightAboveNN data from ElevationLayer
             var result = elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
             HeightAboveNN = Double.Parse(result.ResultEntries.First().Value.ToString());
 
             // Create SpatialEntity for exploration in the tree
-            _explorationEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid());
+            _explorationEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, Guid.NewGuid(), typeof(Tree));
             _explorationEntity.Shape = new Cuboid(new Vector3(50,50,50), new Vector3(_imageCoordinates.X,_imageCoordinates.Y));
         }
 
-        #region IAgent Members
 
         public void Tick() {
             var result = _environment.Explore(_explorationEntity);
@@ -112,14 +111,14 @@ namespace TreeLayer.Agents {
             Biomass = Math.Pow(Math.E, -3.00682 + 1.56775*Math.Log(Diameter*Height));
         }
 
-        #endregion
 
         [Serializable]
         private class SpatialTreeEntity : ISpatialEntity {
 
-            public SpatialTreeEntity(double x, double y, Guid id) {
+            public SpatialTreeEntity(double x, double y, Guid id, Type type) {
                 Shape = new Cuboid(new Vector3(1, 2, 1), new Vector3(x, y));
                 AgentGuid = id;
+                AgentType = type;
             }
 
             public IShape Shape { get; set; }
@@ -129,6 +128,8 @@ namespace TreeLayer.Agents {
             }
 
             public Guid AgentGuid { get; set; }
+
+            public Type AgentType { get; set; }
         }
 
     }

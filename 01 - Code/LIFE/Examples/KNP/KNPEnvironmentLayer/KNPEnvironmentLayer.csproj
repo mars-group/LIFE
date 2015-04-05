@@ -32,18 +32,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EnvironmentServiceComponent">
-      <HintPath>..\..\..\packages\ESC.0.3.22\lib\net45\EnvironmentServiceComponent.dll</HintPath>
+    <Reference Include="EnvironmentServiceComponent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.10\lib\net45\EnvironmentServiceComponent.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
-    <Reference Include="SpatialAPI">
-      <HintPath>..\..\..\packages\ESC.0.3.22\lib\net45\SpatialAPI.dll</HintPath>
+    <Reference Include="SpatialAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.10\lib\net45\SpatialAPI.dll</HintPath>
     </Reference>
-    <Reference Include="SpatialObjectOctree">
-      <HintPath>..\..\..\packages\ESC.0.3.22\lib\net45\SpatialObjectOctree.dll</HintPath>
+    <Reference Include="SpatialObjectOctree, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.10\lib\net45\SpatialObjectOctree.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,9 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Common\LCConnector\LCConnector.csproj">
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
@@ -74,6 +74,9 @@
       <Project>{0DC81B09-3ABF-4BB3-8C08-4E8EE4432BDC}</Project>
       <Name>Scs</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

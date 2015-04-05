@@ -21,6 +21,7 @@ namespace KNPEnvironmentLayer
 
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
             _esc = new EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent();
+            
             return true;
         }
 
@@ -69,6 +70,11 @@ namespace KNPEnvironmentLayer
         public bool IsGrid {
             get { return _esc.IsGrid; }
             set { _esc.IsGrid = value; }
+        }
+
+        public void Nothing()
+        {
+            
         }
     }
 }

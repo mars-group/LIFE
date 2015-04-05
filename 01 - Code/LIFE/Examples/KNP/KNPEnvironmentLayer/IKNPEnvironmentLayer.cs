@@ -7,6 +7,6 @@ namespace KNPEnvironmentLayer
     [ScsService(Version = "0.1")]
     public interface IKNPEnvironmentLayer : ISteppedLayer, IEnvironment
     {
-
+        void Nothing();
     }
 }
