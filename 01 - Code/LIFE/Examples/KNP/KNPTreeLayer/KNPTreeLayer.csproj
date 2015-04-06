@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="EnvironmentServiceComponent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.10\lib\net45\EnvironmentServiceComponent.dll</HintPath>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.13\lib\net45\EnvironmentServiceComponent.dll</HintPath>
     </Reference>
     <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -49,11 +49,11 @@
     </Reference>
     <Reference Include="SpatialAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\SpatialAPI.0.4.10\lib\net45\SpatialAPI.dll</HintPath>
+      <HintPath>..\..\..\packages\SpatialAPI.0.4.13\lib\net45\SpatialAPI.dll</HintPath>
     </Reference>
-    <Reference Include="SpatialObjectOctree">
-      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.10\lib\net45\SpatialObjectOctree.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SpatialObjectOctree, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.13\lib\net45\SpatialObjectOctree.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

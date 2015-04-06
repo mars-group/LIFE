@@ -19,6 +19,7 @@ using SpatialAPI.Entities.Transformation;
 using SpatialAPI.Shape;
 
 namespace TreeLayer.Agents {
+    [Serializable]
     public class Tree : AscService, ITree {
         private double _biomass;
         private Coordinate _imageCoordinates;

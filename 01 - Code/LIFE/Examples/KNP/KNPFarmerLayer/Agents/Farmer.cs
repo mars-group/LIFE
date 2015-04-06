@@ -10,6 +10,7 @@ using TreeLayer.Agents;
 
 namespace KNPFarmerLayer.Agents
 {
+    [Serializable]
     class Farmer : IFarmer
     {
         private readonly IKnpElevationLayer _elevationLayer;
@@ -55,6 +56,7 @@ namespace KNPFarmerLayer.Agents
 
         public Guid ID { get; set; }
 
+        [Serializable]
         private class SpatialFarmerEntity : ISpatialEntity
         {
 
