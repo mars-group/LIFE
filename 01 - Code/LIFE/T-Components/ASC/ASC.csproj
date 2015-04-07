@@ -53,7 +53,7 @@
     <Compile Include="Communication\ScsServices\Communication\Messages\PropertyChangedMessage.cs" />
     <Compile Include="Communication\ScsServices\Communication\Messages\RemoveShadowAgentEventArgs.cs" />
     <Compile Include="Communication\ScsServices\Communication\Messages\RemoveShadowAgentMessage.cs" />
-    <Compile Include="Communication\ScsServices\Communication\Messages\ScsRemoteException.cs" />
+    <Compile Include="Communication\ScsServices\Communication\Messages\AcsRemoteException.cs" />
     <Compile Include="Communication\ScsServices\Communication\Messages\AscRemoteInvokeMessage.cs" />
     <Compile Include="Communication\ScsServices\Communication\Messages\AscRemoteInvokeReturnMessage.cs" />
     <Compile Include="Communication\ScsServices\Communication\RemoteInvokeProxy.cs" />

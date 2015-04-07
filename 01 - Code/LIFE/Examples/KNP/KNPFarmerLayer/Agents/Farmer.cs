@@ -43,6 +43,7 @@ namespace KNPFarmerLayer.Agents
             
             foreach (var spatialEntity in result)
             {
+                if (spatialEntity.AgentType != typeof (Tree)) continue;
                 ITree tree;
                 if (_treeLayer.GetTreeById(spatialEntity.AgentGuid, out tree))
                 {

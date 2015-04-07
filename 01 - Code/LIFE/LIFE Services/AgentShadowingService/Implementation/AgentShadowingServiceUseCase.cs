@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Client;
@@ -25,6 +26,8 @@ namespace AgentShadowingService.Implementation
         private readonly IAscServiceApplication _agentShadowingServer;
         private readonly int _clientListenPort;
         private readonly LayerContainerSettings _config;
+
+        private readonly object _syncRoot = new Object();
 
         public event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
@@ -78,19 +81,28 @@ namespace AgentShadowingService.Implementation
 
         public TServiceInterface CreateShadowAgent(Guid agentId)
         {
-            var shadowAgentClient = AscServiceClientBuilder.CreateClient<TServiceInterface>(
-                _clientListenPort,
-                _mcastAddress,
-                agentId
-                );
-            // set timeout to infinite
-            shadowAgentClient.Timeout = -1;
-            // connect the shadow agent
-            shadowAgentClient.Connect();
-            // store shadow agent client in list for later management and observation
-            _shadowAgentClients.Add(agentId, shadowAgentClient);
-            // return RealProxy interface wrapper as clientside reference to remote object
-            return shadowAgentClient.ServiceProxy;
+            lock (_syncRoot)
+            {
+                if (_shadowAgentClients.ContainsKey(agentId))
+                {
+                    return _shadowAgentClients[agentId].ServiceProxy;
+                }
+
+                var shadowAgentClient = AscServiceClientBuilder.CreateClient<TServiceInterface>(
+                    _clientListenPort,
+                    _mcastAddress,
+                    agentId
+                    );
+                // set timeout to infinite
+                shadowAgentClient.Timeout = -1;
+                // connect the shadow agent
+                shadowAgentClient.Connect();
+                // store shadow agent client in list for later management and observation
+                _shadowAgentClients.Add(agentId, shadowAgentClient);
+                // return RealProxy interface wrapper as clientside reference to remote object
+                return shadowAgentClient.ServiceProxy;
+            }
+
         }
 
         public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds)

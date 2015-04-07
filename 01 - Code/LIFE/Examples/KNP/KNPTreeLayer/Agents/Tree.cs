@@ -26,6 +26,9 @@ namespace TreeLayer.Agents {
         private IKNPEnvironmentLayer _environment;
         private SpatialTreeEntity _explorationEntity;
         private IKnpTreeLayer _treeLayer;
+
+        private Type _treeType = typeof (Tree);
+
         public Guid ID { get; set; }
         public double Height { get; set; }
         public double Diameter { get; set; }
@@ -80,7 +83,7 @@ namespace TreeLayer.Agents {
             // get coordinates as image coords
             _imageCoordinates = elevationLayer.TransformToImage(lat, lon);
             //create SpatialEntity to be usable in the OctTree
-            SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, id, typeof(Tree));
+            SpatialEntity = new SpatialTreeEntity(_imageCoordinates.X, _imageCoordinates.Y, id, _treeType);
 
             // fetch and parse HeightAboveNN data from ElevationLayer
             var result = elevationLayer.GetDataByGeometry(new Point(Lat, Lon));
@@ -97,6 +100,7 @@ namespace TreeLayer.Agents {
             
             foreach (var spatialEntity in result)
             {
+                if (spatialEntity.AgentType != _treeType) continue;
                 ITree otherTree;
                 if (_treeLayer.GetTreeById(spatialEntity.AgentGuid, out otherTree))
                 {

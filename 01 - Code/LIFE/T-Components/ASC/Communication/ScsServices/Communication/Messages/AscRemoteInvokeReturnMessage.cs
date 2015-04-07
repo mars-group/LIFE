@@ -17,7 +17,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         ///     If any exception occured during method invocation, this field contains Exception object.
         ///     If no exception occured, this field is null.
         /// </summary>
-        public ScsRemoteException RemoteException { get; set; }
+        public AcsRemoteException RemoteException { get; set; }
 
         /// <summary>
         /// The serviceObject's ID used to identify the target object

@@ -13,7 +13,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization {
                 .Add("ServiceClassName", "MethodName", "Parameters");
             RuntimeTypeModel.Default.Add(typeof (AscRemoteInvokeReturnMessage), false)
                 .Add("ReturnValue", "RemoteException");
-            RuntimeTypeModel.Default.Add(typeof (ScsRemoteException), true);
+            RuntimeTypeModel.Default.Add(typeof (AcsRemoteException), true);
         }
 
         public byte[] GetBytes(IAscMessage message) {

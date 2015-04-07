@@ -199,7 +199,7 @@ namespace ASC.Communication.ScsServices.Service {
                 if (serviceObject == null)
                 {
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
+                        new AcsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
                     return;
                 }
 
@@ -231,14 +231,14 @@ namespace ASC.Communication.ScsServices.Service {
                 {
                     var innerEx = ex.InnerException;
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new ScsRemoteException(
+                        new AcsRemoteException(
                             innerEx.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, innerEx));
                 }
                 catch (Exception ex)
                 {
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new ScsRemoteException(
+                        new AcsRemoteException(
                             ex.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, ex));
                 }
@@ -246,7 +246,7 @@ namespace ASC.Communication.ScsServices.Service {
             catch (Exception ex)
             {
                 SendInvokeResponse(_messenger, invokeMessage, null,
-                    new ScsRemoteException("An error occured during remote service method call.", ex));
+                    new AcsRemoteException("An error occured during remote service method call.", ex));
             }
             
         }
@@ -293,7 +293,7 @@ namespace ASC.Communication.ScsServices.Service {
                 if (serviceObject == null)
                 {
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
+                        new AcsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
                     return;
                 }
 
@@ -325,14 +325,14 @@ namespace ASC.Communication.ScsServices.Service {
                 {
                     var innerEx = ex.InnerException;
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new ScsRemoteException(
+                        new AcsRemoteException(
                             innerEx.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, innerEx));
                 }
                 catch (Exception ex)
                 {
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new ScsRemoteException(
+                        new AcsRemoteException(
                             ex.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, ex));
                 }
@@ -340,7 +340,7 @@ namespace ASC.Communication.ScsServices.Service {
             catch (Exception ex)
             {
                 SendInvokeResponse(_messenger, invokeMessage, null,
-                    new ScsRemoteException("An error occured during remote service method call.", ex));
+                    new AcsRemoteException("An error occured during remote service method call.", ex));
             }
         }
 
@@ -353,7 +353,7 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="returnValue">Return value to send</param>
         /// <param name="exception">Exception to send</param>
         private static void SendInvokeResponse(IMessenger client, AscRemoteInvokeMessage requestMessage, object returnValue,
-            ScsRemoteException exception)
+            AcsRemoteException exception)
         {
             client.SendMessage(
                 new AscRemoteInvokeReturnMessage {

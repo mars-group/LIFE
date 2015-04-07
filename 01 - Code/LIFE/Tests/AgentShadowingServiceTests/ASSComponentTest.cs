@@ -51,7 +51,7 @@ namespace AgentShadowingServiceTests
             shadows.AddRange(_serviceB.CreateShadowAgents(agentsA.Select(a => a.ID).ToArray()));
             var sw = Stopwatch.StartNew();
             foreach (var mockAgent in shadows) {
-                mockAgent.DoCrazyShit();
+                Assert.AreEqual(42,mockAgent.DoCrazyShit());
             }
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);

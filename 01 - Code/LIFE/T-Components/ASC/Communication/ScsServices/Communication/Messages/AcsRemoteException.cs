@@ -3,27 +3,27 @@ using System.Runtime.Serialization;
 
 namespace ASC.Communication.ScsServices.Communication.Messages {
     /// <summary>
-    ///     Represents a SCS Remote Exception.
+    ///     Represents a ASC Remote Exception.
     ///     This exception is used to send an exception from an application to another application.
     /// </summary>
     [Serializable]
-    public class ScsRemoteException : Exception {
+    public class AcsRemoteException : Exception {
         /// <summary>
         ///     Contstructor.
         /// </summary>
-        public ScsRemoteException() {}
+        public AcsRemoteException() {}
 
         /// <summary>
         ///     Contstructor.
         /// </summary>
-        public ScsRemoteException(SerializationInfo serializationInfo, StreamingContext context)
+        public AcsRemoteException(SerializationInfo serializationInfo, StreamingContext context)
             : base(serializationInfo, context) {}
 
         /// <summary>
         ///     Contstructor.
         /// </summary>
         /// <param name="message">Exception message</param>
-        public ScsRemoteException(string message)
+        public AcsRemoteException(string message)
             : base(message) {}
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
-        public ScsRemoteException(string message, Exception innerException)
+        public AcsRemoteException(string message, Exception innerException)
             : base(message, innerException) {}
     }
 }

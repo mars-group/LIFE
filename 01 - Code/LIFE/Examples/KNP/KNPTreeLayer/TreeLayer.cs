@@ -7,13 +7,11 @@ using AgentShadowingService.Interface;
 using Hik.Communication.ScsServices.Service;
 using KNPElevationLayer;
 using KNPEnvironmentLayer;
-using LCConnector.Exceptions;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
 using Mono.Addins;
 using TreeLayer;
 using TreeLayer.Agents;
-
 
 [assembly: Addin]
 [assembly: AddinDependency("LayerContainer", "0.1")]
@@ -27,6 +25,8 @@ namespace KNPTreeLayer {
         private readonly IKnpElevationLayer _elevationLayer;
         private readonly List<ITree> _agentsToRemoveInPostTick;
         private readonly List<ITree> _agentsToAddInPostTick;
+
+        private HashSet<Guid> _shadowTreeIdSet;  
 
         private double MinX = 31.331;
         private double MinY = -25.292;
@@ -57,7 +57,11 @@ namespace KNPTreeLayer {
 
             foreach (var agentInitConfig in layerInitData.AgentInitConfigs) {
                 if (agentInitConfig.AgentName != "Tree") continue;
+
+                _shadowTreeIdSet = new HashSet<Guid>(agentInitConfig.ShadowAgentsIds);
+
                 var agentBag = new ConcurrentBag<Tree>();
+
                 _localTreeMap = new ConcurrentDictionary<Guid, ITree>();
                 // instantiate real Agents
                 var config = agentInitConfig;
@@ -88,7 +92,7 @@ namespace KNPTreeLayer {
                 }
 
                 Console.WriteLine("Finished: Realagents registered.");
-
+                /*
                 if (layerInitData.Distribute) {
                     // instantiate Shadow Agents
                     var shadowTrees = _agentShadowingService.CreateShadowAgents(agentInitConfig.ShadowAgentsIds);
@@ -99,6 +103,7 @@ namespace KNPTreeLayer {
                 }
 
                 Console.WriteLine("Finished: ShadowAgents created.");
+                */
             }
             return true;
         }
@@ -114,7 +119,25 @@ namespace KNPTreeLayer {
 
         public bool GetTreeById(Guid id, out ITree tree)
         {
-            return _localTreeMap.TryGetValue(id, out tree);
+            ITree t;
+            // do we already have the tree agent?
+            if (_localTreeMap.TryGetValue(id, out t))
+            {
+                tree = t;
+                return true;
+            }
+
+            // are we responsible for the tree agent?
+            if (!_shadowTreeIdSet.Contains(id))
+            {
+                tree = null;
+                return false;
+            }
+
+            // we don't have it yet, but are responsible, so create it
+            tree = _agentShadowingService.CreateShadowAgent(id);
+            _localTreeMap.TryAdd(id, tree);
+            return true;
         }
 
         private double GetRandomDouble(double minimum, double maximum)
