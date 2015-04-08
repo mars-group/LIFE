@@ -1,7 +1,9 @@
-﻿using Hik.Communication.ScsServices.Client;
+﻿using System;
+using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using RuntimeEnvironment.Interfaces.Exceptions;
 
 namespace RuntimeEnvironment.Implementation.Entities {
     internal class LayerContainerClient {
@@ -32,7 +34,14 @@ namespace RuntimeEnvironment.Implementation.Entities {
 
         public void Initialize(TLayerInstanceId layerInstanceId, TInitData initData)
         {
-            Proxy.InitializeLayer(layerInstanceId, initData);
+            if(!Proxy.InitializeLayer(layerInstanceId, initData))
+            {
+                throw new LayerFailedToInitializeException("Layer " 
+                    + layerInstanceId.LayerDescription.Name 
+                    + " failed to initialize. Please review your InitLayer Code! MARS LIFE will shut down now."
+                    );
+            }
         }
     }
+
 }

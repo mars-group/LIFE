@@ -111,8 +111,8 @@ namespace RTEManager.Implementation {
             }
         }
 
-        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
-            _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
+        public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+            return _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
         }
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {

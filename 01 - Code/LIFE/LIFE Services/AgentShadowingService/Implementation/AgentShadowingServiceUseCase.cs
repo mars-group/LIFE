@@ -2,8 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Threading.Tasks;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Client;
 using ASC.Communication.ScsServices.Communication.Messages;
@@ -21,6 +19,7 @@ namespace AgentShadowingService.Implementation
 
         // The dictionary of ShadowAgents, sorted by their Guid
         private readonly IDictionary<Guid, IAscServiceClient<TServiceInterface>> _shadowAgentClients;
+
         // the Multicast Address derived from agent type
         private readonly string _mcastAddress;
         private readonly IAscServiceApplication _agentShadowingServer;
@@ -93,6 +92,7 @@ namespace AgentShadowingService.Implementation
                     _mcastAddress,
                     agentId
                     );
+
                 // set timeout to infinite
                 shadowAgentClient.Timeout = -1;
                 // connect the shadow agent
@@ -110,9 +110,14 @@ namespace AgentShadowingService.Implementation
             return agentIds.Select(CreateShadowAgent).ToList();
         }
 
-        public void RemoveShadowAgent(Guid agentId) {
-            _shadowAgentClients[agentId].Disconnect();
-            _shadowAgentClients.Remove(agentId);
+        public void RemoveShadowAgent(Guid agentId)
+        {
+            lock (_syncRoot)
+            {
+                _shadowAgentClients[agentId].Disconnect();
+                _shadowAgentClients.Remove(agentId);
+            }
+
         }
 
         public void RegisterRealAgent(TServiceClass agentToRegister)

@@ -66,7 +66,9 @@ namespace KNPTreeLayer {
                 // instantiate real Agents
                 var config = agentInitConfig;
                 var placementError = false;
-                Parallel.For(0, agentInitConfig.RealAgentCount, i => {
+                Parallel.For(0, agentInitConfig.RealAgentCount , i => {
+                                                   
+                                                                    
                     var t = new Tree(4, 2, 10, i, 500,
                         GetRandomDouble(MinX, MaxX),
                         GetRandomDouble(MinY, MaxY),
@@ -77,12 +79,16 @@ namespace KNPTreeLayer {
                     );
 
                     // add to ESC 
-                    if (!_environmentLayer.Add(t.SpatialEntity, t.SpatialEntity.Shape.Position)) placementError = true;
-                        _localTreeMap.TryAdd(config.RealAgentIds[i], t);
+                    if (!_environmentLayer.Add(t.SpatialEntity,t.SpatialEntity.Shape.Position))
+                    {
+                        placementError = true;
+                    }
+                    _localTreeMap.TryAdd(config.RealAgentIds[i], t);
+                    agentBag.Add(t);
                     registerAgentHandle(this, t);
                 });
 
-                if (placementError) return false;
+                //if (placementError) return false;
 
                 Console.WriteLine("Finished: Realagents instantiated.");
 

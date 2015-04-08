@@ -46,8 +46,8 @@ namespace RTEManager.Implementation {
             _rteManagerUseCase.RegisterTickClient(layer, tickClient);
         }
 
-        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
-            _rteManagerUseCase.InitializeLayer(instanceId, initData);
+        public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+            return _rteManagerUseCase.InitializeLayer(instanceId, initData);
         }
 
 

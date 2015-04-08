@@ -39,7 +39,7 @@ namespace LCConnector {
         /// <param name="instanceId">not null</param>
         /// <param name="initData">not null</param>
         /// <exception cref="Exceptions.LayerNotInstantiatedException">If the layer was not yet instantiated.</exception>
-        void InitializeLayer(TLayerInstanceId instanceId, TInitData initData);
+        bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData);
 
         /// <summary>
         ///     Calculate one simulation step.

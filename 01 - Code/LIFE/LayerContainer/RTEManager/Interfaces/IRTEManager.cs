@@ -61,7 +61,7 @@ namespace RTEManager.Interfaces {
         /// </summary>
         /// <param name="instanceId"></param>
         /// <param name="initData"></param>
-        void InitializeLayer(TLayerInstanceId instanceId, TInitData initData);
+        bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData);
 
         /// <summary>
         ///     Returns all the tickClients (agents) registered for

@@ -61,8 +61,8 @@ namespace LayerContainerFacade.Implementation {
             _partitionManager.AddLayer(instanceId);
         }
 
-        public void InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
-            _rteManager.InitializeLayer(instanceId, initData);
+        public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+            return _rteManager.InitializeLayer(instanceId, initData);
         }
 
         public long Tick() {

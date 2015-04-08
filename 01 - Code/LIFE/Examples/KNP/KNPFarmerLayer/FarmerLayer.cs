@@ -41,19 +41,22 @@ namespace KNPFarmerLayer
                 var config = agentInitConfig;
                 var placementError = false;
                 Parallel.For(0, agentInitConfig.RealAgentCount, i => {
+
                     var farmer = new Farmer(
-                        _elevationLayer,
-                        _environmentLayer,
-                        _treeLayer,
-                        config.RealAgentIds[i],
-                        GetRandomDouble(MinX, MaxX),
-                        GetRandomDouble(MinY, MaxY));
+                    _elevationLayer,
+                    _environmentLayer,
+                    _treeLayer,
+                    config.RealAgentIds[i],
+                    GetRandomDouble(MinX, MaxX),
+                    GetRandomDouble(MinY, MaxY));
 
                     // add to ESC 
                     if (!_environmentLayer.Add(farmer.SpatialEntity, farmer.SpatialEntity.Shape.Position)) placementError = true;
 
                     agentBag.Add(farmer);
                     registerAgentHandle(this, farmer);
+                
+
                 });
 
                 if (placementError) return false;
