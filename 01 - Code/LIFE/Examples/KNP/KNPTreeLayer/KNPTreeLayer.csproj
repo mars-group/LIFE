@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EnvironmentServiceComponent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.13\lib\net45\EnvironmentServiceComponent.dll</HintPath>
-    </Reference>
     <Reference Include="GeoAPI, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\GeoAPI.dll</HintPath>
@@ -48,12 +44,8 @@
       <HintPath>..\..\..\Libraries\SharpMap_1.1_with_GeoAPI_1.7.3.1\NetTopologySuite.dll</HintPath>
     </Reference>
     <Reference Include="SpatialAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\SpatialAPI.0.4.13\lib\net45\SpatialAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="SpatialObjectOctree, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.13\lib\net45\SpatialObjectOctree.dll</HintPath>
+      <HintPath>..\..\..\packages\SpatialAPI.0.4.16\lib\net45\SpatialAPI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

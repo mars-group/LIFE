@@ -94,10 +94,11 @@ namespace LayerRegistry.Implementation {
             // store in Dict for local usage, by its direct type
             _localLayers.Add(layer.GetType(), layer);
             // and by its direct interface type if any
-            if (layer.GetType().GetInterfaces().Length > 0)
-            {
+            if (layer.GetType().GetInterfaces().Length > 0) {
                 var infs = layer.GetType().GetInterfaces();
-                _localLayers.Add(infs.First(), layer);
+                foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LifeAPI"))) {
+                    _localLayers.Add(type, layer);
+                }
             }
             // this is necessary in the case somebody is neither using distribution nor interfaces, but still has dependencies
 

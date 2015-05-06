@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LifeAPI.Layer;
@@ -16,7 +17,7 @@ namespace KNPEnvironmentLayer
     [Extension(typeof(ISteppedLayer))]
     public class EnvironmentLayer : ScsService, IKNPEnvironmentLayer
     {
-        private IEnvironment _esc;
+        private EnvironmentServiceComponent.Implementation.EnvironmentServiceComponent _esc;
         private long _currentTick;
 
         public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
@@ -54,8 +55,12 @@ namespace KNPEnvironmentLayer
             return _esc.Move(entity, movementVector, rotation);
         }
 
-        public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial) {
-            return _esc.Explore(spatial);
+        public IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial, Type agentType = null) {
+            return _esc.Explore(spatial, agentType);
+        }
+
+        public IEnumerable<ISpatialEntity> Explore(IShape shape, Enum collisionType = null) {
+            return _esc.Explore(shape, collisionType);
         }
 
         public IEnumerable<ISpatialEntity> ExploreAll() {
