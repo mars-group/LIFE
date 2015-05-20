@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using LCConnector.TransportTypes;
-using LifeAPI.Agent;
-using LifeAPI.Layer;
 using ModelMock;
 using NUnit.Framework;
 using RTEManager.Implementation;
