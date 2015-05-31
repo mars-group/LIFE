@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using MARS.Shuttle.SimulationConfig;
 
 namespace LCConnector.TransportTypes {
     /// <summary>
@@ -56,9 +57,11 @@ namespace LCConnector.TransportTypes {
         /// <param name="shadowAgentAmount">The amount of shadow agents to be initialized</param>
         /// <param name="realAgentIds">A Guid[] with ids to be used by the real agents</param>
         /// <param name="shadowAgentsIds">A Guid[] with ids to be used by the shadow agents</param>
-        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds)
+        /// <param name="agentInitParameters">Optional parameterinformation about how and from where
+        /// to initialize the agent's constructor parameters.</param>
+        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null )
         {
-            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds));
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters));
         }
     }
 
@@ -84,12 +87,19 @@ namespace LCConnector.TransportTypes {
 
         public Guid[] ShadowAgentsIds { get; set; }
 
-        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds)
+        /// <summary>
+        /// Constructor call parameters and information about where to get the data from
+        /// Check this for null, prior to using it!
+        /// </summary>
+        public List<IAtConstructorParameter> AgentInitParameters { get; set; }
+
+        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null)
         {
             AgentName = agentName;
             RealAgentCount = agentCount;
             ShadowAgentCount = shadowAgentCount;
             ShadowAgentsIds = shadowAgentsIds;
+            AgentInitParameters = agentInitParameters;
             RealAgentIds = realAgentIds;
         }
     }

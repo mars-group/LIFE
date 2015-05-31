@@ -139,26 +139,6 @@ namespace RuntimeEnvironment.Implementation {
         /// <returns></returns>
         private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
-
-
-            // Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
-            // XML config files are still valid but will be deprecated in the near future
-            var modelConfig = _modelContainer.GetModelConfig(modelDescription);
-            var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription);
-
-            if (shuttleSimConfig != null)
-            {
-                return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainers, shuttleSimConfig);
-            }
-            else
-            {
-                return SetupSimulationRunViaXmlConfig(modelDescription, layerContainers, modelConfig);
-            }
-
-        }
-
-        private LayerContainerClient[] SetupSimulationRunViaXmlConfig(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers, ModelConfig modelConfig)
-        {
             var content = _modelContainer.GetModel(modelDescription);
             var layerContainerClients = new LayerContainerClient[layerContainers.Count];
 
@@ -181,6 +161,25 @@ namespace RuntimeEnvironment.Implementation {
                 i++;
             }
 
+            /* Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
+             * XML config files are still valid but will be deprecated in the near future
+             */
+            var modelConfig = _modelContainer.GetModelConfig(modelDescription);
+            var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription);
+
+
+            // prefer SHUTTLE based configuration
+            if (shuttleSimConfig != null)
+            {
+                // configure bia SHUTTLE
+                return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainerClients, shuttleSimConfig);
+            }
+            // configure via XML (will soon be deprecated)
+            return SetupSimulationRunViaXmlConfig(modelDescription, layerContainerClients, modelConfig);
+        }
+
+        private LayerContainerClient[] SetupSimulationRunViaXmlConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, ModelConfig modelConfig)
+        {
             /* 2.
              * Instantiate and initialize Layers by InstantiationOrder,
              * differentiate between distributable and non-distributable layers.
@@ -246,9 +245,41 @@ namespace RuntimeEnvironment.Implementation {
             return layerContainerClients;
         }
 
-        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers, ISimConfig shuttleSimConfig)
+        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, ISimConfig shuttleSimConfig)
         {
-            throw new NotImplementedException();
+            /* 2.
+             * Instantiate and initialize Layers by InstantiationOrder,
+             * For now don'tdifferentiate between distributable and non-distributable layers
+             * as this is not yet supported in SHUTTLE. 
+             */
+
+            // unique layerID per LayerContainer, does not need to be unique across whole simulation 
+            var layerId = 0;
+            foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
+            {
+                var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
+
+                // easy: first instantiate the layer...
+                layerContainerClients[0].Instantiate(layerInstanceId);
+                
+                //...fetch all agentTypes and amounts...
+                var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate());
+                foreach (var agentConfig in shuttleSimConfig.GetAtConstructorInfoList())//[layerDescription.Name])
+                {
+                    var ids = new Guid[agentConfig.AgentCount];
+                    for (int j = 0; j < agentConfig.AgentCount; j++)
+                    {
+                        ids[j] = Guid.NewGuid();
+                    }
+                    initData.AddAgentInitConfig(agentConfig.GetClassName(), agentConfig.AgentCount, 0, ids, new Guid[0], agentConfig.GetFieldToConstructorArgumentRelations());
+                }
+                //...and finally initialize the layer with it
+                layerContainerClients[0].Initialize(layerInstanceId, initData);
+
+                layerId++;
+            }
+
+            return layerContainerClients;
         }
 
         /// <summary>
