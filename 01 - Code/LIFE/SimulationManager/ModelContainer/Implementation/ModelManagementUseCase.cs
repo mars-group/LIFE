@@ -19,6 +19,9 @@ using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.AddinLoader;
 using LifeAPI.Config;
 using log4net;
+using MARS.Shuttle.SimulationConfig;
+using MARS.Shuttle.SimulationConfig.Interfaces;
+using ModelContainer.Interfaces.Exceptions;
 using Mono.Addins;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
@@ -127,14 +130,31 @@ namespace ModelContainer.Implementation {
             }
         }
 
-        public ModelConfig GetModelConfig(TModelDescription model) {
+        public ISimConfig GetShuttleSimConfig(TModelDescription model) {
+
+            var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name + Path.DirectorySeparatorChar + "SimConfig.json";
+            if (!File.Exists(path))
+            {
+                throw new NoSimulationConfigFoundException(
+                    "Not SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
+            }
+
+            var simConfigJsonContent = File.ReadAllText(path);
+
+            return SimConfigObjectDeserializer.GetDeserializedSimConfigObject(simConfigJsonContent);
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription model)
+        {
             var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name + Path.DirectorySeparatorChar + model.Name + ".cfg";
+
+
             //config exists, so load it
             if (File.Exists(path))
             {
                 return Configuration.Load<ModelConfig>(path);
             }
-            
+
             // config does not exist, create the default one
             var addinLoader = AddinLoader.Instance;
             var nodes = addinLoader.LoadAllLayers(model.Name);

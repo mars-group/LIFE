@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
+using MARS.Shuttle.SimulationConfig;
 using SMConnector.TransportTypes;
 
 namespace ModelContainer.Interfaces {
@@ -50,6 +51,14 @@ namespace ModelContainer.Interfaces {
         /// <param name="modelID">must not be null</param>
         /// <returns>null, if model not found.</returns>
         ModelContent GetModel(TModelDescription modelID);
+
+        /// <summary>
+        /// Returns the SimConfig object created with MARS SHUTTLE if available,
+        /// returns null otherwise.
+        /// </summary>
+        /// <param name="modelId"></param>
+        /// <returns>The Simconfig object or null</returns>
+        ISimConfig GetShuttleSimConfig(TModelDescription modelId);
 
         /// <summary>
         /// Returns the ModelConfig for the given modelDescription

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
+using MARS.Shuttle.SimulationConfig;
 using ModelContainer.Interfaces;
 using SMConnector.TransportTypes;
 
@@ -16,8 +17,13 @@ namespace SimulationManagerTestClasses.MockComponents {
             return new List<TModelDescription> {new TModelDescription("TestSimulationModel")};
         }
 
-        public ModelConfig GetModelConfig(TModelDescription modelId) {
+        public ISimConfig GetShuttleSimConfig(TModelDescription modelId) {
             throw new NotImplementedException("Don't mock me, I'm only a mock :(");
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription modelId)
+        {
+            throw new NotImplementedException();
         }
 
         public TModelDescription AddModelFromDirectory(string filePath) {

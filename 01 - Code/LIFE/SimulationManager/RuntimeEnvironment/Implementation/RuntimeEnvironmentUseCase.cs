@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
+using MARS.Shuttle.SimulationConfig;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -139,8 +139,27 @@ namespace RuntimeEnvironment.Implementation {
         /// <returns></returns>
         private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
-            var content = _modelContainer.GetModel(modelDescription);
+
+
+            // Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
+            // XML config files are still valid but will be deprecated in the near future
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);
+            var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription);
+
+            if (shuttleSimConfig != null)
+            {
+                return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainers, shuttleSimConfig);
+            }
+            else
+            {
+                return SetupSimulationRunViaXmlConfig(modelDescription, layerContainers, modelConfig);
+            }
+
+        }
+
+        private LayerContainerClient[] SetupSimulationRunViaXmlConfig(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers, ModelConfig modelConfig)
+        {
+            var content = _modelContainer.GetModel(modelDescription);
             var layerContainerClients = new LayerContainerClient[layerContainers.Count];
 
             /* 1.
@@ -173,15 +192,18 @@ namespace RuntimeEnvironment.Implementation {
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
-            foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription)) {
+            foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
+            {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
                 // fetch layerConfig by layerName
                 LayerConfig layerConfig;
-                try {
+                try
+                {
                     layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
                 }
-                catch {
+                catch
+                {
                     throw new NoLayerConfigurationPresentException(
                         "Please specify an appropriate LayerConfig for " + layerDescription.Name + " in your config file: " + modelDescription.Name +
                         ".cfg");
@@ -207,7 +229,8 @@ namespace RuntimeEnvironment.Implementation {
                     //...and finally initialize the layer with it
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
                 }
-                else {
+                else
+                {
                     // get initData by layerConfig and LayerContainers
                     var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients, modelConfig);
                     foreach (var layerContainerClient in layerContainerClients)
@@ -221,6 +244,11 @@ namespace RuntimeEnvironment.Implementation {
             }
 
             return layerContainerClients;
+        }
+
+        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers, ISimConfig shuttleSimConfig)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

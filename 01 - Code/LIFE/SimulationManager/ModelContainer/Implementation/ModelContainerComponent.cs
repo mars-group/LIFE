@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
+using MARS.Shuttle.SimulationConfig;
 using ModelContainer.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
@@ -40,7 +41,12 @@ namespace ModelContainer.Implementation {
             return _modelContainerUseCase.GetModel(modelID);
         }
 
-        public ModelConfig GetModelConfig(TModelDescription modelId) {
+        public ISimConfig GetShuttleSimConfig(TModelDescription modelId) {
+            return _modelContainerUseCase.GetShuttleSimConfig(modelId);
+        }
+
+        public ModelConfig GetModelConfig(TModelDescription modelId)
+        {
             return _modelContainerUseCase.GetModelConfig(modelId);
         }
 
