@@ -43,12 +43,11 @@ namespace SimulationController.Implementation {
             }
         }
 
-		private void CheckIfSimControllerIsPresent ()
+		private void CheckIfSimControllerIsPresent()
 		{
 			if (_nodeRegistry.GetAllNodesByType(NodeType.SimulationController).Count > 1) {
 				throw new SimControllerAlreadyPresentException ();
 			}
-		
 		}
 
         private bool SetupSimManagerNode() {
