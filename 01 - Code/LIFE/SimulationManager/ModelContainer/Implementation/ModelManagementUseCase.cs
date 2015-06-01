@@ -124,7 +124,7 @@ namespace ModelContainer.Implementation {
                 }
             }
 
-            Logger.Debug("Finished reimporting models. Informing lsiteners");
+            Logger.Debug("Finished reimporting models. Informing listeners");
             foreach (Action listener in _listeners) {
                 listener();
             }
@@ -133,10 +133,9 @@ namespace ModelContainer.Implementation {
         public ISimConfig GetShuttleSimConfig(TModelDescription model) {
 
             var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name + Path.DirectorySeparatorChar + "SimConfig.json";
-            if (!File.Exists(path))
-            {
-                throw new NoSimulationConfigFoundException(
-                    "Not SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
+            if (!File.Exists(path)) {
+                return null;
+                //throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
             }
 
             var simConfigJsonContent = File.ReadAllText(path);
