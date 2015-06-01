@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppSettingsManager;
 using CommonTypes.DataTypes;
@@ -10,18 +11,20 @@ using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
-using System;
 
 namespace SimulationController.Implementation {
-    public class SimulationControllerUseCase : ISimulationManager {
+    public class SimulationControllerUseCase {
         private SimulationManagerClient _simulationManagerClient;
 
         private readonly INodeRegistry _nodeRegistry;
 
         private bool _isConnected;
+        private Dictionary<Guid, SimulationManagerClient> _simulationManagerClients;
 
         public SimulationControllerUseCase() {
             _isConnected = false;
+
+            _simulationManagerClients = new Dictionary<Guid, SimulationManagerClient>();
 
             var multiCastAdapter =
                 new MulticastAdapterComponent(
@@ -89,8 +92,8 @@ namespace SimulationController.Implementation {
 
 
         public void StartSimulationWithModel
-            (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused = false, int? nrOfTicks = null) {
-            _simulationManagerClient.StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
+            (Guid simulationId, TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused = false, int? nrOfTicks = null) {
+            _simulationManagerClients[simulationId].StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {

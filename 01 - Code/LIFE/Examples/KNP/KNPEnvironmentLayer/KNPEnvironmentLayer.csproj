@@ -32,20 +32,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BHVTree, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.31\lib\net45\BHVTree.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EnvironmentServiceComponent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.16\lib\net45\EnvironmentServiceComponent.dll</HintPath>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.31\lib\net45\EnvironmentServiceComponent.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Addins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.31\lib\net45\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SpatialAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.16\lib\net45\SpatialAPI.dll</HintPath>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.31\lib\net45\SpatialAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SpatialObjectOctree, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.16\lib\net45\SpatialObjectOctree.dll</HintPath>
+      <HintPath>..\..\..\packages\EnvironmentServiceComponent.0.4.31\lib\net45\SpatialObjectOctree.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

@@ -39,7 +39,7 @@
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
     <Reference Include="SpatialAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SpatialAPI.0.4.16\lib\net45\SpatialAPI.dll</HintPath>
+      <HintPath>..\..\..\packages\SpatialAPI.0.4.31\lib\net45\SpatialAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

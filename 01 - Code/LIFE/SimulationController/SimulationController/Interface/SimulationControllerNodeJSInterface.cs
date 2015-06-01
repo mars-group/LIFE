@@ -61,6 +61,7 @@ namespace SimulationController.Interface {
                         }
 
                         simController.StartSimulationWithModel(
+                            Guid.Parse((string)payload["simulationId"]),
                             GetTModelDescription(modelDescr),
                             containers,
                             false,

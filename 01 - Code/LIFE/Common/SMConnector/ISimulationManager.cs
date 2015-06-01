@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
 using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using Hik.Communication.ScsServices.Service;
@@ -33,6 +34,7 @@ namespace SMConnector {
         ///     <param name="startPaused" />
         ///     is true.
         /// </summary>
+        /// <param name="simulationId">The unique Id of this simulation run</param>
         /// <param name="model"></param>
         /// <param name="layerContainers"></param>
         /// <param name="startPaused"></param>
