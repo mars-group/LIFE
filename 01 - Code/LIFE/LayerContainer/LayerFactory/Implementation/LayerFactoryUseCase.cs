@@ -7,9 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.ObjectModel;
 using System.Linq;
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
