@@ -264,7 +264,8 @@ namespace RuntimeEnvironment.Implementation {
                 
                 //...fetch all agentTypes and amounts...
                 var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate());
-                foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetFieldToConstructorArgumentRelationsWithLayerName()[layerDescription.Name])
+                
+                foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
                 {
                     var agentCount = agentConfig.GetAgentInstanceCount();
                     var ids = new Guid[agentCount];
@@ -272,7 +273,13 @@ namespace RuntimeEnvironment.Implementation {
                     {
                         ids[j] = Guid.NewGuid();
                     }
-                    initData.AddAgentInitConfig(agentConfig.GetClassName(), agentCount, 0, ids, new Guid[0], agentConfig.GetFieldToConstructorArgumentRelations(), agentConfig.GetMarsCubeUrl());
+                    initData.AddAgentInitConfig(
+                        agentConfig.GetClassName(),
+                        agentCount, 0, ids, new Guid[0],
+                        agentConfig.GetFieldToConstructorArgumentRelations(),
+                        shuttleSimConfig.GetMarsCubeUrl(),
+                        shuttleSimConfig.GetMarsCubeName()
+                    );
                 }
                 //...and finally initialize the layer with it
                 layerContainerClients[0].Initialize(layerInstanceId, initData);

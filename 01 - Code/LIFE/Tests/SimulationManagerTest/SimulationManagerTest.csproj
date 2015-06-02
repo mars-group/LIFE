@@ -51,7 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.48\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.54\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

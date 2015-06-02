@@ -60,9 +60,9 @@ namespace LCConnector.TransportTypes {
         /// <param name="agentInitParameters">Optional parameterinformation about how and from where
         ///     to initialize the agent's constructor parameters.</param>
         /// <param name="getMarsCubeUrl"></param>
-        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string getMarsCubeUrl = null)
+        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
         {
-            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, getMarsCubeUrl));
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, marsCubeUrl, marsCubeName));
         }
     }
 
@@ -84,11 +84,25 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public int ShadowAgentCount { get; set; }
 
+        /// <summary>
+        /// The ids to be used for the real agents.
+        /// </summary>
         public Guid[] RealAgentIds { get; set; }
 
+        /// <summary>
+        /// The ids to be used for the shadow agents
+        /// </summary>
         public Guid[] ShadowAgentsIds { get; set; }
 
+        /// <summary>
+        /// The URL connection string for the MARS CUBE
+        /// </summary>
         public string MarsCubeUrl { get; set; }
+
+        /// <summary>
+        /// The name of the specific cube in MARS ROCK to be used for initialization
+        /// </summary>
+        public string MarsCubeName { get; set; }
 
         /// <summary>
         /// Constructor call parameters and information about where to get the data from
@@ -96,7 +110,7 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public List<IAtConstructorParameter> AgentInitParameters { get; set; }
 
-        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null)
+        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
         {
             AgentName = agentName;
             RealAgentCount = agentCount;
@@ -105,6 +119,9 @@ namespace LCConnector.TransportTypes {
             AgentInitParameters = agentInitParameters;
             RealAgentIds = realAgentIds;
             MarsCubeUrl = marsCubeUrl;
+            MarsCubeName = marsCubeName;
         }
+
+
     }
 }

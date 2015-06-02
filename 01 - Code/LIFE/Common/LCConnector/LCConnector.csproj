@@ -43,7 +43,7 @@
       <HintPath>..\..\packages\LIFEViewProtocol.0.4.4\lib\net45\LIFEViewProtocol.dll</HintPath>
     </Reference>
     <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.48\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.54\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NetTopologySuite, Version=1.13.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
