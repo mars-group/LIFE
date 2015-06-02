@@ -6,7 +6,6 @@ using log4net;
 using log4net.Appender;
 using log4net.Repository.Hierarchy;
 using MarsErrorReporting;
-using MARSLocalStarter.WinForms;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
@@ -144,10 +143,6 @@ namespace MARSLocalStarter
                 {
                     InteractiveModelChoosing(core);
                 }
-                else if (interactiveUI)
-                {
-                    InteractiveWithUi(core, layerContainer);
-                }
                 else if (!modelName.Equals(string.Empty))
                 {
                     var numOfTicks = 0;
@@ -183,22 +178,6 @@ namespace MARSLocalStarter
                     }
                 }
             }
-        }
-
-        private static void InteractiveWithUi(ISimulationManagerApplicationCore core, ILayerContainerFacade layerContainer)
-        {
-            new Thread(new ThreadStart(delegate
-            {
-                try
-                {
-                    var marsMc = new MarsMC(core, layerContainer);
-                    marsMc.ShowDialog();
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex.ToString());
-                }
-            })).Start();
         }
 
         private static void Main(string[] args) {

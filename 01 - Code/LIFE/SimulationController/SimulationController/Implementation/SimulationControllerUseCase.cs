@@ -14,18 +14,16 @@ using SMConnector.TransportTypes;
 
 namespace SimulationController.Implementation {
     public class SimulationControllerUseCase {
-        private SimulationManagerClient _simulationManagerClient;
-
         private readonly INodeRegistry _nodeRegistry;
 
-        private bool _isConnected;
         private Dictionary<Guid, SimulationManagerClient> _simulationManagerClients;
 
         public SimulationControllerUseCase() {
-            _isConnected = false;
-
             _simulationManagerClients = new Dictionary<Guid, SimulationManagerClient>();
 
+            /*
+             * Not needed atm, since we connect directly via ip and port
+             * 
             var multiCastAdapter =
                 new MulticastAdapterComponent(
                     Configuration.Load<GlobalConfig>("SimControllerGlobalConfig.cfg"),
@@ -44,89 +42,60 @@ namespace SimulationController.Implementation {
                     OnNewSimManagerConnected,
                     NodeType.SimulationManager);
             }
-        }
-
-		private void CheckIfSimControllerIsPresent()
-		{
-			if (_nodeRegistry.GetAllNodesByType(NodeType.SimulationController).Count > 1) {
-				throw new SimControllerAlreadyPresentException ();
-			}
-		}
-
-        private bool SetupSimManagerNode() {
-            var simManagerNode = _nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
-
-            if (simManagerNode != null) {
-                _simulationManagerClient = new SimulationManagerClient(simManagerNode);
-                _isConnected = true;
-                _nodeRegistry.SubscribeForNodeDisconnected(OnNodeDisconnected, simManagerNode);
-                return true;
-            }
-            return false;
-        }
-
-        private void OnNewSimManagerConnected(TNodeInformation newnode) {
-            _simulationManagerClient = new SimulationManagerClient(newnode);
-            _isConnected = true;
-        }
-
-        private void OnNodeDisconnected(TNodeInformation oldNode) {
-            // disconnect and clean up current client
-            _simulationManagerClient.Dispose();
-
-            // try to get new SimManagerNode
-            if (!SetupSimManagerNode()) {
-                // didn't work, lets reset state variables :(
-                _isConnected = false;
-                _simulationManagerClient = null;
-            }
+            */
         }
 
         #region ISimulationManager delegates
 
-        public ICollection<TModelDescription> GetAllModels() {
-            if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            return _simulationManagerClient.GetAllModels();
+        public void SetupNewSimulationRun(Guid simulationId, string ip, int port) {
+            _simulationManagerClients[simulationId] = new SimulationManagerClient(ip, port);
         }
-
-
 
         public void StartSimulationWithModel
-            (Guid simulationId, TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused = false, int? nrOfTicks = null) {
-            _simulationManagerClients[simulationId].StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
+            (Guid simulationId, TModelDescription model, bool startPaused = false, int? nrOfTicks = null) {
+            _simulationManagerClients[simulationId].StartSimulationWithModel(model, startPaused, nrOfTicks);
         }
 
-        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
-            if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClient.StepSimulation(model, layerContainers, nrOfTicks);
+        public void StepSimulation(Guid simulationId, TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null)
+        {
+            if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
+            _simulationManagerClients[simulationId].StepSimulation(model, layerContainers, nrOfTicks);
         }
 
-        public void PauseSimulation(TModelDescription model) {
-            if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClient.PauseSimulation(model);
+        public void PauseSimulation(Guid simulationId, TModelDescription model)
+        {
+            if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
+            _simulationManagerClients[simulationId].PauseSimulation(model);
         }
 
-        public void ResumeSimulation(TModelDescription model) {
-            if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClient.ResumeSimulation(model);
+        public void ResumeSimulation(Guid simulationId, TModelDescription model)
+        {
+            if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
+            _simulationManagerClients[simulationId].ResumeSimulation(model);
         }
 
-        public void AbortSimulation(TModelDescription model) {
-            if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClient.AbortSimulation(model);
+        public void AbortSimulation(Guid simulationId, TModelDescription model)
+        {
+            if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
+            _simulationManagerClients[simulationId].AbortSimulation(model);
         }
 
-        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
-            _simulationManagerClient.StartVisualization(model, nrOfTicksToVisualize);
+        public void StartVisualization(Guid simulationId, TModelDescription model, int? nrOfTicksToVisualize = null)
+        {
+            if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
+            _simulationManagerClients[simulationId].StartVisualization(model, nrOfTicksToVisualize);
         }
 
-        public void StopVisualization(TModelDescription model) {
-            _simulationManagerClient.StopVisualization(model);
+        public void StopVisualization(Guid simulationId, TModelDescription model)
+        {
+            if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
+            _simulationManagerClients[simulationId].StopVisualization(model);
         }
 
-        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
-            if (!_isConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClient.SubscribeForStatusUpdate(statusUpdateAvailable);
+        public void SubscribeForStatusUpdate(Guid simulationId, StatusUpdateAvailable statusUpdateAvailable)
+        {
+            if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
+            _simulationManagerClients[simulationId].SubscribeForStatusUpdate(statusUpdateAvailable);
         }
 
         #endregion

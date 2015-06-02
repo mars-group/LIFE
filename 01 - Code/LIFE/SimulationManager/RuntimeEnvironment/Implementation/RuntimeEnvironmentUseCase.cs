@@ -272,11 +272,11 @@ namespace RuntimeEnvironment.Implementation {
                     {
                         ids[j] = Guid.NewGuid();
                     }
-                    initData.AddAgentInitConfig(agentConfig.GetClassName(), agentCount, 0, ids, new Guid[0], agentConfig.GetFieldToConstructorArgumentRelations());
+                    initData.AddAgentInitConfig(agentConfig.GetClassName(), agentCount, 0, ids, new Guid[0], agentConfig.GetFieldToConstructorArgumentRelations(), agentConfig.GetMarsCubeUrl());
                 }
                 //...and finally initialize the layer with it
                 layerContainerClients[0].Initialize(layerInstanceId, initData);
-
+   
                 layerId++;
             }
 

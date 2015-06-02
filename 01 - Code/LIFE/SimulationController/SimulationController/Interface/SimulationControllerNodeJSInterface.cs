@@ -28,8 +28,6 @@ namespace SimulationController.Interface {
             // we return a new anonymous object here to make sure every subsequent call from Edge.js is done on the
             // same instance of SimulationControllerUseCase
             return new {
-                getAllModels =
-                    (Func<object, Task<object>>) (async i => await Task.Run(() => simController.GetAllModels())),
                 getConnectedNodes =
                     (Func<object, Task<object>>) (async i => await Task.Run(() => simController.GetConnectedNodes())),
                 startSimulationWithModel = (Func<dynamic, Task<object>>) (async i => await Task.Run(
@@ -37,34 +35,29 @@ namespace SimulationController.Interface {
                         var payload = (IDictionary<string, object>) i;
 
                         // TModelDescription
-                        var modelDescr = (IDictionary<string, dynamic>) payload["model"];
-
-                        // object[] containing NodeInformationTypes
-                        var layerContainers = (object[]) payload["layerContainers"];
-
-                        var containers = new List<TNodeInformation>();
-
-                        foreach (IDictionary<string, dynamic> elem in layerContainers)
-                        {
-                            NodeType nodeType;
-                            NodeType.TryParse(elem["NodeType"], out nodeType);
-
-                            var endpointDict = (IDictionary<string, dynamic>) elem["NodeEndpoint"];
-                            var nodeEndpoint = new NodeEndpoint((string)endpointDict["IpAddress"], (int)endpointDict["Port"]);
-
-                            containers.Add(new TNodeInformation(nodeType, elem["NodeIdentifier"], nodeEndpoint));
-                        }
+                        var modelDescr = (IDictionary<string, dynamic>)payload["model"];
 
                         int? ticks = null;
                         if (payload["nrOfTicks"] != null) {
                             ticks = (int)payload["nrOfTicks"];
                         }
 
+                        var startPaused = (bool) payload["startPaused"];
+
+                        var simulationId = Guid.Parse((string) payload["simulationId"]);
+
+                        var smConnectionInfo = (IDictionary<string, dynamic>)payload["smConnectionInfo"];
+                        var ip = (string) smConnectionInfo["ip"];
+                        var port = (int) smConnectionInfo["port"];
+
+                        // setup new connection to simulation cluster
+                        simController.SetupNewSimulationRun(simulationId, ip, port);
+
+                        // start simulation
                         simController.StartSimulationWithModel(
-                            Guid.Parse((string)payload["simulationId"]),
+                            simulationId,
                             GetTModelDescription(modelDescr),
-                            containers,
-                            false,
+                            startPaused,
                             ticks
                             );
 
@@ -72,24 +65,27 @@ namespace SimulationController.Interface {
                     })
                     ),
                 resumeSimulation = (Func<object, Task<object>>) (async i => await Task.Run(() => {
-                    // TModelDescription
-                    var modelDescr = (IDictionary<string, dynamic>) i;
+                    var payload = (IDictionary<string, object>)i;
                     simController.ResumeSimulation(
-                        GetTModelDescription(modelDescr));
+                        Guid.Parse((string)payload["simulationId"]),
+                        GetTModelDescription((IDictionary<string, dynamic>)payload["model"])
+                        );
                     return 0;
                 })),
                 abortSimulation = (Func<object, Task<object>>) (async i => await Task.Run(() => {
-                    // TModelDescription
-                    var modelDescr = (IDictionary<string, dynamic>) i;
+                    var payload = (IDictionary<string, object>)i;
                     simController.AbortSimulation(
-                        GetTModelDescription(modelDescr));
+                        Guid.Parse((string)payload["simulationId"]),
+                        GetTModelDescription((IDictionary<string, dynamic>)payload["model"])
+                        );
                     return 0;
                 })),
                 pauseSimulation = (Func<object, Task<object>>) (async i => await Task.Run(() => {
-                    // TModelDescription
-                    var modelDescr = (IDictionary<string, dynamic>) i;
+                    var payload = (IDictionary<string, object>)i;
                     simController.PauseSimulation(
-                        GetTModelDescription(modelDescr));
+                        Guid.Parse((string)payload["simulationId"]),
+                        GetTModelDescription((IDictionary<string, dynamic>)payload["model"])
+                        );
                     return 0;
                 })),
             };
@@ -98,13 +94,7 @@ namespace SimulationController.Interface {
 
         private static TModelDescription GetTModelDescription(IDictionary<string, dynamic> modelDescr)
         {
-            var statusUpdatedict = (IDictionary<string, dynamic>) modelDescr["Status"];
-            return new TModelDescription
-                (
-                modelDescr["Name"],
-                modelDescr["Description"],
-                statusUpdatedict["StatusMessage"],
-                (bool)modelDescr["Running"]);
+            return new TModelDescription(modelDescr["name"], modelDescr["info"]);
         }
     }
 

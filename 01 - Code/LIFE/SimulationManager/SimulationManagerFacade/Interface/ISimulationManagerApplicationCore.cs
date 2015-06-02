@@ -17,21 +17,8 @@ namespace SimulationManagerFacade.Interface {
 		/// <returns>A list of TModelDescriptions or an empty list if no models are present</returns>
 		ICollection<TModelDescription> GetAllModels();
 
-		/// <summary>
-		/// Starts a simulation with the model derived from the provided TModelDescription.
-		/// </summary>
-		/// <param name="model">not null</param>
-		/// <param name="nrOfTicks"></param>
-		void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null);
 
-        /// <summary>
-        /// Starts a simulation with the model derived from the provided TModelDescription.
-        /// Will just initialize and then pause the execution if <param name="startPaused"/> is true.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="startPaused"></param>
-        /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, bool startPaused, int? nrOfTicks = null);
+
 
         /// <summary>
         /// Steps a simulation with the model derived from the provided TModelDescription 

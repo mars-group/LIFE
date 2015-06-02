@@ -58,10 +58,11 @@ namespace LCConnector.TransportTypes {
         /// <param name="realAgentIds">A Guid[] with ids to be used by the real agents</param>
         /// <param name="shadowAgentsIds">A Guid[] with ids to be used by the shadow agents</param>
         /// <param name="agentInitParameters">Optional parameterinformation about how and from where
-        /// to initialize the agent's constructor parameters.</param>
-        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null )
+        ///     to initialize the agent's constructor parameters.</param>
+        /// <param name="getMarsCubeUrl"></param>
+        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string getMarsCubeUrl = null)
         {
-            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters));
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, getMarsCubeUrl));
         }
     }
 
@@ -87,13 +88,15 @@ namespace LCConnector.TransportTypes {
 
         public Guid[] ShadowAgentsIds { get; set; }
 
+        public string MarsCubeUrl { get; set; }
+
         /// <summary>
         /// Constructor call parameters and information about where to get the data from
         /// Check this for null, prior to using it!
         /// </summary>
         public List<IAtConstructorParameter> AgentInitParameters { get; set; }
 
-        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null)
+        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null)
         {
             AgentName = agentName;
             RealAgentCount = agentCount;
@@ -101,6 +104,7 @@ namespace LCConnector.TransportTypes {
             ShadowAgentsIds = shadowAgentsIds;
             AgentInitParameters = agentInitParameters;
             RealAgentIds = realAgentIds;
+            MarsCubeUrl = marsCubeUrl;
         }
     }
 }

@@ -15,15 +15,17 @@ namespace SimulationController.Implementation {
 
         private readonly ISimulationManager _simManager;
         private readonly IScsServiceClient<ISimulationManager> _simManagerClient;
+        public bool IsConnected { get; private set; }
 
-        public SimulationManagerClient(TNodeInformation newnode) {
+        public SimulationManagerClient(string ip, int port) {
+            IsConnected = false;
             _simManagerClient = ScsServiceClientBuilder.CreateClient<ISimulationManager>(
-                new ScsTcpEndPoint(newnode.NodeEndpoint.IpAddress, newnode.NodeEndpoint.Port));
+                new ScsTcpEndPoint(ip, port));
 
             _simManagerClient.Disconnected += SimManagerClientOnDisconnected;
 
             _simManagerClient.Connect();
-
+            IsConnected = true;
             _simManager = _simManagerClient.ServiceProxy;
         }
 
@@ -45,8 +47,16 @@ namespace SimulationController.Implementation {
             _simManager.StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
         }
 
+        public void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null) {
+            _simManager.StartSimulationWithModel(model, nrOfTicks);
+        }
+
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
             _simManager.StepSimulation(model,layerContainers,nrOfTicks);
+        }
+
+        public void StartSimulationWithModel(TModelDescription model, bool startPaused, int? nrOfTicks = null) {
+            _simManager.StartSimulationWithModel(model, startPaused, nrOfTicks);
         }
 
         public void PauseSimulation(TModelDescription model) {
