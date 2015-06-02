@@ -9,12 +9,13 @@ using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
+using LifeAPI.Layer;
 
 namespace AgentManager.Implementation
 {
     public class AgentManager : IAgentManager
     {
-        public Dictionary<Guid, IAgent> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig) {
+		public Dictionary<Guid, IAgent> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, List<ILayer> additionalLayerDependencies) {
             var agents = new Dictionary<Guid, IAgent>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
@@ -69,32 +70,42 @@ namespace AgentManager.Implementation
 
             foreach (var realAgentId in agentInitConfig.RealAgentIds) {
                 var actualParameters = new List<object>(agentParameterCount);
-
-                foreach (var param in initParams)
+				var paramEnumerator = initParams.GetEnumerator ();
+				var neededParameters = agentConstructor.GetParameters ();
+				foreach (var neededParam in neededParameters)
                 {
-                    if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
-                    {
-                        // use static value
-                        var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
-                        var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
-                        
-                        if (paramType == null || !paramType.IsPrimitive) {
-                            throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type.");
-                        
-                        }
-                        actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
-                    }
+					// check whether the parameter is an instance of ILayer
+					if(neededParam is ILayer){
+						actualParameters.Add (additionalLayerDependencies.First(l => l.GetType () == neededParam.ParameterType));	
+					} else {
+						// it's a primitive type, so take the next param from params list provided by SHUTTLE
+						var param = paramEnumerator.Current;
+						paramEnumerator.MoveNext();
 
-                    if (param.GetParameterType() ==
-                        AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
-                        var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation();
-                        // fetch parameter from ROCK CUBE
-                        var paramValue = agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current;
-                        // advance Enumerator
-                        agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
-                        // add param to actualParameters[]
-                        actualParameters.Add(paramValue);
-                    }   
+						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
+						{
+							// use static value
+							var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
+							var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
+
+							if (paramType == null || !paramType.IsPrimitive) {
+								throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type.");
+
+							}
+							actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
+						}
+
+						if (param.GetParameterType() ==
+							AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
+							var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation();
+							// fetch parameter from ROCK CUBE
+							var paramValue = agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current;
+							// advance Enumerator
+							agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
+							// add param to actualParameters[]
+							actualParameters.Add(paramValue);
+						}   	
+					}
                 }
 
                 // call constructor of agent and store agent in return dictionary
