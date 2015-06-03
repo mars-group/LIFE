@@ -11,13 +11,13 @@ using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
 using SpatialAPI.Environment;
 
-namespace AgentManager.Implementation
+namespace AgentManagerService.Implementation
 {
-    public class AgentManager : IAgentManager
+    public class AgentManager<T> : IAgentManager<T> where T : IAgent
     {
-        public Dictionary<Guid, IAgent> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, IEnvironment environment, List<ILayer> additionalLayerDependencies)
+        public Dictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, IEnvironment environment, List<ILayer> additionalLayerDependencies)
         {
-            var agents = new Dictionary<Guid, IAgent>();
+            var agents = new Dictionary<Guid, T>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
             // connect to MARS ROCK
@@ -113,7 +113,7 @@ namespace AgentManager.Implementation
 				}
 
                 // call constructor of agent and store agent in return dictionary
-                agents.Add(realAgentId, (IAgent)agentConstructor.Invoke(actualParameters.ToArray()));
+                agents.Add(realAgentId, (T)agentConstructor.Invoke(actualParameters.ToArray()));
             }
 
             return agents;
