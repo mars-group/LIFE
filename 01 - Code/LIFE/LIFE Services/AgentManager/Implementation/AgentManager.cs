@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 using AgentManager.Interface;
 using AgentManager.Interface.Exceptions;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
+using LifeAPI.Layer;
 using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
-using LifeAPI.Layer;
+using SpatialAPI.Environment;
 
 namespace AgentManager.Implementation
 {
     public class AgentManager : IAgentManager
     {
-		public Dictionary<Guid, IAgent> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, List<ILayer> additionalLayerDependencies) {
+        public Dictionary<Guid, IAgent> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, IEnvironment environment, List<ILayer> additionalLayerDependencies)
+        {
             var agents = new Dictionary<Guid, IAgent>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
@@ -72,13 +73,16 @@ namespace AgentManager.Implementation
                 var actualParameters = new List<object>(agentParameterCount);
 				var paramEnumerator = initParams.GetEnumerator ();
 				var neededParameters = agentConstructor.GetParameters ();
-				foreach (var neededParam in neededParameters)
-                {
-					// check whether the parameter is an instance of ILayer
-					if(neededParam is ILayer){
+				foreach (var neededParam in neededParameters) {
+				    // check whether the parameter is an instance of ILayer
+				    var layer = neededParam.ParameterType as ILayer;
+				    var env = neededParam.ParameterType as IEnvironment;
+				    if(layer != null){
 						actualParameters.Add (additionalLayerDependencies.First(l => l.GetType () == neededParam.ParameterType));	
+					} else if (env != null) {
+					    actualParameters.Add(environment);
 					} else {
-						// it's a primitive type, so take the next param from params list provided by SHUTTLE
+				    // it's a primitive type, so take the next param from params list provided by SHUTTLE
 						var param = paramEnumerator.Current;
 						paramEnumerator.MoveNext();
 
@@ -106,7 +110,7 @@ namespace AgentManager.Implementation
 							actualParameters.Add(paramValue);
 						}   	
 					}
-                }
+				}
 
                 // call constructor of agent and store agent in return dictionary
                 agents.Add(realAgentId, (IAgent)agentConstructor.Invoke(actualParameters.ToArray()));
