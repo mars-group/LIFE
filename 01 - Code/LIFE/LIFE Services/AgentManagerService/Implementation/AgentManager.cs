@@ -8,6 +8,7 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -24,9 +25,9 @@ namespace AgentManagerService.Implementation
 {
     public class AgentManager<T> : IAgentManager<T> where T : IAgent
     {
-        public Dictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, IEnvironment environment, List<ILayer> additionalLayerDependencies)
+        public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, IEnvironment environment, List<ILayer> additionalLayerDependencies)
         {
-            var agents = new Dictionary<Guid, T>();
+            var agents = new ConcurrentDictionary<Guid, T>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
             // connect to MARS ROCK
@@ -122,7 +123,7 @@ namespace AgentManagerService.Implementation
 				}
 
                 // call constructor of agent and store agent in return dictionary
-                agents.Add(realAgentId, (T)agentConstructor.Invoke(actualParameters.ToArray()));
+                agents.TryAdd(realAgentId, (T)agentConstructor.Invoke(actualParameters.ToArray()));
             }
 
             return agents;
