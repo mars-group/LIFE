@@ -76,7 +76,9 @@ namespace ModelContainer.Implementation {
                     (type.Name,
                         type.Assembly.GetName().Version.Major,
                         type.Assembly.GetName().Version.Minor,
-                        type.Assembly.Location);
+                        type.Assembly.Location,
+                        type.FullName,
+                        type.AssemblyQualifiedName);
 
                 if (constructors.Any(c => c.GetParameters().Length == 0))
                     modelStructure.AddLayer(layerDescription, type);

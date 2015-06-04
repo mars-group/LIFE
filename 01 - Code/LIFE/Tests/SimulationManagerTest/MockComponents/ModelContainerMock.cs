@@ -31,7 +31,7 @@ namespace SimulationManagerTestClasses.MockComponents {
         }
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
-            return new[] {new TLayerDescription("TestLayer", 0, 1, "TestLayer.dll") };
+            return new[] { new TLayerDescription("TestLayer", 0, 1, "TestLayer.dll", "TestLayer", "TestLayer") };
         }
 
         public void AddModelFromURL(string sourceUrl) {

@@ -43,14 +43,14 @@
             ModelStructure structure = new ModelStructure();
 
             TLayerDescription[] descriptions = {
-                new TLayerDescription("0", 0, 1, "no use.dll"),
-                new TLayerDescription("1", 0, 1, "no use.dll"),
-                new TLayerDescription("2", 0, 1, "no use.dll"),
-                new TLayerDescription("3", 0, 1, "no use.dll"),
-                new TLayerDescription("4", 0, 1, "no use.dll"),
-                new TLayerDescription("5", 0, 1, "no use.dll"),
-                new TLayerDescription("6", 0, 1, "no use.dll"),
-                new TLayerDescription("7", 0, 1, "no use.dll")
+                new TLayerDescription("0", 0, 1, "no use.dll","0","0"),
+                new TLayerDescription("1", 0, 1, "no use.dll","0","0"),
+                new TLayerDescription("2", 0, 1, "no use.dll","0","0"),
+                new TLayerDescription("3", 0, 1, "no use.dll","0","0"),
+                new TLayerDescription("4", 0, 1, "no use.dll","0","0"),
+                new TLayerDescription("5", 0, 1, "no use.dll","0","0"),
+                new TLayerDescription("6", 0, 1, "no use.dll","0","0"),
+                new TLayerDescription("7", 0, 1, "no use.dll","0","0")
             };
 
             structure.AddLayer(descriptions[0], typeof (Zero));

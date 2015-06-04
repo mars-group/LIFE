@@ -44,6 +44,11 @@ namespace KNPElevationLayer
         {
             get { return "ElevationLayer"; }
         }
+
+        public void LoadGISDataByWebservice(string gisWebserviceUrl, string imageFormat, int srid, string[] layers,
+            string layerName = "") {
+            throw new NotImplementedException();
+        }
     }
 }
 

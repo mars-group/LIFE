@@ -31,6 +31,11 @@ namespace LifeAPI.Layer.GIS {
         void LoadGISData(Uri gisFileUrl, string layerName = "");
 
         /// <summary>
+        ///     Loads GIS data from the provided WebService URL
+        /// </summary>
+        void LoadGISDataByWebservice(string gisWebserviceUrl, string imageFormat, int srid, string[] layers, string layerName = "");
+
+        /// <summary>
         ///     Executes an intersection query on the data loaded in this GIS layer.
         ///     Will return all data associated with
         ///     <param name="geometry" />

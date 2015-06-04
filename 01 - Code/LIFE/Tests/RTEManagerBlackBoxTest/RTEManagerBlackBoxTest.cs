@@ -18,7 +18,7 @@ namespace RTEManagerBlackBoxTest
             IRTEManager rteManager = new RTEManagerUseCase(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
             var mockLayer = new SimpleSteppedActiveLayerMock();
 
-            var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer"), 1);
+            var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer", "MockLayer", "MockLayer"), 1);
 
             Assert.DoesNotThrow(() => rteManager.RegisterLayer(layerId, mockLayer));
 
@@ -39,7 +39,7 @@ namespace RTEManagerBlackBoxTest
             RTEManagerUseCase rteManager = new RTEManagerUseCase(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
             var mockLayer = new SimpleSteppedActiveLayerMock();
 
-            var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer"), 1);
+            var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer", "MockLayer", "MockLayer"), 1);
 
             Assert.DoesNotThrow(() => rteManager.RegisterLayer(layerId, mockLayer));
 

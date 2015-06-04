@@ -8,6 +8,7 @@ using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
+using LifeAPI.Layer.GIS;
 using MARS.Shuttle.SimulationConfig;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
@@ -255,6 +256,8 @@ namespace RuntimeEnvironment.Implementation {
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
+            var thereAreGisLayers = shuttleSimConfig.GetGISActiveLayerSources().Count > 0;
+            var gisLayerSourceEnumerator = shuttleSimConfig.GetGISActiveLayerSources().GetEnumerator();
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
@@ -264,23 +267,43 @@ namespace RuntimeEnvironment.Implementation {
                 
                 //...fetch all agentTypes and amounts...
                 var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate());
-                
-                foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
-                {
-                    var agentCount = agentConfig.GetAgentInstanceCount();
-                    var ids = new Guid[agentCount];
-                    for (var j = 0; j < agentCount; j++)
-                    {
-                        ids[j] = Guid.NewGuid();
+
+                // check if layer to initialize is GIS layer
+                if (thereAreGisLayers) {
+                    // check if the current layer is a GIS Layer
+                    var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
+                    if (layerType != null && layerType.GetInterfaces().Contains(typeof (IGISAccess))) {
+                        initData.GisLayerSource = gisLayerSourceEnumerator.Current;
+                        if (!gisLayerSourceEnumerator.MoveNext()) {
+                            thereAreGisLayers = false;
+                        }
                     }
-                    initData.AddAgentInitConfig(
-                        agentConfig.GetClassName(),
-                        agentCount, 0, ids, new Guid[0],
-                        agentConfig.GetFieldToConstructorArgumentRelations(),
-                        shuttleSimConfig.GetMarsCubeUrl(),
-                        shuttleSimConfig.GetMarsCubeName()
-                    );
                 }
+                else 
+                {
+                    // no GIS layer, so fetch agentConfig
+                    foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
+                    {
+                        var agentCount = agentConfig.GetAgentInstanceCount();
+                        var ids = new Guid[agentCount];
+
+                        for (var j = 0; j < agentCount; j++)
+                        {
+                            ids[j] = Guid.NewGuid();
+                        }
+
+                        initData.AddAgentInitConfig(
+                            agentConfig.GetClassName(),
+                            agentCount, 0, ids, new Guid[0],
+                            agentConfig.GetFieldToConstructorArgumentRelations(),
+                            shuttleSimConfig.GetMarsCubeUrl(),
+                            shuttleSimConfig.GetMarsCubeName()
+                        );
+                    }
+                }
+
+
+
                 //...and finally initialize the layer with it
                 layerContainerClients[0].Initialize(layerInstanceId, initData);
    

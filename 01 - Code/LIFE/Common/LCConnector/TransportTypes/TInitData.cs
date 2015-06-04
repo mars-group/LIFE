@@ -39,6 +39,8 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public bool Distribute { get; private set; }
 
+        public SimConfig.GISLayerSource GisLayerSource { get; set; }
+
         /// <summary>
         /// Creates a new TInitData object, with an empty list of AgentInitConfigs
         /// </summary>
