@@ -258,6 +258,7 @@ namespace RuntimeEnvironment.Implementation {
             var layerId = 0;
             var thereAreGisLayers = shuttleSimConfig.GetGISActiveLayerSources().Count > 0;
             var gisLayerSourceEnumerator = shuttleSimConfig.GetGISActiveLayerSources().GetEnumerator();
+            
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
