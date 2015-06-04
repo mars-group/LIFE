@@ -50,11 +50,7 @@ namespace SimulationManagerFacade.Implementation {
         }
         
 		//local option for simulation start - connected layer containers unknown. Use all and use standard implementation.
-		public void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null) {
-			_runtimeEnvironment.StartWithModel(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks);
-		}
-
-        public void StartSimulationWithModel(TModelDescription model, bool startPaused, int? nrOfTicks = null) {
+        public void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null, bool startPaused = false) {
             _runtimeEnvironment.StartWithModel(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, startPaused);
         }
 
@@ -65,15 +61,6 @@ namespace SimulationManagerFacade.Implementation {
 
         #region RuntimeEnvironment delegation
 
-
-        public void StartSimulationWithModel
-            (TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null) {
-                _runtimeEnvironment.StartWithModel(model, layerContainers, nrOfTicks, startPaused);
-        }
-
-        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
-            _runtimeEnvironment.StepSimulation(model, layerContainers, nrOfTicks);
-        }
 
         public void PauseSimulation(TModelDescription model) {
             _runtimeEnvironment.Pause(model);

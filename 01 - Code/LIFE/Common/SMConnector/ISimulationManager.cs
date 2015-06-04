@@ -28,37 +28,13 @@ namespace SMConnector {
         ICollection<TModelDescription> GetAllModels();
 
         /// <summary>
-        ///     Starts a simulation with the model derived from the provided TModelDescription.
-        ///     Will just initialize and then pause the execution if
-        ///     <param name="startPaused" />
-        ///     is true.
-        /// </summary>
-        /// <param name="simulationId">The unique Id of this simulation run</param>
-        /// <param name="model"></param>
-        /// <param name="layerContainers"></param>
-        /// <param name="startPaused"></param>
-        /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel
-            (TModelDescription model,
-                ICollection<TNodeInformation> layerContainers,
-                bool startPaused = false,
-                int? nrOfTicks = null);
-
-        /// <summary>
-        /// Starts a simulation with the model derived from the provided TModelDescription.
-        /// </summary>
-        /// <param name="model">not null</param>
-        /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null);
-
-        /// <summary>
         ///     Steps the simulation by one tick or by nrOfTicks if provided.
         /// </summary>
         /// <param name="model">Model.</param>
         /// <param name="layerContainers">Layer containers.</param>
         /// <param name="nrOfTicks">Nr of ticks.</param>
         void StepSimulation
-            (TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null);
+            (TModelDescription model, int? nrOfTicks = null);
 
 
         /// <summary>
@@ -68,13 +44,14 @@ namespace SMConnector {
         /// <param name="model"></param>
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, bool startPaused, int? nrOfTicks = null);
+        void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null, bool startPaused = false);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.
         /// </summary>
         /// <param name="model">not null</param>
         void PauseSimulation(TModelDescription model);
+
 
         /// <summary>
         ///     Resumes the simulation with the given model, if there is one running. Does nothing, if there is not.

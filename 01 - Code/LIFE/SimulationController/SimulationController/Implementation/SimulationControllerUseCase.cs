@@ -53,13 +53,13 @@ namespace SimulationController.Implementation {
 
         public void StartSimulationWithModel
             (Guid simulationId, TModelDescription model, bool startPaused = false, int? nrOfTicks = null) {
-            _simulationManagerClients[simulationId].StartSimulationWithModel(model, startPaused, nrOfTicks);
+                _simulationManagerClients[simulationId].StartSimulationWithModel(model, nrOfTicks, startPaused);
         }
 
-        public void StepSimulation(Guid simulationId, TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null)
+        public void StepSimulation(Guid simulationId, TModelDescription model,  int? nrOfTicks = null)
         {
             if (!_simulationManagerClients[simulationId].IsConnected) throw new NoSimulationManagerConnectedException();
-            _simulationManagerClients[simulationId].StepSimulation(model, layerContainers, nrOfTicks);
+            _simulationManagerClients[simulationId].StepSimulation(model, nrOfTicks);
         }
 
         public void PauseSimulation(Guid simulationId, TModelDescription model)

@@ -42,21 +42,13 @@ namespace SimulationController.Implementation {
             return _simManager.GetAllModels();
         }
 
-
-        public void StartSimulationWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainers, bool startPaused, int? nrOfTicks = null) {
-            _simManager.StartSimulationWithModel(model, layerContainers, startPaused, nrOfTicks);
+        public void StepSimulation(TModelDescription model, int? nrOfTicks = null) {
+            _simManager.StepSimulation(model, nrOfTicks);
         }
 
-        public void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null) {
-            _simManager.StartSimulationWithModel(model, nrOfTicks);
-        }
-
-        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainers, int? nrOfTicks = null) {
-            _simManager.StepSimulation(model,layerContainers,nrOfTicks);
-        }
-
-        public void StartSimulationWithModel(TModelDescription model, bool startPaused, int? nrOfTicks = null) {
-            _simManager.StartSimulationWithModel(model, startPaused, nrOfTicks);
+        public void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null, bool startPaused = false)
+        {
+            _simManager.StartSimulationWithModel(model, nrOfTicks, startPaused);
         }
 
         public void PauseSimulation(TModelDescription model) {

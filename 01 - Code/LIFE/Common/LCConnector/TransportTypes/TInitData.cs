@@ -39,7 +39,7 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public bool Distribute { get; private set; }
 
-        public SimConfig.GISLayerSource GisLayerSource { get; set; }
+        public GisInitConfig GisInitInfo { get; private set; }
 
         /// <summary>
         /// Creates a new TInitData object, with an empty list of AgentInitConfigs
@@ -65,6 +65,26 @@ namespace LCConnector.TransportTypes {
         public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
         {
             AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, marsCubeUrl, marsCubeName));
+        }
+
+        public void AddGisInitConfig(string GisSourceUrl, string ImageFormat, int Srid, string[] layerNames) {
+            GisInitInfo = new GisInitConfig(GisSourceUrl,ImageFormat,Srid,layerNames);
+        }
+    }
+
+    [Serializable]
+    public class GisInitConfig 
+    {
+        public string GisSourceUrl { get; set; }
+        public string ImageFormat { get; set; }
+        public int Srid { get; set; }
+        public string[] LayerNames { get; set; }
+
+        public GisInitConfig(string gisSourceUrl, string imageFormat, int srid, string[] layerNames) {
+            GisSourceUrl = gisSourceUrl;
+            ImageFormat = imageFormat;
+            Srid = srid;
+            LayerNames = layerNames;
         }
     }
 

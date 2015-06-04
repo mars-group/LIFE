@@ -274,7 +274,8 @@ namespace RuntimeEnvironment.Implementation {
                     // check if the current layer is a GIS Layer
                     var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
                     if (layerType != null && layerType.GetInterfaces().Contains(typeof (IGISAccess))) {
-                        initData.GisLayerSource = gisLayerSourceEnumerator.Current;
+                        var gisInfo = gisLayerSourceEnumerator.Current;
+                        initData.AddGisInitConfig(gisInfo.GISSourceUrl, gisInfo.ImageFormat, int.Parse(gisInfo.Srid), gisInfo.LayerNames.ToArray());
                         if (!gisLayerSourceEnumerator.MoveNext()) {
                             thereAreGisLayers = false;
                         }

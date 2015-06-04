@@ -23,6 +23,7 @@ using RuntimeEnvironment.Implementation;
 using RuntimeEnvironment.Interfaces;
 using SimulationManagerFacade.Implementation;
 using SimulationManagerShared;
+using SMConnector;
 
 namespace SimulationManagerFacade.Interface {
     /// <summary>

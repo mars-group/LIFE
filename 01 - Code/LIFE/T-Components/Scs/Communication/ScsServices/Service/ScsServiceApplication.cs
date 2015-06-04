@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using CustomUtilities.Collections;
 using Hik.Communication.Scs.Communication.Messages;
@@ -343,9 +344,10 @@ namespace Hik.Communication.ScsServices.Service {
                     {
                         continue;
                     }
-                    _internalMethods.Add(methodInfo.Name,methodInfo);
+                    _internalMethods.Add(methodInfo.Name, methodInfo);
                 }
             }
+
 
             /// <summary>
             ///     Invokes a method of Service object.
@@ -356,6 +358,7 @@ namespace Hik.Communication.ScsServices.Service {
             public object InvokeMethod(string methodName, params object[] parameters)
             {
                 MethodInfo method = null;
+
                 //Check if there is a method with name methodName
                 if (!_methods.ContainsKey(methodName))
                 {
@@ -369,7 +372,7 @@ namespace Hik.Communication.ScsServices.Service {
                 {
                     method = _methods[methodName];
                 }
-
+                
                 //Invoke method and return invoke result
                 return method.Invoke(Service, parameters);
             }
