@@ -16,6 +16,12 @@ namespace LifeAPI.Config
         /// <summary>
         /// All entities will be evenly distributed across all nodes.
         /// </summary>
-        EVEN_DISTRIBUTION
+        EVEN_DISTRIBUTION,
+         
+        /// <summary>
+        /// Only valid on environmental layers using the ESC!
+        /// Will activate replication of environment
+        /// </summary>
+        ENV_REPLICATION
     }
 }

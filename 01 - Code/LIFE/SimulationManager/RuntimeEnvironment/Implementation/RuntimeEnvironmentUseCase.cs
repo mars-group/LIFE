@@ -229,7 +229,18 @@ namespace RuntimeEnvironment.Implementation {
                     //...and finally initialize the layer with it
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
                 }
-                else
+                else if (layerConfig.DistributionStrategy == DistributionStrategy.ENV_REPLICATION)
+                {
+                    // special case, only valid for ESC layers!
+                    // set distribute to true
+                    var initData = new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate);
+                    foreach (var layerContainerClient in layerContainerClients)
+                    {
+                        layerContainerClient.Instantiate(layerInstanceId);
+                        layerContainerClient.Initialize(layerInstanceId, initData);
+                    }
+                } 
+                else 
                 {
                     // get initData by layerConfig and LayerContainers
                     var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients, modelConfig);
