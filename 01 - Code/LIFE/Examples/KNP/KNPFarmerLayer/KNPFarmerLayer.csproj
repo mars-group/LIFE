@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GeoAPI">
-      <HintPath>..\..\..\packages\LifeGISLayer.0.3.22\lib\net45\GeoAPI.dll</HintPath>
+      <HintPath>..\..\..\packages\LifeGISActiveLayer.0.4.3\lib\net45\GeoAPI.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
