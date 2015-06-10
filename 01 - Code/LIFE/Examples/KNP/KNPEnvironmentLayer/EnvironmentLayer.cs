@@ -7,7 +7,6 @@ using Mono.Addins;
 using SpatialAPI.Entities;
 using SpatialAPI.Entities.Movement;
 using SpatialAPI.Entities.Transformation;
-using SpatialAPI.Environment;
 using SpatialAPI.Shape;
 
 [assembly: Addin]

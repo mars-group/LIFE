@@ -62,7 +62,7 @@ namespace SimulationManager
             int ticks = int.Parse(Console.ReadLine());
             if (nr == -1) {
                 core.StartSimulationWithModel
-                    (new TModelDescription
+                    (Guid.NewGuid(), new TModelDescription
                         ("ElephantModel",
                             "",
                             "Not Running",
@@ -71,7 +71,7 @@ namespace SimulationManager
                         ticks);
             }
             else {
-                core.StartSimulationWithModel(core.GetAllModels().ToList()[nr], ticks);
+                core.StartSimulationWithModel(Guid.NewGuid(), core.GetAllModels().ToList()[nr], ticks);
             }
 
         }
@@ -166,7 +166,7 @@ namespace SimulationManager
                     }
                     else
                     {
-                        core.StartSimulationWithModel(model, numOfTicks);
+                        core.StartSimulationWithModel(Guid.NewGuid(), model, numOfTicks);
                     }
                 }
             }

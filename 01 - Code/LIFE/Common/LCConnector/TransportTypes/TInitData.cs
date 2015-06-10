@@ -35,6 +35,12 @@ namespace LCConnector.TransportTypes {
         public DateTime SimulationWallClockStartDate { get; private set; }
 
         /// <summary>
+        /// The unique simulationId of this simulation run. Use this
+        /// when using any of the LIFE services requiring a simrun id.
+        /// </summary>
+        public Guid SimulationId { get; private set; }
+
+        /// <summary>
         /// Determines whethers this layer should be distributed or not.
         /// </summary>
         public bool Distribute { get; private set; }
@@ -44,10 +50,11 @@ namespace LCConnector.TransportTypes {
         /// <summary>
         /// Creates a new TInitData object, with an empty list of AgentInitConfigs
         /// </summary>
-        public TInitData(bool distribute, TimeSpan oneTickTimeSpan, DateTime simulationWallClockStartDate) {
+        public TInitData(bool distribute, TimeSpan oneTickTimeSpan, DateTime simulationWallClockStartDate, Guid simulationId) {
             Distribute = distribute;
             OneTickTimeSpan = oneTickTimeSpan;
             SimulationWallClockStartDate = simulationWallClockStartDate;
+            SimulationId = simulationId;
             AgentInitConfigs = new List<AgentInitConfig>();
         }
 

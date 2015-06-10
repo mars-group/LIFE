@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 21.11.2014
 //  *******************************************************/
 
+using System;
 using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using Hik.Communication.ScsServices.Service;
@@ -41,10 +42,11 @@ namespace SMConnector {
         /// Starts a simulation with the model derived from the provided TModelDescription.
         /// Will just initialize and then pause the execution if <param name="startPaused"/> is true.
         /// </summary>
+        /// <param name="simulationId">The unique ID identifing this simulation run.</param>
         /// <param name="model"></param>
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
-        void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null, bool startPaused = false);
+        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, bool startPaused = false);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.

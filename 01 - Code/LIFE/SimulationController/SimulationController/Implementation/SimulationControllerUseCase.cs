@@ -53,7 +53,7 @@ namespace SimulationController.Implementation {
 
         public void StartSimulationWithModel
             (Guid simulationId, TModelDescription model, bool startPaused = false, int? nrOfTicks = null) {
-                _simulationManagerClients[simulationId].StartSimulationWithModel(model, nrOfTicks, startPaused);
+                _simulationManagerClients[simulationId].StartSimulationWithModel(simulationId, model, nrOfTicks, startPaused);
         }
 
         public void StepSimulation(Guid simulationId, TModelDescription model,  int? nrOfTicks = null)

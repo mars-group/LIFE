@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using SMConnector;
 using SMConnector.TransportTypes;
@@ -11,11 +12,12 @@ namespace RuntimeEnvironment.Interfaces {
         /// <summary>
         /// Starts a simulation with the provided model.
         /// </summary>
+        /// <param name="simulationId">The unique simulation ID of this simulation run.</param>
         /// <param name="model">The model description to start with.</param>
         /// <param name="layerContainerNodes">The layer container instances to be used in this run.</param>
         /// <param name="nrOfTicks">The number of ticks to be simulated</param>
         /// <param name="startPaused">Whether or not to start the simulation paused.</param>
-        void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false);
+        void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false);
 
         /// <summary>
         /// Steps the simulation by <param name="nrOfTicks"/> or 1 tick if the parameter is not set.

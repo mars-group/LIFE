@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonTypes.DataTypes;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
@@ -18,8 +19,8 @@ namespace RuntimeEnvironment.Implementation {
         }
 
         public void StartWithModel
-            (TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
-            _runtimeEnvironmentUseCase.StartWithModel(model, layerContainerNodes, nrOfTicks, startPaused);
+            (Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
+                _runtimeEnvironmentUseCase.StartWithModel(simulationId, model, layerContainerNodes, nrOfTicks, startPaused);
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {

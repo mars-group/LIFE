@@ -67,7 +67,8 @@ namespace MARSLocalStarter
             if (nr == -1)
             {
                 core.StartSimulationWithModel
-                    (new TModelDescription
+                    (Guid.NewGuid(),
+                     new TModelDescription
                         ("ElephantModel",
                             "",
                             "Not Running",
@@ -78,7 +79,7 @@ namespace MARSLocalStarter
             else
             {
                 var models = core.GetAllModels().ToList();
-                core.StartSimulationWithModel(models[nr], ticks);
+                core.StartSimulationWithModel(Guid.NewGuid(), models[nr], ticks);
             }
         }
 
@@ -174,7 +175,7 @@ namespace MARSLocalStarter
                     }
                     else
                     {
-                        core.StartSimulationWithModel(model, numOfTicks);
+                        core.StartSimulationWithModel(Guid.NewGuid(), model, numOfTicks);
                     }
                 }
             }

@@ -46,9 +46,9 @@ namespace SimulationController.Implementation {
             _simManager.StepSimulation(model, nrOfTicks);
         }
 
-        public void StartSimulationWithModel(TModelDescription model, int? nrOfTicks = null, bool startPaused = false)
+        public void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, bool startPaused = false)
         {
-            _simManager.StartSimulationWithModel(model, nrOfTicks, startPaused);
+            _simManager.StartSimulationWithModel(simulationId, model, nrOfTicks, startPaused);
         }
 
         public void PauseSimulation(TModelDescription model) {

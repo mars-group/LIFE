@@ -25,7 +25,8 @@ namespace RuntimeEnvironment.Implementation {
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
         private readonly ISet<TNodeInformation> _idleLayerContainers;
         private readonly ISet<TNodeInformation> _busyLayerContainers;
-      
+        private Guid _simulationId;
+
         public RuntimeEnvironmentUseCase
             (
             IModelContainer modelContainer,
@@ -42,7 +43,8 @@ namespace RuntimeEnvironment.Implementation {
 
         #region IRuntimeEnvironment Members
 
-        public void StartWithModel(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
+        public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
+            _simulationId = simulationId;
             lock (this) {
 				if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
 					throw new NoLayerContainersArePresentException ();
@@ -216,7 +218,7 @@ namespace RuntimeEnvironment.Implementation {
                     layerContainerClients[0].Instantiate(layerInstanceId);
 
                     //...fetch all agentTypes and amounts...
-                    var initData = new TInitData(false, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate);
+                    var initData = new TInitData(false, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate, _simulationId);
                     foreach (var agentConfig in layerConfig.AgentConfigs)
                     {
                         var ids = new Guid[agentConfig.AgentCount];
@@ -233,7 +235,7 @@ namespace RuntimeEnvironment.Implementation {
                 {
                     // special case, only valid for ESC layers!
                     // set distribute to true
-                    var initData = new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate);
+                    var initData = new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate, _simulationId);
                     foreach (var layerContainerClient in layerContainerClients)
                     {
                         layerContainerClient.Instantiate(layerInstanceId);
@@ -278,7 +280,7 @@ namespace RuntimeEnvironment.Implementation {
                 layerContainerClients[0].Instantiate(layerInstanceId);
                 
                 //...fetch all agentTypes and amounts...
-                var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate());
+                var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
 
                 // check if layer to initialize is GIS layer
                 if (thereAreGisLayers) {
@@ -346,7 +348,7 @@ namespace RuntimeEnvironment.Implementation {
                     // initialize result Dictionary
                     foreach (var layerContainerClient in layerContainerClients)
                     {
-                        result.Add(layerContainerClient, new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate));
+                        result.Add(layerContainerClient, new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate, _simulationId));
                     }
 
                     var lcCount = layerContainerClients.Length;
