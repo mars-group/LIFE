@@ -69,9 +69,9 @@ namespace LCConnector.TransportTypes {
         /// <param name="agentInitParameters">Optional parameterinformation about how and from where
         ///     to initialize the agent's constructor parameters.</param>
         /// <param name="getMarsCubeUrl"></param>
-        public void AddAgentInitConfig(string agentName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
+        public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
         {
-            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, marsCubeUrl, marsCubeName));
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, marsCubeUrl, marsCubeName));
         }
 
         public void AddGisInitConfig(string GisSourceUrl, string ImageFormat, int Srid, string[] layerNames) {
@@ -102,6 +102,8 @@ namespace LCConnector.TransportTypes {
         /// The name of the agent
         /// </summary>
         public string AgentName { get; set; }
+
+        public string AgentFullName { get; set; }
 
         /// <summary>
         /// The amount of agents to use in the simulation
@@ -139,9 +141,10 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public List<IAtConstructorParameter> AgentInitParameters { get; set; }
 
-        public AgentInitConfig(string agentName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
+        public AgentInitConfig(string agentName, string agentFullName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
         {
             AgentName = agentName;
+            AgentFullName = agentFullName;
             RealAgentCount = agentCount;
             ShadowAgentCount = shadowAgentCount;
             ShadowAgentsIds = shadowAgentsIds;

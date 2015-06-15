@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using AgentManager.Interface;
 using AgentManager.Interface.Exceptions;
 using LCConnector.TransportTypes;
@@ -21,11 +22,12 @@ using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
 using SpatialAPI.Environment;
 
+
 namespace AgentManagerService.Implementation
 {
     public class AgentManager<T> : IAgentManager<T> where T : IAgent
     {
-        public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, IEnvironment environment, List<ILayer> additionalLayerDependencies)
+        public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle, IEnvironment environment, List<ILayer> additionalLayerDependencies)
         {
             var agents = new ConcurrentDictionary<Guid, T>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
@@ -35,8 +37,12 @@ namespace AgentManagerService.Implementation
 
             var initParams = agentInitConfig.AgentInitParameters;
 
+            // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
+            // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
+
             // retrieve agent constructor
-            var agentType = Type.GetType(agentInitConfig.AgentName);
+            var agentType = Type.GetType(agentInitConfig.AgentFullName);
 
             var agentConstructor = agentType.GetConstructors().
                 FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishInShuttleAttribute), true).Length > 0);
@@ -75,30 +81,40 @@ namespace AgentManagerService.Implementation
                             (initInfo.MarsCubeDBColumnName,
                                 (from DataRow dr in data.Rows
                                  select dr[initInfo.MarsCubeDBColumnName]).GetEnumerator());
+                        // set enum to first element
+                       // agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
                     }
                 }
             }
 
             foreach (var realAgentId in agentInitConfig.RealAgentIds) {
                 var actualParameters = new List<object>(agentParameterCount);
-				var paramEnumerator = initParams.GetEnumerator ();
+
+				var paramEnumerator = initParams.GetEnumerator();
+                
+                // move enumerator to first element
+                paramEnumerator.MoveNext();
+                
+                // fetch needed params
 				var neededParameters = agentConstructor.GetParameters ();
+
 				foreach (var neededParam in neededParameters) {
 				    // check whether the parameter is an instance of ILayer
-				    var layer = neededParam.ParameterType as ILayer;
-				    var env = neededParam.ParameterType as IEnvironment;
-				    var id = neededParam.ParameterType.IsAssignableFrom(typeof (Guid));
+				    var layer = typeof (ILayer).IsAssignableFrom(neededParam.ParameterType);
+				    //var layer = neededParam.ParameterType.IsAssignableFrom(typeof(ILayer));
+				    var env = typeof(IEnvironment).IsAssignableFrom(neededParam.ParameterType);
+				    var id = typeof(Guid).IsAssignableFrom(neededParam.ParameterType);
 
-				    if (layer != null) {
-				        actualParameters.Add(additionalLayerDependencies.First(l => l.GetType() == neededParam.ParameterType));
+				    if (layer) {
+				        actualParameters.Add(additionalLayerDependencies.First(l => neededParam.ParameterType.IsInstanceOfType(l)));
 				    } else if (id) {
 				       actualParameters.Add(realAgentId);      
-				    } else if (env != null) {
+				    } else if (env) {
 					    actualParameters.Add(environment);
 					} else {
 				    // it's a primitive type, so take the next param from params list provided by SHUTTLE
 						var param = paramEnumerator.Current;
-						paramEnumerator.MoveNext();
+
 
 						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
 						{
@@ -124,6 +140,8 @@ namespace AgentManagerService.Implementation
 							actualParameters.Add(paramValue);
 						}   	
 					}
+                    // move shuttleParams to next element
+                    paramEnumerator.MoveNext();
 				}
 
                 // call constructor of agent and store agent in return dictionary
@@ -210,6 +228,21 @@ namespace AgentManagerService.Implementation
                 return decimal.Parse(parameterValue);
             }
             return parameterValue;
+        }
+
+        /// <summary>
+        /// Resolves an issue which occurs when an assembly should be loaded triggered by an external process.
+        /// By default the assembly is only being searched for in the current context and not in all
+        /// currently loaded assemblies. This is fixed here.
+        /// </summary>
+        private static class AssemblyResolverFix
+        {
+            //Looks up the assembly in the set of currently loaded assemblies,
+            //and returns it if the name matches. Else returns null.
+            public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
+            {
+                return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
+            }
         }
     }
 }

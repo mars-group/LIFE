@@ -226,7 +226,7 @@ namespace RuntimeEnvironment.Implementation {
                         {
                             ids[j] = Guid.NewGuid();
                         }
-                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentCount, 0, ids, new Guid[0]);
+                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentName, agentConfig.AgentCount, 0, ids, new Guid[0]);
                     }
                     //...and finally initialize the layer with it
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
@@ -269,9 +269,11 @@ namespace RuntimeEnvironment.Implementation {
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
-            var thereAreGisLayers = shuttleSimConfig.GetGISActiveLayerSources().Count > 0;
+
             var gisLayerSourceEnumerator = shuttleSimConfig.GetGISActiveLayerSources().GetEnumerator();
-            
+            var thereAreGisLayers = gisLayerSourceEnumerator.MoveNext();
+
+
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
@@ -309,9 +311,10 @@ namespace RuntimeEnvironment.Implementation {
 
                         initData.AddAgentInitConfig(
                             agentConfig.GetClassName(),
+                            agentConfig.GetFullName(),
                             agentCount, 0, ids, new Guid[0],
                             agentConfig.GetFieldToConstructorArgumentRelations(),
-                            shuttleSimConfig.GetMarsCubeUrl(),
+                            "rock.mars.haw-hamburg.de",
                             shuttleSimConfig.GetMarsCubeName()
                         );
                     }
@@ -393,6 +396,7 @@ namespace RuntimeEnvironment.Implementation {
                                 result[layerContainerClients[lcIndex]]
                                     .AddAgentInitConfig(
                                         agentConfig.AgentName,
+                                        agentConfig.AgentName,
                                         overheadedAmount,
                                         shadowAgentCountPerLayerContainer,
                                         realAgentIds,
@@ -427,6 +431,7 @@ namespace RuntimeEnvironment.Implementation {
 
                                 result[layerContainerClients[lcIndex]]
                                     .AddAgentInitConfig(
+                                        agentConfig.AgentName,
                                         agentConfig.AgentName,
                                         agentAmountPerLayerContainer,
                                         shadowAgentCountPerLayerContainer,

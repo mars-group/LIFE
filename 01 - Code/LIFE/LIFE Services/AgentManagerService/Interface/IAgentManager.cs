@@ -8,6 +8,6 @@ using SpatialAPI.Environment;
 namespace AgentManager.Interface
 {
     public interface IAgentManager<T> where T : IAgent {
-		IDictionary<Guid,T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, IEnvironment environment, List<ILayer> additionalLayerDependencies);
+		IDictionary<Guid,T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle, IEnvironment environment, List<ILayer> additionalLayerDependencies);
     }
 }
