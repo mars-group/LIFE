@@ -87,9 +87,13 @@ namespace AgentManagerService.Implementation
 				    // check whether the parameter is an instance of ILayer
 				    var layer = neededParam.ParameterType as ILayer;
 				    var env = neededParam.ParameterType as IEnvironment;
-				    if(layer != null){
-						actualParameters.Add (additionalLayerDependencies.First(l => l.GetType () == neededParam.ParameterType));	
-					} else if (env != null) {
+				    var id = neededParam.ParameterType.IsAssignableFrom(typeof (Guid));
+
+				    if (layer != null) {
+				        actualParameters.Add(additionalLayerDependencies.First(l => l.GetType() == neededParam.ParameterType));
+				    } else if (id) {
+				       actualParameters.Add(realAgentId);      
+				    } else if (env != null) {
 					    actualParameters.Add(environment);
 					} else {
 				    // it's a primitive type, so take the next param from params list provided by SHUTTLE
