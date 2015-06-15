@@ -77,12 +77,19 @@ namespace AgentManagerService.Implementation
                                             || d.Name == initInfo.MarsCubeDimensionName)
                                 });
 
+                        var columnName = cube.Dimensions.FirstOrDefault
+                            (d =>
+                                d.CleanName == initInfo.MarsCubeDimensionName
+                                || d.Name == initInfo.MarsCubeDimensionName)
+                            .Attributes.FirstOrDefault(a => a.CleanName == initInfo.MarsCubeDBColumnName)
+                            .Name;
+
                         agentCubeParamEnumerators.Add
                             (initInfo.MarsCubeDBColumnName,
                                 (from DataRow dr in data.Rows
-                                 select dr[initInfo.MarsCubeDBColumnName]).GetEnumerator());
+                                 select dr[columnName]).GetEnumerator());
                         // set enum to first element
-                       // agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
+                        agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
                     }
                 }
             }
@@ -99,22 +106,20 @@ namespace AgentManagerService.Implementation
 				var neededParameters = agentConstructor.GetParameters ();
 
 				foreach (var neededParam in neededParameters) {
-				    // check whether the parameter is an instance of ILayer
-				    var layer = typeof (ILayer).IsAssignableFrom(neededParam.ParameterType);
-				    //var layer = neededParam.ParameterType.IsAssignableFrom(typeof(ILayer));
-				    var env = typeof(IEnvironment).IsAssignableFrom(neededParam.ParameterType);
-				    var id = typeof(Guid).IsAssignableFrom(neededParam.ParameterType);
-
-				    if (layer) {
+                    if (typeof(ILayer).IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(additionalLayerDependencies.First(l => neededParam.ParameterType.IsInstanceOfType(l)));
-				    } else if (id) {
+				    } else if (typeof(Guid).IsAssignableFrom(neededParam.ParameterType)) {
 				       actualParameters.Add(realAgentId);      
-				    } else if (env) {
-					    actualParameters.Add(environment);
-					} else {
+				    } else if (typeof(IEnvironment).IsAssignableFrom(neededParam.ParameterType)) {
+				        actualParameters.Add(environment);
+				    } else if (typeof (RegisterAgent).IsAssignableFrom(neededParam.ParameterType)) {
+				        actualParameters.Add(registerAgentHandle);
+				    } else if (typeof(UnregisterAgent).IsAssignableFrom(neededParam.ParameterType)) {
+				        actualParameters.Add(unregisterAgentHandle);
+				    } else {
 				    // it's a primitive type, so take the next param from params list provided by SHUTTLE
 						var param = paramEnumerator.Current;
-
+                            
 
 						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
 						{
@@ -129,8 +134,7 @@ namespace AgentManagerService.Implementation
 							actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
 						}
 
-						if (param.GetParameterType() ==
-							AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
+						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
 							var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation();
 							// fetch parameter from ROCK CUBE
 							var paramValue = agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current;
