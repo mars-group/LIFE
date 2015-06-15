@@ -40,10 +40,6 @@
       <HintPath>..\..\packages\Mars.Rock.Drill.0.1.49\lib\net45\Mars.Rock.Drill.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.54\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
