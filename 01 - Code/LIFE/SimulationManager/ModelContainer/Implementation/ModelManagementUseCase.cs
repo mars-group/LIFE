@@ -132,7 +132,7 @@ namespace ModelContainer.Implementation {
 
         public ISimConfig GetShuttleSimConfig(TModelDescription model) {
 
-            var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name + Path.DirectorySeparatorChar + "SimConfig.json";
+            var path = "./SimConfig.json";
             if (!File.Exists(path)) {
                 return null;
                 //throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
