@@ -33,7 +33,8 @@ namespace AgentManagerService.Implementation
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
             // connect to MARS ROCK
-            Drill.InitializeConnection(agentInitConfig.MarsCubeUrl, "mars", "82cxhpcqA5SEHdcikmbx");
+            // agentInitConfig.MarsCubeUrl
+            Drill.InitializeConnection("141.22.29.9", "mars", "82cxhpcqA5SEHdcikmbx");
 
             var initParams = agentInitConfig.AgentInitParameters;
 
@@ -69,6 +70,7 @@ namespace AgentManagerService.Implementation
                         // call to Drill API
                         var cube = Drill.GetCube(agentInitConfig.MarsCubeName);
 
+                        // fetch needed dimension from cube
                         var data = cube.GetData
                             (new List<Dimension> {
                                     cube.Dimensions.FirstOrDefault
@@ -77,6 +79,7 @@ namespace AgentManagerService.Implementation
                                             || d.Name == initInfo.MarsCubeDimensionName)
                                 });
 
+                        // get real column name from CleanName
                         var columnName = cube.Dimensions.FirstOrDefault
                             (d =>
                                 d.CleanName == initInfo.MarsCubeDimensionName
@@ -84,12 +87,17 @@ namespace AgentManagerService.Implementation
                             .Attributes.FirstOrDefault(a => a.CleanName == initInfo.MarsCubeDBColumnName)
                             .Name;
 
+                        // create enumerators for data retrieval
                         agentCubeParamEnumerators.Add
                             (initInfo.MarsCubeDBColumnName,
                                 (from DataRow dr in data.Rows
                                  select dr[columnName]).GetEnumerator());
                         // set enum to first element
                         agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
+                        // advance to first real data element
+                        while (agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current is DBNull) {
+                            agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
+                        }
                     }
                 }
             }
@@ -136,12 +144,16 @@ namespace AgentManagerService.Implementation
 
 						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
 							var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation();
+                            var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
 							// fetch parameter from ROCK CUBE
 							var paramValue = agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current;
-							// advance Enumerator
-							agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
+                            // advance to first real data element
+                            while (agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current is DBNull)
+                            {
+                                agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
+                            }
 							// add param to actualParameters[]
-							actualParameters.Add(paramValue);
+                            actualParameters.Add(GetParameterValue(paramType, (string)paramValue));
 						}   	
 					}
                     // move shuttleParams to next element
