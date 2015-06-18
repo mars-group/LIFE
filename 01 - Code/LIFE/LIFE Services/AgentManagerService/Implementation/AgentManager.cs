@@ -102,6 +102,13 @@ namespace AgentManagerService.Implementation
                 }
             }
 
+            // get types
+            var layerType = typeof (ILayer);
+            var guidType = typeof (Guid);
+            var environmentType = typeof (IEnvironment);
+            var registerAgentType = typeof (RegisterAgent);
+            var unregisterAgentType = typeof (UnregisterAgent);
+
             foreach (var realAgentId in agentInitConfig.RealAgentIds) {
                 var actualParameters = new List<object>(agentParameterCount);
 
@@ -114,20 +121,19 @@ namespace AgentManagerService.Implementation
 				var neededParameters = agentConstructor.GetParameters ();
 
 				foreach (var neededParam in neededParameters) {
-                    if (typeof(ILayer).IsAssignableFrom(neededParam.ParameterType)) {
+                    if (layerType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(additionalLayerDependencies.First(l => neededParam.ParameterType.IsInstanceOfType(l)));
-				    } else if (typeof(Guid).IsAssignableFrom(neededParam.ParameterType)) {
-				       actualParameters.Add(realAgentId);      
-				    } else if (typeof(IEnvironment).IsAssignableFrom(neededParam.ParameterType)) {
+				    } else if (guidType.IsAssignableFrom(neededParam.ParameterType)) {
+				        actualParameters.Add(realAgentId);      
+				    } else if (environmentType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(environment);
-				    } else if (typeof (RegisterAgent).IsAssignableFrom(neededParam.ParameterType)) {
+				    } else if (registerAgentType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(registerAgentHandle);
-				    } else if (typeof(UnregisterAgent).IsAssignableFrom(neededParam.ParameterType)) {
+                    } else if (unregisterAgentType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(unregisterAgentHandle);
 				    } else {
 				    // it's a primitive type, so take the next param from params list provided by SHUTTLE
 						var param = paramEnumerator.Current;
-                            
 
 						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
 						{
