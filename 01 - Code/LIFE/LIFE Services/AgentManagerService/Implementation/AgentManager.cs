@@ -11,6 +11,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using AgentManager.Interface;
@@ -54,6 +55,9 @@ namespace AgentManagerService.Implementation
                 throw new NotEnoughParametersProvidedException("There were not enough parameters provided in your SimConfig for Agent of type: " + agentType);
             }
 
+            // get Cube
+            var cube = Drill.GetCube(agentInitConfig.MarsCubeName);
+
             // setup enumerators for cube parameters
             var agentCubeParamEnumerators = new Dictionary<string, IEnumerator<object>>();
             foreach (var param in initParams)
@@ -67,8 +71,6 @@ namespace AgentManagerService.Implementation
                     // check if we already have this enumerator
                     if (!agentCubeParamEnumerators.ContainsKey(initInfo.MarsCubeDBColumnName))
                     {
-                        // call to Drill API
-                        var cube = Drill.GetCube(agentInitConfig.MarsCubeName);
 
                         // fetch needed dimension from cube
                         var data = cube.GetData
@@ -102,13 +104,14 @@ namespace AgentManagerService.Implementation
                 }
             }
 
-            // get types
+            // get types for special parameters
             var layerType = typeof (ILayer);
             var guidType = typeof (Guid);
             var environmentType = typeof (IEnvironment);
             var registerAgentType = typeof (RegisterAgent);
             var unregisterAgentType = typeof (UnregisterAgent);
 
+            // iterate over all agents and create them
             foreach (var realAgentId in agentInitConfig.RealAgentIds) {
                 var actualParameters = new List<object>(agentParameterCount);
 
@@ -121,12 +124,12 @@ namespace AgentManagerService.Implementation
 				var neededParameters = agentConstructor.GetParameters ();
 
 				foreach (var neededParam in neededParameters) {
-                    if (layerType.IsAssignableFrom(neededParam.ParameterType)) {
+				    if (environmentType.IsAssignableFrom(neededParam.ParameterType)) {
+				        actualParameters.Add(environment);
+				    } else if (layerType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(additionalLayerDependencies.First(l => neededParam.ParameterType.IsInstanceOfType(l)));
 				    } else if (guidType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(realAgentId);      
-				    } else if (environmentType.IsAssignableFrom(neededParam.ParameterType)) {
-				        actualParameters.Add(environment);
 				    } else if (registerAgentType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(registerAgentHandle);
                     } else if (unregisterAgentType.IsAssignableFrom(neededParam.ParameterType)) {
@@ -180,8 +183,9 @@ namespace AgentManagerService.Implementation
         /// <param name="parameterValue"></param>
         /// <returns></returns>
         private static object GetParameterValue(Type parameterDatatype, string parameterValue) {
+            var provider = new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," };
             if (parameterDatatype == typeof (double)) {
-                return Double.Parse(parameterValue);
+                return Convert.ToDouble(parameterValue, provider);
             }
 
             if (parameterDatatype == typeof(int))

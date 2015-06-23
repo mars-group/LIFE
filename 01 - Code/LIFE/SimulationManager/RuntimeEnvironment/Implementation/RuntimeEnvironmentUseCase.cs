@@ -298,26 +298,33 @@ namespace RuntimeEnvironment.Implementation {
                 }
                 else 
                 {
-                    // no GIS layer, so fetch agentConfig
-                    foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
-                    {
-                        var agentCount = agentConfig.GetAgentInstanceCount();
-                        var ids = new Guid[agentCount];
+                    if (
+                        shuttleSimConfig.GetIAtLayerInfo()
+                            .GetAtConstructorInfoListsWithLayerName()
+                            .ContainsKey(layerDescription.Name)) {
+                        foreach (
+                            var agentConfig in
+                                shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[
+                                    layerDescription.Name]) {
+                            var agentCount = agentConfig.GetAgentInstanceCount();
+                            var ids = new Guid[agentCount];
 
-                        for (var j = 0; j < agentCount; j++)
-                        {
-                            ids[j] = Guid.NewGuid();
+                            for (var j = 0; j < agentCount; j++) {
+                                ids[j] = Guid.NewGuid();
+                            }
+
+                            initData.AddAgentInitConfig(
+                                agentConfig.GetClassName(),
+                                agentConfig.GetFullName(),
+                                agentCount, 0, ids, new Guid[0],
+                                agentConfig.GetFieldToConstructorArgumentRelations(),
+                                "rock.mars.haw-hamburg.de",
+                                shuttleSimConfig.GetMarsCubeName()
+                                );
                         }
-
-                        initData.AddAgentInitConfig(
-                            agentConfig.GetClassName(),
-                            agentConfig.GetFullName(),
-                            agentCount, 0, ids, new Guid[0],
-                            agentConfig.GetFieldToConstructorArgumentRelations(),
-                            "rock.mars.haw-hamburg.de",
-                            shuttleSimConfig.GetMarsCubeName()
-                        );
                     }
+                    // no GIS layer, so fetch agentConfig
+
                 }
 
 
