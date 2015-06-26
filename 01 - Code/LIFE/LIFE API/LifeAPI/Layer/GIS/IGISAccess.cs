@@ -28,12 +28,7 @@ namespace LifeAPI.Layer.GIS {
         ///     was tried to be loaded, but the format was not recognized
         ///     or is not supported.
         /// </exception>
-        void LoadGISData(Uri gisFileUrl, string layerName = "");
-
-        /// <summary>
-        ///     Loads GIS data from the provided WebService URL
-        /// </summary>
-        void LoadGISDataByWebservice(string gisWebserviceUrl, string imageFormat, int srid, string[] layers, string layerName = "");
+        void LoadGISData(Uri gisFileUrl, string[] layerName = null);
 
         /// <summary>
         ///     Executes an intersection query on the data loaded in this GIS layer.
