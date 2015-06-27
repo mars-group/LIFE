@@ -290,7 +290,7 @@ namespace RuntimeEnvironment.Implementation {
                     var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
                     if (layerType != null && layerType.GetInterfaces().Contains(typeof (IGISAccess))) {
                         var gisInfo = gisLayerSourceEnumerator.Current;
-                        initData.AddGisInitConfig(gisInfo.GISSourceUrl, gisInfo.ImageFormat, int.Parse(gisInfo.Srid), gisInfo.LayerNames.ToArray());
+                        initData.AddGisInitConfig(gisInfo.GISSourceUrl, gisInfo.LayerNames.ToArray());
                         if (!gisLayerSourceEnumerator.MoveNext()) {
                             thereAreGisLayers = false;
                         }

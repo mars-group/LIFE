@@ -74,8 +74,8 @@ namespace LCConnector.TransportTypes {
             AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, marsCubeUrl, marsCubeName));
         }
 
-        public void AddGisInitConfig(string GisSourceUrl, string ImageFormat, int Srid, string[] layerNames) {
-            GisInitInfo = new GisInitConfig(GisSourceUrl,ImageFormat,Srid,layerNames);
+        public void AddGisInitConfig(string GisSourceUrl, string[] layerNames) {
+            GisInitInfo = new GisInitConfig(GisSourceUrl, layerNames);
         }
     }
 
@@ -83,14 +83,10 @@ namespace LCConnector.TransportTypes {
     public class GisInitConfig 
     {
         public string GisSourceUrl { get; set; }
-        public string ImageFormat { get; set; }
-        public int Srid { get; set; }
         public string[] LayerNames { get; set; }
 
-        public GisInitConfig(string gisSourceUrl, string imageFormat, int srid, string[] layerNames) {
+        public GisInitConfig(string gisSourceUrl, string[] layerNames) {
             GisSourceUrl = gisSourceUrl;
-            ImageFormat = imageFormat;
-            Srid = srid;
             LayerNames = layerNames;
         }
     }
