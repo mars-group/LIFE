@@ -269,7 +269,7 @@ namespace RuntimeEnvironment.Implementation {
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
-
+            var test = shuttleSimConfig.GetGISActiveLayerSources();
             var gisLayerSourceEnumerator = shuttleSimConfig.GetGISActiveLayerSources().GetEnumerator();
             var thereAreGisLayers = gisLayerSourceEnumerator.MoveNext();
 
@@ -290,7 +290,7 @@ namespace RuntimeEnvironment.Implementation {
                     var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
                     if (layerType != null && layerType.GetInterfaces().Contains(typeof (IGISAccess))) {
                         var gisInfo = gisLayerSourceEnumerator.Current;
-                        initData.AddGisInitConfig(gisInfo.GISSourceUrl, gisInfo.LayerNames.ToArray());
+                        initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
                         if (!gisLayerSourceEnumerator.MoveNext()) {
                             thereAreGisLayers = false;
                         }
