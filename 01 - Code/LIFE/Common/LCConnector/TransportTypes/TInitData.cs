@@ -45,7 +45,17 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public bool Distribute { get; private set; }
 
+        /// <summary>
+        /// A GIS initialize info object, containing all relevant informato to initialize
+        /// a GIS layer. Might be NULL, so check!
+        /// </summary>
         public GisInitConfig GisInitInfo { get; private set; }
+
+        /// <summary>
+        /// A TimeSeries initializing a TimeSeries Layer in LIFE.
+        /// Might be NULL, so check!
+        /// </summary>
+        public TimeSeriesInitConfig TimeSeriesInitInfo { get; set; }
 
         /// <summary>
         /// Creates a new TInitData object, with an empty list of AgentInitConfigs
@@ -76,6 +86,30 @@ namespace LCConnector.TransportTypes {
 
         public void AddGisInitConfig(string GisSourceUrl, string[] layerNames) {
             GisInitInfo = new GisInitConfig(GisSourceUrl, layerNames);
+        }
+
+        public void AddTimeSeriesInitConfig(string cubeName, string dimensionName, string columnName,
+            DateTime timeSeriesStartTime = default(DateTime)) {
+            TimeSeriesInitInfo = new TimeSeriesInitConfig(cubeName, dimensionName, columnName, timeSeriesStartTime);
+        }
+    }
+
+    [Serializable]
+    public class TimeSeriesInitConfig {
+        public string CubeName { get; set; }
+        public string DimensionName { get; set; }
+        public string ColumnName { get; set; }
+
+        /// <summary>
+        /// Might not be set.
+        /// Check for NULL!
+        /// </summary>
+        private DateTime TimeSeriesStartTime { get; set; }
+
+        public TimeSeriesInitConfig(string cubeName, string dimensionName, string columnName, DateTime timeSeriesStartTime = default(DateTime)) {
+            CubeName = cubeName;
+            DimensionName = dimensionName;
+            ColumnName = columnName;
         }
     }
 

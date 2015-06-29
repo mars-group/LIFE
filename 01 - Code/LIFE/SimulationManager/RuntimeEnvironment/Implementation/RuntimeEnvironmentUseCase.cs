@@ -9,6 +9,7 @@ using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
 using LifeAPI.Layer.GIS;
+using LifeAPI.Layer.TimeSeries;
 using MARS.Shuttle.SimulationConfig;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
@@ -269,10 +270,11 @@ namespace RuntimeEnvironment.Implementation {
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
-            var test = shuttleSimConfig.GetGISActiveLayerSources();
             var gisLayerSourceEnumerator = shuttleSimConfig.GetGISActiveLayerSources().GetEnumerator();
             var thereAreGisLayers = gisLayerSourceEnumerator.MoveNext();
 
+            var timeSeriesSourceEnumerator = shuttleSimConfig.GetTSLayerSources().GetEnumerator();
+            var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
@@ -293,6 +295,17 @@ namespace RuntimeEnvironment.Implementation {
                         initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
                         if (!gisLayerSourceEnumerator.MoveNext()) {
                             thereAreGisLayers = false;
+                        }
+                    }
+                }
+                else if (thereAreTimeSeriesLayers) {
+                    // check if the current layer is a TimeSeries Layer
+                    var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
+                    if (layerType != null && layerType.GetInterfaces().Contains(typeof (ITimeSeriesLayer))) {
+                        var tsInfo = timeSeriesSourceEnumerator.Current;
+                        initData.AddTimeSeriesInitConfig(shuttleSimConfig.GetMarsCubeName(), tsInfo.DimensionName, tsInfo.ColumnName);
+                        if (!timeSeriesSourceEnumerator.MoveNext()) {
+                            thereAreTimeSeriesLayers = false;
                         }
                     }
                 }
