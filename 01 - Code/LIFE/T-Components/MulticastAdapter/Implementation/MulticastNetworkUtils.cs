@@ -51,13 +51,19 @@ namespace MulticastAdapter.Implementation
         }
 
         public static List<NetworkInterface> GetAllMulticastInterfaces() {
-                return NetworkInterface.GetAllNetworkInterfaces().Where
+                var result = NetworkInterface.GetAllNetworkInterfaces().Where
                     (
                         networkInterface => networkInterface.SupportsMulticast &&
 						(networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)  && 
 						OperationalStatus.Up == networkInterface.OperationalStatus && 
 						networkInterface.GetIPProperties().UnicastAddresses.Any()
                     ).ToList();
+
+            if (result.Count <= 0) {
+                result = NetworkInterface.GetAllNetworkInterfaces().ToList();
+            }
+
+            return result;
         }
 
 
