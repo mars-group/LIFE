@@ -144,7 +144,7 @@ namespace AgentManagerService.Implementation
 							var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
 							var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
 
-							if (paramType == null || !paramType.IsPrimitive) {
+							if (!(paramType == typeof(String)) && (paramType == null || !paramType.IsPrimitive)) {
 								throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type.");
 
 							}
