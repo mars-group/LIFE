@@ -286,61 +286,49 @@ namespace RuntimeEnvironment.Implementation {
                 //...fetch all agentTypes and amounts...
                 var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
 
-                // check if layer to initialize is GIS layer
-                if (thereAreGisLayers) {
-                    // check if the current layer is a GIS Layer
-                    var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-                    if (layerType != null && layerType.GetInterfaces().Contains(typeof (IGISAccess))) {
-                        var gisInfo = gisLayerSourceEnumerator.Current;
-                        initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
-                        if (!gisLayerSourceEnumerator.MoveNext()) {
-                            thereAreGisLayers = false;
-                        }
-                    }
-                }
-                else if (thereAreTimeSeriesLayers) {
-                    // check if the current layer is a TimeSeries Layer
-                    var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-                    if (layerType != null && layerType.GetInterfaces().Contains(typeof (ITimeSeriesLayer))) {
-                        var tsInfo = timeSeriesSourceEnumerator.Current;
-                        initData.AddTimeSeriesInitConfig(shuttleSimConfig.GetMarsCubeName(), tsInfo.DimensionName, tsInfo.ColumnName);
-                        if (!timeSeriesSourceEnumerator.MoveNext()) {
-                            thereAreTimeSeriesLayers = false;
-                        }
-                    }
-                }
-                else 
+
+                // check if the current layer is a GIS Layer
+                var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
+                var interfaces = layerType.GetInterfaces();
+                if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
                 {
-                    if (
-                        shuttleSimConfig.GetIAtLayerInfo()
-                            .GetAtConstructorInfoListsWithLayerName()
-                            .ContainsKey(layerDescription.Name)) {
-                        foreach (
-                            var agentConfig in
-                                shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[
-                                    layerDescription.Name]) {
-                            var agentCount = agentConfig.GetAgentInstanceCount();
-                            var ids = new Guid[agentCount];
-
-                            for (var j = 0; j < agentCount; j++) {
-                                ids[j] = Guid.NewGuid();
-                            }
-
-                            initData.AddAgentInitConfig(
-                                agentConfig.GetClassName(),
-                                agentConfig.GetFullName(),
-                                agentCount, 0, ids, new Guid[0],
-                                agentConfig.GetFieldToConstructorArgumentRelations(),
-                                "rock.mars.haw-hamburg.de",
-                                shuttleSimConfig.GetMarsCubeName()
-                                );
-                        }
+                    var gisInfo = gisLayerSourceEnumerator.Current;
+                    initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
+                    if (!gisLayerSourceEnumerator.MoveNext()) {
+                        thereAreGisLayers = false;
                     }
-                    // no GIS layer, so fetch agentConfig
-
                 }
+                else if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
+                {
+                    var tsInfo = timeSeriesSourceEnumerator.Current;
+                    initData.AddTimeSeriesInitConfig(shuttleSimConfig.GetMarsCubeName(), tsInfo.DimensionName, tsInfo.ColumnName);
+                    if (!timeSeriesSourceEnumerator.MoveNext())
+                    {
+                        thereAreTimeSeriesLayers = false;
+                    }
+                } else if (shuttleSimConfig.GetIAtLayerInfo()
+                        .GetAtConstructorInfoListsWithLayerName()
+                        .ContainsKey(layerDescription.Name)) 
+                {
 
+                    foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[ layerDescription.Name]) {
+                        var agentCount = agentConfig.GetAgentInstanceCount();
+                        var ids = new Guid[agentCount];
 
+                        for (var j = 0; j < agentCount; j++) {
+                            ids[j] = Guid.NewGuid();
+                        }
+
+                        initData.AddAgentInitConfig(
+                            agentConfig.GetClassName(),
+                            agentConfig.GetFullName(),
+                            agentCount, 0, ids, new Guid[0],
+                            agentConfig.GetFieldToConstructorArgumentRelations(),
+                            "rock.mars.haw-hamburg.de",
+                            shuttleSimConfig.GetMarsCubeName()
+                            );
+                    }
+                }
 
                 //...and finally initialize the layer with it
                 layerContainerClients[0].Initialize(layerInstanceId, initData);
