@@ -127,7 +127,12 @@ namespace AgentManagerService.Implementation
 				    if (environmentType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(environment);
 				    } else if (layerType.IsAssignableFrom(neededParam.ParameterType)) {
-				        actualParameters.Add(additionalLayerDependencies.First(l => neededParam.ParameterType.IsInstanceOfType(l)));
+                        if (!additionalLayerDependencies.Any(l => neededParam.ParameterType.IsInstanceOfType(l)))
+                        {
+                            throw new MissingLayerForAgentConstructionException("Agent type '" + agentInitConfig.AgentName + "' needs missing layer type '"
+                                + neededParam.ParameterType + "' to initialize.");
+                        }
+                        actualParameters.Add(additionalLayerDependencies.First(l => neededParam.ParameterType.IsInstanceOfType(l)));
 				    } else if (guidType.IsAssignableFrom(neededParam.ParameterType)) {
 				        actualParameters.Add(realAgentId);      
 				    } else if (registerAgentType.IsAssignableFrom(neededParam.ParameterType)) {
