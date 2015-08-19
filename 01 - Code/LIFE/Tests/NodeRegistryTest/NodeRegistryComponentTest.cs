@@ -271,7 +271,7 @@ namespace NodeRegistryTest {
                     otherNodeinfo.NodeEndpoint.Port,
                     true));
 
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
 
             if (!newNodeSubscriberFired || !newNodeOftypeSubscriberFired) {
                 Thread.Sleep(500);
