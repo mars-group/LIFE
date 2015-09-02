@@ -68,6 +68,15 @@ namespace RuntimeEnvironment.Implementation {
 
                 IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes);
 
+				// try to get SimConfig and determine the number of ticks from it
+				var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(model);
+				if (shuttleSimConfig != null) {
+					var tickCount = shuttleSimConfig.GetSimDurationInSteps();
+					if (tickCount > 0) {
+						nrOfTicks = tickCount;
+					}
+				}
+
                 sw.Stop();
                 Console.WriteLine("...done in " + sw.ElapsedMilliseconds + "ms or " + sw.Elapsed);
                 _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, startPaused);
