@@ -9,11 +9,12 @@ using LifeAPI.Agent;
 using LifeAPI.Layer;
 using Mono.Addins;
 
+[assembly: Addin]
+[assembly: AddinDependency("LayerContainer", "0.1")]
 namespace ModelMock
 {
 
-    [assembly: Addin]
-    [assembly: AddinDependency("LayerContainer", "0.1")]
+
     public class SimpleSteppedActiveLayerMock : ISteppedActiveLayer
     {
         
