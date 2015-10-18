@@ -114,7 +114,7 @@ namespace MARSLocalStarter
 				                               option => interactive = option != null)
                 .Add ("cli-ui", "Use interactive model chooser and start ui",
 				                               option => interactiveUI = option != null)
-				.Add ("-id", "Set SimulatinID",
+				.Add ("id=", "Set SimulationID",
 											   option => simulationId = Guid.Parse (option));
 
             try
@@ -145,7 +145,7 @@ namespace MARSLocalStarter
                 }
                 else if (interactive)
                 {
-                    InteractiveModelChoosing(core);
+                    //InteractiveModelChoosing(core);
                 }
                 else if (!modelName.Equals(string.Empty))
                 {
@@ -185,7 +185,6 @@ namespace MARSLocalStarter
         }
 
         private static void Main(string[] args) {
-
             log4net.Config.XmlConfigurator.Configure();
             Logger.Info("MARS LIFE trying to start up.");
 
@@ -235,6 +234,7 @@ namespace MARSLocalStarter
             // This will shutdown the log4net system
             LogManager.Shutdown();
             Environment.Exit(0);
+
         }
     }
 }
