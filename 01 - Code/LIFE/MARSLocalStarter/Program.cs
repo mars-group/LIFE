@@ -101,18 +101,21 @@ namespace MARSLocalStarter
             string modelName = string.Empty;
             bool interactive = false;
             bool interactiveUI = false;
+			Guid simulationId = Guid.NewGuid ();
 
-            OptionSet optionSet = new OptionSet()
-                .Add("?|h|help", "Shows short usage", option => help = option != null)
-                .Add("c=|count=", "Specifies number of ticks to simulate",
-                                      option => numOfTicksS = option)
-                .Add("l|list", "List all available models",
-                                      option => listModels = option != null)
-                .Add("m=|model=", "Model to simulate", option => modelName = option)
-                .Add("cli", "Use interactive model chooser",
-                                      option => interactive = option != null)
-                .Add("cli-ui", "Use interactive model chooser and start ui",
-                                      option => interactiveUI = option != null);
+			OptionSet optionSet = new OptionSet ()
+                .Add ("?|h|help", "Shows short usage", option => help = option != null)
+                .Add ("c=|count=", "Specifies number of ticks to simulate",
+				                               option => numOfTicksS = option)
+                .Add ("l|list", "List all available models",
+				                               option => listModels = option != null)
+                .Add ("m=|model=", "Model to simulate", option => modelName = option)
+                .Add ("cli", "Use interactive model chooser",
+				                               option => interactive = option != null)
+                .Add ("cli-ui", "Use interactive model chooser and start ui",
+				                               option => interactiveUI = option != null)
+				.Add ("-id", "Set SimulatinID",
+											   option => simulationId = Guid.Parse (option));
 
             try
             {
@@ -175,7 +178,7 @@ namespace MARSLocalStarter
                     }
                     else
                     {
-                        core.StartSimulationWithModel(Guid.NewGuid(), model, numOfTicks);
+						core.StartSimulationWithModel(simulationId, model, numOfTicks);
                     }
                 }
             }
