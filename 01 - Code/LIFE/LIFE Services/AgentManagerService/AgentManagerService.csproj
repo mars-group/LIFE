@@ -78,9 +78,6 @@
     <Reference Include="NetTopologySuite">
       <HintPath>..\..\packages\SpatialAPI.0.5.37\lib\net45\NetTopologySuite.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\SpatialAPI.0.5.37\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PowerCollections">
       <HintPath>..\..\packages\SpatialAPI.0.5.37\lib\net45\PowerCollections.dll</HintPath>
     </Reference>
@@ -95,6 +92,12 @@
     </Reference>
     <Reference Include="MARS.Shuttle.SimulationConfig">
       <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.238\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\ConfigService.0.2.12\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ConfigService">
+      <HintPath>..\..\packages\ConfigService.0.2.12\lib\net45\ConfigService.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

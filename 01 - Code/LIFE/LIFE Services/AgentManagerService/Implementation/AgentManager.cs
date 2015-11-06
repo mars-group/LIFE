@@ -22,6 +22,7 @@ using LifeAPI.Layer;
 using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
 using SpatialAPI.Environment;
+using ConfigService;
 
 
 namespace AgentManagerService.Implementation
@@ -35,7 +36,19 @@ namespace AgentManagerService.Implementation
 
             // connect to MARS ROCK
             // agentInitConfig.MarsCubeUrl
-            Drill.InitializeConnection("141.22.29.9", "mars", "82cxhpcqA5SEHdcikmbx");
+
+			// create ConfigService and connect to marsconfig container. This is due to convention. This LIFE container
+			// should be linked to the marsconfig container and thus marsconfig should lead to the correct ip
+			// as per /etc/hosts
+			var marsConfigService = new ConfigServiceClient("http://marsconfig:8080");
+
+			// retreive ip, port, user and password of mariaDB to us as ROCK instance
+			string rockIp = marsConfigService.Get("rock/ip");
+			int rockPort = int.Parse(marsConfigService.Get("rock/port"));
+			string rockUser = marsConfigService.Get("rock/serveruser");
+			string rockPassword = marsConfigService.Get("rock/serverpassword");
+
+			Drill.InitializeConnection(rockIp, rockUser, rockPassword, rockPort);
 
             var initParams = agentInitConfig.AgentInitParameters;
 
