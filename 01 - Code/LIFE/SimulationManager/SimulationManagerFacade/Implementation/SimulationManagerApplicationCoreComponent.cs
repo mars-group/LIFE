@@ -11,6 +11,7 @@ using SimulationManagerFacade.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
 using SimulationManagerShared;
+using SimulationManagerWebservice;
 
 namespace SimulationManagerFacade.Implementation {
     using CommonTypes.DataTypes;
@@ -41,12 +42,16 @@ namespace SimulationManagerFacade.Implementation {
             _nodeRegistry = nodeRegistry;
             _layerNameService = layerNameService;
 
+			// Create and start RemoteService for LayerNameService
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
-            _server.AddService<ISimulationManager, SimulationManagerApplicationCoreComponent>(this);
             _server.AddService<ILayerNameService, SimulationManagerApplicationCoreComponent>(this);
 
             _server.Start();
+
+			// create and start SM WebService
+			var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
+			simManagerWebservice.StartService();
         }
         
 		//local option for simulation start - connected layer containers unknown. Use all and use standard implementation.
