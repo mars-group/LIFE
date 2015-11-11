@@ -12,8 +12,11 @@
     <releaseNotes>Initial Release</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>MARS, LIFE, Distribution, AgentShadowing</tags>
+    <dependencies>
+      <dependency id="LifeAPI" version="0.9.11" />
+    </dependencies>
   </metadata>
     <files>
-        <file src="bin\Release\*.dll" target="lib\net45\"/>
+        <file src="bin/Release/*.dll" target="lib/net45/"/>
     </files>    
 </package>
