@@ -9,8 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using CommonTypes.DataTypes;
-using Hik.Communication.ScsServices.Service;
 using SMConnector.TransportTypes;
 
 namespace SMConnector {
@@ -19,7 +17,6 @@ namespace SMConnector {
     /// <summary>
     ///     Provides access to the SimulationManager's functions
     /// </summary>
-    [ScsService(Version = "0.1")]
     public interface ISimulationManager {
         /// <summary>
         ///     Returns a list of TModelDescriptions, describing all available models on the
@@ -32,7 +29,6 @@ namespace SMConnector {
         ///     Steps the simulation by one tick or by nrOfTicks if provided.
         /// </summary>
         /// <param name="model">Model.</param>
-        /// <param name="layerContainers">Layer containers.</param>
         /// <param name="nrOfTicks">Nr of ticks.</param>
         void StepSimulation
             (TModelDescription model, int? nrOfTicks = null);

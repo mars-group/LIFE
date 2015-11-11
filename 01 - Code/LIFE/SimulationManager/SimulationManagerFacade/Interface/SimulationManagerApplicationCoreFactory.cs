@@ -24,6 +24,7 @@ using RuntimeEnvironment.Interfaces;
 using SimulationManagerFacade.Implementation;
 using SimulationManagerShared;
 using SMConnector;
+using SimulationManagerWebservice;
 
 namespace SimulationManagerFacade.Interface {
     /// <summary>

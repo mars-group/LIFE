@@ -215,10 +215,10 @@ namespace MARSLocalStarter
                 Logger.FatalFormat("MARS LIFE crashed fatally. Exception:\n {0}.\n InnerException:\n {1}", exception, exception.InnerException);
                 
                 //Get log file
-                var rootAppender = ((Hierarchy)LogManager.GetRepository())
+                /*var rootAppender = ((Hierarchy)LogManager.GetRepository())
                     .Root.Appenders.OfType<FileAppender>()
                     .FirstOrDefault();
-                var filename = rootAppender != null ? rootAppender.File : string.Empty;
+                var filename = rootAppender != null ? rootAppender.File : string.Empty;*/
                 LogManager.Shutdown();
 
                 //Report error to jira
