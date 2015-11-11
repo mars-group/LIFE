@@ -201,76 +201,83 @@ namespace AgentManagerService.Implementation
         /// <param name="parameterValue"></param>
         /// <returns></returns>
         private static object GetParameterValue(Type parameterDatatype, string parameterValue) {
-            var provider = new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," };
-            if (parameterDatatype == typeof (double)) {
-                return Convert.ToDouble(parameterValue, provider);
-            }
+			try {
+	            var provider = new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," };
+	            if (parameterDatatype == typeof (double)) {
+	                return Convert.ToDouble(parameterValue, provider);
+	            }
 
-            if (parameterDatatype == typeof(int))
-            {
-                return int.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(int))
+	            {
+	                return int.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(bool))
-            {
-                return bool.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(bool))
+	            {
+	                return bool.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(float))
-            {
-                return float.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(float))
+	            {
+	                return float.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(char))
-            {
-                return char.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(char))
+	            {
+	                return char.Parse(parameterValue);
+	            }
 
-            // string is returned by default down below, but to save some if-checks, do it here too
-            if (parameterDatatype == typeof(string))
-            {
-                return parameterValue;
-            }
+	            // string is returned by default down below, but to save some if-checks, do it here too
+	            if (parameterDatatype == typeof(string))
+	            {
+	                return parameterValue;
+	            }
 
-            if (parameterDatatype == typeof(long))
-            {
-                return long.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(long))
+	            {
+	                return long.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(byte))
-            {
-                return byte.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(byte))
+	            {
+	                return byte.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(sbyte))
-            {
-                return sbyte.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(sbyte))
+	            {
+	                return sbyte.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(uint))
-            {
-                return uint.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(uint))
+	            {
+	                return uint.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(short))
-            {
-                return short.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(short))
+	            {
+	                return short.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(ushort))
-            {
-                return ushort.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(ushort))
+	            {
+	                return ushort.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(ulong))
-            {
-                return ulong.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(ulong))
+	            {
+	                return ulong.Parse(parameterValue);
+	            }
 
-            if (parameterDatatype == typeof(decimal))
-            {
-                return decimal.Parse(parameterValue);
-            }
+	            if (parameterDatatype == typeof(decimal))
+	            {
+	                return decimal.Parse(parameterValue);
+	            }
+			} catch(FormatException formatException) {
+				Console.Error.WriteLine("An error occured while transforming a value" +
+					" from ROCK-DB. The destined target type is: {0} , the value field contained: {1}," +
+					" the original exception was: {3}."
+					, parameterDatatype, parameterValue, formatException);
+			}
             return parameterValue;
         }
 

@@ -39,15 +39,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-      <HintPath>..\..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Mars.Rock.Common">
-      <HintPath>..\..\packages\Mars.Rock.Drill.0.1.74\lib\net45\Mars.Rock.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Mars.Rock.Drill">
-      <HintPath>..\..\packages\Mars.Rock.Drill.0.1.74\lib\net45\Mars.Rock.Drill.dll</HintPath>
-    </Reference>
     <Reference Include="AppSettingsManager">
       <HintPath>..\..\packages\SpatialAPI.0.5.37\lib\net45\AppSettingsManager.dll</HintPath>
     </Reference>
@@ -98,6 +89,15 @@
     </Reference>
     <Reference Include="ConfigService">
       <HintPath>..\..\packages\ConfigService.0.2.12\lib\net45\ConfigService.dll</HintPath>
+    </Reference>
+    <Reference Include="Mars.Rock.Common">
+      <HintPath>..\..\packages\Mars.Rock.Drill.0.2.17\lib\net45\Mars.Rock.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Mars.Rock.Drill">
+      <HintPath>..\..\packages\Mars.Rock.Drill.0.2.17\lib\net45\Mars.Rock.Drill.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
