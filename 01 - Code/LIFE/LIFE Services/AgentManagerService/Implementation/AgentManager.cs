@@ -166,7 +166,18 @@ namespace AgentManagerService.Implementation
 								throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type.");
 
 							}
-							actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
+
+							try {
+								actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
+							} catch(FormatException formatException) {
+								Console.Error.WriteLine("An error occured while transforming a value" +
+									" from ROCK-DB. " +
+									"The destined target type is: {0} ," +
+									" the value field contained: {1}," +
+									" the argument name was: {2}, " +
+									" the original exception was: {3}."
+									, paramType, initInfo.ParameterValue, initInfo.ConstructorArgumentName, formatException);
+							}
 						}
 
 						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
@@ -179,8 +190,19 @@ namespace AgentManagerService.Implementation
                             {
                                 agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
                             }
+
 							// add param to actualParameters[]
-                            actualParameters.Add(GetParameterValue(paramType, (string)paramValue));
+							try {
+                            	actualParameters.Add(GetParameterValue(paramType, (string)paramValue));
+							} catch(FormatException formatException) {
+								Console.Error.WriteLine("An error occured while transforming a value" +
+									" from ROCK-DB. " +
+									"The destined target type is: {0} ," +
+									" the value field contained: {1}," +
+									" the argument name was: {2}, " +
+									" the original exception was: {3}."
+									, paramType, (string)paramValue, initInfo.ConstructorArgumentName, formatException);
+							}
 						}   	
 					}
                     // move shuttleParams to next element
@@ -201,7 +223,6 @@ namespace AgentManagerService.Implementation
         /// <param name="parameterValue"></param>
         /// <returns></returns>
         private static object GetParameterValue(Type parameterDatatype, string parameterValue) {
-			try {
 	            var provider = new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," };
 	            if (parameterDatatype == typeof (double)) {
 	                return Convert.ToDouble(parameterValue, provider);
@@ -272,12 +293,7 @@ namespace AgentManagerService.Implementation
 	            {
 	                return decimal.Parse(parameterValue);
 	            }
-			} catch(FormatException formatException) {
-				Console.Error.WriteLine("An error occured while transforming a value" +
-					" from ROCK-DB. The destined target type is: {0} , the value field contained: {1}," +
-					" the original exception was: {3}."
-					, parameterDatatype, parameterValue, formatException);
-			}
+
             return parameterValue;
         }
 
