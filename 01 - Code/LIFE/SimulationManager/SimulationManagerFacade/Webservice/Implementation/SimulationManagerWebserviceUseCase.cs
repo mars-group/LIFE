@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using Newtonsoft.Json;
 using SimulationManagerFacade.Interface;
 
 
@@ -36,14 +35,11 @@ namespace SimulationManagerWebservice
 					case "GET":
 						if (uri.Equals("property")) {
 							// Query a single value.
-							WriteResponse(context.Response, Encoding.UTF8.GetBytes(property));
+							//WriteResponse(context.Response, Encoding.UTF8.GetBytes(property));
 						}
 						else if (uri.Equals("properties")) {
 							// Query a directory.
-							Console.WriteLine("[GET] Query on directory '" + qs["directory"] + "'.");
-							var properties = storage.GetDirectory(qs["directory"]);
-							var jsonString = JsonConvert.SerializeObject(properties);
-							WriteResponse(context.Response, Encoding.UTF8.GetBytes(jsonString));
+							//WriteResponse(context.Response, Encoding.UTF8.GetBytes(jsonString));
 						}
 						break;
 
@@ -51,7 +47,7 @@ namespace SimulationManagerWebservice
 						// Performs CREATE operations.
 					case "POST":
 						if(uri.Equals("stop")){
-							simManager.AbortSimulation();
+							//simManager.AbortSimulation();
 						}
 						context.Response.Close();
 						break;
@@ -60,7 +56,6 @@ namespace SimulationManagerWebservice
 						// Performs DELETE operations.
 					case "DELETE":
 						Console.WriteLine("[DELETE] Removal of entry '" + qs["key"] + "'.");
-						storage.Delete(qs["key"]);
 						context.Response.Close();
 						break;
 				}
@@ -93,6 +88,20 @@ namespace SimulationManagerWebservice
 			response.StatusDescription = description;
 			response.Close();
 		}
+
+		#region ISimulationManagerWebservice implementation
+
+		void ISimulationManagerWebservice.StartService ()
+		{
+
+		}
+
+		void ISimulationManagerWebservice.StopService ()
+		{
+
+		}
+
+		#endregion
 	}
 }
 
