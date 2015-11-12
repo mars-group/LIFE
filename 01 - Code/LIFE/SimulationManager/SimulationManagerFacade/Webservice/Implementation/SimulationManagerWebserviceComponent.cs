@@ -1,6 +1,7 @@
 ﻿using System;
 using SMConnector;
 using SimulationManagerFacade.Interface;
+using SimulationManagerFacade.Webservice.Implementation;
 
 namespace SimulationManagerWebservice
 {

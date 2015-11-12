@@ -50,7 +50,7 @@ namespace SimulationManagerFacade.Implementation {
             _server.Start();
 
 			// create and start SM WebService
-			//var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
+			var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
 
         }
         

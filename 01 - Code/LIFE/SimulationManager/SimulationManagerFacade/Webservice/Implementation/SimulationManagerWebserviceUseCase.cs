@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Net;
-using System.IO;
-using Newtonsoft.Json;
-using System.Text;
-using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Web.Script.Serialization;
 using SimulationManagerFacade.Interface;
+using SimulationManagerWebservice;
 using SMConnector.TransportTypes;
 
-
-namespace SimulationManagerWebservice
+namespace SimulationManagerFacade.Webservice.Implementation
 {
 
 
@@ -42,17 +40,17 @@ namespace SimulationManagerWebservice
 				case "GET":
 					Console.WriteLine ("Received a GET request");
 					WriteResponse(context.Response, new byte[0]);
-						break;
+					break;
 
 
-						// Performs CREATE operations.
+					// Performs control operations
 					case "POST":
 						// POST /stop 
 						if(uri.Equals("stop")){
 							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
 							var dict = jss.Deserialize<Dictionary<string,string>>(content);
 							WriteResponse(context.Response, new byte[0]);
-						simManager.AbortSimulation(new TModelDescription(dict["model"]));
+						    simManager.AbortSimulation(new TModelDescription(dict["model"]));
 						}
 						// POST /step 
 						if(uri.Equals("step")){
@@ -76,12 +74,6 @@ namespace SimulationManagerWebservice
 							simManager.ResumeSimulation(new TModelDescription(dict["model"]));
 						}
 
-						context.Response.Close();
-						break;
-
-
-						// Performs DELETE operations.
-					case "DELETE":
 						context.Response.Close();
 						break;
 				}
