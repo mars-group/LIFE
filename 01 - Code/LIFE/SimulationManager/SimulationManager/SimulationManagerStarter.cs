@@ -61,14 +61,7 @@ namespace SimulationManager
             Console.WriteLine("For how many steps is the simulation supposed to run?");
             int ticks = int.Parse(Console.ReadLine());
             if (nr == -1) {
-                core.StartSimulationWithModel
-                    (Guid.NewGuid(), new TModelDescription
-                        ("ElephantModel",
-                            "",
-                            "Not Running",
-                            false,
-                            "http://mc.mars.haw-hamburg.de/modeluploads/test@test.com/ElephantModel.zip"),
-                        ticks);
+
             }
             else {
                 core.StartSimulationWithModel(Guid.NewGuid(), core.GetAllModels().ToList()[nr], ticks);

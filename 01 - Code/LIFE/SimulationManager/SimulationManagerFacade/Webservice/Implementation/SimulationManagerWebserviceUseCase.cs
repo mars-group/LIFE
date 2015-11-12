@@ -6,6 +6,7 @@ using System.Text;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using SimulationManagerFacade.Interface;
+using SMConnector.TransportTypes;
 
 
 namespace SimulationManagerWebservice
@@ -51,21 +52,28 @@ namespace SimulationManagerWebservice
 							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
 							var dict = jss.Deserialize<Dictionary<string,string>>(content);
 							WriteResponse(context.Response, new byte[0]);
-						simManager.AbortSimulation(dict["model"]);
+						simManager.AbortSimulation(new TModelDescription(dict["model"]));
 						}
 						// POST /step 
 						if(uri.Equals("step")){
 							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
 							var dict = jss.Deserialize<Dictionary<string,string>>(content);
 							WriteResponse(context.Response, new byte[0]);
-							simManager.ResumeSimulation (dict["model"]);
+							simManager.StepSimulation (new TModelDescription(dict["model"]));
 						}
 						// POST /pause
 						if(uri.Equals("pause")){
 							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
 							var dict = jss.Deserialize<Dictionary<string,string>>(content);
 							WriteResponse(context.Response, new byte[0]);
-							simManager.PauseSimulation(dict["model"]);
+							simManager.PauseSimulation(new TModelDescription(dict["model"]));
+						}
+						// POST /step 
+						if(uri.Equals("resume")){
+							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+							var dict = jss.Deserialize<Dictionary<string,string>>(content);
+							WriteResponse(context.Response, new byte[0]);
+							simManager.ResumeSimulation(new TModelDescription(dict["model"]));
 						}
 
 						context.Response.Close();

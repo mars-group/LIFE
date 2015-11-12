@@ -66,15 +66,6 @@ namespace MARSLocalStarter
             int ticks = int.Parse(Console.ReadLine());
             if (nr == -1)
             {
-                core.StartSimulationWithModel
-                    (Guid.NewGuid(),
-                     new TModelDescription
-                        ("ElephantModel",
-                            "",
-                            "Not Running",
-                            false,
-                            "http://mc.mars.haw-hamburg.de/modeluploads/test@test.com/ElephantModel.zip"),
-                        ticks);
             }
             else
             {
