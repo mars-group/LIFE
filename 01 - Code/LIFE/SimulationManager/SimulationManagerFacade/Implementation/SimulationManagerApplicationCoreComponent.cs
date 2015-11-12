@@ -50,8 +50,8 @@ namespace SimulationManagerFacade.Implementation {
             _server.Start();
 
 			// create and start SM WebService
-			var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
-			simManagerWebservice.StartService();
+			//var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
+
         }
         
 		//local option for simulation start - connected layer containers unknown. Use all and use standard implementation.

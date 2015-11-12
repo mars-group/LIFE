@@ -9,24 +9,11 @@ namespace SimulationManagerWebservice
 
 		private readonly ISimulationManagerWebservice _simulationManagerWebServiceUseCase;
 
-		public SimulationManagerWebserviceComponent(ISimulationManagerApplicationCore simManager)
+		public SimulationManagerWebserviceComponent()
 		{
-			_simulationManagerWebServiceUseCase = new SimulationManagerWebserviceUseCase (simManager);
+			_simulationManagerWebServiceUseCase = new SimulationManagerWebserviceUseCase ();
 		}
 
-		#region ISimulationManagerWebservice implementation
-
-		public void StartService ()
-		{
-			_simulationManagerWebServiceUseCase.StartService();
-		}
-
-		public void StopService ()
-		{
-			_simulationManagerWebServiceUseCase.StopService();
-		}
-
-		#endregion
 	}
 }
 

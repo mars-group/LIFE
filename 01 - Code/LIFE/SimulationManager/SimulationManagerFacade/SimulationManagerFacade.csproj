@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{58149FF0-0801-46F8-A9C6-571B6030DC1E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SimulationManagerFacade</RootNamespace>
     <AssemblyName>SimulationManagerFacade</AssemblyName>
@@ -25,7 +25,6 @@
     <DocumentationFile>bin\Debug\SimulationManagerFacade.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -86,6 +85,7 @@
     <Compile Include="Webservice\Implementation\SimulationManagerWebserviceComponent.cs" />
     <Compile Include="Webservice\Implementation\SimulationManagerWebserviceUseCase.cs" />
     <Compile Include="Webservice\Interfaces\ISimulationManagerWebservice.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Text;
-using SimulationManagerFacade.Interface;
 
 
 namespace SimulationManagerWebservice
@@ -20,9 +17,9 @@ namespace SimulationManagerWebservice
 		/// </summary>
 		/// <param name="storage">The storage solution to use (CSV or ETCD).</param>
 		/// <param name="address">The address and port number to listen on.</param>
-		public SimulationManagerWebserviceUseCase(ISimulationManagerApplicationCore simManager) {
+		public SimulationManagerWebserviceUseCase() {
 			var listener = new HttpListener();
-			listener.Prefixes.Add("http://*:1234");
+			listener.Prefixes.Add("http://*:1234/");
 			listener.Start();
 
 			/* HTTP listener loop to handle incoming requests. */
@@ -32,23 +29,27 @@ namespace SimulationManagerWebservice
 				var qs = context.Request.QueryString;
 				switch (context.Request.HttpMethod) {
 					// Performs READ operations.
-					case "GET":
-						if (uri.Equals("property")) {
-							// Query a single value.
-							//WriteResponse(context.Response, Encoding.UTF8.GetBytes(property));
-						}
-						else if (uri.Equals("properties")) {
-							// Query a directory.
-							//WriteResponse(context.Response, Encoding.UTF8.GetBytes(jsonString));
-						}
+				case "GET":
+					Console.WriteLine ("Received a GET request");
+					WriteResponse(context.Response, new byte[0]);
 						break;
 
 
 						// Performs CREATE operations.
 					case "POST":
+						// POST /stop 
 						if(uri.Equals("stop")){
 							//simManager.AbortSimulation();
 						}
+						// POST /step 
+						if(uri.Equals("step")){
+							//simManager.ResumeSimulation();
+						}
+						// POST /pause
+						if(uri.Equals("pause")){
+							//simManager.PauseSimulation()
+						}
+						WriteResponse(context.Response, new byte[0]);
 						context.Response.Close();
 						break;
 
@@ -88,20 +89,7 @@ namespace SimulationManagerWebservice
 			response.StatusDescription = description;
 			response.Close();
 		}
-
-		#region ISimulationManagerWebservice implementation
-
-		void ISimulationManagerWebservice.StartService ()
-		{
-
-		}
-
-		void ISimulationManagerWebservice.StopService ()
-		{
-
-		}
-
-		#endregion
+			
 	}
 }
 
