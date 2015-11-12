@@ -1,5 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.IO;
+using Newtonsoft.Json;
+using System.Text;
+using System.Web.Script.Serialization;
+using System.Collections.Generic;
+using SimulationManagerFacade.Interface;
 
 
 namespace SimulationManagerWebservice
@@ -17,10 +23,13 @@ namespace SimulationManagerWebservice
 		/// </summary>
 		/// <param name="storage">The storage solution to use (CSV or ETCD).</param>
 		/// <param name="address">The address and port number to listen on.</param>
-		public SimulationManagerWebserviceUseCase() {
+		public SimulationManagerWebserviceUseCase(ISimulationManagerApplicationCore simManager) {
 			var listener = new HttpListener();
 			listener.Prefixes.Add("http://*:1234/");
 			listener.Start();
+
+			// create a JSON Deserializer
+			var jss = new JavaScriptSerializer ();
 
 			/* HTTP listener loop to handle incoming requests. */
 			while (true) {
@@ -39,24 +48,32 @@ namespace SimulationManagerWebservice
 					case "POST":
 						// POST /stop 
 						if(uri.Equals("stop")){
-							//simManager.AbortSimulation();
+							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+							var dict = jss.Deserialize<Dictionary<string,string>>(content);
+							WriteResponse(context.Response, new byte[0]);
+						simManager.AbortSimulation(dict["model"]);
 						}
 						// POST /step 
 						if(uri.Equals("step")){
-							//simManager.ResumeSimulation();
+							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+							var dict = jss.Deserialize<Dictionary<string,string>>(content);
+							WriteResponse(context.Response, new byte[0]);
+							simManager.ResumeSimulation (dict["model"]);
 						}
 						// POST /pause
 						if(uri.Equals("pause")){
-							//simManager.PauseSimulation()
+							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+							var dict = jss.Deserialize<Dictionary<string,string>>(content);
+							WriteResponse(context.Response, new byte[0]);
+							simManager.PauseSimulation(dict["model"]);
 						}
-						WriteResponse(context.Response, new byte[0]);
+
 						context.Response.Close();
 						break;
 
 
 						// Performs DELETE operations.
 					case "DELETE":
-						Console.WriteLine("[DELETE] Removal of entry '" + qs["key"] + "'.");
 						context.Response.Close();
 						break;
 				}

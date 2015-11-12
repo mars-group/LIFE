@@ -9,9 +9,9 @@ namespace SimulationManagerWebservice
 
 		private readonly ISimulationManagerWebservice _simulationManagerWebServiceUseCase;
 
-		public SimulationManagerWebserviceComponent()
+		public SimulationManagerWebserviceComponent(ISimulationManagerApplicationCore simManager)
 		{
-			_simulationManagerWebServiceUseCase = new SimulationManagerWebserviceUseCase ();
+			_simulationManagerWebServiceUseCase = new SimulationManagerWebserviceUseCase (simManager);
 		}
 
 	}
