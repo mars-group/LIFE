@@ -82,10 +82,6 @@
     <Compile Include="Interface\SimulationManagerApplicationCoreFactory.cs" />
     <Compile Include="Interface\ISimulationManagerApplicationCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Webservice\Implementation\Modules\ControlModule.cs" />
-    <Compile Include="Webservice\Implementation\SimulationManagerWebserviceComponent.cs" />
-    <Compile Include="Webservice\Implementation\SimulationManagerWebserviceUseCase.cs" />
-    <Compile Include="Webservice\Interfaces\ISimulationManagerWebservice.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -157,8 +153,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Webservice\" />
-    <Folder Include="Webservice\Implementation\" />
-  </ItemGroup>
 </Project>
