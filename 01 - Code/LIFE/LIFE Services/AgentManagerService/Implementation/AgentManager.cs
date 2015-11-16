@@ -185,7 +185,8 @@ namespace AgentManagerService.Implementation
                             var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
 							// fetch parameter from ROCK CUBE
 							var paramValue = agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current;
-                            // advance to first real data element
+                            // advance to next real data element (table might include null values
+							agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
                             while (agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current is DBNull)
                             {
                                 agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
