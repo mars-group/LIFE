@@ -6,5 +6,7 @@ namespace AgentManager.Interface.Exceptions {
         public ParameterMustBePrimitiveException(string msg) : base(msg) {
             
         }
+
+		public ParameterMustBePrimitiveException(){}
     }
 }

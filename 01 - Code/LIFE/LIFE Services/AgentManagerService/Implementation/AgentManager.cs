@@ -23,6 +23,7 @@ using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
 using SpatialAPI.Environment;
 using ConfigService;
+using System.Threading.Tasks;
 
 
 namespace AgentManagerService.Implementation
@@ -31,12 +32,12 @@ namespace AgentManagerService.Implementation
     {
         public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle, IEnvironment environment, List<ILayer> additionalLayerDependencies)
         {
+			Console.WriteLine ("Starting creation of agent type: " + agentInitConfig.AgentName);
+
             var agents = new ConcurrentDictionary<Guid, T>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
             // connect to MARS ROCK
-            // agentInitConfig.MarsCubeUrl
-
 			// create ConfigService and connect to marsconfig container. This is due to convention. This LIFE container
 			// should be linked to the marsconfig container and thus marsconfig should lead to the correct ip
 			// as per /etc/hosts
@@ -62,8 +63,11 @@ namespace AgentManagerService.Implementation
             var agentConstructor = agentType.GetConstructors().
                 FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishInShuttleAttribute), true).Length > 0);
 
+			// fetch needed params
+			var neededParameters = agentConstructor.GetParameters ();
+
             // sanity check
-            if (agentConstructor.GetParameters().Length != agentParameterCount)
+			if (neededParameters.Length != agentParameterCount)
             {
                 throw new NotEnoughParametersProvidedException("There were not enough parameters provided in your SimConfig for Agent of type: " + agentType);
             }
@@ -72,50 +76,49 @@ namespace AgentManagerService.Implementation
             var cube = Drill.GetCube(agentInitConfig.MarsCubeName);
 
             // setup enumerators for cube parameters
-            var agentCubeParamEnumerators = new Dictionary<string, IEnumerator<object>>();
-            foreach (var param in initParams)
-            {
+            var agentCubeParamArrays = new ConcurrentDictionary<string, object[]>();
 
-                if (param.GetParameterType()
-                    == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation)
-                {
-                    var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation();
+			Console.WriteLine ("Fetching CUBE Data...");
 
-                    // check if we already have this enumerator
-                    if (!agentCubeParamEnumerators.ContainsKey(initInfo.MarsCubeDBColumnName))
-                    {
+			//Parallel.ForEach (initParams, (param) => {
+			foreach(var param in initParams){
+				if (param.GetParameterType ()
+				    == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
+					var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation ();
 
-                        // fetch needed dimension from cube
-                        var data = cube.GetData
+					// check if we already have this enumerator
+					if (!agentCubeParamArrays.ContainsKey (initInfo.MarsCubeDBColumnName)) {
+
+						// fetch needed dimension from cube
+						var data = cube.GetData
                             (new List<Dimension> {
-                                    cube.Dimensions.FirstOrDefault
+							cube.Dimensions.FirstOrDefault
                                         (d =>
                                             d.CleanName == initInfo.MarsCubeDimensionName
-                                            || d.Name == initInfo.MarsCubeDimensionName)
-                                });
+							||
+							d.Name == initInfo.MarsCubeDimensionName)
+						});
 
-                        // get real column name from CleanName
-                        var columnName = cube.Dimensions.FirstOrDefault
+						// get real column name from CleanName
+						var columnName = cube.Dimensions.FirstOrDefault
                             (d =>
                                 d.CleanName == initInfo.MarsCubeDimensionName
-                                || d.Name == initInfo.MarsCubeDimensionName)
-                            .Attributes.FirstOrDefault(a => a.CleanName == initInfo.MarsCubeDBColumnName)
+						                 || d.Name == initInfo.MarsCubeDimensionName)
+                            .Attributes.FirstOrDefault (a => a.CleanName == initInfo.MarsCubeDBColumnName)
                             .Name;
 
-                        // create enumerators for data retrieval
-                        agentCubeParamEnumerators.Add
-                            (initInfo.MarsCubeDBColumnName,
-                                (from DataRow dr in data.Rows
-                                 select dr[columnName]).GetEnumerator());
-                        // set enum to first element
-                        agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
-                        // advance to first real data element
-                        while (agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current is DBNull) {
-                            agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
-                        }
-                    }
-                }
-            }
+						// create enumerators for data retrieval and store values in arrays
+						var values = (from DataRow dr 
+									  in data.Rows.AsParallel().AsOrdered()
+						              where !(dr [columnName] is DBNull)
+						              select dr [columnName])
+							.ToArray ();
+						agentCubeParamArrays.TryAdd (initInfo.MarsCubeDBColumnName, values);
+					}
+				}
+			}
+
+			Console.WriteLine ("Finished fetching CUBE data, Starting agent creation....");
 
             // get types for special parameters
             var layerType = typeof (ILayer);
@@ -125,94 +128,92 @@ namespace AgentManagerService.Implementation
             var unregisterAgentType = typeof (UnregisterAgent);
 
             // iterate over all agents and create them
-            foreach (var realAgentId in agentInitConfig.RealAgentIds) {
-                var actualParameters = new List<object>(agentParameterCount);
+			Parallel.For (0, agentInitConfig.RealAgentIds.Length, index => {
 
-				var paramEnumerator = initParams.GetEnumerator();
-                
-                // move enumerator to first element
-                paramEnumerator.MoveNext();
-                
-                // fetch needed params
-				var neededParameters = agentConstructor.GetParameters ();
+				var realAgentId = agentInitConfig.RealAgentIds[index];
 
-				foreach (var neededParam in neededParameters) {
-				    if (environmentType.IsAssignableFrom(neededParam.ParameterType)) {
-				        actualParameters.Add(environment);
-				    } else if (layerType.IsAssignableFrom(neededParam.ParameterType)) {
-                        if (!additionalLayerDependencies.Any(l => neededParam.ParameterType.IsInstanceOfType(l)))
-                        {
-                            throw new MissingLayerForAgentConstructionException("Agent type '" + agentInitConfig.AgentName + "' needs missing layer type '"
-                                + neededParam.ParameterType + "' to initialize.");
-                        }
-                        actualParameters.Add(additionalLayerDependencies.First(l => neededParam.ParameterType.IsInstanceOfType(l)));
-				    } else if (guidType.IsAssignableFrom(neededParam.ParameterType)) {
-				        actualParameters.Add(realAgentId);      
-				    } else if (registerAgentType.IsAssignableFrom(neededParam.ParameterType)) {
-				        actualParameters.Add(registerAgentHandle);
-                    } else if (unregisterAgentType.IsAssignableFrom(neededParam.ParameterType)) {
-				        actualParameters.Add(unregisterAgentHandle);
-				    } else {
-				    // it's a primitive type, so take the next param from params list provided by SHUTTLE
-						var param = paramEnumerator.Current;
+				// use concurrentDictionary's Keys as concurrent list
+				var actualParameters = new List<object> ();
 
-						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
-						{
+				foreach(var neededParam in neededParameters) {
+
+					var shuttleParams = initParams.GetEnumerator();
+					shuttleParams.MoveNext();
+					// check special types
+					if (environmentType.IsAssignableFrom (neededParam.ParameterType)) {
+						actualParameters.Add(environment);
+					} else if (layerType.IsAssignableFrom (neededParam.ParameterType)) {
+						if (!additionalLayerDependencies.Any (l => neededParam.ParameterType.IsInstanceOfType (l))) {
+							throw new MissingLayerForAgentConstructionException ("Agent type '" + agentInitConfig.AgentName + "' needs missing layer type '"
+							+ neededParam.ParameterType + "' to initialize.");
+						}
+						actualParameters.Add (additionalLayerDependencies.First (l => neededParam.ParameterType.IsInstanceOfType (l)));
+					} else if (guidType.IsAssignableFrom (neededParam.ParameterType)) {
+						actualParameters.Add (realAgentId);      
+					} else if (registerAgentType.IsAssignableFrom (neededParam.ParameterType)) {
+						actualParameters.Add (registerAgentHandle);
+					} else if (unregisterAgentType.IsAssignableFrom (neededParam.ParameterType)) {
+						actualParameters.Add (unregisterAgentHandle);
+					} else {
+						// it's a primitive type, so take the next param from params list provided by SHUTTLE
+						var param = shuttleParams.Current;
+
+						if (param.GetParameterType () == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation) {
 							// use static value
 							var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
-							var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
+							var paramType = Type.GetType (initInfo.ConstructorArgumentDatatype);
 
-							if (!(paramType == typeof(String)) && (paramType == null || !paramType.IsPrimitive)) {
-								throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type.");
+							if (paramType != typeof(String) && (paramType == null || !paramType.IsPrimitive)) {
+								throw new ParameterMustBePrimitiveException ("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type. But was: " + paramType.Name);
 
 							}
 
 							try {
-								actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
-							} catch(FormatException formatException) {
-								Console.Error.WriteLine("An error occured while transforming a value" +
-									" from ROCK-DB. " +
-									"The destined target type is: {0} ," +
-									" the value field contained: {1}," +
-									" the argument name was: {2}, " +
-									" the original exception was: {3}."
+								actualParameters.Add (GetParameterValue (paramType, initInfo.ParameterValue));
+							} catch (FormatException formatException) {
+								Console.Error.WriteLine ("An error occured while transforming a value" +
+								" from ROCK-DB. " +
+								"The destined target type is: {0} ," +
+								" the value field contained: {1}," +
+								" the argument name was: {2}, " +
+								" the original exception was: {3}."
 									, paramType, initInfo.ParameterValue, initInfo.ConstructorArgumentName, formatException);
 							}
 						}
 
-						if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
-							var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation();
-                            var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
-							// fetch parameter from ROCK CUBE
-							var paramValue = agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current;
-                            // advance to next real data element (table might include null values
-							agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
-                            while (agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].Current is DBNull)
-                            {
-                                agentCubeParamEnumerators[initInfo.MarsCubeDBColumnName].MoveNext();
-                            }
+						if (param.GetParameterType () == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
+							var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation ();
+							var paramType = Type.GetType (initInfo.ConstructorArgumentDatatype);
 
+
+							// fetch parameter from ROCK CUBE
+							var paramValue = agentCubeParamArrays[initInfo.MarsCubeDBColumnName][index];
+							Console.WriteLine("Got Parameter: " + paramValue);
 							// add param to actualParameters[]
 							try {
-                            	actualParameters.Add(GetParameterValue(paramType, (string)paramValue));
-							} catch(FormatException formatException) {
-								Console.Error.WriteLine("An error occured while transforming a value" +
-									" from ROCK-DB. " +
-									"The destined target type is: {0} ," +
-									" the value field contained: {1}," +
-									" the argument name was: {2}, " +
-									" the original exception was: {3}."
+								actualParameters.Add (GetParameterValue (paramType, (string)paramValue));
+							} catch (FormatException formatException) {
+								Console.Error.WriteLine ("An error occured while transforming a value" +
+								" from ROCK-DB. " +
+								"The destined target type is: {0} ," +
+								" the value field contained: {1}," +
+								" the argument name was: {2}, " +
+								" the original exception was: {3}."
 									, paramType, (string)paramValue, initInfo.ConstructorArgumentName, formatException);
 							}
-						}   	
+						}   
+
+						// move to next param
+						shuttleParams.MoveNext();
 					}
-                    // move shuttleParams to next element
-                    paramEnumerator.MoveNext();
+
 				}
 
-                // call constructor of agent and store agent in return dictionary
-                agents.TryAdd(realAgentId, (T)agentConstructor.Invoke(actualParameters.ToArray()));
-            }
+				actualParameters.ForEach(p => Console.WriteLine(p.GetType().Name));
+
+				// call constructor of agent and store agent in return dictionary
+				agents.TryAdd (realAgentId, (T)agentConstructor.Invoke (actualParameters.ToArray()));
+			});
 
             return agents;
         }
