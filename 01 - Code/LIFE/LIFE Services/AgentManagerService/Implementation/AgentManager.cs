@@ -135,10 +135,11 @@ namespace AgentManagerService.Implementation
 				// use concurrentDictionary's Keys as concurrent list
 				var actualParameters = new List<object> ();
 
-				foreach(var neededParam in neededParameters) {
+                var shuttleParams = initParams.GetEnumerator();
+                shuttleParams.MoveNext();
 
-					var shuttleParams = initParams.GetEnumerator();
-					shuttleParams.MoveNext();
+                foreach (var neededParam in neededParameters) {
+
 					// check special types
 					if (environmentType.IsAssignableFrom (neededParam.ParameterType)) {
 						actualParameters.Add(environment);
@@ -203,11 +204,12 @@ namespace AgentManagerService.Implementation
 							}
 						}   
 
-						// move to next param
-						shuttleParams.MoveNext();
 					}
 
-				}
+                    // move to next param
+                    shuttleParams.MoveNext();
+
+                }
 
 				actualParameters.ForEach(p => Console.WriteLine(p.GetType().Name));
 
