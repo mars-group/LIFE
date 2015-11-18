@@ -189,7 +189,6 @@ namespace AgentManagerService.Implementation
 
 							// fetch parameter from ROCK CUBE
 							var paramValue = agentCubeParamArrays[initInfo.MarsCubeDBColumnName][index];
-							Console.WriteLine("Got Parameter: " + paramValue);
 							// add param to actualParameters[]
 							try {
 								actualParameters.Add (GetParameterValue (paramType, (string)paramValue));
@@ -210,8 +209,6 @@ namespace AgentManagerService.Implementation
                     shuttleParams.MoveNext();
 
                 }
-
-				actualParameters.ForEach(p => Console.WriteLine(p.GetType().Name));
 
 				// call constructor of agent and store agent in return dictionary
 				agents.TryAdd (realAgentId, (T)agentConstructor.Invoke (actualParameters.ToArray()));
