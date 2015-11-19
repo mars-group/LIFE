@@ -24,6 +24,7 @@ using MARS.Shuttle.SimulationConfig;
 using SpatialAPI.Environment;
 using ConfigService;
 using System.Threading.Tasks;
+using System.Text;
 
 
 namespace AgentManagerService.Implementation
@@ -179,6 +180,7 @@ namespace AgentManagerService.Implementation
 								" the argument name was: {2}, " +
 								" the original exception was: {3}."
 									, paramType, initInfo.ParameterValue, initInfo.ConstructorArgumentName, formatException);
+								throw formatException;
 							}
 						}
 
@@ -200,6 +202,7 @@ namespace AgentManagerService.Implementation
 								" the argument name was: {2}, " +
 								" the original exception was: {3}."
 									, paramType, (string)paramValue, initInfo.ConstructorArgumentName, formatException);
+								throw formatException;
 							}
 						}   
 
@@ -211,7 +214,14 @@ namespace AgentManagerService.Implementation
                 }
 
 				// call constructor of agent and store agent in return dictionary
+				try {
 				agents.TryAdd (realAgentId, (T)agentConstructor.Invoke (actualParameters.ToArray()));
+				} catch(TargetParameterCountException tex) {
+					var stb = new StringBuilder();
+					actualParameters.Select(p => stb.Append(p.GetType().Name + "/n"));
+					Console.Error.WriteLine("The amount of provided parameters doesn fit with the amount of required parameters. Parameters were: " + stb);
+					throw tex;
+				}
 			});
 
             return agents;
