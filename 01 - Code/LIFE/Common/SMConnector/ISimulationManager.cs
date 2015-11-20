@@ -63,6 +63,8 @@ namespace SMConnector {
         /// <param name="model"></param>
         void AbortSimulation(TModelDescription model);
 
+		void WaitForSimulationToFinish(TModelDescription model);
+
         /// <summary>
         ///     Starts the visuzalization of the model.
         ///     Optional: Provide an integer value describing
@@ -78,6 +80,8 @@ namespace SMConnector {
         /// </summary>
         /// <param name="model"></param>
         void StopVisualization(TModelDescription model);
+
+
 
         /// <summary>
         ///     Subscribe for StatusUpdates from the SimulationManager.

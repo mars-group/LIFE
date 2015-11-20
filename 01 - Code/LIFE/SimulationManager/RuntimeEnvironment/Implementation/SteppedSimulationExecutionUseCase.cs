@@ -30,6 +30,7 @@ namespace RuntimeEnvironment.Implementation {
 
         private readonly ManualResetEvent _simulationExecutionSwitch;
         private int? _steppedTicks;
+		private Task _simulationTask;
 
         public SteppedSimulationExecutionUseCase
 		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, bool startPaused = false) {
@@ -39,8 +40,7 @@ namespace RuntimeEnvironment.Implementation {
             _simulationExecutionSwitch = new ManualResetEvent(false);
 
             // start simulation
-
-			Task.Run(() => this.RunSimulation());
+			_simulationTask = Task.Run(() => this.RunSimulation());
         }
 
         private void RunSimulation() {
@@ -145,6 +145,11 @@ namespace RuntimeEnvironment.Implementation {
         public void Abort() {
             _status = SimulationStatus.Aborted;
         }
+
+		public void WaitForSimulationToFinish ()
+		{
+			_simulationTask.Wait ();
+		}
 
         public void StartVisualization(int? nrOfTicksToVisualize) {
             Parallel.ForEach(_layerContainerClients, l => l.Proxy.StartVisualization(nrOfTicksToVisualize));

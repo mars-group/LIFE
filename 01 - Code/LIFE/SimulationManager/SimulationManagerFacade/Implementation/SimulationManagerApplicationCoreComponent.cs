@@ -83,9 +83,14 @@ namespace SimulationManagerFacade.Implementation {
             _runtimeEnvironment.StopVisualization(model);
         }
 
+		public void WaitForSimulationToFinish(TModelDescription model){
+			_runtimeEnvironment.WaitForSimulationToFinish (model);
+		}
+
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
             _runtimeEnvironment.SubscribeForStatusUpdate(statusUpdateAvailable);
         }
+
 
         #endregion
 
