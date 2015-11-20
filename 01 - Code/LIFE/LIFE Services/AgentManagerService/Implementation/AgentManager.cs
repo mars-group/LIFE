@@ -81,6 +81,33 @@ namespace AgentManagerService.Implementation
 
 			Console.WriteLine ("Fetching CUBE Data...");
 
+			// check if all dimensio names are the same, because in that case we only need to get the cube once
+			var prefetchData = true;
+			var dimensionNames = (from IAtConstructorParameter param 
+								  in initParams
+			                      where param.GetParameterType ()
+			                          == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation
+			                      select param.GetMarsCubeFieldToConstructorArgumentRelation ().MarsCubeDimensionName);
+			
+			var firstDimension = dimensionNames.First();
+			// if there is any dimension by another name, don't prefetch data
+			if(dimensionNames.Any(dimension => dimension != firstDimension)){
+				prefetchData = false;
+			}
+
+			DataTable data = new DataTable();
+			if (prefetchData) {
+				Console.WriteLine ("Prefetching, all Dimensions are the same...");
+				data = cube.GetData
+				(new List<Dimension> {
+					cube.Dimensions.FirstOrDefault
+					(d =>
+							d.CleanName == firstDimension
+						||
+							d.Name == firstDimension)
+				});
+			}
+
 			//Parallel.ForEach (initParams, (param) => {
 			foreach(var param in initParams){
 				if (param.GetParameterType ()
@@ -90,15 +117,17 @@ namespace AgentManagerService.Implementation
 					// check if we already have this enumerator
 					if (!agentCubeParamArrays.ContainsKey (initInfo.MarsCubeDBColumnName)) {
 
-						// fetch needed dimension from cube
-						var data = cube.GetData
+						// fetch needed dimension from cube if not already prefetched
+						if (!prefetchData) {
+							data = cube.GetData
                             (new List<Dimension> {
-							cube.Dimensions.FirstOrDefault
+								cube.Dimensions.FirstOrDefault
                                         (d =>
                                             d.CleanName == initInfo.MarsCubeDimensionName
-							||
-							d.Name == initInfo.MarsCubeDimensionName)
-						});
+								||
+								d.Name == initInfo.MarsCubeDimensionName)
+							});
+						}
 
 						// get real column name from CleanName
 						var columnName = cube.Dimensions.FirstOrDefault
