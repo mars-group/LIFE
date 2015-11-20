@@ -16,8 +16,6 @@ using System.Linq;
 using System.Reflection;
 using AgentManager.Interface;
 using AgentManager.Interface.Exceptions;
-using LCConnector.TransportTypes;
-using LifeAPI.Agent;
 using LifeAPI.Layer;
 using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
@@ -25,6 +23,8 @@ using SpatialAPI.Environment;
 using ConfigService;
 using System.Threading.Tasks;
 using System.Text;
+using LifeAPI.Agent;
+using LCConnector.TransportTypes;
 
 
 namespace AgentManagerService.Implementation
