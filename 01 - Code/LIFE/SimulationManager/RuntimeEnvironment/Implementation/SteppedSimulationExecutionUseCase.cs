@@ -9,7 +9,8 @@ using RabbitMQClient;
 
 [assembly: InternalsVisibleTo("SimulationManagerTest")]
 
-namespace RuntimeEnvironment.Implementation {
+namespace RuntimeEnvironment.Implementation
+{
 
     internal enum SimulationStatus {
         Running,
@@ -76,7 +77,7 @@ namespace RuntimeEnvironment.Implementation {
                             _steppedTicks = null;
                         }
                         else {
-                            DoStep();
+                            DoStep(i);
                         }
 
                         // set switch to non-signaled in case it was signaled before
@@ -94,7 +95,7 @@ namespace RuntimeEnvironment.Implementation {
                         return;
                 }
 
-				DoStep();
+				DoStep(i);
 
             }
 			sw.Stop();
