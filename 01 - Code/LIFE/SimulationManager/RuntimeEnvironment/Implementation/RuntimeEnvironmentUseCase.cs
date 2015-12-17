@@ -80,7 +80,7 @@ namespace RuntimeEnvironment.Implementation {
             sw.Stop();
             Console.WriteLine("...done in " + sw.ElapsedMilliseconds + "ms or " + sw.Elapsed);
 
-            _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, startPaused);
+			_steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, simulationId, startPaused);
 
         }
 

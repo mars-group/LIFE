@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using RuntimeEnvironment.Implementation.Entities;
 using System.Threading.Tasks;
+using RabbitMQClient;
 
 [assembly: InternalsVisibleTo("SimulationManagerTest")]
 
@@ -31,13 +32,18 @@ namespace RuntimeEnvironment.Implementation {
         private readonly ManualResetEvent _simulationExecutionSwitch;
         private int? _steppedTicks;
 		private Task _simulationTask;
+		private Guid _simulationId;
+
+		private RabbitMQWriter _rabbitMQWriter;
 
         public SteppedSimulationExecutionUseCase
-		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, bool startPaused = false) {
+		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, Guid simulationId, bool startPaused = false) {
             _nrOfTicks = nrOfTicks;
             _layerContainerClients = layerContainerClients;
             _status = startPaused ? SimulationStatus.Paused : SimulationStatus.Running;
             _simulationExecutionSwitch = new ManualResetEvent(false);
+			_simulationId = simulationId;
+			_rabbitMQWriter = new RabbitMQWriter(simulationId);
 
             // start simulation
 			_simulationTask = Task.Run(() => this.RunSimulation());
@@ -62,7 +68,7 @@ namespace RuntimeEnvironment.Implementation {
                         if (_steppedTicks.HasValue){
                             // make sure we don't step over the maximum nr of Ticks
                             while ((_steppedTicks+i < _nrOfTicks) && _steppedTicks > 0) {
-                                DoStep();
+                                DoStep(i);
                                 _steppedTicks--;
                                 // increase overall tick number
                                 i++;
@@ -92,10 +98,17 @@ namespace RuntimeEnvironment.Implementation {
 
             }
 			sw.Stop();
+
+			_rabbitMQWriter.SendMessageAsync("{\"simulationId\" : \"" + _simulationId+ "\"," +
+				"\"status\" : \"Finished\"," +
+				"\"tickCount\" : \""+ _nrOfTicks +"\"," +
+				"\"totalDuration\" : \""+ sw.ElapsedMilliseconds +"\"" +
+				"\"time\" : "+ GetUnixTimeStamp () + "}");
+
 			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
         }
 
-		private void DoStep(){
+		private void DoStep(int currentTick){
 
 			_maxExecutionTime = 0;
 
@@ -118,8 +131,12 @@ namespace RuntimeEnvironment.Implementation {
 					}
 				});
 
-
-			//Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
+			_rabbitMQWriter.SendMessageAsync("{\"simulationId\" : \"" + _simulationId+ "\"," +
+				"\"status\" : \"Running\"," +
+				"\"tickFinished\" : \""+ currentTick +"\"," +
+				"\"tickCount\" : \""+ _nrOfTicks +"\"," +
+				"\"longestTickDuration\" : \""+ _maxExecutionTime +"\"" +
+				"\"time\" : "+ GetUnixTimeStamp () + "}");
 		}
 
 		public void StepSimulation(int? nrOfTicks = null) {
@@ -159,5 +176,9 @@ namespace RuntimeEnvironment.Implementation {
         {
             Parallel.ForEach(_layerContainerClients, l => l.Proxy.StopVisualization());
         }
+
+		private int GetUnixTimeStamp(){
+			return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+		}
     }
 }
