@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using LayerContainerFacade.Interfaces;
 using log4net;
-using log4net.Appender;
-using log4net.Repository.Hierarchy;
-using MarsErrorReporting;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
+using System.Text;
 
 namespace MARSLocalStarter
 {
     public class Program
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
+
+		private static TModelDescription chosenModel;
 
         private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
         {
@@ -84,14 +83,13 @@ namespace MARSLocalStarter
         /// </summary>
         /// <param name="args">Arguments.</param>
         /// <param name="core">Core.</param>
-        private static void ParseArgsAndStart(string[] args, ISimulationManagerApplicationCore core, ILayerContainerFacade layerContainer)
+		private static void ParseArgsAndStart(string[] args, ISimulationManagerApplicationCore core, ILayerContainerFacade layerContainer)
         {
             bool help = false;
             bool listModels = false;
             string numOfTicksS = "0";
             string modelName = string.Empty;
             bool interactive = false;
-            bool interactiveUI = false;
 			Guid simulationId = Guid.NewGuid ();
 
 			OptionSet optionSet = new OptionSet ()
@@ -103,8 +101,6 @@ namespace MARSLocalStarter
                 .Add ("m=|model=", "Model to simulate", option => modelName = option)
                 .Add ("cli", "Use interactive model chooser",
 				                               option => interactive = option != null)
-                .Add ("cli-ui", "Use interactive model chooser and start ui",
-				                               option => interactiveUI = option != null)
 				.Add ("id=", "Set SimulationID",
 											   option => simulationId = Guid.Parse (option));
 
@@ -134,10 +130,6 @@ namespace MARSLocalStarter
                         i++;
                     }
                 }
-                else if (interactive)
-                {
-                    //InteractiveModelChoosing(core);
-                }
                 else if (!modelName.Equals(string.Empty))
                 {
                     var numOfTicks = 0;
@@ -154,7 +146,7 @@ namespace MARSLocalStarter
                         throw;
                     }
 
-                    SMConnector.TransportTypes.TModelDescription model = null;
+                    TModelDescription model = null;
                     foreach (var modelDescription in core.GetAllModels())
                     {
                         if (modelDescription.Name.Equals(modelName))
@@ -169,6 +161,7 @@ namespace MARSLocalStarter
                     }
                     else
                     {
+						chosenModel = model;
 						core.StartSimulationWithModel(simulationId, model, numOfTicks);
                     }
                 }
@@ -176,6 +169,7 @@ namespace MARSLocalStarter
         }
 
         private static void Main(string[] args) {
+			
             log4net.Config.XmlConfigurator.Configure();
             Logger.Info("MARS LIFE trying to start up.");
 
@@ -193,13 +187,10 @@ namespace MARSLocalStarter
                 // parse for any given parameters and act accordingly
                 ParseArgsAndStart(args, simCore, layerCountainerCore);
 
-                Console.WriteLine("MARS LIFE up and running. Press 'q' to quit.");
+				Logger.Info("MARS LIFE up and running...");
 
-                ConsoleKeyInfo info = Console.ReadKey();
-                while (info.Key != ConsoleKey.Q)
-                {
-                    info = Console.ReadKey();
-                }
+				simCore.WaitForSimulationToFinish(chosenModel);
+
             }
             catch (Exception exception)
             {
@@ -210,7 +201,7 @@ namespace MARSLocalStarter
                     .Root.Appenders.OfType<FileAppender>()
                     .FirstOrDefault();
                 var filename = rootAppender != null ? rootAppender.File : string.Empty;*/
-                LogManager.Shutdown();
+             	LogManager.Shutdown();
 
                 //Report error to jira
                 //JiraErrorReporter.ReportError(filename, exception);
@@ -225,7 +216,11 @@ namespace MARSLocalStarter
             // This will shutdown the log4net system
             LogManager.Shutdown();
             Environment.Exit(0);
-
+		
         }
+
+	private static int GetUnixTimeStamp(){
+		return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+	}
     }
 }

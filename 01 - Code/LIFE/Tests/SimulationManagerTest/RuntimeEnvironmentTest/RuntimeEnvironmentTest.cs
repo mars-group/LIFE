@@ -6,6 +6,7 @@ using RuntimeEnvironment.Implementation;
 using RuntimeEnvironment.Implementation.Entities;
 using SimulationManagerTestClasses.MockComponents;
 using SMConnector.TransportTypes;
+using System;
 
 namespace SimulationManagerTestClasses.RuntimeEnvironmentTest {
     [TestFixture]
@@ -15,7 +16,7 @@ namespace SimulationManagerTestClasses.RuntimeEnvironmentTest {
             IModelContainer modelContainer = new ModelContainerMock();
             TModelDescription model = modelContainer.GetAllModels().FirstOrDefault();
             IList<LayerContainerClient> clients = new LayerContainerClient[] { };
-            SteppedSimulationExecutionUseCase steppedSimulation = new SteppedSimulationExecutionUseCase(50, clients);
+			SteppedSimulationExecutionUseCase steppedSimulation = new SteppedSimulationExecutionUseCase(50, clients, Guid.NewGuid());
         }
     }
 }

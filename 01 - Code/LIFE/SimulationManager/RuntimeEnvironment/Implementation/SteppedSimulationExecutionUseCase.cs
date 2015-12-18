@@ -5,10 +5,13 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using RuntimeEnvironment.Implementation.Entities;
 using System.Threading.Tasks;
+using RabbitMQClient;
+using System.Text;
 
 [assembly: InternalsVisibleTo("SimulationManagerTest")]
 
-namespace RuntimeEnvironment.Implementation {
+namespace RuntimeEnvironment.Implementation
+{
 
     internal enum SimulationStatus {
         Running,
@@ -30,17 +33,22 @@ namespace RuntimeEnvironment.Implementation {
 
         private readonly ManualResetEvent _simulationExecutionSwitch;
         private int? _steppedTicks;
+		private Task _simulationTask;
+		private Guid _simulationId;
+
+		private RabbitMQWriter _rabbitMQWriter;
 
         public SteppedSimulationExecutionUseCase
-		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, bool startPaused = false) {
+		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, Guid simulationId, bool startPaused = false) {
             _nrOfTicks = nrOfTicks;
             _layerContainerClients = layerContainerClients;
             _status = startPaused ? SimulationStatus.Paused : SimulationStatus.Running;
             _simulationExecutionSwitch = new ManualResetEvent(false);
+			_simulationId = simulationId;
+			_rabbitMQWriter = new RabbitMQWriter(simulationId);
 
             // start simulation
-
-			Task.Run(() => this.RunSimulation());
+			_simulationTask = Task.Run(() => this.RunSimulation());
         }
 
         private void RunSimulation() {
@@ -62,7 +70,7 @@ namespace RuntimeEnvironment.Implementation {
                         if (_steppedTicks.HasValue){
                             // make sure we don't step over the maximum nr of Ticks
                             while ((_steppedTicks+i < _nrOfTicks) && _steppedTicks > 0) {
-                                DoStep();
+                                DoStep(i);
                                 _steppedTicks--;
                                 // increase overall tick number
                                 i++;
@@ -70,7 +78,7 @@ namespace RuntimeEnvironment.Implementation {
                             _steppedTicks = null;
                         }
                         else {
-                            DoStep();
+                            DoStep(i);
                         }
 
                         // set switch to non-signaled in case it was signaled before
@@ -88,14 +96,19 @@ namespace RuntimeEnvironment.Implementation {
                         return;
                 }
 
-				DoStep();
+				DoStep(i);
 
             }
 			sw.Stop();
+
+			var stb = new StringBuilder ();
+			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Finished\",\"tickCount\" : \"{1}\",\"totalDuration\" : \"{2}\", \"time\" : \"{3}\"}}", _simulationId, _nrOfTicks, sw.ElapsedMilliseconds, GetUnixTimeStamp());
+			_rabbitMQWriter.SendMessage(stb.ToString());
+
 			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
         }
 
-		private void DoStep(){
+		private void DoStep(int currentTick){
 
 			_maxExecutionTime = 0;
 
@@ -118,8 +131,9 @@ namespace RuntimeEnvironment.Implementation {
 					}
 				});
 
-
-			//Console.WriteLine("Simulation step #" + i + " finished. Longest exceution time: " + _maxExecutionTime);
+			var stb = new StringBuilder ();
+			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
+			_rabbitMQWriter.SendMessage(stb.ToString());
 		}
 
 		public void StepSimulation(int? nrOfTicks = null) {
@@ -146,6 +160,11 @@ namespace RuntimeEnvironment.Implementation {
             _status = SimulationStatus.Aborted;
         }
 
+		public void WaitForSimulationToFinish ()
+		{
+			_simulationTask.Wait ();
+		}
+
         public void StartVisualization(int? nrOfTicksToVisualize) {
             Parallel.ForEach(_layerContainerClients, l => l.Proxy.StartVisualization(nrOfTicksToVisualize));
         }
@@ -154,5 +173,9 @@ namespace RuntimeEnvironment.Implementation {
         {
             Parallel.ForEach(_layerContainerClients, l => l.Proxy.StopVisualization());
         }
+
+		private int GetUnixTimeStamp(){
+			return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+		}
     }
 }

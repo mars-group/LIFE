@@ -124,6 +124,10 @@
       <Project>{859AB95D-478C-473C-80BC-193F61FDBC99}</Project>
       <Name>SimulationManagerShared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\T-Components\RabbitMQClient\RabbitMQClient.csproj">
+      <Project>{01E00AEE-4932-496C-AFE8-73406B760A64}</Project>
+      <Name>RabbitMQClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

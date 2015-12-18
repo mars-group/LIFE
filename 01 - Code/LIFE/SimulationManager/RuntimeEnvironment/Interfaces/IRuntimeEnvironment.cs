@@ -61,6 +61,14 @@ namespace RuntimeEnvironment.Interfaces {
         /// <param name="model"></param>
         void StopVisualization(TModelDescription model);
 
+		/// <summary>
+		/// Waits for simulation to finish.
+		/// This will block the current thread and return execution, when 
+		/// the simulation is completed.
+		/// </summary>
+		/// <param name="model">Model.</param>
+		void WaitForSimulationToFinish (TModelDescription model);
+
         /// <summary>
         /// Subscribes the provided delegate for a status update, regarding the simulation.
         /// </summary>

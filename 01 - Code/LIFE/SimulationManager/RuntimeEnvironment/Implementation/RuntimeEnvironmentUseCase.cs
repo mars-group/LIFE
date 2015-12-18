@@ -20,7 +20,7 @@ using SMConnector.Exceptions;
 using SMConnector.TransportTypes;
 
 namespace RuntimeEnvironment.Implementation {
-    internal class RuntimeEnvironmentUseCase : IRuntimeEnvironment {
+	internal class RuntimeEnvironmentUseCase : IRuntimeEnvironment {
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
@@ -46,36 +46,42 @@ namespace RuntimeEnvironment.Implementation {
 
         public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
             _simulationId = simulationId;
-            lock (this) {
-				if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
-					throw new NoLayerContainersArePresentException ();
-				}
 
-                Console.WriteLine("Found and working with " + layerContainerNodes.Count + " Layercontainers.");
+			if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
+				throw new NoLayerContainersArePresentException ();
+			}
 
-                // if not all LayerContainers are idle throw exception
-				if (!layerContainerNodes.All (l => _idleLayerContainers.Any (c => c.Equals (l)))) {
-					throw new LayerContainerBusyException ();
-				}
+            Console.WriteLine("Found and working with " + layerContainerNodes.Count + " Layercontainers.");
 
-                Console.WriteLine("Setting up SimulationRun...");
-                var sw = Stopwatch.StartNew();
+            // if not all LayerContainers are idle throw exception
+			if (!layerContainerNodes.All (l => _idleLayerContainers.Any (c => c.Equals (l)))) {
+				throw new LayerContainerBusyException ();
+			}
 
-                IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes);
-
-				// try to get SimConfig and determine the number of ticks from it
-				var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(model);
-				if (shuttleSimConfig != null) {
-					var tickCount = shuttleSimConfig.GetSimDurationInSteps();
-					if (tickCount > 0) {
-						nrOfTicks = tickCount;
-					}
-				}
-
-                sw.Stop();
-                Console.WriteLine("...done in " + sw.ElapsedMilliseconds + "ms or " + sw.Elapsed);
-                _steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, startPaused);
+            // download Model ZIP file from MARS WebSuite, extract and add it to the model repo
+            if (model.SourceURL != String.Empty) {
+                _modelContainer.AddModelFromURL(model.SourceURL);
             }
+
+            Console.WriteLine("Setting up SimulationRun...");
+            var sw = Stopwatch.StartNew();
+
+            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes);
+
+			// try to get SimConfig and determine the number of ticks from it
+			var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(model);
+			if (shuttleSimConfig != null) {
+				var tickCount = shuttleSimConfig.GetSimDurationInSteps();
+				if (tickCount > 0) {
+					nrOfTicks = tickCount;
+				}
+			}
+
+            sw.Stop();
+            Console.WriteLine("...done in " + sw.ElapsedMilliseconds + "ms or " + sw.Elapsed);
+
+			_steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, simulationId, startPaused);
+
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
@@ -133,6 +139,16 @@ namespace RuntimeEnvironment.Implementation {
                     ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
             }
         }
+
+		public void WaitForSimulationToFinish (TModelDescription model)
+		{
+			if (!_steppedSimulations.ContainsKey(model))
+			{
+				throw new SimulationHasNotBeenStartedException
+				("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+			}
+			_steppedSimulations [model].WaitForSimulationToFinish ();
+		}
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {}
 

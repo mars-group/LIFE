@@ -9,7 +9,7 @@ using SMConnector.TransportTypes;
 using SimulationManagerShared;
 
 namespace RuntimeEnvironment.Implementation {
-    public class RuntimeEnvironmentComponent : IRuntimeEnvironment {
+	public class RuntimeEnvironmentComponent : IRuntimeEnvironment {
         private readonly IRuntimeEnvironment _runtimeEnvironmentUseCase;
 
         public RuntimeEnvironmentComponent(SimulationManagerSettings settings,
@@ -46,6 +46,11 @@ namespace RuntimeEnvironment.Implementation {
         public void StopVisualization(TModelDescription model) {
             _runtimeEnvironmentUseCase.StopVisualization(model);
         }
+
+		public void WaitForSimulationToFinish (TModelDescription model)
+		{
+			_runtimeEnvironmentUseCase.WaitForSimulationToFinish (model);
+		}
 
         public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
             _runtimeEnvironmentUseCase.SubscribeForStatusUpdate(statusUpdateAvailable);
