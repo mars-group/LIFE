@@ -10,9 +10,11 @@ namespace RabbitMQClient
 	{
 		private IConnection connection;
 		private IModel channel;
+		private string _queueName;
 
 		public RabbitMQWriter(Guid simulationId)
 		{
+			
 			var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
 			var ip   = cfgClient.Get("rabbitmq/ip");
 			var port = cfgClient.Get("rabbitmq/port");
@@ -31,8 +33,8 @@ namespace RabbitMQClient
 			channel = connection.CreateModel ();
 
 			// name queue with 'life-' prefix
-			var queueName = "life-" + simulationId;
-			channel.QueueDeclare(queue: queueName,
+			_queueName = "life-" + simulationId;
+			channel.QueueDeclare(queue: _queueName,
 				durable: false,
 				exclusive: false,
 				autoDelete: false,
@@ -47,24 +49,9 @@ namespace RabbitMQClient
 			var body = Encoding.UTF8.GetBytes(message);
 
 			channel.BasicPublish(exchange: "",
-				routingKey: "",
+				routingKey: _queueName,
 				basicProperties: null,
 				body: body);
-		}
-
-		/// <summary>
-		/// Sends a message via RabbitMQ asynchronously
-		/// </summary>
-		/// <param name="message">Message.</param>
-		public async Task SendMessageAsync(string message){
-			await Task.Run (() => {
-				var body = Encoding.UTF8.GetBytes (message);
-
-				channel.BasicPublish (exchange: "",
-					routingKey: "",
-					basicProperties: null,
-					body: body);
-			});
 		}
 	}
 }
