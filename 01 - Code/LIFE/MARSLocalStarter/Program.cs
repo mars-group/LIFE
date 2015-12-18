@@ -5,6 +5,7 @@ using log4net;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
+using System.Text;
 
 namespace MARSLocalStarter
 {
@@ -177,6 +178,7 @@ namespace MARSLocalStarter
         }
 
         private static void Main(string[] args) {
+			
             log4net.Config.XmlConfigurator.Configure();
             Logger.Info("MARS LIFE trying to start up.");
 
@@ -208,7 +210,7 @@ namespace MARSLocalStarter
                     .Root.Appenders.OfType<FileAppender>()
                     .FirstOrDefault();
                 var filename = rootAppender != null ? rootAppender.File : string.Empty;*/
-                LogManager.Shutdown();
+             	LogManager.Shutdown();
 
                 //Report error to jira
                 //JiraErrorReporter.ReportError(filename, exception);
@@ -223,7 +225,11 @@ namespace MARSLocalStarter
             // This will shutdown the log4net system
             LogManager.Shutdown();
             Environment.Exit(0);
-
+		
         }
+
+	private static int GetUnixTimeStamp(){
+		return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+	}
     }
 }
