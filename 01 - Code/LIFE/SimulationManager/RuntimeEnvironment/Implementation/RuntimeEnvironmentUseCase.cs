@@ -58,11 +58,6 @@ namespace RuntimeEnvironment.Implementation {
 				throw new LayerContainerBusyException ();
 			}
 
-            // download Model ZIP file from MARS WebSuite, extract and add it to the model repo
-            if (model.SourceURL != String.Empty) {
-                _modelContainer.AddModelFromURL(model.SourceURL);
-            }
-
             Console.WriteLine("Setting up SimulationRun...");
             var sw = Stopwatch.StartNew();
 

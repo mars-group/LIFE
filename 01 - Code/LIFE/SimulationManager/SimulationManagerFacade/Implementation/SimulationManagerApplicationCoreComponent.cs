@@ -79,6 +79,11 @@ namespace SimulationManagerFacade.Implementation {
             _runtimeEnvironment.Abort(model);
         }
 
+        public void WaitForSimulationToFinish(TModelDescription model)
+        {
+            _runtimeEnvironment.WaitForSimulationToFinish(model);
+        }
+
         public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
             _runtimeEnvironment.StartVisualization(model, nrOfTicksToVisualize);
         }
