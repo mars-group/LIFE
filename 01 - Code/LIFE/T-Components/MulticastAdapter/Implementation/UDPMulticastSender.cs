@@ -65,14 +65,18 @@ namespace MulticastAdapter.Implementation {
 
 
         public void SendMessageToMulticastGroup(byte[] msg) {
-            foreach (UdpClient client in _clients) {
+			var errorCounter = 0;
+			foreach (UdpClient client in _clients) {
                 try {
                     if (client.Client != null) {
                         client.Send(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort));
                     }
                 }
                 catch (Exception ex) {
-                    throw ex;
+					if (_clients.Count == 1 || errorCounter >= _clients.Count) {
+						// no interface was capable of sending, so stop and throw exception
+						throw ex;
+					} 
                 }
             }
         }
@@ -103,14 +107,12 @@ namespace MulticastAdapter.Implementation {
                     }
                 }
             }
-
             else {
                 IPEndPoint endPoint = GetBindingEndpoint();
                 UdpClient updClient = new UdpClient(GetBindingEndpoint());
                 updClient.JoinMulticastGroup(_mGrpAdr, endPoint.Address);
                 resultList.Add(updClient);
             }
-
 
             return resultList;
         }

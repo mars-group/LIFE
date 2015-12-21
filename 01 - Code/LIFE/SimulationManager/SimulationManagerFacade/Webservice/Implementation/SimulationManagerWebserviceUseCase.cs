@@ -6,6 +6,7 @@ using System.Web.Script.Serialization;
 using SimulationManagerFacade.Interface;
 using SimulationManagerWebservice;
 using SMConnector.TransportTypes;
+using System.Threading.Tasks;
 
 namespace SimulationManagerFacade.Webservice.Implementation
 {
@@ -31,53 +32,56 @@ namespace SimulationManagerFacade.Webservice.Implementation
 			var jss = new JavaScriptSerializer ();
 
 			/* HTTP listener loop to handle incoming requests. */
-			while (true) {
-				var context = listener.GetContext();
-				var uri = context.Request.Url.GetComponents(UriComponents.Path, UriFormat.UriEscaped);
-				var qs = context.Request.QueryString;
-				switch (context.Request.HttpMethod) {
-					// Performs READ operations.
-				case "GET":
-					Console.WriteLine ("Received a GET request");
-					WriteResponse(context.Response, new byte[0]);
-					break;
-
-
-					// Performs control operations
-					case "POST":
-						// POST /stop 
-						if(uri.Equals("stop")){
-							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
-							var dict = jss.Deserialize<Dictionary<string,string>>(content);
-							WriteResponse(context.Response, new byte[0]);
-						    simManager.AbortSimulation(new TModelDescription(dict["model"]));
-						}
-						// POST /step 
-						if(uri.Equals("step")){
-							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
-							var dict = jss.Deserialize<Dictionary<string,string>>(content);
-							WriteResponse(context.Response, new byte[0]);
-							simManager.StepSimulation (new TModelDescription(dict["model"]));
-						}
-						// POST /pause
-						if(uri.Equals("pause")){
-							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
-							var dict = jss.Deserialize<Dictionary<string,string>>(content);
-							WriteResponse(context.Response, new byte[0]);
-							simManager.PauseSimulation(new TModelDescription(dict["model"]));
-						}
-						// POST /step 
-						if(uri.Equals("resume")){
-							var content = new StreamReader(context.Request.InputStream).ReadToEnd();
-							var dict = jss.Deserialize<Dictionary<string,string>>(content);
-							WriteResponse(context.Response, new byte[0]);
-							simManager.ResumeSimulation(new TModelDescription(dict["model"]));
-						}
-
-						context.Response.Close();
+			Task.Run (() => {
+				while (true) {
+					var context = listener.GetContext();
+					var uri = context.Request.Url.GetComponents(UriComponents.Path, UriFormat.UriEscaped);
+					var qs = context.Request.QueryString;
+					switch (context.Request.HttpMethod) {
+						// Performs READ operations.
+					case "GET":
+						Console.WriteLine ("Received a GET request");
+						WriteResponse(context.Response, new byte[0]);
 						break;
+
+
+						// Performs control operations
+						case "POST":
+							// POST /stop 
+							if(uri.Equals("stop")){
+								var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+								var dict = jss.Deserialize<Dictionary<string,string>>(content);
+								WriteResponse(context.Response, new byte[0]);
+							    simManager.AbortSimulation(new TModelDescription(dict["model"]));
+							}
+							// POST /step 
+							if(uri.Equals("step")){
+								var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+								var dict = jss.Deserialize<Dictionary<string,string>>(content);
+								WriteResponse(context.Response, new byte[0]);
+								simManager.StepSimulation (new TModelDescription(dict["model"]));
+							}
+							// POST /pause
+							if(uri.Equals("pause")){
+								var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+								var dict = jss.Deserialize<Dictionary<string,string>>(content);
+								WriteResponse(context.Response, new byte[0]);
+								simManager.PauseSimulation(new TModelDescription(dict["model"]));
+							}
+							// POST /step 
+							if(uri.Equals("resume")){
+								var content = new StreamReader(context.Request.InputStream).ReadToEnd();
+								var dict = jss.Deserialize<Dictionary<string,string>>(content);
+								WriteResponse(context.Response, new byte[0]);
+								simManager.ResumeSimulation(new TModelDescription(dict["model"]));
+							}
+
+							context.Response.Close();
+							break;
+					}
 				}
 			}
+			);
 			// ReSharper disable once FunctionNeverReturns
 		}
 

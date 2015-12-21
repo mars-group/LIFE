@@ -72,6 +72,9 @@ namespace NodeRegistry.Implementation.UseCases {
                     }
                 }
             }
+			catch (Exception ex){
+				throw ex;
+			}/*
             catch (ThreadInterruptedException ex) {
                 Logger.Debug("Message lost in local NodeRegistry. Reason was: \n" + ex);
             }
@@ -80,7 +83,8 @@ namespace NodeRegistry.Implementation.UseCases {
             }
 			catch (ObjectDisposedException ex){
 				Logger.Debug("Call to disposed multicast adapter happenend. Usually not problematic, since it only happens when shutting down.");
-			}
+			}*/
+
         }
 
         private void ComputeMessage(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {

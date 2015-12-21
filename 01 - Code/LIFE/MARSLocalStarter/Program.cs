@@ -182,6 +182,7 @@ namespace MARSLocalStarter
                 Logger.Info("SimulationManager successfully started.");
 
                 var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
+
                 Logger.Info("LayerContainer successfully started.");
 
                 // parse for any given parameters and act accordingly
