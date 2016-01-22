@@ -11,20 +11,24 @@ namespace AgentShadowingService.Interface
         event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
         /// <summary> 
-        /// Create a ShadowAgent for a real agent with id <param name="agentId"/> and Type T.
+        /// Resolves an agent by its agentId.
+		/// Will create a ShadowAgent for a real agent with id <param name="agentId"/> and Type T,
+		/// if the agent instance is not found to be running locally. 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <returns>The ShadowAgent proxy object of type T</returns>
-        TServiceInterface CreateShadowAgent(Guid agentId);
+        /// <returns>The reference to the local agent if found, the ShadowAgent proxy object of type T otherwise</returns>
+        TServiceInterface ResolveAgent(Guid agentId);
 
         /// <summary>
-        /// Creates all ShadowAgents for agentIds.
+		/// Resolves agents by their agentId.
+		/// Will create one ShadowAgent for each real agent with id <param name="agentId"/> and Type T,
+		/// if the agent instance is not found to be running locally. 
         /// Uses parallelism, so use this method, whenever you have more than a few ShadowAgents to create.
         /// e.g.: at first Initialization!
         /// </summary>
         /// <param name="agentIds"></param>
         /// <returns>List of TSerivceInterface</returns>
-        List<TServiceInterface> CreateShadowAgents(Guid[] agentIds); 
+        List<TServiceInterface> ResolveAgents(Guid[] agentIds); 
 
         /// <summary>
         /// Removes the Shadow Agent with id agentId from the Service.

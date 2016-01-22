@@ -47,8 +47,8 @@ namespace AgentShadowingServiceTests
 
             // create Shadowagents
             List<IMockAgent> shadows = new List<IMockAgent>();
-            shadows.AddRange(_serviceA.CreateShadowAgents(agentsB.Select(a => a.ID).ToArray()));
-            shadows.AddRange(_serviceB.CreateShadowAgents(agentsA.Select(a => a.ID).ToArray()));
+            shadows.AddRange(_serviceA.ResolveAgents(agentsB.Select(a => a.ID).ToArray()));
+            shadows.AddRange(_serviceB.ResolveAgents(agentsA.Select(a => a.ID).ToArray()));
             var sw = Stopwatch.StartNew();
             foreach (var mockAgent in shadows) {
                 Assert.AreEqual(42,mockAgent.DoCrazyShit());

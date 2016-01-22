@@ -28,13 +28,13 @@ namespace AgentShadowingService.Implementation
         }
 
 
-        public TServiceInterface CreateShadowAgent(Guid agentId)
+        public TServiceInterface ResolveAgent(Guid agentId)
         {
-            return _agentShadowingUseCase.CreateShadowAgent(agentId);
+            return _agentShadowingUseCase.ResolveAgent(agentId);
         }
 
-        public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds) {
-            return _agentShadowingUseCase.CreateShadowAgents(agentIds);
+        public List<TServiceInterface> ResolveAgents(Guid[] agentIds) {
+            return _agentShadowingUseCase.ResolveAgents(agentIds);
         }
 
         public void RemoveShadowAgent(Guid agentId) {

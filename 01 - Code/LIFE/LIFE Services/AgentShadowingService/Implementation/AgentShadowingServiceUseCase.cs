@@ -25,6 +25,8 @@ namespace AgentShadowingService.Implementation
         private readonly IAscServiceApplication _agentShadowingServer;
         private readonly int _clientListenPort;
         private readonly LayerContainerSettings _config;
+		private readonly string _typeOfServiceClassName;
+		private readonly string _typeOfServiceInterfaceName;
 
         private readonly object _syncRoot = new Object();
 
@@ -33,10 +35,13 @@ namespace AgentShadowingService.Implementation
         public AgentShadowingServiceUseCase(int port = 6666) {
             _clientListenPort = port;
             var typeOfTServiceClass = typeof (TServiceClass);
-            _shadowAgentClients = new ConcurrentDictionary<Guid, IAscServiceClient<TServiceInterface>>();
+			_typeOfServiceClassName = typeOfTServiceClass.Name;
+			_typeOfServiceInterfaceName = typeof(TServiceInterface).Name;
+			_shadowAgentClients = new ConcurrentDictionary<Guid, IAscServiceClient<TServiceInterface>>();
+
             // calculate MulticastAddress for this agentType
             _mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
-            _agentShadowingServer = AscServiceBuilder.CreateService(port, _mcastAddress);
+			_agentShadowingServer = AscServiceFactory.CreateService(port, _mcastAddress, typeOfTServiceClass.Name);
             _agentShadowingServer.Start();
 
             // subscribe for remote events
@@ -71,15 +76,22 @@ namespace AgentShadowingService.Implementation
                    new List<TServiceInterface>(),
                    // add list contains new agent
                    new List<TServiceInterface> {
-                       CreateShadowAgent(agentId)
+                       ResolveAgent(agentId)
                    }
             ));
         }
 
 
 
-        public TServiceInterface CreateShadowAgent(Guid agentId)
+		public TServiceInterface ResolveAgent(Guid agentId)
         {
+			// first check whether this agent lives locally on this node
+			var serviceapp = AscServiceFactory.GetServiceApplicationByTypeName (_typeOfServiceClassName);
+			if (serviceapp != null && serviceapp.ContainsService<TServiceInterface, TServiceClass> (agentId, _typeOfServiceInterfaceName)) {
+				return serviceapp.GetServiceByID<TServiceInterface, TServiceClass> (agentId, _typeOfServiceInterfaceName);
+			}
+
+			// agent is not on local node, so create ShadowAgent
             lock (_syncRoot)
             {
                 if (_shadowAgentClients.ContainsKey(agentId))
@@ -105,9 +117,9 @@ namespace AgentShadowingService.Implementation
 
         }
 
-        public List<TServiceInterface> CreateShadowAgents(Guid[] agentIds)
+		public List<TServiceInterface> ResolveAgents(Guid[] agentIds)
         {
-            return agentIds.Select(CreateShadowAgent).ToList();
+            return agentIds.Select(ResolveAgent).ToList();
         }
 
         public void RemoveShadowAgent(Guid agentId)

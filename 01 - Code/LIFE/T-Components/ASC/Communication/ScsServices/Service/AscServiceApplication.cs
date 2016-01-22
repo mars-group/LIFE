@@ -15,7 +15,7 @@ namespace ASC.Communication.ScsServices.Service {
     /// <summary>
     ///     Implements IAscServiceApplication and provides all functionallity.
     /// </summary>
-    internal class AscServiceApplication : IAscServiceApplication {
+	internal class AscServiceApplication : IAscServiceApplication {
         #region Public events
 
         public event EventHandler<AddShadowAgentEventArgs> AddShadowAgentMessageReceived;
@@ -97,32 +97,59 @@ namespace ASC.Communication.ScsServices.Service {
         /// <param name="service">An instance of TServiceClass.</param>
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if service argument is null</exception>
         /// <exception cref="Exception">Throws Exception if service is already added before</exception>
-        public void AddService<TServiceInterface, TServiceClass>(TServiceClass service)
+		public void AddService<TServiceInterface, TServiceClass>(TServiceClass service, Type typeOfTServiceInterface = null)
             where TServiceClass : AscService, TServiceInterface
             where TServiceInterface : class {
             if (service == null) throw new ArgumentNullException("service");
 
-            var type = typeof (TServiceInterface);
+			if (typeOfTServiceInterface == null) {
+				typeOfTServiceInterface = typeof(TServiceInterface);
+			}
 
             // check if service is cacheable
             var cacheableService = service as ICacheable;
             if (cacheableService != null) {
-                if (_serviceObjects.ContainsKey(type.Name))
-                    _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
+				if (_serviceObjects.ContainsKey(typeOfTServiceInterface.Name))
+					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new CacheableServiceObject(typeOfTServiceInterface, service);
                 else {
-                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
-                    _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
+					_serviceObjects[typeOfTServiceInterface.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new CacheableServiceObject(typeOfTServiceInterface, service);
                 }
             }
             else {
-                if (_serviceObjects.ContainsKey(type.Name))
-                    _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
+				if (_serviceObjects.ContainsKey(typeOfTServiceInterface.Name))
+					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new ServiceObject(typeOfTServiceInterface, service);
                 else {
-                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
-                    _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
+					_serviceObjects[typeOfTServiceInterface.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new ServiceObject(typeOfTServiceInterface, service);
                 }
             }
         }
+
+		public TServiceInterface GetServiceByID<TServiceInterface, TServiceClass> (Guid id, string typeName = "")
+			where TServiceClass : AscService, TServiceInterface
+			where TServiceInterface : class
+		{
+			if (typeName == "") {
+				typeName = typeof(TServiceInterface).Name;
+			}
+			return (TServiceClass)_serviceObjects [typeName] [id].Service;
+		}
+
+		public bool ContainsService<TServiceInterface, TServiceClass> (Guid id, string typeName = "")
+			where TServiceClass : AscService, TServiceInterface
+			where TServiceInterface : class
+		{
+			if (typeName == "") {
+				typeName = typeof(TServiceInterface).Name;
+			}
+			if (_serviceObjects.ContainsKey (typeName)){
+				if (_serviceObjects [typeName].ContainsKey (id)) {
+					return true;
+				}
+			}
+			return false;
+		}
 
         /// <summary>
         ///     Removes a previously added service object from this service application.
@@ -429,6 +456,10 @@ namespace ASC.Communication.ScsServices.Service {
             }
         }
 
+		/// <summary>
+		/// A Cacheable service object. It registers client's listenting to it.
+		/// This allows to push updates of fields to the clients, when they occur.
+		/// </summary>
         private sealed class CacheableServiceObject : ServiceObject {
             private static ThreadSafeSortedList<long, IMessenger> _clients;
             private readonly IDictionary<string, PropertyInfo> _properties;
