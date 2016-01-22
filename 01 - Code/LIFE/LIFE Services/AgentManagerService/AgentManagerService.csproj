@@ -61,13 +61,16 @@
       <HintPath>..\..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Mars.Rock.Common">
-      <HintPath>..\..\packages\Mars.Rock.Drill.0.2.31\lib\net45\Mars.Rock.Common.dll</HintPath>
+      <HintPath>..\..\packages\Mars.Rock.Drill.0.2.34\lib\net45\Mars.Rock.Common.dll</HintPath>
     </Reference>
     <Reference Include="Mars.Rock.Drill">
-      <HintPath>..\..\packages\Mars.Rock.Drill.0.2.31\lib\net45\Mars.Rock.Drill.dll</HintPath>
+      <HintPath>..\..\packages\Mars.Rock.Drill.0.2.34\lib\net45\Mars.Rock.Drill.dll</HintPath>
     </Reference>
     <Reference Include="SpatialAPI">
-      <HintPath>..\..\packages\SpatialAPI.0.6.58\lib\net45\SpatialAPI.dll</HintPath>
+      <HintPath>..\..\packages\SpatialAPI.1.0.70\lib\net45\SpatialAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

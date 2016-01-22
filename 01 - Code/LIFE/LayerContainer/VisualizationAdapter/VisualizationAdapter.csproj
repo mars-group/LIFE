@@ -53,9 +53,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RabbitMQ.Client">
-      <HintPath>..\..\packages\RabbitMQ.Client.3.4.3\lib\net35\RabbitMQ.Client.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,19 +61,25 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="GeoAPI">
-      <HintPath>..\..\packages\LIFEViewProtocol.0.4.4\lib\net45\GeoAPI.dll</HintPath>
+      <HintPath>..\..\packages\LIFEViewProtocol.0.9.0\lib\net45\GeoAPI.dll</HintPath>
     </Reference>
     <Reference Include="LIFEViewProtocol">
-      <HintPath>..\..\packages\LIFEViewProtocol.0.4.4\lib\net45\LIFEViewProtocol.dll</HintPath>
+      <HintPath>..\..\packages\LIFEViewProtocol.0.9.0\lib\net45\LIFEViewProtocol.dll</HintPath>
+    </Reference>
+    <Reference Include="MsgPack">
+      <HintPath>..\..\packages\LIFEViewProtocol.0.9.0\lib\net45\MsgPack.dll</HintPath>
     </Reference>
     <Reference Include="NetTopologySuite">
-      <HintPath>..\..\packages\LIFEViewProtocol.0.4.4\lib\net45\NetTopologySuite.dll</HintPath>
+      <HintPath>..\..\packages\LIFEViewProtocol.0.9.0\lib\net45\NetTopologySuite.dll</HintPath>
     </Reference>
     <Reference Include="PowerCollections">
-      <HintPath>..\..\packages\LIFEViewProtocol.0.4.4\lib\net45\PowerCollections.dll</HintPath>
+      <HintPath>..\..\packages\LIFEViewProtocol.0.9.0\lib\net45\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
-      <HintPath>..\..\packages\LIFEViewProtocol.0.4.4\lib\net45\protobuf-net.dll</HintPath>
+      <HintPath>..\..\packages\LIFEViewProtocol.0.9.0\lib\net45\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client">
+      <HintPath>..\..\packages\RabbitMQ.Client.3.6.0\lib\net45\RabbitMQ.Client.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

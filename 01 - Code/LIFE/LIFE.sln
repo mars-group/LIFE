@@ -88,8 +88,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTEManagerBlackBoxTest", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentShadowingServiceTests", "Tests\AgentShadowingServiceTests\AgentShadowingServiceTests.csproj", "{3FB2FD1D-9A3F-461B-8F24-01C14EC0E48D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "R-Components", "R-Components", "{E873F75D-2C07-4688-8635-075D60A32574}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIFE Services", "LIFE Services", "{5BF046F2-CC5D-47DD-AAC9-AD021E984031}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentShadowingService", "LIFE Services\AgentShadowingService\AgentShadowingService.csproj", "{17064DB2-8976-439F-A697-AD8ACDB975CC}"
