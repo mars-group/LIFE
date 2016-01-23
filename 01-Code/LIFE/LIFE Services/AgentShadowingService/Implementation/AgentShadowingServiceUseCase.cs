@@ -28,6 +28,7 @@ namespace AgentShadowingService.Implementation
 		private readonly string _typeOfServiceInterfaceName;
 
         private readonly object _syncRoot = new Object();
+        private readonly Type _typeOfTServiceInterface;
 
         public event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
@@ -35,7 +36,9 @@ namespace AgentShadowingService.Implementation
             _clientListenPort = port;
             var typeOfTServiceClass = typeof (TServiceClass);
 			_typeOfServiceClassName = typeOfTServiceClass.Name;
-			_typeOfServiceInterfaceName = typeof(TServiceInterface).Name;
+            _typeOfTServiceInterface = typeof (TServiceInterface);
+
+            _typeOfServiceInterfaceName = _typeOfTServiceInterface.Name;
 			_shadowAgentClients = new ConcurrentDictionary<Guid, IAscServiceClient<TServiceInterface>>();
 
             // calculate MulticastAddress for this agentType
@@ -130,7 +133,7 @@ namespace AgentShadowingService.Implementation
 
         public void RegisterRealAgent(TServiceClass agentToRegister)
         {
-            _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister);
+            _agentShadowingServer.AddService<TServiceInterface, TServiceClass>(agentToRegister, _typeOfTServiceInterface);
             // send Message to other hosts to trigger Shadow Agent creation
             //_agentShadowingServer.SendMessage(new AddShadowAgentMessage {AgentID = agentToRegister.ServiceID});
         }
