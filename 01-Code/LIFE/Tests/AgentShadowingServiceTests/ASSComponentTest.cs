@@ -55,10 +55,6 @@ namespace AgentShadowingServiceTests
             }
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
-            //shadowsOfA.ToArray()[0].DoCrazyShit();
-            //Assert.Contains(shadowsOfA.ToArray()[0].DoCrazyShit(), agentsA.Select(a => a.ID).ToArray());
-            //Assert.AreEqual(agentsA.ToArray()[0].ID, shadowsOfA.ToArray()[0].DoCrazyShit());
-
         }
 
 
@@ -71,7 +67,7 @@ namespace AgentShadowingServiceTests
             ServiceID = ID;
         }
 
-        public Guid ID { get; set; }
+        public Guid ID { get; }
 
         public int DoCrazyShit() {
             return 42;
