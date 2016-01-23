@@ -25,6 +25,7 @@ namespace ASC.Communication.ScsServices.Service {
 				return serviceAppDictionary [typeOfService];
 			} else {
 				var serviceApp = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, multicastGroup)));
+                serviceAppDictionary.Add(typeOfService, serviceApp);
 				return serviceApp;
 			}
         }
@@ -34,11 +35,9 @@ namespace ASC.Communication.ScsServices.Service {
 		/// </summary>
 		/// <returns>The service application by type name if found, null otherwise.</returns>
 		/// <param name="typeName">Type name.</param>
-		public static IAscServiceApplication GetServiceApplicationByTypeName(string typeName){
-			if (serviceAppDictionary.ContainsKey (typeName)) { 
-				return serviceAppDictionary [typeName];
-			}
-			return null;
+		public static IAscServiceApplication GetServiceApplicationByTypeName(string typeName)
+		{
+		    return serviceAppDictionary.ContainsKey (typeName) ? serviceAppDictionary [typeName] : null;
 		}
     }
 }
