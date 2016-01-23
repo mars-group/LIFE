@@ -24,7 +24,6 @@ namespace AgentShadowingService.Implementation
         private readonly string _mcastAddress;
         private readonly IAscServiceApplication _agentShadowingServer;
         private readonly int _clientListenPort;
-        private readonly LayerContainerSettings _config;
 		private readonly string _typeOfServiceClassName;
 		private readonly string _typeOfServiceInterfaceName;
 
@@ -47,9 +46,6 @@ namespace AgentShadowingService.Implementation
             // subscribe for remote events
             _agentShadowingServer.AddShadowAgentMessageReceived += OnAddShadowAgentMessageReceived;
             _agentShadowingServer.RemoveShadowAgentMessageReceived += OnRemoveShadowAgentMessageReceived;
-
-            // load config
-            _config = Configuration.Load<LayerContainerSettings>();
         }
 
         private void OnRemoveShadowAgentMessageReceived(object sender, RemoveShadowAgentEventArgs e) {
