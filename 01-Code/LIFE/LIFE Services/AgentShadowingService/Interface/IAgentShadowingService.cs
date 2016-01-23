@@ -54,11 +54,5 @@ namespace AgentShadowingService.Interface
         /// </summary>
         /// <param name="agentToRemove"></param>
         void RemoveRealAgent(TServiceClass agentToRemove);
-
-        /// <summary>
-        /// Returns the name of this LayerContainer
-        /// </summary>
-        /// <returns></returns>
-        string GetLayerContainerName();
     }
 }

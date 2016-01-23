@@ -152,8 +152,5 @@ namespace AgentShadowingService.Implementation
             //_agentShadowingServer.SendMessage(new RemoveShadowAgentMessage {AgentID = agentToRemove.ServiceID});
         }
 
-        public string GetLayerContainerName() {
-            return _config.NodeRegistryConfig.NodeIdentifier;
-        }
     }
 }

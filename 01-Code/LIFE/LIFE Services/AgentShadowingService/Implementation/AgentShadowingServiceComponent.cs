@@ -53,9 +53,5 @@ namespace AgentShadowingService.Implementation
         public void RemoveRealAgent(TServiceClass agentToRemove) {
             _agentShadowingUseCase.RemoveRealAgent(agentToRemove);
         }
-
-        public string GetLayerContainerName() {
-            return _agentShadowingUseCase.GetLayerContainerName();
-        }
     }
 }

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using AgentShadowingService.Implementation;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
-using CustomUtilities.Collections;
 using NUnit.Framework;
 
 namespace AgentShadowingServiceTests
@@ -13,10 +13,10 @@ namespace AgentShadowingServiceTests
     [TestFixture]
     public class ASSComponentTest {
 
-        private IAgentShadowingService<IMockAgent,MockAgent> _serviceA;
+        private IAgentShadowingService<IMockAgent, MockAgent> _serviceA;
         private IAgentShadowingService<IMockAgent, MockAgent> _serviceB;
 
-        public int AgentsPerNode = 200;
+        private const int AgentsPerNode = 200;
 
         [SetUp]
         public void SetupTest() {
@@ -28,7 +28,7 @@ namespace AgentShadowingServiceTests
         public void TestCommunication() {
             // create and register RealAgents in serviceA
             var agentsA = new List<MockAgent>();
-            for (int i = 0; i < AgentsPerNode; i++) {
+            for (var i = 0; i < AgentsPerNode; i++) {
                 agentsA.Add(new MockAgent());
             }
 
@@ -37,7 +37,7 @@ namespace AgentShadowingServiceTests
 
             // create and register RealAgents in serviceB
             var agentsB = new List<MockAgent>();
-            for (int i = 0; i < AgentsPerNode; i++)
+            for (var i = 0; i < AgentsPerNode; i++)
             {
                 agentsB.Add(new MockAgent());
             }
@@ -46,13 +46,13 @@ namespace AgentShadowingServiceTests
             _serviceB.RegisterRealAgents(agentsB.ToArray());
 
             // create Shadowagents
-            List<IMockAgent> shadows = new List<IMockAgent>();
+            var shadows = new List<IMockAgent>();
             shadows.AddRange(_serviceA.ResolveAgents(agentsB.Select(a => a.ID).ToArray()));
             shadows.AddRange(_serviceB.ResolveAgents(agentsA.Select(a => a.ID).ToArray()));
             var sw = Stopwatch.StartNew();
-            foreach (var mockAgent in shadows) {
-                Assert.AreEqual(42,mockAgent.DoCrazyShit());
-            }
+
+            Parallel.ForEach(shadows, mockAgent => Assert.AreEqual(42, mockAgent.DoCrazyShit()));
+
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
         }
