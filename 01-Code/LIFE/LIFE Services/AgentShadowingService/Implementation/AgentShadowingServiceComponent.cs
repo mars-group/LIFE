@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
-using LayerContainerShared;
 
 namespace AgentShadowingService.Implementation
 {
@@ -11,7 +10,6 @@ namespace AgentShadowingService.Implementation
         where TServiceInterface : class
     {
         private readonly IAgentShadowingService<TServiceInterface, TServiceClass> _agentShadowingUseCase;
-        private LayerContainerSettings _config;
 
         public event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
