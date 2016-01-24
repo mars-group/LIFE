@@ -164,9 +164,6 @@ namespace ASC.Communication.ScsServices.Client {
             OnDisconnected();
         }
 
-        #endregion
-
-        #region Private methods
 
         /// <summary>
         ///     Raises Connected event.

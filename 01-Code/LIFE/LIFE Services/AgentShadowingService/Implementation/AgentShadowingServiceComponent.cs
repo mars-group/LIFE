@@ -51,5 +51,10 @@ namespace AgentShadowingService.Implementation
         public void RemoveRealAgent(TServiceClass agentToRemove) {
             _agentShadowingUseCase.RemoveRealAgent(agentToRemove);
         }
+
+        public void Dispose()
+        {
+            _agentShadowingUseCase.Dispose();
+        }
     }
 }

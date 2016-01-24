@@ -54,5 +54,10 @@ namespace AgentShadowingService.Interface
         /// </summary>
         /// <param name="agentToRemove"></param>
         void RemoveRealAgent(TServiceClass agentToRemove);
-    }
+
+        /// <summary>
+        ///  Stops and disposes this service.
+        /// </summary>
+        void Dispose();
+        }
 }

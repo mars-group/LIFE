@@ -58,7 +58,7 @@ namespace AgentShadowingServiceTests
             // Unpack fields are here:
             // temp variables
             this.Parameters = new object[unpacker.ItemsCount];
-            object temp;
+
 
             // ...Instead, you can unpack from map as follows:
             if (!unpacker.IsMapHeader)

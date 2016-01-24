@@ -85,10 +85,11 @@ namespace AgentShadowingService.Implementation
 		public TServiceInterface ResolveAgent(Guid agentId)
         {
 			// first check whether this agent lives locally on this node
-			var serviceapp = AscServiceFactory.GetServiceApplicationByTypeName (_typeOfServiceClassName);
+		    var serviceapp = AscServiceFactory.GetServiceApplicationByTypeName (_typeOfServiceClassName);
 			if (serviceapp != null && serviceapp.ContainsService<TServiceInterface, TServiceClass> (agentId, _typeOfServiceInterfaceName)) {
 				return serviceapp.GetServiceByID<TServiceInterface, TServiceClass> (agentId, _typeOfServiceInterfaceName);
 			}
+            
 
 			// agent is not on local node, so create ShadowAgent
             lock (_syncRoot)
@@ -151,5 +152,10 @@ namespace AgentShadowingService.Implementation
             //_agentShadowingServer.SendMessage(new RemoveShadowAgentMessage {AgentID = agentToRemove.ServiceID});
         }
 
+        public void Dispose()
+        {
+            _agentShadowingServer.Stop();
+            _shadowAgentClients.Clear();
+        }
     }
 }

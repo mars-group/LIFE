@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Messengers;
@@ -11,7 +12,10 @@ using ASC.Communication.ScsServices.Communication.Messages;
 using CustomUtilities.Collections;
 using CustomUtilities.Threading;
 
-namespace ASC.Communication.ScsServices.Service {
+[assembly: InternalsVisibleTo("AgentShadowingServiceTests")]
+namespace ASC.Communication.ScsServices.Service
+{
+
     /// <summary>
     ///     Implements IAscServiceApplication and provides all functionallity.
     /// </summary>
@@ -143,12 +147,7 @@ namespace ASC.Communication.ScsServices.Service {
 			if (typeName == "") {
 				typeName = typeof(TServiceInterface).Name;
 			}
-			if (_serviceObjects.ContainsKey (typeName)){
-				if (_serviceObjects [typeName].ContainsKey (id)) {
-					return true;
-				}
-			}
-			return false;
+		    return _serviceObjects.ContainsKey(typeName) && _serviceObjects [typeName].ContainsKey (id);
 		}
 
         /// <summary>
@@ -294,6 +293,11 @@ namespace ASC.Communication.ScsServices.Service {
             //Cast message to AscRemoteInvokeMessage and check it
             var invokeMessage = e.Message as AscRemoteInvokeMessage;
             if (invokeMessage == null) return;
+            // TODO: Why on earth does this error not get thrown?
+            /*{
+                SendInvokeResponse(_messenger, invokeMessage, null,
+                    new AcsRemoteException("The received message was not of type AscRemoteInvokeMessage"));
+            } */
 
             try
             {

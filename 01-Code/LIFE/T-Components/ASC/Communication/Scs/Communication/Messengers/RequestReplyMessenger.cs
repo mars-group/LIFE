@@ -172,6 +172,10 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             return SendMessageAndWaitForResponse(message, Timeout);
         }
 
+        #endregion
+
+        #region Private methods
+
         /// <summary>
         ///     Sends a message and waits a response for that message.
         /// </summary>
@@ -187,14 +191,17 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <returns>Response message</returns>
         /// <exception cref="TimeoutException">Throws TimeoutException if can not receive reply message in timeout value</exception>
         /// <exception cref="CommunicationException">Throws CommunicationException if communication fails before reply message.</exception>
-        public IAscMessage SendMessageAndWaitForResponse(IAscMessage message, int timeoutMilliseconds) {
+        private IAscMessage SendMessageAndWaitForResponse(IAscMessage message, int timeoutMilliseconds)
+        {
             //Create a waiting message record and add to list
             var waitingMessage = new WaitingMessage();
-            lock (_syncObj) {
+            lock (_syncObj)
+            {
                 _waitingMessages[message.MessageId] = waitingMessage;
             }
 
-            try {
+            try
+            {
                 //Send message
                 Messenger.SendMessage(message);
 
@@ -202,10 +209,10 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 waitingMessage.WaitEvent.Wait(timeoutMilliseconds);
 
                 //Check for exceptions
-                switch (waitingMessage.State) {
+                switch (waitingMessage.State)
+                {
                     case WaitingMessageStates.WaitingForResponse:
                         throw new TimeoutException("Timeout occured. Can not receive response.");
-                        break;
                     case WaitingMessageStates.Cancelled:
                         throw new CommunicationException("Disconnected before response received.");
                 }
@@ -213,17 +220,15 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 //return response message
                 return waitingMessage.ResponseMessage;
             }
-            finally {
+            finally
+            {
                 //Remove message from waiting messages
-                lock (_syncObj) {
+                lock (_syncObj)
+                {
                     if (_waitingMessages.ContainsKey(message.MessageId)) _waitingMessages.Remove(message.MessageId);
                 }
             }
         }
-
-        #endregion
-
-        #region Private methods
 
         /// <summary>
         ///     Handles MessageReceived event of Messenger object.
