@@ -113,13 +113,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 					if (_udpReceivingClient.Client != null) {
 						data = _udpReceivingClient.Receive(ref remoteEP);
 						var stream = new MemoryStream(data);
-						// inform all listeners about the new message
 						var msg = (IAscMessage)_binaryFormatter.Deserialize(stream);
+						// inform all listeners about the new message
 						OnMessageReceived(msg);
 						data = new byte[]{};
 					}
 				}
 				catch(ObjectDisposedException expo){
+					// catch broken sockets and re-create them
 					_udpReceivingClient = GetReceivingClient();
 					JoinMulticastGroup();
 				}

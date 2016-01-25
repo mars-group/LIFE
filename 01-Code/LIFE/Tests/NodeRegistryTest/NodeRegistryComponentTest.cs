@@ -215,7 +215,7 @@ namespace NodeRegistryTest {
                 (
                 localNodeInfo.NodeType,
 					"UnitTestNode",
-                new NodeEndpoint("127.0.0.1", 90010));
+                new NodeEndpoint("127.0.0.1", 40862));
 
             bool newNodeSubscriberFired = false;
             bool newNodeOftypeSubscriberFired = false;

@@ -22,8 +22,8 @@ namespace MulticastAdapterTest
         {
             int numberOfMulticastComponents = 10;
 
-            var testListenPort = 60035;
-            var mcastAddress = "224.10.100.1";
+			var testListenPort = 50000;
+			var mcastAddress = "239.0.0.4";
 
             var startListenPort = 50555;
 
@@ -53,7 +53,7 @@ namespace MulticastAdapterTest
 
             foreach (var adapter in multicastAdapters)
             {
-                adapter.SendMessageToMulticastGroup(new byte[0]);
+				adapter.SendMessageToMulticastGroup(new []{ new byte()});
             }
 
             Thread.Sleep(200);
@@ -65,7 +65,7 @@ namespace MulticastAdapterTest
             
             foreach (var adapter in multicastAdapters)
             {
-                adapter.SendMessageToMulticastGroup(new byte[0]);
+				adapter.SendMessageToMulticastGroup(new []{ new byte()});
             }
 
             Thread.Sleep(50);
@@ -87,9 +87,9 @@ namespace MulticastAdapterTest
         [Test]
         public void SendMessageTest()
         {
-            var testListenPort = 60030;
-            var testSendIngPortStartSeed = 60000;
-            var mcastAddress = "224.50.50.50";
+			var testListenPort = 6666;
+            var testSendIngPortStartSeed = 6000;
+			var mcastAddress = "239.0.0.2";
 
             var reciever = new UDPMulticastReceiver(IPAddress.Parse(mcastAddress), testListenPort);
             var sender =
@@ -102,10 +102,10 @@ namespace MulticastAdapterTest
             var listenThread = new Thread(messageCounter.ListenAndCount);
             listenThread.Start();
 
-            sender.SendMessageToMulticastGroup(new byte[0]);
+			sender.SendMessageToMulticastGroup(new []{ new byte()});
 
             //wait for message to arrive.
-            Thread.Sleep(200);
+            Thread.Sleep(1000);
 
             var msgNr = messageCounter.NumberOfmessages;
             
@@ -113,7 +113,7 @@ namespace MulticastAdapterTest
 
             messageCounter.StopRunning();
 
-            sender.SendMessageToMulticastGroup(new byte[0]);
+			sender.SendMessageToMulticastGroup(new []{ new byte()});
 
             Thread.Sleep(50);
 
@@ -123,7 +123,7 @@ namespace MulticastAdapterTest
 
         [Test]
         public void UDPSenderShutDownTest() {
-            var testListenPort = 60055;
+            var testListenPort = 50000;
             var testSendIngPortStartSeed = 60066;
             var mcastAddress = "224.50.50.50";
 
@@ -144,7 +144,7 @@ namespace MulticastAdapterTest
         public void UDPRecieverShutDownTest() 
         {
             var mcastAddress = "224.50.50.50";
-            var testListenPort = 60060;
+			var testListenPort = 50000;
             var reciever = new UDPMulticastReceiver(IPAddress.Parse(mcastAddress), testListenPort);
             
             reciever.CloseSocket();

@@ -178,7 +178,6 @@
   <ItemGroup>
     <Compile Include="MockComponents\ModelContainerMock.cs" />
     <Compile Include="ModelContainerTestClasses\Zero.cs" />
-    <Compile Include="RuntimeEnvironmentTest\RuntimeEnvironmentTest.cs" />
     <Compile Include="ModelContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulationManagerFacadeTest\SimulationManagerFacadeTest.cs" />
