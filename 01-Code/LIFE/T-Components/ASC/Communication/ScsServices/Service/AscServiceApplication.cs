@@ -470,12 +470,12 @@ namespace ASC.Communication.ScsServices.Service
 		/// This allows to push updates of fields to the clients, when they occur.
 		/// </summary>
         private sealed class CacheableServiceObject : ServiceObject {
-            private static ThreadSafeSortedList<long, IMessenger> _clients;
+            private static ConcurrentDictionary<long, IMessenger> _clients;
             private readonly IDictionary<string, PropertyInfo> _properties;
 
             public CacheableServiceObject(Type serviceInterfaceType, AscService service)
                 : base(serviceInterfaceType, service) {
-                _clients = new ThreadSafeSortedList<long, IMessenger>();
+                _clients = new ConcurrentDictionary<long, IMessenger>();
 
                 _properties = new Dictionary<string, PropertyInfo>();
                 foreach (var propertyInfo in serviceInterfaceType.GetProperties()) {
@@ -494,7 +494,7 @@ namespace ASC.Communication.ScsServices.Service
             /// <param name="propertyChangedEventArgs"></param>
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs) {
                 // send PropertyChangedMessage to all subscribed clients
-                Parallel.ForEach(_clients.GetAllItems(), messenger => {
+                Parallel.ForEach(_clients.Values, messenger => {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod()
                         .Invoke(Service, null);
 
@@ -518,7 +518,11 @@ namespace ASC.Communication.ScsServices.Service
             /// <param name="e"></param>
             public static void CacheableObject_OnClientDisconnected(object sender, ServerClientEventArgs e) {
                 if (_clients == null) return;
-                if (_clients.ContainsKey(e.Client.ClientId)) _clients.Remove(e.Client.ClientId);
+                if (_clients.ContainsKey(e.Client.ClientId))
+                {
+                    IMessenger bla;
+                    _clients.TryRemove(e.Client.ClientId, out bla);
+                }
             }
 
             /// <summary>
