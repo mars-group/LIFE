@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
@@ -188,8 +190,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		private List<UdpClient> GetSendingClients()
 		{
 			var resultList = new List<UdpClient>();
-			foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
-			{
+			//foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
+			//{
+                /*
 				foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
 				{
 					if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4))
@@ -199,7 +202,14 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 						resultList.Add(updClient);
 					}
 				}
-			}
+                */
+
+                var address = MulticastNetworkUtils.GetAllMulticastInterfaces().First().GetIPProperties().UnicastAddresses
+			        .First(elem => elem.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4));
+                var updClient = SetupSocket(address.Address);
+                updClient.MulticastLoopback = true;
+                resultList.Add(updClient);
+            //}
 
 			return resultList;
 		}

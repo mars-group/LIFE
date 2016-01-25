@@ -19,7 +19,7 @@ namespace AgentShadowingServiceTests
         private List<MockAgent> _agentsB;
 
 
-        private const int AgentsPerNode = 10;
+        private const int AgentsPerNode = 200;
 
         [SetUp]
         public void SetupTest() {
@@ -30,9 +30,6 @@ namespace AgentShadowingServiceTests
             {
                 _agentsA.Add(new MockAgent());
             }
-
-
-
 
             // create and register RealAgents in serviceB
             _agentsB = new List<MockAgent>();
@@ -62,7 +59,6 @@ namespace AgentShadowingServiceTests
             serviceA.Dispose();
             serviceB.Dispose();
             Console.WriteLine(sw.ElapsedMilliseconds);
-            
         }
 
 		[Test]

@@ -222,16 +222,13 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             if (!string.IsNullOrEmpty(e.Message.RepliedMessageId)) {
                 WaitingMessage waitingMessage = null;
 
-                if (_waitingMessages.ContainsKey(e.Message.RepliedMessageId))
-                    waitingMessage = _waitingMessages[e.Message.RepliedMessageId];
-                
+                _waitingMessages.TryGetValue(e.Message.RepliedMessageId, out waitingMessage);
 
                 // If there is a thread waiting for this response message, pulse it
-                if (waitingMessage != null) {
-                    waitingMessage.ResponseMessage = e.Message;
-                    waitingMessage.State = WaitingMessageStates.ResponseReceived;
-                    waitingMessage.WaitEvent.Set();
-                }
+                if (waitingMessage == null) return;
+                waitingMessage.ResponseMessage = e.Message;
+                waitingMessage.State = WaitingMessageStates.ResponseReceived;
+                waitingMessage.WaitEvent.Set();
             }
         }
 
