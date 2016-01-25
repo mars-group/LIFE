@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.Messengers;
@@ -8,6 +9,9 @@ namespace ASC.Communication.ScsServices.Client {
     ///     This class is used to build service clients to remotely invoke methods of a SCS service.
     /// </summary>
     public class AscServiceClientBuilder {
+
+        private static ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>> _replyMessengers = new ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>>();  
+
         /// <summary>
         ///     Creates a client to connect to a SCS service.
         /// </summary>
@@ -20,8 +24,17 @@ namespace ASC.Communication.ScsServices.Client {
         /// </param>
         /// <returns>Created client object to connect to the server</returns>
         private static IAscServiceClient<T> CreateClient<T>(AscEndPoint endpoint, Guid serviceID,
-            object clientObject = null) where T : class {
-            return new AscServiceClient<T>(new RequestReplyMessenger<IScsClient>(endpoint.CreateClient()), clientObject, serviceID);
+            object clientObject = null) where T : class
+        {
+            RequestReplyMessenger<IScsClient> messenger;
+            if (_replyMessengers.TryGetValue(endpoint, out messenger))
+            {
+                return new AscServiceClient<T>(messenger, clientObject, serviceID);
+            }
+
+            var newMessenger = new RequestReplyMessenger<IScsClient>(endpoint.CreateClient());
+            _replyMessengers.TryAdd(endpoint, newMessenger);
+            return new AscServiceClient<T>(newMessenger, clientObject, serviceID);
         }
 
         /// <summary>

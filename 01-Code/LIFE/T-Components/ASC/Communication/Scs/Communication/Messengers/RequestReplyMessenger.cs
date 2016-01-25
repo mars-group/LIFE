@@ -219,17 +219,15 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <param name="e">Event arguments</param>
         private void Messenger_MessageReceived(object sender, MessageEventArgs e) {
             // Check if there is a waiting thread for this message in SendMessageAndWaitForResponse method
-            if (!string.IsNullOrEmpty(e.Message.RepliedMessageId)) {
-                WaitingMessage waitingMessage = null;
+            if (string.IsNullOrEmpty(e.Message.RepliedMessageId)) return;
 
-                _waitingMessages.TryGetValue(e.Message.RepliedMessageId, out waitingMessage);
+            WaitingMessage waitingMessage;
+            if (!_waitingMessages.TryGetValue(e.Message.RepliedMessageId, out waitingMessage)) return;
 
-                // If there is a thread waiting for this response message, pulse it
-                if (waitingMessage == null) return;
-                waitingMessage.ResponseMessage = e.Message;
-                waitingMessage.State = WaitingMessageStates.ResponseReceived;
-                waitingMessage.WaitEvent.Set();
-            }
+            // If there is a thread waiting for this response message, pulse it
+            waitingMessage.ResponseMessage = e.Message;
+            waitingMessage.State = WaitingMessageStates.ResponseReceived;
+            waitingMessage.WaitEvent.Set();
         }
 
         /// <summary>
