@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using AgentShadowingService.Implementation;
-using AgentShadowingService.Interface;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Server;
 using ASC.Communication.ScsServices.Client;
@@ -21,7 +19,7 @@ namespace AgentShadowingServiceTests
         private List<MockAgent> _agentsB;
 
 
-        private const int AgentsPerNode = 5;
+        private const int AgentsPerNode = 10;
 
         [SetUp]
         public void SetupTest() {
@@ -44,7 +42,7 @@ namespace AgentShadowingServiceTests
             }
         }
 
-        [Test]
+		[Test]
         public void TestLocalFirstResolution() {
             var serviceA = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
             var serviceB = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
@@ -67,7 +65,7 @@ namespace AgentShadowingServiceTests
             
         }
 
-        [Test]
+		[Test]
         public void TestCommunication()
         {
             var port = 6666;

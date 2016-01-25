@@ -23,7 +23,7 @@ namespace MulticastAdapter.Implementation
             _mcastAddress = mCastAdr;
             _listenPort = listenPort;
 			_receiverClient = GetClient();
-            JoinMulticastGroupes();
+            JoinMulticastGroups();
 
         }
 
@@ -32,21 +32,21 @@ namespace MulticastAdapter.Implementation
 
             _mcastAddress = IPAddress.Parse(_generalSettings.MulticastGroupIp);
             _listenPort = _generalSettings.MulticastGroupListenPort;
-			_receiverClient = GetClient();
-            JoinMulticastGroupes();
+			_receiverClient = GetClient ();
+            JoinMulticastGroups();
         }
 
 
-        private void JoinMulticastGroupes()
+        private void JoinMulticastGroups()
         {
-            foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
-            {
-                foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
-                {
-                    if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily((IPVersionType)_generalSettings.IPVersion))
-						_receiverClient.JoinMulticastGroup(_mcastAddress, unicastAddr.Address);
-                }
-            }
+			foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces()) {
+				foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses) {
+					if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily ((IPVersionType)_generalSettings.IPVersion)) {
+						_receiverClient.JoinMulticastGroup (_mcastAddress, unicastAddr.Address);
+					}
+				}
+
+			}
         }
 
         private UdpClient GetClient()
@@ -68,11 +68,11 @@ namespace MulticastAdapter.Implementation
 
             // allow another client to bind to this port
             udpClient.ExclusiveAddressUse = false;
+
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
             
             return udpClient;
-
         }
 
         internal UdpClient GetSocket()
@@ -98,14 +98,22 @@ namespace MulticastAdapter.Implementation
 
 			}
 
-            try
-            {
-				if (_receiverClient.Client != null) msg = _receiverClient.Receive(ref sourceEndPoint);
-            }
-            catch (SocketException ex)
-            {
-                if (ex.ErrorCode != 10004) throw;
-            }
+			while (msg.Length <= 0) {
+				try
+				{
+					if (_receiverClient.Client != null) msg = _receiverClient.Receive(ref sourceEndPoint);
+				}
+				catch(ObjectDisposedException expo){
+					_receiverClient = GetClient ();
+					JoinMulticastGroups ();
+				}
+				catch (SocketException ex)
+				{
+					//_receiverClient.Close ();
+					if (ex.ErrorCode != 10004 && ex.ErrorCode != 10060) throw;
+				}
+			}
+
             return msg;
         }
 

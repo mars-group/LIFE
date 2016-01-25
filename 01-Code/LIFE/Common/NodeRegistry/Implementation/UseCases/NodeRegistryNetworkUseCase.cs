@@ -7,6 +7,7 @@ using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Implementation.Messages.Factory;
 using ProtoBuf;
+using System.Net.Sockets;
 
 namespace NodeRegistry.Implementation.UseCases {
 
@@ -59,33 +60,24 @@ namespace NodeRegistry.Implementation.UseCases {
         }
 
         private void Listen() {
-            try {
-                while (Thread.CurrentThread.IsAlive) {
-                    byte[] msg = _multicastAdapter.readMulticastGroupMessage();
-                    MemoryStream stream = new MemoryStream(msg);
-                    stream.Position = 0;
 
-                    if (stream.Length > 0) {
-                        AbstractNodeRegistryMessage nodeRegistryMessage =
-                            Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
-                        ComputeMessage(nodeRegistryMessage);
-                    }
-                }
-            }
-			catch (Exception ex){
+			try {
+				while (Thread.CurrentThread.IsAlive) {
+					byte[] msg = _multicastAdapter.readMulticastGroupMessage();
+					MemoryStream stream = new MemoryStream(msg);
+					stream.Position = 0;
+
+					if (stream.Length > 0) {
+						AbstractNodeRegistryMessage nodeRegistryMessage =
+							Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
+						ComputeMessage(nodeRegistryMessage);
+					}
+				}
+			} catch (Exception ex){
 				throw ex;
-			}/*
-            catch (ThreadInterruptedException ex) {
-                Logger.Debug("Message lost in local NodeRegistry. Reason was: \n" + ex);
-            }
-            catch (ProtoException ex) {
-                Logger.Debug("Message lost in local NodeRegistry. Reason was: \n" + ex);
-            }
-			catch (ObjectDisposedException ex){
-				Logger.Debug("Call to disposed multicast adapter happenend. Usually not problematic, since it only happens when shutting down.");
-			}*/
-
-        }
+			}
+			
+		}
 
         private void ComputeMessage(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {
             if (nodeRegistryConnectionInfoMessage == null) {

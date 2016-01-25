@@ -92,28 +92,27 @@ namespace AgentShadowingService.Implementation
             
 
 			// agent is not on local node, so create ShadowAgent
-            lock (_syncRoot)
+
+            if (_shadowAgentClients.ContainsKey(agentId))
             {
-                if (_shadowAgentClients.ContainsKey(agentId))
-                {
-                    return _shadowAgentClients[agentId].ServiceProxy;
-                }
-
-                var shadowAgentClient = AscServiceClientBuilder.CreateClient<TServiceInterface>(
-                    _clientListenPort,
-                    _mcastAddress,
-                    agentId
-                    );
-
-                // set timeout to infinite
-                shadowAgentClient.Timeout = -1;
-                // connect the shadow agent
-                shadowAgentClient.Connect();
-                // store shadow agent client in list for later management and observation
-                _shadowAgentClients.Add(agentId, shadowAgentClient);
-                // return RealProxy interface wrapper as clientside reference to remote object
-                return shadowAgentClient.ServiceProxy;
+                return _shadowAgentClients[agentId].ServiceProxy;
             }
+
+            var shadowAgentClient = AscServiceClientBuilder.CreateClient<TServiceInterface>(
+                _clientListenPort,
+                _mcastAddress,
+                agentId
+                );
+
+            // set timeout to infinite
+            shadowAgentClient.Timeout = -1;
+            // connect the shadow agent
+            shadowAgentClient.Connect();
+            // store shadow agent client in list for later management and observation
+            _shadowAgentClients.Add(agentId, shadowAgentClient);
+            // return RealProxy interface wrapper as clientside reference to remote object
+            return shadowAgentClient.ServiceProxy;
+        
 
         }
 

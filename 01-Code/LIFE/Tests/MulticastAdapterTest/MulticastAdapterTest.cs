@@ -185,7 +185,6 @@ namespace MulticastAdapterTest
                     _receiver.readMulticastGroupMessage();
                     NumberOfmessages++;
                 }
-                Console.WriteLine("thread counter thread is down");
             }
         }
 

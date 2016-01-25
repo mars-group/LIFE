@@ -214,7 +214,7 @@ namespace NodeRegistryTest {
             TNodeInformation otherNodeinfo = new TNodeInformation
                 (
                 localNodeInfo.NodeType,
-                "otherNodeInfo",
+					"UnitTestNode",
                 new NodeEndpoint("127.0.0.1", 90010));
 
             bool newNodeSubscriberFired = false;
@@ -230,6 +230,13 @@ namespace NodeRegistryTest {
                     (
                     new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4),
                     new MulticastSenderConfig());
+
+			MulticastAdapterComponent otherMulticastAdapter =
+				new MulticastAdapterComponent
+				(
+					new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort++, 4),
+					new MulticastSenderConfig());
+			_sendingStartPortSeed += 1;
 
             NodeRegistryComponent localNodeRegistry = new NodeRegistryComponent
                 (
@@ -262,7 +269,7 @@ namespace NodeRegistryTest {
 
             NodeRegistryComponent otherNodeRegistry = new NodeRegistryComponent
                 (
-                multicastAdapter,
+                otherMulticastAdapter,
                 new NodeRegistryConfig
                     (
                     otherNodeinfo.NodeType,
@@ -338,7 +345,7 @@ namespace NodeRegistryTest {
 
             Assert.True(!nodeList.Contains(localNodeInformation));
 
-            localNodeRegistry.ShutDownNodeRegistry();
+           // localNodeRegistry.ShutDownNodeRegistry();
         }
 
 
