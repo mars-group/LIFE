@@ -50,8 +50,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// </summary>
 		private readonly BinaryFormatter _binaryFormatter;
 
-
-		Thread _listenThread;
+        /// <summary>
+        /// Listening Thread
+        /// </summary>
+	    private Thread _listenThread;
 		#endregion
 
 		/// <summary>
@@ -106,20 +108,16 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 		private void Receive() {
 			var remoteEP = new IPEndPoint(IPAddress.Any, 0);
-			byte[] data = { };
-			while (_running) {
+		    while (_running) {
 				try
 				{
-					if (_udpReceivingClient.Client != null) {
-						data = _udpReceivingClient.Receive(ref remoteEP);
-						var stream = new MemoryStream(data);
-						var msg = (IAscMessage)_binaryFormatter.Deserialize(stream);
-						// inform all listeners about the new message
-						OnMessageReceived(msg);
-						data = new byte[]{};
-					}
+				    var data = _udpReceivingClient.Receive(ref remoteEP);
+				    var stream = new MemoryStream(data);
+				    var msg = (IAscMessage)_binaryFormatter.Deserialize(stream);
+				    // inform all listeners about the new message
+				    OnMessageReceived(msg);
 				}
-				catch(ObjectDisposedException expo){
+				catch(ObjectDisposedException){
 					// catch broken sockets and re-create them
 					_udpReceivingClient = GetReceivingClient();
 					JoinMulticastGroup();
@@ -127,9 +125,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 				catch (SocketException sex)
 				{
 					if (sex.ErrorCode != 10004 && sex.ErrorCode != 10060) throw;
-				}
-				catch (Exception ex){
-					throw ex;
 				}
 			}
 		}
