@@ -1,4 +1,5 @@
-﻿using ASC.Communication.Scs.Communication.Channels;
+﻿using System.Collections.Concurrent;
+using ASC.Communication.Scs.Communication.Channels;
 using ASC.Communication.Scs.Communication.Messengers;
 using ASC.Communication.Scs.Communication.Protocols;
 using CustomUtilities.Collections;
@@ -19,7 +20,7 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     A collection of clients that are connected to the server.
         /// </summary>
-        public ThreadSafeSortedList<long, IAscServerClient> Clients { get; private set; }
+        private ConcurrentDictionary<long, IAscServerClient> Clients { get; set; }
 
         #endregion
 
@@ -38,7 +39,7 @@ namespace ASC.Communication.Scs.Server {
         ///     Constructor.
         /// </summary>
         protected AscServerBase() {
-            Clients = new ThreadSafeSortedList<long, IAscServerClient>();
+            Clients = new ConcurrentDictionary<long, IAscServerClient>();
             WireProtocolFactory = WireProtocolManager.GetDefaultWireProtocolFactory();
         }
 

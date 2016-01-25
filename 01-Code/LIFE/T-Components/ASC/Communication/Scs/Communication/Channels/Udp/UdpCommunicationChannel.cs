@@ -176,12 +176,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 		private UdpClient GetReceivingClient()
 		{
-			var udpClient = new UdpClient(_endPoint.UdpPort);
-			//udpClient.ExclusiveAddressUse = false;
+			var udpClient = new UdpClient();
+			udpClient.ExclusiveAddressUse = false;
 
 			// allow another client to bind to this port
-			//udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-			//udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, _endPoint.UdpPort));
+			udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+			udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, _endPoint.UdpPort));
 			return udpClient;
 		}
 

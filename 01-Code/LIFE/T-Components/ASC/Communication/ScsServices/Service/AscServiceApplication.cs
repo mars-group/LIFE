@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace ASC.Communication.ScsServices.Service
         ///     Key2: ID of the ServiceObjects Instance, encoded as a GUID
         ///     Value: Service object.
         /// </summary>
-        private readonly ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>> _serviceObjects;
+        private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, ServiceObject>> _serviceObjects;
 
         private readonly SequentialItemProcessor<IAscMessage> _incomingMessageProcessor;
         private readonly IMessenger _messenger;
@@ -67,7 +68,7 @@ namespace ASC.Communication.ScsServices.Service
             //_messenger.MessageReceived += Client_MessageReceived;
             _messenger.MessageReceived += Msg_Received;
 
-            _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
+            _serviceObjects = new ConcurrentDictionary<string, ConcurrentDictionary<Guid, ServiceObject>>();
         }
 
 
@@ -116,7 +117,7 @@ namespace ASC.Communication.ScsServices.Service
 				if (_serviceObjects.ContainsKey(typeOfTServiceInterface.Name))
 					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new CacheableServiceObject(typeOfTServiceInterface, service);
                 else {
-					_serviceObjects[typeOfTServiceInterface.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+					_serviceObjects[typeOfTServiceInterface.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
 					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new CacheableServiceObject(typeOfTServiceInterface, service);
                 }
             }
@@ -124,7 +125,7 @@ namespace ASC.Communication.ScsServices.Service
 				if (_serviceObjects.ContainsKey(typeOfTServiceInterface.Name))
 					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new ServiceObject(typeOfTServiceInterface, service);
                 else {
-					_serviceObjects[typeOfTServiceInterface.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+					_serviceObjects[typeOfTServiceInterface.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
 					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new ServiceObject(typeOfTServiceInterface, service);
                 }
             }
@@ -157,12 +158,16 @@ namespace ASC.Communication.ScsServices.Service
         /// <typeparam name="TServiceInterface">Service interface type</typeparam>
         /// <returns>True: removed. False: no service object with this interface</returns>
         public bool RemoveService<TServiceInterface>()
-            where TServiceInterface : class {
-            return _serviceObjects.Remove(typeof (TServiceInterface).Name);
+            where TServiceInterface : class
+        {
+            ConcurrentDictionary<Guid, ServiceObject> bla;
+            return _serviceObjects.TryRemove(typeof (TServiceInterface).Name, out bla);
         }
 
-        public bool RemoveService<TServiceInterface>(Guid serviceGuid) where TServiceInterface : class {
-            return _serviceObjects[typeof (TServiceInterface).Name].Remove(serviceGuid);
+        public bool RemoveService<TServiceInterface>(Guid serviceGuid) where TServiceInterface : class
+        {
+            ServiceObject bla;
+            return _serviceObjects[typeof (TServiceInterface).Name].TryRemove(serviceGuid, out bla);
         }
 
         #endregion
@@ -215,7 +220,7 @@ namespace ASC.Communication.ScsServices.Service
                 if (invokeMessage.ServiceID.Equals(Guid.Empty))
                 {
                     // we are not looking for a specific implementation, but just for any, so use first found
-                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].GetAllItems().First();
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].First().Value;
                 }
                 else
                 {
@@ -314,7 +319,7 @@ namespace ASC.Communication.ScsServices.Service
                 if (invokeMessage.ServiceID.Equals(Guid.Empty))
                 {
                     // we are not looking for a specific implementation, but just for any, so use first found
-                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].GetAllItems().First();
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].First().Value;
                 }
                 else
                 {

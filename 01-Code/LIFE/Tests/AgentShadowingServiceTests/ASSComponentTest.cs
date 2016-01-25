@@ -42,7 +42,7 @@ namespace AgentShadowingServiceTests
             }
         }
 
-		[Test]
+		[Test, RequiresMTA]
         public void TestLocalFirstResolution() {
             var serviceA = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
             var serviceB = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
