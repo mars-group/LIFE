@@ -21,7 +21,7 @@ namespace AgentShadowingServiceTests
         private List<MockAgent> _agentsB;
 
 
-        private const int AgentsPerNode = 20;
+        private const int AgentsPerNode = 200;
 
         [SetUp]
         public void SetupTest() {

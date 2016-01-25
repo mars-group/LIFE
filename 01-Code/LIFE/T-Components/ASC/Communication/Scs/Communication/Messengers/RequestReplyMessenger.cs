@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using ASC.Communication.Scs.Communication.Messages;
@@ -80,17 +81,12 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Key: MessageID of waiting request message.
         ///     Value: A WaitingMessage instance.
         /// </summary>
-        private readonly SortedList<string, WaitingMessage> _waitingMessages;
+        private readonly ConcurrentDictionary<string, WaitingMessage> _waitingMessages;
 
         /// <summary>
         ///     This object is used to process incoming messages sequentially.
         /// </summary>
         private readonly SequentialItemProcessor<IAscMessage> _incomingMessageProcessor;
-
-        /// <summary>
-        ///     This object is used for thread synchronization.
-        /// </summary>
-        private readonly object _syncObj = new object();
 
         #endregion
 
@@ -105,7 +101,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             messenger.MessageReceived += Messenger_MessageReceived;
             messenger.MessageSent += Messenger_MessageSent;
             //_incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(OnMessageReceived);
-            _waitingMessages = new SortedList<string, WaitingMessage>();
+            _waitingMessages = new ConcurrentDictionary<string, WaitingMessage>();
             Timeout = DefaultTimeout;
         }
 
@@ -131,14 +127,14 @@ namespace ASC.Communication.Scs.Communication.Messengers {
 
             //Pulse waiting threads for incoming messages, since underlying messenger is disconnected
             //and can not receive messages anymore.
-            lock (_syncObj) {
-                foreach (var waitingMessage in _waitingMessages.Values) {
-                    waitingMessage.State = WaitingMessageStates.Cancelled;
-                    waitingMessage.WaitEvent.Set();
-                }
 
-                _waitingMessages.Clear();
+            foreach (var waitingMessage in _waitingMessages.Values) {
+                waitingMessage.State = WaitingMessageStates.Cancelled;
+                waitingMessage.WaitEvent.Set();
             }
+
+            _waitingMessages.Clear();
+            
         }
 
         /// <summary>
@@ -195,10 +191,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         {
             //Create a waiting message record and add to list
             var waitingMessage = new WaitingMessage();
-            lock (_syncObj)
-            {
-                _waitingMessages[message.MessageId] = waitingMessage;
-            }
+
+            _waitingMessages[message.MessageId] = waitingMessage;
 
             try
             {
@@ -223,10 +217,9 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             finally
             {
                 //Remove message from waiting messages
-                lock (_syncObj)
-                {
-                    if (_waitingMessages.ContainsKey(message.MessageId)) _waitingMessages.Remove(message.MessageId);
-                }
+                WaitingMessage delMessage;
+                if (_waitingMessages.ContainsKey(message.MessageId)) _waitingMessages.TryRemove(message.MessageId, out delMessage);
+
             }
         }
 
@@ -239,10 +232,10 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             // Check if there is a waiting thread for this message in SendMessageAndWaitForResponse method
             if (!string.IsNullOrEmpty(e.Message.RepliedMessageId)) {
                 WaitingMessage waitingMessage = null;
-                lock (_syncObj) {
-                    if (_waitingMessages.ContainsKey(e.Message.RepliedMessageId))
-                        waitingMessage = _waitingMessages[e.Message.RepliedMessageId];
-                }
+
+                if (_waitingMessages.ContainsKey(e.Message.RepliedMessageId))
+                    waitingMessage = _waitingMessages[e.Message.RepliedMessageId];
+                
 
                 // If there is a thread waiting for this response message, pulse it
                 if (waitingMessage != null) {
