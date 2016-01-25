@@ -17,17 +17,11 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         #region private fields
 
         private readonly AscUdpEndPoint _endPoint;
-        //private readonly MulticastAdapterComponent _multicastAdapter;
 
         /// <summary>
         ///     A flag to control thread's running
         /// </summary>
         private volatile bool _running;
-
-        /// <summary>
-        ///     This object is just used for thread synchronizing (locking).
-        /// </summary>
-        private readonly object _syncLock;
 
         /// <summary>
         /// The UDP receiver client
@@ -78,8 +72,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             JoinMulticastGroup();
             // get all sending udpClients. One per active and multicast enabled interface
             _udpSendingClients = GetSendingClients();
-            // a lock object to be used for sending method
-            _syncLock = new object();
             
             _binaryFormatter = new BinaryFormatter();
         }
@@ -119,23 +111,22 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             var messageBytes = memoryStream.ToArray();
             var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpPort);
 
-            lock (_syncLock)
-                {
-                //Send all bytes to the remote application asynchronously
-                _udpSendingClients.ForEach(client =>
-                {
-                    client.BeginSend(
-                        messageBytes,
-                        messageBytes.Length,
-                        endpoint,
-                        SendCallback,
-                        client
-                        );
-                });
-                // store last time a message was sent
-                LastSentMessageTime = DateTime.Now;
-                OnMessageSent(message);
-            }
+
+            //Send all bytes to the remote application asynchronously
+            _udpSendingClients.ForEach(client =>
+            {
+                client.BeginSend(
+                    messageBytes,
+                    messageBytes.Length,
+                    endpoint,
+                    SendCallback,
+                    client
+                    );
+            });
+            // store last time a message was sent
+            LastSentMessageTime = DateTime.Now;
+            OnMessageSent(message);
+            
         }
 
         private void SendCallback(IAsyncResult ar)

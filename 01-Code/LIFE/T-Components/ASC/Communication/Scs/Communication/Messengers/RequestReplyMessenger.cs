@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading;
 using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Protocols;
-using CustomUtilities.Threading;
 
 
 namespace ASC.Communication.Scs.Communication.Messengers {
@@ -83,11 +81,6 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// </summary>
         private readonly ConcurrentDictionary<string, WaitingMessage> _waitingMessages;
 
-        /// <summary>
-        ///     This object is used to process incoming messages sequentially.
-        /// </summary>
-        private readonly SequentialItemProcessor<IAscMessage> _incomingMessageProcessor;
-
         #endregion
 
         #region Constructor
@@ -100,7 +93,6 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             Messenger = messenger;
             messenger.MessageReceived += Messenger_MessageReceived;
             messenger.MessageSent += Messenger_MessageSent;
-            //_incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(OnMessageReceived);
             _waitingMessages = new ConcurrentDictionary<string, WaitingMessage>();
             Timeout = DefaultTimeout;
         }
@@ -113,7 +105,6 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Starts the messenger.
         /// </summary>
         public virtual void Start() {
-            //_incomingMessageProcessor.Start();
         }
 
         /// <summary>
@@ -123,8 +114,6 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Also stops incoming message processing and deletes all messages in incoming message queue.
         /// </summary>
         public virtual void Stop() {
-            _incomingMessageProcessor.Stop();
-
             //Pulse waiting threads for incoming messages, since underlying messenger is disconnected
             //and can not receive messages anymore.
 
@@ -242,12 +231,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                     waitingMessage.ResponseMessage = e.Message;
                     waitingMessage.State = WaitingMessageStates.ResponseReceived;
                     waitingMessage.WaitEvent.Set();
-                    return;
                 }
             }
-
-            // raise OnMessageReceived Event via multi-threaded MessageProcessor
-            //_incomingMessageProcessor.EnqueueMessage(e.Message);
         }
 
         /// <summary>
