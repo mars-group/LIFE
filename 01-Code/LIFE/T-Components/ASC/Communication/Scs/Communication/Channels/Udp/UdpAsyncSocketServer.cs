@@ -20,7 +20,6 @@ namespace ASC
 		private int m_receiveBufferSize;// buffer size to use for each socket I/O operation 
 
 		private Semaphore m_maxNumberReadClients;
-
 		private Semaphore m_maxNumberWriteClients;
 
 		readonly BufferManager m_readBufferManager;  // represents a large reusable set of buffers for all socket operations
@@ -28,14 +27,16 @@ namespace ASC
 		const int opsToPreAlloc = 2;    // read, write (don't alloc buffer space for accepts)
 		Socket _listenSocket;            // the socket used to listen for incoming connection requests
 		Socket _sendingSocket;			// the socket used to send datagrams
-		// pool of reusable SocketAsyncEventArgs objects for write, read and accept socket operations
-		readonly SocketAsyncEventArgsPool m_readPool;
 
+		// pools of reusable SocketAsyncEventArgs objects for write, read and accept socket operations
+		readonly SocketAsyncEventArgsPool m_readPool;
 		readonly SocketAsyncEventArgsPool m_writePool;
 
 		int _serverListenPort;
 
 		IPAddress _mcastAddress;
+
+		Thread _listenThread;
 
 		// Create an uninitialized server instance.  
 		// To start the server listening for connection requests
@@ -146,8 +147,10 @@ namespace ASC
 			BindSendingSocket(localAddress.Address, sendingStartPort);
 
 
-            // begin to receive
-			Receive ();
+            // begin to receive in Thread to not block the sending side
+			_listenThread = new Thread(Receive);
+			_listenThread.IsBackground = true;
+			_listenThread.Start();
 		}
 
 		private void BindSendingSocket(IPAddress localAddress, int sendingStartPort){
@@ -217,7 +220,7 @@ namespace ASC
 			case SocketAsyncOperation.Receive:
 				ProcessReceive(e);
 				break;
-			case SocketAsyncOperation.Send:
+			case SocketAsyncOperation.SendTo:
 				ProcessSend(e);
 				break;
 			default:
@@ -226,10 +229,7 @@ namespace ASC
 
 		}
 
-		// This method is invoked when an asynchronous receive operation completes. 
-		// If the remote host closed the connection, then the socket is closed.  
-		// If data was received then the data is echoed back to the client.
-		//
+		// This method is invoked when an asynchronous receive operation completes.  
 		private void ProcessReceive(SocketAsyncEventArgs e)
 		{
 			var dgramLength = e.BytesTransferred;
