@@ -18,12 +18,20 @@ namespace ASC
 
 		private int m_numConnections;   // the maximum number of connections the sample is designed to handle simultaneously 
 		private int m_receiveBufferSize;// buffer size to use for each socket I/O operation 
-		readonly BufferManager m_bufferManager;  // represents a large reusable set of buffers for all socket operations
+
+		private Semaphore m_maxNumberReadClients;
+
+		private Semaphore m_maxNumberWriteClients;
+
+		readonly BufferManager m_readBufferManager;  // represents a large reusable set of buffers for all socket operations
+		readonly BufferManager m_writeBufferManager;
 		const int opsToPreAlloc = 2;    // read, write (don't alloc buffer space for accepts)
 		Socket _listenSocket;            // the socket used to listen for incoming connection requests
 		Socket _sendingSocket;			// the socket used to send datagrams
 		// pool of reusable SocketAsyncEventArgs objects for write, read and accept socket operations
-		readonly SocketAsyncEventArgsPool m_readWritePool;
+		readonly SocketAsyncEventArgsPool m_readPool;
+
+		readonly SocketAsyncEventArgsPool m_writePool;
 
 		int _serverListenPort;
 
@@ -41,11 +49,16 @@ namespace ASC
 			m_receiveBufferSize = receiveBufferSize;
 			// allocate buffers such that the maximum number of sockets can have one outstanding read and 
 			//write posted to the socket simultaneously  
-			m_bufferManager = new BufferManager(receiveBufferSize * numConnections * opsToPreAlloc,
+			m_readBufferManager = new BufferManager(receiveBufferSize * numConnections * opsToPreAlloc,
+				receiveBufferSize);
+			m_writeBufferManager = new BufferManager(receiveBufferSize * numConnections * opsToPreAlloc,
 				receiveBufferSize);
 
-			m_readWritePool = new SocketAsyncEventArgsPool(numConnections);
+			m_readPool = new SocketAsyncEventArgsPool(numConnections);
+			m_writePool = new SocketAsyncEventArgsPool(numConnections);
 			_serverListenPort = 6666;
+			m_maxNumberReadClients = new Semaphore (numConnections, numConnections);
+			m_maxNumberWriteClients = new Semaphore (numConnections, numConnections);
 		}
 
 		// Initializes the server by preallocating reusable buffers and 
@@ -57,22 +70,37 @@ namespace ASC
 		{
 			// Allocates one large byte buffer which all I/O operations use a piece of.  This gaurds 
 			// against memory fragmentation
-			m_bufferManager.InitBuffer();
+			m_readBufferManager.InitBuffer();
 
 			// preallocate pool of SocketAsyncEventArgs objects
-			SocketAsyncEventArgs readWriteEventArg;
+			SocketAsyncEventArgs readEventArg;
 
 			for (int i = 0; i < m_numConnections; i++)
 			{
 				//Pre-allocate a set of reusable SocketAsyncEventArgs
-				readWriteEventArg = new SocketAsyncEventArgs();
-				readWriteEventArg.Completed += IO_Completed;
+				readEventArg = new SocketAsyncEventArgs();
+				readEventArg.Completed += IO_Completed;
 
 				// assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
-				m_bufferManager.SetBuffer(readWriteEventArg);
+				m_readBufferManager.SetBuffer(readEventArg);
 
 				// add SocketAsyncEventArg to the pool
-				m_readWritePool.Push(readWriteEventArg);
+				m_readPool.Push(readEventArg);
+			}
+
+			SocketAsyncEventArgs writeEventArg;
+
+			for (int i = 0; i < m_numConnections; i++)
+			{
+				//Pre-allocate a set of reusable SocketAsyncEventArgs
+				writeEventArg = new SocketAsyncEventArgs();
+				writeEventArg.Completed += IO_Completed;
+
+				// assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
+				m_writeBufferManager.SetBuffer(writeEventArg);
+
+				// add SocketAsyncEventArg to the pool
+				m_writePool.Push(writeEventArg);
 			}
 
 		}
@@ -134,12 +162,13 @@ namespace ASC
 		}
 
 		public void Send(byte[] messageToSend){
+			m_maxNumberWriteClients.WaitOne ();
 			// Pop a SocketAsyncEventArgs object from the stack
-			SocketAsyncEventArgs writeEventArgs = m_readWritePool.Pop();
+			SocketAsyncEventArgs writeEventArgs = m_writePool.Pop();
 			// send to provided multicastaddress and serverListenPort
 			writeEventArgs.RemoteEndPoint = new IPEndPoint (_mcastAddress, _serverListenPort);
 			// free the buffer of this socketAsyncEventArg
-			m_bufferManager.FreeBuffer (writeEventArgs);
+			m_writeBufferManager.FreeBuffer (writeEventArgs);
 			// set Buffer to messageToSend byte[]
 			writeEventArgs.SetBuffer(messageToSend, 0, messageToSend.Length);
 			bool willRaiseEvent = _sendingSocket.SendToAsync (writeEventArgs);
@@ -152,8 +181,9 @@ namespace ASC
 
 		private void Receive()
 		{
+			m_maxNumberReadClients.WaitOne ();
 			// Pop a SocketAsyncEventArgs object from the stack
-			SocketAsyncEventArgs readEventArgs = m_readWritePool.Pop();
+			SocketAsyncEventArgs readEventArgs = m_readPool.Pop();
 
 			// receive from every address and port
 			readEventArgs.RemoteEndPoint = new IPEndPoint (IPAddress.Any, 0);
@@ -211,7 +241,9 @@ namespace ASC
 			OnDatagramReceived (data);
 
 			// put the SocketAsyncEventArg object back onto the stack for later usage
-			m_readWritePool.Push(e);
+			m_readPool.Push(e);
+			// release the semaphore
+			m_maxNumberReadClients.Release();
 
 			// currently nothing, later on: Handle messages too large for the buffer,
 			// this will need a 4 digit prefix to indicate the message size
@@ -230,8 +262,10 @@ namespace ASC
 		private void ProcessSend(SocketAsyncEventArgs e)
 		{
 			// sending done, reset buffer and free socketAsyncEventArg
-			m_bufferManager.SetBuffer (e);
-			m_readWritePool.Push(e);
+			m_writeBufferManager.SetBuffer (e);
+			m_writePool.Push(e);
+			// release the semaphore
+			m_maxNumberWriteClients.Release();
 		}
 
 
