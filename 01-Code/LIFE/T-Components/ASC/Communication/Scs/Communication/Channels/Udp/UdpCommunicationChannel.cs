@@ -105,6 +105,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 			// start receiving in an asynchronous way
 			_listenThread = new Thread(Receive);
+			_listenThread.IsBackground = true;
 			_listenThread.Start();
 		}
 
@@ -154,7 +155,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 		private void SendCallback(IAsyncResult ar)
 		{
-            
+			
 			// nothing to be done here
 		}
 
@@ -208,7 +209,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
                 var address = MulticastNetworkUtils.GetAllMulticastInterfaces().First().GetIPProperties().UnicastAddresses
 			        .First(elem => elem.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4));
                 var updClient = SetupSocket(address.Address);
-                updClient.MulticastLoopback = true;
+				updClient.MulticastLoopback = true;
                 resultList.Add(updClient);
             //}
 
@@ -225,7 +226,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		{
 			try
 			{
-			    return new UdpClient(new IPEndPoint(unicastAddress, _sendingStartPort));
+				var client = new UdpClient(new IPEndPoint(unicastAddress, _sendingStartPort));
+				return client;
 
 			}
 			catch (SocketException socketException)

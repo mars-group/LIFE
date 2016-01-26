@@ -14,6 +14,7 @@ using CustomUtilities.Collections;
 using CustomUtilities.Threading;
 
 [assembly: InternalsVisibleTo("AgentShadowingServiceTests")]
+[assembly: InternalsVisibleTo("PerfTester")]
 namespace ASC.Communication.ScsServices.Service
 {
 
