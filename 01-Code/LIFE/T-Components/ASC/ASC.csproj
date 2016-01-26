@@ -114,6 +114,9 @@
     <Compile Include="Communication\Scs\Server\Udp\AscUdpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Communication\ScsServices\Service\AscServiceFactory.cs" />
+    <Compile Include="Communication\Scs\Communication\Channels\Udp\SocketAsyncEventArgsPool.cs" />
+    <Compile Include="Communication\Scs\Communication\Channels\Udp\BufferManager.cs" />
+    <Compile Include="Communication\Scs\Communication\Channels\Udp\UdpAsyncSocketServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

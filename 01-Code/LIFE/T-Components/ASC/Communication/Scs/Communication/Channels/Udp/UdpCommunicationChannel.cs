@@ -27,15 +27,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// </summary>
 		private volatile bool _running;
 
-		/// <summary>
-		/// The UDP receiver client
-		/// </summary>
-		private UdpClient _udpReceivingClient;
-
-		/// <summary>
-		/// All UDP sending clients. One client per interface is created
-		/// </summary>
-		private readonly List<UdpClient> _udpSendingClients;
+		private UdpAsyncSocketServer _udpAsyncSockerServer;
 
 		/// <summary>
 		/// The multicast address being used for this communicationchannel
@@ -52,10 +44,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// </summary>
 		private readonly BinaryFormatter _binaryFormatter;
 
-        /// <summary>
-        /// Listening Thread
-        /// </summary>
-	    private Thread _listenThread;
 		#endregion
 
 		/// <summary>
@@ -67,6 +55,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 
 		public UdpCommunicationChannel(AscUdpEndPoint endPoint) {
+			_udpAsyncSockerServer = new UdpAsyncSocketServer ();
+			_udpAsyncSockerServer.Init();
 			_endPoint = endPoint;
 			// running is false, not yet
 			_running = false;
@@ -74,12 +64,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			_mcastGroupIpAddress = IPAddress.Parse(_endPoint.McastGroup);
 			// sending port starts with listenport +1, will be increased if port is not availabel
 			_sendingStartPort = endPoint.UdpPort+1;
-			// get a receiving UDP client which listens on all interfaces and specified port
-			_udpReceivingClient = GetReceivingClient();
-			// Join multicast groups with all receiving clients
-			JoinMulticastGroup();
+
 			// get all sending udpClients. One per active and multicast enabled interface
-			_udpSendingClients = GetSendingClients();
+			//_udpSendingClients = GetSendingClients();
 
 			_binaryFormatter = new BinaryFormatter();
 		}
@@ -104,32 +91,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			_running = true;
 
 			// start receiving in an asynchronous way
-			_listenThread = new Thread(Receive);
-			_listenThread.IsBackground = true;
-			_listenThread.Start();
-		}
-
-		private void Receive() {
-			var remoteEP = new IPEndPoint(IPAddress.Any, 0);
-		    while (_running) {
-				try
-				{
-				    var data = _udpReceivingClient.Receive(ref remoteEP);
-				    var stream = new MemoryStream(data);
-				    var msg = (IAscMessage)_binaryFormatter.Deserialize(stream);
-				    // inform all listeners about the new message
-				    OnMessageReceived(msg);
-				}
-				catch(ObjectDisposedException){
-					// catch broken sockets and re-create them
-					_udpReceivingClient = GetReceivingClient();
-					JoinMulticastGroup();
-				}
-				catch (SocketException sex)
-				{
-					if (sex.ErrorCode != 10004 && sex.ErrorCode != 10060) throw;
-				}
-			}
+			_udpAsyncSockerServer.DatagramReceived += On_DatagramReceived;
+			_udpAsyncSockerServer.Start(new IPEndPoint(IPAddress.Any, _endPoint.UdpPort), _mcastGroupIpAddress);
 		}
 
 		protected override void SendMessageInternal(IAscMessage message)
@@ -140,12 +103,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			new BinaryFormatter().Serialize(memoryStream, message);
 
 			var messageBytes = memoryStream.ToArray();
-			var endpoint = new IPEndPoint(_mcastGroupIpAddress, _endPoint.UdpPort);
 
-
-			//Send all bytes to the remote application asynchronously
-			_udpSendingClients.ForEach(client =>
-				client.BeginSend (messageBytes, messageBytes.Length, endpoint, SendCallback, client));
+			_udpAsyncSockerServer.Send (messageBytes);
 			
 			// store last time a message was sent
 			LastSentMessageTime = DateTime.Now;
@@ -155,91 +114,25 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 		private void SendCallback(IAsyncResult ar)
 		{
-			
 			// nothing to be done here
 		}
 
 		#endregion
 
-		#region private Methods
 
 		/// <summary>
-		/// Joins the multicast group via all available interfaces
+		/// Reacts to a received datagram by deserializing it and raising our own message received event
 		/// </summary>
-		private void JoinMulticastGroup()
+		/// <param name="sender">Sender.</param>
+		/// <param name="datagram">Datagram.</param>
+		void On_DatagramReceived (object sender, byte[] datagram)
 		{
-			foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
-			{
-				foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses)
-				{
-					if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4))
-						_udpReceivingClient.JoinMulticastGroup(_mcastGroupIpAddress, unicastAddr.Address);
-				}
+			var msg = (IAscMessage)_binaryFormatter.Deserialize (new MemoryStream (datagram));
+			if (msg != null) {
+				OnMessageReceived (msg);
 			}
 		}
-
-		private UdpClient GetReceivingClient()
-		{
-			var udpClient = new UdpClient();
-			udpClient.ExclusiveAddressUse = false;
-
-			// allow another client to bind to this port
-			udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-			udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, _endPoint.UdpPort));
-			return udpClient;
-		}
-
-		private List<UdpClient> GetSendingClients()
-		{
-			var resultList = new List<UdpClient>();
-			//foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces())
-			//{
-                /*
-				foreach (var unicastAddress in networkInterface.GetIPProperties().UnicastAddresses)
-				{
-					if (unicastAddress.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4))
-					{
-						var updClient = SetupSocket(unicastAddress.Address);
-						updClient.MulticastLoopback = true;
-						resultList.Add(updClient);
-					}
-				}
-                */
-
-                var address = MulticastNetworkUtils.GetAllMulticastInterfaces().First().GetIPProperties().UnicastAddresses
-			        .First(elem => elem.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4));
-                var updClient = SetupSocket(address.Address);
-				updClient.MulticastLoopback = true;
-                resultList.Add(updClient);
-            //}
-
-			return resultList;
-		}
-
-		/// <summary>
-		/// Sets up the sending socket.
-		/// Will increase the sending port, if it is already in use
-		/// </summary>
-		/// <param name="unicastAddress"></param>
-		/// <returns></returns>
-		private UdpClient SetupSocket(IPAddress unicastAddress)
-		{
-			try
-			{
-				var client = new UdpClient(new IPEndPoint(unicastAddress, _sendingStartPort));
-				return client;
-
-			}
-			catch (SocketException socketException)
-			{
-				//if sending port is already in use increment port and try again.
-				if (socketException.ErrorCode != 10048) throw;
-				_sendingStartPort = _sendingStartPort + 1;
-				return SetupSocket(unicastAddress);
-			}
-		}
-
-		#endregion
+			
 	}
 
 	[Serializable]
