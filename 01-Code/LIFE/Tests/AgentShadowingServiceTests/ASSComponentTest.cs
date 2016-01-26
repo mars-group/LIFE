@@ -19,7 +19,7 @@ namespace AgentShadowingServiceTests
         private List<MockAgent> _agentsB;
 
 
-        private const int AgentsPerNode = 100;
+        private const int AgentsPerNode = 1000;
 
         [SetUp]
         public void SetupTest() {
@@ -61,17 +61,15 @@ namespace AgentShadowingServiceTests
             Console.WriteLine(sw.ElapsedMilliseconds);
         }
 
-		[Test]
+		[Test,RequiresMTA]
         public void TestCommunication()
         {
             var port = 6666;
             var clientListenPort = port;
             var typeOfTServiceClass = typeof(MockAgent);
-            var typeOfServiceClassName = typeOfTServiceClass.Name;
-            var typeOfTServiceInterface = typeof(IMockAgent);
-            var typeOfServiceInterfaceName = typeOfTServiceInterface.Name;
+		    var typeOfTServiceInterface = typeof(IMockAgent);
 
-            var mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
+		    var mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
 
             var ascServiceApp1 = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, mcastAddress)));
             var ascServiceApp2 = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, mcastAddress)));
@@ -79,7 +77,7 @@ namespace AgentShadowingServiceTests
             ascServiceApp2.Start();
 
 
-
+            // create shadows for A and B
             var shadows = new List<IMockAgent>();
             _agentsA.ForEach(a =>
             {
@@ -108,11 +106,13 @@ namespace AgentShadowingServiceTests
             });
 
             var sw = Stopwatch.StartNew();
-
+            // call the method on all shadows
             Parallel.ForEach(shadows, mockAgent => Assert.AreEqual(42, mockAgent.DoCrazyShit()));
 
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
+            ascServiceApp1.Stop();
+            ascServiceApp2.Stop();
         }
     }
 

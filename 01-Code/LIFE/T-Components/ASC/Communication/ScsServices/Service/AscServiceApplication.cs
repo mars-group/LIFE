@@ -44,7 +44,6 @@ namespace ASC.Communication.ScsServices.Service
         /// </summary>
         private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, ServiceObject>> _serviceObjects;
 
-        private readonly SequentialItemProcessor<IAscMessage> _incomingMessageProcessor;
         private readonly IMessenger _messenger;
 
         #endregion
@@ -58,9 +57,6 @@ namespace ASC.Communication.ScsServices.Service
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if ascServer argument is null</exception>
         public AscServiceApplication(IAscServer ascServer) {
             if (ascServer == null) throw new ArgumentNullException("ascServer");
-
-            //_incomingMessageProcessor = new SequentialItemProcessor<IAscMessage>(ProcessRemoteInvokeMessage);
-            //_incomingMessageProcessor.Start();
 
             _ascServer = ascServer;
             _messenger = _ascServer.GetMessenger();
@@ -289,7 +285,7 @@ namespace ASC.Communication.ScsServices.Service
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
         private void Client_MessageReceived(object sender, MessageEventArgs e) {
-            _incomingMessageProcessor.EnqueueMessage(e.Message);
+
         }
 
         private void Msg_Received(object sender, MessageEventArgs e)

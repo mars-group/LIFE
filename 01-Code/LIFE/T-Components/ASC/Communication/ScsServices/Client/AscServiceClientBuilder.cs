@@ -10,7 +10,8 @@ namespace ASC.Communication.ScsServices.Client {
     /// </summary>
     public class AscServiceClientBuilder {
 
-        private static ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>> _replyMessengers = new ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>>();  
+        private static readonly ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>> ReplyMessengers 
+            = new ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>>();  
 
         /// <summary>
         ///     Creates a client to connect to a SCS service.
@@ -27,13 +28,13 @@ namespace ASC.Communication.ScsServices.Client {
             object clientObject = null) where T : class
         {
             RequestReplyMessenger<IScsClient> messenger;
-            if (_replyMessengers.TryGetValue(endpoint, out messenger))
+            if (ReplyMessengers.TryGetValue(endpoint, out messenger))
             {
                 return new AscServiceClient<T>(messenger, clientObject, serviceID);
             }
 
             var newMessenger = new RequestReplyMessenger<IScsClient>(endpoint.CreateClient());
-            _replyMessengers.TryAdd(endpoint, newMessenger);
+            ReplyMessengers.TryAdd(endpoint, newMessenger);
             return new AscServiceClient<T>(newMessenger, clientObject, serviceID);
         }
 

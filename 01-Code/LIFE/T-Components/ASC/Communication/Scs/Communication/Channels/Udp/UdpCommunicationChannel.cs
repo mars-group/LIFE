@@ -154,6 +154,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 		private void SendCallback(IAsyncResult ar)
 		{
+            
 			// nothing to be done here
 		}
 
@@ -224,7 +225,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		{
 			try
 			{
-				return new UdpClient(new IPEndPoint(unicastAddress, _sendingStartPort));
+			    return new UdpClient(new IPEndPoint(unicastAddress, _sendingStartPort));
+
 			}
 			catch (SocketException socketException)
 			{

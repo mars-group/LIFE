@@ -10,7 +10,7 @@ namespace ASC.Communication.ScsServices.Service {
     /// </summary>
     public static class AscServiceFactory {
         
-		private static readonly IDictionary<string, IAscServiceApplication> serviceAppDictionary = new ConcurrentDictionary<string, IAscServiceApplication> ();
+		private static readonly IDictionary<string, IAscServiceApplication> ServiceAppDictionary = new ConcurrentDictionary<string, IAscServiceApplication> ();
 
 		/// <summary>
         /// Creates an ASC Service with the provided and multiCast Address and by using the default 
@@ -20,24 +20,25 @@ namespace ASC.Communication.ScsServices.Service {
         /// <returns></returns>
 		/// <param name = "typeOfService">The type of the service to host.</param>
         public static IAscServiceApplication CreateService(int port, string multicastGroup, string typeOfService)
-        {
-			if (serviceAppDictionary.ContainsKey (typeOfService)) {
-				return serviceAppDictionary [typeOfService];
-			} else {
-				var serviceApp = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, multicastGroup)));
-                serviceAppDictionary.Add(typeOfService, serviceApp);
-				return serviceApp;
-			}
-        }
+		{
+		    IAscServiceApplication serviceApp;
+		    if (ServiceAppDictionary.TryGetValue(typeOfService, out serviceApp))
+		    {
+		        return serviceApp;
+		    }
+		    serviceApp = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, multicastGroup)));
+		    ServiceAppDictionary.Add(typeOfService, serviceApp);
+		    return serviceApp;
+		}
 
-		/// <summary>
+        /// <summary>
 		/// Gets a service application by type.
 		/// </summary>
 		/// <returns>The service application by type name if found, null otherwise.</returns>
 		/// <param name="typeName">Type name.</param>
 		public static IAscServiceApplication GetServiceApplicationByTypeName(string typeName)
 		{
-		    return serviceAppDictionary.ContainsKey (typeName) ? serviceAppDictionary [typeName] : null;
+		    return ServiceAppDictionary.ContainsKey (typeName) ? ServiceAppDictionary [typeName] : null;
 		}
     }
 }
