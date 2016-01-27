@@ -80,9 +80,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 				//Pre-allocate a set of reusable SocketAsyncEventArgs
 				var readEventArg = new SocketAsyncEventArgs();
 				readEventArg.Completed += IO_Completed;
-
-				// assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
-				_readBufferManager.SetBuffer(readEventArg);
+                // receive from every address and port
+                readEventArg.RemoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                // assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
+                _readBufferManager.SetBuffer(readEventArg);
 
 				// add SocketAsyncEventArg to the pool
 				_readPool.Push(readEventArg);
@@ -166,10 +167,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			var writeEventArgs = _writePool.Pop();
 			// send to provided multicastaddress and serverListenPort
 			writeEventArgs.RemoteEndPoint = new IPEndPoint (_mcastAddress, _serverListenPort);
-			// free the buffer of this socketAsyncEventArg
-			//_writeBufferManager.FreeBuffer (writeEventArgs);
 			// set Buffer to messageToSend byte[]
 			writeEventArgs.SetBuffer(messageToSend, 0, messageToSend.Length);
+
+            // Start actual send operation
 			var willRaiseEvent = _sendingSocket.SendToAsync (writeEventArgs);
 			if (!willRaiseEvent) {
 				// operation completed synchronously
@@ -184,8 +185,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			// Pop a SocketAsyncEventArgs object from the stack
 			var readEventArgs = _readPool.Pop();
 
-			// receive from every address and port
-			readEventArgs.RemoteEndPoint = new IPEndPoint (IPAddress.Any, 0);
+
 
 			// As soon as the client is connected, post a receive to the connection
 			var willRaiseEvent = _listenSocket.ReceiveAsync(readEventArgs);

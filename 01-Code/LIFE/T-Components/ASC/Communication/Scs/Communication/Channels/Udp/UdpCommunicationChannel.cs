@@ -127,12 +127,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// <param name="datagram">Datagram.</param>
 		void On_DatagramReceived (object sender, byte[] datagram)
 		{
-			var msg = (IAscMessage)_binaryFormatter.Deserialize (new MemoryStream (datagram));
-			if (msg != null) {
-				OnMessageReceived (msg);
-			}
+		    var msg = (IAscMessage) new BinaryFormatter().Deserialize(new MemoryStream(datagram));
+	        OnMessageReceived(msg);
 		}
-			
 	}
 
 	[Serializable]
