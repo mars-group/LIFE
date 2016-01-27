@@ -23,7 +23,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
         private readonly BufferManager _readBufferManager;  // represents a large reusable set of buffers for all socket operations
         private readonly BufferManager _writeBufferManager;
-        private const int OpsToPreAlloc = 2;    // read, write (don't alloc buffer space for accepts)
         private Socket _listenSocket;            // the socket used to listen for incoming connection requests
         private Socket _sendingSocket;			// the socket used to send datagrams
 
@@ -53,9 +52,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			_receiveBufferSize = receiveBufferSize;
 			// allocate buffers such that the maximum number of sockets can have one outstanding read and 
 			//write posted to the socket simultaneously  
-			_readBufferManager = new BufferManager(receiveBufferSize * numConnections * OpsToPreAlloc,
+			_readBufferManager = new BufferManager(receiveBufferSize * numConnections,
 				receiveBufferSize);
-			_writeBufferManager = new BufferManager(receiveBufferSize * numConnections * OpsToPreAlloc,
+			_writeBufferManager = new BufferManager(receiveBufferSize * numConnections,
 				receiveBufferSize);
 
 			_readPool = new SocketAsyncEventArgsPool(numConnections);
@@ -193,7 +192,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 
 			// As soon as the client is connected, post a receive to the connection
-			var willRaiseEvent = _listenSocket.ReceiveMessageFromAsync(readEventArgs);
+			var willRaiseEvent = _listenSocket.ReceiveFromAsync(readEventArgs);
 			if(!willRaiseEvent){
 				// operation completed synchronously
 				ProcessReceive(readEventArgs);
@@ -218,7 +217,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			// determine which type of operation just completed and call the associated handler
 			switch (e.LastOperation)
 			{
-			case SocketAsyncOperation.Receive:
+			case SocketAsyncOperation.ReceiveFrom:
 				ProcessReceive(e);
 				break;
 			case SocketAsyncOperation.SendTo:
