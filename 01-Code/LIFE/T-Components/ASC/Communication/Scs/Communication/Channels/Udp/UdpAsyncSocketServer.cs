@@ -27,6 +27,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
         private Socket _listenSocket;            // the socket used to listen for incoming connection requests
         private Socket _sendingSocket;			// the socket used to send datagrams
 
+		private int _numOfReceivedMessages;
+		private int _numOfSentMessages;
+
 		// pools of reusable SocketAsyncEventArgs objects for write, read and accept socket operations
 	    private readonly SocketAsyncEventArgsPool _readPool;
 	    private readonly SocketAsyncEventArgsPool _writePool;
@@ -60,6 +63,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			_serverListenPort = 6666;
 			_maxNumberReadClients = new Semaphore (numConnections, numConnections);
 			_maxNumberWriteClients = new Semaphore (numConnections, numConnections);
+			_numOfReceivedMessages = 0;
+			_numOfSentMessages = 0;
 		}
 
 		// Initializes the server by preallocating reusable buffers and 
@@ -188,7 +193,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 
 			// As soon as the client is connected, post a receive to the connection
-			var willRaiseEvent = _listenSocket.ReceiveAsync(readEventArgs);
+			var willRaiseEvent = _listenSocket.ReceiveMessageFromAsync(readEventArgs);
 			if(!willRaiseEvent){
 				// operation completed synchronously
 				ProcessReceive(readEventArgs);
@@ -235,7 +240,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 			// fire event
 			OnDatagramReceived (data);
-
+			Interlocked.Increment (ref _numOfReceivedMessages);
+			Console.WriteLine ("MSG Rec : {0}", _numOfReceivedMessages);
 			// put the SocketAsyncEventArg object back onto the stack for later usage
 			_readPool.Push(e);
 			// release the semaphore
@@ -257,6 +263,8 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		// <param name="e"></param>
 		private void ProcessSend(SocketAsyncEventArgs e)
 		{
+			Interlocked.Increment (ref _numOfSentMessages);
+			//Console.WriteLine ("MSG Sent : {0}", _numOfSentMessages);
 			// sending done, reset buffer and free socketAsyncEventArg
 			//_writeBufferManager.SetBuffer (e);
 			_writePool.Push(e);
