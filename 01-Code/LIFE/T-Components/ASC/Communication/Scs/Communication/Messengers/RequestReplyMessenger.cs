@@ -92,7 +92,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         public RequestReplyMessenger(T messenger) {
             Messenger = messenger;
             messenger.MessageReceived += Messenger_MessageReceived;
-            messenger.MessageSent += Messenger_MessageSent;
+            //messenger.MessageSent += Messenger_MessageSent;
             _waitingMessages = new ConcurrentDictionary<string, WaitingMessage>();
             Timeout = DefaultTimeout;
         }

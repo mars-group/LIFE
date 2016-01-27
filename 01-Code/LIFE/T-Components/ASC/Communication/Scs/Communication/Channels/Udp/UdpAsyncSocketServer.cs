@@ -16,18 +16,15 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// </summary>
 		public event EventHandler<byte[]> DatagramReceived;
 
-		private readonly int _numConnections;   // the maximum number of connections the sample is designed to handle simultaneously 
-
-		private readonly Semaphore _maxNumberReadClients;
+		private readonly int _numReadConnections;   // the maximum number of connections the sample is designed to handle simultaneously 
+        private readonly int _numWriteConnections;
+        private readonly Semaphore _maxNumberReadClients;
 		private readonly Semaphore _maxNumberWriteClients;
 
         private readonly BufferManager _readBufferManager;  // represents a large reusable set of buffers for all socket operations
         private readonly BufferManager _writeBufferManager;
         private Socket _listenSocket;            // the socket used to listen for incoming connection requests
         private Socket _sendingSocket;			// the socket used to send datagrams
-
-		private int _numOfReceivedMessages;
-		private int _numOfSentMessages;
 
 		// pools of reusable SocketAsyncEventArgs objects for write, read and accept socket operations
 	    private readonly SocketAsyncEventArgsPool _readPool;
@@ -38,32 +35,33 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		private IPAddress _mcastAddress;
 
 		private Thread _listenThread;
-	    private int _receiveBufferSize;
+	    private readonly int _receiveBufferSize;
+
 
 	    // Create an uninitialized server instance.  
 		// To start the server listening for connection requests
 		// call the Init method followed by Start method 
 		//
-		// <param name="numConnections">the maximum number of connections the sample is designed to handle simultaneously</param>
+		// <param name="numReadConnections">the maximum number of connections the sample is designed to handle simultaneously</param>
 		// <param name="receiveBufferSize">buffer size to use for each socket I/O operation</param>
-		public UdpAsyncSocketServer(int numConnections=1, int receiveBufferSize=8192)
+		public UdpAsyncSocketServer(int numReadConnections=5, int numWriteConnections=10, int receiveBufferSize=8192)
 		{
-			_numConnections = numConnections;
-			_receiveBufferSize = receiveBufferSize;
+			_numReadConnections = numReadConnections;
+		    _numWriteConnections = numWriteConnections;
+
+            _receiveBufferSize = receiveBufferSize;
 			// allocate buffers such that the maximum number of sockets can have one outstanding read and 
 			//write posted to the socket simultaneously  
-			_readBufferManager = new BufferManager(receiveBufferSize * numConnections,
+			_readBufferManager = new BufferManager(receiveBufferSize * numReadConnections,
 				receiveBufferSize);
-			_writeBufferManager = new BufferManager(receiveBufferSize * numConnections,
+			_writeBufferManager = new BufferManager(receiveBufferSize * numWriteConnections,
 				receiveBufferSize);
 
-			_readPool = new SocketAsyncEventArgsPool(numConnections);
-			_writePool = new SocketAsyncEventArgsPool(numConnections);
+			_readPool = new SocketAsyncEventArgsPool(numReadConnections);
+			_writePool = new SocketAsyncEventArgsPool(numReadConnections);
 			_serverListenPort = 6666;
-			_maxNumberReadClients = new Semaphore (numConnections, numConnections);
-			_maxNumberWriteClients = new Semaphore (numConnections, numConnections);
-			_numOfReceivedMessages = 0;
-			_numOfSentMessages = 0;
+			_maxNumberReadClients = new Semaphore (numReadConnections, numReadConnections);
+			_maxNumberWriteClients = new Semaphore (numWriteConnections, numWriteConnections);
 		}
 
 		// Initializes the server by preallocating reusable buffers and 
@@ -76,10 +74,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			// Allocates one large byte buffer which all I/O operations use a piece of.  This gaurds 
 			// against memory fragmentation
 			_readBufferManager.InitBuffer();
-
+            _writeBufferManager.InitBuffer();
 			// preallocate pool of SocketAsyncEventArgs objects
 
-		    for (var i = 0; i < _numConnections; i++)
+		    for (var i = 0; i < _numReadConnections; i++)
 			{
 				//Pre-allocate a set of reusable SocketAsyncEventArgs
 				var readEventArg = new SocketAsyncEventArgs();
@@ -92,19 +90,20 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 				// add SocketAsyncEventArg to the pool
 				_readPool.Push(readEventArg);
 			}
-
-		    for (var i = 0; i < _numConnections; i++)
+            
+		    for (var i = 0; i < _numWriteConnections; i++)
 			{
 				//Pre-allocate a set of reusable SocketAsyncEventArgs
 				var writeEventArg = new SocketAsyncEventArgs();
 				writeEventArg.Completed += IO_Completed;
 
 				// assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
-				//_writeBufferManager.SetBuffer(writeEventArg);
+				_writeBufferManager.SetBuffer(writeEventArg);
 
 				// add SocketAsyncEventArg to the pool
 				_writePool.Push(writeEventArg);
 			}
+            
 
 		}
 
@@ -141,10 +140,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			// create the socket(s) we will use to send
 			var localAddress = MulticastNetworkUtils.GetAllMulticastInterfaces().First().GetIPProperties().UnicastAddresses
 				.First(elem => elem.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily(IPVersionType.IPv4));
-			
-			_sendingSocket = new Socket(localEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-		    _sendingSocket.SendBufferSize = _receiveBufferSize;
-			var sendingStartPort = _serverListenPort + 1;
+
+		    _sendingSocket = new Socket(localEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp)
+		    {
+		        SendBufferSize = _receiveBufferSize
+		    };
+		    var sendingStartPort = _serverListenPort + 1;
 
 			BindSendingSocket(localAddress.Address, sendingStartPort);
 
@@ -171,9 +172,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			var writeEventArgs = _writePool.Pop();
 			// send to provided multicastaddress and serverListenPort
 			writeEventArgs.RemoteEndPoint = new IPEndPoint (_mcastAddress, _serverListenPort);
-			// set Buffer to messageToSend byte[]
-			writeEventArgs.SetBuffer(messageToSend, 0, messageToSend.Length);
-
+            // set Buffer to messageToSend byte[]
+            writeEventArgs.SetBuffer(writeEventArgs.Offset, messageToSend.Length);
+            Buffer.BlockCopy(messageToSend, 0, writeEventArgs.Buffer, writeEventArgs.Offset, messageToSend.Length);
+            
             // Start actual send operation
 			var willRaiseEvent = _sendingSocket.SendToAsync (writeEventArgs);
 			if (!willRaiseEvent) {
@@ -189,22 +191,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			// Pop a SocketAsyncEventArgs object from the stack
 			var readEventArgs = _readPool.Pop();
 
-
-
 			// As soon as the client is connected, post a receive to the connection
 			var willRaiseEvent = _listenSocket.ReceiveFromAsync(readEventArgs);
 			if(!willRaiseEvent){
 				// operation completed synchronously
 				ProcessReceive(readEventArgs);
 			}
-
-			/*
-			 *  catch (SocketException sex)
-				{
-					if (sex.ErrorCode != 10004 && sex.ErrorCode != 10060) throw;
-				}
-			 */
-
 			// Accept the next connection request
 			Receive();
 		}
@@ -239,8 +231,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 			// fire event
 			OnDatagramReceived (data);
-			Interlocked.Increment (ref _numOfReceivedMessages);
-			Console.WriteLine ("MSG Rec : {0}", _numOfReceivedMessages);
+
 			// put the SocketAsyncEventArg object back onto the stack for later usage
 			_readPool.Push(e);
 			// release the semaphore
@@ -262,10 +253,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		// <param name="e"></param>
 		private void ProcessSend(SocketAsyncEventArgs e)
 		{
-			Interlocked.Increment (ref _numOfSentMessages);
-			//Console.WriteLine ("MSG Sent : {0}", _numOfSentMessages);
 			// sending done, reset buffer and free socketAsyncEventArg
-			//_writeBufferManager.SetBuffer (e);
 			_writePool.Push(e);
 			// release the semaphore
 			_maxNumberWriteClients.Release();
