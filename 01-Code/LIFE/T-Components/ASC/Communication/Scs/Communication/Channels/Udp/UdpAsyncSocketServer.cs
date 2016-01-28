@@ -44,7 +44,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		//
 		// <param name="numReadConnections">the maximum number of connections the sample is designed to handle simultaneously</param>
 		// <param name="receiveBufferSize">buffer size to use for each socket I/O operation</param>
-		public UdpAsyncSocketServer(int numReadConnections=5, int numWriteConnections=10, int receiveBufferSize=8192)
+		public UdpAsyncSocketServer(int numReadConnections=10, int numWriteConnections=10, int receiveBufferSize=8192)
 		{
 			_numReadConnections = numReadConnections;
 		    _numWriteConnections = numWriteConnections;
@@ -175,10 +175,13 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             // set Buffer to messageToSend byte[]
 		    try
 		    {
-               // Console.WriteLine("Offset : {0} , Count : {1} , Buffersize: {2}", writeEventArgs.Offset, messageToSend.Length, writeEventArgs.Buffer.Length);
-                writeEventArgs.SetBuffer(writeEventArgs.Offset, messageToSend.Length);
-		        Buffer.BlockCopy(messageToSend, 0, writeEventArgs.Buffer, writeEventArgs.Offset, messageToSend.Length);
-
+				if(messageToSend.Length > _receiveBufferSize) {
+					throw new ArgumentOutOfRangeException();
+				}
+				// set buffer to new length
+               	writeEventArgs.SetBuffer(writeEventArgs.Offset, messageToSend.Length);
+				// copy message into buffer
+		      	Buffer.BlockCopy(messageToSend, 0, writeEventArgs.Buffer, writeEventArgs.Offset, messageToSend.Length);
 		    }
 		    catch (ArgumentOutOfRangeException)
 		    {

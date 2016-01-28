@@ -13,12 +13,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 	internal class BufferManager
 	{
 	    private readonly int _numBytes;                 // the total number of bytes controlled by the buffer pool
-		private byte[] _buffer;                // the underlying byte array maintained by the Buffer Manager
+		private byte[] _buffer;                			// the underlying byte array maintained by the Buffer Manager
 	    private readonly Stack<int> _freeIndexPool;     // 
 		private int _currentIndex;
 	    private readonly int _bufferSize;
-
-	    private object _synclock;
 
 		public BufferManager(int totalBytes, int bufferSize)
 		{
@@ -26,7 +24,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			_currentIndex = 0;
 			_bufferSize = bufferSize;
 			_freeIndexPool = new Stack<int>();
-		    _synclock = new object();
 		}
 
 		// Allocates buffer space used by the buffer pool

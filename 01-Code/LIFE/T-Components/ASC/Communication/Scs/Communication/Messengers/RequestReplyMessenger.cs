@@ -67,6 +67,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         #endregion
 
         #region Private fields
+		private int resent_counter = 0;
 
         /// <summary>
         ///     Default Timeout value.
@@ -181,7 +182,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             //Create a waiting message record and add to list
             var waitingMessage = new WaitingMessage();
 
-            _waitingMessages[message.MessageId] = waitingMessage;
+			_waitingMessages.AddOrUpdate (message.MessageId, waitingMessage, (key, oldMsg) => waitingMessage);
 
             try
             {
@@ -189,13 +190,16 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 Messenger.SendMessage(message);
 
                 //Wait for response
-                waitingMessage.WaitEvent.Wait(timeoutMilliseconds);
+                waitingMessage.WaitEvent.Wait(750);
 
                 //Check for exceptions
                 switch (waitingMessage.State)
                 {
                     case WaitingMessageStates.WaitingForResponse:
-                        throw new TimeoutException("Timeout occured. Can not receive response.");
+                        // timeout, so resend
+					//Interlocked.Increment(ref resent_counter);
+					//Console.WriteLine("T/O : {0}, Resent: {1}", timeout, resent_counter);
+						return SendMessageAndWaitForResponse(message, timeoutMilliseconds);
                     case WaitingMessageStates.Cancelled:
                         throw new CommunicationException("Disconnected before response received.");
                 }
@@ -207,7 +211,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             {
                 //Remove message from waiting messages
                 WaitingMessage delMessage;
-                if (_waitingMessages.ContainsKey(message.MessageId)) _waitingMessages.TryRemove(message.MessageId, out delMessage);
+				_waitingMessages.TryRemove(message.MessageId, out delMessage);
 
             }
         }

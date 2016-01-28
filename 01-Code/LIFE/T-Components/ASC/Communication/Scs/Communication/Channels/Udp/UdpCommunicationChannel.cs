@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Communication.Messages;
-using MulticastAdapter.Implementation;
-using MulticastAdapter.Interface.Config.Types;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
@@ -127,7 +119,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// <param name="datagram">Datagram.</param>
 		void On_DatagramReceived (object sender, byte[] datagram)
 		{
-		    var msg = (IAscMessage) new BinaryFormatter().Deserialize(new MemoryStream(datagram));
+		    var msg = (IAscMessage) _binaryFormatter.Deserialize(new MemoryStream(datagram));
 	        OnMessageReceived(msg);
 		}
 	}
