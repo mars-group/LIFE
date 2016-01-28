@@ -43,7 +43,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		// <returns>true if the buffer was successfully set, else false</returns>
 		public bool SetBuffer(SocketAsyncEventArgs args)
 		{
-            lock (_synclock) { 
+
 			    if (_freeIndexPool.Count > 0)
 			    {
 				    args.SetBuffer(_buffer, _freeIndexPool.Pop(), _bufferSize);
@@ -58,18 +58,17 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 				    _currentIndex += _bufferSize;
 			    }
 			    return true;
-            }
+            
         }
 
 		// Removes the buffer from a SocketAsyncEventArg object.  
 		// This frees the buffer back to the buffer pool
 		public void FreeBuffer(SocketAsyncEventArgs args)
 		{
-		    lock (_synclock)
-		    {
+
 		        _freeIndexPool.Push(args.Offset);
 		        args.SetBuffer(null, 0, 0);
-		    }
+		    
 		}
 
 	}

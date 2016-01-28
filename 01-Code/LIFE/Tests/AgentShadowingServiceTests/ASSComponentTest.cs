@@ -19,7 +19,7 @@ namespace AgentShadowingServiceTests
         private List<MockAgent> _agentsB;
 
 
-        private const int AgentsPerNode = 10000;
+        private const int AgentsPerNode = 500;
 
         [SetUp]
         public void SetupTest() {
@@ -61,7 +61,7 @@ namespace AgentShadowingServiceTests
             Console.WriteLine(sw.ElapsedMilliseconds);
         }
 
-		[Test,RequiresMTA]
+		[Test]
         public void TestCommunication()
         {
             var port = 6666;

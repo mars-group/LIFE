@@ -173,9 +173,18 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			// send to provided multicastaddress and serverListenPort
 			writeEventArgs.RemoteEndPoint = new IPEndPoint (_mcastAddress, _serverListenPort);
             // set Buffer to messageToSend byte[]
-            writeEventArgs.SetBuffer(writeEventArgs.Offset, messageToSend.Length);
-            Buffer.BlockCopy(messageToSend, 0, writeEventArgs.Buffer, writeEventArgs.Offset, messageToSend.Length);
-            
+		    try
+		    {
+               // Console.WriteLine("Offset : {0} , Count : {1} , Buffersize: {2}", writeEventArgs.Offset, messageToSend.Length, writeEventArgs.Buffer.Length);
+                writeEventArgs.SetBuffer(writeEventArgs.Offset, messageToSend.Length);
+		        Buffer.BlockCopy(messageToSend, 0, writeEventArgs.Buffer, writeEventArgs.Offset, messageToSend.Length);
+
+		    }
+		    catch (ArgumentOutOfRangeException)
+		    {
+                Console.WriteLine("Offset + Count were larger than buffersize");
+            }
+
             // Start actual send operation
 			var willRaiseEvent = _sendingSocket.SendToAsync (writeEventArgs);
 			if (!willRaiseEvent) {
