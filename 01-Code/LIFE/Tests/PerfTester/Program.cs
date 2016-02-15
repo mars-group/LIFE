@@ -1,4 +1,12 @@
-﻿using System;
+﻿//  /*******************************************************
+//  * Copyright (C) Christian Hüning - All Rights Reserved
+//  * Unauthorized copying of this file, via any medium is strictly prohibited
+//  * Proprietary and confidential
+//  * This file is part of the MARS LIFE project, which is part of the MARS System
+//  * More information under: http://www.mars-group.org
+//  * Written by Christian Hüning <christianhuening@gmail.com>, 26.01.2016
+//  *******************************************************/
+using System;
 using System.Collections.Generic;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Server;
