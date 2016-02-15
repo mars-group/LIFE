@@ -7,7 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
@@ -19,7 +18,7 @@ using VisualizationAdapter.Interface;
 
 
 namespace RTEManager.Implementation {
-    public class RTEManagerComponent : IRTEManager {
+	public class RTEManagerComponent : IRTEManager {
         private readonly IRTEManager _rteManagerUseCase;
 
         public RTEManagerComponent(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
@@ -49,6 +48,10 @@ namespace RTEManager.Implementation {
             return _rteManagerUseCase.InitializeLayer(instanceId, initData);
         }
 
+		public void DisposeSuitableLayers ()
+		{
+			_rteManagerUseCase.DisposeSuitableLayers ();
+		}
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
             return _rteManagerUseCase.GetAllTickClientsByLayer(layer);

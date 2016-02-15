@@ -36,6 +36,10 @@ namespace RuntimeEnvironment.Implementation.Entities {
             return _layerContainer.ServiceProxy.Tick();
         }
 
+		public void CleanUp(){
+			_layerContainer.ServiceProxy.CleanUp ();
+		}
+
         public ILayerContainer Proxy {
             get { return _layerContainer.ServiceProxy; }
         }

@@ -78,6 +78,11 @@ namespace RTEManager.Interfaces {
         /// <returns>The milliseconds the last tick took to execute.</returns>
         long AdvanceOneTick();
 
+		/// <summary>
+		/// Calls DisposeLayer on all IDisposableLayer layers.
+		/// </summary>
+		void DisposeSuitableLayers();
+
         // TODO: Information methods needed!
     }
 }

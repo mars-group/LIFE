@@ -107,6 +107,10 @@ namespace RuntimeEnvironment.Implementation
 				DoStep(i);
 
             }
+
+			// clean up after simulation, by calling DisposeLayer on all IDisposableLayers
+			CleanUp();
+
 			sw.Stop();
 
 			var stb = new StringBuilder ();
@@ -142,6 +146,10 @@ namespace RuntimeEnvironment.Implementation
 			var stb = new StringBuilder ();
 			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
 			_rabbitMQWriter.SendMessage(stb.ToString());
+		}
+
+		private void CleanUp(){
+			Parallel.ForEach<LayerContainerClient> (_layerContainerClients, lc => lc.CleanUp());
 		}
 
 		public void StepSimulation(int? nrOfTicks = null) {

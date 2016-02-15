@@ -18,12 +18,13 @@ using LifeAPI.Layer.Visualization;
 using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
+using LifeAPI;
 
 [assembly: InternalsVisibleTo("RTEManagerBlackBoxTest")]
 
 namespace RTEManager.Implementation {
 
-    internal class RTEManagerUseCase : IRTEManager {
+	internal class RTEManagerUseCase : IRTEManager {
         private readonly IVisualizationAdapterInternal _visualizationAdapter;
 
         // the tickClients being executed per Layer
@@ -39,7 +40,10 @@ namespace RTEManager.Implementation {
         private readonly IDictionary<TLayerInstanceId, ILayer> _layers;
 
         // all layers which are enlisted for Pre- and PostTick calls
-        private readonly List<ISteppedActiveLayer> _preAndPostTickLayer;
+        private readonly ConcurrentBag<ISteppedActiveLayer> _preAndPostTickLayer;
+
+		// all layers which are enlisted for Pre- and PostTick calls
+		private readonly ConcurrentBag<IDisposableLayer> _disposableLayers;
 
         // indicator whether this Layercontainer ist currently executing a Tick
         private bool _isRunning;
@@ -51,7 +55,8 @@ namespace RTEManager.Implementation {
         public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
             _visualizationAdapter = visualizationAdapter;
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
-            _preAndPostTickLayer = new List<ISteppedActiveLayer>();
+            _preAndPostTickLayer = new ConcurrentBag<ISteppedActiveLayer>();
+			_disposableLayers = new ConcurrentBag<IDisposableLayer> ();
             _tickClientsMarkedForDeletionPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _tickClientsMarkedForRegistrationPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
@@ -88,6 +93,12 @@ namespace RTEManager.Implementation {
             if (activeLayer != null) {
                 _preAndPostTickLayer.Add(activeLayer);
             }
+
+			// add layer to Disposable execution chain if it is an IDisposableLayer
+			IDisposableLayer disposableLayer = layer as IDisposableLayer;
+			if (disposableLayer != null) {
+				_disposableLayers.Add (disposableLayer);
+			}
         }
 
         public void UnregisterLayer(TLayerInstanceId layerInstanceId) {
@@ -113,6 +124,11 @@ namespace RTEManager.Implementation {
         public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
             return _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
         }
+
+		public void DisposeSuitableLayers ()
+		{
+			Parallel.ForEach (_disposableLayers, dl => dl.DisposeLayer ());
+		}
 
         public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
             return _tickClientsPerLayer[_layers[layer]].Keys;

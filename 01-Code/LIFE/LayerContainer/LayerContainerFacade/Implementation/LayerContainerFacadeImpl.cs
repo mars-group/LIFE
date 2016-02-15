@@ -23,7 +23,7 @@ using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 
 namespace LayerContainerFacade.Implementation {
-    internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
+	internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
         private readonly IPartitionManager _partitionManager;
         private readonly IRTEManager _rteManager;
         private readonly IVisualizationAdapterPublic _visualizationAdapter;
@@ -67,6 +67,11 @@ namespace LayerContainerFacade.Implementation {
         public long Tick() {
             return _rteManager.AdvanceOneTick();
         }
+
+		public void CleanUp ()
+		{
+			_rteManager.DisposeSuitableLayers ();
+		}
 
         public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 

@@ -47,6 +47,12 @@ namespace LCConnector {
         /// <exception cref="Exceptions.LayerNotInitializedException">If one of the layers not yet initialized.</exception>
         long Tick();
 
+		/// <summary>
+		/// Cleans up all Layers which implement the IDisposableLayer 
+		/// interface.
+		/// </summary>
+		void CleanUp();
+
         event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         /// <summary>
