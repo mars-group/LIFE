@@ -41,7 +41,6 @@ namespace LayerContainerFacade.Implementation {
             _partitionManager = partitionManager;
             _rteManager = rteManager;
             _visualizationAdapter = visualizationAdapter;
-            _visualizationAdapter.VisualizationUpdated += _visualizationAdapterInternalUseCase_VisualizationUpdated;
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
             _server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);

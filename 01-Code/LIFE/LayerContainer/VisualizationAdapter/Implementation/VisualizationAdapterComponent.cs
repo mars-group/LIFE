@@ -18,8 +18,6 @@ namespace VisualizationAdapter.Implementation {
 
         public VisualizationAdapterComponent() {
             _visualizationAdapterInternalUseCase = new VisualizationAdapterUseCase();
-            _visualizationAdapterInternalUseCase.VisualizationUpdated +=
-                _visualizationAdapterInternalUseCase_VisualizationUpdated;
         }
 
         #region IVisualizationAdapterInternal Members

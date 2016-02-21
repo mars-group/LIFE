@@ -15,11 +15,6 @@ namespace VisualizationAdapter.Interface {
     /// The public interface of the VisualizationAdapter
     /// </summary>
     public interface IVisualizationAdapterPublic {
-        /// <summary>
-        /// An event indicating that the Visualization has been updated.
-        /// The event args will contain all changes.
-        /// </summary>
-        event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         /// <summary>
         /// Starts the visualization. Takes optional parameter to 

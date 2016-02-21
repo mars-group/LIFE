@@ -27,8 +27,6 @@ namespace VisualizationAdapter.Implementation {
 
         #region IVisualizationAdapterInternal Members
 
-        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
-
         public void VisualizeTick(int currentTick) {
             if (!_isRunning) return;
             if (_tickVisualizationIntervall.HasValue && currentTick%_tickVisualizationIntervall != 0) return;
@@ -38,10 +36,7 @@ namespace VisualizationAdapter.Implementation {
                 (_visualizables.Keys,
                     vis => {
                         // Get data from Layers
-                        List<BasicVisualizationMessage> visMessages = vis.GetVisData();
-
-                        // Raise Event for everbody locally interested
-                        OnRaiseVisualizationUpdated(visMessages);
+                        List<string> visMessages = vis.GetVisData();
 
                         // Send via Queue if possible
                         // TODO : Send to Queue
@@ -71,15 +66,5 @@ namespace VisualizationAdapter.Implementation {
         }
 
         #endregion
-
-        private void OnRaiseVisualizationUpdated(List<BasicVisualizationMessage> visMessages) {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            EventHandler<List<BasicVisualizationMessage>> handler = VisualizationUpdated;
-
-            // Event will be null if there are no subscribers
-            if (handler != null) handler(this, visMessages);
-        }
     }
 }

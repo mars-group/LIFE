@@ -6,9 +6,8 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Collections.Generic;
-using GeoAPI.Geometries;
-using LIFEViewProtocol.Basics;
 
 namespace LifeAPI.Layer.Visualization {
     /// <summary>
@@ -17,17 +16,14 @@ namespace LifeAPI.Layer.Visualization {
     public interface IVisualizableLayer : ILayer {
 
         /// <summary>
-        ///     Returns every entity in the whole environment
+        /// Returns a List of approriately formatted JSON strings. The format is as defined as:
+        /// "{{"AgentID":"{0}","            // GUID of this agent.
+        /// "AgentType":"{1}","             // Derived class type.
+        /// "Position":[{2},{3},{4}],"      // Agent position (x,y,z).
+        /// "Orientation":[{5},{6},{7}],"   // Rotation as (yaw,pitch,roll).
+        /// "DisplayParams":{{{8}}}}}",     // Additional agent information.
         /// </summary>
         /// <returns>A list of everything visualizable in the whole environment, empty list if nothing is present</returns>
-        List<BasicVisualizationMessage> GetVisData();
-
-        /// <summary>
-        ///     Returns every entity which is associated with the intersection of the provided geometry
-        ///     and the environment
-        /// </summary>
-        /// <param name="geometry">The geometry to intersect with.</param>
-        /// <returns>A list of everything visualizable in the whole environment, empty list if nothing is present</returns>
-        List<BasicVisualizationMessage> GetVisData(IGeometry geometry);
+        List<string> GetVisData();
     }
 }
