@@ -77,7 +77,7 @@ namespace RTEManager.Implementation {
             }
 
             // check layer for visualizability and if true register it with the adapter
-            var visualizableLayer = layer as IVisualizable;
+            var visualizableLayer = layer as IVisualizableLayer;
             if (visualizableLayer != null) {
                 _visualizationAdapter.RegisterVisualizable(visualizableLayer);
             }
@@ -115,11 +115,6 @@ namespace RTEManager.Implementation {
         public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
             if (!_isRunning) {
                 _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
-                var visTickClient = tickClient as IVisualizable;
-                if (visTickClient != null)
-                {
-                    _visualizationAdapter.RegisterVisualizable(visTickClient);
-                }
             }
             else {
                 _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
@@ -186,11 +181,6 @@ namespace RTEManager.Implementation {
                             tickClientToBeRemoved => {
                                 byte trash;
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
-                                var visTickClient = tickClientToBeRemoved as IVisualizable;
-                                if (visTickClient != null)
-                                {
-                                    _visualizationAdapter.DeRegisterVisualizable(visTickClient);
-                                }
                             })
                 );
 
@@ -203,14 +193,8 @@ namespace RTEManager.Implementation {
                         (
                             _tickClientsMarkedForRegistrationPerLayer[layer],
                             tickClientToBeRegistered =>
-                            {
-                                var visTickClient = tickClientToBeRegistered as IVisualizable;
-                                if (visTickClient != null)
-                                {
-                                    _visualizationAdapter.RegisterVisualizable(visTickClient);
-                                }
-                                _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte());
-                            })
+                                _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte())
+                            )
                 );
 
             // reset collections

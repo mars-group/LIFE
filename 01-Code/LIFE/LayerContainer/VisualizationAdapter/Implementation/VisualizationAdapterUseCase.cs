@@ -16,12 +16,12 @@ using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation {
     internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
-        private readonly ConcurrentDictionary<IVisualizable, byte> _visualizables;
+        private readonly ConcurrentDictionary<IVisualizableLayer, byte> _visualizables;
         private bool _isRunning;
         private int? _tickVisualizationIntervall;
 
         public VisualizationAdapterUseCase() {
-            _visualizables = new ConcurrentDictionary<IVisualizable, byte>();
+            _visualizables = new ConcurrentDictionary<IVisualizableLayer, byte>();
             _isRunning = false;
         }
 
@@ -48,10 +48,10 @@ namespace VisualizationAdapter.Implementation {
                     });
         }
 
-        public void RegisterVisualizable(IVisualizable visualizable) {
-            _visualizables.TryAdd(visualizable, new byte());
+        public void RegisterVisualizable(IVisualizableLayer visualizableLayer) {
+            _visualizables.TryAdd(visualizableLayer, new byte());
         }
-        public void DeRegisterVisualizable(IVisualizable visTickClient)
+        public void DeRegisterVisualizable(IVisualizableLayer visTickClient)
         {
             byte bla;
             _visualizables.TryRemove(visTickClient, out bla);

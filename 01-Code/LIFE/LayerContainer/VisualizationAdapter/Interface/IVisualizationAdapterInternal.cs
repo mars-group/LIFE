@@ -16,10 +16,10 @@ namespace VisualizationAdapter.Interface {
     public interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {
 
         /// <summary>
-        /// Registers a new visualizable component
+        /// Registers a new visualizableLayer component
         /// </summary>
-        /// <param name="visualizable">The IVisualizable object to be visualized.</param>
-        void RegisterVisualizable(IVisualizable visualizable);
+        /// <param name="visualizableLayer">The IVisualizableLayer object to be visualized.</param>
+        void RegisterVisualizable(IVisualizableLayer visualizableLayer);
 
         /// <summary>
         /// Visualizes one tick.
@@ -28,9 +28,9 @@ namespace VisualizationAdapter.Interface {
         void VisualizeTick(int currentTick);
 
         /// <summary>
-        /// De-Registers a visualizable component
+        /// De-Registers a visualizableLayer component
         /// </summary>
         /// <param name="visTickClient"></param>
-        void DeRegisterVisualizable(IVisualizable visTickClient);
+        void DeRegisterVisualizable(IVisualizableLayer visTickClient);
     }
 }

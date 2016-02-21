@@ -38,15 +38,15 @@ namespace VisualizationAdapter.Implementation {
             _visualizationAdapterInternalUseCase.ChangeVisualizationView(topLeft, topRight, bottomLeft, bottomRight);
         }
 
-        public void RegisterVisualizable(IVisualizable visualizable) {
-            _visualizationAdapterInternalUseCase.RegisterVisualizable(visualizable);
+        public void RegisterVisualizable(IVisualizableLayer visualizableLayer) {
+            _visualizationAdapterInternalUseCase.RegisterVisualizable(visualizableLayer);
         }
 
         public void VisualizeTick(int currentTick) {
             _visualizationAdapterInternalUseCase.VisualizeTick(currentTick);
         }
 
-        public void DeRegisterVisualizable(IVisualizable visTickClient)
+        public void DeRegisterVisualizable(IVisualizableLayer visTickClient)
         {
             _visualizationAdapterInternalUseCase.DeRegisterVisualizable(visTickClient);
         }

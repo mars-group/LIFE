@@ -33,7 +33,7 @@ namespace RTEManagerBlackBoxTest.Mocks
          
         }
 
-        public void RegisterVisualizable(IVisualizable visualizable)
+        public void RegisterVisualizable(IVisualizableLayer visualizableLayer)
         {
            
         }
@@ -43,7 +43,7 @@ namespace RTEManagerBlackBoxTest.Mocks
            
         }
 
-        public void DeRegisterVisualizable(IVisualizable visTickClient)
+        public void DeRegisterVisualizable(IVisualizableLayer visTickClient)
         {
             
         }

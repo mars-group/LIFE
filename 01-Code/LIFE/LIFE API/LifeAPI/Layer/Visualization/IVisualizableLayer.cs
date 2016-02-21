@@ -14,7 +14,7 @@ namespace LifeAPI.Layer.Visualization {
     /// <summary>
     ///     Implement this interface if you want your Layer to be visualized after each tick
     /// </summary>
-    public interface IVisualizable {
+    public interface IVisualizableLayer : ILayer {
 
         /// <summary>
         ///     Returns every entity in the whole environment
