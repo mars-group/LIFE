@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using GeoAPI.Geometries;
 using LIFEViewProtocol.Basics;
-using LIFEViewProtocol.Helper;
 
 namespace LifeAPI.Layer.Visualization {
     /// <summary>

@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LifeAPI.Layer.Visualization;
@@ -15,12 +16,12 @@ using VisualizationAdapter.Interface;
 
 namespace VisualizationAdapter.Implementation {
     internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
-        private readonly List<IVisualizable> _visualizables;
+        private readonly ConcurrentDictionary<IVisualizable, byte> _visualizables;
         private bool _isRunning;
         private int? _tickVisualizationIntervall;
 
         public VisualizationAdapterUseCase() {
-            _visualizables = new List<IVisualizable>();
+            _visualizables = new ConcurrentDictionary<IVisualizable, byte>();
             _isRunning = false;
         }
 
@@ -34,7 +35,7 @@ namespace VisualizationAdapter.Implementation {
 
 
             Parallel.ForEach
-                (_visualizables,
+                (_visualizables.Keys,
                     vis => {
                         // Get data from Layers
                         List<BasicVisualizationMessage> visMessages = vis.GetVisData();
@@ -48,7 +49,12 @@ namespace VisualizationAdapter.Implementation {
         }
 
         public void RegisterVisualizable(IVisualizable visualizable) {
-            _visualizables.Add(visualizable);
+            _visualizables.TryAdd(visualizable, new byte());
+        }
+        public void DeRegisterVisualizable(IVisualizable visTickClient)
+        {
+            byte bla;
+            _visualizables.TryRemove(visTickClient, out bla);
         }
 
         public void StartVisualization(int? nrOfTicksToVisualize = null) {

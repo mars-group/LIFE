@@ -46,6 +46,11 @@ namespace VisualizationAdapter.Implementation {
             _visualizationAdapterInternalUseCase.VisualizeTick(currentTick);
         }
 
+        public void DeRegisterVisualizable(IVisualizable visTickClient)
+        {
+            _visualizationAdapterInternalUseCase.DeRegisterVisualizable(visTickClient);
+        }
+
         #endregion
 
         private void _visualizationAdapterInternalUseCase_VisualizationUpdated

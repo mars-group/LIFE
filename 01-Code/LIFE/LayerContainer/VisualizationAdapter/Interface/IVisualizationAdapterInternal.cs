@@ -16,7 +16,7 @@ namespace VisualizationAdapter.Interface {
     public interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {
 
         /// <summary>
-        /// Registers a new visualizable  compoenent
+        /// Registers a new visualizable component
         /// </summary>
         /// <param name="visualizable">The IVisualizable object to be visualized.</param>
         void RegisterVisualizable(IVisualizable visualizable);
@@ -26,5 +26,11 @@ namespace VisualizationAdapter.Interface {
         /// </summary>
         /// <param name="currentTick">The current tick. Needed for sanity check.</param>
         void VisualizeTick(int currentTick);
+
+        /// <summary>
+        /// De-Registers a visualizable component
+        /// </summary>
+        /// <param name="visTickClient"></param>
+        void DeRegisterVisualizable(IVisualizable visTickClient);
     }
 }

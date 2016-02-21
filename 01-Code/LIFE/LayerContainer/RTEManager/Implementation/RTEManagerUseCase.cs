@@ -77,25 +77,25 @@ namespace RTEManager.Implementation {
             }
 
             // check layer for visualizability and if true register it with the adapter
-            IVisualizable visualizableLayer = layer as IVisualizable;
+            var visualizableLayer = layer as IVisualizable;
             if (visualizableLayer != null) {
                 _visualizationAdapter.RegisterVisualizable(visualizableLayer);
             }
 
             // add layer to tickClientsPerLayer if it is an active layer
-            ITickClient tickedLayer = layer as ITickClient;
+            var tickedLayer = layer as ITickClient;
             if (tickedLayer != null) {
                 _tickClientsPerLayer[layer].TryAdd(tickedLayer, new byte());
             }
 
             // add layer to Pre- and PostTick execution chain if it is an ISteppedActiveLayer
-            ISteppedActiveLayer activeLayer = layer as ISteppedActiveLayer;
+            var activeLayer = layer as ISteppedActiveLayer;
             if (activeLayer != null) {
                 _preAndPostTickLayer.Add(activeLayer);
             }
 
 			// add layer to Disposable execution chain if it is an IDisposableLayer
-			IDisposableLayer disposableLayer = layer as IDisposableLayer;
+			var disposableLayer = layer as IDisposableLayer;
 			if (disposableLayer != null) {
 				_disposableLayers.Add (disposableLayer);
 			}
@@ -115,6 +115,11 @@ namespace RTEManager.Implementation {
         public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
             if (!_isRunning) {
                 _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
+                var visTickClient = tickClient as IVisualizable;
+                if (visTickClient != null)
+                {
+                    _visualizationAdapter.RegisterVisualizable(visTickClient);
+                }
             }
             else {
                 _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
@@ -137,7 +142,7 @@ namespace RTEManager.Implementation {
         public long AdvanceOneTick() {
             _isRunning = true;
 
-            Stopwatch stopWatch = Stopwatch.StartNew();
+            var stopWatch = Stopwatch.StartNew();
 
             // set currentTick to all layers
             Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
@@ -181,6 +186,11 @@ namespace RTEManager.Implementation {
                             tickClientToBeRemoved => {
                                 byte trash;
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
+                                var visTickClient = tickClientToBeRemoved as IVisualizable;
+                                if (visTickClient != null)
+                                {
+                                    _visualizationAdapter.DeRegisterVisualizable(visTickClient);
+                                }
                             })
                 );
 
@@ -193,7 +203,14 @@ namespace RTEManager.Implementation {
                         (
                             _tickClientsMarkedForRegistrationPerLayer[layer],
                             tickClientToBeRegistered =>
-                                _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte()))
+                            {
+                                var visTickClient = tickClientToBeRegistered as IVisualizable;
+                                if (visTickClient != null)
+                                {
+                                    _visualizationAdapter.RegisterVisualizable(visTickClient);
+                                }
+                                _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte());
+                            })
                 );
 
             // reset collections

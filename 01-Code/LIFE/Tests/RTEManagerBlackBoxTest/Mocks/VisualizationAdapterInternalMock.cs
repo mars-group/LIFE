@@ -42,5 +42,10 @@ namespace RTEManagerBlackBoxTest.Mocks
         {
            
         }
+
+        public void DeRegisterVisualizable(IVisualizable visTickClient)
+        {
+            
+        }
     }
 }
