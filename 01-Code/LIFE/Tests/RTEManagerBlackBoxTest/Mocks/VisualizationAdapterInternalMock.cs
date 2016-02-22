@@ -14,7 +14,7 @@ using VisualizationAdapter.Interface;
 
 namespace RTEManagerBlackBoxTest.Mocks
 {
-    class VisualizationAdapterInternalMock : IVisualizationAdapterInternal
+	class VisualizationAdapterInternalMock : IVisualizationAdapterInternal
     {
        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
@@ -33,19 +33,22 @@ namespace RTEManagerBlackBoxTest.Mocks
          
         }
 
-        public void RegisterVisualizable(IVisualizableLayer visualizableLayer)
-        {
-           
-        }
+
+
 
         public void VisualizeTick(int currentTick)
         {
            
         }
 
-        public void DeRegisterVisualizable(IVisualizableLayer visTickClient)
-        {
-            
-        }
+
+		public void RegisterVisualizable (LifeAPI.Layer.ILayer layer, IVisualizableAgent visAgent)
+		{
+
+		}
+		public void DeRegisterVisualizable (LifeAPI.Layer.ILayer layer, IVisualizableAgent visAgent)
+		{
+
+		}
     }
 }
