@@ -10,18 +10,18 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LifeAPI.Layer.Visualization;
-using LIFEViewProtocol.Basics;
 using VisualizationAdapter.Interface;
+using LifeAPI.Layer.Visualization;
+using LifeAPI.Layer;
 
 namespace VisualizationAdapter.Implementation {
-    internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
-        private readonly ConcurrentDictionary<IVisualizableLayer, byte> _visualizables;
+	internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
+		private readonly ConcurrentDictionary<ILayer, ConcurrentDictionary<IVisualizableAgent, byte>> _visualizablesPerLayer;
         private bool _isRunning;
         private int? _tickVisualizationIntervall;
 
         public VisualizationAdapterUseCase() {
-            _visualizables = new ConcurrentDictionary<IVisualizableLayer, byte>();
+			_visualizablesPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<IVisualizableAgent, byte>>();
             _isRunning = false;
         }
 
@@ -33,24 +33,40 @@ namespace VisualizationAdapter.Implementation {
 
 
             Parallel.ForEach
-                (_visualizables.Keys,
+                (_visualizablesPerLayer,
                     vis => {
-                        // Get data from Layers
-                        List<string> visMessages = vis.GetVisData();
+					// store layer name
+					var layerName = vis.Key.GetType().Name;
+					Parallel.ForEach(vis.Value.Keys, _visAgent => {
+						var jsonStrig =_visAgent.GetVisualizationJson();
+						// Send via Queue if possible
+						// TODO : Send to Queue
+						// DoSend(buildPackage(layer,jsonString));
+					});
 
-                        // Send via Queue if possible
-                        // TODO : Send to Queue
-                    });
+                });
         }
 
-        public void RegisterVisualizable(IVisualizableLayer visualizableLayer) {
-            _visualizables.TryAdd(visualizableLayer, new byte());
-        }
-        public void DeRegisterVisualizable(IVisualizableLayer visTickClient)
-        {
-            byte bla;
-            _visualizables.TryRemove(visTickClient, out bla);
-        }
+		public void RegisterVisualizable (ILayer layer, IVisualizableAgent visAgent)
+		{
+			ConcurrentDictionary<IVisualizableAgent, byte> agentList;
+			if (_visualizablesPerLayer.TryGetValue (layer, out agentList)) {
+				agentList.TryAdd(visAgent, new byte());
+			} else {
+				agentList = new ConcurrentDictionary<IVisualizableAgent, byte>();
+				agentList.TryAdd(visAgent, new byte());
+				_visualizablesPerLayer.TryAdd (layer, agentList);
+			}
+		}
+
+		public void DeRegisterVisualizable (ILayer layer, IVisualizableAgent visAgent)
+		{
+			ConcurrentDictionary<IVisualizableAgent, byte> agentBag;
+			if (_visualizablesPerLayer.TryGetValue (layer, out agentBag)) {
+				byte bla;
+				agentBag.TryRemove(visAgent, out bla);
+			}
+		}
 
         public void StartVisualization(int? nrOfTicksToVisualize = null) {
             _tickVisualizationIntervall = nrOfTicksToVisualize;

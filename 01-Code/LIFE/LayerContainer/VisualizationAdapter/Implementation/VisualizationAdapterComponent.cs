@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using LifeAPI.Layer.Visualization;
 using LIFEViewProtocol.Basics;
 using VisualizationAdapter.Interface;
+using LifeAPI.Layer;
 
 namespace VisualizationAdapter.Implementation {
     public class VisualizationAdapterComponent : IVisualizationAdapterInternal {
@@ -36,17 +37,17 @@ namespace VisualizationAdapter.Implementation {
             _visualizationAdapterInternalUseCase.ChangeVisualizationView(topLeft, topRight, bottomLeft, bottomRight);
         }
 
-        public void RegisterVisualizable(IVisualizableLayer visualizableLayer) {
-            _visualizationAdapterInternalUseCase.RegisterVisualizable(visualizableLayer);
+		public void RegisterVisualizable(ILayer layer, IVisualizableAgent visAgent) {
+			_visualizationAdapterInternalUseCase.RegisterVisualizable(layer, visAgent);
         }
 
         public void VisualizeTick(int currentTick) {
             _visualizationAdapterInternalUseCase.VisualizeTick(currentTick);
         }
 
-        public void DeRegisterVisualizable(IVisualizableLayer visTickClient)
+		public void DeRegisterVisualizable(ILayer layer, IVisualizableAgent visAgent)
         {
-            _visualizationAdapterInternalUseCase.DeRegisterVisualizable(visTickClient);
+			_visualizationAdapterInternalUseCase.DeRegisterVisualizable(layer,visAgent);
         }
 
         #endregion

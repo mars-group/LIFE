@@ -76,12 +76,6 @@ namespace RTEManager.Implementation {
                 _layers.Add(layerInstanceId, layer);
             }
 
-            // check layer for visualizability and if true register it with the adapter
-            var visualizableLayer = layer as IVisualizableLayer;
-            if (visualizableLayer != null) {
-                _visualizationAdapter.RegisterVisualizable(visualizableLayer);
-            }
-
             // add layer to tickClientsPerLayer if it is an active layer
             var tickedLayer = layer as ITickClient;
             if (tickedLayer != null) {
@@ -181,7 +175,14 @@ namespace RTEManager.Implementation {
                             tickClientToBeRemoved => {
                                 byte trash;
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
-                            })
+								
+								// remove tickClient from visualization if type is appropiate
+								var visAgent = tickClientToBeRemoved as IVisualizableAgent;
+								if(visAgent != null){
+									_visualizationAdapter.DeRegisterVisualizable(layer, visAgent);
+								}
+						    }
+						)
                 );
 
 
@@ -192,9 +193,16 @@ namespace RTEManager.Implementation {
                     layer => Parallel.ForEach
                         (
                             _tickClientsMarkedForRegistrationPerLayer[layer],
-                            tickClientToBeRegistered =>
-                                _tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte())
-                            )
+							tickClientToBeRegistered => {								
+								_tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte());
+
+								// add tickClient to visualization if type is appropiate
+								var visAgent = tickClientToBeRegistered as IVisualizableAgent;
+								if(visAgent != null){
+									_visualizationAdapter.RegisterVisualizable(layer, visAgent);
+								}
+							}
+                        )
                 );
 
             // reset collections

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using LifeAPI.Agent;
+﻿using LifeAPI.Agent;
 
 namespace LifeAPI.Layer.Visualization
 {
-    public interface IVisualizableAgent : IAgent
+	/// <summary>
+	/// Implement this interface, if you want your Agent to be visualized
+	/// during execution.
+	/// </summary>
+	public interface IVisualizableAgent : ITickClient
     {
         /// <summary>
         /// Returns an appropiately formatted JSON string

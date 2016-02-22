@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using LifeAPI.Layer.Visualization;
+using LifeAPI.Layer;
 
 namespace VisualizationAdapter.Interface {
 
@@ -19,7 +20,7 @@ namespace VisualizationAdapter.Interface {
         /// Registers a new visualizableLayer component
         /// </summary>
         /// <param name="visualizableLayer">The IVisualizableLayer object to be visualized.</param>
-        void RegisterVisualizable(IVisualizableLayer visualizableLayer);
+        void RegisterVisualizable(ILayer layer, IVisualizableAgent visAgent);
 
         /// <summary>
         /// Visualizes one tick.
@@ -31,6 +32,6 @@ namespace VisualizationAdapter.Interface {
         /// De-Registers a visualizableLayer component
         /// </summary>
         /// <param name="visTickClient"></param>
-        void DeRegisterVisualizable(IVisualizableLayer visTickClient);
+		void DeRegisterVisualizable(ILayer layer, IVisualizableAgent visAgent);
     }
 }

@@ -132,7 +132,7 @@ namespace AgentShadowingServiceTests
             ServiceID = ID;
         }
 
-        public Guid ID { get; }
+		public Guid ID { get; private set;}
 
         public int DoCrazyShit() {
             return 42;
