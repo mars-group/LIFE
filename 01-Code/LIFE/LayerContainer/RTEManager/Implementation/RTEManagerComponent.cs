@@ -21,7 +21,7 @@ namespace RTEManager.Implementation {
 	public class RTEManagerComponent : IRTEManager {
         private readonly IRTEManager _rteManagerUseCase;
 
-        public RTEManagerComponent(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
+        public RTEManagerComponent(IVisualizationAdapter visualizationAdapter, INodeRegistry nodeRegistry) {
             _rteManagerUseCase = new RTEManagerUseCase(visualizationAdapter, nodeRegistry);
         }
 

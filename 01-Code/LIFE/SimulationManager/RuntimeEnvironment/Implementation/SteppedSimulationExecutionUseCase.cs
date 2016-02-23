@@ -181,15 +181,6 @@ namespace RuntimeEnvironment.Implementation
 			_simulationTask.Wait ();
 		}
 
-        public void StartVisualization(int? nrOfTicksToVisualize) {
-            Parallel.ForEach(_layerContainerClients, l => l.Proxy.StartVisualization(nrOfTicksToVisualize));
-        }
-
-        public void StopVisualization()
-        {
-            Parallel.ForEach(_layerContainerClients, l => l.Proxy.StopVisualization());
-        }
-
 		private int GetUnixTimeStamp(){
 			return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 		}

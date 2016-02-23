@@ -26,7 +26,6 @@ namespace LayerContainerFacade.Implementation {
 	internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
         private readonly IPartitionManager _partitionManager;
         private readonly IRTEManager _rteManager;
-        private readonly IVisualizationAdapterPublic _visualizationAdapter;
         private IScsServiceApplication _server;
 
 
@@ -35,12 +34,11 @@ namespace LayerContainerFacade.Implementation {
             (LayerContainerSettings settings,
                 IPartitionManager partitionManager,
                 IRTEManager rteManager,
-                IVisualizationAdapterInternal visualizationAdapter) {
+                IVisualizationAdapter visualizationAdapter) {
 
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
             _partitionManager = partitionManager;
             _rteManager = rteManager;
-            _visualizationAdapter = visualizationAdapter;
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
             _server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
@@ -72,27 +70,8 @@ namespace LayerContainerFacade.Implementation {
 			_rteManager.DisposeSuitableLayers ();
 		}
 
-        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
-
-        public void StartVisualization(int? nrOfTicksToVisualize = null) {
-            _visualizationAdapter.StartVisualization(nrOfTicksToVisualize);
-        }
-
-        public void StopVisualization() {
-            _visualizationAdapter.StopVisualization();
-        }
-
-
-        public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
-            _visualizationAdapter.ChangeVisualizationView(topLeft, topRight, bottomRight, bottomLeft);
-        }
-
         #endregion
 
-        private void _visualizationAdapterInternalUseCase_VisualizationUpdated
-            (object sender, List<BasicVisualizationMessage> e) {
-            VisualizationUpdated(sender, e);
-        }
 
 
     }

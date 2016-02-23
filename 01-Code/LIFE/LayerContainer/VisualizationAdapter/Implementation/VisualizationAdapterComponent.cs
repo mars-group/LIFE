@@ -14,8 +14,8 @@ using VisualizationAdapter.Interface;
 using LifeAPI.Layer;
 
 namespace VisualizationAdapter.Implementation {
-    public class VisualizationAdapterComponent : IVisualizationAdapterInternal {
-        private readonly IVisualizationAdapterInternal _visualizationAdapterInternalUseCase;
+    public class VisualizationAdapterComponent : IVisualizationAdapter {
+        private readonly IVisualizationAdapter _visualizationAdapterInternalUseCase;
 
         public VisualizationAdapterComponent() {
             _visualizationAdapterInternalUseCase = new VisualizationAdapterUseCase();
@@ -24,18 +24,6 @@ namespace VisualizationAdapter.Implementation {
         #region IVisualizationAdapterInternal Members
 
         public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
-
-        public void StartVisualization(int? nrOfTicksToVisualize = null) {
-            _visualizationAdapterInternalUseCase.StartVisualization(nrOfTicksToVisualize);
-        }
-
-        public void StopVisualization() {
-            _visualizationAdapterInternalUseCase.StopVisualization();
-        }
-
-        public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
-            _visualizationAdapterInternalUseCase.ChangeVisualizationView(topLeft, topRight, bottomLeft, bottomRight);
-        }
 
 		public void RegisterVisualizable(ILayer layer, IVisualizableAgent visAgent) {
 			_visualizationAdapterInternalUseCase.RegisterVisualizable(layer, visAgent);
@@ -52,9 +40,5 @@ namespace VisualizationAdapter.Implementation {
 
         #endregion
 
-        private void _visualizationAdapterInternalUseCase_VisualizationUpdated
-            (object sender, List<BasicVisualizationMessage> e) {
-            VisualizationUpdated(sender, e);
-        }
     }
 }

@@ -8,29 +8,22 @@
 //  *******************************************************/
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using VisualizationAdapter.Interface;
 using LifeAPI.Layer.Visualization;
 using LifeAPI.Layer;
 
 namespace VisualizationAdapter.Implementation {
-	internal class VisualizationAdapterUseCase : IVisualizationAdapterInternal {
+	internal class VisualizationAdapterUseCase : IVisualizationAdapter {
 		private readonly ConcurrentDictionary<ILayer, ConcurrentDictionary<IVisualizableAgent, byte>> _visualizablesPerLayer;
-        private bool _isRunning;
-        private int? _tickVisualizationIntervall;
 
-        public VisualizationAdapterUseCase() {
+		public VisualizationAdapterUseCase() {
 			_visualizablesPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<IVisualizableAgent, byte>>();
-            _isRunning = false;
         }
 
         #region IVisualizationAdapterInternal Members
 
         public void VisualizeTick(int currentTick) {
-            if (!_isRunning) return;
-            if (_tickVisualizationIntervall.HasValue && currentTick%_tickVisualizationIntervall != 0) return;
-
 
             Parallel.ForEach
                 (_visualizablesPerLayer,
@@ -67,19 +60,6 @@ namespace VisualizationAdapter.Implementation {
 				agentBag.TryRemove(visAgent, out bla);
 			}
 		}
-
-        public void StartVisualization(int? nrOfTicksToVisualize = null) {
-            _tickVisualizationIntervall = nrOfTicksToVisualize;
-            _isRunning = true;
-        }
-
-        public void StopVisualization() {
-            _isRunning = false;
-        }
-
-        public void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight) {
-            throw new NotImplementedException();
-        }
 
         #endregion
     }

@@ -121,27 +121,7 @@ namespace RuntimeEnvironment.Implementation {
 
             _steppedSimulations[model].Abort();
         }
-
-        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
-            if (_steppedSimulations.ContainsKey(model)) {
-                _steppedSimulations[model].StartVisualization(nrOfTicksToVisualize);
-            }
-            else {
-                throw new SimulationHasNotBeenStartedException
-                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
-            }
-        }
-
-        public void StopVisualization(TModelDescription model) {
-            if (_steppedSimulations.ContainsKey(model))
-            {
-                _steppedSimulations[model].StopVisualization();
-            }
-            else {
-                throw new SimulationHasNotBeenStartedException
-                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
-            }
-        }
+			
 
 		public void WaitForSimulationToFinish (TModelDescription model)
 		{

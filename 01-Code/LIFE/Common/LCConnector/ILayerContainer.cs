@@ -6,12 +6,9 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
-using System.Collections.Generic;
 using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
-using LIFEViewProtocol.Basics;
 
 namespace LCConnector {
     /// <summary>
@@ -53,25 +50,5 @@ namespace LCConnector {
 		/// </summary>
 		void CleanUp();
 
-        event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
-
-        /// <summary>
-        ///     Starts visualization of the simulation
-        /// </summary>
-        void StartVisualization(int? nrOfTicksToVisualize);
-
-        /// <summary>
-        ///     Stops visualization of the simulation
-        /// </summary>
-        void StopVisualization();
-
-        /// <summary>
-        ///     Changes the view of the visualization
-        /// </summary>
-        /// <param name="topLeft">The top left coordinate of the new view</param>
-        /// <param name="topRight">The top right coordinate of the new view</param>
-        /// <param name="bottomLeft">The bottom left coordinate of the new view</param>
-        /// <param name="bottomRight">The bottom right coordinate of the new view</param>
-        void ChangeVisualizationView(double topLeft, double topRight, double bottomLeft, double bottomRight);
     }
 }

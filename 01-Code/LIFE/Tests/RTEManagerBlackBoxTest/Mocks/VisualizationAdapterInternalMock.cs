@@ -14,7 +14,7 @@ using VisualizationAdapter.Interface;
 
 namespace RTEManagerBlackBoxTest.Mocks
 {
-	class VisualizationAdapterInternalMock : IVisualizationAdapterInternal
+	class VisualizationAdapterInternalMock : IVisualizationAdapter
     {
        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 

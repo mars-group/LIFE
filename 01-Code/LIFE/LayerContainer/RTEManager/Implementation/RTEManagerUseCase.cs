@@ -25,7 +25,7 @@ using LifeAPI;
 namespace RTEManager.Implementation {
 
 	internal class RTEManagerUseCase : IRTEManager {
-        private readonly IVisualizationAdapterInternal _visualizationAdapter;
+        private readonly IVisualizationAdapter _visualizationAdapter;
 
         // the tickClients being executed per Layer
         private readonly IDictionary<ILayer, ConcurrentDictionary<ITickClient, byte>> _tickClientsPerLayer;
@@ -52,7 +52,7 @@ namespace RTEManager.Implementation {
         private int _currentTick;
 
 
-        public RTEManagerUseCase(IVisualizationAdapterInternal visualizationAdapter, INodeRegistry nodeRegistry) {
+        public RTEManagerUseCase(IVisualizationAdapter visualizationAdapter, INodeRegistry nodeRegistry) {
             _visualizationAdapter = visualizationAdapter;
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
             _preAndPostTickLayer = new ConcurrentBag<ISteppedActiveLayer>();

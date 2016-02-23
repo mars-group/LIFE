@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using log4net;
 
+
 [assembly: InternalsVisibleTo("MulticastAdapterTestProject")]
 
 namespace ConfigurationAdapter.Interface {

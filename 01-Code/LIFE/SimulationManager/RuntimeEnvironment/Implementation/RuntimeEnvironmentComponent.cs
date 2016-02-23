@@ -47,14 +47,6 @@ namespace RuntimeEnvironment.Implementation {
             _runtimeEnvironmentUseCase.Abort(model);
         }
 
-        public void StartVisualization(TModelDescription model, int? nrOfTicksToVisualize = null) {
-            _runtimeEnvironmentUseCase.StartVisualization(model, nrOfTicksToVisualize);
-        }
-
-        public void StopVisualization(TModelDescription model) {
-            _runtimeEnvironmentUseCase.StopVisualization(model);
-        }
-
 		public void WaitForSimulationToFinish (TModelDescription model)
 		{
 			_runtimeEnvironmentUseCase.WaitForSimulationToFinish (model);

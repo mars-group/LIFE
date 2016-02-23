@@ -14,7 +14,7 @@ namespace VisualizationAdapter.Interface {
     /// <summary>
     /// The internal interface for the visualization adapter. Its method's won't be avaibale via the ILayercontainer interface.
     /// </summary>
-    public interface IVisualizationAdapterInternal : IVisualizationAdapterPublic {
+    public interface IVisualizationAdapter {
 
         /// <summary>
         /// Registers a new visualizableLayer component

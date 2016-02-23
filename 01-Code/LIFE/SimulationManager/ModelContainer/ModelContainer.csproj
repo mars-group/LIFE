@@ -58,9 +58,6 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\Libraries\zip-v1.9\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
@@ -71,8 +68,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.220\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.238\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
