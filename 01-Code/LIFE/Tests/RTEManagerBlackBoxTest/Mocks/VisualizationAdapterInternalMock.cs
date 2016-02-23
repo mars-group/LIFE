@@ -16,6 +16,15 @@ namespace RTEManagerBlackBoxTest.Mocks
 {
 	class VisualizationAdapterInternalMock : IVisualizationAdapter
     {
+		public Guid SimulationId {
+			get {
+				return Guid.NewGuid ();
+			}
+			set {
+
+			}
+		}
+
        public event EventHandler<List<BasicVisualizationMessage>> VisualizationUpdated;
 
         public void StartVisualization(int? nrOfTicksToVisualize = null)

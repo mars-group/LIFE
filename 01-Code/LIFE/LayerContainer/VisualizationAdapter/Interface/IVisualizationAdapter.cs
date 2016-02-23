@@ -8,6 +8,7 @@
 //  *******************************************************/
 using LifeAPI.Layer.Visualization;
 using LifeAPI.Layer;
+using System;
 
 namespace VisualizationAdapter.Interface {
 
@@ -15,6 +16,11 @@ namespace VisualizationAdapter.Interface {
     /// The internal interface for the visualization adapter. Its method's won't be avaibale via the ILayercontainer interface.
     /// </summary>
     public interface IVisualizationAdapter {
+
+		Guid SimulationId {
+			get;
+			set;
+		}
 
         /// <summary>
         /// Registers a new visualizableLayer component

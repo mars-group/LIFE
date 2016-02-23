@@ -19,6 +19,7 @@ using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 using VisualizationAdapter.Interface;
 using LifeAPI;
+using System;
 
 [assembly: InternalsVisibleTo("RTEManagerBlackBoxTest")]
 
@@ -50,6 +51,8 @@ namespace RTEManager.Implementation {
 
         // current Tick
         private int _currentTick;
+
+		private Guid _simulationId;
 
 
         public RTEManagerUseCase(IVisualizationAdapter visualizationAdapter, INodeRegistry nodeRegistry) {
@@ -116,6 +119,13 @@ namespace RTEManager.Implementation {
         }
 
         public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+			if (_simulationId == Guid.Empty) {
+				// store simulationID
+				_simulationId = initData.SimulationId;
+				// deliver simulationID to VisulizationAdapter
+				_visualizationAdapter.SimulationId = _simulationId;
+			}
+			// Initialize Layer
             return _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
         }
 

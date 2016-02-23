@@ -14,8 +14,17 @@ using VisualizationAdapter.Interface;
 using LifeAPI.Layer;
 
 namespace VisualizationAdapter.Implementation {
-    public class VisualizationAdapterComponent : IVisualizationAdapter {
+	public class VisualizationAdapterComponent : IVisualizationAdapter {
         private readonly IVisualizationAdapter _visualizationAdapterInternalUseCase;
+
+		public Guid SimulationId {
+			get {
+				return _visualizationAdapterInternalUseCase.SimulationId;
+			}
+			set {
+				_visualizationAdapterInternalUseCase.SimulationId = value;
+			}
+		}
 
         public VisualizationAdapterComponent() {
             _visualizationAdapterInternalUseCase = new VisualizationAdapterUseCase();

@@ -15,6 +15,14 @@ using LifeAPI.Layer;
 
 namespace VisualizationAdapter.Implementation {
 	internal class VisualizationAdapterUseCase : IVisualizationAdapter {
+
+		/// <summary>
+		/// The SimulationID. 
+		/// It will be set before the first call to VisualizeTick().
+		/// </summary>
+		/// <value>The simulation identifier.</value>
+		public Guid SimulationId { get; set; }
+
 		private readonly ConcurrentDictionary<ILayer, ConcurrentDictionary<IVisualizableAgent, byte>> _visualizablesPerLayer;
 
 		public VisualizationAdapterUseCase() {
