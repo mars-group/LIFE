@@ -78,15 +78,27 @@ namespace LCConnector.TransportTypes {
         /// <param name="agentInitParameters">Optional parameterinformation about how and from where
         ///     to initialize the agent's constructor parameters.</param>
         /// <param name="getMarsCubeUrl"></param>
-        public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
+        public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, int shadowAgentAmount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null)
         {
-            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters, marsCubeUrl, marsCubeName));
+            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, shadowAgentAmount, realAgentIds, shadowAgentsIds, agentInitParameters));
         }
 
+		/// <summary>
+		/// Adds a GisInitConfig to the configuration.
+		/// </summary>
+		/// <param name="GisSourceUrl">Gis source URL.</param>
+		/// <param name="layerNames">Layer names.</param>
         public void AddGisInitConfig(string GisSourceUrl, string[] layerNames) {
             GisInitInfo = new GisInitConfig(GisSourceUrl, layerNames);
         }
 
+		/// <summary>
+		/// Adds a TimeSeriesInitConfig
+		/// </summary>
+		/// <param name="tableName">Table name.</param>
+		/// <param name="databaseColumnName">Database column name.</param>
+		/// <param name="clearColumnName">Clear column name.</param>
+		/// <param name="timeSeriesStartTime">Time series start time.</param>
 		public void AddTimeSeriesInitConfig(string tableName, string databaseColumnName, string clearColumnName,
             DateTime timeSeriesStartTime = default(DateTime)) {
 			TimeSeriesInitInfo = new TimeSeriesInitConfig(tableName, databaseColumnName, clearColumnName, timeSeriesStartTime);
@@ -145,15 +157,33 @@ namespace LCConnector.TransportTypes {
     [Serializable]
     public class GisInitConfig 
     {
+		/// <summary>
+		/// The GIS source url used to retreive the gis file
+		/// </summary>
+		/// <value>The gis source URL.</value>
         public string GisSourceUrl { get; set; }
-        public string[] LayerNames { get; set; }
+        
+		/// <summary>
+		/// The names of all layers the gis source is valid for.
+		/// </summary>
+		/// <value>The layer names.</value>
+		public string[] LayerNames { get; set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LCConnector.TransportTypes.GisInitConfig"/> class.
+		/// </summary>
+		/// <param name="gisSourceUrl">Gis source URL.</param>
+		/// <param name="layerNames">Layer names.</param>
         public GisInitConfig(string gisSourceUrl, string[] layerNames) {
             GisSourceUrl = gisSourceUrl;
             LayerNames = layerNames;
         }
     }
 
+	/// <summary>
+	/// Agent init config.
+	/// Used in the AgentManager to instantiate agents.
+	/// </summary>
     [Serializable]
     public class AgentInitConfig
     {
@@ -162,6 +192,10 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public string AgentName { get; set; }
 
+		/// <summary>
+		/// The full name of the agent.
+		/// </summary>
+		/// <value>The name of the agent full.</value>
         public string AgentFullName { get; set; }
 
         /// <summary>
@@ -185,22 +219,22 @@ namespace LCConnector.TransportTypes {
         public Guid[] ShadowAgentsIds { get; set; }
 
         /// <summary>
-        /// The URL connection string for the MARS CUBE
-        /// </summary>
-        public string MarsCubeUrl { get; set; }
-
-        /// <summary>
-        /// The name of the specific cube in MARS ROCK to be used for initialization
-        /// </summary>
-        public string MarsCubeName { get; set; }
-
-        /// <summary>
         /// Constructor call parameters and information about where to get the data from
         /// Check this for null, prior to using it!
         /// </summary>
         public List<IAtConstructorParameter> AgentInitParameters { get; set; }
 
-        public AgentInitConfig(string agentName, string agentFullName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null, string marsCubeUrl = null, string marsCubeName = null)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LCConnector.TransportTypes.AgentInitConfig"/> class.
+		/// </summary>
+		/// <param name="agentName">Agent name.</param>
+		/// <param name="agentFullName">Agent full name.</param>
+		/// <param name="agentCount">Agent count.</param>
+		/// <param name="shadowAgentCount">Shadow agent count.</param>
+		/// <param name="realAgentIds">Real agent identifiers.</param>
+		/// <param name="shadowAgentsIds">Shadow agents identifiers.</param>
+		/// <param name="agentInitParameters">Agent init parameters.</param>
+        public AgentInitConfig(string agentName, string agentFullName, int agentCount, int shadowAgentCount, Guid[] realAgentIds, Guid[] shadowAgentsIds, List<IAtConstructorParameter> agentInitParameters = null)
         {
             AgentName = agentName;
             AgentFullName = agentFullName;
@@ -209,8 +243,6 @@ namespace LCConnector.TransportTypes {
             ShadowAgentsIds = shadowAgentsIds;
             AgentInitParameters = agentInitParameters;
             RealAgentIds = realAgentIds;
-            MarsCubeUrl = marsCubeUrl;
-            MarsCubeName = marsCubeName;
         }
 
 

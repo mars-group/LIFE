@@ -327,9 +327,7 @@ namespace RuntimeEnvironment.Implementation {
                             agentConfig.GetClassName(),
                             agentConfig.GetFullName(),
                             agentCount, 0, ids, new Guid[0],
-                            agentConfig.GetFieldToConstructorArgumentRelations(),
-                            "rock.mars.haw-hamburg.de",
-                            shuttleSimConfig.GetMarsCubeName()
+                            agentConfig.GetFieldToConstructorArgumentRelations()
                             );
                     }
                 }
