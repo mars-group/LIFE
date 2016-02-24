@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Text;
 using LifeAPI.Agent;
 using LCConnector.TransportTypes;
+using MySql.Data.MySqlClient;
 
 
 namespace AgentManagerService.Implementation
@@ -44,14 +45,15 @@ namespace AgentManagerService.Implementation
 			var marsConfigService = new ConfigServiceClient("http://marsconfig:8080");
 
 			// retreive ip, port, user and password of mariaDB to us as ROCK instance
-			string rockIp = marsConfigService.Get("rock/ip");
-			int rockPort = int.Parse(marsConfigService.Get("rock/port"));
+			//string rockIp = marsConfigService.Get("rock/ip");
+			//int rockPort = int.Parse(marsConfigService.Get("rock/port"));
 			string rockUser = marsConfigService.Get("rock/serveruser");
 			string rockPassword = marsConfigService.Get("rock/serverpassword");
 
-			Drill.InitializeConnection(rockIp, rockUser, rockPassword, rockPort);
+			var connectionString = String.Format("Server={0};Uid={1};Pwd={2};","mariadbhost",rockUser,rockPassword);
 
-            var initParams = agentInitConfig.AgentInitParameters;
+			var mysqlConnection = new MySqlConnection (connectionString);
+			mysqlConnection.Open ();
 
             // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
             // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
@@ -72,82 +74,32 @@ namespace AgentManagerService.Implementation
                 throw new NotEnoughParametersProvidedException("There were not enough parameters provided in your SimConfig for Agent of type: " + agentType);
             }
 
-            // get Cube
-            var cube = Drill.GetCube(agentInitConfig.MarsCubeName);
 
-            // setup enumerators for cube parameters
-            var agentCubeParamArrays = new ConcurrentDictionary<string, object[]>();
+            // setup arrays for agent parameters
+			var agentDBParamArrays = new ConcurrentDictionary<string, string[]>();
 
-			Console.WriteLine ("Fetching CUBE Data...");
+			var initParams = agentInitConfig.AgentInitParameters;
 
-			// check if all dimensio names are the same, because in that case we only need to get the cube once
-			var prefetchData = true;
-			var dimensionNames = (from IAtConstructorParameter param 
-								  in initParams
-			                      where param.GetParameterType ()
-			                          == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation
-			                      select param.GetFieldToConstructorArgumentRelation ().MarsTableName);
-			
-			var firstDimension = dimensionNames.First();
-			// if there is any dimension by another name, don't prefetch data
-			if(dimensionNames.Any(dimension => dimension != firstDimension)){
-				prefetchData = false;
-			}
-
-			DataTable data = new DataTable();
-			if (prefetchData) {
-				Console.WriteLine ("Prefetching, all Dimensions are the same...");
-				data = cube.GetData
-				(new List<Dimension> {
-					cube.Dimensions.FirstOrDefault
-					(d =>
-							d.CleanName == firstDimension
-						||
-							d.Name == firstDimension)
-				});
-			}
-
-			//Parallel.ForEach (initParams, (param) => {
-			foreach(var param in initParams){
+			Parallel.ForEach (initParams, param => {
 				if (param.GetParameterType ()
 				    == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
 					var initInfo = param.GetFieldToConstructorArgumentRelation ();
 
 					// check if we already have this enumerator
-					if (!agentCubeParamArrays.ContainsKey (initInfo.MarsDBColumnName)) {
-
-						// fetch needed dimension from cube if not already prefetched
-						if (!prefetchData) {
-							data = cube.GetData
-                            (new List<Dimension> {
-								cube.Dimensions.FirstOrDefault
-                                        (d =>
-                                            d.CleanName == initInfo.MarsTableName
-                                ||
-								d.Name == initInfo.MarsTableName)
-							});
+					if (!agentDBParamArrays.ContainsKey (initInfo.MarsDBColumnName)) {
+						var sqlQuery = String.Format ("SELECT {0} FROM imports.{1}", initInfo.MarsDBColumnName, initInfo.MarsTableName);
+						var cmd = new MySqlCommand (sqlQuery, mysqlConnection);
+						var reader = cmd.ExecuteReader ();
+						List<string> values = new List<string> ();
+						while (reader.Read ()) {
+							values.Add (reader.GetString (initInfo.MarsDBColumnName));	
 						}
-
-						// get real column name from CleanName
-						var columnName = cube.Dimensions.FirstOrDefault
-                            (d =>
-                                d.CleanName == initInfo.MarsTableName
-                                         || d.Name == initInfo.MarsTableName)
-                            .Attributes.FirstOrDefault (a => a.CleanName == initInfo.MarsDBColumnName)
-                            .Name;
-
-						// create enumerators for data retrieval and store values in arrays
-						var values = (from DataRow dr 
-									  in data.Rows.AsParallel().AsOrdered()
-						              where !(dr [columnName] is DBNull)
-						              select dr [columnName])
-							.ToArray ();
-						agentCubeParamArrays.TryAdd (initInfo.MarsDBColumnName, values);
+						agentDBParamArrays.TryAdd (initInfo.MarsDBColumnName, values.ToArray ());
 					}
 				}
-			}
+			});
 
-			Console.WriteLine ("Finished fetching CUBE data, Starting agent creation....");
+			Console.WriteLine ("Finished fetching DB data, Starting agent creation....");
 
             // get types for special parameters
             var layerType = typeof (ILayer);
@@ -218,7 +170,7 @@ namespace AgentManagerService.Implementation
 
 
 							// fetch parameter from ROCK CUBE
-							var paramValue = agentCubeParamArrays[initInfo.MarsDBColumnName][index];
+							var paramValue = agentDBParamArrays[initInfo.MarsDBColumnName][index];
 							// add param to actualParameters[]
 							try {
 								actualParameters.Add (GetParameterValue (paramType, (string)paramValue));
