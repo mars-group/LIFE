@@ -112,6 +112,11 @@ namespace RTEManager.Implementation {
         public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
             if (!_isRunning) {
                 _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
+				// add tickClient to visualization if type is appropriate
+				var visAgent = tickClient as IVisualizableAgent;
+				if(visAgent != null){
+					_visualizationAdapter.RegisterVisualizable(layer, visAgent);
+				}
             }
             else {
                 _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);

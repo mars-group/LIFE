@@ -34,6 +34,10 @@
     <DocumentationFile>bin\Release\LCConnector.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.1\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,9 +47,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.0.1.238\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
     <Reference Include="LIFEViewProtocol">
       <HintPath>..\..\packages\LIFEViewProtocol.0.9.0\lib\net45\LIFEViewProtocol.dll</HintPath>
@@ -87,6 +88,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

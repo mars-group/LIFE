@@ -305,7 +305,7 @@ namespace RuntimeEnvironment.Implementation {
                 {
                     var tsInfo = timeSeriesSourceEnumerator.Current;
 					// ToDo: Update with new SimConfig
-                    initData.AddTimeSeriesInitConfig(shuttleSimConfig.GetMarsCubeName(), tsInfo.DimensionName, tsInfo.ColumnName);
+                    initData.AddTimeSeriesInitConfig(tsInfo.DimensionName, tsInfo.DimensionName, tsInfo.ColumnName);
                     if (!timeSeriesSourceEnumerator.MoveNext())
                     {
                         thereAreTimeSeriesLayers = false;

@@ -86,7 +86,7 @@ namespace AgentManagerService.Implementation
 								  in initParams
 			                      where param.GetParameterType ()
 			                          == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation
-			                      select param.GetMarsCubeFieldToConstructorArgumentRelation ().MarsCubeDimensionName);
+			                      select param.GetFieldToConstructorArgumentRelation ().MarsTableName);
 			
 			var firstDimension = dimensionNames.First();
 			// if there is any dimension by another name, don't prefetch data
@@ -111,10 +111,10 @@ namespace AgentManagerService.Implementation
 			foreach(var param in initParams){
 				if (param.GetParameterType ()
 				    == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
-					var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation ();
+					var initInfo = param.GetFieldToConstructorArgumentRelation ();
 
 					// check if we already have this enumerator
-					if (!agentCubeParamArrays.ContainsKey (initInfo.MarsCubeDBColumnName)) {
+					if (!agentCubeParamArrays.ContainsKey (initInfo.MarsDBColumnName)) {
 
 						// fetch needed dimension from cube if not already prefetched
 						if (!prefetchData) {
@@ -122,18 +122,18 @@ namespace AgentManagerService.Implementation
                             (new List<Dimension> {
 								cube.Dimensions.FirstOrDefault
                                         (d =>
-                                            d.CleanName == initInfo.MarsCubeDimensionName
-								||
-								d.Name == initInfo.MarsCubeDimensionName)
+                                            d.CleanName == initInfo.MarsTableName
+                                ||
+								d.Name == initInfo.MarsTableName)
 							});
 						}
 
 						// get real column name from CleanName
 						var columnName = cube.Dimensions.FirstOrDefault
                             (d =>
-                                d.CleanName == initInfo.MarsCubeDimensionName
-						                 || d.Name == initInfo.MarsCubeDimensionName)
-                            .Attributes.FirstOrDefault (a => a.CleanName == initInfo.MarsCubeDBColumnName)
+                                d.CleanName == initInfo.MarsTableName
+                                         || d.Name == initInfo.MarsTableName)
+                            .Attributes.FirstOrDefault (a => a.CleanName == initInfo.MarsDBColumnName)
                             .Name;
 
 						// create enumerators for data retrieval and store values in arrays
@@ -142,7 +142,7 @@ namespace AgentManagerService.Implementation
 						              where !(dr [columnName] is DBNull)
 						              select dr [columnName])
 							.ToArray ();
-						agentCubeParamArrays.TryAdd (initInfo.MarsCubeDBColumnName, values);
+						agentCubeParamArrays.TryAdd (initInfo.MarsDBColumnName, values);
 					}
 				}
 			}
@@ -213,12 +213,12 @@ namespace AgentManagerService.Implementation
 						}
 
 						if (param.GetParameterType () == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
-							var initInfo = param.GetMarsCubeFieldToConstructorArgumentRelation ();
+							var initInfo = param.GetFieldToConstructorArgumentRelation ();
 							var paramType = Type.GetType (initInfo.ConstructorArgumentDatatype);
 
 
 							// fetch parameter from ROCK CUBE
-							var paramValue = agentCubeParamArrays[initInfo.MarsCubeDBColumnName][index];
+							var paramValue = agentCubeParamArrays[initInfo.MarsDBColumnName][index];
 							// add param to actualParameters[]
 							try {
 								actualParameters.Add (GetParameterValue (paramType, (string)paramValue));
