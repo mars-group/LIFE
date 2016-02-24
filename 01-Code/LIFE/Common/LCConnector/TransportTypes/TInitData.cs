@@ -87,31 +87,61 @@ namespace LCConnector.TransportTypes {
             GisInitInfo = new GisInitConfig(GisSourceUrl, layerNames);
         }
 
-        public void AddTimeSeriesInitConfig(string cubeName, string dimensionName, string columnName,
+		public void AddTimeSeriesInitConfig(string tableName, string databaseColumnName, string clearColumnName,
             DateTime timeSeriesStartTime = default(DateTime)) {
-            TimeSeriesInitInfo = new TimeSeriesInitConfig(cubeName, dimensionName, columnName, timeSeriesStartTime);
+			TimeSeriesInitInfo = new TimeSeriesInitConfig(tableName, databaseColumnName, clearColumnName, timeSeriesStartTime);
         }
     }
 
+	/// <summary>
+	/// Time series init config.
+	/// </summary>
     [Serializable]
     public class TimeSeriesInitConfig {
-        public string CubeName { get; set; }
-        public string DimensionName { get; set; }
-        public string ColumnName { get; set; }
+		/// <summary>
+		/// The name of the table inside the timeseries database
+		/// </summary>
+		/// <value>The name of the table.</value>
+        public string TableName { get; set; }
+
+		/// <summary>
+		/// The name of the column as present in the Database.
+		/// Use this to fetch data from the DB. 
+		/// </summary>
+		/// <value>The name of the database column.</value>
+        public string DatabaseColumnName { get; set; }
+
+		/// <summary>
+		/// The clear name of column.
+		/// Use this to present information to the user.
+		/// </summary>
+		/// <value>The name of the clear column.</value>
+		public string ClearColumnName { get; set;}
 
         /// <summary>
         /// Might not be set.
-        /// Check for NULL!
+		/// Check for default(DateTime)!
         /// </summary>
         private DateTime TimeSeriesStartTime { get; set; }
 
-        public TimeSeriesInitConfig(string cubeName, string dimensionName, string columnName, DateTime timeSeriesStartTime = default(DateTime)) {
-            CubeName = cubeName;
-            DimensionName = dimensionName;
-            ColumnName = columnName;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LCConnector.TransportTypes.TimeSeriesInitConfig"/> class.
+		/// </summary>
+		/// <param name="tableName">Table name in timeseries db.</param>
+		/// <param name="databaseColumnName">Database column name.</param>
+		/// <param name="clearColumnName">Clear column name. For enduser presentation only!</param>
+		/// <param name="timeSeriesStartTime">(Optional) Time series start time.</param>
+		public TimeSeriesInitConfig(string tableName, string databaseColumnName, string clearColumnName, DateTime timeSeriesStartTime = default(DateTime)) {
+            TableName = tableName;
+            DatabaseColumnName = databaseColumnName;
+			ClearColumnName = clearColumnName;
+			TimeSeriesStartTime = timeSeriesStartTime;
         }
     }
 
+	/// <summary>
+	/// Gis init config.
+	/// </summary>
     [Serializable]
     public class GisInitConfig 
     {
