@@ -304,8 +304,7 @@ namespace RuntimeEnvironment.Implementation {
                 else if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
                 {
                     var tsInfo = timeSeriesSourceEnumerator.Current;
-					// ToDo: Update with new SimConfig
-                    initData.AddTimeSeriesInitConfig(tsInfo.DimensionName, tsInfo.DimensionName, tsInfo.ColumnName);
+                    initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
                     if (!timeSeriesSourceEnumerator.MoveNext())
                     {
                         thereAreTimeSeriesLayers = false;

@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.2\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -68,9 +72,6 @@
     <Reference Include="PowerCollections">
       <HintPath>..\..\packages\NetTopologySuite.1.14\lib\net45\PowerCollections.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.1\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Data.dll</HintPath>
