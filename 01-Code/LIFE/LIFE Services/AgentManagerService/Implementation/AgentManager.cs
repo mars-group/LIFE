@@ -52,8 +52,7 @@ namespace AgentManagerService.Implementation
 
 			var connectionString = String.Format("Server={0};Uid={1};Pwd={2};","mariadbhost",rockUser,rockPassword);
 
-			var mysqlConnection = new MySqlConnection (connectionString);
-			mysqlConnection.Open ();
+
 
             // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
             // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
@@ -81,23 +80,29 @@ namespace AgentManagerService.Implementation
 			var initParams = agentInitConfig.AgentInitParameters;
 
 			Parallel.ForEach (initParams, param => {
-				if (param.GetParameterType ()
-				    == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
-					var initInfo = param.GetFieldToConstructorArgumentRelation ();
+			    if (param.GetParameterType() !=
+			        AtConstructorParameter.AtConstructorParameterType
+			            .MarsCubeFieldToConstructorArgumentRelation) return;
 
-					// check if we already have this enumerator
-					if (!agentDBParamArrays.ContainsKey (initInfo.MarsDBColumnName)) {
-						var sqlQuery = String.Format ("SELECT {0} FROM imports.{1}", initInfo.MarsDBColumnName, initInfo.MarsTableName);
-						var cmd = new MySqlCommand (sqlQuery, mysqlConnection);
-						var reader = cmd.ExecuteReader ();
-						var values = new List<string> ();
-						while (reader.Read ()) {
-							values.Add (reader.GetString (initInfo.MarsDBColumnName));	
-						}
-                        reader.Close();
-						agentDBParamArrays.TryAdd (initInfo.MarsDBColumnName, values.ToArray ());
-					}
-				}
+			    var initInfo = param.GetFieldToConstructorArgumentRelation ();
+
+			    // check if we already have this enumerator
+			    if (agentDBParamArrays.ContainsKey(initInfo.MarsDBColumnName)) return;
+
+			    var sqlQuery = String.Format ("SELECT {0} FROM imports.{1}", initInfo.MarsDBColumnName, initInfo.MarsTableName);
+			    using (var mysqlConnection = new MySqlConnection(connectionString))
+			    {
+			        mysqlConnection.Open();
+			        var cmd = new MySqlCommand(sqlQuery, mysqlConnection);
+			        var reader = cmd.ExecuteReader();
+			        var values = new List<string>();
+			        while (reader.Read())
+			        {
+			            values.Add(reader.GetString(initInfo.MarsDBColumnName));
+			        }
+			        reader.Close();
+			        agentDBParamArrays.TryAdd(initInfo.MarsDBColumnName, values.ToArray());
+			    }
 			});
 
 			Console.WriteLine ("Finished fetching DB data, Starting agent creation....");
