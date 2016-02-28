@@ -116,7 +116,6 @@ namespace LayerRegistry.Implementation {
                 // add service to SCS Server
                 var serversPort = _layerServiceStartPort++;
 
-
                 var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
                 var addServiceMethod = server.GetType().GetMethod("AddService");
                 var genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);

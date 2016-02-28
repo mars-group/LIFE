@@ -18,8 +18,6 @@ using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Messengers;
 using ASC.Communication.Scs.Server;
 using ASC.Communication.ScsServices.Communication.Messages;
-using CustomUtilities.Collections;
-using CustomUtilities.Threading;
 
 [assembly: InternalsVisibleTo("AgentShadowingServiceTests")]
 [assembly: InternalsVisibleTo("PerfTester")]

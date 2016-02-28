@@ -7,13 +7,12 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using CustomUtilities.Collections;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.Scs.Server;
@@ -51,14 +50,14 @@ namespace Hik.Communication.ScsServices.Service {
         ///     Key2: ID of the ServiceObjects Instance, encoded as a GUID
         ///     Value: Service object.
         /// </summary>
-        private readonly ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>> _serviceObjects;
+        private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, ServiceObject>> _serviceObjects;
 
         /// <summary>
         ///     All connected clients to service.
         ///     Key: Client's unique Id.
         ///     Value: Reference to the client.
         /// </summary>
-        private readonly ThreadSafeSortedList<long, IScsServiceClient> _serviceClients;
+        private readonly ConcurrentDictionary<long, IScsServiceClient> _serviceClients;
 
         #endregion
 
@@ -76,8 +75,8 @@ namespace Hik.Communication.ScsServices.Service {
             _scsServer.ClientConnected += ScsServer_ClientConnected;
             _scsServer.ClientDisconnected += ScsServer_ClientDisconnected;
             _scsServer.ClientDisconnected += CacheableServiceObject.CacheableObject_OnClientDisconnected;
-            _serviceObjects = new ThreadSafeSortedList<string, ThreadSafeSortedList<Guid, ServiceObject>>();
-            _serviceClients = new ThreadSafeSortedList<long, IScsServiceClient>();
+            _serviceObjects = new ConcurrentDictionary<string, ConcurrentDictionary<Guid, ServiceObject>>();
+            _serviceClients = new ConcurrentDictionary<long, IScsServiceClient>();
         }
 
         #endregion
@@ -123,7 +122,7 @@ namespace Hik.Communication.ScsServices.Service {
                 if (_serviceObjects.ContainsKey(type.Name))
                     _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
                 else {
-                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+                    _serviceObjects[type.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
                     _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
                 }
             }
@@ -131,7 +130,7 @@ namespace Hik.Communication.ScsServices.Service {
                 if (_serviceObjects.ContainsKey(type.Name))
                     _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
                 else {
-                    _serviceObjects[type.Name] = new ThreadSafeSortedList<Guid, ServiceObject>();
+                    _serviceObjects[type.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
                     _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
                 }
             }
@@ -144,8 +143,10 @@ namespace Hik.Communication.ScsServices.Service {
         /// <typeparam name="TServiceInterface">Service interface type</typeparam>
         /// <returns>True: removed. False: no service object with this interface</returns>
         public bool RemoveService<TServiceInterface>()
-            where TServiceInterface : class {
-            return _serviceObjects.Remove(typeof (TServiceInterface).Name);
+            where TServiceInterface : class
+        {
+            ConcurrentDictionary<Guid, ServiceObject> bla;
+            return _serviceObjects.TryRemove(typeof (TServiceInterface).Name, out bla);
         }
 
         #endregion
@@ -177,7 +178,8 @@ namespace Hik.Communication.ScsServices.Service {
             var serviceClient = _serviceClients[e.Client.ClientId];
             if (serviceClient == null) return;
 
-            _serviceClients.Remove(e.Client.ClientId);
+            IScsServiceClient bla;
+            _serviceClients.TryRemove(e.Client.ClientId, out bla);
             OnClientDisconnected(serviceClient);
         }
 
@@ -207,7 +209,7 @@ namespace Hik.Communication.ScsServices.Service {
                 ServiceObject serviceObject;
                 if (invokeMessage.ServiceID.Equals(Guid.Empty)) {
                     // we are not looking for a specific implementation, but just for any, so use first found
-                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].GetAllItems().First();
+                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].First().Value;
                 }
                 else serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
 
@@ -387,12 +389,12 @@ namespace Hik.Communication.ScsServices.Service {
         }
 
         private sealed class CacheableServiceObject : ServiceObject {
-            private static ThreadSafeSortedList<long, IMessenger> _clients;
+            private static ConcurrentDictionary<long, IMessenger> _clients;
             private readonly IDictionary<string, PropertyInfo> _properties;
 
             public CacheableServiceObject(Type serviceInterfaceType, ScsService service)
                 : base(serviceInterfaceType, service) {
-                _clients = new ThreadSafeSortedList<long, IMessenger>();
+                _clients = new ConcurrentDictionary<long, IMessenger>();
 
                 _properties = new Dictionary<string, PropertyInfo>();
                 foreach (var propertyInfo in serviceInterfaceType.GetProperties()) {
@@ -412,7 +414,7 @@ namespace Hik.Communication.ScsServices.Service {
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs) {
                 // send PropertyChangedMessage to all subscribed clients
                 // TODO: change or adapt this for Multicast Messaging (maybe not possible...)
-                Parallel.ForEach(_clients.GetAllItems(), messenger => {
+                Parallel.ForEach(_clients.Values, messenger => {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod()
                         .Invoke(Service, null);
 
@@ -436,7 +438,11 @@ namespace Hik.Communication.ScsServices.Service {
             /// <param name="e"></param>
             public static void CacheableObject_OnClientDisconnected(object sender, ServerClientEventArgs e) {
                 if (_clients == null) return;
-                if (_clients.ContainsKey(e.Client.ClientId)) _clients.Remove(e.Client.ClientId);
+                if (_clients.ContainsKey(e.Client.ClientId))
+                {
+                    IMessenger bla;
+                    _clients.TryRemove(e.Client.ClientId, out bla);
+                }
             }
 
             /// <summary>
