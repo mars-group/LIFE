@@ -444,8 +444,10 @@ namespace ASC.Communication.ScsServices.Service
 
                 ServiceAttribute = classAttributes[0] as AscServiceAttribute;
                 _methods = new SortedList<string, MethodInfo>();
-                foreach (var methodInfo in serviceInterfaceType.GetMethods()) {
-                    _methods.Add(methodInfo.Name, methodInfo);
+                foreach (var methodInfo in serviceInterfaceType.GetMethods())
+                {
+                    // store with name + param count to allow for overloaded methods
+                    _methods.Add(methodInfo.Name + methodInfo.GetParameters().Length, methodInfo);
                 }
             }
 
@@ -456,12 +458,13 @@ namespace ASC.Communication.ScsServices.Service
             /// <param name="parameters">Parameters of method</param>
             /// <returns>Return value of method</returns>
             public object InvokeMethod(string methodName, params object[] parameters) {
+                var sig = methodName + parameters.Length;
                 //Check if there is a method with name methodName
-                if (!_methods.ContainsKey(methodName))
+                if (!_methods.ContainsKey(sig))
                     throw new Exception("There is not a method with name '" + methodName + "' in service class.");
 
                 //Get method
-                var method = _methods[methodName];
+                var method = _methods[sig];
 
                 //Invoke method and return invoke result
                 return method.Invoke(Service, parameters);

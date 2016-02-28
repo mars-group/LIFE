@@ -345,16 +345,18 @@ namespace Hik.Communication.ScsServices.Service {
                 ServiceAttribute = classAttributes[0] as ScsServiceAttribute;
                 _methods = new SortedList<string, MethodInfo>();
                 foreach (var methodInfo in serviceInterfaceType.GetMethods()) {
-                    _methods.Add(methodInfo.Name, methodInfo);
+                    // store with name + param count to allow for overloaded methods
+                    _methods.Add(methodInfo.Name+methodInfo.GetParameters().Length, methodInfo);
                 }
                 _internalMethods = new SortedList<string, MethodInfo>();
                 foreach (var methodInfo in service.GetType().GetMethods())
                 {
-                    if (_internalMethods.ContainsKey(methodInfo.Name))
+                    var sig = methodInfo.Name + methodInfo.GetParameters().Length;
+                    if (_internalMethods.ContainsKey(sig))
                     {
                         continue;
                     }
-                    _internalMethods.Add(methodInfo.Name, methodInfo);
+                    _internalMethods.Add(sig, methodInfo);
                 }
             }
 
@@ -368,19 +370,19 @@ namespace Hik.Communication.ScsServices.Service {
             public object InvokeMethod(string methodName, params object[] parameters)
             {
                 MethodInfo method = null;
-
+                var sig = methodName + parameters.Length;
                 //Check if there is a method with name methodName
-                if (!_methods.ContainsKey(methodName))
+                if (!_methods.ContainsKey(sig))
                 {
-                    if (!_internalMethods.ContainsKey(methodName))
+                    if (!_internalMethods.ContainsKey(sig))
                     {
                         throw new Exception("There is not a method with name '" + methodName + "' in service class.");
                     }
-                    method = _internalMethods[methodName];
+                    method = _internalMethods[sig];
                 }
                 else
                 {
-                    method = _methods[methodName];
+                    method = _methods[sig];
                 }
                 
                 //Invoke method and return invoke result
