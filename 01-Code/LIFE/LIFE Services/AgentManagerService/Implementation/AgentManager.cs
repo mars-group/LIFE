@@ -90,10 +90,11 @@ namespace AgentManagerService.Implementation
 						var sqlQuery = String.Format ("SELECT {0} FROM imports.{1}", initInfo.MarsDBColumnName, initInfo.MarsTableName);
 						var cmd = new MySqlCommand (sqlQuery, mysqlConnection);
 						var reader = cmd.ExecuteReader ();
-						List<string> values = new List<string> ();
+						var values = new List<string> ();
 						while (reader.Read ()) {
 							values.Add (reader.GetString (initInfo.MarsDBColumnName));	
 						}
+                        reader.Close();
 						agentDBParamArrays.TryAdd (initInfo.MarsDBColumnName, values.ToArray ());
 					}
 				}
