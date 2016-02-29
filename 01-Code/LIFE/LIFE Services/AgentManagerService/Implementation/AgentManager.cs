@@ -101,6 +101,7 @@ namespace AgentManagerService.Implementation
 			            values.Add(reader.GetString(initInfo.MarsDBColumnName));
 			        }
 			        reader.Close();
+					mysqlConnection.Close();
 			        agentDBParamArrays.TryAdd(initInfo.MarsDBColumnName, values.ToArray());
 			    }
 			});
