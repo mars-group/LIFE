@@ -142,8 +142,10 @@ namespace RuntimeEnvironment.Implementation
 						localMax = Interlocked.Read(ref _maxExecutionTime);
 					}
 				});
+			
+			Console.WriteLine (String.Format("Executed Tick {0} in {1} ms.", currentTick, _maxExecutionTime));
 
-			var stb = new StringBuilder ();
+ 			var stb = new StringBuilder ();
 			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
 			_rabbitMQWriter.SendMessage(stb.ToString());
 		}

@@ -69,9 +69,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Atlassian.Jira">
-      <HintPath>..\packages\MARSErrorReporting.0.3.51\lib\net45\Atlassian.Jira.dll</HintPath>
-    </Reference>
     <Reference Include="MarsErrorReporting">
       <HintPath>..\packages\MARSErrorReporting.0.3.51\lib\net45\MarsErrorReporting.dll</HintPath>
     </Reference>
@@ -80,7 +77,6 @@
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Nancy">
       <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
@@ -102,6 +98,15 @@
     </Reference>
     <Reference Include="PowerCollections">
       <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Atlassian.Jira">
+      <HintPath>..\packages\Atlassian.SDK.5.13.1\lib\Atlassian.Jira.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
