@@ -9,14 +9,12 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using AgentManager.Interface;
 using AgentManager.Interface.Exceptions;
 using LifeAPI.Layer;
-using mars.rock.drill;
 using MARS.Shuttle.SimulationConfig;
 using SpatialAPI.Environment;
 using ConfigService;
@@ -31,7 +29,7 @@ namespace AgentManagerService.Implementation
 {
     public class AgentManager<T> : IAgentManager<T> where T : IAgent
     {
-        public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle, IEnvironment environment, List<ILayer> additionalLayerDependencies)
+        public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle, IEnvironment environment, List<ILayer> additionalLayerDependencies, int reducedAgentCount=-1)
         {
 			Console.WriteLine ("Starting creation of agent type: " + agentInitConfig.AgentName);
 
@@ -115,8 +113,14 @@ namespace AgentManagerService.Implementation
             var registerAgentType = typeof (RegisterAgent);
             var unregisterAgentType = typeof (UnregisterAgent);
 
-            // iterate over all agents and create them
-			Parallel.For (0, agentInitConfig.RealAgentIds.Length, index => {
+			// setup agent count
+			var agentCount = agentInitConfig.RealAgentIds.Length;
+			if (reducedAgentCount > 0 && reducedAgentCount <= agentInitConfig.RealAgentIds.Length) {
+				agentCount = reducedAgentCount;
+			}
+
+			// iterate over all agents and create them
+			Parallel.For (0, agentCount, index => {
 
 				var realAgentId = agentInitConfig.RealAgentIds[index];
 
