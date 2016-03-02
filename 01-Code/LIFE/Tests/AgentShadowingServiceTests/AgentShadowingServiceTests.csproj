@@ -43,11 +43,11 @@
     <Reference Include="LIFEUtilities">
       <HintPath>..\..\packages\LIFEUtilities.0.3.22\lib\net45\LIFEUtilities.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="MsgPack">
       <HintPath>..\..\packages\MsgPack.Cli.0.6.8\lib\net45\MsgPack.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

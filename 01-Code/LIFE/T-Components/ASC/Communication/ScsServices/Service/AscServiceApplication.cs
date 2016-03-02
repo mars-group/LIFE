@@ -116,21 +116,13 @@ namespace ASC.Communication.ScsServices.Service
 
             // check if service is cacheable
             var cacheableService = service as ICacheable;
+
+			var serviceDict = _serviceObjects.GetOrAdd (typeOfTServiceInterface.Name, new ConcurrentDictionary<Guid, ServiceObject> ());
             if (cacheableService != null) {
-				if (_serviceObjects.ContainsKey(typeOfTServiceInterface.Name))
-					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new CacheableServiceObject(typeOfTServiceInterface, service);
-                else {
-					_serviceObjects[typeOfTServiceInterface.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
-					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new CacheableServiceObject(typeOfTServiceInterface, service);
-                }
+				serviceDict.GetOrAdd (service.ServiceID, new CacheableServiceObject (typeOfTServiceInterface, service));
             }
             else {
-				if (_serviceObjects.ContainsKey(typeOfTServiceInterface.Name))
-					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new ServiceObject(typeOfTServiceInterface, service);
-                else {
-					_serviceObjects[typeOfTServiceInterface.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
-					_serviceObjects[typeOfTServiceInterface.Name][service.ServiceID] = new ServiceObject(typeOfTServiceInterface, service);
-                }
+				serviceDict.GetOrAdd (service.ServiceID, new ServiceObject (typeOfTServiceInterface, service));
             }
         }
 

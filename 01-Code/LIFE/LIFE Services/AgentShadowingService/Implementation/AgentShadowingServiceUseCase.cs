@@ -17,6 +17,7 @@ using ASC.Communication.ScsServices.Service;
 using ConfigurationAdapter.Interface;
 using LayerContainerShared;
 using LIFEUtilities.MulticastAddressGenerator;
+using System.Threading.Tasks;
 
 namespace AgentShadowingService.Implementation
 {
@@ -147,10 +148,7 @@ namespace AgentShadowingService.Implementation
         }
 
         public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
-            foreach (var agent in agentsToRegister)
-            {
-                RegisterRealAgent(agent);
-            }
+			Parallel.ForEach (agentsToRegister, RegisterRealAgent);
         }
 
         public void RemoveRealAgent(TServiceClass agentToRemove) {
