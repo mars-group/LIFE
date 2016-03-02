@@ -34,8 +34,8 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     public ResultAdapterUseCase() {
       _simObjects = new ConcurrentDictionary<ISimResult, byte>();
-      _sender = new MongoSender("mongodb://mongodb");
-      _notifier = new RabbitNotifier("192.168.99.100", "guest", "guest", 5672, "NewResults");
+      //_sender = new MongoSender("mongodb://mongodb");
+      //_notifier = new RabbitNotifier("192.168.99.100", "guest", "guest", 5672, "NewResults");
     }
 
 
@@ -52,8 +52,8 @@ namespace ResultAdapter.Implementation {
       });
 
       // MongoDB bulk insert of the output strings and RMQ notification.
-      _sender.SendVisualizationData(results, SimulationId.ToString());
-      _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
+      //TODO _sender.SendVisualizationData(results, SimulationId.ToString());
+      //TODO _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
     }
 
 

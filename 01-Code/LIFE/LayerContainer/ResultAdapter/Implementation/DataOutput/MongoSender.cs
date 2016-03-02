@@ -11,9 +11,8 @@ namespace ResultAdapter.Implementation.DataOutput {
 
 
     public MongoSender(string address) {
-      _client = new MongoClient(address);
-      _database = _client.GetDatabase("test");
-      Console.WriteLine("test constr.");
+      //_client = new MongoClient(address);
+      //_database = _client.GetDatabase("test");
     }
 
 
