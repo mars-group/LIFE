@@ -85,7 +85,7 @@
   <ItemGroup>
     <Compile Include="RTEManagerBlackBoxTest.cs" />
     <Compile Include="Mocks\NodeRegistryMock.cs" />
-    <Compile Include="Mocks\VisualizationAdapterInternalMock.cs" />
+    <Compile Include="Mocks\ResultAdapterInternalMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,9 +109,9 @@
       <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
       <Name>RTEManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LayerContainer\VisualizationAdapter\VisualizationAdapter.csproj">
+    <ProjectReference Include="..\..\LayerContainer\ResultAdapter\ResultAdapter.csproj">
       <Project>{F6626674-3A9A-460B-A98B-A66B561FD811}</Project>
-      <Name>VisualizationAdapter</Name>
+      <Name>ResultAdapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
       <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>

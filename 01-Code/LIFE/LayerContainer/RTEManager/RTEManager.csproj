@@ -99,9 +99,9 @@
       <Project>{9BA27555-C7DC-49A8-925C-B56D9C7DE2F4}</Project>
       <Name>LayerContainerShared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VisualizationAdapter\VisualizationAdapter.csproj">
+    <ProjectReference Include="..\ResultAdapter\ResultAdapter.csproj">
       <Project>{F6626674-3A9A-460B-A98B-A66B561FD811}</Project>
-      <Name>VisualizationAdapter</Name>
+      <Name>ResultAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
