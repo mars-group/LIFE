@@ -20,15 +20,15 @@ namespace RTEManagerBlackBoxTest.Mocks {
     }
 
     public void WriteResults(int currentTick) {
-      throw new NotImplementedException();
+
     }
 
     public void Register(ISimResult simObject) {
-      throw new NotImplementedException();
+
     }
 
     public void DeRegister(ISimResult simObject) {
-      throw new NotImplementedException();
+
     }
   }
 }
