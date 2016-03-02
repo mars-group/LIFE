@@ -158,7 +158,6 @@ namespace AgentManagerService.Implementation
 
 							if (paramType != typeof(String) && (paramType == null || !paramType.IsPrimitive)) {
 								throw new ParameterMustBePrimitiveException ("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type. But was: " + paramType.Name);
-
 							}
 
 							try {
@@ -214,7 +213,7 @@ namespace AgentManagerService.Implementation
 					throw tex;
 				}
 			});
-
+			Console.WriteLine (String.Format("Finished agent creation. Created {0} agents.", agentCount));
             return agents;
         }
 
