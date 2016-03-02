@@ -54,8 +54,8 @@ namespace ResultAdapter.Implementation {
       });
 
       // MongoDB bulk insert of the output strings and RMQ notification.
-      _sender.SendVisualizationData(results, SimulationId.ToString());
-      _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
+      //_sender.SendVisualizationData(results, SimulationId.ToString());
+      //_notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
     }
 
 

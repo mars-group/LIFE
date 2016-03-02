@@ -114,15 +114,16 @@ namespace AgentManagerService.Implementation
             var unregisterAgentType = typeof (UnregisterAgent);
 
 			// setup agent count
-			var agentCount = agentInitConfig.RealAgentIds.Length;
-			if (reducedAgentCount > 0 && reducedAgentCount <= agentInitConfig.RealAgentIds.Length) {
+			var agentCount = agentInitConfig.RealAgentCount;
+			if (reducedAgentCount > 0 && reducedAgentCount <= agentInitConfig.RealAgentCount) {
 				agentCount = reducedAgentCount;
 			}
 
 			// iterate over all agents and create them
 			Parallel.For (0, agentCount, index => {
 
-				var realAgentId = agentInitConfig.RealAgentIds[index];
+				// create Agent ID
+				var realAgentId = Guid.NewGuid ();
 
 				// use concurrentDictionary's Keys as concurrent list
 				var actualParameters = new List<object> ();

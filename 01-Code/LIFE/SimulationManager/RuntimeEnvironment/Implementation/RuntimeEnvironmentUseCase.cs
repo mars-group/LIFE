@@ -26,6 +26,7 @@ using RuntimeEnvironment.Interfaces;
 using SMConnector;
 using SMConnector.Exceptions;
 using SMConnector.TransportTypes;
+using System.Threading.Tasks;
 
 namespace RuntimeEnvironment.Implementation {
 	internal class RuntimeEnvironmentUseCase : IRuntimeEnvironment {
@@ -230,7 +231,7 @@ namespace RuntimeEnvironment.Implementation {
                         {
                             ids[j] = Guid.NewGuid();
                         }
-                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentName, agentConfig.AgentCount, 0, ids, new Guid[0]);
+                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentName, agentConfig.AgentCount);
                     }
                     //...and finally initialize the layer with it
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
@@ -316,16 +317,11 @@ namespace RuntimeEnvironment.Implementation {
 
                     foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[ layerDescription.Name]) {
                         var agentCount = agentConfig.GetAgentInstanceCount();
-                        var ids = new Guid[agentCount];
-
-                        for (var j = 0; j < agentCount; j++) {
-                            ids[j] = Guid.NewGuid();
-                        }
 
                         initData.AddAgentInitConfig(
                             agentConfig.GetClassName(),
                             agentConfig.GetFullName(),
-                            agentCount, 0, ids, new Guid[0],
+							agentCount,
                             agentConfig.GetFieldToConstructorArgumentRelations()
                             );
                     }
@@ -333,7 +329,6 @@ namespace RuntimeEnvironment.Implementation {
 
                 //...and finally initialize the layer with it
                 layerContainerClients[0].Initialize(layerInstanceId, initData);
-   
                 layerId++;
             }
 
@@ -406,10 +401,7 @@ namespace RuntimeEnvironment.Implementation {
                                     .AddAgentInitConfig(
                                         agentConfig.AgentName,
                                         agentConfig.AgentName,
-                                        overheadedAmount,
-                                        shadowAgentCountPerLayerContainer,
-                                        realAgentIds,
-                                        shadowAgentIds
+                                        overheadedAmount
                                     );
                             }
                             else
@@ -442,10 +434,7 @@ namespace RuntimeEnvironment.Implementation {
                                     .AddAgentInitConfig(
                                         agentConfig.AgentName,
                                         agentConfig.AgentName,
-                                        agentAmountPerLayerContainer,
-                                        shadowAgentCountPerLayerContainer,
-                                        realAgentIds,
-                                        shadowAgentIds
+                                        agentAmountPerLayerContainer
                                     );   
                             }
                         }
