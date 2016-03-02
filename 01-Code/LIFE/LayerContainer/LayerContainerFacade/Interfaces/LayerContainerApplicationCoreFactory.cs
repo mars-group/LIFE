@@ -20,10 +20,10 @@ using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using PartitionManager.Implementation;
 using PartitionManager.Interfaces;
+using ResultAdapter.Implementation;
+using ResultAdapter.Interface;
 using RTEManager.Implementation;
 using RTEManager.Interfaces;
-using VisualizationAdapter.Implementation;
-using VisualizationAdapter.Interface;
 
 namespace LayerContainerFacade.Interfaces {
     /// <summary>
@@ -63,8 +63,8 @@ namespace LayerContainerFacade.Interfaces {
                     .As<IRTEManager>()
                     .InstancePerLifetimeScope();
 
-                _containerBuilder.RegisterType<VisualizationAdapterComponent>()
-                    .As<IVisualizationAdapter>()
+                _containerBuilder.RegisterType<ResultAdapterComponent>()
+                    .As<IResultAdapter>()
                     .InstancePerLifetimeScope();
 
                 _containerBuilder.RegisterType<LayerFactoryComponent>()

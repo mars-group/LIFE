@@ -23,7 +23,7 @@ namespace RTEManagerBlackBoxTest
         [Test]
         public void TickLayerTest()
         {
-            IRTEManager rteManager = new RTEManagerUseCase(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
+            IRTEManager rteManager = new RTEManagerUseCase(new ResultAdapterInternalMock(), new NodeRegistryMock());
             var mockLayer = new SimpleSteppedActiveLayerMock();
 
             var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer", "MockLayer", "MockLayer"), 1);
@@ -44,7 +44,7 @@ namespace RTEManagerBlackBoxTest
         [Test]
         public void RegisterAndUnregisterLayerTest()
         {
-            RTEManagerUseCase rteManager = new RTEManagerUseCase(new VisualizationAdapterInternalMock(), new NodeRegistryMock());
+            RTEManagerUseCase rteManager = new RTEManagerUseCase(new ResultAdapterInternalMock(), new NodeRegistryMock());
             var mockLayer = new SimpleSteppedActiveLayerMock();
 
             var layerId = new TLayerInstanceId(new TLayerDescription("TestMockLayer", 1, 0, "MockLayer", "MockLayer", "MockLayer"), 1);

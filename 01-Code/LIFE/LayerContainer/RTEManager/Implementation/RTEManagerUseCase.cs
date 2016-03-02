@@ -14,19 +14,19 @@ using System.Threading.Tasks;
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 using LifeAPI.Layer;
-using LifeAPI.Layer.Visualization;
 using NodeRegistry.Interface;
 using RTEManager.Interfaces;
-using VisualizationAdapter.Interface;
 using LifeAPI;
 using System;
+using LifeAPI.Results;
+using ResultAdapter.Interface;
 
 [assembly: InternalsVisibleTo("RTEManagerBlackBoxTest")]
 
 namespace RTEManager.Implementation {
 
 	internal class RTEManagerUseCase : IRTEManager {
-        private readonly IVisualizationAdapter _visualizationAdapter;
+        private readonly IResultAdapter _resultAdapter;
 
         // the tickClients being executed per Layer
         private readonly IDictionary<ILayer, ConcurrentDictionary<ITickClient, byte>> _tickClientsPerLayer;
@@ -55,8 +55,8 @@ namespace RTEManager.Implementation {
 		private Guid _simulationId;
 
 
-        public RTEManagerUseCase(IVisualizationAdapter visualizationAdapter, INodeRegistry nodeRegistry) {
-            _visualizationAdapter = visualizationAdapter;
+        public RTEManagerUseCase(IResultAdapter resultAdapter, INodeRegistry nodeRegistry) {
+            _resultAdapter = resultAdapter;
             _tickClientsPerLayer = new Dictionary<ILayer, ConcurrentDictionary<ITickClient, byte>>();
             _preAndPostTickLayer = new ConcurrentBag<ISteppedActiveLayer>();
 			_disposableLayers = new ConcurrentBag<IDisposableLayer> ();
@@ -113,9 +113,9 @@ namespace RTEManager.Implementation {
             if (!_isRunning) {
                 _tickClientsPerLayer[layer].TryAdd(tickClient, new byte());
 				// add tickClient to visualization if type is appropriate
-				var visAgent = tickClient as IVisualizableAgent;
+				var visAgent = tickClient as ISimResult;
 				if(visAgent != null){
-					_visualizationAdapter.RegisterVisualizable(layer, visAgent);
+					_resultAdapter.Register(visAgent);
 				}
             }
             else {
@@ -128,7 +128,7 @@ namespace RTEManager.Implementation {
 				// store simulationID
 				_simulationId = initData.SimulationId;
 				// deliver simulationID to VisulizationAdapter
-				_visualizationAdapter.SimulationId = _simulationId;
+				_resultAdapter.SimulationId = _simulationId;
 			}
 			// Initialize Layer
             return _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
@@ -153,7 +153,7 @@ namespace RTEManager.Implementation {
 
             // visualize all visualizable layers once prior to first execution if tick = 0
             if (_currentTick == 0) {
-                _visualizationAdapter.VisualizeTick(_currentTick);
+                _resultAdapter.WriteResults(_currentTick);
             }
 
             // PreTick all ActiveLayers
@@ -178,7 +178,7 @@ namespace RTEManager.Implementation {
 
 
             // visualize all layers
-            _visualizationAdapter.VisualizeTick(_currentTick);
+            _resultAdapter.WriteResults(_currentTick);
 
             // clean up all deleted tickClients
             Parallel.ForEach
@@ -192,9 +192,9 @@ namespace RTEManager.Implementation {
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
 								
 								// remove tickClient from visualization if type is appropiate
-								var visAgent = tickClientToBeRemoved as IVisualizableAgent;
+								var visAgent = tickClientToBeRemoved as ISimResult;
 								if(visAgent != null){
-									_visualizationAdapter.DeRegisterVisualizable(layer, visAgent);
+									_resultAdapter.DeRegister(visAgent);
 								}
 						    }
 						)
@@ -212,9 +212,9 @@ namespace RTEManager.Implementation {
 								_tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte());
 
 								// add tickClient to visualization if type is appropiate
-								var visAgent = tickClientToBeRegistered as IVisualizableAgent;
+								var visAgent = tickClientToBeRegistered as ISimResult;
 								if(visAgent != null){
-									_visualizationAdapter.RegisterVisualizable(layer, visAgent);
+									_resultAdapter.Register(visAgent);
 								}
 							}
                         )

@@ -19,8 +19,8 @@ using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LIFEViewProtocol.Basics;
 using PartitionManager.Interfaces;
+using ResultAdapter.Interface;
 using RTEManager.Interfaces;
-using VisualizationAdapter.Interface;
 
 namespace LayerContainerFacade.Implementation {
 	internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
@@ -34,7 +34,7 @@ namespace LayerContainerFacade.Implementation {
             (LayerContainerSettings settings,
                 IPartitionManager partitionManager,
                 IRTEManager rteManager,
-                IVisualizationAdapter visualizationAdapter) {
+                IResultAdapter resultAdapter) {
 
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
             _partitionManager = partitionManager;

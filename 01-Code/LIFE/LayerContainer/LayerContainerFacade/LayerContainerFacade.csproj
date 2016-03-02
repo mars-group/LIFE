@@ -117,9 +117,9 @@
       <Project>{F2AC5988-E7F0-4A1F-8371-907945C1D351}</Project>
       <Name>RTEManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VisualizationAdapter\VisualizationAdapter.csproj">
+    <ProjectReference Include="..\ResultAdapter\ResultAdapter.csproj">
       <Project>{F6626674-3A9A-460B-A98B-A66B561FD811}</Project>
-      <Name>VisualizationAdapter</Name>
+      <Name>ResultAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
