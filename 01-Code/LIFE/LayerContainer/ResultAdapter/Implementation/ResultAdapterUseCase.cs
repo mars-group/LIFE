@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using ConfigService;
 using LifeAPI.Results;
 using ResultAdapter.Implementation.DataOutput;
 using ResultAdapter.Interface;
@@ -34,8 +35,9 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     public ResultAdapterUseCase() {
       _simObjects = new ConcurrentDictionary<ISimResult, byte>();
-      //_sender = new MongoSender("mongodb://mongodb");
-      //_notifier = new RabbitNotifier("192.168.99.100", "guest", "guest", 5672, "NewResults");
+      var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
+      _sender = new MongoSender(cfgClient);
+      _notifier = new RabbitNotifier(cfgClient);
     }
 
 
@@ -52,8 +54,8 @@ namespace ResultAdapter.Implementation {
       });
 
       // MongoDB bulk insert of the output strings and RMQ notification.
-      //TODO _sender.SendVisualizationData(results, SimulationId.ToString());
-      //TODO _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
+      _sender.SendVisualizationData(results, SimulationId.ToString());
+      _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
     }
 
 

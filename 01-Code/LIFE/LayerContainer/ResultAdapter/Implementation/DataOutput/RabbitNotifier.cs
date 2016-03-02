@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using ConfigService;
 using RabbitMQ.Client;
 
 namespace ResultAdapter.Implementation.DataOutput {
@@ -16,19 +17,15 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// <summary>
     ///   Initialize a new Rabbit-MQ notifier.
     /// </summary>
-    /// <param name="host">Name or IP of host computer.</param>
-    /// <param name="user">Username to log in.</param>
-    /// <param name="password">Associated password.</param>
-    /// <param name="port">Rabbit MQ port (default port is 5672).</param>
-    /// <param name="queue">Name of queue to use. If it does not exists, it will be created!</param>
-    public RabbitNotifier(string host, string user, string password, int port, string queue) {
+    /// <param name="cfgClient">MARS KV client for connection properties.</param>
+    public RabbitNotifier(IConfigServiceClient cfgClient) {   
       var connection = new ConnectionFactory {
-        HostName = host,
-        UserName = user,
-        Password = password,
-        Port = port
+        HostName = cfgClient.Get("rabbitmq/ip"),
+        UserName = cfgClient.Get("rabbitmq/user"),
+        Password = cfgClient.Get("rabbitmq/pass"),
+        Port = int.Parse(cfgClient.Get("rabbitmq/port"))
       }.CreateConnection();
-      _queueName = queue;
+      _queueName = "NewResults";
       _channel = connection.CreateModel();
       _channel.QueueDeclare(_queueName, false, false, false, null);     
     }

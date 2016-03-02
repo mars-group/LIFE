@@ -65,48 +65,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="MarsErrorReporting">
-      <HintPath>..\packages\MARSErrorReporting.0.3.51\lib\net45\MarsErrorReporting.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Hosting.Self">
-      <HintPath>..\packages\Nancy.Hosting.Self.1.4.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="LIFEViewProtocol">
-      <HintPath>..\packages\LIFEViewProtocol.0.9.0\lib\net45\LIFEViewProtocol.dll</HintPath>
-    </Reference>
-    <Reference Include="MsgPack">
-      <HintPath>..\packages\LIFEViewProtocol.0.9.0\lib\net45\MsgPack.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\packages\LIFEViewProtocol.0.9.0\lib\net45\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="GeoAPI">
-      <HintPath>..\packages\GeoAPI.1.7.4\lib\net45\GeoAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="NetTopologySuite">
-      <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\NetTopologySuite.dll</HintPath>
-    </Reference>
-    <Reference Include="PowerCollections">
-      <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\PowerCollections.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Atlassian.Jira">
-      <HintPath>..\packages\Atlassian.SDK.5.13.1\lib\Atlassian.Jira.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -138,14 +99,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
-      <Name>CommonTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj">
-      <Project>{46CD516A-50B3-4DD1-A0DF-65E0BE141E21}</Project>
-      <Name>ConfigurationAdapter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common\LNSConnector\LNSConnector.csproj">
       <Project>{A8A6BC7B-AA40-4279-8F09-15FA3AA63A77}</Project>
       <Name>LNSConnector</Name>
@@ -157,10 +110,6 @@
     <ProjectReference Include="..\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj">
       <Project>{6EF23027-A874-4533-9F39-2C4B165D8BB9}</Project>
       <Name>LayerContainerFacade</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LIFE API\LifeAPI\LifeAPI.csproj">
-      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LifeAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.csproj">
       <Project>{58149FF0-0801-46F8-A9C6-571B6030DC1E}</Project>
