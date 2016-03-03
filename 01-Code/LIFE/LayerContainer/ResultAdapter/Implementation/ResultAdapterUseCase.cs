@@ -26,8 +26,8 @@ namespace ResultAdapter.Implementation {
     public Guid SimulationId { get; set; }
 
     private readonly ConcurrentDictionary<ISimResult, byte> _simObjects; // List of all objects to output.
-    private readonly MongoSender _sender;                                // Database connector.
-    private readonly RabbitNotifier _notifier;                           // Listener queue notifier.
+    private MongoSender _sender;                                         // Database connector.
+    private RabbitNotifier _notifier;                                    // Listener queue notifier.
 
 
     /// <summary>
@@ -35,9 +35,6 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     public ResultAdapterUseCase() {
       _simObjects = new ConcurrentDictionary<ISimResult, byte>();
-      var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
-      //_sender = new MongoSender(cfgClient);
-      //_notifier = new RabbitNotifier(cfgClient);
     }
 
 
@@ -47,15 +44,22 @@ namespace ResultAdapter.Implementation {
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
 
+      // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
+      if (_sender == null) {
+        var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
+        _sender = new MongoSender(cfgClient, SimulationId.ToString());
+        _notifier = new RabbitNotifier(cfgClient);        
+      }
+
       // Loop in parallel over all simulation elements to output.
-      var results = new ConcurrentBag<string>();
+      var results = new ConcurrentBag<AgentSimResult>();
       Parallel.ForEach(_simObjects.Keys, entity => {
         results.Add(entity.GetResultData());
       });
 
       // MongoDB bulk insert of the output strings and RMQ notification.
-      //_sender.SendVisualizationData(results, SimulationId.ToString());
-      //_notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
+      _sender.SendVisualizationData(results);
+      _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
     }
 
 
