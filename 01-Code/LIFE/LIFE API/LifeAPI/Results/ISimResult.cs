@@ -11,6 +11,6 @@
     ///   Returns an appropriately formatted JSON string.
     /// </summary>
     /// <returns>Agent properties in JSON notation.</returns>
-    string GetResultData();
+    AgentSimResult GetResultData();
   }
 }

@@ -81,6 +81,7 @@
     <Compile Include="Layer\ISteppedLayer.cs" />
     <Compile Include="Agent\ITickClient.cs" />
     <Compile Include="Layer\TimeSeries\ITimeSeriesLayer.cs" />
+    <Compile Include="Results\AgentSimResult.cs" />
     <Compile Include="Results\ISimResult.cs" />
     <Compile Include="Layer\LayerStatus.cs" />
     <Compile Include="Perception\Sensors\QuerySensor.cs" />
