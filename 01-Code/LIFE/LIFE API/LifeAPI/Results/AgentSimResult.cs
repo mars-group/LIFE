@@ -25,7 +25,7 @@ namespace LifeAPI.Results {
     /// <summary>
     ///   Simulation execution tick.
     /// </summary>
-    public int Tick;
+    public long Tick;
     
     /// <summary>
     ///   Agent position (x,y,z).
