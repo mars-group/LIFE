@@ -36,8 +36,8 @@ namespace ResultAdapter.Implementation {
     public ResultAdapterUseCase() {
       _simObjects = new ConcurrentDictionary<ISimResult, byte>();
       var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
-      _sender = new MongoSender(cfgClient);
-      _notifier = new RabbitNotifier(cfgClient);
+      //_sender = new MongoSender(cfgClient);
+      //_notifier = new RabbitNotifier(cfgClient);
     }
 
 
