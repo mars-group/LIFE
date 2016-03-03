@@ -104,7 +104,7 @@ namespace AgentManagerService.Implementation
 			    }
 			});
 
-			Console.WriteLine ("Finished fetching DB data, Starting agent creation....");
+			Console.WriteLine ("Finished fetching DB data, Starting agent ID creation....");
 
             // get types for special parameters
             var layerType = typeof (ILayer);
@@ -119,15 +119,22 @@ namespace AgentManagerService.Implementation
 				agentCount = reducedAgentCount;
 			}
 
+
+			var agentIds = new Guid[agentCount];
+
+			Parallel.For(0, agentCount, i => agentIds[i] = Guid.NewGuid ());
+			Console.WriteLine ("Finished agent ID creation, Starting agent creation.... AgentCount is : {0}", agentCount);
+
 			// iterate over all agents and create them
 			Parallel.For (0, agentCount, index => {
 
 				// create Agent ID
-				var realAgentId = Guid.NewGuid ();
+				var realAgentId = agentIds[index];
 
-				// use concurrentDictionary's Keys as concurrent list
+				// the list which will hold the actual Parameters
 				var actualParameters = new List<object> ();
 
+				// get an enumerator for the parameters provided by SHUTTLE
                 var shuttleParams = initParams.GetEnumerator();
                 shuttleParams.MoveNext();
 
@@ -206,7 +213,7 @@ namespace AgentManagerService.Implementation
 
 				// call constructor of agent and store agent in return dictionary
 				try {
-				agents.TryAdd (realAgentId, (T)agentConstructor.Invoke (actualParameters.ToArray()));
+					agents.TryAdd (realAgentId, (T)agentConstructor.Invoke (actualParameters.ToArray()));
 				} catch(TargetParameterCountException tex) {
 					var stb = new StringBuilder();
 					actualParameters.Select(p => stb.Append(p.GetType().Name + "/n"));
@@ -214,6 +221,7 @@ namespace AgentManagerService.Implementation
 					throw tex;
 				}
 			});
+
 			Console.WriteLine (String.Format("Finished agent creation. Created {0} agents.", agentCount));
             return agents;
         }
