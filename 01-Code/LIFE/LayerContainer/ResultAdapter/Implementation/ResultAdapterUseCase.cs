@@ -27,7 +27,7 @@ namespace ResultAdapter.Implementation {
 
     private readonly ConcurrentDictionary<ISimResult, byte> _simObjects; // List of all objects to output.
     private MongoSender _sender;                                         // Database connector.
-    private RabbitNotifier _notifier;                                    // Listener queue notifier.
+                                 // Listener queue notifier.
 
 
     /// <summary>
@@ -43,12 +43,14 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
+	  if (_simObjects.IsEmpty) {
+		return;
+	  }
 
       // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
       if (_sender == null) {
         var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
-        _sender = new MongoSender(cfgClient, SimulationId.ToString());
-        _notifier = new RabbitNotifier(cfgClient);        
+        _sender = new MongoSender(cfgClient, SimulationId.ToString());      
       }
 
       // Loop in parallel over all simulation elements to output.
@@ -58,8 +60,7 @@ namespace ResultAdapter.Implementation {
       });
 
       // MongoDB bulk insert of the output strings and RMQ notification.
-      _sender.SendVisualizationData(results);
-      _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
+	  _sender.SendVisualizationData(results, currentTick);
     }
 
 

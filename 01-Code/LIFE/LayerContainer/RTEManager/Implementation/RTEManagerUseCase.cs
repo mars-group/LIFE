@@ -153,12 +153,13 @@ namespace RTEManager.Implementation {
 
             // visualize all visualizable layers once prior to first execution if tick = 0
             if (_currentTick == 0) {
-                _resultAdapter.WriteResults(_currentTick);
+				Console.WriteLine ("[LIFE] Executing Pre-Viz.");
+				_resultAdapter.WriteResults(_currentTick);
             }
-
+			Console.WriteLine ("[LIFE] Executing Pre-Tick");
             // PreTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
-
+			Console.WriteLine ("[LIFE] Beginning to Simulate the next Tick");
             // tick all tickClients
             Parallel.ForEach
                 (
@@ -169,17 +170,18 @@ namespace RTEManager.Implementation {
                             client => client.Key.Tick()
                         )
                 );
-
+			Console.WriteLine ("[LIFE] Executing Post-Tick");
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
             // increase Tick counter
             _currentTick++;
 
-
+			Console.WriteLine ("[LIFE] Executing Result Writing");
             // visualize all layers
             _resultAdapter.WriteResults(_currentTick);
 
+			Console.WriteLine ("[LIFE] Removing agents");
             // clean up all deleted tickClients
             Parallel.ForEach
                 (
@@ -200,7 +202,7 @@ namespace RTEManager.Implementation {
 						)
                 );
 
-
+			Console.WriteLine ("[LIFE] Adding new Agents");
             // add all new TickClients which were registered during the run
             Parallel.ForEach
                 (
@@ -220,6 +222,7 @@ namespace RTEManager.Implementation {
                         )
                 );
 
+			Console.WriteLine ("[LIFE] cleaning up");
             // reset collections
             Parallel.ForEach
                 (
@@ -234,6 +237,7 @@ namespace RTEManager.Implementation {
             stopWatch.Stop();
 
             _isRunning = false;
+			Console.WriteLine ("[LIFE] Tick Done");
             return stopWatch.ElapsedMilliseconds;
         }
 
