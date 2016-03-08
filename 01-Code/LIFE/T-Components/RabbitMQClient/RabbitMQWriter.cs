@@ -24,20 +24,13 @@ namespace RabbitMQClient
 		{
 			
 			var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
-			var ip   = cfgClient.Get("rabbitmq/ip");
-			var port = cfgClient.Get("rabbitmq/port");
-			var user = cfgClient.Get("rabbitmq/user");
-			var pass = cfgClient.Get("rabbitmq/pass");
 
-			var factory = new ConnectionFactory() { 
-				HostName = ip, 
-				Port = Int32.Parse(port),
-				UserName = user,
-				Password = pass
-			
-			};
-
-			connection = factory.CreateConnection();
+			var connection = new ConnectionFactory {
+				HostName = cfgClient.Get("rabbitmq/ip"),
+				UserName = cfgClient.Get("rabbitmq/user"),
+				Password = cfgClient.Get("rabbitmq/pass"),
+				Port = int.Parse(cfgClient.Get("rabbitmq/port"))
+			}.CreateConnection();
 			channel = connection.CreateModel ();
 
 			// name queue with 'life-' prefix
