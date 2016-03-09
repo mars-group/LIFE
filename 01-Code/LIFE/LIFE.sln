@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulation Manager", "Simulation Manager", "{060A5DF3-4C49-402B-9B3F-142A9ECD30B1}"
 EndProject
@@ -441,8 +440,8 @@ Global
 		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|ARM.ActiveCfg = Release|Any CPU
 		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|x64.ActiveCfg = Release|x64
-		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|x64.Build.0 = Release|x64
+		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|x64.ActiveCfg = Release|Any CPU
+		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|x64.Build.0 = Release|Any CPU
 		{F6626674-3A9A-460B-A98B-A66B561FD811}.Release|x86.ActiveCfg = Release|Any CPU
 		{20A316C2-8779-474D-98FB-A13DAC9043AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20A316C2-8779-474D-98FB-A13DAC9043AB}.Debug|Any CPU.Build.0 = Debug|Any CPU

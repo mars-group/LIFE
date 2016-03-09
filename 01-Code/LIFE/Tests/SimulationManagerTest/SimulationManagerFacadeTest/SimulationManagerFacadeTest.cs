@@ -11,12 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LayerContainerFacade.Interfaces;
 using LCConnector.TransportTypes;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using SimulationManagerFacade.Implementation;
-using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 
 namespace SimulationManagerTest.SimulationManagerFassadeTest

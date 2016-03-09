@@ -27,7 +27,6 @@ namespace ResultAdapter.Implementation {
 
     private readonly ConcurrentDictionary<ISimResult, byte> _simObjects; // List of all objects to output.
     private MongoSender _sender;                                         // Database connector.
-                                 // Listener queue notifier.
 
 
     /// <summary>
@@ -43,9 +42,8 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
-	  if (_simObjects.IsEmpty) {
-		return;
-	  }
+	    if (_simObjects.IsEmpty) return;
+	  
 
       // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
       if (_sender == null) {
@@ -60,7 +58,7 @@ namespace ResultAdapter.Implementation {
       });
 
       // MongoDB bulk insert of the output strings and RMQ notification.
-	  _sender.SendVisualizationData(results, currentTick);
+	    _sender.SendVisualizationData(results, currentTick);
     }
 
 
