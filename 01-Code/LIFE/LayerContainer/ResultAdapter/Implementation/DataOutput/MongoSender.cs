@@ -39,9 +39,8 @@ namespace ResultAdapter.Implementation.DataOutput {
 	/// <param name = "currentTick">The current tick of the simulation.</param>
     public void SendVisualizationData(ConcurrentBag<AgentSimResult> results, int currentTick) {
 			_collection.InsertMany (results);
-			_notifier.AnnounceNewPackage (_simId, currentTick);
-			/*
-			_collection.InsertManyAsync(results)
+			_notifier.AnnounceNewPackage(_simId, currentTick);
+			/*_collection.InsertManyAsync(results)
 				.ContinueWith(t => {
 					if(t.IsFaulted){
 						throw t.Exception;
