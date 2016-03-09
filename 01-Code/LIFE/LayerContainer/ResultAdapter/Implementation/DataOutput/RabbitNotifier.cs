@@ -25,7 +25,7 @@ namespace ResultAdapter.Implementation.DataOutput {
         Password = cfgClient.Get("rabbitmq/pass"),
         Port = int.Parse(cfgClient.Get("rabbitmq/port"))
       }.CreateConnection();
-      _queueName = "NewResults";
+      _queueName = "ResultAdapterEvents";
       _channel = connection.CreateModel();
       _channel.QueueDeclare(_queueName, false, false, false, null);     
     }

@@ -115,7 +115,7 @@ namespace RuntimeEnvironment.Implementation
 
 			var stb = new StringBuilder ();
 			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Finished\",\"tickCount\" : \"{1}\",\"totalDuration\" : \"{2}\", \"time\" : \"{3}\"}}", _simulationId, _nrOfTicks, sw.ElapsedMilliseconds, GetUnixTimeStamp());
-			_rabbitMQWriter.SendMessage(stb.ToString());
+			//_rabbitMQWriter.SendMessage(stb.ToString());
 
 			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
         }
@@ -147,7 +147,8 @@ namespace RuntimeEnvironment.Implementation
 
  			var stb = new StringBuilder ();
 			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
-			_rabbitMQWriter.SendMessage(stb.ToString());
+			Console.WriteLine (stb);
+			//_rabbitMQWriter.SendMessage(stb.ToString());
 		}
 
 		private void CleanUp(){
