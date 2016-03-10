@@ -7,7 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Data;
 using LayerContainerFacade.Interfaces;
 using log4net;
 

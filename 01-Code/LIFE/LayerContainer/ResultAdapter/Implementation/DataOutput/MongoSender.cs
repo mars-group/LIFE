@@ -2,7 +2,6 @@
 using ConfigService;
 using LifeAPI.Results;
 using MongoDB.Driver;
-using System;
 
 namespace ResultAdapter.Implementation.DataOutput {
 
@@ -12,9 +11,9 @@ namespace ResultAdapter.Implementation.DataOutput {
   internal class MongoSender {
 
     private readonly IMongoCollection<AgentSimResult> _collection; // Collection for output.
-	private readonly RabbitNotifier _notifier;  
+	  private readonly RabbitNotifier _notifier;                     // Listener queue notifier.
+	  private readonly string _simId;                                // Sim-ID, used for announcement.
 
-	private readonly string _simId;
 
     /// <summary>
     ///   Create the MongoDB adapter for data output.
@@ -27,8 +26,8 @@ namespace ResultAdapter.Implementation.DataOutput {
       var client = new MongoClient("mongodb://"+ip+":"+port);
       var database = client.GetDatabase("SimResults");
       _collection = database.GetCollection<AgentSimResult>(simId);
-	  _notifier = new RabbitNotifier(cfgClient);  
-	  _simId = simId;
+	    _notifier = new RabbitNotifier(cfgClient);  
+	    _simId = simId;
     }
 
 
@@ -55,7 +54,7 @@ namespace ResultAdapter.Implementation.DataOutput {
 						_notifier.AnnounceNewPackage(_simId, currentTick);
 					}
 				});
-				*/
+			*/
     }
   }
 }
