@@ -22,7 +22,7 @@ namespace PerfTester
 	{
 		public static void Main (string[] args)
 		{
-			var AgentsPerNode = 100;
+			var AgentsPerNode = 10000;
 			// create and register RealAgents in serviceA
 			var _agentsA = new List<MockAgent>();
 			for (var i = 0; i < AgentsPerNode; i++)

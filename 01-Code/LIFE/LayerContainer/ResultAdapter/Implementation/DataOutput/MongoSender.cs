@@ -26,8 +26,8 @@ namespace ResultAdapter.Implementation.DataOutput {
       var client = new MongoClient("mongodb://"+ip+":"+port);
       var database = client.GetDatabase("SimResults");
       _collection = database.GetCollection<AgentSimResult>(simId);
-	  _notifier = new RabbitNotifier(cfgClient);  
-	  _simId = simId;
+	    _notifier = new RabbitNotifier(cfgClient);  
+	    _simId = simId;
     }
 
 
@@ -38,9 +38,8 @@ namespace ResultAdapter.Implementation.DataOutput {
 	/// <param name = "currentTick">The current tick of the simulation.</param>
     public void SendVisualizationData(ConcurrentBag<AgentSimResult> results, int currentTick) {
 			_collection.InsertMany (results);
-			_notifier.AnnounceNewPackage (_simId, currentTick);
-			/*
-			_collection.InsertManyAsync(results)
+			_notifier.AnnounceNewPackage(_simId, currentTick);
+			/*_collection.InsertManyAsync(results)
 				.ContinueWith(t => {
 					if(t.IsFaulted){
 						throw t.Exception;
@@ -55,7 +54,7 @@ namespace ResultAdapter.Implementation.DataOutput {
 						_notifier.AnnounceNewPackage(_simId, currentTick);
 					}
 				});
-				*/
+			*/
     }
   }
 }

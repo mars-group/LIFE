@@ -57,8 +57,9 @@ namespace ResultAdapter.Implementation {
         results.Add(entity.GetResultData());
       });
 
-      // MongoDB bulk insert of the output strings and RMQ notification.
+      // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
 	    _sender.SendVisualizationData(results, currentTick);
+	    results = null;
     }
 
 
