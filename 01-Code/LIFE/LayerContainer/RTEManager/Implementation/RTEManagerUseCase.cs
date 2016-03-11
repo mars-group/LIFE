@@ -131,7 +131,8 @@ namespace RTEManager.Implementation {
 				_resultAdapter.SimulationId = _simulationId;
 			}
 			// Initialize Layer
-            return _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
+			var duration = _layers[instanceId].InitLayer(initData, RegisterTickClient, UnregisterTickClient);
+			return duration;
         }
 
 		public void DisposeSuitableLayers ()
@@ -155,6 +156,7 @@ namespace RTEManager.Implementation {
             if (_currentTick == 0) {
 				Console.WriteLine ("[LIFE] Executing Pre-Viz.");
 				_resultAdapter.WriteResults(_currentTick);
+				GC.Collect();
             }
 			Console.WriteLine ("[LIFE] Executing Pre-Tick");
             // PreTick all ActiveLayers
@@ -192,7 +194,7 @@ namespace RTEManager.Implementation {
                             tickClientToBeRemoved => {
                                 byte trash;
                                 _tickClientsPerLayer[layer].TryRemove(tickClientToBeRemoved, out trash);
-								
+
 								// remove tickClient from visualization if type is appropiate
 								var visAgent = tickClientToBeRemoved as ISimResult;
 								if(visAgent != null){
@@ -222,16 +224,22 @@ namespace RTEManager.Implementation {
                         )
                 );
 
-			Console.WriteLine ("[LIFE] cleaning up");
+			Console.WriteLine ("[LIFE] cleaning up and collecting garbage");
             // reset collections
             Parallel.ForEach
                 (
                     _tickClientsPerLayer.Keys,
                     layer => {
+						_tickClientsMarkedForDeletionPerLayer[layer] = null;
+						_tickClientsMarkedForRegistrationPerLayer[layer] = null;
                         _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentBag<ITickClient>();
                         _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentBag<ITickClient>();
                     }
                 );
+
+			// Garbage Collect now
+			GC.Collect();
+
 
             // stop time measurement
             stopWatch.Stop();

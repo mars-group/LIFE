@@ -65,7 +65,7 @@
       <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.2\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
     <Reference Include="SpatialAPI">
-      <HintPath>..\..\packages\SpatialAPI.1.0.70\lib\net45\SpatialAPI.dll</HintPath>
+      <HintPath>..\..\packages\SpatialAPI.1.0.77\lib\net45\SpatialAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
