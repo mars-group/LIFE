@@ -224,7 +224,7 @@ namespace RTEManager.Implementation {
                         )
                 );
 
-			Console.WriteLine ("[LIFE] cleaning up");
+			Console.WriteLine ("[LIFE] cleaning up and explicit Garbage Collection");
             // reset collections
             Parallel.ForEach
                 (
@@ -238,7 +238,7 @@ namespace RTEManager.Implementation {
                 );
 
 			// Garbage Collect now
-			//GC.Collect();
+			GC.Collect();
 
 
             // stop time measurement
