@@ -27,7 +27,7 @@ namespace AgentShadowingService.Implementation
     {
 
         // The dictionary of ShadowAgents, sorted by their Guid
-        private readonly IDictionary<Guid, IAscServiceClient<TServiceInterface>> _shadowAgentClients;
+        private readonly ConcurrentDictionary<Guid, IAscServiceClient<TServiceInterface>> _shadowAgentClients;
 
         // the Multicast Address derived from agent type
         private readonly string _mcastAddress;
@@ -118,7 +118,7 @@ namespace AgentShadowingService.Implementation
             // connect the shadow agent
             shadowAgentClient.Connect();
             // store shadow agent client in list for later management and observation
-            _shadowAgentClients.Add(agentId, shadowAgentClient);
+            _shadowAgentClients.TryAdd(agentId, shadowAgentClient);
             // return RealProxy interface wrapper as clientside reference to remote object
             return shadowAgentClient.ServiceProxy;
         
@@ -135,7 +135,8 @@ namespace AgentShadowingService.Implementation
             lock (_syncRoot)
             {
                 _shadowAgentClients[agentId].Disconnect();
-                _shadowAgentClients.Remove(agentId);
+                IAscServiceClient<TServiceInterface> bla;
+                _shadowAgentClients.TryRemove(agentId, out bla);
             }
 
         }
