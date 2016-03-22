@@ -224,7 +224,7 @@ namespace RuntimeEnvironment.Implementation
 						".cfg");
 				}
 
-				// easy: first instantiate the layer...
+				// make distinction between distributed initialization...
 				if (distributionPossible && layerConfig.DistributionStrategy != DistributionStrategy.NO_DISTRIBUTION)
 				{
 					// currently we only support EVEN_DISTRIBUTION or ENV_REPLICATION
@@ -279,22 +279,32 @@ namespace RuntimeEnvironment.Implementation
 						foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
 						{
 							var agentCount = agentConfig.GetAgentInstanceCount();
+							var lcCount = layerContainerClients.Count();
+							var normalAgentCount = agentCount / lcCount;
+							var overheadAgentCount = agentCount % lcCount;
 
-							initData.AddAgentInitConfig(
-								agentConfig.GetClassName(),
-								agentConfig.GetFullName(),
-								agentCount,
-								agentConfig.GetFieldToConstructorArgumentRelations()
+							Parallel.For(0, lcCount, i => {
+
+								initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
+
+								// add overhead of agents to first layer
+								var actualAgentCount = i == 0 ? normalAgentCount + overheadAgentCount : normalAgentCount;
+								var offset = i * actualAgentCount;
+
+								initData.AddAgentInitConfig(
+									agentConfig.GetClassName(),
+									agentConfig.GetFullName(),
+									actualAgentCount,
+									offset,
+									agentConfig.GetFieldToConstructorArgumentRelations()
 								);
-
-
+								layerContainerClients[i].Initialize(layerInstanceId, initData);
+							});
 						}
-
-						// initialize 
-						Parallel.ForEach(layerContainerClients, lc => lc.Initialize(layerInstanceId, initData));
 
 					}
 				}
+				// ... and non-distributed initialization
 				else 
 				{
 					layerContainerClients[0].Instantiate(layerInstanceId);
@@ -333,6 +343,7 @@ namespace RuntimeEnvironment.Implementation
 								agentConfig.GetClassName(),
 								agentConfig.GetFullName(),
 								agentCount,
+								0,
 								agentConfig.GetFieldToConstructorArgumentRelations()
 								);
 						}

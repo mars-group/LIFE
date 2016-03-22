@@ -48,7 +48,7 @@ namespace AgentManagerService.Implementation
 			string rockUser = marsConfigService.Get("rock/serveruser");
 			string rockPassword = marsConfigService.Get("rock/serverpassword");
 
-			var connectionString = String.Format("Server={0};Uid={1};Pwd={2};","mariadbhost",rockUser,rockPassword);
+			var connectionString = string.Format("Server={0};Uid={1};Pwd={2};","mariadbhost",rockUser,rockPassword);
 
 
 
@@ -87,7 +87,7 @@ namespace AgentManagerService.Implementation
 			    // check if we already have this enumerator
 			    if (agentDBParamArrays.ContainsKey(initInfo.MarsDBColumnName)) return;
 
-			    var sqlQuery = String.Format ("SELECT {0} FROM imports.{1}", initInfo.MarsDBColumnName, initInfo.MarsTableName);
+				var sqlQuery = string.Format ("SELECT {0} FROM imports.{1} LIMIT {2} OFFSET {3}", initInfo.MarsDBColumnName, initInfo.MarsTableName, agentInitConfig.RealAgentCount, agentInitConfig.AgentInitOffset);
 			    using (var mysqlConnection = new MySqlConnection(connectionString))
 			    {
 			        mysqlConnection.Open();
