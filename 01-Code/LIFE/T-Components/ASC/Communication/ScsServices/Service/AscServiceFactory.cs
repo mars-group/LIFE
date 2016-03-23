@@ -8,17 +8,16 @@
 //  *******************************************************/
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Server;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
-namespace ASC.Communication.ScsServices.Service {
-    /// <summary>
-    ///     This class is used to build AscService applications.
-    /// </summary>
-    public static class AscServiceFactory {
+namespace ASC.Communication.ScsServices.Service
+{
+	/// <summary>
+	///     This class is used to build AscService applications.
+	/// </summary>
+	public static class AscServiceFactory {
         
-		private static readonly IDictionary<string, IAscServiceApplication> ServiceAppDictionary = new ConcurrentDictionary<string, IAscServiceApplication> ();
+		private static readonly ConcurrentDictionary<string, IAscServiceApplication> ServiceAppDictionary = new ConcurrentDictionary<string, IAscServiceApplication> ();
 
 		/// <summary>
         /// Creates an ASC Service with the provided and multiCast Address and by using the default 
@@ -35,8 +34,7 @@ namespace ASC.Communication.ScsServices.Service {
 		        return serviceApp;
 		    }
 		    serviceApp = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, multicastGroup)));
-		    ServiceAppDictionary.Add(typeOfService, serviceApp);
-		    return serviceApp;
+			return ServiceAppDictionary.GetOrAdd(typeOfService, serviceApp);
 		}
 
         /// <summary>
@@ -46,7 +44,9 @@ namespace ASC.Communication.ScsServices.Service {
 		/// <param name="typeName">Type name.</param>
 		public static IAscServiceApplication GetServiceApplicationByTypeName(string typeName)
 		{
-		    return ServiceAppDictionary.ContainsKey (typeName) ? ServiceAppDictionary [typeName] : null;
+			IAscServiceApplication serviceApp;
+			ServiceAppDictionary.TryGetValue(typeName, out serviceApp);
+			return serviceApp;
 		}
     }
 }
