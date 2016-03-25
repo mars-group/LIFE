@@ -6,7 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
+
 using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
@@ -17,9 +17,7 @@ namespace RuntimeEnvironment.Implementation.Entities {
     internal class LayerContainerClient {
         private readonly IScsServiceClient<ILayerContainer> _layerContainer;
 
-        public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer,
-            ModelContent content,
-            int nr) {
+        public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer, ModelContent content) {
             _layerContainer = layerContainer;
 			// set timeout to infinite
 			_layerContainer.Timeout = -1;

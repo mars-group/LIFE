@@ -29,11 +29,6 @@ namespace AppSettingsManager {
         /// </summary>
         public int MulticastGroupSendingStartPort { get; set; }
 
-        /// <summary>
-        /// </summary>
-        public int DHTPort { get; set; }
-
-
         public List<string> Strings { get; set; } 
         /// <summary>
         /// </summary>
@@ -43,7 +38,6 @@ namespace AppSettingsManager {
             MulticastGroupIp = "239.0.0.1";
             MulticastGroupListenPort = 50100;
             MulticastGroupSendingStartPort = 50500;
-            DHTPort = 8500;
             IPVersion = 4;
         }
 
@@ -52,7 +46,6 @@ namespace AppSettingsManager {
             MulticastGroupIp = multicastGroupIp;
             MulticastGroupListenPort = multicastGroupListenPort;
             MulticastGroupSendingStartPort = multicastGroupSendingStartPort;
-            DHTPort = 8500;
             IPVersion = ipVersion;
         }
     }

@@ -8,7 +8,6 @@
 //  *******************************************************/
 using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,12 +19,12 @@ using LifeAPI.Config;
 using log4net;
 using MARS.Shuttle.SimulationConfig;
 using MARS.Shuttle.SimulationConfig.Interfaces;
-using ModelContainer.Interfaces.Exceptions;
 using Mono.Addins;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 
-namespace ModelContainer.Implementation {
+namespace ModelContainer.Implementation
+{
     /// <summary>
     ///     This class implements all logic revolving around the immediate finding of models in the model folder,<br />
     ///     watching for changes, serialization for transport and so on.

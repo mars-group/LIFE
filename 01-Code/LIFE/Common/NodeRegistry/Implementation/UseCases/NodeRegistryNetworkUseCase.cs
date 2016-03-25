@@ -15,7 +15,6 @@ using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Implementation.Messages.Factory;
 using ProtoBuf;
-using System.Net.Sockets;
 
 namespace NodeRegistry.Implementation.UseCases {
 
@@ -25,7 +24,7 @@ namespace NodeRegistry.Implementation.UseCases {
         private readonly NodeRegistryHeartBeatUseCase _nodeRegistryHeartBeatUseCase;
 
         private readonly IMulticastAdapter _multicastAdapter;
-        private readonly Boolean _addMySelfToActiveNodeList;
+        private readonly bool _addMySelfToActiveNodeList;
 
         private readonly Thread _listenThread;
         private ILog Logger;

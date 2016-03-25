@@ -7,7 +7,10 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 
@@ -42,35 +45,27 @@ namespace SimulationManagerShared
         /// </summary>
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
-        public SimulationManagerSettings(string addinLibraryDirectoryPath, string modelDirectoryPath, NodeRegistryConfig nodeRegistryConfig, MulticastSenderConfig multicastSenderConfig) {
-            AddinLibraryDirectoryPath = addinLibraryDirectoryPath;
-            ModelDirectoryPath = modelDirectoryPath;
-            NodeRegistryConfig = nodeRegistryConfig;
-            MulticastSenderConfig = multicastSenderConfig;
-        }
-
         //TODO: can this be internal?
         public SimulationManagerSettings() {
-            var ipAddress = "127.0.0.1";
-            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                {
-                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
-                    {
-                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                        {
-                            ipAddress = ip.Address.ToString();
-                        }
-                    }
-                }
-            }
+            var foundAddress = NetworkInterface.GetAllNetworkInterfaces()
+                .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                .GetIPProperties().UnicastAddresses
+                .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
 
-            //AddinLibraryDirectoryPath = "./addinConfig";
-            //ModelDirectoryPath = "./addinConfig/addins";
+            var ipAddress = (foundAddress != String.Empty) ? foundAddress : "127.0.0.1";
+            // Step 1: Get the host name
+            var hostname = Dns.GetHostName();
+            // Step 2: Perform a DNS lookup.
+            // Note that the lookup is not guaranteed to succeed, especially
+            // if the system is misconfigured. On the other hand, if that
+            // happens, you probably can't connect to the host by name, anyway.
+            var hostinfo = Dns.GetHostEntry(hostname);
+            // Step 3: Retrieve the canonical name.
+            var fqdn = hostinfo.HostName;
+            var smName = "SM-" + fqdn;
             AddinLibraryDirectoryPath = "./layers";
             ModelDirectoryPath = "./layers/addins";
-            NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, "SM-1", ipAddress, 44521, true);
+            NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, smName, ipAddress, 44521, true);
             MulticastSenderConfig = new MulticastSenderConfig();
         }
     }

@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
@@ -26,9 +28,9 @@ using RuntimeEnvironment.Interfaces;
 using SMConnector;
 using SMConnector.Exceptions;
 using SMConnector.TransportTypes;
-using System.Threading.Tasks;
 
-namespace RuntimeEnvironment.Implementation {
+namespace RuntimeEnvironment.Implementation
+{
 	internal class RuntimeEnvironmentUseCase : IRuntimeEnvironment {
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
@@ -148,25 +150,37 @@ namespace RuntimeEnvironment.Implementation {
         private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
             var content = _modelContainer.GetModel(modelDescription);
-            var layerContainerClients = new LayerContainerClient[layerContainers.Count];
+            var layerContainerClients = new List<LayerContainerClient>();
 
             /* 1.
              * Create LayerContainerClients for all connected LayerContainers
              */
-            var i = 0;
-            foreach (TNodeInformation nodeInformationType in layerContainers)
+            foreach (var nodeInformationType in layerContainers)
             {
-                var client = new LayerContainerClient
-                    (
-                    ScsServiceClientBuilder.CreateClient<ILayerContainer>
+                try
+                {
+                    var client = new LayerContainerClient(
+                        ScsServiceClientBuilder.CreateClient<ILayerContainer>
                         (
                             nodeInformationType.NodeEndpoint.IpAddress + ":" +
                             nodeInformationType.NodeEndpoint.Port
                         ),
-                    content,
-                    i);
-                layerContainerClients[i] = client;
-                i++;
+                    content);
+                    layerContainerClients.Add(client);
+                }
+                catch(Exception ex)
+                {
+                    var sockEx = ex as SocketException;
+                    if (sockEx != null)
+                    {
+                        Console.WriteLine("A LayerContainer could not be connected. Continueing without it.");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
             }
 
             /* Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
@@ -176,95 +190,17 @@ namespace RuntimeEnvironment.Implementation {
             var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription);
 
 
-            // prefer SHUTTLE based configuration
-            if (shuttleSimConfig != null)
-            {
-                // configure bia SHUTTLE
-                return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainerClients, shuttleSimConfig);
-            }
-            // configure via XML (will soon be deprecated)
-            return SetupSimulationRunViaXmlConfig(modelDescription, layerContainerClients, modelConfig);
-        }
-
-        private LayerContainerClient[] SetupSimulationRunViaXmlConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, ModelConfig modelConfig)
-        {
-            /* 2.
-             * Instantiate and initialize Layers by InstantiationOrder,
-             * differentiate between distributable and non-distributable layers.
-             * If distributable: instantiate and initialize in all LayerContainers according to DistributionStrategy
-             * This also includes initialization of the agent shadowing system.
-             * This is possible because each shadow agent stub, only joins a multicast group, but mustn't have a 
-             * 1-1 connection to its real agent counterpart
-             */
-
-            // unique layerID per LayerContainer, does not need to be unique across whole simulation 
-            var layerId = 0;
-            foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
-            {
-                var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
-
-                // fetch layerConfig by layerName
-                LayerConfig layerConfig;
-                try
-                {
-                    layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
-                }
-                catch
-                {
-                    throw new NoLayerConfigurationPresentException(
-                        "Please specify an appropriate LayerConfig for " + layerDescription.Name + " in your config file: " + modelDescription.Name +
-                        ".cfg");
-                }
+			// prefer SHUTTLE based configuration
+			if (shuttleSimConfig != null)
+			{
+				// configure bia SHUTTLE
+				return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainerClients.ToArray(), shuttleSimConfig, modelConfig);
+			}
+			throw new Exception("No SHUTTLE SimConfig has been found. Please check your root folder for a SimConfig file.");
+		}
 
 
-                if (layerConfig.DistributionStrategy == DistributionStrategy.NO_DISTRIBUTION)
-                {
-                    // easy: first instantiate the layer...
-                    layerContainerClients[0].Instantiate(layerInstanceId);
-
-                    //...fetch all agentTypes and amounts...
-                    var initData = new TInitData(false, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate, _simulationId);
-                    foreach (var agentConfig in layerConfig.AgentConfigs)
-                    {
-                        var ids = new Guid[agentConfig.AgentCount];
-                        for (int j = 0; j < agentConfig.AgentCount; j++)
-                        {
-                            ids[j] = Guid.NewGuid();
-                        }
-                        initData.AddAgentInitConfig(agentConfig.AgentName, agentConfig.AgentName, agentConfig.AgentCount);
-                    }
-                    //...and finally initialize the layer with it
-                    layerContainerClients[0].Initialize(layerInstanceId, initData);
-                }
-                else if (layerConfig.DistributionStrategy == DistributionStrategy.ENV_REPLICATION)
-                {
-                    // special case, only valid for ESC layers!
-                    // set distribute to true
-                    var initData = new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate, _simulationId);
-                    foreach (var layerContainerClient in layerContainerClients)
-                    {
-                        layerContainerClient.Instantiate(layerInstanceId);
-                        layerContainerClient.Initialize(layerInstanceId, initData);
-                    }
-                } 
-                else 
-                {
-                    // get initData by layerConfig and LayerContainers
-                    var initData = GetInitDataByLayerConfig(layerConfig, layerContainerClients, modelConfig);
-                    foreach (var layerContainerClient in layerContainerClients)
-                    {
-                        layerContainerClient.Instantiate(layerInstanceId);
-                        layerContainerClient.Initialize(layerInstanceId, initData[layerContainerClient]);
-                    }
-                }
-
-                layerId++;
-            }
-
-            return layerContainerClients;
-        }
-
-        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, ISimConfig shuttleSimConfig)
+        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, ISimConfig shuttleSimConfig, ModelConfig modelConfig)
         {
             /* 2.
              * Instantiate and initialize Layers by InstantiationOrder,
@@ -277,6 +213,8 @@ namespace RuntimeEnvironment.Implementation {
             var gisLayerSourceEnumerator = shuttleSimConfig.GetGISActiveLayerSources().GetEnumerator();
             var thereAreGisLayers = gisLayerSourceEnumerator.MoveNext();
 
+			var distributionPossible = layerContainerClients.Count() > 1;
+
             var timeSeriesSourceEnumerator = shuttleSimConfig.GetTSLayerSources().GetEnumerator();
             var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
@@ -284,171 +222,163 @@ namespace RuntimeEnvironment.Implementation {
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
-                // easy: first instantiate the layer...
-                layerContainerClients[0].Instantiate(layerInstanceId);
+				var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
+
+				// fetch layerConfig by layerName
+				LayerConfig layerConfig;
+				try
+				{
+					layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
+				}
+				catch
+				{
+					throw new NoLayerConfigurationPresentException(
+						"Please specify an appropriate LayerConfig for " + layerDescription.Name + " in your config file: " + modelDescription.Name +
+						".cfg");
+				}
+
+				// make distinction between distributed initialization...
+				if (distributionPossible && layerConfig.DistributionStrategy != DistributionStrategy.NO_DISTRIBUTION)
+				{
+					// currently we only support EVEN_DISTRIBUTION or ENV_REPLICATION
+					// each of which lead to the distributed layers being instantiated on all nodes
+					foreach (var lc in layerContainerClients)
+					{
+						lc.Instantiate(layerInstanceId);
+					}
+
+					// check if the current layer is a GIS Layer
+					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
+					var interfaces = layerType.GetInterfaces();
+					if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
+					{
+						var gisInfo = gisLayerSourceEnumerator.Current;
+						initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
+
+
+						//...and finally initialize all layer instances with it
+						foreach (var lc in layerContainerClients)
+						{
+							lc.Initialize(layerInstanceId, initData);
+						}
+
+						if (!gisLayerSourceEnumerator.MoveNext())
+						{
+							thereAreGisLayers = false;
+						}
+
+					}
+					else if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
+					{
+						var tsInfo = timeSeriesSourceEnumerator.Current;
+						initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
+
+						foreach (var lc in layerContainerClients)
+						{
+							lc.Initialize(layerInstanceId, initData);
+						}
+
+						if (!timeSeriesSourceEnumerator.MoveNext())
+						{
+							thereAreTimeSeriesLayers = false;
+						}
+					}
+					else if (shuttleSimConfig.GetIAtLayerInfo()
+						  .GetAtConstructorInfoListsWithLayerName()
+						  .ContainsKey(layerDescription.Name))
+					{
+
+
+						foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
+						{
+							var agentCount = agentConfig.GetAgentInstanceCount();
+							var lcCount = layerContainerClients.Count();
+							var normalAgentCount = agentCount / lcCount;
+							var overheadAgentCount = agentCount % lcCount;
+
+							Parallel.For(0, lcCount, i => {
+
+								initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
+
+								// add overhead of agents to first layer
+								var actualAgentCount = i == 0 ? normalAgentCount + overheadAgentCount : normalAgentCount;
+								var offset = i * actualAgentCount;
+
+								initData.AddAgentInitConfig(
+									agentConfig.GetClassName(),
+									agentConfig.GetFullName(),
+									actualAgentCount,
+									offset,
+									agentConfig.GetFieldToConstructorArgumentRelations()
+								);
+								layerContainerClients[i].Initialize(layerInstanceId, initData);
+							});
+						}
+
+					}
+				}
+				// ... and non-distributed initialization
+				else 
+				{
+					layerContainerClients[0].Instantiate(layerInstanceId);
+
+					// check if the current layer is a GIS Layer
+					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
+					var interfaces = layerType.GetInterfaces();
+					if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
+					{
+						var gisInfo = gisLayerSourceEnumerator.Current;
+						initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
+						if (!gisLayerSourceEnumerator.MoveNext())
+						{
+							thereAreGisLayers = false;
+						}
+					}
+					else if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
+					{
+						var tsInfo = timeSeriesSourceEnumerator.Current;
+						initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
+						if (!timeSeriesSourceEnumerator.MoveNext())
+						{
+							thereAreTimeSeriesLayers = false;
+						}
+					}
+					else if (shuttleSimConfig.GetIAtLayerInfo()
+						  .GetAtConstructorInfoListsWithLayerName()
+						  .ContainsKey(layerDescription.Name))
+					{
+
+						foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
+						{
+							var agentCount = agentConfig.GetAgentInstanceCount();
+
+							initData.AddAgentInitConfig(
+								agentConfig.GetClassName(),
+								agentConfig.GetFullName(),
+								agentCount,
+								0,
+								agentConfig.GetFieldToConstructorArgumentRelations()
+								);
+						}
+
+					}
+
+					layerContainerClients[0].Initialize(layerInstanceId, initData);
+				}
                 
-                //...fetch all agentTypes and amounts...
-                var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
 
-
-                // check if the current layer is a GIS Layer
-                var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-                var interfaces = layerType.GetInterfaces();
-                if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
-                {
-                    var gisInfo = gisLayerSourceEnumerator.Current;
-                    initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
-                    if (!gisLayerSourceEnumerator.MoveNext()) {
-                        thereAreGisLayers = false;
-                    }
-                }
-                else if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
-                {
-                    var tsInfo = timeSeriesSourceEnumerator.Current;
-                    initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
-                    if (!timeSeriesSourceEnumerator.MoveNext())
-                    {
-                        thereAreTimeSeriesLayers = false;
-                    }
-                } else if (shuttleSimConfig.GetIAtLayerInfo()
-                        .GetAtConstructorInfoListsWithLayerName()
-                        .ContainsKey(layerDescription.Name)) 
-                {
-
-                    foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[ layerDescription.Name]) {
-                        var agentCount = agentConfig.GetAgentInstanceCount();
-
-                        initData.AddAgentInitConfig(
-                            agentConfig.GetClassName(),
-                            agentConfig.GetFullName(),
-							agentCount,
-                            agentConfig.GetFieldToConstructorArgumentRelations()
-                            );
-                    }
-                }
-
-                //...and finally initialize the layer with it
-                layerContainerClients[0].Initialize(layerInstanceId, initData);
                 layerId++;
             }
 
             return layerContainerClients;
         }
 
-        /// <summary>
-        /// Creates a Dictionary of initialization data per Layercontainer
-        /// </summary>
-        /// <param name="layerConfig"></param>
-        /// <param name="layerContainerClients"></param>
-        /// <returns></returns>
-        private IDictionary<LayerContainerClient, TInitData> GetInitDataByLayerConfig(LayerConfig layerConfig, LayerContainerClient[] layerContainerClients, ModelConfig modelConfig)
-        {
-            if (layerContainerClients == null) throw new ArgumentNullException("layerContainerClients");
-            
-            var result = new Dictionary<LayerContainerClient, TInitData>();
 
-            switch (layerConfig.DistributionStrategy)
-            {
-
-                    case DistributionStrategy.EVEN_DISTRIBUTION:
-
-                    // initialize result Dictionary
-                    foreach (var layerContainerClient in layerContainerClients)
-                    {
-                        result.Add(layerContainerClient, new TInitData(true, modelConfig.OneTickTimeSpan, modelConfig.SimulationWallClockStartDate, _simulationId));
-                    }
-
-                    var lcCount = layerContainerClients.Length;
-                    
-                    foreach (var agentConfig in layerConfig.AgentConfigs)
-                    {
-                        
-                        // create Guids for all agents
-                        var agentIds = new Guid[agentConfig.AgentCount];
-                        for (int i = 0; i < agentConfig.AgentCount; i++) {
-                            agentIds[i] = Guid.NewGuid();
-                        }
-
-                        // calculate Agents per LayerContainer
-                        var agentAmountPerLayerContainer = agentConfig.AgentCount / lcCount;
-                        
-                        // calculate overhead resulting from uneven division
-                        var agentOverhead = agentConfig.AgentCount % lcCount;
-                        var overheadedAmount = agentAmountPerLayerContainer + agentOverhead;
-
-                        var agentInitIndex = 0;
-                        for (var lcIndex = 0; lcIndex < lcCount; lcIndex++) {
-                            // add overhead to first layerContainer
-                            if (lcIndex == 0)
-                            {
-
-                                var shadowAgentCountPerLayerContainer = agentConfig.AgentCount - overheadedAmount;
-
-                                var realAgentIds = new Guid[overheadedAmount];
-                                var shadowAgentIds = new Guid[shadowAgentCountPerLayerContainer];
-
-                                for (int j = 0; j < overheadedAmount; j++) {
-                                    realAgentIds[j] = agentIds[lcIndex + j];
-                                }
-
-                                agentInitIndex += overheadedAmount;
-
-                                for (int j = 0; j < shadowAgentCountPerLayerContainer; j++) {
-                                    shadowAgentIds[j] = agentIds[overheadedAmount + j];
-                                }
-
-                                result[layerContainerClients[lcIndex]]
-                                    .AddAgentInitConfig(
-                                        agentConfig.AgentName,
-                                        agentConfig.AgentName,
-                                        overheadedAmount
-                                    );
-                            }
-                            else
-                            {
-
-                                var shadowAgentCountPerLayerContainer = agentConfig.AgentCount-agentAmountPerLayerContainer;
-
-                                var realAgentIds = new Guid[agentAmountPerLayerContainer];
-                                var shadowAgentIds = new Guid[shadowAgentCountPerLayerContainer];
-
-                                for (int j = 0; j < agentAmountPerLayerContainer; j++)
-                                {
-                                    realAgentIds[j] = agentIds[agentInitIndex + j];
-                                }
-                                // set initIndex to next block of agents
-                                agentInitIndex += agentAmountPerLayerContainer;
-
-                                // add all agentIds which are before the current range of real agents
-                                for (int j = 0; j < agentInitIndex-agentAmountPerLayerContainer; j++)
-                                {
-                                    shadowAgentIds[j] = agentIds[j];
-                                }
-
-                                // add all agentIds which are after the current range of real agents
-                                for (int i = agentInitIndex-agentAmountPerLayerContainer; i < agentConfig.AgentCount-agentInitIndex; i++) {
-                                    shadowAgentIds[i] = agentIds[i + agentAmountPerLayerContainer];
-                                }
-
-                                result[layerContainerClients[lcIndex]]
-                                    .AddAgentInitConfig(
-                                        agentConfig.AgentName,
-                                        agentConfig.AgentName,
-                                        agentAmountPerLayerContainer
-                                    );   
-                            }
-                        }
-                    }
-
-                    break;
-
-            }
-            return result;
-        }
 
         private void NewNode(TNodeInformation newnode) {
             lock (this) {
                 _idleLayerContainers.Add(newnode);
+                Console.WriteLine("New LayerContainer registered: IP={0}, Name={1}", newnode.NodeEndpoint.IpAddress, newnode.NodeIdentifier);
             }
         }
     }

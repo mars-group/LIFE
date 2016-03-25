@@ -7,11 +7,11 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using CustomUtilities.Collections;
 
 
 namespace NodeRegistry.Implementation.UseCases
@@ -20,17 +20,17 @@ namespace NodeRegistry.Implementation.UseCases
 
         private readonly NodeRegistryEventHandlerUseCase _nodeRegistryEventHandlerUseCase;
         
-        private readonly ThreadSafeSortedList<String, TNodeInformation> _activeNodeList;
+        private readonly ConcurrentDictionary<String, TNodeInformation> _activeNodeList;
 
 
         public NodeRegistryNodeManagerUseCase(NodeRegistryEventHandlerUseCase nodeRegistryEventHandlerUseCase) {
             _nodeRegistryEventHandlerUseCase = nodeRegistryEventHandlerUseCase;
-            _activeNodeList = new ThreadSafeSortedList<string, TNodeInformation>();
+            _activeNodeList = new ConcurrentDictionary<string, TNodeInformation>();
         }
 
         public List<TNodeInformation> GetAllNodes()
         {
-            return _activeNodeList.GetAllItems();
+            return _activeNodeList.Values.ToList();
         }
 
         public List<TNodeInformation> GetAllNodesByType(NodeType nodeType)
@@ -49,10 +49,12 @@ namespace NodeRegistry.Implementation.UseCases
 
         public void RemoveNode(TNodeInformation nodeInformation) {
             if (!_activeNodeList.ContainsKey(nodeInformation.NodeIdentifier)) return;
-            _activeNodeList.Remove(nodeInformation.NodeIdentifier);
-
-            //notify leave subsribers
-            _nodeRegistryEventHandlerUseCase.NotifyOnNodeLeaveSubsribers(nodeInformation);
+            TNodeInformation removedNode;
+            if (_activeNodeList.TryRemove(nodeInformation.NodeIdentifier, out removedNode))
+            {
+                //notify leave subsribers
+                _nodeRegistryEventHandlerUseCase.NotifyOnNodeLeaveSubsribers(nodeInformation);
+            }
         }
 
         public bool ContainsNode(TNodeInformation nodeInformation) {

@@ -7,11 +7,11 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using CustomUtilities.Collections;
 using log4net;
 using LoggerFactory.Interface;
 using MulticastAdapter.Interface;
@@ -27,13 +27,13 @@ namespace NodeRegistry.Implementation.UseCases
     internal class NodeRegistryHeartBeatUseCase
     {
 
-        private NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUseCase;
+        private readonly NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUseCase;
 
         /// <summary>
 		/// This dictionary maps Timers NodeInformationTypes to Timers. If no HeartBeat msg from a TNodeInformation is received the timeEvent will fire
 		///  and delete this TNodeInformation from the active NodeList
         /// </summary>
-        private ThreadSafeSortedList<TNodeInformation, Timer> _heartBeatTimers;
+        private readonly ConcurrentDictionary<TNodeInformation, Timer> _heartBeatTimers;
 
         private readonly int _heartBeatInterval;
 
@@ -61,32 +61,28 @@ namespace NodeRegistry.Implementation.UseCases
             _multicastAdapter = multicastAdapter;
             _localNodeInformation = localNodeInformation;
 
-            _heartBeatTimers = new ThreadSafeSortedList<TNodeInformation, Timer>();
+            _heartBeatTimers = new ConcurrentDictionary<TNodeInformation, Timer>();
             _heartBeatSenderTimer = new Timer(_heartBeatInterval);
             StartSendingHeartBeats();
         }
 
         private void StartSendingHeartBeats()
         {
-            
-            //_heartBeatSenderThread = new Thread(SendHeartBeat);
             _heartBeatSenderTimer.Elapsed += SendHeartBeat;
             _heartBeatSenderTimer.Enabled = true;
             _heartBeatSenderTimer.Start();
-            //_heartBeatSenderThread.Start();
         }
 
 
         public void CreateAndStartTimerForNodeEntry(TNodeInformation nodeInformation)
         {
-            if (!_heartBeatTimers.ContainsKey(nodeInformation) && ! nodeInformation.Equals(_localNodeInformation))
-            {
-                _nodeRegistryNodeManagerUseCase.AddNode(nodeInformation);
+            if (_heartBeatTimers.ContainsKey(nodeInformation) || nodeInformation.Equals(_localNodeInformation)) return;
 
-                var timer = CreateNewTimerForNodeEntry(nodeInformation);
-                _heartBeatTimers[nodeInformation] = timer;
-                timer.Start();
-            }
+            _nodeRegistryNodeManagerUseCase.AddNode(nodeInformation);
+
+            var timer = CreateNewTimerForNodeEntry(nodeInformation);
+            _heartBeatTimers[nodeInformation] = timer;
+            timer.Start();
         }
 
 
@@ -94,27 +90,22 @@ namespace NodeRegistry.Implementation.UseCases
         {
             var nodeInformationStub = new TNodeInformation(nodeType, nodeID, null);
 
-            if (_heartBeatTimers.ContainsKey(nodeInformationStub))
-            {
-                Timer timer = _heartBeatTimers[nodeInformationStub];
-                timer.Stop();
-                timer.Start();
-            }
+            if (!_heartBeatTimers.ContainsKey(nodeInformationStub)) return;
+            var timer = _heartBeatTimers[nodeInformationStub];
+            timer.Stop();
+            timer.Start();
         }
 
         public void Shutdow()
         {
-            //_heartBeatSenderThread.Interrupt();
             _heartBeatSenderTimer.Stop();
         }
 
         public void DeleteTimerForNodeInformationType(TNodeInformation nodeInformation) {
-            if (_heartBeatTimers.ContainsKey(nodeInformation)) {
-
-                _heartBeatTimers[nodeInformation].Stop();
-                _heartBeatTimers.Remove(nodeInformation);
-            }
-
+            if (!_heartBeatTimers.ContainsKey(nodeInformation)) return;
+            _heartBeatTimers[nodeInformation].Stop();
+            Timer deletedTimer;
+            _heartBeatTimers.TryRemove(nodeInformation, out deletedTimer);
         }
 
 
@@ -125,7 +116,8 @@ namespace NodeRegistry.Implementation.UseCases
             timer.Elapsed += delegate {
                 Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
                 _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
-                _heartBeatTimers.Remove(nodeInformation);
+                Timer delTimer;
+                _heartBeatTimers.TryRemove(nodeInformation, out delTimer);
             };
 
             return timer;

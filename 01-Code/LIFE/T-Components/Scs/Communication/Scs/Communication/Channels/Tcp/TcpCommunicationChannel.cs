@@ -70,9 +70,10 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         ///     used to communicate over network
         /// </param>
         public TcpCommunicationChannel(Socket clientSocket) {
+            if(clientSocket == null) { throw new ArgumentNullException(nameof(clientSocket));}
             _clientSocket = clientSocket;
             _clientSocket.NoDelay = true;
-
+            if(_clientSocket.RemoteEndPoint == null) { Console.WriteLine("ERROR ENDPOINT NULL!");}
             var ipEndPoint = (IPEndPoint) _clientSocket.RemoteEndPoint;
             _remoteEndPoint = new ScsTcpEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
 

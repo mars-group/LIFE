@@ -78,9 +78,9 @@ namespace LCConnector.TransportTypes {
         /// <param name="agentInitParameters">Optional parameterinformation about how and from where
         ///     to initialize the agent's constructor parameters.</param>
         /// <param name="getMarsCubeUrl"></param>
-        public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, List<IAtConstructorParameter> agentInitParameters = null)
+        public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, int offset, List<IAtConstructorParameter> agentInitParameters = null)
         {
-            AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, agentInitParameters));
+			AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, offset, agentInitParameters));
         }
 
 		/// <summary>
@@ -203,6 +203,14 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public int RealAgentCount { get; set; }
 
+		/// <summary>
+		/// Offset to define where to start the fetching
+		/// process during automatic initialization of agents.
+		/// Defaults to 0.
+		/// </summary>
+		/// <value>The agent init offset.</value>
+		public int AgentInitOffset { get; set; }
+
         /// <summary>
         /// Constructor call parameters and information about where to get the data from
         /// Check this for null, prior to using it!
@@ -219,12 +227,13 @@ namespace LCConnector.TransportTypes {
 		/// <param name="realAgentIds">Real agent identifiers.</param>
 		/// <param name="shadowAgentsIds">Shadow agents identifiers.</param>
 		/// <param name="agentInitParameters">Agent init parameters.</param>
-        public AgentInitConfig(string agentName, string agentFullName, int agentCount, List<IAtConstructorParameter> agentInitParameters = null)
+        public AgentInitConfig(string agentName, string agentFullName, int agentCount, int offset=0, List<IAtConstructorParameter> agentInitParameters = null)
         {
             AgentName = agentName;
             AgentFullName = agentFullName;
             RealAgentCount = agentCount;
             AgentInitParameters = agentInitParameters;
+			AgentInitOffset = offset;
         }
 
 
