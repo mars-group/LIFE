@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Net;
 using Hik.Communication.Scs.Communication.Channels;
 using Hik.Communication.Scs.Communication.Channels.Tcp;
@@ -33,12 +34,12 @@ namespace Hik.Communication.Scs.Client.Tcp {
         ///     Creates a communication channel using ServerIpAddress and ServerPort.
         /// </summary>
         /// <returns>Ready communication channel to communicate</returns>
-        protected override ICommunicationChannel CreateCommunicationChannel() {
+        protected override ICommunicationChannel CreateCommunicationChannel()
+        {
             return new TcpCommunicationChannel(
                 TcpHelper.ConnectToServer(
-                    new IPEndPoint(IPAddress.Parse(_serverEndPoint.IpAddress), _serverEndPoint.TcpPort),
-                    ConnectTimeout
-                    ));
+                    new IPEndPoint(IPAddress.Parse(_serverEndPoint.IpAddress), _serverEndPoint.TcpPort), ConnectTimeout
+                ));
         }
     }
 }

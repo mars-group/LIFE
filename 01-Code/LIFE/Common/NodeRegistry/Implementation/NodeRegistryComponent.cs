@@ -32,7 +32,11 @@ namespace NodeRegistry.Implementation
         public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config) {
             _config = config;
 
-            TNodeInformation locaNodeInformation = ParseNodeInformationTypeFromConfig();
+            var locaNodeInformation = new TNodeInformation(
+                _config.NodeType,
+                _config.NodeIdentifier,
+                new NodeEndpoint(_config.NodeEndPointIP, _config.NodeEndPointPort)
+                );
 
             _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
             _eventHandlerUseCase.SimulationManagerConnected += EventHandlerUseCaseOnSimulationManagerConnected;
@@ -89,29 +93,5 @@ namespace NodeRegistry.Implementation
             _heartBeatUseCase.Shutdow();
             _multicastAdapter.CloseSocket();
         }
-
-     
-
-        private TNodeInformation ParseNodeInformationTypeFromConfig()
-        {
-            return new TNodeInformation(
-                ParseNodeTypeFromConfig(),
-                _config.NodeIdentifier,
-                ParseNodeEndpointFromConfig()
-                );
-        }
-
-        private NodeEndpoint ParseNodeEndpointFromConfig()
-        {
-            return new NodeEndpoint(_config.NodeEndPointIP, _config.NodeEndPointPort);
-        }
-
-        private NodeType ParseNodeTypeFromConfig()
-        {
-            return _config.NodeType;
-        }
-
-
-
     }
 }

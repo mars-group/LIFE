@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
@@ -149,25 +150,37 @@ namespace RuntimeEnvironment.Implementation
         private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
 
             var content = _modelContainer.GetModel(modelDescription);
-            var layerContainerClients = new LayerContainerClient[layerContainers.Count];
+            var layerContainerClients = new List<LayerContainerClient>();
 
             /* 1.
              * Create LayerContainerClients for all connected LayerContainers
              */
-            var i = 0;
-            foreach (TNodeInformation nodeInformationType in layerContainers)
+            foreach (var nodeInformationType in layerContainers)
             {
-                var client = new LayerContainerClient
-                    (
-                    ScsServiceClientBuilder.CreateClient<ILayerContainer>
+                try
+                {
+                    var client = new LayerContainerClient(
+                        ScsServiceClientBuilder.CreateClient<ILayerContainer>
                         (
                             nodeInformationType.NodeEndpoint.IpAddress + ":" +
                             nodeInformationType.NodeEndpoint.Port
                         ),
-                    content,
-                    i);
-                layerContainerClients[i] = client;
-                i++;
+                    content);
+                    layerContainerClients.Add(client);
+                }
+                catch(Exception ex)
+                {
+                    var sockEx = ex as SocketException;
+                    if (sockEx != null)
+                    {
+                        Console.WriteLine("A LayerContainer could not be connected. Continueing without it.");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
             }
 
             /* Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
@@ -181,7 +194,7 @@ namespace RuntimeEnvironment.Implementation
 			if (shuttleSimConfig != null)
 			{
 				// configure bia SHUTTLE
-				return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainerClients, shuttleSimConfig, modelConfig);
+				return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainerClients.ToArray(), shuttleSimConfig, modelConfig);
 			}
 			throw new Exception("No SHUTTLE SimConfig has been found. Please check your root folder for a SimConfig file.");
 		}
@@ -365,6 +378,7 @@ namespace RuntimeEnvironment.Implementation
         private void NewNode(TNodeInformation newnode) {
             lock (this) {
                 _idleLayerContainers.Add(newnode);
+                Console.WriteLine("New LayerContainer registered: IP={0}, Name={1}", newnode.NodeEndpoint.IpAddress, newnode.NodeIdentifier);
             }
         }
     }

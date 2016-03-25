@@ -7,6 +7,8 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using AppSettingsManager;
@@ -23,16 +25,23 @@ namespace LayerContainerShared {
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
         public LayerContainerSettings() {
-            string ipAddress = "127.0.0.1";
-            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
-                if (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
-                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
-                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork) ipAddress = ip.Address.ToString();
-                    }
-                }
-            }
+            var foundAddress = NetworkInterface.GetAllNetworkInterfaces()
+                .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                .GetIPProperties().UnicastAddresses
+                .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
 
-            NodeRegistryConfig = new NodeRegistryConfig(NodeType.LayerContainer, "LC-1", ipAddress, 60100, true);
+            var ipAddress = (foundAddress != String.Empty) ? foundAddress : "127.0.0.1";
+            // Step 1: Get the host name
+            var hostname = Dns.GetHostName();
+            // Step 2: Perform a DNS lookup.
+            // Note that the lookup is not guaranteed to succeed, especially
+            // if the system is misconfigured. On the other hand, if that
+            // happens, you probably can't connect to the host by name, anyway.
+            var hostinfo = Dns.GetHostEntry(hostname);
+            // Step 3: Retrieve the canonical name.
+            var fqdn = hostinfo.HostName;
+            var lcName = "LC-" + fqdn;
+            NodeRegistryConfig = new NodeRegistryConfig(NodeType.LayerContainer, lcName, ipAddress, 60100, true);
             GlobalConfig = new GlobalConfig();
             MulticastSenderConfig = new MulticastSenderConfig();
         }
