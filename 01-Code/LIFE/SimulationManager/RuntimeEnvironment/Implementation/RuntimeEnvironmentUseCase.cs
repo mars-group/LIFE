@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
@@ -157,29 +158,47 @@ namespace RuntimeEnvironment.Implementation
              */
             foreach (var nodeInformationType in layerContainers)
             {
-                try
+                var retries = 0;
+                var connected = false;
+                while (!connected && retries < 3)
                 {
-                    var client = new LayerContainerClient(
-                        ScsServiceClientBuilder.CreateClient<ILayerContainer>
-                        (
-                            nodeInformationType.NodeEndpoint.IpAddress + ":" +
-                            nodeInformationType.NodeEndpoint.Port
-                        ),
-                    content);
-                    layerContainerClients.Add(client);
-                }
-                catch(Exception ex)
-                {
-                    var sockEx = ex as SocketException;
-                    if (sockEx != null)
+                    try
                     {
-                        Console.WriteLine("A LayerContainer could not be connected. Continueing without it.");
+                        var client = new LayerContainerClient(
+                            ScsServiceClientBuilder.CreateClient<ILayerContainer>
+                            (
+                                nodeInformationType.NodeEndpoint.IpAddress + ":" +
+                                nodeInformationType.NodeEndpoint.Port
+                            ),
+                        content);
+                        layerContainerClients.Add(client);
+                        connected = true;
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        throw;
+                        // fail after 3 attempts
+                        if (retries >= 3)
+                        {
+                            var sockEx = ex as SocketException;
+                            if (sockEx != null)
+                            {
+                                Console.Error.WriteLine(
+                                    "A LayerContainer could not be connected. Continueing without it. Exception was: {0}",
+                                    sockEx.Message);
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                        else
+                        {
+                            Thread.Sleep(500);
+                            retries++;
+                        }
                     }
                 }
+
 
             }
 
