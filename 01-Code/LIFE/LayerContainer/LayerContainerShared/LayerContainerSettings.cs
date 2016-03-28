@@ -30,7 +30,7 @@ namespace LayerContainerShared {
                 .GetIPProperties().UnicastAddresses
                 .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
 
-            var ipAddress = (foundAddress != String.Empty) ? foundAddress : "127.0.0.1";
+            var ipAddress = foundAddress != String.Empty ? foundAddress : "127.0.0.1";
             // Step 1: Get the host name
             var hostname = Dns.GetHostName();
             // Step 2: Perform a DNS lookup.
