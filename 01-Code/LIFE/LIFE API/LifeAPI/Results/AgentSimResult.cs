@@ -40,6 +40,6 @@ namespace LifeAPI.Results {
     /// <summary>
     ///   Additional agent information. 
     /// </summary>
-    public IDictionary<string, string> AgentData;
+    public IDictionary<string, object> AgentData;
   }
 }
