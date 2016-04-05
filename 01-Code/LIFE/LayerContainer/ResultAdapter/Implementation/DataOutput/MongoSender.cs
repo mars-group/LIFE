@@ -26,10 +26,22 @@ namespace ResultAdapter.Implementation.DataOutput {
       var client = new MongoClient("mongodb://"+ip+":"+port);
       var database = client.GetDatabase("SimResults");
       _collection = database.GetCollection<AgentSimResult>(simId);
-	    _notifier = new RabbitNotifier(cfgClient);  
-	    _simId = simId;
+      _notifier = new RabbitNotifier(cfgClient);  
+	  _simId = simId;
     }
 
+    /// <summary>
+    ///   Create MongoDB indexes for AgentSimResult attributes.
+    /// </summary>
+    /// <todo>
+    ///   Create indexes for selected attributes from the SimConfig. 
+    /// </todo>
+    public async void CreateMongoDbIndexes()
+    {
+        var indexKeys = Builders<AgentSimResult>.IndexKeys.Ascending("Tick").Ascending("AgentType").Ascending("Layer");
+        CreateIndexOptions indexOptions = new CreateIndexOptions { Background = true };
+        await _collection.Indexes.CreateOneAsync(indexKeys, indexOptions);
+    }
 
     /// <summary>
     ///   Write the agent data to the MongoDB.
