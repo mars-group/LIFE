@@ -48,7 +48,8 @@ namespace ResultAdapter.Implementation {
       // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
       if (_sender == null) {
         var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
-        _sender = new MongoSender(cfgClient, SimulationId.ToString());      
+        _sender = new MongoSender(cfgClient, SimulationId.ToString());
+        _sender.CreateMongoDbIndexes();
       }
 
       // Loop in parallel over all simulation elements to output.
