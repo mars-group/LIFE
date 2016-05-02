@@ -43,5 +43,9 @@
       <Project>{6BEC24D9-FD97-4D66-BCFF-8671343B798E}</Project>
       <Name>ASC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIFE Services\AgentShadowingService\AgentShadowingService.csproj">
+      <Project>{17064DB2-8976-439F-A697-AD8ACDB975CC}</Project>
+      <Name>AgentShadowingService</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

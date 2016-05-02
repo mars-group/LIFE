@@ -97,7 +97,7 @@ namespace ASC.Communication.ScsServices.Communication {
             }
 
             var requestMessage = new AscRemoteInvokeMessage {
-                ServiceClassName = _typeOfTProxy.Name,
+                ServiceInterfaceName = _typeOfTProxy.Name,
                 MethodName = message.MethodName,
                 Parameters = message.InArgs,
                 ServiceID = _serviceId

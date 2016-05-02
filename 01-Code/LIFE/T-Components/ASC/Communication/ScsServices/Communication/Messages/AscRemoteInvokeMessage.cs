@@ -19,7 +19,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         /// <summary>
         ///     Name of the remove service class.
         /// </summary>
-        public string ServiceClassName { get; set; }
+        public string ServiceInterfaceName { get; set; }
 
         /// <summary>
         ///     Method of remote application to invoke.
@@ -41,7 +41,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         /// </summary>
         /// <returns>String representation of this object</returns>
         public override string ToString() {
-            return string.Format("AscRemoteInvokeMessage: {0}.{1}(...)", ServiceClassName, MethodName);
+            return string.Format("AscRemoteInvokeMessage: {0}.{1}(...)", ServiceInterfaceName, MethodName);
         }
     }
 }

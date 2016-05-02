@@ -15,27 +15,100 @@ using ASC.Communication.ScsServices.Service;
 using System.Threading.Tasks;
 using LIFEUtilities.MulticastAddressGenerator;
 using System.Diagnostics;
+using AgentShadowingService.Implementation;
+using System.Linq;
+using System.Collections.Concurrent;
+using ASC.Communication.Scs.Communication.Messages;
+using ASC.Communication.ScsServices.Communication.Messages;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using ASC.Communication.Scs.Communication.Channels.Udp;
+using System.Net;
+using ASC.Communication.Scs.Communication.EndPoints.Udp;
 
 namespace PerfTester
 {
 	class MainClass
 	{
+		static int rcvd = 0;
+		static int AgentsPerNode = 100;
 		public static void Main (string[] args)
 		{
-			var AgentsPerNode = 10000;
-			// create and register RealAgents in serviceA
-			var _agentsA = new List<MockAgent>();
-			for (var i = 0; i < AgentsPerNode; i++)
-			{
-				_agentsA.Add(new MockAgent());
+			if (args != null){
+				foreach (var s in args) {
+					rcvd = 0;
+					AgentsPerNode = int.Parse(s);
+					Console.WriteLine($"Using {AgentsPerNode*2} agents");
+					//TestLocalFirstResolution();
+					//TestBinarySerializer();
+					TestAsyncSocketEventArgs();
+					//TestCommunicationPerformance();
+				}
+
 			}
 
-			// create and register RealAgents in serviceB
+		}
+
+		public static void TestLocalFirstResolution()
+		{
+			Console.WriteLine("Now testing local first resolution performance!");
+			// create and register RealAgents in serviceA+B
+			var _agentsA = new List<MockAgent>();
 			var _agentsB = new List<MockAgent>();
-			for (var i = 0; i < AgentsPerNode; i++)
+
+			var sw = Stopwatch.StartNew();
+			var _concA = new ConcurrentDictionary<MockAgent, byte>();
+			var _concB = new ConcurrentDictionary<MockAgent, byte>();
+			Parallel.For(0, AgentsPerNode, i => {
+				_concA.TryAdd(new MockAgent(), new byte());
+				_concB.TryAdd(new MockAgent(), new byte());
+			});
+			_agentsA.AddRange(_concA.Keys);
+			_agentsB.AddRange(_concA.Keys);
+
+			Console.WriteLine($"Agent creation took: {sw.ElapsedMilliseconds}ms");
+			sw.Restart();
+			var serviceA = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
+			var serviceB = new AgentShadowingServiceComponent<IMockAgent, MockAgent>();
+
+			serviceA.RegisterRealAgents(_agentsA.ToArray());
+			serviceB.RegisterRealAgents(_agentsB.ToArray());
+
+			Console.WriteLine($"Agent registration took: {sw.ElapsedMilliseconds}ms");
+			sw.Restart();
+			// create Shadowagents
+			var shadows = new List<IMockAgent>();
+			shadows.AddRange(serviceA.ResolveAgents(_agentsB.Select(a => a.ID).ToArray()));
+			shadows.AddRange(serviceB.ResolveAgents(_agentsA.Select(a => a.ID).ToArray()));
+			Console.WriteLine($"Agent resolution took: {sw.ElapsedMilliseconds}ms");
+			sw.Restart();
+			Parallel.ForEach(shadows, mockAgent => mockAgent.DoCrazyShit());
+
+			sw.Stop();
+			Console.WriteLine($"Calling methods took: {sw.ElapsedMilliseconds}ms");
+			serviceA.Dispose();
+			serviceB.Dispose();
+
+		}
+
+		public static void TestCommunicationPerformance() {
+			Console.WriteLine("Now testing communication performance!");
+			// create and register RealAgents in serviceA+B
+			var _agentsA = new List<MockAgent>();
+			var _agentsB = new List<MockAgent>();
+
+			var sw = Stopwatch.StartNew();
+			var _concA = new ConcurrentDictionary<MockAgent, byte>();
+			var _concB = new ConcurrentDictionary<MockAgent, byte>();
+			Parallel.For(0, AgentsPerNode, i =>
 			{
-				_agentsB.Add(new MockAgent());
-			}
+				_concA.TryAdd(new MockAgent(), new byte());
+				_concB.TryAdd(new MockAgent(), new byte());
+			});
+			_agentsA.AddRange(_concA.Keys);
+			_agentsB.AddRange(_concA.Keys);
+			Console.WriteLine($"Agent creation took: {sw.ElapsedMilliseconds}ms");
+			sw.Restart();
 
 			var port = 6666;
 			var clientListenPort = port;
@@ -48,13 +121,26 @@ namespace PerfTester
 			var ascServiceApp2 = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, mcastAddress)));
 			ascServiceApp1.Start();
 			ascServiceApp2.Start();
+			Console.WriteLine($"AgentShadowing service creation took: {sw.ElapsedMilliseconds}ms");
+			sw.Restart();
 
+			Parallel.ForEach(_agentsA, a =>
+			{
+				ascServiceApp1.AddService<IMockAgent, MockAgent>(a, typeOfTServiceInterface);
+			});
+
+			Parallel.ForEach(_agentsB, b =>
+			{
+				ascServiceApp2.AddService<IMockAgent, MockAgent>(b, typeOfTServiceInterface);
+			});
+
+			Console.WriteLine($"Agent registration took: {sw.ElapsedMilliseconds}ms");
+			sw.Restart();
 
 			// create shadows for A and B
-			var shadows = new List<IMockAgent>();
-			_agentsA.ForEach(a =>
+			var shadows = new ConcurrentBag<IMockAgent>();
+			Parallel.ForEach(_agentsA, a =>
 				{
-					ascServiceApp1.AddService<IMockAgent, MockAgent>(a, typeOfTServiceInterface);
 					var shadow = AscServiceClientBuilder.CreateClient<IMockAgent>(
 						clientListenPort,
 						mcastAddress,
@@ -65,9 +151,8 @@ namespace PerfTester
 					shadows.Add(shadow.ServiceProxy);
 				});
 
-			_agentsB.ForEach(b =>
+			Parallel.ForEach(_agentsB, b =>
 				{
-					ascServiceApp2.AddService<IMockAgent, MockAgent>(b, typeOfTServiceInterface);
 					var shadow = AscServiceClientBuilder.CreateClient<IMockAgent>(
 						clientListenPort,
 						mcastAddress,
@@ -78,16 +163,102 @@ namespace PerfTester
 					shadows.Add(shadow.ServiceProxy);
 				});
 
-			var sw = Stopwatch.StartNew();
+			Console.WriteLine($"Agent resolution took: {sw.ElapsedMilliseconds}ms");
+			sw.Restart();
+
 			// call the method on all shadows
 			Parallel.ForEach(shadows, mockAgent => mockAgent.DoCrazyShit());
 
 			sw.Stop();
-			Console.WriteLine(sw.ElapsedMilliseconds);
+			Console.WriteLine($"Calling methods took : {sw.ElapsedMilliseconds} ms");
+
 			ascServiceApp1.Stop();
 			ascServiceApp2.Stop();
 		}
-	}
+
+		public static void TestBinarySerializer() {
+			var bin = new BinaryFormatter();
+			Console.WriteLine("Now testing BinaryFormatter!");
+			var messages = new ConcurrentBag<IAscMessage>();
+			Parallel.For(0, AgentsPerNode * 2, i => messages.Add(new AscRemoteInvokeMessage()
+			{
+				ServiceInterfaceName = "IAscMessage",
+				MethodName = "DoSomething",
+				ServiceID = Guid.NewGuid()
+			}));
+
+			var sw = Stopwatch.StartNew();
+			Parallel.ForEach(messages, m =>
+			{
+				var memoryStream = new MemoryStream();
+
+				bin.Serialize(memoryStream, m);
+
+				var messageBytes = memoryStream.ToArray();
+			});
+			sw.Stop();
+			Console.WriteLine($"BinaryFormatter took {sw.ElapsedMilliseconds}ms");
+		}
+
+		public static void TestAsyncSocketEventArgs() {
+			var bin = new BinaryFormatter();
+			Console.WriteLine("Now testing Message creation!");
+			var sw = Stopwatch.StartNew();
+			var messages = new ConcurrentBag<IAscMessage>();
+
+			Parallel.For(0, AgentsPerNode * 2, i => messages.Add(new AscRemoteInvokeMessage()
+			{
+				ServiceInterfaceName = "IAscMessage",
+				MethodName = "DoSomething",
+				ServiceID = Guid.NewGuid()
+			}));
+
+			var msgCreation = sw.ElapsedMilliseconds;
+			Console.WriteLine($"Message creation took {msgCreation}");
+			sw.Restart();
+
+			Console.WriteLine("Now testing BinaryFormatter!");
+			var messageBytes = new ConcurrentBag<byte[]>();
+
+			Parallel.ForEach(messages, m =>
+			{
+				var memoryStream = new MemoryStream();
+
+				bin.Serialize(memoryStream, m);
+
+				messageBytes.Add(memoryStream.ToArray());
+			});
+
+			var binForm = sw.ElapsedMilliseconds;
+			Console.WriteLine($"BinaryFormatter took {binForm}");
+
+			var msgsAry = messageBytes.ToArray();
+			sw.Restart();
+
+			Console.WriteLine("Now testing UdpAsyncSocketEventArgs!");
+
+			var server = new UdpAsyncSocketServer();
+			server.Init();
+			server.DatagramReceived += On_DatagramReceived;
+			var endPoint = new AscUdpEndPoint(6666, "239.10.11.12");
+			server.Start(new IPEndPoint(IPAddress.Any, endPoint.UdpPort), IPAddress.Parse(endPoint.McastGroup));
+
+			/*for (int i = 0; i < msgsAry.Length; i++) {
+				server.Send(msgsAry[0]);
+			}*/
+			Parallel.ForEach(messageBytes, b => server.Send(b));
+
+			sw.Stop();
+			var udp = sw.ElapsedMilliseconds;
+			Console.WriteLine($"UDP Send took {udp}ms, rcvd was: {rcvd}");
+			Console.WriteLine($"Total duration was: {udp+binForm+msgCreation}ms.\n\n");
+		}
+
+		static void On_DatagramReceived(object sender, byte[] e)
+		{
+			rcvd++;
+		}
+}
 
 	internal class MockAgent : AscService, IMockAgent {
 

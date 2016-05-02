@@ -100,7 +100,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			//Create a byte array from message according to current protocol
 			var memoryStream = new MemoryStream();
 
-			new BinaryFormatter().Serialize(memoryStream, message);
+			_binaryFormatter.Serialize(memoryStream, message);
 
 			var messageBytes = memoryStream.ToArray();
 

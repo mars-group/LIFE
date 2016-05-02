@@ -98,7 +98,6 @@ namespace AgentShadowingService.Implementation
 			if (serviceapp != null && serviceapp.ContainsService<TServiceInterface, TServiceClass> (agentId, _typeOfServiceInterfaceName)) {
 				return serviceapp.GetServiceByID<TServiceInterface, TServiceClass> (agentId, _typeOfServiceInterfaceName);
 			}
-            
 
 			// agent is not on local node, so create ShadowAgent
 
@@ -127,7 +126,7 @@ namespace AgentShadowingService.Implementation
 
 		public List<TServiceInterface> ResolveAgents(Guid[] agentIds)
         {
-            return agentIds.Select(ResolveAgent).ToList();
+			return agentIds.AsParallel().Select(ResolveAgent).ToList();
         }
 
         public void RemoveShadowAgent(Guid agentId)

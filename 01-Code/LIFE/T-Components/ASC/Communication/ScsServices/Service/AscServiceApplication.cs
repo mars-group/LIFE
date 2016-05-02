@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Messengers;
@@ -203,7 +204,7 @@ namespace ASC.Communication.ScsServices.Service
             try
             {
                 // check whether we are responsible for the real object
-                if (!_serviceObjects[invokeMessage.ServiceClassName].ContainsKey(invokeMessage.ServiceID))
+                if (!_serviceObjects[invokeMessage.ServiceInterfaceName].ContainsKey(invokeMessage.ServiceID))
                 {
                     // we are not. So simply return. This is not an error condition, since the ServiceID field was set.
                     return;
@@ -215,17 +216,17 @@ namespace ASC.Communication.ScsServices.Service
                 if (invokeMessage.ServiceID.Equals(Guid.Empty))
                 {
                     // we are not looking for a specific implementation, but just for any, so use first found
-                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].First().Value;
+                    serviceObject = _serviceObjects[invokeMessage.ServiceInterfaceName].First().Value;
                 }
                 else
                 {
-                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
+                    serviceObject = _serviceObjects[invokeMessage.ServiceInterfaceName][invokeMessage.ServiceID];
                 }
 
                 if (serviceObject == null)
                 {
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new AcsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
+                        new AcsRemoteException("There is no service with name '" + invokeMessage.ServiceInterfaceName + "'"));
                     return;
                 }
 
@@ -301,30 +302,32 @@ namespace ASC.Communication.ScsServices.Service
 
             try
             {
-                // check whether we are responsible for the real object
-                if (!_serviceObjects[invokeMessage.ServiceClassName].ContainsKey(invokeMessage.ServiceID))
-                {
-                    // we are not. So simply return. This is not an error condition, since the ServiceID field was set.
-                    return;
 
-                }
+				// check whether we are responsible for the real object
+				if (!_serviceObjects[invokeMessage.ServiceInterfaceName].ContainsKey(invokeMessage.ServiceID))
+				{
+					// we are not. So simply return. This is not an error condition, since the ServiceID field was set.
+					return;
+
+				}
+
 
                 //Get service object
                 ServiceObject serviceObject;
                 if (invokeMessage.ServiceID.Equals(Guid.Empty))
                 {
                     // we are not looking for a specific implementation, but just for any, so use first found
-                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName].First().Value;
+                    serviceObject = _serviceObjects[invokeMessage.ServiceInterfaceName].First().Value;
                 }
                 else
                 {
-                    serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
+                    serviceObject = _serviceObjects[invokeMessage.ServiceInterfaceName][invokeMessage.ServiceID];
                 }
 
                 if (serviceObject == null)
                 {
                     SendInvokeResponse(_messenger, invokeMessage, null,
-                        new AcsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
+                        new AcsRemoteException("There is no service with name '" + invokeMessage.ServiceInterfaceName + "'"));
                     return;
                 }
 
