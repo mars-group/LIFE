@@ -197,7 +197,7 @@ namespace PerfTester
 				var messageBytes = memoryStream.ToArray();
 			});
 			sw.Stop();
-			Console.WriteLine($"BinaryFormatter took {sw.ElapsedMilliseconds}ms");
+			Console.WriteLine($"BinaryFormatter: {sw.ElapsedMilliseconds}ms");
 		}
 
 		public static void TestAsyncSocketEventArgs() {
@@ -214,7 +214,7 @@ namespace PerfTester
 			}));
 
 			var msgCreation = sw.ElapsedMilliseconds;
-			Console.WriteLine($"Message creation took {msgCreation}");
+			Console.WriteLine($"Message creation: {msgCreation}ms");
 			sw.Restart();
 
 			Console.WriteLine("Now testing BinaryFormatter!");
@@ -230,14 +230,14 @@ namespace PerfTester
 			});
 
 			var binForm = sw.ElapsedMilliseconds;
-			Console.WriteLine($"BinaryFormatter took {binForm}");
+			Console.WriteLine($"BinaryFormatter: {binForm}ms");
 
 			var msgsAry = messageBytes.ToArray();
 			sw.Restart();
 
 			Console.WriteLine("Now testing UdpAsyncSocketEventArgs!");
 
-			var server = new UdpAsyncSocketServer();
+			var server = new UdpAsyncSocketServer(2,12,8000);
 			server.Init();
 			server.DatagramReceived += On_DatagramReceived;
 			var endPoint = new AscUdpEndPoint(6666, "239.10.11.12");
@@ -250,8 +250,8 @@ namespace PerfTester
 
 			sw.Stop();
 			var udp = sw.ElapsedMilliseconds;
-			Console.WriteLine($"UDP Send took {udp}ms, rcvd was: {rcvd}");
-			Console.WriteLine($"Total duration was: {udp+binForm+msgCreation}ms.\n\n");
+			Console.WriteLine($"UDP Send: {udp}ms\n, rcvd: {rcvd}");
+			Console.WriteLine($"Total duration: {udp+binForm+msgCreation}ms.\n\n");
 		}
 
 		static void On_DatagramReceived(object sender, byte[] e)
