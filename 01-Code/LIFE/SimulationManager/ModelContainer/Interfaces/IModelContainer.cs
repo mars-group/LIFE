@@ -57,7 +57,7 @@ namespace ModelContainer.Interfaces {
         /// </summary>
         /// <param name="modelId"></param>
         /// <returns>The Simconfig object or null</returns>
-        ISimConfig GetShuttleSimConfig(TModelDescription modelId);
+        ISimConfig GetShuttleSimConfig(TModelDescription modelId, string simConfigName);
 
         /// <summary>
         /// Returns the ModelConfig for the given modelDescription

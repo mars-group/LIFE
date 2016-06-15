@@ -96,6 +96,7 @@ namespace MARSLocalStarter {
 		var interactive = false;
 		var simulationId = Guid.NewGuid();
 		var marsConfigAddress = string.Empty;
+		var simConfigToUse = String.Empty;
 
 		var optionSet = new OptionSet()
 		  .Add("?|h|help", "Shows short usage", option => help = option != null)
@@ -109,7 +110,9 @@ namespace MARSLocalStarter {
 		  .Add("id=", "Set SimulationID",
 			option => simulationId = Guid.Parse(option))
 		  .Add("mca=|marsconfigaddress=", "MARSConfig address to use",
-			option => marsConfigAddress = option);
+			option => marsConfigAddress = option)
+		  .Add("simconfig=|scenario=","Name of SimConfig/Scenario file to use. File must be in /layers/addins/<ModelName>/scenarios folder",
+		    option => simConfigToUse = option);
 
 		try
 		{
@@ -170,7 +173,15 @@ namespace MARSLocalStarter {
 					if (marsConfigAddress != String.Empty) {
 						MARSConfigServiceSettings.Address = marsConfigAddress;	
 					}
-					core.StartSimulationWithModel(simulationId, model, numOfTicks);
+                    var simConfigName = "SimConfig.json";
+					if (simConfigToUse != String.Empty)
+					{
+                        if (!simConfigToUse.EndsWith(".json")){
+                            throw new Exception("Format of SimConfig file is not valid. Must be .json file!");
+                        }
+                        simConfigName = simConfigToUse;                    
+					}
+                    core.StartSimulationWithModel(simulationId, model, numOfTicks, simConfigName);
 				}
 			}
 		}

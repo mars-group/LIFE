@@ -128,9 +128,9 @@ namespace ModelContainer.Implementation
             }
         }
 
-        public ISimConfig GetShuttleSimConfig(TModelDescription model) {
+        public ISimConfig GetShuttleSimConfig(TModelDescription model, string simConfigName) {
 
-            var path = "./SimConfig.json";
+            var path = $"./layers/addins/{model.Name}/scenarios/{simConfigName}";
             if (!File.Exists(path)) {
                 return null;
                 //throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");

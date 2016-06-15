@@ -25,7 +25,7 @@ namespace SimulationManagerTestClasses.MockComponents {
             return new List<TModelDescription> {new TModelDescription("TestSimulationModel")};
         }
 
-        public ISimConfig GetShuttleSimConfig(TModelDescription modelId) {
+        public ISimConfig GetShuttleSimConfig(TModelDescription modelId, string simConfigName) {
             throw new NotImplementedException("Don't mock me, I'm only a mock :(");
         }
 

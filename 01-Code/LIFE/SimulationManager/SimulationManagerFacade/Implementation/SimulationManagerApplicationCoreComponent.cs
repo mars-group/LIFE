@@ -63,8 +63,8 @@ namespace SimulationManagerFacade.Implementation {
         }
         
 		//local option for simulation start - connected layer containers unknown. Use all and use standard implementation.
-        public void StartSimulationWithModel(Guid simulationId,TModelDescription model, int? nrOfTicks = null, bool startPaused = false) {
-            _runtimeEnvironment.StartWithModel(simulationId, model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, startPaused);
+        public void StartSimulationWithModel(Guid simulationId,TModelDescription model, int? nrOfTicks = null, string simConfigName = "SimConfig.json", bool startPaused = false) {
+            _runtimeEnvironment.StartWithModel(simulationId, model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, simConfigName, startPaused);
         }
 
         public void StepSimulation(TModelDescription model, int? nrOfTicks = null)

@@ -56,7 +56,7 @@ namespace RuntimeEnvironment.Implementation
 
         #region IRuntimeEnvironment Members
 
-        public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
+        public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, string simConfigName = "SimConfig.json", bool startPaused = false) {
             _simulationId = simulationId;
 
 			if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
@@ -73,10 +73,10 @@ namespace RuntimeEnvironment.Implementation
             Console.WriteLine("Setting up SimulationRun...");
             var sw = Stopwatch.StartNew();
 
-            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes);
+            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, simConfigName);
 
 			// try to get SimConfig and determine the number of ticks from it
-			var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(model);
+			var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(model, simConfigName);
 			if (shuttleSimConfig != null) {
 				var tickCount = shuttleSimConfig.GetSimDurationInSteps();
 				if (tickCount > 0) {
@@ -148,7 +148,7 @@ namespace RuntimeEnvironment.Implementation
         /// <param name="modelDescription">not null</param>
         /// <param name="layerContainers">not null</param>
         /// <returns></returns>
-        private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers) {
+        private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers, string simConfigName) {
 
             var content = _modelContainer.GetModel(modelDescription);
             var layerContainerClients = new List<LayerContainerClient>();
@@ -206,7 +206,7 @@ namespace RuntimeEnvironment.Implementation
              * XML config files are still valid but will be deprecated in the near future
              */
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);
-            var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription);
+            var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription, simConfigName);
 
 
 			// only accept SHUTTLE based configuration

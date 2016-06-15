@@ -40,8 +40,8 @@ namespace ModelContainer.Implementation {
             return _modelContainerUseCase.GetModel(modelID);
         }
 
-        public ISimConfig GetShuttleSimConfig(TModelDescription modelId) {
-            return _modelContainerUseCase.GetShuttleSimConfig(modelId);
+        public ISimConfig GetShuttleSimConfig(TModelDescription modelId, string simConfigName) {
+            return _modelContainerUseCase.GetShuttleSimConfig(modelId, simConfigName);
         }
 
         public ModelConfig GetModelConfig(TModelDescription modelId)

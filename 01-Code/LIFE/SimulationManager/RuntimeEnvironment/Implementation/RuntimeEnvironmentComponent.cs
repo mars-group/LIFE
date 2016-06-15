@@ -27,8 +27,8 @@ namespace RuntimeEnvironment.Implementation {
         }
 
         public void StartWithModel
-            (Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, bool startPaused = false) {
-                _runtimeEnvironmentUseCase.StartWithModel(simulationId, model, layerContainerNodes, nrOfTicks, startPaused);
+            (Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, string simConfigName = "SimConfig.json", bool startPaused = false) {
+            _runtimeEnvironmentUseCase.StartWithModel(simulationId, model, layerContainerNodes, nrOfTicks, simConfigName, startPaused);
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
