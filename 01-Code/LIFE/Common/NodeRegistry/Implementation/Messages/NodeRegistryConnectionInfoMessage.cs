@@ -6,7 +6,6 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System.Net;
 using CommonTypes.DataTypes;
 using ProtoBuf;
 
@@ -22,13 +21,14 @@ namespace NodeRegistry.Implementation.Messages
         [ProtoMember(20)]
         public TNodeInformation NodeInformation { get; set; }
 
+
         public NodeRegistryConnectionInfoMessage()
             : base()
         {
         }
 
-        public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, TNodeInformation information, string address)
-            : base(messageType) {
+        public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, TNodeInformation information, string address, string clusterName)
+            : base(messageType, clusterName) {
                 OriginAddress = address;
             NodeInformation = information;
         }

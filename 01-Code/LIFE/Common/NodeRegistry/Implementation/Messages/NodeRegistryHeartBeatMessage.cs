@@ -7,10 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommonTypes.Types;
 using ProtoBuf;
 
@@ -32,8 +28,8 @@ namespace NodeRegistry.Implementation.Messages
 
 
 
-        public NodeRegistryHeartBeatMessage(NodeRegistryMessageType messageType, string nodeIdentifier, NodeType nodeType)
-            : base(messageType)
+        public NodeRegistryHeartBeatMessage(NodeRegistryMessageType messageType, string nodeIdentifier, NodeType nodeType, string clusterName)
+            : base(messageType, clusterName)
         {
             NodeIdentifier = nodeIdentifier;
             NodeType = nodeType;

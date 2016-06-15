@@ -73,7 +73,7 @@ namespace NodeRegistryTest {
                         "motivationBurst",
                         new NodeEndpoint("127.0.0.1", 44567)),
                     false,
-                    400));
+                    400), null);
 
             bool leaveEventFired = false;
 
@@ -88,7 +88,7 @@ namespace NodeRegistryTest {
             NodeRegistryComponent otherNodeReg = new NodeRegistryComponent
                 (
                 localMulticastAdapter,
-                new NodeRegistryConfig(otherNodeInfo, false, 300));
+                new NodeRegistryConfig(otherNodeInfo, false, 300), null);
 
             Thread.Sleep(250);
 
@@ -159,7 +159,7 @@ namespace NodeRegistryTest {
                     _information.NodeIdentifier,
                     _information.NodeEndpoint.IpAddress,
                     _information.NodeEndpoint.Port,
-                    true));
+                    true), null);
             Assert.True(nr != null);
 
             nr.ShutDownNodeRegistry();
@@ -192,7 +192,7 @@ namespace NodeRegistryTest {
                     localNodeInfo.NodeIdentifier,
                     localNodeInfo.NodeEndpoint.IpAddress,
                     localNodeInfo.NodeEndpoint.Port,
-                    true));
+                    true), null);
 
             //Just to make sure 
             localNodeRegistry.JoinCluster();
@@ -255,7 +255,7 @@ namespace NodeRegistryTest {
                     localNodeInfo.NodeIdentifier,
                     localNodeInfo.NodeEndpoint.IpAddress,
                     localNodeInfo.NodeEndpoint.Port,
-                    true));
+                    true), null);
 
             //subscribe for events
             localNodeRegistry.SubscribeForNewNodeConnected
@@ -284,7 +284,7 @@ namespace NodeRegistryTest {
                     otherNodeinfo.NodeIdentifier,
                     otherNodeinfo.NodeEndpoint.IpAddress,
                     otherNodeinfo.NodeEndpoint.Port,
-                    true));
+                    true), null);
 
             Thread.Sleep(1000);
 
@@ -324,7 +324,7 @@ namespace NodeRegistryTest {
                     localNodeInformation.NodeIdentifier,
                     localNodeInformation.NodeEndpoint.IpAddress,
                     localNodeInformation.NodeEndpoint.Port,
-                    true));
+                    true), null);
 
 
             Thread.Sleep(300);
@@ -345,7 +345,7 @@ namespace NodeRegistryTest {
                     localNodeInformation.NodeIdentifier,
                     localNodeInformation.NodeEndpoint.IpAddress,
                     localNodeInformation.NodeEndpoint.Port,
-                    false));
+                    false), null);
 
             Thread.Sleep(300);
 
@@ -397,11 +397,11 @@ namespace NodeRegistryTest {
             NodeRegistryComponent localNodeRegistry = new NodeRegistryComponent
                 (
                 localMulticastAdapter,
-                new NodeRegistryConfig(localNodeInformation, false, timeout));
+                new NodeRegistryConfig(localNodeInformation, false, timeout), null);
             NodeRegistryComponent otherNodeRegistry = new NodeRegistryComponent
                 (
                 otherMulticastAdapter,
-                new NodeRegistryConfig(otherNodeinfo, false, timeout));
+                new NodeRegistryConfig(otherNodeinfo, false, timeout), null);
 
             Thread.Sleep(150);
             //Check if Nodes have found eachother

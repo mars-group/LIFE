@@ -23,7 +23,8 @@ namespace MARSLocalStarter {
     private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
     private static TModelDescription _chosenModel;
-
+    private static ISimulationManagerApplicationCore simCore;
+    private static ILayerContainerFacade layerContainerCore;
 
 	private static void Main(string[] args)
 	{
@@ -35,15 +36,10 @@ namespace MARSLocalStarter {
 			Logger.Info("Initializing components and building application core...");
 
 
-			var simCore = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
-			Logger.Info("SimulationManager successfully started.");
 
-			var layerCountainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
-
-			Logger.Info("LayerContainer successfully started.");
 
 			// parse for any given parameters and act accordingly
-			ParseArgsAndStart(args, simCore, layerCountainerCore);
+			ParseArgsAndStart(args);
 
 			Logger.Info("MARS LIFE up and running...");
 
@@ -86,8 +82,7 @@ namespace MARSLocalStarter {
 	/// </summary>
 	/// <param name="args">Arguments.</param>
 	/// <param name="core">Core.</param>
-	private static void ParseArgsAndStart(string[] args, ISimulationManagerApplicationCore core,
-	  ILayerContainerFacade layerContainer)
+	private static void ParseArgsAndStart(string[] args)
 	{
 		var help = false;
 		var listModels = false;
@@ -97,6 +92,7 @@ namespace MARSLocalStarter {
 		var simulationId = Guid.NewGuid();
 		var marsConfigAddress = string.Empty;
 		var simConfigToUse = String.Empty;
+        string clusterName = null;
 
 		var optionSet = new OptionSet()
 		  .Add("?|h|help", "Shows short usage", option => help = option != null)
@@ -112,7 +108,9 @@ namespace MARSLocalStarter {
 		  .Add("mca=|marsconfigaddress=", "MARSConfig address to use",
 			option => marsConfigAddress = option)
 		  .Add("simconfig=|scenario=","Name of SimConfig/Scenario file to use. File must be in /layers/addins/<ModelName>/scenarios folder",
-		    option => simConfigToUse = option);
+		    option => simConfigToUse = option)
+          .Add("clustername=|cn=", "Optional. Provide a name for the simulation cluster. Only LIFE process with the same name join each other",
+            option => clusterName = option);
 
 		try
 		{
@@ -128,11 +126,19 @@ namespace MARSLocalStarter {
 			ShowHelp("Usage is:", optionSet, false);
 		}
 		else {
+
+            // initialize basic services
+            simCore = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore(clusterName);
+            Logger.Info("SimulationManager successfully started.");
+
+            layerContainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade(clusterName);
+            Logger.Info("LayerContainer successfully started.");
+
 			if (listModels)
 			{
 				Console.WriteLine("Available models:");
 				var i = 1;
-				foreach (var modelDescription in core.GetAllModels())
+				foreach (var modelDescription in simCore.GetAllModels())
 				{
 					Console.Write(i + ": ");
 					Console.WriteLine(modelDescription.Name);
@@ -156,7 +162,7 @@ namespace MARSLocalStarter {
 				}
 
 				TModelDescription model = null;
-				foreach (var modelDescription in core.GetAllModels())
+				foreach (var modelDescription in simCore.GetAllModels())
 				{
 					if (modelDescription.Name.Equals(modelName))
 					{
@@ -181,7 +187,7 @@ namespace MARSLocalStarter {
                         }
                         simConfigName = simConfigToUse;                    
 					}
-                    core.StartSimulationWithModel(simulationId, model, numOfTicks, simConfigName);
+                    simCore.StartSimulationWithModel(simulationId, model, numOfTicks, simConfigName);
 				}
 			}
 		}

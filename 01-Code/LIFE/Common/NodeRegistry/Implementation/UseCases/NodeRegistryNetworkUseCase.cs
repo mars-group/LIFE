@@ -27,14 +27,17 @@ namespace NodeRegistry.Implementation.UseCases {
         private readonly bool _addMySelfToActiveNodeList;
 
         private readonly Thread _listenThread;
-        private ILog Logger;
+
+        private readonly string _clusterName;
 
         public NodeRegistryNetworkUseCase
             (NodeRegistryNodeManagerUseCase nodeManagerUseCase,
                 NodeRegistryHeartBeatUseCase heartBeatUseCase,
                 TNodeInformation localNodeInformation,
                 bool addMySelfToActiveNodeList,
-                IMulticastAdapter multicastAdapter) {
+                IMulticastAdapter multicastAdapter,
+                string clusterName) {
+            _clusterName = clusterName;
             _nodeRegistryNodeManagerUse = nodeManagerUseCase;
             _multicastAdapter = multicastAdapter;
             _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
@@ -52,14 +55,14 @@ namespace NodeRegistry.Implementation.UseCases {
             _multicastAdapter.SendMessageToMulticastGroup
                 (
                     NodeRegistryMessageFactory.GetJoinMessage
-                        (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress));
+                        (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress, _clusterName));
         }
 
         public void LeaveCluster() {
             _multicastAdapter.SendMessageToMulticastGroup
                 (
                     NodeRegistryMessageFactory.GetLeaveMessage
-                        (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress));
+                        (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress, _clusterName));
         }
 
         public void Shutdown() {
@@ -77,6 +80,9 @@ namespace NodeRegistry.Implementation.UseCases {
 					if (stream.Length > 0) {
 						AbstractNodeRegistryMessage nodeRegistryMessage =
 							Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
+                        // check whether the message belongs to our cluster, if not throw away
+                        if (nodeRegistryMessage.ClusterName != _clusterName) { return; }
+                        // message is ok, so compute
 						ComputeMessage(nodeRegistryMessage);
 					}
 				}
@@ -159,7 +165,7 @@ namespace NodeRegistry.Implementation.UseCases {
                 _multicastAdapter.SendMessageToMulticastGroup
                     (
                         NodeRegistryMessageFactory.GetAnswerMessage
-                            (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress));
+                                     (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress, _clusterName));
             }
         }
 

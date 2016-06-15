@@ -30,7 +30,7 @@ namespace SimulationManagerFacade.Interface {
     public class SimulationManagerApplicationCoreFactory {
         private static IContainer container;
 
-        public static ISimulationManagerApplicationCore GetProductionApplicationCore() {
+        public static ISimulationManagerApplicationCore GetProductionApplicationCore(string clusterName = null) {
             if (container == null) {
                 ContainerBuilder builder = new ContainerBuilder();
 
@@ -44,7 +44,8 @@ namespace SimulationManagerFacade.Interface {
 
                 builder.RegisterType<NodeRegistryComponent>()
                     .As<INodeRegistry>()
-                    .InstancePerLifetimeScope();
+                    .InstancePerLifetimeScope()
+                    .WithParameter(new TypedParameter(typeof(string), clusterName));
 
                 builder.RegisterType<MulticastAdapterComponent>()
                     .As<IMulticastAdapter>()

@@ -12,32 +12,32 @@ using ProtoBuf;
 
 namespace NodeRegistry.Implementation.Messages.Factory {
     internal static class NodeRegistryMessageFactory {
-        public static byte[] GetJoinMessage(TNodeInformation information, string localAddress) {
+        public static byte[] GetJoinMessage(TNodeInformation information, string localAddress, string clusterName) {
             var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Join, information, localAddress));
+            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Join, information, localAddress, clusterName));
 
             return stream.ToArray();
         }
 
-        public static byte[] GetLeaveMessage(TNodeInformation information, string localAddress)
+        public static byte[] GetLeaveMessage(TNodeInformation information, string localAddress, string clusterName)
         {
             var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Leave, information, localAddress));
+            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Leave, information, localAddress, clusterName));
 
             return stream.ToArray();
         }
 
-        public static byte[] GetAnswerMessage(TNodeInformation information, string localAddress)
+        public static byte[] GetAnswerMessage(TNodeInformation information, string localAddress, string clusterName)
         {
             var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Answer, information, localAddress));
+            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Answer, information, localAddress, clusterName));
 
             return stream.ToArray();
         }
 
-        public static byte[] GetHeartBeatMessage(TNodeInformation information) {
+        public static byte[] GetHeartBeatMessage(TNodeInformation information, string clusterName) {
             var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryHeartBeatMessage(NodeRegistryMessageType.HeartBeat, information.NodeIdentifier, information.NodeType));
+            Serializer.Serialize(stream, new NodeRegistryHeartBeatMessage(NodeRegistryMessageType.HeartBeat, information.NodeIdentifier, information.NodeType, clusterName));
 
             return stream.ToArray();
         }

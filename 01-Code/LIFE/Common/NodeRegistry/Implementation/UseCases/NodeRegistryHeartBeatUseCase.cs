@@ -47,12 +47,13 @@ namespace NodeRegistry.Implementation.UseCases
         private readonly Timer _heartBeatSenderTimer;
 
         private readonly ILog Logger;
+        private readonly string _clusterName;
 
 
 
-        public NodeRegistryHeartBeatUseCase(NodeRegistryNodeManagerUseCase nodeRegistryNodeManagerUseCase, TNodeInformation localNodeInformation, IMulticastAdapter multicastAdapter,  int heartBeatInterval, int heartBeatTimeOutMultiplier = 3)
+        public NodeRegistryHeartBeatUseCase(NodeRegistryNodeManagerUseCase nodeRegistryNodeManagerUseCase, TNodeInformation localNodeInformation, IMulticastAdapter multicastAdapter,  int heartBeatInterval, string clusterName, int heartBeatTimeOutMultiplier = 3)
         {
-
+            _clusterName = clusterName;
             Logger = LoggerInstanceFactory.GetLoggerInstance<NodeRegistryHeartBeatUseCase>();
             _nodeRegistryNodeManagerUseCase = nodeRegistryNodeManagerUseCase;
             
@@ -126,7 +127,7 @@ namespace NodeRegistry.Implementation.UseCases
         private void SendHeartBeat(object sender, EventArgs eventArgs)
         {
             _multicastAdapter.SendMessageToMulticastGroup(
-                NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation)
+                NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation, _clusterName)
                 );
         }
 

@@ -29,14 +29,18 @@ namespace NodeRegistry.Implementation.Messages
         [ProtoMember(3)]
         public NodeRegistryMessageType MessageType;
 
+        [ProtoMember(4)]
+        public string ClusterName { get; set; }
+
         public AbstractNodeRegistryMessage()
         {
             
         }
 
-        protected AbstractNodeRegistryMessage(NodeRegistryMessageType messageType)
+        protected AbstractNodeRegistryMessage(NodeRegistryMessageType messageType, string clusterName)
         {
             MessageType = messageType;
+            ClusterName = clusterName;
         }
     }
 }

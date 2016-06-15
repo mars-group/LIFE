@@ -23,14 +23,16 @@ namespace NodeRegistry.Implementation
         private readonly NodeRegistryNetworkUseCase _networkUseCase;
         private readonly NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
         private readonly IMulticastAdapter _multicastAdapter;
-
         private readonly NodeRegistryConfig _config;
+        private readonly string _clusterName;
 
 
         public event EventHandler<TNodeInformation> SimulationManagerConnected;
 
-        public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config) {
+        public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config, string clusterName) {
             _config = config;
+
+            _clusterName = clusterName;
 
             var locaNodeInformation = new TNodeInformation(
                 _config.NodeType,
@@ -41,8 +43,8 @@ namespace NodeRegistry.Implementation
             _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
             _eventHandlerUseCase.SimulationManagerConnected += EventHandlerUseCaseOnSimulationManagerConnected;
             _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
-            _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation, multicastAdapter, config.HeartBeatInterval, config.HeartBeatTimeOutmultiplier);
-            _networkUseCase = new NodeRegistryNetworkUseCase(_nodeManagerUseCase, _heartBeatUseCase, locaNodeInformation, config.AddMySelfToActiveNodeList, multicastAdapter);
+            _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation, multicastAdapter, config.HeartBeatInterval, clusterName, config.HeartBeatTimeOutmultiplier);
+            _networkUseCase = new NodeRegistryNetworkUseCase(_nodeManagerUseCase, _heartBeatUseCase, locaNodeInformation, config.AddMySelfToActiveNodeList, multicastAdapter, clusterName);
           
             _multicastAdapter = multicastAdapter;
           

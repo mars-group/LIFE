@@ -39,13 +39,14 @@ namespace LayerContainerFacade.Interfaces {
         /// retreive a new LayerContainer or to reset an old one.
         /// </summary>
         /// <returns>A reference to an ILayerContainerFacade instance.</returns>
-        public static ILayerContainerFacade GetLayerContainerFacade() {
+        public static ILayerContainerFacade GetLayerContainerFacade(string clusterName = null) {
             if (_container == null) {
                 if (_containerBuilder == null) _containerBuilder = new ContainerBuilder();
 
                 _containerBuilder.RegisterType<NodeRegistryComponent>()
                     .As<INodeRegistry>()
-                    .InstancePerLifetimeScope();
+                    .InstancePerLifetimeScope()
+                    .WithParameter(new TypedParameter(typeof(string), clusterName)); ;
 
                 _containerBuilder.RegisterType<MulticastAdapterComponent>()
                     .As<IMulticastAdapter>()
