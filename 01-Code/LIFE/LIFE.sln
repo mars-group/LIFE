@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationManagerFacade", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationManagerShared", "SimulationManager\SimulationManagerShared\SimulationManagerShared.csproj", "{859AB95D-478C-473C-80BC-193F61FDBC99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizationManager", "SimulationManager\VisualizationManager\VisualizationManager.csproj", "{18494945-EDD8-403B-81B3-3B11D0B43D99}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerNameService", "SimulationManager\LayerNameService\LayerNameService.csproj", "{AEC2A321-CE09-4A06-8616-8E57A685E610}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B43F18BD-D65F-4604-AC98-1A61DC77CDFE}"
@@ -193,22 +191,6 @@ Global
 		{859AB95D-478C-473C-80BC-193F61FDBC99}.Release|x64.Build.0 = Release|x64
 		{859AB95D-478C-473C-80BC-193F61FDBC99}.Release|x86.ActiveCfg = Release|Any CPU
 		{859AB95D-478C-473C-80BC-193F61FDBC99}.Debug|x64.Build.0 = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|ARM.ActiveCfg = Release|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|x64.ActiveCfg = Release|x64
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|x64.Build.0 = Release|x64
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Release|x86.ActiveCfg = Release|Any CPU
-		{18494945-EDD8-403B-81B3-3B11D0B43D99}.Debug|x64.Build.0 = Debug|Any CPU
 		{AEC2A321-CE09-4A06-8616-8E57A685E610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEC2A321-CE09-4A06-8616-8E57A685E610}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEC2A321-CE09-4A06-8616-8E57A685E610}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -739,7 +721,6 @@ Global
 		{D83FD1A0-6698-404E-9515-7754C28063BC} = {060A5DF3-4C49-402B-9B3F-142A9ECD30B1}
 		{58149FF0-0801-46F8-A9C6-571B6030DC1E} = {060A5DF3-4C49-402B-9B3F-142A9ECD30B1}
 		{859AB95D-478C-473C-80BC-193F61FDBC99} = {060A5DF3-4C49-402B-9B3F-142A9ECD30B1}
-		{18494945-EDD8-403B-81B3-3B11D0B43D99} = {060A5DF3-4C49-402B-9B3F-142A9ECD30B1}
 		{AEC2A321-CE09-4A06-8616-8E57A685E610} = {060A5DF3-4C49-402B-9B3F-142A9ECD30B1}
 		{DF8053EF-4673-4812-99BF-11AB6E669A11} = {B43F18BD-D65F-4604-AC98-1A61DC77CDFE}
 		{277C3CC1-699D-417B-9D2C-A88B8CAF6957} = {B43F18BD-D65F-4604-AC98-1A61DC77CDFE}
@@ -788,5 +769,32 @@ Global
 		$5.NamingStyle = None
 		$5.IncludeInstanceMembers = True
 		$5.IncludeStaticEntities = True
+		$0.TextStylePolicy = $6
+		$6.FileWidth = 120
+		$6.TabsToSpaces = False
+		$6.inheritsSet = VisualStudio
+		$6.inheritsScope = text/plain
+		$6.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $7
+		$7.IndentSwitchSection = True
+		$7.NewLinesForBracesInProperties = True
+		$7.NewLinesForBracesInAccessors = True
+		$7.NewLinesForBracesInAnonymousMethods = True
+		$7.NewLinesForBracesInControlBlocks = True
+		$7.NewLinesForBracesInAnonymousTypes = True
+		$7.NewLinesForBracesInObjectCollectionArrayInitializers = True
+		$7.NewLinesForBracesInLambdaExpressionBody = True
+		$7.NewLineForElse = True
+		$7.NewLineForCatch = True
+		$7.NewLineForFinally = True
+		$7.NewLineForMembersInObjectInit = True
+		$7.NewLineForMembersInAnonymousTypes = True
+		$7.NewLineForClausesInQuery = True
+		$7.SpacingAfterMethodDeclarationName = False
+		$7.SpaceAfterMethodCallName = False
+		$7.SpaceBeforeOpenSquareBracket = False
+		$7.inheritsSet = Mono
+		$7.inheritsScope = text/x-csharp
+		$7.scope = text/x-csharp
 	EndGlobalSection
 EndGlobal

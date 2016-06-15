@@ -92,6 +92,10 @@
       <Project>{F6626674-3A9A-460B-A98B-A66B561FD811}</Project>
       <Name>ResultAdapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

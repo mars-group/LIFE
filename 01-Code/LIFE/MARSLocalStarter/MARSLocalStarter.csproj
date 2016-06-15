@@ -119,6 +119,10 @@
       <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
       <Name>LCConnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\CommonTypes\CommonTypes.csproj">
+      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

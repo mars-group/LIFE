@@ -56,7 +56,7 @@ namespace RuntimeEnvironment.Implementation
 			_rabbitMQWriter = new RabbitMQWriter(simulationId);
 
             // start simulation
-			_simulationTask = Task.Run(() => this.RunSimulation());
+			_simulationTask = Task.Run(() => RunSimulation());
         }
 
         private void RunSimulation() {

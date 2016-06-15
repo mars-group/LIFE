@@ -53,6 +53,7 @@
     <Compile Include="TransportTypes\TModel.cs" />
     <Compile Include="TransportTypes\TSimModel.cs" />
     <Compile Include="Types\NodeType.cs" />
+    <Compile Include="MARSConfigServiceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

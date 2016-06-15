@@ -209,7 +209,7 @@ namespace RuntimeEnvironment.Implementation
             var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription);
 
 
-			// prefer SHUTTLE based configuration
+			// only accept SHUTTLE based configuration
 			if (shuttleSimConfig != null)
 			{
 				// configure bia SHUTTLE

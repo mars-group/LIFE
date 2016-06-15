@@ -50,5 +50,12 @@ namespace LCConnector {
 		/// </summary>
 		void CleanUp();
 
+		/// <summary>
+		/// Sets the mars config service address. Use this if you want to override the default setting
+		/// which points to the MARSConfig Docker container
+		/// </summary>
+		/// <returns>The mars config service address.</returns>
+		/// <param name="marsConfigServiceAddress">Mars config service address.</param>
+		void SetMarsConfigServiceAddress(string marsConfigServiceAddress);
     }
 }

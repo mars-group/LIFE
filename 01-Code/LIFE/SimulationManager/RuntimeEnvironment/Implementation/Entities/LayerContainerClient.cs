@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 
+using CommonTypes;
 using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
@@ -22,7 +23,9 @@ namespace RuntimeEnvironment.Implementation.Entities {
 			// set timeout to infinite
 			_layerContainer.Timeout = -1;
             _layerContainer.Connect();
-
+			// set the config service address for the layerContainer. It might have been overriden by a 
+			// parameter during startup trough the MARSLocalStarter
+			_layerContainer.ServiceProxy.SetMarsConfigServiceAddress(MARSConfigServiceSettings.Address);
             _layerContainer.ServiceProxy.LoadModelContent(content);
         }
 

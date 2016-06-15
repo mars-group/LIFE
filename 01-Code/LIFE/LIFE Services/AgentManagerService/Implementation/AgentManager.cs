@@ -23,7 +23,7 @@ using System.Text;
 using LifeAPI.Agent;
 using LCConnector.TransportTypes;
 using MySql.Data.MySqlClient;
-
+using CommonTypes;
 
 namespace AgentManagerService.Implementation
 {
@@ -36,12 +36,13 @@ namespace AgentManagerService.Implementation
             var agents = new ConcurrentDictionary<Guid, T>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
-            // connect to MARS ROCK
+			// connect to MARS ROCK
 			// create ConfigService and connect to marsconfig container. This is due to convention. This LIFE container
 			// should be linked to the marsconfig container and thus marsconfig should lead to the correct ip
 			// as per /etc/hosts
-			var marsConfigService = new ConfigServiceClient("http://marsconfig:8080");
 
+			var marsConfigService = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+			Console.WriteLine($"AgentManager: Using {MARSConfigServiceSettings.Address} as MARSConfigService address.");
 			// retreive ip, port, user and password of mariaDB to us as ROCK instance
 			//string rockIp = marsConfigService.Get("rock/ip");
 			//int rockPort = int.Parse(marsConfigService.Get("rock/port"));

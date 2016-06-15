@@ -40,7 +40,7 @@ namespace PerfTester
 					AgentsPerNode = int.Parse(s);
 					Console.WriteLine($"Using {AgentsPerNode*2} agents");
 					//TestLocalFirstResolution();
-					//TestBinarySerializer();
+					TestBinarySerializer();
 					TestAsyncSocketEventArgs();
 					//TestCommunicationPerformance();
 				}
@@ -237,7 +237,7 @@ namespace PerfTester
 
 			Console.WriteLine("Now testing UdpAsyncSocketEventArgs!");
 
-			var server = new UdpAsyncSocketServer(2,12,8000);
+			var server = new UdpAsyncSocketServer(12,12,16000);
 			server.Init();
 			server.DatagramReceived += On_DatagramReceived;
 			var endPoint = new AscUdpEndPoint(6666, "239.10.11.12");

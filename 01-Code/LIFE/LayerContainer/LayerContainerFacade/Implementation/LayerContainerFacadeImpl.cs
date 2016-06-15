@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommonTypes;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using LayerContainerFacade.Interfaces;
@@ -69,11 +70,16 @@ namespace LayerContainerFacade.Implementation {
 			_rteManager.DisposeSuitableLayers ();
 		}
 
-        #endregion
+		public void SetMarsConfigServiceAddress(string marsConfigServiceAddress)
+		{
+			MARSConfigServiceSettings.Address = marsConfigServiceAddress;
+		}
+
+		#endregion
 
 
 
-    }
+	}
 
     public static class AssemblyResolverFix
     {
