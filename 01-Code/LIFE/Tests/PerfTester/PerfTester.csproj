@@ -30,11 +30,10 @@
     <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LIFEUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\LIFEUtilities.1.0.10\lib\net45\LIFEUtilities.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="LIFEUtilities">
+      <HintPath>..\..\packages\LIFEUtilities.1.0.11\lib\net45\LIFEUtilities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -54,11 +53,4 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\..\packages\Baseclass.Contrib.Nuget.Output.1.0.0\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('..\..\packages\Baseclass.Contrib.Nuget.Output.1.0.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Baseclass.Contrib.Nuget.Output.1.0.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Baseclass.Contrib.Nuget.Output.1.0.0\build\net40\Baseclass.Contrib.Nuget.Output.targets'))" />
-  </Target>
 </Project>

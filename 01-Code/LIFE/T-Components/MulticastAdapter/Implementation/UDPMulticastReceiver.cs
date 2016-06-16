@@ -32,7 +32,6 @@ namespace MulticastAdapter.Implementation
             _listenPort = listenPort;
 			_receiverClient = GetClient();
             JoinMulticastGroups();
-
         }
 
         public UDPMulticastReceiver(GlobalConfig generalSeConfig) {

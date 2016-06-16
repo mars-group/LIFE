@@ -8,9 +8,13 @@
 //  *******************************************************/
 using System;
 using System.Collections.Generic;
+using AppSettingsManager;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
+using LIFEUtilities.MulticastAddressGenerator;
+using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface;
+using MulticastAdapter.Interface.Config;
 using NodeRegistry.Implementation.UseCases;
 using NodeRegistry.Interface;
 
@@ -33,7 +37,14 @@ namespace NodeRegistry.Implementation
             _config = config;
 
             _clusterName = clusterName;
-            
+
+			if (!String.IsNullOrEmpty(clusterName)){
+				// recreate MultiCastAdapter with specific mcastGroup if clusterName is set
+				var globalSettings = new GlobalConfig();
+				globalSettings.MulticastGroupIp = MulticastAddressGenerator.GetIPv4MulticastAddressByType(clusterName);
+				multicastAdapter = new MulticastAdapterComponent(globalSettings, new MulticastSenderConfig());
+			}
+
             var locaNodeInformation = new TNodeInformation(
                 _config.NodeType,
                 _config.NodeIdentifier,

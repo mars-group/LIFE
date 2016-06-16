@@ -299,7 +299,7 @@ namespace NodeRegistryTest {
             localNodeRegistry.ShutDownNodeRegistry();
         }
 
-        //[Test]
+        [Test]
         public void TestClusterDivision()
         {
             string localMulticastGrp = "239.0.0.3";
