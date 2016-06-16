@@ -451,9 +451,11 @@ namespace NodeRegistryTest {
 
             Assert.False(newNodeSubscriberFiredNonClusterNode);
             Assert.False(newNodeOftypeSubscriberFiredNonClusterNode);
+
             Assert.True(newNodeOftypeSubscriberFiredClusterNode2);
             Assert.True(newNodeSubscriberFiredClusterNode2);
-            Assert.True(newNodeOftypeSubscriberFiredClusterNode1);
+      
+						Assert.True(newNodeOftypeSubscriberFiredClusterNode1);
             Assert.True(newNodeSubscriberFiredClusterNode1);
 
 
