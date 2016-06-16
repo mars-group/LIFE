@@ -14,10 +14,8 @@ using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Client;
 using ASC.Communication.ScsServices.Communication.Messages;
 using ASC.Communication.ScsServices.Service;
-using ConfigurationAdapter.Interface;
-using LayerContainerShared;
-using LIFEUtilities.MulticastAddressGenerator;
 using System.Threading.Tasks;
+using LIFEUtilities.MulticastAddressGenerator;
 
 namespace AgentShadowingService.Implementation
 {

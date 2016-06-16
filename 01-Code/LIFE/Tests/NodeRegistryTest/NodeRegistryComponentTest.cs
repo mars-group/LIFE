@@ -32,7 +32,7 @@ namespace NodeRegistryTest {
             _information = new TNodeInformation
                 (
                 NodeType.LayerContainer,
-                "UnitTestNode",
+                "UnitTestNode0",
                 new NodeEndpoint("127.0.0.1", 55500)
                 );
         }
@@ -299,6 +299,171 @@ namespace NodeRegistryTest {
             localNodeRegistry.ShutDownNodeRegistry();
         }
 
+        //[Test]
+        public void TestClusterDivision()
+        {
+            string localMulticastGrp = "239.0.0.3";
+
+            TNodeInformation localNodeInfo = _information;
+
+            NodeType nodeType = localNodeInfo.NodeType;
+
+            TNodeInformation clusterNode1Info = new TNodeInformation
+                (
+                localNodeInfo.NodeType,
+                    "UnitTestNode1",
+                new NodeEndpoint("127.0.0.1", 40862));
+
+            TNodeInformation clusterNode2Info = new TNodeInformation
+                (
+                localNodeInfo.NodeType,
+                    "UnitTestNode2",
+                new NodeEndpoint("127.0.0.1", 40863));
+
+            bool newNodeSubscriberFiredNonClusterNode = false;
+            bool newNodeOftypeSubscriberFiredNonClusterNode = false;
+            bool newNodeSubscriberFiredClusterNode1 = false;
+            bool newNodeOftypeSubscriberFiredClusterNode1 = false;
+            bool newNodeSubscriberFiredClusterNode2 = false;
+            bool newNodeOftypeSubscriberFiredClusterNode2 = false;
+
+            int localListenPort = _listenStartPortSeed;
+            _listenStartPortSeed += 1;
+            int localSendingPort = _sendingStartPortSeed;
+            _sendingStartPortSeed += 1;
+
+            MulticastAdapterComponent multicastAdapter =
+                new MulticastAdapterComponent
+                    (
+                    new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4),
+                    new MulticastSenderConfig());
+
+            MulticastAdapterComponent clusterMulticastAdapter1 =
+                new MulticastAdapterComponent
+                (
+                    new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort++, 4),
+                    new MulticastSenderConfig());
+
+            MulticastAdapterComponent clusterMulticastAdapter2 =
+                new MulticastAdapterComponent
+                (
+                    new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort++, 4),
+                    new MulticastSenderConfig());
+
+            NodeRegistryComponent localNodeRegistry = new NodeRegistryComponent
+                (
+                multicastAdapter,
+                new NodeRegistryConfig
+                    (
+                    localNodeInfo.NodeType,
+                    localNodeInfo.NodeIdentifier,
+                    localNodeInfo.NodeEndpoint.IpAddress,
+                    localNodeInfo.NodeEndpoint.Port,
+                    true), null);
+
+            //subscribe for events
+            localNodeRegistry.SubscribeForNewNodeConnected
+                (
+                    delegate (TNodeInformation nodeInformation) {
+                        if (nodeInformation.Equals(clusterNode1Info) || nodeInformation.Equals(clusterNode2Info))
+                        {
+                            newNodeSubscriberFiredNonClusterNode = true;
+                        }
+                    });
+
+            localNodeRegistry.SubscribeForNewNodeConnectedByType
+                (
+                    delegate (TNodeInformation nodeInformation) {
+                        if (nodeInformation.Equals(clusterNode1Info) || nodeInformation.Equals(clusterNode2Info))
+                        {
+                            newNodeOftypeSubscriberFiredNonClusterNode = true;
+                        }
+                    },
+                    nodeType);
+
+            NodeRegistryComponent clusterNodeRegistry1 = new NodeRegistryComponent
+                (
+                clusterMulticastAdapter1,
+                new NodeRegistryConfig
+                    (
+                    clusterNode1Info.NodeType,
+                    clusterNode1Info.NodeIdentifier,
+                    clusterNode1Info.NodeEndpoint.IpAddress,
+                    clusterNode1Info.NodeEndpoint.Port,
+                    true), "cluster1");
+
+            //subscribe for events
+            clusterNodeRegistry1.SubscribeForNewNodeConnected
+                (
+                    nodeInformation =>
+                    {
+                        if (nodeInformation.Equals(clusterNode2Info))
+                        {
+                            newNodeSubscriberFiredClusterNode1 = true;
+                        }
+                    });
+
+            clusterNodeRegistry1.SubscribeForNewNodeConnectedByType
+                (
+                    nodeInformation =>
+                    {
+                        if (nodeInformation.Equals(clusterNode2Info))
+                        {
+                            newNodeOftypeSubscriberFiredClusterNode1 = true;
+                        }
+                    },
+                    nodeType);
+
+            NodeRegistryComponent clusterNodeRegistry2 = new NodeRegistryComponent
+                (
+                clusterMulticastAdapter2,
+                new NodeRegistryConfig
+                    (
+                    clusterNode2Info.NodeType,
+                    clusterNode2Info.NodeIdentifier,
+                    clusterNode2Info.NodeEndpoint.IpAddress,
+                    clusterNode2Info.NodeEndpoint.Port,
+                    true), "cluster1");
+
+            //subscribe for events
+            clusterNodeRegistry2.SubscribeForNewNodeConnected
+                (
+                    nodeInformation =>
+                    {
+                        if (nodeInformation.Equals(clusterNode1Info))
+                        {
+                            newNodeSubscriberFiredClusterNode2 = true;
+                        }
+                    });
+
+            clusterNodeRegistry2.SubscribeForNewNodeConnectedByType
+                (
+                    nodeInformation =>
+                    {
+                        if (nodeInformation.Equals(clusterNode1Info))
+                        {
+                            newNodeOftypeSubscriberFiredClusterNode2 = true;
+                        }
+                    },
+                    nodeType);
+
+            Thread.Sleep(2500);
+
+            Assert.False(newNodeSubscriberFiredNonClusterNode);
+            Assert.False(newNodeOftypeSubscriberFiredNonClusterNode);
+            Assert.True(newNodeOftypeSubscriberFiredClusterNode2);
+            Assert.True(newNodeSubscriberFiredClusterNode2);
+            Assert.True(newNodeOftypeSubscriberFiredClusterNode1);
+            Assert.True(newNodeSubscriberFiredClusterNode1);
+
+
+
+            localNodeRegistry.ShutDownNodeRegistry();
+            clusterNodeRegistry2.ShutDownNodeRegistry();
+            clusterNodeRegistry1.ShutDownNodeRegistry();
+        }
+
+
         [Test]
         public void GetNodesListFromNodeRegistry() {
             TNodeInformation localNodeInformation = _information;
@@ -427,8 +592,6 @@ namespace NodeRegistryTest {
             localNodeRegistry.ShutDownNodeRegistry();
         }
 
-
-        //[Test]
     }
 
 }

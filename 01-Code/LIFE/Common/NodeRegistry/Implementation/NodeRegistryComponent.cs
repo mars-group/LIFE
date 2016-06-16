@@ -33,7 +33,7 @@ namespace NodeRegistry.Implementation
             _config = config;
 
             _clusterName = clusterName;
-
+            
             var locaNodeInformation = new TNodeInformation(
                 _config.NodeType,
                 _config.NodeIdentifier,
