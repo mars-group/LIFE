@@ -15,7 +15,6 @@ namespace LifeAPI.Config
     /// <summary>
     /// A MARS LIFE model configuration. 
     /// </summary>
-    [Serializable]
     public class ModelConfig
     {
         /// <summary>

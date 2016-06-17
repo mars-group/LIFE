@@ -81,7 +81,7 @@ namespace NodeRegistry.Implementation.UseCases {
 						AbstractNodeRegistryMessage nodeRegistryMessage =
 							Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
                         // check whether the message belongs to our cluster, if not throw away
-                        if (nodeRegistryMessage.ClusterName != _clusterName) { return; }
+						if (nodeRegistryMessage.ClusterName != null && nodeRegistryMessage.ClusterName != _clusterName) { return; }
                         // message is ok, so compute
 						ComputeMessage(nodeRegistryMessage);
 					}

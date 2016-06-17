@@ -6,7 +6,6 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 
@@ -14,7 +13,6 @@ namespace LCConnector {
     /// <summary>
     /// The LayerContainer's public interface. This may be jused locally or via the provided SCS service.
     /// </summary>
-    [ScsService(Version = "0.1")]
     public interface ILayerContainer {
         /// <summary>
         ///     Transmits the serialized model content for the next simulation run to the layer container.
