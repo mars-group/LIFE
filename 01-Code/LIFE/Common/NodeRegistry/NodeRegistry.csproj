@@ -69,11 +69,11 @@
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="LIFEUtilities">
-      <HintPath>..\..\packages\LIFEUtilities.1.0.11\lib\net45\LIFEUtilities.dll</HintPath>
+      <HintPath>..\..\packages\LIFEUtilities.1.0.12\lib\net45\LIFEUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -774,7 +774,7 @@ Global
 		$6.TabsToSpaces = False
 		$6.inheritsSet = VisualStudio
 		$6.inheritsScope = text/plain
-		$6.scope = text/x-csharp
+		$6.scope = text/plain
 		$6.TabWidth = 2
 		$6.IndentWidth = 2
 		$0.CSharpFormattingPolicy = $7

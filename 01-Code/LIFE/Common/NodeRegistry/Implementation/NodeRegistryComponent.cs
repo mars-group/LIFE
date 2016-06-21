@@ -41,7 +41,7 @@ namespace NodeRegistry.Implementation
 			if (!String.IsNullOrEmpty(clusterName)){
 				// recreate MultiCastAdapter with specific mcastGroup if clusterName is set
 				var globalSettings = new GlobalConfig();
-				globalSettings.MulticastGroupIp = MulticastAddressGenerator.GetIPv4MulticastAddressByType(clusterName);
+				globalSettings.MulticastGroupIp = MulticastAddressGenerator.GetIPv4MulticastAddress(clusterName);
 				multicastAdapter = new MulticastAdapterComponent(globalSettings, new MulticastSenderConfig());
 			}
 
