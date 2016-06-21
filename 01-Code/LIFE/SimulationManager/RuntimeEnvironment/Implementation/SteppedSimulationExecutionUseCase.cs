@@ -53,7 +53,13 @@ namespace RuntimeEnvironment.Implementation
             _status = startPaused ? SimulationStatus.Paused : SimulationStatus.Running;
             _simulationExecutionSwitch = new ManualResetEvent(false);
 			_simulationId = simulationId;
-			_rabbitMQWriter = new RabbitMQWriter(simulationId);
+			try
+			{
+				_rabbitMQWriter = new RabbitMQWriter(simulationId);
+			}
+			catch (Exception e){
+				Console.Error.WriteLine($"An error occured while trying to access the RabbitMQ based EventQueue. Simultion will continue without updates to the queue. The error was: {e.Message}");
+			}
 
             // start simulation
 			_simulationTask = Task.Run(() => RunSimulation());

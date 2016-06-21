@@ -11,6 +11,7 @@ using RabbitMQ.Client;
 using System.Text;
 using ConfigService;
 using System.Threading.Tasks;
+using CommonTypes;
 
 namespace RabbitMQClient
 {
@@ -23,7 +24,7 @@ namespace RabbitMQClient
 		public RabbitMQWriter(Guid simulationId)
 		{
 			
-			var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
+			var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
 
 			var connection = new ConnectionFactory {
 				HostName = cfgClient.Get("rabbitmq/ip"),
