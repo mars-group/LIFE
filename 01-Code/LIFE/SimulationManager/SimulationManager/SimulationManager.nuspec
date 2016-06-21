@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SimulationManager</id>
+    <version>0.1</version>
+    <title>SimulationManager</title>
+    <authors>Christian Hüning</authors>
+    <owners>MARS Group</owners>
+    <projectUrl>http://mars-group.org</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The SimulationManager package.</description>
+    <releaseNotes>Initial Release</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>MARS, LIFE, Distribution, Initialization</tags>
+     <dependencies />
+  </metadata>
+    <files>
+        <file src="bin/Release/*.dll" target="lib/net45/"/>
+    </files>    
+</package>
