@@ -45,6 +45,7 @@ namespace RuntimeEnvironment.Implementation
 		private Guid _simulationId;
 
 		private RabbitMQWriter _rabbitMQWriter;
+        private bool publishToQueue = true;
 
         public SteppedSimulationExecutionUseCase
 		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, Guid simulationId, bool startPaused = false) {
@@ -58,6 +59,7 @@ namespace RuntimeEnvironment.Implementation
 				_rabbitMQWriter = new RabbitMQWriter(simulationId);
 			}
 			catch (Exception e){
+                publishToQueue = false;
 				Console.Error.WriteLine($"An error occured while trying to access the RabbitMQ based EventQueue. Simultion will continue without updates to the queue. The error was: {e.Message}");
 			}
 
