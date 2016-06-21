@@ -46,10 +46,11 @@ namespace AgentManagerService.Implementation
 			// retreive ip, port, user and password of mariaDB to us as ROCK instance
 			//string rockIp = marsConfigService.Get("rock/ip");
 			//int rockPort = int.Parse(marsConfigService.Get("rock/port"));
+			string rockIP = marsConfigService.Get("rock/ip");
 			string rockUser = marsConfigService.Get("rock/serveruser");
 			string rockPassword = marsConfigService.Get("rock/serverpassword");
 
-			var connectionString = string.Format("Server={0};Uid={1};Pwd={2};","mariadbhost",rockUser,rockPassword);
+			var connectionString = string.Format("Server={0};Uid={1};Pwd={2};",rockIP,rockUser,rockPassword);
 
 
 
