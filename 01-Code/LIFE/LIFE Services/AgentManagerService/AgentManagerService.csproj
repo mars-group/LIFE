@@ -39,12 +39,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\ConfigService.0.2.12\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="ConfigService">
-      <HintPath>..\..\packages\ConfigService.0.2.12\lib\net45\ConfigService.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -61,11 +55,17 @@
     <Reference Include="MySql.Web">
       <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Web.dll</HintPath>
     </Reference>
-    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.2\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
-    </Reference>
     <Reference Include="SpatialAPI">
-      <HintPath>..\..\packages\SpatialAPI.1.0.77\lib\net45\SpatialAPI.dll</HintPath>
+      <HintPath>..\..\packages\SpatialAPI.1.0.81\lib\net45\SpatialAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="MARS.Shuttle.SimulationConfig">
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.4\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\ConfigService.0.2.13\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ConfigService">
+      <HintPath>..\..\packages\ConfigService.0.2.13\lib\net45\ConfigService.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
