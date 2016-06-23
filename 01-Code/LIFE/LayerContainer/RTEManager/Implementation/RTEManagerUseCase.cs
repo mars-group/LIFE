@@ -193,7 +193,7 @@ namespace RTEManager.Implementation {
                                              executionGroup =>
                                             {
                                                 // execute group's agents if they match the currenttick
-                                                if (executionGroup % _currentTick == 0)
+                                                if (_currentTick == 0 || _currentTick % executionGroup == 0)
                                                 {
                                                     Parallel.ForEach(_tickClientsPerLayer[layer][executionGroup],
                                                                     client => client.Key.Tick()
