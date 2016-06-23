@@ -70,7 +70,7 @@ namespace RuntimeEnvironment.Implementation
         private void RunSimulation() {
 
             var sw = Stopwatch.StartNew();
-            for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
+            for (var i = 1; _nrOfTicks == null || i <= _nrOfTicks; i++) {
 
                 // check for status change
                 switch (_status) {

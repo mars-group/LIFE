@@ -169,14 +169,11 @@ namespace RTEManager.Implementation {
             Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
             // visualize all visualizable layers once prior to first execution if tick = 0
-            if (_currentTick == 0) {
-				Console.WriteLine ("[LIFE] Executing Pre-Viz.");
+            if (_currentTick == 1) {
+				Console.WriteLine ("[LIFE] Executing Pre-Viz to fetch initial state.");
 				_resultAdapter.WriteResults(_currentTick);
 
                 if (_explicitGC) { GC.Collect(); }
-
-                // raise tick to 1 after initial result output
-                _currentTick++;
             }
 
 			Console.WriteLine ("[LIFE] Executing Pre-Tick");

@@ -33,7 +33,7 @@ namespace RTEManagerBlackBoxTest
             var mockTick = mockLayer.GetCurrentTick();
             int numberofTicks = new Random().Next(200, 500);
 
-            for (int i = 0; i < numberofTicks-1; i++)
+            for (int i = 1; i <= numberofTicks; i++)
             {
                 rteManager.AdvanceOneTick();
             }
