@@ -125,12 +125,12 @@ namespace RTEManager.Implementation {
 				// add tickClient to visualization if type is appropriate
 				var visAgent = tickClient as ISimResult;
 				if(visAgent != null){
-					_resultAdapter.Register(visAgent);
-                    // TODO add execution group to resultAdapter
+					_resultAdapter.Register(visAgent, executionInterval);
+
 				}
             }
             else {
-                _tickClientsPerLayer[layer].GetOrAdd(executionInterval, new ConcurrentDictionary<ITickClient, byte>());
+                _tickClientsMarkedForRegistrationPerLayer[layer].GetOrAdd(executionInterval, new ConcurrentBag<ITickClient>());
                 _tickClientsMarkedForRegistrationPerLayer[layer][executionInterval].Add(tickClient);
             }
         }
