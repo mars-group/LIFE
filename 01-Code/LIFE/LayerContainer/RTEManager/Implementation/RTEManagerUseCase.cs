@@ -35,7 +35,7 @@ namespace RTEManager.Implementation {
         private readonly ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentBag<ITickClient>>> _tickClientsMarkedForDeletionPerLayer;
 
         // the tickClients which are marked to be registered per Layer during active simulation
-        private readonly IDictionary<ILayer, ConcurrentBag<ITickClient>> _tickClientsMarkedForRegistrationPerLayer;
+        private readonly ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentBag<ITickClient>>> _tickClientsMarkedForRegistrationPerLayer;
 
         // all the layers mapped by their instanceID
         private readonly IDictionary<TLayerInstanceId, ILayer> _layers;
@@ -65,7 +65,7 @@ namespace RTEManager.Implementation {
             _preAndPostTickLayer = new ConcurrentBag<ISteppedActiveLayer>();
 			_disposableLayers = new ConcurrentBag<IDisposableLayer> ();
             _tickClientsMarkedForDeletionPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentBag<ITickClient>>>();
-            _tickClientsMarkedForRegistrationPerLayer = new Dictionary<ILayer, ConcurrentBag<ITickClient>>();
+            _tickClientsMarkedForRegistrationPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentBag<ITickClient>>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
             _currentTick = 0;
@@ -77,7 +77,7 @@ namespace RTEManager.Implementation {
             if (!_tickClientsPerLayer.ContainsKey(layer)) {
                 _tickClientsPerLayer.TryAdd(layer, new ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>());
                 _tickClientsMarkedForDeletionPerLayer.TryAdd(layer, new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>());
-                _tickClientsMarkedForRegistrationPerLayer.Add(layer, new ConcurrentBag<ITickClient>());
+                _tickClientsMarkedForRegistrationPerLayer.TryAdd(layer, new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>());
             }
             if (!_layers.ContainsKey(layerInstanceId)) {
                 _layers.Add(layerInstanceId, layer);
@@ -127,11 +127,11 @@ namespace RTEManager.Implementation {
 				if(visAgent != null){
 					_resultAdapter.Register(visAgent);
                     // TODO add execution group to resultAdapter
-
 				}
             }
             else {
-                _tickClientsMarkedForRegistrationPerLayer[layer].Add(tickClient);
+                _tickClientsPerLayer[layer].GetOrAdd(executionInterval, new ConcurrentDictionary<ITickClient, byte>());
+                _tickClientsMarkedForRegistrationPerLayer[layer][executionInterval].Add(tickClient);
             }
         }
 
@@ -195,7 +195,7 @@ namespace RTEManager.Implementation {
                                                 // execute group's agents if they match the currenttick
                                                 if (executionGroup % _currentTick == 0)
                                                 {
-                                                    Parallel.ForEach(_tickClientsPerLayer[layer][1],
+                                                    Parallel.ForEach(_tickClientsPerLayer[layer][executionGroup],
                                                                     client => client.Key.Tick()
                                                                 );
                                                 }
@@ -227,19 +227,22 @@ namespace RTEManager.Implementation {
                     layer => Parallel.ForEach
                         (
                             _tickClientsMarkedForDeletionPerLayer[layer],
-                            tickClientsPerExecGroup => {
-                                Parallel.ForEach(tickClientsPerExecGroup.Value, tickClient => {
-                                     byte trash;
-                                     _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryRemove(tickClient, out trash);
+                            tickClientsPerExecGroup =>
+                            {
+                                Parallel.ForEach(tickClientsPerExecGroup.Value, tickClient =>
+                                {
+                                    byte trash;
+                                    _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryRemove(tickClient,
+                                        out trash);
 
-                                     // remove tickClient from visualization if type is appropiate
-                                     var visAgent = tickClient as ISimResult;
-                                     if (visAgent != null)
-                                     {
-                                         _resultAdapter.DeRegister(visAgent);
-                                     }
-                                 }
-						    }
+                                    // remove tickClient from visualization if type is appropiate
+                                    var visAgent = tickClient as ISimResult;
+                                    if (visAgent != null)
+                                    {
+                                        _resultAdapter.DeRegister(visAgent);
+                                    }
+                                });
+                            }
 						)
                 );
 
@@ -251,15 +254,20 @@ namespace RTEManager.Implementation {
                     layer => Parallel.ForEach
                         (
                             _tickClientsMarkedForRegistrationPerLayer[layer],
-							tickClientToBeRegistered => {								
-								_tickClientsPerLayer[layer].TryAdd(tickClientToBeRegistered, new byte());
+                            tickClientsPerExecGroup =>
+                            {
+                                Parallel.ForEach(tickClientsPerExecGroup.Value, tickClient =>
+                                {
+                                    _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryAdd(tickClient, new byte());
 
-								// add tickClient to visualization if type is appropiate
-								var visAgent = tickClientToBeRegistered as ISimResult;
-								if(visAgent != null){
-									_resultAdapter.Register(visAgent);
-								}
-							}
+                                    // add tickClient to visualization if type is appropiate
+                                    var visAgent = tickClient as ISimResult;
+                                    if (visAgent != null)
+                                    {
+                                        _resultAdapter.Register(visAgent);
+                                    }
+                                });
+                            }
                         )
                 );
 
@@ -272,7 +280,7 @@ namespace RTEManager.Implementation {
 						_tickClientsMarkedForDeletionPerLayer[layer] = null;
 						_tickClientsMarkedForRegistrationPerLayer[layer] = null;
                         _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>();
-                        _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentBag<ITickClient>();
+                        _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>();
                     }
                 );
 

@@ -26,7 +26,7 @@ namespace ResultAdapter.Implementation {
     /// <value>The simulation identifier.</value>    
     public Guid SimulationId { get; set; }
 
-    private readonly ConcurrentDictionary<ISimResult, byte> _simObjects; // List of all objects to output.
+    private readonly ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>> _simObjects; // List of all objects to output.
     private MongoSender _sender;                                         // Database connector.
 
 
@@ -34,7 +34,7 @@ namespace ResultAdapter.Implementation {
     ///   Instantiate the concrete result adapter.
     /// </summary>
     public ResultAdapterUseCase() {
-      _simObjects = new ConcurrentDictionary<ISimResult, byte>();
+      _simObjects = new ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>>();
     }
 
 
@@ -48,15 +48,18 @@ namespace ResultAdapter.Implementation {
 
       // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
       if (_sender == null) {
-				var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+		var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
         _sender = new MongoSender(cfgClient, SimulationId.ToString());
         _sender.CreateMongoDbIndexes();
       }
 
       // Loop in parallel over all simulation elements to output.
       var results = new ConcurrentBag<AgentSimResult>();
-      Parallel.ForEach(_simObjects.Keys, entity => {
-        results.Add(entity.GetResultData());
+      Parallel.ForEach(_simObjects.Keys, executionGroup => {
+          if (executionGroup % currentTick == 0)
+          {
+              Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
+          }
       });
 
       // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
@@ -69,8 +72,11 @@ namespace ResultAdapter.Implementation {
     ///   Register a simulation object at the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to add to output queue.</param>
-    public void Register(ISimResult simObject) {
-      _simObjects.TryAdd(simObject, new byte());
+    /// <param name="executionGroup"></param>
+    public void Register(ISimResult simObject, int executionGroup = 1)
+    {
+        _simObjects.GetOrAdd(executionGroup, new ConcurrentDictionary<ISimResult, byte>());
+        _simObjects[executionGroup].TryAdd(simObject, new byte());
     }
 
 
@@ -78,9 +84,12 @@ namespace ResultAdapter.Implementation {
     ///   Deregisters a simulation object from the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to remove.</param>
-    public void DeRegister(ISimResult simObject) {
-      byte b;
-      _simObjects.TryRemove(simObject, out b);
+    public void DeRegister(ISimResult simObject, int executionGroup = 1) {
+        if (_simObjects.ContainsKey(executionGroup))
+        {
+            byte b;
+            _simObjects[executionGroup].TryRemove(simObject, out b);
+        }
     }
   }
 }

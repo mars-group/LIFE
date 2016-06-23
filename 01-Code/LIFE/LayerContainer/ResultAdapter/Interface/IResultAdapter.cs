@@ -35,13 +35,17 @@ namespace ResultAdapter.Interface {
     ///   Register a simulation object at the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to add to output queue.</param>
-    void Register(ISimResult simObject);
+    /// <param name="executionGroup">The executionGroup of the agent:
+    /// 0 : output never
+    /// 1 : output every tick
+    /// n : output every tick where tick % executionGroup == 0</param>
+    void Register(ISimResult simObject, int executionGroup = 1);
 
 
     /// <summary>
     ///   Deregisters a simulation object from the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to remove.</param>
-    void DeRegister(ISimResult simObject);
+    void DeRegister(ISimResult simObject, int executionGroup = 1);
   }
 }
