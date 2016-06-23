@@ -10,9 +10,9 @@ using LCConnector.TransportTypes;
 using LifeAPI.Agent;
 
 namespace LifeAPI.Layer {
-    public delegate void RegisterAgent(ILayer layer, ITickClient tickClient);
+    public delegate void RegisterAgent(ILayer layer, ITickClient tickClient, int executionInterval=1);
 
-    public delegate void UnregisterAgent(ILayer layer, ITickClient tickClient);
+    public delegate void UnregisterAgent(ILayer layer, ITickClient tickClient, int executionInterval=1);
 
     /// <summary>
     ///     Base Interface for all layers.
