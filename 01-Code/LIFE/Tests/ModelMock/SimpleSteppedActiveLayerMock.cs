@@ -48,8 +48,6 @@ namespace ModelMock
         public void Tick()
         {
            _tick = _tick + 1;
-            //Simulation some work
-            Thread.Sleep(10);
         }
 
         public void PreTick()
