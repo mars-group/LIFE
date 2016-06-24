@@ -56,7 +56,7 @@ namespace ResultAdapter.Implementation {
       // Loop in parallel over all simulation elements to output.
       var results = new ConcurrentBag<AgentSimResult>();
       Parallel.ForEach(_simObjects.Keys, executionGroup => {
-          if (currentTick == 0 || currentTick % executionGroup == 0)
+          if (currentTick == 1 || currentTick % executionGroup == 0)
           {
               Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
           }

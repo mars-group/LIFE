@@ -68,7 +68,7 @@ namespace RTEManager.Implementation {
             _tickClientsMarkedForRegistrationPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentBag<ITickClient>>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
-            _currentTick = 0;
+            _currentTick = 1;
         }
 
         #region Public Methods
@@ -190,7 +190,7 @@ namespace RTEManager.Implementation {
                                              executionGroup =>
                                             {
                                                 // execute group's agents if they match the currenttick
-                                                if (_currentTick == 0 || _currentTick % executionGroup == 0)
+                                                if (_currentTick == 1 || _currentTick % executionGroup == 0)
                                                 {
                                                     Parallel.ForEach(_tickClientsPerLayer[layer][executionGroup],
                                                                     client => client.Key.Tick()
@@ -199,9 +199,6 @@ namespace RTEManager.Implementation {
 
                                             }
                                             );
-                        
-
-                            
                         }
                 );
             
