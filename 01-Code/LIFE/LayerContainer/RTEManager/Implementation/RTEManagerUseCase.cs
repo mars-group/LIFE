@@ -165,8 +165,6 @@ namespace RTEManager.Implementation {
 
             var stopWatch = Stopwatch.StartNew();
 
-            // set currentTick to all layers
-            Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
             // visualize all visualizable layers once prior to first execution if tick = 0
             if (_currentTick == 0) {
@@ -178,7 +176,11 @@ namespace RTEManager.Implementation {
                 _currentTick++;
             }
 
-			Console.WriteLine ("[LIFE] Executing Pre-Tick");
+            // set currentTick to all layers
+            Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
+
+
+            Console.WriteLine ("[LIFE] Executing Pre-Tick");
             // PreTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
             Console.WriteLine ($"[LIFE] Executing Tick {_currentTick}...");
