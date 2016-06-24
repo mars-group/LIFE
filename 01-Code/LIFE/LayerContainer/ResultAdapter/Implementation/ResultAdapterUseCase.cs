@@ -44,27 +44,28 @@ namespace ResultAdapter.Implementation {
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
 	    if (_simObjects.IsEmpty) return;
-	  
+    	  
 
-      // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
-      if (_sender == null) {
-		var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-        _sender = new MongoSender(cfgClient, SimulationId.ToString());
-        _sender.CreateMongoDbIndexes();
-      }
-
-      // Loop in parallel over all simulation elements to output.
-      var results = new ConcurrentBag<AgentSimResult>();
-      Parallel.ForEach(_simObjects.Keys, executionGroup => {
-          if (currentTick == 1 || currentTick % executionGroup == 0)
-          {
-              Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
+          // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
+          if (_sender == null) {
+    		var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+            _sender = new MongoSender(cfgClient, SimulationId.ToString());
+            _sender.CreateMongoDbIndexes();
           }
-      });
 
-      // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
-	    _sender.SendVisualizationData(results, currentTick);
-	    results = null;
+          // Loop in parallel over all simulation elements to output.
+          var results = new ConcurrentBag<AgentSimResult>();
+          Parallel.ForEach(_simObjects.Keys, executionGroup => {
+              if (currentTick == 0 || currentTick == 1 || currentTick % executionGroup == 0)
+              {   
+                  //Console.WriteLine($"[OUTPUT: Tick {currentTick}]Outputting group {executionGroup} with {_simObjects[executionGroup].Keys.Count} agents.");
+                  Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
+              }
+          });
+
+        // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
+        _sender.SendVisualizationData(results, currentTick);
+        results = null;
     }
 
 

@@ -68,7 +68,7 @@ namespace RTEManager.Implementation {
             _tickClientsMarkedForRegistrationPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentBag<ITickClient>>>();
             _layers = new Dictionary<TLayerInstanceId, ILayer>();
             _isRunning = false;
-            _currentTick = 1;
+            _currentTick = 0;
         }
 
         #region Public Methods
@@ -169,11 +169,13 @@ namespace RTEManager.Implementation {
             Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
             // visualize all visualizable layers once prior to first execution if tick = 0
-            if (_currentTick == 1) {
-				Console.WriteLine ("[LIFE] Executing Pre-Viz to fetch initial state.");
+            if (_currentTick == 0) {
+				Console.WriteLine ("[LIFE] Executing Result Writing to fetch initial state.");
 				_resultAdapter.WriteResults(_currentTick);
 
                 if (_explicitGC) { GC.Collect(); }
+
+                _currentTick++;
             }
 
 			Console.WriteLine ("[LIFE] Executing Pre-Tick");
@@ -189,9 +191,11 @@ namespace RTEManager.Implementation {
                             Parallel.ForEach(_tickClientsPerLayer[layer].Keys,
                                              executionGroup =>
                                             {
-                                                // execute group's agents if they match the currenttick
-                                                if (_currentTick == 1 || _currentTick % executionGroup == 0)
-                                                {
+                                            // execute group's agents if they match the currenttick
+                                            // execute all agents in tick 1 and none which are in execGroup 0
+                                            if (_currentTick == 1 || _currentTick % executionGroup == 0)
+                                            {
+                                                    //Console.WriteLine($"[Tick {_currentTick}]Executing group {executionGroup} with {_tickClientsPerLayer[layer][executionGroup].Count} agents.");
                                                     Parallel.ForEach(_tickClientsPerLayer[layer][executionGroup],
                                                                     client => client.Key.Tick()
                                                                 );
@@ -203,15 +207,17 @@ namespace RTEManager.Implementation {
                 );
             
 			Console.WriteLine ("[LIFE] Executing Post-Tick");
+
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
-            // increase Tick counter
-            _currentTick++;
 
-			Console.WriteLine ("[LIFE] Executing Result Writing");
+            Console.WriteLine("[LIFE] Executing Result Writing");
             // visualize all layers
             _resultAdapter.WriteResults(_currentTick);
+
+            // increase Tick counter
+            _currentTick++;
 
 			Console.WriteLine ("[LIFE] Removing agents");
             // clean up all deleted tickClients
@@ -227,13 +233,13 @@ namespace RTEManager.Implementation {
                                 {
                                     byte trash;
                                     _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryRemove(tickClient,
-                                        out trash);
+                                    out trash);
 
                                     // remove tickClient from visualization if type is appropiate
                                     var visAgent = tickClient as ISimResult;
                                     if (visAgent != null)
                                     {
-                                        _resultAdapter.DeRegister(visAgent);
+                                        _resultAdapter.DeRegister(visAgent, tickClientsPerExecGroup.Key);
                                     }
                                 });
                             }
@@ -258,7 +264,7 @@ namespace RTEManager.Implementation {
                                     var visAgent = tickClient as ISimResult;
                                     if (visAgent != null)
                                     {
-                                        _resultAdapter.Register(visAgent);
+                                        _resultAdapter.Register(visAgent, tickClientsPerExecGroup.Key);
                                     }
                                 });
                             }
