@@ -6,14 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using LCConnector.TransportTypes;
-using LifeAPI.Agent;
 using LifeAPI.Layer;
 using Mono.Addins;
 
