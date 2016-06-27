@@ -168,7 +168,7 @@ namespace RTEManager.Implementation {
 
             // visualize all visualizable layers once prior to first execution if tick = 0
             if (_currentTick == 0) {
-				Console.WriteLine ("[LIFE] Executing Result Writing to fetch initial state.");
+				//Console.WriteLine ("[LIFE] Executing Result Writing to fetch initial state.");
 				_resultAdapter.WriteResults(_currentTick);
 
                 if (_explicitGC) { GC.Collect(); }
@@ -180,10 +180,10 @@ namespace RTEManager.Implementation {
             Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
 
-            Console.WriteLine ("[LIFE] Executing Pre-Tick");
+            //Console.WriteLine ("[LIFE] Executing Pre-Tick");
             // PreTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
-            Console.WriteLine ($"[LIFE] Executing Tick {_currentTick}...");
+            //Console.WriteLine ($"[LIFE] Executing Tick {_currentTick}...");
             // tick all tickClients
             Parallel.ForEach
                 (
@@ -208,20 +208,20 @@ namespace RTEManager.Implementation {
                         }
                 );
             
-			Console.WriteLine ("[LIFE] Executing Post-Tick");
+			//Console.WriteLine ("[LIFE] Executing Post-Tick");
 
             // PostTick all ActiveLayers
             Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
 
-            Console.WriteLine("[LIFE] Executing Result Writing");
+            //Console.WriteLine("[LIFE] Executing Result Writing");
             // visualize all layers
             _resultAdapter.WriteResults(_currentTick);
 
             // increase Tick counter
             _currentTick++;
 
-			Console.WriteLine ("[LIFE] Removing agents");
+			//Console.WriteLine ("[LIFE] Removing agents");
             // clean up all deleted tickClients
             Parallel.ForEach
                 (
@@ -248,7 +248,7 @@ namespace RTEManager.Implementation {
 						)
                 );
 
-			Console.WriteLine ("[LIFE] Adding new Agents");
+			//Console.WriteLine ("[LIFE] Adding new Agents");
             // add all new TickClients which were registered during the run
             Parallel.ForEach
                 (
@@ -273,7 +273,7 @@ namespace RTEManager.Implementation {
                         )
                 );
 
-			Console.WriteLine ("[LIFE] Cleaning up");
+			//Console.WriteLine ("[LIFE] Cleaning up");
             // reset collections
             Parallel.ForEach
                 (
@@ -294,7 +294,7 @@ namespace RTEManager.Implementation {
             stopWatch.Stop();
 
             _isRunning = false;
-			Console.WriteLine ("[LIFE] Tick Done");
+			//Console.WriteLine ("[LIFE] Tick Done");
             return stopWatch.ElapsedMilliseconds;
         }
 
