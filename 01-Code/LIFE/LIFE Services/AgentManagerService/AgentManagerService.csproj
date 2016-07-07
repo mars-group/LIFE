@@ -46,26 +46,26 @@
       <HintPath>..\..\packages\GeoAPI.1.7.4\lib\net45\GeoAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MySql.Data">
-      <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data.Entity">
       <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Data.Entity.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Web">
       <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Web.dll</HintPath>
     </Reference>
-    <Reference Include="SpatialAPI">
-      <HintPath>..\..\packages\SpatialAPI.1.0.81\lib\net45\SpatialAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.4\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\ConfigService.0.2.13\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ConfigService">
       <HintPath>..\..\packages\ConfigService.0.2.13\lib\net45\ConfigService.dll</HintPath>
+    </Reference>
+    <Reference Include="SpatialAPI">
+      <HintPath>..\..\packages\SpatialAPI.1.0.86\lib\net45\SpatialAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MARS.Shuttle.SimulationConfig">
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.5\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
