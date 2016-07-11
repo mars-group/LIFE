@@ -49,7 +49,8 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// <param name="results">A number of result elements to be written.</param>
 	/// <param name = "currentTick">The current tick of the simulation.</param>
     public void SendVisualizationData(ConcurrentBag<AgentSimResult> results, int currentTick) {
-			_collection.InsertMany (results);
+			
+            _collection.InsertMany (results);
 			_notifier.AnnounceNewPackage(_simId, currentTick);
 			/*_collection.InsertManyAsync(results)
 				.ContinueWith(t => {

@@ -62,7 +62,11 @@ namespace ResultAdapter.Implementation {
                   Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
               }
           });
-
+        // don't do shit, when results are empty
+        if (results.IsEmpty) {
+                results = null;
+                return; 
+        }
         // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
         _sender.SendVisualizationData(results, currentTick);
         results = null;
