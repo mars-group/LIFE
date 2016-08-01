@@ -39,33 +39,66 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="GeoAPI">
-      <HintPath>..\..\packages\GeoAPI.1.7.4\lib\net45\GeoAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="MySql.Data.Entity">
       <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Data.Entity.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Web">
       <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\ConfigService.0.2.13\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="ConfigService">
-      <HintPath>..\..\packages\ConfigService.0.2.13\lib\net45\ConfigService.dll</HintPath>
-    </Reference>
-    <Reference Include="SpatialAPI">
-      <HintPath>..\..\packages\SpatialAPI.1.0.86\lib\net45\SpatialAPI.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\ConfigService.0.2.16\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ConfigService">
+      <HintPath>..\..\packages\ConfigService.0.2.16\lib\net45\ConfigService.dll</HintPath>
+    </Reference>
+    <Reference Include="ASC">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\ASC.dll</HintPath>
+    </Reference>
+    <Reference Include="AppSettingsManager">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\AppSettingsManager.dll</HintPath>
+    </Reference>
+    <Reference Include="CustomUtilities">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\CustomUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="DalskiAgent">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\DalskiAgent.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoAPI">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\GeoAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GeoGridEnvironment">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\GeoGridEnvironment.dll</HintPath>
+    </Reference>
+    <Reference Include="LCConnector">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\LCConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="LifeAPI">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\LifeAPI.dll</HintPath>
+    </Reference>
     <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.5\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Addins">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\Mono.Addins.dll</HintPath>
+    </Reference>
+    <Reference Include="MulticastAdapter">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\MulticastAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Scs">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\Scs.dll</HintPath>
+    </Reference>
+    <Reference Include="SpatialAPI">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\SpatialAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\protobuf-net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -99,14 +132,6 @@
   </Target>
   -->
   <ItemGroup>
-    <ProjectReference Include="..\..\LIFE API\LifeAPI\LifeAPI.csproj">
-      <Project>{2CAF4351-EB6F-4A54-B8F2-CB1588B00A81}</Project>
-      <Name>LifeAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj">
-      <Project>{76BFFBA7-7BF3-439E-83D4-A340B1227461}</Project>
-      <Name>LCConnector</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
       <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
       <Name>CommonTypes</Name>
