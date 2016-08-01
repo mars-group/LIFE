@@ -35,7 +35,7 @@ namespace LifeAPI.Results {
     /// <summary>
     ///   Rotation as (yaw,pitch,roll).
     /// </summary>
-    public float[] Orientation;
+    public double[] Orientation;
     
     /// <summary>
     ///   Additional agent information. 
