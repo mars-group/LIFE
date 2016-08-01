@@ -28,9 +28,9 @@ namespace LifeAPI.Results {
     public long Tick;
     
     /// <summary>
-    ///   Agent position (x,y,z).
+    ///   Agent position (lat, lon).
     /// </summary>
-    public double[] Position;
+    public string Position;
     
     /// <summary>
     ///   Rotation as (yaw,pitch,roll).
