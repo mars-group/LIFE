@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LIFEUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\LIFEUtilities.1.0.20\lib\net45\LIFEUtilities.dll</HintPath>
+      <HintPath>..\..\packages\LIFEUtilities.1.0.28\lib\net45\LIFEUtilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

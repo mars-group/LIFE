@@ -31,11 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ConfigService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ConfigService.0.2.16\lib\net45\ConfigService.dll</HintPath>
+      <HintPath>..\..\packages\ConfigService.0.2.20\lib\net45\ConfigService.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ConfigService.0.2.16\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\ConfigService.0.2.20\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
