@@ -24,12 +24,14 @@ using LifeAPI.Agent;
 using LCConnector.TransportTypes;
 using MySql.Data.MySqlClient;
 using CommonTypes;
+using GeoGridEnvironment.Interface;
+using DalskiAgent.Agents;
 
 namespace AgentManagerService.Implementation
 {
     public class AgentManager<T> : IAgentManager<T> where T : IAgent
     {
-        public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle, IEnvironment environment, List<ILayer> additionalLayerDependencies, int reducedAgentCount=-1)
+        public IDictionary<Guid, T> GetAgentsByAgentInitConfig(AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle, List<ILayer> additionalLayerDependencies, IEnvironment environment = null, IGeoGridEnvironment<GpsAgent> geoGridEnvironment = null, int reducedAgentCount=-1)
         {
 			Console.WriteLine ("Starting creation of agent type: " + agentInitConfig.AgentName);
 
@@ -112,6 +114,7 @@ namespace AgentManagerService.Implementation
             var layerType = typeof (ILayer);
             var guidType = typeof (Guid);
             var environmentType = typeof (IEnvironment);
+            var geoGridEnvironmentType = typeof(IGeoGridEnvironment<GpsAgent>);
             var registerAgentType = typeof (RegisterAgent);
             var unregisterAgentType = typeof (UnregisterAgent);
 
@@ -145,7 +148,9 @@ namespace AgentManagerService.Implementation
 					// check special types
 					if (environmentType.IsAssignableFrom (neededParam.ParameterType)) {
 						actualParameters.Add(environment);
-					} else if (layerType.IsAssignableFrom (neededParam.ParameterType)) {
+                    } else if(geoGridEnvironmentType.IsAssignableFrom(neededParam.ParameterType)) {
+                        actualParameters.Add(geoGridEnvironment);
+                    } else if (layerType.IsAssignableFrom (neededParam.ParameterType)) {
 						if (!additionalLayerDependencies.Any (l => neededParam.ParameterType.IsInstanceOfType (l))) {
 							throw new MissingLayerForAgentConstructionException ("Agent type '" + agentInitConfig.AgentName + "' needs missing layer type '"
 							+ neededParam.ParameterType + "' to initialize.");

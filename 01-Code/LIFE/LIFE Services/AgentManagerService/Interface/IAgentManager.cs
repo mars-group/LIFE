@@ -20,8 +20,8 @@ namespace AgentManager.Interface
     public interface IAgentManager<T> where T : IAgent {
 		IDictionary<Guid,T> GetAgentsByAgentInitConfig(
             AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle,
-            UnregisterAgent unregisterAgentHandle, IEnvironment environment,
-             List<ILayer> additionalLayerDependencies, IGeoGridEnvironment<GpsAgent> geoGridEnvironment = null,
+            UnregisterAgent unregisterAgentHandle, List<ILayer> additionalLayerDependencies,
+            IEnvironment environment = null, IGeoGridEnvironment<GpsAgent> geoGridEnvironment = null,
             int reducedAgentCount = -1);
     }
 }
