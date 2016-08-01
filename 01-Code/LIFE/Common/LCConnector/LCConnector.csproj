@@ -34,6 +34,10 @@
     <DocumentationFile>bin\Release\LCConnector.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.5\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,9 +45,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.4\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\LayerNotInitializedException.cs" />

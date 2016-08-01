@@ -58,6 +58,10 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\Libraries\zip-v1.9\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.5\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Mono.Addins">
       <HintPath>..\..\Libraries\MonoAddins\Mono.Addins.dll</HintPath>
     </Reference>
@@ -70,9 +74,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.4\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
