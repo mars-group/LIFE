@@ -39,7 +39,9 @@ namespace ResultAdapter.Implementation.DataOutput {
     public async void CreateMongoDbIndexes()
     {
         var indexKeys = Builders<AgentSimResult>.IndexKeys.Ascending("Tick").Ascending("AgentType").Ascending("Layer");
+		var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position");
         CreateIndexOptions indexOptions = new CreateIndexOptions { Background = true };
+		await _collection.Indexes.CreateOneAsync(geoIndexKeys);
         await _collection.Indexes.CreateOneAsync(indexKeys, indexOptions);
     }
 
