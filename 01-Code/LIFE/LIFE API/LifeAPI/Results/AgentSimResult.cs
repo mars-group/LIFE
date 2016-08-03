@@ -30,7 +30,7 @@ namespace LifeAPI.Results {
     /// <summary>
     ///   Agent position (lat, lon).
     /// </summary>
-    public string Position;
+    public object Position;
     
     /// <summary>
     ///   Rotation as (yaw,pitch,roll).

@@ -32,6 +32,110 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AgentShadowingService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\AgentShadowingService.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AppSettingsManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\AppSettingsManager.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ASC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\ASC.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CommonTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\CommonTypes.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ConfigService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ConfigService.0.2.20\lib\net45\ConfigService.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CustomUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\CustomUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DalskiAgent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\DalskiAgent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GeoAPI, Version=1.7.4.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\GeoAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GeoGridEnvironment, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\GeoGridEnvironment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LayerContainerShared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\LayerContainerShared.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LCConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\LCConnector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LifeAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\LifeAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LIFEUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\LIFEUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LoggerFactory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\LoggerFactory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MARS.Shuttle.SimulationConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Addins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\Mono.Addins.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MulticastAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\MulticastAdapter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ConfigService.0.2.20\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NodeRegistry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\NodeRegistry.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Scs, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\Scs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SpatialAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DalskiAgent.0.5.54\lib\net45\SpatialAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,58 +151,6 @@
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\ConfigService.0.2.16\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="ConfigService">
-      <HintPath>..\..\packages\ConfigService.0.2.16\lib\net45\ConfigService.dll</HintPath>
-    </Reference>
-    <Reference Include="ASC">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\ASC.dll</HintPath>
-    </Reference>
-    <Reference Include="AppSettingsManager">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\AppSettingsManager.dll</HintPath>
-    </Reference>
-    <Reference Include="CustomUtilities">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\CustomUtilities.dll</HintPath>
-    </Reference>
-    <Reference Include="DalskiAgent">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\DalskiAgent.dll</HintPath>
-    </Reference>
-    <Reference Include="GeoAPI">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\GeoAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GeoGridEnvironment">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\GeoGridEnvironment.dll</HintPath>
-    </Reference>
-    <Reference Include="LCConnector">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\LCConnector.dll</HintPath>
-    </Reference>
-    <Reference Include="LifeAPI">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\LifeAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Addins">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\Mono.Addins.dll</HintPath>
-    </Reference>
-    <Reference Include="MulticastAdapter">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\MulticastAdapter.dll</HintPath>
-    </Reference>
-    <Reference Include="Scs">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\Scs.dll</HintPath>
-    </Reference>
-    <Reference Include="SpatialAPI">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\SpatialAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\packages\DalskiAgent.0.5.49\lib\net45\protobuf-net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -132,10 +184,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj">
-      <Project>{DF8053EF-4673-4812-99BF-11AB6E669A11}</Project>
-      <Name>CommonTypes</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
