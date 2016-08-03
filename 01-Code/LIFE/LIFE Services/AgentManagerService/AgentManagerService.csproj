@@ -160,6 +160,7 @@
     <Compile Include="Interface\Exceptions\ParameterMustBePrimitiveException.cs" />
     <Compile Include="Interface\IAgentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interface\Exceptions\ParameterIsNotMappedOrHasNotDefaultValue.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
