@@ -26,6 +26,7 @@ using MySql.Data.MySqlClient;
 using CommonTypes;
 using GeoGridEnvironment.Interface;
 using DalskiAgent.Agents;
+using AgentManager;
 
 namespace AgentManagerService.Implementation
 {
@@ -69,8 +70,9 @@ namespace AgentManagerService.Implementation
 			// fetch needed params
 			var neededParameters = agentConstructor.GetParameters ();
 
-            // sanity check
-			if (neededParameters.Length != agentParameterCount)
+            // sanity check for really needed parameters. Every parameter which has a default value might as well be 
+            // initialized from that default value in case no mapping is present
+            if (neededParameters.Length - neededParameters.Count(p => p.HasDefaultValue) != agentParameterCount)
             {
                 throw new NotEnoughParametersProvidedException("There were not enough parameters provided in your SimConfig for Agent of type: " + agentType);
             }
@@ -141,7 +143,7 @@ namespace AgentManagerService.Implementation
 
 				// get an enumerator for the parameters provided by SHUTTLE
                 var shuttleParams = initParams.GetEnumerator();
-                shuttleParams.MoveNext();
+                var nextParamAvailable = shuttleParams.MoveNext();
 
                 foreach (var neededParam in neededParameters) {
 
@@ -163,58 +165,80 @@ namespace AgentManagerService.Implementation
 					} else if (unregisterAgentType.IsAssignableFrom (neededParam.ParameterType)) {
 						actualParameters.Add (unregisterAgentHandle);
 					} else {
-						// it's a primitive type, so take the next param from params list provided by SHUTTLE
-						var param = shuttleParams.Current;
 
-						if (param.GetParameterType () == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation) {
-							// use static value
-							var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
-							var paramType = Type.GetType (initInfo.ConstructorArgumentDatatype);
+                        // check whether a next parameter is avialable from SHUTTLE:
+                        if (nextParamAvailable)
+                        {
+                            // it's a primitive type, so take the next param from params list provided by SHUTTLE
+                            var param = shuttleParams.Current;
 
-							if (paramType != typeof(String) && (paramType == null || !paramType.IsPrimitive)) {
-								throw new ParameterMustBePrimitiveException ("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type. But was: " + paramType.Name);
-							}
+                            if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
+                            {
+                                // use static value
+                                var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
+                                var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
 
-							try {
-								actualParameters.Add (GetParameterValue (paramType, initInfo.ParameterValue));
-							} catch (FormatException formatException) {
-								Console.Error.WriteLine ("An error occured while transforming a value" +
-								" from ROCK-DB. " +
-								"The destined target type is: {0} ," +
-								" the value field contained: {1}," +
-								" the argument name was: {2}, " +
-								" the original exception was: {3}."
-									, paramType, initInfo.ParameterValue, initInfo.ConstructorArgumentName, formatException);
-								throw formatException;
-							}
-						}
+                                if (paramType != typeof(string) && (paramType == null || !paramType.IsPrimitive))
+                                {
+                                    throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type. But was: " + paramType.Name);
+                                }
 
-						if (param.GetParameterType () == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation) {
-							var initInfo = param.GetFieldToConstructorArgumentRelation ();
-							var paramType = Type.GetType (initInfo.ConstructorArgumentDatatype);
+                                try
+                                {
+                                    actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
+                                }
+                                catch (FormatException formatException)
+                                {
+                                    Console.Error.WriteLine("An error occured while transforming a value" +
+                                    " from ROCK-DB. " +
+                                    "The destined target type is: {0} ," +
+                                    " the value field contained: {1}," +
+                                    " the argument name was: {2}, " +
+                                    " the original exception was: {3}."
+                                        , paramType, initInfo.ParameterValue, initInfo.ConstructorArgumentName, formatException);
+                                    throw formatException;
+                                }
+                            }
+
+                            if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation)
+                            {
+                                var initInfo = param.GetFieldToConstructorArgumentRelation();
+                                var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
 
 
-							// fetch parameter from ROCK CUBE
-							var paramValue = agentDBParamArrays[initInfo.MarsDBColumnName][index];
-							// add param to actualParameters[]
-							try {
-								actualParameters.Add (GetParameterValue (paramType, (string)paramValue));
-							} catch (FormatException formatException) {
-								Console.Error.WriteLine ("An error occured while transforming a value" +
-								" from ROCK-DB. " +
-								"The destined target type is: {0} ," +
-								" the value field contained: {1}," +
-								" the argument name was: {2}, " +
-								" the original exception was: {3}."
-									, paramType, (string)paramValue, initInfo.ConstructorArgumentName, formatException);
-								throw formatException;
-							}
-						}   
+                                // fetch parameter from ROCK CUBE
+                                var paramValue = agentDBParamArrays[initInfo.MarsDBColumnName][index];
+                                // add param to actualParameters[]
+                                try
+                                {
+                                    actualParameters.Add(GetParameterValue(paramType, paramValue));
+                                }
+                                catch (FormatException formatException)
+                                {
+                                    Console.Error.WriteLine("An error occured while transforming a value" +
+                                    " from ROCK-DB. " +
+                                    "The destined target type is: {0} ," +
+                                    " the value field contained: {1}," +
+                                    " the argument name was: {2}, " +
+                                    " the original exception was: {3}."
+                                        , paramType, paramValue, initInfo.ConstructorArgumentName, formatException);
+                                    throw formatException;
+                                }
+                            }
+                        }
+                        // no next param avialable, but still params are needed, these must be params with default values
+                        else {
+                            if (!neededParam.HasDefaultValue)
+                            {
+                                throw new ParameterIsNotMappedOrHasNotDefaultValue($"The parameter {neededParam.Name} was not mapped in SHUTTLE or has no default value assigned!"); 
+                            }
+                            actualParameters.Add(neededParam.DefaultValue);
+                        }
 
 					}
 
                     // move to next param
-                    shuttleParams.MoveNext();
+                    nextParamAvailable = shuttleParams.MoveNext();
 
                 }
 

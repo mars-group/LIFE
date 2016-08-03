@@ -72,7 +72,7 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MARS.Shuttle.SimulationConfig">
-      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.4\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
+      <HintPath>..\..\packages\MARS.Shuttle.SimulationConfig.1.0.5\lib\net45\MARS.Shuttle.SimulationConfig.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
