@@ -74,7 +74,18 @@ namespace AgentManagerService.Implementation
             // initialized from that default value in case no mapping is present
             if (neededParameters.Length - neededParameters.Count(p => p.HasDefaultValue) != agentParameterCount)
             {
-                throw new NotEnoughParametersProvidedException("There were not enough parameters provided in your SimConfig for Agent of type: " + agentType);
+                var errmsg = new StringBuilder();
+                errmsg.AppendLine("There were not enough parameters provided in your SimConfig for Agent of type: " + agentType);
+                errmsg.Append("NeededParams are:");
+                foreach(var np in neededParameters) {
+                    errmsg.AppendLine($"Name: {np.Name}, Type: {np.GetType().ToString()}");
+                }
+                errmsg.Append("ActualParams are:");
+                foreach (var np in agentInitConfig.AgentInitParameters)
+                {
+                    errmsg.AppendLine($"Type: {np.GetParameterType()}");
+                }
+                throw new NotEnoughParametersProvidedException(errmsg.ToString());
             }
 
 
