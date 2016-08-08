@@ -49,13 +49,9 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="MsgPack">
-      <HintPath>..\..\packages\MsgPack.Cli.0.8.0\lib\net45\MsgPack.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ASSComponentTest.cs" />
-    <Compile Include="MsgPackTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
