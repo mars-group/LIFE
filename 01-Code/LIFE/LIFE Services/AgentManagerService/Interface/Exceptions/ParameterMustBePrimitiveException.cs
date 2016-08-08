@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
 using System;
+using System.Runtime.Serialization;
 
 namespace AgentManager.Interface.Exceptions {
     [Serializable]
@@ -15,6 +16,7 @@ namespace AgentManager.Interface.Exceptions {
             
         }
 
-		public ParameterMustBePrimitiveException(){}
+		public ParameterMustBePrimitiveException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context) { }
     }
 }
