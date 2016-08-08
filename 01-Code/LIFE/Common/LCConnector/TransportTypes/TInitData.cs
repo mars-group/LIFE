@@ -57,13 +57,21 @@ namespace LCConnector.TransportTypes {
         public TimeSeriesInitConfig TimeSeriesInitInfo { get; set; }
 
         /// <summary>
+        /// The address of the MARS Config. Defaults to http://marsconfig, but 
+        /// will be overridden, in case the '--mca' flag is provided upon
+        /// start.
+        /// </summary>
+        public string MARSConfigAddress { get; private set; }
+
+        /// <summary>
         /// Creates a new TInitData object, with an empty list of AgentInitConfigs
         /// </summary>
-        public TInitData(bool distribute, TimeSpan oneTickTimeSpan, DateTime simulationWallClockStartDate, Guid simulationId) {
+        public TInitData(bool distribute, TimeSpan oneTickTimeSpan, DateTime simulationWallClockStartDate, Guid simulationId, string marsConfigAddress) {
             Distribute = distribute;
             OneTickTimeSpan = oneTickTimeSpan;
             SimulationWallClockStartDate = simulationWallClockStartDate;
             SimulationId = simulationId;
+            MARSConfigAddress = marsConfigAddress;
             AgentInitConfigs = new List<AgentInitConfig>();
         }
 

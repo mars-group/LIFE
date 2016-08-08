@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using CommonTypes;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
@@ -241,7 +242,7 @@ namespace RuntimeEnvironment.Implementation
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
-				var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
+				var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
 
 				// fetch layerConfig by layerName
 				LayerConfig layerConfig;
@@ -317,7 +318,7 @@ namespace RuntimeEnvironment.Implementation
 
 							Parallel.For(0, lcCount, i => {
 
-								initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId);
+								initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
 
 								// add overhead of agents to first layer
 								var actualAgentCount = i == 0 ? normalAgentCount + overheadAgentCount : normalAgentCount;
