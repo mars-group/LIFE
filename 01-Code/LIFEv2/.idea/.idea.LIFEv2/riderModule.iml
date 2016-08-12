@@ -7,6 +7,8 @@
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerShared" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManager" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/RuntimeEnvironment" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/ModelContainer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/LayerNameService" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
