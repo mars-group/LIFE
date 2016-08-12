@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/../../MARSLocalStarter" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerFacade" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerShared" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManager" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/RuntimeEnvironment" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
