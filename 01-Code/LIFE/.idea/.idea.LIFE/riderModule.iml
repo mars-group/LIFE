@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../..">
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/RuntimeEnvironment" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManager" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/ModelContainer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerFacade" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerShared" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/LayerNameService" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/CommonTypes" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/SMConnector" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/LCConnector" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/ConfigurationAdapter" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/NodeRegistry" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/LoggerFactory" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/LNSConnector" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerRegistry" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/RTEManager" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/PartitionManager" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerFacade" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerFactory" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerShared" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/ResultAdapter" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/MulticastAdapter" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/Scs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/ASC" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/CustomUtilities" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/RabbitMQClient" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/SimulationManagerTest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/MulticastAdapterTest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/NodeRegistryTest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/ModelMock" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/RTEManagerBlackBoxTest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/AgentShadowingServiceTests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/PerfTester" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LIFE Services/AgentShadowingService" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LIFE Services/AgentManagerService" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LIFE API/LifeAPI" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../MARSLocalStarter" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.nuget/NuGet.Config" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.nuget/NuGet.exe" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.nuget/NuGet.targets" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/CommonTypes/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/CommonTypes/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/ConfigurationAdapter/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/ConfigurationAdapter/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/LCConnector/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/LCConnector/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/LNSConnector/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/LNSConnector/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/LoggerFactory/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/LoggerFactory/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/NodeRegistry/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/NodeRegistry/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/SMConnector/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Common/SMConnector/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LIFE API/LifeAPI/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LIFE API/LifeAPI/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LIFE Services/AgentManagerService/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LIFE Services/AgentShadowingService/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LIFE Services/AgentShadowingService/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainer/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainer/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerFacade/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerFacade/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerShared/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerShared/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerFactory/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerFactory/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerRegistry/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerRegistry/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/PartitionManager/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/PartitionManager/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/RTEManager/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/RTEManager/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/ResultAdapter/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../LayerContainer/ResultAdapter/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../MARSLocalStarter/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../MARSLocalStarter/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/LayerNameService/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/LayerNameService/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/ModelContainer/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/ModelContainer/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/RuntimeEnvironment/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/RuntimeEnvironment/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManager/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManager/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerFacade/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerFacade/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerShared/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SimulationManager/SimulationManagerShared/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/ASC/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/ASC/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/CustomUtilities/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/CustomUtilities/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/MulticastAdapter/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/MulticastAdapter/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/RabbitMQClient/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/RabbitMQClient/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/Scs/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../T-Components/Scs/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/AgentShadowingServiceTests/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/AgentShadowingServiceTests/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/LayerContainerFassadeTest/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/ModelMock/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/MulticastAdapterTest/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/MulticastAdapterTest/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/NodeRegistryTest/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/NodeRegistryTest/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/PerfTester/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/PerfTester/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/RTEManagerBlackBoxTest/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/RTEManagerBlackBoxTest/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/SimulationManagerTest/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/SimulationManagerTest/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../packages" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
