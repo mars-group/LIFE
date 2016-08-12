@@ -57,11 +57,12 @@ namespace MARSLocalStarter {
 					var filename = rootAppender != null ? rootAppender.File : string.Empty;*/
 			LogManager.Shutdown();
 
-			//Report error to jira
-			//JiraErrorReporter.ReportError(filename, exception);
+            //Report error to jira
+            //JiraErrorReporter.ReportError(filename, exception);
 
-			throw;
-		}
+            Console.Error.WriteLine($"MARS LIFE crashed with an error. Error was: {exception.Message}");
+            Environment.Exit(1);
+            }
 
 
 		Logger.Info("MARS LIFE shutting down.");

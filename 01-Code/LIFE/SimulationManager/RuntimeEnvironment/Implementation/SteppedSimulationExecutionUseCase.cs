@@ -45,6 +45,7 @@ namespace RuntimeEnvironment.Implementation
 		private Guid _simulationId;
 
 		private RabbitMQWriter _rabbitMQWriter;
+        private bool publishToQueue = true;
 
         public SteppedSimulationExecutionUseCase
 		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, Guid simulationId, bool startPaused = false) {
@@ -53,7 +54,14 @@ namespace RuntimeEnvironment.Implementation
             _status = startPaused ? SimulationStatus.Paused : SimulationStatus.Running;
             _simulationExecutionSwitch = new ManualResetEvent(false);
 			_simulationId = simulationId;
-			_rabbitMQWriter = new RabbitMQWriter(simulationId);
+			try
+			{
+				_rabbitMQWriter = new RabbitMQWriter(simulationId);
+			}
+			catch (Exception e){
+                publishToQueue = false;
+				Console.Error.WriteLine($"An error occured while trying to access the RabbitMQ based EventQueue. Simultion will continue without updates to the queue. The error was: {e.Message}");
+			}
 
             // start simulation
 			_simulationTask = Task.Run(() => RunSimulation());
@@ -62,7 +70,7 @@ namespace RuntimeEnvironment.Implementation
         private void RunSimulation() {
 
             var sw = Stopwatch.StartNew();
-            for (var i = 0; _nrOfTicks == null || i < _nrOfTicks; i++) {
+            for (var i = 1; _nrOfTicks == null || i <= _nrOfTicks; i++) {
 
                 // check for status change
                 switch (_status) {

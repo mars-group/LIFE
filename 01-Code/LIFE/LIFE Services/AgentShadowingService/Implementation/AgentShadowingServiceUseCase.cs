@@ -49,7 +49,7 @@ namespace AgentShadowingService.Implementation
 			_shadowAgentClients = new ConcurrentDictionary<Guid, IAscServiceClient<TServiceInterface>>();
 
             // calculate MulticastAddress for this agentType
-            _mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
+            _mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddress(typeOfTServiceClass);
 			_agentShadowingServer = AscServiceFactory.CreateService(port, _mcastAddress, typeOfTServiceClass.Name);
             _agentShadowingServer.Start();
 

@@ -23,12 +23,15 @@ namespace RTEManagerBlackBoxTest.Mocks {
 
     }
 
-    public void Register(ISimResult simObject) {
+      public void Register(ISimResult simObject, int executionGroup = 1)
+      {
 
-    }
+      }
 
-    public void DeRegister(ISimResult simObject) {
+      public void DeRegister(ISimResult simObject, int executionGroup = 1)
+      {
 
-    }
+      }
+
   }
 }

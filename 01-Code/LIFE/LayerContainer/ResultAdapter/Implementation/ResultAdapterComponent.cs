@@ -52,8 +52,9 @@ namespace ResultAdapter.Implementation {
     ///   Register a simulation object at the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to add to output queue.</param>
-    public void Register(ISimResult simObject) {
-      _resultAdapterInternalUseCase.Register(simObject);
+    /// <param name="executionGroup"></param>
+    public void Register(ISimResult simObject, int executionGroup = 1) {
+      _resultAdapterInternalUseCase.Register(simObject, executionGroup);
     }
 
 
@@ -61,8 +62,8 @@ namespace ResultAdapter.Implementation {
     ///   Deregisters a simulation object from the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to remove.</param>
-    public void DeRegister(ISimResult simObject) {
-      _resultAdapterInternalUseCase.DeRegister(simObject);
+    public void DeRegister(ISimResult simObject, int executionGroup = 1) {
+      _resultAdapterInternalUseCase.DeRegister(simObject, executionGroup);
     }
   }
 }

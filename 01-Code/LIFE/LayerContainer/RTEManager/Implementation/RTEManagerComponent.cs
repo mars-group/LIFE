@@ -36,11 +36,11 @@ namespace RTEManager.Implementation {
             _rteManagerUseCase.UnregisterLayer(layerInstanceId);
         }
 
-        public void UnregisterTickClient(ILayer layer, ITickClient tickClient) {
+        public void UnregisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1) {
             _rteManagerUseCase.UnregisterTickClient(layer, tickClient);
         }
 
-        public void RegisterTickClient(ILayer layer, ITickClient tickClient) {
+        public void RegisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1) {
             _rteManagerUseCase.RegisterTickClient(layer, tickClient);
         }
 

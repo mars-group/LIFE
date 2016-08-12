@@ -39,7 +39,7 @@ namespace RTEManager.Interfaces {
         /// </summary>
         /// <param name="layer"></param>
         /// <param name="tickClient"></param>
-        void UnregisterTickClient(ILayer layer, ITickClient tickClient);
+        void UnregisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval=1);
 
         /// <summary>
         ///     Registers an agent with the LayerContainer.
@@ -48,7 +48,9 @@ namespace RTEManager.Interfaces {
         /// </summary>
         /// <param name="layer"></param>
         /// <param name="tickClient"></param>
-        void RegisterTickClient(ILayer layer, ITickClient tickClient);
+        /// <param name="executionInterval">Set to tell LIFE to execute this agent in a specific interval
+        /// other than every tick.</param>
+        void RegisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval=1);
 
         /// <summary>
         ///     Initializes the layer wit

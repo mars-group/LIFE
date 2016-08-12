@@ -772,7 +772,7 @@ Global
 		$0.TextStylePolicy = $6
 		$6.FileWidth = 120
 		$6.TabsToSpaces = False
-		$6.inheritsSet = VisualStudio
+		$6.inheritsSet = null
 		$6.inheritsScope = text/plain
 		$6.scope = text/x-csharp
 		$6.TabWidth = 2

@@ -33,12 +33,13 @@ namespace RTEManagerBlackBoxTest
             var mockTick = mockLayer.GetCurrentTick();
             int numberofTicks = new Random().Next(200, 500);
 
-            for (int i = 0; i < numberofTicks; i++)
+            for (int i = 1; i <= numberofTicks; i++)
             {
                 rteManager.AdvanceOneTick();
             }
 
-            Assert.AreEqual(mockTick + numberofTicks, mockLayer.GetCurrentTick());
+            // +1 because after executing numberOfTicks the counter will be +1 to that. 
+            Assert.AreEqual(mockTick + numberofTicks + 1, mockLayer.GetCurrentTick());
         }
 
         [Test]

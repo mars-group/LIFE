@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using ConfigService;
 using LifeAPI.Results;
 using MongoDB.Driver;
@@ -39,7 +40,9 @@ namespace ResultAdapter.Implementation.DataOutput {
     public async void CreateMongoDbIndexes()
     {
         var indexKeys = Builders<AgentSimResult>.IndexKeys.Ascending("Tick").Ascending("AgentType").Ascending("Layer");
+		var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position._v");
         CreateIndexOptions indexOptions = new CreateIndexOptions { Background = true };
+		await _collection.Indexes.CreateOneAsync(geoIndexKeys);
         await _collection.Indexes.CreateOneAsync(indexKeys, indexOptions);
     }
 
@@ -49,7 +52,8 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// <param name="results">A number of result elements to be written.</param>
 	/// <param name = "currentTick">The current tick of the simulation.</param>
     public void SendVisualizationData(ConcurrentBag<AgentSimResult> results, int currentTick) {
-			_collection.InsertMany (results);
+			
+            _collection.InsertMany (results);
 			_notifier.AnnounceNewPackage(_simId, currentTick);
 			/*_collection.InsertManyAsync(results)
 				.ContinueWith(t => {

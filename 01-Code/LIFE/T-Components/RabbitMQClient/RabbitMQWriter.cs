@@ -11,6 +11,7 @@ using RabbitMQ.Client;
 using System.Text;
 using ConfigService;
 using System.Threading.Tasks;
+using CommonTypes;
 
 namespace RabbitMQClient
 {
@@ -23,7 +24,7 @@ namespace RabbitMQClient
 		public RabbitMQWriter(Guid simulationId)
 		{
 			
-			var cfgClient = new ConfigServiceClient("http://marsconfig:8080/");
+			var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
 
 			var connection = new ConnectionFactory {
 				HostName = cfgClient.Get("rabbitmq/ip"),
@@ -48,11 +49,15 @@ namespace RabbitMQClient
 		/// <param name="message">Message.</param>
 		public void SendMessage(string message){
 			var body = Encoding.UTF8.GetBytes(message);
-
-			channel.BasicPublish(exchange: "",
-				routingKey: _queueName,
-				basicProperties: null,
-				body: body);
+            try
+            {
+                channel.BasicPublish("", _queueName, null, body);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine("[RabbitMQWriter] Propagation of new result package failed!");
+                Console.Error.WriteLine(ex);
+            }
 		}
 	}
 }

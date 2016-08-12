@@ -77,7 +77,7 @@ namespace AgentShadowingServiceTests
             var typeOfTServiceClass = typeof(MockAgent);
 		    var typeOfTServiceInterface = typeof(IMockAgent);
 
-		    var mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddressByType(typeOfTServiceClass);
+		    var mcastAddress = MulticastAddressGenerator.GetIPv4MulticastAddress(typeOfTServiceClass);
 
             var ascServiceApp1 = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, mcastAddress)));
             var ascServiceApp2 = new AscServiceApplication(AcsServerFactory.CreateServer(AscEndPoint.CreateEndPoint(port, mcastAddress)));
