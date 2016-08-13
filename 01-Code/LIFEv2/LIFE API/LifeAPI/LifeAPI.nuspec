@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>LifeAPI</id>
+    <version>0.1</version>
+    <title>LifeAPI</title>
+    <authors>Christian Huening</authors>
+    <owners>Christian Huening</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The API needed to create new layers and agents</description>
+    <releaseNotes>Stable Release</releaseNotes>
+    <copyright>Copyright 2014 - MARS Group</copyright>
+    <tags>mars layerapi</tags>
+    <dependencies>
+        <dependency id="log4net" version="2.0.3" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin/Release/*.dll" target="lib/net45/"/>
+  </files>
+</package>

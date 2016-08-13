@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/RuntimeEnvironment" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/ModelContainer" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/LayerNameService" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LIFE API/LifeAPI" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
