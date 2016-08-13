@@ -22,11 +22,11 @@ using System.Threading.Tasks;
 using System.Text;
 using LifeAPI.Agent;
 using LCConnector.TransportTypes;
-using MySql.Data.MySqlClient;
 using CommonTypes;
 using GeoGridEnvironment.Interface;
 using DalskiAgent.Agents;
 using AgentManager;
+using MySql.Data.MySqlClient;
 
 namespace AgentManagerService.Implementation
 {

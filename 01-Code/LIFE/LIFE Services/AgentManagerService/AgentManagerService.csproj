@@ -64,6 +64,14 @@
       <HintPath>..\..\packages\GeoGridEnvironment.0.9.17\lib\net45\GeoGridEnvironment.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.ProtocolBuffers, Version=2.4.1.555, Culture=neutral, PublicKeyToken=55f7125234beb589, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers.Serialization, Version=2.4.1.555, Culture=neutral, PublicKeyToken=55f7125234beb589, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LayerContainerShared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DalskiAgent.0.5.61\lib\net45\LayerContainerShared.dll</HintPath>
       <Private>True</Private>
@@ -112,6 +120,10 @@
       <HintPath>..\..\packages\DalskiAgent.0.5.61\lib\net45\MulticastAdapter.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MySql.Data, Version=7.0.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MySql.Data.7.0.3-DMR\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NodeRegistry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DalskiAgent.0.5.61\lib\net45\NodeRegistry.dll</HintPath>
       <Private>True</Private>
@@ -135,15 +147,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="MySql.Data.Entity">
-      <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Data.Entity.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Web">
-      <HintPath>..\..\packages\MySQL.NET.6.6.4\lib\net40\MySql.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data">
-      <HintPath>..\..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\ConfigService.0.2.23\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>

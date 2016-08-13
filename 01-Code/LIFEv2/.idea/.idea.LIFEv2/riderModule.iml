@@ -10,6 +10,29 @@
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/ModelContainer" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../SimulationManager/LayerNameService" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../LIFE API/LifeAPI" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/CommonTypes" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/ConfigurationAdapter" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/LCConnector" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/LNSConnector" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/LoggerFactory" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/NodeRegistry" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/SMConnector" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerFacade" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainerShared" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerFactory" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerRegistry" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/PartitionManager" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/ResultAdapter" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/RTEManager" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LIFE Services/AgentManagerService" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LIFE Services/AgentShadowingService" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/ASC" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/CustomUtilities" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/MulticastAdapter" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/RabbitMQClient" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../T-Components/Scs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../global.json" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

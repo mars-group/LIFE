@@ -59,7 +59,7 @@ namespace AgentManagerService.Implementation
 
             // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
             // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
-            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
+            //AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
 
             // retrieve agent constructor
             var agentType = Type.GetType(agentInitConfig.AgentFullName);
@@ -104,7 +104,8 @@ namespace AgentManagerService.Implementation
 			    // check if we already have this enumerator
 			    if (agentDBParamArrays.ContainsKey(initInfo.MarsDBColumnName)) return;
 
-				var sqlQuery = string.Format ("SELECT {0} FROM imports.{1} LIMIT {2} OFFSET {3}", initInfo.MarsDBColumnName, initInfo.MarsTableName, agentInitConfig.RealAgentCount, agentInitConfig.AgentInitOffset);
+				var sqlQuery =
+				    $"SELECT {initInfo.MarsDBColumnName} FROM imports.{initInfo.MarsTableName} LIMIT {agentInitConfig.RealAgentCount} OFFSET {agentInitConfig.AgentInitOffset}";
 			    using (var mysqlConnection = new MySqlConnection(connectionString))
 			    {
 			        mysqlConnection.Open();
@@ -354,7 +355,7 @@ namespace AgentManagerService.Implementation
         /// By default the assembly is only being searched for in the current context and not in all
         /// currently loaded assemblies. This is fixed here.
         /// </summary>
-        private static class AssemblyResolverFix
+        /*private static class AssemblyResolverFix
         {
             //Looks up the assembly in the set of currently loaded assemblies,
             //and returns it if the name matches. Else returns null.
@@ -362,6 +363,6 @@ namespace AgentManagerService.Implementation
             {
                 return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
             }
-        }
+        }*/
     }
 }
