@@ -1,6 +1,8 @@
 #OS junk files
 [Tt]humbs.db
 *.DS_Store
+#dotnet core lock files
+*project.lock.json
 
 #Visual Studio files
 *.[Oo]bj
