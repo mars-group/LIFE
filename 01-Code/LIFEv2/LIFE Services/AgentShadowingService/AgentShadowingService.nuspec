@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>AgentShadowingService</id>
+    <version>0.1</version>
+    <title>Agent Shadowing Service</title>
+    <authors>Christian Hüning</authors>
+    <owners>MARS Group</owners>
+    <projectUrl>http://mars-group.org</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The AgentShadowing Service. Use this if you want to distribute a layer across multiple nodes.</description>
+    <releaseNotes>Initial Release</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>MARS, LIFE, Distribution, AgentShadowing</tags>
+    <dependencies>
+      <dependency id="LifeAPI" version="0.9.11" />
+    </dependencies>
+  </metadata>
+    <files>
+        <file src="bin/Release/*.dll" target="lib/net45/"/>
+    </files>    
+</package>
