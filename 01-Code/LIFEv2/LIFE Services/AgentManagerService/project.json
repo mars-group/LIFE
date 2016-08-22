@@ -2,11 +2,15 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "CommonTypes": "1.0.0-*",
-    "LCConnector": "1.0.0-*",
-    "LifeAPI": "1.0.0-*",
-    "MySqlConnector": "0.1.0-alpha10",
+    "CommonTypes": "2.0.0-*",
+    "ConfigService": "2.0.0-7",
+    "GeoGridEnvironment": "2.0.0-12",
+    "LCConnector": "2.0.0-*",
+    "LifeAPI": "2.0.0-*",
+    "MARS.Shuttle.SimulationConfig": "2.0.0-7",
+    "MySqlConnector": "0.1.0-alpha11",
     "NETStandard.Library": "1.6.0",
+    "SpatialAPI": "2.0.0-2",
     "System.Threading.Tasks.Parallel": "4.0.1"
   },
 

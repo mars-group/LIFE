@@ -15,8 +15,6 @@ using System.Reflection;
 using AgentManager.Interface;
 using AgentManager.Interface.Exceptions;
 using LifeAPI.Layer;
-using MARS.Shuttle.SimulationConfig;
-using SpatialAPI.Environment;
 using ConfigService;
 using System.Threading.Tasks;
 using System.Text;
@@ -25,8 +23,10 @@ using LCConnector.TransportTypes;
 using MySql.Data.MySqlClient;
 using CommonTypes;
 using GeoGridEnvironment.Interface;
-using DalskiAgent.Agents;
 using AgentManager;
+using MARS.Shuttle.SimulationConfig.Implementation;
+using MARS.Shuttle.SimulationConfig.Interfaces;
+using SpatialAPI.Environment;
 
 namespace AgentManagerService.Implementation
 {
@@ -59,8 +59,8 @@ namespace AgentManagerService.Implementation
             // retrieve agent constructor
             var agentType = Type.GetType(agentInitConfig.AgentFullName);
 
-            var agentConstructor = agentType.GetConstructors().
-                FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishInShuttleAttribute), true).Length > 0);
+            var agentConstructor = agentType.GetTypeInfo().GetConstructors().
+                FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishInShuttleAttribute), true).Any());
 
 			// fetch needed params
 			var neededParameters = agentConstructor.GetParameters ();
@@ -105,13 +105,17 @@ namespace AgentManagerService.Implementation
 			    {
 			        mysqlConnection.Open();
 			        var cmd = new MySqlCommand(sqlQuery, mysqlConnection);
-			        var reader = cmd.ExecuteReader();
 			        var values = new List<string>();
-			        while (reader.Read())
-			        {
-			            values.Add(reader.GetString(initInfo.MarsDBColumnName));
-			        }
-			        reader.Close();
+			        using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // should be first column in result. TODO: Fix this in new MySQL.NET client for dotnet core.
+                            values.Add(reader.GetString(0));
+                        }
+
+                    }
+
 					mysqlConnection.Close();
 			        agentDBParamArrays.TryAdd(initInfo.MarsDBColumnName, values.ToArray());
 			    }
@@ -140,7 +144,7 @@ namespace AgentManagerService.Implementation
 			Console.WriteLine ("Finished agent ID creation, Starting agent creation.... AgentCount is : {0}", agentCount);
 
 			// iterate over all agents and create them
-			Parallel.For (0, agentCount, index => {
+			Parallel.For (0L, agentCount, index => {
 
 				// create Agent ID
 				var realAgentId = agentIds[index];
@@ -155,21 +159,21 @@ namespace AgentManagerService.Implementation
                 foreach (var neededParam in neededParameters) {
 
 					// check special types
-					if (environmentType.IsAssignableFrom (neededParam.ParameterType)) {
+					if (environmentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
 						actualParameters.Add(environment);
-                    } else if(geoGridEnvironmentType.IsAssignableFrom(neededParam.ParameterType)) {
+                    } else if(geoGridEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)) {
                         actualParameters.Add(geoGridEnvironment);
-                    } else if (layerType.IsAssignableFrom (neededParam.ParameterType)) {
-						if (!additionalLayerDependencies.Any (l => neededParam.ParameterType.IsInstanceOfType (l))) {
+                    } else if (layerType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
+						if (!additionalLayerDependencies.Any (l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType (l))) {
 							throw new MissingLayerForAgentConstructionException ("Agent type '" + agentInitConfig.AgentName + "' needs missing layer type '"
 							+ neededParam.ParameterType + "' to initialize.");
 						}
-						actualParameters.Add (additionalLayerDependencies.First (l => neededParam.ParameterType.IsInstanceOfType (l)));
-					} else if (guidType.IsAssignableFrom (neededParam.ParameterType)) {
+						actualParameters.Add (additionalLayerDependencies.First (l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType (l)));
+					} else if (guidType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
 						actualParameters.Add (realAgentId);      
-					} else if (registerAgentType.IsAssignableFrom (neededParam.ParameterType)) {
+					} else if (registerAgentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
 						actualParameters.Add (registerAgentHandle);
-					} else if (unregisterAgentType.IsAssignableFrom (neededParam.ParameterType)) {
+					} else if (unregisterAgentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
 						actualParameters.Add (unregisterAgentHandle);
 					} else {
 
@@ -185,7 +189,7 @@ namespace AgentManagerService.Implementation
                                 var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
                                 var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
 
-                                if (paramType != typeof(string) && (paramType == null || !paramType.IsPrimitive))
+                                if (paramType != typeof(string) && (paramType == null || !paramType.GetTypeInfo().IsPrimitive))
                                 {
                                     throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type. But was: " + paramType.Name);
                                 }

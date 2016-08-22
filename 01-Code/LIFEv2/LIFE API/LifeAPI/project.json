@@ -2,8 +2,7 @@
   "version": "2.0.0-*",
   "dependencies": {
     "MARS.Shuttle.SimulationConfig": "2.0.0-5",
-    "LCConnector": "2.0.0-*",
-    "Mono.Addins": "1.3.0"
+    "LCConnector": "2.0.0-*"
   },
   "frameworks": {
     "netstandard1.6": {
