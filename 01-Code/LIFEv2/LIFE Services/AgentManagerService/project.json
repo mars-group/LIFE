@@ -8,9 +8,9 @@
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",
-    "MySqlConnector": "0.1.0-alpha11",
+    "MySqlConnector": "0.1.0-alpha12",
     "NETStandard.Library": "1.6.0",
-    "SpatialAPI": "2.0.0-2",
+    "SpatialAPI": "2.0.0-5",
     "System.Threading.Tasks.Parallel": "4.0.1"
   },
 

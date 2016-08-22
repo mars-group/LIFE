@@ -7,11 +7,11 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using GeoAPI.Geometries;
+//using GeoAPI.Geometries;
 using LifeAPI.Layer.GIS.ResultTypes;
-
+// TODO: REIMPLEMENT! Find alternative for GeoAPI etc.
 namespace LifeAPI.Layer.GIS {
-    /// <summary>
+  /*  /// <summary>
     ///     Allows to load and access GISData by a geometry object.
     /// </summary>
     public interface IGISAccess {
@@ -98,4 +98,5 @@ namespace LifeAPI.Layer.GIS {
     public class GISLayerHasNoDataException : Exception {
         public GISLayerHasNoDataException(string msg) : base(msg) {}
     }
+    */
 }

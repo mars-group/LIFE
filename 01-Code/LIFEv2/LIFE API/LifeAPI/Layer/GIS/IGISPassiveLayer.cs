@@ -7,9 +7,12 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 namespace LifeAPI.Layer.GIS {
+    // TODO: REIMPLEMENT!
+    /*
     /// <summary>
     ///     A passive GIS layer, which allows to load and access GIS data
     ///     as well as hold agents.
     /// </summary>
     public interface IGISPassiveLayer : ISteppedLayer, IGISAccess {}
+    */
 }

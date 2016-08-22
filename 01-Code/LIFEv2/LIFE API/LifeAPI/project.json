@@ -3,25 +3,30 @@
   "dependencies": {
     "LCConnector": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
-    "System.Xml.XmlSerializer": "4.0.11"
+    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
   },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.0",
+        "System.Xml.XmlSerializer": "4.0.10"
       }
     },
-    "net46": {},
+    "net46": {
+        "frameworkAssemblies": {
+          "System.Xml": "4.0.0.0"
+        }
+      },
     "netcoreapp1.0": {
-      "imports": "dnxcore50",
+        "imports": "dnxcore50",
       "dependencies": {
         "Microsoft.NETCore.App": {
           "version": "1.0.0-*",
           "type": "platform"
-        }
+        },
+        "System.Xml.XmlSerializer": "4.0.10"
+      }
       }
     }
-  }
 }
