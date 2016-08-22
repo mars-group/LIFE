@@ -56,11 +56,6 @@ namespace AgentManagerService.Implementation
 			var connectionString = string.Format("Server={0};Uid={1};Pwd={2};",rockIP,rockUser,rockPassword);
 
 
-
-            // Hook into the assembly resovle process, to load any neede .dll from Visual Studios' output directory
-            // This needed when types need to be dynamically loaded by a De-Serializer and this code gets called from node.js/edge.js.
-            //AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
-
             // retrieve agent constructor
             var agentType = Type.GetType(agentInitConfig.AgentFullName);
 
@@ -350,19 +345,5 @@ namespace AgentManagerService.Implementation
             return parameterValue;
         }
 
-        /// <summary>
-        /// Resolves an issue which occurs when an assembly should be loaded triggered by an external process.
-        /// By default the assembly is only being searched for in the current context and not in all
-        /// currently loaded assemblies. This is fixed here.
-        /// </summary>
-        /*private static class AssemblyResolverFix
-        {
-            //Looks up the assembly in the set of currently loaded assemblies,
-            //and returns it if the name matches. Else returns null.
-            public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
-            {
-                return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
-            }
-        }*/
     }
 }
