@@ -6,7 +6,6 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -14,7 +13,6 @@ namespace LCConnector.TransportTypes.ModelStructure {
     /// <summary>
     ///     A folder within a model directory.
     /// </summary>
-    [Serializable]
     internal class ModelFolder : IModelDirectoryContent {
         public IList<IModelDirectoryContent> Contents { get; set; }
 

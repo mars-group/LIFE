@@ -10,11 +10,11 @@ using System;
 using System.IO;
 using System.Threading;
 
+
 namespace LCConnector.TransportTypes.ModelStructure {
     /// <summary>
     ///     This class holds the content of a model and is able to write it to a stream.
     /// </summary>
-    [Serializable]
     public class ModelContent {
         private readonly ModelFolder _root;
 
@@ -90,10 +90,11 @@ namespace LCConnector.TransportTypes.ModelStructure {
                 bool locked = true;
                 while (locked) {
                     try {
-                        stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create);
-                        stream.Write(file.Content, 0, file.Content.Length);
-                        stream.Close();
-                        locked = false;
+                        using (stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create))
+                        {
+                            stream.Write(file.Content, 0, file.Content.Length);
+                            locked = false;
+                        }
                     }
                     catch (IOException ex) {
                         locked = true;

@@ -7,10 +7,10 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using LCConnector.TransportTypes;
 
-namespace LCConnector.TransportTypes {
-    [Serializable]
-    public class TLayerInstanceId : IEquatable<TLayerInstanceId> {
+
+public class TLayerInstanceId : IEquatable<TLayerInstanceId> {
         /// <summary>
         ///     The layer's identity.
         /// </summary>
@@ -53,5 +53,4 @@ namespace LCConnector.TransportTypes {
         }
 
         #endregion
-    }
 }

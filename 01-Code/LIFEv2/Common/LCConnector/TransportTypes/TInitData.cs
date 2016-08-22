@@ -8,14 +8,13 @@
 //  *******************************************************/
 using System;
 using System.Collections.Generic;
-using MARS.Shuttle.SimulationConfig;
+using MARS.Shuttle.SimulationConfig.Interfaces;
 
 namespace LCConnector.TransportTypes {
     /// <summary>
     /// Will be passed to each Layer in its InitLayer(...) method.
     /// Contains all relevant information to properly initialize this layer.
     /// </summary>
-    [Serializable]
     public class TInitData
     {
         /// <summary>
@@ -116,7 +115,6 @@ namespace LCConnector.TransportTypes {
 	/// <summary>
 	/// Time series init config.
 	/// </summary>
-    [Serializable]
     public class TimeSeriesInitConfig {
 		/// <summary>
 		/// The name of the table inside the timeseries database
@@ -162,7 +160,6 @@ namespace LCConnector.TransportTypes {
 	/// <summary>
 	/// Gis init config.
 	/// </summary>
-    [Serializable]
     public class GisInitConfig 
     {
 		/// <summary>
@@ -192,7 +189,6 @@ namespace LCConnector.TransportTypes {
 	/// Agent init config.
 	/// Used in the AgentManager to instantiate agents.
 	/// </summary>
-    [Serializable]
     public class AgentInitConfig
     {
         /// <summary>

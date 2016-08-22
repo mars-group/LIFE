@@ -6,21 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
 using System.Text;
-using ProtoBuf;
+
 
 namespace CommonTypes.DataTypes {
     /// <summary>
     ///     The endpoint of a node participating in the LIFE system
     /// </summary>
-    [ProtoContract]
-    [Serializable]
     public class NodeEndpoint {
-        [ProtoMember(1)]
+
         public string IpAddress { get; private set; }
 
-        [ProtoMember(2)]
         public int Port { get; private set; }
 
         private NodeEndpoint() {}

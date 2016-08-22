@@ -6,14 +6,12 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
 using System.IO;
 
 namespace LCConnector.TransportTypes.ModelStructure {
     /// <summary>
     ///     A file
     /// </summary>
-    [Serializable]
     internal class ModelFile : IModelDirectoryContent {
         public byte[] Content { get; set; }
 

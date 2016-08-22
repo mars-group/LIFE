@@ -9,9 +9,6 @@
 using System;
 
 namespace CommonTypes.TransportTypes {
-    /// <summary>
-    /// </summary>
-    [Serializable]
     public class TSimModel : IEquatable<TSimModel> {
         public string Path { get { return _path; } set { } }
 
