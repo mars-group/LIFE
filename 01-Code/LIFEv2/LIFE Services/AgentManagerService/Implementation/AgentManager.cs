@@ -24,6 +24,7 @@ using MySql.Data.MySqlClient;
 using CommonTypes;
 using GeoGridEnvironment.Interface;
 using AgentManager;
+using DalskiAgent.Agents;
 using MARS.Shuttle.SimulationConfig.Implementation;
 using MARS.Shuttle.SimulationConfig.Interfaces;
 using SpatialAPI.Environment;

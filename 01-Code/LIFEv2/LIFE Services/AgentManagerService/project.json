@@ -4,6 +4,7 @@
   "dependencies": {
     "CommonTypes": "2.0.0-*",
     "ConfigService": "2.0.0-7",
+    "DalskiAgent": "2.0.0-2",
     "GeoGridEnvironment": "2.0.0-12",
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
