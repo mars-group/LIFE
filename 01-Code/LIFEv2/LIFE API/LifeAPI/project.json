@@ -1,12 +1,26 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "2.0.0-*",
   "dependencies": {
     "MARS.Shuttle.SimulationConfig": "2.0.0-5",
-    "NETStandard.Library": "1.6.0"
+    "LCConnector": "2.0.0-*",
+    "Mono.Addins": "1.3.0"
   },
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    },
+    "net46": {},
+    "netcoreapp1.0": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
+      }
     }
   }
 }
