@@ -8,16 +8,16 @@
 //  *******************************************************/
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-using log4net;
+
 
 
 [assembly: InternalsVisibleTo("MulticastAdapterTestProject")]
 
 namespace ConfigurationAdapter.Interface {
     public static class Configuration {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (Configuration));
 
         /// <summary>
         ///     Grants access to a config file. If no file exists, it will be created automatically.
@@ -31,24 +31,18 @@ namespace ConfigurationAdapter.Interface {
 
             XmlSerializer serializer;
 
-            try {
-                serializer = new XmlSerializer(typeof (T));
-                if (File.Exists(path)) {
-                    using (FileStream file = new FileStream(path, FileMode.Open)) {
-                        result = (T) serializer.Deserialize(file);
-                    }
-                }
-                else {
-                    CreatePath("./config");
-                    using (FileStream file = new FileStream(path, FileMode.Create)) {
-                        result = (T) typeof (T).GetConstructor(new Type[0]).Invoke(new object[0]);
-                        serializer.Serialize(file, result);
-                    }
+            serializer = new XmlSerializer(typeof (T));
+            if (File.Exists(path)) {
+                using (var file = new FileStream(path, FileMode.Open)) {
+                    result = (T) serializer.Deserialize(file);
                 }
             }
-            catch (Exception exception) {
-                Logger.Error(exception);
-                throw exception;
+            else {
+                CreatePath("./config");
+                using (FileStream file = new FileStream(path, FileMode.Create)) {
+                    result = (T) typeof (T).GetTypeInfo().GetConstructor(new Type[0]).Invoke(new object[0]);
+                    serializer.Serialize(file, result);
+                }
             }
 
             return result;
@@ -66,7 +60,6 @@ namespace ConfigurationAdapter.Interface {
             using (FileStream file = new FileStream(path, FileMode.OpenOrCreate)) {
                 new XmlSerializer(typeof (T)).Serialize(file, t);
                 file.Flush();
-                file.Close();
             }
         }
 
