@@ -1,5 +1,8 @@
 {
   "version": "2.0.0-*",
+  "description": "The LIFE-API. Use this to create new Layers and Agents.",
+  "copyright": "(c) 2016 - MARS Group",
+  "authors": [ "Christian Hüning"],
   "dependencies": {
     "LCConnector": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",
@@ -14,12 +17,12 @@
       }
     },
     "net46": {
-        "frameworkAssemblies": {
-          "System.Xml": "4.0.0.0"
-        }
-      },
+      "frameworkAssemblies": {
+        "System.Xml": "4.0.0.0"
+      }
+    },
     "netcoreapp1.0": {
-        "imports": "dnxcore50",
+      "imports": "dnxcore50",
       "dependencies": {
         "Microsoft.NETCore.App": {
           "version": "1.0.0-*",
@@ -27,6 +30,6 @@
         },
         "System.Xml.XmlSerializer": "4.0.10"
       }
-      }
     }
+  }
 }

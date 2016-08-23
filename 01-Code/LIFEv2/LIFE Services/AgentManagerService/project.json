@@ -1,23 +1,37 @@
 {
-  "version": "1.0.0-*",
-
+  "version": "2.0.0-*",
+  "description": "The LIFE AgentManager. Use this package to automatically initalize your agents in their layer's InitLayer() method.",
+  "copyright": "(c) 2016 - MARS Group",
+  "authors": [ "Christian Hüning" ],
   "dependencies": {
     "CommonTypes": "2.0.0-*",
     "ConfigService": "2.0.0-7",
     "DalskiAgent": "2.0.0-2",
-    "GeoGridEnvironment": "2.0.0-12",
+    "GeoGridEnvironment": "2.0.0-13",
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",
     "MySqlConnector": "0.1.0-alpha12",
-    "NETStandard.Library": "1.6.0",
-    "SpatialAPI": "2.0.0-5",
+    "SpatialAPI": "2.0.0-8",
     "System.Threading.Tasks.Parallel": "4.0.1"
   },
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    },
+    "net46": {},
+    "netcoreapp1.0": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
+      }
     }
   }
 }
