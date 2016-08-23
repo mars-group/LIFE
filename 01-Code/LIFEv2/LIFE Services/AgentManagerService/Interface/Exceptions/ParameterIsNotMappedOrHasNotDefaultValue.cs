@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace AgentManager
 {
@@ -10,8 +9,7 @@ namespace AgentManager
         {
 
         }
-        public ParameterIsNotMappedOrHasNotDefaultValue(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context) { }
+
     }
 }
 

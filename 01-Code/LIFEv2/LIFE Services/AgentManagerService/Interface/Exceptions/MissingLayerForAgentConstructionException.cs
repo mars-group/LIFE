@@ -7,7 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Runtime.Serialization;
+
 
 namespace AgentManager.Interface.Exceptions
 {
@@ -17,7 +17,6 @@ namespace AgentManager.Interface.Exceptions
         public MissingLayerForAgentConstructionException(string msg) : base(msg) {
 
         }
-        public MissingLayerForAgentConstructionException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context) { }
+
     }
 }

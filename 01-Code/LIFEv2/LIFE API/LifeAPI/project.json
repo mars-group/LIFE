@@ -2,7 +2,7 @@
   "version": "2.0.0-*",
   "description": "The LIFE-API. Use this to create new Layers and Agents.",
   "copyright": "(c) 2016 - MARS Group",
-  "authors": [ "Christian Hüning"],
+  "authors": [ "Christian Huening"],
   "dependencies": {
     "LCConnector": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",

@@ -2,7 +2,7 @@
   "version": "2.0.0-*",
   "description": "The LIFE AgentManager. Use this package to automatically initalize your agents in their layer's InitLayer() method.",
   "copyright": "(c) 2016 - MARS Group",
-  "authors": [ "Christian H�ning" ],
+  "authors": [ "Christian Huening" ],
   "dependencies": {
     "CommonTypes": "2.0.0-*",
     "ConfigService": "2.0.0-8",
@@ -13,7 +13,8 @@
     "MARS.Shuttle.SimulationConfig": "2.0.0-8",
     "MySqlConnector": "0.1.0-alpha13",
     "SpatialAPI": "2.0.0-8",
-    "System.Threading.Tasks.Parallel": "4.0.1"
+    "System.Threading.Tasks.Parallel": "4.0.1",
+    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
   },
 
   "frameworks": {

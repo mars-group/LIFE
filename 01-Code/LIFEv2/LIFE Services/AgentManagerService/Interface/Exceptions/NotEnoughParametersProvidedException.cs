@@ -7,7 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Runtime.Serialization;
 
 namespace AgentManager.Interface.Exceptions {
     [Serializable]
@@ -15,7 +14,6 @@ namespace AgentManager.Interface.Exceptions {
         public NotEnoughParametersProvidedException(string msg) : base(msg) {
             
         }
-        public NotEnoughParametersProvidedException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context) { }
+
     }
 }
