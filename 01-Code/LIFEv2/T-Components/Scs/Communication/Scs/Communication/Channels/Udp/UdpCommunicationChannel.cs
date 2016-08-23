@@ -8,7 +8,7 @@
 //  *******************************************************/
 using System;
 using System.Threading.Tasks;
-using AppSettingsManager;
+using ConfigurationAdapter;
 using Hik.Communication.Scs.Communication.EndPoints;
 using Hik.Communication.Scs.Communication.EndPoints.Udp;
 using Hik.Communication.Scs.Communication.Messages;

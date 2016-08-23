@@ -7,7 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Runtime.Serialization;
 
 namespace Hik.Communication.ScsServices.Communication.Messages {
     /// <summary>
@@ -17,18 +16,12 @@ namespace Hik.Communication.ScsServices.Communication.Messages {
     [Serializable]
     public class ScsRemoteException : Exception {
         /// <summary>
-        ///     Contstructor.
+        ///     Constructor.
         /// </summary>
         public ScsRemoteException() {}
 
         /// <summary>
-        ///     Contstructor.
-        /// </summary>
-        public ScsRemoteException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context) {}
-
-        /// <summary>
-        ///     Contstructor.
+        ///     Constructor.
         /// </summary>
         /// <param name="message">Exception message</param>
         public ScsRemoteException(string message)

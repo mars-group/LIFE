@@ -1,13 +1,29 @@
 ﻿{
-  "version": "1.0.0-*",
-
+  "version": "2.0.0-*",
+  "description": "Some custom classes, mostly for SCS",
+  "copyright": "(c) 2016 - MARS Group",
+  "authors": [ "Christian Huening" ],
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "System.Threading.Tasks": "4.0.11",
+    "System.Collections": "4.0.11"
   },
 
-  "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50"
-    }
-  }
+	"frameworks": {
+	 "netstandard1.6": {
+	   "imports": "dnxcore50",
+	   "dependencies": {
+	     "NETStandard.Library": "1.6.0"
+	   }
+	 },
+	 "net46": {},
+	 "netcoreapp1.0": {
+	   "imports": "dnxcore50",
+	   "dependencies": {
+	     "Microsoft.NETCore.App": {
+	       "version": "1.0.0-*",
+	       "type": "platform"
+	     }
+	   }
+	 }
+	}
 }

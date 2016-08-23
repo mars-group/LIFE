@@ -1,13 +1,50 @@
 ﻿{
-  "version": "1.0.0-*",
-
+  "description": "The simple client server framework to make communication easy",
+  "copyright": "(c) 2016 - MARS Group",
+  "authors": [
+    "Christian Huening"
+  ],
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "ConfigurationAdapter": "2.0.0-*",
+    "CustomUtilities": "2.0.0-*",
+    "System.Collections": "4.0.11",
+    "System.Reflection.DispatchProxy": "4.0.1",
+    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
+    "System.Threading.Tasks": "4.0.11",
+    "System.Threading.Tasks.Parallel": "4.0.1"
   },
-
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      },
+      "buildOptions": {
+        "define": [
+          "HAS_DISPATCH_PROXY",
+          "HAS_ASYNC_LOCAL",
+          "LIBLOG_PORTABLE"
+        ]
+      }
+    },
+    "net46": {
+      "buildOptions": {
+        "define": [
+          "NET40",
+          "HAS_REAL_PROXY",
+          "CAN_GET_SOCKET_HANDLE",
+          "HAS_SERIALIZABLE_EXCEPTIONS"
+        ]
+      }
+    },
+    "netcoreapp1.0": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
+      }
     }
   }
 }

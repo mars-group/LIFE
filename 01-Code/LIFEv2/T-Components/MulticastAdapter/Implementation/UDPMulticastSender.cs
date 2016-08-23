@@ -12,8 +12,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
-using AppSettingsManager;
-using log4net;
+using ConfigurationAdapter;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Config.Types;
@@ -24,7 +23,6 @@ using MulticastAdapter.Interface.Exceptions;
 namespace MulticastAdapter.Implementation {
 
     public class UDPMulticastSender : IMulticastSender {
-        private static readonly ILog logger = LogManager.GetLogger(typeof (UDPMulticastSender));
 
         private readonly IPAddress _mGrpAdr;
         private readonly int _listenPort;
@@ -53,12 +51,14 @@ namespace MulticastAdapter.Implementation {
                     
                 }
                 catch (Exception e) {
+                    /*
                     if (logger != null) {
                         logger.Warn
                             (
                                 "Error from Type " + e.GetType()
                                 + " by shutting down multicast send service. Message is: " + e.Message);
                     }
+*/
                 }
             }
         }

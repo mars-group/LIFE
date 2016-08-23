@@ -12,10 +12,11 @@ using System.Threading;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config;
 using MulticastAdapter.Interface.Exceptions;
+using ConfigurationAdapter;
 
 namespace MulticastAdapter.Implementation
 {
-    using AppSettingsManager;
+
 
     public class MulticastAdapterComponent : IMulticastAdapter
     {

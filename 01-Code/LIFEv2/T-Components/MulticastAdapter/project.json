@@ -1,13 +1,35 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "2.0.0-*",
+  "description": "MulticastAdapter for MARS LIFE",
+  "copyright": "(c) 2016 - MARS Group",
+  "authors": [ "Christian Huening" ],
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "ConfigurationAdapter": "2.0.0-*",
+    "System.Net.NetworkInformation": "4.1.0",
+    "System.Threading.Thread": "4.0.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
-    }
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    },
+    "net46": {
+          "frameworkAssemblies": {
+            "System.Xml": "4.0.0.0"
+          }
+        },
+        "netcoreapp1.0": {
+          "imports": "dnxcore50",
+          "dependencies": {
+            "Microsoft.NETCore.App": {
+              "version": "1.0.0-*",
+              "type": "platform"
+            }
+          }
+        }
   }
 }

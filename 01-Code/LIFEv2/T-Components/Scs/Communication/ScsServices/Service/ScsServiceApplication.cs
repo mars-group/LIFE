@@ -336,8 +336,8 @@ namespace Hik.Communication.ScsServices.Service {
             /// <param name="service">The service object that is used to invoke methods on</param>
             public ServiceObject(Type serviceInterfaceType, ScsService service) {
                 Service = service;
-                var classAttributes = serviceInterfaceType.GetCustomAttributes(typeof (ScsServiceAttribute), true);
-                if (classAttributes.Length <= 0) {
+                var classAttributes = serviceInterfaceType.GetTypeInfo().GetCustomAttributes(typeof (ScsServiceAttribute), true).ToArray();
+                if (!classAttributes.Any()) {
                     throw new Exception("Service interface (" + serviceInterfaceType.Name +
                                         ") must have ScsService attribute.");
                 }
@@ -349,7 +349,7 @@ namespace Hik.Communication.ScsServices.Service {
                     _methods.Add(methodInfo.Name+methodInfo.GetParameters().Length, methodInfo);
                 }
                 _internalMethods = new SortedList<string, MethodInfo>();
-                foreach (var methodInfo in service.GetType().GetMethods())
+                foreach (var methodInfo in service.GetType().GetTypeInfo().GetMethods())
                 {
                     var sig = methodInfo.Name + methodInfo.GetParameters().Length;
                     if (_internalMethods.ContainsKey(sig))
@@ -399,7 +399,7 @@ namespace Hik.Communication.ScsServices.Service {
                 _clients = new ConcurrentDictionary<long, IMessenger>();
 
                 _properties = new Dictionary<string, PropertyInfo>();
-                foreach (var propertyInfo in serviceInterfaceType.GetProperties()) {
+                foreach (var propertyInfo in serviceInterfaceType.GetTypeInfo().GetProperties()) {
                     _properties.Add(propertyInfo.Name, propertyInfo);
                 }
 
@@ -416,7 +416,7 @@ namespace Hik.Communication.ScsServices.Service {
             private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs) {
                 // send PropertyChangedMessage to all subscribed clients
                 // TODO: change or adapt this for Multicast Messaging (maybe not possible...)
-                Parallel.ForEach(_clients.Values, messenger => {
+                Parallel.ForEach<IMessenger>(_clients.Values, messenger => {
                     var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod()
                         .Invoke(Service, null);
 

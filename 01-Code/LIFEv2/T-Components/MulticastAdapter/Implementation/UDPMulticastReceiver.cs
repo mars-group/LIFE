@@ -10,7 +10,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
-using AppSettingsManager;
+using ConfigurationAdapter;
 using MulticastAdapter.Interface;
 using MulticastAdapter.Interface.Config.Types;
 
