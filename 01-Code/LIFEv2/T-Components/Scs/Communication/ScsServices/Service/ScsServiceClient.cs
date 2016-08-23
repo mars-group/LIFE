@@ -7,7 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Runtime.Remoting.Proxies;
+using System.Reflection;
 using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.EndPoints;
 using Hik.Communication.Scs.Communication.Messengers;
@@ -15,21 +15,27 @@ using Hik.Communication.Scs.Server;
 using Hik.Communication.ScsServices.Communication;
 
 namespace Hik.Communication.ScsServices.Service {
+
+#if HAS_REAL_PROXY
+
+    using System.Runtime.Remoting.Proxies;
+
+
     /// <summary>
     ///     Implements IScsServiceClient.
     ///     It is used to manage and monitor a service client.
     /// </summary>
     internal class ScsServiceClient : IScsServiceClient {
-        #region Public events
+    #region Public events
 
         /// <summary>
         ///     This event is raised when this client is disconnected from server.
         /// </summary>
         public event EventHandler Disconnected;
 
-        #endregion
+    #endregion
 
-        #region Public properties
+    #region Public properties
 
         /// <summary>
         ///     Unique identifier for this client.
@@ -52,9 +58,9 @@ namespace Hik.Communication.ScsServices.Service {
             get { return _serverClient.CommunicationState; }
         }
 
-        #endregion
+    #endregion
 
-        #region Private fields
+    #region Private fields
 
         /// <summary>
         ///     Reference to underlying IScsServerClient object.
@@ -71,9 +77,9 @@ namespace Hik.Communication.ScsServices.Service {
         /// </summary>
         private RealProxy _realProxy;
 
-        #endregion
+    #endregion
 
-        #region Constructor
+    #region Constructor
 
         /// <summary>
         ///     Creates a new ScsServiceClient object.
@@ -87,9 +93,9 @@ namespace Hik.Communication.ScsServices.Service {
             _requestReplyMessenger = requestReplyMessenger;
         }
 
-        #endregion
+    #endregion
 
-        #region Public methods
+    #region Public methods
 
         /// <summary>
         ///     Closes client connection.
@@ -108,9 +114,9 @@ namespace Hik.Communication.ScsServices.Service {
             return (T) _realProxy.GetTransparentProxy();
         }
 
-        #endregion
+    #endregion
 
-        #region Private methods
+    #region Private methods
 
         /// <summary>
         ///     Handles disconnect event of _serverClient object.
@@ -122,9 +128,9 @@ namespace Hik.Communication.ScsServices.Service {
             OnDisconnected();
         }
 
-        #endregion
+    #endregion
 
-        #region Event raising methods
+    #region Event raising methods
 
         /// <summary>
         ///     Raises Disconnected event.
@@ -134,6 +140,134 @@ namespace Hik.Communication.ScsServices.Service {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+    #endregion
+    }
+#else
+    /// <summary>
+    ///     Implements IScsServiceClient.
+    ///     It is used to manage and monitor a service client.
+    /// </summary>
+    internal class ScsServiceClient : IScsServiceClient
+    {
+        #region Public events
+
+        /// <summary>
+        ///     This event is raised when this client is disconnected from server.
+        /// </summary>
+        public event EventHandler Disconnected;
+
+        #endregion
+
+        #region Public properties
+
+        /// <summary>
+        ///     Unique identifier for this client.
+        /// </summary>
+        public long ClientId
+        {
+            get { return _serverClient.ClientId; }
+        }
+
+        /// <summary>
+        ///     Gets endpoint of remote application.
+        /// </summary>
+        public ScsEndPoint RemoteEndPoint
+        {
+            get { return _serverClient.RemoteEndPoint; }
+        }
+
+        /// <summary>
+        ///     Gets the communication state of the Client.
+        /// </summary>
+        public CommunicationStates CommunicationState
+        {
+            get { return _serverClient.CommunicationState; }
+        }
+
+        #endregion
+
+        #region Private fields
+
+        /// <summary>
+        ///     Reference to underlying IScsServerClient object.
+        /// </summary>
+        private readonly IScsServerClient _serverClient;
+
+        /// <summary>
+        ///     This object is used to send messages to client.
+        /// </summary>
+        private readonly RequestReplyMessenger<IScsServerClient> _requestReplyMessenger;
+
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        ///     Creates a new ScsServiceClient object.
+        /// </summary>
+        /// <param name="serverClient">Reference to underlying IScsServerClient object</param>
+        /// <param name="requestReplyMessenger">RequestReplyMessenger to send messages</param>
+        public ScsServiceClient(IScsServerClient serverClient,
+            RequestReplyMessenger<IScsServerClient> requestReplyMessenger)
+        {
+            _serverClient = serverClient;
+            _serverClient.Disconnected += Client_Disconnected;
+            _requestReplyMessenger = requestReplyMessenger;
+        }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        ///     Closes client connection.
+        /// </summary>
+        public void Disconnect()
+        {
+            _serverClient.Disconnect();
+        }
+
+        /// <summary>
+        ///     Gets the client proxy interface that provides calling client methods remotely.
+        /// </summary>
+        /// <typeparam name="T">Type of client interface</typeparam>
+        /// <returns>Client interface</returns>
+        public T GetClientProxy<T>(Guid serviceID) where T : class
+        {
+            //_realProxy = new RemoteInvokeProxy<T, IScsServerClient>(_requestReplyMessenger, serviceID);
+            return DispatchProxy.Create<T, RemoteInvokeProxy<T, IScsServerClient>>();
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        ///     Handles disconnect event of _serverClient object.
+        /// </summary>
+        /// <param name="sender">Source of event</param>
+        /// <param name="e">Event arguments</param>
+        private void Client_Disconnected(object sender, EventArgs e)
+        {
+            _requestReplyMessenger.Stop();
+            OnDisconnected();
+        }
+
+        #endregion
+
+        #region Event raising methods
+
+        /// <summary>
+        ///     Raises Disconnected event.
+        /// </summary>
+        private void OnDisconnected()
+        {
+            var handler = Disconnected;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         #endregion
     }
+#endif
 }

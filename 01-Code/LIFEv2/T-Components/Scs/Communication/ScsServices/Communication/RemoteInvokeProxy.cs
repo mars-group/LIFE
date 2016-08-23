@@ -160,7 +160,7 @@ namespace Hik.Communication.ScsServices.Communication
             _cache = new Dictionary<string, object>();
 
             _typeOfTProxy = typeof(TProxy);
-
+            
             //retreive all methods which are marked as cacheable
             var methodsOfTProxy = _typeOfTProxy.GetTypeInfo().GetMethods();
             _cacheableMethods = new List<MethodInfo>();
