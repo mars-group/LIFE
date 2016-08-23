@@ -108,7 +108,11 @@ namespace MulticastAdapter.Implementation
 			while (msg.Length <= 0) {
 				try
 				{
-					if (_receiverClient.Client != null) msg = _receiverClient.Receive(ref sourceEndPoint);
+				    if (_receiverClient.Client != null)
+				    {
+				        var recTask = _receiverClient.ReceiveAsync();
+				        msg = recTask.Result.Buffer;
+				    } //.Receive(ref sourceEndPoint);
 				}
 				catch(ObjectDisposedException expo){
 					_receiverClient = GetClient ();
@@ -117,7 +121,7 @@ namespace MulticastAdapter.Implementation
 				catch (SocketException ex)
 				{
 					//_receiverClient.Close ();
-					if (ex.ErrorCode != 10004 && ex.ErrorCode != 10060) throw;
+					if (ex.SocketErrorCode != SocketError.Interrupted && ex.SocketErrorCode != SocketError.TimedOut) throw;
 				}
 			}
 
@@ -126,7 +130,7 @@ namespace MulticastAdapter.Implementation
 
         public void CloseSocket()
         {
-			_receiverClient.Close();
+			_receiverClient.Client.Shutdown(SocketShutdown.Receive);
         }
 
         public void ReopenSocket()

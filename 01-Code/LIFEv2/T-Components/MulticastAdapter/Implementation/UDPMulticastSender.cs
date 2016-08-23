@@ -46,26 +46,13 @@ namespace MulticastAdapter.Implementation {
 
         public void CloseSocket() {
             foreach (UdpClient client in _clients) {
-                try {
-                    client.Close();
-                    
-                }
-                catch (Exception e) {
-                    /*
-                    if (logger != null) {
-                        logger.Warn
-                            (
-                                "Error from Type " + e.GetType()
-                                + " by shutting down multicast send service. Message is: " + e.Message);
-                    }
-*/
-                }
+                    client.Client.Shutdown(SocketShutdown.Send);
             }
         }
 
         public void ReopenSocket() {
             foreach (var client in _clients) {
-                client.Client.Disconnect(true);
+                client.Client.Shutdown(SocketShutdown.Send);
             }
 
             _clients = GetSendingInterfaces();
@@ -77,7 +64,7 @@ namespace MulticastAdapter.Implementation {
 			foreach (UdpClient client in _clients) {
                 try {
                     if (client.Client != null) {
-                        client.Send(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort));
+                        client.SendAsync(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort)).Wait();
                     }
                 }
                 catch (Exception ex) {
@@ -131,7 +118,7 @@ namespace MulticastAdapter.Implementation {
             }
             catch (SocketException socketException) {
                 //if sending port is already in use increment port and try again.
-                if (socketException.ErrorCode == 10048) {
+                if (socketException.SocketErrorCode == SocketError.AddressAlreadyInUse) {
                     _sendingPort = _sendingPort + 1;
                     return SetupSocket(unicastAddress);
                 }

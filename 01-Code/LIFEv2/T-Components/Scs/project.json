@@ -5,6 +5,7 @@
     "Christian Huening"
   ],
   "dependencies": {
+    "MulticastAdapter": "2.0.0-*",
     "ConfigurationAdapter": "2.0.0-*",
     "CustomUtilities": "2.0.0-*",
     "System.Collections": "4.0.11",
