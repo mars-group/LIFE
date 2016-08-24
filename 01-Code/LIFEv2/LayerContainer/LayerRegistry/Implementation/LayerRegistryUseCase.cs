@@ -106,7 +106,7 @@ namespace LayerRegistry.Implementation {
             var layerType = layer.GetType();
             // check if an interface with ScsService Attribute is present
             Type interfaceType = null;
-            foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
+            foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
             {
                 interfaceType = @interface;
             }
@@ -155,14 +155,14 @@ namespace LayerRegistry.Implementation {
             // layerType either is an interface type or reflect the correct interface type
             MethodInfo genericCreateClientMethod;
             Type interfaceType = null;
-            if (layerType.IsInterface)
+            if (layerType.GetTypeInfo().IsInterface)
             {
                 interfaceType = layerType;
                 genericCreateClientMethod = createClientMethod.MakeGenericMethod(interfaceType);
             }
             else 
             {
-                foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
+                foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
                 {
                     interfaceType = @interface;
                 }

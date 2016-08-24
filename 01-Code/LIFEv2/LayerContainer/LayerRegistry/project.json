@@ -7,7 +7,10 @@
   ],
   "dependencies": {
     "LifeAPI": "2.0.0-*",
-    "NodeRegistry": "2.0.0-*"
+    "NodeRegistry": "2.0.0-*",
+    "Scs": "2.0.0-*",
+    "CommonTypes": "2.0.0-*",
+    "LNSConnector": "2.0.0-*"
   },
   "frameworks": {
     "netstandard1.6": {
