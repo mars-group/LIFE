@@ -8,17 +8,16 @@
 //  *******************************************************/
 using System;
 using CommonTypes.Types;
-using ProtoBuf;
 
 namespace NodeRegistry.Implementation.Messages
 {
-    [ProtoContract]
+
     public class NodeRegistryHeartBeatMessage : AbstractNodeRegistryMessage
     {
 
-        [ProtoMember(20)]
+
         public String NodeIdentifier;
-        [ProtoMember(21)]
+
         public NodeType NodeType;
 
         public NodeRegistryHeartBeatMessage()

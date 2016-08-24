@@ -7,18 +7,14 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using CommonTypes.DataTypes;
-using ProtoBuf;
 
 namespace NodeRegistry.Implementation.Messages
 {
-    [ProtoContract]
     public class NodeRegistryConnectionInfoMessage : AbstractNodeRegistryMessage
     {
-        [ProtoMember(10)]
         public string OriginAddress { get; set; }
 
 
-        [ProtoMember(20)]
         public TNodeInformation NodeInformation { get; set; }
 
 

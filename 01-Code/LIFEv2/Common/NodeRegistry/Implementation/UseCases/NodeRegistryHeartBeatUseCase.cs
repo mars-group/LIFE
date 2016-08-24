@@ -12,11 +12,9 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
-using log4net;
-using LoggerFactory.Interface;
 using MulticastAdapter.Interface;
 using NodeRegistry.Implementation.Messages.Factory;
-using Timer = System.Timers.Timer;
+using Timer = System.Threading.Timer;
 
 [assembly: InternalsVisibleTo("NodeRegistryTest")]
 
@@ -46,7 +44,6 @@ namespace NodeRegistry.Implementation.UseCases
         private Thread _heartBeatSenderThread;
         private readonly Timer _heartBeatSenderTimer;
 
-        private readonly ILog Logger;
         private readonly string _clusterName;
 
 
@@ -54,7 +51,6 @@ namespace NodeRegistry.Implementation.UseCases
         public NodeRegistryHeartBeatUseCase(NodeRegistryNodeManagerUseCase nodeRegistryNodeManagerUseCase, TNodeInformation localNodeInformation, IMulticastAdapter multicastAdapter,  int heartBeatInterval, string clusterName, int heartBeatTimeOutMultiplier = 3)
         {
             _clusterName = clusterName;
-            Logger = LoggerInstanceFactory.GetLoggerInstance<NodeRegistryHeartBeatUseCase>();
             _nodeRegistryNodeManagerUseCase = nodeRegistryNodeManagerUseCase;
             
             _heartBeatInterval = heartBeatInterval;
@@ -63,16 +59,10 @@ namespace NodeRegistry.Implementation.UseCases
             _localNodeInformation = localNodeInformation;
 
             _heartBeatTimers = new ConcurrentDictionary<TNodeInformation, Timer>();
-            _heartBeatSenderTimer = new Timer(_heartBeatInterval);
-            StartSendingHeartBeats();
+            var autoEvent = new AutoResetEvent(false);
+            _heartBeatSenderTimer = new Timer(SendHeartBeat, autoEvent, 0, _heartBeatInterval);
         }
 
-        private void StartSendingHeartBeats()
-        {
-            _heartBeatSenderTimer.Elapsed += SendHeartBeat;
-            _heartBeatSenderTimer.Enabled = true;
-            _heartBeatSenderTimer.Start();
-        }
 
 
         public void CreateAndStartTimerForNodeEntry(TNodeInformation nodeInformation)
@@ -83,7 +73,6 @@ namespace NodeRegistry.Implementation.UseCases
 
             var timer = CreateNewTimerForNodeEntry(nodeInformation);
             _heartBeatTimers[nodeInformation] = timer;
-            timer.Start();
         }
 
 
@@ -93,18 +82,18 @@ namespace NodeRegistry.Implementation.UseCases
 
             if (!_heartBeatTimers.ContainsKey(nodeInformationStub)) return;
             var timer = _heartBeatTimers[nodeInformationStub];
-            timer.Stop();
-            timer.Start();
+            timer.Change(Timeout.Infinite, Timeout.Infinite);
+            timer.Change(0, _heartBeatInterval);
         }
 
         public void Shutdow()
         {
-            _heartBeatSenderTimer.Stop();
+            _heartBeatSenderTimer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public void DeleteTimerForNodeInformationType(TNodeInformation nodeInformation) {
             if (!_heartBeatTimers.ContainsKey(nodeInformation)) return;
-            _heartBeatTimers[nodeInformation].Stop();
+            _heartBeatTimers[nodeInformation].Change(Timeout.Infinite, Timeout.Infinite);
             Timer deletedTimer;
             _heartBeatTimers.TryRemove(nodeInformation, out deletedTimer);
         }
@@ -112,24 +101,25 @@ namespace NodeRegistry.Implementation.UseCases
 
         private Timer CreateNewTimerForNodeEntry(TNodeInformation nodeInformation)
         {
-            var timer = new Timer(_heartBeatInterval * _heartBeatTimeOutMultiplier) { AutoReset = false };
-			// add event to timer
-            timer.Elapsed += delegate {
-                Logger.Debug("Timer for " + nodeInformation + " expired. Deleting node.");
+
+            var timer = new Timer(delegate
+            {
                 _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
                 Timer delTimer;
                 _heartBeatTimers.TryRemove(nodeInformation, out delTimer);
-            };
+            },new AutoResetEvent(false),0,_heartBeatInterval * _heartBeatTimeOutMultiplier);
+
 
             return timer;
         }
 
-        private void SendHeartBeat(object sender, EventArgs eventArgs)
+        private void SendHeartBeat(object stateInfo)
         {
             _multicastAdapter.SendMessageToMulticastGroup(
                 NodeRegistryMessageFactory.GetHeartBeatMessage(_localNodeInformation, _clusterName)
-                );
+            );
         }
+
 
     }
 }

@@ -6,40 +6,40 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System.IO;
+using System.Text;
 using CommonTypes.DataTypes;
-using ProtoBuf;
+using Newtonsoft.Json;
 
 namespace NodeRegistry.Implementation.Messages.Factory {
     internal static class NodeRegistryMessageFactory {
         public static byte[] GetJoinMessage(TNodeInformation information, string localAddress, string clusterName) {
-            var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Join, information, localAddress, clusterName));
 
-            return stream.ToArray();
+            var json = JsonConvert.SerializeObject(new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Join, information, localAddress, clusterName));
+
+            return Encoding.UTF8.GetBytes(json);
         }
 
         public static byte[] GetLeaveMessage(TNodeInformation information, string localAddress, string clusterName)
         {
-            var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Leave, information, localAddress, clusterName));
+            var json =
+                JsonConvert.SerializeObject(new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Leave, information, localAddress, clusterName));
 
-            return stream.ToArray();
+            return Encoding.UTF8.GetBytes(json);
         }
 
         public static byte[] GetAnswerMessage(TNodeInformation information, string localAddress, string clusterName)
         {
-            var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Answer, information, localAddress, clusterName));
+            var json =
+                JsonConvert.SerializeObject(new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Answer, information, localAddress, clusterName));
 
-            return stream.ToArray();
+            return Encoding.UTF8.GetBytes(json);
         }
 
         public static byte[] GetHeartBeatMessage(TNodeInformation information, string clusterName) {
-            var stream = new MemoryStream();
-            Serializer.Serialize(stream, new NodeRegistryHeartBeatMessage(NodeRegistryMessageType.HeartBeat, information.NodeIdentifier, information.NodeType, clusterName));
+            var json =
+                JsonConvert.SerializeObject(new NodeRegistryHeartBeatMessage(NodeRegistryMessageType.HeartBeat, information.NodeIdentifier, information.NodeType, clusterName));
 
-            return stream.ToArray();
+            return Encoding.UTF8.GetBytes(json);
         }
 
     }

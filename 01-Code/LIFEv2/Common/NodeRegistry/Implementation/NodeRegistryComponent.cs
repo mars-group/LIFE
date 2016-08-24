@@ -8,7 +8,7 @@
 //  *******************************************************/
 using System;
 using System.Collections.Generic;
-using AppSettingsManager;
+using ConfigurationAdapter;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using LIFEUtilities.MulticastAddressGenerator;

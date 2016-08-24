@@ -8,13 +8,15 @@
 //  *******************************************************/
 using System;
 using System.IO;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using CommonTypes.DataTypes;
-using log4net;
 using MulticastAdapter.Interface;
+using Newtonsoft.Json;
 using NodeRegistry.Implementation.Messages;
 using NodeRegistry.Implementation.Messages.Factory;
-using ProtoBuf;
+
 
 namespace NodeRegistry.Implementation.UseCases {
 
@@ -26,8 +28,10 @@ namespace NodeRegistry.Implementation.UseCases {
         private readonly IMulticastAdapter _multicastAdapter;
         private readonly bool _addMySelfToActiveNodeList;
 
-        private readonly Thread _listenThread;
+        //private readonly Thread _listenThread;
+        private Task _listenTask;
 
+        private CancellationTokenSource _tokenSource;
         private readonly string _clusterName;
 
         public NodeRegistryNetworkUseCase
@@ -45,8 +49,35 @@ namespace NodeRegistry.Implementation.UseCases {
             _addMySelfToActiveNodeList = addMySelfToActiveNodeList;
             _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
 
-            _listenThread = new Thread(Listen);
-            _listenThread.Start();
+            _tokenSource = new CancellationTokenSource();
+            var ct = _tokenSource.Token;
+
+            Task.Factory.StartNew(() =>
+            {
+                // Were we already canceled?
+                //ct.ThrowIfCancellationRequested();
+
+                while (!ct.IsCancellationRequested)
+                {
+                    byte[] msg = _multicastAdapter.readMulticastGroupMessage();
+
+
+                    if (msg.Length <= 0) continue;
+
+                    var nodeRegistryMessage =
+                        JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(Encoding.UTF8.GetString(msg));
+
+                    // check whether the message belongs to our cluster, if not throw away
+                    if (nodeRegistryMessage.ClusterName != null &&
+                        nodeRegistryMessage.ClusterName != _clusterName)
+                    {
+                        continue;
+                    }
+
+                    // message is ok, so compute
+                    ComputeMessage(nodeRegistryMessage);
+                }
+            }, _tokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
             JoinCluster();
         }
@@ -66,29 +97,12 @@ namespace NodeRegistry.Implementation.UseCases {
         }
 
         public void Shutdown() {
-            _listenThread.Interrupt();
+            _tokenSource.Cancel();
         }
 
         private void Listen() {
 
-			try {
-				while (Thread.CurrentThread.IsAlive) {
-					byte[] msg = _multicastAdapter.readMulticastGroupMessage();
-					MemoryStream stream = new MemoryStream(msg);
-					stream.Position = 0;
 
-					if (stream.Length > 0) {
-						AbstractNodeRegistryMessage nodeRegistryMessage =
-							Serializer.Deserialize<AbstractNodeRegistryMessage>(stream);
-                        // check whether the message belongs to our cluster, if not throw away
-						if (nodeRegistryMessage.ClusterName != null && nodeRegistryMessage.ClusterName != _clusterName) { return; }
-                        // message is ok, so compute
-						ComputeMessage(nodeRegistryMessage);
-					}
-				}
-			} catch (Exception ex){
-				throw ex;
-			}
 			
 		}
 
