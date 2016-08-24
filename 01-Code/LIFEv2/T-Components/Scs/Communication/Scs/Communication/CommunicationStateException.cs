@@ -7,7 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Runtime.Serialization;
+
 
 namespace Hik.Communication.Scs.Communication {
     /// <summary>
@@ -19,12 +19,6 @@ namespace Hik.Communication.Scs.Communication {
         ///     Contstructor.
         /// </summary>
         public CommunicationStateException() {}
-
-        /// <summary>
-        ///     Contstructor for serializing.
-        /// </summary>
-        public CommunicationStateException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context) {}
 
         /// <summary>
         ///     Contstructor.

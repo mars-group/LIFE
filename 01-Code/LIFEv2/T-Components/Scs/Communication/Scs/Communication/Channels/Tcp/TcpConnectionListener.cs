@@ -88,7 +88,8 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         private void DoListenAsThread() {
             while (_running) {
                 try {
-                    var clientSocket = _listenerSocket.AcceptSocket();
+                    var clientSocketTask = _listenerSocket.AcceptSocketAsync();
+                    var clientSocket = clientSocketTask.Result;
                     if (clientSocket.Connected)
                         OnCommunicationChannelConnected(new TcpCommunicationChannel(clientSocket));
                 }

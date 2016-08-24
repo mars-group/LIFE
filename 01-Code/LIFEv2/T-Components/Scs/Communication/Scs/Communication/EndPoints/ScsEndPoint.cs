@@ -36,7 +36,7 @@ namespace Hik.Communication.Scs.Communication.EndPoints {
             //Split protocol and address parts
             var splittedEndPoint = endPointAddr.Split(new[] {"://"}, StringSplitOptions.RemoveEmptyEntries);
             if (splittedEndPoint.Length != 2)
-                throw new ApplicationException(endPointAddress + " is not a valid endpoint address.");
+                throw new Exception(endPointAddress + " is not a valid endpoint address.");
 
             //Split end point, find protocol and address
             var protocol = splittedEndPoint[0].Trim().ToLower();
@@ -47,7 +47,7 @@ namespace Hik.Communication.Scs.Communication.EndPoints {
                 case "udp":
                     return new ScsUdpEndPoint(address);
                 default:
-                    throw new ApplicationException("Unsupported protocol " + protocol + " in end point " +
+                    throw new Exception("Unsupported protocol " + protocol + " in end point " +
                                                    endPointAddress);
             }
         }
