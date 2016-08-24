@@ -13,7 +13,6 @@ using System.Linq;
 using System.Reflection;
 using LCConnector.TransportTypes;
 using LifeAPI.AddinLoader;
-using log4net;
 using ModelContainer.Implementation.Entities;
 using Mono.Addins;
 using SimulationManagerShared;
@@ -27,14 +26,11 @@ namespace ModelContainer.Implementation {
     ///     for instantiation order analysis.
     /// </summary>
     internal class ModelInstantiationOrderingUseCase {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (ModelInstantiationOrderingUseCase));
 
         private SimulationManagerSettings _settings;
 
         public ModelInstantiationOrderingUseCase(SimulationManagerSettings settings) {
             _settings = settings;
-
-            Logger.Debug("instantiated.");
         }
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description) {
