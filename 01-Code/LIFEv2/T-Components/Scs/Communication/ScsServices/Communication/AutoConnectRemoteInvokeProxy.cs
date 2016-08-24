@@ -82,25 +82,20 @@ namespace Hik.Communication.ScsServices.Communication
         /// <summary>
         ///     Reference to the client object that is used to connect/disconnect.
         /// </summary>
-        private readonly IConnectableClient _client;
+        private IConnectableClient _client;
 
-        /// <summary>
-        ///     Creates a new AutoConnectRemoteInvokeProxy object.
-        /// </summary>
-        /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
-        /// <param name="client">Reference to the client object that is used to connect/disconnect</param>
-        /// <param name="serviceID"></param>
-        public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client,
+
+        public void Configure(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client,
             Guid serviceID)
-            : base(clientMessenger, serviceID)
         {
             _client = client;
+            Configure(clientMessenger, serviceID);
         }
 
-        public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client)
-            : base(clientMessenger)
+        public void Configure(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client)
         {
             _client = client;
+            Configure(clientMessenger);
         }
 
         /// <summary>
@@ -110,6 +105,8 @@ namespace Hik.Communication.ScsServices.Communication
         /// <returns>Method invoke return message (to RealProxy base class)</returns>
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
+            if (!_configured) { throw new Exception("Proxy not configured"); }
+
             if (_client.CommunicationState == CommunicationStates.Connected)
             {
                 //If already connected, behave as base class (RemoteInvokeProxy).

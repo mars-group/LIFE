@@ -140,17 +140,18 @@ namespace Hik.Communication.ScsServices.Communication
         /// <summary>
         ///     Messenger object that is used to send/receive messages.
         /// </summary>
-        private readonly RequestReplyMessenger<TMessenger> _clientMessenger;
+        private RequestReplyMessenger<TMessenger> _clientMessenger;
 
-        private readonly Guid _serviceId;
+        private Guid _serviceId;
 
-        private readonly List<MethodInfo> _cacheableMethods;
-        private readonly Type _typeOfTProxy;
+        private List<MethodInfo> _cacheableMethods;
+        private Type _typeOfTProxy;
 
-        private readonly IDictionary<string, object> _cache;
+        private IDictionary<string, object> _cache;
 
+        internal bool _configured = false;
 
-        protected RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger)
+        public void Configure(RequestReplyMessenger<TMessenger> clientMessenger)
         {
             _clientMessenger = clientMessenger;
             // subscribe for new PropertyChangedMessages. Will work since
@@ -160,7 +161,7 @@ namespace Hik.Communication.ScsServices.Communication
             _cache = new Dictionary<string, object>();
 
             _typeOfTProxy = typeof(TProxy);
-            
+
             //retreive all methods which are marked as cacheable
             var methodsOfTProxy = _typeOfTProxy.GetTypeInfo().GetMethods();
             _cacheableMethods = new List<MethodInfo>();
@@ -181,17 +182,14 @@ namespace Hik.Communication.ScsServices.Communication
             {
                 _cacheableMethods.Add(propertyInfo.GetGetMethod());
             }
+            _configured = true;
         }
 
-        /// <summary>
-        ///     Creates a new RemoteInvokeProxy object.
-        /// </summary>
-        /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
-        /// <param name="serviceID"></param>
-        public RemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, Guid serviceID)
-            : this(clientMessenger)
+        public void Configure(RequestReplyMessenger<TMessenger> clientMessenger, Guid serviceID)
         {
             _serviceId = serviceID;
+            Configure(clientMessenger);
+            _configured = true;
         }
 
         private void ClientMessengerOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
@@ -209,6 +207,7 @@ namespace Hik.Communication.ScsServices.Communication
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             if (targetMethod == null) return null;
+            if(!_configured) { throw new Exception("Proxy not configured"); }
 
             // Answer request from cache if available
             if (_cache.ContainsKey(targetMethod.Name))

@@ -93,7 +93,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
 
             _running = false;
             try {
-                if (_clientSocket.Connected) _clientSocket.Close();
+                if (_clientSocket.Connected) _clientSocket.Shutdown(SocketShutdown.Both);
 
                 _clientSocket.Dispose();
             }

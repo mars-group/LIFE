@@ -118,8 +118,14 @@ namespace Hik.Communication.ScsServices.Client {
             _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
             _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
+#if HAS_REAL_PROXY
             _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this, serviceID);
-            ServiceProxy = (T) _realServiceProxy.GetTransparentProxy();
+            ServiceProxy = (T)_realServiceProxy.GetTransparentProxy();
+#else
+            var proxy = DispatchProxy.Create<T, AutoConnectRemoteInvokeProxy<T, IScsClient>>();
+            (proxy as AutoConnectRemoteInvokeProxy<T, IScsClient>).Configure(_requestReplyMessenger, this, serviceID);
+            ServiceProxy = proxy;
+#endif
         }
 
         public ScsServiceClient(IScsClient client, object clientObject) {
@@ -132,8 +138,14 @@ namespace Hik.Communication.ScsServices.Client {
             _requestReplyMessenger = new RequestReplyMessenger<IScsClient>(client);
             _requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
+#if HAS_REAL_PROXY
             _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this);
             ServiceProxy = (T) _realServiceProxy.GetTransparentProxy();
+#else
+            var proxy = DispatchProxy.Create<T, AutoConnectRemoteInvokeProxy<T, IScsClient>>();
+            (proxy as AutoConnectRemoteInvokeProxy<T, IScsClient>).Configure(_requestReplyMessenger, this);
+            ServiceProxy = proxy;
+#endif
         }
 
         #endregion

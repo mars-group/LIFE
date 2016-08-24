@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
+using System.Text;
+using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.Messages;
+using Hik.Communication.Scs.Communication.Protocols;
+using Newtonsoft.Json;
 
-namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
+namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
     /// <summary>
     ///     Default communication protocol between server and clients to send and receive a message.
     ///     It uses .NET binary serialization to write and read messages.
@@ -24,7 +27,7 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
     ///     This class can be derived to change serializer (default: BinaryFormatter). To do this,
     ///     SerializeMessage and DeserializeMessage methods must be overrided.
     /// </summary>
-    public class BinarySerializationProtocol : IScsWireProtocol {
+    public class JsonSerializationProtocol : IScsWireProtocol {
         #region Private fields
 
         /// <summary>
@@ -42,9 +45,9 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
         #region Constructor
 
         /// <summary>
-        ///     Creates a new instance of BinarySerializationProtocol.
+        ///     Creates a new instance of JsonSerializationProtocol.
         /// </summary>
-        public BinarySerializationProtocol() {
+        public JsonSerializationProtocol() {
             _receiveMemoryStream = new MemoryStream();
         }
 
@@ -130,10 +133,8 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
         ///     Does not include length of the message.
         /// </returns>
         protected virtual byte[] SerializeMessage(IScsMessage message) {
-            using (var memoryStream = new MemoryStream()) {
-                new BinaryFormatter().Serialize(memoryStream, message);
-                return memoryStream.ToArray();
-            }
+            var json = JsonConvert.SerializeObject(message);
+            return Encoding.UTF8.GetBytes(json);
         }
 
         /// <summary>
@@ -148,18 +149,14 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
         /// <returns>Deserialized message</returns>
         protected virtual IScsMessage DeserializeMessage(byte[] bytes) {
             //Create a MemoryStream to convert bytes to a stream
-            using (var deserializeMemoryStream = new MemoryStream(bytes)) {
-                //Go to head of the stream
-                deserializeMemoryStream.Position = 0;
-
-                //Deserialize the message
-                var binaryFormatter = new BinaryFormatter {
-                    AssemblyFormat = FormatterAssemblyStyle.Simple,
-                    Binder = new DeserializationAppDomainBinder()
-                };
+            using (var deserializeMemoryStream = new MemoryStream(bytes))
+            using (var sr = new StreamReader(deserializeMemoryStream))
+            using (var reader = new JsonTextReader(sr))
+            {
+                var serialiazer = new JsonSerializer();
 
                 //Return the deserialized message
-                return (IScsMessage) binaryFormatter.Deserialize(deserializeMemoryStream);
+                return (IScsMessage)serialiazer.Deserialize(reader);
             }
         }
 
@@ -277,7 +274,7 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
         }
 
         #endregion
-
+        /*
         #region Nested classes
 
         /// <summary>
@@ -294,5 +291,6 @@ namespace Hik.Communication.Scs.Communication.Protocols.BinarySerialization {
         }
 
         #endregion
+        */
     }
 }

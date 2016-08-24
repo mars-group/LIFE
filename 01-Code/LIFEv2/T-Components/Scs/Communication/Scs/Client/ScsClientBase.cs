@@ -59,7 +59,7 @@ namespace Hik.Communication.Scs.Client {
             get { return _wireProtocol; }
             set {
                 if (CommunicationState == CommunicationStates.Connected)
-                    throw new ApplicationException("Wire protocol can not be changed while connected to server.");
+                    throw new Exception("Wire protocol can not be changed while connected to server.");
 
                 _wireProtocol = value;
             }

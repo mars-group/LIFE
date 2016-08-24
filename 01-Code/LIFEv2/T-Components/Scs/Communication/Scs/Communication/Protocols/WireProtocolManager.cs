@@ -6,7 +6,8 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using Hik.Communication.Scs.Communication.Protocols.BinarySerialization;
+
+using Scs.Communication.Scs.Communication.Protocols.JsonSerialization;
 
 namespace Hik.Communication.Scs.Communication.Protocols {
     /// <summary>
@@ -18,7 +19,7 @@ namespace Hik.Communication.Scs.Communication.Protocols {
         /// </summary>
         /// <returns>A new instance of default wire protocol</returns>
         public static IScsWireProtocolFactory GetDefaultWireProtocolFactory() {
-            return new BinarySerializationProtocolFactory();
+            return new JsonSerializationProtocolFactory();
             //return new ProtobufSerializationProtocolFactory();
         }
 
@@ -27,7 +28,7 @@ namespace Hik.Communication.Scs.Communication.Protocols {
         /// </summary>
         /// <returns>A new instance of default wire protocol</returns>
         public static IScsWireProtocol GetDefaultWireProtocol() {
-            return new BinarySerializationProtocol();
+            return new JsonSerializationProtocol();
             //return new ProtobufSerializationProtocol();
         }
     }

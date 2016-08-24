@@ -235,13 +235,20 @@ namespace Hik.Communication.ScsServices.Service {
         /// <returns>Client interface</returns>
         public T GetClientProxy<T>(Guid serviceID) where T : class
         {
-            //_realProxy = new RemoteInvokeProxy<T, IScsServerClient>(_requestReplyMessenger, serviceID);
-            return DispatchProxy.Create<T, RemoteInvokeProxy<T, IScsServerClient>>();
+#if HAS_REAL_PROXY
+            _realProxy = new RemoteInvokeProxy<T, IScsServerClient>(_requestReplyMessenger, serviceID);
+            return (T)_realProxy.GetTransparentProxy();
+#else
+
+            var proxy = DispatchProxy.Create<T, RemoteInvokeProxy<T, IScsServerClient>>();
+            (proxy as RemoteInvokeProxy<T, IScsServerClient>).Configure(_requestReplyMessenger, serviceID);
+            return proxy;
+#endif
         }
 
         #endregion
 
-        #region Private methods
+            #region Private methods
 
         /// <summary>
         ///     Handles disconnect event of _serverClient object.
@@ -254,9 +261,9 @@ namespace Hik.Communication.ScsServices.Service {
             OnDisconnected();
         }
 
-        #endregion
+            #endregion
 
-        #region Event raising methods
+            #region Event raising methods
 
         /// <summary>
         ///     Raises Disconnected event.
@@ -267,7 +274,7 @@ namespace Hik.Communication.ScsServices.Service {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        #endregion
+            #endregion
     }
 #endif
-}
+        }
