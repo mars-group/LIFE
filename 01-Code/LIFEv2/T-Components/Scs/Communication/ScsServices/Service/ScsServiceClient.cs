@@ -235,15 +235,9 @@ namespace Hik.Communication.ScsServices.Service {
         /// <returns>Client interface</returns>
         public T GetClientProxy<T>(Guid serviceID) where T : class
         {
-#if HAS_REAL_PROXY
-            _realProxy = new RemoteInvokeProxy<T, IScsServerClient>(_requestReplyMessenger, serviceID);
-            return (T)_realProxy.GetTransparentProxy();
-#else
-
             var proxy = DispatchProxy.Create<T, RemoteInvokeProxy<T, IScsServerClient>>();
             (proxy as RemoteInvokeProxy<T, IScsServerClient>).Configure(_requestReplyMessenger, serviceID);
             return proxy;
-#endif
         }
 
         #endregion
