@@ -4,6 +4,7 @@
     "emitEntryPoint": true
   },
   "dependencies": {
+    "Microsoft.Extensions.DependencyModel": "1.0.0",
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0"
@@ -13,7 +14,8 @@
   },
   "frameworks": {
     "netcoreapp1.0": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "buildOptions": { "preserveCompilationContext": true }
     }
   }
 }
