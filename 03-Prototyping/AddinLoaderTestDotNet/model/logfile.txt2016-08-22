@@ -1,0 +1,18 @@
+[2016-08-22 10:27:32,825][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-22 10:27:32,852][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-22 10:27:33,331][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-22 10:27:33,333][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-22 10:27:33,334][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-22 10:27:33,335][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-22 10:28:47,345][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-22 10:28:47,366][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-22 10:28:47,782][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-22 10:28:47,784][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-22 10:28:47,784][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-22 10:28:47,785][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-22 10:56:20,678][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-22 10:56:20,703][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-22 10:56:21,072][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-22 10:56:21,074][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-22 10:56:21,075][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-22 10:56:21,076][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.

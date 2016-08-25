@@ -1,0 +1,678 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MARS.Shuttle.SimulationConfig</name>
+    </assembly>
+    <members>
+        <member name="T:MARS.Shuttle.SimulationConfig.AtConstructorInfo">
+            <summary>
+            This class reflects how agenttypes will be initailized via their constructors<br />
+            during the simulation initialisation phase
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorInfo.#ctor">
+            <summary>
+            STD constructor
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorInfo.SetClassName(System.String)">
+            <summary>
+            Set the class name of the agenttype to initialize
+            </summary>
+            <param name="name">
+            name of the agenttype to initialize
+            </param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorInfo.AddFieldToContructorArgumentRelation(MARS.Shuttle.SimulationConfig.AtConstructorParameter)">
+            <summary>
+            Add initialisation info for one agenttype constructor<br />
+            parameter to the parameterInfoList
+            </summary>
+            <param name="acp">
+            initialisation info for this constructor parameter
+            </param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorInfo.GetClassName">
+            <summary>
+            Get the class name of the agenttype to initialize
+            </summary>
+            <returns>
+            class name of the agenttype to initialize
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorInfo.GetFieldToConstructorArgumentRelations">
+            <summary>
+            Get the list of initialisation infos for each constructor<br />
+            parameter type in the correct order
+            </summary>
+            <returns>
+            list of initialisation infos for each constructor<br />
+            parameter type in the correct order
+            </returns></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.AtConstructorParameter">
+            <summary>
+            This class represents the initialisation info of one<br />
+            agenttype constructor parameter.
+            this info can either be how to initialize the parameter via a<br />
+            data field (or column) from a MARS subcube<br />
+            or<br />
+            how to initialize the parameter via a fixed parameter (constant value)
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorParameter.#ctor(MARS.Shuttle.SimulationConfig.AtConstructorParameter.FieldToConstructorArgumentRelation)">
+            <summary>
+            Use this constructor if the parameter init type is <br />
+            MarsCubeFieldToConstructorArgumentRelation
+            </summary>
+            <param name="fcar">struct representing the expexted initialisation info</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorParameter.#ctor(MARS.Shuttle.SimulationConfig.AtConstructorParameter.ConstantParameterToConstructorArgumentRelation)">
+            <summary>
+            Use this constructor if the parameter init type is <br />
+            ConstantParameterToConstructorArgumentRelation
+            </summary>
+            <param name="pcar">struct representing the expexted initialisation info</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorParameter.GetParameterType">
+            <summary>
+            Get the type of the initialisation info used for this<br />
+            constructor parameter
+            </summary>
+            <returns>
+            type of the initialisation info used for this<br />
+            constructor parameter
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorParameter.GetFieldToConstructorArgumentRelation">
+            <summary>
+            Get initialisation info used for this<br />
+            constructor parameter, if the info parameter type<br />
+            is MarsCubeFieldToConstructorArgumentRelation
+            </summary>
+            <returns>
+            info parameter of type MarsCubeFieldToConstructorArgumentRelation<br />
+            ATTENTION: returns null, if GetParameterType() does not return info type <br />
+            MarsCubeFieldToConstructorArgumentRelation
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorParameter.GetConstantParameterToConstructorArgumentRelation">
+            <summary>
+            Get initialisation info used for this<br />
+            constructor parameter, if the info parameter type<br />
+            is ConstantParameterToConstructorArgumentRelation
+            </summary>
+            <returns>
+            info parameter of type ConstantParameterToConstructorArgumentRelation<br />
+            ATTENTION: returns null, if GetParameterType() does not return info type <br />
+            ConstantParameterToConstructorArgumentRelation
+            </returns></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.AtConstructorParameter.AtConstructorParameterType">
+            <summary>
+            Indicates the type of initialisation info used<br />
+            for this constructor parameter
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation">
+            <summary>
+            the constructor parameter will be initialized by a correponding<br />
+            MARS cube data field (column)
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation">
+            <summary>
+            the constructor parameter will be initialized by<br />
+            a fixed parameter (constant value)
+            </summary></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.AtConstructorParameter.FieldToConstructorArgumentRelation">
+            <summary>
+            struct representing a constructor parameter initialisation info<br />
+            of type MarsCubeFieldToConstructorArgumentRelation
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.FieldToConstructorArgumentRelation.ConstructorArgumentDatatype">
+            <summary>
+            datatype of this constructor argument
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.FieldToConstructorArgumentRelation.ConstructorArgumentName">
+            <summary>
+            name of this constructor argument
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.FieldToConstructorArgumentRelation.MarsTableName">
+            <summary>
+            name of the MARS cube column where the corresponding<br />
+            cube field (column) can be found
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.FieldToConstructorArgumentRelation.MarsDBColumnName">
+            <summary>
+            name of the the corresponding<br />
+            MARS cube field (column)
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorParameter.FieldToConstructorArgumentRelation.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            STD - constructor
+            </summary>
+            <param name="constructorArgumentDatatype">datatype of this constructor argument</param>
+            <param name="constructorArgumentName">name of this constructor argument</param>
+            <param name="marsTableName">name of the MARS cube column where the corresponding cube field (column) can be found</param>
+            <param name="marsDBColumnName">name of the the corresponding MARS cube field (column)</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.AtConstructorParameter.ConstantParameterToConstructorArgumentRelation">
+            <summary>
+            struct representing a constructor parameter initialisation info<br />
+            of type ConstantParameterToConstructorArgumentRelation
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.ConstantParameterToConstructorArgumentRelation.ConstructorArgumentDatatype">
+            <summary>
+            datatype of this constructor argument
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.ConstantParameterToConstructorArgumentRelation.ConstructorArgumentName">
+            <summary>
+            name of this constructor argument
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.ConstantParameterToConstructorArgumentRelation.ParameterDatatype">
+            <summary>
+            datatype of fixed parameter (constant value)
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.AtConstructorParameter.ConstantParameterToConstructorArgumentRelation.ParameterValue">
+            <summary>
+            value of fixed parameter (constant value)
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.AtConstructorParameter.ConstantParameterToConstructorArgumentRelation.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            STD - constructor
+            </summary>
+            <param name="constructorArgumentDatatype">datatype of this constructor argument</param>
+            <param name="constructorArgumentName">name of this constructor argument</param>
+            <param name="parameterDatatype">datatype of fixed parameter (constant value)</param>
+            <param name="parameterValue">value of fixed parameter (constant value)</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.IAtConstructorInfo">
+            <summary>
+            This interface reflects how agenttypes will be initailized via their constructors<br />
+            during the simulation initialisation phase
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.IAtConstructorInfo.GetClassName">
+            <summary>
+            Get the class name of the agenttype to initialize
+            </summary>
+            <returns>
+            class name of the agenttype to initialize
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.IAtConstructorInfo.GetFullName">
+            <summary>
+            get the full qualified domain name of the agent class
+            </summary>
+            <returns>
+            full qualified domain name of the agent class
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.IAtConstructorInfo.GetAgentInstanceCount">
+            <summary>
+            Returns the number of agent instances that can be created from initialisation data
+            </summary>
+            <returns>
+            number of agent instances that can be created from initialisation data
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.IAtConstructorInfo.GetFieldToConstructorArgumentRelations">
+            <summary>
+            Get the list of initialisation infos for each constructor<br />
+            parameter type in the correct order
+            </summary>
+            <returns>
+            list of initialisation infos for each constructor<br />
+            parameter type in the correct order
+            </returns></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.IAtConstructorParameter">
+            <summary>
+            This interface represents the initialisation info of one<br />
+            agenttype constructor parameter.
+            this info can either be how to initialize the parameter via a<br />
+            data field (or column) from a MARS subcube<br />
+            or<br />
+            how to initialize the parameter via a fixed parameter (constant value)
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.IAtConstructorParameter.GetParameterType">
+            <summary>
+            Get the type of the initialisation info used for this<br />
+            constructor parameter
+            </summary>
+            <returns>
+            type of the initialisation info used for this<br />
+            constructor parameter
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.IAtConstructorParameter.GetFieldToConstructorArgumentRelation">
+            <summary>
+            Get initialisation info used for this<br />
+            constructor parameter, if the info parameter type<br />
+            is MarsCubeFieldToConstructorArgumentRelation
+            </summary>
+            <returns>
+            info parameter of type MarsCubeFieldToConstructorArgumentRelation<br />
+            ATTENTION: returns null, if GetParameterType() does not return info type <br />
+            MarsCubeFieldToConstructorArgumentRelation
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.IAtConstructorParameter.GetConstantParameterToConstructorArgumentRelation">
+            <summary>
+            Get initialisation info used for this<br />
+            constructor parameter, if the info parameter type<br />
+            is ConstantParameterToConstructorArgumentRelation
+            </summary>
+            <returns>
+            info parameter of type ConstantParameterToConstructorArgumentRelation<br />
+            ATTENTION: returns null, if GetParameterType() does not return info type <br />
+            ConstantParameterToConstructorArgumentRelation
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.Interfaces.IAtLayerInfo.GetAtConstructorInfoListsWithLayerName">
+            <summary>
+            Returns initalisation information of all agenttypes of the simulation
+            and their respective layers
+            </summary>
+            <returns>
+            interface to access initalisation information of all agenttypes of the simulation
+            and their respective layers
+            </returns></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.ISimConfig">
+            <summary>
+            interface to access the simulaton configuration object<br />
+            the object is created by the module MARS.Shuttle.ParserGenerator object
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetIAtLayerInfo">
+            <summary>
+            Returns initalisation information of all agenttypes of the simulation
+            and their respective layers
+            </summary>
+            <returns>
+            AtLayerInfo interface
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetLayerParameters">
+            <summary>
+            Returns the set layer parameters of the SimConfig
+            </summary>
+            <returns>Dictionary with parameter lists, where the string key is the layername</returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetResultConfig">
+            <summary>
+            returns result config of simulation run
+            </summary>
+            <returns> result config of simulation run</returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetVisualizationConfig">
+            <summary>
+            returns visualization config to render agent visualization
+            </summary>
+            <returns>visualization config</returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetSimStartDate">
+            <summary>
+            get the realtime start date for this simulation run
+            </summary>
+            <returns>
+            realtime start date
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetSimEndDate">
+            <summary>
+            get the realtime end date for this simulation run
+            </summary>
+            <returns>
+            realtime end date
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetSimStepDuration">
+            <summary>
+            get the duration of one simulation step or tick
+            </summary>
+            <returns>
+            the duration of one simulation step
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetSimDurationInSteps">
+            <summary>
+            gets the duration of the simulation run in steps
+            </summary>
+            <returns>
+            number of steps for this simulation run
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetDeltaSpace">
+            <summary>
+            gets the deltaSpace structure that stores information about
+            length of one spatial unit within the simulation
+            </summary>
+            <returns></returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetGeoSpatialBoundaries">
+            <summary>
+            Gets a list of GPS coordinates which represent the geospatial boundaries
+            of the simulation
+            </summary>
+            <returns></returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetModelDataId">
+            <summary>
+            get the path where the model files can be found
+            </summary>
+            <returns></returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetInternalModelName">
+            <summary>
+            gets the internal name of the model
+            </summary>
+            <returns></returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetGISActiveLayerSources">
+            <summary>
+            get a list of structs containing the names of LifeGISActiveLayers and<br />
+            their corresponding GIS source URLs for initialisation
+            </summary>
+            <returns>string tuple:
+            list of structs containing the names of LifeGISActiveLayers and<br />
+            their corresponding GIS source URLs for initialisation
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.ISimConfig.GetTSLayerSources">
+            <summary>
+            gets the data source information to initialize TimeSeries layers
+            </summary>
+            <returns></returns></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.PublishInShuttleAttribute">
+            <summary>
+            use this attribute to mark an AgentType constructor for<br />
+            publishing its arguments in MARS Websuites scenario configuration.<br />
+            the containing class must implement the interface IAgent<br />
+            <br />
+            ATTENTION: for now it's just possible to mark only one constructor per<br />
+            AgentType class
+            </summary></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.Interfaces.SimConfigObjectDeserializer">
+            <summary>
+            This is an interface class to get a deserialized<br />
+            instance of SimConfig (access interface ISimConfig)
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.Interfaces.SimConfigObjectDeserializer.GetDeserializedSimConfigObject(System.String)">
+            <summary>
+            Get a deserialized instance of SimConfig<br />
+            (access interface ISimConfig)
+            </summary>
+            <param name="serializedSimConfigObject">
+            SimConfig object serialized as JSON
+            </param>
+            <returns>
+            deserialized instance of SimConfig
+            </returns></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig">
+            <summary>
+            this class represents a simualtion config object<br />
+            which stores all necessary information to initialize a simulation run
+            </summary></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.LayerParameter">
+            <summary>
+            struct representing a layer parameter <br />
+            and its initializing value
+            </summary></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource">
+            <summary>
+            struct representing initialisation info for <br />
+            a GISLayer and its corresponding GIS data URL
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource.GISActiveLayerName">
+            <summary>
+            Name of the GISActiveLayer
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource.GISActiveLayerFullName">
+            <summary>
+            full name of the GISActiveLayer
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource.LayerNames">
+            <summary>
+            name of the layer to initialize
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource.GISSourceUrl">
+            <summary>
+            URL of the corresponding GIS data source
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource.GISFileName">
+            <summary>
+            name of the GIS File
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource.#ctor(System.String,System.String,System.String[],System.String,System.String)">
+            <summary>
+            STD - constructor
+            </summary>
+            <param name="layerNames">name of the layer to initialize</param>
+            <param name="gisSourceUrl">URL of the corresponding GIS data source</param>
+            <param name="gisActiveLayerName">name of the gisActiveLayer</param>
+            <param name="gisActiveLayerFullName">full name of the gisActiveLayer</param>
+            <param name="gisFileName">name of the GIS File</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.GPSCoordinate">
+            <summary>
+            represents a GPS Coordinate
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.GPSCoordinate.Lat">
+            <summary>
+            lat value
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.GPSCoordinate.Lon">
+            <summary>
+            lon value
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GPSCoordinate.#ctor">
+            <summary>
+            Default constructor
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GPSCoordinate.#ctor(System.Decimal,System.Decimal)">
+            <summary>
+            Param constructor
+            </summary>
+            <param name="lat">lat value</param>
+            <param name="lon">lon value</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.DeltaSpace">
+            <summary>
+            represents a delta of spatial values
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.DeltaSpace.DeltaSpaceinMeters">
+            <summary>
+            delta value in meters
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.DeltaSpace.DeltaSpaceInChosenResolution">
+            <summary>
+            delta value in chosen resolution
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.DeltaSpace.ResolutionName">
+            <summary>
+            name of the resolution
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.DeltaSpace.#ctor(System.Decimal,System.Decimal,System.String)">
+            <summary>
+            param constructor
+            </summary>
+            <param name="deltaXinMeters">delta value in meters</param>
+            <param name="deltaXinChosenResolution">delta value in chosen resolution</param>
+            <param name="resolutionName">name of the resolution</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource">
+            <summary>
+            represents the source of a TimeSeries layer
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource.TimeSeriesLayerName">
+            <summary>
+            name of the TimeSeries layer
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource.FullTimeSeriesLayerName">
+            <summary>
+            full name of the TimeSeries layer
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource.TableName">
+            <summary>
+            table name of the init data source
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource.ClearColumnName">
+            <summary>
+            clear column name of the init data source
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource.ColumnName">
+            <summary>
+            real column name of the init data source
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            param constructor
+            </summary>
+            <param name="timeSeriesLayerName">name of the TimeSeries layer</param>
+            <param name="fullTimeSeriesLayerName">full name of the TimeSeries layer</param>
+            <param name="tableName">table name of the init data source</param>
+            <param name="clearColumnName">clear column name of the init data source</param>
+            <param name="columnName">real column name of the init data source</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfig">
+            <summary>
+            represents the simulation result config
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfig.AgentList">
+            <summary>
+            list with config parameter per agent. agent name is dictionary key
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfig.#ctor(System.Collections.Generic.Dictionary{System.String,MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent})">
+            <summary>
+            param constructor
+            </summary>
+            <param name="agentList">list with config parameter per agent. agent name is dictionary key</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent">
+            <summary>
+            represents a config element of the result config
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent.Enabled">
+            <summary>
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent.Frequency">
+            <summary>
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent.SpatialOutput">
+            <summary>
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent.SpatialType">
+            <summary>
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent.OutputProperties">
+            <summary>
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.ResultConfigAgent.#ctor(System.Boolean,System.Int32,System.Boolean,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            param constructor
+            </summary>
+            <param name="enabled"></param>
+            <param name="frequency"></param>
+            <param name="spatialOutput"></param>
+            <param name="spatialType"></param>
+            <param name="outputProperties"></param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfig">
+            <summary>
+            represents the settings for agent visualization
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfig.AgentList">
+            <summary>
+            list with config parameter per agent. agent name is dictionary key
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfig.#ctor(System.Collections.Generic.Dictionary{System.String,MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfigAgent})">
+            <summary>
+            param constructor
+            </summary>
+            <param name="agentList">list with config parameter per agent. agent name is dictionary key</param></member>
+        <member name="T:MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfigAgent">
+            <summary>
+            represent a config element of visualization config
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfigAgent.Enabled">
+            <summary>
+            </summary></member>
+        <member name="F:MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfigAgent.Params">
+            <summary>
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfigAgent.#ctor(System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            </summary>
+            <param name="enabled"></param>
+            <param name="params"></param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.#ctor">
+            <summary>
+            STD - constructor
+            </summary></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.AddAtConstructorInfoListElement(System.String,MARS.Shuttle.SimulationConfig.IAtConstructorInfo)">
+            <summary>
+            Add initialisation information for one constructor parameter
+            </summary>
+            <param name="aci">
+            information object for one constructor parameter
+            </param>
+            <param name="layerName">name of the layer that contains this agentType</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.SetLayerParameter(System.String,System.String,System.String,System.String)">
+            <summary>
+            Adds a Layer Parameter to the SimConfig Object
+            </summary>
+            <param name="layerName">Name of Layer containing the parameter</param>
+            <param name="layerParamName">Name of the paramter</param>
+            <param name="value">Value of the parameter</param>
+            <param name="valueType">DataType of the parameter</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GetLayerParameters">
+            <summary>
+            Returns the set layer parameters of the SimConfig
+            </summary>
+            <returns>Dictionary with parameter lists, where the string key is the layername</returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.AddGISLayerSourceInfoListElement(MARS.Shuttle.SimulationConfig.SimConfig.GISLayerSource)">
+            <summary>
+            Add initialisation information for one GIS Layer
+            </summary>
+            <param name="gls">
+            initialisation information struct for one GIS Layer
+            </param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.AddTSLayerSourceInfoListElement(MARS.Shuttle.SimulationConfig.SimConfig.TimeSeriesLayerSource)">
+            <summary>
+            adds a TimeSeriesLayerSource
+            </summary>
+            <param name="tsls">TimeSeriesLayerSource to add</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.SetInternalModelName(System.String)">
+            <summary>
+            Stes the internalModelName
+            </summary>
+            <param name="internalModelName">internalModelName to set</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.SetSimStartDate(System.DateTime)">
+            <summary>
+            Set simulation realtime start date
+            </summary>
+            <param name="dt">
+            simulation realtime start date
+            </param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.SetSimEndDate(System.DateTime)">
+            <summary>
+            sets simulation end date
+            </summary>
+            <param name="dt">simulation end date to set</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.SetSimStepDuration(System.TimeSpan)">
+            <summary>
+            Set simulation realtime tick duration
+            </summary>
+            <param name="ts">
+            simulation realtime tick duration
+            </param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GetTSLayerSources">
+            <summary>
+            get a list of structs containing the names of LifeGISActiveLayers and<br />
+            their corresponding GIS source URLs for initialisation
+            </summary>
+            <returns>string tuple:
+            list of structs containing the names of LifeGISActiveLayers and<br />
+            their corresponding GIS source URLs for initialisation
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GetSimStartDate">
+            <summary>
+            get the realtime start date for this simulation run
+            </summary>
+            <returns>
+            realtime start date
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GetSimStepDuration">
+            <summary>
+            get the duration of one simulation step or tick
+            </summary>
+            <returns>
+            the duration of one simulation step
+            </returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.SetResultConfig(MARS.Shuttle.SimulationConfig.SimConfig.ResultConfig)">
+            <summary>
+            sets result config
+            </summary>
+            <param name="resultConfig">result config to set</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GetResultConfig">
+            <summary>
+            gets result config
+            </summary>
+            <returns>result config</returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.SetVisualizationConfig(MARS.Shuttle.SimulationConfig.SimConfig.VisualizationConfig)">
+            <summary>
+            sets visualization config
+            </summary>
+            <param name="visualizationConfig">visualization config to set</param></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.GetVisualizationConfig">
+            <summary>
+            gets visualization config
+            </summary>
+            <returns>visualization config</returns></member>
+        <member name="M:MARS.Shuttle.SimulationConfig.SimConfig.Serialize">
+            <summary>
+            Serializes this SimConfig object as JSON
+            </summary>
+            <returns>
+            JSON of serialized SimConfig object
+            </returns></member>
+    </members>
+</doc>

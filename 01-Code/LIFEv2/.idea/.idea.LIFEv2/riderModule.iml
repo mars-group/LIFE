@@ -14,7 +14,6 @@
       <sourceFolder url="file://$MODULE_DIR$/../../Common/ConfigurationAdapter" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Common/LCConnector" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Common/LNSConnector" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../Common/LoggerFactory" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Common/NodeRegistry" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Common/SMConnector" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../LayerContainer/LayerContainer" isTestSource="false" />

@@ -18,7 +18,7 @@ using LifeAPI.Layer;
 //[assembly: AddinRoot("LayerContainer", "0.1")]
 // TODO: REIMPLEMENT!
 namespace LifeAPI.AddinLoader {
-  /*  public sealed class AddinLoader : IAddinLoader {
+    public sealed class AddinLoader : IAddinLoader {
         public static AddinLoader Instance { get { return _instance; } }
         private static readonly AddinLoader _instance = new AddinLoader();
         private ExtensionNodeList _extensionNodes;
@@ -106,5 +106,5 @@ namespace LifeAPI.AddinLoader {
             }
         }
     }
-    */
+
 }

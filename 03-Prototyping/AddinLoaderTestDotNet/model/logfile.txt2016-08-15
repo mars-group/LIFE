@@ -1,0 +1,258 @@
+[2016-08-15 10:07:00,818][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:07:00,836][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:07:01,105][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:07:01,107][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:07:01,107][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:07:01,111][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:16:37,423][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:16:37,448][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:16:37,788][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:16:37,791][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:16:37,792][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:16:37,793][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:21:01,886][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:21:01,913][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:21:02,354][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:21:02,357][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:21:02,358][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:21:02,359][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:22:35,697][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:22:35,723][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:22:36,083][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:22:36,086][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:22:36,086][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:22:36,087][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:25:19,772][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:25:19,793][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:25:20,081][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:25:20,084][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:25:20,084][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:25:20,088][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:27:09,346][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:27:09,366][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:27:09,726][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:27:09,729][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:27:09,730][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:27:09,731][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:30:01,919][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:30:01,937][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:30:02,282][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:30:02,285][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:30:02,286][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:30:02,287][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:44:14,975][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:44:14,997][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:44:15,316][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:44:15,318][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:44:15,319][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:44:15,320][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:46:23,833][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:46:23,856][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:46:24,268][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:46:24,271][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:46:24,271][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:46:24,272][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 10:47:23,412][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 10:47:23,435][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 10:47:23,760][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 10:47:23,763][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 10:47:23,763][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 10:47:23,764][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 11:31:48,995][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 11:31:49,014][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 11:31:49,342][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 11:31:49,345][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 11:31:49,345][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 11:31:49,346][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 11:41:27,779][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 11:41:27,800][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 11:41:28,189][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 11:41:28,192][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 11:41:28,192][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 11:41:28,193][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 11:48:08,217][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 11:48:08,236][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 11:48:08,515][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 11:48:08,517][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 11:48:08,517][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 11:48:08,518][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 11:55:37,674][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 11:55:37,694][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 11:55:38,046][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 11:55:38,049][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 11:55:38,050][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 11:55:38,050][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 12:01:29,894][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 12:01:29,917][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 12:01:30,262][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 12:01:30,264][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 12:01:30,265][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 12:01:30,265][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 12:08:25,081][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 12:08:25,104][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 12:08:25,422][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 12:08:25,425][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 12:08:25,426][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 12:08:25,426][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 12:15:15,632][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 12:15:15,651][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 12:15:15,964][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 12:15:15,966][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 12:15:15,966][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 12:15:15,967][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 12:17:09,896][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 12:17:09,923][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 12:17:10,347][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 12:17:10,350][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 12:17:10,351][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 12:17:10,354][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 12:21:54,666][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 12:21:54,693][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 12:21:55,015][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 12:21:55,018][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 12:21:55,018][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 12:21:55,019][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 12:22:37,817][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 12:22:37,836][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 12:22:38,152][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 12:22:38,154][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 12:22:38,155][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 12:22:38,156][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 12:55:12,945][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 12:55:12,965][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 12:55:13,289][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 12:55:13,292][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 12:55:13,293][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 12:55:13,294][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 13:03:50,112][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 13:03:50,137][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 13:03:50,463][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 13:03:50,466][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 13:03:50,466][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 13:03:50,467][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 13:11:53,457][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 13:11:53,475][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 13:11:53,863][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 13:11:53,865][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 13:11:53,865][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 13:11:53,866][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 13:17:57,160][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 13:17:57,179][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 13:17:57,499][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 13:17:57,501][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 13:17:57,501][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 13:17:57,502][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 13:26:29,213][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 13:26:29,240][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 13:26:29,870][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 13:26:29,873][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 13:26:29,874][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 13:26:29,875][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 13:28:22,858][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 13:28:22,880][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 13:28:23,459][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 13:28:23,462][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 13:28:23,462][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 13:28:23,463][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 14:11:53,210][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 14:11:53,230][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 14:11:53,522][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 14:11:53,524][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 14:11:53,524][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 14:11:53,525][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 14:29:12,298][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 14:29:12,320][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 14:29:12,787][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 14:29:12,789][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 14:29:12,790][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 14:29:12,791][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 14:41:24,979][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 14:41:24,997][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 14:41:25,404][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 14:41:25,406][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 14:41:25,406][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 14:41:25,407][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 14:44:52,217][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 14:44:52,235][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 14:44:52,570][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 14:44:52,572][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 14:44:52,573][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 14:44:52,573][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 14:45:04,512][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 14:45:04,534][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 14:45:05,123][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 14:45:05,125][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 14:45:05,126][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 14:45:05,126][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 14:52:55,606][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 14:52:55,624][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 14:52:56,053][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 14:52:56,055][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 14:52:56,056][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 14:52:56,057][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 15:16:30,409][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 15:16:30,428][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 15:16:30,688][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 15:16:30,690][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 15:16:30,690][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 15:16:30,691][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 15:23:48,744][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 15:23:48,762][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 15:23:49,061][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 15:23:49,063][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 15:23:49,064][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 15:23:49,065][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 17:03:28,995][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 17:03:29,014][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 17:03:29,490][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 17:03:29,493][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 17:03:29,494][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 17:03:29,495][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 17:12:47,531][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 17:12:47,553][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 17:12:47,978][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 17:12:47,981][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 17:12:47,981][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 17:12:47,982][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 17:44:03,266][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 17:44:03,285][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 17:44:03,574][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 17:44:03,577][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 17:44:03,577][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 17:44:03,578][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 18:12:48,281][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 18:12:48,300][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 18:12:48,611][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 18:12:48,613][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 18:12:48,613][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 18:12:48,614][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 18:22:54,747][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 18:22:54,766][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 18:22:55,061][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 18:22:55,063][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 18:22:55,063][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 18:22:55,064][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 19:11:12,527][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 19:11:12,548][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 19:11:12,892][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 19:11:12,895][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 19:11:12,896][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 19:11:12,897][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 19:40:37,500][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 19:40:37,519][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 19:40:37,831][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 19:40:37,834][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 19:40:37,834][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 19:40:37,835][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 19:49:19,050][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 19:49:19,070][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 19:49:19,392][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 19:49:19,395][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 19:49:19,396][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 19:49:19,397][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.
+[2016-08-15 20:03:04,689][INFO][MARSLocalStarter.Program:Main:32] MARS LIFE trying to start up.
+[2016-08-15 20:03:04,708][INFO][MARSLocalStarter.Program:Main:36] Initializing components and building application core...
+[2016-08-15 20:03:05,000][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Model folder './layers/addins' was altered. Reimporting models.
+[2016-08-15 20:03:05,003][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:UpdateModelList:0] Finished reimporting models. Informing listeners
+[2016-08-15 20:03:05,003][DEBUG][ModelContainer.Implementation.ModelManagementUseCase:.ctor:0] instantiated
+[2016-08-15 20:03:05,004][DEBUG][ModelContainer.Implementation.ModelInstantiationOrderingUseCase:.ctor:0] instantiated.

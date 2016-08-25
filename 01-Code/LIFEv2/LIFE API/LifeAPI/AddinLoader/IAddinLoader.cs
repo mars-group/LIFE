@@ -10,7 +10,7 @@ using LCConnector.TransportTypes.ModelStructure;
 //using Mono.Addins;
 // TODO: REIMPLEMENT!
 namespace LifeAPI.AddinLoader {
-  /*
+
     /// <summary>
     /// The AddinLoader used to load MARS LIFE models.
     /// </summary>
@@ -43,5 +43,5 @@ namespace LifeAPI.AddinLoader {
         /// <returns></returns>
         ExtensionNodeList LoadAllLayers(string modelName);
     }
-    */
+
 }
