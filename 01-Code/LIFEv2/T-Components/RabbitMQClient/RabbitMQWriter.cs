@@ -10,7 +10,6 @@ using System;
 using RabbitMQ.Client;
 using System.Text;
 using ConfigService;
-using System.Threading.Tasks;
 using CommonTypes;
 
 namespace RabbitMQClient

@@ -1,13 +1,31 @@
 ﻿{
-  "version": "1.0.0-*",
-
+  "version": "2.0.0-*",
+  "description": "LayerFactory allows to create layer instances by either using a local or remote reference.",
+  "copyright": "(c) 2016 - MARS Group",
+  "authors": [
+    "Christian Huening"
+  ],
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "LifeAPI": "2.0.0-*",
+    "LCConnector": "2.0.0-*",
+    "LayerRegistry": "2.0.0-*"
   },
-
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    },
+    "net46": {},
+    "netcoreapp1.0": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
+      }
     }
   }
 }

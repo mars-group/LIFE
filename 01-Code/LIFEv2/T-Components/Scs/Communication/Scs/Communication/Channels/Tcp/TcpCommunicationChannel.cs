@@ -202,7 +202,6 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
                 _maxNumberReadClients.WaitOne();
                 // Pop a SocketAsyncEventArgs object from the stack
                 var readEventArgs = _readPool.Pop();
-
                 // As soon as the client is connected, post a receive to the connection
                 var willRaiseEvent = _clientSocket.ReceiveAsync(readEventArgs);
                 if (!willRaiseEvent)

@@ -13,10 +13,12 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
+using CommonTypes.Types;
+
 
 namespace SimulationManagerShared
 {
-    using CommonTypes.Types;
+
 
     /// <summary>
     /// This class holds all local settings for the SimulationManager.
@@ -59,7 +61,7 @@ namespace SimulationManagerShared
             // Note that the lookup is not guaranteed to succeed, especially
             // if the system is misconfigured. On the other hand, if that
             // happens, you probably can't connect to the host by name, anyway.
-            var hostinfo = Dns.GetHostEntry(hostname);
+            var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
             // Step 3: Retrieve the canonical name.
             var fqdn = hostinfo.HostName;
             var smName = "SM-" + fqdn;
