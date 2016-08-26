@@ -8,19 +8,20 @@
 //  *******************************************************/
 using System.Linq;
 using LayerFactory.Interface;
+using LayerLoader.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
-using LifeAPI.AddinLoader;
 using LifeAPI.Layer;
+
 
 namespace LayerFactory.Implementation {
     internal class LayerFactoryUseCase : ILayerFactory {
         private readonly ILayerRegistry _layerRegistry;
-        private readonly IAddinLoader _addinLoader;
+        private readonly ILayerLoader _layerLoader;
 
         public LayerFactoryUseCase(ILayerRegistry layerRegistry) {
             _layerRegistry = layerRegistry;
-            _addinLoader = AddinLoader.Instance;
+            _layerLoader = new LayerLoader.Implementation.LayerLoader();
         }
 
         #region ILayerFactory Members
@@ -28,13 +29,16 @@ namespace LayerFactory.Implementation {
         public ILayer GetLayer(string layerName) {
             ILayer result;
 
-            var typeExtensionNode = _addinLoader.LoadLayer(layerName);
+            var layerTypeInfo = _layerLoader.LoadLayer(layerName);
 
-            var constructors = typeExtensionNode.Type.GetConstructors();
+            var constructors = layerTypeInfo.Constructors;
 
             // check if there is an empty constructor
             if (constructors.Any(c => c.GetParameters().Length == 0))
-                result = (ILayer) typeExtensionNode.CreateInstance();
+            {
+                var ctor = constructors.First(c => c.GetParameters().Length == 0);
+                result = (ILayer) ctor.Invoke(new object[0]);
+            }
             else {
                 // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
                 var currentConstructor = constructors[0];
@@ -55,7 +59,7 @@ namespace LayerFactory.Implementation {
         }
 
         public void LoadModelContent(ModelContent content) {
-            _addinLoader.LoadModelContent(content);
+            _layerLoader.LoadModelContent(content);
         }
 
         #endregion

@@ -16,10 +16,8 @@ using Ionic.Zip;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.AddinLoader;
 using LifeAPI.Config;
-using log4net;
 using MARS.Shuttle.SimulationConfig;
 using MARS.Shuttle.SimulationConfig.Interfaces;
-using Mono.Addins;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 

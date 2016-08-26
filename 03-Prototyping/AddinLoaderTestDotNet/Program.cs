@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,8 +11,6 @@ namespace AddinLoaderTestDotNet
     {
         public static void Main(string[] args)
         {
-
-            var asms = new List<Assembly>();
             foreach (var fileSystemInfo in new DirectoryInfo("./model").GetFileSystemInfos("*.dll"))
             {
                 var asl = new AssemblyLoader("./ model");
@@ -21,16 +18,23 @@ namespace AddinLoaderTestDotNet
                 
                 var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
 
-        	/*
-			 * Throws! :(
-			 * Try out assembly created with .NET Core, might be related to 
-			 * target framework for which the dll has been compiled
-        	 */
-                asm.GetTypes();
-                Console.WriteLine(asm.FullName);
-                asms.Add(asm);
-               
+
+                var agentSimResultType = asm.GetTypes().FirstOrDefault(t => t.FullName == "CommonTypes.TransportTypes.TSimModel");
+                if (agentSimResultType != null)
+                {
+                    var ctor = agentSimResultType.GetConstructors().First();
+                    foreach (var parameterInfo in ctor.GetParameters())
+                    {
+                        Console.WriteLine(parameterInfo.Name);
+                    }
+                    var simModel = ctor.Invoke(new object[] {"."});
+                    Console.WriteLine(simModel.GetType().FullName);
+
+                }
+
             }
+               
+            
 
             Console.ReadLine();
         }
@@ -40,11 +44,11 @@ namespace AddinLoaderTestDotNet
 
     public class AssemblyLoader : AssemblyLoadContext
     {
-        private string folderPath;
+        private readonly string _folderPath;
 
         public AssemblyLoader(string folderPath)
         {
-            this.folderPath = folderPath;
+            _folderPath = folderPath;
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
@@ -55,16 +59,12 @@ namespace AddinLoaderTestDotNet
             {
                 return Assembly.Load(new AssemblyName(res.First().Name));
             }
-            else
-            {
-                var apiApplicationFileInfo = new FileInfo($"{folderPath}{Path.DirectorySeparatorChar}{assemblyName.Name}.dll");
-                if (File.Exists(apiApplicationFileInfo.FullName))
-                {
-                    var asl = new AssemblyLoader(apiApplicationFileInfo.DirectoryName);
-                    return asl.LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
-                }
-            }
-            return Assembly.Load(assemblyName);
+            var apiApplicationFileInfo = new FileInfo($"{_folderPath}{Path.DirectorySeparatorChar}{assemblyName.Name}.dll");
+
+            if (!File.Exists(apiApplicationFileInfo.FullName)) return Assembly.Load(assemblyName);
+
+            var asl = new AssemblyLoader(apiApplicationFileInfo.DirectoryName);
+            return asl.LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
         }
     }
 
