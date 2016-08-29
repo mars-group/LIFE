@@ -25,7 +25,7 @@ namespace MARSLocalStarter {
 
 	private static void Main(string[] args)
 	{
-		XmlConfigurator.Configure();
+
 		Console.WriteLine("MARS LIFE trying to start up.");
 
 		try
