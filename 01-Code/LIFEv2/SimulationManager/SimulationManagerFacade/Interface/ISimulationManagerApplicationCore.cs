@@ -6,10 +6,9 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System.Collections.Generic;
+
 using LNSConnector.Interface;
 using SMConnector;
-using SMConnector.TransportTypes;
 
 namespace SimulationManagerFacade.Interface {
     /// <summary>

@@ -22,8 +22,6 @@ using SimulationManagerShared;
 using SimulationManagerWebservice;
 
 namespace SimulationManagerFacade.Implementation {
-    using CommonTypes.DataTypes;
-
     /// <summary>
     ///     This class represents the implementation of the simulation manager's application core.
     /// </summary>

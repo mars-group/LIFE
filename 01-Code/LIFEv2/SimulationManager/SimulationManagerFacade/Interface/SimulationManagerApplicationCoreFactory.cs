@@ -6,8 +6,8 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
-using AppSettingsManager;
 using Autofac;
+using ConfigurationAdapter;
 using ConfigurationAdapter.Interface;
 using LayerNameService.Implementation;
 using LNSConnector.Interface;
@@ -31,45 +31,44 @@ namespace SimulationManagerFacade.Interface {
         private static IContainer container;
 
         public static ISimulationManagerApplicationCore GetProductionApplicationCore(string clusterName = null) {
-            if (container == null) {
-                ContainerBuilder builder = new ContainerBuilder();
+            if (container != null) return container.Resolve<ISimulationManagerApplicationCore>();
+            var builder = new ContainerBuilder();
 
-                builder.RegisterType<ModelContainerComponent>()
-                    .As<IModelContainer>()
-                    .InstancePerLifetimeScope();
+            builder.RegisterType<ModelContainerComponent>()
+                .As<IModelContainer>()
+                .InstancePerLifetimeScope();
 
-                builder.RegisterType<RuntimeEnvironmentComponent>()
-                    .As<IRuntimeEnvironment>()
-                    .InstancePerLifetimeScope();
+            builder.RegisterType<RuntimeEnvironmentComponent>()
+                .As<IRuntimeEnvironment>()
+                .InstancePerLifetimeScope();
 
-                builder.RegisterType<NodeRegistryComponent>()
-                    .As<INodeRegistry>()
-                    .InstancePerLifetimeScope()
-                    .WithParameter(new TypedParameter(typeof(string), clusterName));
+            builder.RegisterType<NodeRegistryComponent>()
+                .As<INodeRegistry>()
+                .InstancePerLifetimeScope()
+                .WithParameter(new TypedParameter(typeof(string), clusterName));
 
-                builder.RegisterType<MulticastAdapterComponent>()
-                    .As<IMulticastAdapter>()
-                    .InstancePerLifetimeScope();
+            builder.RegisterType<MulticastAdapterComponent>()
+                .As<IMulticastAdapter>()
+                .InstancePerLifetimeScope();
 
-                builder.RegisterType<LayerNameServiceComponent>()
-                    .As<ILayerNameService>()
-                    .InstancePerLifetimeScope();
+            builder.RegisterType<LayerNameServiceComponent>()
+                .As<ILayerNameService>()
+                .InstancePerLifetimeScope();
 
-                builder.RegisterType<SimulationManagerApplicationCoreComponent>()
-                    .As<ISimulationManagerApplicationCore>()
-                    .InstancePerDependency();
+            builder.RegisterType<SimulationManagerApplicationCoreComponent>()
+                .As<ISimulationManagerApplicationCore>()
+                .InstancePerDependency();
 
-                // Make the configurations available for all components
-                GlobalConfig globalConfig = Configuration.Load<GlobalConfig>();
-                builder.RegisterInstance(globalConfig);
+            // Make the configurations available for all components
+            var globalConfig = Configuration.Load<GlobalConfig>();
+            builder.RegisterInstance(globalConfig);
 
-                SimulationManagerSettings localConfig = Configuration.Load<SimulationManagerSettings>();
-                builder.RegisterInstance(localConfig);
-                builder.RegisterInstance(localConfig.NodeRegistryConfig);
-                builder.RegisterInstance(localConfig.MulticastSenderConfig);
+            var localConfig = Configuration.Load<SimulationManagerSettings>();
+            builder.RegisterInstance(localConfig);
+            builder.RegisterInstance(localConfig.NodeRegistryConfig);
+            builder.RegisterInstance(localConfig.MulticastSenderConfig);
 
-                container = builder.Build();
-            }
+            container = builder.Build();
 
             return container.Resolve<ISimulationManagerApplicationCore>();
         }

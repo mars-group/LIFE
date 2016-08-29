@@ -13,8 +13,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -172,9 +172,7 @@ namespace Mono.Options
 				throw new ArgumentOutOfRangeException ("index");
 			if (c.Option.OptionValueType == OptionValueType.Required &&
 					index >= values.Count)
-				throw new OptionException (string.Format (
-							c.OptionSet.MessageLocalizer ("Missing required value for option '{0}'."), c.OptionName), 
-						c.OptionName);
+				throw new OptionException ($"Missing required value for option '{c.OptionName}'.", c.OptionName);
 		}
 
 		public string this [int index] {
@@ -327,8 +325,8 @@ namespace Mono.Options
 		protected static T Parse<T> (string value, OptionContext c)
 		{
 			Type tt = typeof (T);
-			bool nullable = tt.IsValueType && tt.IsGenericType && 
-				!tt.IsGenericTypeDefinition && 
+			bool nullable = tt.GetTypeInfo().IsValueType && tt.GetTypeInfo().IsGenericType && 
+				!tt.GetTypeInfo().IsGenericTypeDefinition && 
 				tt.GetGenericTypeDefinition () == typeof (Nullable<>);
 			Type targetType = nullable ? tt.GetGenericArguments () [0] : typeof (T);
 			TypeConverter conv = TypeDescriptor.GetConverter (targetType);
@@ -338,10 +336,7 @@ namespace Mono.Options
 					t = (T) conv.ConvertFromString (value);
 			}
 			catch (Exception e) {
-				throw new OptionException (
-						string.Format (
-							c.OptionSet.MessageLocalizer ("Could not convert string `{0}' to type {1} for option `{2}'."),
-							value, targetType.Name, c.OptionName),
+				throw new OptionException ($"Could not convert string `{value}' to type {targetType.Name} for option `{c.OptionName}'.",
 						c.OptionName, e);
 			}
 			return t;
@@ -500,7 +495,7 @@ namespace Mono.Options
 			}
 			finally {
 				if (close)
-					reader.Close ();
+					reader.Dispose();
 			}
 		}
 	}
@@ -527,7 +522,6 @@ namespace Mono.Options
 		}
 	}
 
-	[Serializable]
 	public class OptionException : Exception {
 		private string option;
 
@@ -547,21 +541,10 @@ namespace Mono.Options
 			this.option = optionName;
 		}
 
-		protected OptionException (SerializationInfo info, StreamingContext context)
-			: base (info, context)
-		{
-			this.option = info.GetString ("OptionName");
-		}
+
 
 		public string OptionName {
 			get {return this.option;}
-		}
-
-		[SecurityPermission (SecurityAction.LinkDemand, SerializationFormatter = true)]
-		public override void GetObjectData (SerializationInfo info, StreamingContext context)
-		{
-			base.GetObjectData (info, context);
-			info.AddValue ("OptionName", option);
 		}
 	}
 
@@ -569,22 +552,14 @@ namespace Mono.Options
 
 	public class OptionSet : KeyedCollection<string, Option>
 	{
-		public OptionSet ()
-			: this (delegate (string f) {return f;})
-		{
-		}
 
-		public OptionSet (Converter<string, string> localizer)
+
+		public OptionSet ()
 		{
-			this.localizer = localizer;
 			this.roSources = new ReadOnlyCollection<ArgumentSource>(sources);
 		}
 
-		Converter<string, string> localizer;
 
-		public Converter<string, string> MessageLocalizer {
-			get {return localizer;}
-		}
 
 		List<ArgumentSource> sources = new List<ArgumentSource> ();
 		ReadOnlyCollection<ArgumentSource> roSources;
@@ -978,9 +953,7 @@ namespace Mono.Options
 					c.Option.OptionValueType == OptionValueType.Optional)
 				c.Option.Invoke (c);
 			else if (c.OptionValues.Count > c.Option.MaxValueCount) {
-				throw new OptionException (localizer (string.Format (
-								"Error: Found {0} option values when expecting {1}.", 
-								c.OptionValues.Count, c.Option.MaxValueCount)),
+				throw new OptionException ($"Error: Found {c.OptionValues.Count} option values when expecting {c.Option.MaxValueCount}.",
 						c.OptionName);
 			}
 		}
@@ -1013,8 +986,7 @@ namespace Mono.Options
 				if (!Contains (rn)) {
 					if (i == 0)
 						return false;
-					throw new OptionException (string.Format (localizer (
-									"Cannot use unregistered option '{0}' in bundle '{1}'."), rn, f + n), null);
+					throw new OptionException($"Cannot use unregistered option '{rn}' in bundle '{f+n}'.", null);
 				}
 				p = this [rn];
 				switch (p.OptionValueType) {
@@ -1105,7 +1077,7 @@ namespace Mono.Options
 		void WriteDescription (TextWriter o, string value, string prefix, int firstWidth, int remWidth)
 		{
 			bool indent = false;
-			foreach (string line in GetLines (localizer (GetDescription (value)), firstWidth, remWidth)) {
+			foreach (string line in GetLines (GetDescription (value), firstWidth, remWidth)) {
 				if (indent)
 					o.Write (prefix);
 				o.WriteLine (line);
@@ -1140,17 +1112,17 @@ namespace Mono.Options
 			if (p.OptionValueType == OptionValueType.Optional ||
 					p.OptionValueType == OptionValueType.Required) {
 				if (p.OptionValueType == OptionValueType.Optional) {
-					Write (o, ref written, localizer ("["));
+					Write (o, ref written, ("["));
 				}
-				Write (o, ref written, localizer ("=" + GetArgumentName (0, p.MaxValueCount, p.Description)));
+				Write (o, ref written, "=" + GetArgumentName (0, p.MaxValueCount, p.Description));
 				string sep = p.ValueSeparators != null && p.ValueSeparators.Length > 0 
 					? p.ValueSeparators [0]
 					: " ";
 				for (int c = 1; c < p.MaxValueCount; ++c) {
-					Write (o, ref written, localizer (sep + GetArgumentName (c, p.MaxValueCount, p.Description)));
+					Write (o, ref written, sep + GetArgumentName (c, p.MaxValueCount, p.Description));
 				}
 				if (p.OptionValueType == OptionValueType.Optional) {
-					Write (o, ref written, localizer ("]"));
+					Write (o, ref written, "]");
 				}
 			}
 			return true;

@@ -7,20 +7,14 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
 using System;
-using System.IO;
-using log4net;
-using log4net.Config;
 using SimulationManagerFacade.Interface;
 using System.Linq;
 using Mono.Options;
-using SMConnector.TransportTypes;
 
 namespace SimulationManager
 {
     internal class SimulationManagerStarter
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(SimulationManagerStarter));
-
         private static void ShowHelp(String message, OptionSet optionSet, bool exitWithError)
         {
             Console.WriteLine(message);
@@ -176,7 +170,7 @@ namespace SimulationManager
         private static void Main(string[] args)
         {
 
-            Logger.Info("SimulationManager trying to start up.");
+            Console.WriteLine("SimulationManager trying to start up.");
 
             try
             {
@@ -184,7 +178,7 @@ namespace SimulationManager
 
                 ISimulationManagerApplicationCore core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
 
-                Logger.Info("SimulationManager successfully started.");
+                Console.WriteLine("SimulationManager successfully started.");
 
                 Console.WriteLine("SimulationManager up and running. Press 'q' to quit.");
 
@@ -198,15 +192,12 @@ namespace SimulationManager
             }
             catch (Exception exception)
             {
-                Logger.Fatal("SimulationManager crashed fatally. Exception:\n {0}", exception);
+                Console.Error.WriteLine("SimulationManager crashed fatally. Exception:\n {0}", exception);
 				throw;
             }
 
 
-            Logger.Info("SimulationController shutting down.");
-
-            // This will shutdown the log4net system
-            LogManager.Shutdown();
+           Console.WriteLine("SimulationController shutting down.");
         }
     }
 }
