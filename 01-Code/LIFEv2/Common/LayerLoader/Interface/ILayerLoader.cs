@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using LayerLoader.Implementation;
 using LCConnector.TransportTypes.ModelStructure;
 
@@ -15,10 +15,16 @@ namespace LayerLoader.Interface
         void LoadModelContent(ModelContent modelContent);
 
         /// <summary>
-        ///     Loads a Layer by the given name and returns its TypeExtensionNode object.
+        ///     Loads a Layer by the given name and returns its LayerTypeInfo object.
         /// </summary>
         /// <param name="layerName">The name of the layer. Must be the name of the implementing class.</param>
         /// <returns>A Type object for the layer to load. Allows to reflect over its dependencies</returns>
-        LayerTypeInfo LoadLayer(string layerName);
+        LayerTypeInfo LoadLayerOnLayerContainer(string layerName);
+
+        /// <summary>
+        /// Loads all layers and returns a list of LayerTypeInfos
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<LayerTypeInfo> LoadAllLayersForModel(string modelName);
     }
 }

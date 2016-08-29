@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
-using MARS.Shuttle.SimulationConfig;
+using MARS.Shuttle.SimulationConfig.Interfaces;
 using SMConnector.TransportTypes;
 
 namespace ModelContainer.Interfaces {
@@ -84,14 +84,5 @@ namespace ModelContainer.Interfaces {
         /// <param name="model">not null</param>
         /// <returns>empty, if no </returns>
         IList<TLayerDescription> GetInstantiationOrder(TModelDescription model);
-
-        /// <summary>
-        ///     Adds a Model from a URL.
-        ///     Will therefore download the specified file from the URL,
-        ///     unzip it to the addins directory and add it to the registry
-        /// </summary>
-        /// <param name="sourceUrl"></param>
-        /// <returns></returns>
-        void AddModelFromURL(string sourceUrl);
     }
 }

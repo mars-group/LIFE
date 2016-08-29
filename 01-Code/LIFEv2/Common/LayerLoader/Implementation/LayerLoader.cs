@@ -12,13 +12,13 @@ namespace LayerLoader.Implementation
 {
     public class LayerLoader : ILayerLoader
     {
-        private readonly List<Type> _layerTypes = new List<Type>();
+        private readonly Dictionary<string, List<Type>> _layerTypes = new Dictionary<string, List<Type>>();
 
         public void LoadModelContent(ModelContent modelContent)
         {
             //write files
             modelContent.Write("./models/tmp");
-
+            
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo("./model/tmp").GetFileSystemInfos("*.dll"))
             {
@@ -26,13 +26,18 @@ namespace LayerLoader.Implementation
 
                 var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
 
-                _layerTypes.AddRange(asm.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ILayer))));
+                _layerTypes.Add("tmp", asm.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ILayer))).ToList());
             }
         }
 
-        public LayerTypeInfo LoadLayer(string layerName)
+        public LayerTypeInfo LoadLayerOnLayerContainer(string layerName)
         {
-            var layerType = _layerTypes.FirstOrDefault(t => t.Name == layerName);
+            if (!_layerTypes.ContainsKey("tmp"))
+            {
+                throw new ModelCodeFailedToLoadException("It appears there was no valid mode code found in the ./models/tmp subdirectory. Please check!");
+            }
+
+            var layerType = _layerTypes["tmp"].FirstOrDefault(t => t.Name == layerName);
             if (layerType == null)
             {
                 throw new LayerNotFoundException($"A Layer with Name {layerName} could not be found");
@@ -45,6 +50,15 @@ namespace LayerLoader.Implementation
             }
 
             return new LayerTypeInfo(layerType, ctors);
+        }
+
+        public IEnumerable<LayerTypeInfo> LoadAllLayersForModel(string modelName)
+        {
+            if (!_layerTypes.ContainsKey(modelName))
+            {
+                throw new ModelCodeFailedToLoadException($"It appears there was no valid mode code found in the ./models/{modelName} subdirectory. Please check your build config etc.!");
+            }
+            return _layerTypes[modelName].Select(l => new LayerTypeInfo(l, l.GetConstructors()));
         }
     }
 }

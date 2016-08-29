@@ -29,7 +29,7 @@ namespace LayerFactory.Implementation {
         public ILayer GetLayer(string layerName) {
             ILayer result;
 
-            var layerTypeInfo = _layerLoader.LoadLayer(layerName);
+            var layerTypeInfo = _layerLoader.LoadLayerOnLayerContainer(layerName);
 
             var constructors = layerTypeInfo.Constructors;
 

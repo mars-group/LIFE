@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using LCConnector.TransportTypes;
 
 namespace ModelContainer.Implementation.Entities {
@@ -48,7 +49,7 @@ namespace ModelContainer.Implementation.Entities {
         /// </summary>
         /// <param name="newNode"></param>
         public void UpdateEdges(ModelNode newNode) {
-            if (Dependencies.Any(d => d.IsAssignableFrom(newNode.Layer))) _edges.Add(newNode);
+            if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer))) _edges.Add(newNode);
         }
 
         public override bool Equals(object obj) {

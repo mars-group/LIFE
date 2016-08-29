@@ -11,14 +11,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using LayerLoader.Interface;
 using LCConnector.TransportTypes;
-using LifeAPI.AddinLoader;
 using ModelContainer.Implementation.Entities;
-using Mono.Addins;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 
-[assembly: AddinRoot("LayerContainer", "0.1")]
 
 namespace ModelContainer.Implementation {
     /// <summary>
@@ -48,19 +46,19 @@ namespace ModelContainer.Implementation {
 
             // use AddinLoader from LIFEApi, because Mono.Addins may only load Plugins whose 
             // Interfaces originate from the Assembly they are attempted to be loaded from
-            IAddinLoader addinLoader = AddinLoader.Instance;
+            ILayerLoader addinLoader = new LayerLoader.Implementation.LayerLoader();
 
-            ExtensionNodeList nodes = addinLoader.LoadAllLayers(description.Name);
+            var nodes = addinLoader.LoadAllLayersForModel(description.Name);
 
             ModelStructure modelStructure = new ModelStructure();
 
-            foreach (TypeExtensionNode node in nodes) {
-                Type type = node.Type;
+            foreach (var node in nodes) {
+                Type type = node.LayerType;
                 ConstructorInfo[] constructors = type.GetConstructors();
                 // make sure all parameters in all constructors are Interfaces, throw exception otherwise
                 if (
                     constructors.Any(
-                        info => info.GetParameters().Any(parameterInfo => !parameterInfo.ParameterType.IsInterface)))
+                        info => info.GetParameters().Any(parameterInfo => !parameterInfo.ParameterType.GetTypeInfo().IsInterface)))
                 {
                     throw new AllLayerConstructorParamtersNeedToBeInterfacesException(
                         "Make sure all your parameters in your Layer's constructor are interface types." +
@@ -69,9 +67,9 @@ namespace ModelContainer.Implementation {
                 }
                 TLayerDescription layerDescription = new TLayerDescription
                     (type.Name,
-                        type.Assembly.GetName().Version.Major,
-                        type.Assembly.GetName().Version.Minor,
-                        type.Assembly.Location,
+                        type.GetTypeInfo().Assembly.GetName().Version.Major,
+                        type.GetTypeInfo().Assembly.GetName().Version.Minor,
+                        type.GetTypeInfo().Assembly.Location,
                         type.FullName,
                         type.AssemblyQualifiedName);
 

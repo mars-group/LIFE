@@ -9,17 +9,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using ConfigurationAdapter.Interface;
-using Ionic.Zip;
 using LCConnector.TransportTypes.ModelStructure;
-using LifeAPI.AddinLoader;
 using LifeAPI.Config;
-using MARS.Shuttle.SimulationConfig;
 using MARS.Shuttle.SimulationConfig.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
+using System.Linq;
 
 namespace ModelContainer.Implementation
 {
@@ -28,7 +24,6 @@ namespace ModelContainer.Implementation
     ///     watching for changes, serialization for transport and so on.
     /// </summary>
     internal class ModelManagementUseCase {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (ModelManagementUseCase));
         private readonly SimulationManagerSettings _settings;
         private IDictionary<TModelDescription, string> _models;
         private FileSystemWatcher _systemWatcher;
@@ -55,8 +50,6 @@ namespace ModelContainer.Implementation
             //Reload model folder contents if file system has changed. (Also of course once, initially)
             _systemWatcher.Changed += UpdateModelList;
             UpdateModelList(null, null);
-
-            Logger.Debug("instantiated");
         }
 
         public void RegisterForModelListChange(Action callback) {
@@ -80,29 +73,17 @@ namespace ModelContainer.Implementation
             return new TModelDescription(tmp[tmp.Length - 1]);
         }
 
-        public void AddModelFromURL(string sourceUrl) {
-            WebClient webClient = new WebClient();
-            string targetFileName = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + "tmp.zip";
-            webClient.DownloadFile(sourceUrl, targetFileName);
-            ZipFile zip = new ZipFile(targetFileName);
-            zip.ExtractAll(".");
-        }
 
         public void DeleteModel(TModelDescription model) {
-            Logger.Debug("DeleteModel called");
             string path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
             if (!Directory.Exists(path)) Directory.Delete(path, true);
             _models.Remove(model);
-
-            Logger.Debug("Deleting model directory '" + path + "' succeeded.");
         }
 
         /// <summary>
         ///     Recreates the _models list according to the contents in the specified model folder.
         /// </summary>
         private void UpdateModelList(object sender, FileSystemEventArgs fileSystemEventArgs) {
-            Logger.Debug("Model folder '" + _settings.ModelDirectoryPath + "' was altered. Reimporting models.");
-
             //remove old data
             _models.Clear();
 
@@ -114,13 +95,13 @@ namespace ModelContainer.Implementation
                     _models.Add(new TModelDescription(path[path.Length - 1]), folder);
                 }
                 catch (Exception exception) {
-                    Logger.Error
-                        (string.Format
+                    Console.Error.WriteLine(
+                        string.Format
                             ("An error occurred while reading the model in '{0}'. Error: \n{1}", folder, exception));
                 }
             }
 
-            Logger.Debug("Finished reimporting models. Informing listeners");
+            Console.WriteLine("Finished reimporting models. Informing listeners");
             foreach (Action listener in _listeners) {
                 listener();
             }
@@ -151,9 +132,9 @@ namespace ModelContainer.Implementation
             }
 
             // config does not exist, create the default one
-            var addinLoader = AddinLoader.Instance;
-            var nodes = addinLoader.LoadAllLayers(model.Name);
-            var layerConfigs = nodes.Cast<TypeExtensionNode>().Select(node => new LayerConfig(node.Type.Name, DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>())).ToList();
+            var addinLoader = new LayerLoader.Implementation.LayerLoader();
+            var nodes = addinLoader.LoadAllLayersForModel(model.Name);
+            var layerConfigs = nodes.Select(node => new LayerConfig(node.LayerType.Name, DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>())).ToList();
             var mc = new ModelConfig(layerConfigs);
             Configuration.Save(mc, path);
             return mc;

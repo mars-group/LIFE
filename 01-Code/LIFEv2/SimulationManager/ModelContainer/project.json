@@ -8,7 +8,12 @@
   "dependencies": {
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
-    "MARS.Shuttle.SimulationConfig": "2.0.0-8"
+    "LayerLoader": "2.0.0-*",
+    "MARS.Shuttle.SimulationConfig": "2.0.0-8",
+    "ConfigurationAdapter": "2.0.0-*",
+    "SimulationManagerShared": "2.0.0-*",
+    "SMConnector": "2.0.0-*",
+    "System.IO.FileSystem.Watcher": "4.0.0"
   },
   "frameworks": {
     "netstandard1.6": {
@@ -17,7 +22,6 @@
         "NETStandard.Library": "1.6.0"
       }
     },
-    "net46": {},
     "netcoreapp1.0": {
       "imports": "dnxcore50",
       "dependencies": {

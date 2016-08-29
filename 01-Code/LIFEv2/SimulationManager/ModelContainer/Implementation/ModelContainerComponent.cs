@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
-using MARS.Shuttle.SimulationConfig;
+using MARS.Shuttle.SimulationConfig.Interfaces;
 using ModelContainer.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
@@ -61,9 +61,6 @@ namespace ModelContainer.Implementation {
             return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);
         }
 
-        public void AddModelFromURL(string sourceUrl) {
-            _modelContainerUseCase.AddModelFromURL(sourceUrl);
-        }
 
         #endregion
     }
