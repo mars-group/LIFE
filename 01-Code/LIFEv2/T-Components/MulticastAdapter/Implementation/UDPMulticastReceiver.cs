@@ -22,7 +22,7 @@ namespace MulticastAdapter.Implementation
     {
         private readonly IPAddress _mcastAddress;
 		private UdpClient _receiverClient;
-        private readonly int _listenPort;
+        private int _listenPort;
         private readonly GlobalConfig _generalSettings;
         
         public UDPMulticastReceiver(IPAddress mCastAdr, int listenPort, int ipVersion = 4)
@@ -49,7 +49,7 @@ namespace MulticastAdapter.Implementation
 			foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces()) {
 				foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses) {
 					if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily ((IPVersionType)_generalSettings.IPVersion)) {
-						_receiverClient.JoinMulticastGroup (_mcastAddress, unicastAddr.Address);
+                        _receiverClient.JoinMulticastGroup (_mcastAddress, unicastAddr.Address);
 					}
 				}
 
@@ -74,12 +74,27 @@ namespace MulticastAdapter.Implementation
             var udpClient = new UdpClient();
 
             // allow another client to bind to this port
-            //udpClient.ExclusiveAddressUse = false;
-
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
-            
+
             return udpClient;
+
+            /* Alternative implementation incrementing listening port 
+            try
+            {
+                return new UdpClient(new IPEndPoint(listenAddress, _listenPort));
+            }
+            catch (SocketException socketException)
+            {
+                //if sending port is already in use increment port and try again.
+                if (socketException.SocketErrorCode != SocketError.AddressAlreadyInUse) throw;
+                _listenPort = _listenPort + 1;
+                return GetClient();
+            }
+            */
+            // allow another client to bind to this port
+            //udpClient.ExclusiveAddressUse = false;
+
         }
 
         internal UdpClient GetSocket()
@@ -92,18 +107,9 @@ namespace MulticastAdapter.Implementation
         ///     soon as one message has arrived (blocking).
         /// </summary>
         /// <returns> the written bytestream</returns>
-        public byte[] readMulticastGroupMessage()
+        public byte[] ReadMulticastGroupMessage()
         {
-            IPEndPoint sourceEndPoint;
             byte[] msg = { };
-
-			// check for IP Version and initialize sourceEndPoint accordingly
-			if (MulticastNetworkUtils.GetAddressFamily ((IPVersionType)_generalSettings.IPVersion) == AddressFamily.InterNetworkV6) {
-				sourceEndPoint = new IPEndPoint (IPAddress.IPv6Any, 0);
-			} else {
-				sourceEndPoint = new IPEndPoint (IPAddress.Any, 0);
-
-			}
 
 			while (msg.Length <= 0) {
 				try
@@ -112,7 +118,7 @@ namespace MulticastAdapter.Implementation
 				    {
 				        var recTask = _receiverClient.ReceiveAsync();
 				        msg = recTask.Result.Buffer;
-				    } //.Receive(ref sourceEndPoint);
+				    }
 				}
 				catch(ObjectDisposedException expo){
 					_receiverClient = GetClient ();
@@ -120,7 +126,7 @@ namespace MulticastAdapter.Implementation
 				}
 				catch (SocketException ex)
 				{
-					//_receiverClient.Close ();
+					_receiverClient.Dispose();
 					if (ex.SocketErrorCode != SocketError.Interrupted && ex.SocketErrorCode != SocketError.TimedOut) throw;
 				}
 			}

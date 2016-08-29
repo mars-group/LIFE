@@ -6,6 +6,8 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
+using System;
 using System.Text;
 using CommonTypes.DataTypes;
 using Newtonsoft.Json;
@@ -15,7 +17,6 @@ namespace NodeRegistry.Implementation.Messages.Factory {
         public static byte[] GetJoinMessage(TNodeInformation information, string localAddress, string clusterName) {
 
             var json = JsonConvert.SerializeObject(new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Join, information, localAddress, clusterName));
-
             return Encoding.UTF8.GetBytes(json);
         }
 

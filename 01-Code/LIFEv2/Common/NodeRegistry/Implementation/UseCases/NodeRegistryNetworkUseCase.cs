@@ -59,21 +59,23 @@ namespace NodeRegistry.Implementation.UseCases {
 
                 while (!ct.IsCancellationRequested)
                 {
-                    byte[] msg = _multicastAdapter.readMulticastGroupMessage();
-
+                    var msg = _multicastAdapter.ReadMulticastGroupMessage();
 
                     if (msg.Length <= 0) continue;
 
+                    var msgString = Encoding.UTF8.GetString(msg);
+                    Console.WriteLine($"Msg is: {msgString}");
                     var nodeRegistryMessage =
-                        JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(Encoding.UTF8.GetString(msg));
+                        JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(msgString);
 
                     // check whether the message belongs to our cluster, if not throw away
                     if (nodeRegistryMessage.ClusterName != null &&
                         nodeRegistryMessage.ClusterName != _clusterName)
                     {
+                        Console.WriteLine($"Throwing away. Own clustername was{_clusterName}, received name was {nodeRegistryMessage.ClusterName}");
                         continue;
                     }
-
+                    Console.WriteLine($"Got message! {nodeRegistryMessage.MessageType} was the type");
                     // message is ok, so compute
                     ComputeMessage(nodeRegistryMessage);
                 }
@@ -99,12 +101,6 @@ namespace NodeRegistry.Implementation.UseCases {
         public void Shutdown() {
             _tokenSource.Cancel();
         }
-
-        private void Listen() {
-
-
-			
-		}
 
         private void ComputeMessage(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {
             if (nodeRegistryConnectionInfoMessage == null) {

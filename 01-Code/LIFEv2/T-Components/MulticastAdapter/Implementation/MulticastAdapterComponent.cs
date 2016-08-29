@@ -41,9 +41,9 @@ namespace MulticastAdapter.Implementation
 
         #endregion
 
-        public byte[] readMulticastGroupMessage()
+        public byte[] ReadMulticastGroupMessage()
         {
-            return _reciever.readMulticastGroupMessage();
+            return _reciever.ReadMulticastGroupMessage();
         }
 
         public void SendMessageToMulticastGroup(byte[] msg)

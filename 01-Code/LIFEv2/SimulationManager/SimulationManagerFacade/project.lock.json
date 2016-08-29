@@ -2463,7 +2463,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v1.0",
         "dependencies": {
-          "Microsoft.NETCore.App": "1.0.0"
+          "Microsoft.NETCore.App": "1.0.0",
+          "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
           "netcoreapp1.0/CommonTypes.dll": {}
@@ -4531,7 +4532,8 @@
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
-          "NETStandard.Library": "1.6.0"
+          "NETStandard.Library": "1.6.0",
+          "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
           "netstandard1.6/CommonTypes.dll": {}

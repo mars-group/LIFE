@@ -6,15 +6,9 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using CommonTypes.DataTypes;
-using CommonTypes.Types;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace NodeRegistry.Implementation.Messages
 {
@@ -22,6 +16,7 @@ namespace NodeRegistry.Implementation.Messages
     public abstract class AbstractNodeRegistryMessage
     {
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public NodeRegistryMessageType MessageType;
 
 

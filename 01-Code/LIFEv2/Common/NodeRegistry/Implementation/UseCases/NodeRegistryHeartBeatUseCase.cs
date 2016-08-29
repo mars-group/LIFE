@@ -60,7 +60,8 @@ namespace NodeRegistry.Implementation.UseCases
 
             _heartBeatTimers = new ConcurrentDictionary<TNodeInformation, Timer>();
             var autoEvent = new AutoResetEvent(false);
-            _heartBeatSenderTimer = new Timer(SendHeartBeat, autoEvent, 0, _heartBeatInterval);
+           
+            _heartBeatSenderTimer = new Timer(SendHeartBeat, autoEvent, _heartBeatInterval, _heartBeatInterval);
         }
 
 
