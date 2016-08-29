@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using CommonTypes;
@@ -20,9 +21,8 @@ using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
-using LifeAPI.Layer.GIS;
 using LifeAPI.Layer.TimeSeries;
-using MARS.Shuttle.SimulationConfig;
+using MARS.Shuttle.SimulationConfig.Interfaces;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
@@ -269,8 +269,10 @@ namespace RuntimeEnvironment.Implementation
 
 					// check if the current layer is a GIS Layer
 					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-					var interfaces = layerType.GetInterfaces();
-					if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
+					var interfaces = layerType.GetTypeInfo().GetInterfaces();
+
+                    // TODO: Maybe reimplement some day with new GIS Library
+					/*if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
 					{
 						var gisInfo = gisLayerSourceEnumerator.Current;
 						initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
@@ -288,7 +290,8 @@ namespace RuntimeEnvironment.Implementation
 						}
 
 					}
-					else if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
+					else*/ 
+                    if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
 					{
 						var tsInfo = timeSeriesSourceEnumerator.Current;
 						initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
@@ -345,7 +348,8 @@ namespace RuntimeEnvironment.Implementation
 					// check if the current layer is a GIS Layer
 					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
 					var interfaces = layerType.GetInterfaces();
-					if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
+                    /*
+                    if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
 					{
 						var gisInfo = gisLayerSourceEnumerator.Current;
 						initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
@@ -354,7 +358,9 @@ namespace RuntimeEnvironment.Implementation
 							thereAreGisLayers = false;
 						}
 					}
-					else if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
+					else 
+                    */
+                    if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
 					{
 						var tsInfo = timeSeriesSourceEnumerator.Current;
 						initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
