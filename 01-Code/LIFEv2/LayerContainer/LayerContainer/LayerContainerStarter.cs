@@ -8,23 +8,21 @@
 //  *******************************************************/
 using System;
 using LayerContainerFacade.Interfaces;
-using log4net;
 
 namespace LayerContainer {
     public class LayerContainerStarter {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (LayerContainerStarter));
 
 
 
         private static void Main(string[] args) {
 
-                Logger.Info("LayerContainer trying to startup.");
+                Console.WriteLine("LayerContainer trying to startup.");
                 try {
-                    Logger.Info("Initializing components and building application core...");
+                    Console.WriteLine("Initializing components and building application core...");
 
                     ILayerContainerFacade _facade = LayerContainerApplicationCoreFactory.GetLayerContainerFacade();
 
-                    Logger.Info("LayerContainer successfully started.");
+                    Console.WriteLine("LayerContainer successfully started.");
 
                     Console.WriteLine("LayerContainer up and running. Press 'q' to quit.");
 
@@ -35,14 +33,12 @@ namespace LayerContainer {
 
                 }
                 catch (Exception exception) {
-                    Logger.Fatal("LayerContainer crashed fatally. Exception:\n {0}. Restarting LayerContainer...", exception);
+                    Console.Error.WriteLine("LayerContainer crashed fatally. Exception:\n {0}. Restarting LayerContainer...", exception);
                 }
 
-    
-            Logger.Info("LayerContainer shutting down.");
 
-            // This will shutdown the log4net system
-            LogManager.Shutdown();
+            Console.WriteLine("LayerContainer shutting down.");
+
             Console.ReadKey();
         }
     }

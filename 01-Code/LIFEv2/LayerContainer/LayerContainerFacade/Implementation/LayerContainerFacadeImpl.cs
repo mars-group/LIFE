@@ -36,7 +36,6 @@ namespace LayerContainerFacade.Implementation {
                 IRTEManager rteManager,
                 IResultAdapter resultAdapter) {
 
-            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolverFix.HandleAssemblyResolve;
             _partitionManager = partitionManager;
             _rteManager = rteManager;
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
@@ -81,13 +80,4 @@ namespace LayerContainerFacade.Implementation {
 
 	}
 
-    public static class AssemblyResolverFix
-    {
-        //Looks up the assembly in the set of currently loaded assemblies,
-        //and returns it if the name matches. Else returns null.
-        public static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(ass => ass.FullName == args.Name);
-        }
-    }
 }

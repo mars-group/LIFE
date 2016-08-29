@@ -32,6 +32,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../T-Components/RabbitMQClient" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../T-Components/Scs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../global.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Common/LayerLoader" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

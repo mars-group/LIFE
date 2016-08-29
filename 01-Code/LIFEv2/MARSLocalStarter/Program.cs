@@ -9,8 +9,6 @@
 
 using System;
 using System.Linq;
-using log4net;
-using log4net.Config;
 using LayerContainerFacade.Interfaces;
 using Mono.Options;
 using SimulationManagerFacade.Interface;
@@ -20,7 +18,6 @@ using CommonTypes;
 namespace MARSLocalStarter {
 
   public class Program {
-    private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
     private static TModelDescription _chosenModel;
     private static ISimulationManagerApplicationCore simCore;
@@ -29,11 +26,11 @@ namespace MARSLocalStarter {
 	private static void Main(string[] args)
 	{
 		XmlConfigurator.Configure();
-		Logger.Info("MARS LIFE trying to start up.");
+		Console.WriteLine("MARS LIFE trying to start up.");
 
 		try
 		{
-			Logger.Info("Initializing components and building application core...");
+			Console.WriteLine("Initializing components and building application core...");
 
 
 
@@ -41,34 +38,23 @@ namespace MARSLocalStarter {
 			// parse for any given parameters and act accordingly
 			ParseArgsAndStart(args);
 
-			Logger.Info("MARS LIFE up and running...");
+			Console.WriteLine("MARS LIFE up and running...");
 
 			simCore.WaitForSimulationToFinish(_chosenModel);
 		}
 		catch (Exception exception)
 		{
-			Logger.FatalFormat("MARS LIFE crashed fatally. Exception:\n {0}.\n InnerException:\n {1}", exception,
-			  exception.InnerException);
+			Console.Error.WriteLine($"MARS LIFE crashed fatally. Exception:\n {exception}.\n InnerException:\n {exception.InnerException}");
 
-			//Get log file
-			/*var rootAppender = ((Hierarchy)LogManager.GetRepository())
-						.Root.Appenders.OfType<FileAppender>()
-						.FirstOrDefault();
-					var filename = rootAppender != null ? rootAppender.File : string.Empty;*/
-			LogManager.Shutdown();
-
-            //Report error to jira
-            //JiraErrorReporter.ReportError(filename, exception);
 
             Console.Error.WriteLine($"MARS LIFE crashed with an error. Error was: {exception.Message}");
             Environment.Exit(1);
             }
 
 
-		Logger.Info("MARS LIFE shutting down.");
+		Console.WriteLine("MARS LIFE shutting down.");
 
-		// This will shutdown the log4net system
-		LogManager.Shutdown();
+
 		Environment.Exit(0);
 	}
 
@@ -130,10 +116,10 @@ namespace MARSLocalStarter {
 
             // initialize basic services
             simCore = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore(clusterName);
-            Logger.Info("SimulationManager successfully started.");
+            Console.WriteLine("SimulationManager successfully started.");
 
             layerContainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade(clusterName);
-            Logger.Info("LayerContainer successfully started.");
+            Console.WriteLine("LayerContainer successfully started.");
 
 			if (listModels)
 			{
