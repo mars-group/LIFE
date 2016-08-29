@@ -74,7 +74,7 @@ namespace MulticastAdapter.Implementation
             var udpClient = new UdpClient();
 
             // allow another client to bind to this port
-            udpClient.ExclusiveAddressUse = false;
+            //udpClient.ExclusiveAddressUse = false;
 
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
