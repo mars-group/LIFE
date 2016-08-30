@@ -22,7 +22,7 @@ namespace NodeRegistry.Implementation.UseCases {
 
     internal class NodeRegistryNetworkUseCase {
         private readonly TNodeInformation _localNodeInformation;
-        private readonly NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUse;
+        private readonly NodeRegistryNodeManagerUseCase _nodeRegistryNodeManagerUseCase;
         private readonly NodeRegistryHeartBeatUseCase _nodeRegistryHeartBeatUseCase;
 
         private readonly IMulticastAdapter _multicastAdapter;
@@ -43,12 +43,11 @@ namespace NodeRegistry.Implementation.UseCases {
                 IMulticastAdapter multicastAdapter,
                 string clusterName) {
             _clusterName = clusterName;
-            _nodeRegistryNodeManagerUse = nodeManagerUseCase;
+            _nodeRegistryNodeManagerUseCase = nodeManagerUseCase;
             _multicastAdapter = multicastAdapter;
             _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
             _localNodeInformation = localNodeInformation;
             _addMySelfToActiveNodeList = addMySelfToActiveNodeList;
-            _nodeRegistryHeartBeatUseCase = heartBeatUseCase;
 
             _tokenSource = new CancellationTokenSource();
             var ct = _tokenSource.Token;
@@ -148,7 +147,7 @@ namespace NodeRegistry.Implementation.UseCases {
             }
 
             // if message cannot be cast to NodeRegistry ConnectionMessage, something's gone wrong
-            NodeRegistryConnectionInfoMessage connectionInfoMessage =
+            var connectionInfoMessage =
                 nodeRegistryConnectionInfoMessage as NodeRegistryConnectionInfoMessage;
             if (connectionInfoMessage == null) {
                 return false;
@@ -163,12 +162,12 @@ namespace NodeRegistry.Implementation.UseCases {
             if (nodeRegistryConnectionInfoMessage.NodeInformation.Equals(_localNodeInformation)) {
                 if (_addMySelfToActiveNodeList) {
                     //add self to list
-                    _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
+                    _nodeRegistryNodeManagerUseCase.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
                 }
             }
             else {
                 //add new node to list
-                _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
+                _nodeRegistryNodeManagerUseCase.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
 
                 // send my information to the new node
                 _multicastAdapter.SendMessageToMulticastGroup
@@ -179,12 +178,14 @@ namespace NodeRegistry.Implementation.UseCases {
         }
 
         private void OnLeaveMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage) {
-            _nodeRegistryNodeManagerUse.RemoveNode(nodeRegistryConnectionInfoMessage.NodeInformation);
+            _nodeRegistryNodeManagerUseCase.RemoveNode(nodeRegistryConnectionInfoMessage.NodeInformation);
         }
 
         private void OnAnswerMessage(NodeRegistryConnectionInfoMessage nodeRegistryConnectionInfoMessage) {
-            //add answer node to list
-            _nodeRegistryNodeManagerUse.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
+            //add answer node to list, if and only if it's not myself 
+            if (nodeRegistryConnectionInfoMessage.NodeInformation.Equals(_localNodeInformation)) return;
+
+            _nodeRegistryNodeManagerUseCase.AddNode(nodeRegistryConnectionInfoMessage.NodeInformation);
 
             _nodeRegistryHeartBeatUseCase.CreateAndStartTimerForNodeEntry
                 (nodeRegistryConnectionInfoMessage.NodeInformation);

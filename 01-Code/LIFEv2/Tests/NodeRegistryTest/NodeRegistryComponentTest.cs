@@ -6,17 +6,15 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 25.01.2016
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using ConfigurationAdapter;
 using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
-using Newtonsoft.Json;
 using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
 using NUnit.Framework;
@@ -34,7 +32,7 @@ namespace NodeRegistryTest {
         public void Setup() {
             _information = new TNodeInformation
                 (
-                NodeType.LayerContainer,
+                NodeType.SimulationManager,
                 "UnitTestNode0",
                 new NodeEndpoint("127.0.0.1", 55500)
                 );
@@ -122,40 +120,40 @@ namespace NodeRegistryTest {
 
         [Test]
         public void TestNewNodeSubscrition() {
-            string localMulticastGrp = "239.0.0.3";
+            var localMulticastGrp = "239.0.0.3";
 
-            TNodeInformation localNodeInfo = _information;
+            var localNodeInfo = _information;
 
-            NodeType nodeType = localNodeInfo.NodeType;
+            var nodeType = localNodeInfo.NodeType;
 
-            TNodeInformation otherNodeinfo = new TNodeInformation
+            var otherNodeinfo = new TNodeInformation
                 (
                 localNodeInfo.NodeType,
 					"UnitTestNode",
                 new NodeEndpoint("127.0.0.1", 40862));
 
-            bool newNodeSubscriberFired = false;
-            bool newNodeOftypeSubscriberFired = false;
+            var newNodeSubscriberFired = false;
+            var newNodeOftypeSubscriberFired = false;
 
-            int localListenPort = _listenStartPortSeed;
+            var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
-            int localSendingPort = _sendingStartPortSeed;
+            var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            MulticastAdapterComponent multicastAdapter =
+            var multicastAdapter =
                 new MulticastAdapterComponent
                     (
                     new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4),
                     new MulticastSenderConfig());
 
-			MulticastAdapterComponent otherMulticastAdapter =
+			var otherMulticastAdapter =
 				new MulticastAdapterComponent
 				(
 					new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort++, 4),
 					new MulticastSenderConfig());
 			_sendingStartPortSeed += 1;
 
-            NodeRegistryComponent localNodeRegistry = new NodeRegistryComponent
+            var localNodeRegistry = new NodeRegistryComponent
                 (
                 multicastAdapter,
                 new NodeRegistryConfig
@@ -184,7 +182,7 @@ namespace NodeRegistryTest {
                     },
                     nodeType);
 
-            NodeRegistryComponent otherNodeRegistry = new NodeRegistryComponent
+            var otherNodeRegistry = new NodeRegistryComponent
                 (
                 otherMulticastAdapter,
                 new NodeRegistryConfig
@@ -211,55 +209,55 @@ namespace NodeRegistryTest {
         [Test]
         public void TestClusterDivision()
         {
-            string localMulticastGrp = "239.0.0.3";
+            var localMulticastGrp = "239.0.0.3";
 
-            TNodeInformation localNodeInfo = _information;
+            var localNodeInfo = _information;
 
-            NodeType nodeType = localNodeInfo.NodeType;
+            var nodeType = localNodeInfo.NodeType;
 
-            TNodeInformation clusterNode1Info = new TNodeInformation
+            var clusterNode1Info = new TNodeInformation
                 (
                 localNodeInfo.NodeType,
                     "UnitTestNode1",
                 new NodeEndpoint("127.0.0.1", 40862));
 
-            TNodeInformation clusterNode2Info = new TNodeInformation
+            var clusterNode2Info = new TNodeInformation
                 (
                 localNodeInfo.NodeType,
                     "UnitTestNode2",
                 new NodeEndpoint("127.0.0.1", 40863));
 
-            bool newNodeSubscriberFiredNonClusterNode = false;
-            bool newNodeOftypeSubscriberFiredNonClusterNode = false;
-            bool newNodeSubscriberFiredClusterNode1 = false;
-            bool newNodeOftypeSubscriberFiredClusterNode1 = false;
-            bool newNodeSubscriberFiredClusterNode2 = false;
-            bool newNodeOftypeSubscriberFiredClusterNode2 = false;
+            var newNodeSubscriberFiredNonClusterNode = false;
+            var newNodeOftypeSubscriberFiredNonClusterNode = false;
+            var newNodeSubscriberFiredClusterNode1 = false;
+            var newNodeOftypeSubscriberFiredClusterNode1 = false;
+            var newNodeSubscriberFiredClusterNode2 = false;
+            var newNodeOftypeSubscriberFiredClusterNode2 = false;
 
-            int localListenPort = _listenStartPortSeed;
+            var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
-            int localSendingPort = _sendingStartPortSeed;
+            var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            MulticastAdapterComponent multicastAdapter =
+            var multicastAdapter =
                 new MulticastAdapterComponent
                     (
                     new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort, 4),
                     new MulticastSenderConfig());
 
-            MulticastAdapterComponent clusterMulticastAdapter1 =
+            var clusterMulticastAdapter1 =
                 new MulticastAdapterComponent
                 (
                     new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort++, 4),
                     new MulticastSenderConfig());
 
-            MulticastAdapterComponent clusterMulticastAdapter2 =
+            var clusterMulticastAdapter2 =
                 new MulticastAdapterComponent
                 (
                     new GlobalConfig(localMulticastGrp, localListenPort, localSendingPort++, 4),
                     new MulticastSenderConfig());
 
-            NodeRegistryComponent localNodeRegistry = new NodeRegistryComponent
+            var localNodeRegistry = new NodeRegistryComponent
                 (
                 multicastAdapter,
                 new NodeRegistryConfig
@@ -290,7 +288,7 @@ namespace NodeRegistryTest {
                     },
                     nodeType);
 
-            NodeRegistryComponent clusterNodeRegistry1 = new NodeRegistryComponent
+            var clusterNodeRegistry1 = new NodeRegistryComponent
                 (
                 clusterMulticastAdapter1,
                 new NodeRegistryConfig
@@ -323,7 +321,7 @@ namespace NodeRegistryTest {
                     },
                     nodeType);
 
-            NodeRegistryComponent clusterNodeRegistry2 = new NodeRegistryComponent
+            var clusterNodeRegistry2 = new NodeRegistryComponent
                 (
                 clusterMulticastAdapter2,
                 new NodeRegistryConfig
@@ -377,21 +375,21 @@ namespace NodeRegistryTest {
 
         [Test]
         public void GetNodesListFromNodeRegistry() {
-            TNodeInformation localNodeInformation = _information;
+            var localNodeInformation = _information;
 
-            int localListenPort = _listenStartPortSeed;
+            var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
 
-            int localSendingPort = _sendingStartPortSeed;
+            var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            MulticastAdapterComponent localMulticastAdapter =
+            var localMulticastAdapter =
                 new MulticastAdapterComponent
                     (
                     new GlobalConfig("239.0.0.4", localListenPort, localSendingPort, 4),
                     new MulticastSenderConfig());
 
-            NodeRegistryComponent localNodeRegistry = new NodeRegistryComponent
+            var localNodeRegistry = new NodeRegistryComponent
                 (
                 localMulticastAdapter,
                 new NodeRegistryConfig
@@ -405,63 +403,44 @@ namespace NodeRegistryTest {
 
             Thread.Sleep(300);
 
-            List<TNodeInformation> nodeList = localNodeRegistry.GetAllNodes();
+            var nodeList = localNodeRegistry.GetAllNodes();
 
             Assert.True(nodeList.Contains(localNodeInformation));
 
             localNodeRegistry.ShutDownNodeRegistry();
-
-
-            localNodeRegistry = new NodeRegistryComponent
-                (
-                localMulticastAdapter,
-                new NodeRegistryConfig
-                    (
-                    localNodeInformation.NodeType,
-                    localNodeInformation.NodeIdentifier,
-                    localNodeInformation.NodeEndpoint.IpAddress,
-                    localNodeInformation.NodeEndpoint.Port,
-                    false), null);
-
-            Thread.Sleep(300);
-
-            nodeList = localNodeRegistry.GetAllNodes();
-
-            Assert.True(!nodeList.Contains(localNodeInformation));
-
-           // localNodeRegistry.ShutDownNodeRegistry();
         }
 
 
         //test if a node does not time out while sending heartbeats
         [Test]
         public void HeartBeatTest() {
-            TNodeInformation localNodeInformation = new TNodeInformation
+            var localNodeInformation = new TNodeInformation
                 (
                 NodeType.LayerContainer,
                 "localNode",
                 new NodeEndpoint("127.0.0.1", 41000));
 
 
-            TNodeInformation otherNodeinfo = new TNodeInformation
+            var otherNodeinfo = new TNodeInformation
                 (
                 NodeType.LayerContainer,
-                "otherNodeInfo",
+                "otherNode",
                 new NodeEndpoint("127.0.0.1", 40999));
 
-            int localListenPort = _listenStartPortSeed;
+            var localListenPort = _listenStartPortSeed;
             _listenStartPortSeed += 1;
 
-            int localSendingPort = _sendingStartPortSeed;
+            var localSendingPort = _sendingStartPortSeed;
             _sendingStartPortSeed += 1;
 
-            string mcastGrp = "239.0.0.5";
+            var mcastGrp = "239.0.0.5";
 
             var localMulticastAdapter =
                 new MulticastAdapterComponent
                     (
                     new GlobalConfig(mcastGrp, localListenPort, localSendingPort, 4),
                     new MulticastSenderConfig());
+
             var otherMulticastAdapter =
                 new MulticastAdapterComponent
                     (
@@ -480,8 +459,9 @@ namespace NodeRegistryTest {
                 otherMulticastAdapter,
                 new NodeRegistryConfig(otherNodeinfo, false, timeout), null);
 
-            Thread.Sleep(1500);
+            Thread.Sleep(150);
             //Check if Nodes have found eachother
+
             Assert.True(localNodeRegistry.GetAllNodes().Contains(otherNodeinfo));
             Assert.True(otherNodeRegistry.GetAllNodes().Contains(localNodeInformation));
 

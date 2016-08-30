@@ -41,7 +41,6 @@ namespace NodeRegistry.Implementation.UseCases
 
         private readonly TNodeInformation _localNodeInformation;
 
-        private Thread _heartBeatSenderThread;
         private readonly Timer _heartBeatSenderTimer;
 
         private readonly string _clusterName;
@@ -70,21 +69,31 @@ namespace NodeRegistry.Implementation.UseCases
         {
             if (_heartBeatTimers.ContainsKey(nodeInformation) || nodeInformation.Equals(_localNodeInformation)) return;
 
-            _nodeRegistryNodeManagerUseCase.AddNode(nodeInformation);
+            //_nodeRegistryNodeManagerUseCase.AddNode(nodeInformation);
 
             var timer = CreateNewTimerForNodeEntry(nodeInformation);
             _heartBeatTimers[nodeInformation] = timer;
         }
 
+        private Timer CreateNewTimerForNodeEntry(TNodeInformation nodeInformation)
+        {
+            var timeOut = _heartBeatInterval * _heartBeatTimeOutMultiplier;
+            return new Timer(delegate
+            {
+                _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
+                Timer delTimer;
+                _heartBeatTimers.TryRemove(nodeInformation, out delTimer);
+            }, new AutoResetEvent(false), timeOut, timeOut);
+        }
 
-        public void ResetTimer(String nodeID, NodeType nodeType)
+        public void ResetTimer(string nodeID, NodeType nodeType)
         {
             var nodeInformationStub = new TNodeInformation(nodeType, nodeID, null);
 
             if (!_heartBeatTimers.ContainsKey(nodeInformationStub)) return;
             var timer = _heartBeatTimers[nodeInformationStub];
-            timer.Change(Timeout.Infinite, Timeout.Infinite);
-            timer.Change(0, _heartBeatInterval);
+            var timeOut = _heartBeatInterval * _heartBeatTimeOutMultiplier;
+            timer.Change(timeOut, timeOut);
         }
 
         public void Shutdow()
@@ -100,19 +109,6 @@ namespace NodeRegistry.Implementation.UseCases
         }
 
 
-        private Timer CreateNewTimerForNodeEntry(TNodeInformation nodeInformation)
-        {
-
-            var timer = new Timer(delegate
-            {
-                _nodeRegistryNodeManagerUseCase.RemoveNode(nodeInformation);
-                Timer delTimer;
-                _heartBeatTimers.TryRemove(nodeInformation, out delTimer);
-            },new AutoResetEvent(false),0,_heartBeatInterval * _heartBeatTimeOutMultiplier);
-
-
-            return timer;
-        }
 
         private void SendHeartBeat(object stateInfo)
         {

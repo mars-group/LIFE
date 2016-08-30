@@ -28,7 +28,6 @@ namespace NodeRegistry.Implementation
         private readonly NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
         private readonly IMulticastAdapter _multicastAdapter;
         private readonly NodeRegistryConfig _config;
-        private readonly string _clusterName;
 
 
         public event EventHandler<TNodeInformation> SimulationManagerConnected;
@@ -36,9 +35,7 @@ namespace NodeRegistry.Implementation
         public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config, string clusterName) {
             _config = config;
 
-            _clusterName = clusterName;
-
-			if (!String.IsNullOrEmpty(clusterName)){
+			if (!string.IsNullOrEmpty(clusterName)){
 				// recreate MultiCastAdapter with specific mcastGroup if clusterName is set
 				var globalSettings = new GlobalConfig();
 				globalSettings.MulticastGroupIp = MulticastAddressGenerator.GetIPv4MulticastAddress(clusterName);
@@ -66,10 +63,10 @@ namespace NodeRegistry.Implementation
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            EventHandler<TNodeInformation> handler = this.SimulationManagerConnected;
+            var handler = SimulationManagerConnected;
 
             // Event will be null if there are no subscribers
-            if (handler != null) handler(this, nodeInformation);
+            handler?.Invoke(this, nodeInformation);
         }
 
 

@@ -11,6 +11,7 @@ using System.Text;
 using CommonTypes.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using static System.String;
 
 namespace CommonTypes.DataTypes {
 
@@ -37,17 +38,17 @@ namespace CommonTypes.DataTypes {
         #region IComparable Members
 
         public int CompareTo(object obj) {
-            return NodeIdentifier.CompareTo((obj as TNodeInformation).NodeIdentifier);
+            return Compare(NodeIdentifier, (obj as TNodeInformation).NodeIdentifier, StringComparison.Ordinal);
         }
 
         #endregion
 
         public override string ToString() {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             return
                 sb.AppendFormat
-                    ("[NodeIdentifier{0}, TNode{1}, NodeEndpoint{2}]", NodeIdentifier, NodeType, NodeEndpoint)
+                    ("[NodeIdentifier: {0}, TNode: {1}, NodeEndpoint: {2}]", NodeIdentifier, NodeType, NodeEndpoint)
                     .ToString();
         }
 
@@ -55,16 +56,12 @@ namespace CommonTypes.DataTypes {
         public override bool Equals(object obj) {
 
 
-            TNodeInformation otherNodeInfo = obj as TNodeInformation;
-            if (otherNodeInfo == null)
-            {
-                return false;    
-            }
-            if (otherNodeInfo.NodeIdentifier == null || otherNodeInfo.NodeType == null) {
+            var otherNodeInfo = obj as TNodeInformation;
+            if (otherNodeInfo?.NodeIdentifier == null) {
                 return false;
             }
 
-           return (otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType));
+           return otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType);
 
         }
 

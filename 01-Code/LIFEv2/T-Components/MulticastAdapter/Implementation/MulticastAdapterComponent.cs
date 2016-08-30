@@ -32,10 +32,9 @@ namespace MulticastAdapter.Implementation
 
         public MulticastAdapterComponent(GlobalConfig globalConfiguration, MulticastSenderConfig senderConfiguration)
         {
+            ValidateMulticastGroup(globalConfiguration.MulticastGroupIp);
             _sender = new UDPMulticastSender(globalConfiguration, senderConfiguration);
             _reciever = new UDPMulticastReceiver(globalConfiguration);
-            validateMulticastGroup(globalConfiguration.MulticastGroupIp);
-
         }
 
 
@@ -64,7 +63,7 @@ namespace MulticastAdapter.Implementation
 
         }
 
-        private void validateMulticastGroup(string mcastIp) {
+        private void ValidateMulticastGroup(string mcastIp) {
 
 
             if (IPAddress.Parse(mcastIp).IsIPv6Multicast || MulticastNetworkUtils.IsIPv4Multicast(mcastIp))

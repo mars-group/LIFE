@@ -20,7 +20,7 @@ namespace NodeRegistry.Implementation.UseCases
 
         private readonly NodeRegistryEventHandlerUseCase _nodeRegistryEventHandlerUseCase;
         
-        private readonly ConcurrentDictionary<String, TNodeInformation> _activeNodeList;
+        private readonly ConcurrentDictionary<string, TNodeInformation> _activeNodeList;
 
 
         public NodeRegistryNodeManagerUseCase(NodeRegistryEventHandlerUseCase nodeRegistryEventHandlerUseCase) {
@@ -39,7 +39,7 @@ namespace NodeRegistry.Implementation.UseCases
         }
 
         public void AddNode(TNodeInformation nodeInformation) {
-            _activeNodeList[nodeInformation.NodeIdentifier] = nodeInformation;
+            _activeNodeList.AddOrUpdate(nodeInformation.NodeIdentifier, nodeInformation, (k,v) => nodeInformation);
 
             //notify all subscribers
             _nodeRegistryEventHandlerUseCase.NotifyOnNodeJoinSubsribers(nodeInformation);

@@ -45,24 +45,22 @@ namespace MulticastAdapter.Implementation {
         #region IMulticastSender Members
 
         public void CloseSocket() {
-            foreach (UdpClient client in _clients) {
-
-                client.Dispose();//.Client.Shutdown(SocketShutdown.Send);
+            foreach (var client in _clients) {
+                client.Dispose();
             }
         }
 
         public void ReopenSocket() {
             foreach (var client in _clients) {
-                client.Client.Shutdown(SocketShutdown.Send);
+                client.Dispose();
             }
-
             _clients = GetSendingInterfaces();
         }
 
 
         public void SendMessageToMulticastGroup(byte[] msg) {
 			var errorCounter = 0;
-			foreach (UdpClient client in _clients) {
+			foreach (var client in _clients) {
                 try {
                     if (client.Client != null) {
                         client.SendAsync(msg, msg.Length, new IPEndPoint(_mGrpAdr, _listenPort)).Wait();
