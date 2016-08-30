@@ -70,24 +70,12 @@ namespace MulticastAdapter.Implementation
                     listenAddress = IPAddress.Any;
                     break;
             }
+            var udpClient = new UdpClient();
 
-            try
-            {
-                var udpClient = new UdpClient();
-
-                // allow another client to bind to this port
-                udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
-                return udpClient;
-            }
-            catch (SocketException socketException)
-            {
-                //if sending port is already in use increment port and try again.
-                if (socketException.SocketErrorCode != SocketError.AddressAlreadyInUse) throw;
-                _listenPort = _listenPort + 1;
-                return GetClient();
-            }
-            
+            // allow another client to bind to this port
+            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
+            return udpClient;
 
         }
 
