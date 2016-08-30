@@ -27,6 +27,7 @@ namespace NodeRegistry.Implementation.UseCases {
 
         private readonly IMulticastAdapter _multicastAdapter;
         private readonly bool _addMySelfToActiveNodeList;
+        private readonly JsonSerializerSettings _jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
 
         //private readonly Thread _listenThread;
         private Task _listenTask;
@@ -64,18 +65,16 @@ namespace NodeRegistry.Implementation.UseCases {
                     if (msg.Length <= 0) continue;
 
                     var msgString = Encoding.UTF8.GetString(msg);
-                    Console.WriteLine($"Msg is: {msgString}");
+
                     var nodeRegistryMessage =
-                        JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(msgString);
+                        JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(msgString, _jset);
 
                     // check whether the message belongs to our cluster, if not throw away
                     if (nodeRegistryMessage.ClusterName != null &&
                         nodeRegistryMessage.ClusterName != _clusterName)
                     {
-                        Console.WriteLine($"Throwing away. Own clustername was{_clusterName}, received name was {nodeRegistryMessage.ClusterName}");
                         continue;
                     }
-                    Console.WriteLine($"Got message! {nodeRegistryMessage.MessageType} was the type");
                     // message is ok, so compute
                     ComputeMessage(nodeRegistryMessage);
                 }
