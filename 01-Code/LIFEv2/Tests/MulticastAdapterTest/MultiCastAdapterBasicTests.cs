@@ -23,7 +23,7 @@ namespace MulticastAdapterTest
         {
             _information = new TNodeInformation
                 (
-                NodeType.LayerContainer,
+                NodeType.SimulationManager,
                 "UnitTestNode0",
                 new NodeEndpoint("127.0.0.1", 55500)
                 );
@@ -76,7 +76,7 @@ namespace MulticastAdapterTest
 
                     var regMsg = JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(msgString, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
                                         msgRcvdA++;
-                    Console.WriteLine($"Msg is: {regMsg.MessageType}, RCVD BY: B");
+                    Console.WriteLine($"Msg is: {regMsg.MessageType}, RCVD BY: A");
 
                 }
             }, _tokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
@@ -120,7 +120,7 @@ namespace MulticastAdapterTest
 
             sendTaskB.Wait();
             sendTaskA.Wait();
-            Thread.Sleep(1000);
+            Thread.Sleep(21000);
             Console.WriteLine($"A rcvd: {msgRcvdA} msgs");
         }
     }

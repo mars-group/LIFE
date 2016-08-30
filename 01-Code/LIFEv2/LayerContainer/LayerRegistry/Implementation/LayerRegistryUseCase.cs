@@ -46,7 +46,7 @@ namespace LayerRegistry.Implementation {
             {
                 simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
                 if (simManager != null) continue;
-
+                Console.WriteLine("No SimManager found! Waiting 3 seconds for re-check...");
                 // No SimManager found so wait for 3 seconds and recheck
                 var manualEvent = new ManualResetEvent(false);
                 nodeRegistry.SimulationManagerConnected += (sender, information) =>

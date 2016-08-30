@@ -46,7 +46,8 @@ namespace MulticastAdapter.Implementation {
 
         public void CloseSocket() {
             foreach (UdpClient client in _clients) {
-                    client.Client.Shutdown(SocketShutdown.Send);
+
+                client.Dispose();//.Client.Shutdown(SocketShutdown.Send);
             }
         }
 

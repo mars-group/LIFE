@@ -16,6 +16,7 @@ using MARS.Shuttle.SimulationConfig.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 using System.Linq;
+using ModelContainer.Interfaces.Exceptions;
 
 namespace ModelContainer.Implementation
 {
@@ -36,8 +37,7 @@ namespace ModelContainer.Implementation
             if (!Directory.Exists(_settings.ModelDirectoryPath))
                 Directory.CreateDirectory(_settings.ModelDirectoryPath);
             // delete possible remains from old run
-            if (Directory.Exists("./layers/addins/tmp")) Directory.Delete("./layers/addins/tmp", true);
-
+            if (Directory.Exists("./models/tmp")) Directory.Delete("./models/tmp", true);
 
             try {
                 _systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
@@ -57,6 +57,10 @@ namespace ModelContainer.Implementation
         }
 
         public ICollection<TModelDescription> GetAllModels() {
+            foreach (var modelDescription in _models.Keys)
+            {
+                Console.WriteLine($"Model: {modelDescription.Name}");
+            }
             return _models.Keys;
         }
 
@@ -88,9 +92,9 @@ namespace ModelContainer.Implementation
             _models.Clear();
 
             // search through all folders in the model directory and try loading the models.
-            string[] folders = Directory.GetDirectories(_settings.ModelDirectoryPath);
-            foreach (string folder in folders) {
-                string[] path = folder.Split(Path.DirectorySeparatorChar);
+            var folders = Directory.GetDirectories(_settings.ModelDirectoryPath);
+            foreach (var folder in folders) {
+                var path = folder.Split(Path.DirectorySeparatorChar);
                 try {
                     _models.Add(new TModelDescription(path[path.Length - 1]), folder);
                 }
@@ -102,17 +106,17 @@ namespace ModelContainer.Implementation
             }
 
             Console.WriteLine("Finished reimporting models. Informing listeners");
-            foreach (Action listener in _listeners) {
+            foreach (var listener in _listeners) {
                 listener();
             }
         }
 
         public ISimConfig GetShuttleSimConfig(TModelDescription model, string simConfigName) {
 
-            var path = $"./layers/addins/{model.Name}/scenarios/{simConfigName}";
+            var path = $"./models/{model.Name}/scenarios/{simConfigName}";
             if (!File.Exists(path)) {
-                return null;
-                //throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
+                //return null;
+                throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
             }
 
             var simConfigJsonContent = File.ReadAllText(path);

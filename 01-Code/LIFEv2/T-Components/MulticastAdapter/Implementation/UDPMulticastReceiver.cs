@@ -71,15 +71,16 @@ namespace MulticastAdapter.Implementation
                     break;
             }
 
-            var udpClient = new UdpClient();
+            //var udpClient = new UdpClient();
 
             // allow another client to bind to this port
-            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
+            //udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            //udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
 
-            return udpClient;
+            //return udpClient;
 
-            /* Alternative implementation incrementing listening port 
+            // Alternative implementation incrementing listening port
+
             try
             {
                 return new UdpClient(new IPEndPoint(listenAddress, _listenPort));
@@ -91,9 +92,7 @@ namespace MulticastAdapter.Implementation
                 _listenPort = _listenPort + 1;
                 return GetClient();
             }
-            */
-            // allow another client to bind to this port
-            //udpClient.ExclusiveAddressUse = false;
+
 
         }
 
@@ -136,7 +135,7 @@ namespace MulticastAdapter.Implementation
 
         public void CloseSocket()
         {
-			_receiverClient.Client.Shutdown(SocketShutdown.Receive);
+			_receiverClient.Dispose();//.Client.Shutdown(SocketShutdown.Receive);
         }
 
         public void ReopenSocket()

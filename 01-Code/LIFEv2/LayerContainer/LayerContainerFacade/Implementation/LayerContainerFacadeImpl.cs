@@ -38,12 +38,14 @@ namespace LayerContainerFacade.Implementation {
 
             _partitionManager = partitionManager;
             _rteManager = rteManager;
+            Console.WriteLine($"LC: Creating Service with port {settings.NodeRegistryConfig.NodeEndPointPort}");
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
-
+            Console.WriteLine($"LC: Adding Service for LayerContainerFacade");
             _server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
-
+            Console.WriteLine($"LC: Starting Service for LayerContainerFacade");
             //Start server
             _server.Start();
+            Console.WriteLine($"LC: DONE Service for LayerContainerFacade");
         }
 
         #region ILayerContainerFacade Members

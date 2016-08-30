@@ -6,7 +6,10 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
+using System;
 using Autofac;
+using ConfigurationAdapter;
 using ConfigurationAdapter.Interface;
 using LayerContainerFacade.Implementation;
 using LayerContainerShared;
@@ -32,61 +35,62 @@ namespace LayerContainerFacade.Interfaces {
     /// </summary>
     public static class LayerContainerApplicationCoreFactory {
         private static IContainer _container;
-        private static ContainerBuilder _containerBuilder;
-
         /// <summary>
         /// Instantiates a LayercontainerFacade instance and returns the reference. Use this to
         /// retreive a new LayerContainer or to reset an old one.
         /// </summary>
         /// <returns>A reference to an ILayerContainerFacade instance.</returns>
         public static ILayerContainerFacade GetLayerContainerFacade(string clusterName = null) {
-            if (_container == null) {
-                if (_containerBuilder == null) _containerBuilder = new ContainerBuilder();
+            if (_container != null) return _container.Resolve<ILayerContainerFacade>();
+            var containerBuilder = new ContainerBuilder();
 
-                _containerBuilder.RegisterType<NodeRegistryComponent>()
-                    .As<INodeRegistry>()
-                    .InstancePerLifetimeScope()
-                    .WithParameter(new TypedParameter(typeof(string), clusterName)); ;
+            containerBuilder.RegisterType<NodeRegistryComponent>()
+                .As<INodeRegistry>()
+                .InstancePerLifetimeScope()
+                .WithParameter(new TypedParameter(typeof(string), clusterName));
 
-                _containerBuilder.RegisterType<MulticastAdapterComponent>()
-                    .As<IMulticastAdapter>()
-                    .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<MulticastAdapterComponent>()
+                .As<IMulticastAdapter>()
+                .InstancePerLifetimeScope();
 
-                _containerBuilder.RegisterType<LayerRegistryComponent>()
-                    .As<ILayerRegistry>()
-                    .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<LayerRegistryComponent>()
+                .As<ILayerRegistry>()
+                .InstancePerLifetimeScope();
 
-                _containerBuilder.RegisterType<PartitionManagerComponent>()
-                    .As<IPartitionManager>()
-                    .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<PartitionManagerComponent>()
+                .As<IPartitionManager>()
+                .InstancePerLifetimeScope();
 
-                _containerBuilder.RegisterType<RTEManagerComponent>()
-                    .As<IRTEManager>()
-                    .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<RTEManagerComponent>()
+                .As<IRTEManager>()
+                .InstancePerLifetimeScope();
 
-                _containerBuilder.RegisterType<ResultAdapterComponent>()
-                    .As<IResultAdapter>()
-                    .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ResultAdapterComponent>()
+                .As<IResultAdapter>()
+                .InstancePerLifetimeScope();
 
-                _containerBuilder.RegisterType<LayerFactoryComponent>()
-                    .As<ILayerFactory>()
-                    .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<LayerFactoryComponent>()
+                .As<ILayerFactory>()
+                .InstancePerLifetimeScope();
 
-                _containerBuilder.RegisterType<LayerContainerFacadeImpl>()
-                    .As<ILayerContainerFacade>()
-                    .InstancePerDependency();
+            containerBuilder.RegisterType<LayerContainerFacadeImpl>()
+                .As<ILayerContainerFacade>()
+                .InstancePerDependency();
 
-                // Make the configuration file available for all components
-                LayerContainerSettings config = Configuration.Load<LayerContainerSettings>();
-                _containerBuilder.RegisterInstance(config);
-                _containerBuilder.RegisterInstance(config.NodeRegistryConfig);
-                _containerBuilder.RegisterInstance(config.GlobalConfig);
-                _containerBuilder.RegisterInstance(config.MulticastSenderConfig);
+            // Make the configuration file available for all components
 
-                _container = _containerBuilder.Build();
-            }
+            LayerContainerSettings config = Configuration.Load<LayerContainerSettings>();
+            containerBuilder.RegisterInstance(config);
+            containerBuilder.RegisterInstance(config.NodeRegistryConfig);
+            containerBuilder.RegisterInstance(config.GlobalConfig);
+            containerBuilder.RegisterInstance(config.MulticastSenderConfig);
 
-            return _container.Resolve<ILayerContainerFacade>();
+            _container = containerBuilder.Build();
+
+
+            var cont = _container.Resolve<ILayerContainerFacade>();
+            Console.WriteLine("Done creating LayerContainer");
+            return cont;
         }
     }
 }

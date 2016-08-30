@@ -65,8 +65,8 @@ namespace SimulationManagerShared
             // Step 3: Retrieve the canonical name.
             var fqdn = hostinfo.HostName;
             var smName = "SM-" + fqdn;
-            AddinLibraryDirectoryPath = "./layers";
-            ModelDirectoryPath = "./layers/addins";
+            AddinLibraryDirectoryPath = "./models";
+            ModelDirectoryPath = "./models";
             NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, smName, ipAddress, 44521, true);
             MulticastSenderConfig = new MulticastSenderConfig();
         }

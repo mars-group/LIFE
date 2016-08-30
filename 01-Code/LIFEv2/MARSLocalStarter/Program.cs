@@ -118,7 +118,7 @@ namespace MARSLocalStarter {
             layerContainerCore = LayerContainerApplicationCoreFactory.GetLayerContainerFacade(clusterName);
             Console.WriteLine("LayerContainer successfully started.");
 
-			if (listModels)
+		    if (listModels)
 			{
 				Console.WriteLine("Available models:");
 				var i = 1;
@@ -171,9 +171,11 @@ namespace MARSLocalStarter {
                         }
                         simConfigName = simConfigToUse;                    
 					}
+				    Console.WriteLine("startingWithModel");
                     simCore.StartSimulationWithModel(simulationId, model, numOfTicks, simConfigName);
 				}
 			}
+
 		}
 	}
 
