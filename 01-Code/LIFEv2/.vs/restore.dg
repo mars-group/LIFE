@@ -1,43 +1,10 @@
-#:F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManager\SimulationManager.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManager\SimulationManager.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManager\SimulationManager.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\SMConnector\SMConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\LayerNameService\LayerNameService.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LNSConnector\LNSConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerShared\SimulationManagerShared.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\SMConnector\SMConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\LayerNameService\LayerNameService.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LNSConnector\LNSConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\LayerNameService\LayerNameService.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LNSConnector\LNSConnector.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\CustomUtilities\CustomUtilities.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\MulticastAdapter\MulticastAdapter.xproj
+#:F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Tests\MulticastAdapterTest\MulticastAdapterTest.xproj
+F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Tests\MulticastAdapterTest\MulticastAdapterTest.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\CommonTypes\CommonTypes.xproj
+F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Tests\MulticastAdapterTest\MulticastAdapterTest.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\MulticastAdapter\MulticastAdapter.xproj
+F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Tests\MulticastAdapterTest\MulticastAdapterTest.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj
+F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Tests\MulticastAdapterTest\MulticastAdapterTest.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
 F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\MulticastAdapter\MulticastAdapter.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LayerLoader\LayerLoader.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LCConnector\LCConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE API\LifeAPI\LifeAPI.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerShared\SimulationManagerShared.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\SMConnector\SMConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LayerLoader\LayerLoader.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE API\LifeAPI\LifeAPI.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE API\LifeAPI\LifeAPI.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LCConnector\LCConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerShared\SimulationManagerShared.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\CommonTypes\CommonTypes.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerShared\SimulationManagerShared.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\MulticastAdapter\MulticastAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\SimulationManagerShared\SimulationManagerShared.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj
 F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\CommonTypes\CommonTypes.xproj
 F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
 F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\CustomUtilities\CustomUtilities.xproj
 F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\MulticastAdapter\MulticastAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\CommonTypes\CommonTypes.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LCConnector\LCConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE API\LifeAPI\LifeAPI.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\ModelContainer\ModelContainer.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\NodeRegistry\NodeRegistry.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\RabbitMQClient\RabbitMQClient.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\SMConnector\SMConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\RabbitMQClient\RabbitMQClient.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\CommonTypes\CommonTypes.xproj

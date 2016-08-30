@@ -4,6 +4,7 @@
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
   "dependencies": {
+    "Newtonsoft.Json": "9.0.1"
   },
 
   "frameworks": {

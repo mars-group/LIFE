@@ -57,7 +57,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Udp
 
         private void ListenAndReceive() {
             while (_running) {
-                var receivedBytes = _multicastAdapter.readMulticastGroupMessage();
+                var receivedBytes = _multicastAdapter.ReadMulticastGroupMessage();
 
                 //Read messages according to current wire protocol
                 var messages = WireProtocol.CreateMessages(receivedBytes);

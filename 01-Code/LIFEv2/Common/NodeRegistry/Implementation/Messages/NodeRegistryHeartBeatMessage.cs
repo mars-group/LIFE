@@ -8,6 +8,8 @@
 //  *******************************************************/
 using System;
 using CommonTypes.Types;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace NodeRegistry.Implementation.Messages
 {
@@ -18,6 +20,7 @@ namespace NodeRegistry.Implementation.Messages
 
         public String NodeIdentifier;
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public NodeType NodeType;
 
         public NodeRegistryHeartBeatMessage()

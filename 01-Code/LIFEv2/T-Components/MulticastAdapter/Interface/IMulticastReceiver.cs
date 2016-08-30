@@ -15,7 +15,7 @@ namespace MulticastAdapter.Interface
         /// Listen for new UDP-Multicast messages on the configured port. This Method is blocking.
         /// </summary>
         /// <returns></returns>
-        byte[] readMulticastGroupMessage();
+        byte[] ReadMulticastGroupMessage();
         /// <summary>
         ///     Close the underlying communication socket
         /// </summary>

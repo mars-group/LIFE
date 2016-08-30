@@ -35,6 +35,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// </summary>
         private const int MaxMessageLength = 256*1024*1024; //128 Megabytes.
 
+        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+
         /// <summary>
         ///     This MemoryStream object is used to collect receiving bytes to build messages.
         /// </summary>
@@ -133,7 +135,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Does not include length of the message.
         /// </returns>
         protected virtual byte[] SerializeMessage(IScsMessage message) {
-            var json = JsonConvert.SerializeObject(message);
+            var json = JsonConvert.SerializeObject(message, Jset);
             return Encoding.UTF8.GetBytes(json);
         }
 
@@ -148,16 +150,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// </param>
         /// <returns>Deserialized message</returns>
         protected virtual IScsMessage DeserializeMessage(byte[] bytes) {
-            //Create a MemoryStream to convert bytes to a stream
-            using (var deserializeMemoryStream = new MemoryStream(bytes))
-            using (var sr = new StreamReader(deserializeMemoryStream))
-            using (var reader = new JsonTextReader(sr))
-            {
-                var serialiazer = new JsonSerializer();
-
-                //Return the deserialized message
-                return (IScsMessage)serialiazer.Deserialize(reader);
-            }
+            return JsonConvert.DeserializeObject<IScsMessage>(Encoding.UTF8.GetString(bytes), Jset);
         }
 
         #endregion

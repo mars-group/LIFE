@@ -9,11 +9,14 @@
 using System;
 using System.Text;
 using CommonTypes.Types;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace CommonTypes.DataTypes {
 
     public class TNodeInformation : IComparable {
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public NodeType NodeType { get; private set; }
 
 

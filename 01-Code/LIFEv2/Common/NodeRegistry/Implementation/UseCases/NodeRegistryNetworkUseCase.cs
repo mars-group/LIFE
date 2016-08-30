@@ -27,6 +27,7 @@ namespace NodeRegistry.Implementation.UseCases {
 
         private readonly IMulticastAdapter _multicastAdapter;
         private readonly bool _addMySelfToActiveNodeList;
+        private readonly JsonSerializerSettings _jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
 
         //private readonly Thread _listenThread;
         private Task _listenTask;
@@ -59,13 +60,14 @@ namespace NodeRegistry.Implementation.UseCases {
 
                 while (!ct.IsCancellationRequested)
                 {
-                    byte[] msg = _multicastAdapter.readMulticastGroupMessage();
-
+                    var msg = _multicastAdapter.ReadMulticastGroupMessage();
 
                     if (msg.Length <= 0) continue;
 
+                    var msgString = Encoding.UTF8.GetString(msg);
+
                     var nodeRegistryMessage =
-                        JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(Encoding.UTF8.GetString(msg));
+                        JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(msgString, _jset);
 
                     // check whether the message belongs to our cluster, if not throw away
                     if (nodeRegistryMessage.ClusterName != null &&
@@ -73,7 +75,6 @@ namespace NodeRegistry.Implementation.UseCases {
                     {
                         continue;
                     }
-
                     // message is ok, so compute
                     ComputeMessage(nodeRegistryMessage);
                 }
@@ -99,12 +100,6 @@ namespace NodeRegistry.Implementation.UseCases {
         public void Shutdown() {
             _tokenSource.Cancel();
         }
-
-        private void Listen() {
-
-
-			
-		}
 
         private void ComputeMessage(AbstractNodeRegistryMessage nodeRegistryConnectionInfoMessage) {
             if (nodeRegistryConnectionInfoMessage == null) {
