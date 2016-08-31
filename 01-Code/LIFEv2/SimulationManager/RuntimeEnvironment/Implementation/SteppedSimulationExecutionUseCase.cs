@@ -44,8 +44,7 @@ namespace RuntimeEnvironment.Implementation
 		private Task _simulationTask;
 		private Guid _simulationId;
 
-		private RabbitMQWriter _rabbitMQWriter;
-        private bool publishToQueue = true;
+
 
         public SteppedSimulationExecutionUseCase
 		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, Guid simulationId, bool startPaused = false) {
@@ -54,14 +53,7 @@ namespace RuntimeEnvironment.Implementation
             _status = startPaused ? SimulationStatus.Paused : SimulationStatus.Running;
             _simulationExecutionSwitch = new ManualResetEvent(false);
 			_simulationId = simulationId;
-			try
-			{
-				_rabbitMQWriter = new RabbitMQWriter(simulationId);
-			}
-			catch (Exception e){
-                publishToQueue = false;
-				Console.Error.WriteLine($"An error occured while trying to access the RabbitMQ based EventQueue. Simultion will continue without updates to the queue. The error was: {e.Message}");
-			}
+
 
             // start simulation
 			_simulationTask = Task.Run(() => RunSimulation());
@@ -156,7 +148,6 @@ namespace RuntimeEnvironment.Implementation
  			var stb = new StringBuilder ();
 			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
 			Console.WriteLine (stb);
-			//_rabbitMQWriter.SendMessage(stb.ToString());
 		}
 
 		private void CleanUp(){

@@ -15,7 +15,7 @@ namespace LNSConnector.Interface
     /// <summary>
     /// This service allows to resolve connectiviy information by a valid layer name.
     /// </summary>
-    [ScsService(Version = "0.1")]
+    [ScsService]
     public interface ILayerNameService
     {
         /// <summary>

@@ -31,7 +31,7 @@ namespace Hik.Communication.Scs.Client.Tcp {
                 socket.Connect(endPoint);
                 return socket;
             }
-            catch (SocketException ex)
+            catch (SocketException)
             {
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Dispose();

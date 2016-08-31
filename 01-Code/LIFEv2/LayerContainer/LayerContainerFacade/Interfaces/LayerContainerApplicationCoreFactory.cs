@@ -89,7 +89,6 @@ namespace LayerContainerFacade.Interfaces {
 
 
             var cont = _container.Resolve<ILayerContainerFacade>();
-            Console.WriteLine("Done creating LayerContainer");
             return cont;
         }
     }

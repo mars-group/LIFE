@@ -74,7 +74,7 @@ namespace LCConnector.TransportTypes.ModelStructure {
                         return true;
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception) {
                     // Wait for the lock to be released
                     Thread.Sleep(sleep);
                 }
@@ -84,25 +84,26 @@ namespace LCConnector.TransportTypes.ModelStructure {
 
         private static void Write(IModelDirectoryContent dirContent, string path) {
             if (dirContent.Type == ContentType.File) {
-                ModelFile file = dirContent as ModelFile;
-                FileStream stream;
+                var file = dirContent as ModelFile;
 
-                bool locked = true;
+                var locked = true;
                 while (locked) {
-                    try {
+                    try
+                    {
+                        FileStream stream;
                         using (stream = File.Open(path + Path.DirectorySeparatorChar + file.Name, FileMode.Create))
                         {
                             stream.Write(file.Content, 0, file.Content.Length);
                             locked = false;
                         }
                     }
-                    catch (IOException ex) {
+                    catch (IOException) {
                         locked = true;
                     }
                 }
             }
             else {
-                ModelFolder folder = dirContent as ModelFolder;
+                var folder = dirContent as ModelFolder;
                 if (!Directory.Exists(path + Path.DirectorySeparatorChar + dirContent.Name))
                     Directory.CreateDirectory(path + Path.DirectorySeparatorChar + dirContent.Name);
 

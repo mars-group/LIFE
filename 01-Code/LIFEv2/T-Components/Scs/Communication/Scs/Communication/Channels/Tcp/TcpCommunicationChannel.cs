@@ -50,20 +50,12 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
 
         private readonly Semaphore _maxNumberReadClients;
 
-        /// <summary>
-        ///     This buffer is used to receive bytes
-        /// </summary>
-        private readonly byte[] _buffer;
 
         /// <summary>
         ///     Socket object to send/reveice messages.
         /// </summary>
         private readonly Socket _clientSocket;
 
-        /// <summary>
-        ///     A flag to control thread's running
-        /// </summary>
-        private volatile bool _running;
 
         private Thread _listenThread;
 
@@ -97,8 +89,6 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
             _readPool = new SocketAsyncEventArgsPool(NumReadConnections);
 
             _maxNumberReadClients = new Semaphore(NumReadConnections, NumReadConnections);
-
-            //_buffer = new byte[ReceiveBufferSize];
             _syncLock = new object();
         }
 
@@ -111,14 +101,15 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// </summary>
         public override void Disconnect() {
             if (CommunicationState != CommunicationStates.Connected) return;
-
-            _running = false;
             try {
                 if (_clientSocket.Connected) _clientSocket.Shutdown(SocketShutdown.Both);
 
                 _clientSocket.Dispose();
             }
-            catch {}
+            catch
+            {
+                // ignored
+            }
 
             CommunicationState = CommunicationStates.Disconnected;
             OnDisconnected();
@@ -152,11 +143,9 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
                 _readPool.Push(readEventArg);
             }
 
-            _running = true;
             // begin to receive in Thread to not block the sending side
             _listenThread = new Thread(Receive) {IsBackground = true};
             _listenThread.Start();
-            //_clientSocket.BeginReceive(_buffer, 0, _buffer.Length, 0, ReceiveCallback, null);
         }
 
 
@@ -221,14 +210,15 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
             // determine which type of operation just completed and call the associated handler
             switch (e.LastOperation)
             {
-                case SocketAsyncOperation.ReceiveFrom:
+                case SocketAsyncOperation.Receive:
                     ProcessReceive(e);
                     break;
-                case SocketAsyncOperation.SendTo:
+                case SocketAsyncOperation.Send:
                    // ProcessSend(e);
                     break;
                 default:
-                    throw new ArgumentException("The last operation completed on the socket was not a receive or send");
+
+                    throw new ArgumentException($"The last operation completed on the socket was not a receive or send, but: {e.LastOperation}");
             }
 
         }
@@ -241,7 +231,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
             {
                 //Copy received bytes to a new byte array
                 var receivedBytes = new byte[bytesRead];
-                Array.Copy(_buffer, 0, receivedBytes, 0, bytesRead);
+                Buffer.BlockCopy(e.Buffer, e.Offset, receivedBytes, 0, bytesRead);
 
                 //Read messages according to current wire protocol
                 var messages = WireProtocol.CreateMessages(receivedBytes);

@@ -15,7 +15,7 @@ namespace LCConnector {
     /// <summary>
     /// The LayerContainer's public interface. This may be jused locally or via the provided SCS service.
     /// </summary>
-    [ScsService(Version = "0.1")]
+    [ScsService]
     public interface ILayerContainer {
         /// <summary>
         ///     Transmits the serialized model content for the next simulation run to the layer container.

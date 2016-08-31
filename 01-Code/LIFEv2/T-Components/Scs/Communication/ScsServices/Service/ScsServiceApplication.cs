@@ -270,18 +270,14 @@ namespace Hik.Communication.ScsServices.Service {
         /// <param name="returnValue">Return value to send</param>
         /// <param name="exception">Exception to send</param>
         private static void SendInvokeResponse(IMessenger client, IScsMessage requestMessage, object returnValue,
-            ScsRemoteException exception) {
-            try {
-                client.SendMessage(
-                    new ScsRemoteInvokeReturnMessage {
-                        RepliedMessageId = requestMessage.MessageId,
-                        ReturnValue = returnValue,
-                        RemoteException = exception
-                    });
-            }
-            catch (Exception ex) {
-                throw;
-            }
+            ScsRemoteException exception)
+        {
+            client.SendMessage(
+                new ScsRemoteInvokeReturnMessage {
+                    RepliedMessageId = requestMessage.MessageId,
+                    ReturnValue = returnValue,
+                    RemoteException = exception
+                });
         }
 
         /// <summary>

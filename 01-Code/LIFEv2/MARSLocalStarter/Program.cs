@@ -171,7 +171,6 @@ namespace MARSLocalStarter {
                         }
                         simConfigName = simConfigToUse;                    
 					}
-				    Console.WriteLine("startingWithModel");
                     simCore.StartSimulationWithModel(simulationId, model, numOfTicks, simConfigName);
 				}
 			}

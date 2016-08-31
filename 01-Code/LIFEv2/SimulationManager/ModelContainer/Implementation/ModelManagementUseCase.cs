@@ -26,11 +26,11 @@ namespace ModelContainer.Implementation
     /// </summary>
     internal class ModelManagementUseCase {
         private readonly SimulationManagerSettings _settings;
-        private IDictionary<TModelDescription, string> _models;
-        private FileSystemWatcher _systemWatcher;
-        private ICollection<Action> _listeners;
+        private readonly IDictionary<TModelDescription, string> _models;
+        private readonly ICollection<Action> _listeners;
 
         public ModelManagementUseCase(SimulationManagerSettings settings) {
+            FileSystemWatcher systemWatcher;
             _settings = settings;
             _models = new Dictionary<TModelDescription, string>();
             _listeners = new LinkedList<Action>();
@@ -40,15 +40,15 @@ namespace ModelContainer.Implementation
             if (Directory.Exists("./models/tmp")) Directory.Delete("./models/tmp", true);
 
             try {
-                _systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
+                systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
             }
             catch {
                 Directory.CreateDirectory(_settings.ModelDirectoryPath);
-                _systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
+                systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
             }
 
             //Reload model folder contents if file system has changed. (Also of course once, initially)
-            _systemWatcher.Changed += UpdateModelList;
+            systemWatcher.Changed += UpdateModelList;
             UpdateModelList(null, null);
         }
 
@@ -57,29 +57,24 @@ namespace ModelContainer.Implementation
         }
 
         public ICollection<TModelDescription> GetAllModels() {
-            foreach (var modelDescription in _models.Keys)
-            {
-                Console.WriteLine($"Model: {modelDescription.Name}");
-            }
             return _models.Keys;
         }
 
-        public ModelContent GetModel(TModelDescription modelDesc) {
-            if (_models.ContainsKey(modelDesc)) return new ModelContent(_models[modelDesc]);
-
-            return null;
+        public ModelContent GetModel(TModelDescription modelDesc)
+        {
+            return _models.ContainsKey(modelDesc) ? new ModelContent(_models[modelDesc]) : null;
         }
 
         public TModelDescription AddModelFromDirectory(string filePath) {
-            ModelContent content = new ModelContent(filePath);
-            string[] tmp = filePath.Split(Path.DirectorySeparatorChar);
+            var content = new ModelContent(filePath);
+            var tmp = filePath.Split(Path.DirectorySeparatorChar);
             content.Write(_settings.ModelDirectoryPath + Path.DirectorySeparatorChar + tmp[tmp.Length - 1]);
             return new TModelDescription(tmp[tmp.Length - 1]);
         }
 
 
         public void DeleteModel(TModelDescription model) {
-            string path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
+            var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
             if (!Directory.Exists(path)) Directory.Delete(path, true);
             _models.Remove(model);
         }
@@ -115,7 +110,6 @@ namespace ModelContainer.Implementation
 
             var path = $"./models/{model.Name}/scenarios/{simConfigName}";
             if (!File.Exists(path)) {
-                //return null;
                 throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
             }
 
