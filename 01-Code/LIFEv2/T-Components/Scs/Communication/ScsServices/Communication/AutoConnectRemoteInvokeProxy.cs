@@ -76,7 +76,7 @@ namespace Hik.Communication.ScsServices.Communication
     /// </summary>
     /// <typeparam name="TProxy">Type of the proxy class/interface</typeparam>
     /// <typeparam name="TMessenger">Type of the messenger object that is used to send/receive messages</typeparam>
-    internal class AutoConnectRemoteInvokeProxy<TProxy, TMessenger> : RemoteInvokeProxy<TProxy, TMessenger>
+    public class AutoConnectRemoteInvokeProxy<TProxy, TMessenger> : RemoteInvokeProxy<TProxy, TMessenger>
         where TMessenger : IMessenger
     {
         /// <summary>

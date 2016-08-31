@@ -23,6 +23,7 @@ using ResultAdapter.Interface;
 using RTEManager.Interfaces;
 
 namespace LayerContainerFacade.Implementation {
+    [ScsService]
 	internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
         private readonly IPartitionManager _partitionManager;
         private readonly IRTEManager _rteManager;

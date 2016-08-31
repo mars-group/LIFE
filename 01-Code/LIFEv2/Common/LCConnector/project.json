@@ -2,11 +2,12 @@
   "version": "2.0.0-*",
   "description": "Necessary classes to connect with a LayerContainer.",
   "copyright": "(c) 2016 - MARS Group",
-  "authors": [ "Christian H�ning" ],
+  "authors": [ "Christian Huening" ],
   "dependencies": {
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",
     "System.Threading": "4.0.11",
-    "System.Threading.Thread": "4.0.0"
+    "System.Threading.Thread": "4.0.0",
+    "Scs": "2.0.0-*"
   },
   "frameworks": {
     "netstandard1.6": {
