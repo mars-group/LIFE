@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "3ca022f78fa4efa608c7aaeb4e57fe0546314e25"
+    "signature": "611b63bcbb8dd03c2f932d2db88ac75e292f4b6b"
   },
   "compilationOptions": {},
   "targets": {
@@ -10,8 +10,8 @@
         "dependencies": {
           "DalskiAgent": "2.0.0",
           "EnvironmentServiceComponent": "2.0.0-8",
-          "LCConnector": "2.0.0-32",
-          "LifeAPI": "2.0.0-32",
+          "LCConnector": "2.0.0-41",
+          "LifeAPI": "2.0.0-41",
           "SpatialAPI": "2.0.0-8"
         },
         "runtime": {
@@ -42,7 +42,7 @@
           "lib/netcoreapp1.0/GeoGridEnvironment.dll": {}
         }
       },
-      "LCConnector/2.0.0-32": {
+      "LCConnector/2.0.0-41": {
         "dependencies": {
           "MARS.Shuttle.SimulationConfig": "2.0.0-7"
         },
@@ -50,9 +50,9 @@
           "lib/netcoreapp1.0/LCConnector.dll": {}
         }
       },
-      "LifeAPI/2.0.0-32": {
+      "LifeAPI/2.0.0-41": {
         "dependencies": {
-          "LCConnector": "2.0.0-32",
+          "LCConnector": "2.0.0-41",
           "MARS.Shuttle.SimulationConfig": "2.0.0-7",
           "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
           "System.Xml.XmlSerializer": "4.0.10"
@@ -137,7 +137,7 @@
       "DalskiAgent/2.0.0": {
         "dependencies": {
           "GeoGridEnvironment": "2.0.0-12",
-          "LifeAPI": "2.0.0-32",
+          "LifeAPI": "2.0.0-41",
           "MongoDB.Driver": "2.3.0-beta1",
           "SpatialAPI": "2.0.0-8",
           "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
@@ -169,15 +169,15 @@
       "serviceable": true,
       "sha512": "sha512-W7N8hRwA1A1tb+/h5mo7sCmIDLPY6wUAmEjbEhbk7WyCe+lI8F9YWKJ1zHwfp+JnjfzuiOdhZTWQqoG+FwRulg=="
     },
-    "LCConnector/2.0.0-32": {
+    "LCConnector/2.0.0-41": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-wxXc/VMpS0cyu69nHpMWI3Mvtn8x8ye64dUw/E2sm/u1vYxa/pgpEWvw5R5NFw7WphjPbakYjbug0Q/z2L7XYA=="
+      "sha512": "sha512-7KRXA1TFmCDRHVmR4uioCRPz8O5JdskV37qJgu9beh0Nz5OafmSkfI9Xs6k8VSALjj5vmS9v838b0bW7gTqZQQ=="
     },
-    "LifeAPI/2.0.0-32": {
+    "LifeAPI/2.0.0-41": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-qUGe+9M6VTfYdL+H4ir0LumISPNJhySfN/tfDy46oJJntYE+sPT3uDG3FzZS6mRsr14z1WYEvzDJZ/klkyEkdQ=="
+      "sha512": "sha512-9FIdb7ESQ2BgMlDP/lIO6sQpuVmtbcKsWKLgIj+8hkcUb4VL8CHtSowu04mkRcH3/ksrKAXe4ecKP8mqKjlxWw=="
     },
     "MARS.Shuttle.SimulationConfig/2.0.0-7": {
       "type": "package",

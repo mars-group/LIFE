@@ -32,7 +32,7 @@ namespace LCConnector.TransportTypes.ModelStructure {
         public void Write(string targetDirectory) {
             if (!Directory.Exists(targetDirectory)) Directory.CreateDirectory(targetDirectory);
             //EmptyDirectory(targetDirectory);
-            foreach (IModelDirectoryContent modelDirectoryContent in _root.Contents) {
+            foreach (var modelDirectoryContent in _root.Contents) {
                 Write(modelDirectoryContent, targetDirectory);
             }
         }
