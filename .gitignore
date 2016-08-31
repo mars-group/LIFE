@@ -90,3 +90,6 @@ node_modules/
 01-Code/LIFEv2/MARSLocalStarter/config/GlobalConfig.cfg
 01-Code/LIFEv2/MARSLocalStarter/config/LayerContainerSettings.cfg
 01-Code/LIFEv2/MARSLocalStarter/config/SimulationManagerSettings.cfg
+01-Code/LIFEv2/config/GlobalConfig.cfg
+01-Code/LIFEv2/config/LayerContainerSettings.cfg
+01-Code/LIFEv2/config/SimulationManagerSettings.cfg

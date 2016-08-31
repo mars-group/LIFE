@@ -88,7 +88,7 @@ namespace MulticastAdapter.Implementation {
 
 
             if (_senderSettings.SendOnAllInterfaces) {
-                foreach (NetworkInterface networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces()) {
+                foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces()) {
                     foreach (
                         UnicastIPAddressInformation unicastAddress in
                             networkInterface.GetIPProperties().UnicastAddresses) {
@@ -102,8 +102,8 @@ namespace MulticastAdapter.Implementation {
                 }
             }
             else {
-                IPEndPoint endPoint = GetBindingEndpoint();
-                UdpClient updClient = new UdpClient(GetBindingEndpoint());
+                var endPoint = GetBindingEndpoint();
+                var updClient = new UdpClient(GetBindingEndpoint());
                 updClient.JoinMulticastGroup(_mGrpAdr, endPoint.Address);
                 resultList.Add(updClient);
             }
@@ -142,7 +142,7 @@ namespace MulticastAdapter.Implementation {
         }
 
         private IPEndPoint GetIPEndPointByName() {
-            NetworkInterface networkInterface =
+            var networkInterface =
                 MulticastNetworkUtils.GetInterfaceByName(_senderSettings.SendingInterfaceName);
             IPAddress ipAddress = null;
 

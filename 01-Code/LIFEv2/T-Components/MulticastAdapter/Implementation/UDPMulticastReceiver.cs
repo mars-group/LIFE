@@ -43,19 +43,6 @@ namespace MulticastAdapter.Implementation
             JoinMulticastGroups();
         }
 
-
-        private void JoinMulticastGroups()
-        {
-			foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces()) {
-				foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses) {
-					if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily ((IPVersionType)_generalSettings.IPVersion)) {
-                        _receiverClient.JoinMulticastGroup (_mcastAddress, unicastAddr.Address);
-					}
-				}
-
-			}
-        }
-
         private UdpClient GetClient()
         {
 
@@ -73,10 +60,24 @@ namespace MulticastAdapter.Implementation
             var udpClient = new UdpClient();
 
             // allow another client to bind to this port
+            //udpClient.Client.MulticastLoopback = true;
+            //udpClient.Client.ExclusiveAddressUse = false;
+
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(new IPEndPoint(listenAddress, _listenPort));
             return udpClient;
+        }
 
+        private void JoinMulticastGroups()
+        {
+			foreach (var networkInterface in MulticastNetworkUtils.GetAllMulticastInterfaces()) {
+				foreach (var unicastAddr in networkInterface.GetIPProperties().UnicastAddresses) {
+					if (unicastAddr.Address.AddressFamily == MulticastNetworkUtils.GetAddressFamily ((IPVersionType)_generalSettings.IPVersion)) {
+                        _receiverClient.JoinMulticastGroup (_mcastAddress, unicastAddr.Address);
+					}
+				}
+
+			}
         }
 
         /// <summary>

@@ -76,7 +76,7 @@ namespace MulticastAdapterTest
 
                     var regMsg = JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(msgString, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
                                         msgRcvdA++;
-                    Console.WriteLine($"Msg is: {regMsg.MessageType}, RCVD BY: A");
+                    //Console.WriteLine($"Msg is: {regMsg.MessageType}, RCVD BY: A");
 
                 }
             }, _tokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
@@ -93,7 +93,7 @@ namespace MulticastAdapterTest
                     Console.WriteLine($"Msg was: {msgString}");
                     var regMsg = JsonConvert.DeserializeObject<AbstractNodeRegistryMessage>(msgString, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
                     msgRcvdB++;
-                    Console.WriteLine($"Msg is: {regMsg.MessageType}, RCVD BY: B");
+                    //Console.WriteLine($"Msg is: {regMsg.MessageType}, RCVD BY: B");
 
                 }
             }, _tokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
@@ -120,8 +120,10 @@ namespace MulticastAdapterTest
 
             sendTaskB.Wait();
             sendTaskA.Wait();
-            Thread.Sleep(21000);
+            Thread.Sleep(2000);
+            Assert.True(msgRcvdA > 0 && msgRcvdB > 0);
             Console.WriteLine($"A rcvd: {msgRcvdA} msgs");
+            Console.WriteLine($"B rcvd: {msgRcvdB} msgs");
         }
     }
 }
