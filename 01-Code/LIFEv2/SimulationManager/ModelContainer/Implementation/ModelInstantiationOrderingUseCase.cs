@@ -53,8 +53,13 @@ namespace ModelContainer.Implementation {
             ModelStructure modelStructure = new ModelStructure();
 
             foreach (var node in nodes) {
+
+
                 Type type = node.LayerType;
                 ConstructorInfo[] constructors = type.GetConstructors();
+
+                Console.WriteLine($"Found layer: {type.Name}");
+
                 // make sure all parameters in all constructors are Interfaces, throw exception otherwise
                 if (
                     constructors.Any(
@@ -71,7 +76,8 @@ namespace ModelContainer.Implementation {
                         type.GetTypeInfo().Assembly.GetName().Version.Minor,
                         type.GetTypeInfo().Assembly.Location,
                         type.FullName,
-                        type.AssemblyQualifiedName);
+                        type.AssemblyQualifiedName,
+                        type);
 
                 if (constructors.Any(c => c.GetParameters().Length == 0))
                     modelStructure.AddLayer(layerDescription, type);

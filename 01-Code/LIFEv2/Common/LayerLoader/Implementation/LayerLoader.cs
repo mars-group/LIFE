@@ -33,7 +33,7 @@ namespace LayerLoader.Implementation
 
                 var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
 
-                _layerTypes.Add(FolderNameForTransferredModelCode, asm.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ILayer))).ToList());
+                _layerTypes.Add(FolderNameForTransferredModelCode, asm.GetTypes().Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer))).ToList());
             }
         }
 
@@ -66,16 +66,19 @@ namespace LayerLoader.Implementation
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(currentModelPath).GetFileSystemInfos("*.dll"))
             {
-                if(fileSystemInfo.FullName.EndsWith("DalskiAgent.dll")) { continue;}
                 var asl = new LIFEAssemblyLoader(currentModelPath);
 
                 var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-                Console.WriteLine(fileSystemInfo.FullName);
-                var foundLayerTypes = asm.GetTypes()
-                    .Where(t => t.GetInterfaces().Contains(typeof(ILayer)))
-                    .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
-                    .ToList();
-                results.AddRange(foundLayerTypes);
+                try{
+                    var foundLayerTypes = asm.GetTypes()
+                        .Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer)))
+                        .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
+                        .ToList();
+                    results.AddRange(foundLayerTypes);
+                }catch(ReflectionTypeLoadException ex){
+                    Console.WriteLine($"Caught type load error while Loading model code. Make sure you use 'dotnet publish' to finally create your mode code. Error was: {ex.LoaderExceptions.First()}");
+                }
+
             }
 
             if (!results.Any())

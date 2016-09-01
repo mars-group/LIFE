@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "611b63bcbb8dd03c2f932d2db88ac75e292f4b6b"
+    "signature": "2c5e355545d9c6d147fa988eea4356d3e9624934"
   },
   "compilationOptions": {},
   "targets": {
@@ -37,7 +37,7 @@
           "lib/netcoreapp1.0/EnvironmentServiceComponent.dll": {}
         }
       },
-      "GeoGridEnvironment/2.0.0-12": {
+      "GeoGridEnvironment/2.0.0-14": {
         "runtime": {
           "lib/netcoreapp1.0/GeoGridEnvironment.dll": {}
         }
@@ -69,26 +69,32 @@
           "lib/netcoreapp1.0/MARS.Shuttle.SimulationConfig.dll": {}
         }
       },
-      "MongoDB.Bson/2.3.0-beta1": {
-        "runtime": {
-          "lib/netstandard1.6/MongoDB.Bson.dll": {}
-        }
-      },
-      "MongoDB.Driver/2.3.0-beta1": {
+      "MongoDB.Bson/2.3.0-rc1": {
         "dependencies": {
-          "MongoDB.Bson": "2.3.0-beta1",
-          "MongoDB.Driver.Core": "2.3.0-beta1"
+          "System.Collections.NonGeneric": "4.0.1"
         },
         "runtime": {
-          "lib/netstandard1.6/MongoDB.Driver.dll": {}
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
         }
       },
-      "MongoDB.Driver.Core/2.3.0-beta1": {
+      "MongoDB.Driver/2.3.0-rc1": {
         "dependencies": {
-          "MongoDB.Bson": "2.3.0-beta1"
+          "MongoDB.Bson": "2.3.0-rc1",
+          "MongoDB.Driver.Core": "2.3.0-rc1"
         },
         "runtime": {
-          "lib/netstandard1.6/MongoDB.Driver.Core.dll": {}
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
+        }
+      },
+      "MongoDB.Driver.Core/2.3.0-rc1": {
+        "dependencies": {
+          "MongoDB.Bson": "2.3.0-rc1",
+          "System.Collections.Specialized": "4.0.1",
+          "System.Diagnostics.TraceSource": "4.0.0",
+          "System.Security.SecureString": "4.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
         }
       },
       "Newtonsoft.Json/9.0.1": {
@@ -115,6 +121,31 @@
           "lib/netcoreapp1.0/SpatialObjectTree.dll": {}
         }
       },
+      "System.Collections.NonGeneric/4.0.1": {
+        "runtime": {
+          "lib/netstandard1.3/System.Collections.NonGeneric.dll": {}
+        }
+      },
+      "System.Collections.Specialized/4.0.1": {
+        "dependencies": {
+          "System.Collections.NonGeneric": "4.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.3/System.Collections.Specialized.dll": {}
+        }
+      },
+      "System.Diagnostics.TraceSource/4.0.0": {
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
       "System.Runtime.Serialization.Formatters/4.0.0-rc3-24212-01": {
         "dependencies": {
           "System.Runtime.Serialization.Primitives": "4.1.1"
@@ -128,6 +159,18 @@
           "lib/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
         }
       },
+      "System.Security.SecureString/4.0.0": {
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
       "System.ServiceModel/1.0.0": {},
       "System.Xml.XmlSerializer/4.0.10": {
         "runtime": {
@@ -136,9 +179,9 @@
       },
       "DalskiAgent/2.0.0": {
         "dependencies": {
-          "GeoGridEnvironment": "2.0.0-12",
+          "GeoGridEnvironment": "2.0.0-14",
           "LifeAPI": "2.0.0-41",
-          "MongoDB.Driver": "2.3.0-beta1",
+          "MongoDB.Driver": "2.3.0-rc1",
           "SpatialAPI": "2.0.0-8",
           "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
         },
@@ -164,10 +207,10 @@
       "serviceable": true,
       "sha512": "sha512-zPhOzDWXUsu3x5kFg9Y/gJhOkj1KJZL4YEWn6xTY8+gbKZRqlexC1cllSqxFa+Iu1qIhiwfk7ij1c9O6ELdl0g=="
     },
-    "GeoGridEnvironment/2.0.0-12": {
+    "GeoGridEnvironment/2.0.0-14": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-W7N8hRwA1A1tb+/h5mo7sCmIDLPY6wUAmEjbEhbk7WyCe+lI8F9YWKJ1zHwfp+JnjfzuiOdhZTWQqoG+FwRulg=="
+      "sha512": "sha512-DRiJy2dtliUZukl1/XfQH6om2JWOTpaPeP8QFIsaOIRQdeuLTOXRJpBhr474Yn8ZIF7HAKgWTkYwLc6UxB+U+g=="
     },
     "LCConnector/2.0.0-41": {
       "type": "package",
@@ -184,20 +227,20 @@
       "serviceable": true,
       "sha512": "sha512-jXdx2VSNsxKOPfNpsEOeHtrOxv7KIJE6KtvvjaQQOtwMSXOSEsZCfW6zagqZr2AeQTo39BlPpQHOCdvYfjwkTg=="
     },
-    "MongoDB.Bson/2.3.0-beta1": {
+    "MongoDB.Bson/2.3.0-rc1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-UOhuuowkOw+LxkB6yCVEQb1iZ7om32cirpoc0ecvg1Swqqi5hl7TLVHu/UdsYljQbxJd4HEw2I9BY0sn0POasA=="
+      "sha512": "sha512-u1IgFhqOW9A4QVRg5+0z2xv4CGDUMZyXp9t5Uvvjt6kN7ygx/bxlPJ8cRy0UY1MJUNRoB2ezTwyAmceF+o0SSg=="
     },
-    "MongoDB.Driver/2.3.0-beta1": {
+    "MongoDB.Driver/2.3.0-rc1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-DNJzglW5Oet9rB0wLpgYUsVSF9/56Isbe1sKH6typxwTzuCP8snz8Of8ABDMbggE9V54xVhMmOvlo0oUViIHqw=="
+      "sha512": "sha512-RTtiYHsVkzDMMCoqITBlyZIdmrQK2UXfx2GUp3oQP5XM1ZDFy8qKgULCsdzgysrx/BEuTbfuZGankvBpnVM7cQ=="
     },
-    "MongoDB.Driver.Core/2.3.0-beta1": {
+    "MongoDB.Driver.Core/2.3.0-rc1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-x03OEXas9SXyg9kgikNDHlcbIMz1WDAl9YsfdgwgX4Fmo2TqkfE7rqEftoIiZ5BKI1Cu0241Gd6mAqfJxWD48A=="
+      "sha512": "sha512-513knKw4KZiswMeUGe5IeHujGmw6HYLJWeOsGNk2TpGtrS94V+ZzaU298eyyZu8ZJJLaD7Y6asaCvvcIijeuWA=="
     },
     "Newtonsoft.Json/9.0.1": {
       "type": "package",
@@ -214,6 +257,21 @@
       "serviceable": true,
       "sha512": "sha512-U37lGJlQK/sGk80Ol11aEd/VbOgu9mtxQKqzwHmPbldkmqyf29lnYGce2+eVKmFCTKJ56Kf2QxioGv7Wq8KLzw=="
     },
+    "System.Collections.NonGeneric/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hMxFT2RhhlffyCdKLDXjx8WEC5JfCvNozAZxCablAuFRH74SCV4AgzE8yJCh/73bFnEoZgJ9MJmkjQ0dJmnKqA=="
+    },
+    "System.Collections.Specialized/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/HKQyVP0yH1I0YtK7KJL/28snxHNH/bi+0lgk/+MbURF6ULhAE31MDI+NZDerNWu264YbxklXCCygISgm+HMug=="
+    },
+    "System.Diagnostics.TraceSource/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6WVCczFZKXwpWpzd/iJkYnsmWTSFFiU24Xx/YdHXBcu+nFI/ehTgeqdJQFbtRPzbrO3KtRNjvkhtj4t5/WwWsA=="
+    },
     "System.Runtime.Serialization.Formatters/4.0.0-rc3-24212-01": {
       "type": "package",
       "serviceable": true,
@@ -223,6 +281,11 @@
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-HZ6Du5QrTG8MNJbf4e4qMO3JRAkIboGT5Fk804uZtg3Gq516S7hAqTm2UZKUHa7/6HUGdVy3AqMQKbns06G/cg=="
+    },
+    "System.Security.SecureString/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sqzq9GD6/b0yqPuMpgIKBuoLf4VKAj8oAfh4kXSzPaN6eoKY3hRi9C5L27uip25qlU+BGPfb0xh2Rmbwc4jFVA=="
     },
     "System.ServiceModel/1.0.0": {
       "type": "package",
