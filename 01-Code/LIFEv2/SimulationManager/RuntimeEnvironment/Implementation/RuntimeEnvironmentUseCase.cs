@@ -177,8 +177,9 @@ namespace RuntimeEnvironment.Implementation
                     }
                     catch (Exception ex)
                     {
+
                         // fail after 3 attempts
-                        if (retries >= 3)
+                        if (retries > 1)
                         {
                             var sockEx = ex as SocketException;
                             if (sockEx != null)
@@ -189,7 +190,8 @@ namespace RuntimeEnvironment.Implementation
                             }
                             else
                             {
-                                throw;
+                                throw ex;
+
                             }
                         }
                         else
@@ -345,9 +347,7 @@ namespace RuntimeEnvironment.Implementation
 				{
 					layerContainerClients[0].Instantiate(layerInstanceId);
 
-					// check if the current layer is a GIS Layer
-					Console.WriteLine($"Trying to find Type: {layerDescription.AssemblyQualifiedName}");
-					
+
 					//var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
 					var layerType = layerDescription.LayerType;
 					var interfaces = layerType.GetInterfaces();

@@ -25,7 +25,7 @@ namespace LayerLoader.Implementation
         {
             //write files
             modelContent.Write(_pathForTransferredModel);
-            
+
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(_pathForTransferredModel).GetFileSystemInfos("*.dll"))
             {
