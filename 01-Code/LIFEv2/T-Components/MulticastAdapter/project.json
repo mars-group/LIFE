@@ -3,7 +3,9 @@
   "description": "MulticastAdapter for MARS LIFE",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
-
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
     "ConfigurationAdapter": "2.0.0-*",
     "System.Net.NetworkInformation": "4.1.0",

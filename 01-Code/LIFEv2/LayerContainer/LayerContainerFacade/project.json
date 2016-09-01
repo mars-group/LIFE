@@ -1,6 +1,8 @@
 ﻿{
   "version": "2.0.0-*",
-
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
     "Autofac": "4.1.0",
     "LayerFactory": "2.0.0-*",

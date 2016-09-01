@@ -7,8 +7,8 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceRoot}/MARSLocalStarter/bin/Debug/netcoreapp1.0/MARSLocalStarter.dll",
-            "args": ["-m wolvesmodel"],
-            "cwd": "${workspaceRoot}",
+            "args": ["-m","wolvesmodel"],
+            "cwd": "${workspaceRoot}/MARSLocalStarter",
             "stopAtEntry": false,
             "externalConsole": false
         },

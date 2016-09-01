@@ -3,6 +3,9 @@
   "description": "CommonTypes for MARS LIFE",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
     "Newtonsoft.Json": "9.0.1"
   },

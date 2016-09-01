@@ -6,7 +6,11 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 namespace LCConnector.TransportTypes.ModelStructure {
+
+    [JsonConverter(typeof(StringEnumConverter))]
     internal enum ContentType {
         File,
         Folder

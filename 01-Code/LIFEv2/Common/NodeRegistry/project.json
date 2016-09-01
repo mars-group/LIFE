@@ -5,6 +5,9 @@
   "authors": [
     "Christian Huening"
   ],
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
     "CommonTypes": "2.0.0-*",
     "ConfigurationAdapter": "2.0.0-*",

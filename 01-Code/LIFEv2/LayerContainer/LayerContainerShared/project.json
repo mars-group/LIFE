@@ -5,6 +5,9 @@
   "authors": [
     "Christian Huening"
   ],
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
     "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
     "MulticastAdapter": "2.0.0-*",

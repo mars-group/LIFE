@@ -9,6 +9,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using Newtonsoft.Json;
 
 
 namespace LCConnector.TransportTypes.ModelStructure {
@@ -16,6 +17,7 @@ namespace LCConnector.TransportTypes.ModelStructure {
     ///     This class holds the content of a model and is able to write it to a stream.
     /// </summary>
     public class ModelContent {
+        [JsonProperty()]
         private readonly ModelFolder _root;
 
         public ModelContent(string modelPath) {

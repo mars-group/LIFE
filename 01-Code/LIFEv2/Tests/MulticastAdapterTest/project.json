@@ -9,7 +9,9 @@
     "NodeRegistry": "2.0.0-*",
     "ConfigurationAdapter": "2.0.0-*"
   },
-
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "testRunner": "nunit",
 
   "frameworks": {

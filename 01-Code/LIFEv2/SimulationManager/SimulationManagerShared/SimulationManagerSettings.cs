@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -65,8 +66,8 @@ namespace SimulationManagerShared
             // Step 3: Retrieve the canonical name.
             var fqdn = hostinfo.HostName;
             var smName = "SM-" + fqdn;
-            AddinLibraryDirectoryPath = "./models";
-            ModelDirectoryPath = "./models";
+            AddinLibraryDirectoryPath = "." + Path.DirectorySeparatorChar + "models";
+            ModelDirectoryPath = "." + Path.DirectorySeparatorChar + "models";
             NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, smName, ipAddress, 44521, true);
             MulticastSenderConfig = new MulticastSenderConfig();
         }

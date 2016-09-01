@@ -5,6 +5,9 @@
   "authors": [
     "Christian Huening"
   ],
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
     "MulticastAdapter": "2.0.0-*",
     "NodeRegistry": "2.0.0-*",

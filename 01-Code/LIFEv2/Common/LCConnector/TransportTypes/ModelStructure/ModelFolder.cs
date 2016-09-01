@@ -16,8 +16,8 @@ namespace LCConnector.TransportTypes.ModelStructure {
     internal class ModelFolder : IModelDirectoryContent {
         public IList<IModelDirectoryContent> Contents { get; set; }
 
-        public ModelFolder(string name) : this() {
-
+        public ModelFolder(string name) {
+                Contents = new List<IModelDirectoryContent>();
                 string[] parts = name.Split(Path.DirectorySeparatorChar);
                 Name = parts[parts.Length - 1];
 
@@ -36,10 +36,6 @@ namespace LCConnector.TransportTypes.ModelStructure {
                         Contents.Add(new ModelFile(file));
                     }
                 }
-        }
-
-        public ModelFolder() {
-            Contents = new List<IModelDirectoryContent>();
         }
 
         #region IModelDirectoryContent Members

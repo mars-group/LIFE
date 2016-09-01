@@ -1,6 +1,8 @@
 ﻿{
   "version": "2.0.0-*",
-
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
     "Scs": "2.0.0-*",
     "LNSConnector": "2.0.0-*",

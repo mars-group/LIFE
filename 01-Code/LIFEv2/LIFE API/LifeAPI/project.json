@@ -8,6 +8,9 @@
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",
     "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
   },
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
