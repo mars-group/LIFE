@@ -71,13 +71,13 @@ namespace LayerLoader.Implementation
                 var asl = new LIFEAssemblyLoader(currentModelPath);
 
                 var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-                try{
+                try {
                     var foundLayerTypes = asm.GetTypes()
                         .Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer)))
                         .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
                         .ToList();
                     results.AddRange(foundLayerTypes);
-                }catch(ReflectionTypeLoadException ex){
+                } catch(ReflectionTypeLoadException ex){
                     Console.WriteLine($"Caught type load error while Loading model code. Make sure you use 'dotnet publish' to finally create your mode code. Error was: {ex.LoaderExceptions.First()}");
                 }
 

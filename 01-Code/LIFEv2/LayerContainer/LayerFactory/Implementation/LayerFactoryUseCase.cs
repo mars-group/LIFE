@@ -6,6 +6,8 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
+using System;
 using System.Linq;
 using LayerFactory.Interface;
 using LayerLoader.Interface;
@@ -37,7 +39,8 @@ namespace LayerFactory.Implementation {
             if (constructors.Any(c => c.GetParameters().Length == 0))
             {
                 var ctor = constructors.First(c => c.GetParameters().Length == 0);
-                result = (ILayer) ctor.Invoke(new object[0]);
+                result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType);
+                //result = (ILayer) ctor.Invoke(new object[0]);
             }
             else {
                 // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
@@ -52,7 +55,8 @@ namespace LayerFactory.Implementation {
                     actualParameters[i] = param;
                     i++;
                 }
-                result = (ILayer) currentConstructor.Invoke(actualParameters.ToArray());
+                result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType, actualParameters);
+                //currentConstructor.Invoke(actualParameters.ToArray());
             }
             _layerRegistry.RegisterLayer(result);
             return result;
