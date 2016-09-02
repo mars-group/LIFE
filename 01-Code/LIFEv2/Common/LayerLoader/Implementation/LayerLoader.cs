@@ -32,8 +32,10 @@ namespace LayerLoader.Implementation
                 var asl = new LIFEAssemblyLoader(_pathForTransferredModel);
 
                 var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-
-                _layerTypes.Add(FolderNameForTransferredModelCode, asm.GetTypes().Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer))).ToList());
+                if(!_layerTypes.ContainsKey(FolderNameForTransferredModelCode)){
+                    _layerTypes.Add(FolderNameForTransferredModelCode, new List<Type>());
+                }
+                _layerTypes[FolderNameForTransferredModelCode].AddRange(asm.GetTypes().Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer))).ToList());
             }
         }
 

@@ -14,12 +14,12 @@ public class TLayerInstanceId : IEquatable<TLayerInstanceId> {
         /// <summary>
         ///     The layer's identity.
         /// </summary>
-        public TLayerDescription LayerDescription { get; protected set; }
+        public TLayerDescription LayerDescription { get; set; }
 
         /// <summary>
         ///     The instance's unique number.
         /// </summary>
-        public int InstanceNr { get; protected set; }
+        public int InstanceNr { get; set; }
 
         public TLayerInstanceId(TLayerDescription layerDescription, int instanceNr) {
             LayerDescription = layerDescription;

@@ -270,7 +270,7 @@ namespace RuntimeEnvironment.Implementation
 					}
 
 					// check if the current layer is a GIS Layer
-					var layerType = layerDescription.LayerType;
+					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
 					var interfaces = layerType.GetInterfaces();
 
                     // TODO: Maybe reimplement some day with new GIS Library
@@ -349,7 +349,7 @@ namespace RuntimeEnvironment.Implementation
 
 
 					//var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-					var layerType = layerDescription.LayerType;
+					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
 					var interfaces = layerType.GetInterfaces();
                     /*
                     if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))

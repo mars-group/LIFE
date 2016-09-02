@@ -3,7 +3,7 @@
 *.DS_Store
 #dotnet core lock files
 *project.lock.json
-
+models/tmp/*
 #Visual Studio files
 *.[Oo]bj
 *.user

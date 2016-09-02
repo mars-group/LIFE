@@ -38,6 +38,8 @@ namespace LCConnector.TransportTypes.ModelStructure {
                 }
         }
 
+        public ModelFolder() {}
+
         #region IModelDirectoryContent Members
 
         public string Name { get; set; }

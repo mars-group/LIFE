@@ -38,7 +38,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Size of the buffer that is used to receive bytes from TCP socket.
         /// </summary>
-        private const int ReceiveBufferSize = 8*1024; //8KB
+        private const int ReceiveBufferSize = 128*1024*1024; //128MB
 
         private const int NumReadConnections = 10;
         private const int NumWriteConnections = 10;

@@ -15,6 +15,7 @@ using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Protocols;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
     /// <summary>
@@ -35,12 +36,16 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// </summary>
         private const int MaxMessageLength = 256*1024*1024; //128 Megabytes.
 
+
+
         private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
 
         /// <summary>
         ///     This MemoryStream object is used to collect receiving bytes to build messages.
         /// </summary>
         private MemoryStream _receiveMemoryStream;
+
+        private object _lock;
 
         #endregion
 
@@ -50,6 +55,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Creates a new instance of JsonSerializationProtocol.
         /// </summary>
         public JsonSerializationProtocol() {
+            _lock = new Object();
             _receiveMemoryStream = new MemoryStream();
         }
 
@@ -101,14 +107,16 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     may return an empty list (and save bytes to combine with next method call).
         /// </returns>
         public IEnumerable<IScsMessage> CreateMessages(byte[] receivedBytes) {
-            //Write all received bytes to the _receiveMemoryStream
-            _receiveMemoryStream.Write(receivedBytes, 0, receivedBytes.Length);
-            //Create a list to collect messages
-            var messages = new List<IScsMessage>();
-            //Read all available messages and add to messages collection
-            while (ReadSingleMessage(messages)) {}
-            //Return message list
-            return messages;
+            lock(_receiveMemoryStream){
+                //Write all received bytes to the _receiveMemoryStream
+                _receiveMemoryStream.Write(receivedBytes, 0, receivedBytes.Length);
+                //Create a list to collect messages
+                var messages = new List<IScsMessage>();
+                //Read all available messages and add to messages collection
+                while (ReadSingleMessage(messages)) {}
+                //Return message list
+                return messages;
+            }
         }
 
         /// <summary>
@@ -122,7 +130,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
 
         #endregion
 
-        #region Proptected virtual methods
+        #region Protected virtual methods
 
         /// <summary>
         ///     This method is used to serialize a IScsMessage to a byte array.
@@ -135,7 +143,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Does not include length of the message.
         /// </returns>
         protected virtual byte[] SerializeMessage(IScsMessage message) {
-            var json = JsonConvert.SerializeObject(message, Jset);
+            var json = JsonConvert.SerializeObject(message,Formatting.Indented, Jset);
             return Encoding.UTF8.GetBytes(json);
         }
 
@@ -150,7 +158,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// </param>
         /// <returns>Deserialized message</returns>
         protected virtual IScsMessage DeserializeMessage(byte[] bytes) {
-            return JsonConvert.DeserializeObject<IScsMessage>(Encoding.UTF8.GetString(bytes), Jset);
+            var output = Encoding.UTF8.GetString(bytes);
+            return JsonConvert.DeserializeObject<IScsMessage>(output, Jset);
         }
 
         #endregion

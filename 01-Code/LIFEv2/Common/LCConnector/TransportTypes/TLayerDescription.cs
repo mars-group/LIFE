@@ -34,31 +34,24 @@ namespace LCConnector.TransportTypes {
         public string FullName { get; set; }
         public string AssemblyQualifiedName { get; set; }
 
-        public Type LayerType {get; set;}
 
         private readonly string _name;
         private readonly int _majorVersion;
         private readonly int _minorVersion;
         private readonly string _fileName;
 
-        public TLayerDescription(string name, int majorVersion, int minorVersion, string fileName, string fullName, string assemblyQualifiedName, Type layerType) {
+        public TLayerDescription(string name, int majorVersion, int minorVersion, string fileName, string fullName, string assemblyQualifiedName) {
             _name = name;
             _majorVersion = majorVersion;
             _minorVersion = minorVersion;
             _fileName = fileName;
             FullName = fullName;
             AssemblyQualifiedName = assemblyQualifiedName;
-            LayerType = layerType;
         }
 
         #region Object Contracts
 
-        /// <summary>
-        ///     Parameterless constructor for serialization. (DO NOT USE!)
-        /// </summary>
-        public TLayerDescription(string fullName) {
-            FullName = fullName;
-        }
+
 
         public bool Equals(TLayerDescription other) {
             if (ReferenceEquals(null, other)) return false;
