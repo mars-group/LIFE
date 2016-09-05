@@ -474,38 +474,53 @@
           }
         }
       },
-      "MongoDB.Bson/2.3.0-beta1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard1.6/MongoDB.Bson.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.6/MongoDB.Bson.dll": {}
-        }
-      },
-      "MongoDB.Driver/2.3.0-beta1": {
+      "MongoDB.Bson/2.3.0-rc1": {
         "type": "package",
         "dependencies": {
-          "MongoDB.Bson": "2.3.0-beta1",
-          "MongoDB.Driver.Core": "2.3.0-beta1"
+          "NETStandard.Library": "1.6.0",
+          "System.Collections.NonGeneric": "4.0.1",
+          "System.Diagnostics.Process": "4.1.0",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.Reflection.Emit.Lightweight": "4.0.1"
         },
         "compile": {
-          "lib/netstandard1.6/MongoDB.Driver.dll": {}
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.6/MongoDB.Driver.dll": {}
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
         }
       },
-      "MongoDB.Driver.Core/2.3.0-beta1": {
+      "MongoDB.Driver/2.3.0-rc1": {
         "type": "package",
         "dependencies": {
-          "MongoDB.Bson": "2.3.0-beta1"
+          "MongoDB.Bson": "2.3.0-rc1",
+          "MongoDB.Driver.Core": "2.3.0-rc1",
+          "NETStandard.Library": "1.6.0",
+          "System.Linq.Queryable": "4.0.1"
         },
         "compile": {
-          "lib/netstandard1.6/MongoDB.Driver.Core.dll": {}
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.6/MongoDB.Driver.Core.dll": {}
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
+        }
+      },
+      "MongoDB.Driver.Core/2.3.0-rc1": {
+        "type": "package",
+        "dependencies": {
+          "MongoDB.Bson": "2.3.0-rc1",
+          "NETStandard.Library": "1.6.0",
+          "System.Collections.Specialized": "4.0.1",
+          "System.Diagnostics.TraceSource": "4.0.0",
+          "System.Net.NameResolution": "4.0.0",
+          "System.Net.Security": "4.0.0",
+          "System.Security.SecureString": "4.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
         }
       },
       "NETStandard.Library/1.6.0": {
@@ -590,7 +605,7 @@
           "lib/netstandard1.0/Newtonsoft.Json.dll": {}
         }
       },
-      "RabbitMQ.Client/4.0.1-rc1": {
+      "RabbitMQ.Client/4.0.2": {
         "type": "package",
         "dependencies": {
           "System.Collections.Concurrent": "4.0.12",
@@ -788,7 +803,7 @@
           "System.Threading": "4.0.11"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Collections.Specialized.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Collections.Specialized.dll": {}
@@ -1016,6 +1031,33 @@
         },
         "compile": {
           "ref/netstandard1.0/System.Diagnostics.Tools.dll": {}
+        }
+      },
+      "System.Diagnostics.TraceSource/4.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.1",
+          "System.Collections": "4.0.11",
+          "System.Diagnostics.Debug": "4.0.11",
+          "System.Globalization": "4.0.11",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0",
+          "System.Threading": "4.0.11",
+          "runtime.native.System": "4.0.0"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Diagnostics.TraceSource.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
         }
       },
       "System.Diagnostics.Tracing/4.1.0": {
@@ -1709,7 +1751,7 @@
           "System.Runtime": "4.1.0"
         },
         "compile": {
-          "ref/netstandard1.0/_._": {}
+          "ref/netstandard1.0/System.Reflection.Emit.ILGeneration.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Reflection.Emit.ILGeneration.dll": {}
@@ -1724,7 +1766,7 @@
           "System.Runtime": "4.1.0"
         },
         "compile": {
-          "ref/netstandard1.0/_._": {}
+          "ref/netstandard1.0/System.Reflection.Emit.Lightweight.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Reflection.Emit.Lightweight.dll": {}
@@ -2224,6 +2266,32 @@
           }
         }
       },
+      "System.Security.SecureString/4.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.1",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Handles": "4.0.1",
+          "System.Runtime.InteropServices": "4.1.0",
+          "System.Security.Cryptography.Primitives": "4.0.0",
+          "System.Text.Encoding": "4.0.11",
+          "System.Threading": "4.0.11"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Security.SecureString.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "System.Text.Encoding/4.0.11": {
         "type": "package",
         "dependencies": {
@@ -2495,37 +2563,38 @@
           "System.Xml.ReaderWriter": "4.0.11"
         },
         "compile": {
-          "ref/netstandard1.3/System.Xml.XmlDocument.dll": {}
+          "ref/netstandard1.3/_._": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
-      "System.Xml.XmlSerializer/4.0.10": {
+      "System.Xml.XmlSerializer/4.0.11": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.10",
-          "System.Diagnostics.Debug": "4.0.10",
-          "System.Globalization": "4.0.10",
-          "System.IO": "4.0.10",
-          "System.Linq": "4.0.0",
-          "System.Reflection": "4.0.10",
-          "System.Reflection.Extensions": "4.0.0",
-          "System.Reflection.Primitives": "4.0.0",
-          "System.Reflection.TypeExtensions": "4.0.0",
-          "System.Resources.ResourceManager": "4.0.0",
-          "System.Runtime": "4.0.20",
-          "System.Runtime.Extensions": "4.0.10",
-          "System.Text.RegularExpressions": "4.0.10",
-          "System.Threading": "4.0.10",
-          "System.Xml.ReaderWriter": "4.0.10",
-          "System.Xml.XmlDocument": "4.0.0"
+          "System.Collections": "4.0.11",
+          "System.Globalization": "4.0.11",
+          "System.IO": "4.1.0",
+          "System.Linq": "4.1.0",
+          "System.Reflection": "4.1.0",
+          "System.Reflection.Emit": "4.0.1",
+          "System.Reflection.Emit.ILGeneration": "4.0.1",
+          "System.Reflection.Extensions": "4.0.1",
+          "System.Reflection.Primitives": "4.0.1",
+          "System.Reflection.TypeExtensions": "4.1.0",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0",
+          "System.Text.RegularExpressions": "4.1.0",
+          "System.Threading": "4.0.11",
+          "System.Xml.ReaderWriter": "4.0.11",
+          "System.Xml.XmlDocument": "4.0.1"
         },
         "compile": {
-          "ref/dotnet/System.Xml.XmlSerializer.dll": {}
+          "ref/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         },
         "runtime": {
-          "lib/DNXCore50/System.Xml.XmlSerializer.dll": {}
+          "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
       "System.Xml.XPath/4.0.1": {
@@ -2588,7 +2657,7 @@
         "dependencies": {
           "Microsoft.NETCore.App": "1.0.0",
           "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
-          "System.Xml.XmlSerializer": "4.0.10"
+          "System.Xml.XmlSerializer": "4.0.11"
         },
         "compile": {
           "netcoreapp1.0/ConfigurationAdapter.dll": {}
@@ -2729,6 +2798,7 @@
         "dependencies": {
           "MARS.Shuttle.SimulationConfig": "2.0.0-7",
           "Microsoft.NETCore.App": "1.0.0",
+          "Newtonsoft.Json": "9.0.1",
           "Scs": "2.0.0",
           "System.Threading": "4.0.11",
           "System.Threading.Thread": "4.0.0"
@@ -2748,7 +2818,7 @@
           "MARS.Shuttle.SimulationConfig": "2.0.0-7",
           "Microsoft.NETCore.App": "1.0.0",
           "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
-          "System.Xml.XmlSerializer": "4.0.10"
+          "System.Xml.XmlSerializer": "4.0.11"
         },
         "compile": {
           "netcoreapp1.0/LifeAPI.dll": {}
@@ -2781,6 +2851,7 @@
           "LifeAPI": "2.0.0",
           "MARS.Shuttle.SimulationConfig": "2.0.0-8",
           "Microsoft.NETCore.App": "1.0.0",
+          "Newtonsoft.Json": "9.0.1",
           "SMConnector": "2.0.0",
           "SimulationManagerShared": "2.0.0",
           "System.IO.FileSystem.Watcher": "4.0.0"
@@ -2852,7 +2923,7 @@
           "CommonTypes": "2.0.0",
           "ConfigService": "2.0.0-8",
           "Microsoft.NETCore.App": "1.0.0",
-          "RabbitMQ.Client": "4.0.1-rc1"
+          "RabbitMQ.Client": "4.0.2"
         },
         "compile": {
           "netcoreapp1.0/RabbitMQClient.dll": {}
@@ -2869,8 +2940,8 @@
           "ConfigService": "2.0.0-8",
           "LifeAPI": "2.0.0",
           "Microsoft.NETCore.App": "1.0.0",
-          "MongoDB.Driver": "2.3.0-beta1",
-          "RabbitMQ.Client": "4.0.1-rc1",
+          "MongoDB.Driver": "2.3.0-rc1",
+          "RabbitMQ.Client": "4.0.2",
           "System.Threading.Tasks.Parallel": "4.0.1"
         },
         "compile": {
@@ -3485,46 +3556,46 @@
         "runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll"
       ]
     },
-    "MongoDB.Bson/2.3.0-beta1": {
-      "sha512": "UOhuuowkOw+LxkB6yCVEQb1iZ7om32cirpoc0ecvg1Swqqi5hl7TLVHu/UdsYljQbxJd4HEw2I9BY0sn0POasA==",
+    "MongoDB.Bson/2.3.0-rc1": {
+      "sha512": "u1IgFhqOW9A4QVRg5+0z2xv4CGDUMZyXp9t5Uvvjt6kN7ygx/bxlPJ8cRy0UY1MJUNRoB2ezTwyAmceF+o0SSg==",
       "type": "package",
-      "path": "MongoDB.Bson/2.3.0-beta1",
+      "path": "MongoDB.Bson/2.3.0-rc1",
       "files": [
         "License.rtf",
-        "MongoDB.Bson.2.3.0-beta1.nupkg.sha512",
+        "MongoDB.Bson.2.3.0-rc1.nupkg.sha512",
         "MongoDB.Bson.nuspec",
         "lib/net45/MongoDB.Bson.XML",
         "lib/net45/MongoDB.Bson.dll",
-        "lib/netstandard1.6/MongoDB.Bson.dll",
-        "lib/netstandard1.6/MongoDB.Bson.xml"
+        "lib/netstandard1.5/MongoDB.Bson.dll",
+        "lib/netstandard1.5/MongoDB.Bson.xml"
       ]
     },
-    "MongoDB.Driver/2.3.0-beta1": {
-      "sha512": "DNJzglW5Oet9rB0wLpgYUsVSF9/56Isbe1sKH6typxwTzuCP8snz8Of8ABDMbggE9V54xVhMmOvlo0oUViIHqw==",
+    "MongoDB.Driver/2.3.0-rc1": {
+      "sha512": "RTtiYHsVkzDMMCoqITBlyZIdmrQK2UXfx2GUp3oQP5XM1ZDFy8qKgULCsdzgysrx/BEuTbfuZGankvBpnVM7cQ==",
       "type": "package",
-      "path": "MongoDB.Driver/2.3.0-beta1",
+      "path": "MongoDB.Driver/2.3.0-rc1",
       "files": [
         "License.rtf",
-        "MongoDB.Driver.2.3.0-beta1.nupkg.sha512",
+        "MongoDB.Driver.2.3.0-rc1.nupkg.sha512",
         "MongoDB.Driver.nuspec",
         "lib/net45/MongoDB.Driver.XML",
         "lib/net45/MongoDB.Driver.dll",
-        "lib/netstandard1.6/MongoDB.Driver.dll",
-        "lib/netstandard1.6/MongoDB.Driver.xml"
+        "lib/netstandard1.5/MongoDB.Driver.dll",
+        "lib/netstandard1.5/MongoDB.Driver.xml"
       ]
     },
-    "MongoDB.Driver.Core/2.3.0-beta1": {
-      "sha512": "x03OEXas9SXyg9kgikNDHlcbIMz1WDAl9YsfdgwgX4Fmo2TqkfE7rqEftoIiZ5BKI1Cu0241Gd6mAqfJxWD48A==",
+    "MongoDB.Driver.Core/2.3.0-rc1": {
+      "sha512": "513knKw4KZiswMeUGe5IeHujGmw6HYLJWeOsGNk2TpGtrS94V+ZzaU298eyyZu8ZJJLaD7Y6asaCvvcIijeuWA==",
       "type": "package",
-      "path": "MongoDB.Driver.Core/2.3.0-beta1",
+      "path": "MongoDB.Driver.Core/2.3.0-rc1",
       "files": [
         "License.rtf",
-        "MongoDB.Driver.Core.2.3.0-beta1.nupkg.sha512",
+        "MongoDB.Driver.Core.2.3.0-rc1.nupkg.sha512",
         "MongoDB.Driver.Core.nuspec",
         "lib/net45/MongoDB.Driver.Core.XML",
         "lib/net45/MongoDB.Driver.Core.dll",
-        "lib/netstandard1.6/MongoDB.Driver.Core.dll",
-        "lib/netstandard1.6/MongoDB.Driver.Core.xml"
+        "lib/netstandard1.5/MongoDB.Driver.Core.dll",
+        "lib/netstandard1.5/MongoDB.Driver.Core.xml"
       ]
     },
     "NETStandard.Library/1.6.0": {
@@ -3562,12 +3633,12 @@
         "tools/install.ps1"
       ]
     },
-    "RabbitMQ.Client/4.0.1-rc1": {
-      "sha512": "+A9Bx7s0QBaeXB56hWNQm6NU6FbgzshkJsqnEdGTzQWeT7xN9201OvwjTO/HtSDOJKr5OjxfzmKe2GqrVoONJA==",
+    "RabbitMQ.Client/4.0.2": {
+      "sha512": "YQeRpkFfqLtJqBpPDIl+TalL876LQquEr5axWscWyI+D8Uxieq23k8Iz4mIMkeW7rIkU2bP+bUkSVIBujtwtiw==",
       "type": "package",
-      "path": "RabbitMQ.Client/4.0.1-rc1",
+      "path": "RabbitMQ.Client/4.0.2",
       "files": [
-        "RabbitMQ.Client.4.0.1-rc1.nupkg.sha512",
+        "RabbitMQ.Client.4.0.2.nupkg.sha512",
         "RabbitMQ.Client.nuspec",
         "lib/net451/RabbitMQ.Client.dll",
         "lib/netstandard1.5/RabbitMQ.Client.dll"
@@ -4491,6 +4562,45 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
+      ]
+    },
+    "System.Diagnostics.TraceSource/4.0.0": {
+      "sha512": "6WVCczFZKXwpWpzd/iJkYnsmWTSFFiU24Xx/YdHXBcu+nFI/ehTgeqdJQFbtRPzbrO3KtRNjvkhtj4t5/WwWsA==",
+      "type": "package",
+      "path": "System.Diagnostics.TraceSource/4.0.0",
+      "files": [
+        "System.Diagnostics.TraceSource.4.0.0.nupkg.sha512",
+        "System.Diagnostics.TraceSource.nuspec",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Diagnostics.TraceSource.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/System.Diagnostics.TraceSource.dll",
+        "ref/netstandard1.3/System.Diagnostics.TraceSource.dll",
+        "ref/netstandard1.3/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/de/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/es/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/fr/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/it/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/ja/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/ko/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/ru/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/zh-hans/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/zh-hant/System.Diagnostics.TraceSource.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/unix/lib/netstandard1.3/System.Diagnostics.TraceSource.dll",
+        "runtimes/win/lib/net46/System.Diagnostics.TraceSource.dll",
+        "runtimes/win/lib/netstandard1.3/System.Diagnostics.TraceSource.dll"
       ]
     },
     "System.Diagnostics.Tracing/4.1.0": {
@@ -7329,6 +7439,45 @@
         "runtimes/win/lib/netstandard1.3/System.Security.Principal.Windows.dll"
       ]
     },
+    "System.Security.SecureString/4.0.0": {
+      "sha512": "sqzq9GD6/b0yqPuMpgIKBuoLf4VKAj8oAfh4kXSzPaN6eoKY3hRi9C5L27uip25qlU+BGPfb0xh2Rmbwc4jFVA==",
+      "type": "package",
+      "path": "System.Security.SecureString/4.0.0",
+      "files": [
+        "System.Security.SecureString.4.0.0.nupkg.sha512",
+        "System.Security.SecureString.nuspec",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Security.SecureString.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/System.Security.SecureString.dll",
+        "ref/netstandard1.3/System.Security.SecureString.dll",
+        "ref/netstandard1.3/System.Security.SecureString.xml",
+        "ref/netstandard1.3/de/System.Security.SecureString.xml",
+        "ref/netstandard1.3/es/System.Security.SecureString.xml",
+        "ref/netstandard1.3/fr/System.Security.SecureString.xml",
+        "ref/netstandard1.3/it/System.Security.SecureString.xml",
+        "ref/netstandard1.3/ja/System.Security.SecureString.xml",
+        "ref/netstandard1.3/ko/System.Security.SecureString.xml",
+        "ref/netstandard1.3/ru/System.Security.SecureString.xml",
+        "ref/netstandard1.3/zh-hans/System.Security.SecureString.xml",
+        "ref/netstandard1.3/zh-hant/System.Security.SecureString.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/unix/lib/netstandard1.3/System.Security.SecureString.dll",
+        "runtimes/win/lib/net46/System.Security.SecureString.dll",
+        "runtimes/win/lib/netstandard1.3/System.Security.SecureString.dll"
+      ]
+    },
     "System.Text.Encoding/4.0.11": {
       "sha512": "7Dzu1eCyKuRWIzmbTFHhvaBHG0UPqke46G6BjoYCZnWT2WE19kMqDxEPDq0OEa7Wy2nI9aodGD9pQ4dMWakvZA==",
       "type": "package",
@@ -8129,38 +8278,73 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Xml.XmlSerializer/4.0.10": {
-      "sha512": "OKhE6vruk88z/hl0lmfrMvXteTASgJUagu6PT6S10i9uLbvDR3pTwB6jVgiwa2D2qtTB+eneZbS9jljhPXhTtg==",
+    "System.Xml.XmlSerializer/4.0.11": {
+      "sha512": "FrazwwqfIXTfq23mfv4zH+BjqkSFNaNFBtjzu3I9NRmG8EELYyrv/fJnttCIwRMFRR/YKXF1hmsMmMEnl55HGw==",
       "type": "package",
-      "path": "System.Xml.XmlSerializer/4.0.10",
+      "path": "System.Xml.XmlSerializer/4.0.11",
       "files": [
-        "System.Xml.XmlSerializer.4.0.10.nupkg.sha512",
+        "System.Xml.XmlSerializer.4.0.11.nupkg.sha512",
         "System.Xml.XmlSerializer.nuspec",
-        "lib/DNXCore50/System.Xml.XmlSerializer.dll",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
-        "lib/net46/_._",
+        "lib/net45/_._",
         "lib/netcore50/System.Xml.XmlSerializer.dll",
+        "lib/netstandard1.3/System.Xml.XmlSerializer.dll",
+        "lib/portable-net45+win8+wp8+wpa81/_._",
+        "lib/win8/_._",
+        "lib/wp80/_._",
+        "lib/wpa81/_._",
         "lib/xamarinios10/_._",
         "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
         "ref/MonoAndroid10/_._",
         "ref/MonoTouch10/_._",
-        "ref/dotnet/System.Xml.XmlSerializer.dll",
-        "ref/dotnet/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/de/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/es/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/fr/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/it/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/ja/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/ko/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/ru/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/zh-hans/System.Xml.XmlSerializer.xml",
-        "ref/dotnet/zh-hant/System.Xml.XmlSerializer.xml",
-        "ref/net46/_._",
+        "ref/net45/_._",
+        "ref/netcore50/System.Xml.XmlSerializer.dll",
+        "ref/netcore50/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/de/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/es/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/fr/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/it/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/ja/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/ko/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/ru/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/zh-hans/System.Xml.XmlSerializer.xml",
+        "ref/netcore50/zh-hant/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/System.Xml.XmlSerializer.dll",
+        "ref/netstandard1.0/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/de/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/es/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/fr/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/it/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/ja/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/ko/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/ru/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/zh-hans/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.0/zh-hant/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/System.Xml.XmlSerializer.dll",
+        "ref/netstandard1.3/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/de/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/es/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/fr/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/it/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/ja/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/ko/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/ru/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/zh-hans/System.Xml.XmlSerializer.xml",
+        "ref/netstandard1.3/zh-hant/System.Xml.XmlSerializer.xml",
+        "ref/portable-net45+win8+wp8+wpa81/_._",
+        "ref/win8/_._",
+        "ref/wp80/_._",
+        "ref/wpa81/_._",
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
-        "runtime.json",
-        "runtimes/win8-aot/lib/netcore50/System.Xml.XmlSerializer.dll"
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll"
       ]
     },
     "System.Xml.XPath/4.0.1": {

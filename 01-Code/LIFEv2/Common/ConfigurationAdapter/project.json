@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "ConfigurationAdapter which writes and reads MARS LIFE config files in XML",
   "copyright": "(c) 2016 - MARS Group",
@@ -7,15 +7,15 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
+    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
+    "System.Xml.XmlSerializer": "4.0.11"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
-        "System.Xml.XmlSerializer": "4.0.10"
+        "NETStandard.Library": "1.6.0"
       }
     },
     "net46": {
@@ -29,8 +29,7 @@
             "Microsoft.NETCore.App": {
               "version": "1.0.0-*",
               "type": "platform"
-            },
-            "System.Xml.XmlSerializer": "4.0.10"
+            }
           }
         }
   }

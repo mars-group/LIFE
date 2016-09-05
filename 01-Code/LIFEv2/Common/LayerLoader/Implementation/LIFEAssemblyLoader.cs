@@ -18,6 +18,7 @@ namespace LayerLoader.Implementation
         protected override Assembly Load(AssemblyName assemblyName)
         {
             var deps = DependencyContext.Default;
+            
             var res = deps.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
             if (res.Count > 0)
             {

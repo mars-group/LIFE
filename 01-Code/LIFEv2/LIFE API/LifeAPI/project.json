@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "The LIFE-API. Use this to create new Layers and Agents.",
   "copyright": "(c) 2016 - MARS Group",
@@ -6,7 +6,8 @@
   "dependencies": {
     "LCConnector": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-7",
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
+    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
+    "System.Xml.XmlSerializer": "4.0.11"
   },
   "buildOptions": {
     "debugType": "portable"
@@ -15,8 +16,7 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
-        "System.Xml.XmlSerializer": "4.0.10"
+        "NETStandard.Library": "1.6.0"
       }
     },
     "net46": {
@@ -30,8 +30,7 @@
         "Microsoft.NETCore.App": {
           "version": "1.0.0-*",
           "type": "platform"
-        },
-        "System.Xml.XmlSerializer": "4.0.10"
+        }
       }
     }
   }

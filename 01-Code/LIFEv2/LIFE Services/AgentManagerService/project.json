@@ -11,10 +11,10 @@
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-8",
-    "MySqlConnector": "0.1.0-alpha13",
     "SpatialAPI": "2.0.0-8",
     "System.Threading.Tasks.Parallel": "4.0.1",
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
+    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
+    "MySqlConnector": "0.1.0-alpha15"
   },
   "buildOptions": {
     "debugType": "portable"

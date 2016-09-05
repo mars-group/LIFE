@@ -8,12 +8,16 @@
 //  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
 using LayerFactory.Interface;
 using LayerLoader.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Layer;
+using Microsoft.Extensions.DependencyModel;
 
 
 namespace LayerFactory.Implementation {
@@ -28,6 +32,29 @@ namespace LayerFactory.Implementation {
 
         #region ILayerFactory Members
 
+        public static IEnumerable<Assembly> GetReferencingAssemblies(string assemblyName)
+        {
+            var assemblies = new List<Assembly>();
+            var dependencies = DependencyContext.Default.RuntimeLibraries;
+            foreach (var library in dependencies)
+            {
+                if (IsCandidateLibrary(library, assemblyName))
+                {
+                    var assembly = Assembly.Load(new AssemblyName(library.Name));
+                    assemblies.Add(assembly);
+                }
+            }
+            return assemblies;
+        }
+
+        private static bool IsCandidateLibrary(RuntimeLibrary library, string assemblyName)
+        {
+            return library.Name == (assemblyName)
+                || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName));
+        }
+
+
+
         public ILayer GetLayer(string layerName) {
             ILayer result;
 
@@ -35,10 +62,19 @@ namespace LayerFactory.Implementation {
 
             var constructors = layerTypeInfo.Constructors;
 
+            var references = GetReferencingAssemblies(layerTypeInfo.LayerType.GetTypeInfo().Assembly.GetName().Name);
+            foreach (var reference in references)
+            {
+                Console.WriteLine($"Found: {reference.FullName}");
+            }
+
             // check if there is an empty constructor
             if (constructors.Any(c => c.GetParameters().Length == 0))
             {
                 var ctor = constructors.First(c => c.GetParameters().Length == 0);
+                
+                
+                
                 result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType);
                 //result = (ILayer) ctor.Invoke(new object[0]);
             }

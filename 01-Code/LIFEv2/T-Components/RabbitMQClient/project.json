@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "The RabbitMQClient allows to write to RabbitMQ",
   "copyright": "(c) 2016 - MARS Group",
@@ -11,7 +11,7 @@
   "dependencies": {
     "ConfigService": "2.0.0-8",
     "CommonTypes": "2.0.0-*",
-    "RabbitMQ.Client": "4.0.1-rc1"
+    "RabbitMQ.Client": "4.0.2"
   },
   "frameworks": {
     "netstandard1.6": {
