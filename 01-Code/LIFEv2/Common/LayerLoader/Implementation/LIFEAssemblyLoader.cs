@@ -37,8 +37,8 @@ namespace LayerLoader.Implementation
                 return Assembly.Load(assemblyName);
             }
 
-            var asl = new LIFEAssemblyLoader(apiApplicationFileInfo.DirectoryName);
-            return asl.LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
+            //var asl = new LIFEAssemblyLoader(apiApplicationFileInfo.DirectoryName);
+            return LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
         }
     }
 }

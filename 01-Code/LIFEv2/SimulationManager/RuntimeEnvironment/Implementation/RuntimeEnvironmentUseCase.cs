@@ -349,8 +349,15 @@ namespace RuntimeEnvironment.Implementation
 
 
 					//var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-					var interfaces = layerType.GetInterfaces();
+					var layerType = Type.GetType(layerDescription.FullName);
+					if(layerType == null){
+						layerType = new LayerLoader.Implementation.LayerLoader()
+						.LoadAllLayersForModel(modelDescription.Name)
+						.FirstOrDefault(l => l.LayerType.AssemblyQualifiedName.Equals(layerDescription.AssemblyQualifiedName))
+						.LayerType;
+					}
+
+					var interfaces = layerType.GetTypeInfo().GetInterfaces();
                     /*
                     if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
 					{

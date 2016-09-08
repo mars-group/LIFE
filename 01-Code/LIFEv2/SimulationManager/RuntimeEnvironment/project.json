@@ -9,6 +9,7 @@
     "debugType": "portable"
   },
   "dependencies": {
+    "LayerLoader": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
     "LCConnector": "2.0.0-*",
     "SMConnector": "2.0.0-*",
