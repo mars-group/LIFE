@@ -43,7 +43,6 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
-        return;
 	    if (_simObjects.IsEmpty) return;
     	  
 
