@@ -144,7 +144,7 @@ namespace RuntimeEnvironment.Implementation
 					}
 				});
 
-            var status = $"Finished {currentTick} in {_maxExecutionTime} ms.";
+            var status = $"Finished tick {currentTick} in {_maxExecutionTime} ms.";
             Console.SetCursorPosition(0,Console.CursorTop);
 			Console.Write(status);
 
