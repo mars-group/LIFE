@@ -14,7 +14,7 @@
     "CommonTypes": "2.0.0-*",
     "System.Threading.Tasks.Parallel": "4.0.1",
     "MongoDB.Driver": "2.3.0-rc1",
-    "RabbitMQ.Client": "4.0.2"
+    "RabbitMQ.Client": "4.1.0-rc1"
   },
   "frameworks": {
     "netstandard1.6": {

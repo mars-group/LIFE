@@ -11,7 +11,7 @@
   "dependencies": {
     "ConfigService": "2.0.0-8",
     "CommonTypes": "2.0.0-*",
-    "RabbitMQ.Client": "4.0.2"
+    "RabbitMQ.Client": "4.1.0-rc1"
   },
   "frameworks": {
     "netstandard1.6": {

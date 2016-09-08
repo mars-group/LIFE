@@ -25,7 +25,7 @@
 	"SimStartDate": "2007-12-31T23:00:00:000",
 	"SimEndDate": "2008-12-30T23:00:00:000",
 	"SimStepDuration": "0:1:0:0:0",
-	"SimDurationInSteps":10,
+	"SimDurationInSteps":1000,
 	"GISLayerSourceInfo": [],
 	"TSLayerSourceInfo": [],
 	"GeoSpatialBoundaries": [],

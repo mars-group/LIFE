@@ -26,7 +26,7 @@ namespace MARSLocalStarter {
 	private static void Main(string[] args)
 	{
 
-		Console.WriteLine("MARS LIFE trying to start up.");
+		Console.WriteLine("MARS LIFE 2.0 trying to start up.");
 
 		try
 		{
@@ -38,7 +38,7 @@ namespace MARSLocalStarter {
 			// parse for any given parameters and act accordingly
 			ParseArgsAndStart(args);
 
-			Console.WriteLine("MARS LIFE up and running...");
+			Console.WriteLine("MARS LIFE 2.0 up and running...");
 
 			simCore.WaitForSimulationToFinish(_chosenModel);
 		}
@@ -49,7 +49,7 @@ namespace MARSLocalStarter {
         }
 
 
-		Console.WriteLine("MARS LIFE shutting down.");
+		Console.WriteLine("MARS LIFE 2.0 shutting down.");
 
 
 		Environment.Exit(0);

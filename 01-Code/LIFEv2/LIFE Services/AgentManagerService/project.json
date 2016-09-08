@@ -6,15 +6,15 @@
   "dependencies": {
     "CommonTypes": "2.0.0-*",
     "ConfigService": "2.0.0-8",
-    "DalskiAgent": "2.0.0-3",
     "GeoGridEnvironment": "2.0.0-14",
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
-    "MARS.Shuttle.SimulationConfig": "2.0.0-8",
-    "SpatialAPI": "2.0.0-8",
     "System.Threading.Tasks.Parallel": "4.0.1",
     "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
-    "MySqlConnector": "0.1.0-alpha15"
+    "DalskiAgent": "2.0.0-4",
+    "MySqlConnector": "0.1.0-alpha18",
+    "SpatialAPI": "2.0.0-10",
+    "MARS.Shuttle.SimulationConfig": "2.0.0-12"
   },
   "buildOptions": {
     "debugType": "portable"

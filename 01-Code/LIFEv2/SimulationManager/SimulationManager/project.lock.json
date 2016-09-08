@@ -81,7 +81,7 @@
           "lib/netcoreapp1.0/LIFEUtilities.dll": {}
         }
       },
-      "MARS.Shuttle.SimulationConfig/2.0.0-8": {
+      "MARS.Shuttle.SimulationConfig/2.0.0-12": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.App": "1.0.0",
@@ -556,7 +556,7 @@
           "lib/netstandard1.0/Newtonsoft.Json.dll": {}
         }
       },
-      "RabbitMQ.Client/4.0.2": {
+      "RabbitMQ.Client/4.1.0-rc1": {
         "type": "package",
         "dependencies": {
           "System.Collections.Concurrent": "4.0.12",
@@ -568,6 +568,7 @@
           "System.Net.Security": "4.0.0",
           "System.Net.Sockets": "4.1.0",
           "System.Reflection.Extensions": "4.0.1",
+          "System.Reflection.TypeExtensions": "4.1.0",
           "System.Runtime.Extensions": "4.1.0",
           "System.Text.RegularExpressions": "4.1.0",
           "System.Threading": "4.0.11",
@@ -2615,7 +2616,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v1.0",
         "dependencies": {
-          "MARS.Shuttle.SimulationConfig": "2.0.0-7",
+          "MARS.Shuttle.SimulationConfig": "2.0.0-12",
           "Microsoft.NETCore.App": "1.0.0",
           "Newtonsoft.Json": "9.0.1",
           "Scs": "2.0.0",
@@ -2634,7 +2635,7 @@
         "framework": ".NETCoreApp,Version=v1.0",
         "dependencies": {
           "LCConnector": "2.0.0",
-          "MARS.Shuttle.SimulationConfig": "2.0.0-7",
+          "MARS.Shuttle.SimulationConfig": "2.0.0-12",
           "Microsoft.NETCore.App": "1.0.0",
           "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
           "System.Xml.XmlSerializer": "4.0.11"
@@ -2668,7 +2669,7 @@
           "LCConnector": "2.0.0",
           "LayerLoader": "2.0.0",
           "LifeAPI": "2.0.0",
-          "MARS.Shuttle.SimulationConfig": "2.0.0-8",
+          "MARS.Shuttle.SimulationConfig": "2.0.0-12",
           "Microsoft.NETCore.App": "1.0.0",
           "Newtonsoft.Json": "9.0.1",
           "SMConnector": "2.0.0",
@@ -2725,7 +2726,7 @@
           "CommonTypes": "2.0.0",
           "ConfigService": "2.0.0-8",
           "Microsoft.NETCore.App": "1.0.0",
-          "RabbitMQ.Client": "4.0.2"
+          "RabbitMQ.Client": "4.1.0-rc1"
         },
         "compile": {
           "netcoreapp1.0/RabbitMQClient.dll": {}
@@ -2740,6 +2741,7 @@
         "dependencies": {
           "CommonTypes": "2.0.0",
           "LCConnector": "2.0.0",
+          "LayerLoader": "2.0.0",
           "LifeAPI": "2.0.0",
           "Microsoft.NETCore.App": "1.0.0",
           "ModelContainer": "2.0.0",
@@ -2893,12 +2895,12 @@
         "lib/netstandard1.6/LIFEUtilities.dll"
       ]
     },
-    "MARS.Shuttle.SimulationConfig/2.0.0-8": {
-      "sha512": "QvlSSrQ+672cobPw0paUe7m6N+rUNr9fXNq/k6e4rjZztHoLk4x5OjmZ2rkWb4g+7xkMZtKIhnQYScbdxscqwA==",
+    "MARS.Shuttle.SimulationConfig/2.0.0-12": {
+      "sha512": "p2JghpEJ8s18d2P/VBoM8TfnHIi7vyvBU9pf5zkONyurdON303rg5AIqsCCL+UKInnsy+YJ3aUU7lVqx/TVpOQ==",
       "type": "package",
-      "path": "MARS.Shuttle.SimulationConfig/2.0.0-8",
+      "path": "MARS.Shuttle.SimulationConfig/2.0.0-12",
       "files": [
-        "MARS.Shuttle.SimulationConfig.2.0.0-8.nupkg.sha512",
+        "MARS.Shuttle.SimulationConfig.2.0.0-12.nupkg.sha512",
         "MARS.Shuttle.SimulationConfig.nuspec",
         "lib/net46/MARS.Shuttle.SimulationConfig.dll",
         "lib/netcoreapp1.0/MARS.Shuttle.SimulationConfig.dll",
@@ -3356,12 +3358,12 @@
         "tools/install.ps1"
       ]
     },
-    "RabbitMQ.Client/4.0.2": {
-      "sha512": "YQeRpkFfqLtJqBpPDIl+TalL876LQquEr5axWscWyI+D8Uxieq23k8Iz4mIMkeW7rIkU2bP+bUkSVIBujtwtiw==",
+    "RabbitMQ.Client/4.1.0-rc1": {
+      "sha512": "vF8BzUGHr0bdUTmzGn5HU+pDRK51wmriIC+nm1YJ9uMFmhowcA3CtzyKVbj7nAC1FFZGr4NVxkgNmfiRL800jg==",
       "type": "package",
-      "path": "RabbitMQ.Client/4.0.2",
+      "path": "RabbitMQ.Client/4.1.0-rc1",
       "files": [
-        "RabbitMQ.Client.4.0.2.nupkg.sha512",
+        "RabbitMQ.Client.4.1.0-rc1.nupkg.sha512",
         "RabbitMQ.Client.nuspec",
         "lib/net451/RabbitMQ.Client.dll",
         "lib/netstandard1.5/RabbitMQ.Client.dll"

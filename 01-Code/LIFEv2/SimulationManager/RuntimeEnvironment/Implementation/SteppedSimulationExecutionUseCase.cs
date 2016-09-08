@@ -60,7 +60,7 @@ namespace RuntimeEnvironment.Implementation
         }
 
         private void RunSimulation() {
-
+            Console.WriteLine($"Starting Simulation with ID {_simulationId} for {_nrOfTicks} ticks...");
             var sw = Stopwatch.StartNew();
             for (var i = 1; _nrOfTicks == null || i <= _nrOfTicks; i++) {
 
@@ -116,7 +116,7 @@ namespace RuntimeEnvironment.Implementation
 			var stb = new StringBuilder ();
 			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Finished\",\"tickCount\" : \"{1}\",\"totalDuration\" : \"{2}\", \"time\" : \"{3}\"}}", _simulationId, _nrOfTicks, sw.ElapsedMilliseconds, GetUnixTimeStamp());
 			//_rabbitMQWriter.SendMessage(stb.ToString());
-
+            
 			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
         }
 
@@ -142,12 +142,14 @@ namespace RuntimeEnvironment.Implementation
 						localMax = Interlocked.Read(ref _maxExecutionTime);
 					}
 				});
-			
-			Console.WriteLine (String.Format("Executed Tick {0} in {1} ms.", currentTick, _maxExecutionTime));
 
- 			var stb = new StringBuilder ();
-			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
-			Console.WriteLine (stb);
+            var status = $"Finished {currentTick} in {_maxExecutionTime} ms.";
+            Console.SetCursorPosition(0,Console.CursorTop);
+			Console.Write(status);
+
+ 			//var stb = new StringBuilder ();
+			//stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
+			//Console.WriteLine (stb);
 		}
 
 		private void CleanUp(){
