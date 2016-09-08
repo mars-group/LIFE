@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using LayerLoader.Interface;
 using LayerLoader.Interface.Exceptions;
 using LCConnector.TransportTypes.ModelStructure;
@@ -21,17 +22,21 @@ namespace LayerLoader.Implementation
         private readonly string _pathForTransferredModel =
             $".{Path.DirectorySeparatorChar}models{Path.DirectorySeparatorChar}{FolderNameForTransferredModelCode}";
 
+        private LIFEAssemblyLoader _asl;
+
         public void LoadModelContent(ModelContent modelContent)
         {
             //write files
             modelContent.Write(_pathForTransferredModel);
 
+
+            
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(_pathForTransferredModel).GetFileSystemInfos("*.dll"))
             {
-                var asl = new LIFEAssemblyLoader(_pathForTransferredModel);
 
-                var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
+                _asl = new LIFEAssemblyLoader(_pathForTransferredModel);
+                var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                 if(!_layerTypes.ContainsKey(FolderNameForTransferredModelCode)){
                     _layerTypes.Add(FolderNameForTransferredModelCode, new List<Type>());
                 }
@@ -64,13 +69,17 @@ namespace LayerLoader.Implementation
         public IEnumerable<LayerTypeInfo> LoadAllLayersForModel(string modelName)
         {
             var currentModelPath = $"{BasePathForModels}{Path.DirectorySeparatorChar}{modelName}";
+
             var results = new List<LayerTypeInfo>();
+
+
+
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(currentModelPath).GetFileSystemInfos("*.dll"))
             {
-                var asl = new LIFEAssemblyLoader(currentModelPath);
 
-                var asm = asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
+                _asl = new LIFEAssemblyLoader(currentModelPath);
+                var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                 try {
                     var foundLayerTypes = asm.GetTypes()
                         .Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer)))

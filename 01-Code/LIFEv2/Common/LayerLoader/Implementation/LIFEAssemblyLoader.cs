@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -13,6 +14,12 @@ namespace LayerLoader.Implementation
         public LIFEAssemblyLoader(string folderPath)
         {
             _folderPath = folderPath;
+            this.Resolving += OnResolving;
+        }
+
+        private Assembly OnResolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
+        {
+            return Load(assemblyName);
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
@@ -26,7 +33,9 @@ namespace LayerLoader.Implementation
             }
             var apiApplicationFileInfo = new FileInfo($"{_folderPath}{Path.DirectorySeparatorChar}{assemblyName.Name}.dll");
 
-            if (!File.Exists(apiApplicationFileInfo.FullName)) return Assembly.Load(assemblyName);
+            if (!File.Exists(apiApplicationFileInfo.FullName)) {
+                return Assembly.Load(assemblyName);
+            }
 
             var asl = new LIFEAssemblyLoader(apiApplicationFileInfo.DirectoryName);
             return asl.LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
