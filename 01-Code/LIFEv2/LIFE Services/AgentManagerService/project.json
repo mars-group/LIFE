@@ -12,7 +12,7 @@
     "System.Threading.Tasks.Parallel": "4.0.1",
     "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
     "DalskiAgent": "2.0.0-4",
-    "MySqlConnector": "0.1.0-alpha18",
+    "MySql.Data": "7.0.5-ir21",
     "SpatialAPI": "2.0.0-10",
     "MARS.Shuttle.SimulationConfig": "2.0.0-12"
   },
