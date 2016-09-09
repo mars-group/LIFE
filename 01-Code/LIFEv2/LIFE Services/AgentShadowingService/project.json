@@ -1,15 +1,35 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "2.0.0-*",
+  "description": "The AgentShadowingService. Use if you want to communicate transparently with other agents.",
+  "copyright": "(c) 2016 - MARS Group",
+  "authors": [
+    "Christian Huening"
+  ],
   "buildOptions": {
     "debugType": "portable"
   },
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "ASC": "2.0.0-*",
+    "LIFEUtilities": "2.0.0-3",
+    "System.Linq.Parallel": "4.0.1"
   },
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    },
+    "net46": {},
+    "netcoreapp1.0": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
+      }
     }
   }
 }
