@@ -85,23 +85,29 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         ///     Entrance point of the thread.
         ///     This method is used by the thread to listen incoming requests.
         /// </summary>
-        private void DoListenAsThread() {
-            while (_running) {
-                try {
-                    var clientSocket = _listenerSocket.AcceptSocket();
+        private void DoListenAsThread()
+        {
+            while (_running)
+            {
+                try
+                {
+                    var clientSocketTask = _listenerSocket.AcceptSocketAsync();
+                    var clientSocket = clientSocketTask.Result;
                     if (clientSocket.Connected)
                         OnCommunicationChannelConnected(new TcpCommunicationChannel(clientSocket));
                 }
-                catch {
+                catch
+                {
                     //Disconnect, wait for a while and connect again.
                     StopSocket();
                     Thread.Sleep(1000);
                     if (!_running) return;
 
-                    try {
+                    try
+                    {
                         StartSocket();
                     }
-                    catch {}
+                    catch { }
                 }
             }
         }

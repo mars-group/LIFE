@@ -28,27 +28,14 @@ namespace ASC.Communication.Scs.Client.Tcp {
             var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
-                socket.Blocking = false;
                 socket.Connect(endPoint);
-                socket.Blocking = true;
                 return socket;
             }
-            catch (SocketException socketException)
+            catch (SocketException)
             {
-                if (socketException.ErrorCode != 10035)
-                {
-                    socket.Close();
-                    throw;
-                }
-
-                if (!socket.Poll(timeoutMs * 1000, SelectMode.SelectWrite))
-                {
-                    socket.Close();
-                    throw new TimeoutException("The host failed to connect. Timeout occured.");
-                }
-
-                socket.Blocking = true;
-                return socket;
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Dispose();
+                throw;
             }
         }
     }

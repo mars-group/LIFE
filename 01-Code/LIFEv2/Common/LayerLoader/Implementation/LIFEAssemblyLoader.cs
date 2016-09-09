@@ -14,7 +14,7 @@ namespace LayerLoader.Implementation
         public LIFEAssemblyLoader(string folderPath)
         {
             _folderPath = folderPath;
-            this.Resolving += OnResolving;
+            Resolving += OnResolving;
         }
 
         private Assembly OnResolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
@@ -37,7 +37,6 @@ namespace LayerLoader.Implementation
                 return Assembly.Load(assemblyName);
             }
 
-            //var asl = new LIFEAssemblyLoader(apiApplicationFileInfo.DirectoryName);
             return LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
         }
     }

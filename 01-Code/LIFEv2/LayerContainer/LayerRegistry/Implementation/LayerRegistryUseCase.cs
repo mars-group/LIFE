@@ -93,8 +93,8 @@ namespace LayerRegistry.Implementation {
             // store in Dict for local usage, by its direct type
             _localLayers.Add(layer.GetType(), layer);
             // and by its direct interface type if any
-            if (layer.GetType().GetInterfaces().Length > 0) {
-                var infs = layer.GetType().GetInterfaces();
+            if (layer.GetType().GetTypeInfo().GetInterfaces().Length > 0) {
+                var infs = layer.GetType().GetTypeInfo().GetInterfaces();
                 foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LifeAPI"))) {
                     _localLayers.Add(type, layer);
                 }
@@ -106,7 +106,7 @@ namespace LayerRegistry.Implementation {
             var layerType = layer.GetType();
             // check if an interface with ScsService Attribute is present
             Type interfaceType = null;
-            foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
+            foreach (var @interface in from @interface in layerType.GetTypeInfo().GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
             {
                 interfaceType = @interface;
             }
@@ -117,7 +117,7 @@ namespace LayerRegistry.Implementation {
                 var serversPort = _layerServiceStartPort++;
 
                 var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
-                var addServiceMethod = server.GetType().GetMethod("AddService");
+                var addServiceMethod = server.GetType().GetTypeInfo().GetMethod("AddService");
                 var genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
                 genericAddServiceMethod.Invoke(server, new object[]{layer});
 
@@ -149,7 +149,7 @@ namespace LayerRegistry.Implementation {
         private object GetRemoteLayerInstance(Type layerType)
         {
             var entry = _layerNameServiceClient.ServiceProxy.ResolveLayer(layerType);
-            var createClientMethod = typeof(ScsServiceClientBuilder).GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
+            var createClientMethod = typeof(ScsServiceClientBuilder).GetTypeInfo().GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
 
             // we need to use the layer's interface type and not the class type, so make sure
             // layerType either is an interface type or reflect the correct interface type
@@ -162,7 +162,7 @@ namespace LayerRegistry.Implementation {
             }
             else 
             {
-                foreach (var @interface in from @interface in layerType.GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
+                foreach (var @interface in from @interface in layerType.GetTypeInfo().GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
                 {
                     interfaceType = @interface;
                 }
@@ -175,12 +175,12 @@ namespace LayerRegistry.Implementation {
             Type typeOfScsStub = scsStub.GetType();
 
             // set timeout to infinite
-            typeOfScsStub.GetProperty("Timeout").SetValue(scsStub, -1);
+            typeOfScsStub.GetTypeInfo().GetProperty("Timeout").SetValue(scsStub, -1);
 
             // cast to IConnectableClient since dynamic binding only exposes the statically implemented members
             ((IConnectableClient)scsStub).Connect();
 
-            var proxy = typeOfScsStub.GetProperty("ServiceProxy").GetValue(scsStub);
+            var proxy = typeOfScsStub.GetTypeInfo().GetProperty("ServiceProxy").GetValue(scsStub);
 
             return proxy;
         }

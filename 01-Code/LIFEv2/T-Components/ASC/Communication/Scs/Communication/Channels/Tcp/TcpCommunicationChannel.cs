@@ -9,6 +9,8 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using ASC.Communication.Scs.Communication.Channels.Udp;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 using ASC.Communication.Scs.Communication.Messages;
@@ -17,13 +19,15 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
     /// <summary>
     ///     This class is used to communicate with a remote application over TCP/IP protocol.
     /// </summary>
-    internal class TcpCommunicationChannel : CommunicationChannelBase {
+    internal class TcpCommunicationChannel : CommunicationChannelBase
+    {
         #region Public properties
 
         /// <summary>
         ///     Gets the endpoint of remote application.
         /// </summary>
-        public override AscEndPoint RemoteEndPoint {
+        public override AscEndPoint RemoteEndPoint
+        {
             get { return _remoteEndPoint; }
         }
 
@@ -36,22 +40,26 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Size of the buffer that is used to receive bytes from TCP socket.
         /// </summary>
-        private const int ReceiveBufferSize = 4*1024; //4KB
+        private const int ReceiveBufferSize = 128 * 1024 * 1024; //128MB
 
-        /// <summary>
-        ///     This buffer is used to receive bytes
-        /// </summary>
-        private readonly byte[] _buffer;
+        private const int NumReadConnections = 10;
+        private const int NumWriteConnections = 10;
+
+        private readonly BufferManager _readBufferManager;
+        //private readonly BufferManager _writeBufferManager;
+
+        private readonly SocketAsyncEventArgsPool _readPool;
+
+        private readonly Semaphore _maxNumberReadClients;
+
 
         /// <summary>
         ///     Socket object to send/reveice messages.
         /// </summary>
         private readonly Socket _clientSocket;
 
-        /// <summary>
-        ///     A flag to control thread's running
-        /// </summary>
-        private volatile bool _running;
+
+        private Thread _listenThread;
 
         /// <summary>
         ///     This object is just used for thread synchronizing (locking).
@@ -69,14 +77,21 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         ///     A connected Socket object that is
         ///     used to communicate over network
         /// </param>
-        public TcpCommunicationChannel(Socket clientSocket) {
+        public TcpCommunicationChannel(Socket clientSocket)
+        {
+            if (clientSocket == null) { throw new ArgumentNullException(nameof(clientSocket)); }
             _clientSocket = clientSocket;
             _clientSocket.NoDelay = true;
 
-            var ipEndPoint = (IPEndPoint) _clientSocket.RemoteEndPoint;
+            if (_clientSocket.RemoteEndPoint == null) { Console.WriteLine("ERROR ENDPOINT NULL!"); }
+
+            var ipEndPoint = (IPEndPoint)_clientSocket.RemoteEndPoint;
             _remoteEndPoint = new AscTcpEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
 
-            _buffer = new byte[ReceiveBufferSize];
+            _readBufferManager = new BufferManager(ReceiveBufferSize * NumReadConnections, ReceiveBufferSize);
+            _readPool = new SocketAsyncEventArgsPool(NumReadConnections);
+
+            _maxNumberReadClients = new Semaphore(NumReadConnections, NumReadConnections);
             _syncLock = new object();
         }
 
@@ -87,16 +102,19 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Disconnects from remote application and closes channel.
         /// </summary>
-        public override void Disconnect() {
+        public override void Disconnect()
+        {
             if (CommunicationState != CommunicationStates.Connected) return;
-
-            _running = false;
-            try {
-                if (_clientSocket.Connected) _clientSocket.Close();
+            try
+            {
+                if (_clientSocket.Connected) _clientSocket.Shutdown(SocketShutdown.Both);
 
                 _clientSocket.Dispose();
             }
-            catch {}
+            catch
+            {
+                // ignored
+            }
 
             CommunicationState = CommunicationStates.Disconnected;
             OnDisconnected();
@@ -109,26 +127,57 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Starts the thread to receive messages from socket.
         /// </summary>
-        protected override void StartInternal() {
-            _running = true;
-            _clientSocket.BeginReceive(_buffer, 0, _buffer.Length, 0, ReceiveCallback, null);
+        protected override void StartInternal()
+        {
+            // Allocates one large byte buffer which all I/O operations use a piece of.  This gaurds
+            // against memory fragmentation
+            _readBufferManager.InitBuffer();
+
+            for (var i = 0; i < NumReadConnections; i++)
+            {
+                //Pre-allocate a set of reusable SocketAsyncEventArgs
+                var readEventArg = new SocketAsyncEventArgs();
+                readEventArg.Completed += IO_Completed;
+
+                // receive only from connected remote endpoint! NOT:receive from every address and port
+                readEventArg.RemoteEndPoint = _clientSocket.RemoteEndPoint; //new IPEndPoint(IPAddress.Any, 0);
+
+                // assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
+                _readBufferManager.SetBuffer(readEventArg);
+
+                // add SocketAsyncEventArg to the pool
+                _readPool.Push(readEventArg);
+            }
+
+            // begin to receive in Thread to not block the sending side
+            _listenThread = new Thread(Receive) { IsBackground = true };
+            _listenThread.Start();
         }
+
+
+        #endregion
+
+        #region Private methods
 
         /// <summary>
         ///     Sends a message to the remote application.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        protected override void SendMessageInternal(IAscMessage message) {
+        protected override void SendMessageInternal(IAscMessage message)
+        {
             //Send message
             var totalSent = 0;
-            lock (_syncLock) {
+            lock (_syncLock)
+            {
                 //Create a byte array from message according to current protocol
                 var messageBytes = WireProtocol.GetBytes(message);
                 //Send all bytes to the remote application
-                while (totalSent < messageBytes.Length) {
+                while (totalSent < messageBytes.Length)
+                {
                     var sent = _clientSocket.Send(messageBytes, totalSent, messageBytes.Length - totalSent,
                         SocketFlags.None);
-                    if (sent <= 0) {
+                    if (sent <= 0)
+                    {
                         throw new CommunicationException("Message could not be sent via TCP socket. Only " + totalSent +
                                                          " bytes of " + messageBytes.Length + " bytes are sent.");
                     }
@@ -140,46 +189,78 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
                 OnMessageSent(message);
             }
         }
-        
-        #endregion
 
-        #region Private methods
-
-        /// <summary>
-        ///     This method is used as callback method in _clientSocket's BeginReceive method.
-		///     It reveives bytes from socket.
-        /// </summary>
-        /// <param name="ar">Asyncronous call result</param>
-        private void ReceiveCallback(IAsyncResult ar) {
-            if (!_running) return;
-
-            try {
-                //Get received bytes count
-                var bytesRead = _clientSocket.EndReceive(ar);
-                if (bytesRead > 0) {
-                    LastReceivedMessageTime = DateTime.Now;
-
-                    //Copy received bytes to a new byte array
-                    var receivedBytes = new byte[bytesRead];
-                    Array.Copy(_buffer, 0, receivedBytes, 0, bytesRead);
-
-                    //Read messages according to current wire protocol
-                    var messages = WireProtocol.CreateMessages(receivedBytes);
-
-                    //Raise MessageReceived event for all received messages
-                    foreach (var message in messages) {
-                        OnMessageReceived(message);
-                    }
+        private void Receive()
+        {
+            while (true)
+            {
+                _maxNumberReadClients.WaitOne();
+                // Pop a SocketAsyncEventArgs object from the stack
+                var readEventArgs = _readPool.Pop();
+                // As soon as the client is connected, post a receive to the connection
+                var willRaiseEvent = _clientSocket.ReceiveAsync(readEventArgs);
+                if (!willRaiseEvent)
+                {
+                    // operation completed synchronously
+                    ProcessReceive(readEventArgs);
                 }
-                else throw new CommunicationException("Tcp socket is closed");
+                // Accept the next connection request
+            }
+        }
 
-                //Read more bytes if still running
-                if (_running) _clientSocket.BeginReceive(_buffer, 0, _buffer.Length, 0, ReceiveCallback, null);
+        // This method is called whenever a receive or send operation is completed on a socket
+        //
+        // <param name="e">SocketAsyncEventArg associated with the completed receive operation</param>
+        private void IO_Completed(object sender, SocketAsyncEventArgs e)
+        {
+            // determine which type of operation just completed and call the associated handler
+            switch (e.LastOperation)
+            {
+                case SocketAsyncOperation.Receive:
+                    ProcessReceive(e);
+                    break;
+                case SocketAsyncOperation.Send:
+                    // ProcessSend(e);
+                    break;
+                default:
+
+                    throw new ArgumentException($"The last operation completed on the socket was not a receive or send, but: {e.LastOperation}");
             }
-            catch(Exception ex) {
-                Disconnect();
-                //throw;
+
+        }
+
+        // This method is invoked when an asynchronous receive operation completes.
+        private void ProcessReceive(SocketAsyncEventArgs e)
+        {
+            var bytesRead = e.BytesTransferred;
+            if (bytesRead > 0)
+            {
+                //Copy received bytes to a new byte array
+                var receivedBytes = new byte[bytesRead];
+                Buffer.BlockCopy(e.Buffer, e.Offset, receivedBytes, 0, bytesRead);
+
+                //Read messages according to current wire protocol
+                var messages = WireProtocol.CreateMessages(receivedBytes);
+
+                //Raise MessageReceived event for all received messages
+                foreach (var message in messages)
+                {
+                    OnMessageReceived(message);
+                }
             }
+            else
+            {
+                throw new CommunicationException("Tcp socket is closed");
+            }
+
+
+            // put the SocketAsyncEventArg object back onto the stack for later usage
+            _readPool.Push(e);
+            // release the semaphore
+            _maxNumberReadClients.Release();
+
+            // currently nothing, later on: Handle messages too large for the buffer,
+            // this will need a 4 digit prefix to indicate the message size
         }
 
         #endregion

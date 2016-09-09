@@ -431,7 +431,7 @@ namespace ASC.Communication.ScsServices.Service
             /// <param name="service">The service object that is used to invoke methods on</param>
             public ServiceObject(Type serviceInterfaceType, AscService service) {
                 Service = service;
-                var classAttributes = serviceInterfaceType.GetCustomAttributes(typeof (AscServiceAttribute), true);
+                var classAttributes = serviceInterfaceType.GetTypeInfo().GetCustomAttributes(typeof (AscServiceAttribute), true).ToArray();
                 if (classAttributes.Length <= 0) {
                     throw new Exception("Service interface (" + serviceInterfaceType.Name +
                                         ") must have AscService attribute.");
@@ -439,7 +439,7 @@ namespace ASC.Communication.ScsServices.Service
 
                 ServiceAttribute = classAttributes[0] as AscServiceAttribute;
                 _methods = new SortedList<string, MethodInfo>();
-                foreach (var methodInfo in serviceInterfaceType.GetMethods())
+                foreach (var methodInfo in serviceInterfaceType.GetTypeInfo().GetMethods())
                 {
                     // store with name + param count to allow for overloaded methods
                     _methods.Add(methodInfo.Name + methodInfo.GetParameters().Length, methodInfo);
@@ -479,7 +479,7 @@ namespace ASC.Communication.ScsServices.Service
                 _clients = new ConcurrentDictionary<long, IMessenger>();
 
                 _properties = new Dictionary<string, PropertyInfo>();
-                foreach (var propertyInfo in serviceInterfaceType.GetProperties()) {
+                foreach (var propertyInfo in serviceInterfaceType.GetTypeInfo().GetProperties()) {
                     _properties.Add(propertyInfo.Name, propertyInfo);
                 }
 

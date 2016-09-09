@@ -168,7 +168,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 				_sendingSocket.Bind(new IPEndPoint(localAddress, sendingStartPort));
 			} catch (SocketException socketException){
 				//if sending port is already in use increment port and try again.
-				if (socketException.ErrorCode != 10048) throw;
+				if (socketException.SocketErrorCode != SocketError.AddressAlreadyInUse) throw;
 				sendingStartPort = sendingStartPort + 1;
 				BindSendingSocket(localAddress, sendingStartPort);
 			}

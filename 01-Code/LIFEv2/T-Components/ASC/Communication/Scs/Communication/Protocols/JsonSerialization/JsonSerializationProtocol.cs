@@ -6,16 +6,15 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using ASC.Communication.Scs.Communication.Messages;
+using Newtonsoft.Json;
 
-namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
+namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
     /// <summary>
     ///     Default communication protocol between server and clients to send and receive a message.
     ///     It uses .NET binary serialization to write and read messages.
@@ -26,7 +25,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
     ///     This class can be derived to change serializer (default: BinaryFormatter). To do this,
     ///     SerializeMessage and DeserializeMessage methods must be overrided.
     /// </summary>
-    public class BinarySerializationProtocol : IAcsWireProtocol {
+    public class JsonSerializationProtocol : IAcsWireProtocol {
         #region Private fields
 
         /// <summary>
@@ -44,9 +43,9 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         #region Constructor
 
         /// <summary>
-        ///     Creates a new instance of BinarySerializationProtocol.
+        ///     Creates a new instance of JsonSerializationProtocol.
         /// </summary>
-        public BinarySerializationProtocol() {
+        public JsonSerializationProtocol() {
             _receiveMemoryStream = new MemoryStream();
         }
 
@@ -136,11 +135,9 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         ///     Serialized message bytes.
         ///     Does not include length of the message.
         /// </returns>
-        protected virtual byte[] SerializeMessage(IAscMessage message) {
-            using (var memoryStream = new MemoryStream()) {
-                new BinaryFormatter().Serialize(memoryStream, message);
-                return memoryStream.ToArray();
-            }
+        protected virtual byte[] SerializeMessage(IAscMessage message)
+        {
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
         }
 
         /// <summary>
@@ -154,20 +151,10 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
         /// </param>
         /// <returns>Deserialized message</returns>
         protected virtual IAscMessage DeserializeMessage(byte[] bytes) {
-            //Create a MemoryStream to convert bytes to a stream
-            using (var deserializeMemoryStream = new MemoryStream(bytes)) {
-                //Go to head of the stream
-                deserializeMemoryStream.Position = 0;
 
-                //Deserialize the message
-                var binaryFormatter = new BinaryFormatter {
-                    AssemblyFormat = FormatterAssemblyStyle.Simple,
-                    Binder = new DeserializationAppDomainBinder()
-                };
-
-                //Return the deserialized message
-                return (IAscMessage) binaryFormatter.Deserialize(deserializeMemoryStream);
-            }
+            //Return the deserialized message
+            return (IAscMessage) JsonConvert.DeserializeObject(Encoding.UTF8.GetString(bytes));
+            
         }
 
         #endregion
@@ -290,21 +277,5 @@ namespace ASC.Communication.Scs.Communication.Protocols.BinarySerialization {
 
         #endregion
 
-        #region Nested classes
-
-        /// <summary>
-        ///     This class is used in deserializing to allow deserializing objects that are defined
-        ///     in assemlies that are load in runtime (like PlugIns).
-        /// </summary>
-        protected sealed class DeserializationAppDomainBinder : SerializationBinder {
-            public override Type BindToType(string assemblyName, string typeName) {
-                var toAssemblyName = assemblyName.Split(',')[0];
-                return (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                    where assembly.FullName.Split(',')[0] == toAssemblyName
-                    select assembly.GetType(typeName)).FirstOrDefault();
-            }
-        }
-
-        #endregion
     }
 }

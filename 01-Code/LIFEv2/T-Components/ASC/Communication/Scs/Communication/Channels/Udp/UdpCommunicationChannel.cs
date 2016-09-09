@@ -9,10 +9,11 @@
 using System;
 using System.IO;
 using System.Net;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Communication.Messages;
+using Newtonsoft.Json;
 
 namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
@@ -39,11 +40,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// </summary>
 		private int _sendingStartPort;
 
-		/// <summary>
-		/// The Formatter used to serialize and de-serialize
-		/// </summary>
-		private readonly BinaryFormatter _binaryFormatter;
-
 		#endregion
 
 		/// <summary>
@@ -64,11 +60,6 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 			_mcastGroupIpAddress = IPAddress.Parse(_endPoint.McastGroup);
 			// sending port starts with listenport +1, will be increased if port is not availabel
 			_sendingStartPort = endPoint.UdpPort+1;
-
-			// get all sending udpClients. One per active and multicast enabled interface
-			//_udpSendingClients = GetSendingClients();
-
-			_binaryFormatter = new BinaryFormatter();
 		}
 
 
@@ -97,12 +88,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 		protected override void SendMessageInternal(IAscMessage message)
 		{
-			//Create a byte array from message according to current protocol
-			var memoryStream = new MemoryStream();
+			var json = JsonConvert.SerializeObject(message);
 
-			_binaryFormatter.Serialize(memoryStream, message);
-
-			var messageBytes = memoryStream.ToArray();
+		    var messageBytes = Encoding.UTF8.GetBytes(json);
 
 			_udpAsyncSockerServer.Send (messageBytes);
 			
@@ -127,7 +115,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// <param name="datagram">Datagram.</param>
 		void On_DatagramReceived (object sender, byte[] datagram)
 		{
-		    var msg = (IAscMessage) _binaryFormatter.Deserialize(new MemoryStream(datagram));
+		    var msg = (IAscMessage) JsonConvert.DeserializeObject(Encoding.UTF8.GetString(datagram));
 	        OnMessageReceived(msg);
 		}
 	}

@@ -340,7 +340,7 @@ namespace Hik.Communication.ScsServices.Service {
 
                 ServiceAttribute = classAttributes[0] as ScsServiceAttribute;
                 _methods = new SortedList<string, MethodInfo>();
-                foreach (var methodInfo in serviceInterfaceType.GetMethods()) {
+                foreach (var methodInfo in serviceInterfaceType.GetTypeInfo().GetMethods()) {
                     // store with name + param count to allow for overloaded methods
                     _methods.Add(methodInfo.Name+methodInfo.GetParameters().Length, methodInfo);
                 }

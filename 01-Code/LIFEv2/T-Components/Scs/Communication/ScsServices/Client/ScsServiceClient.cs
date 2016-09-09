@@ -199,7 +199,7 @@ namespace Hik.Communication.ScsServices.Client {
             object returnValue;
             try {
                 var type = _clientObject.GetType();
-                var method = type.GetMethod(invokeMessage.MethodName);
+                var method = type.GetTypeInfo().GetMethod(invokeMessage.MethodName);
                 returnValue = method.Invoke(_clientObject, invokeMessage.Parameters);
             }
             catch (TargetInvocationException ex) {

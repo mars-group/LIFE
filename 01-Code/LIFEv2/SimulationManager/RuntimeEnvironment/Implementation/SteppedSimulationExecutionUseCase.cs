@@ -147,10 +147,6 @@ namespace RuntimeEnvironment.Implementation
             var status = $"Finished tick {currentTick} in {_maxExecutionTime} ms.";
             Console.SetCursorPosition(0,Console.CursorTop);
 			Console.Write(status);
-
- 			//var stb = new StringBuilder ();
-			//stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Running\",\"tickFinished\" : \"{1}\",\"tickCount\" : \"{2}\",\"longestTickDuration\" : \"{3}\",\"time\" : \"{4}\"}}",_simulationId, currentTick, _nrOfTicks, _maxExecutionTime, GetUnixTimeStamp ());
-			//Console.WriteLine (stb);
 		}
 
 		private void CleanUp(){

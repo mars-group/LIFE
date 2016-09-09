@@ -23,8 +23,7 @@ namespace ASC.Communication.Scs.Communication {
         /// <summary>
         ///     Contstructor for serializing.
         /// </summary>
-        public CommunicationException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context) {}
+        public CommunicationException(SerializationInfo serializationInfo, StreamingContext context){}
 
         /// <summary>
         ///     Contstructor.

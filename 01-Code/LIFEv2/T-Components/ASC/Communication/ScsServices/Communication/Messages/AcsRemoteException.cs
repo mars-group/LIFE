@@ -24,8 +24,7 @@ namespace ASC.Communication.ScsServices.Communication.Messages {
         /// <summary>
         ///     Contstructor.
         /// </summary>
-        public AcsRemoteException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context) {}
+        public AcsRemoteException(SerializationInfo serializationInfo, StreamingContext context){}
 
         /// <summary>
         ///     Contstructor.

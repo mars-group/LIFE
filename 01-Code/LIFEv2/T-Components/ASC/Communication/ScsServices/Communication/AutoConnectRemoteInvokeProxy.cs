@@ -7,40 +7,94 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Runtime.Remoting.Messaging;
+using System.Reflection;
 using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Communication;
 using ASC.Communication.Scs.Communication.Messengers;
 
 namespace ASC.Communication.ScsServices.Communication {
+
+#if HAS_REAL_PROXY
+    using System.Runtime.Remoting.Messaging;
+        /// <summary>
+        ///     This class extends RemoteInvokeProxy to provide auto connect/disconnect mechanism
+        ///     if client is not connected to the server when a service method is called.
+        /// </summary>
+        /// <typeparam name="TProxy">Type of the proxy class/interface</typeparam>
+        /// <typeparam name="TMessenger">Type of the messenger object that is used to send/receive messages</typeparam>
+        internal class AutoConnectRemoteInvokeProxy<TProxy, TMessenger> : RemoteInvokeProxy<TProxy, TMessenger>
+            where TMessenger : IMessenger {
+            /// <summary>
+            ///     Reference to the client object that is used to connect/disconnect.
+            /// </summary>
+            private readonly IConnectableClient _client;
+
+            /// <summary>
+            ///     Creates a new AutoConnectRemoteInvokeProxy object.
+            /// </summary>
+            /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
+            /// <param name="client">Reference to the client object that is used to connect/disconnect</param>
+            /// <param name="serviceID"></param>
+            public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client,
+                Guid serviceID)
+                : base(clientMessenger, serviceID) {
+                _client = client;
+            }
+
+            public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client)
+                : base(clientMessenger) {
+                _client = client;
+            }
+
+            /// <summary>
+            ///     Overrides message calls and translates them to messages to remote application.
+            /// </summary>
+            /// <param name="msg">Method invoke message (from RealProxy base class)</param>
+            /// <returns>Method invoke return message (to RealProxy base class)</returns>
+            public override IMessage Invoke(IMessage msg) {
+                if (_client.CommunicationState == CommunicationStates.Connected) {
+                    //If already connected, behave as base class (RemoteInvokeProxy).
+                    return base.Invoke(msg);
+                }
+
+                //Connect, call method and finally disconnect
+                _client.Connect();
+                try {
+                    return base.Invoke(msg);
+                }
+                finally {
+                    _client.Disconnect();
+                }
+            }
+        }
+
+#else
     /// <summary>
     ///     This class extends RemoteInvokeProxy to provide auto connect/disconnect mechanism
     ///     if client is not connected to the server when a service method is called.
     /// </summary>
     /// <typeparam name="TProxy">Type of the proxy class/interface</typeparam>
     /// <typeparam name="TMessenger">Type of the messenger object that is used to send/receive messages</typeparam>
-    internal class AutoConnectRemoteInvokeProxy<TProxy, TMessenger> : RemoteInvokeProxy<TProxy, TMessenger>
-        where TMessenger : IMessenger {
+    public class AutoConnectRemoteInvokeProxy<TProxy, TMessenger> : RemoteInvokeProxy<TProxy, TMessenger>
+        where TMessenger : IMessenger
+    {
         /// <summary>
         ///     Reference to the client object that is used to connect/disconnect.
         /// </summary>
-        private readonly IConnectableClient _client;
+        private IConnectableClient _client;
 
-        /// <summary>
-        ///     Creates a new AutoConnectRemoteInvokeProxy object.
-        /// </summary>
-        /// <param name="clientMessenger">Messenger object that is used to send/receive messages</param>
-        /// <param name="client">Reference to the client object that is used to connect/disconnect</param>
-        /// <param name="serviceID"></param>
-        public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client,
+
+        public void Configure(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client,
             Guid serviceID)
-            : base(clientMessenger, serviceID) {
+        {
             _client = client;
+            Configure(clientMessenger, serviceID);
         }
 
-        public AutoConnectRemoteInvokeProxy(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client)
-            : base(clientMessenger) {
+        public void Configure(RequestReplyMessenger<TMessenger> clientMessenger, IConnectableClient client)
+        {
             _client = client;
+            Configure(clientMessenger);
         }
 
         /// <summary>
@@ -48,20 +102,28 @@ namespace ASC.Communication.ScsServices.Communication {
         /// </summary>
         /// <param name="msg">Method invoke message (from RealProxy base class)</param>
         /// <returns>Method invoke return message (to RealProxy base class)</returns>
-        public override IMessage Invoke(IMessage msg) {
-            if (_client.CommunicationState == CommunicationStates.Connected) {
+        protected override object Invoke(MethodInfo targetMethod, object[] args)
+        {
+            if (!_configured) { throw new Exception("Proxy not configured"); }
+
+            if (_client.CommunicationState == CommunicationStates.Connected)
+            {
                 //If already connected, behave as base class (RemoteInvokeProxy).
-                return base.Invoke(msg);
+                return base.Invoke(targetMethod, args);
             }
 
             //Connect, call method and finally disconnect
             _client.Connect();
-            try {
-                return base.Invoke(msg);
+            try
+            {
+                return base.Invoke(targetMethod, args);
             }
-            finally {
+            finally
+            {
                 _client.Disconnect();
             }
         }
     }
+#endif
+
 }

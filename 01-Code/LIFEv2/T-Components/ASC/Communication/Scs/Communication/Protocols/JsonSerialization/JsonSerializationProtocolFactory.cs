@@ -6,10 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-namespace ASC.Communication.Scs.Communication.Protocols.ProtobufSerialization {
-    internal class ProtobufSerializationProtocolFactory : IAcsWireProtocolFactory {
+
+namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
+    /// <summary>
+    ///     This class is used to create Binary Serialization Protocol objects.
+    /// </summary>
+    public class JsonSerializationProtocolFactory : IAcsWireProtocolFactory {
+        /// <summary>
+        ///     Creates a new Wire Protocol object.
+        /// </summary>
+        /// <returns>Newly created wire protocol object</returns>
         public IAcsWireProtocol CreateWireProtocol() {
-            return new ProtobufSerializationProtocol();
+            return new JsonSerializationProtocol();
         }
     }
 }

@@ -6,7 +6,8 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using ASC.Communication.Scs.Communication.Protocols.BinarySerialization;
+
+using ASC.Communication.Scs.Communication.Protocols.JsonSerialization;
 
 namespace ASC.Communication.Scs.Communication.Protocols {
     /// <summary>
@@ -18,7 +19,7 @@ namespace ASC.Communication.Scs.Communication.Protocols {
         /// </summary>
         /// <returns>A new instance of default wire protocol</returns>
         public static IAcsWireProtocolFactory GetDefaultWireProtocolFactory() {
-            return new BinarySerializationProtocolFactory();
+            return new JsonSerializationProtocolFactory();
             //return new ProtobufSerializationProtocolFactory();
         }
 
@@ -27,7 +28,7 @@ namespace ASC.Communication.Scs.Communication.Protocols {
         /// </summary>
         /// <returns>A new instance of default wire protocol</returns>
         public static IAcsWireProtocol GetDefaultWireProtocol() {
-            return new BinarySerializationProtocol();
+            return new JsonSerializationProtocol();
             //return new ProtobufSerializationProtocol();
         }
     }
