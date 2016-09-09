@@ -46,13 +46,13 @@ namespace MulticastAdapter.Implementation {
 
         public void CloseSocket() {
             foreach (var client in _clients) {
-                client.Dispose();
+                client.Client.Dispose();
             }
         }
 
         public void ReopenSocket() {
             foreach (var client in _clients) {
-                client.Dispose();
+                client.Client.Dispose();
             }
             _clients = GetSendingInterfaces();
         }

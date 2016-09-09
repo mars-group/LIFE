@@ -104,7 +104,7 @@ namespace MulticastAdapter.Implementation
 				}
 				catch (SocketException ex)
 				{
-					_receiverClient.Dispose();
+					_receiverClient.Client.Dispose();
 					if (ex.SocketErrorCode != SocketError.Interrupted && ex.SocketErrorCode != SocketError.TimedOut) throw;
 				}
 			}
@@ -114,7 +114,7 @@ namespace MulticastAdapter.Implementation
 
         public void CloseSocket()
         {
-			_receiverClient.Dispose();//.Client.Shutdown(SocketShutdown.Receive);
+			_receiverClient.Client.Dispose();//.Client.Shutdown(SocketShutdown.Receive);
         }
 
         public void ReopenSocket()
