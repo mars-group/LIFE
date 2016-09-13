@@ -5,7 +5,7 @@
   "authors": [ "Christian Huening"],
   "dependencies": {
     "LCConnector": "2.0.0-*",
-    "MARS.Shuttle.SimulationConfig": "2.0.0-12",
+    "MARS.Shuttle.SimulationConfig": "2.0.0-13",
     "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
     "System.Xml.XmlSerializer": "4.0.11"
   },

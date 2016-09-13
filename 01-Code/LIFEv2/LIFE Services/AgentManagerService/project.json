@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "2.0.0-*",
   "description": "The LIFE AgentManager. Use this package to automatically initalize your agents in their layer's InitLayer() method.",
   "copyright": "(c) 2016 - MARS Group",
@@ -14,7 +14,7 @@
     "DalskiAgent": "2.0.0-4",
     "MySql.Data": "7.0.5-ir21",
     "SpatialAPI": "2.0.0-10",
-    "MARS.Shuttle.SimulationConfig": "2.0.0-12"
+    "MARS.Shuttle.SimulationConfig": "2.0.0-13"
   },
   "buildOptions": {
     "debugType": "portable"
