@@ -12,7 +12,6 @@
     "CommonTypes": "2.0.0-*",
     "System.ComponentModel.TypeConverter": "4.1.0",
     "Microsoft.NETCore.App": {
-      "type": "platform",
       "version": "1.0.0"
     }
   },
@@ -21,5 +20,10 @@
     "netcoreapp1.0": {
       "imports": "dnxcore50"
     }
+  },
+
+  "runtimes": {
+    "osx.10.11-x64":{},
+    "win10": {}
   }
 }
