@@ -151,7 +151,7 @@ namespace RuntimeEnvironment.Implementation
         /// <returns></returns>
         private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers, string simConfigName) {
 
-            var content = _modelContainer.GetModel(modelDescription);
+            var content = _modelContainer.GetSerializedModel(modelDescription);
             var layerContainerClients = new List<LayerContainerClient>();
 
             /* 1.

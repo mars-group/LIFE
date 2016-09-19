@@ -26,52 +26,6 @@ namespace SimulationManager
         }
 
         /// <summary>
-        /// Shows interactive shell for choosing a model.
-        /// </summary>
-        /// <param name="core">Core.</param>
-        private static void InteractiveModelChoosing(ISimulationManagerApplicationCore core)
-        {
-
-            //Console input requested
-            Console.WriteLine("Please input the number of the model you'd like to run:");
-
-            // list special option
-            Console.Write("0 : ElephantModel via Download (EXPERIMENTAL)");
-
-            // listing all available models
-            var i = 0;
-            foreach (var modelDescription in core.GetAllModels())
-            {
-                i++;
-                Console.Write(i + ": ");
-                Console.WriteLine(modelDescription.Name);
-            }
-
-
-            int nr = 0;
-            // read selected model number from console and start it
-            nr = int.Parse(Console.ReadLine()) - 1;
-
-            if (nr != -1) { 
-                while (!Enumerable.Range(0, i).Contains(nr))
-                {
-                    Console.WriteLine("Please input an existing model number.");
-                    nr = int.Parse(Console.ReadLine()) - 1;
-                }
-            }
-
-            Console.WriteLine("For how many steps is the simulation supposed to run?");
-            int ticks = int.Parse(Console.ReadLine());
-            if (nr == -1) {
-
-            }
-            else {
-                core.StartSimulationWithModel(Guid.NewGuid(), core.GetAllModels().ToList()[nr], ticks);
-            }
-
-        }
-
-        /// <summary>
         /// Start simulation of a model as defined by launcher arguments.
         /// -h / --help / -? shows quick help
         /// -l / --list lists all available models
@@ -87,7 +41,7 @@ namespace SimulationManager
             bool listModels = false;
             int numOfTicks = 0;
             string numOfTicksS = "0";
-            string modelName = "";
+            string modelPath = "";
             bool interactive = false;
 
             OptionSet optionSet = new OptionSet()
@@ -96,7 +50,7 @@ namespace SimulationManager
                                       option => numOfTicksS = option)
                 .Add("l|list", "List all available models",
                                       option => listModels = option != null)
-                .Add("m=|model=", "Model to simulate", option => modelName = option)
+                .Add("m=|model=", "Model to simulate", option => modelPath = option)
                 .Add("cli", "Use interactive model chooser",
                                       option => interactive = option != null);
 
@@ -116,22 +70,7 @@ namespace SimulationManager
             }
             else
             {
-                if (listModels)
-                {
-                    Console.WriteLine("Available models:");
-                    var i = 1;
-                    foreach (var modelDescription in core.GetAllModels())
-                    {
-                        Console.Write(i + ": ");
-                        Console.WriteLine(modelDescription.Name);
-                        i++;
-                    }
-                }
-                else if (interactive)
-                {
-                    InteractiveModelChoosing(core);
-                }
-                else if (!modelName.Equals(""))
+                if (!modelPath.Equals(""))
                 {
                     try
                     {
@@ -147,17 +86,12 @@ namespace SimulationManager
                     }
 
                     SMConnector.TransportTypes.TModelDescription model = null;
-                    foreach (var modelDescription in core.GetAllModels())
-                    {
-                        if (modelDescription.Name.Equals(modelName))
-                        {
-                            model = modelDescription;
-                        }
-                    }
+
+                    model = core.GetModelDescription(modelPath);
 
                     if (model == null)
                     {
-                        ShowHelp("Model " + modelName + " not exists", optionSet, true);
+                        ShowHelp("Model " + modelPath + " not exists", optionSet, true);
                     }
                     else
                     {

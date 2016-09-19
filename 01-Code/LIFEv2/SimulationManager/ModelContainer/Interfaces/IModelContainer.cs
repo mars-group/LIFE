@@ -32,24 +32,19 @@ namespace ModelContainer.Interfaces {
     ///     * It also actively scans the model directory for changes and informs possible interested listeners.
     /// </remarks>
     public interface IModelContainer {
-        /// <summary>
-        ///     Registers the callback. In the event, that the underlying filesystem has changed, callbacks are informed.
-        /// </summary>
-        /// <see cref="ModelDirectoryChanged" />
-        void RegisterForModelListChange(Action callback);
 
         /// <summary>
-        ///     Returns a list of all available models.
+        ///     Returns a TModelDescription for the given modelPath
         /// </summary>
-        /// <returns>empty, if none found</returns>
-        ICollection<TModelDescription> GetAllModels();
+        /// <returns>TModelDescription, throws Exception if not model found.</returns>
+        TModelDescription GetModelDescription(string modelPath);
 
         /// <summary>
         ///     Returns the serialized contents of the given model.
         /// </summary>
-        /// <param name="modelID">must not be null</param>
-        /// <returns>null, if model not found.</returns>
-        ModelContent GetModel(TModelDescription modelID);
+        /// <param name="modelPath">must not be null</param>
+        /// <returns>ModelContent, throws Exception if no model found</returns>
+        ModelContent GetSerializedModel(TModelDescription modelPath);
 
         /// <summary>
         /// Returns the SimConfig object created with MARS SHUTTLE if available,
@@ -65,18 +60,6 @@ namespace ModelContainer.Interfaces {
         /// <param name="modelId"></param>
         /// <returns></returns>
         ModelConfig GetModelConfig(TModelDescription modelId);
-
-        /// <summary>
-        ///     Copies the contents of filePath into a folder into a model folder with the same name.
-        /// </summary>
-        /// <param name="filePath">not null</param>
-        TModelDescription AddModelFromDirectory(string filePath);
-
-        /// <summary>
-        ///     Deletes the model and the folder it is contained in from the model folder.
-        /// </summary>
-        /// <param name="model"></param>
-        void DeleteModel(TModelDescription model);
 
         /// <summary>
         ///     Calculates a feasible instantion order for the layers the model consists of.

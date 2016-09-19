@@ -22,7 +22,7 @@ namespace SMConnector {
         ///     SimulationManager node.
         /// </summary>
         /// <returns>A list of TModelDescriptions or an empty list if no models are present</returns>
-        ICollection<TModelDescription> GetAllModels();
+        TModelDescription GetModelDescription(string modelPath);
 
         /// <summary>
         ///     Steps the simulation by one tick or by nrOfTicks if provided.

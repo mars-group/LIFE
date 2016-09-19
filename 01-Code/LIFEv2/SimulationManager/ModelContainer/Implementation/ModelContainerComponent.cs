@@ -23,21 +23,19 @@ namespace ModelContainer.Implementation {
 
         public ModelContainerComponent(SimulationManagerSettings settings) {
             _modelContainerUseCase = new ModelManagementUseCase(settings);
-            _modelInstantionOrderingUseCase = new ModelInstantiationOrderingUseCase(settings);
+            _modelInstantionOrderingUseCase = new ModelInstantiationOrderingUseCase();
         }
 
         #region IModelContainer Members
 
-        public void RegisterForModelListChange(Action callback) {
-            _modelContainerUseCase.RegisterForModelListChange(callback);
+
+        public TModelDescription GetModelDescription(string modelPath)
+        {
+            return _modelContainerUseCase.GetModelDescription(modelPath);
         }
 
-        public ICollection<TModelDescription> GetAllModels() {
-            return _modelContainerUseCase.GetAllModels();
-        }
-
-        public ModelContent GetModel(TModelDescription modelID) {
-            return _modelContainerUseCase.GetModel(modelID);
+        public ModelContent GetSerializedModel(TModelDescription modelPath) {
+            return _modelContainerUseCase.GetModel(modelPath);
         }
 
         public ISimConfig GetShuttleSimConfig(TModelDescription modelId, string simConfigName) {
@@ -49,13 +47,6 @@ namespace ModelContainer.Implementation {
             return _modelContainerUseCase.GetModelConfig(modelId);
         }
 
-        public TModelDescription AddModelFromDirectory(string filePath) {
-            return _modelContainerUseCase.AddModelFromDirectory(filePath);
-        }
-
-        public void DeleteModel(TModelDescription model) {
-            _modelContainerUseCase.DeleteModel(model);
-        }
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
             return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);

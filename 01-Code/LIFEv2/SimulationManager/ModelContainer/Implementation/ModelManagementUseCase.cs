@@ -25,90 +25,48 @@ namespace ModelContainer.Implementation
     ///     watching for changes, serialization for transport and so on.
     /// </summary>
     internal class ModelManagementUseCase {
-        private readonly SimulationManagerSettings _settings;
-        private readonly IDictionary<TModelDescription, string> _models;
-        private readonly ICollection<Action> _listeners;
+        private TModelDescription _currentModel;
 
         public ModelManagementUseCase(SimulationManagerSettings settings) {
             FileSystemWatcher systemWatcher;
-            _settings = settings;
-            _models = new Dictionary<TModelDescription, string>();
-            _listeners = new LinkedList<Action>();
-            if (!Directory.Exists(_settings.ModelDirectoryPath))
-                Directory.CreateDirectory(_settings.ModelDirectoryPath);
-            // delete possible remains from old run
-            if (Directory.Exists("./models/tmp")) Directory.Delete("./models/tmp", true);
-
-            try {
-                systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
-            }
-            catch {
-                Directory.CreateDirectory(_settings.ModelDirectoryPath);
-                systemWatcher = new FileSystemWatcher(_settings.ModelDirectoryPath);
-            }
-
-            //Reload model folder contents if file system has changed. (Also of course once, initially)
-            systemWatcher.Changed += UpdateModelList;
-            UpdateModelList(null, null);
         }
 
-        public void RegisterForModelListChange(Action callback) {
-            _listeners.Add(callback);
-        }
 
-        public ICollection<TModelDescription> GetAllModels() {
-            return _models.Keys;
+        public TModelDescription GetModelDescription(string modelPath)
+        {
+            if (_currentModel == null)
+            {
+                CheckForValidModel(modelPath);
+            }
+
+            return _currentModel;
         }
 
         public ModelContent GetModel(TModelDescription modelDesc)
         {
-            return _models.ContainsKey(modelDesc) ? new ModelContent(_models[modelDesc]) : null;
-        }
-
-        public TModelDescription AddModelFromDirectory(string filePath) {
-            var content = new ModelContent(filePath);
-            var tmp = filePath.Split(Path.DirectorySeparatorChar);
-            content.Write(_settings.ModelDirectoryPath + Path.DirectorySeparatorChar + tmp[tmp.Length - 1]);
-            return new TModelDescription(tmp[tmp.Length - 1]);
-        }
-
-
-        public void DeleteModel(TModelDescription model) {
-            var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name;
-            if (!Directory.Exists(path)) Directory.Delete(path, true);
-            _models.Remove(model);
-        }
-
-        /// <summary>
-        ///     Recreates the _models list according to the contents in the specified model folder.
-        /// </summary>
-        private void UpdateModelList(object sender, FileSystemEventArgs fileSystemEventArgs) {
-            //remove old data
-            _models.Clear();
-
-            // search through all folders in the model directory and try loading the models.
-            var folders = Directory.GetDirectories(_settings.ModelDirectoryPath);
-            foreach (var folder in folders) {
-                var path = folder.Split(Path.DirectorySeparatorChar);
-                try {
-                    _models.Add(new TModelDescription(path[path.Length - 1]), folder);
-                }
-                catch (Exception exception) {
-                    Console.Error.WriteLine(
-                        string.Format
-                            ("An error occurred while reading the model in '{0}'. Error: \n{1}", folder, exception));
-                }
+            if (_currentModel == null)
+            {
+                CheckForValidModel(modelDesc.ModelPath);
             }
+            return _currentModel.Equals(modelDesc) ? new ModelContent(_currentModel.ModelPath) : null;
+        }
 
-            Console.WriteLine("Finished reimporting models. Informing listeners");
-            foreach (var listener in _listeners) {
-                listener();
+        private void CheckForValidModel(string path)
+        {
+            var addinLoader = new LayerLoader.Implementation.LayerLoader();
+            var nodes = addinLoader.LoadAllLayersForModel(path);
+            _currentModel = nodes.Any() ? new TModelDescription(path) : null;
+
+            if (_currentModel == null)
+            {
+                throw new Exception("No Model has been loaded so far! Exiting...");
             }
         }
+
 
         public ISimConfig GetShuttleSimConfig(TModelDescription model, string simConfigName) {
 
-            var path = $"./models/{model.Name}/scenarios/{simConfigName}";
+            var path = $"{model.ModelPath}{Path.DirectorySeparatorChar}scenarios{Path.DirectorySeparatorChar}{simConfigName}";
             if (!File.Exists(path)) {
                 throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
             }
@@ -120,7 +78,7 @@ namespace ModelContainer.Implementation
 
         public ModelConfig GetModelConfig(TModelDescription model)
         {
-            var path = _settings.ModelDirectoryPath + Path.DirectorySeparatorChar + model.Name + Path.DirectorySeparatorChar + model.Name + ".cfg";
+            var path = model.ModelPath + Path.DirectorySeparatorChar + model.Name + ".cfg";
 
 
             //config exists, so load it
@@ -131,7 +89,7 @@ namespace ModelContainer.Implementation
 
             // config does not exist, create the default one
             var addinLoader = new LayerLoader.Implementation.LayerLoader();
-            var nodes = addinLoader.LoadAllLayersForModel(model.Name);
+            var nodes = addinLoader.LoadAllLayersForModel(model.ModelPath);
             var layerConfigs = nodes.Select(node => new LayerConfig(node.LayerType.Name, DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>())).ToList();
             var mc = new ModelConfig(layerConfigs);
             Configuration.Save(mc, path);

@@ -7,7 +7,6 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
 using System;
-using System.Collections.Generic;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
 using LNSConnector.Interface;
@@ -19,7 +18,6 @@ using SimulationManagerFacade.Interface;
 using SMConnector;
 using SMConnector.TransportTypes;
 using SimulationManagerShared;
-using SimulationManagerWebservice;
 
 namespace SimulationManagerFacade.Implementation {
     /// <summary>
@@ -65,6 +63,11 @@ namespace SimulationManagerFacade.Implementation {
             _runtimeEnvironment.StartWithModel(simulationId, model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, simConfigName, startPaused);
         }
 
+        public TModelDescription GetModelDescription(string modelPath)
+        {
+            return _modelContainer.GetModelDescription(modelPath);
+        }
+
         public void StepSimulation(TModelDescription model, int? nrOfTicks = null)
         {
             _runtimeEnvironment.StepSimulation(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks);
@@ -99,25 +102,7 @@ namespace SimulationManagerFacade.Implementation {
 
         #region ModelContainer delegation
 
-        public void RegisterForModelListChange(Action callback)
-        {
-            _modelContainer.RegisterForModelListChange(callback);
-        }
 
-        public ICollection<TModelDescription> GetAllModels()
-        {
-            return _modelContainer.GetAllModels();
-        }
-
-        public TModelDescription AddModelFromDirectory(string filePath)
-        {
-            return _modelContainer.AddModelFromDirectory(filePath);
-        }
-
-        public void DeleteModel(TModelDescription model)
-        {
-            _modelContainer.DeleteModel(model);
-        }
 
         #endregion
 

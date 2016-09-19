@@ -109,13 +109,8 @@ namespace MARSLocalStarter {
 
 
             TModelDescription model = null;
-            foreach (var modelDescription in simCore.GetAllModels())
-            {
-                if (modelDescription.Name.Equals(modelPath))
-                {
-                    model = modelDescription;
-                }
-            }
+             model = simCore.GetModelDescription(modelPath);
+
 
             if (model == null)
             {

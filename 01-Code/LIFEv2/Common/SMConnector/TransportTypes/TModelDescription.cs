@@ -7,6 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
 using System;
+using System.IO;
 
 namespace SMConnector.TransportTypes {
     [Serializable]
@@ -14,8 +15,11 @@ namespace SMConnector.TransportTypes {
 
         public string Name { get; private set; }
 
-        public TModelDescription(string name) {
-            Name = name;
+        public string ModelPath { get; private set; }
+
+        public TModelDescription(string modelPath) {
+            Name = modelPath.Split(Path.DirectorySeparatorChar)[0];
+            ModelPath = modelPath;
         }
 
         public TModelDescription() {}
