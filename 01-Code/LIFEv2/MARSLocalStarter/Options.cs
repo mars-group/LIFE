@@ -464,7 +464,7 @@ namespace Mono.Options
             bool nullable = tt.GetTypeInfo().IsValueType && tt.GetTypeInfo().IsGenericType &&
                             !tt.GetTypeInfo().IsGenericTypeDefinition &&
                             tt.GetGenericTypeDefinition() == typeof(Nullable<>);
-            Type targetType = nullable ? tt.GetGenericArguments()[0] : typeof(T);
+            Type targetType = nullable ? tt.GetTypeInfo().GetGenericArguments()[0] : typeof(T);
             TypeConverter conv = TypeDescriptor.GetConverter(targetType);
             T t = default(T);
             try

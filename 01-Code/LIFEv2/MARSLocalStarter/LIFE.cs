@@ -16,13 +16,13 @@ using CommonTypes;
 
 namespace MARSLocalStarter {
 
-  public class Program {
+  public class LIFE {
 
     private static TModelDescription _chosenModel;
     private static ISimulationManagerApplicationCore simCore;
     private static ILayerContainerFacade layerContainerCore;
 
-	private static void Main(string[] args)
+	private static void Start(string[] args)
 	{
 
 		Console.WriteLine("MARS LIFE 2.0 trying to start up.");
@@ -65,9 +65,7 @@ namespace MARSLocalStarter {
 	private static void ParseArgsAndStart(string[] args)
 	{
 		var help = false;
-		var numOfTicksS = "0";
 		var modelPath = ".";
-		var interactive = false;
 		var simulationId = Guid.NewGuid();
 		var marsConfigAddress = string.Empty;
 		var simConfigToUse = String.Empty;

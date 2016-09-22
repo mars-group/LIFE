@@ -1,29 +1,51 @@
 ﻿{
   "version": "2.0.0-*",
   "buildOptions": {
-    "emitEntryPoint": true,
     "debugType": "portable"
   },
 
   "dependencies": {
-    "LayerContainerFacade": "2.0.0-*",
-    "SimulationManagerFacade": "2.0.0-*",
-    "SMConnector": "2.0.0-*",
-    "CommonTypes": "2.0.0-*",
-    "System.ComponentModel.TypeConverter": "4.1.0",
-    "Microsoft.NETCore.App": {
-      "version": "1.0.0"
-    }
+    "LayerContainerFacade":  {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "SimulationManagerFacade":  {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "LCConnector": {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "SMConnector":  {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "CommonTypes":  {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "LNSConnector": {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "System.ComponentModel.TypeConverter": "4.1.0"
   },
 
   "frameworks": {
+    "netstandard1.6": {
+        "imports": "dnxcore50",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        }
+    },
     "netcoreapp1.0": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0"
+        }
+      }
     }
-  },
-
-  "runtimes": {
-    "osx.10.11-x64":{},
-    "win10": {}
   }
 }
