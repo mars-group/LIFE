@@ -4,16 +4,43 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "Scs": "2.0.0-*",
-    "LNSConnector": "2.0.0-*",
-    "ModelContainer": "2.0.0-*",
-    "NodeRegistry": "2.0.0-*",
-    "RuntimeEnvironment": "2.0.0-*",
-    "SMConnector": "2.0.0-*",
-    "SimulationManagerShared": "2.0.0-*",
-    "LayerNameService": "2.0.0-*",
-    "ConfigurationAdapter": "2.0.0-*",
-    "Autofac": "4.1.0",
+    "Scs": {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "LNSConnector": {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "ModelContainer": {
+         "version": "2.0.0-*",
+         "type": "build"
+     },
+    "NodeRegistry": {
+       "version": "2.0.0-*",
+       "type": "build"
+    },
+    "RuntimeEnvironment":  {
+      "version": "2.0.0-*",
+      "type": "build"
+    },
+    "SMConnector":  {
+       "version": "2.0.0-*",
+       "type": "build"
+    },
+    "SimulationManagerShared": {
+      "version": "2.0.0-*",
+      "type": "build"
+    },
+    "LayerNameService":  {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "ConfigurationAdapter":  {
+        "version": "2.0.0-*",
+        "type": "build"
+    },
+    "Autofac":  "4.1.0",
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.Net.Http.Server": "1.0.0-rc1-final"
   },
