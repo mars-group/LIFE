@@ -5,6 +5,7 @@
   },
 
   "dependencies": {
+    "LNSConnector":  "2.0.0-*", 
     "SimulationManagerFacade": "2.0.0-*",
     "SMConnector": "2.0.0-*",
     "Microsoft.NETCore.App": {

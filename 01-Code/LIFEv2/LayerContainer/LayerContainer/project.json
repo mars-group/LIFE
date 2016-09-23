@@ -6,6 +6,7 @@
   },
 
   "dependencies": {
+    "LCConnector": "2.0.0-*",
     "LayerContainerFacade": "2.0.0-*",
     "Microsoft.NETCore.App": {
       "type": "platform",

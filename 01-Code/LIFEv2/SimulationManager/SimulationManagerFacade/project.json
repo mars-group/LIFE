@@ -5,40 +5,31 @@
   },
   "dependencies": {
     "Scs": {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "LNSConnector": {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "ModelContainer": {
-         "version": "2.0.0-*",
-         "type": "build"
+         "version": "2.0.0-*"
      },
     "NodeRegistry": {
-       "version": "2.0.0-*",
-       "type": "build"
+       "version": "2.0.0-*"
     },
     "RuntimeEnvironment":  {
-      "version": "2.0.0-*",
-      "type": "build"
+      "version": "2.0.0-*"
     },
     "SMConnector":  {
-       "version": "2.0.0-*",
-       "type": "build"
+       "version": "2.0.0-*"
     },
     "SimulationManagerShared": {
-      "version": "2.0.0-*",
-      "type": "build"
+      "version": "2.0.0-*"
     },
     "LayerNameService":  {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "ConfigurationAdapter":  {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "Autofac":  "4.1.0",
     "Newtonsoft.Json": "9.0.1",
