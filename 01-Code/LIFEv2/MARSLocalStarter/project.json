@@ -6,42 +6,26 @@
 
   "dependencies": {
     "LayerContainerFacade": {
-      "version": "2.0.0-*",
-      "type": "build"
+      "version": "2.0.0-*"
     },
     "SimulationManagerFacade":  {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "LCConnector": {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "SMConnector":  {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "CommonTypes":  {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "LNSConnector": {
-        "version": "2.0.0-*",
-        "type": "build"
+        "version": "2.0.0-*"
     },
     "System.ComponentModel.TypeConverter": "4.1.0"
   },
 
-  "packOptions": {
-
-    "files": {
-      "mappings": {
-        "lib/netcoreapp1.0/": {
-          "include": [ "bin/Release/netcoreap1.0/**" ]
-        } 
-      }
-    }
-  },
 
   "frameworks": {
     "netstandard1.6": {
