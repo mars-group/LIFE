@@ -35,6 +35,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../Common/LayerLoader" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Tests/NodeRegistryTest" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Tests/MulticastAdapterTest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../LIFECompleteStarter" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
