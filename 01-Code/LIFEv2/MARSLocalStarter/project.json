@@ -5,9 +5,9 @@
   },
 
   "dependencies": {
-    "LayerContainerFacade":  {
-        "version": "2.0.0-*",
-        "type": "build"
+    "LayerContainerFacade": {
+      "version": "2.0.0-*",
+      "type": "build"
     },
     "SimulationManagerFacade":  {
         "version": "2.0.0-*",
@@ -30,6 +30,17 @@
         "type": "build"
     },
     "System.ComponentModel.TypeConverter": "4.1.0"
+  },
+
+  "packOptions": {
+
+    "files": {
+      "mappings": {
+        "lib/netcoreapp1.0/": {
+          "include": [ "bin/Release/netcoreap1.0/**" ]
+        } 
+      }
+    }
   },
 
   "frameworks": {
