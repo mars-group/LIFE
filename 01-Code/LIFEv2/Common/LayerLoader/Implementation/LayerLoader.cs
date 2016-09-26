@@ -66,19 +66,18 @@ namespace LayerLoader.Implementation
             return new LayerTypeInfo(layerType, ctors);
         }
 
-        public IEnumerable<LayerTypeInfo> LoadAllLayersForModel(string modelName)
+        public IEnumerable<LayerTypeInfo> LoadAllLayersForModel(string modelPath)
         {
-            var currentModelPath = $"{BasePathForModels}{Path.DirectorySeparatorChar}{modelName}";
 
             var results = new List<LayerTypeInfo>();
 
 
 
             // iterate all DLLs and try to find ILayer implementations
-            foreach (var fileSystemInfo in new DirectoryInfo(currentModelPath).GetFileSystemInfos("*.dll"))
+            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll"))
             {
 
-                _asl = new LIFEAssemblyLoader(currentModelPath);
+                _asl = new LIFEAssemblyLoader(modelPath);
                 var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                 try {
                     var foundLayerTypes = asm.GetTypes()
@@ -94,7 +93,7 @@ namespace LayerLoader.Implementation
 
             if (!results.Any())
             {
-                throw new ModelCodeFailedToLoadException($"It appears there was no valid mode code found in the {currentModelPath} subdirectory. Please check your build config etc.!");
+                throw new ModelCodeFailedToLoadException($"It appears there was no valid mode code found in the {modelPath} subdirectory. Please check your build config etc.!");
             }
             return results;
         }
