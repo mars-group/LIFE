@@ -35,7 +35,7 @@ namespace ModelContainer.Implementation {
             // Interfaces originate from the Assembly they are attempted to be loaded from
             ILayerLoader addinLoader = new LayerLoader.Implementation.LayerLoader();
 
-            var nodes = addinLoader.LoadAllLayersForModel(description.Name);
+            var nodes = addinLoader.LoadAllLayersForModel(description.ModelPath);
 
             ModelStructure modelStructure = new ModelStructure();
 
