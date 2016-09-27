@@ -5,7 +5,7 @@
   },
 
   "dependencies": {
-    "MARSLocalStarter": "2.0.0-*",
+    "MARSLocalStarter": "2.0.0-85",
     "Microsoft.NETCore.App": {
       "version": "1.0.0"
     }
