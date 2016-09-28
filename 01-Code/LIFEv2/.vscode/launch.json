@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/MARSLocalStarter/bin/Debug/netcoreapp1.0/MARSLocalStarter.dll",
-            "args": ["-m","wolvesmodel","--mca","dock-three.mars.haw-hamburg.de:8080"],
-            "cwd": "${workspaceRoot}/MARSLocalStarter",
+            "program": "${workspaceRoot}/LIFECompleteStarter/bin/Debug/netcoreapp1.0/LIFECompleteStarter.dll",
+            "args": ["-m","./model","--mca","dock-three.mars.haw-hamburg.de:8080"],
+            "cwd": "${workspaceRoot}/LIFECompleteStarter",
             "stopAtEntry": false,
             "externalConsole": false
         },
