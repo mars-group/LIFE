@@ -48,15 +48,22 @@ namespace SimulationManagerShared
                 .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
 
             var ipAddress = (foundAddress != Empty) ? foundAddress : "127.0.0.1";
-            // Step 1: Get the host name
-            var hostname = Dns.GetHostName();
-            // Step 2: Perform a DNS lookup.
-            // Note that the lookup is not guaranteed to succeed, especially
-            // if the system is misconfigured. On the other hand, if that
-            // happens, you probably can't connect to the host by name, anyway.
-            var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
-            // Step 3: Retrieve the canonical name.
-            var fqdn = hostinfo.HostName;
+            var fqdn = "";
+            try {
+                // Step 1: Get the host name
+                var hostname = Dns.GetHostName();
+                // Step 2: Perform a DNS lookup.
+                // Note that the lookup is not guaranteed to succeed, especially
+                // if the system is misconfigured. On the other hand, if that
+                // happens, you probably can't connect to the host by name, anyway.
+                var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
+                // Step 3: Retrieve the canonical name.
+                fqdn = hostinfo.HostName;
+            }catch(Exception ex){
+                Console.Error.WriteLine("Dns Hostname Resolution failed, using random GUID as unique identifiert for SimulationManager");
+                fqdn = Guid.NewGuid().ToString();
+            }
+
             var smName = "SM-" + fqdn;
             ModelDirectoryPath = "." + Path.DirectorySeparatorChar + "models";
             NodeRegistryConfig = new NodeRegistryConfig(NodeType.SimulationManager, smName, ipAddress, 44521, true);
