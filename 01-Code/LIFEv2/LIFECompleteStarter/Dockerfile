@@ -1,10 +1,12 @@
-FROM artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet-nightly:rel-1.0.0-sdk
+FROM artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet-nightly:rel-1.0.0-core-deps
+
+MAINTAINER Christian Hüning <christian.huening@haw-hamburg.de>
 
 
-RUN mkdir -p /dotnetapp
-WORKDIR /dotnetapp
+RUN mkdir -p /life
 
-ENTRYPOINT ["dotnet", "run"]
+COPY ./bin/Release/netcoreapp1.0/debian.8-x64/publish/ /life
 
-ONBUILD COPY . /dotnetapp
-ONBUILD RUN dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual
+WORKDIR /life
+
+ENTRYPOINT ["./LIFECompleteStarter"]
