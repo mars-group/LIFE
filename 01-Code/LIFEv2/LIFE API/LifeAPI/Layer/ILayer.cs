@@ -8,6 +8,7 @@
 //  *******************************************************/
 using LCConnector.TransportTypes;
 using LifeAPI.Agent;
+using LifeAPI.LIFECapabilities;
 
 namespace LifeAPI.Layer {
     public delegate void RegisterAgent(ILayer layer, ITickClient tickClient, int executionInterval=1);
@@ -19,7 +20,7 @@ namespace LifeAPI.Layer {
     ///     DO NOT IMPLEMENT THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
     ///     Instead implement either ISteppedLayer or one of its decendants depending on your requirements.
     /// </summary>
-    public interface ILayer {
+    public interface ILayer : ILIFEAutoInitialized {
         /// <summary>
         ///     Initializes the layer with layerInitData.
         ///     Use this instead of the constructor, as it is
