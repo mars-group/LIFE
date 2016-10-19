@@ -13,6 +13,7 @@ using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
 using MARS.Shuttle.SimulationConfig.Interfaces;
 using ModelContainer.Interfaces;
+using Newtonsoft.Json.Linq;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 
@@ -38,9 +39,7 @@ namespace ModelContainer.Implementation {
             return _modelContainerUseCase.GetModel(modelPath);
         }
 
-        public ISimConfig GetShuttleSimConfig(TModelDescription modelId, string simConfigName) {
-            return _modelContainerUseCase.GetShuttleSimConfig(modelId, simConfigName);
-        }
+
 
         public ModelConfig GetModelConfig(TModelDescription modelId)
         {
@@ -50,6 +49,11 @@ namespace ModelContainer.Implementation {
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
             return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);
+        }
+
+        public JObject GetSimulationConfig(TModelDescription modelId, string scenarioConfigId)
+        {
+            return _modelContainerUseCase.GetSimulationConfig(modelId, scenarioConfigId);
         }
 
 

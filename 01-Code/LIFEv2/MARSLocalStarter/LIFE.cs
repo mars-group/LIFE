@@ -68,7 +68,7 @@ namespace MARSLocalStarter {
 		var modelPath = ".";
 		var simulationId = Guid.NewGuid();
 		var marsConfigAddress = string.Empty;
-		var simConfigToUse = String.Empty;
+		var scenarioConfigToUse = String.Empty;
         string clusterName = null;
 
 		var optionSet = new OptionSet()
@@ -78,8 +78,8 @@ namespace MARSLocalStarter {
 			option => simulationId = Guid.Parse(option))
 		  .Add("mca=|marsconfigaddress=", "MARSConfig address to use",
 			option => marsConfigAddress = option)
-		  .Add("simconfig=|scenario=","Name of SimConfig/Scenario file to use. File must be in <ModelPath>/scenarios folder",
-		    option => simConfigToUse = option)
+		  .Add("sc=|scenario=","The ID of a ScenarioConfiguration. Mandatory if the simulation requires data from the MARS Cloud!",
+		    option => scenarioConfigToUse = option)
           .Add("clustername=|cn=", "Optional. Provide a name for the simulation cluster. Only LIFE process with the same name join each other",
             option => clusterName = option);
 
@@ -125,15 +125,8 @@ namespace MARSLocalStarter {
                 {
                     throw new Exception("Please specify a MARS Config Service Address, which is valid in your context!");
                 }
-                var simConfigName = "SimConfig.json";
-                if (simConfigToUse != string.Empty)
-                {
-                    if (!simConfigToUse.EndsWith(".json")){
-                        throw new Exception("Format of SimConfig file is not valid. Must be .json file!");
-                    }
-                    simConfigName = simConfigToUse;
-                }
-                simCore.StartSimulationWithModel(simulationId, model, 0, simConfigName);
+
+                simCore.StartSimulationWithModel(simulationId, model, 0, scenarioConfigToUse);
             }
 		}
 	}

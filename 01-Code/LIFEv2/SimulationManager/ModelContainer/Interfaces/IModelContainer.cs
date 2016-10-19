@@ -12,6 +12,7 @@ using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
 using MARS.Shuttle.SimulationConfig.Interfaces;
+using Newtonsoft.Json.Linq;
 using SMConnector.TransportTypes;
 
 namespace ModelContainer.Interfaces {
@@ -47,12 +48,14 @@ namespace ModelContainer.Interfaces {
         ModelContent GetSerializedModel(TModelDescription modelPath);
 
         /// <summary>
-        /// Returns the SimConfig object created with MARS SHUTTLE if available,
+        /// Returns a JObject SimConfig object created from a scenarioConfig from the MARS Cloud
+        /// if available.
         /// returns null otherwise.
         /// </summary>
         /// <param name="modelId"></param>
+        /// <param name="scenarioConfigId"></param>
         /// <returns>The Simconfig object or null</returns>
-        ISimConfig GetShuttleSimConfig(TModelDescription modelId, string simConfigName);
+        JObject GetSimulationConfig(TModelDescription modelId, string scenarioConfigId);
 
         /// <summary>
         /// Returns the ModelConfig for the given modelDescription

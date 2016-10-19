@@ -11,10 +11,10 @@
     "System.Threading.Tasks.Parallel": "4.0.1",
     "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
     "MySql.Data": "7.0.5-ir21",
-    "SpatialAPI": "2.0.0-10",
-    "DalskiAgent": "2.0.0-6",
-    "GeoGridEnvironment": "2.0.0-15",
-    "MARS.Shuttle.SimulationConfig": "2.0.0-15"
+    "MARS.Shuttle.SimulationConfig": "2.0.0-15",
+    "DalskiAgent": "2.0.0-8",
+    "GeoGridEnvironment": "2.0.0-16",
+    "SpatialAPI": "2.0.0-19"
   },
   "buildOptions": {
     "debugType": "portable"

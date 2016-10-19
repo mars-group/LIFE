@@ -57,7 +57,8 @@ namespace RuntimeEnvironment.Implementation
 
         #region IRuntimeEnvironment Members
 
-        public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, string simConfigName = "SimConfig.json", bool startPaused = false) {
+        public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
+            int? nrOfTicks = null, string simConfigName = "", bool startPaused = false) {
             _simulationId = simulationId;
 
 			if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
@@ -77,9 +78,9 @@ namespace RuntimeEnvironment.Implementation
             IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, simConfigName);
 
 			// try to get SimConfig and determine the number of ticks from it
-			var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(model, simConfigName);
-			if (shuttleSimConfig != null) {
-				var tickCount = shuttleSimConfig.GetSimDurationInSteps();
+			var simConfigJson = _modelContainer.GetSimulationConfig(model, simConfigName);
+			if (simConfigJson != null) {
+				var tickCount = simConfigJson.GetSimDurationInSteps();
 				if (tickCount > 0) {
 					nrOfTicks = tickCount;
 				}
@@ -209,7 +210,7 @@ namespace RuntimeEnvironment.Implementation
              * XML config files are still valid but will be deprecated in the near future
              */
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);
-            var shuttleSimConfig = _modelContainer.GetShuttleSimConfig(modelDescription, simConfigName);
+            var shuttleSimConfig = _modelContainer.GetSimulationConfig(modelDescription, simConfigName);
 
 
 			// only accept SHUTTLE based configuration

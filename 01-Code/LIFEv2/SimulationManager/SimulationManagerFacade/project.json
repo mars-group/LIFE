@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "buildOptions": {
     "debugType": "portable"
@@ -31,9 +31,9 @@
     "ConfigurationAdapter":  {
         "version": "2.0.0-*"
     },
-    "Autofac":  "4.1.0",
     "Newtonsoft.Json": "9.0.1",
-    "Microsoft.Net.Http.Server": "1.0.0-rc1-final"
+    "Autofac": "4.1.1",
+    "Microsoft.Net.Http.Server": "1.0.0-rc2-final"
   },
 
   "frameworks": {

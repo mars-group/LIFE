@@ -33,13 +33,13 @@ namespace SimulationManagerFacade.Webservice.Implementation
 		/// <param name="address">The address and port number to listen on.</param>
 		public SimulationManagerWebserviceUseCase(ISimulationManagerApplicationCore simManager) {
 			var listener = new WebListener();
-			listener.UrlPrefixes.Add("http://*:1234/");
+			listener.Settings.UrlPrefixes.Add("http://*:1234/");
 			listener.Start();
 
 			/* HTTP listener loop to handle incoming requests. */
 			Task.Run (() => {
 				while (true) {
-					var context = listener.GetContextAsync().Result;
+					var context = listener.AcceptAsync().Result;
 				    var uri = context.Request.Path;//context.Request.GetComponents(UriComponents.Path, UriFormat.UriEscaped);
 					var qs = context.Request.QueryString;
 					switch (context.Request.Method) {

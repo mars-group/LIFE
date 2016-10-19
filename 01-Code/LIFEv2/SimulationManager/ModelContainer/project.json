@@ -9,6 +9,7 @@
     "debugType": "portable"
   },
   "dependencies": {
+    "EurekaClient":  "2.0.0-15", 
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
     "LayerLoader": "2.0.0-*",

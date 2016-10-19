@@ -41,8 +41,8 @@ namespace SMConnector {
         /// <param name="model"></param>
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
-        /// <param name="SimConfigFileName">Optional. Defaults to 'SimConfig.json'</param>
-        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, string SimConfigFileName = "SimConfig.json", bool startPaused = false);
+        /// <param name="scenarioConfig">The ID of the ScenarioConfig to use</param>
+        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, string scenarioConfig = "", bool startPaused = false);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.

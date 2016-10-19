@@ -8,20 +8,20 @@
     "LayerContainerFacade": {
       "version": "2.0.0-*"
     },
-    "SimulationManagerFacade":  {
-        "version": "2.0.0-*"
+    "SimulationManagerFacade": {
+      "version": "2.0.0-*"
     },
     "LCConnector": {
-        "version": "2.0.0-*"
+      "version": "2.0.0-*"
     },
-    "SMConnector":  {
-        "version": "2.0.0-*"
+    "SMConnector": {
+      "version": "2.0.0-*"
     },
-    "CommonTypes":  {
-        "version": "2.0.0-*"
+    "CommonTypes": {
+      "version": "2.0.0-*"
     },
     "LNSConnector": {
-        "version": "2.0.0-*"
+      "version": "2.0.0-*"
     },
     "System.ComponentModel.TypeConverter": "4.1.0"
   },

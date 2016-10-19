@@ -16,7 +16,10 @@ using MARS.Shuttle.SimulationConfig.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 using System.Linq;
+using System.Net.Http;
+using MarsEurekaClient;
 using ModelContainer.Interfaces.Exceptions;
+using Newtonsoft.Json.Linq;
 
 namespace ModelContainer.Implementation
 {
@@ -64,8 +67,16 @@ namespace ModelContainer.Implementation
         }
 
 
-        public ISimConfig GetShuttleSimConfig(TModelDescription model, string simConfigName) {
-
+        public JObject GetSimulationConfig(TModelDescription model, string scenarioConfigId)
+        {
+            var eureka = new EurekaClient();
+            var smService = eureka.GetInstancesForApplication("SCENARIO-MANAGEMENT-SERVICE").FirstOrDefault();
+            if (smService == null)
+            {
+                // ToDo Think about what to do! Throw error? Warn?
+            }
+            
+            
             var path = $"{model.ModelPath}{Path.DirectorySeparatorChar}scenarios{Path.DirectorySeparatorChar}{simConfigName}";
             if (!File.Exists(path)) {
                 throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
