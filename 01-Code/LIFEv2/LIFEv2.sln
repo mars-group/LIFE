@@ -74,6 +74,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MulticastAdapterTest", "Tes
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LIFECompleteStarter", "LIFECompleteStarter\LIFECompleteStarter.xproj", "{0FB2D97C-17E6-4746-BD23-5AD0CA3E146C}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SimulationPlanParserTest", "Tests\SimulationPlanParserTest\SimulationPlanParserTest.xproj", "{D53793C3-DA96-4754-89BA-244CA6545B80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -212,6 +214,10 @@ Global
 		{0FB2D97C-17E6-4746-BD23-5AD0CA3E146C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB2D97C-17E6-4746-BD23-5AD0CA3E146C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB2D97C-17E6-4746-BD23-5AD0CA3E146C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53793C3-DA96-4754-89BA-244CA6545B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53793C3-DA96-4754-89BA-244CA6545B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53793C3-DA96-4754-89BA-244CA6545B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53793C3-DA96-4754-89BA-244CA6545B80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

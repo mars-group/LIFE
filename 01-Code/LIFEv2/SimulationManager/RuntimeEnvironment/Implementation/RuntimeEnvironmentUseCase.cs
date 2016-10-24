@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
@@ -24,6 +25,7 @@ using LifeAPI.Config;
 using LifeAPI.Layer.TimeSeries;
 using MARS.Shuttle.SimulationConfig.Interfaces;
 using ModelContainer.Interfaces;
+using Newtonsoft.Json.Linq;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Implementation.Entities;
 using RuntimeEnvironment.Interfaces;
@@ -58,7 +60,7 @@ namespace RuntimeEnvironment.Implementation
         #region IRuntimeEnvironment Members
 
         public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
-            int? nrOfTicks = null, string simConfigName = "", bool startPaused = false) {
+            int? nrOfTicks = null, string scenarioConfigId = "", bool startPaused = false) {
             _simulationId = simulationId;
 
 			if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
@@ -75,12 +77,18 @@ namespace RuntimeEnvironment.Implementation
             Console.WriteLine("Setting up SimulationRun...");
             var sw = Stopwatch.StartNew();
 
-            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, simConfigName);
+            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId);
 
 			// try to get SimConfig and determine the number of ticks from it
-			var simConfigJson = _modelContainer.GetSimulationConfig(model, simConfigName);
-			if (simConfigJson != null) {
-				var tickCount = simConfigJson.GetSimDurationInSteps();
+			var scenarioconfigJson = _modelContainer.GetScenarioConfig(model, scenarioConfigId);
+			if (scenarioconfigJson != null)
+			{
+			    var globalParams = scenarioconfigJson["ParameterizationDescription"]["Global"];
+			    var startDate = DateTime.Parse(globalParams["SimulationStartDateTime"].ToString());
+			    var endDate = DateTime.Parse(globalParams["SimulationEndDateTime"].ToString());
+			    var deltaT = int.Parse(globalParams["DeltaT"].ToString());
+			    var duration = (int)(endDate - startDate).TotalMilliseconds;
+			    var tickCount = duration / deltaT;
 				if (tickCount > 0) {
 					nrOfTicks = tickCount;
 				}
@@ -210,7 +218,7 @@ namespace RuntimeEnvironment.Implementation
              * XML config files are still valid but will be deprecated in the near future
              */
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);
-            var shuttleSimConfig = _modelContainer.GetSimulationConfig(modelDescription, simConfigName);
+            var shuttleSimConfig = _modelContainer.GetScenarioConfig(modelDescription, simConfigName);
 
 
 			// only accept SHUTTLE based configuration
@@ -223,7 +231,7 @@ namespace RuntimeEnvironment.Implementation
 		}
 
 
-        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, ISimConfig shuttleSimConfig, ModelConfig modelConfig)
+        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, JObject scenarioConfig, ModelConfig modelConfig)
         {
             /* 2.
              * Instantiate and initialize Layers by InstantiationOrder,
@@ -233,19 +241,19 @@ namespace RuntimeEnvironment.Implementation
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
-            var gisLayerSourceEnumerator = shuttleSimConfig.GetGISActiveLayerSources().GetEnumerator();
+            var gisLayerSourceEnumerator = scenarioConfig.GetGISActiveLayerSources().GetEnumerator();
             var thereAreGisLayers = gisLayerSourceEnumerator.MoveNext();
 
 			var distributionPossible = layerContainerClients.Count() > 1;
 
-            var timeSeriesSourceEnumerator = shuttleSimConfig.GetTSLayerSources().GetEnumerator();
+            var timeSeriesSourceEnumerator = scenarioConfig.GetTSLayerSources().GetEnumerator();
             var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
-				var initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
+				var initData = new TInitData(false, scenarioConfig.GetSimStepDuration(), scenarioConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
 
 				// fetch layerConfig by layerName
 				LayerConfig layerConfig;
@@ -309,13 +317,13 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-					else if (shuttleSimConfig.GetIAtLayerInfo()
+					else if (scenarioConfig.GetIAtLayerInfo()
 						  .GetAtConstructorInfoListsWithLayerName()
 						  .ContainsKey(layerDescription.Name))
 					{
 
 
-						foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
+						foreach (var agentConfig in scenarioConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
 						{
 							var agentCount = agentConfig.GetAgentInstanceCount();
 							var lcCount = layerContainerClients.Count();
@@ -324,7 +332,7 @@ namespace RuntimeEnvironment.Implementation
 
 							Parallel.For(0, lcCount, i => {
 
-								initData = new TInitData(false, shuttleSimConfig.GetSimStepDuration(), shuttleSimConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
+								initData = new TInitData(false, scenarioConfig.GetSimStepDuration(), scenarioConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
 
 								// add overhead of agents to first layer
 								var actualAgentCount = i == 0 ? normalAgentCount + overheadAgentCount : normalAgentCount;
@@ -380,12 +388,12 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-					else if (shuttleSimConfig.GetIAtLayerInfo()
+					else if (scenarioConfig.GetIAtLayerInfo()
 						  .GetAtConstructorInfoListsWithLayerName()
 						  .ContainsKey(layerDescription.Name))
 					{
 
-						foreach (var agentConfig in shuttleSimConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
+						foreach (var agentConfig in scenarioConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
 						{
 							var agentCount = agentConfig.GetAgentInstanceCount();
 

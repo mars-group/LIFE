@@ -17,9 +17,12 @@ using SimulationManagerShared;
 using SMConnector.TransportTypes;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using MarsEurekaClient;
 using ModelContainer.Interfaces.Exceptions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog.LayoutRenderers.Wrappers;
 
 namespace ModelContainer.Implementation
 {
@@ -31,7 +34,6 @@ namespace ModelContainer.Implementation
         private TModelDescription _currentModel;
 
         public ModelManagementUseCase(SimulationManagerSettings settings) {
-            FileSystemWatcher systemWatcher;
         }
 
 
@@ -67,24 +69,22 @@ namespace ModelContainer.Implementation
         }
 
 
-        public JObject GetSimulationConfig(TModelDescription model, string scenarioConfigId)
+        public JObject GetScenarioConfig(TModelDescription model, string scenarioConfigId)
         {
             var eureka = new EurekaClient();
             var smService = eureka.GetInstancesForApplication("SCENARIO-MANAGEMENT-SERVICE").FirstOrDefault();
             if (smService == null)
             {
-                // ToDo Think about what to do! Throw error? Warn?
+                throw new Exception(
+                    "No ScenarioManagementService could be found in MARS Cloud. LIFE is shutting down now :(");
             }
-            
-            
-            var path = $"{model.ModelPath}{Path.DirectorySeparatorChar}scenarios{Path.DirectorySeparatorChar}{simConfigName}";
-            if (!File.Exists(path)) {
-                throw new NoSimulationConfigFoundException("No SimConfig.json could be found! Please verify that you created one via MARS SHUTTLE and packed your image accoridngly.");
-            }
+            var http = new HttpClient();
 
-            var simConfigJsonContent = File.ReadAllText(path);
+            var getTask = http.GetByteArrayAsync(new Uri($"http://{smService.IpAddress}:{smService.Port}/scenarios/{scenarioConfigId}/complete"));
+            getTask.Wait();
+            var json = Encoding.UTF8.GetString(getTask.Result);
 
-            return SimConfigObjectDeserializer.GetDeserializedSimConfigObject(simConfigJsonContent);
+            return JObject.Parse(json);
         }
 
         public ModelConfig GetModelConfig(TModelDescription model)
