@@ -241,19 +241,53 @@ namespace RuntimeEnvironment.Implementation
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
-            var gisLayerSourceEnumerator = scenarioConfig.GetGISActiveLayerSources().GetEnumerator();
-            var thereAreGisLayers = gisLayerSourceEnumerator.MoveNext();
+            //var gisLayerSourceEnumerator = scenarioConfig.GetGISActiveLayerSources().GetEnumerator();
+            var thereAreGisLayers = scenarioConfig["InitializationDescription"]["GISLayers"].HasValues;//gisLayerSourceEnumerator.MoveNext();
 
 			var distributionPossible = layerContainerClients.Count() > 1;
 
-            var timeSeriesSourceEnumerator = scenarioConfig.GetTSLayerSources().GetEnumerator();
-            var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
+            //var timeSeriesSourceEnumerator = scenarioConfig.GetTSLayerSources().GetEnumerator();
+            var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Values().GetEnumerator();
+            var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();//timeSeriesSourceEnumerator.MoveNext();
 
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
 
-				var initData = new TInitData(false, scenarioConfig.GetSimStepDuration(), scenarioConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
+                var globalParams = scenarioConfig["ParameterizationDescription"]["Global"];
+                var startDate = DateTime.Parse(globalParams["SimulationStartDateTime"].ToString());
+                var endDate = DateTime.Parse(globalParams["SimulationEndDateTime"].ToString());
+                var deltaT = int.Parse(globalParams["DeltaT"].ToString());
+                var deltaTUnit = globalParams["DeltaTUnit"].ToString();
+                var simStepDuration = new TimeSpan();
+                switch (deltaTUnit)
+                {
+                    case "years":
+                        simStepDuration = new TimeSpan(deltaT*365,0,0,0);
+                        break;
+                    case "months":
+                        simStepDuration = new TimeSpan(deltaT * 30, 0, 0, 0);
+                        break;
+                    case "days":
+                        simStepDuration = new TimeSpan(deltaT, 0, 0, 0);
+                        break;
+                    case "hours":
+                        simStepDuration = new TimeSpan(0, deltaT, 0, 0);
+                        break;
+                    case "minutes":
+                        simStepDuration = new TimeSpan(0, 0, deltaT, 0);
+                        break;
+                    case "seconds":
+                        simStepDuration = new TimeSpan(0, 0, 0, deltaT);
+                        break;
+                    case "milliseconds":
+                        simStepDuration = new TimeSpan(0, 0, 0, 0, deltaT);
+                        break;
+                    case "microseconds":
+                        simStepDuration = new TimeSpan(deltaT*10);
+                        break;
+                }
+				var initData = new TInitData(false, simStepDuration, startDate, _simulationId, MARSConfigServiceSettings.Address);
 
 				// fetch layerConfig by layerName
 				LayerConfig layerConfig;
@@ -305,7 +339,7 @@ namespace RuntimeEnvironment.Implementation
                     if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
 					{
 						var tsInfo = timeSeriesSourceEnumerator.Current;
-						initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
+						initData.AddTimeSeriesInitConfig(tsInfo["TableName"].ToString(), tsInfo["ColumnName"].ToString(), tsInfo["ColumnClearName"].ToString());
 
 						foreach (var lc in layerContainerClients)
 						{
@@ -317,7 +351,7 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-					else if (scenarioConfig.GetIAtLayerInfo()
+					else if (scenarioConfig["InitializationDescription"]["BasicLayers"].Values()
 						  .GetAtConstructorInfoListsWithLayerName()
 						  .ContainsKey(layerDescription.Name))
 					{
@@ -332,7 +366,7 @@ namespace RuntimeEnvironment.Implementation
 
 							Parallel.For(0, lcCount, i => {
 
-								initData = new TInitData(false, scenarioConfig.GetSimStepDuration(), scenarioConfig.GetSimStartDate(), _simulationId, MARSConfigServiceSettings.Address);
+								initData = new TInitData(false, simStepDuration, startDate, _simulationId, MARSConfigServiceSettings.Address);
 
 								// add overhead of agents to first layer
 								var actualAgentCount = i == 0 ? normalAgentCount + overheadAgentCount : normalAgentCount;
@@ -382,7 +416,7 @@ namespace RuntimeEnvironment.Implementation
                     if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
 					{
 						var tsInfo = timeSeriesSourceEnumerator.Current;
-						initData.AddTimeSeriesInitConfig(tsInfo.TableName, tsInfo.ColumnName, tsInfo.ClearColumnName);
+						initData.AddTimeSeriesInitConfig(tsInfo["TableName"].ToString(), tsInfo["ColumnName"].ToString(), tsInfo["ColumnClearName"].ToString());
 						if (!timeSeriesSourceEnumerator.MoveNext())
 						{
 							thereAreTimeSeriesLayers = false;
