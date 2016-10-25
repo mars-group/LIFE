@@ -79,7 +79,7 @@ namespace AgentManagerService.Implementation
                 errmsg.Append("ActualParams are:");
                 foreach (var np in agentInitConfig.AgentInitParameters)
                 {
-                    errmsg.AppendLine($"Type: {np.GetParameterType()}");
+                    errmsg.AppendLine($"Type: {np.Type}");
                 }
                 throw new NotEnoughParametersProvidedException(errmsg.ToString());
             }
@@ -90,35 +90,32 @@ namespace AgentManagerService.Implementation
 
 			var initParams = agentInitConfig.AgentInitParameters;
 
-			Parallel.ForEach (initParams, param => {
-			    if (param.GetParameterType() !=
-			        AtConstructorParameter.AtConstructorParameterType
-			            .MarsCubeFieldToConstructorArgumentRelation) return;
-
-			    var initInfo = param.GetFieldToConstructorArgumentRelation ();
+			Parallel.ForEach (initParams, param =>
+			{
+			    if (param.MappingType !=
+			        MappingType.ColumnParameterMapping) return;
 
 			    // check if we already have this enumerator
-			    if (agentDBParamArrays.ContainsKey(initInfo.MarsDBColumnName)) return;
+			    if (agentDBParamArrays.ContainsKey(param.ColumnName)) return;
 
-				var sqlQuery =
-				    $"SELECT {initInfo.MarsDBColumnName} FROM imports.{initInfo.MarsTableName} LIMIT {agentInitConfig.RealAgentCount} OFFSET {agentInitConfig.AgentInitOffset}";
+			    var sqlQuery =
+			        $"SELECT {param.ColumnName} FROM imports.{param.TableName} LIMIT {agentInitConfig.RealAgentCount} OFFSET {agentInitConfig.AgentInitOffset}";
 			    using (var mysqlConnection = new MySqlConnection(connectionString))
 			    {
 			        mysqlConnection.Open();
 			        var cmd = new MySqlCommand(sqlQuery, mysqlConnection);
 			        var values = new List<string>();
 			        using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            // should be first column in result. TODO: Fix this in new MySQL.NET client for dotnet core.
-                            values.Add(reader.GetString(0));
-                        }
+			        {
+			            while (reader.Read())
+			            {
+			                // should be first column in result. TODO: Fix this in new MySQL.NET client for dotnet core.
+			                values.Add(reader.GetString(0));
+			            }
+			        }
 
-                    }
-
-					mysqlConnection.Close();
-			        agentDBParamArrays.TryAdd(initInfo.MarsDBColumnName, values.ToArray());
+			        mysqlConnection.Close();
+			        agentDBParamArrays.TryAdd(param.ColumnName, values.ToArray());
 			    }
 			});
 
@@ -184,20 +181,20 @@ namespace AgentManagerService.Implementation
                             // it's a primitive type, so take the next param from params list provided by SHUTTLE
                             var param = shuttleParams.Current;
 
-                            if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.ConstantParameterToConstructorArgumentRelation)
+                            if (param.MappingType == MappingType.ValueParameterMapping)
                             {
                                 // use static value
-                                var initInfo = param.GetConstantParameterToConstructorArgumentRelation();
-                                var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
+
+                                var paramType = neededParam.GetType();
 
                                 if (paramType != typeof(string) && (paramType == null || !paramType.GetTypeInfo().IsPrimitive))
                                 {
-                                    throw new ParameterMustBePrimitiveException("The parameter " + initInfo.ConstructorArgumentName + " must be a primitive C# type. But was: " + paramType.Name);
+                                    throw new ParameterMustBePrimitiveException("The parameter " + param.Name + " must be a primitive C# type. But was: " + paramType.Name);
                                 }
 
                                 try
                                 {
-                                    actualParameters.Add(GetParameterValue(paramType, initInfo.ParameterValue));
+                                    actualParameters.Add(GetParameterValue(paramType, param.Value));
                                 }
                                 catch (FormatException formatException)
                                 {
@@ -207,19 +204,19 @@ namespace AgentManagerService.Implementation
                                     " the value field contained: {1}," +
                                     " the argument name was: {2}, " +
                                     " the original exception was: {3}."
-                                        , paramType, initInfo.ParameterValue, initInfo.ConstructorArgumentName, formatException);
+                                        , paramType, param.Value, param.Name, formatException);
                                     throw formatException;
                                 }
                             }
 
-                            if (param.GetParameterType() == AtConstructorParameter.AtConstructorParameterType.MarsCubeFieldToConstructorArgumentRelation)
+                            if (param.MappingType == MappingType.ColumnParameterMapping)
                             {
-                                var initInfo = param.GetFieldToConstructorArgumentRelation();
-                                var paramType = Type.GetType(initInfo.ConstructorArgumentDatatype);
+
+                                var paramType = neededParam.GetType();
 
 
                                 // fetch parameter from ROCK CUBE
-                                var paramValue = agentDBParamArrays[initInfo.MarsDBColumnName][index];
+                                var paramValue = agentDBParamArrays[param.ColumnName][index];
                                 // add param to actualParameters[]
                                 try
                                 {
@@ -233,7 +230,7 @@ namespace AgentManagerService.Implementation
                                     " the value field contained: {1}," +
                                     " the argument name was: {2}, " +
                                     " the original exception was: {3}."
-                                        , paramType, paramValue, initInfo.ConstructorArgumentName, formatException);
+                                        , paramType, paramValue, param.Name, formatException);
                                     throw formatException;
                                 }
                             }

@@ -9,7 +9,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
@@ -23,7 +22,6 @@ using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
 using LifeAPI.Layer.TimeSeries;
-using MARS.Shuttle.SimulationConfig.Interfaces;
 using ModelContainer.Interfaces;
 using Newtonsoft.Json.Linq;
 using NodeRegistry.Interface;
@@ -241,14 +239,13 @@ namespace RuntimeEnvironment.Implementation
 
             // unique layerID per LayerContainer, does not need to be unique across whole simulation 
             var layerId = 0;
-            //var gisLayerSourceEnumerator = scenarioConfig.GetGISActiveLayerSources().GetEnumerator();
-            var thereAreGisLayers = scenarioConfig["InitializationDescription"]["GISLayers"].HasValues;//gisLayerSourceEnumerator.MoveNext();
+
+            var thereAreGisLayers = scenarioConfig["InitializationDescription"]["GISLayers"].HasValues;
 
 			var distributionPossible = layerContainerClients.Count() > 1;
 
-            //var timeSeriesSourceEnumerator = scenarioConfig.GetTSLayerSources().GetEnumerator();
             var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Values().GetEnumerator();
-            var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();//timeSeriesSourceEnumerator.MoveNext();
+            var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
@@ -351,15 +348,18 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-					else if (scenarioConfig["InitializationDescription"]["BasicLayers"].Values()
-						  .GetAtConstructorInfoListsWithLayerName()
-						  .ContainsKey(layerDescription.Name))
-					{
+					else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
+                        .Values()
+                        .Any(j => j["LayerName"].ToString() == layerDescription.Name))
+                    {
 
+                        var basicLayerMapping = (JObject)scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
+                            .Where(j => j["LayerName"].ToString() == layerDescription.Name);
 
-						foreach (var agentConfig in scenarioConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
-						{
-							var agentCount = agentConfig.GetAgentInstanceCount();
+                        foreach (var agentMapping in basicLayerMapping["Agents"])
+					    {
+
+					        var agentCount = int.Parse(agentMapping["InstanceCount"].ToString());
 							var lcCount = layerContainerClients.Count();
 							var normalAgentCount = agentCount / lcCount;
 							var overheadAgentCount = agentCount % lcCount;
@@ -372,13 +372,38 @@ namespace RuntimeEnvironment.Implementation
 								var actualAgentCount = i == 0 ? normalAgentCount + overheadAgentCount : normalAgentCount;
 								var offset = i * actualAgentCount;
 
-								initData.AddAgentInitConfig(
-									agentConfig.GetClassName(),
-									agentConfig.GetFullName(),
-									actualAgentCount,
-									offset,
-									agentConfig.GetFieldToConstructorArgumentRelations()
-								);
+							    initData.AddAgentInitConfig(
+							        agentMapping["Name"].ToString(),
+							        agentMapping["FullName"].ToString(),
+							        actualAgentCount,
+							        offset,
+							        new List<TConstructorParameterMapping>(
+							            agentMapping["ConstructorParameterMapping"]
+							                .Children()
+							                .Select(j =>
+							                {
+							                    if (j["TableName"] != null)
+							                    {
+							                        return new TConstructorParameterMapping(
+							                            j["Type"].ToString(),
+							                            j["Name"].ToString(),
+							                            bool.Parse(j["IsAutoInitialized"].ToString()),
+							                            j["MappingType"].ToString(),
+                                                        j["TableName"].ToString(),
+							                            j["ColumnName"].ToString()
+							                        );
+							                    }
+
+							                    return new TConstructorParameterMapping(
+							                        j["Type"].ToString(),
+							                        j["Name"].ToString(),
+							                        bool.Parse(j["IsAutoInitialized"].ToString()),
+							                        j["MappingType"].ToString(),
+							                        value: j["Value"].ToString()
+							                    );
+							                }).ToList()
+							        )
+							    );
 								layerContainerClients[i].Initialize(layerInstanceId, initData);
 							});
 						}
@@ -392,15 +417,14 @@ namespace RuntimeEnvironment.Implementation
 
 
 					//var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-					var layerType = Type.GetType(layerDescription.FullName);
-					if(layerType == null){
-						layerType = new LayerLoader.Implementation.LayerLoader()
-						.LoadAllLayersForModel(modelDescription.Name)
-						.FirstOrDefault(l => l.LayerType.AssemblyQualifiedName.Equals(layerDescription.AssemblyQualifiedName))
-						.LayerType;
-					}
+					var layerType = Type.GetType(layerDescription.FullName)
+					                ??
+					                new LayerLoader.Implementation.LayerLoader()
+					                    .LoadAllLayersForModel(modelDescription.Name)
+					                    .FirstOrDefault(l => l.LayerType.AssemblyQualifiedName.Equals(layerDescription.AssemblyQualifiedName))
+					                    .LayerType;
 
-					var interfaces = layerType.GetTypeInfo().GetInterfaces();
+				    var interfaces = layerType.GetTypeInfo().GetInterfaces();
                     /*
                     if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
 					{
@@ -422,23 +446,54 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-					else if (scenarioConfig.GetIAtLayerInfo()
-						  .GetAtConstructorInfoListsWithLayerName()
-						  .ContainsKey(layerDescription.Name))
-					{
+                    else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
+                        .Values()
+                        .Any(j => j["LayerName"].ToString() == layerDescription.Name))
+                    {
+                        var basicLayerMapping = (JObject)scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
+                            .Where(j => j["LayerName"].ToString() == layerDescription.Name);
 
-						foreach (var agentConfig in scenarioConfig.GetIAtLayerInfo().GetAtConstructorInfoListsWithLayerName()[layerDescription.Name])
-						{
-							var agentCount = agentConfig.GetAgentInstanceCount();
+                        foreach (var agentMapping in basicLayerMapping["Agents"])
+                        {
+                            initData = new TInitData(false, simStepDuration, startDate, _simulationId, MARSConfigServiceSettings.Address);
 
-							initData.AddAgentInitConfig(
-								agentConfig.GetClassName(),
-								agentConfig.GetFullName(),
-								agentCount,
-								0,
-								agentConfig.GetFieldToConstructorArgumentRelations()
-								);
-						}
+                            initData.AddAgentInitConfig(
+                                agentMapping["Name"].ToString(),
+                                agentMapping["FullName"].ToString(),
+                                int.Parse(agentMapping["InstanceCount"].ToString()),
+                                0,
+                                new List<TConstructorParameterMapping>(
+                                    agentMapping["ConstructorParameterMapping"]
+                                        .Children()
+                                        .Select(j =>
+                                        {
+                                            if (j["TableName"] != null)
+                                            {
+                                                return new TConstructorParameterMapping(
+                                                    j["Type"].ToString(),
+                                                    j["Name"].ToString(),
+                                                    bool.Parse(j["IsAutoInitialized"].ToString()),
+                                                    j["MappingType"].ToString(),
+                                                    j["TableName"].ToString(),
+                                                    j["ColumnName"].ToString()
+                                                );
+                                            }
+                                            else
+                                            {
+                                                return new TConstructorParameterMapping(
+                                                    j["Type"].ToString(),
+                                                    j["Name"].ToString(),
+                                                    bool.Parse(j["IsAutoInitialized"].ToString()),
+                                                    j["MappingType"].ToString()
+
+                                                );
+                                            }
+
+
+                                        }).ToList()
+                                )
+                            );
+                        }
 
 					}
 

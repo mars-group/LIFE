@@ -8,7 +8,6 @@
 //  *******************************************************/
 using System;
 using System.Collections.Generic;
-using MARS.Shuttle.SimulationConfig.Interfaces;
 
 namespace LCConnector.TransportTypes {
     /// <summary>
@@ -85,7 +84,7 @@ namespace LCConnector.TransportTypes {
         /// <param name="agentInitParameters">Optional parameterinformation about how and from where
         ///     to initialize the agent's constructor parameters.</param>
         /// <param name="getMarsCubeUrl"></param>
-        public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, int offset, List<IAtConstructorParameter> agentInitParameters = null)
+        public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, int offset, List<TConstructorParameterMapping> agentInitParameters = null)
         {
 			AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, offset, agentInitParameters));
         }
@@ -219,7 +218,7 @@ namespace LCConnector.TransportTypes {
         /// Constructor call parameters and information about where to get the data from
         /// Check this for null, prior to using it!
         /// </summary>
-        public List<IAtConstructorParameter> AgentInitParameters { get; set; }
+        public List<TConstructorParameterMapping> AgentInitParameters { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LCConnector.TransportTypes.AgentInitConfig"/> class.
@@ -231,7 +230,7 @@ namespace LCConnector.TransportTypes {
 		/// <param name="realAgentIds">Real agent identifiers.</param>
 		/// <param name="shadowAgentsIds">Shadow agents identifiers.</param>
 		/// <param name="agentInitParameters">Agent init parameters.</param>
-        public AgentInitConfig(string agentName, string agentFullName, int agentCount, int offset=0, List<IAtConstructorParameter> agentInitParameters = null)
+        public AgentInitConfig(string agentName, string agentFullName, int agentCount, int offset=0, List<TConstructorParameterMapping> agentInitParameters = null)
         {
             AgentName = agentName;
             AgentFullName = agentFullName;
