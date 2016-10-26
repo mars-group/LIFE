@@ -21,6 +21,8 @@ using Hik.Communication.ScsServices.Client;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
+using LifeAPI.Layer.Obstacle;
+using LifeAPI.Layer.PotentialField;
 using LifeAPI.Layer.TimeSeries;
 using ModelContainer.Interfaces;
 using Newtonsoft.Json.Linq;
@@ -247,6 +249,19 @@ namespace RuntimeEnvironment.Implementation
             var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Values().GetEnumerator();
             var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
+            var obstacleLayerSourceEnumerator =
+                scenarioConfig["InitializationDescription"]["ObstacleLayers"].Values().GetEnumerator();
+            var thereAreObstacleLayer = obstacleLayerSourceEnumerator.MoveNext();
+
+            var geoPotentialFieldLayerSourceEnumerator =
+                scenarioConfig["InitializationDescription"]["GeoPotentialFieldLayers"].Values().GetEnumerator();
+            var thereAreGeoPotentialFieldLayers = geoPotentialFieldLayerSourceEnumerator.MoveNext();
+
+            var gridPotentialFieldLayerSourceEnumerator =
+                scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Values().GetEnumerator();
+            var thereAreGridPotentialFieldLayers = gridPotentialFieldLayerSourceEnumerator.MoveNext();
+
+
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
@@ -446,6 +461,16 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
+				    else if ((thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
+                             ||
+				             (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
+				             ||
+				             (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
+                    )
+                    {
+                        var olInfo = obstacleLayerSourceEnumerator.Current;
+                        initData.AddFileInitInfo(olInfo["MetaDataId"].ToString());
+                    }
                     else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
                         .Values()
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))

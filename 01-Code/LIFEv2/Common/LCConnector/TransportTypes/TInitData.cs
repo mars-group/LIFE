@@ -54,6 +54,8 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public TimeSeriesInitConfig TimeSeriesInitInfo { get; set; }
 
+        public FileInitInfoConfig FileInitInfoConfig { get; set; }
+
         /// <summary>
         /// The address of the MARS Config. Defaults to http://marsconfig, but 
         /// will be overridden, in case the '--mca' flag is provided upon
@@ -108,6 +110,25 @@ namespace LCConnector.TransportTypes {
 		public void AddTimeSeriesInitConfig(string tableName, string databaseColumnName, string clearColumnName,
             DateTime timeSeriesStartTime = default(DateTime)) {
 			TimeSeriesInitInfo = new TimeSeriesInitConfig(tableName, databaseColumnName, clearColumnName, timeSeriesStartTime);
+        }
+
+        /// <summary>
+        /// Adds a FileInitInfo for Layers which are initialized from a file downloaded from the MARS Cloud
+        /// </summary>
+        /// <param name="dataId">The uuidv4 identifing the file</param>
+        public void AddFileInitInfo(string dataId)
+        {
+            FileInitInfoConfig = new FileInitInfoConfig(dataId);
+        }
+    }
+
+    public class FileInitInfoConfig
+    {
+        public string FileId { get; private set; }
+
+        public FileInitInfoConfig(string fileId)
+        {
+            FileId = fileId;
         }
     }
 

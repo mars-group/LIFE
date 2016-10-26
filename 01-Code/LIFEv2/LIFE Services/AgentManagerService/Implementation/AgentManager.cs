@@ -25,7 +25,6 @@ using CommonTypes;
 using GeoGridEnvironment.Interface;
 using AgentManager;
 using DalskiAgent.Agents;
-using MARS.Shuttle.SimulationConfig.Implementation;
 using MARS.Shuttle.SimulationConfig.Interfaces;
 using SpatialAPI.Environment;
 
@@ -48,8 +47,6 @@ namespace AgentManagerService.Implementation
 			var marsConfigService = new ConfigServiceClient(MARSConfigServiceSettings.Address);
 			Console.WriteLine($"AgentManager: Using {MARSConfigServiceSettings.Address} as MARSConfigService address.");
 			// retreive ip, port, user and password of mariaDB to us as ROCK instance
-			//string rockIp = marsConfigService.Get("rock/ip");
-			//int rockPort = int.Parse(marsConfigService.Get("rock/port"));
 			string rockIP = marsConfigService.Get("rock/ip");
 			string rockUser = marsConfigService.Get("rock/serveruser");
 			string rockPassword = marsConfigService.Get("rock/serverpassword");
