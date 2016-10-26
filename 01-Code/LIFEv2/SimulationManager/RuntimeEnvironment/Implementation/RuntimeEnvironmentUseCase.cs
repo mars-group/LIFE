@@ -363,7 +363,17 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-					else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
+                    else if ((thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
+                             ||
+                             (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
+                             ||
+                             (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
+                    )
+                    {
+                        var olInfo = obstacleLayerSourceEnumerator.Current;
+                        initData.AddFileInitInfo(olInfo["MetaDataId"].ToString());
+                    }
+                    else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
                         .Values()
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))
                     {
