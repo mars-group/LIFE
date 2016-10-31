@@ -15,6 +15,7 @@ using ConfigurationAdapter;
 using CommonTypes.Types;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
+using static System.String;
 
 namespace LayerContainerShared {
     [Serializable]
@@ -25,21 +26,38 @@ namespace LayerContainerShared {
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
         public LayerContainerSettings() {
-            var foundAddress = NetworkInterface.GetAllNetworkInterfaces()
-                .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                .GetIPProperties().UnicastAddresses
-                .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
+            var foundAddress = "";
+            try
+            {
+                foundAddress = NetworkInterface.GetAllNetworkInterfaces()
+                    .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                    .GetIPProperties().UnicastAddresses
+                    .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Address resolution failes, will use 127.0.0.1 instead");
+                // ignored
+            }
 
-            var ipAddress = foundAddress != String.Empty ? foundAddress : "127.0.0.1";
-            // Step 1: Get the host name
-            var hostname = Dns.GetHostName();
-            // Step 2: Perform a DNS lookup.
-            // Note that the lookup is not guaranteed to succeed, especially
-            // if the system is misconfigured. On the other hand, if that
-            // happens, you probably can't connect to the host by name, anyway.
-            var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
-            // Step 3: Retrieve the canonical name.
-            var fqdn = hostinfo.HostName;
+
+            var ipAddress = foundAddress != Empty ? foundAddress : "127.0.0.1";
+            var fqdn = "";
+            try {
+                // Step 1: Get the host name
+                var hostname = Dns.GetHostName();
+                // Step 2: Perform a DNS lookup.
+                // Note that the lookup is not guaranteed to succeed, especially
+                // if the system is misconfigured. On the other hand, if that
+                // happens, you probably can't connect to the host by name, anyway.
+                var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
+                // Step 3: Retrieve the canonical name.
+                fqdn = hostinfo.HostName;
+            }catch(Exception ex){
+                Console.Error.WriteLine("Dns Hostname Resolution failed, using random GUID as unique identifier for LayerContainer");
+                fqdn = Guid.NewGuid().ToString();
+            }
+
             var lcName = "LC-" + fqdn;
             NodeRegistryConfig = new NodeRegistryConfig(NodeType.LayerContainer, lcName, ipAddress, 60100, true);
             GlobalConfig = new GlobalConfig();

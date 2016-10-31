@@ -41,13 +41,24 @@ namespace SimulationManagerShared
         /// </summary>
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
-        public SimulationManagerSettings() {
-            var foundAddress = NetworkInterface.GetAllNetworkInterfaces()
-                .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                .GetIPProperties().UnicastAddresses
-                .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
+        public SimulationManagerSettings()
+        {
+            var foundAddress = "";
+            try
+            {
+                foundAddress = NetworkInterface.GetAllNetworkInterfaces()
+                    .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                    .GetIPProperties().UnicastAddresses
+                    .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Address resolution failes, will use 127.0.0.1 instead");
+                // ignored
+            }
 
-            var ipAddress = (foundAddress != Empty) ? foundAddress : "127.0.0.1";
+
+            var ipAddress = foundAddress != Empty ? foundAddress : "127.0.0.1";
             var fqdn = "";
             try {
                 // Step 1: Get the host name
@@ -60,7 +71,7 @@ namespace SimulationManagerShared
                 // Step 3: Retrieve the canonical name.
                 fqdn = hostinfo.HostName;
             }catch(Exception ex){
-                Console.Error.WriteLine("Dns Hostname Resolution failed, using random GUID as unique identifiert for SimulationManager");
+                Console.Error.WriteLine("Dns Hostname Resolution failed, using random GUID as unique identifier for SimulationManager");
                 fqdn = Guid.NewGuid().ToString();
             }
 
