@@ -78,15 +78,24 @@ namespace LayerLoader.Implementation
             {
 
                 _asl = new LIFEAssemblyLoader(modelPath);
-                var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-                try {
+
+                try
+                {
+                    var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                     var foundLayerTypes = asm.GetTypes()
                         .Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer)))
                         .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
                         .ToList();
                     results.AddRange(foundLayerTypes);
-                } catch(ReflectionTypeLoadException ex){
-                    Console.WriteLine($"Caught type load error while Loading model code. Make sure you use 'dotnet publish' to finally create your mode code. Error was: {ex.LoaderExceptions.First()}");
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    Console.WriteLine(
+                        $"Caught type load error while Loading model code. Make sure you use 'dotnet publish' to finally create your model code. Error was: {ex.LoaderExceptions.First()}");
+                }
+                catch (FileLoadException fex)
+                {
+                    Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
                 }
 
             }
