@@ -221,17 +221,18 @@ namespace RuntimeEnvironment.Implementation
             var shuttleSimConfig = _modelContainer.GetScenarioConfig(modelDescription, simConfigName);
 
 
-			// only accept SHUTTLE based configuration
-			if (shuttleSimConfig != null)
+            // only accept ScenarioConfig based configuration
+            if (shuttleSimConfig != null)
 			{
-				// configure bia SHUTTLE
-				return SetupSimulationRunViaShuttleConfig(modelDescription, layerContainerClients.ToArray(), shuttleSimConfig, modelConfig);
+				// configure via ScenarioConfig
+				return SetupSimulationRunViaScenarioConfig(modelDescription, layerContainerClients.ToArray(), shuttleSimConfig, modelConfig);
 			}
-			throw new Exception("No SHUTTLE SimConfig has been found. Please check your root folder for a SimConfig file.");
+			throw new Exception("No ScenarioConfiguration has been found. Please use the --sc flag to provide the ID of a ScenarioConfiguration and make sure" +
+			                    "you're running this simulation in a MARS Cloud instance!");
 		}
 
 
-        private LayerContainerClient[] SetupSimulationRunViaShuttleConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, JObject scenarioConfig, ModelConfig modelConfig)
+        private LayerContainerClient[] SetupSimulationRunViaScenarioConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, JObject scenarioConfig, ModelConfig modelConfig)
         {
             /* 2.
              * Instantiate and initialize Layers by InstantiationOrder,

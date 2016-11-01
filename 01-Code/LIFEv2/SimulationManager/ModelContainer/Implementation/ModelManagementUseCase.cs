@@ -16,6 +16,7 @@ using MARS.Shuttle.SimulationConfig.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using MarsEurekaClient;
@@ -79,12 +80,21 @@ namespace ModelContainer.Implementation
                     "No ScenarioManagementService could be found in MARS Cloud. LIFE is shutting down now :(");
             }
             var http = new HttpClient();
-
-            var getTask = http.GetByteArrayAsync(new Uri($"http://{smService.IpAddress}:{smService.Port}/scenarios/{scenarioConfigId}/complete"));
+            Console.WriteLine("Retrieving ScenarioConfig...");
+            var uri = new Uri($"http://{smService.IpAddress}:{smService.Port}/scenarios/{scenarioConfigId}/complete");
+            var getTask = http.GetAsync(uri);
             getTask.Wait();
-            var json = Encoding.UTF8.GetString(getTask.Result);
+            if (getTask.Result.StatusCode != HttpStatusCode.OK)
+            {
+                throw new CouldNotGetScenarioConfigurationFromSMServiceException(
+                    $"Failed to retrieve ScenarioConfiguration by URI: {uri.AbsoluteUri}." +
+                    $"Did you run your Simulationcontainer inside of the MARS Cloud?");
+            }
+            var readAsString = getTask.Result.Content.ReadAsStringAsync();
+            readAsString.Wait();
 
-            return JObject.Parse(json);
+
+            return JObject.Parse(readAsString.Result);
         }
 
         public ModelConfig GetModelConfig(TModelDescription model)
