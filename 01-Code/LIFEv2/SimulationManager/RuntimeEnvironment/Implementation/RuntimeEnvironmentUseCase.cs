@@ -174,7 +174,6 @@ namespace RuntimeEnvironment.Implementation
                 {
                     try
                     {
-                        Console.WriteLine($"Connecting to  {nodeInformationType.NodeEndpoint.IpAddress}:{nodeInformationType.NodeEndpoint.Port}");
                         var client = new LayerContainerClient(
                             ScsServiceClientBuilder.CreateClient<ILayerContainer>
                             (
@@ -322,7 +321,7 @@ namespace RuntimeEnvironment.Implementation
 						"Please specify an appropriate LayerConfig for " + layerDescription.Name + " in your config file: " + modelDescription.Name +
 						".cfg");
 				}
-Console.WriteLine("10");
+
 				// make distinction between distributed initialization...
 				if (distributionPossible && layerConfig.DistributionStrategy != DistributionStrategy.NO_DISTRIBUTION)
 				{

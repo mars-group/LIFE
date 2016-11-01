@@ -236,9 +236,9 @@ namespace Hik.Communication.ScsServices.Communication
 
             if (responseMessage.RemoteException != null){
                 throw responseMessage.RemoteException;
-            } else {
-                return responseMessage.ReturnValue; 
             }
+
+            return responseMessage.ReturnValue;
         }
     }
 
