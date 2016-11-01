@@ -203,12 +203,16 @@ namespace Hik.Communication.ScsServices.Client {
                 returnValue = method.Invoke(_clientObject, invokeMessage.Parameters);
             }
             catch (TargetInvocationException ex) {
+                Console.WriteLine("EX1");
                 var innerEx = ex.InnerException;
                 SendInvokeResponse(invokeMessage, null, new ScsRemoteException(innerEx.Message, innerEx));
+                throw ex;
                 return;
             }
             catch (Exception ex) {
+                Console.WriteLine("EX2");
                 SendInvokeResponse(invokeMessage, null, new ScsRemoteException(ex.Message, ex));
+                throw ex;
                 return;
             }
 

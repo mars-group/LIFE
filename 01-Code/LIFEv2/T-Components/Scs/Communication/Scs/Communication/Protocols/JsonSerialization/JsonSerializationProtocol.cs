@@ -159,7 +159,15 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// <returns>Deserialized message</returns>
         protected virtual IScsMessage DeserializeMessage(byte[] bytes) {
             var output = Encoding.UTF8.GetString(bytes);
-            return JsonConvert.DeserializeObject<IScsMessage>(output, Jset);
+            try
+            {
+                return JsonConvert.DeserializeObject<IScsMessage>(output, Jset);
+            }
+            catch (FormatException fex)
+            {
+                Console.WriteLine("Exception occured during DeSerialization. Message was: " + output);
+                throw fex;
+            }
         }
 
         #endregion

@@ -38,8 +38,13 @@ namespace NodeRegistry.Implementation.UseCases
             return GetAllNodes().Where(nodeInformationType => nodeInformationType.NodeType == nodeType).ToList();
         }
 
-        public void AddNode(TNodeInformation nodeInformation) {
-            _activeNodeList.AddOrUpdate(nodeInformation.NodeIdentifier, nodeInformation, (k,v) => nodeInformation);
+        public void AddNode(TNodeInformation nodeInformation)
+        {
+            if (_activeNodeList.ContainsKey(nodeInformation.NodeIdentifier))
+            {
+                return;
+            }
+            _activeNodeList.GetOrAdd(nodeInformation.NodeIdentifier, nodeInformation);
 
             //notify all subscribers
             _nodeRegistryEventHandlerUseCase.NotifyOnNodeJoinSubsribers(nodeInformation);
