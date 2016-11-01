@@ -31,22 +31,12 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
     public class JsonSerializationProtocol : IScsWireProtocol {
         #region Private fields
 
-        /// <summary>
-        ///     Maximum length of a message.
-        /// </summary>
-        private const int MaxMessageLength = 256*1024*1024; //128 Megabytes.
-
-
-
         private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
 
         /// <summary>
         ///     This MemoryStream object is used to collect receiving bytes to build messages.
         /// </summary>
         private MemoryStream _receiveMemoryStream;
-
-        private object _lock;
-
         #endregion
 
         #region Constructor
@@ -55,7 +45,6 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Creates a new instance of JsonSerializationProtocol.
         /// </summary>
         public JsonSerializationProtocol() {
-            _lock = new Object();
             _receiveMemoryStream = new MemoryStream();
         }
 
@@ -142,7 +131,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Serialized message bytes.
         ///     Does not include length of the message.
         /// </returns>
-        protected virtual byte[] SerializeMessage(IScsMessage message) {
+        private static byte[] SerializeMessage(IScsMessage message) {
             var json = JsonConvert.SerializeObject(message,Formatting.Indented, Jset);
             return Encoding.UTF8.GetBytes(json);
         }
@@ -165,7 +154,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
             }
             catch (FormatException fex)
             {
-                Console.WriteLine("Exception occured during DeSerialization. Message was: " + output);
+                Console.WriteLine($"Exception occured during DeSerialization. Message was: {output}, messagelength = {bytes.Length}, error = {fex.Message}");
                 throw fex;
             }
         }

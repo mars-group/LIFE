@@ -280,7 +280,7 @@ namespace RuntimeEnvironment.Implementation
                 var deltaT = int.Parse(globalParams["DeltaT"].ToString());
                 var deltaTUnit = globalParams["DeltaTUnit"].ToString();
                 var simStepDuration = new TimeSpan();
-                Console.WriteLine("8");
+
                 switch (deltaTUnit)
                 {
                     case "years":

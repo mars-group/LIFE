@@ -24,7 +24,7 @@ namespace RuntimeEnvironment.Implementation.Entities {
 			_layerContainer.Timeout = -1;
             _layerContainer.Connect();
 			// set the config service address for the layerContainer. It might have been overriden by a 
-			// parameter during startup trough the MARSLocalStarter
+			// parameter during startup through the MARSLocalStarter
 			_layerContainer.ServiceProxy.SetMarsConfigServiceAddress(MARSConfigServiceSettings.Address);
             _layerContainer.ServiceProxy.LoadModelContent(content);
         }

@@ -40,7 +40,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// </summary>
         private const int ReceiveBufferSize = 128*1024*1024; //128MB
 
-        private const int NumReadConnections = 10;
+        private const int NumReadConnections = 1;
         private const int NumWriteConnections = 10;
 
         private readonly BufferManager _readBufferManager;
