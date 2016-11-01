@@ -162,7 +162,7 @@ namespace RuntimeEnvironment.Implementation
 
             var content = _modelContainer.GetSerializedModel(modelDescription);
             var layerContainerClients = new List<LayerContainerClient>();
-
+            Console.WriteLine("Creating LayerContainer Clients...");
             /* 1.
              * Create LayerContainerClients for all connected LayerContainers
              */
@@ -174,6 +174,7 @@ namespace RuntimeEnvironment.Implementation
                 {
                     try
                     {
+                        Console.WriteLine($"Connecting to  {nodeInformationType.NodeEndpoint.IpAddress}:{nodeInformationType.NodeEndpoint.Port}");
                         var client = new LayerContainerClient(
                             ScsServiceClientBuilder.CreateClient<ILayerContainer>
                             (
@@ -186,7 +187,7 @@ namespace RuntimeEnvironment.Implementation
                     }
                     catch (Exception ex)
                     {
-
+                        Console.Error.WriteLine("Layercontainer Connection ERROR: " + ex.Message);
                         // fail after 3 attempts
                         if (retries > 1)
                         {
@@ -214,10 +215,14 @@ namespace RuntimeEnvironment.Implementation
 
             }
 
+            Console.Write("...done!");
+
             /* Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
              * XML config files are still valid but will be deprecated in the near future
              */
+            Console.WriteLine("Get ModelConfig...");
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);
+            Console.WriteLine("Get Scenario Config...");
             var shuttleSimConfig = _modelContainer.GetScenarioConfig(modelDescription, simConfigName);
 
 
@@ -247,8 +252,10 @@ namespace RuntimeEnvironment.Implementation
 
 			var distributionPossible = layerContainerClients.Count() > 1;
 
+
             var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Values().GetEnumerator();
             var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
+
 
             var obstacleLayerSourceEnumerator =
                 scenarioConfig["InitializationDescription"]["ObstacleLayers"].Values().GetEnumerator();
@@ -262,10 +269,10 @@ namespace RuntimeEnvironment.Implementation
                 scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Values().GetEnumerator();
             var thereAreGridPotentialFieldLayers = gridPotentialFieldLayerSourceEnumerator.MoveNext();
 
-
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
             {
                 var layerInstanceId = new TLayerInstanceId(layerDescription, layerId);
+
 
                 var globalParams = scenarioConfig["ParameterizationDescription"]["Global"];
                 var startDate = DateTime.Parse(globalParams["SimulationStartDateTime"].ToString());
@@ -273,6 +280,7 @@ namespace RuntimeEnvironment.Implementation
                 var deltaT = int.Parse(globalParams["DeltaT"].ToString());
                 var deltaTUnit = globalParams["DeltaTUnit"].ToString();
                 var simStepDuration = new TimeSpan();
+                Console.WriteLine("8");
                 switch (deltaTUnit)
                 {
                     case "years":
@@ -314,7 +322,7 @@ namespace RuntimeEnvironment.Implementation
 						"Please specify an appropriate LayerConfig for " + layerDescription.Name + " in your config file: " + modelDescription.Name +
 						".cfg");
 				}
-
+Console.WriteLine("10");
 				// make distinction between distributed initialization...
 				if (distributionPossible && layerConfig.DistributionStrategy != DistributionStrategy.NO_DISTRIBUTION)
 				{
@@ -378,7 +386,6 @@ namespace RuntimeEnvironment.Implementation
                         .Values()
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))
                     {
-
                         var basicLayerMapping = (JObject)scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
                             .Where(j => j["LayerName"].ToString() == layerDescription.Name);
 

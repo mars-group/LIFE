@@ -78,15 +78,25 @@ namespace NodeRegistry.Implementation.UseCases {
                     ComputeMessage(nodeRegistryMessage);
                 }
             }, _tokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-            JoinCluster();
         }
 
         public void JoinCluster() {
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    SendJoinMessage();
+                    Thread.Sleep(5000);
+                }
+            }).Start();
+        }
+
+        private void SendJoinMessage()
+        {
             _multicastAdapter.SendMessageToMulticastGroup
-                (
-                    NodeRegistryMessageFactory.GetJoinMessage
-                        (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress, _clusterName));
+            (
+                NodeRegistryMessageFactory.GetJoinMessage
+                    (_localNodeInformation, _localNodeInformation.NodeEndpoint.IpAddress, _clusterName));
         }
 
         public void LeaveCluster() {

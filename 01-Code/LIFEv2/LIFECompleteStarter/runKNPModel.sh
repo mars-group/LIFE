@@ -1,0 +1,1 @@
+﻿dotnet run -m ./model --sc 88840273-3c90-421e-8ff5-25cf952e672b --mca dock-three.mars.haw-hamburg.de:8080

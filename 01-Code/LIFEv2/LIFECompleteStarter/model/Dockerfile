@@ -1,1 +1,0 @@
-FROM life:model-onbuild

@@ -53,6 +53,7 @@ namespace SimulationManagerFacade.Implementation {
 
             _server.Start();
 
+            nodeRegistry.JoinCluster();
 			// create and start SM WebService
 			//var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
 

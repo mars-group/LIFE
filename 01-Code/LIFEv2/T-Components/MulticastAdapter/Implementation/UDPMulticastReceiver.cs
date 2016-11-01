@@ -60,7 +60,7 @@ namespace MulticastAdapter.Implementation
             var udpClient = new UdpClient();
 
             // allow another client to bind to this port
-            //udpClient.Client.MulticastLoopback = true;
+            udpClient.Client.MulticastLoopback = true;
             //udpClient.Client.ExclusiveAddressUse = false;
 
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);

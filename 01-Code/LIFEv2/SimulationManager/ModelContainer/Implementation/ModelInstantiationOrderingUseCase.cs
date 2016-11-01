@@ -37,13 +37,13 @@ namespace ModelContainer.Implementation {
 
             var nodes = addinLoader.LoadAllLayersForModel(description.ModelPath);
 
-            ModelStructure modelStructure = new ModelStructure();
+            var modelStructure = new ModelStructure();
 
             foreach (var node in nodes) {
 
 
-                Type type = node.LayerType;
-                ConstructorInfo[] constructors = type.GetConstructors();
+                var type = node.LayerType;
+                var constructors = type.GetTypeInfo().GetConstructors();
 
                 Console.WriteLine($"Found layer: {type.Name}");
 

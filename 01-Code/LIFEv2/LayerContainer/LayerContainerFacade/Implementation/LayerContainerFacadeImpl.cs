@@ -6,10 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+
 using CommonTypes;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
@@ -18,6 +15,7 @@ using LayerContainerShared;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
+using NodeRegistry.Interface;
 using PartitionManager.Interfaces;
 using ResultAdapter.Interface;
 using RTEManager.Interfaces;
@@ -35,7 +33,8 @@ namespace LayerContainerFacade.Implementation {
             (LayerContainerSettings settings,
                 IPartitionManager partitionManager,
                 IRTEManager rteManager,
-                IResultAdapter resultAdapter) {
+                IResultAdapter resultAdapter,
+                INodeRegistry nodeRegistry) {
 
             _partitionManager = partitionManager;
             _rteManager = rteManager;
@@ -44,6 +43,8 @@ namespace LayerContainerFacade.Implementation {
 
             //Start server
             _server.Start();
+
+            nodeRegistry.JoinCluster();
         }
 
         #region ILayerContainerFacade Members

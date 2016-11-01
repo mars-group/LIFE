@@ -120,6 +120,7 @@ namespace MARSLocalStarter {
                 if (marsConfigAddress != string.Empty)
                 {
                     MARSConfigServiceSettings.Address = marsConfigAddress;
+                    Console.WriteLine($"Using ConfigServiceAddress {marsConfigAddress}");
                 }
                 else
                 {

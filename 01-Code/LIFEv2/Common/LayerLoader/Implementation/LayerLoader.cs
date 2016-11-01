@@ -83,7 +83,7 @@ namespace LayerLoader.Implementation
                 {
                     var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                     var foundLayerTypes = asm.GetTypes()
-                        .Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer)))
+                        .Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer)) && !t.GetTypeInfo().IsAbstract)
                         .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
                         .ToList();
                     results.AddRange(foundLayerTypes);
