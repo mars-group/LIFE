@@ -56,7 +56,8 @@ namespace ModelContainer.Implementation.Entities {
             {
                 foreach (var dependency in Dependencies)
                 {
-                    var check = dependency.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo());
+                    //var check = dependency.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo());
+                    var check = newNode.Layer.GetInterfaces().Contains(dependency);
                     Console.Error.WriteLine($"Dep {dependency.GetTypeInfo().AssemblyQualifiedName} isAssignableFrom {newNode.Layer.GetTypeInfo().AssemblyQualifiedName} => {check}");
                 }
 
