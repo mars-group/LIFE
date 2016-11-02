@@ -1,4 +1,4 @@
-﻿FROM artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.0.0-preview2.1-sdk
+﻿FROM artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet
 
 MAINTAINER Christian Hüning <christian.huening@haw-hamburg.de>
 

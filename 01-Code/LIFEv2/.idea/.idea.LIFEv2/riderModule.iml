@@ -34,6 +34,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../T-Components/MulticastAdapter" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../T-Components/RabbitMQClient" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../T-Components/Scs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Tests/ModelContainerTest" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Tests/MulticastAdapterTest" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Tests/NodeRegistryTest" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../Tests/SimulationPlanParserTest" isTestSource="false" />
@@ -99,6 +100,8 @@
       <excludeFolder url="file://$MODULE_DIR$/../../T-Components/RabbitMQClient/obj" />
       <excludeFolder url="file://$MODULE_DIR$/../../T-Components/Scs/bin" />
       <excludeFolder url="file://$MODULE_DIR$/../../T-Components/Scs/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/ModelContainerTest/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Tests/ModelContainerTest/obj" />
       <excludeFolder url="file://$MODULE_DIR$/../../Tests/MulticastAdapterTest/bin" />
       <excludeFolder url="file://$MODULE_DIR$/../../Tests/MulticastAdapterTest/obj" />
       <excludeFolder url="file://$MODULE_DIR$/../../Tests/NodeRegistryTest/bin" />

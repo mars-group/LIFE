@@ -26,23 +26,9 @@ namespace LayerLoader.Implementation
         {
             //write files
             modelContent.Write(_pathForTransferredModel);
-            
-            // iterate all DLLs and try to find ILayer implementations
-            foreach (var fileSystemInfo in new DirectoryInfo(_pathForTransferredModel).GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
-            {
-                _asl = new LIFEAssemblyLoader(_pathForTransferredModel);
-                var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-                _layerTypes
-                    .AddRange(asm.GetTypes()
-                        .Where(t => 
-                            //t.GetTypeInfo().IsClass
-                            //&&
-                            t.GetTypeInfo().GetInterface("ILayer") != null//t.GetInterfaces().Contains(typeof(ILayer))
-                            &&
-                            !t.GetTypeInfo().IsAbstract
-                        ).ToList()
-                    );
-            }
+
+            _layerTypes
+                .AddRange(DoReflection(_pathForTransferredModel));
         }
 
         public LayerTypeInfo LoadLayerOnLayerContainer(string layerName)
@@ -67,15 +53,33 @@ namespace LayerLoader.Implementation
             return new LayerTypeInfo(layerType, ctors);
         }
 
+
+
         public IEnumerable<LayerTypeInfo> LoadAllLayersForModel(string modelPath)
         {
 
             var results = new List<LayerTypeInfo>();
 
 
+            var foundLayerTypes = DoReflection(modelPath)
+                .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
+                .ToList();
+            results.AddRange(foundLayerTypes);
+
+
+            if (!results.Any())
+            {
+                throw new ModelCodeFailedToLoadException($"It appears there was no valid mode code found in the {modelPath} subdirectory. Please check your build config etc.!");
+            }
+            return results;
+        }
+
+        private IEnumerable<Type> DoReflection(string modelPath)
+        {
+            var types = new List<Type>();
 
             // iterate all DLLs and try to find ILayer implementations
-            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
+            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll"))
             {
 
                 _asl = new LIFEAssemblyLoader(modelPath);
@@ -83,17 +87,15 @@ namespace LayerLoader.Implementation
                 try
                 {
                     var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-                    var foundLayerTypes = asm.GetTypes()
+                    types.AddRange(asm.GetTypes()
                         .Where(t =>
-                                //t.GetTypeInfo().IsClass
-                                //&&
-                                t.GetTypeInfo().GetInterface("ILayer") != null//t.GetInterfaces().Contains(typeof(ILayer))
-                                &&
-                                !t.GetTypeInfo().IsAbstract
-                        )
-                        .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
-                        .ToList();
-                    results.AddRange(foundLayerTypes);
+                                    t.GetTypeInfo().IsClass
+                                    &&
+                                    t.GetInterfaces().Contains(typeof(ILayer))
+                                    &&
+                                    !t.GetTypeInfo().IsAbstract
+                        ).ToList());
+
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
@@ -102,16 +104,16 @@ namespace LayerLoader.Implementation
                 }
                 catch (FileLoadException fex)
                 {
-                    Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
+                    Console.WriteLine(
+                        $"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
+                }
+                catch (BadImageFormatException bex)
+                {
+                    Console.WriteLine($"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");
                 }
 
             }
-
-            if (!results.Any())
-            {
-                throw new ModelCodeFailedToLoadException($"It appears there was no valid mode code found in the {modelPath} subdirectory. Please check your build config etc.!");
-            }
-            return results;
+            return types;
         }
     }
 }
