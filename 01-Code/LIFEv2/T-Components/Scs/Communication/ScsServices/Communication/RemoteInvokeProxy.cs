@@ -235,7 +235,8 @@ namespace Hik.Communication.ScsServices.Communication
             }
 
             if (responseMessage.RemoteException != null){
-                throw responseMessage.RemoteException;
+                Console.Error.WriteLine("A remote exception occured: ");
+                throw responseMessage.RemoteException.InnerException;
             }
 
             return responseMessage.ReturnValue;

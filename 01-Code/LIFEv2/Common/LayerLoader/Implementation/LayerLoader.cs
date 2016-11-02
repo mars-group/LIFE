@@ -13,9 +13,7 @@ namespace LayerLoader.Implementation
 {
     public class LayerLoader : ILayerLoader
     {
-        private readonly Dictionary<string, List<Type>> _layerTypes = new Dictionary<string, List<Type>>();
-
-        private static readonly string BasePathForModels = $".{Path.DirectorySeparatorChar}models";
+        private readonly List<Type> _layerTypes = new List<Type>();
 
         private const string FolderNameForTransferredModelCode = "tmp";
 
@@ -28,30 +26,33 @@ namespace LayerLoader.Implementation
         {
             //write files
             modelContent.Write(_pathForTransferredModel);
-
-            Console.WriteLine("HERE I AM");
             
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(_pathForTransferredModel).GetFileSystemInfos("*.dll"))
             {
-
                 _asl = new LIFEAssemblyLoader(_pathForTransferredModel);
                 var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-                if(!_layerTypes.ContainsKey(FolderNameForTransferredModelCode)){
-                    _layerTypes.Add(FolderNameForTransferredModelCode, new List<Type>());
-                }
-                _layerTypes[FolderNameForTransferredModelCode].AddRange(asm.GetTypes().Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer))).ToList());
+                _layerTypes
+                    .AddRange(asm.GetTypes()
+                        .Where(t => 
+                            t.GetTypeInfo().IsClass 
+                            && 
+                            t.GetInterfaces().Contains(typeof(ILayer))
+                            &&
+                            !t.GetTypeInfo().IsAbstract
+                        ).ToList()
+                    );
             }
         }
 
         public LayerTypeInfo LoadLayerOnLayerContainer(string layerName)
         {
-            if (!_layerTypes.ContainsKey(FolderNameForTransferredModelCode))
+            if (_layerTypes.Count <= 0)
             {
                 throw new ModelCodeFailedToLoadException("It appears there was no valid model code found in the ./models/tmp subdirectory. Please check!");
             }
 
-            var layerType = _layerTypes[FolderNameForTransferredModelCode].FirstOrDefault(t => t.Name == layerName);
+            var layerType = _layerTypes.FirstOrDefault(t => t.Name == layerName);
             if (layerType == null)
             {
                 throw new LayerNotFoundException($"A Layer with Name {layerName} could not be found");

@@ -241,7 +241,8 @@ namespace Hik.Communication.ScsServices.Service {
                     //Send method invocation return value to the client
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, returnValue, null);
                 }
-                catch (TargetInvocationException ex) {
+                catch (TargetInvocationException ex)
+                {
                     var innerEx = ex;
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
 
