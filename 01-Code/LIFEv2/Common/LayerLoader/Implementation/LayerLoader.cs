@@ -28,16 +28,16 @@ namespace LayerLoader.Implementation
             modelContent.Write(_pathForTransferredModel);
             
             // iterate all DLLs and try to find ILayer implementations
-            foreach (var fileSystemInfo in new DirectoryInfo(_pathForTransferredModel).GetFileSystemInfos("*.dll"))
+            foreach (var fileSystemInfo in new DirectoryInfo(_pathForTransferredModel).GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
             {
                 _asl = new LIFEAssemblyLoader(_pathForTransferredModel);
                 var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                 _layerTypes
                     .AddRange(asm.GetTypes()
                         .Where(t => 
-                            t.GetTypeInfo().IsClass 
-                            && 
-                            t.GetInterfaces().Contains(typeof(ILayer))
+                            //t.GetTypeInfo().IsClass
+                            //&&
+                            t.GetTypeInfo().GetInterface("ILayer") != null//t.GetInterfaces().Contains(typeof(ILayer))
                             &&
                             !t.GetTypeInfo().IsAbstract
                         ).ToList()
@@ -75,7 +75,7 @@ namespace LayerLoader.Implementation
 
 
             // iterate all DLLs and try to find ILayer implementations
-            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll"))
+            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
             {
 
                 _asl = new LIFEAssemblyLoader(modelPath);
@@ -84,7 +84,13 @@ namespace LayerLoader.Implementation
                 {
                     var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                     var foundLayerTypes = asm.GetTypes()
-                        .Where(t => t.GetTypeInfo().IsClass && t.GetInterfaces().Contains(typeof(ILayer)) && !t.GetTypeInfo().IsAbstract)
+                        .Where(t =>
+                                //t.GetTypeInfo().IsClass
+                                //&&
+                                t.GetTypeInfo().GetInterface("ILayer") != null//t.GetInterfaces().Contains(typeof(ILayer))
+                                &&
+                                !t.GetTypeInfo().IsAbstract
+                        )
                         .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
                         .ToList();
                     results.AddRange(foundLayerTypes);

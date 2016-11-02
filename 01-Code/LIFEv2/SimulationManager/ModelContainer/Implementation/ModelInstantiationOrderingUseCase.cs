@@ -8,13 +8,11 @@
 //  *******************************************************/
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using LayerLoader.Interface;
 using LCConnector.TransportTypes;
 using ModelContainer.Implementation.Entities;
-using SimulationManagerShared;
 using SMConnector.TransportTypes;
 
 
@@ -23,16 +21,17 @@ namespace ModelContainer.Implementation {
     ///     This class reads one specific model and converts it into a representation that allows<br />
     ///     for instantiation order analysis.
     /// </summary>
-    internal class ModelInstantiationOrderingUseCase {
+    internal class ModelInstantiationOrderingUseCase
+    {
 
 
-        public ModelInstantiationOrderingUseCase() {
+        public ModelInstantiationOrderingUseCase()
+        {
         }
+
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description) {
 
-            // use AddinLoader from LIFEApi, because Mono.Addins may only load Plugins whose 
-            // Interfaces originate from the Assembly they are attempted to be loaded from
             ILayerLoader addinLoader = new LayerLoader.Implementation.LayerLoader();
 
             var nodes = addinLoader.LoadAllLayersForModel(description.ModelPath);
@@ -43,7 +42,7 @@ namespace ModelContainer.Implementation {
 
 
                 var type = node.LayerType;
-                var constructors = type.GetTypeInfo().GetConstructors();
+                var constructors = type.GetConstructors();
 
                 Console.WriteLine($"Found layer: {type.Name}");
 
@@ -57,7 +56,7 @@ namespace ModelContainer.Implementation {
                         "This is required for MARS LIFE's distribution to work properly."
                         );
                 }
-                TLayerDescription layerDescription = new TLayerDescription
+                var layerDescription = new TLayerDescription
                     (type.Name,
                         type.GetTypeInfo().Assembly.GetName().Version.Major,
                         type.GetTypeInfo().Assembly.GetName().Version.Minor,
@@ -66,16 +65,26 @@ namespace ModelContainer.Implementation {
                         type.AssemblyQualifiedName);
 
                 if (constructors.Any(c => c.GetParameters().Length == 0))
+                {
                     modelStructure.AddLayer(layerDescription, type);
-                else {
-                    ParameterInfo[] paramList = constructors.First(c => c.GetParameters().Length > 0).GetParameters();
+                }
+                else
+                {
+                    var paramList = constructors.First(c => c.GetParameters().Length > 0).GetParameters();
                     modelStructure.AddLayer(layerDescription, type, paramList.Select(p => p.ParameterType).ToArray());
                 }
             }
 
-            return modelStructure.CalculateInstantiationOrder();
+            var instOrder = modelStructure.CalculateInstantiationOrder();
+            Console.Error.WriteLine("Inst Order:");
+            foreach (var layerDescription in instOrder)
+            {
+                Console.WriteLine($"{layerDescription.FullName}");
+            }
+            return instOrder;
         }
     }
+
 
     [Serializable]
     internal class AllLayerConstructorParamtersNeedToBeInterfacesException : Exception

@@ -27,7 +27,7 @@ namespace PartitionManager.Implementation {
         #region IPartitionManager Members
 
         public bool AddLayer(TLayerInstanceId instanceId) {
-            ILayer layer = _layerFactory.GetLayer(instanceId.LayerDescription.Name);
+            var layer = _layerFactory.GetLayer(instanceId.LayerDescription.Name);
             _rteManager.RegisterLayer(instanceId, layer);
             return true;
         }

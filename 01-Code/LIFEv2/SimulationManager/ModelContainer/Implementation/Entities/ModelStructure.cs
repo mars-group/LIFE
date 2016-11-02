@@ -12,7 +12,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using LCConnector.TransportTypes;
 
-[assembly: InternalsVisibleTo("SimulationManagerTest")]
+[assembly: InternalsVisibleTo("ModelContainerTest")]
 
 namespace ModelContainer.Implementation.Entities {
     /// <summary>
@@ -46,7 +46,7 @@ namespace ModelContainer.Implementation.Entities {
              */
 
             IList<HashSet<ModelNode>> setList = new List<HashSet<ModelNode>>();
-
+            var level = 0;
             while (_nodes.Any()) {
                 // get all satisfied nodes from _nodes
                 var dependentNodes = _nodes.Where
@@ -56,7 +56,23 @@ namespace ModelContainer.Implementation.Entities {
                                 e => setList.Any(s => s.Contains(e))
                             )
                     ).ToArray();
+                Console.Error.WriteLine($"Level {level}:");
+                foreach (var dependentNode in dependentNodes)
+                {
+                    Console.Error.WriteLine($"DepNode: {dependentNode.LayerDescription.FullName}");
+                }
+                var setLevel = 0;
+                foreach (var set in setList)
+                {
 
+                    foreach (var modelNode in set)
+                    {
+                        Console.Error.WriteLine($"SetLevel {setLevel} : {modelNode.LayerDescription.FullName}");
+                    }
+                    setLevel++;
+
+                }
+                level++;
                 // remove these from the _nodes collection
                 foreach (var dependentNode in dependentNodes) {
                     _nodes.Remove(dependentNode);

@@ -49,7 +49,19 @@ namespace ModelContainer.Implementation.Entities {
         /// </summary>
         /// <param name="newNode"></param>
         public void UpdateEdges(ModelNode newNode) {
-            if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer))) _edges.Add(newNode);
+
+            if ((LayerDescription.Name == "MarulaLayer" &&
+                newNode.Layer.FullName == "KNPPrecipitationLayer.PrecipitationLayer"))
+            //|| LayerDescription.Name == "ElephantLayer")
+            {
+                foreach (var dependency in Dependencies)
+                {
+                    var check = dependency.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo());
+                    Console.Error.WriteLine($"Dep {dependency.GetTypeInfo().AssemblyQualifiedName} isAssignableFrom {newNode.Layer.GetTypeInfo().AssemblyQualifiedName} => {check}");
+                }
+
+            }
+            if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo()))) _edges.Add(newNode);
         }
 
         public override bool Equals(object obj) {

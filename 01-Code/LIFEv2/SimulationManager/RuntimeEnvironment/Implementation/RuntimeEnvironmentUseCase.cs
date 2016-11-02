@@ -18,6 +18,7 @@ using CommonTypes;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
+using Hik.Communication.ScsServices.Communication.Messages;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LifeAPI.Config;
@@ -180,9 +181,15 @@ namespace RuntimeEnvironment.Implementation
                                 nodeInformationType.NodeEndpoint.IpAddress + ":" +
                                 nodeInformationType.NodeEndpoint.Port
                             ),
-                        content);
+                            content);
                         layerContainerClients.Add(client);
                         connected = true;
+                    }
+                    catch (ScsRemoteException scsEx)
+                    {
+                        Console.Error.WriteLine(scsEx.StackTrace);
+
+                        throw scsEx;
                     }
                     catch (Exception ex)
                     {

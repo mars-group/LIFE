@@ -234,9 +234,9 @@ namespace Hik.Communication.ScsServices.Communication
                 else _cache[targetMethod.Name] = responseMessage.ReturnValue;
             }
 
-            if (responseMessage.RemoteException != null){
-                Console.Error.WriteLine("A remote exception occured: ");
-                throw responseMessage.RemoteException.InnerException;
+            if (responseMessage.RemoteException != null)
+            {
+                throw responseMessage.RemoteException;
             }
 
             return responseMessage.ReturnValue;

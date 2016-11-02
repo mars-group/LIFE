@@ -11,33 +11,33 @@ namespace LayerLoader.Implementation
     {
         private readonly string _folderPath;
 
-        public LIFEAssemblyLoader(string folderPath)
-        {
+
+        /// <summary>
+        ///   Create a new assembly loader.
+        /// </summary>
+        /// <param name="folderPath">Base path for the dependency resolving.</param>
+        public LIFEAssemblyLoader(string folderPath) {
             _folderPath = folderPath;
-            Resolving += OnResolving;
         }
 
-        private Assembly OnResolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
-        {
-            return Load(assemblyName);
-        }
 
-        protected override Assembly Load(AssemblyName assemblyName)
-        {
+        /// <summary>
+        ///   Load the requested assembly. Performs recursive calls to load required dependencies.
+        /// </summary>
+        /// <param name="assemblyName">Assembly description.</param>
+        /// <returns>The loaded assembly.</returns>
+        protected override Assembly Load(AssemblyName assemblyName) {
             var deps = DependencyContext.Default;
-            
             var res = deps.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
-            if (res.Count > 0)
-            {
+            if (res.Count > 0) {
                 return Assembly.Load(new AssemblyName(res.First().Name));
             }
-            var apiApplicationFileInfo = new FileInfo($"{_folderPath}{Path.DirectorySeparatorChar}{assemblyName.Name}.dll");
-
-            if (!File.Exists(apiApplicationFileInfo.FullName)) {
-                return Assembly.Load(assemblyName);
+            var dllPath = _folderPath + Path.DirectorySeparatorChar + assemblyName.Name + ".dll";
+            var fileinfo = new FileInfo(dllPath);
+            if (File.Exists(fileinfo.FullName)) {
+                return LoadFromAssemblyPath(fileinfo.FullName);
             }
-
-            return LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
+            return Assembly.Load(assemblyName);
         }
     }
 }
