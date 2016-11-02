@@ -57,12 +57,13 @@ namespace ModelContainer.Implementation.Entities {
                 foreach (var dependency in Dependencies)
                 {
                     //var check = dependency.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo());
-                    var check = newNode.Layer.GetInterfaces().Contains(dependency);
+                    var check = newNode.Layer.GetInterfaces().Any(i => i.FullName == dependency.FullName);
                     Console.Error.WriteLine($"Dep {dependency.GetTypeInfo().AssemblyQualifiedName} isAssignableFrom {newNode.Layer.GetTypeInfo().AssemblyQualifiedName} => {check}");
                 }
 
             }
-            if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo()))) _edges.Add(newNode);
+            //if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo()))) _edges.Add(newNode);
+            if (Dependencies.Any(dependency => newNode.Layer.GetInterfaces().Any(i => i.FullName == dependency.FullName))) _edges.Add(newNode);
         }
 
         public override bool Equals(object obj) {
