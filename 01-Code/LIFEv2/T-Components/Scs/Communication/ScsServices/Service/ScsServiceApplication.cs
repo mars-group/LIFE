@@ -243,7 +243,7 @@ namespace Hik.Communication.ScsServices.Service {
                 }
                 catch (TargetInvocationException ex)
                 {
-                    var innerEx = ex;
+                    var innerEx = ex.InnerException;
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
 
                         new ScsRemoteException(
