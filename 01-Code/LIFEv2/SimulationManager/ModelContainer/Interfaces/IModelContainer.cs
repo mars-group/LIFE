@@ -55,7 +55,7 @@ namespace ModelContainer.Interfaces {
         /// <param name="modelId"></param>
         /// <param name="scenarioConfigId"></param>
         /// <returns>The Simconfig object or null</returns>
-        JObject GetScenarioConfig(TModelDescription modelId, string scenarioConfigId);
+        JObject GetScenarioConfig(string scenarioConfigId);
 
         /// <summary>
         /// Returns the ModelConfig for the given modelDescription

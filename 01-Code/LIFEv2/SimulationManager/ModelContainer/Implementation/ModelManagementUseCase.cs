@@ -36,6 +36,7 @@ namespace ModelContainer.Implementation
     /// </summary>
     internal class ModelManagementUseCase {
         private TModelDescription _currentModel;
+        private JObject _scenarioConfig;
 
         public ModelManagementUseCase(SimulationManagerSettings settings) {
         }
@@ -73,8 +74,12 @@ namespace ModelContainer.Implementation
         }
 
 
-        public JObject GetScenarioConfig(TModelDescription model, string scenarioConfigId)
+        public JObject GetScenarioConfig(string scenarioConfigId)
         {
+            // cache
+            if (_scenarioConfig != null) return _scenarioConfig;
+
+
             var smServiceHost = "";
             try
             {
@@ -114,7 +119,8 @@ namespace ModelContainer.Implementation
             readAsString.Wait();
 
 
-            return JObject.Parse(readAsString.Result);
+            _scenarioConfig = JObject.Parse(readAsString.Result);
+            return _scenarioConfig;
         }
 
         public ModelConfig GetModelConfig(TModelDescription model)

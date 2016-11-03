@@ -51,9 +51,9 @@ namespace ModelContainer.Implementation {
             return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);
         }
 
-        public JObject GetScenarioConfig(TModelDescription modelId, string scenarioConfigId)
+        public JObject GetScenarioConfig(string scenarioConfigId)
         {
-            return _modelContainerUseCase.GetScenarioConfig(modelId, scenarioConfigId);
+            return _modelContainerUseCase.GetScenarioConfig(scenarioConfigId);
         }
 
 

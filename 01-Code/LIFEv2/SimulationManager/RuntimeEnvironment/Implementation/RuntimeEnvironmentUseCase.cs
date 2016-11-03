@@ -55,12 +55,13 @@ namespace RuntimeEnvironment.Implementation
             _idleLayerContainers = new HashSet<TNodeInformation>();
             _busyLayerContainers = new HashSet<TNodeInformation>();
 
+            // register for new LayerContainers
             _nodeRegistry.SubscribeForNewNodeConnectedByType(NewNode, NodeType.LayerContainer);
         }
 
         #region IRuntimeEnvironment Members
 
-        public void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
+        public void StartWithModel(Guid simulationId, TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
             int? nrOfTicks = null, string scenarioConfigId = "", bool startPaused = false) {
             _simulationId = simulationId;
 
@@ -78,22 +79,27 @@ namespace RuntimeEnvironment.Implementation
             Console.WriteLine("Setting up SimulationRun...");
             var sw = Stopwatch.StartNew();
 
+            // try to get ScenarioConfig and determine various information from it
+            var scenarioconfigJson = _modelContainer.GetScenarioConfig(scenarioConfigId);
+            if (scenarioconfigJson != null)
+            {
+                var globalParams = scenarioconfigJson["ParameterizationDescription"]["Global"];
+                var startDate = DateTime.Parse(globalParams["SimulationStartDateTime"].ToString());
+                var endDate = DateTime.Parse(globalParams["SimulationEndDateTime"].ToString());
+                var deltaT = int.Parse(globalParams["DeltaT"].ToString());
+                var duration = (int)(endDate - startDate).TotalMilliseconds;
+                var tickCount = duration / deltaT;
+                if (tickCount > 0) {
+                    nrOfTicks = tickCount;
+                }
+            }
+
+            model.Name = scenarioconfigJson["Name"].ToString();
+
+
             IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId);
 
-			// try to get SimConfig and determine the number of ticks from it
-			var scenarioconfigJson = _modelContainer.GetScenarioConfig(model, scenarioConfigId);
-			if (scenarioconfigJson != null)
-			{
-			    var globalParams = scenarioconfigJson["ParameterizationDescription"]["Global"];
-			    var startDate = DateTime.Parse(globalParams["SimulationStartDateTime"].ToString());
-			    var endDate = DateTime.Parse(globalParams["SimulationEndDateTime"].ToString());
-			    var deltaT = int.Parse(globalParams["DeltaT"].ToString());
-			    var duration = (int)(endDate - startDate).TotalMilliseconds;
-			    var tickCount = duration / deltaT;
-				if (tickCount > 0) {
-					nrOfTicks = tickCount;
-				}
-			}
+
 
             sw.Stop();
             Console.WriteLine("...done in " + sw.ElapsedMilliseconds + "ms or " + sw.Elapsed);
@@ -229,14 +235,14 @@ namespace RuntimeEnvironment.Implementation
             Console.WriteLine("Get ModelConfig...");
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);
             Console.WriteLine("Get Scenario Config...");
-            var shuttleSimConfig = _modelContainer.GetScenarioConfig(modelDescription, simConfigName);
+            var scenarioConfig = _modelContainer.GetScenarioConfig(simConfigName);
 
 
             // only accept ScenarioConfig based configuration
-            if (shuttleSimConfig != null)
+            if (scenarioConfig != null)
 			{
 				// configure via ScenarioConfig
-				return SetupSimulationRunViaScenarioConfig(modelDescription, layerContainerClients.ToArray(), shuttleSimConfig, modelConfig);
+				return SetupSimulationRunViaScenarioConfig(modelDescription, layerContainerClients.ToArray(), scenarioConfig, modelConfig);
 			}
 			throw new Exception("No ScenarioConfiguration has been found. Please use the --sc flag to provide the ID of a ScenarioConfiguration and make sure" +
 			                    "you're running this simulation in a MARS Cloud instance!");
@@ -451,16 +457,19 @@ namespace RuntimeEnvironment.Implementation
 				}
                 #endregion
 				// ... and non-distributed initialization
-				else 
+				else
 				{
-					layerContainerClients[0].Instantiate(layerInstanceId);
+
+				    Console.WriteLine($"BEGIN Init of : {layerInstanceId.LayerDescription.Name}");
+
+				    layerContainerClients[0].Instantiate(layerInstanceId);
 
 
-					//var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
+
 					var layerType = Type.GetType(layerDescription.FullName)
 					                ??
 					                new LayerLoader.Implementation.LayerLoader()
-					                    .LoadAllLayersForModel(modelDescription.Name)
+					                    .LoadAllLayersForModel(modelDescription.ModelPath)
 					                    .FirstOrDefault(l => l.LayerType.AssemblyQualifiedName.Equals(layerDescription.AssemblyQualifiedName))
 					                    .LayerType;
 
@@ -558,11 +567,14 @@ namespace RuntimeEnvironment.Implementation
         }
 
 
-
+        /// <summary>
+        /// Handler to find new idle Layercontainers
+        /// </summary>
+        /// <param name="newnode"></param>
         private void NewNode(TNodeInformation newnode) {
             lock (this) {
                 _idleLayerContainers.Add(newnode);
-                Console.WriteLine("New LayerContainer registered: IP={0}, Name={1}", newnode.NodeEndpoint.IpAddress, newnode.NodeIdentifier);
+                //Console.WriteLine("New LayerContainer registered: IP={0}, Name={1}", newnode.NodeEndpoint.IpAddress, newnode.NodeIdentifier);
             }
         }
     }

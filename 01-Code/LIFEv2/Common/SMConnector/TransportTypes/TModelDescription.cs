@@ -13,7 +13,7 @@ namespace SMConnector.TransportTypes {
     [Serializable]
 	public class TModelDescription : IEquatable<TModelDescription> {
 
-        public string Name { get; private set; }
+        public string Name {  get; set; }
 
         public string ModelPath { get; private set; }
 
