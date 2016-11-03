@@ -15,13 +15,13 @@ namespace LNSConnector.TransportTypes
     {
         public string IpAddress { get; private set; }
         public int Port { get; private set; }
-        public Type LayerType { get; private set; }
+        public string LayerType { get; private set; }
 
-        public TLayerNameServiceEntry(string ipAddress, int port, Type layerType)
+        public TLayerNameServiceEntry(string ipAddress, int port, string layerTypeFullName)
         {
             IpAddress = ipAddress;
             Port = port;
-            LayerType = layerType;
+            LayerType = layerTypeFullName;
         }
 
         protected bool Equals(TLayerNameServiceEntry other)

@@ -12,6 +12,7 @@ using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Layer;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
+using System;
 
 namespace PartitionManager.Implementation {
     internal class PartitionManagerUseCase : IPartitionManager {

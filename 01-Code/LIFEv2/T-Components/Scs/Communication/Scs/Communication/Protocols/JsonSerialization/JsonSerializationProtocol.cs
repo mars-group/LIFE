@@ -14,6 +14,7 @@ using System.Text;
 using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Protocols;
+using Hik.Communication.ScsServices.Communication.Messages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -150,7 +151,14 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
             var output = Encoding.UTF8.GetString(bytes);
             try
             {
-                return JsonConvert.DeserializeObject<IScsMessage>(output, Jset);
+                var msg = JsonConvert.DeserializeObject<IScsMessage>(output, Jset);
+                var errMsg = (msg as ScsRemoteInvokeReturnMessage);
+                if (errMsg != null && errMsg.RemoteException != null)
+                {
+                    Console.WriteLine("REMOTE CALL RESULTED IN ERROR! Exception was: " + output);
+                }
+
+                return msg;
             }
             catch (FormatException fex)
             {

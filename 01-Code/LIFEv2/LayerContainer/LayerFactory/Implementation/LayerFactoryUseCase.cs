@@ -63,20 +63,13 @@ namespace LayerFactory.Implementation {
             var constructors = layerTypeInfo.Constructors;
 
             var references = GetReferencingAssemblies(layerTypeInfo.LayerType.GetTypeInfo().Assembly.GetName().Name);
-            foreach (var reference in references)
-            {
-                Console.WriteLine($"Found: {reference.FullName}");
-            }
 
             // check if there is an empty constructor
             if (constructors.Any(c => c.GetParameters().Length == 0))
             {
                 var ctor = constructors.First(c => c.GetParameters().Length == 0);
-                
-                
-                
+
                 result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType);
-                //result = (ILayer) ctor.Invoke(new object[0]);
             }
             else {
                 // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
@@ -92,8 +85,7 @@ namespace LayerFactory.Implementation {
                     i++;
                 }
                 result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType, actualParameters);
-                //currentConstructor.Invoke(actualParameters.ToArray());
-            }
+             }
             _layerRegistry.RegisterLayer(result);
             return result;
         }

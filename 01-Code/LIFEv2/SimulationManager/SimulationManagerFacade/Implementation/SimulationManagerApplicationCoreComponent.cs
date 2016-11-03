@@ -107,17 +107,17 @@ namespace SimulationManagerFacade.Implementation {
 
         #endregion
 
-        public TLayerNameServiceEntry ResolveLayer(Type layerType)
+        public TLayerNameServiceEntry ResolveLayer(string layerType)
         {
             return _layerNameService.ResolveLayer(layerType);
         }
 
-        public void RegisterLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
         {
             _layerNameService.RegisterLayer(layerType, layerNameServiceEntry);
         }
 
-        public void RemoveLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
         {
             _layerNameService.RemoveLayer(layerType, layerNameServiceEntry);
         }

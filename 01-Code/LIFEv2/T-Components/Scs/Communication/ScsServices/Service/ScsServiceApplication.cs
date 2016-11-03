@@ -233,6 +233,7 @@ namespace Hik.Communication.ScsServices.Service {
                     try {
                         Console.Error.WriteLine($"Calling method : {invokeMessage.MethodName}");
                         returnValue = serviceObject.InvokeMethod(invokeMessage.MethodName, invokeMessage.Parameters);
+                        Console.Error.WriteLine($"Finished calling method : {invokeMessage.MethodName}");
                     }
                     finally {
                         //Set CurrentClient as null since method call completed

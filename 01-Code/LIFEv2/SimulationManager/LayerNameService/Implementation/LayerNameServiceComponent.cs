@@ -22,17 +22,17 @@ namespace LayerNameService.Implementation
             _layerNameServiceUseCase = new LayerNameServiceUseCase();
         }
 
-        public TLayerNameServiceEntry ResolveLayer(Type layerType)
+        public TLayerNameServiceEntry ResolveLayer(string layerType)
         {
             return _layerNameServiceUseCase.ResolveLayer(layerType);
         }
 
-        public void RegisterLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
         {
             _layerNameServiceUseCase.RegisterLayer(layerType, layerNameServiceEntry);
         }
 
-        public void RemoveLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
         {
             _layerNameServiceUseCase.RemoveLayer(layerType, layerNameServiceEntry);
         }

@@ -76,7 +76,7 @@ namespace LayerRegistry.Implementation {
 
         public void RemoveLayerInstance(Type layerType) {
             if (!_localLayers.ContainsKey(layerType)) return;
-            _layerNameServiceClient.ServiceProxy.RemoveLayer(layerType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType));
+            _layerNameServiceClient.ServiceProxy.RemoveLayer(layerType.FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType.FullName));
             _localLayers.Remove(layerType);
             _layerServiceStartPort--; // TODO: this won't work... need to manage a port array or something...
         }
@@ -84,7 +84,7 @@ namespace LayerRegistry.Implementation {
         public void ResetLayerRegistry() {
             foreach (var localLayer in _localLayers)
             {
-                _layerNameServiceClient.ServiceProxy.RemoveLayer(localLayer.GetType(), new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType()));
+                _layerNameServiceClient.ServiceProxy.RemoveLayer(localLayer.GetType().FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType().FullName));
             }
             _localLayers = new ConcurrentDictionary<Type, ILayer>();
         }
@@ -99,8 +99,8 @@ namespace LayerRegistry.Implementation {
                     _localLayers.Add(type, layer);
                 }
             }
-            // this is necessary in the case somebody is neither using distribution nor interfaces, but still has dependencies
 
+            // this is necessary in the case somebody is neither using distribution nor interfaces, but still has dependencies
 
             // check whether this layer should create a service endpoint and be remotely accessible or not
             var layerType = layer.GetType();
@@ -115,17 +115,21 @@ namespace LayerRegistry.Implementation {
             if (interfaceType != null) {
                 // add service to SCS Server
                 var serversPort = _layerServiceStartPort++;
-
                 var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
+
                 var addServiceMethod = server.GetType().GetTypeInfo().GetMethod("AddService");
-                var genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
+                MethodInfo genericAddServiceMethod = null;
+
+                genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
+
                 genericAddServiceMethod.Invoke(server, new object[]{layer});
 
                 server.Start();
                 _layerServers.Add(server);
 
                 // store LayerRegistryEntry in LayerNameService for remote resolution
-                _layerNameServiceClient.ServiceProxy.RegisterLayer(interfaceType, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType()));
+                _layerNameServiceClient.ServiceProxy.RegisterLayer(interfaceType.FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType().FullName));
+
             }
         }
 
@@ -148,7 +152,7 @@ namespace LayerRegistry.Implementation {
         /// DONT. EVER. TOUCH. THIS!</returns>
         private object GetRemoteLayerInstance(Type layerType)
         {
-            var entry = _layerNameServiceClient.ServiceProxy.ResolveLayer(layerType);
+            var entry = _layerNameServiceClient.ServiceProxy.ResolveLayer(layerType.FullName);
             var createClientMethod = typeof(ScsServiceClientBuilder).GetTypeInfo().GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
 
             // we need to use the layer's interface type and not the class type, so make sure

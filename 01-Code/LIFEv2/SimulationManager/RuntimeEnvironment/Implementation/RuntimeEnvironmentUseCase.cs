@@ -395,7 +395,7 @@ namespace RuntimeEnvironment.Implementation
                         initData.AddFileInitInfo(olInfo["MetaDataId"].ToString());
                     }
                     else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
-                        .Values()
+                        .Children()
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))
                     {
                         var basicLayerMapping = (JObject)scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
@@ -506,10 +506,10 @@ namespace RuntimeEnvironment.Implementation
                         initData.AddFileInitInfo(olInfo["MetaDataId"].ToString());
                     }
                     else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
-                        .Values()
+                        .Children()
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))
                     {
-                        var basicLayerMapping = (JObject)scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
+                        var basicLayerMapping = scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
                             .Where(j => j["LayerName"].ToString() == layerDescription.Name);
 
                         foreach (var agentMapping in basicLayerMapping["Agents"])

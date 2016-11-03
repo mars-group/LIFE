@@ -17,19 +17,19 @@ namespace LayerNameService.Implementation
 {
     internal class LayerNameServiceUseCase : ILayerNameService
     {
-        private readonly IDictionary<Type, List<TLayerNameServiceEntry>> _layerMap;
+        private readonly IDictionary<string, List<TLayerNameServiceEntry>> _layerMap;
 
         public LayerNameServiceUseCase()
         {
-            _layerMap = new ConcurrentDictionary<Type, List<TLayerNameServiceEntry>>();
+            _layerMap = new ConcurrentDictionary<string, List<TLayerNameServiceEntry>>();
         }
 
-        public TLayerNameServiceEntry ResolveLayer(Type layerType)
+        public TLayerNameServiceEntry ResolveLayer(string layerType)
         {
             return _layerMap[layerType].FirstOrDefault();
         }
 
-        public void RegisterLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
         {
             if (!_layerMap.ContainsKey(layerType))
             {
@@ -38,7 +38,7 @@ namespace LayerNameService.Implementation
             _layerMap[layerType].Add(layerNameServiceEntry);
         }
 
-        public void RemoveLayer(Type layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
         {
             if (_layerMap[layerType].Count <= 1)
             {
