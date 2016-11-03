@@ -259,20 +259,19 @@ namespace RuntimeEnvironment.Implementation
 			var distributionPossible = layerContainerClients.Count() > 1;
 
 
-            var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Values().GetEnumerator();
+            var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Children().GetEnumerator();
             var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
-
             var obstacleLayerSourceEnumerator =
-                scenarioConfig["InitializationDescription"]["ObstacleLayers"].Values().GetEnumerator();
+                scenarioConfig["InitializationDescription"]["ObstacleLayers"].Children().GetEnumerator();
             var thereAreObstacleLayer = obstacleLayerSourceEnumerator.MoveNext();
 
             var geoPotentialFieldLayerSourceEnumerator =
-                scenarioConfig["InitializationDescription"]["GeoPotentialFieldLayers"].Values().GetEnumerator();
+                scenarioConfig["InitializationDescription"]["GeoPotentialFieldLayers"].Children().GetEnumerator();
             var thereAreGeoPotentialFieldLayers = geoPotentialFieldLayerSourceEnumerator.MoveNext();
 
             var gridPotentialFieldLayerSourceEnumerator =
-                scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Values().GetEnumerator();
+                scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Children().GetEnumerator();
             var thereAreGridPotentialFieldLayers = gridPotentialFieldLayerSourceEnumerator.MoveNext();
 
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
@@ -330,6 +329,7 @@ namespace RuntimeEnvironment.Implementation
 				}
 
 				// make distinction between distributed initialization...
+                #region distributed init
 				if (distributionPossible && layerConfig.DistributionStrategy != DistributionStrategy.NO_DISTRIBUTION)
 				{
 					// currently we only support EVEN_DISTRIBUTION or ENV_REPLICATION
@@ -449,6 +449,7 @@ namespace RuntimeEnvironment.Implementation
 
 					}
 				}
+                #endregion
 				// ... and non-distributed initialization
 				else 
 				{

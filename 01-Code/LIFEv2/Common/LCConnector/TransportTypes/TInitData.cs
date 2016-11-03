@@ -54,7 +54,7 @@ namespace LCConnector.TransportTypes {
         /// </summary>
         public TimeSeriesInitConfig TimeSeriesInitInfo { get; set; }
 
-        public FileInitInfoConfig FileInitInfoConfig { get; set; }
+        public FileInitInfo FileInitInfo { get; set; }
 
         /// <summary>
         /// The address of the MARS Config. Defaults to http://marsconfig, but 
@@ -118,15 +118,15 @@ namespace LCConnector.TransportTypes {
         /// <param name="dataId">The uuidv4 identifing the file</param>
         public void AddFileInitInfo(string dataId)
         {
-            FileInitInfoConfig = new FileInitInfoConfig(dataId);
+            FileInitInfo = new FileInitInfo(dataId);
         }
     }
 
-    public class FileInitInfoConfig
+    public class FileInitInfo
     {
         public string FileId { get; private set; }
 
-        public FileInitInfoConfig(string fileId)
+        public FileInitInfo(string fileId)
         {
             FileId = fileId;
         }

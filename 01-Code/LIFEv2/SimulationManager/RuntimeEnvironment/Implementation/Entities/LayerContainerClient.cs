@@ -6,9 +6,12 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
+using System;
 using System.Net;
 using CommonTypes;
 using Hik.Communication.ScsServices.Client;
+using Hik.Communication.ScsServices.Communication.Messages;
 using LCConnector;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
@@ -47,12 +50,16 @@ namespace RuntimeEnvironment.Implementation.Entities {
 
         public void Initialize(TLayerInstanceId layerInstanceId, TInitData initData)
         {
-            if(!Proxy.InitializeLayer(layerInstanceId, initData)){
-                throw new LayerFailedToInitializeException("Layer " 
-                    + layerInstanceId.LayerDescription.Name 
-                    + " failed to initialize. Please review your InitLayer Code! MARS LIFE will shut down now."
-                    );
+
+            if (!Proxy.InitializeLayer(layerInstanceId, initData))
+            {
+                throw new LayerFailedToInitializeException("Layer "
+                                                           + layerInstanceId.LayerDescription.Name
+                                                           +
+                                                           " failed to initialize. Please review your InitLayer Code! MARS LIFE will shut down now."
+                );
             }
+
         }
     }
 

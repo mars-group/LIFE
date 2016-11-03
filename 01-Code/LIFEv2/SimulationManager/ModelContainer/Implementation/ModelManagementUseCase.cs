@@ -100,7 +100,7 @@ namespace ModelContainer.Implementation
             }
         
             var http = new HttpClient();
-            Console.WriteLine("Retrieving ScenarioConfig...");
+            Console.WriteLine("...downloading ScenarioConfig...");
             var uri = new Uri($"{smServiceHost}/scenarios/{scenarioConfigId}/complete");
             var getTask = http.GetAsync(uri);
             getTask.Wait();

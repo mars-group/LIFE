@@ -250,17 +250,20 @@ namespace Hik.Communication.ScsServices.Service {
                         new ScsRemoteException(
                             innerEx.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, innerEx));
+                    return;
                 }
                 catch (Exception ex) {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
                         new ScsRemoteException(
                             ex.Message + Environment.NewLine + "Service Version: " +
                             serviceObject.ServiceAttribute.Version, ex));
+                    return;
                 }
             }
             catch (Exception ex) {
                 SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
                     new ScsRemoteException("An error occured during remote service method call.", ex));
+                return;
             }
         }
 

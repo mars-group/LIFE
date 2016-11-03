@@ -76,11 +76,6 @@ namespace ModelContainer.Implementation {
             }
 
             var instOrder = modelStructure.CalculateInstantiationOrder();
-            Console.Error.WriteLine("Inst Order:");
-            foreach (var layerDescription in instOrder)
-            {
-                Console.WriteLine($"{layerDescription.FullName}");
-            }
             return instOrder;
         }
     }
