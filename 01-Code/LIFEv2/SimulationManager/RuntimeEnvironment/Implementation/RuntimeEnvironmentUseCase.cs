@@ -399,7 +399,7 @@ namespace RuntimeEnvironment.Implementation
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))
                     {
                         var basicLayerMapping = (JObject)scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
-                            .Where(j => j["LayerName"].ToString() == layerDescription.Name);
+                            .First(j => j["LayerName"].ToString() == layerDescription.Name);
 
                         foreach (var agentMapping in basicLayerMapping["Agents"])
 					    {
@@ -510,7 +510,7 @@ namespace RuntimeEnvironment.Implementation
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))
                     {
                         var basicLayerMapping = scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
-                            .Where(j => j["LayerName"].ToString() == layerDescription.Name);
+                            .First(j => j["LayerName"].ToString() == layerDescription.Name);
 
                         foreach (var agentMapping in basicLayerMapping["Agents"])
                         {
