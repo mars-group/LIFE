@@ -155,21 +155,27 @@ namespace AgentManagerService.Implementation
 
 					// check special types
 					if (environmentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
+					Console.WriteLine("Hit1");
 						actualParameters.Add(environment);
                     } else if(geoGridEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)) {
-                        actualParameters.Add(geoGridEnvironment);
+					    Console.WriteLine("Hit2");
+					    actualParameters.Add(geoGridEnvironment);
                     } else if (layerType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-						if (!additionalLayerDependencies.Any (l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType (l))) {
+					    Console.WriteLine("Hit3");
+					    if (!additionalLayerDependencies.Any (l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType (l))) {
 							throw new MissingLayerForAgentConstructionException ("Agent type '" + agentInitConfig.AgentName + "' needs missing layer type '"
 							+ neededParam.ParameterType + "' to initialize.");
 						}
 						actualParameters.Add (additionalLayerDependencies.First (l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType (l)));
 					} else if (guidType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-						actualParameters.Add (realAgentId);      
+					    Console.WriteLine("Hit4");
+					    actualParameters.Add (realAgentId);
 					} else if (registerAgentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-						actualParameters.Add (registerAgentHandle);
+					    Console.WriteLine("Hit5");
+					    actualParameters.Add (registerAgentHandle);
 					} else if (unregisterAgentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-						actualParameters.Add (unregisterAgentHandle);
+					    Console.WriteLine("Hit5");
+					    actualParameters.Add (unregisterAgentHandle);
 					} else {
 
                         // check whether a next parameter is avialable from SHUTTLE:
@@ -181,7 +187,7 @@ namespace AgentManagerService.Implementation
                             if (param.MappingType == MappingType.ValueParameterMapping)
                             {
                                 // use static value
-
+                                Console.WriteLine("Hit6");
                                 var paramType = neededParam.GetType();
 
                                 if (paramType != typeof(string) && (paramType == null || !paramType.GetTypeInfo().IsPrimitive))
@@ -210,7 +216,7 @@ namespace AgentManagerService.Implementation
                             {
 
                                 var paramType = neededParam.GetType();
-
+                                Console.WriteLine("Hit7");
 
                                 // fetch parameter from ROCK CUBE
                                 var paramValue = agentDBParamArrays[param.ColumnName][index];
@@ -238,6 +244,7 @@ namespace AgentManagerService.Implementation
                             {
                                 throw new ParameterIsNotMappedOrHasNotDefaultValue($"The parameter {neededParam.Name} was not mapped in SHUTTLE or has no default value assigned!"); 
                             }
+                            Console.WriteLine("Hit8");
                             actualParameters.Add(neededParam.DefaultValue);
                         }
 
