@@ -4,7 +4,9 @@
 #dotnet core lock files
 *project.lock.json
 
-**/models/tmp/*
+**LIFECompleteStarter/models/tmp/*
+**LIFECompleteStarter/model/*
+**LIFECompleteStarter/config/*
 
 #Visual Studio files
 *.[Oo]bj
