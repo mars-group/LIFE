@@ -33,13 +33,6 @@
         ]
       }
     },
-    "net46": {
-      "buildOptions": {
-        "define": [
-          "HAS_REAL_PROXY"
-        ]
-      }
-    },
     "netcoreapp1.0": {
       "imports": "dnxcore50",
       "dependencies": {
