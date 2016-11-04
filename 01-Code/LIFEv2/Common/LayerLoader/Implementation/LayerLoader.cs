@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Loader;
 using LayerLoader.Interface;
 using LayerLoader.Interface.Exceptions;
 using LCConnector.TransportTypes.ModelStructure;
@@ -26,7 +25,7 @@ namespace LayerLoader.Implementation
         {
             //write files
             modelContent.Write(_pathForTransferredModel);
-
+            _asl  = new LIFEAssemblyLoader(_pathForTransferredModel);
             _layerTypes
                 .AddRange(DoReflection(_pathForTransferredModel));
         }
@@ -60,6 +59,7 @@ namespace LayerLoader.Implementation
 
             var results = new List<LayerTypeInfo>();
 
+            _asl = new LIFEAssemblyLoader(modelPath);
 
             var foundLayerTypes = DoReflection(modelPath)
                 .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
@@ -85,7 +85,7 @@ namespace LayerLoader.Implementation
             foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll"))
             {
 
-                _asl = new LIFEAssemblyLoader(modelPath);
+                //_asl = new LIFEAssemblyLoader(modelPath);
 
                 try
                 {
