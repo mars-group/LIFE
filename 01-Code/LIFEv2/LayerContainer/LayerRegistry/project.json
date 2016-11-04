@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "The LayerRegistry. Used to register and retreive layer instances. ",
   "copyright": "(c) 2016 - MARS Group",
@@ -13,23 +13,20 @@
     "NodeRegistry": "2.0.0-*",
     "Scs": "2.0.0-*",
     "CommonTypes": "2.0.0-*",
-    "LNSConnector": "2.0.0-*"
+    "LNSConnector": "2.0.0-*",
+    "NETStandard.Library": "1.6.1-preview1-24530-04"
   },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
       }
     },
     "net46": {},
     "netcoreapp1.0": {
       "imports": "dnxcore50",
       "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.0.0-*",
-          "type": "platform"
-        }
+        "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"
       }
     }
   }

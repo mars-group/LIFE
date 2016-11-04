@@ -8,13 +8,14 @@
     "ConfigService": "2.0.0-8",
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
-    "System.Threading.Tasks.Parallel": "4.0.1",
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
     "MySql.Data": "7.0.5-ir21",
     "MARS.Shuttle.SimulationConfig": "2.0.0-15",
     "DalskiAgent": "2.0.0-8",
     "GeoGridEnvironment": "2.0.0-16",
-    "SpatialAPI": "2.0.0-19"
+    "SpatialAPI": "2.0.0-19",
+    "NETStandard.Library": "1.6.1-preview1-24530-04",
+    "System.Runtime.Serialization.Formatters": "4.3.0-preview1-24530-04",
+    "System.Threading.Tasks.Parallel": "4.3.0-preview1-24530-04"
   },
   "buildOptions": {
     "debugType": "portable"
@@ -23,17 +24,13 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
       }
     },
     "net46": {},
     "netcoreapp1.0": {
       "imports": "dnxcore50",
       "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.0.0-*",
-          "type": "platform"
-        }
+        "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"
       }
     }
   }

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "The RuntimeEnvironmment contains the actual simulation execution code",
   "copyright": "(c) 2016 - MARS Group",
@@ -17,7 +17,8 @@
     "CommonTypes": "2.0.0-*",
     "Scs": "2.0.0-*",
     "RabbitMQClient": "2.0.0-*",
-    "ModelContainer": "2.0.0-*"
+    "ModelContainer": "2.0.0-*",
+    "NETStandard.Library": "1.6.1-preview1-24530-04"
   },
   "frameworks": {
     "netstandard1.6": {
@@ -29,10 +30,7 @@
     "netcoreapp1.0": {
       "imports": "dnxcore50",
       "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.0.0-*",
-          "type": "platform"
-        }
+        "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"
       }
     }
   }
