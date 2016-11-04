@@ -3,11 +3,10 @@
     "buildOptions": {
         "debugType": "portable"
     },
-  "dependencies": {
-    "NUnit": "3.4.1",
-    "Microsoft.NETCore.App": "1.1.0-preview1-001100-00",
-    "dotnet-test-nunit": "3.4.0-beta-2"
-  },
+    "dependencies": {
+        "NUnit": "3.4.1",
+        "dotnet-test-nunit": "3.4.0-beta-2"
+    },
 
     "testRunner": "nunit",
 
@@ -15,6 +14,10 @@
         "netcoreapp1.0": {
             "imports": "portable-net45+win8",
             "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "version": "1.0.0-*",
+                    "type": "platform"
+                }
             }
         }
     }

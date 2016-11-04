@@ -5,15 +5,18 @@
   },
 
   "dependencies": {
-    "LNSConnector": "2.0.0-*",
+    "LNSConnector":  "2.0.0-*", 
     "SimulationManagerFacade": "2.0.0-*",
     "SMConnector": "2.0.0-*",
-    "Microsoft.NETCore.App": "1.1.0-preview1-001100-00",
-    "System.ComponentModel.TypeConverter": "4.3.0-preview1-24530-04"
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0"
+    },
+    "System.ComponentModel.TypeConverter": "4.1.0"
   },
 
   "frameworks": {
-    "netcoreapp1.1": {
+    "netcoreapp1.0": {
       "imports": "dnxcore50"
     }
   }

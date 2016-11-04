@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable"
@@ -9,8 +9,7 @@
     "CommonTypes": "2.0.0-*",
     "MulticastAdapter": "2.0.0-*",
     "NodeRegistry": "2.0.0-*",
-    "ConfigurationAdapter": "2.0.0-*",
-    "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"
+    "ConfigurationAdapter": "2.0.0-*"
   },
 
   "testRunner": "nunit",
@@ -19,6 +18,10 @@
     "netcoreapp1.0": {
       "imports": "dnxcore50",
       "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
       }
     }
   }
