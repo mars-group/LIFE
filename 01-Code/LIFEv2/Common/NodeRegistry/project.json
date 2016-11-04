@@ -14,9 +14,8 @@
     "CustomUtilities": "2.0.0-*",
     "LIFEUtilities": "2.0.0-3",
     "MulticastAdapter": "2.0.0-*",
-
     "Newtonsoft.Json": "9.0.1",
-    "System.Threading.Timer": "4.0.1"
+    "System.Threading.Timer": "4.3.0-preview1-24530-04"
   },
   "frameworks": {
     "netstandard1.6": {

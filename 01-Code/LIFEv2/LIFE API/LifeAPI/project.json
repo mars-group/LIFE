@@ -8,7 +8,7 @@
     "GeoCommon": "2.0.0-14",
     "MARS.Shuttle.SimulationConfig": "2.0.0-15",
     "System.Runtime.Serialization.Formatters": "4.3.0-preview1-24530-04",
-    "System.Xml.XmlSerializer": "4.0.11"
+    "System.Xml.XmlSerializer": "4.3.0-preview1-24530-04"
   },
   "buildOptions": {
     "debugType": "portable"
