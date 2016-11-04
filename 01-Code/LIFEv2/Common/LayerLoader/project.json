@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "The LayerLoader allows to load layers from DLLs.",
   "copyright": "(c) 2016 - MARS Group",
@@ -10,24 +10,21 @@
   },
   "dependencies": {
     "LifeAPI": "2.0.0-*",
-    "System.Reflection": "4.1.0",
-    "System.Runtime.Loader": "4.0.0",
-    "Microsoft.Extensions.DependencyModel": "1.0.0"
+    "Microsoft.Extensions.DependencyModel": "1.1.0-preview1-001100",
+    "System.Reflection": "4.3.0-preview1-24530-04",
+    "System.Runtime.Loader": "4.3.0-preview1-24530-04"
   },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1-preview1-24530-04"
       }
     },
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "imports": "dnxcore50",
       "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.0.0",
-          "type": "platform"
-        }
+        "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"
       }
     }
   }

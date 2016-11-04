@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "buildOptions": {
     "emitEntryPoint": true,
@@ -12,12 +12,10 @@
   },
 
   "frameworks": {
-      "netcoreapp1.0": {
-          "dependencies": {
-              "Microsoft.NETCore.App": {
-                  "version": "1.0.0"//1.1.0-preview1-*"
-              }
-          },
+      "netcoreapp1.1": {
+        "dependencies": {
+          "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"
+        },
           "imports": "dnxcore50"
       }
   },
