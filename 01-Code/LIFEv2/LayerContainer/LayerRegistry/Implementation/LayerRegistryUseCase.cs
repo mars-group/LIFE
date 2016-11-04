@@ -11,6 +11,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
@@ -27,7 +28,7 @@ using NodeRegistry.Interface;
 
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {
-        private IDictionary<Type, ILayer> _localLayers;
+        private IDictionary<string, ILayer> _localLayers;
         private readonly IScsServiceClient<ILayerNameService> _layerNameServiceClient;
         private readonly ILayerNameService _layerNameService;
         private readonly NodeRegistryConfig _nodeRegistryConfig;
@@ -69,15 +70,15 @@ namespace LayerRegistry.Implementation {
 
             _layerNameService = _layerNameServiceClient.ServiceProxy;
 
-            _localLayers = new Dictionary<Type, ILayer>();
+            _localLayers = new Dictionary<string, ILayer>();
         }
 
         #region ILayerRegistry Members
 
         public void RemoveLayerInstance(Type layerType) {
-            if (!_localLayers.ContainsKey(layerType)) return;
+            if (!_localLayers.ContainsKey(layerType.FullName)) return;
             _layerNameServiceClient.ServiceProxy.RemoveLayer(layerType.FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType.FullName));
-            _localLayers.Remove(layerType);
+            _localLayers.Remove(layerType.FullName);
             _layerServiceStartPort--; // TODO: this won't work... need to manage a port array or something...
         }
 
@@ -86,17 +87,17 @@ namespace LayerRegistry.Implementation {
             {
                 _layerNameServiceClient.ServiceProxy.RemoveLayer(localLayer.GetType().FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType().FullName));
             }
-            _localLayers = new ConcurrentDictionary<Type, ILayer>();
+            _localLayers = new ConcurrentDictionary<string, ILayer>();
         }
 
         public void RegisterLayer(ILayer layer) {
             // store in Dict for local usage, by its direct type
-            _localLayers.Add(layer.GetType(), layer);
+            _localLayers.Add(layer.GetType().FullName, layer);
             // and by its direct interface type if any
             if (layer.GetType().GetTypeInfo().GetInterfaces().Length > 0) {
                 var infs = layer.GetType().GetTypeInfo().GetInterfaces();
                 foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LifeAPI"))) {
-                    _localLayers.Add(type, layer);
+                    _localLayers.Add(type.FullName, layer);
                 }
             }
 
@@ -135,7 +136,18 @@ namespace LayerRegistry.Implementation {
 
         public object GetLayerInstance(Type layerType)
         {
-            return _localLayers.ContainsKey(layerType) ? _localLayers[layerType] : GetRemoteLayerInstance(layerType);
+
+            if (!_localLayers.ContainsKey(layerType.FullName))
+            {
+                var stb = new StringBuilder();
+                foreach (var key in _localLayers.Keys)
+                {
+                    stb.Append(key);
+                    stb.Append(" | ");
+                }
+                Console.Error.WriteLine($"Layer with Key: {layerType} could not be found! Keys are: {stb}");
+            }
+            return _localLayers.ContainsKey(layerType.FullName) ? _localLayers[layerType.FullName] : GetRemoteLayerInstance(layerType);
         }
 
         #endregion

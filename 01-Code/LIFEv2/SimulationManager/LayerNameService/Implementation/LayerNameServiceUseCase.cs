@@ -10,6 +10,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
 
@@ -26,7 +27,7 @@ namespace LayerNameService.Implementation
 
         public TLayerNameServiceEntry ResolveLayer(string layerType)
         {
-            return _layerMap[layerType].FirstOrDefault();
+                return _layerMap[layerType].FirstOrDefault();
         }
 
         public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)

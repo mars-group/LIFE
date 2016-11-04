@@ -1,7 +1,10 @@
 ﻿{
   "version": "1.0.0-*",
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "compile": {
+      "exclude": [ "mars-knp" ]
+    }
   },
 
   "dependencies": {
@@ -12,7 +15,7 @@
       "netcoreapp1.0": {
           "dependencies": {
               "Microsoft.NETCore.App": {
-                  "version": "1.0.0"//"1.1.0-preview1-*"
+                  "version": "1.0.0"//1.1.0-preview1-*"
               }
           },
           "imports": "dnxcore50"
@@ -25,7 +28,7 @@
     "debian.8-x64": {},
     "osx.10.10-x64": {},
     "osx.10.11-x64": {},
-    //"osx.10.12-x64": {}
+    //"osx.10.12-x64": {},
     "win10-x64": {},
     "win81-x64": {},
     "win8-x64": {},

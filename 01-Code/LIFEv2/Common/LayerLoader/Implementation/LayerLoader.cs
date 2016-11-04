@@ -78,6 +78,9 @@ namespace LayerLoader.Implementation
         {
             var types = new List<Type>();
 
+
+
+
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll"))
             {
@@ -99,15 +102,15 @@ namespace LayerLoader.Implementation
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
-                    //Console.WriteLine($"Caught type load error while Loading model code. Make sure you use 'dotnet publish' to finally create your model code. Error was: {ex.LoaderExceptions.First()}");
+                    Console.WriteLine($"Caught type load error while Loading model code. Make sure you use 'dotnet publish' to finally create your model code. Error was: {ex.LoaderExceptions.First()}");
                 }
                 catch (FileLoadException fex)
                 {
-                    //Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
+                    Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
                 }
                 catch (BadImageFormatException bex)
                 {
-                    //Console.WriteLine($"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");
+                    Console.WriteLine($"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");
                 }
 
             }

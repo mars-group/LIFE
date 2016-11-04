@@ -249,15 +249,13 @@ namespace Hik.Communication.ScsServices.Service {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
 
                         new ScsRemoteException(
-                            innerEx.Message + Environment.NewLine + "Service Version: " +
-                            serviceObject.ServiceAttribute.Version, innerEx));
+                            innerEx.Message, innerEx));
                     return;
                 }
                 catch (Exception ex) {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
                         new ScsRemoteException(
-                            ex.Message + Environment.NewLine + "Service Version: " +
-                            serviceObject.ServiceAttribute.Version, ex));
+                            ex.Message, ex));
                     return;
                 }
             }

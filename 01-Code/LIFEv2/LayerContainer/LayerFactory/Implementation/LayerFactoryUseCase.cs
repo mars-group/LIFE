@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Text;
 using LayerFactory.Interface;
 using LayerLoader.Interface;
 using LayerRegistry.Interfaces;
@@ -70,9 +71,10 @@ namespace LayerFactory.Implementation {
                 var ctor = constructors.First(c => c.GetParameters().Length == 0);
 
                 result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType);
+                //result = (ILayer) ctor.Invoke(new object[0]);
             }
             else {
-                // take first constructor, resolve dependencies from LayerRegistry and instanciate Layer
+                // take first constructor, resolve dependencies from LayerRegistry and instantiate Layer
                 var currentConstructor = constructors[0];
                 var neededParameters = currentConstructor.GetParameters();
 
@@ -80,11 +82,35 @@ namespace LayerFactory.Implementation {
 
                 var i = 0;
                 foreach (var parameterInfo in neededParameters) {
+                    Console.WriteLine($"Trying to resolve Layer Param: {parameterInfo.ParameterType.FullName}");
                     var param = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
+                    Console.WriteLine($"Got param: {param.GetType().FullName}");
+                    Console.WriteLine($"Param {param.GetType().FullName} implements the following interfaces:");
+                    foreach (var inf in param.GetType().GetInterfaces())
+                    {
+                        Console.WriteLine($"Inf: {inf.FullName}");
+                    }
+
                     actualParameters[i] = param;
                     i++;
                 }
-                result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType, actualParameters);
+                result = null;
+                try
+                {
+                    result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType, actualParameters);
+                    //result = (ILayer) currentConstructor.Invoke(actualParameters.ToArray());
+                }
+                catch (MissingMethodException mex)
+                {
+                    var stb = new StringBuilder();
+                    foreach (var actualParameter in actualParameters)
+                    {
+                        stb.Append(actualParameter.GetType().FullName);
+                        stb.Append(" | ");
+                    }
+                    Console.Error.WriteLine($"Something was wrong with the parameters for Layer {layerTypeInfo.LayerType.FullName}. Parameters were: " + stb);
+                    throw mex;
+                }
              }
             _layerRegistry.RegisterLayer(result);
             return result;

@@ -155,26 +155,26 @@ namespace AgentManagerService.Implementation
 
 					// check special types
 					if (environmentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-					Console.WriteLine("Hit1");
+
 						actualParameters.Add(environment);
                     } else if(geoGridEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)) {
-					    Console.WriteLine("Hit2");
+
 					    actualParameters.Add(geoGridEnvironment);
                     } else if (layerType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-					    Console.WriteLine("Hit3");
+
 					    if (!additionalLayerDependencies.Any (l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType (l))) {
 							throw new MissingLayerForAgentConstructionException ("Agent type '" + agentInitConfig.AgentName + "' needs missing layer type '"
 							+ neededParam.ParameterType + "' to initialize.");
 						}
 						actualParameters.Add (additionalLayerDependencies.First (l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType (l)));
 					} else if (guidType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-					    Console.WriteLine("Hit4");
+
 					    actualParameters.Add (realAgentId);
 					} else if (registerAgentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-					    Console.WriteLine("Hit5");
+
 					    actualParameters.Add (registerAgentHandle);
 					} else if (unregisterAgentType.GetTypeInfo().IsAssignableFrom (neededParam.ParameterType)) {
-					    Console.WriteLine("Hit5");
+
 					    actualParameters.Add (unregisterAgentHandle);
 					} else {
 
@@ -187,8 +187,8 @@ namespace AgentManagerService.Implementation
                             if (param.MappingType == MappingType.ValueParameterMapping)
                             {
                                 // use static value
-                                Console.WriteLine("Hit6");
-                                var paramType = neededParam.GetType();
+
+                                var paramType = neededParam.ParameterType;
 
                                 if (paramType != typeof(string) && (paramType == null || !paramType.GetTypeInfo().IsPrimitive))
                                 {
@@ -215,8 +215,8 @@ namespace AgentManagerService.Implementation
                             if (param.MappingType == MappingType.ColumnParameterMapping)
                             {
 
-                                var paramType = neededParam.GetType();
-                                Console.WriteLine("Hit7");
+                                var paramType = neededParam.ParameterType;
+
 
                                 // fetch parameter from ROCK CUBE
                                 var paramValue = agentDBParamArrays[param.ColumnName][index];
@@ -256,7 +256,8 @@ namespace AgentManagerService.Implementation
                 }
 
 				// call constructor of agent and store agent in return dictionary
-				try {
+				try
+				{
 					agents.TryAdd (realAgentId, (T)agentConstructor.Invoke (actualParameters.ToArray()));
 				} catch(TargetParameterCountException tex) {
 					var stb = new StringBuilder();
