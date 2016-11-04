@@ -11,7 +11,6 @@
   "dependencies": {
     "ASC": "2.0.0-*",
     "LIFEUtilities": "2.0.0-3",
-    "NETStandard.Library": "1.6.1-preview1-24530-04",
     "System.Linq.Parallel": "4.3.0-preview1-24530-04"
   },
 
@@ -19,10 +18,10 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
+        "NETStandard.Library": "1.6.1-preview1-24530-04"
       }
     },
-    "net46": {},
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "imports": "dnxcore50",
       "dependencies": {
         "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"

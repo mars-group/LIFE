@@ -7,7 +7,7 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "NETStandard.Library": "1.6.1-preview1-24530-04",
+
     "System.Runtime.Serialization.Formatters": "4.3.0-preview1-24530-04",
     "System.Xml.XmlSerializer": "4.0.11"
   },
@@ -16,15 +16,10 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1-preview1-24530-04"
       }
     },
-    "net46": {
-          "frameworkAssemblies": {
-            "System.Xml": "4.0.0.0"
-          }
-        },
-        "netcoreapp1.0": {
+        "netcoreapp1.1": {
           "imports": "dnxcore50",
           "dependencies": {
             "Microsoft.NETCore.App": "1.1.0-preview1-001100-00"
