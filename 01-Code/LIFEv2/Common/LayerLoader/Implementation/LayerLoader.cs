@@ -77,15 +77,9 @@ namespace LayerLoader.Implementation
         private IEnumerable<Type> DoReflection(string modelPath)
         {
             var types = new List<Type>();
-
-
-
-
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll"))
             {
-
-                //_asl = new LIFEAssemblyLoader(modelPath);
 
                 try
                 {

@@ -231,9 +231,7 @@ namespace Hik.Communication.ScsServices.Service {
                     //in service method using CurrentClient property.
                     serviceObject.Service.CurrentClient = client;
                     try {
-                        Console.Error.WriteLine($"Calling method : {invokeMessage.MethodName}");
                         returnValue = serviceObject.InvokeMethod(invokeMessage.MethodName, invokeMessage.Parameters);
-                        Console.Error.WriteLine($"Finished calling method : {invokeMessage.MethodName}");
                     }
                     finally {
                         //Set CurrentClient as null since method call completed

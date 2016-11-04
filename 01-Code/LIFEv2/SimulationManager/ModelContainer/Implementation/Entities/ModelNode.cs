@@ -49,9 +49,9 @@ namespace ModelContainer.Implementation.Entities {
         /// </summary>
         /// <param name="newNode"></param>
         public void UpdateEdges(ModelNode newNode) {
-            //if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo()))) _edges.Add(newNode);
+            if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo()))) _edges.Add(newNode);
             // somewhat dirty workaround because IsAssignableFrom didnt work in
-            if (Dependencies.Any(dependency => newNode.Layer.GetInterfaces().Any(i => i.FullName == dependency.FullName))) _edges.Add(newNode);
+            //if (Dependencies.Any(dependency => newNode.Layer.GetInterfaces().Any(i => i.FullName == dependency.FullName))) _edges.Add(newNode);
         }
 
         public override bool Equals(object obj) {

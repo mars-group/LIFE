@@ -82,14 +82,15 @@ namespace LayerFactory.Implementation {
 
                 var i = 0;
                 foreach (var parameterInfo in neededParameters) {
-                    Console.WriteLine($"Trying to resolve Layer Param: {parameterInfo.ParameterType.FullName}");
+                    //Console.WriteLine($"Trying to resolve Layer Param: {parameterInfo.ParameterType.FullName}");
                     var param = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
-                    Console.WriteLine($"Got param: {param.GetType().FullName}");
-                    Console.WriteLine($"Param {param.GetType().FullName} implements the following interfaces:");
+                    /*Console.WriteLine($"Got param: {param.GetType().FullName}");
+                    //Console.WriteLine($"Param {param.GetType().FullName} implements the following interfaces:");
                     foreach (var inf in param.GetType().GetInterfaces())
                     {
                         Console.WriteLine($"Inf: {inf.FullName}");
                     }
+                    */
 
                     actualParameters[i] = param;
                     i++;
