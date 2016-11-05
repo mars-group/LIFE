@@ -1,4 +1,4 @@
-﻿using GeoGridEnvironment.Interface;
+﻿using GeoCommon;
 
 namespace LifeAPI.Layer.Obstacle
 {

@@ -4,8 +4,8 @@
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening"],
   "dependencies": {
+    "GeoCommon": "2.0.0-16",
     "LCConnector": "2.0.0-*",
-    "GeoCommon": "2.0.0-14",
     "MARS.Shuttle.SimulationConfig": "2.0.0-15",
     "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
     "System.Xml.XmlSerializer": "4.0.11"

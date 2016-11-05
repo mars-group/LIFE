@@ -13,8 +13,8 @@
     "MySql.Data": "7.0.5-ir21",
     "MARS.Shuttle.SimulationConfig": "2.0.0-15",
     "SpatialAPI": "2.0.0-21",
-    "DalskiAgent": "2.0.0-9",
-    "GeoGridEnvironment": "2.0.0-17"
+    "DalskiAgent": "2.0.0-12",
+    "GeoGridEnvironment": "2.0.0-18"
   },
   "buildOptions": {
     "debugType": "portable"
