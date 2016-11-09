@@ -27,7 +27,7 @@ namespace ResultAdapter.Implementation {
     public Guid SimulationId { get; set; }
 
     private readonly ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>> _simObjects; // List of all objects to output.
-    private MongoSender _sender;                                         // Database connector.
+    private List<MongoSender> _senders;                                          // Database connector.
 
 
     /// <summary>
@@ -35,6 +35,7 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     public ResultAdapterUseCase() {
       _simObjects = new ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>>();
+      _senders = new List<MongoSender>();
     }
 
 
@@ -47,11 +48,21 @@ namespace ResultAdapter.Implementation {
     	  
 
           // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
-          if (_sender == null) {
-    		var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-            _sender = new MongoSender(cfgClient, SimulationId.ToString());
-            _sender.CreateMongoDbIndexes();
+      if (!_senders.Any()) {
+        try {
+          for (var i = 0; i < 4; i++) { 
+                        var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+                        var sender = new MongoSender(cfgClient, SimulationId.ToString());
+                        sender.CreateMongoDbIndexes();
+                        _senders.Add(sender);
           }
+
+         // _notifier = new RabbitNotifier(cfgClient); 
+        }
+        catch (Exception ex) {
+          throw new ResultAdapterFailedToInitializeException(ex.StackTrace);
+        }
+      }
 
           // Loop in parallel over all simulation elements to output.
           var results = new ConcurrentBag<AgentSimResult>();
