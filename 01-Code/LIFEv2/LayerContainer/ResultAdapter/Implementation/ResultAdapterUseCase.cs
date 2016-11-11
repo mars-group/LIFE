@@ -9,12 +9,14 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommonTypes;
 using ConfigService;
 using LifeAPI.Results;
 using ResultAdapter.Implementation.DataOutput;
 using ResultAdapter.Interface;
+using System.Linq;
 
 namespace ResultAdapter.Implementation {
   internal class ResultAdapterUseCase : IResultAdapter {
@@ -47,42 +49,52 @@ namespace ResultAdapter.Implementation {
 	    if (_simObjects.IsEmpty) return;
     	  
 
-          // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
-      if (!_senders.Any()) {
-        try {
-          for (var i = 0; i < 4; i++) { 
+        // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
+        if (!_senders.Any()) {
+
+            for (var i = 0; i < 4; i++) { 
                         var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
                         var sender = new MongoSender(cfgClient, SimulationId.ToString());
                         sender.CreateMongoDbIndexes();
                         _senders.Add(sender);
-          }
+            }
 
-         // _notifier = new RabbitNotifier(cfgClient); 
-        }
-        catch (Exception ex) {
-          throw new ResultAdapterFailedToInitializeException(ex.StackTrace);
-        }
-      }
+            // _notifier = new RabbitNotifier(cfgClient); 
 
-          // Loop in parallel over all simulation elements to output.
-          var results = new ConcurrentBag<AgentSimResult>();
-          Parallel.ForEach(_simObjects.Keys, executionGroup => {
-              if (currentTick == 0 || currentTick == 1 || currentTick % executionGroup == 0)
-              {   
-                  //Console.WriteLine($"[OUTPUT: Tick {currentTick}]Outputting group {executionGroup} with {_simObjects[executionGroup].Keys.Count} agents.");
-                  Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
-              }
-          });
+        }
+
+        // Loop in parallel over all simulation elements to output.
+        var results = new ConcurrentBag<AgentSimResult>();
+        Parallel.ForEach(_simObjects.Keys, executionGroup => {
+            if (currentTick == 0 || currentTick == 1 || currentTick % executionGroup == 0)
+            {   
+                Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
+            }
+        });
+
         // don't do shit, when results are empty
         if (results.IsEmpty) {
                 results = null;
                 return; 
         }
+
         // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
-        _sender.SendVisualizationData(results, currentTick);
+        var lists = SplitList(results.ToList(), results.Count / _senders.Count);
+        Parallel.For(0, _senders.Count, i => _senders[i].SendVisualizationData(lists[i], currentTick));
         results = null;
     }
 
+    private static List<List<AgentSimResult>> SplitList(List<AgentSimResult> locations, int nSize = 30)
+    {
+        var list = new List<List<AgentSimResult>>();
+        if (nSize == 0) nSize = 1;
+        for (var i = 0; i < locations.Count; i += nSize)
+        {
+            list.Add(locations.GetRange(i, Math.Min(nSize, locations.Count - i)));
+        }
+
+        return list;
+    }
 
     /// <summary>
     ///   Register a simulation object at the result adapter. 

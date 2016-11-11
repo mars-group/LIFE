@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using ConfigService;
 using LifeAPI.Results;
 using MongoDB.Driver;
@@ -51,7 +52,7 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// </summary>
     /// <param name="results">A number of result elements to be written.</param>
 	/// <param name = "currentTick">The current tick of the simulation.</param>
-    public void SendVisualizationData(ConcurrentBag<AgentSimResult> results, int currentTick) {
+    public void SendVisualizationData(IEnumerable<AgentSimResult> results, int currentTick) {
 			
             _collection.InsertMany (results);
 			_notifier.AnnounceNewPackage(_simId, currentTick);
