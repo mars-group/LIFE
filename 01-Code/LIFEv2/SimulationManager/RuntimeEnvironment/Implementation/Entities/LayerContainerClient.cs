@@ -36,11 +36,12 @@ namespace RuntimeEnvironment.Implementation.Entities {
             _layerContainer.ServiceProxy.Instantiate(instanceId);
         }
 
-        public long Tick() {
-            return _layerContainer.ServiceProxy.Tick();
+        public long Tick(int amountOfTicks = 1)
+        {
+            return _layerContainer.ServiceProxy.Tick(amountOfTicks);
         }
 
-		public void CleanUp(){
+        public void CleanUp(){
 			_layerContainer.ServiceProxy.CleanUp ();
 		}
 

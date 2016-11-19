@@ -61,12 +61,11 @@ namespace LayerContainerFacade.Implementation {
         public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
             return _rteManager.InitializeLayer(instanceId, initData);
         }
-
-        public long Tick() {
-            return _rteManager.AdvanceOneTick();
+        public long Tick(int amountOfTicks = 1)
+        {
+            return _rteManager.Advance(amountOfTicks);
         }
-
-		public void CleanUp ()
+        public void CleanUp ()
 		{
 			_rteManager.DisposeSuitableLayers ();
 		}

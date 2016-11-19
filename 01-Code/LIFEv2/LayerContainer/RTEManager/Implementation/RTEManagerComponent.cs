@@ -57,8 +57,9 @@ namespace RTEManager.Implementation {
             return _rteManagerUseCase.GetAllTickClientsByLayer(layer);
         }
 
-        public long AdvanceOneTick() {
-            return _rteManagerUseCase.AdvanceOneTick();
+        public long Advance(int ticksToAdvanceBy)
+        {
+            return _rteManagerUseCase.Advance(ticksToAdvanceBy);
         }
 
         #endregion

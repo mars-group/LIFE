@@ -43,7 +43,7 @@ namespace LCConnector {
         /// </summary>
         /// <returns>The duration of the tick execution in milliseconds.</returns>
         /// <exception cref="Exceptions.LayerNotInitializedException">If one of the layers not yet initialized.</exception>
-        long Tick();
+        long Tick(int amountOfTicks = 1);
 
 		/// <summary>
 		/// Cleans up all Layers which implement the IDisposableLayer 

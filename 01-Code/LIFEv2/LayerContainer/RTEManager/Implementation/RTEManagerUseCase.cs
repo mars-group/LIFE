@@ -160,141 +160,154 @@ namespace RTEManager.Implementation {
             return result;
         }
 
-        public long AdvanceOneTick() {
-            _isRunning = true;
-
+        public long Advance(int ticksToAdvanceBy = 1) {
             var stopWatch = Stopwatch.StartNew();
+            for (var i = 0; i < ticksToAdvanceBy; i++)
+            {
+                _isRunning = true;
 
 
-            // visualize all visualizable layers once prior to first execution if tick = 0
-            if (_currentTick == 0) {
-				//Console.WriteLine ("[LIFE] Executing Result Writing to fetch initial state.");
-				_resultAdapter.WriteResults(_currentTick);
+                // visualize all visualizable layers once prior to first execution if tick = 0
+                if (_currentTick == 0)
+                {
+                    //Console.WriteLine ("[LIFE] Executing Result Writing to fetch initial state.");
+                    _resultAdapter.WriteResults(_currentTick);
 
-                if (_explicitGC) { GC.Collect(); }
+                    if (_explicitGC)
+                    {
+                        GC.Collect();
+                    }
 
-                _currentTick++;
-            }
+                    _currentTick++;
+                }
 
-            // set currentTick to all layers
-            Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
+                // set currentTick to all layers
+                Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
 
-            //Console.WriteLine ("[LIFE] Executing Pre-Tick");
-            // PreTick all ActiveLayers
-            Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
-            //Console.WriteLine ($"[LIFE] Executing Tick {_currentTick}...");
-            // tick all tickClients
-            Parallel.ForEach
+                //Console.WriteLine ("[LIFE] Executing Pre-Tick");
+                // PreTick all ActiveLayers
+                Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
+                //Console.WriteLine ($"[LIFE] Executing Tick {_currentTick}...");
+                // tick all tickClients
+                Parallel.ForEach
                 (
                     _tickClientsPerLayer.Keys,
-                        layer =>
-                        {
-                            Parallel.ForEach(_tickClientsPerLayer[layer].Keys,
-                                             executionGroup =>
-                                            {
-                                            // execute group's agents if they match the currenttick
-                                            // execute all agents in tick 1 and none which are in execGroup 0
-                                            if (_currentTick == 1 || _currentTick % executionGroup == 0)
-                                            {
-                                                    //Console.WriteLine($"[Tick {_currentTick}]Executing group {executionGroup} with {_tickClientsPerLayer[layer][executionGroup].Count} agents.");
-                                                    Parallel.ForEach(_tickClientsPerLayer[layer][executionGroup],
-                                                                    client => client.Key.Tick()
-                                                                );
-                                                }
-
-                                            }
-                                            );
-                        }
-                );
-            
-			//Console.WriteLine ("[LIFE] Executing Post-Tick");
-
-            // PostTick all ActiveLayers
-            Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
-
-
-            //Console.WriteLine("[LIFE] Executing Result Writing");
-            // visualize all layers
-            _resultAdapter.WriteResults(_currentTick);
-
-            // increase Tick counter
-            _currentTick++;
-
-			//Console.WriteLine ("[LIFE] Removing agents");
-            // clean up all deleted tickClients
-            Parallel.ForEach
-                (
-                    _tickClientsMarkedForDeletionPerLayer.Keys,
-                    layer => Parallel.ForEach
-                        (
-                            _tickClientsMarkedForDeletionPerLayer[layer],
-                            tickClientsPerExecGroup =>
+                    layer =>
+                    {
+                        Parallel.ForEach(_tickClientsPerLayer[layer].Keys,
+                            executionGroup =>
                             {
-                                Parallel.ForEach(tickClientsPerExecGroup.Value, tickClient =>
+                                // execute group's agents if they match the currenttick
+                                // execute all agents in tick 1 and none which are in execGroup 0
+                                if (_currentTick == 1 || _currentTick%executionGroup == 0)
                                 {
-                                    byte trash;
-                                    _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryRemove(tickClient,
-                                    out trash);
+                                    //Console.WriteLine($"[Tick {_currentTick}]Executing group {executionGroup} with {_tickClientsPerLayer[layer][executionGroup].Count} agents.");
+                                    Parallel.ForEach(_tickClientsPerLayer[layer][executionGroup],
+                                        client => client.Key.Tick()
+                                    );
+                                }
 
-                                    // remove tickClient from visualization if type is appropiate
-                                    var visAgent = tickClient as ISimResult;
-                                    if (visAgent != null)
-                                    {
-                                        _resultAdapter.DeRegister(visAgent, tickClientsPerExecGroup.Key);
-                                    }
-                                });
                             }
-						)
-                );
-
-			//Console.WriteLine ("[LIFE] Adding new Agents");
-            // add all new TickClients which were registered during the run
-            Parallel.ForEach
-                (
-                    _tickClientsMarkedForRegistrationPerLayer.Keys,
-                    layer => Parallel.ForEach
-                        (
-                            _tickClientsMarkedForRegistrationPerLayer[layer],
-                            tickClientsPerExecGroup =>
-                            {
-                                Parallel.ForEach(tickClientsPerExecGroup.Value, tickClient =>
-                                {
-                                    _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryAdd(tickClient, new byte());
-
-                                    // add tickClient to visualization if type is appropiate
-                                    var visAgent = tickClient as ISimResult;
-                                    if (visAgent != null)
-                                    {
-                                        _resultAdapter.Register(visAgent, tickClientsPerExecGroup.Key);
-                                    }
-                                });
-                            }
-                        )
-                );
-
-			//Console.WriteLine ("[LIFE] Cleaning up");
-            // reset collections
-            Parallel.ForEach
-                (
-                    _tickClientsPerLayer.Keys,
-                    layer => {
-						_tickClientsMarkedForDeletionPerLayer[layer] = null;
-						_tickClientsMarkedForRegistrationPerLayer[layer] = null;
-                        _tickClientsMarkedForDeletionPerLayer[layer] = new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>();
-                        _tickClientsMarkedForRegistrationPerLayer[layer] = new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>();
+                        );
                     }
                 );
 
-            // Garbage Collect
-            if (_explicitGC) { GC.Collect(); }
+                //Console.WriteLine ("[LIFE] Executing Post-Tick");
+
+                // PostTick all ActiveLayers
+                Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
 
-            // stop time measurement
-            stopWatch.Stop();
+                //Console.WriteLine("[LIFE] Executing Result Writing");
+                // visualize all layers
+                _resultAdapter.WriteResults(_currentTick);
 
-            _isRunning = false;
-			//Console.WriteLine ("[LIFE] Tick Done");
+                // increase Tick counter
+                _currentTick++;
+
+                //Console.WriteLine ("[LIFE] Removing agents");
+                // clean up all deleted tickClients
+                Parallel.ForEach
+                (
+                    _tickClientsMarkedForDeletionPerLayer.Keys,
+                    layer => Parallel.ForEach
+                    (
+                        _tickClientsMarkedForDeletionPerLayer[layer],
+                        tickClientsPerExecGroup =>
+                        {
+                            Parallel.ForEach(tickClientsPerExecGroup.Value, tickClient =>
+                            {
+                                byte trash;
+                                _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryRemove(tickClient,
+                                    out trash);
+
+                                // remove tickClient from visualization if type is appropiate
+                                var visAgent = tickClient as ISimResult;
+                                if (visAgent != null)
+                                {
+                                    _resultAdapter.DeRegister(visAgent, tickClientsPerExecGroup.Key);
+                                }
+                            });
+                        }
+                    )
+                );
+
+                //Console.WriteLine ("[LIFE] Adding new Agents");
+                // add all new TickClients which were registered during the run
+                Parallel.ForEach
+                (
+                    _tickClientsMarkedForRegistrationPerLayer.Keys,
+                    layer => Parallel.ForEach
+                    (
+                        _tickClientsMarkedForRegistrationPerLayer[layer],
+                        tickClientsPerExecGroup =>
+                        {
+                            Parallel.ForEach(tickClientsPerExecGroup.Value, tickClient =>
+                            {
+                                _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryAdd(tickClient, new byte());
+
+                                // add tickClient to visualization if type is appropiate
+                                var visAgent = tickClient as ISimResult;
+                                if (visAgent != null)
+                                {
+                                    _resultAdapter.Register(visAgent, tickClientsPerExecGroup.Key);
+                                }
+                            });
+                        }
+                    )
+                );
+
+                //Console.WriteLine ("[LIFE] Cleaning up");
+                // reset collections
+                Parallel.ForEach
+                (
+                    _tickClientsPerLayer.Keys,
+                    layer =>
+                    {
+                        _tickClientsMarkedForDeletionPerLayer[layer] = null;
+                        _tickClientsMarkedForRegistrationPerLayer[layer] = null;
+                        _tickClientsMarkedForDeletionPerLayer[layer] =
+                            new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>();
+                        _tickClientsMarkedForRegistrationPerLayer[layer] =
+                            new ConcurrentDictionary<int, ConcurrentBag<ITickClient>>();
+                    }
+                );
+
+                // Garbage Collect
+                if (_explicitGC)
+                {
+                    GC.Collect();
+                }
+
+
+                // stop time measurement
+                stopWatch.Stop();
+
+                _isRunning = false;
+                Console.WriteLine($"[LIFE] Tick {_currentTick} done. Took {stopWatch.ElapsedMilliseconds} ms.");
+                stopWatch.Restart();
+            }
             return stopWatch.ElapsedMilliseconds;
         }
 

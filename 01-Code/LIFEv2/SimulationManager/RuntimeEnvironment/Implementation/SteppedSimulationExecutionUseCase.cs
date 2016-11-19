@@ -13,8 +13,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using RuntimeEnvironment.Implementation.Entities;
 using System.Threading.Tasks;
-using RabbitMQClient;
-using System.Text;
 
 [assembly: InternalsVisibleTo("SimulationManagerTest")]
 
@@ -60,68 +58,81 @@ namespace RuntimeEnvironment.Implementation
         }
 
         private void RunSimulation() {
-            Console.WriteLine($"Starting Simulation with ID {_simulationId} for {_nrOfTicks} ticks...");
-            var sw = Stopwatch.StartNew();
-            for (var i = 1; _nrOfTicks == null || i <= _nrOfTicks; i++) {
+            Console.WriteLine($"[LIFE] Starting Simulation with ID: {_simulationId} for {_nrOfTicks} ticks.");
+            // if there's only a single layercontainer, just run all ticks at once as a batch run!
+            if (_layerContainerClients.Count == 1)
+            {
+                if (_nrOfTicks != null) DoBatchRun(_nrOfTicks.Value);
+            }
+            else
+            {
+                var sw = Stopwatch.StartNew();
+                for (var i = 1; _nrOfTicks == null || i <= _nrOfTicks; i++)
+                {
 
-                // check for status change
-                switch (_status) {
+                    // check for status change
+                    switch (_status)
+                    {
 
-                    case SimulationStatus.Paused:
-                        // pause execution and wait to be signaled
-                        sw.Stop();
-                        _simulationExecutionSwitch.WaitOne();
-                        sw.Start();
-                        break;
+                        case SimulationStatus.Paused:
+                            // pause execution and wait to be signaled
+                            sw.Stop();
+                            _simulationExecutionSwitch.WaitOne();
+                            sw.Start();
+                            break;
 
-					case SimulationStatus.Stepped:
-                        if (_steppedTicks.HasValue){
-                            // make sure we don't step over the maximum nr of Ticks
-                            while ((_steppedTicks+i < _nrOfTicks) && _steppedTicks > 0) {
-                                DoStep(i);
-                                _steppedTicks--;
-                                // increase overall tick number
-                                i++;
+                        case SimulationStatus.Stepped:
+                            if (_steppedTicks.HasValue)
+                            {
+                                // make sure we don't step over the maximum nr of Ticks
+                                while ((_steppedTicks + i < _nrOfTicks) && _steppedTicks > 0)
+                                {
+                                    DoStep(i);
+                                    _steppedTicks--;
+                                    // increase overall tick number
+                                    i++;
+                                }
+                                _steppedTicks = null;
                             }
-                            _steppedTicks = null;
-                        }
-                        else {
-                            DoStep(i);
-                        }
+                            else
+                            {
+                                DoStep(i);
+                            }
 
-                        // set switch to non-signaled in case it was signaled before
-                        _simulationExecutionSwitch.Reset();
+                            // set switch to non-signaled in case it was signaled before
+                            _simulationExecutionSwitch.Reset();
 
-						// pause execution and wait to be signaled
-                        sw.Stop();
-						_simulationExecutionSwitch.WaitOne();
-                        sw.Start();
+                            // pause execution and wait to be signaled
+                            sw.Stop();
+                            _simulationExecutionSwitch.WaitOne();
+                            sw.Start();
 
-						continue;
+                            continue;
 
-                    case SimulationStatus.Aborted:
-                        // that's it..
-                        return;
+                        case SimulationStatus.Aborted:
+                            // that's it..
+                            return;
+                    }
+
+                    DoStep(i);
+
+
+
+                    // clean up after simulation, by calling DisposeLayer on all IDisposableLayers
+                    CleanUp();
                 }
 
-				DoStep(i);
-
+                sw.Stop();
+                Console.WriteLine("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
             }
-
-			// clean up after simulation, by calling DisposeLayer on all IDisposableLayers
-			CleanUp();
-
-			sw.Stop();
-
-			var stb = new StringBuilder ();
-			stb.AppendFormat("{{\"simulationId\" : \"{0}\",\"status\" : \"Finished\",\"tickCount\" : \"{1}\",\"totalDuration\" : \"{2}\", \"time\" : \"{3}\"}}", _simulationId, _nrOfTicks, sw.ElapsedMilliseconds, GetUnixTimeStamp());
-			//_rabbitMQWriter.SendMessage(stb.ToString());
-            
-            Console.WriteLine();
-			Console.WriteLine ("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
         }
 
-		private void DoStep(int currentTick){
+        private void DoBatchRun(int nrOfTicks)
+        {
+            _layerContainerClients[0].Tick(nrOfTicks);
+        }
+
+        private void DoStep(int currentTick){
 
 			_maxExecutionTime = 0;
 

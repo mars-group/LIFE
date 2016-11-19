@@ -78,12 +78,12 @@ namespace RTEManager.Interfaces {
         ///     In other words: Simulates one tick.
         /// </summary>
         /// <returns>The milliseconds the last tick took to execute.</returns>
-        long AdvanceOneTick();
+        long Advance(int ticksToAdvanceBy = 1);
 
-		/// <summary>
-		/// Calls DisposeLayer on all IDisposableLayer layers.
-		/// </summary>
-		void DisposeSuitableLayers();
+        /// <summary>
+        /// Calls DisposeLayer on all IDisposableLayer layers.
+        /// </summary>
+        void DisposeSuitableLayers();
 
         // TODO: Information methods needed!
     }
