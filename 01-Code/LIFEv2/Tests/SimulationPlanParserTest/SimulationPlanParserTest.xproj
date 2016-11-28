@@ -10,8 +10,8 @@
     <ProjectGuid>{D53793C3-DA96-4754-89BA-244CA6545B80}</ProjectGuid>
     <ProjectTypeGuids>{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}</ProjectTypeGuids>
     <RootNamespace>SimulationPlanParserTest</RootNamespace>
-    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-    <OutputPath Condition="'$(OutputPath)'=='' ">bin\$(MSBuildProjectName)\</OutputPath>
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj\</BaseIntermediateOutputPath>
+    <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
 
