@@ -17,10 +17,10 @@
         "NETStandard.Library": "1.6.0"
       }
     },
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "imports": "dnxcore50",
       "dependencies": {
-        "Microsoft.NETCore.App": "1.0.0"
+        "Microsoft.NETCore.App": "1.1.0"
       }
     }
   }

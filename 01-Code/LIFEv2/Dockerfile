@@ -1,10 +1,12 @@
-﻿FROM artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet
+﻿FROM artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
 
 MAINTAINER Christian Hüning <christian.huening@haw-hamburg.de>
 
 RUN mkdir -p /life
 
 COPY . /life
+
+WORKDIR /life
 
 RUN dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/
 
