@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "The LayerLoader allows to load layers from DLLs.",
   "copyright": "(c) 2016 - MARS Group",
@@ -9,9 +9,9 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "System.Runtime.Loader": "4.0.0",
-    "Microsoft.Extensions.DependencyModel": "1.0.0",
-    "LCConnector":  "2.0.0-*" 
+    "Microsoft.Extensions.DependencyModel": "1.1.0",
+    "LCConnector": "2.0.0-*",
+    "System.Runtime.Loader": "4.3.0"
   },
   "frameworks": {
     "netstandard1.6": {

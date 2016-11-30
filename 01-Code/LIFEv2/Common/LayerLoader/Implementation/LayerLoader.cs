@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using LayerLoader.Interface;
 using LayerLoader.Interface.Exceptions;
 using LCConnector.TransportTypes.ModelStructure;
@@ -109,7 +110,7 @@ namespace LayerLoader.Implementation
 
                 try
                 {
-                    var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
+                    var asm = _asl.LoadFromAssemblyName(AssemblyLoadContext.GetAssemblyName(fileSystemInfo.FullName));//.LoadFromAssemblyPath(fileSystemInfo.FullName);
                     types.AddRange(asm.GetTypes()
                         .Where(t => t.GetTypeInfo().GetInterface("ILayer") != null && !t.GetTypeInfo().IsAbstract
                             /*
@@ -137,6 +138,7 @@ namespace LayerLoader.Implementation
                     Console.WriteLine($"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");
                     //throw bex;
                 }
+                
 
             }
             return types;

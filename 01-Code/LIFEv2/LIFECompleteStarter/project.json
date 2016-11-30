@@ -22,5 +22,8 @@
           },
           "imports": "dnxcore50"
       }
-  }
+  },
+    "runtimes": {
+        "win10-x64":{}
+    }
 }
