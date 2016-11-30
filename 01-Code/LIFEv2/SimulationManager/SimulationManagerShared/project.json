@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "SimulationManagerShared provides common classes for the SimulationManager and its services",
   "copyright": "(c) 2016 - MARS Group",
@@ -12,13 +12,13 @@
     "MulticastAdapter": "2.0.0-*",
     "NodeRegistry": "2.0.0-*",
     "CommonTypes": "2.0.0-*",
-    "System.Net.NameResolution": "4.0.0"
+    "System.Net.NameResolution": "4.3.0"
   },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     },
     "netcoreapp1.1": {

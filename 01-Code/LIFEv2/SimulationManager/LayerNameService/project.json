@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "The LayerNameService allows to register and resolve remote layer instances by their names",
   "copyright": "(c) 2016 - MARS Group",
@@ -16,7 +16,7 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     },
     "netcoreapp1.1": {

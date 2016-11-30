@@ -18,8 +18,13 @@ namespace LayerLoader.Implementation
         /// <param name="folderPath">Base path for the dependency resolving.</param>
         public LIFEAssemblyLoader(string folderPath) {
             _folderPath = folderPath;
+            this.Resolving += OnResolving;
         }
 
+        private Assembly OnResolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
+        {
+            return Load(assemblyName);
+        }
 
         /// <summary>
         ///   Load the requested assembly. Performs recursive calls to load required dependencies.

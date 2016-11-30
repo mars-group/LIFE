@@ -7,8 +7,8 @@
     "GeoCommon": "2.0.0-16",
     "LCConnector": "2.0.0-*",
     "MARS.Shuttle.SimulationConfig": "2.0.0-15",
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
-    "System.Xml.XmlSerializer": "4.0.11"
+    "System.Runtime.Serialization.Formatters": "4.3.0",
+    "System.Xml.XmlSerializer": "4.3.0"
   },
   "buildOptions": {
     "debugType": "portable"
@@ -17,7 +17,7 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     },
     "netcoreapp1.1": {

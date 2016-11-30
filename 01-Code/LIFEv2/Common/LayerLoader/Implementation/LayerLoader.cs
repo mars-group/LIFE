@@ -7,6 +7,7 @@ using System.Runtime.Loader;
 using LayerLoader.Interface;
 using LayerLoader.Interface.Exceptions;
 using LCConnector.TransportTypes.ModelStructure;
+using Microsoft.Extensions.DependencyModel;
 
 namespace LayerLoader.Implementation
 {
@@ -110,7 +111,25 @@ namespace LayerLoader.Implementation
 
                 try
                 {
-                    var asm = _asl.LoadFromAssemblyName(AssemblyLoadContext.GetAssemblyName(fileSystemInfo.FullName));//.LoadFromAssemblyPath(fileSystemInfo.FullName);
+                    //var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
+                    AssemblyLoadContext.Default.Resolving += (context, name) =>
+                    {
+                        var deps = DependencyContext.Default;
+                        var res = deps.RuntimeLibraries.Where(d => d.Name.Contains(name.Name)).ToList();
+                        if (res.Count > 0)
+                        {
+                            return Assembly.Load(new AssemblyName(res.First().Name));
+                        }
+                        var dllPath = modelPath + Path.DirectorySeparatorChar + name.Name + ".dll";
+                        var fileinfo = new FileInfo(dllPath);
+                        if (File.Exists(fileinfo.FullName))
+                        {
+                            return AssemblyLoadContext.Default.LoadFromAssemblyPath(fileinfo.FullName);
+                        }
+                        return Assembly.Load(name);
+                    };
+
+                    var asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(fileSystemInfo.FullName);
                     types.AddRange(asm.GetTypes()
                         .Where(t => t.GetTypeInfo().GetInterface("ILayer") != null && !t.GetTypeInfo().IsAbstract
                             /*
@@ -128,11 +147,12 @@ namespace LayerLoader.Implementation
                     Console.WriteLine($"Caught type load error while Loading model code. Error was: {ex.LoaderExceptions.First()}");
                     //throw ex;
                 }
-                catch (FileLoadException fex)
+               /* catch (FileLoadException fex)
                 {
                     Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
                     //throw fex;
                 }
+                */
                 catch (BadImageFormatException bex)
                 {
                     Console.WriteLine($"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");

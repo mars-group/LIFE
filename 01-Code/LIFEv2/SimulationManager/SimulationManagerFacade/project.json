@@ -1,10 +1,10 @@
-﻿{
+{
   "version": "2.0.0-*",
   "buildOptions": {
     "debugType": "portable"
   },
   "dependencies": {
-    "Autofac": "4.1.1",
+    "Autofac": "4.2.1",
     "ConfigurationAdapter": {
       "version": "2.0.0-*"
     },
@@ -39,7 +39,7 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     },
     "netcoreapp1.1": {

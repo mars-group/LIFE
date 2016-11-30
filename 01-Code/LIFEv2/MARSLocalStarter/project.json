@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "buildOptions": {
     "debugType": "portable"
@@ -23,7 +23,7 @@
     "LNSConnector": {
       "version": "2.0.0-*"
     },
-    "System.ComponentModel.TypeConverter": "4.1.0"
+    "System.ComponentModel.TypeConverter": "4.3.0"
   },
 
 
@@ -31,7 +31,6 @@
     "netstandard1.6": {
         "imports": "dnxcore50",
         "dependencies": {
-          "NETStandard.Library": "1.6.0"
         }
     },
     "netcoreapp1.1": {

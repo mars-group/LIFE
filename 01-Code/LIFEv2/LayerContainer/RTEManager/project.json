@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "RTEManager manages the RuntimeEnvironment",
   "copyright": "(c) 2016 - MARS Group",
@@ -12,14 +12,13 @@
     "LifeAPI": "2.0.0-*",
     "LCConnector": "2.0.0-*",
     "NodeRegistry": "2.0.0-*",
-    "ResultAdapter": "2.0.0-*",
-    "System.Threading.Tasks.Parallel": "4.0.1"
+    "ResultAdapter": "2.0.0-*"
   },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     },
     "netcoreapp1.1": {

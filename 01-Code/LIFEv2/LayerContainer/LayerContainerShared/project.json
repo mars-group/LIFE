@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "LayerContainerShared provides common classes for the SimulationManager and its services",
   "copyright": "(c) 2016 - MARS Group",
@@ -9,18 +9,18 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
     "MulticastAdapter": "2.0.0-*",
     "NodeRegistry": "2.0.0-*",
     "CommonTypes": "2.0.0-*",
     "ConfigurationAdapter": "2.0.0-*",
-    "System.Net.NameResolution": "4.0.0"
+    "System.Runtime.Serialization.Formatters": "4.3.0",
+    "System.Net.NameResolution": "4.3.0"
   },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     },
     "netcoreapp1.1": {

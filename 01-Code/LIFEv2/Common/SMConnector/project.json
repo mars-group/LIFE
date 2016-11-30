@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.0.0-*",
   "description": "SMConnector provides common classes for the SimulationManager and its services",
   "copyright": "(c) 2016 - MARS Group",
@@ -6,7 +6,7 @@
     "Christian Huening"
   ],
   "dependencies": {
-    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
+    "System.Runtime.Serialization.Formatters": "4.3.0"
   },
   "buildOptions": {
     "debugType": "portable"
@@ -15,7 +15,7 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     },
     "netcoreapp1.1": {
