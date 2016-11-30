@@ -20,16 +20,47 @@ namespace LayerLoader.Implementation
         private readonly string _pathForTransferredModel =
             $".{Path.DirectorySeparatorChar}models{Path.DirectorySeparatorChar}{FolderNameForTransferredModelCode}";
 
-        private LIFEAssemblyLoader _asl;
+        //private LIFEAssemblyLoader _asl;
 
         private readonly List<LayerTypeInfo> _simulationManagerLayerCache;
 
         public LayerLoader(string modelPath = "./model")
         {
             _simulationManagerLayerCache  = new List<LayerTypeInfo>();
-            _asl = new LIFEAssemblyLoader(modelPath);
-        }
+            //_asl = new LIFEAssemblyLoader(modelPath);
+            AssemblyLoadContext.Default.Resolving += (context, name) =>
+            {
+                /*
+                var deps = DependencyContext.Default;
 
+                var res = deps.CompileLibraries.Where(d => d.Name.Contains(name.Name)).ToList();
+                if (res.Count > 0)
+                {
+                    return Assembly.Load(new AssemblyName(res.First().Name));
+                }*/
+                var dependencies = DependencyContext.Default.RuntimeLibraries;
+                foreach (var library in dependencies)
+                {
+                    if (IsCandidateLibrary(library, name.Name))
+                    {
+                        return Assembly.Load(new AssemblyName(library.Name));
+                    }
+                }
+
+                var dllPath = modelPath + Path.DirectorySeparatorChar + name.Name + ".dll";
+                var fileinfo = new FileInfo(dllPath);
+                if (File.Exists(fileinfo.FullName))
+                {
+                    return context.LoadFromAssemblyPath(fileinfo.FullName);
+                }
+                return Assembly.Load(name);
+            };
+        }
+        private static bool IsCandidateLibrary(RuntimeLibrary library, string assemblyName)
+        {
+            return library.Name == (assemblyName)
+                || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName));
+        }
         /// <summary>
         /// Gets called on LayerContainer only!
         /// </summary>
@@ -38,7 +69,8 @@ namespace LayerLoader.Implementation
         {
             //write files
             modelContent.Write(_pathForTransferredModel);
-            _asl  = new LIFEAssemblyLoader(_pathForTransferredModel);
+            //_asl  = new LIFEAssemblyLoader(_pathForTransferredModel);
+
             _layerTypes.AddRange(DoReflection(_pathForTransferredModel));
         }
 
@@ -102,63 +134,50 @@ namespace LayerLoader.Implementation
             return _simulationManagerLayerCache;
         }
 
-        private IEnumerable<Type> DoReflection(string modelPath)
+        private static IEnumerable<Type> DoReflection(string modelPath)
         {
             var types = new List<Type>();
             // iterate all DLLs and try to find ILayer implementations
             foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
             {
-
+                Assembly asm = null;
                 try
                 {
                     //var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
-                    AssemblyLoadContext.Default.Resolving += (context, name) =>
+                    asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(fileSystemInfo.FullName);
+                }
+                catch (FileLoadException fex)
+                {
+                    
+                    // Get loaded assembly
+                    asm = Assembly.Load(new AssemblyName(Path.GetFileNameWithoutExtension(fileSystemInfo.Name)));
+
+                    if (asm == null)
                     {
-                        var deps = DependencyContext.Default;
-                        var res = deps.RuntimeLibraries.Where(d => d.Name.Contains(name.Name)).ToList();
-                        if (res.Count > 0)
-                        {
-                            return Assembly.Load(new AssemblyName(res.First().Name));
-                        }
-                        var dllPath = modelPath + Path.DirectorySeparatorChar + name.Name + ".dll";
-                        var fileinfo = new FileInfo(dllPath);
-                        if (File.Exists(fileinfo.FullName))
-                        {
-                            return AssemblyLoadContext.Default.LoadFromAssemblyPath(fileinfo.FullName);
-                        }
-                        return Assembly.Load(name);
-                    };
+                        Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
+                        throw fex;
+                    }
 
-                    var asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(fileSystemInfo.FullName);
+                }
+
+                try
+                {
                     types.AddRange(asm.GetTypes()
-                        .Where(t => t.GetTypeInfo().GetInterface("ILayer") != null && !t.GetTypeInfo().IsAbstract
-                            /*
-                                t.GetTypeInfo().IsClass
-                                &&
-                                t.GetInterfaces().Contains(typeof(ILayer))
-                                &&
-                                !t.GetTypeInfo().IsAbstract
-*/
-                        ).ToList());
-
+                        .Where(t => t.GetTypeInfo().GetInterface("ILayer") != null && !t.GetTypeInfo().IsAbstract)
+                        .ToList()
+                        );
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
                     Console.WriteLine($"Caught type load error while Loading model code. Error was: {ex.LoaderExceptions.First()}");
-                    //throw ex;
+                    throw ex;
                 }
-               /* catch (FileLoadException fex)
-                {
-                    Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
-                    //throw fex;
-                }
-                */
                 catch (BadImageFormatException bex)
                 {
                     Console.WriteLine($"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");
-                    //throw bex;
+                    throw bex;
                 }
-                
+
 
             }
             return types;

@@ -460,10 +460,11 @@ namespace RuntimeEnvironment.Implementation
 				else
 				{
 
-				    Console.WriteLine($"BEGIN Init of : {layerInstanceId.LayerDescription.Name}");
+				    Console.WriteLine($"INSTANTIATE: {layerInstanceId.LayerDescription.Name}");
 
 				    layerContainerClients[0].Instantiate(layerInstanceId);
 
+                    Console.WriteLine("...done.");
 
 
 					var layerType = Type.GetType(layerDescription.FullName)
@@ -555,10 +556,14 @@ namespace RuntimeEnvironment.Implementation
                         }
 
 					}
+                    Console.WriteLine($"INIT: {layerInstanceId.LayerDescription.Name}");
 
-					layerContainerClients[0].Initialize(layerInstanceId, initData);
-				}
-                
+                    layerContainerClients[0].Initialize(layerInstanceId, initData);
+
+                    Console.WriteLine($"...done");
+
+                }
+
 
                 layerId++;
             }
