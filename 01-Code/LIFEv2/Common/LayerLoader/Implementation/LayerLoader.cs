@@ -139,7 +139,6 @@ namespace LayerLoader.Implementation
                 Assembly asm = null;
                 try
                 {
-                    //var asm = _asl.LoadFromAssemblyPath(fileSystemInfo.FullName);
                     asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(fileSystemInfo.FullName);
                 }
                 catch (FileLoadException fex)
