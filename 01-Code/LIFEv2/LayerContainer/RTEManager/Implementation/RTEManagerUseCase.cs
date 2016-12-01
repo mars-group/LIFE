@@ -161,7 +161,6 @@ namespace RTEManager.Implementation {
         }
 
         public long Advance(long ticksToAdvanceBy = 1) {
-            Console.WriteLine("Reached Advance()!");
             var stopWatch = Stopwatch.StartNew();
             for (var i = 0; i < ticksToAdvanceBy; i++)
             {
