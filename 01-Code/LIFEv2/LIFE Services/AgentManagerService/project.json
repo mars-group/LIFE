@@ -14,7 +14,8 @@
     "DalskiAgent": "2.0.0-13",
     "GeoGridEnvironment": "2.0.0-19",
     "MySql.Data": "7.0.6-IR31",
-    "SpatialAPI": "2.0.0-22"
+    "SpatialAPI": "2.0.0-22",
+    "System.Data.SqlClient": "4.3.0"
   },
   "buildOptions": {
     "debugType": "portable"

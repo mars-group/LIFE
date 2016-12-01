@@ -20,46 +20,46 @@ namespace LayerLoader.Implementation
         private readonly string _pathForTransferredModel =
             $".{Path.DirectorySeparatorChar}models{Path.DirectorySeparatorChar}{FolderNameForTransferredModelCode}";
 
-        //private LIFEAssemblyLoader _asl;
-
         private readonly List<LayerTypeInfo> _simulationManagerLayerCache;
 
         public LayerLoader(string modelPath = "./model")
         {
             _simulationManagerLayerCache  = new List<LayerTypeInfo>();
-            //_asl = new LIFEAssemblyLoader(modelPath);
+
             AssemblyLoadContext.Default.Resolving += (context, name) =>
             {
-                /*
-                var deps = DependencyContext.Default;
-
-                var res = deps.CompileLibraries.Where(d => d.Name.Contains(name.Name)).ToList();
-                if (res.Count > 0)
+                // avoid loading *.resources dlls, because of: https://github.com/dotnet/coreclr/issues/8416
+                if (name.Name.EndsWith("resources"))
                 {
-                    return Assembly.Load(new AssemblyName(res.First().Name));
-                }*/
+                    return null;
+                }
+
                 var dependencies = DependencyContext.Default.RuntimeLibraries;
                 foreach (var library in dependencies)
                 {
-                    if (IsCandidateLibrary(library, name.Name))
+                    if (IsCandidateLibrary(library, name))
                     {
-                        return Assembly.Load(new AssemblyName(library.Name));
+                        return context.LoadFromAssemblyName(new AssemblyName(library.Name));
                     }
                 }
 
-                var dllPath = modelPath + Path.DirectorySeparatorChar + name.Name + ".dll";
-                var fileinfo = new FileInfo(dllPath);
-                if (File.Exists(fileinfo.FullName))
+                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(modelPath).FullName, name.Name + ".dll", SearchOption.AllDirectories);
+                if (foundDlls.Any())
                 {
-                    return context.LoadFromAssemblyPath(fileinfo.FullName);
+                    return context.LoadFromAssemblyPath(foundDlls[0]);
                 }
-                return Assembly.Load(name);
+
+                return context.LoadFromAssemblyName(name);
             };
         }
-        private static bool IsCandidateLibrary(RuntimeLibrary library, string assemblyName)
+        private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
         {
-            return library.Name == (assemblyName)
-                || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName));
+            return (library.Name == (assemblyName.Name))
+                    || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
+            /*
+            return (library.Name == (assemblyName.Name) && library.Version == assemblyName.Version.ToString())
+                || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name) && d.Version == assemblyName.Version.ToString()));
+                */
         }
         /// <summary>
         /// Gets called on LayerContainer only!
@@ -69,8 +69,6 @@ namespace LayerLoader.Implementation
         {
             //write files
             modelContent.Write(_pathForTransferredModel);
-            //_asl  = new LIFEAssemblyLoader(_pathForTransferredModel);
-
             _layerTypes.AddRange(DoReflection(_pathForTransferredModel));
         }
 
@@ -119,8 +117,6 @@ namespace LayerLoader.Implementation
                 return _simulationManagerLayerCache;
             }
 
-            //_asl = new LIFEAssemblyLoader(modelPath);
-
             var foundLayerTypes = DoReflection(modelPath)
                 .Select(layerType => new LayerTypeInfo(layerType, layerType.GetConstructors()))
                 .ToList();
@@ -138,7 +134,7 @@ namespace LayerLoader.Implementation
         {
             var types = new List<Type>();
             // iterate all DLLs and try to find ILayer implementations
-            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
+            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll", SearchOption.TopDirectoryOnly))
             {
                 Assembly asm = null;
                 try
@@ -148,9 +144,9 @@ namespace LayerLoader.Implementation
                 }
                 catch (FileLoadException fex)
                 {
-                    
-                    // Get loaded assembly
-                    asm = Assembly.Load(new AssemblyName(Path.GetFileNameWithoutExtension(fileSystemInfo.Name)));
+
+                    // Get loaded assembly 
+                    asm = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(fileSystemInfo.Name)));
 
                     if (asm == null)
                     {
