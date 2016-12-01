@@ -87,8 +87,10 @@ namespace RuntimeEnvironment.Implementation
                 var startDate = DateTime.Parse(globalParams["SimulationStartDateTime"].ToString());
                 var endDate = DateTime.Parse(globalParams["SimulationEndDateTime"].ToString());
                 var deltaT = int.Parse(globalParams["DeltaT"].ToString());
-                var duration = (int)(endDate - startDate).TotalMilliseconds;
-                var tickCount = duration / deltaT;
+                var deltaTUnit = globalParams["DeltaTUnit"].ToString();
+                var duration = (endDate - startDate);
+                var simStepDuration = GetDeltaTUnitTimeSpan(deltaTUnit, deltaT);
+                var tickCount = (int)(duration.TotalMilliseconds / simStepDuration.TotalMilliseconds);
                 if (tickCount > 0) {
                     nrOfTicks = tickCount;
                 }
@@ -290,35 +292,9 @@ namespace RuntimeEnvironment.Implementation
                 var endDate = DateTime.Parse(globalParams["SimulationEndDateTime"].ToString());
                 var deltaT = int.Parse(globalParams["DeltaT"].ToString());
                 var deltaTUnit = globalParams["DeltaTUnit"].ToString();
-                var simStepDuration = new TimeSpan();
 
-                switch (deltaTUnit)
-                {
-                    case "years":
-                        simStepDuration = new TimeSpan(deltaT*365,0,0,0);
-                        break;
-                    case "months":
-                        simStepDuration = new TimeSpan(deltaT * 30, 0, 0, 0);
-                        break;
-                    case "days":
-                        simStepDuration = new TimeSpan(deltaT, 0, 0, 0);
-                        break;
-                    case "hours":
-                        simStepDuration = new TimeSpan(0, deltaT, 0, 0);
-                        break;
-                    case "minutes":
-                        simStepDuration = new TimeSpan(0, 0, deltaT, 0);
-                        break;
-                    case "seconds":
-                        simStepDuration = new TimeSpan(0, 0, 0, deltaT);
-                        break;
-                    case "milliseconds":
-                        simStepDuration = new TimeSpan(0, 0, 0, 0, deltaT);
-                        break;
-                    case "microseconds":
-                        simStepDuration = new TimeSpan(deltaT*10);
-                        break;
-                }
+                var simStepDuration = GetDeltaTUnitTimeSpan(deltaTUnit, deltaT);
+
 				var initData = new TInitData(false, simStepDuration, startDate, _simulationId, MARSConfigServiceSettings.Address);
 
 				// fetch layerConfig by layerName
@@ -571,6 +547,39 @@ namespace RuntimeEnvironment.Implementation
             return layerContainerClients;
         }
 
+
+        private TimeSpan GetDeltaTUnitTimeSpan(string deltaTUnit, int deltaT)
+        {
+            TimeSpan simStepDuration;
+            switch (deltaTUnit)
+            {
+                case "years":
+                    simStepDuration = new TimeSpan(deltaT * 365, 0, 0, 0);
+                    break;
+                case "months":
+                    simStepDuration = new TimeSpan(deltaT * 30, 0, 0, 0);
+                    break;
+                case "days":
+                    simStepDuration = new TimeSpan(deltaT, 0, 0, 0);
+                    break;
+                case "hours":
+                    simStepDuration = new TimeSpan(0, deltaT, 0, 0);
+                    break;
+                case "minutes":
+                    simStepDuration = new TimeSpan(0, 0, deltaT, 0);
+                    break;
+                case "seconds":
+                    simStepDuration = new TimeSpan(0, 0, 0, deltaT);
+                    break;
+                case "milliseconds":
+                    simStepDuration = new TimeSpan(0, 0, 0, 0, deltaT);
+                    break;
+                case "microseconds":
+                    simStepDuration = new TimeSpan(deltaT * 10);
+                    break;
+            }
+            return simStepDuration;
+        }
 
         /// <summary>
         /// Handler to find new idle Layercontainers

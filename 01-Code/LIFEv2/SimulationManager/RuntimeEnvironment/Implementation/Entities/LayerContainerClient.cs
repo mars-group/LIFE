@@ -36,7 +36,7 @@ namespace RuntimeEnvironment.Implementation.Entities {
             _layerContainer.ServiceProxy.Instantiate(instanceId);
         }
 
-        public long Tick(int amountOfTicks = 1)
+        public long Tick(long amountOfTicks = 1)
         {
             return _layerContainer.ServiceProxy.Tick(amountOfTicks);
         }

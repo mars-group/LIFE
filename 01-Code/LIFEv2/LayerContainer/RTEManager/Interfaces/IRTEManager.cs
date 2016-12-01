@@ -78,7 +78,7 @@ namespace RTEManager.Interfaces {
         ///     In other words: Simulates one tick.
         /// </summary>
         /// <returns>The milliseconds the last tick took to execute.</returns>
-        long Advance(int ticksToAdvanceBy = 1);
+        long Advance(long ticksToAdvanceBy = 1);
 
         /// <summary>
         /// Calls DisposeLayer on all IDisposableLayer layers.

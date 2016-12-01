@@ -48,8 +48,8 @@ namespace LayerLoader.Implementation
                 {
                     return context.LoadFromAssemblyPath(foundDlls[0]);
                 }
-
-                return context.LoadFromAssemblyName(name);
+                return null;
+                //return context.LoadFromAssemblyName(name);
             };
         }
         private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
