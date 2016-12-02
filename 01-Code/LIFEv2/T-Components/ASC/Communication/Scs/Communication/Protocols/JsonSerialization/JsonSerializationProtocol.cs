@@ -33,6 +33,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// </summary>
         private const int MaxMessageLength = 128*1024*1024; //128 Megabytes.
 
+        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+
         /// <summary>
         ///     This MemoryStream object is used to collect receiving bytes to build messages.
         /// </summary>
@@ -137,7 +139,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// </returns>
         protected virtual byte[] SerializeMessage(IAscMessage message)
         {
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message, Jset));
         }
 
         /// <summary>
@@ -153,8 +155,7 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         protected virtual IAscMessage DeserializeMessage(byte[] bytes) {
 
             //Return the deserialized message
-            return (IAscMessage) JsonConvert.DeserializeObject(Encoding.UTF8.GetString(bytes));
-            
+            return JsonConvert.DeserializeObject<IAscMessage>(Encoding.UTF8.GetString(bytes), Jset);
         }
 
         #endregion

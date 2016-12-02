@@ -171,7 +171,7 @@ namespace RuntimeEnvironment.Implementation
 
             var content = _modelContainer.GetSerializedModel(modelDescription);
             var layerContainerClients = new List<LayerContainerClient>();
-            Console.WriteLine("Creating LayerContainer Clients...");
+            Console.Write("Creating LayerContainer Clients...");
             /* 1.
              * Create LayerContainerClients for all connected LayerContainers
              */
@@ -234,7 +234,6 @@ namespace RuntimeEnvironment.Implementation
             /* Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
              * XML config files are still valid but will be deprecated in the near future
              */
-            Console.WriteLine("Get ModelConfig...");
             var modelConfig = _modelContainer.GetModelConfig(modelDescription);
             Console.WriteLine("Get Scenario Config...");
             var scenarioConfig = _modelContainer.GetScenarioConfig(simConfigName);
@@ -436,11 +435,9 @@ namespace RuntimeEnvironment.Implementation
 				else
 				{
 
-				    Console.WriteLine($"INSTANTIATE: {layerInstanceId.LayerDescription.Name}");
+				    Console.WriteLine($"INIT OF: {layerInstanceId.LayerDescription.Name}");
 
 				    layerContainerClients[0].Instantiate(layerInstanceId);
-
-                    Console.WriteLine("...done.");
 
 
 					var layerType = Type.GetType(layerDescription.FullName)
@@ -532,11 +529,8 @@ namespace RuntimeEnvironment.Implementation
                         }
 
 					}
-                    Console.WriteLine($"INIT: {layerInstanceId.LayerDescription.Name}");
 
                     layerContainerClients[0].Initialize(layerInstanceId, initData);
-
-                    Console.WriteLine($"...done");
 
                 }
 
@@ -588,7 +582,6 @@ namespace RuntimeEnvironment.Implementation
         private void NewNode(TNodeInformation newnode) {
             lock (this) {
                 _idleLayerContainers.Add(newnode);
-                //Console.WriteLine("New LayerContainer registered: IP={0}, Name={1}", newnode.NodeEndpoint.IpAddress, newnode.NodeIdentifier);
             }
         }
     }

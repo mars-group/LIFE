@@ -22,11 +22,12 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		#region private fields
 
 		private readonly AscUdpEndPoint _endPoint;
+        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
 
-		/// <summary>
-		///     A flag to control thread's running
-		/// </summary>
-		private volatile bool _running;
+        /// <summary>
+        ///     A flag to control thread's running
+        /// </summary>
+        private volatile bool _running;
 
 		private UdpAsyncSocketServer _udpAsyncSockerServer;
 
@@ -88,7 +89,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 
 		protected override void SendMessageInternal(IAscMessage message)
 		{
-			var json = JsonConvert.SerializeObject(message);
+			var json = JsonConvert.SerializeObject(message, Jset);
 
 		    var messageBytes = Encoding.UTF8.GetBytes(json);
 
@@ -115,7 +116,7 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		/// <param name="datagram">Datagram.</param>
 		void On_DatagramReceived (object sender, byte[] datagram)
 		{
-		    var msg = (IAscMessage) JsonConvert.DeserializeObject(Encoding.UTF8.GetString(datagram));
+		    var msg = JsonConvert.DeserializeObject<IAscMessage>(Encoding.UTF8.GetString(datagram), Jset);//.DeserializeObject(Encoding.UTF8.GetString(datagram));
 	        OnMessageReceived(msg);
 		}
 	}

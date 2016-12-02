@@ -1,10 +1,1 @@
-#:F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE Services\AgentManagerService\AgentManagerService.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE Services\AgentManagerService\AgentManagerService.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\CommonTypes\CommonTypes.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE Services\AgentManagerService\AgentManagerService.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LCConnector\LCConnector.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE Services\AgentManagerService\AgentManagerService.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE API\LifeAPI\LifeAPI.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LCConnector\LCConnector.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\CustomUtilities\CustomUtilities.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\Scs\Scs.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\MulticastAdapter\MulticastAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\T-Components\MulticastAdapter\MulticastAdapter.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\ConfigurationAdapter\ConfigurationAdapter.xproj
-F:\Softwareprojekte\LIFE\01-Code\LIFEv2\LIFE API\LifeAPI\LifeAPI.xproj|F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Common\LCConnector\LCConnector.xproj
+#:F:\Softwareprojekte\LIFE\01-Code\LIFEv2\Tests\SimulationPlanParserTest\SimulationPlanParserTest.xproj

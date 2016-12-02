@@ -9,9 +9,12 @@
     "NUnit": "3.5.0"
   },
    "testRunner": "nunit",
-    "frameworks": {
-        "netcoreapp1.1": {
-            "imports": "portable-net45+win8"
-        }
+  "frameworks": {
+    "netcoreapp1.1": {
+      "imports": "portable-net45+win8"
     }
+  },
+  "runtimes": {
+    "win10-x64": {} 
+  }
 }
