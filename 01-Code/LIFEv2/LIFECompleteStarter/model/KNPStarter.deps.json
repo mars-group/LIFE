@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.1",
-    "signature": "30c44400c2ccab0cd6cde3db11728382ef856513"
+    "signature": "906f8d112ce0bf9a7cf405525d78c532ee155fff"
   },
   "compilationOptions": {},
   "targets": {
@@ -15,20 +15,20 @@
           "KNPShadeLayer": "1.0.0",
           "KNPTemperatureLayer": "1.0.0",
           "KNPWaterPotentialFieldLayer": "1.0.0",
-          "MARSLocalStarter": "2.0.0-137"
+          "MARSLocalStarter": "2.0.0-142"
         },
         "runtime": {
           "KNPStarter.dll": {}
         }
       },
-      "AgentManagerService/2.0.0-137": {
+      "AgentManagerService/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
+          "CommonTypes": "2.0.0-142",
           "ConfigService": "2.0.0-8",
           "DalskiAgent": "2.0.0-13",
           "GeoGridEnvironment": "2.0.0-19",
-          "LCConnector": "2.0.0-137",
-          "LifeAPI": "2.0.0-137",
+          "LCConnector": "2.0.0-142",
+          "LifeAPI": "2.0.0-142",
           "MARS.Shuttle.SimulationConfig": "2.0.0-15",
           "MySql.Data": "7.0.6-ir31",
           "SpatialAPI": "2.0.0-22",
@@ -39,20 +39,20 @@
           "lib/netcoreapp1.1/AgentManagerService.dll": {}
         }
       },
-      "AgentShadowingService/2.0.0-137": {
+      "AgentShadowingService/2.0.0-142": {
         "dependencies": {
-          "ASC": "2.0.0-137",
+          "ASC": "2.0.0-142",
           "LIFEUtilities": "2.0.0-3"
         },
         "runtime": {
           "lib/netcoreapp1.1/AgentShadowingService.dll": {}
         }
       },
-      "ASC/2.0.0-137": {
+      "ASC/2.0.0-142": {
         "dependencies": {
-          "ConfigurationAdapter": "2.0.0-137",
-          "CustomUtilities": "2.0.0-137",
-          "MulticastAdapter": "2.0.0-137",
+          "ConfigurationAdapter": "2.0.0-142",
+          "CustomUtilities": "2.0.0-142",
+          "MulticastAdapter": "2.0.0-142",
           "Newtonsoft.Json": "9.0.1",
           "System.Runtime.Serialization.Formatters": "4.3.0"
         },
@@ -65,7 +65,7 @@
           "lib/netstandard1.1/Autofac.dll": {}
         }
       },
-      "CommonTypes/2.0.0-137": {
+      "CommonTypes/2.0.0-142": {
         "dependencies": {
           "Newtonsoft.Json": "9.0.1"
         },
@@ -81,7 +81,7 @@
           "lib/netcoreapp1.0/ConfigService.dll": {}
         }
       },
-      "ConfigurationAdapter/2.0.0-137": {
+      "ConfigurationAdapter/2.0.0-142": {
         "dependencies": {
           "System.Runtime.Serialization.Formatters": "4.3.0",
           "System.Xml.XmlSerializer": "4.3.0"
@@ -90,17 +90,17 @@
           "lib/netcoreapp1.1/ConfigurationAdapter.dll": {}
         }
       },
-      "CustomUtilities/2.0.0-137": {
+      "CustomUtilities/2.0.0-142": {
         "runtime": {
           "lib/netcoreapp1.1/CustomUtilities.dll": {}
         }
       },
       "DalskiAgent/2.0.0-13": {
         "dependencies": {
-          "ASC": "2.0.0-137",
+          "ASC": "2.0.0-142",
           "GeoCommon": "2.0.0-16",
           "GeoGridEnvironment": "2.0.0-19",
-          "LifeAPI": "2.0.0-137",
+          "LifeAPI": "2.0.0-142",
           "MongoDB.Driver": "2.4.0",
           "SpatialAPI": "2.0.0-22",
           "System.Runtime.Serialization.Formatters": "4.3.0"
@@ -125,7 +125,7 @@
       "GeoGridEnvironment/2.0.0-19": {
         "dependencies": {
           "GeoCommon": "2.0.0-16",
-          "LifeAPI": "2.0.0-137"
+          "LifeAPI": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.0/GeoGridEnvironment.dll": {}
@@ -147,15 +147,15 @@
       },
       "GridPotentialFieldLayer/2.0.0-27": {
         "dependencies": {
-          "LCConnector": "2.0.0-137",
-          "LifeAPI": "2.0.0-137",
+          "LCConnector": "2.0.0-142",
+          "LifeAPI": "2.0.0-142",
           "Mars.CloudSupport.File": "2.0.0-11"
         },
         "runtime": {
           "lib/netcoreapp1.0/GridPotentialFieldLayer.dll": {}
         }
       },
-      "InfluxDB.Net/2.0.0-13": {
+      "InfluxDB.Net/2.0.0-15": {
         "dependencies": {
           "Newtonsoft.Json": "9.0.1"
         },
@@ -163,91 +163,91 @@
           "lib/netcoreapp1.0/InfluxDB.Net.dll": {}
         }
       },
-      "LayerContainerFacade/2.0.0-137": {
+      "LayerContainerFacade/2.0.0-142": {
         "dependencies": {
           "Autofac": "4.2.1",
-          "CommonTypes": "2.0.0-137",
-          "ConfigurationAdapter": "2.0.0-137",
-          "LCConnector": "2.0.0-137",
-          "LayerContainerShared": "2.0.0-137",
-          "LayerFactory": "2.0.0-137",
-          "LayerRegistry": "2.0.0-137",
-          "MulticastAdapter": "2.0.0-137",
-          "PartitionManager": "2.0.0-137",
-          "RTEManager": "2.0.0-137",
-          "ResultAdapter": "2.0.0-137",
-          "Scs": "2.0.0-137"
+          "CommonTypes": "2.0.0-142",
+          "ConfigurationAdapter": "2.0.0-142",
+          "LCConnector": "2.0.0-142",
+          "LayerContainerShared": "2.0.0-142",
+          "LayerFactory": "2.0.0-142",
+          "LayerRegistry": "2.0.0-142",
+          "MulticastAdapter": "2.0.0-142",
+          "PartitionManager": "2.0.0-142",
+          "RTEManager": "2.0.0-142",
+          "ResultAdapter": "2.0.0-142",
+          "Scs": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/LayerContainerFacade.dll": {}
         }
       },
-      "LayerContainerShared/2.0.0-137": {
+      "LayerContainerShared/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
-          "ConfigurationAdapter": "2.0.0-137",
-          "MulticastAdapter": "2.0.0-137",
-          "NodeRegistry": "2.0.0-137",
+          "CommonTypes": "2.0.0-142",
+          "ConfigurationAdapter": "2.0.0-142",
+          "MulticastAdapter": "2.0.0-142",
+          "NodeRegistry": "2.0.0-142",
           "System.Runtime.Serialization.Formatters": "4.3.0"
         },
         "runtime": {
           "lib/netcoreapp1.1/LayerContainerShared.dll": {}
         }
       },
-      "LayerFactory/2.0.0-137": {
+      "LayerFactory/2.0.0-142": {
         "dependencies": {
-          "LCConnector": "2.0.0-137",
-          "LayerLoader": "2.0.0-137",
-          "LayerRegistry": "2.0.0-137",
-          "LifeAPI": "2.0.0-137"
+          "LCConnector": "2.0.0-142",
+          "LayerLoader": "2.0.0-142",
+          "LayerRegistry": "2.0.0-142",
+          "LifeAPI": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/LayerFactory.dll": {}
         }
       },
-      "LayerLoader/2.0.0-137": {
+      "LayerLoader/2.0.0-142": {
         "dependencies": {
-          "LCConnector": "2.0.0-137",
+          "LCConnector": "2.0.0-142",
           "Microsoft.Extensions.DependencyModel": "1.1.0"
         },
         "runtime": {
           "lib/netcoreapp1.1/LayerLoader.dll": {}
         }
       },
-      "LayerNameService/2.0.0-137": {
+      "LayerNameService/2.0.0-142": {
         "dependencies": {
-          "LNSConnector": "2.0.0-137",
-          "Scs": "2.0.0-137"
+          "LNSConnector": "2.0.0-142",
+          "Scs": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/LayerNameService.dll": {}
         }
       },
-      "LayerRegistry/2.0.0-137": {
+      "LayerRegistry/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
-          "LNSConnector": "2.0.0-137",
-          "LifeAPI": "2.0.0-137",
-          "NodeRegistry": "2.0.0-137",
-          "Scs": "2.0.0-137"
+          "CommonTypes": "2.0.0-142",
+          "LNSConnector": "2.0.0-142",
+          "LifeAPI": "2.0.0-142",
+          "NodeRegistry": "2.0.0-142",
+          "Scs": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/LayerRegistry.dll": {}
         }
       },
-      "LCConnector/2.0.0-137": {
+      "LCConnector/2.0.0-142": {
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
-          "Scs": "2.0.0-137"
+          "Scs": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/LCConnector.dll": {}
         }
       },
-      "LifeAPI/2.0.0-137": {
+      "LifeAPI/2.0.0-142": {
         "dependencies": {
           "GeoCommon": "2.0.0-16",
-          "LCConnector": "2.0.0-137",
+          "LCConnector": "2.0.0-142",
           "MARS.Shuttle.SimulationConfig": "2.0.0-15",
           "System.Runtime.Serialization.Formatters": "4.3.0",
           "System.Xml.XmlSerializer": "4.3.0"
@@ -256,16 +256,16 @@
           "lib/netcoreapp1.1/LifeAPI.dll": {}
         }
       },
-      "LIFETimeSeriesLayer/2.0.0-13": {
+      "LIFETimeSeriesLayer/2.0.0-15": {
         "dependencies": {
           "ConfigService": "2.0.0-8",
           "EurekaClient": "2.0.0-16",
-          "InfluxDB.Net": "2.0.0-13",
-          "LCConnector": "2.0.0-137",
-          "LifeAPI": "2.0.0-137"
+          "InfluxDB.Net": "2.0.0-15",
+          "LCConnector": "2.0.0-142",
+          "LifeAPI": "2.0.0-142"
         },
         "runtime": {
-          "lib/netcoreapp1.0/LIFETimeSeriesLayer.dll": {}
+          "lib/netcoreapp1.1/LIFETimeSeriesLayer.dll": {}
         }
       },
       "LIFEUtilities/2.0.0-3": {
@@ -273,9 +273,9 @@
           "lib/netcoreapp1.0/LIFEUtilities.dll": {}
         }
       },
-      "LNSConnector/2.0.0-137": {
+      "LNSConnector/2.0.0-142": {
         "dependencies": {
-          "Scs": "2.0.0-137"
+          "Scs": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/LNSConnector.dll": {}
@@ -299,14 +299,14 @@
           "lib/netcoreapp1.0/MARS.Shuttle.SimulationConfig.dll": {}
         }
       },
-      "MARSLocalStarter/2.0.0-137": {
+      "MARSLocalStarter/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
-          "LCConnector": "2.0.0-137",
-          "LNSConnector": "2.0.0-137",
-          "LayerContainerFacade": "2.0.0-137",
-          "SMConnector": "2.0.0-137",
-          "SimulationManagerFacade": "2.0.0-137",
+          "CommonTypes": "2.0.0-142",
+          "LCConnector": "2.0.0-142",
+          "LNSConnector": "2.0.0-142",
+          "LayerContainerFacade": "2.0.0-142",
+          "SMConnector": "2.0.0-142",
+          "SimulationManagerFacade": "2.0.0-142",
           "System.ComponentModel.TypeConverter": "4.3.0"
         },
         "runtime": {
@@ -414,18 +414,18 @@
           "lib/netstandard1.3/Microsoft.Net.Http.Server.dll": {}
         }
       },
-      "ModelContainer/2.0.0-137": {
+      "ModelContainer/2.0.0-142": {
         "dependencies": {
           "ConfigService": "2.0.0-8",
-          "ConfigurationAdapter": "2.0.0-137",
+          "ConfigurationAdapter": "2.0.0-142",
           "EurekaClient": "2.0.0-16",
-          "LCConnector": "2.0.0-137",
-          "LayerLoader": "2.0.0-137",
-          "LifeAPI": "2.0.0-137",
+          "LCConnector": "2.0.0-142",
+          "LayerLoader": "2.0.0-142",
+          "LifeAPI": "2.0.0-142",
           "MARS.Shuttle.SimulationConfig": "2.0.0-15",
           "Newtonsoft.Json": "9.0.1",
-          "SMConnector": "2.0.0-137",
-          "SimulationManagerShared": "2.0.0-137"
+          "SMConnector": "2.0.0-142",
+          "SimulationManagerShared": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/ModelContainer.dll": {}
@@ -459,9 +459,9 @@
           "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
         }
       },
-      "MulticastAdapter/2.0.0-137": {
+      "MulticastAdapter/2.0.0-142": {
         "dependencies": {
-          "ConfigurationAdapter": "2.0.0-137",
+          "ConfigurationAdapter": "2.0.0-142",
           "System.Net.NetworkInformation": "4.3.0"
         },
         "runtime": {
@@ -508,13 +508,13 @@
           "lib/netstandard1.5/NLog.dll": {}
         }
       },
-      "NodeRegistry/2.0.0-137": {
+      "NodeRegistry/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
-          "ConfigurationAdapter": "2.0.0-137",
-          "CustomUtilities": "2.0.0-137",
+          "CommonTypes": "2.0.0-142",
+          "ConfigurationAdapter": "2.0.0-142",
+          "CustomUtilities": "2.0.0-142",
           "LIFEUtilities": "2.0.0-3",
-          "MulticastAdapter": "2.0.0-137",
+          "MulticastAdapter": "2.0.0-142",
           "Newtonsoft.Json": "9.0.1"
         },
         "runtime": {
@@ -524,19 +524,19 @@
       "ObstacleLayer/2.0.0-34": {
         "dependencies": {
           "GeoCommon": "2.0.0-16",
-          "LifeAPI": "2.0.0-137",
+          "LifeAPI": "2.0.0-142",
           "Mars.CloudSupport.File": "2.0.0-11"
         },
         "runtime": {
           "lib/netcoreapp1.1/ObstacleLayer.dll": {}
         }
       },
-      "PartitionManager/2.0.0-137": {
+      "PartitionManager/2.0.0-142": {
         "dependencies": {
-          "LCConnector": "2.0.0-137",
-          "LayerFactory": "2.0.0-137",
-          "LifeAPI": "2.0.0-137",
-          "RTEManager": "2.0.0-137"
+          "LCConnector": "2.0.0-142",
+          "LayerFactory": "2.0.0-142",
+          "LifeAPI": "2.0.0-142",
+          "RTEManager": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/PartitionManager.dll": {}
@@ -547,9 +547,9 @@
           "lib/netstandard1.5/RabbitMQ.Client.dll": {}
         }
       },
-      "RabbitMQClient/2.0.0-137": {
+      "RabbitMQClient/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
+          "CommonTypes": "2.0.0-142",
           "ConfigService": "2.0.0-8",
           "RabbitMQ.Client": "4.1.1"
         },
@@ -557,11 +557,11 @@
           "lib/netcoreapp1.1/RabbitMQClient.dll": {}
         }
       },
-      "ResultAdapter/2.0.0-137": {
+      "ResultAdapter/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
+          "CommonTypes": "2.0.0-142",
           "ConfigService": "2.0.0-8",
-          "LifeAPI": "2.0.0-137",
+          "LifeAPI": "2.0.0-142",
           "MongoDB.Driver": "2.4.0",
           "RabbitMQ.Client": "4.1.1"
         },
@@ -569,12 +569,12 @@
           "lib/netcoreapp1.1/ResultAdapter.dll": {}
         }
       },
-      "RTEManager/2.0.0-137": {
+      "RTEManager/2.0.0-142": {
         "dependencies": {
-          "LCConnector": "2.0.0-137",
-          "LifeAPI": "2.0.0-137",
-          "NodeRegistry": "2.0.0-137",
-          "ResultAdapter": "2.0.0-137"
+          "LCConnector": "2.0.0-142",
+          "LifeAPI": "2.0.0-142",
+          "NodeRegistry": "2.0.0-142",
+          "ResultAdapter": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/RTEManager.dll": {}
@@ -602,27 +602,27 @@
           }
         }
       },
-      "RuntimeEnvironment/2.0.0-137": {
+      "RuntimeEnvironment/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
-          "LCConnector": "2.0.0-137",
-          "LayerLoader": "2.0.0-137",
-          "LifeAPI": "2.0.0-137",
-          "ModelContainer": "2.0.0-137",
-          "NodeRegistry": "2.0.0-137",
-          "RabbitMQClient": "2.0.0-137",
-          "SMConnector": "2.0.0-137",
-          "Scs": "2.0.0-137"
+          "CommonTypes": "2.0.0-142",
+          "LCConnector": "2.0.0-142",
+          "LayerLoader": "2.0.0-142",
+          "LifeAPI": "2.0.0-142",
+          "ModelContainer": "2.0.0-142",
+          "NodeRegistry": "2.0.0-142",
+          "RabbitMQClient": "2.0.0-142",
+          "SMConnector": "2.0.0-142",
+          "Scs": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/RuntimeEnvironment.dll": {}
         }
       },
-      "Scs/2.0.0-137": {
+      "Scs/2.0.0-142": {
         "dependencies": {
-          "ConfigurationAdapter": "2.0.0-137",
-          "CustomUtilities": "2.0.0-137",
-          "MulticastAdapter": "2.0.0-137",
+          "ConfigurationAdapter": "2.0.0-142",
+          "CustomUtilities": "2.0.0-142",
+          "MulticastAdapter": "2.0.0-142",
           "Newtonsoft.Json": "9.0.1",
           "System.Runtime.Serialization.Formatters": "4.3.0"
         },
@@ -630,36 +630,36 @@
           "lib/netcoreapp1.1/Scs.dll": {}
         }
       },
-      "SimulationManagerFacade/2.0.0-137": {
+      "SimulationManagerFacade/2.0.0-142": {
         "dependencies": {
           "Autofac": "4.2.1",
-          "ConfigurationAdapter": "2.0.0-137",
-          "LNSConnector": "2.0.0-137",
-          "LayerNameService": "2.0.0-137",
+          "ConfigurationAdapter": "2.0.0-142",
+          "LNSConnector": "2.0.0-142",
+          "LayerNameService": "2.0.0-142",
           "Microsoft.Net.Http.Server": "1.1.0",
-          "ModelContainer": "2.0.0-137",
+          "ModelContainer": "2.0.0-142",
           "Newtonsoft.Json": "9.0.1",
-          "NodeRegistry": "2.0.0-137",
-          "RuntimeEnvironment": "2.0.0-137",
-          "SMConnector": "2.0.0-137",
-          "Scs": "2.0.0-137",
-          "SimulationManagerShared": "2.0.0-137"
+          "NodeRegistry": "2.0.0-142",
+          "RuntimeEnvironment": "2.0.0-142",
+          "SMConnector": "2.0.0-142",
+          "Scs": "2.0.0-142",
+          "SimulationManagerShared": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/SimulationManagerFacade.dll": {}
         }
       },
-      "SimulationManagerShared/2.0.0-137": {
+      "SimulationManagerShared/2.0.0-142": {
         "dependencies": {
-          "CommonTypes": "2.0.0-137",
-          "MulticastAdapter": "2.0.0-137",
-          "NodeRegistry": "2.0.0-137"
+          "CommonTypes": "2.0.0-142",
+          "MulticastAdapter": "2.0.0-142",
+          "NodeRegistry": "2.0.0-142"
         },
         "runtime": {
           "lib/netcoreapp1.1/SimulationManagerShared.dll": {}
         }
       },
-      "SMConnector/2.0.0-137": {
+      "SMConnector/2.0.0-142": {
         "dependencies": {
           "System.Runtime.Serialization.Formatters": "4.3.0"
         },
@@ -669,7 +669,7 @@
       },
       "SpatialAPI/2.0.0-22": {
         "dependencies": {
-          "LifeAPI": "2.0.0-137",
+          "LifeAPI": "2.0.0-142",
           "Newtonsoft.Json": "9.0.1"
         },
         "runtime": {
@@ -862,8 +862,8 @@
       },
       "KNPMarulaTreeLayer/1.0.0": {
         "dependencies": {
-          "AgentManagerService": "2.0.0-137",
-          "AgentShadowingService": "2.0.0-137",
+          "AgentManagerService": "2.0.0-142",
+          "AgentShadowingService": "2.0.0-142",
           "DalskiAgent": "2.0.0-13",
           "KNPPrecipitationLayer": "1.0.0"
         },
@@ -873,7 +873,7 @@
       },
       "KNPObstacleLayer/1.0.0": {
         "dependencies": {
-          "LifeAPI": "2.0.0-137",
+          "LifeAPI": "2.0.0-142",
           "ObstacleLayer": "2.0.0-34"
         },
         "runtime": {
@@ -882,7 +882,7 @@
       },
       "KNPPrecipitationLayer/1.0.0": {
         "dependencies": {
-          "LIFETimeSeriesLayer": "2.0.0-13"
+          "LIFETimeSeriesLayer": "2.0.0-15"
         },
         "runtime": {
           "KNPPrecipitationLayer.dll": {}
@@ -898,7 +898,7 @@
       },
       "KNPTemperatureLayer/1.0.0": {
         "dependencies": {
-          "LIFETimeSeriesLayer": "2.0.0-13"
+          "LIFETimeSeriesLayer": "2.0.0-15"
         },
         "runtime": {
           "KNPTemperatureLayer.dll": {}
@@ -920,45 +920,45 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AgentManagerService/2.0.0-137": {
+    "AgentManagerService/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-rmsvZZhQGSuUKZTemdzK12BzwiEi1O6LH1SQnEp04w3B7UaJmdbor3QYpHtdpKyX3NJY2K6s4W6/cwhRrBlZgQ=="
+      "sha512": "sha512-LxDXSM1DxnFpjhGpWf+AOz6yiRcKpaxA1J8DIsnlyzWzQiMcJR3meeR3oSbsfd+pUgCrCjCkbsMsxWezci9Qnw=="
     },
-    "AgentShadowingService/2.0.0-137": {
+    "AgentShadowingService/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-irbsPVS7OEwLBH7cPL77r1NAFsxmTcewMkK6vSZrkHRWklQzBEJGrq7sEGucBbxu38Fq3XvptuuaATLm3Ipa3g=="
+      "sha512": "sha512-722jhqjIlEUzohljhEGvNIzvOIf4zengNw5w6W0QC5ngTjNajkW/x0jw94/iornhU8vx0TOnD4ejCBsbhDl9AQ=="
     },
-    "ASC/2.0.0-137": {
+    "ASC/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-lddzqtTCBJBTx0hednFLK9JcWIgMwruElxVstpH1g6Rm1vYRNPHlSZh+ZROSZLiNWGX/KheZKfj42MeDrDut7A=="
+      "sha512": "sha512-ZpwFIAjzdScNkDG0iF5zcNG9lSv4HNBdoyg0MEYJtkBEfGTQgjtaA+aV2LEiK3t0tCKxJ3DlHOWkPw0Wgx+nbg=="
     },
     "Autofac/4.2.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-mLXJziTZPIt7R6m8SmPIOjMTd4k8Ok9L21j4yFniyA8AogHxEL2XburSwElJLmGU5KsgeMkpuTI22S3GSOeLqQ=="
     },
-    "CommonTypes/2.0.0-137": {
+    "CommonTypes/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-oT3rLh9kyBC06ghOUsgPb+NTl0vQYBNL1Vpetf56CToutZp0S2vnVRjL2Di5RyO45JhxCao0H91BQEZRc/9YWw=="
+      "sha512": "sha512-aCQiulcUEJmNEDlTM4QmZO7UYWk/66FkBhqWutAIZfyE3a0GV29cElj1mVswx/WEedL2LF/0fgxKI2sOJIBfCQ=="
     },
     "ConfigService/2.0.0-8": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-NOU2FcvaW8JuDJek8IG5ip34hpdOxVa6+WgxTcjJYPzY55upQQulrWUGzMHU3ZBFxTV0b798sOwuRSKYFNxJ+A=="
     },
-    "ConfigurationAdapter/2.0.0-137": {
+    "ConfigurationAdapter/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-0yEBWjljSeidKy7ds19fI8djMcPBguOaF4Od6obkZxdJtDdZz+/N7yda8PN95eUztZbr8uiqBB3izI71PD60Fw=="
+      "sha512": "sha512-KmdblgCcD6J0SugTGn7o32x+wM9VYevzwd4qelhmUcLv+AWFAOYydhy/M827bEx7Xj8gtkSC8SyB3aw6cL0OMQ=="
     },
-    "CustomUtilities/2.0.0-137": {
+    "CustomUtilities/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-QqM/zZR+vmN+VxNC+hTIIm+PhzwMhOciKTB4nQD0NXg87Zkc7rDx2za0rJTJ7UHH1hsfLgpB5q37Ft6D2uv9vg=="
+      "sha512": "sha512-zeBrEUZoQ7C/b8JP4eTTqBUutJ6S8bDVFh3G86u6xtsuQy/s4l6DxOXSJkqjFZYBGXgqWhfHFXqoQSA8sjRa0w=="
     },
     "DalskiAgent/2.0.0-13": {
       "type": "package",
@@ -995,65 +995,65 @@
       "serviceable": true,
       "sha512": "sha512-JXA+5Epekys+/frw/fabrKyXthE2YPA67oTu9vc5zkZn5+Zdm1l0gO5qJUlBYSoExBcFjozSXVzY5auMTGEccw=="
     },
-    "InfluxDB.Net/2.0.0-13": {
+    "InfluxDB.Net/2.0.0-15": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-I0oKNj/kMEKKQj2QqZYB/3/bVaQRZHhl1X6wSg86sHOV/JC5fa4ONbKPNSH6WyZ3JWSJetpekkHSjbXlcXTWWg=="
+      "sha512": "sha512-0o6zCPsOept9oTcTFVTH5UUV7OTSw1x2ZVc5ectLqospsArrgvg8WQanYkAZC/8z/gv6+wqgI0n1p615ZnnL1A=="
     },
-    "LayerContainerFacade/2.0.0-137": {
+    "LayerContainerFacade/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-LvfcGq7Yyqr6qGFTwZDNH1eiJhsSmLJDymrbkMfw6oUSGz76B/3HRdQ8DTNoJxO/hS2wUOo1klfN5OSu3CRXAw=="
+      "sha512": "sha512-sEsb8PcQzUrcSzKtt1EwYdPx4DO+ozmSUlrJDQqBMdrs7BGtLWUqyM4yMVtahpyklFtv5ll0f5E+h4jCFw6zrQ=="
     },
-    "LayerContainerShared/2.0.0-137": {
+    "LayerContainerShared/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-+/hk4r/7cLvPIbjvcOVkCP009YxyF7aOhtJjnFaGnHJNp7Tbk+yIBfi2J7UjVplIFbLe8Zxbvy23VgW9hHoPHA=="
+      "sha512": "sha512-kfCUo5YOzJ0Kkls26SqdYagYOOW81r0I9/2OA4g63ZBsEeNvAodCejaVu0/KcIdL+1HYDaw3alDxWYMSlQ1g2Q=="
     },
-    "LayerFactory/2.0.0-137": {
+    "LayerFactory/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xX4W1W2TPCV6rHJKe1rOJ5gr9IuE1mHg/txtiLsfrmmgc04O/+oYsvh1x2qTYjaibJGNhOxlL0EjowRkgL3EmQ=="
+      "sha512": "sha512-+JOpqIVyqlApBRcJKR72guujkMo9mKhFOJwylq2v89NKo17W0fS+0NXisuHeeA8sKgT9ZoS8uloLFwZWVeplFA=="
     },
-    "LayerLoader/2.0.0-137": {
+    "LayerLoader/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-3FpAzFF0CIh+J6/d+dmdwVSGj8g2AB3s4J3Nkjy0EHC054l6hFyxXFAn6XCCVW2u1BTZB1hj9r1cfO5Cdpg8hw=="
+      "sha512": "sha512-+D6i29UAFIz7itnM19E7PcSqMYMrHckyPZH1MNVhuD/6vsHHMHXPLY2tXU9DQhtV9qMlmrqDhcif19qUHqL4AQ=="
     },
-    "LayerNameService/2.0.0-137": {
+    "LayerNameService/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-NIK9wlPIoqFYGuanPZHkeIrWOI4rztNTU7IxQFUAexi/u6euOUFsKOPWqUH8Af9BqcjYv9Xog1UxXLgnjFmP4A=="
+      "sha512": "sha512-KJxz0AFXZwqlOAIl1LH9rSu56LYbk9WGvx36a1DRAXNZ9ri8XhKRitUXpqvGjnxbPhPcksOHLfQ32I5yOVPGdg=="
     },
-    "LayerRegistry/2.0.0-137": {
+    "LayerRegistry/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-a9fx4h6n9xtHsQ5lACzmEAohQ1SLLCZ7giR8HodWAM1nlaeSMDe4oQvBfyKRX02/XdXn2OSEMt7/P5c6mNwKDQ=="
+      "sha512": "sha512-QT11IlBp2z91fCArVXDoytZZzfE5R/RqfQ2CE5jtO5su0ir9faoetzxhi09TKt4Abbx/LA/xSPYvjY3zZMUWJQ=="
     },
-    "LCConnector/2.0.0-137": {
+    "LCConnector/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-1Bi2qe2P+Koq9IxnB5bPPGOGq/0wtZghC5GzZX8JaLyRp7dMSVG09O2Y2Y+kwiNWmCFY8jhuhu4n06Zn0RINsA=="
+      "sha512": "sha512-lJkC8du4ioHeyf/Yps1rhP/RmsPyCOCBXqn1ZyBho8MM78ZUBSb4H/AZU1W76jkjvwDL8CcMmCUrvCYbY32uCA=="
     },
-    "LifeAPI/2.0.0-137": {
+    "LifeAPI/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-LKsLcAQ5G4cSNcjf2P9mtEAdLra82PFYJFJyH2HF/2AlHeK3iA9+hjGHi1duozIoCqQNkoG+yZEyALvmF751mw=="
+      "sha512": "sha512-ux4hFuBjMLeMQX5y7fvoEn6qxXZyZEdAdojcUPeJHbZFeGBFrQhmKbUvYIsQxat/QEc1JHfoCy6/A/pQZhhI1g=="
     },
-    "LIFETimeSeriesLayer/2.0.0-13": {
+    "LIFETimeSeriesLayer/2.0.0-15": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-IBalkfkb2iejM8iKwe9VGWA2zBvQXX0h8kzLxWreHIkbem9LKHJZvTqbln4eL7VMDSrgeRYb2J+odlhns/sOew=="
+      "sha512": "sha512-2pR7TcYJjw1KaOtOVY/RL/nhBycE7d56Rlcy2aDEYHFKqTY2qL7o+gDBmRF4116trKNUpNlm5/LWxH1df7VZ6w=="
     },
     "LIFEUtilities/2.0.0-3": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-xFzWuXj0obw7N+2QsQdDzKV1LF7MVFyhYbf9gdXZPQ2OXrKZ3hQhR8gmPv83ns5jM6JOlNA1w8v/ji7ViFPVpQ=="
     },
-    "LNSConnector/2.0.0-137": {
+    "LNSConnector/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-1PwB7H+wDaZu/m+M3H+w4kAE3zJ9enTGlh2BFWqXVRopcUX8yhjWOvDnePS4AUKVUGxnX2sv6fHtHyeyoMcnbw=="
+      "sha512": "sha512-F5T0v3ET5gRzLJb+Vli2CGGRkO7TLhAp0x4X2zZklFATvaQ1WtCBveLEx/50eG5KXWDYPbrKfLz1tzNqllchLg=="
     },
     "Mars.CloudSupport.File/2.0.0-11": {
       "type": "package",
@@ -1065,10 +1065,10 @@
       "serviceable": true,
       "sha512": "sha512-e7VuBpXEPDMcjLJ4Vj2kZnx9qmArJeuDoRestlBUOryv7SB1EHms2/RDcCXREc1Yp7Jc+ZlY/rNjJhcsNRLllA=="
     },
-    "MARSLocalStarter/2.0.0-137": {
+    "MARSLocalStarter/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RqvT5qQaoqssSzQAOT7V+fctwfCNr3zLYDP1yAUboSY5IlIJZSQt3NZpMvw51yxCtvIGihmQEvTmsm09Fyrqqg=="
+      "sha512": "sha512-3ftpytrmzXLKj2TQbEenwM2Wn3tmzNy/JO3EJ3XK+IKQbPwDx/nIuyb8loYG14Mr4QuU1uoq3FQ5qzt3k0WRTw=="
     },
     "Microsoft.DotNet.PlatformAbstractions/1.1.0": {
       "type": "package",
@@ -1135,10 +1135,10 @@
       "serviceable": true,
       "sha512": "sha512-Hbw0lG3aY3BxGFru83IT6M1K85tZImyfQkQI5DoPIjtOQ2fmoqsP/xE0kvUB+fG12znVdVRcoByKoex1fyVCfQ=="
     },
-    "ModelContainer/2.0.0-137": {
+    "ModelContainer/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2X71o18qaf8PyFVkhvFcd24edOFKzov86cMOcwNQx/hRINEXk8wCT8EGbq8uGSc3e8YgJBd+eMEBVZUmDEfhUw=="
+      "sha512": "sha512-aeH5gbqJn3cYxG9NpmNLmbR3QWrZebN5VP7JFbpPeOsDghGSZXK/WeSAiauggrfAEyg4I0p5X+A4rr+rY6wAOA=="
     },
     "MongoDB.Bson/2.4.0": {
       "type": "package",
@@ -1155,10 +1155,10 @@
       "serviceable": true,
       "sha512": "sha512-sYO15KAnnhaGgJv6wKUPH8A90lfUglnF/s457T9CClK0FogDjO56qI+vGH0bvqRnZvRQoznkPcci6/UYNKgWXA=="
     },
-    "MulticastAdapter/2.0.0-137": {
+    "MulticastAdapter/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RUtpfx0YJNn3kUp3A4od2zCLwAMbtij7n1LDVl9qHEEHk5nJ4ZH1eGBdWX9PWu1JpGXZJkq3iwGtuCw7blMc3g=="
+      "sha512": "sha512-qmUFzOVlEUBHvDqYjdDqwGFDyXZ/d0uxsLkOShP3eQJBC40QdM0qPYh4avTDmn/33Og+ebPhwP3a5zD+dnBBMA=="
     },
     "MySql.Data/7.0.6-ir31": {
       "type": "package",
@@ -1175,40 +1175,40 @@
       "serviceable": true,
       "sha512": "sha512-LDRcdjv5VG9EWz+mnFqdSolUci+j+DBPIPjm7Xdam3xa1F9Rt7o0UpYoCnNRulqHzpKbU704o7Ad4ck9WxDhnw=="
     },
-    "NodeRegistry/2.0.0-137": {
+    "NodeRegistry/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-DTDVQXc6/OS1AYzMWWqWqPCZ+xfj4zMdZSuRUUHjzuUGHPJsTm4OrAtZG8nX4uBlWMLRwA7gaC0csTRZdIjSWw=="
+      "sha512": "sha512-TKSgFhiIOBaiKlKPfbAwgGuedQecw7812pxGSObD6UfYe8SVW9hNfhsuefmRH8ZLVX6UeuFijk1kqYDRBr3dOQ=="
     },
     "ObstacleLayer/2.0.0-34": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-VeL6/1bf6PA5x8/SuyQ+MPc3TYuPR1UvdNiitQALnl6l+YOd3AAMa5j+euk+UrgW+cMWxFSsSjoWj1f0BUJfAw=="
     },
-    "PartitionManager/2.0.0-137": {
+    "PartitionManager/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZQPE1/kOrIQmBlgN7H9NXX/FewB9AJPHx9cwT6HZ750kh5ZrMmfal/XLdiCB4HT24lamgP3BTW2yG/TN8ncNTg=="
+      "sha512": "sha512-g0roxb6G9D3InkQRv3e8h/Gz7lAfUAdTzGRRmQ8kPsWpO5WFezpPfYXh8eU7My/ky0AzQMpXRCzz9Hb2FUiK/A=="
     },
     "RabbitMQ.Client/4.1.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-adis8yHbNguFOniec6JC1YV9GEyAr0KoX+ZiRzHDxYrn9O5cmkf8B1TzL51JVcP42zDzYubvuUF65uFqo5kDeg=="
     },
-    "RabbitMQClient/2.0.0-137": {
+    "RabbitMQClient/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-FF7F93B2CqZ2VTLL3GOz+F6v/81kcVgN/S0RoJeo6GRgQ895y8mowl4bm3PoCviJhFi8apKnL4vnFW+gTrHTRw=="
+      "sha512": "sha512-F9xKZiPh1BLLemOIaXrwj9EjJqkVNJRHttZlDQoTnJ36HnJa1hzDbiS1eWCdbfn6znvWe1MnMw/IwMQmr3hXOA=="
     },
-    "ResultAdapter/2.0.0-137": {
+    "ResultAdapter/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-bNvu76zeN4It6fHo3CO8nrsGJoA+ZgB/KaF4vLzydv3S5QSxQlOT4yldguoxva4hQ+toxu5+XikmX91IUY+9Bw=="
+      "sha512": "sha512-9r8vKqU1N7OkvhByPtzE6kqCt7Xn1bMiM8vFv00aCDW1tg+5Ps2RAZRmuGAmVTxtH/AidW5yNJc6sjuhWqrJjg=="
     },
-    "RTEManager/2.0.0-137": {
+    "RTEManager/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2gnulZBWtVwVCBx727l4hGYIxZjBxoAtubdxnRm11+wiZw71I/0oUGAtEwrU8WAzFtDGwY8eisi5/Chc3GljnA=="
+      "sha512": "sha512-/hzWT8JvPJR4FzDORwNJJUpZ/BeFXtgY7uvxew0Tpw0c7f4RFX5gHBExeXqZHMhmezhirlgDyOGUvQwSSAlTXw=="
     },
     "runtime.native.System.Data.SqlClient.sni/4.3.0": {
       "type": "package",
@@ -1225,30 +1225,30 @@
       "serviceable": true,
       "sha512": "sha512-4cXRTIcttvIreAoqK/5hzTtzepeggac+m5A0rzH+9zLtnFh2J0rLuGeJR4KjNLyKqPzO0kjqrs5lkRJEKX8HAA=="
     },
-    "RuntimeEnvironment/2.0.0-137": {
+    "RuntimeEnvironment/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-pdtsnX6xXDNDEocBcMOHfIwwKBd+aA+y8bCtnuHg4qiy7w7cgrsKytV/0hlKRZV3J5qKbJtf2+rCJvncVbhHpQ=="
+      "sha512": "sha512-9ulahUPKrfHDTcrGZsN6dVV50K9/1l4K/feYQKx9GJ9JXwGeZHemVjntabWOdqJpP6193iQHLhiMt30iklBC8w=="
     },
-    "Scs/2.0.0-137": {
+    "Scs/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aaMdHlz4YYVrja3fjwwX565DtqfvQXgRPiyKq9I3d5xrON5OmdHKJ3S4g8OzjBJtII8gnCbUgQQC4HPwbWn4+g=="
+      "sha512": "sha512-Ofawt6BetV8hdXZv8AwR/PXcDV4HFYKGvalHfmYK93Cw5v2GL+BAQJNaecYp7q+KNheSBY4yhZtq+qQof/kBtA=="
     },
-    "SimulationManagerFacade/2.0.0-137": {
+    "SimulationManagerFacade/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RdbquU9hODEAHucTT4omnWguM16sjC8UAPFg0wcIxUc24+9rghvcvz4BV4BdJCl3k3P6MC1HzBJlLH2wi8gsew=="
+      "sha512": "sha512-0yWaVdIKgWFueosQlzTHxtPp8GmPsTZEOrMOrhVqUeen7S9E/0wRvFAhBqgaYpaGYmUC3ydFaf9BmGYS1gqK/g=="
     },
-    "SimulationManagerShared/2.0.0-137": {
+    "SimulationManagerShared/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ygqF9dTLi0Ch+wXUA6gOHyF4llijdAGnXD+DhFXBesGmPgOzoFabfofz0446H7zAtbKvfnaDhfvymklCBNWZXQ=="
+      "sha512": "sha512-/t1kr+Xqc0cp4m05vDQZu8JD2U1T5+iwkzz92knFaveaIDA02GSe2IFDZAO+kqZnSqbmzsH1dN9F1J6j/W91gg=="
     },
-    "SMConnector/2.0.0-137": {
+    "SMConnector/2.0.0-142": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-tVxvWP2rGjG4lL7xheyQfSGHdEHO4Q5gcaP1eLIip9cuKcAoviByeai8I5JJCY4RT+vXv5z1Ph8aIfy1u+6hSg=="
+      "sha512": "sha512-QJToGoJ02tGpUB23+lJMX5+8OiwvlrUYgZh2eG1Xp48luzMZ7F4lGdpakU0g2+XtD7CzB1fuP4+l4gVuI+Q0fA=="
     },
     "SpatialAPI/2.0.0-22": {
       "type": "package",
