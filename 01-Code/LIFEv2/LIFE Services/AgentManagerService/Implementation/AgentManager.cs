@@ -46,10 +46,11 @@ namespace AgentManagerService.Implementation
 
 			var marsConfigService = new ConfigServiceClient(MARSConfigServiceSettings.Address);
 			Console.WriteLine($"AgentManager: Using {MARSConfigServiceSettings.Address} as MARSConfigService address.");
+
 			// retreive ip, port, user and password of mariaDB to us as ROCK instance
-			string rockIP = marsConfigService.Get("rock/ip");
-			string rockUser = marsConfigService.Get("rock/serveruser");
-			string rockPassword = marsConfigService.Get("rock/serverpassword");
+            var rockIP = "mariadb"; // use k8s service name
+			var rockUser = marsConfigService.Get("rock/serveruser");
+			var rockPassword = marsConfigService.Get("rock/serverpassword");
 
 			var connectionString = string.Format("Server={0};Uid={1};Pwd={2};",rockIP,rockUser,rockPassword);
 

@@ -12,21 +12,13 @@ using System.IO;
 using ConfigurationAdapter.Interface;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
-using MARS.Shuttle.SimulationConfig.Interfaces;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using CommonTypes;
-using ConfigService;
-using MarsEurekaClient;
 using ModelContainer.Interfaces.Exceptions;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NLog.LayoutRenderers.Wrappers;
-using static System.String;
 
 namespace ModelContainer.Implementation
 {
@@ -80,33 +72,13 @@ namespace ModelContainer.Implementation
             if (_scenarioConfig != null) return _scenarioConfig;
 
 
-            var smServiceHost = "";
-            try
-            {
-                var marsConfigService = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-                smServiceHost = marsConfigService.Get("scenario-management-service/host");
-            }
-            catch (Exception)
-            {
-                // ignored, means service not reachable or key not present
-                Console.WriteLine("MARS Config Service not reachable, will try ServiceDiscovery with Eureka as fallback.");
-            }
 
-            if (smServiceHost == Empty)
-            {
-                var eureka = new EurekaClient();
-                var smService = eureka.GetInstancesForApplication("SCENARIO-MANAGEMENT-SERVICE").FirstOrDefault();
-                if (smService == null)
-                {
-                    throw new Exception(
-                        "No ScenarioManagementService could be found in MARS Cloud. LIFE is shutting down now :(");
-                }
-                smServiceHost = $"http://{smService.IpAddress}:{smService.Port}/";
-            }
+             var smServiceHost = "scenario-svc";
+
         
             var http = new HttpClient();
             Console.WriteLine("...downloading ScenarioConfig...");
-            var uri = new Uri($"{smServiceHost}/scenarios/{scenarioConfigId}/complete");
+            var uri = new Uri($"http://{smServiceHost}/scenarios/{scenarioConfigId}/complete");
             var getTask = http.GetAsync(uri);
             getTask.Wait();
             if (getTask.Result.StatusCode != HttpStatusCode.OK)

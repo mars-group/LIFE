@@ -6,12 +6,11 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
+
 using System.Collections.Generic;
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 using LifeAPI.Config;
-using MARS.Shuttle.SimulationConfig.Interfaces;
 using ModelContainer.Interfaces;
 using Newtonsoft.Json.Linq;
 using SimulationManagerShared;

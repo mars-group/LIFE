@@ -39,10 +39,10 @@ namespace ResultAdapter.Implementation.DataOutput {
         // Check if the connection is available. Otherwise (re-)initialize it.
         if (_channel == null || _channel.IsClosed) {
           var connection = new ConnectionFactory {
-            HostName = _csc.Get("rabbitmq/ip"),
+            HostName = "rabbitmq",
             UserName = _csc.Get("rabbitmq/user"),
             Password = _csc.Get("rabbitmq/pass"),
-            Port = int.Parse(_csc.Get("rabbitmq/port"))
+            Port = 5672
           }.CreateConnection();
           _channel = connection.CreateModel();
           _channel.QueueDeclare(_queueName, false, false, false, new Dictionary<string, object> {

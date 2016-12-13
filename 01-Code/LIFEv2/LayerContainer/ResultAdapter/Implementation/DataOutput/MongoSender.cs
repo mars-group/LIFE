@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ConfigService;
 using LifeAPI.Results;
 using MongoDB.Driver;
@@ -23,8 +21,8 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// <param name="cfgClient">MARS KV client for connection properties.</param>
     /// <param name="simId">Simulation ID. Used as collection name.</param>
     public MongoSender(IConfigServiceClient cfgClient, string simId) {
-      var ip = cfgClient.Get("mongodb/ip");
-      var port = cfgClient.Get("mongodb/port");
+      var ip = "result-mongodb";
+      var port = "27017";
       var client = new MongoClient("mongodb://"+ip+":"+port);
       var database = client.GetDatabase("SimResults");
       _collection = database.GetCollection<AgentSimResult>(simId);
@@ -53,25 +51,8 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// <param name="results">A number of result elements to be written.</param>
 	/// <param name = "currentTick">The current tick of the simulation.</param>
     public void SendVisualizationData(IEnumerable<AgentSimResult> results, int currentTick) {
-			
             _collection.InsertMany (results);
 			_notifier.AnnounceNewPackage(_simId, currentTick);
-			/*_collection.InsertManyAsync(results)
-				.ContinueWith(t => {
-					if(t.IsFaulted){
-						throw t.Exception;
-					}
-
-					if(t.IsCanceled){
-						throw new Exception("MongoDB Sender Task got cancelled!");
-					}
-
-					if(t.IsCompleted)
-					{
-						_notifier.AnnounceNewPackage(_simId, currentTick);
-					}
-				});
-			*/
     }
   }
 }
