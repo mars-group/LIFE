@@ -120,12 +120,9 @@ namespace MARSLocalStarter {
                 if (marsConfigAddress != string.Empty)
                 {
                     MARSConfigServiceSettings.Address = marsConfigAddress;
-                    Console.WriteLine($"Using ConfigServiceAddress {marsConfigAddress}");
                 }
-                else
-                {
-                    throw new Exception("Please specify a MARS Config Service Address, which is valid in your context!");
-                }
+
+                Console.WriteLine($"Using ConfigServiceAddress {MARSConfigServiceSettings.Address}");
 
                 simCore.StartSimulationWithModel(simulationId, model, 0, scenarioConfigToUse);
             }
