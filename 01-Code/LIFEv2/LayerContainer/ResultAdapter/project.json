@@ -10,11 +10,11 @@
   },
   "dependencies": {
     "LifeAPI": "2.0.0-*",
-    "ConfigService": "2.0.0-8",
     "CommonTypes": "2.0.0-*",
     "System.Threading.Tasks.Parallel": "4.3.0",
     "RabbitMQ.Client": "4.1.1",
-    "MongoDB.Driver": "2.4.0"
+    "ConfigService": "2.0.0-9",
+    "MongoDB.Driver": "2.4.1"
   },
   "frameworks": {
     "netstandard1.6": {
