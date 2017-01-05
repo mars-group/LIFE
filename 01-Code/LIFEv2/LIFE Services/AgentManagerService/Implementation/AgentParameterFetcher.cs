@@ -32,7 +32,6 @@ namespace AgentManagerService.Implementation
             var rockPassword = marsConfigService.Get("rock/serverpassword");
 
             _connectionString = string.Format("Server={0};Uid={1};Pwd={2};",rockIP,rockUser,rockPassword);
-            Console.WriteLine($"Connection to Database is made with: {_connectionString}");
 
         }
 
