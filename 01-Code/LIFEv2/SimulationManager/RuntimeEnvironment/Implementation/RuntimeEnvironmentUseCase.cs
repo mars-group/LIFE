@@ -269,16 +269,13 @@ namespace RuntimeEnvironment.Implementation
             var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Children().GetEnumerator();
             var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
-            var obstacleLayerSourceEnumerator =
-                scenarioConfig["InitializationDescription"]["ObstacleLayers"].Children().GetEnumerator();
+            var obstacleLayerSourceEnumerator = scenarioConfig["InitializationDescription"]["ObstacleLayers"].Children().GetEnumerator();
             var thereAreObstacleLayer = obstacleLayerSourceEnumerator.MoveNext();
 
-            var geoPotentialFieldLayerSourceEnumerator =
-                scenarioConfig["InitializationDescription"]["GeoPotentialFieldLayers"].Children().GetEnumerator();
+            var geoPotentialFieldLayerSourceEnumerator = scenarioConfig["InitializationDescription"]["GeoPotentialFieldLayers"].Children().GetEnumerator();
             var thereAreGeoPotentialFieldLayers = geoPotentialFieldLayerSourceEnumerator.MoveNext();
 
-            var gridPotentialFieldLayerSourceEnumerator =
-                scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Children().GetEnumerator();
+            var gridPotentialFieldLayerSourceEnumerator = scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Children().GetEnumerator();
             var thereAreGridPotentialFieldLayers = gridPotentialFieldLayerSourceEnumerator.MoveNext();
 
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
@@ -359,15 +356,31 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-                    else if ((thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
-                             ||
-                             (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
-                             ||
-                             (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
-                    )
+                    else if (thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
                     {
                         var olInfo = obstacleLayerSourceEnumerator.Current;
                         initData.AddFileInitInfo(olInfo["MetaDataId"].ToString());
+                        if (!obstacleLayerSourceEnumerator.MoveNext())
+                        {
+                            thereAreObstacleLayer = false;
+                        }
+                    } else if (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
+                    {
+                        var gridInfo = gridPotentialFieldLayerSourceEnumerator.Current;
+                        initData.AddFileInitInfo(gridInfo["MetaDataId"].ToString());
+                        if (!gridPotentialFieldLayerSourceEnumerator.MoveNext())
+                        {
+                            thereAreGridPotentialFieldLayers = false;
+                        }
+                    }
+                    else if (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
+                    {
+                        var geoInfo = geoPotentialFieldLayerSourceEnumerator.Current;
+                        initData.AddFileInitInfo(geoInfo["MetaDataId"].ToString());
+                        if (!geoPotentialFieldLayerSourceEnumerator.MoveNext())
+                        {
+                            thereAreGeoPotentialFieldLayers = false;
+                        }
                     }
                     else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
                         .Children()
@@ -469,68 +482,87 @@ namespace RuntimeEnvironment.Implementation
 							thereAreTimeSeriesLayers = false;
 						}
 					}
-				    else if ((thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
-                             ||
-				             (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
-				             ||
-				             (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
-                    )
+				    else if (thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
                     {
                         var olInfo = obstacleLayerSourceEnumerator.Current;
                         initData.AddFileInitInfo(olInfo["MetaDataId"].ToString());
-                    }
-                    else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
-                        .Children()
-                        .Any(j => j["LayerName"].ToString() == layerDescription.Name))
-                    {
-                        var basicLayerMapping = scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
-                            .First(j => j["LayerName"].ToString() == layerDescription.Name);
-
-                        foreach (var agentMapping in basicLayerMapping["Agents"])
+                        if (!obstacleLayerSourceEnumerator.MoveNext())
                         {
-                            initData = new TInitData(false, simStepDuration, startDate, _simulationId, MARSConfigServiceSettings.Address);
-
-                            initData.AddAgentInitConfig(
-                                agentMapping["Name"].ToString(),
-                                agentMapping["FullName"].ToString(),
-                                int.Parse(agentMapping["InstanceCount"].ToString()),
-                                0,
-                                new List<TConstructorParameterMapping>(
-                                    agentMapping["ConstructorParameterMapping"]
-                                        .Children()
-                                        .Select(j =>
-                                        {
-                                            if (j["TableName"] != null)
-                                            {
-                                                return new TConstructorParameterMapping(
-                                                    j["Type"].ToString(),
-                                                    j["Name"].ToString(),
-                                                    bool.Parse(j["IsAutoInitialized"].ToString()),
-                                                    j["MappingType"].ToString(),
-                                                    j["TableName"].ToString(),
-                                                    j["ColumnName"].ToString()
-                                                );
-                                            }
-                                            else
-                                            {
-                                                return new TConstructorParameterMapping(
-                                                    j["Type"].ToString(),
-                                                    j["Name"].ToString(),
-                                                    bool.Parse(j["IsAutoInitialized"].ToString()),
-                                                    j["MappingType"].ToString()
-
-                                                );
-                                            }
-
-
-                                        }).ToList()
-                                )
-                            );
+                            thereAreObstacleLayer = false;
                         }
+                    } else if (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
+				    {
+				        var gridInfo = gridPotentialFieldLayerSourceEnumerator.Current;
+				        initData.AddFileInitInfo(gridInfo["MetaDataId"].ToString());
+				        if (!gridPotentialFieldLayerSourceEnumerator.MoveNext())
+				        {
+				            thereAreGridPotentialFieldLayers = false;
+				        }
+				    }
+				    else if (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
+				    {
+				        var geoInfo = geoPotentialFieldLayerSourceEnumerator.Current;
+				        initData.AddFileInitInfo(geoInfo["MetaDataId"].ToString());
+				        if (!geoPotentialFieldLayerSourceEnumerator.MoveNext())
+				        {
+				            thereAreGeoPotentialFieldLayers = false;
+				        }
+				    }
+				    else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
+				        .Children()
+				        .Any(j => j["LayerName"].ToString() == layerDescription.Name))
+				    {
+				        var basicLayerMapping = scenarioConfig["InitializationDescription"]["BasicLayers"]
+				            .Children()
+				            .First(j => j["LayerName"].ToString() == layerDescription.Name);
 
-					}
+				        foreach (var agentMapping in basicLayerMapping["Agents"])
+				        {
+				            initData = new TInitData(false, simStepDuration, startDate, _simulationId,
+				                MARSConfigServiceSettings.Address);
 
-                    layerContainerClients[0].Initialize(layerInstanceId, initData);
+				            initData.AddAgentInitConfig(
+				                agentMapping["Name"].ToString(),
+				                agentMapping["FullName"].ToString(),
+				                int.Parse(agentMapping["InstanceCount"].ToString()),
+				                0,
+				                new List<TConstructorParameterMapping>(
+				                    agentMapping["ConstructorParameterMapping"]
+				                        .Children()
+				                        .Select(j =>
+				                        {
+				                            if (j["TableName"] != null)
+				                            {
+				                                return new TConstructorParameterMapping(
+				                                    j["Type"].ToString(),
+				                                    j["Name"].ToString(),
+				                                    bool.Parse(j["IsAutoInitialized"].ToString()),
+				                                    j["MappingType"].ToString(),
+				                                    j["TableName"].ToString(),
+				                                    j["ColumnName"].ToString()
+				                                );
+				                            }
+				                            else
+				                            {
+				                                return new TConstructorParameterMapping(
+				                                    j["Type"].ToString(),
+				                                    j["Name"].ToString(),
+				                                    bool.Parse(j["IsAutoInitialized"].ToString()),
+				                                    j["MappingType"].ToString()
+
+				                                );
+				                            }
+
+
+				                        })
+				                        .ToList()
+				                )
+				            );
+				        }
+
+				    }
+
+				    layerContainerClients[0].Initialize(layerInstanceId, initData);
 
                 }
 
