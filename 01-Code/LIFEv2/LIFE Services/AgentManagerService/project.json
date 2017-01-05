@@ -8,14 +8,12 @@
     "ConfigService": "2.0.0-9",
     "LCConnector": "2.0.0-*",
     "LifeAPI": "2.0.0-*",
-    "MARS.Shuttle.SimulationConfig": "2.0.0-15",
     "System.Runtime.Serialization.Formatters": "4.3.0",
     "System.Threading.Tasks.Parallel": "4.3.0",
     "DalskiAgent": "2.0.0-13",
     "GeoGridEnvironment": "2.0.0-19",
     "MySql.Data": "7.0.6-IR31",
-    "SpatialAPI": "2.0.0-22",
-    "System.Data.SqlClient": "4.3.0"
+    "SpatialAPI": "2.0.0-22"
   },
   "buildOptions": {
     "debugType": "portable"

@@ -15,15 +15,13 @@ using System.Reflection;
 using AgentManager.Interface;
 using AgentManager.Interface.Exceptions;
 using LifeAPI.Layer;
-using ConfigService;
 using System.Threading.Tasks;
 using System.Text;
 using LifeAPI.Agent;
 using LCConnector.TransportTypes;
-using MySql.Data.MySqlClient;
-using CommonTypes;
 using GeoGridEnvironment.Interface;
 using AgentManager;
+using AgentManagerService.Interface.Exceptions;
 using DalskiAgent.Agents;
 using MARS.Shuttle.SimulationConfig.Interfaces;
 using SpatialAPI.Environment;
@@ -39,28 +37,19 @@ namespace AgentManagerService.Implementation
             var agents = new ConcurrentDictionary<Guid, T>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
 
-			// connect to MARS ROCK
-			// create ConfigService and connect to marsconfig container. This is due to convention. This LIFE container
-			// should be linked to the marsconfig container and thus marsconfig should lead to the correct ip
-			// as per /etc/hosts
-
-			var marsConfigService = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-			Console.WriteLine($"AgentManager: Using {MARSConfigServiceSettings.Address} as MARSConfigService address.");
-
-			// retreive ip, port, user and password of mariaDB to us as ROCK instance
-            var rockIP = "mariadb"; // use k8s service name
-			var rockUser = marsConfigService.Get("rock/serveruser");
-			var rockPassword = marsConfigService.Get("rock/serverpassword");
-
-			var connectionString = string.Format("Server={0};Uid={1};Pwd={2};",rockIP,rockUser,rockPassword);
-
 
             // retrieve agent constructor
             var agentType = Type.GetType(agentInitConfig.AgentFullName);
 
             var agentConstructor = agentType.GetTypeInfo().GetConstructors().
                 FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishInShuttleAttribute), true).Any());
-
+            if (agentConstructor == null)
+            {
+                var msg =
+                    "AgentConstructor was not found. Either Reflection is not working or you forgot to annotate a ctor with [PublishInShuttle]";
+                Console.WriteLine(msg);
+                throw new AgentConstructorWasNullException("msg");
+            }
 			// fetch needed params
 			var neededParameters = agentConstructor.GetParameters ();
 
@@ -79,43 +68,19 @@ namespace AgentManagerService.Implementation
                 {
                     errmsg.AppendLine($"Type: {np.Type}");
                 }
+                Console.WriteLine(errmsg.ToString());
                 throw new NotEnoughParametersProvidedException(errmsg.ToString());
             }
 
 
             // setup arrays for agent parameters
-			var agentDBParamArrays = new ConcurrentDictionary<string, string[]>();
+            var agentParameterFetcher = new AgentParameterFetcher();
+            var agentDbParamArrays =
+                agentParameterFetcher.GetParametersForInitConfig(agentInitConfig);
 
 			var initParams = agentInitConfig.AgentInitParameters;
 
-			Parallel.ForEach (initParams, param =>
-			{
-			    if (param.MappingType !=
-			        MappingType.ColumnParameterMapping) return;
 
-			    // check if we already have this enumerator
-			    if (agentDBParamArrays.ContainsKey(param.ColumnName)) return;
-
-			    var sqlQuery =
-			        $"SELECT {param.ColumnName} FROM imports.{param.TableName} LIMIT {agentInitConfig.RealAgentCount} OFFSET {agentInitConfig.AgentInitOffset}";
-			    using (var mysqlConnection = new MySqlConnection(connectionString))
-			    {
-			        mysqlConnection.Open();
-			        var cmd = new MySqlCommand(sqlQuery, mysqlConnection);
-			        var values = new List<string>();
-			        using (var reader = cmd.ExecuteReader())
-			        {
-			            while (reader.Read())
-			            {
-			                // should be first column in result. TODO: Fix this in new MySQL.NET client for dotnet core.
-			                values.Add(reader.GetString(0));
-			            }
-			        }
-
-			        mysqlConnection.Close();
-			        agentDBParamArrays.TryAdd(param.ColumnName, values.ToArray());
-			    }
-			});
 
 			Console.WriteLine ("Finished fetching DB data, Starting agent ID creation....");
 
@@ -220,7 +185,7 @@ namespace AgentManagerService.Implementation
 
 
                                 // fetch parameter from ROCK CUBE
-                                var paramValue = agentDBParamArrays[param.ColumnName][index];
+                                var paramValue = agentDbParamArrays[param.ColumnName][index];
                                 // add param to actualParameters[]
                                 try
                                 {
