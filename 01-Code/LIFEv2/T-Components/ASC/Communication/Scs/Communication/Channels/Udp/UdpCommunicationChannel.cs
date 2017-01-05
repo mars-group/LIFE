@@ -22,7 +22,11 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
 		#region private fields
 
 		private readonly AscUdpEndPoint _endPoint;
-        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() {
+            TypeNameHandling = TypeNameHandling.All,
+            ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects
+        };
 
         /// <summary>
         ///     A flag to control thread's running

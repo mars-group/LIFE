@@ -43,7 +43,6 @@ namespace AgentManagerService.Implementation
                 if (param.MappingType !=
                     MappingType.ColumnParameterMapping)
                 {
-                    Console.WriteLine($"Skipping Paramfetching because MappingType is {param.MappingType}");
                     return;
                 }
 
