@@ -28,9 +28,9 @@ packAndPushAgentManagerService:
   image: artifactory.mars.haw-hamburg.de:5000/mono:4.6.2.16
   script:
     - cd 01-Code/LIFEv2/LIFE Services/AgentManagerService
-    - dotnet pack -c Release --version-suffix $CI_BUILD_ID
-    - mono ../../.nuget/NuGet.exe push ./bin/Release/AgentManagerService.2.0.0-$CI_BUILD_ID.nupkg -Source Artifactory
-    - rm ./bin/Release/AgentManagerService.2.0.0-$CI_BUILD_ID.nupkg
+    - dotnet pack -c Release --version-suffix $CI_PIPELINE_ID
+    - mono ../../.nuget/NuGet.exe push ./bin/Release/AgentManagerService.2.0.0-$CI_PIPELINE_ID.nupkg -Source Artifactory
+    - rm ./bin/Release/AgentManagerService.2.0.0-$CI_PIPELINE_ID.nupkg
 
 buildASC:
   stage: build
@@ -56,6 +56,6 @@ packAndPushASC:
   image: artifactory.mars.haw-hamburg.de:5000/mono:4.6.2.16
   script:
     - cd 01-Code/LIFEv2/T-Components/ASC
-    - dotnet pack -c Release --version-suffix $CI_BUILD_ID
-    - mono ../../.nuget/NuGet.exe push ./bin/Release/ASC.2.0.0-$CI_BUILD_ID.nupkg -Source Artifactory
-    - rm ./bin/Release/ASC.2.0.0-$CI_BUILD_ID.nupkg
+    - dotnet pack -c Release --version-suffix $CI_PIPELINE_ID
+    - mono ../../.nuget/NuGet.exe push ./bin/Release/ASC.2.0.0-$CI_PIPELINE_ID.nupkg -Source Artifactory
+    - rm ./bin/Release/ASC.2.0.0-$CI_PIPELINE_ID.nupkg
