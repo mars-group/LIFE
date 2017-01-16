@@ -19,7 +19,7 @@ testAgentManagerService:
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   script:
     - cd 01-Code/LIFEv2
-    - dotnet restore .
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd 01-Code/LIFEv2/LIFE Services/AgentManagerService
     - dotnet test
 
@@ -37,7 +37,7 @@ buildASC:
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   script:
     - cd 01-Code/LIFEv2
-    - dotnet restore .
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd 01-Code/LIFEv2/T-Components/ASC
     - dotnet build
 
