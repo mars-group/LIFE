@@ -74,13 +74,13 @@ namespace MARSLocalStarter {
 		var optionSet = new OptionSet()
 		  .Add("?|h|help", "Shows short usage", option => help = option != null)
 		  .Add("m=|model=", "Path to the Modelcode to simulate. Defaults to current directory.", option => modelPath = option)
-		  .Add("id=", "Set SimulationID",
+		  .Add("id=", "Set SimulationID (must be a valid UUIDv4!)",
 			option => simulationId = Guid.Parse(option))
-		  .Add("mca=|marsconfigaddress=", "MARSConfig address to use",
+		  .Add("mca=|marsconfigaddress=", "MARSConfig address to use (DEPRECATED)",
 			option => marsConfigAddress = option)
 		  .Add("sc=|scenario=","The ID of a ScenarioConfiguration. Mandatory if the simulation requires data from the MARS Cloud!",
 		    option => scenarioConfigToUse = option)
-          .Add("clustername=|cn=", "Optional. Provide a name for the simulation cluster. Only LIFE process with the same name join each other",
+          .Add("cn=|clustername=", "Optional. Provide a name for the simulation cluster. Only LIFE process with the same name join each other",
             option => clusterName = option);
 
 		try
