@@ -11,8 +11,7 @@ namespace ResultAdapter.Implementation.DataOutput {
   internal class MongoSender {
 
     private readonly IMongoCollection<AgentSimResult> _collection; // Collection for output.
-	  private readonly RabbitNotifier _notifier;                     // Listener queue notifier.
-	  private readonly string _simId;                                // Sim-ID, used for announcement.
+	private readonly string _simId;                                // Sim-ID, used for announcement.
 
 
     /// <summary>
@@ -26,7 +25,6 @@ namespace ResultAdapter.Implementation.DataOutput {
       var client = new MongoClient("mongodb://"+ip+":"+port);
       var database = client.GetDatabase("SimResults");
       _collection = database.GetCollection<AgentSimResult>(simId);
-      _notifier = new RabbitNotifier(cfgClient);  
 	  _simId = simId;
     }
 
@@ -52,7 +50,6 @@ namespace ResultAdapter.Implementation.DataOutput {
 	/// <param name = "currentTick">The current tick of the simulation.</param>
     public void SendVisualizationData(IEnumerable<AgentSimResult> results, int currentTick) {
             _collection.InsertMany (results);
-			_notifier.AnnounceNewPackage(_simId, currentTick);
     }
   }
 }
