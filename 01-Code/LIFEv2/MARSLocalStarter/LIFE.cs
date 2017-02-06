@@ -42,7 +42,7 @@ namespace MARSLocalStarter {
 		{
 			Console.WriteLine($"MARS LIFE crashed fatally. Exception:\n {exception}.\n InnerException:\n {exception.InnerException}");
 		    throw exception;
-            #Environment.Exit(1);
+            //Environment.Exit(1);
 		}
 
 
