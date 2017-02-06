@@ -96,8 +96,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
                     if (clientSocket.Connected)
                         OnCommunicationChannelConnected(new TcpCommunicationChannel(clientSocket));
                 }
-                catch
+                catch(Exception ex)
                 {
+                    Console.Write($"Caught an exception in SCS listening Thread. Exception: {ex}");
                     //Disconnect, wait for a while and connect again.
                     StopSocket();
                     Thread.Sleep(1000);
@@ -107,7 +108,10 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
                     {
                         StartSocket();
                     }
-                    catch { }
+                    catch (Exception ex2)
+                    {
+                        Console.Write($"Caught an exception in SCS while restarting listening Thread. Exception: {ex2}");
+                    }
                 }
             }
         }

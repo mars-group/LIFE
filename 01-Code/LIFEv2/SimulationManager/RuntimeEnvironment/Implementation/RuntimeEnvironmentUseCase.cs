@@ -195,20 +195,20 @@ namespace RuntimeEnvironment.Implementation
                     }
                     catch (ScsRemoteException scsEx)
                     {
-                        Console.Error.WriteLine(scsEx.StackTrace);
+                        Console.WriteLine(scsEx.StackTrace);
 
                         throw scsEx;
                     }
                     catch (Exception ex)
                     {
-                        Console.Error.WriteLine("Layercontainer Connection ERROR: " + ex.Message);
+                        Console.WriteLine("Layercontainer Connection ERROR: " + ex.Message);
                         // fail after 3 attempts
                         if (retries > 1)
                         {
                             var sockEx = ex as SocketException;
                             if (sockEx != null)
                             {
-                                Console.Error.WriteLine(
+                                Console.WriteLine(
                                     "A LayerContainer could not be connected. Continueing without it. Exception was: {0}",
                                     sockEx.Message);
                             }

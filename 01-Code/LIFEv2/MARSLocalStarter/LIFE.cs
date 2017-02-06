@@ -40,9 +40,10 @@ namespace MARSLocalStarter {
 		}
 		catch (Exception exception)
 		{
-			Console.Error.WriteLine($"MARS LIFE crashed fatally. Exception:\n {exception}.\n InnerException:\n {exception.InnerException}");
-            Environment.Exit(1);
-        }
+			Console.WriteLine($"MARS LIFE crashed fatally. Exception:\n {exception}.\n InnerException:\n {exception.InnerException}");
+		    throw exception;
+            #Environment.Exit(1);
+		}
 
 
 		Console.WriteLine("MARS LIFE 2.0 shutting down.");

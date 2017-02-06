@@ -70,7 +70,7 @@ namespace SimulationManagerShared
                 var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
                 // Step 3: Retrieve the canonical name.
                 fqdn = hostinfo.HostName;
-            }catch(Exception ex){
+            }catch(SocketException ex){
                 Console.Error.WriteLine("Dns Hostname Resolution failed, using random GUID as unique identifier for SimulationManager");
                 fqdn = Guid.NewGuid().ToString();
             }

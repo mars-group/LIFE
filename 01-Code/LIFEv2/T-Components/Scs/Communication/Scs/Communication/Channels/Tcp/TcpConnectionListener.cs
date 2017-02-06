@@ -85,24 +85,33 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         ///     Entrance point of the thread.
         ///     This method is used by the thread to listen incoming requests.
         /// </summary>
-        private void DoListenAsThread() {
-            while (_running) {
-                try {
+        private void DoListenAsThread()
+        {
+            while (_running)
+            {
+                try
+                {
                     var clientSocketTask = _listenerSocket.AcceptSocketAsync();
                     var clientSocket = clientSocketTask.Result;
                     if (clientSocket.Connected)
                         OnCommunicationChannelConnected(new TcpCommunicationChannel(clientSocket));
                 }
-                catch {
+                catch (Exception ex)
+                {
+                    Console.Write($"Caught an exception in SCS listening Thread. Exception: {ex}");
                     //Disconnect, wait for a while and connect again.
                     StopSocket();
                     Thread.Sleep(1000);
                     if (!_running) return;
 
-                    try {
+                    try
+                    {
                         StartSocket();
                     }
-                    catch {}
+                    catch (Exception ex2)
+                    {
+                        Console.Write($"Caught an exception in SCS while restarting listening Thread. Exception: {ex2}");
+                    }
                 }
             }
         }
