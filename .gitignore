@@ -1,0 +1,23 @@
+# OS junk files.
+[Tt]humbs.db
+*.DS_Store
+
+
+# Visual Studio files.
+.vs/
+*/.vs/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+
+# .NET Core and Project Rider files.
+.idea/
+project.lock.json
