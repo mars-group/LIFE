@@ -1,19 +1,22 @@
 # LIFE v2.1
 
-A re-structured LIFE solution that unites the LIFE-API with the model-development components and the simulation runtime (not integrated yet).
+A re-structured LIFE solution that unites the LIFE-API with the model-development components and the simulation runtime.
 
 ### Contents
 * LIFE-API: The former 'LifeAPI'. Contains all LIFE interfaces.
 * LIFE-Components: All optional components regarding base/predefined components for model development.
-  * CloudSupport
-  * DalskiAgent
-  * EnvironmentServiceComponent
-  * GeoGridEnvironment
-  * ObstacleLayer
-  * PotentialFieldLayer
-  * TimeSeriesLayer
-
-* LIFE-Core: Intended to hold all projects the simulation runtime consists of.
+  * Agents
+        * DalskiAgent 
+  * Layers
+        * ObstacleLayer
+        * PotentialFieldLayer
+        * TimeSeriesLayer
+  * Environments
+        * EnvironmentServiceComponent
+        * GeoGridEnvironment
+  * Utilities
+        * CloudSupport
+* LIFE-Core: The LIFE Core components LayerContainer and SimulationManager
 * Tests: All component-related tests are gathered here.
 
 ### Versioning
