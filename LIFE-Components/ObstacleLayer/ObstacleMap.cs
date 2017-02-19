@@ -183,7 +183,7 @@ namespace LIFE.Components.ObstacleLayer {
     /// <param name="lon2">Lon value from position two</param>
     private static double GetDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
       // Radius of the earth in km
-      var R = 6371;
+      const int r = 6371;
       var dLat = Deg2Rad(lat2 - lat1);
       var dLon = Deg2Rad(lon2 - lon1);
       var a =
@@ -191,7 +191,7 @@ namespace LIFE.Components.ObstacleLayer {
         Math.Cos(Deg2Rad(lat1))*Math.Cos(Deg2Rad(lat2))*
         Math.Sin(dLon/2)*Math.Sin(dLon/2);
       var c = 2*Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-      var d = R*c; // Distance in km
+      var d = r*c; // Distance in km
       return d;
     }
 

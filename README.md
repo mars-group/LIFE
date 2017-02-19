@@ -1,9 +1,10 @@
 # LIFE v2.1
 
-A re-structured LIFE solution that unites the LIFE-API with the model-development components and the simulation runtime (not integrated yet). It comprises of three main directories:
+A re-structured LIFE solution that unites the LIFE-API with the model-development components and the simulation runtime (not integrated yet).
 
+### Contents
 * LIFE-API: The former 'LifeAPI'. Contains all LIFE interfaces.
-* LIFE-Components: All optional components regarding base/predefined components for model development
+* LIFE-Components: All optional components regarding base/predefined components for model development.
   * CloudSupport
   * DalskiAgent
   * EnvironmentServiceComponent
@@ -13,7 +14,7 @@ A re-structured LIFE solution that unites the LIFE-API with the model-developmen
   * TimeSeriesLayer
 
 * LIFE-Core: Intended to hold all projects the simulation runtime consists of.
-
+* Tests: All component-related tests are gathered here.
 
 ### Versioning
 

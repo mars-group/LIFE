@@ -6,9 +6,10 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-
 using System;
 using System.Collections.Generic;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace LIFE.API.Layer.Initialization {
 
@@ -73,8 +74,7 @@ namespace LIFE.API.Layer.Initialization {
 
     /// <summary>
     ///   The address of the MARS Config. Defaults to http://marsconfig, but
-    ///   will be overridden, in case the '--mca' flag is provided upon
-    ///   start.
+    ///   will be overridden, in case the '--mca' flag is provided upon start.
     /// </summary>
     public string MARSConfigAddress { get; private set; }
 
@@ -82,15 +82,13 @@ namespace LIFE.API.Layer.Initialization {
     ///   Adds a new AgentInitConfig by providing all necessary information
     /// </summary>
     /// <param name="agentName">The name of the agent's class (not interface)</param>
+    /// <param name="agentFullName"></param>
     /// <param name="agentAmount">The amount of rel agents to be initialized</param>
-    /// <param name="shadowAgentAmount">The amount of shadow agents to be initialized</param>
-    /// <param name="realAgentIds">A Guid[] with ids to be used by the real agents</param>
-    /// <param name="shadowAgentsIds">A Guid[] with ids to be used by the shadow agents</param>
+    /// <param name="offset"></param>
     /// <param name="agentInitParameters">
     ///   Optional parameterinformation about how and from where
     ///   to initialize the agent's constructor parameters.
     /// </param>
-    /// <param name="getMarsCubeUrl"></param>
     public void AddAgentInitConfig(string agentName, string agentFullName, int agentAmount, int offset,
       List<TConstructorParameterMapping> agentInitParameters = null) {
       AgentInitConfigs.Add(new AgentInitConfig(agentName, agentFullName, agentAmount, offset, agentInitParameters));
@@ -99,10 +97,10 @@ namespace LIFE.API.Layer.Initialization {
     /// <summary>
     ///   Adds a GisInitConfig to the configuration.
     /// </summary>
-    /// <param name="GisSourceUrl">Gis source URL.</param>
+    /// <param name="gisSourceUrl">Gis source URL.</param>
     /// <param name="layerNames">Layer names.</param>
-    public void AddGisInitConfig(string GisSourceUrl, string[] layerNames) {
-      GisInitInfo = new GisInitConfig(GisSourceUrl, layerNames);
+    public void AddGisInitConfig(string gisSourceUrl, string[] layerNames) {
+      GisInitInfo = new GisInitConfig(gisSourceUrl, layerNames);
     }
 
     /// <summary>
@@ -139,7 +137,7 @@ namespace LIFE.API.Layer.Initialization {
   /// </summary>
   public class TimeSeriesInitConfig {
     /// <summary>
-    ///   Initializes a new instance of the <see cref="LCConnector.TransportTypes.TimeSeriesInitConfig" /> class.
+    ///   Initializes a new instance of the TimeSeriesInitConfig class.
     /// </summary>
     /// <param name="tableName">Table name in timeseries db.</param>
     /// <param name="databaseColumnName">Database column name.</param>
@@ -185,7 +183,7 @@ namespace LIFE.API.Layer.Initialization {
   /// </summary>
   public class GisInitConfig {
     /// <summary>
-    ///   Initializes a new instance of the <see cref="LCConnector.TransportTypes.GisInitConfig" /> class.
+    ///   Initializes a new instance of the GisInitConfig class.
     /// </summary>
     /// <param name="gisSourceUrl">Gis source URL.</param>
     /// <param name="layerNames">Layer names.</param>
@@ -213,14 +211,12 @@ namespace LIFE.API.Layer.Initialization {
   /// </summary>
   public class AgentInitConfig {
     /// <summary>
-    ///   Initializes a new instance of the <see cref="LCConnector.TransportTypes.AgentInitConfig" /> class.
+    ///   Initializes a new instance of the AgentInitConfig" class.
     /// </summary>
     /// <param name="agentName">Agent name.</param>
     /// <param name="agentFullName">Agent full name.</param>
     /// <param name="agentCount">Agent count.</param>
-    /// <param name="shadowAgentCount">Shadow agent count.</param>
-    /// <param name="realAgentIds">Real agent identifiers.</param>
-    /// <param name="shadowAgentsIds">Shadow agents identifiers.</param>
+    /// <param name="offset"></param>
     /// <param name="agentInitParameters">Agent init parameters.</param>
     public AgentInitConfig(string agentName, string agentFullName, int agentCount, int offset = 0,
       List<TConstructorParameterMapping> agentInitParameters = null) {

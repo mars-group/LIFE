@@ -43,7 +43,7 @@ namespace LIFE.Components.TimeSeriesLayer {
     //TODO enable different start time for time series layer (not the simulation time)
     private DateTime _timeSeriesStartTime;
     internal IInfluxDb InfluxDbClient;
-    private readonly int numberOfTicksToPreload = 10;
+    private const int NumberOfTicksToPreload = 10;
 
     internal IConfigServiceClient MarsConfigService { get; set; }
 
@@ -65,7 +65,7 @@ namespace LIFE.Components.TimeSeriesLayer {
     public bool InitLayer
       (TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle) {
       var timeSeriesInitConfig = layerInitData.TimeSeriesInitInfo;
-      assertTimeSeriesInitInfosAreSet(timeSeriesInitConfig);
+      AssertTimeSeriesInitInfosAreSet(timeSeriesInitConfig);
 
       _tableName = timeSeriesInitConfig.TableName;
       _dbColumnName = timeSeriesInitConfig.DatabaseColumnName;
@@ -88,7 +88,7 @@ namespace LIFE.Components.TimeSeriesLayer {
       return true;
     }
 
-    private void assertTimeSeriesInitInfosAreSet(TimeSeriesInitConfig timeSeriesInitConfig) {
+    private static void AssertTimeSeriesInitInfosAreSet(TimeSeriesInitConfig timeSeriesInitConfig) {
       if (timeSeriesInitConfig == null)
         throw new InvalidTimeSeriesLayerInitConfigException("TimeSeriesInitConfig is null");
       if (string.IsNullOrEmpty(timeSeriesInitConfig.ClearColumnName))
@@ -140,7 +140,7 @@ namespace LIFE.Components.TimeSeriesLayer {
     /// </summary>
     /// <param name="requestTime">Request time.</param>
     private void InitialPreload(DateTime requestTime) {
-      for (var i = 0; i <= numberOfTicksToPreload; i++) {
+      for (var i = 0; i <= NumberOfTicksToPreload; i++) {
         var additionalTimeSpan = new TimeSpan(_oneTickTimeSpan.Ticks*i);
         var dateTimeToQuery = requestTime.Add(additionalTimeSpan);
         LoadValue(dateTimeToQuery);
@@ -152,7 +152,7 @@ namespace LIFE.Components.TimeSeriesLayer {
     /// </summary>
     /// <param name="requestTime">Request time.</param>
     private void PreloadWithOffset(DateTime requestTime) {
-      var additionalTimeSpan = new TimeSpan(_oneTickTimeSpan.Ticks*numberOfTicksToPreload);
+      var additionalTimeSpan = new TimeSpan(_oneTickTimeSpan.Ticks*NumberOfTicksToPreload);
       LoadValue(requestTime.Add(additionalTimeSpan));
     }
 

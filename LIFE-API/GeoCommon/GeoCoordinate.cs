@@ -31,7 +31,7 @@ namespace LIFE.API.GeoCommon {
     /// <param name="other">Coordinate to compare to.</param>
     public double Distance(GeoCoordinate other) {
       // Radius of the earth in km
-      var R = 6371;
+      const int r = 6371;
       var dLat = Deg2Rad(other.Latitude - Latitude);
       var dLon = Deg2Rad(Longitude - other.Longitude);
       var a =
@@ -40,7 +40,7 @@ namespace LIFE.API.GeoCommon {
           Math.Sin(dLon/2)*Math.Sin(dLon/2)
         ;
       var c = 2*Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-      var d = R*c; // Distance in km
+      var d = r*c; // Distance in km
       return d;
     }
 

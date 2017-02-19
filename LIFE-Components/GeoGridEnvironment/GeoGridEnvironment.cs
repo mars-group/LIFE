@@ -12,16 +12,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LIFE.API.GeoCommon;
+// ReSharper disable StaticMemberInGenericType
 
 namespace LIFE.Components.GeoGridEnvironment {
 
   public class GeoGridEnvironment<T> : IGeoGridEnvironment<T> where T : IEquatable<T>, IGeoCoordinate {
 
     private static double _topLat;
-    private static double _bottomLat;
-
     private static double _leftLong;
-    private static double _rightLong;
     private readonly int _cellSizeInM;
     private readonly ConcurrentDictionary<T, byte>[] _geoGrid;
 
@@ -42,13 +40,11 @@ namespace LIFE.Components.GeoGridEnvironment {
     /// <param name="cellSizeInM">Size of the square cells in meters</param>
     public GeoGridEnvironment(double topLat, double bottomLat, double leftLong, double rightLong, int cellSizeInM) {
       _topLat = topLat;
-      _bottomLat = bottomLat;
       _leftLong = leftLong;
-      _rightLong = rightLong;
       _cellSizeInM = cellSizeInM;
 
-      _latDistance = Math.Abs(_bottomLat - _topLat);
-      _longDistance = Math.Abs(_rightLong - _leftLong);
+      _latDistance = Math.Abs(bottomLat - _topLat);
+      _longDistance = Math.Abs(rightLong - _leftLong);
 
       var tempDistanceTop = GetDistanceFromLatLonInKm(topLat, leftLong, topLat, rightLong);
       var missingHorizontalDistance = GetDecimalDegreesByMetersForLong
@@ -276,7 +272,7 @@ namespace LIFE.Components.GeoGridEnvironment {
     /// <param name="lon2">Lon value from position two</param>
     private static double GetDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
       // Radius of the earth in km
-      var R = 6371;
+      const int r = 6371;
       var dLat = Deg2Rad(lat2 - lat1);
       var dLon = Deg2Rad(lon2 - lon1);
       var a =
@@ -285,7 +281,7 @@ namespace LIFE.Components.GeoGridEnvironment {
           Math.Sin(dLon/2)*Math.Sin(dLon/2)
         ;
       var c = 2*Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-      var d = R*c; // Distance in km
+      var d = r*c; // Distance in km
       return d;
     }
 

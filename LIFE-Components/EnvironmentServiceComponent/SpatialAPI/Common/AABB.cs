@@ -64,26 +64,25 @@ namespace LIFE.Components.ESC.SpatialAPI.Common {
 
     public class AxisAlignedBoundingInterval {
       //needed by protobuf!!!
-      private AxisAlignedBoundingInterval() {}
 
       public AxisAlignedBoundingInterval(double val1, double val2) {
         // Set smaller value as minimum.
         if (val1 < val2) {
-          _min = val1;
-          _max = val2;
+          Min = val1;
+          Max = val2;
         }
         else {
-          _min = val2;
-          _max = val1;
+          Min = val2;
+          Max = val1;
         }
       }
 
 
-      public double _max { get;
+      public double Max { get;
         //neeeded by protobuf
       }
 
-      public double _min { get;
+      public double Min { get;
         //needed by protobuf
       }
 
@@ -96,17 +95,17 @@ namespace LIFE.Components.ESC.SpatialAPI.Common {
       /// <returns>"True": collision, "false": no collision.</returns>
       public bool IntersectWith(AxisAlignedBoundingInterval other) {
         if (ReferenceEquals(this, other)) return true; //| Overlap with ...  
-        return ((_min >= other._min) && (_min < other._max)) || //| 1) left interval
-               ((other._min >= _min) && (other._min < _max)) || //| 2) right interval
-               ((_min <= other._min) && (_max >= other._max)) || //| 3) inner interval
-               ((other._min <= _min) && (other._max >= _max)); //| 4) outer interval.
+        return ((Min >= other.Min) && (Min < other.Max)) || //| 1) left interval
+               ((other.Min >= Min) && (other.Min < Max)) || //| 2) right interval
+               ((Min <= other.Min) && (Max >= other.Max)) || //| 3) inner interval
+               ((other.Min <= Min) && (other.Max >= Max)); //| 4) outer interval.
       }
 
       public bool Equals(AxisAlignedBoundingInterval other) {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return (Math.Abs(_min - other._min) <= double.Epsilon)
-               && (Math.Abs(_max - other._max) <= double.Epsilon);
+        return (Math.Abs(Min - other.Min) <= double.Epsilon)
+               && (Math.Abs(Max - other.Max) <= double.Epsilon);
       }
 
       public override bool Equals(object obj) {
@@ -118,7 +117,7 @@ namespace LIFE.Components.ESC.SpatialAPI.Common {
 
       public override int GetHashCode() {
         unchecked {
-          return (int) (_min*397) ^ (int) _max;
+          return (int) (Min*397) ^ (int) Max;
         }
       }
 
@@ -131,7 +130,7 @@ namespace LIFE.Components.ESC.SpatialAPI.Common {
       }
 
       public override string ToString() {
-        return string.Format("({0,6:0.00} →{1,6:0.00})", _min, _max);
+        return string.Format("({0,6:0.00} →{1,6:0.00})", Min, Max);
       }
     }
 

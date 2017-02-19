@@ -14,8 +14,8 @@ namespace LIFE.Components.ESC.SpatialAPI.Shape {
       Rotation = rotation ?? new Direction();
 
       var aabb = AABB.Generate(Position, Rotation.GetDirectionalVector(), Dimension);
-      var leftBottomFront = new Vector3(aabb.XIntv._min, aabb.YIntv._min, aabb.ZIntv._min);
-      var rightTopRear = new Vector3(aabb.XIntv._max, aabb.YIntv._max, aabb.ZIntv._max);
+      var leftBottomFront = new Vector3(aabb.XIntv.Min, aabb.YIntv.Min, aabb.ZIntv.Min);
+      var rightTopRear = new Vector3(aabb.XIntv.Max, aabb.YIntv.Max, aabb.ZIntv.Max);
       Bounds = BoundingBox.GenerateByCorners(leftBottomFront, rightTopRear);
     }
 

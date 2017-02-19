@@ -33,6 +33,7 @@ namespace LIFE.Components.ESC.SpatialAPI.Environment {
     ///   Query the specified sphere. Optimized query for spheres
     /// </summary>
     /// <param name="sphere">Sphere.</param>
+    /// <param name="maxResults"></param>
     List<T> Query(Sphere sphere, int maxResults = -1);
 
     /// <summary>

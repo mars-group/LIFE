@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+/*
 using System;
 
 namespace LIFE.API.Layer.GIS.ResultTypes {
@@ -18,4 +19,4 @@ namespace LIFE.API.Layer.GIS.ResultTypes {
     public double Z { get; set; }
     public object Value { get; set; }
   }
-}
+}*/

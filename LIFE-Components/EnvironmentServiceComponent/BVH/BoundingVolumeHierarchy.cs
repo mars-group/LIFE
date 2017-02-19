@@ -24,6 +24,7 @@ namespace LIFE.Components.ESC.BVH {
     ///   Constructs a <code>BoundingVolumeHierarchy</code> and adds given entities to it.
     /// </summary>
     /// <param name="entities">that can be added to the tree.</param>
+    /// <param name="leafObjectMax"></param>
     public BoundingVolumeHierarchy(List<T> entities = null, int leafObjectMax = 10) {
       LEAF_OBJ_MAX = leafObjectMax;
       _root = new Node(_nodeAdapter, entities ?? new List<T>());
@@ -32,8 +33,8 @@ namespace LIFE.Components.ESC.BVH {
     public void Insert(T spatialObject) {
       lock (_syncLock) {
         var box = VolatileBoundingBox.FromBoundingBox(spatialObject.Shape.Bounds);
-        var sah = _root.CalculateSAH(ref box);
-        _root.AddObject(_nodeAdapter, spatialObject, ref box, sah);
+        var sah = Node.CalculateSAH(ref box);
+        _root.AddObject(_nodeAdapter, spatialObject, ref box);
       }
     }
 
@@ -189,7 +190,7 @@ namespace LIFE.Components.ESC.BVH {
         if (!Box.Equals(oldbox)) if (!Root) _parent.ComputeVolumeByChildNodes();
       }
 
-      private double CalculateSAH(VolatileBoundingBox box) {
+      private static double CalculateSAH(VolatileBoundingBox box) {
         var xSize = box.Max.X - box.Min.X;
         var ySize = box.Max.Y - box.Min.Y;
         var zSize = box.Max.Z - box.Min.Z;
@@ -197,7 +198,7 @@ namespace LIFE.Components.ESC.BVH {
         return 2.0f*(xSize*ySize + xSize*zSize + ySize*zSize);
       }
 
-      internal double CalculateSAH(ref VolatileBoundingBox box) {
+      internal static double CalculateSAH(ref VolatileBoundingBox box) {
         var xSize = box.Max.X - box.Min.X;
         var ySize = box.Max.Y - box.Min.Y;
         var zSize = box.Max.Z - box.Min.Z;
@@ -205,7 +206,7 @@ namespace LIFE.Components.ESC.BVH {
         return 2.0f*(xSize*ySize + xSize*zSize + ySize*zSize);
       }
 
-      private double CalculateSAH(Node node) {
+      private static double CalculateSAH(Node node) {
         var xSize = node.Box.Max.X - node.Box.Min.X;
         var ySize = node.Box.Max.Y - node.Box.Min.Y;
         var zSize = node.Box.Max.Z - node.Box.Min.Z;
@@ -265,7 +266,7 @@ namespace LIFE.Components.ESC.BVH {
       }
 
       internal void AddObject
-        (NodeAdapter nodeAdapter, T entity, ref VolatileBoundingBox entitiyBox, double sah) {
+        (NodeAdapter nodeAdapter, T entity, ref VolatileBoundingBox entitiyBox) {
         if (_leaf) {
           Entities.Add(entity);
           nodeAdapter.MapEntityToLeaf(entity, this);
@@ -273,13 +274,13 @@ namespace LIFE.Components.ESC.BVH {
           SplitNodeIfNecessary(nodeAdapter);
         }
         else {
-          var leftSAH = CalculateSAH(Left);
-          var rightSAH = CalculateSAH(Right);
-          var sendLeftSAH = rightSAH + CalculateSAH(Left.Box.CreateExpanded(entitiyBox)); // (L+N,R)
-          var sendRightSAH = leftSAH + CalculateSAH(Right.Box.CreateExpanded(entitiyBox)); // (L,R+N)
+          var leftSah = CalculateSAH(Left);
+          var rightSah = CalculateSAH(Right);
+          var sendLeftSah = rightSah + CalculateSAH(Left.Box.CreateExpanded(entitiyBox)); // (L+N,R)
+          var sendRightSah = leftSah + CalculateSAH(Right.Box.CreateExpanded(entitiyBox)); // (L,R+N)
 
-          if (sendLeftSAH < sendRightSAH) Left.AddObject(nodeAdapter, entity, ref entitiyBox, sah);
-          else Right.AddObject(nodeAdapter, entity, ref entitiyBox, sah);
+          if (sendLeftSah < sendRightSah) Left.AddObject(nodeAdapter, entity, ref entitiyBox);
+          else Right.AddObject(nodeAdapter, entity, ref entitiyBox);
         }
       }
 

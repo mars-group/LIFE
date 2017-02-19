@@ -29,6 +29,7 @@ namespace LIFE.Components.ESC.Implementation {
     ///   Initializes the environment.
     /// </summary>
     /// <param name="collisionMatrix">Defines the collision behaviour of added ISpatialEntities.</param>
+    /// <param name="maxLeafObjectCount"></param>
     public DistributedESC(bool[,] collisionMatrix = null, int maxLeafObjectCount = 10) {
       _collisionMatrix = collisionMatrix ?? CollisionMatrix.Get(); // if null use standard behaviour instead
       _tree = new BoundingVolumeHierarchy<ISpatialEntity>(leafObjectMax: maxLeafObjectCount);
@@ -75,8 +76,7 @@ namespace LIFE.Components.ESC.Implementation {
     /// </param>
     /// <returns>A MovementResult that defines the success of the operation and possible collisions.</returns>
     private MovementResult Move
-    (bool entityIsAdded, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null,
-      bool propagate = true) {
+    (bool entityIsAdded, ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
       //At move propagation must be done before entity is modified => otherwise replicated octrees won't
       //find the entity since the octree implementation has a lookup table over shapes :-/ and not agent id
       rotation = rotation ?? new Direction();
@@ -94,6 +94,7 @@ namespace LIFE.Components.ESC.Implementation {
       return new MovementResult();
     }
 
+/*
     /// <summary>
     ///   Indicates if the combination of collision types causes a collision. Respect the order.
     /// </summary>
@@ -103,6 +104,7 @@ namespace LIFE.Components.ESC.Implementation {
     private bool Collides(int givenCollisionType, int foundCollisionType) {
       return _collisionMatrix[givenCollisionType, foundCollisionType];
     }
+*/
 
     /// <summary>
     ///   Generates a random position within the given bounds.
@@ -146,7 +148,7 @@ namespace LIFE.Components.ESC.Implementation {
       var movementVector = position - shape.Position;
 
       // call to internal method directly and DONT propagate
-      var result = Move(false, entity, movementVector, rotation, false);
+      var result = Move(false, entity, movementVector, rotation);
 
       if (!result.Success) return false;
 
@@ -224,7 +226,7 @@ namespace LIFE.Components.ESC.Implementation {
     }
 
     public MovementResult Move(ISpatialEntity entity, Vector3 movementVector, Direction rotation = null) {
-      return Move(true, entity, movementVector, rotation, true);
+      return Move(true, entity, movementVector, rotation);
     }
 
     #endregion

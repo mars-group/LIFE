@@ -24,14 +24,14 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
     public class SpatialObjectOctree<T> : ITree<T> where T : class, ISpatialObject {
 
         public enum Direction {
-            NWB = 0, //NORTH-WEST-BOTTOM
-            NEB = 1,
-            SWB = 2,
-            SEB = 3,
-            NWT = 4,
-            NET = 5,
-            SWT = 6,
-            SET = 7 //SOUTH-EAST-TOP
+            Nwb = 0, //NORTH-WEST-BOTTOM
+            Neb = 1,
+            Swb = 2,
+            Seb = 3,
+            Nwt = 4,
+            Net = 5,
+            Swt = 6,
+            Set = 7 //SOUTH-EAST-TOP
         }
 
         private readonly int _maxObjectsPerLeaf;
@@ -85,21 +85,21 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                 get
                 {
                     switch (direction) {
-                        case Direction.NWT:
+                        case Direction.Nwt:
                             return _nodes[0];
-                        case Direction.NET:
+                        case Direction.Net:
                             return _nodes[1];
-                        case Direction.SWT:
+                        case Direction.Swt:
                             return _nodes[2];
-                        case Direction.SET:
+                        case Direction.Set:
                             return _nodes[3];
-                        case Direction.NWB:
+                        case Direction.Nwb:
                             return _nodes[4];
-                        case Direction.NEB:
+                        case Direction.Neb:
                             return _nodes[5];
-                        case Direction.SWB:
+                        case Direction.Swb:
                             return _nodes[6];
-                        case Direction.SEB:
+                        case Direction.Seb:
                             return _nodes[7];
                         default:
                             return null;
@@ -108,28 +108,28 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                 set
                 {
                     switch (direction) {
-                        case Direction.NWT:
+                        case Direction.Nwt:
                             _nodes[0] = value;
                             break;
-                        case Direction.NET:
+                        case Direction.Net:
                             _nodes[1] = value;
                             break;
-                        case Direction.SWT:
+                        case Direction.Swt:
                             _nodes[2] = value;
                             break;
-                        case Direction.SET:
+                        case Direction.Set:
                             _nodes[3] = value;
                             break;
-                        case Direction.NWB:
+                        case Direction.Nwb:
                             _nodes[4] = value;
                             break;
-                        case Direction.NEB:
+                        case Direction.Neb:
                             _nodes[5] = value;
                             break;
-                        case Direction.SWB:
+                        case Direction.Swb:
                             _nodes[6] = value;
                             break;
-                        case Direction.SEB:
+                        case Direction.Seb:
                             _nodes[7] = value;
                             break;
                     }
@@ -253,31 +253,31 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                 Direction rootDirection;
                 if (isBottom) {
                     if (isNorth) {
-                        rootDirection = isWest ? Direction.NWB : Direction.NEB;
+                        rootDirection = isWest ? Direction.Nwb : Direction.Neb;
                     }
                     else {
-                        rootDirection = isWest ? Direction.SWB : Direction.SEB;
+                        rootDirection = isWest ? Direction.Swb : Direction.Seb;
                     }
                 }
                 else {
                     if (isNorth) {
-                        rootDirection = isWest ? Direction.NWT : Direction.NET;
+                        rootDirection = isWest ? Direction.Nwt : Direction.Net;
                     }
                     else {
-                        rootDirection = isWest ? Direction.SWT : Direction.SET;
+                        rootDirection = isWest ? Direction.Swt : Direction.Set;
                     }
                 }
 
-                double newX = (rootDirection == Direction.NWB || rootDirection == Direction.SWB ||
-                               rootDirection == Direction.NWT || rootDirection == Direction.SWT)
+                double newX = (rootDirection == Direction.Nwb || rootDirection == Direction.Swb ||
+                               rootDirection == Direction.Nwt || rootDirection == Direction.Swt)
                     ? Root.Bounds.LeftBottomFront.X
                     : Root.Bounds.LeftBottomFront.X - Root.Bounds.Width;
-                double newY = (rootDirection == Direction.NWB || rootDirection == Direction.NEB ||
-                               rootDirection == Direction.NWT || rootDirection == Direction.NET)
+                double newY = (rootDirection == Direction.Nwb || rootDirection == Direction.Neb ||
+                               rootDirection == Direction.Nwt || rootDirection == Direction.Net)
                     ? Root.Bounds.LeftBottomFront.Y
                     : Root.Bounds.LeftBottomFront.Y - Root.Bounds.Height;
-                double newZ = (rootDirection == Direction.NWT || rootDirection == Direction.NET ||
-                               rootDirection == Direction.SWT || rootDirection == Direction.SET)
+                double newZ = (rootDirection == Direction.Nwt || rootDirection == Direction.Net ||
+                               rootDirection == Direction.Swt || rootDirection == Direction.Set)
                     ? Root.Bounds.LeftBottomFront.Z
                     : Root.Bounds.LeftBottomFront.Z - Root.Bounds.Length;
 
@@ -372,42 +372,42 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                         node.Bounds.Height/2,
                         node.Bounds.Length/2);
 
-                node[Direction.NWT] = new Ocnode
+                node[Direction.Nwt] = new Ocnode
                     (node.Bounds.LeftBottomFront.X,
                         node.Bounds.LeftBottomFront.Y,
                         node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
                         dimension);
-                node[Direction.NET] = new Ocnode
+                node[Direction.Net] = new Ocnode
                     (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
                         node.Bounds.LeftBottomFront.Y,
                         node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
                         dimension);
-                node[Direction.SWT] = new Ocnode
+                node[Direction.Swt] = new Ocnode
                     (node.Bounds.LeftBottomFront.X,
                         node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
                         node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
                         dimension);
-                node[Direction.SET] = new Ocnode
+                node[Direction.Set] = new Ocnode
                     (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
                         node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
                         node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
                         dimension);
-                node[Direction.NWB] = new Ocnode
+                node[Direction.Nwb] = new Ocnode
                     (node.Bounds.LeftBottomFront.X,
                         node.Bounds.LeftBottomFront.Y,
                         node.Bounds.LeftBottomFront.Z,
                         dimension);
-                node[Direction.NEB] = new Ocnode
+                node[Direction.Neb] = new Ocnode
                     (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
                         node.Bounds.LeftBottomFront.Y,
                         node.Bounds.LeftBottomFront.Z,
                         dimension);
-                node[Direction.SWB] = new Ocnode
+                node[Direction.Swb] = new Ocnode
                     (node.Bounds.LeftBottomFront.X,
                         node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
                         node.Bounds.LeftBottomFront.Z,
                         dimension);
-                node[Direction.SEB] = new Ocnode
+                node[Direction.Seb] = new Ocnode
                     (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
                         node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
                         node.Bounds.LeftBottomFront.Z,

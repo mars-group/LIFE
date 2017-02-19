@@ -2,6 +2,7 @@
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Shape;
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace LIFE.Components.ESC.SpatialObjectTree {
   
