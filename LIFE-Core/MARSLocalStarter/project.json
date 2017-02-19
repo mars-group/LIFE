@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
+  "dependencies": {
+    "LayerContainerFacade": {
+      "version": "2.0.0-*"
+    },
+    "SimulationManagerFacade": {
+      "version": "2.0.0-*"
+    },
+    "LCConnector": {
+      "version": "2.0.0-*"
+    },
+    "SMConnector": {
+      "version": "2.0.0-*"
+    },
+    "CommonTypes": {
+      "version": "2.0.0-*"
+    },
+    "LNSConnector": {
+      "version": "2.0.0-*"
+    },
+    "System.ComponentModel.TypeConverter": "4.3.0"
+  },
+
+
+  "frameworks": {
+    "netstandard1.6": {
+        "imports": "dnxcore50",
+        "dependencies": {
+        }
+    },
+    "netcoreapp1.1": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.1.0"
+        }
+      }
+    }
+  }
+}
