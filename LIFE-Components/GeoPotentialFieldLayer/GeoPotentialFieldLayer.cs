@@ -4,7 +4,7 @@ using LIFE.API.GeoCommon;
 using LIFE.API.Layer.PotentialField;
 using LIFE.Components.GridPotentialFieldLayer;
 
-[assembly: InternalsVisibleTo("GeoPotentialFieldLayerTest")]
+[assembly: InternalsVisibleTo("GeoPotentialFieldLayerTests")]
 
 namespace LIFE.Components.GeoPotentialFieldLayer {
 

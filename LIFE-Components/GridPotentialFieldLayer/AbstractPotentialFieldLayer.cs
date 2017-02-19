@@ -6,8 +6,8 @@ using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.Components.CloudSupport.File;
 
-[assembly: InternalsVisibleTo("GridPotentialFieldLayerTest")]
-[assembly: InternalsVisibleTo("GeoPotentialFieldLayerTest")]
+[assembly: InternalsVisibleTo("GridPotentialFieldLayerTests")]
+[assembly: InternalsVisibleTo("GeoPotentialFieldLayerTests")]
 
 namespace LIFE.Components.GridPotentialFieldLayer {
 

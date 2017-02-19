@@ -16,6 +16,7 @@
 *.userosscache
 *.sln.docstates
 *.userprefs
+TestResult.xml
 
 
 # .NET Core and Project Rider files.

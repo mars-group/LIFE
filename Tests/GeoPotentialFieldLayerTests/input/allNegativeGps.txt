@@ -1,0 +1,9 @@
+﻿LatitudeTop=-1
+LongitudeLeft=-5
+LatitudeBottom=-5
+LongitudeRight=-1
+CellSizeInM=1000
+0;0;0;0
+0;50;0;0
+50;100;50;0
+0;50;0;0
