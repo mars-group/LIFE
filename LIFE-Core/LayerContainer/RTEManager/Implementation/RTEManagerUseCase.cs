@@ -169,14 +169,14 @@ namespace RTEManager.Implementation {
                 // visualize all visualizable layers once prior to first execution if tick = 0
                 if (_currentTick == 0)
                 {
-                    //Console.WriteLine ("[LIFE] Executing Result Writing to fetch initial state.");
+                    Console.Write ("[LIFE] Executing Result Writing to fetch initial state");
                     _resultAdapter.WriteResults(_currentTick);
 
                     if (_explicitGC)
                     {
                         GC.Collect();
                     }
-
+                    Console.WriteLine ("...done!");
                     _currentTick++;
                 }
 
@@ -221,9 +221,6 @@ namespace RTEManager.Implementation {
                 //Console.WriteLine("[LIFE] Executing Result Writing");
                 // visualize all layers
                 _resultAdapter.WriteResults(_currentTick);
-
-                // increase Tick counter
-                _currentTick++;
 
                 //Console.WriteLine ("[LIFE] Removing agents");
                 // clean up all deleted tickClients
@@ -306,6 +303,9 @@ namespace RTEManager.Implementation {
                 _isRunning = false;
                 Console.WriteLine($"[LIFE] Tick {_currentTick} done. Took {stopWatch.ElapsedMilliseconds} ms.");
                 stopWatch.Restart();
+
+                // increase Tick counter
+                _currentTick++;
             }
             return stopWatch.ElapsedMilliseconds;
         }

@@ -548,7 +548,8 @@ namespace RuntimeEnvironment.Implementation
 				                                    j["Type"].ToString(),
 				                                    j["Name"].ToString(),
 				                                    bool.Parse(j["IsAutoInitialized"].ToString()),
-				                                    j["MappingType"].ToString()
+				                                    j["MappingType"].ToString(),
+				                                    value: j["Value"].ToString()
 
 				                                );
 				                            }
