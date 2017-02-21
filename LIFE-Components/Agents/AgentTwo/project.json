@@ -18,7 +18,6 @@
       "target": "project",
       "version": "2.1.0-*"
     },
-    "MongoDB.Driver": "2.4.1",
     "System.Threading.Tasks.Parallel": "4.3.0"
   },
 
