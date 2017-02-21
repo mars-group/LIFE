@@ -1,4 +1,4 @@
-﻿using LIFE.Components.DalskiAgent.Perception;
+﻿using LIFE.Components.Agents.DalskiAgent.Perception;
 using NUnit.Framework;
 
 namespace DalskiAgentTests {

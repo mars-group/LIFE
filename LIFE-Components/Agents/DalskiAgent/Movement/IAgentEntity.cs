@@ -1,6 +1,6 @@
 ﻿using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 
-namespace LIFE.Components.DalskiAgent.Movement {
+namespace LIFE.Components.Agents.DalskiAgent.Movement {
   
   /// <summary>
   ///   Interface class for spatial queries on the agent.

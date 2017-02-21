@@ -20,7 +20,7 @@ using AgentManagerService.Interface.Exceptions;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
-using LIFE.Components.DalskiAgent.Agents;
+using LIFE.Components.Agents.DalskiAgent.Agents;
 using LIFE.Components.GeoGridEnvironment;
 using LIFE.Services.AgentManagerService.Interface;
 using MARS.Shuttle.SimulationConfig.Interfaces;

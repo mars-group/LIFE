@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using LIFE.Components.DalskiAgent.Interactions;
-using LIFE.Components.DalskiAgent.Perception;
+using LIFE.Components.Agents.DalskiAgent.Interactions;
+using LIFE.Components.Agents.DalskiAgent.Perception;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 
-namespace LIFE.Components.DalskiAgent.Movement {
+namespace LIFE.Components.Agents.DalskiAgent.Movement {
   #pragma warning disable 1591
 
   /// <summary>

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LIFE.Components.DalskiAgent.Perception {
+namespace LIFE.Components.Agents.DalskiAgent.Perception {
 
   /// <summary>
   ///   Simple sensor interface. Just requests a sensing method.

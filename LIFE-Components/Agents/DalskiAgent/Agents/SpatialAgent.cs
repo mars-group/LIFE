@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using LIFE.API.Layer;
 using LIFE.API.Results;
-using LIFE.Components.DalskiAgent.Movement;
+using LIFE.Components.Agents.DalskiAgent.Movement;
 using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Shape;
 using MongoDB.Driver.GeoJsonObjectModel;
 
-namespace LIFE.Components.DalskiAgent.Agents {
+namespace LIFE.Components.Agents.DalskiAgent.Agents {
 
   /// <summary>
   ///   This agent is part of a spatial world. It has a position and 

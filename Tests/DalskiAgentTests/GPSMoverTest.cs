@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using LIFE.Components.DalskiAgent.Movement;
-using LIFE.Components.DalskiAgent.Perception;
+using LIFE.Components.Agents.DalskiAgent.Movement;
+using LIFE.Components.Agents.DalskiAgent.Perception;
 using LIFE.Components.ESC.Implementation;
 using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;

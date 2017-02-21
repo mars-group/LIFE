@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
-using LIFE.Components.DalskiAgent.Agents;
+using LIFE.Components.Agents.DalskiAgent.Agents;
 using LIFE.Components.GeoGridEnvironment;
 using SpatialAPI.Environment;
 

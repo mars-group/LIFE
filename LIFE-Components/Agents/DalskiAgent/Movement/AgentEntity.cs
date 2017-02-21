@@ -3,7 +3,7 @@ using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Shape;
 
-namespace LIFE.Components.DalskiAgent.Movement {
+namespace LIFE.Components.Agents.DalskiAgent.Movement {
   
   /// <summary>
   ///   Agent-internal ISpatialEntity implementation.

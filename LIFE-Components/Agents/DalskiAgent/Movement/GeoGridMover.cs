@@ -1,9 +1,9 @@
 ﻿using System;
-using LIFE.Components.DalskiAgent.Agents;
-using LIFE.Components.DalskiAgent.Interactions;
+using LIFE.Components.Agents.DalskiAgent.Agents;
+using LIFE.Components.Agents.DalskiAgent.Interactions;
 using LIFE.Components.GeoGridEnvironment;
 
-namespace LIFE.Components.DalskiAgent.Movement {
+namespace LIFE.Components.Agents.DalskiAgent.Movement {
 
   /// <summary>
   ///   Movement module for the GPS grid environment.

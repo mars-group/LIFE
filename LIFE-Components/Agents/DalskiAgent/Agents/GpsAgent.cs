@@ -12,11 +12,11 @@ using System.Collections.Generic;
 using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
-using LIFE.Components.DalskiAgent.Movement;
+using LIFE.Components.Agents.DalskiAgent.Movement;
 using LIFE.Components.GeoGridEnvironment;
 using MongoDB.Driver.GeoJsonObjectModel;
 
-namespace LIFE.Components.DalskiAgent.Agents {
+namespace LIFE.Components.Agents.DalskiAgent.Agents {
 
   /// <summary>
   ///   The GPS agent is a special implementation for the geo grid environment.

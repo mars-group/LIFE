@@ -1,6 +1,6 @@
 ﻿using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
 
-namespace LIFE.Components.DalskiAgent.Perception {
+namespace LIFE.Components.Agents.DalskiAgent.Perception {
   
   /// <summary>
   ///   Simple sensor for movement feedback.

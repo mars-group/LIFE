@@ -1,4 +1,4 @@
-﻿namespace LIFE.Components.DalskiAgent.Interactions {
+﻿namespace LIFE.Components.Agents.DalskiAgent.Interactions {
   
   /// <summary>
   ///   Action object for agent movement.

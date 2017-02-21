@@ -1,7 +1,7 @@
-﻿using LIFE.Components.DalskiAgent.Perception;
+﻿using LIFE.Components.Agents.DalskiAgent.Perception;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 
-namespace LIFE.Components.DalskiAgent.Movement {
+namespace LIFE.Components.Agents.DalskiAgent.Movement {
 
   /// <summary>
   ///   This mover class serves as a base for agent movement.

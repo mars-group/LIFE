@@ -15,7 +15,7 @@ namespace LIFE.Components.ESC.BVH {
 
   public class BoundingVolumeHierarchy<T> : ITree<T> where T : class, ISpatialObject {
 
-    private static int LEAF_OBJ_MAX = 10;
+    private static int _leafObjMax = 10;
     private readonly NodeAdapter _nodeAdapter = new NodeAdapter();
     private readonly Node _root;
     private readonly object _syncLock = new object();
@@ -26,14 +26,14 @@ namespace LIFE.Components.ESC.BVH {
     /// <param name="entities">that can be added to the tree.</param>
     /// <param name="leafObjectMax"></param>
     public BoundingVolumeHierarchy(List<T> entities = null, int leafObjectMax = 10) {
-      LEAF_OBJ_MAX = leafObjectMax;
+      _leafObjMax = leafObjectMax;
       _root = new Node(_nodeAdapter, entities ?? new List<T>());
     }
 
     public void Insert(T spatialObject) {
       lock (_syncLock) {
         var box = VolatileBoundingBox.FromBoundingBox(spatialObject.Shape.Bounds);
-        var sah = Node.CalculateSAH(ref box);
+        Node.CalculateSAH(ref box);
         _root.AddObject(_nodeAdapter, spatialObject, ref box);
       }
     }
@@ -121,7 +121,7 @@ namespace LIFE.Components.ESC.BVH {
         _parent = parent;
         Entities = entities;
         _depth = depth;
-        _leaf = Entities.Count <= LEAF_OBJ_MAX;
+        _leaf = Entities.Count <= _leafObjMax;
 
         if (Entities.Any()) {
           ComputeVolumeByEntities();
@@ -215,7 +215,7 @@ namespace LIFE.Components.ESC.BVH {
       }
 
       private void SplitNodeIfNecessary(NodeAdapter nodeAdapter) {
-        if (Entities.Count > LEAF_OBJ_MAX) {
+        if (Entities.Count > _leafObjMax) {
           _leaf = false;
           // second, decide which axis to split on, and sort..
           var splitlist = Entities;

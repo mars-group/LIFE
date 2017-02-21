@@ -2,10 +2,10 @@
 using ASC.Communication.ScsServices.Service;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
-using LIFE.Components.DalskiAgent.Interactions;
-using LIFE.Components.DalskiAgent.Perception;
+using LIFE.Components.Agents.DalskiAgent.Interactions;
+using LIFE.Components.Agents.DalskiAgent.Perception;
 
-namespace LIFE.Components.DalskiAgent.Agents {
+namespace LIFE.Components.Agents.DalskiAgent.Agents {
 
   /// <summary>
   /// The abstract agent. This is the most generic agent form, it specifies the main execution
