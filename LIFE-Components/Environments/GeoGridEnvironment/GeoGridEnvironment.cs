@@ -14,7 +14,7 @@ using System.Text;
 using LIFE.API.GeoCommon;
 // ReSharper disable StaticMemberInGenericType
 
-namespace LIFE.Components.GeoGridEnvironment {
+namespace LIFE.Components.Environments.GeoGridEnvironment {
 
   public class GeoGridEnvironment<T> : IGeoGridEnvironment<T> where T : IEquatable<T>, IGeoCoordinate {
 

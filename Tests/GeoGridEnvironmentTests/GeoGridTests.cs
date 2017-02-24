@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using LIFE.API.GeoCommon;
-using LIFE.Components.GeoGridEnvironment;
+using LIFE.Components.Environments.GeoGridEnvironment;
 using NUnit.Framework;
 // ReSharper disable AccessToModifiedClosure
 

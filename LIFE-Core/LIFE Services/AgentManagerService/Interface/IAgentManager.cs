@@ -13,7 +13,7 @@ using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.Components.Agents.DalskiAgent.Agents;
-using LIFE.Components.GeoGridEnvironment;
+using LIFE.Components.Environments.GeoGridEnvironment;
 using SpatialAPI.Environment;
 
 namespace LIFE.Services.AgentManagerService.Interface

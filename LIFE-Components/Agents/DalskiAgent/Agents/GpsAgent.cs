@@ -13,7 +13,7 @@ using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.DalskiAgent.Movement;
-using LIFE.Components.GeoGridEnvironment;
+using LIFE.Components.Environments.GeoGridEnvironment;
 using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace LIFE.Components.Agents.DalskiAgent.Agents {

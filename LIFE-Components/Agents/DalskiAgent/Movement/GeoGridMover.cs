@@ -1,7 +1,7 @@
 ﻿using System;
 using LIFE.Components.Agents.DalskiAgent.Agents;
 using LIFE.Components.Agents.DalskiAgent.Interactions;
-using LIFE.Components.GeoGridEnvironment;
+using LIFE.Components.Environments.GeoGridEnvironment;
 
 namespace LIFE.Components.Agents.DalskiAgent.Movement {
 

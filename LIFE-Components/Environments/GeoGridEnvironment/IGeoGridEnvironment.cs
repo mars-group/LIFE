@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using LIFE.API.GeoCommon;
 using LIFE.API.LIFECapabilities;
 
-namespace LIFE.Components.GeoGridEnvironment {
+namespace LIFE.Components.Environments.GeoGridEnvironment {
 
   public interface IGeoGridEnvironment<T> : ILifeAutoInitialized where T : IEquatable<T>, IGeoCoordinate {
 

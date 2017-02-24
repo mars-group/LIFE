@@ -3,7 +3,7 @@ using LIFE.Components.Agents.AgentTwo.Environment;
 using LIFE.Components.Agents.AgentTwo.Perception;
 using LIFE.Components.Agents.AgentTwo.Reasoning;
 using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
-using LIFE.Components.GeoGridEnvironment;
+using LIFE.Components.Environments.GeoGridEnvironment;
 
 namespace LIFE.Components.Agents.AgentTwo.Movement {
 

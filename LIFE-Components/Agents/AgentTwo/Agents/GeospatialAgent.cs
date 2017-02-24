@@ -2,7 +2,7 @@
 using LIFE.API.Results;
 using LIFE.Components.Agents.AgentTwo.Environment;
 using LIFE.Components.Agents.AgentTwo.Movement;
-using LIFE.Components.GeoGridEnvironment;
+using LIFE.Components.Environments.GeoGridEnvironment;
 
 /* The following warnings are useless, because this is an abstract base class
  * and we don't know if the user maybe want to use a variable or overwrite it. */
