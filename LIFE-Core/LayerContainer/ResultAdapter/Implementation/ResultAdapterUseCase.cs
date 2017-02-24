@@ -52,14 +52,14 @@ namespace ResultAdapter.Implementation {
         // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
         if (!_senders.Any()) {
 
-            for (var i = 0; i < 4; i++) { 
-                        var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-                        var sender = new MongoSender(cfgClient, SimulationId.ToString());
-                        sender.CreateMongoDbIndexes();
-                        _senders.Add(sender);
-            }
+            //for (var i = 0; i < 4; i++) {
+            var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+            var sender = new MongoSender(cfgClient, SimulationId.ToString());
+            sender.CreateMongoDbIndexes();
+            _senders.Add(sender);
+            //}
 
-            // _notifier = new RabbitNotifier(cfgClient); 
+            // _notifier = new RabbitNotifier(cfgClient);
 
         }
 
@@ -67,7 +67,7 @@ namespace ResultAdapter.Implementation {
         var results = new ConcurrentBag<AgentSimResult>();
         Parallel.ForEach(_simObjects.Keys, executionGroup => {
             if (currentTick == 0 || currentTick == 1 || currentTick % executionGroup == 0)
-            {   
+            {
                 Parallel.ForEach(_simObjects[executionGroup].Keys, simResult => results.Add(simResult.GetResultData()));
             }
         });
@@ -75,12 +75,13 @@ namespace ResultAdapter.Implementation {
         // don't do shit, when results are empty
         if (results.IsEmpty) {
                 results = null;
-                return; 
+                return;
         }
 
         // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
-        var lists = SplitList(results.ToList(), results.Count / _senders.Count);
-        Parallel.For(0, _senders.Count, i => _senders[i].SendVisualizationData(lists[i], currentTick));
+        //var lists = SplitList(results.ToList(), results.Count / _senders.Count);
+        //Parallel.For(0, _senders.Count, i => _senders[i].SendVisualizationData(lists[i], currentTick));
+        _senders.First().SendVisualizationData(results, currentTick);
         results = null;
     }
 
