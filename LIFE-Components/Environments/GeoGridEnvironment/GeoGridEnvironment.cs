@@ -213,6 +213,7 @@ namespace LIFE.Components.Environments.GeoGridEnvironment {
     }
 
     /// Translates a cell into its corrsponding geo coordinates
+    // ReSharper disable once UnusedMember.Local
     private GeoCoordinate GetGpsForCell(int cell) {
       var cellX = cell%_numberOfGridCellsX;
       var cellY = cell/_numberOfGridCellsX;

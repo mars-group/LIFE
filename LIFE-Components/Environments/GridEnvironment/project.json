@@ -1,18 +1,20 @@
 ﻿{
   "version": "2.1.0-*",
-  "buildOptions": {
-    "debugType": "portable"
-  },
+
   "dependencies": {
-      "LIFE-API": {
-          "target": "project",
-          "version": "2.1.0-*"
-      },
-     "NETStandard.Library": "1.6.1"
+    "LIFE-API": {
+      "target": "project",
+      "version": "2.1.0-*"
+    }
   },
+
+  // Build solution as .NET Core 1.1 library (DLL).
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      }
     }
   }
 }

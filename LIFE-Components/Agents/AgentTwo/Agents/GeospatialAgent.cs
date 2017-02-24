@@ -1,6 +1,6 @@
-﻿using LIFE.API.Layer;
+﻿using LIFE.API.GeoCommon;
+using LIFE.API.Layer;
 using LIFE.API.Results;
-using LIFE.Components.Agents.AgentTwo.Environment;
 using LIFE.Components.Agents.AgentTwo.Movement;
 using LIFE.Components.Environments.GeoGridEnvironment;
 
@@ -17,12 +17,12 @@ namespace LIFE.Components.Agents.AgentTwo.Agents {
   /// </summary>
   public abstract class GeospatialAgent : Agent {
 
-    private readonly IGeoGridEnvironment<GeoPosition> _env; // The grid environment to use.
-    private readonly GeoPosition _position;                 // Agent position backing structure.
-    protected readonly GeospatialMover Mover;               // Agent movement module.
-    public double Latitude => _position.Latitude;           // Latitude of this agent.
-    public double Longitude => _position.Longitude;         // Longitude of agent position.
-    public double Bearing => _position.Bearing;             // The agent's heading.
+    private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
+    private readonly GeoPosition _position;                    // Agent position backing structure.
+    protected readonly GeospatialMover Mover;                  // Agent movement module.
+    public double Latitude => _position.Latitude;              // Latitude of this agent.
+    public double Longitude => _position.Longitude;            // Longitude of agent position.
+    public double Bearing => _position.Bearing;                // The agent's heading.
 
 
     /// <summary>
@@ -36,14 +36,14 @@ namespace LIFE.Components.Agents.AgentTwo.Agents {
     /// <param name="lng">Agent start position (longitude).</param>
     /// <param name="id">The agent identifier (serialized GUID).</param>
     /// <param name="freq">MARS LIFE execution freqency.</param>
-    protected GeospatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,  // Base params.
-                              IGeoGridEnvironment<GeoPosition> env, double lat, double lng,  // Spatial data.
-                              byte[] id=null, int freq=1)                                    // Optional.
+    protected GeospatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,    // Base params.
+                              IGeoGridEnvironment<IGeoCoordinate> env, double lat, double lng, // Spatial data.
+                              byte[] id=null, int freq=1)                                      // Optional.
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
-      _position = new GeoPosition();
+      _position = new GeoPosition(lat, lng);
       Mover = new GeospatialMover(env, _position, SensorArray);
-      Mover.SetToPosition(lat, lng);
+      Mover.SetToPosition(lat, lng, 0);
     }
 
 

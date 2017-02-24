@@ -1,5 +1,5 @@
 ﻿using System;
-using LIFE.Components.Agents.AgentTwo.Environment;
+using LIFE.API.GeoCommon;
 using LIFE.Components.Agents.AgentTwo.Perception;
 using LIFE.Components.Agents.AgentTwo.Reasoning;
 using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
@@ -12,8 +12,8 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
   /// </summary>
   public class GeospatialMover : AgentMover {
 
-    private readonly IGeoGridEnvironment<GeoPosition> _geoGrid; // The grid environment to use.
-    private readonly GeoPosition _position;                     // Agent position structure.
+    private readonly IGeoGridEnvironment<IGeoCoordinate> _geoGrid; // The grid environment to use.
+    private readonly GeoPosition _position;                        // Agent position structure.
 
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     /// <param name="env">The geospatial environment to use.</param>
     /// <param name="agentPos">Agent position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
-    public GeospatialMover(IGeoGridEnvironment<GeoPosition> env, GeoPosition agentPos, SensorArray sensorArray)
+    public GeospatialMover(IGeoGridEnvironment<IGeoCoordinate> env, GeoPosition agentPos, SensorArray sensorArray)
       : base(sensorArray) {
       _geoGrid = env;
       _position = agentPos;
@@ -54,7 +54,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
         bearing, distance,                       // This is our heading and traveling distance.
         out targetLat, out targetLong            // Return the calculated target position.
       );
-      return SetToPosition(targetLat, targetLong);
+      return SetToPosition(targetLat, targetLong, bearing);
     }
 
 
@@ -76,13 +76,14 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     /// </summary>
     /// <param name="lat">Latitude of new position.</param>
     /// <param name="lng">Longitude of new position.</param>
+    /// <param name="bearing">New agent bearing.</param>
     /// <returns>An interaction describing the movement.</returns>
-    public MovementAction SetToPosition(double lat, double lng) {
+    public MovementAction SetToPosition(double lat, double lng, double bearing) {
       return new MovementAction(() => {
-        GeoPosition newPos;
-        try { newPos = _geoGrid.MoveToPosition(_position, lat, lng); }
+        IGeoCoordinate newPos;
+        try { newPos = _geoGrid.MoveToPosition(new GeoCoordinate(_position.Latitude, _position.Longitude), lat, lng); }
         catch (IndexOutOfRangeException) { return; } // Movement failed, stay at the old position.
-        _position.Bearing = newPos.Bearing;
+        _position.Bearing = bearing;
         _position.Latitude = newPos.Latitude;
         _position.Longitude = newPos.Longitude;
         MovementSensor.SetMovementResult(new MovementResult());
