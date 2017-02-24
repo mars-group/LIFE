@@ -5,6 +5,10 @@
     "LIFE-API": {
       "target": "project",
       "version": "2.1.0-*"
+    },
+    "GridEnvironment": {
+        "target": "project",
+        "version": "2.1.0-*"
     }
   },
 

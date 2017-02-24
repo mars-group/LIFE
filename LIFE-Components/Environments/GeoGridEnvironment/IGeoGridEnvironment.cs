@@ -52,13 +52,12 @@ namespace LIFE.Components.Environments.GeoGridEnvironment {
 
     T GetNearest(IGeoCoordinate gpsCoordinate, double maxDistanceInM = -1, Predicate<T> predicate = null);
 
-    /// Moves <param>objectToMove</param> to destination
-    /// <param name="objectToMove">the object to move</param>
-    /// <param name="latitudeDestination">Latitude of destination</param>
-    /// <param name="longitudeDestination">Longitude of destination</param>
-    /// <returns>T with updated coordinates</returns>
-    T Move(T objectToMove, double latitudeDestination, double longitudeDestination);
-
+      /// Moves <param>objectToMove</param> to destination
+      /// <param name="objectToMove">the object to move</param>
+      /// <param name="latitudeDestination">Latitude of destination</param>
+      /// <param name="longitudeDestination">Longitude of destination</param>
+      /// <returns>T with updated coordinates</returns>
+      T MoveToPosition(T objectToMove, double latitudeDestination, double longitudeDestination);
   }
 
 }

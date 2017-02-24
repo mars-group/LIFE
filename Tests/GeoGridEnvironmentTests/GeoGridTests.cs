@@ -101,7 +101,7 @@ namespace GeoGridEnvironmentTests {
         Parallel.For
         (0, treeCount,
           ti => {
-            var newT = _geoGrid.Move(trees[ti], moves[ti*i].Latitude, moves[ti*i].Longitude);
+            var newT = _geoGrid.MoveToPosition(trees[ti], moves[ti*i].Latitude, moves[ti*i].Longitude);
             Assert.AreEqual(newT.Latitude, moves[ti*i].Latitude);
           });
       sw.Stop();

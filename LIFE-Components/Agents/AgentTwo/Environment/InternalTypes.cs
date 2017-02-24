@@ -1,4 +1,5 @@
 ﻿using System;
+using LIFE.API.GridCommon;
 
 namespace LIFE.Components.Agents.AgentTwo.Environment
 {
@@ -58,7 +59,7 @@ namespace LIFE.Components.Agents.AgentTwo.Environment
         public int X => Convert.ToInt32(_pos.X); // X-coordinate.
         public int Y => Convert.ToInt32(_pos.Y); // Y-coordinate.
         public int Yaw => Convert.ToInt32(_pos.Yaw); // Yaw value.
-        public GridDir Direction => _pos.GridDirection; // Yaw as grid direction constant.
+        public GridDirection Direction => _pos.GridDirection; // Yaw as grid direction constant.
 
 
         /// <summary>
@@ -71,19 +72,4 @@ namespace LIFE.Components.Agents.AgentTwo.Environment
         }
     }
 
-
-    /// <summary>
-    ///   Direction enumeration for grid movement.
-    /// </summary>
-    public enum GridDir
-    {
-        Up,
-        Right,
-        Down,
-        Left,
-        UpRight,
-        DownRight,
-        DownLeft,
-        UpLeft
-    }
 }

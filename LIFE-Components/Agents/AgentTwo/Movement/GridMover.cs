@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using LIFE.Components.Agents.AgentTwo.Environment;
+using LIFE.API.GridCommon;
 using LIFE.Components.Agents.AgentTwo.Reasoning;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
+using GridPosition = LIFE.Components.Agents.AgentTwo.Environment.GridPosition;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -46,17 +48,17 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     /// </summary>
     /// <param name="direction">The direction to move (enumeration value).</param>
     /// <returns>An interaction object that contains the code to execute this movement.</returns>
-    public MovementAction MoveInDirection(GridDir direction) {
+    public MovementAction MoveInDirection(GridDirection direction) {
       const double r = 1.41421356;
       switch (direction) {
-        case GridDir.Up       : return _mover2D.MoveInDirection(1,   0);
-        case GridDir.UpRight  : return _mover2D.MoveInDirection(r,  45);
-        case GridDir.Right    : return _mover2D.MoveInDirection(1,  90);
-        case GridDir.DownRight: return _mover2D.MoveInDirection(r, 135);
-        case GridDir.Down     : return _mover2D.MoveInDirection(1, 180);
-        case GridDir.DownLeft : return _mover2D.MoveInDirection(r, 225);
-        case GridDir.Left     : return _mover2D.MoveInDirection(1, 270);
-        case GridDir.UpLeft   : return _mover2D.MoveInDirection(r, 315);
+        case GridDirection.Up       : return _mover2D.MoveInDirection(1,   0);
+        case GridDirection.UpRight  : return _mover2D.MoveInDirection(r,  45);
+        case GridDirection.Right    : return _mover2D.MoveInDirection(1,  90);
+        case GridDirection.DownRight: return _mover2D.MoveInDirection(r, 135);
+        case GridDirection.Down     : return _mover2D.MoveInDirection(1, 180);
+        case GridDirection.DownLeft : return _mover2D.MoveInDirection(r, 225);
+        case GridDirection.Left     : return _mover2D.MoveInDirection(1, 270);
+        case GridDirection.UpLeft   : return _mover2D.MoveInDirection(r, 315);
         default: return null;
       }
     }
@@ -94,7 +96,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
         // Calculate angular difference to current option. If >180°, consider other semicircle.
         var diff = Math.Abs(angle - (offset + mod*90));
         if (diff > 180.0f) diff = 360.0f - diff;
-        list.Add(new MovementOption {Direction = (GridDir) iEnum, Offset = diff});
+        list.Add(new MovementOption {Direction = (GridDirection) iEnum, Offset = diff});
       }
 
       // Now we have a list of available movement options, ordered by efficiency.
@@ -109,7 +111,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
   ///   This structure holds a movement option candidate (combination of direction and difference).
   /// </summary>
   public struct MovementOption : IComparable {
-    public GridDir Direction; // The represented grid movement direction.
+    public GridDirection Direction; // The represented grid movement direction.
     public double Offset;     // Angular offset to target (heuristic).
 
 

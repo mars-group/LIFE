@@ -1,9 +1,13 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "2.1.0-*",
   "buildOptions": {
     "debugType": "portable"
   },
   "dependencies": {
+      "LIFE-API": {
+          "target": "project",
+          "version": "2.1.0-*"
+      },
      "NETStandard.Library": "1.6.1"
   },
   "frameworks": {

@@ -113,7 +113,7 @@ namespace LIFE.Components.Environments.GeoGridEnvironment {
       return GetNearest(gpsCoordinate.Latitude, gpsCoordinate.Longitude, maxDistanceInM, predicate);
     }
 
-    public T Move(T objectToMove, double latitudeDestination, double longitudeDestination) {
+    public T MoveToPosition(T objectToMove, double latitudeDestination, double longitudeDestination) {
       var currentCell = GetCellForGps(objectToMove.Latitude, objectToMove.Longitude);
       var currentColl = _geoGrid[currentCell];
       var targetCell = GetCellForGps(latitudeDestination, longitudeDestination);

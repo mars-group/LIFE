@@ -1,4 +1,5 @@
 ﻿using System;
+using LIFE.API.GridCommon;
 using LIFE.Components.Agents.AgentTwo.Agents;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
@@ -49,19 +50,19 @@ namespace LIFE.Components.Agents.AgentTwo.Environment {
     /// <summary>
     ///   Returns the current yaw as grid orientation constant.
     /// </summary>
-    public GridDir GridDirection {
+    public GridDirection GridDirection {
       get {
         var yaw = Convert.ToInt32(Yaw);
         switch (yaw) {
-          case   0: return GridDir.Up;
-          case  45: return GridDir.UpRight;
-          case  90: return GridDir.Right;
-          case 135: return GridDir.DownRight;
-          case 180: return GridDir.Down;
-          case 225: return GridDir.DownLeft;
-          case 270: return GridDir.Left;
-          case 315: return GridDir.UpLeft;
-          default : return GridDir.Up;
+          case   0: return GridDirection.Up;
+          case  45: return GridDirection.UpRight;
+          case  90: return GridDirection.Right;
+          case 135: return GridDirection.DownRight;
+          case 180: return GridDirection.Down;
+          case 225: return GridDirection.DownLeft;
+          case 270: return GridDirection.Left;
+          case 315: return GridDirection.UpLeft;
+          default : return GridDirection.Up;
         }
       }
     }

@@ -32,7 +32,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
 
 
     /// <summary>
-    ///   Move the agent forward with a given speed.
+    ///   MoveToPosition the agent forward with a given speed.
     /// </summary>
     /// <param name="distance">The distance to move.</param>
     /// <returns>Interaction expressing this movement.</returns>
@@ -42,7 +42,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
 
 
     /// <summary>
-    ///   Move the agent into a direction.
+    ///   MoveToPosition the agent into a direction.
     /// </summary>
     /// <param name="distance">The distance to move.</param>
     /// <param name="bearing">New agent bearing.</param>
@@ -59,7 +59,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
 
 
     /// <summary>
-    ///   Move the agent to a position.
+    ///   MoveToPosition the agent to a position.
     /// </summary>
     /// <param name="distance">The distance to move.</param>
     /// <param name="targetLat">Latitude of target position.</param>
@@ -80,7 +80,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     public MovementAction SetToPosition(double lat, double lng) {
       return new MovementAction(() => {
         GeoPosition newPos;
-        try { newPos = _geoGrid.Move(_position, lat, lng); }
+        try { newPos = _geoGrid.MoveToPosition(_position, lat, lng); }
         catch (IndexOutOfRangeException) { return; } // Movement failed, stay at the old position.
         _position.Bearing = newPos.Bearing;
         _position.Latitude = newPos.Latitude;

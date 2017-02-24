@@ -42,7 +42,7 @@ namespace LIFE.Components.Agents.DalskiAgent.Movement {
       CalculateNewCoordinates(_gpsAgent.Latitude, _gpsAgent.Longitude, bearing, distance, out targetLat, out targetLong);
       return new MovementAction(() => {
         try {
-          var updatedAgent = _geoGrid.Move(_gpsAgent, targetLat, targetLong);
+          var updatedAgent = _geoGrid.MoveToPosition(_gpsAgent, targetLat, targetLong);
           _gpsAgent.Bearing = updatedAgent.Bearing;
           _gpsAgent.Latitude = updatedAgent.Latitude;
           _gpsAgent.Longitude = updatedAgent.Longitude;

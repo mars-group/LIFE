@@ -32,7 +32,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
 
 
     /// <summary>
-    ///   Move the agent forward with a given speed.
+    ///   MoveToPosition the agent forward with a given speed.
     /// </summary>
     /// <param name="distance">The distance to move.</param>
     /// <returns>Interaction expressing this movement.</returns>
@@ -42,7 +42,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
 
 
     /// <summary>
-    ///   Move the agent into a direction.
+    ///   MoveToPosition the agent into a direction.
     /// </summary>
     /// <param name="distance">The distance to move.</param>
     /// <param name="yaw">New agent heading.</param>
@@ -53,7 +53,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
 
 
     /// <summary>
-    ///   Move the agent to a position.
+    ///   MoveToPosition the agent to a position.
     /// </summary>
     /// <param name="distance">The distance to move.</param>
     /// <param name="x">X-coordinate target position.</param>
