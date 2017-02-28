@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Http;
 using NLog;
 
-namespace LIFE.Components.CloudSupport.File {
+namespace LIFE.Components.Utilities.CloudSupport {
 
   public class FileClient : IFileClient {
 

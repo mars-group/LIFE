@@ -9,9 +9,18 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "ConfigurationAdapter": "2.0.0-*",
-    "CustomUtilities": "2.0.0-*",
-    "MulticastAdapter": "2.0.0-*",
+    "ConfigurationAdapter": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
+    "CustomUtilities": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
+    "MulticastAdapter": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
     "Newtonsoft.Json": "9.0.1",
     "System.Collections": "4.3.0",
     "System.Linq": "4.3.0",
@@ -31,15 +40,6 @@
         "define": [
           "HAS_DISPATCH_PROXY"
         ]
-      }
-    },
-    "netcoreapp1.1": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.1.0",
-          "type": "platform"
-        }
       }
     }
   }

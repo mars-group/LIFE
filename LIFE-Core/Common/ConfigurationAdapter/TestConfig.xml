@@ -1,6 +1,0 @@
-<!-- MyApp.xml -->
-<Nini>
-  <Section Name="Test">
-    <Key Name="Test" Value="xdcfgjklö" />
-  </Section>
-</Nini>

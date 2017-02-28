@@ -6,8 +6,8 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>94c79cc6-50dd-44b8-a672-c0a65a160bf9</ProjectGuid>
-    <RootNamespace>LIFE.Components.CloudSupport</RootNamespace>
+    <ProjectGuid>f8bdddd3-7a49-41ee-aedc-9c67b27ef234</ProjectGuid>
+    <RootNamespace>LIFE.Components.Utilities</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>

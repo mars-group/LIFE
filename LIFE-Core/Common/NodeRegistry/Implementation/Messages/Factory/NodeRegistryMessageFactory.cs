@@ -7,43 +7,51 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 
-using System;
 using System.Text;
 using CommonTypes.DataTypes;
 using Newtonsoft.Json;
 
 namespace NodeRegistry.Implementation.Messages.Factory {
-    internal static class NodeRegistryMessageFactory
-    {
-        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() {TypeNameHandling = TypeNameHandling.All};
-        public static byte[] GetJoinMessage(TNodeInformation information, string localAddress, string clusterName) {
 
-            var json = JsonConvert.SerializeObject(new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Join, information, localAddress, clusterName), Jset);
-            return Encoding.UTF8.GetBytes(json);
-        }
+  internal static class NodeRegistryMessageFactory {
 
-        public static byte[] GetLeaveMessage(TNodeInformation information, string localAddress, string clusterName)
-        {
-            var json =
-                JsonConvert.SerializeObject(new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Leave, information, localAddress, clusterName), Jset);
+    private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings {
+      TypeNameHandling = TypeNameHandling.All
+    };
 
-            return Encoding.UTF8.GetBytes(json);
-        }
-
-        public static byte[] GetAnswerMessage(TNodeInformation information, string localAddress, string clusterName)
-        {
-            var json =
-                JsonConvert.SerializeObject(new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Answer, information, localAddress, clusterName), Jset);
-
-            return Encoding.UTF8.GetBytes(json);
-        }
-
-        public static byte[] GetHeartBeatMessage(TNodeInformation information, string clusterName) {
-            var json =
-                JsonConvert.SerializeObject(new NodeRegistryHeartBeatMessage(NodeRegistryMessageType.HeartBeat, information.NodeIdentifier, information.NodeType, clusterName), Jset);
-
-            return Encoding.UTF8.GetBytes(json);
-        }
-
+    public static byte[] GetJoinMessage(TNodeInformation information, string localAddress, string clusterName) {
+      var json =
+        JsonConvert.SerializeObject(
+          new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Join, information, localAddress, clusterName),
+          Jset);
+      return Encoding.UTF8.GetBytes(json);
     }
+
+    public static byte[] GetLeaveMessage(TNodeInformation information, string localAddress, string clusterName) {
+      var json =
+        JsonConvert.SerializeObject(
+          new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Leave, information, localAddress, clusterName),
+          Jset);
+
+      return Encoding.UTF8.GetBytes(json);
+    }
+
+    public static byte[] GetAnswerMessage(TNodeInformation information, string localAddress, string clusterName) {
+      var json =
+        JsonConvert.SerializeObject(
+          new NodeRegistryConnectionInfoMessage(NodeRegistryMessageType.Answer, information, localAddress, clusterName),
+          Jset);
+
+      return Encoding.UTF8.GetBytes(json);
+    }
+
+    public static byte[] GetHeartBeatMessage(TNodeInformation information, string clusterName) {
+      var json =
+        JsonConvert.SerializeObject(
+          new NodeRegistryHeartBeatMessage(NodeRegistryMessageType.HeartBeat, information.NodeIdentifier,
+            information.NodeType, clusterName), Jset);
+
+      return Encoding.UTF8.GetBytes(json);
+    }
+  }
 }

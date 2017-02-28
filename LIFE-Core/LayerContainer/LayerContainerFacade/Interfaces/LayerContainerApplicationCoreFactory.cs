@@ -7,9 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 
-using System;
 using Autofac;
-using ConfigurationAdapter;
 using ConfigurationAdapter.Interface;
 using LayerContainerFacade.Implementation;
 using LayerContainerShared;

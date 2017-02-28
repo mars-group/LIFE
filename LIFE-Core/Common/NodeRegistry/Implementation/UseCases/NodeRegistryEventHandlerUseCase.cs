@@ -6,109 +6,94 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using CustomUtilities.Collections;
 using NodeRegistry.Interface;
 
-namespace NodeRegistry.Implementation.UseCases
-{
-    public class NodeRegistryEventHandlerUseCase
-    {
-        public event EventHandler<TNodeInformation> SimulationManagerConnected;
+namespace NodeRegistry.Implementation.UseCases {
 
-        /// <summary>
-        ///     Delegates for different subscriber types.
-        /// </summary>
-        private NewNodeConnected _newNodeConnectedHandler;
+  public class NodeRegistryEventHandlerUseCase {
 
-        private NewNodeConnected _newLayerContainerConnectedHandler;
-        private NewNodeConnected _newSimulationManagerConnectedHandler;
-        private NewNodeConnected _newSimulationControllerConnectedHandler;
+    private readonly ThreadSafeSortedList<TNodeInformation, NodeDisconnected> _disconnectedNodeEventHandlers;
 
-        private readonly ThreadSafeSortedList<TNodeInformation, NodeDisconnected> _disconnectedNodeEventHandlers;
+    private NewNodeConnected _newLayerContainerConnectedHandler;
 
-        public NodeRegistryEventHandlerUseCase() {
-            _disconnectedNodeEventHandlers = new ThreadSafeSortedList<TNodeInformation, NodeDisconnected>();
-        }
+    /// <summary>
+    ///   Delegates for different subscriber types.
+    /// </summary>
+    private NewNodeConnected _newNodeConnectedHandler;
 
+    private NewNodeConnected _newSimulationControllerConnectedHandler;
+    private NewNodeConnected _newSimulationManagerConnectedHandler;
 
-        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node) {
-            _disconnectedNodeEventHandlers[node] += nodeDisconnectedHandler;
-        }
-
-        public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler)
-        {
-            _newNodeConnectedHandler += newNodeConnectedHandler;
-        }
-
-        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType)
-        {
-            switch (nodeType)
-            {
-                case NodeType.LayerContainer:
-                    _newLayerContainerConnectedHandler += newNodeConnectedHandler;
-                    break;
-                case NodeType.SimulationController:
-                    _newSimulationControllerConnectedHandler += newNodeConnectedHandler;
-                    break;
-                case NodeType.SimulationManager:
-                    _newSimulationManagerConnectedHandler += newNodeConnectedHandler;
-                    break;
-            }
-        }
-
-        public void NotifyOnNodeJoinSubsribers(TNodeInformation nodeInformation)
-        {
-            if (_newNodeConnectedHandler != null) _newNodeConnectedHandler.Invoke(nodeInformation);
-        }
-
-        public void NotifyOnNodeTypeJoinSubsribers(TNodeInformation nodeInformation)
-        {
-            switch (nodeInformation.NodeType)
-            {
-                case NodeType.LayerContainer:
-                    if (_newLayerContainerConnectedHandler != null)
-                        _newLayerContainerConnectedHandler.Invoke(nodeInformation);
-                    break;
-                case NodeType.SimulationController:
-                    if (_newSimulationControllerConnectedHandler != null)
-                        _newSimulationControllerConnectedHandler.Invoke(nodeInformation);
-                    break;
-                case NodeType.SimulationManager:
-                    if (_newSimulationManagerConnectedHandler != null)
-                    {
-                        _newSimulationManagerConnectedHandler.Invoke(nodeInformation);
-                    }
-                    OnSimulationManagerConnected(nodeInformation);
-                    break;
-            }
-        }
-
-        public void NotifyOnNodeLeaveSubsribers(TNodeInformation nodeInformation) {
-
-            if (_disconnectedNodeEventHandlers.ContainsKey(nodeInformation)) {
-                if (_disconnectedNodeEventHandlers[nodeInformation] != null) {
-                    _disconnectedNodeEventHandlers[nodeInformation].Invoke(nodeInformation);
-                } 
-
-
-            }
-
-        }
-
-        private void OnSimulationManagerConnected(TNodeInformation nodeInformation)
-        {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            EventHandler<TNodeInformation> handler = SimulationManagerConnected;
-
-            // Event will be null if there are no subscribers
-            if (handler != null) handler(this, nodeInformation);
-        }
-
-
+    public NodeRegistryEventHandlerUseCase() {
+      _disconnectedNodeEventHandlers = new ThreadSafeSortedList<TNodeInformation, NodeDisconnected>();
     }
+
+    public event EventHandler<TNodeInformation> SimulationManagerConnected;
+
+
+    public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node) {
+      _disconnectedNodeEventHandlers[node] += nodeDisconnectedHandler;
+    }
+
+    public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler) {
+      _newNodeConnectedHandler += newNodeConnectedHandler;
+    }
+
+    public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType) {
+      switch (nodeType) {
+        case NodeType.LayerContainer:
+          _newLayerContainerConnectedHandler += newNodeConnectedHandler;
+          break;
+        case NodeType.SimulationController:
+          _newSimulationControllerConnectedHandler += newNodeConnectedHandler;
+          break;
+        case NodeType.SimulationManager:
+          _newSimulationManagerConnectedHandler += newNodeConnectedHandler;
+          break;
+      }
+    }
+
+    public void NotifyOnNodeJoinSubsribers(TNodeInformation nodeInformation) {
+      if (_newNodeConnectedHandler != null) _newNodeConnectedHandler.Invoke(nodeInformation);
+    }
+
+    public void NotifyOnNodeTypeJoinSubsribers(TNodeInformation nodeInformation) {
+      switch (nodeInformation.NodeType) {
+        case NodeType.LayerContainer:
+          if (_newLayerContainerConnectedHandler != null)
+            _newLayerContainerConnectedHandler.Invoke(nodeInformation);
+          break;
+        case NodeType.SimulationController:
+          if (_newSimulationControllerConnectedHandler != null)
+            _newSimulationControllerConnectedHandler.Invoke(nodeInformation);
+          break;
+        case NodeType.SimulationManager:
+          if (_newSimulationManagerConnectedHandler != null)
+            _newSimulationManagerConnectedHandler.Invoke(nodeInformation);
+          OnSimulationManagerConnected(nodeInformation);
+          break;
+      }
+    }
+
+    public void NotifyOnNodeLeaveSubsribers(TNodeInformation nodeInformation) {
+      if (_disconnectedNodeEventHandlers.ContainsKey(nodeInformation))
+        if (_disconnectedNodeEventHandlers[nodeInformation] != null)
+          _disconnectedNodeEventHandlers[nodeInformation].Invoke(nodeInformation);
+    }
+
+    private void OnSimulationManagerConnected(TNodeInformation nodeInformation) {
+      // Make a temporary copy of the event to avoid possibility of
+      // a race condition if the last subscriber unsubscribes
+      // immediately after the null check and before the event is raised.
+      var handler = SimulationManagerConnected;
+
+      // Event will be null if there are no subscribers
+      if (handler != null) handler(this, nodeInformation);
+    }
+  }
 }

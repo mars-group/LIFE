@@ -10,6 +10,7 @@ using System;
 using LayerRegistry.Interfaces;
 using LIFE.API.Layer;
 using NodeRegistry.Interface;
+using NodeRegistry.Interface.Config;
 
 namespace LayerRegistry.Implementation {
     public class LayerRegistryComponent : ILayerRegistry {

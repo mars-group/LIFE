@@ -1,6 +1,7 @@
 {
   "projects": [ 
-    "..", 
+    "..",
+    "../LIFE-Components", 
     "../LIFE-Components/Agents",
     "../LIFE-Components/Layers", 
     "../LIFE-Components/Environments",

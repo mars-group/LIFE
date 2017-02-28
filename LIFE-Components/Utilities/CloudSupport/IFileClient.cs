@@ -1,4 +1,4 @@
-﻿namespace LIFE.Components.CloudSupport.File {
+﻿namespace LIFE.Components.Utilities.CloudSupport {
 
   /// <summary>
   ///   Interface for the C# File client.

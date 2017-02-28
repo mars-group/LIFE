@@ -3,7 +3,7 @@ using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.API.Layer.Obstacle;
-using LIFE.Components.CloudSupport.File;
+using LIFE.Components.Utilities.CloudSupport;
 
 namespace LIFE.Components.ObstacleLayer {
 

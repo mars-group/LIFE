@@ -15,6 +15,7 @@ using MulticastAdapter.Implementation;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Implementation;
 using NodeRegistry.Interface;
+using NodeRegistry.Interface.Config;
 using NUnit.Framework;
 // ReSharper disable RedundantAssignment
 
