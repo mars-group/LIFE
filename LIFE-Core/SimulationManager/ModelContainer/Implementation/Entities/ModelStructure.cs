@@ -12,7 +12,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using LCConnector.TransportTypes;
 
-[assembly: InternalsVisibleTo("ModelContainerTest")]
+[assembly: InternalsVisibleTo("ModelContainerTests")]
 
 namespace ModelContainer.Implementation.Entities {
     /// <summary>

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using Hik.Communication.ScsServices.Service;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
-using LIFE.Components.CloudSupport.File;
+using LIFE.Components.Utilities.CloudSupport;
 
 [assembly: InternalsVisibleTo("GridPotentialFieldLayerTests")]
 [assembly: InternalsVisibleTo("GeoPotentialFieldLayerTests")]

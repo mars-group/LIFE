@@ -2,28 +2,23 @@
   "version": "2.0.0-*",
   "description": "The RabbitMQClient allows to write to RabbitMQ",
   "copyright": "(c) 2016 - MARS Group",
-  "authors": [
-    "Christian Huening"
-  ],
-  "buildOptions": {
-    "debugType": "portable"
-  },
+  "authors": [ "Christian Huening" ],
+
   "dependencies": {
-    "CommonTypes": "2.0.0-*",
+    "CommonTypes": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
     "ConfigService": "2.0.0-9",
     "RabbitMQ.Client": "4.1.1"
   },
+
+  // Build solution as .NET Core 1.1 library (DLL).
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
         "NETStandard.Library": "1.6.1"
-      }
-    },
-    "netcoreapp1.1": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "Microsoft.NETCore.App": "1.1.0"
       }
     }
   }

@@ -2,10 +2,6 @@
   "version": "2.1.0-*",
 
   "dependencies": {
-    "CloudSupport": {
-      "target": "project",
-      "version": "2.1.0-*"
-    },
     "GridPotentialFieldLayer": {
       "target": "project",
       "version": "2.1.0-*"
@@ -14,7 +10,14 @@
       "target": "project",
       "version": "2.1.0-*"
     },
-    "Scs": "2.0.0-725"
+    "Scs": {
+      "target": "project",
+      "version": "2.0.0-*"
+    },
+    "Utilities": {
+      "target": "project",
+      "version": "2.1.0-*"
+    }
   },
 
   // Build solution as .NET Core 1.1 library (DLL).

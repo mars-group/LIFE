@@ -2,32 +2,33 @@
   "version": "2.0.0-*",
   "description": "The PartitionManager intends to manage the partitioning of layers in a distributed case",
   "copyright": "(c) 2016 - MARS Group",
-  "authors": [
-    "Christian Huening"
-  ],
-  "buildOptions": {
-    "debugType": "portable"
-  },
+  "authors": [ "Christian Huening" ],
+
   "dependencies": {
-    "LIFE-API": "2.1.0-*",
-    "LCConnector": "2.0.0-*",
-    "LayerFactory": "2.0.0-*",
-    "RTEManager": "2.0.0-*"
+    "LayerFactory": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
+    "LCConnector": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
+    "LIFE-API": {
+      "version": "2.1.0-*",
+      "target": "project"
+    },
+    "RTEManager": {
+      "version": "2.0.0-*",
+      "target": "project"
+    }
   },
+  
+  // Build solution as .NET Core 1.1 library (DLL).
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
         "NETStandard.Library": "1.6.1"
-      }
-    },
-    "netcoreapp1.1": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.1.0",
-          "type": "platform"
-        }
       }
     }
   }

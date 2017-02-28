@@ -6,35 +6,27 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
+
 using CommonTypes.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NodeRegistry.Implementation.Messages
-{
+namespace NodeRegistry.Implementation.Messages {
 
-    public class NodeRegistryHeartBeatMessage : AbstractNodeRegistryMessage
-    {
+  public class NodeRegistryHeartBeatMessage : AbstractNodeRegistryMessage {
 
+    public string NodeIdentifier;
 
-        public String NodeIdentifier;
+    [JsonConverter(typeof(StringEnumConverter))] public NodeType NodeType;
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public NodeType NodeType;
-
-        public NodeRegistryHeartBeatMessage()
-            : base()
-        {
-        }
+    public NodeRegistryHeartBeatMessage() {}
 
 
-
-        public NodeRegistryHeartBeatMessage(NodeRegistryMessageType messageType, string nodeIdentifier, NodeType nodeType, string clusterName)
-            : base(messageType, clusterName)
-        {
-            NodeIdentifier = nodeIdentifier;
-            NodeType = nodeType;
-        }
+    public NodeRegistryHeartBeatMessage(NodeRegistryMessageType messageType, string nodeIdentifier, NodeType nodeType,
+      string clusterName)
+      : base(messageType, clusterName) {
+      NodeIdentifier = nodeIdentifier;
+      NodeType = nodeType;
     }
+  }
 }

@@ -8,7 +8,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2D8AB843-15EB-4C94-B927-F03668AFA258}</ProjectGuid>
     <ProjectTypeGuids>{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}</ProjectTypeGuids>
-    <RootNamespace>LIFE.Components.GeoGridEnvironment</RootNamespace>
+    <RootNamespace>LIFE.Components.Environments.GeoGridEnvironment</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>

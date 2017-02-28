@@ -6,27 +6,25 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using CommonTypes.DataTypes;
 
-namespace NodeRegistry.Implementation.Messages
-{
-    public class NodeRegistryConnectionInfoMessage : AbstractNodeRegistryMessage
-    {
-        public string OriginAddress { get; set; }
+namespace NodeRegistry.Implementation.Messages {
 
+  public class NodeRegistryConnectionInfoMessage : AbstractNodeRegistryMessage {
 
-        public TNodeInformation NodeInformation { get; set; }
+    public NodeRegistryConnectionInfoMessage() {}
 
-
-        public NodeRegistryConnectionInfoMessage()
-            : base()
-        {
-        }
-
-        public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, TNodeInformation information, string address, string clusterName)
-            : base(messageType, clusterName) {
-                OriginAddress = address;
-            NodeInformation = information;
-        }
+    public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, TNodeInformation information,
+      string address, string clusterName)
+      : base(messageType, clusterName) {
+      OriginAddress = address;
+      NodeInformation = information;
     }
+
+    public string OriginAddress { get; set; }
+
+
+    public TNodeInformation NodeInformation { get; set; }
+  }
 }

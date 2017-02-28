@@ -25,6 +25,7 @@ using LIFE.API.Layer;
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
 using NodeRegistry.Interface;
+using NodeRegistry.Interface.Config;
 
 namespace LayerRegistry.Implementation {
     internal class LayerRegistryUseCase : ILayerRegistry {

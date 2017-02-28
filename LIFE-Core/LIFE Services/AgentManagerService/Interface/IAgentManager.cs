@@ -10,11 +10,11 @@
 using System;
 using System.Collections.Generic;
 using LIFE.API.Agent;
+using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
-using LIFE.Components.Agents.DalskiAgent.Agents;
 using LIFE.Components.Environments.GeoGridEnvironment;
-using SpatialAPI.Environment;
+using LIFE.Components.ESC.SpatialAPI.Environment;
 
 namespace LIFE.Services.AgentManagerService.Interface
 {
@@ -22,7 +22,7 @@ namespace LIFE.Services.AgentManagerService.Interface
 		IDictionary<Guid,T> GetAgentsByAgentInitConfig(
             AgentInitConfig agentInitConfig, RegisterAgent registerAgentHandle,
             UnregisterAgent unregisterAgentHandle, List<ILayer> additionalLayerDependencies,
-            IEnvironment environment = null, IGeoGridEnvironment<GpsAgent> geoGridEnvironment = null,
+            IEnvironment environment = null, IGeoGridEnvironment<IGeoCoordinate> geoGridEnvironment = null,
             int reducedAgentCount = -1);
     }
 }

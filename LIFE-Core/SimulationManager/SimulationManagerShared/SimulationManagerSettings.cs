@@ -15,6 +15,7 @@ using System.Net.Sockets;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
 using CommonTypes.Types;
+using NodeRegistry.Interface.Config;
 using static System.String;
 
 

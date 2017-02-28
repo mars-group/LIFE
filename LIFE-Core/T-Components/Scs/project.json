@@ -2,16 +2,21 @@
   "version": "2.0.0-*",
   "description": "The simple client server framework to make communication easy",
   "copyright": "(c) 2016 - MARS Group",
-  "authors": [
-    "Christian Huening"
-  ],
-  "buildOptions": {
-    "debugType": "portable"
-  },
+  "authors": [ "Christian Huening" ],
+
   "dependencies": {
-    "ConfigurationAdapter": "2.0.0-*",
-    "CustomUtilities": "2.0.0-*",
-    "MulticastAdapter": "2.0.0-*",
+    "ConfigurationAdapter": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
+    "CustomUtilities": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
+    "MulticastAdapter": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
     "Newtonsoft.Json": "9.0.1",
     "System.Collections": "4.3.0",
     "System.Linq": "4.3.0",
@@ -21,6 +26,7 @@
     "System.Threading.Tasks": "4.3.0",
     "System.Threading.Tasks.Parallel": "4.3.0"
   },
+
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
@@ -28,18 +34,7 @@
         "NETStandard.Library": "1.6.1"
       },
       "buildOptions": {
-        "define": [
-          "HAS_DISPATCH_PROXY"
-        ]
-      }
-    },
-    "netcoreapp1.1": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.1.0",
-          "type": "platform"
-        }
+        "define": [ "HAS_DISPATCH_PROXY" ]
       }
     }
   }

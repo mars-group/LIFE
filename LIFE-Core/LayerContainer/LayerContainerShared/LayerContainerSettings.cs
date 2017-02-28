@@ -15,6 +15,7 @@ using ConfigurationAdapter;
 using CommonTypes.Types;
 using MulticastAdapter.Interface.Config;
 using NodeRegistry.Interface;
+using NodeRegistry.Interface.Config;
 using static System.String;
 
 namespace LayerContainerShared {

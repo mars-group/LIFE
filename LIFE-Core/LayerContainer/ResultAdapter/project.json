@@ -2,34 +2,29 @@
   "version": "2.0.0-*",
   "description": "The ResultAdapter manages the output of agent data",
   "copyright": "(c) 2016 - MARS Group",
-  "authors": [
-    "Christian Huening"
-  ],
-  "buildOptions": {
-    "debugType": "portable"
-  },
+  "authors": [ "Christian Huening" ],
+
   "dependencies": {
-    "LIFE-API": "2.1.0-*",
-    "CommonTypes": "2.0.0-*",
-    "System.Threading.Tasks.Parallel": "4.3.0",
-    "RabbitMQ.Client": "4.1.1",
+    "CommonTypes": {
+      "version": "2.0.0-*",
+      "target": "project"
+    },
+    "LIFE-API": {
+      "version": "2.1.0-*",
+      "target": "project"
+    },  
     "ConfigService": "2.0.0-9",
-    "MongoDB.Driver": "2.4.1"
+    "MongoDB.Driver": "2.4.1",
+    "RabbitMQ.Client": "4.1.1",
+    "System.Threading.Tasks.Parallel": "4.3.0"    
   },
+  
+  // Build solution as .NET Core 1.1 library (DLL).
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
         "NETStandard.Library": "1.6.1"
-      }
-    },
-    "netcoreapp1.1": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.1.0",
-          "type": "platform"
-        }
       }
     }
   }

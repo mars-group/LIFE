@@ -1,3 +1,15 @@
 {
-  "projects": [ "..", "LIFE API", "Common", "LIFE Services", "T-Components", "SimulationManager", "LayerContainer", "LIFECompleteStarter", "MARSLocalStarter", "../LIFE-Components/Agents", "../LIFE-Components/Environments" ]
+  "projects": [
+    "../LIFE-Components", 
+    "../LIFE-Components/Agents", 
+    "../LIFE-Components/Environments", 
+    "..", 
+    "Common", 
+    "LIFE Services", 
+    "T-Components", 
+    "SimulationManager", 
+    "LayerContainer", 
+    "LIFECompleteStarter", 
+    "MARSLocalStarter"
+  ]
 }

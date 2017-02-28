@@ -25,9 +25,6 @@ namespace LayerContainerFacade.Implementation {
 	internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
         private readonly IPartitionManager _partitionManager;
         private readonly IRTEManager _rteManager;
-        private IScsServiceApplication _server;
-
-
 
         public LayerContainerFacadeImpl
             (LayerContainerSettings settings,
@@ -38,11 +35,11 @@ namespace LayerContainerFacade.Implementation {
 
             _partitionManager = partitionManager;
             _rteManager = rteManager;
-            _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
-            _server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
+            var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
+            server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
 
             //Start server
-            _server.Start();
+            server.Start();
 
             nodeRegistry.JoinCluster();
         }

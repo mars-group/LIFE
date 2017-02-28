@@ -1,3 +1,14 @@
 {
-  "projects": [ "..", "../LIFE-Components/Agents","../LIFE-Components/Layers", "../LIFE-Components/Environments" ]
+  "projects": [ 
+    "..",
+    "../LIFE-Components", 
+    "../LIFE-Components/Agents",
+    "../LIFE-Components/Layers", 
+    "../LIFE-Components/Environments",
+    "../LIFE-Core/Common",
+    "../LIFE-Core/LayerContainer",  
+    "../LIFE-Core/LIFE Services",  
+    "../LIFE-Core/SimulationManager",  
+    "../LIFE-Core/T-Components"
+  ]
 }

@@ -5,27 +5,38 @@ namespace LIFE.API.GeoCommon {
 
   /// <summary>
   ///   Copying and pasting from stack overflow:
-  ///   http://stackoverflow.com/questions/6151625/should-i-use-a-struct-or-a-class-to-represent-a-lat-lng-coordinate
   /// </summary>
   public class GeoCoordinate : IGeoCoordinate {
 
+    public double Latitude { get; set; }  // Latitude of this agents position.
+    public double Longitude { get; set; } // Longitude of this agents position.
+
+
+    /// <summary>
+    ///   Create a new GPS coordinate.
+    /// </summary>
+    /// <param name="latitude">Latitude value.</param>
+    /// <param name="longitude">Longitude value.</param>
     public GeoCoordinate(double latitude, double longitude) {
       Latitude = latitude;
       Longitude = longitude;
     }
 
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
 
+    /// <summary>
+    ///   Checks if this position equals another one.
+    /// </summary>
+    /// <param name="other">The other position to check.</param>
+    /// <returns>'True', if both positions are sufficiently equal.</returns>
     public bool Equals(IGeoCoordinate other) {
-      return (Math.Abs(Latitude - other.Latitude) < 0.00000000000001) &&
-             (Math.Abs(Longitude - other.Longitude) < 0.00000000000001);
+      const double threshold = 0.00000000000001;
+      return (Math.Abs(Latitude - other.Latitude) < threshold) &&
+             (Math.Abs(Longitude - other.Longitude) < threshold);
     }
+
 
     /// <summary>
     ///   Calculates the distance between two positions in km.
-    ///   Copying and Pasting from stack overflow for dummies:
-    ///   http://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
     /// </summary>
     /// <returns>The distance from lat lon in km.</returns>
     /// <param name="other">Coordinate to compare to.</param>
@@ -34,11 +45,10 @@ namespace LIFE.API.GeoCommon {
       const int r = 6371;
       var dLat = Deg2Rad(other.Latitude - Latitude);
       var dLon = Deg2Rad(Longitude - other.Longitude);
-      var a =
-          Math.Sin(dLat/2)*Math.Sin(dLat/2) +
-          Math.Cos(Deg2Rad(Latitude))*Math.Cos(Deg2Rad(other.Latitude))*
-          Math.Sin(dLon/2)*Math.Sin(dLon/2)
-        ;
+      var a = Math.Sin(dLat/2)*Math.Sin(dLat/2) +
+              Math.Cos(Deg2Rad(Latitude))*Math.Cos(Deg2Rad(other.Latitude))*
+              Math.Sin(dLon/2)*Math.Sin(dLon/2);
+
       var c = 2*Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
       var d = r*c; // Distance in km
       return d;

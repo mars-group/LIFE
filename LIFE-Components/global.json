@@ -1,3 +1,10 @@
 {
-  "projects": ["..", "../LIFE-Core/T-Components", "Agents", "Environments", "Layers", "Utilities"]
+  "projects": [
+    ".",
+    "..", 
+    "../LIFE-Core/T-Components", 
+    "Agents", 
+    "Environments", 
+    "Layers"  
+  ]
 }

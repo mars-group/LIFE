@@ -27,7 +27,7 @@ namespace ConfigurationAdapter.Interface {
         /// <returns></returns>
         public static T Load<T>(string fileName = null) {
             string path = fileName ?? "./config/" + typeof (T).Name + ".cfg";
-            T result = default(T);
+            T result;
 
             XmlSerializer serializer;
 

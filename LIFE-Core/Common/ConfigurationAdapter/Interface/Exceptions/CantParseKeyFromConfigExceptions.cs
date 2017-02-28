@@ -6,10 +6,12 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
 namespace ConfigurationAdapter.Interface.Exceptions {
-    internal class CantParseKeyFromConfigExceptions : Exception {
-        public CantParseKeyFromConfigExceptions(String msg) : base(msg) {}
-    }
+
+  internal class CantParseKeyFromConfigExceptions : Exception {
+    public CantParseKeyFromConfigExceptions(string msg) : base(msg) {}
+  }
 }
