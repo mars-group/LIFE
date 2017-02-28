@@ -51,20 +51,20 @@ namespace LIFE.Components.Agents.AgentTwo.Environment {
   ///   A position structure for 2D grid agents.
   ///   It provides an integer (X,Y) position.
   /// </summary>
-  public class GridPosition {
-    private readonly CartesianPosition _pos; // The underlying position container.
+  public class ReadOnlyGridPosition {
+    private readonly GridPosition _pos; // The underlying position container.
 
     /// <summary>
     ///   Create a new grid position structure.
     /// </summary>
     /// <param name="pos">Position data container.</param>
-    public GridPosition(CartesianPosition pos) {
+    public ReadOnlyGridPosition(GridPosition pos) {
       _pos = pos;
     }
 
-    public int X => Convert.ToInt32(_pos.X);              // X-coordinate.
-    public int Y => Convert.ToInt32(_pos.Y);              // Y-coordinate.
-    public int Yaw => Convert.ToInt32(_pos.Yaw);          // Yaw value.
-    public GridDirection Direction => _pos.GridDirection; // Yaw as grid direction constant.
+    public int X => Convert.ToInt32(_pos.X);               // X-coordinate.
+    public int Y => Convert.ToInt32(_pos.Y);               // Y-coordinate.
+    public int Yaw => Convert.ToInt32(_pos.GridDirection); // Yaw value.
+    public GridDirection Direction => _pos.GridDirection;  // Yaw as grid direction constant.
   }
 }

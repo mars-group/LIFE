@@ -1,9 +1,13 @@
-﻿using LIFE.Components.Agents.AgentTwo.Environment;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LIFE.Components.Agents.AgentTwo.Environment;
 using LIFE.Components.Agents.AgentTwo.Perception;
 using LIFE.Components.Agents.AgentTwo.Reasoning;
+using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC. SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Shape;
+using MovementResult = LIFE.Components.Agents.AgentTwo.Perception.MovementResult;
 
 namespace LIFE.Components.Agents.AgentTwo.Movement {
 
@@ -67,7 +71,21 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
       var vec =  dir.GetDirectionalVector() * distance;
       return new MovementAction(() => {
         var result = _env.Move(_pos, vec, dir);
-        MovementSensor.SetMovementResult(result);
+        var success = MovementStatus.Success;
+        var colObj = new List<CollisionObject>();
+        if (result.Collisions != null && result.Collisions.Any()) {
+          success = MovementStatus.SuccessCollision;
+          foreach (var entity in result.Collisions) {
+            colObj.Add(new CollisionObject {
+              AgentId = entity.AgentGuid.ToString(),
+              AgentType = entity.AgentType.Name
+            });
+            if (entity.CollisionType.Equals(CollisionType.MassiveAgent)) {
+              success = MovementStatus.FailedCollision;
+            }
+          }          
+        }     
+        MovementSensor.SetMovementResult(new MovementResult(success, colObj));
       });
     }
 

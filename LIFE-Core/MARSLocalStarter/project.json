@@ -1,29 +1,29 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
 
   "dependencies": {
     "CommonTypes": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LayerContainerFacade": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LCConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LNSConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "SimulationManagerFacade": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "SMConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "System.ComponentModel.TypeConverter": "4.3.0"

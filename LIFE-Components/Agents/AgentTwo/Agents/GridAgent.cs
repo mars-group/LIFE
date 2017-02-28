@@ -1,8 +1,9 @@
-﻿using LIFE.API.Layer;
+﻿using LIFE.API.GridCommon;
+using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.AgentTwo.Environment;
 using LIFE.Components.Agents.AgentTwo.Movement;
-using LIFE.Components.ESC.SpatialAPI.Environment;
+using LIFE.Components.Environments.GridEnvironment;
 
 /* The following warnings are useless, because this is an abstract base class
  * and we don't know if the user maybe want to use a variable or overwrite it. */
@@ -16,10 +17,10 @@ namespace LIFE.Components.Agents.AgentTwo.Agents {
   /// </summary>
   public abstract class GridAgent : Agent {
 
-    private readonly IEnvironment _env;           // IESC implementation for collision detection.
-    private readonly CartesianPosition _position; // Agent position backing structure.
-    protected readonly GridMover Mover;           // Agent movement module.
-    public readonly GridPosition Position;        // Agent position container.
+    private readonly IGridEnvironment<IGridCoordinate> _env; // IESC implementation for collision detection.
+    private readonly GridPosition _position;                 // Agent position backing structure.
+    protected readonly GridMover Mover;                      // Agent movement module.
+    public readonly ReadOnlyGridPosition Position;           // Agent position container.
 
 
     /// <summary>
@@ -29,16 +30,15 @@ namespace LIFE.Components.Agents.AgentTwo.Agents {
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">Environment implementation.</param>
-    /// <param name="colType">Collision class. ('MASSIVE' [default], 'ENVIRONMENT', 'GHOST').</param>
     /// <param name="id">The agent identifier (serialized GUID).</param>
     /// <param name="freq">MARS LIFE execution freqency.</param>
     protected GridAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-                        IEnvironment env, string colType=null, byte[] id=null, int freq=1)
+                        IGridEnvironment<IGridCoordinate> env, byte[] id=null, int freq=1)
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
-      _position = new CartesianPosition(this, colType ?? "-");
-      Position = new GridPosition(_position);
-      Mover = new GridMover(new AgentMover2D(new AgentMover3D(env, _position, SensorArray)), Position);
+      _position = new GridPosition(0,0);
+      Position = new ReadOnlyGridPosition(_position);
+      Mover = new GridMover(env, _position, SensorArray);
     }
 
 

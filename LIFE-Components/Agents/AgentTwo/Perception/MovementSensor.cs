@@ -1,6 +1,4 @@
-﻿using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
-
-namespace LIFE.Components.Agents.AgentTwo.Perception {
+﻿namespace LIFE.Components.Agents.AgentTwo.Perception {
   
   /// <summary>
   ///   Simple sensor for movement feedback.

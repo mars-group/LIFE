@@ -5,7 +5,9 @@ using System.Linq;
 using LIFE.API.GridCommon;
 
 namespace LIFE.Components.Environments.GridEnvironment {
+
   public class GridEnvironment<T> : IGridEnvironment<T> where T : IEquatable<T>, IGridCoordinate {
+
     private readonly ConcurrentDictionary<T, byte>[] _grid;
     private readonly int _numberOfGridCellsX;
     private readonly int _numberOfGridCellsY;
@@ -63,6 +65,9 @@ namespace LIFE.Components.Environments.GridEnvironment {
       var currentCell = GetCell(objectToMove);
       var currentColl = _grid[currentCell];
       var targetCell = GetCell(xDestination, yDestination);
+      if ((targetCell >= _grid.Length) || (targetCell < 0)) {
+        return objectToMove;
+      }
       var targetColl = _grid[targetCell];
       byte dummy;
       if (currentColl.TryRemove(objectToMove, out dummy)) {
@@ -80,9 +85,7 @@ namespace LIFE.Components.Environments.GridEnvironment {
 
     public T MoveTowardsTarget(T objectToMove, int xDestination, int yDestination, int distance) {
       var path = GetPathFromAtoB(objectToMove.X, objectToMove.Y, xDestination, yDestination);
-      objectToMove.X = path[distance - 1].X;
-      objectToMove.Y = path[distance - 1].Y;
-      return objectToMove;
+      return MoveToPosition(objectToMove, path[distance - 1].X, path[distance - 1].Y);
     }
 
     public T MoveTowardsTarget(T objectToMove, IGridCoordinate destination, int distance) {

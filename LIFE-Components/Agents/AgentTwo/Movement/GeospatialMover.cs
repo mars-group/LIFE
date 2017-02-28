@@ -2,7 +2,6 @@
 using LIFE.API.GeoCommon;
 using LIFE.Components.Agents.AgentTwo.Perception;
 using LIFE.Components.Agents.AgentTwo.Reasoning;
-using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
 using LIFE.Components.Environments.GeoGridEnvironment;
 
 namespace LIFE.Components.Agents.AgentTwo.Movement {
@@ -21,13 +20,24 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     ///   This function is automatically invoked in the abstract agent!
     /// </summary>
     /// <param name="env">The geospatial environment to use.</param>
-    /// <param name="agentPos">Agent position data structure.</param>
+    /// <param name="pos">Agent position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
-    public GeospatialMover(IGeoGridEnvironment<IGeoCoordinate> env, GeoPosition agentPos, SensorArray sensorArray)
+    public GeospatialMover(IGeoGridEnvironment<IGeoCoordinate> env, GeoPosition pos, SensorArray sensorArray)
       : base(sensorArray) {
       _geoGrid = env;
-      _position = agentPos;
-      env.Insert(_position);
+      _position = pos;
+    }
+
+
+    /// <summary>
+    ///   Try to insert this agent into the environment at the given position.
+    /// </summary>
+    /// <param name="lat">Agent start position (latitude).</param>
+    /// <param name="lng">Agent start position (longitude).</param>
+    public void InsertIntoEnvironment(double lat, double lng) {
+      _position.Latitude = lat;
+      _position.Longitude = lng;
+      _geoGrid.Insert(_position);
     }
 
 
@@ -80,13 +90,16 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     /// <returns>An interaction describing the movement.</returns>
     public MovementAction SetToPosition(double lat, double lng, double bearing) {
       return new MovementAction(() => {
-        IGeoCoordinate newPos;
-        try { newPos = _geoGrid.MoveToPosition(new GeoCoordinate(_position.Latitude, _position.Longitude), lat, lng); }
-        catch (IndexOutOfRangeException) { return; } // Movement failed, stay at the old position.
-        _position.Bearing = bearing;
-        _position.Latitude = newPos.Latitude;
-        _position.Longitude = newPos.Longitude;
-        MovementSensor.SetMovementResult(new MovementResult());
+        try {
+          var newPos = _geoGrid.MoveToPosition(new GeoCoordinate(_position.Latitude, _position.Longitude), lat, lng);
+          _position.Bearing = bearing;
+          _position.Latitude = newPos.Latitude;
+          _position.Longitude = newPos.Longitude;
+          MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));
+        }
+        catch (IndexOutOfRangeException) { // Movement failed, stay at the old position.
+          MovementSensor.SetMovementResult(new MovementResult(MovementStatus.FailedCollision));
+        } 
       });
     }
 

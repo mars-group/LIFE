@@ -22,10 +22,10 @@ using LIFE.API.Agent;
 using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
+using LIFE.API.LIFECapabilities;
 using LIFE.Components.Environments.GeoGridEnvironment;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Services.AgentManagerService.Interface;
-using MARS.Shuttle.SimulationConfig.Interfaces;
 
 namespace LIFE.Services.AgentManagerService.Implementation {
 
@@ -45,10 +45,10 @@ namespace LIFE.Services.AgentManagerService.Implementation {
       var agentType = Type.GetType(agentInitConfig.AgentFullName);
 
       var agentConstructor = agentType.GetTypeInfo().GetConstructors().
-        FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishInShuttleAttribute), true).Any());
+        FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishForMappingInMarsAttribute), true).Any());
       if (agentConstructor == null) {
         var msg =
-          "AgentConstructor was not found. Either Reflection is not working or you forgot to annotate a ctor with [PublishInShuttle]";
+          "AgentConstructor was not found. Either Reflection is not working or you forgot to annotate a ctor with [PublishForMappingInMars]";
         Console.WriteLine(msg);
         throw new AgentConstructorWasNullException("msg");
       }

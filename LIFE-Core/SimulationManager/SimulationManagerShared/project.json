@@ -1,20 +1,20 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
   "description": "SimulationManagerShared provides common classes for the SimulationManager and its services",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
 
   "dependencies": {
     "CommonTypes": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "MulticastAdapter": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "NodeRegistry": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "System.Net.NameResolution": "4.3.0"

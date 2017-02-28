@@ -1,16 +1,16 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
   "description": "The PartitionManager intends to manage the partitioning of layers in a distributed case",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
 
   "dependencies": {
     "LayerFactory": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LCConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LIFE-API": {
@@ -18,7 +18,7 @@
       "target": "project"
     },
     "RTEManager": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     }
   },

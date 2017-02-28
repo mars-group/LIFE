@@ -1,12 +1,12 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
   "description": "The LayerLoader allows to load layers from DLLs.",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
 
   "dependencies": {
     "LCConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "Microsoft.Extensions.DependencyModel": "1.1.0",

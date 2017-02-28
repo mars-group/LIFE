@@ -1,41 +1,41 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
 
   "dependencies": {
     "ConfigurationAdapter": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LayerNameService": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LNSConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "ModelContainer": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "NodeRegistry": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "RuntimeEnvironment": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "Scs": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "SimulationManagerShared": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "SMConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "Autofac": "4.2.1",

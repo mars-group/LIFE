@@ -1,20 +1,20 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
   "description": "LayerFactory allows to create layer instances by either using a local or remote reference.",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
 
   "dependencies": {
     "LayerLoader": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LayerRegistry": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LCConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LIFE-API": {

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using LIFE.API.GridCommon;
+using LIFE.Components.Agents.AgentTwo.Perception;
 using LIFE.Components.Agents.AgentTwo.Reasoning;
+using LIFE.Components.Environments.GridEnvironment;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
-using GridPosition = LIFE.Components.Agents.AgentTwo.Environment.GridPosition;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -14,21 +15,24 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
   ///   Two-dimensional, grid-based movement module.
   ///   For now, this mover rests upon the 2D continuous environment, emulating grid behaviour.
   /// </summary>
-  public class GridMover {
+  public class GridMover : AgentMover {
 
-    private readonly AgentMover2D _mover2D;   // 2D movement module used internally.
-    private readonly GridPosition _pos;       // Current agent grid position.
+    private readonly IGridEnvironment<IGridCoordinate> _grid; // The grid environment to use.
+    private readonly GridPosition _position;                  // Agent position structure.
+
     public bool DiagonalEnabled { get; set; } // This flag enables diagonal movement [default: disabled].
 
 
     /// <summary>
     ///   Create a new grid movement module.
     /// </summary>
-    /// <param name="mover2D">2D continuous cartesian mover.</param>
-    /// <param name="pos">The agent's position structure.</param>
-    public GridMover(AgentMover2D mover2D, GridPosition pos) {
-      _mover2D = mover2D;
-      _pos = pos;
+    /// <param name="env">The grid environment to use.</param>
+    /// <param name="pos">Agent position data structure.</param>
+    /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
+    public GridMover(IGridEnvironment<IGridCoordinate> env, GridPosition pos, SensorArray sensorArray)
+      : base(sensorArray) {
+      _grid = env;
+      _position = pos;
     }
 
 
@@ -37,30 +41,55 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     /// </summary>
     /// <param name="x">Agent start position (x-coordinate).</param>
     /// <param name="y">Agent start position (y-coordinate).</param>
-    /// <returns>Success flag. If failed, the agent may not be moved!</returns>
-    public bool InsertIntoEnvironment(int x, int y) {
-      return _mover2D.InsertIntoEnvironment(x, y);
+    public void InsertIntoEnvironment(int x, int y) {
+      _position.X = x;
+      _position.Y = y;
+      _grid.Insert(_position);
     }
 
 
     /// <summary>
     ///   Perform grid-based movement.
     /// </summary>
-    /// <param name="direction">The direction to move (enumeration value).</param>
+    /// <param name="dir">The direction to move (enumeration value).</param>
     /// <returns>An interaction object that contains the code to execute this movement.</returns>
-    public MovementAction MoveInDirection(GridDirection direction) {
-      const double r = 1.41421356;
-      switch (direction) {
-        case GridDirection.Up       : return _mover2D.MoveInDirection(1,   0);
-        case GridDirection.UpRight  : return _mover2D.MoveInDirection(r,  45);
-        case GridDirection.Right    : return _mover2D.MoveInDirection(1,  90);
-        case GridDirection.DownRight: return _mover2D.MoveInDirection(r, 135);
-        case GridDirection.Down     : return _mover2D.MoveInDirection(1, 180);
-        case GridDirection.DownLeft : return _mover2D.MoveInDirection(r, 225);
-        case GridDirection.Left     : return _mover2D.MoveInDirection(1, 270);
-        case GridDirection.UpLeft   : return _mover2D.MoveInDirection(r, 315);
+    public MovementAction MoveInDirection(GridDirection dir) {
+      var x = _position.X;
+      var y = _position.Y;
+      switch (dir) {
+        case GridDirection.Up       : return SetToPosition(x,   y+1, dir);
+        case GridDirection.UpRight  : return SetToPosition(x+1, y+1, dir);
+        case GridDirection.Right    : return SetToPosition(x+1, y,   dir);
+        case GridDirection.DownRight: return SetToPosition(x+1, y-1, dir);
+        case GridDirection.Down     : return SetToPosition(x,   y-1, dir);
+        case GridDirection.DownLeft : return SetToPosition(x-1, y-1, dir);
+        case GridDirection.Left     : return SetToPosition(x-1, y,   dir);
+        case GridDirection.UpLeft   : return SetToPosition(x-1, y+1, dir);
         default: return null;
       }
+    }
+
+
+    /// <summary>
+    ///   Set this agent to a new position.
+    /// </summary>
+    /// <param name="x">X coordinate to move to.</param>
+    /// <param name="y">Y coordinate to move to.</param>
+    /// <param name="dir">Agent orientation (optional).</param>
+    /// <returns></returns>
+    public MovementAction SetToPosition(int x, int y, GridDirection dir = GridDirection.NotSet) {  
+      return new MovementAction(() => {
+        var result = _grid.MoveToPosition(_position, x, y);
+        if (dir != GridDirection.NotSet) _position.GridDirection = dir;
+        if (result.X == _position.X && result.Y == _position.Y) {
+          MovementSensor.SetMovementResult(new MovementResult(MovementStatus.OutOfBounds));
+        }
+        else {
+          _position.X = result.X;
+          _position.Y = result.Y;  
+          MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));                
+        }
+      });
     }
 
 
@@ -74,10 +103,10 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
     public List<MovementOption> GetMovementOptions(int targetX, int targetY) {
 
       // Check, if we are already there. Otherwise no need to move anyway (empty list).
-      if (targetX == _pos.X && targetY == _pos.Y) return new List<MovementOption>();
+      if (targetX == _position.X && targetY == _position.Y) return new List<MovementOption>();
 
       // Calculate yaw to target position.
-      var joint = new Vector3(targetX - _pos.X, targetY - _pos.Y, 0);
+      var joint = new Vector3(targetX - _position.X, targetY - _position.Y, 0);
       var dir = new Direction();
       dir.SetDirectionalVector(joint);
       var angle = dir.Yaw;
@@ -112,7 +141,7 @@ namespace LIFE.Components.Agents.AgentTwo.Movement {
   /// </summary>
   public struct MovementOption : IComparable {
     public GridDirection Direction; // The represented grid movement direction.
-    public double Offset;     // Angular offset to target (heuristic).
+    public double Offset;           // Angular offset to target (heuristic).
 
 
     /// <summary>

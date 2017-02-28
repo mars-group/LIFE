@@ -55,7 +55,10 @@ namespace LIFE.Components.Environments.GridEnvironment {
     /// <param name="objectToMove">the object to move</param>
     /// <param name="xDestination">X component to move to</param>
     /// <param name="yDestination">Y component to move to</param>
-    /// <returns>T with updated coordinates</returns>
+    /// <returns>
+    ///   T with updated coordinates. If the object moves out of the boundaries,
+    ///   the move is denied and the old position is returned.
+    /// </returns>
     T MoveToPosition(T objectToMove, int xDestination, int yDestination);
 
     T MoveToPosition(T objectToMove, IGridCoordinate destination);

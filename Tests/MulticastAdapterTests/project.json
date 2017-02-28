@@ -4,19 +4,19 @@
   "dependencies": {
     "CommonTypes": {
       "target": "project",
-      "version": "2.0.0-*"
+      "version": "2.1.0-*"
     },
     "ConfigurationAdapter": {
       "target": "project",
-      "version": "2.0.0-*"
+      "version": "2.1.0-*"
     },
     "MulticastAdapter": {
       "target": "project",
-      "version": "2.0.0-*"
+      "version": "2.1.0-*"
     }, 
     "NodeRegistry": {
       "target": "project",
-      "version": "2.0.0-*"
+      "version": "2.1.0-*"
     },     
     "NUnit": "3.5.0",
     "dotnet-test-nunit": "3.4.0-beta-3"

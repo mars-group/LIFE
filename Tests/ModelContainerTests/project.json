@@ -4,11 +4,11 @@
   "dependencies": {
     "LCConnector": {
       "target": "project",
-      "version": "2.0.0-*"
+      "version": "2.1.0-*"
     },
     "ModelContainer": {
       "target": "project",
-      "version": "2.0.0-*"
+      "version": "2.1.0-*"
     },
     "Microsoft.DotNet.InternalAbstractions": "1.0.0",
     "NUnit": "3.5.0",

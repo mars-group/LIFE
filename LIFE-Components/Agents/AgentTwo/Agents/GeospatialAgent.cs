@@ -32,18 +32,14 @@ namespace LIFE.Components.Agents.AgentTwo.Agents {
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">The grid environment.</param>
-    /// <param name="lat">Agent start position (latitude).</param>
-    /// <param name="lng">Agent start position (longitude).</param>
     /// <param name="id">The agent identifier (serialized GUID).</param>
     /// <param name="freq">MARS LIFE execution freqency.</param>
-    protected GeospatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,    // Base params.
-                              IGeoGridEnvironment<IGeoCoordinate> env, double lat, double lng, // Spatial data.
-                              byte[] id=null, int freq=1)                                      // Optional.
+    protected GeospatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
+                              IGeoGridEnvironment<IGeoCoordinate> env, byte[] id=null, int freq=1)
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
-      _position = new GeoPosition(lat, lng);
+      _position = new GeoPosition(0, 0);
       Mover = new GeospatialMover(env, _position, SensorArray);
-      Mover.SetToPosition(lat, lng, 0);
     }
 
 

@@ -1,12 +1,12 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
   "description": "The LNSConnector provides common classes for the LayerNameService and connecting services",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
 
   "dependencies": {
     "Scs": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     }
   },

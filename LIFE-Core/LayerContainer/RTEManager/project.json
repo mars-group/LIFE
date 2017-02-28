@@ -1,12 +1,12 @@
 {
-  "version": "2.0.0-*",
+  "version": "2.1.0-*",
   "description": "RTEManager manages the RuntimeEnvironment",
   "copyright": "(c) 2016 - MARS Group",
   "authors": [ "Christian Huening" ],
 
   "dependencies": {
     "LCConnector": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "LIFE-API": {
@@ -14,11 +14,11 @@
       "target": "project"
     },
     "NodeRegistry": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "ResultAdapter": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     }
   },

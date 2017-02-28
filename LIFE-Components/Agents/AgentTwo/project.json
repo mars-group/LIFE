@@ -3,7 +3,7 @@
 
   "dependencies": {
     "ASC": {
-      "version": "2.0.0-*",
+      "version": "2.1.0-*",
       "target": "project"
     },
     "EnvironmentServiceComponent": {
@@ -11,6 +11,10 @@
       "version": "2.1.0-*"
     },
     "GeoGridEnvironment": {
+      "target": "project",
+      "version": "2.1.0-*"
+    },
+    "GridEnvironment": {
       "target": "project",
       "version": "2.1.0-*"
     },
