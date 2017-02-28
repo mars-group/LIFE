@@ -6,35 +6,30 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
+
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
 
-namespace LayerNameService.Implementation
-{
+namespace LayerNameService.Implementation {
 
-    public class LayerNameServiceComponent : ILayerNameService
-    {
-        private readonly ILayerNameService _layerNameServiceUseCase;
+  public class LayerNameServiceComponent : ILayerNameService {
 
-        public LayerNameServiceComponent()
-        {
-            _layerNameServiceUseCase = new LayerNameServiceUseCase();
-        }
+    private readonly ILayerNameService _layerNameServiceUseCase;
 
-        public TLayerNameServiceEntry ResolveLayer(string layerType)
-        {
-            return _layerNameServiceUseCase.ResolveLayer(layerType);
-        }
-
-        public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
-        {
-            _layerNameServiceUseCase.RegisterLayer(layerType, layerNameServiceEntry);
-        }
-
-        public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
-        {
-            _layerNameServiceUseCase.RemoveLayer(layerType, layerNameServiceEntry);
-        }
+    public LayerNameServiceComponent() {
+      _layerNameServiceUseCase = new LayerNameServiceUseCase();
     }
+
+    public TLayerNameServiceEntry ResolveLayer(string layerType) {
+      return _layerNameServiceUseCase.ResolveLayer(layerType);
+    }
+
+    public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
+      _layerNameServiceUseCase.RegisterLayer(layerType, layerNameServiceEntry);
+    }
+
+    public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
+      _layerNameServiceUseCase.RemoveLayer(layerType, layerNameServiceEntry);
+    }
+  }
 }

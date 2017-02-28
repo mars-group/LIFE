@@ -28,11 +28,7 @@
     "NodeRegistry": {
       "version": "2.1.0-*",
       "target": "project"
-    },
-    "RabbitMQClient": {
-      "version": "2.1.0-*",
-      "target": "project"
-    },      
+    },     
     "Scs": {
       "version": "2.1.0-*",
       "target": "project"

@@ -6,50 +6,38 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-using System;
+
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
 
-namespace LayerNameService.Implementation
-{
-    internal class LayerNameServiceUseCase : ILayerNameService
-    {
-        private readonly IDictionary<string, List<TLayerNameServiceEntry>> _layerMap;
+namespace LayerNameService.Implementation {
 
-        public LayerNameServiceUseCase()
-        {
-            _layerMap = new ConcurrentDictionary<string, List<TLayerNameServiceEntry>>();
-        }
+  internal class LayerNameServiceUseCase : ILayerNameService {
 
-        public TLayerNameServiceEntry ResolveLayer(string layerType)
-        {
-                return _layerMap[layerType].FirstOrDefault();
-        }
+    private readonly IDictionary<string, List<TLayerNameServiceEntry>> _layerMap;
 
-        public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
-        {
-            if (!_layerMap.ContainsKey(layerType))
-            {
-                _layerMap[layerType] = new List<TLayerNameServiceEntry>();
-            }
-            _layerMap[layerType].Add(layerNameServiceEntry);
-        }
-
-        public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
-        {
-            if (_layerMap[layerType].Count <= 1)
-            {
-                _layerMap.Remove(layerType);
-            }
-            else
-            {
-                _layerMap[layerType].Remove(layerNameServiceEntry);
-            }
-
-        }
+    public LayerNameServiceUseCase() {
+      _layerMap = new ConcurrentDictionary<string, List<TLayerNameServiceEntry>>();
     }
+
+    public TLayerNameServiceEntry ResolveLayer(string layerType) {
+      return _layerMap[layerType].FirstOrDefault();
+    }
+
+    public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
+      if (!_layerMap.ContainsKey(layerType))
+        _layerMap[layerType] = new List<TLayerNameServiceEntry>();
+      _layerMap[layerType].Add(layerNameServiceEntry);
+    }
+
+    public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
+      if (_layerMap[layerType].Count <= 1)
+        _layerMap.Remove(layerType);
+      else
+        _layerMap[layerType].Remove(layerNameServiceEntry);
+    }
+  }
 }

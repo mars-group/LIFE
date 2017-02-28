@@ -48,7 +48,7 @@ namespace LIFE.Components.Agents.AgentTwo.Environment {
 
 
   /// <summary>
-  ///   A position structure for 2D grid agents.
+  ///   R/O position structure for 2D grid agents.
   ///   It provides an integer (X,Y) position.
   /// </summary>
   public class ReadOnlyGridPosition {

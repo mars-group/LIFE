@@ -5,9 +5,7 @@ using LIFE.Components.Agents.AgentTwo.Perception;
 using LIFE.Components.Agents.AgentTwo.Reasoning;
 using LIFE.Components.Environments.GridEnvironment;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
-
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable MemberCanBePrivate.Global
 
 namespace LIFE.Components.Agents.AgentTwo.Movement {
 

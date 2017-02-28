@@ -8,7 +8,6 @@
 //  *******************************************************/
 using System;
 using SimulationManagerFacade.Interface;
-using System.Linq;
 using Mono.Options;
 
 namespace SimulationManager
