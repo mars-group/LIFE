@@ -15,7 +15,7 @@ namespace LIFE.Components.Agents.DalskiAgent.Agents {
   ///   An agent with a geospatial position (lat, lng).
   ///   It is placed in a GeoGrid-Environment and also has a GPS movement module.
   /// </summary>
-  public abstract class GeospatialAgent : Agent {
+  public abstract class GeoAgent : Agent {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
     private readonly GeoPosition _position;                    // Agent position backing structure.
@@ -34,7 +34,7 @@ namespace LIFE.Components.Agents.DalskiAgent.Agents {
     /// <param name="env">The grid environment.</param>
     /// <param name="id">The agent identifier (serialized GUID).</param>
     /// <param name="freq">MARS LIFE execution freqency.</param>
-    protected GeospatialAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
+    protected GeoAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
                               IGeoGridEnvironment<IGeoCoordinate> env, byte[] id=null, int freq=1)
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
