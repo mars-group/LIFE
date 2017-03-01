@@ -40,6 +40,7 @@ namespace LIFE.Components.TimeSeriesLayer
         private readonly string _databaseName = "timeseries";
         private string _dbColumnName;
         private TimeSpan _oneTickTimeSpan;
+        private String hostName = "influxdb";
 
         private string _tableName;
 
@@ -88,7 +89,10 @@ namespace LIFE.Components.TimeSeriesLayer
             var influxDbUser = MarsConfigService.Get("influxdb/user");
             var influxDbPassword = MarsConfigService.Get("influxdb/password");
 
-            InfluxDbClient = new InfluxDb("http://influxdb:8086", influxDbUser, influxDbPassword, InfluxVersion.v096);
+            Console.WriteLine("----------------" + hostName);
+
+            InfluxDbClient = new InfluxDb("http://" + hostName + ":8086", influxDbUser, influxDbPassword,
+                InfluxVersion.v096);
 
             InitialPreload(_currentSimulationTime);
 
