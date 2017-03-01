@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using ASC.Communication.ScsServices.Service;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
-using LIFE.Components.Agents.DalskiAgent.Interactions;
 using LIFE.Components.Agents.DalskiAgent.Perception;
+using LIFE.Components.Agents.DalskiAgent.Reasoning;
+
+/* The following warnings are useless, because this is an abstract base class
+ * and we don't know if the user maybe want to use a variable or overwrite it. */
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
 
 namespace LIFE.Components.Agents.DalskiAgent.Agents {
 
@@ -12,18 +18,15 @@ namespace LIFE.Components.Agents.DalskiAgent.Agents {
   /// cycle and several extension points available for specialized agent implementations.
   /// </summary>
 	public abstract class Agent : AscService, IAgent {
- 
-    private readonly UnregisterAgent _unregFkt;   // Delegate for unregistration function.
-    private readonly int _executionGroup;
 
-    /// <summary>Sensor aggregation unit and data storage.</summary>
-    protected readonly SensorArray SensorArray;
-     
-    /// <summary>Alive flag for execution and deletion checks.</summary>
-    protected bool IsAlive;
+    private readonly UnregisterAgent _unregFkt;              // Delegate for unregistration function.
+    protected readonly SensorArray SensorArray;              // Sensor aggregation unit and data storage.
+    protected bool IsAlive;                                  // Alive flag for execution and deletion checks.
+    protected int ExecutionGroup;                            // Agent execution frequency.
+    protected readonly ILayer Layer;                         // Layer reference needed for delegate calls.
+    protected readonly Dictionary<string, object> AgentData; // Dictionary for arbitrary result values.
+    public Guid ID { get; set; }                             // The agent identifier [required by LifeAPI].
 
-    /// <summary>Layer reference needed for delegate calls.</summary>
-    public readonly ILayer Layer;
 
 
     /// <summary>
@@ -34,37 +37,18 @@ namespace LIFE.Components.Agents.DalskiAgent.Agents {
     /// <param name="regFkt">Agent registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="id">Fixed GUID to use in this agent (optional).</param>
-    /// <param name="executionGroup">
-    ///   The execution group of your agent:
-    ///   0 : execute never
-    ///   1 : execute every tick
-    ///   n : execute every tick where tick % executionGroup == 0
-    /// </param>
-    protected Agent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, byte[] id = null, int executionGroup = 1) {
+    /// <param name="freq">Agent execution frequency (ticks). [default: 1]</param>
+    protected Agent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, byte[] id=null, int freq=1) {
       if (id == null) ID = Guid.NewGuid();
       else ID = ID = new Guid(id);
-      _executionGroup = executionGroup;
+      ExecutionGroup = freq;
       IsAlive = true;
       SensorArray = new SensorArray();
-      regFkt(layer, this, executionGroup);
+      regFkt(layer, this, freq);
       Layer = layer;
       _unregFkt = unregFkt;
+      AgentData = new Dictionary<string, object>();
     }
-
-
-    /// <summary>
-    /// Sensing phase. Calls all sensors per default.
-    /// </summary>
-    protected virtual void Sense() {
-      SensorArray.SenseAll();       
-    }
-
-
-	  /// <summary>
-	  /// Abstract implementation requires sub-class to implement it.
-	  /// </summary>
-	  /// <returns>The interaction the agent shall execute.</returns>
-	  protected abstract IInteraction Reason();
 
 
     /// <summary>
@@ -74,30 +58,39 @@ namespace LIFE.Components.Agents.DalskiAgent.Agents {
     /// </summary>
     public void Tick() {
       try {
-        if (!IsAlive) Remove();
-        
-        // Phase 1: Perception
-        Sense(); 
-
-        // Phase 2: Reasoning  
-		    var action = Reason();
-        
-        // Phase 3: Execution
-        if (IsAlive && action != null) action.Execute(); 
-        else if (!IsAlive) Remove(); // Agent deletion. 
+        if (!IsAlive) Remove();                          // Agent deletion.
+        Sense();                                         // Phase 1: Perception
+		    var action = Reason();                           // Phase 2: Reasoning
+        if (IsAlive && action != null) action.Execute(); // Phase 3: Execution
+        else if (!IsAlive) Remove();                     // Agent deletion.
       }
-      catch (Exception e) {
-        Console.Error.WriteLine(e);
+      catch (Exception ex) {
+        Console.Error.WriteLine(ex);
         throw;
       }     
     }
 
 
     /// <summary>
+    /// Sensing phase. Calls all sensors per default.
+    /// </summary>
+    protected virtual void Sense() {
+      SensorArray.SenseAll();
+    }
+
+
+    /// <summary>
+    /// Abstract implementation requires sub-class to implement it.
+    /// </summary>
+    /// <returns>The interaction the agent shall execute.</returns>
+    protected abstract IInteraction Reason();
+
+
+    /// <summary>
     ///   Returns the current simulation tick.
     /// </summary>
     /// <returns>Execution tick counter value.</returns>
-    public long GetTick() {
+    protected long GetTick() {
       return Layer.GetCurrentTick();
     }
 
@@ -107,7 +100,7 @@ namespace LIFE.Components.Agents.DalskiAgent.Agents {
     ///   to be overridden by more specific methods calling down to this via 'base'. 
     /// </summary>
     protected virtual void Remove() {
-      _unregFkt(Layer, this, _executionGroup);
+      _unregFkt(Layer, this, ExecutionGroup);
     }
 
 
@@ -118,11 +111,5 @@ namespace LIFE.Components.Agents.DalskiAgent.Agents {
     public override string ToString() {
       return "["+ID+" "+GetType().Name+"]\t\t Tick: " + GetTick();
     }
-
-
-      /// <summary>
-      ///   Get or set an agent identifier.
-      /// </summary>
-      public Guid ID { get; set; }
 	}
 }

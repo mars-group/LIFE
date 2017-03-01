@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace LIFE.Components.Agents.DalskiAgent.Perception {
 
+
   /// <summary>
   ///   Simple sensor interface. Just requests a sensing method.
   /// </summary>

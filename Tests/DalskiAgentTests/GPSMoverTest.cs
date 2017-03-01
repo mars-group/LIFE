@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace DalskiAgentTests {
 
-  [TestFixture]
+ /* [TestFixture]
   public class GPSMoverTest {
 
     private IEnvironment _env;      // The default Environment Service Component.
@@ -75,5 +75,5 @@ namespace DalskiAgentTests {
       PlaceAndMove(southafrica, _wp, 500);
       PlaceAndMove(southafrica, _wp, 4450);
     }
-  }
+  }*/
 }

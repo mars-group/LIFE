@@ -5,7 +5,7 @@
   "authors": [ "Christian Huening" ],
 
   "dependencies": {
-    "AgentTwo": {
+    "DalskiAgent": {
       "version": "2.1.0-*",
       "target": "project"
     },

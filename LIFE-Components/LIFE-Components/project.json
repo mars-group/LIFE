@@ -1,0 +1,61 @@
+﻿{
+    "version": "2.1.0-*",
+    "buildOptions": {
+        "debugType": "portable"
+    },
+    "packOptions": {
+        "files": {
+            "mappings": {
+                "lib/netstandard1.6/": {
+                    "include": "bin/Release/netstandard1.6/*.dll"
+                }
+            }
+        },
+        "licenseUrl": "https://www.mars-group.org",
+        "owners": ["Christian Hüning", "Jan Dalski"]
+    },
+    "dependencies": {
+        "DalskiAgent": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "GridEnvironment": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "GeoGridEnvironment": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "GeoPotentialFieldLayer": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "EnvironmentServiceComponent": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "ObstacleLayer": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "TimeSeriesLayer": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "GridPotentialFieldLayer": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "Utilities": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "NETStandard.Library": "1.6.1"
+    },
+    "frameworks": {
+        "netstandard1.6": {
+            "imports": "dnxcore50"
+        }
+    }
+}
