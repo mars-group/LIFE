@@ -9,7 +9,7 @@
       "version": "2.1.0-*",
       "target": "project"
     },
-    "Utilities": {
+    "LIFECoreUtilities": {
       "version": "2.1.0-*",
       "target": "project"
     },
