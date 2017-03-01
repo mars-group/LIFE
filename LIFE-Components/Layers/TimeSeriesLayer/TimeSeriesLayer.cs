@@ -35,23 +35,19 @@ namespace LIFE.Components.TimeSeriesLayer
             new ConcurrentDictionary<DateTime, object>();
 
         private DateTime _currentSimulationTime;
-
-        private long _currentTick;
+        private const int NumberOfTicksToPreload = 10;
         private readonly string _databaseName = "timeseries";
+        private long _currentTick;
         private string _dbColumnName;
         private TimeSpan _oneTickTimeSpan;
-
-        internal string hostName = "influxdb";
-
         private string _tableName;
 
         //TODO enable different start time for time series layer (not the simulation time)
         private DateTime _timeSeriesStartTime;
 
+        internal string HostName = "influxdb";
         internal IInfluxDb InfluxDbClient;
-        private const int NumberOfTicksToPreload = 10;
-
-        internal IConfigServiceClient MarsConfigService { get; set; }
+        internal IConfigServiceClient ConfigService;
 
         #region ITimeLineLayer Members
 
@@ -84,15 +80,18 @@ namespace LIFE.Components.TimeSeriesLayer
             _timeSeriesStartTime = layerInitData.SimulationWallClockStartDate;
 
             //for testing: you can inject a ConfigService mock.
-            if (MarsConfigService == null)
-                MarsConfigService = new ConfigServiceClient(layerInitData.MARSConfigAddress);
+            if (ConfigService == null)
+            {
+                ConfigService = new ConfigServiceClient(layerInitData.MARSConfigAddress);
+            }
+
             // retreive port, user and password of influxdb
-            var influxDbUser = MarsConfigService.Get("influxdb/user");
-            var influxDbPassword = MarsConfigService.Get("influxdb/password");
+            var influxDbUser = ConfigService.Get("influxdb/user");
+            var influxDbPassword = ConfigService.Get("influxdb/password");
 
-            Console.WriteLine("----------------" + hostName);
+            Console.WriteLine("----------------" + HostName);
 
-            InfluxDbClient = new InfluxDb("http://" + hostName + ":8086", influxDbUser, influxDbPassword,
+            InfluxDbClient = new InfluxDb("http://" + HostName + ":8086", influxDbUser, influxDbPassword,
                 InfluxVersion.v096);
 
             InitialPreload(_currentSimulationTime);
