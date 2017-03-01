@@ -12,15 +12,33 @@ namespace LIFE.Components.Layers
     [TestFixture]
     public class TimeSeriesIntegrationTest
     {
+        const string User = "mars";
+        const string Password = "sram2015";
+        const string InfluxDbHost = "artifactory.mars.haw-hamburg.de-influxdb";
 
         [Test]
-        public void integrationTest()
+        public void IntegrationTest()
         {
             // given
-            const string user = "mars";
-            const string password = "sram2015";
-            const string influxDbHost = "artifactory.mars.haw-hamburg.de-influxdb";
+            var timeSeriesLayer = InitTimeSeriesLayer(InfluxDbHost, User, Password);
+            InitDatabaseValues();
 
+            // when
+            var valueForCurrentSimulationTime = timeSeriesLayer.GetValueForCurrentSimulationTime();
+
+            // then
+            Assert.AreEqual(valueForCurrentSimulationTime, 1337);
+        }
+
+        private static void InitDatabaseValues()
+        {
+            var influxDb = new InfluxDb("http://" + InfluxDbHost + ":8086", User, Password, InfluxVersion.v096);
+            var taskStatus = influxDb.CreateDatabaseAsync("timeseries").Status;
+            Console.WriteLine("Status for creating database: " + taskStatus);
+        }
+
+        private ConcreteTimeSeriesLayer InitTimeSeriesLayer(string influxDbHost, string user, string password)
+        {
             var timeSeriesLayer = new ConcreteTimeSeriesLayer();
 
             var hostNameField = timeSeriesLayer.GetType().GetField("HostName", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -30,23 +48,15 @@ namespace LIFE.Components.Layers
             configServiceClient.Get("influxdb/user").Returns(user);
             configServiceClient.Get("influxdb/password").Returns(password);
 
-            var configServiceField = timeSeriesLayer.GetType().GetField("ConfigService", BindingFlags.NonPublic | BindingFlags.Instance);
+            var configServiceField = timeSeriesLayer.GetType()
+                .GetField("ConfigService", BindingFlags.NonPublic | BindingFlags.Instance);
             configServiceField.SetValue(timeSeriesLayer, configServiceClient);
 
             TInitData initData = createTInitDataWithoutTimeSeriesInitInfo();
             initData.TimeSeriesInitInfo = new TimeSeriesInitConfig("t1sdfghjkl", "c_1", "temperature");
             timeSeriesLayer.InitLayer(initData, null, null);
-
-            var influxDb = new InfluxDb("http://" + influxDbHost + ":8086", user, password, InfluxVersion.v096);
-            influxDb.CreateDatabaseAsync("timeseries").Wait();
-
-            // when
-            var valueForCurrentSimulationTime = timeSeriesLayer.GetValueForCurrentSimulationTime();
-
-            // then
-            Assert.AreEqual(valueForCurrentSimulationTime, 1337);
+            return timeSeriesLayer;
         }
-
 
         private TInitData createTInitDataWithoutTimeSeriesInitInfo()
         {
