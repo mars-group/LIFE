@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using ConfigService;
 using LIFE.API.Layer.Initialization;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace LIFE.Components.Layers
@@ -21,6 +23,10 @@ namespace LIFE.Components.Layers
             TInitData initData = createTInitDataWithoutTimeSeriesInitInfo();
             initData.TimeSeriesInitInfo = new TimeSeriesInitConfig("t1sdfghjkl", "c_1", "temperature");
             timeSeriesLayer.InitLayer(initData, null, null);
+
+            var configServiceClient = Substitute.For<IConfigServiceClient>();
+            configServiceClient.Get("influxdb/user").Returns("mars");
+            configServiceClient.Get("influxdb/password").Returns("sram2015");
 
             // when
             var valueForCurrentSimulationTime = timeSeriesLayer.GetValueForCurrentSimulationTime();
