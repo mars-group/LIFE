@@ -4,18 +4,11 @@
         "debugType": "portable"
     },
     "packOptions": {
-        "files": {
-            "mappings": {
-                "lib/netstandard1.6/": {
-                    "include": "bin/Release/netstandard1.6/*.dll"
-                }
-            }
-        },
         "licenseUrl": "https://www.mars-group.org",
         "owners": ["Christian Hüning", "Jan Dalski"]
     },
     "dependencies": {
-        "DalskiAgent": {
+        "BasicAgents": {
             "target": "project",
             "version": "2.1.0-*"
         },

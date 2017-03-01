@@ -51,18 +51,57 @@ build-LIFE-Components:
     paths:
       - out-LIFE-Components/
 
-build-DalskiAgent:
+build-BasicAgents:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   script:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd LIFE-Components/Agents/DalskiAgent
+    - cd LIFE-Components/Agents/BasicAgents
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-DalskiAgent --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
-      - out-DalskiAgent/
+      - out-BasicAgents/
+
+build-ESC:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Environments/EnvironmentServiceComponent
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-ESC/
+
+build-GeoGridEnvironment:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Environments/GeoGridEnvironment
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-GeoGridEnvironment
+
+build-GridEnvironment:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Environments/GridEnvironment
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-GridEnvironment
 
 
 
@@ -73,4 +112,7 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFE-Components/LIFE-Components.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-DalskiAgent/DalskiAgent.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-BasicAgents/BasicAgents.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
