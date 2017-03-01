@@ -1,26 +1,26 @@
 ﻿{
-  "version": "2.1.0-*",
+    "version": "2.1.0-*",
 
-  "dependencies": {
-    "ConfigService": "2.0.0-494",
-    "InfluxDB.Net.Core": "1.1.22-beta",
-    "LIFE-API": {
-      "target": "project",
-      "version": "2.1.0-*"
+    "dependencies": {
+        "ConfigService": "2.0.0-494",
+        "InfluxDB.Net.Core": "1.1.22-beta",
+        "LIFE-API": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "Scs": {
+            "target": "project",
+            "version": "2.1.0-*"
+        }
     },
-    "Scs": {
-      "target": "project",
-      "version": "2.1.0-*"
-    }
-  },
 
-  // Build solution as .NET Core 1.1 library (DLL).
-  "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "NETStandard.Library": "1.6.1"
-      }
+    // Build solution as .NET Core 1.1 library (DLL).
+    "frameworks": {
+        "netstandard1.6": {
+            "imports": "dnxcore50",
+            "dependencies": {
+                "NETStandard.Library": "1.6.1"
+            }
+        }
     }
-  }
 }
