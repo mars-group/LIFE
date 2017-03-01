@@ -25,9 +25,25 @@ build-LIFE-API:
       - out-LIFE-API/
 
 
+build-LIFE-Core:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - cd LIFE-Core
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd MARSLocalStarter
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-LIFE-Core/
+
+
 
 pushAllPackages:
   stage: deploy
   image: frolvlad/alpine-mono
   script:
     - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
