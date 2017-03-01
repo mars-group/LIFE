@@ -155,7 +155,7 @@ build-TimeSeriesLayer:
     paths:
       - out-TimeSeriesLayer
 
-build-TimeSeriesLayer:
+build-Utilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   script:
