@@ -73,4 +73,4 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFE-Components/LIFE-Components.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/DalskiAgent.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-DalskiAgent/DalskiAgent.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
