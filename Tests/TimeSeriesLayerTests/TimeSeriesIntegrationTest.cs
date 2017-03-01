@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using ConfigService;
+using InfluxDB.Net;
+using InfluxDB.Net.Enums;
 using LIFE.API.Layer.Initialization;
 using NSubstitute;
 using NUnit.Framework;
@@ -15,14 +17,18 @@ namespace LIFE.Components.Layers
         public void integrationTest()
         {
             // given
+            const string user = "mars";
+            const string password = "sram2015";
+            const string influxDbHost = "artifactory.mars.haw-hamburg.de-influxdb";
+
             var timeSeriesLayer = new ConcreteTimeSeriesLayer();
 
             var hostNameField = timeSeriesLayer.GetType().GetField("HostName", BindingFlags.NonPublic | BindingFlags.Instance);
-            hostNameField.SetValue(timeSeriesLayer, "artifactory.mars.haw-hamburg.de-influxdb");
+            hostNameField.SetValue(timeSeriesLayer, influxDbHost);
 
             var configServiceClient = Substitute.For<IConfigServiceClient>();
-            configServiceClient.Get("influxdb/user").Returns("mars");
-            configServiceClient.Get("influxdb/password").Returns("sram2015");
+            configServiceClient.Get("influxdb/user").Returns(user);
+            configServiceClient.Get("influxdb/password").Returns(password);
 
             var configServiceField = timeSeriesLayer.GetType().GetField("ConfigService", BindingFlags.NonPublic | BindingFlags.Instance);
             configServiceField.SetValue(timeSeriesLayer, configServiceClient);
@@ -30,6 +36,9 @@ namespace LIFE.Components.Layers
             TInitData initData = createTInitDataWithoutTimeSeriesInitInfo();
             initData.TimeSeriesInitInfo = new TimeSeriesInitConfig("t1sdfghjkl", "c_1", "temperature");
             timeSeriesLayer.InitLayer(initData, null, null);
+
+            var influxDb = new InfluxDb("http://" + influxDbHost + ":8086", user, password, InfluxVersion.v096);
+            influxDb.CreateDatabaseAsync("timeseries").Wait();
 
             // when
             var valueForCurrentSimulationTime = timeSeriesLayer.GetValueForCurrentSimulationTime();
