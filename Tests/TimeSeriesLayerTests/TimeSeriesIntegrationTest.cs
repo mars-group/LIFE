@@ -19,8 +19,9 @@ namespace LIFE.Components.Layers
         [Test]
         public void IntegrationTest()
         {
+            Console.WriteLine("--------------- Start test");
             // given
-            var timeSeriesLayer = InitTimeSeriesLayer(InfluxDbHost, User, Password);
+            var timeSeriesLayer = InitTimeSeriesLayer();
             InitDatabaseValues();
 
             // when
@@ -32,22 +33,23 @@ namespace LIFE.Components.Layers
 
         private static void InitDatabaseValues()
         {
+            Console.WriteLine("-------------");
             var influxDb = new InfluxDb("http://" + InfluxDbHost + ":8086", User, Password, InfluxVersion.v096);
             Console.WriteLine("Lets create the Database");
             var taskStatus = influxDb.CreateDatabaseAsync("timeseries").Status;
             Console.WriteLine("Status for creating database: " + taskStatus);
         }
 
-        private ConcreteTimeSeriesLayer InitTimeSeriesLayer(string influxDbHost, string user, string password)
+        private ConcreteTimeSeriesLayer InitTimeSeriesLayer()
         {
             var timeSeriesLayer = new ConcreteTimeSeriesLayer();
 
             var hostNameField = timeSeriesLayer.GetType().GetField("HostName", BindingFlags.NonPublic | BindingFlags.Instance);
-            hostNameField.SetValue(timeSeriesLayer, influxDbHost);
+            hostNameField.SetValue(timeSeriesLayer, InfluxDbHost);
 
             var configServiceClient = Substitute.For<IConfigServiceClient>();
-            configServiceClient.Get("influxdb/user").Returns(user);
-            configServiceClient.Get("influxdb/password").Returns(password);
+            configServiceClient.Get("influxdb/user").Returns(User);
+            configServiceClient.Get("influxdb/password").Returns(Password);
 
             var configServiceField = timeSeriesLayer.GetType()
                 .GetField("ConfigService", BindingFlags.NonPublic | BindingFlags.Instance);
