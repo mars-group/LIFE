@@ -21,8 +21,9 @@ namespace LIFE.Components.Layers
         {
             Console.WriteLine("--------------- Start test");
             // given
-            var timeSeriesLayer = InitTimeSeriesLayer();
             InitDatabaseValues();
+
+            var timeSeriesLayer = InitTimeSeriesLayer();
 
             // when
             var valueForCurrentSimulationTime = timeSeriesLayer.GetValueForCurrentSimulationTime();
