@@ -11,48 +11,48 @@ namespace LIFE.Components.Layers
         [Test]
         public void ShouldRejectNullAsInit()
         {
-            var rockLayer = new ConcreteTimeSeriesLayer();
+            var timeSeriesLayer = new ConcreteTimeSeriesLayer();
             TInitData invalidTInitDataWithoutTimeSeriesInit = createTInitDataWithoutTimeSeriesInitInfo();
 
             Assert.Throws
             (typeof(InvalidTimeSeriesLayerInitConfigException),
-                delegate { rockLayer.InitLayer(invalidTInitDataWithoutTimeSeriesInit, null, null); });
+                delegate { timeSeriesLayer.InitLayer(invalidTInitDataWithoutTimeSeriesInit, null, null); });
         }
 
         [Test]
         public void ShouldRejectInitWithoutTableName()
         {
-            var rockLayer = new ConcreteTimeSeriesLayer();
+            var timeSeriesLayer = new ConcreteTimeSeriesLayer();
             TInitData invalidTInitData = createTInitDataWithoutTimeSeriesInitInfo();
             invalidTInitData.TimeSeriesInitInfo = new TimeSeriesInitConfig(null, "c_1", "temperature");
 
             Assert.Throws
             (typeof(InvalidTimeSeriesLayerInitConfigException),
-                delegate { rockLayer.InitLayer(invalidTInitData, null, null); });
+                delegate { timeSeriesLayer.InitLayer(invalidTInitData, null, null); });
         }
 
         [Test]
         public void ShouldRejectInitWithoutDatabaseColumnName()
         {
-            var rockLayer = new ConcreteTimeSeriesLayer();
+            var timeSeriesLayer = new ConcreteTimeSeriesLayer();
             TInitData invalidTInitData = createTInitDataWithoutTimeSeriesInitInfo();
             invalidTInitData.TimeSeriesInitInfo = new TimeSeriesInitConfig("my_table", null, "temperature");
 
             Assert.Throws
             (typeof(InvalidTimeSeriesLayerInitConfigException),
-                delegate { rockLayer.InitLayer(invalidTInitData, null, null); });
+                delegate { timeSeriesLayer.InitLayer(invalidTInitData, null, null); });
         }
 
         [Test]
         public void ShouldRejectInitWithoutClearColumnName()
         {
-            var rockLayer = new ConcreteTimeSeriesLayer();
+            var timeSeriesLayer = new ConcreteTimeSeriesLayer();
             TInitData invalidTInitData = createTInitDataWithoutTimeSeriesInitInfo();
             invalidTInitData.TimeSeriesInitInfo = new TimeSeriesInitConfig("my_table", "c_1", null);
 
             Assert.Throws
             (typeof(InvalidTimeSeriesLayerInitConfigException),
-                delegate { rockLayer.InitLayer(invalidTInitData, null, null); });
+                delegate { timeSeriesLayer.InitLayer(invalidTInitData, null, null); });
         }
 
         private TInitData createTInitDataWithoutTimeSeriesInitInfo()
