@@ -20,6 +20,7 @@ test:
   services:
     - artifactory.mars.haw-hamburg.de:5000/influxdb:0.13 
   script:
+    - cat /etc/hosts
     - cd $CI_PROJECT_DIR/LIFE-API
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd $CI_PROJECT_DIR/LIFE-Core

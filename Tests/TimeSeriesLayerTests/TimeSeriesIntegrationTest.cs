@@ -9,7 +9,7 @@ namespace LIFE.Components.Layers
     {
 
         [Test]
-        public void ShouldRejectNullAsInit()
+        public void integrationTest()
         {
             // given
             var timeSeriesLayer = new ConcreteTimeSeriesLayer();
