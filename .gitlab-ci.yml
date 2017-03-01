@@ -29,9 +29,8 @@ build-LIFE-Core:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   script:
-    - cd LIFE-Core
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd LIFECoreStarter
+    - cd LIFE-Core/LIFECoreStarter
     - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix $CI_PIPELINE_ID
   artifacts:
