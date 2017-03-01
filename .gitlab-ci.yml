@@ -103,7 +103,70 @@ build-GridEnvironment:
     paths:
       - out-GridEnvironment
 
+build-GeoPotentialField:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Layers/GeoPotentialField
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialField --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-GeoPotentialField
 
+build-GridPotentialField:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Layers/GridPotentialField
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialField --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-GridPotentialField
+
+build-ObstacleLayer:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Layers/ObstacleLayer
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-ObstacleLayer
+
+build-TimeSeriesLayer:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Layers/TimeSeriesLayer
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-TimeSeriesLayer
+
+build-TimeSeriesLayer:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Utilities
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-Utilities
 
 pushAllPackages:
   stage: deploy
@@ -116,3 +179,8 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Components/GeoPotentialFieldLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Components/GridPotentialFieldLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Components/ObstacleLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Components/TimeSeriesLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Components/Utilities.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
