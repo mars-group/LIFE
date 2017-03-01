@@ -31,7 +31,7 @@ build-LIFE-Core:
   script:
     - cd LIFE-Core
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd MARSLocalStarter
+    - cd LIFECoreStarter
     - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix $CI_PIPELINE_ID
   artifacts:

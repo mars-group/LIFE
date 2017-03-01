@@ -1,4 +1,5 @@
 {
+    "name": "LIFE-Core",
     "version": "2.1.0-*",
 
     "packOptions": {
@@ -8,7 +9,9 @@
                     "include": "bin/Release/netstandard1.6/*.dll"
                 }
             }
-        }
+        },
+        "licenseUrl": "https://www.mars-group.org",
+        "owners": ["Christian Hüning", "Jan Dalski"]
     },
 
     "dependencies": {
