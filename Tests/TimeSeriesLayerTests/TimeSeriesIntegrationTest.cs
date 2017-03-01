@@ -14,8 +14,9 @@ namespace LIFE.Components.Layers
         {
             // given
             var timeSeriesLayer = new ConcreteTimeSeriesLayer();
-            timeSeriesLayer.GetType().GetProperty("CreatedOn")
-                .SetValue(timeSeriesLayer, "artifactory.mars.haw-hamburg.de-influxdb", null);
+
+            var hostNameField = timeSeriesLayer.GetType().GetField("hostName", BindingFlags.NonPublic | BindingFlags.Instance);
+            hostNameField.SetValue(timeSeriesLayer, "artifactory.mars.haw-hamburg.de-influxdb");
 
             TInitData initData = createTInitDataWithoutTimeSeriesInitInfo();
             initData.TimeSeriesInitInfo = new TimeSeriesInitConfig("t1sdfghjkl", "c_1", "temperature");

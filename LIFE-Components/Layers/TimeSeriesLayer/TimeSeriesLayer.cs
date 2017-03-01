@@ -40,7 +40,8 @@ namespace LIFE.Components.TimeSeriesLayer
         private readonly string _databaseName = "timeseries";
         private string _dbColumnName;
         private TimeSpan _oneTickTimeSpan;
-        private String hostName = "influxdb";
+
+        internal string hostName = "influxdb";
 
         private string _tableName;
 
