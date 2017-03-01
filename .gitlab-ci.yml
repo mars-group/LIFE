@@ -108,7 +108,7 @@ build-GeoPotentialField:
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   script:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd LIFE-Components/Layers/GeoPotentialField
+    - cd LIFE-Components/Layers/GeoPotentialFieldLayer
     - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialField --version-suffix $CI_PIPELINE_ID
   artifacts:
@@ -121,7 +121,7 @@ build-GridPotentialField:
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   script:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd LIFE-Components/Layers/GridPotentialField
+    - cd LIFE-Components/Layers/GridPotentialFieldLayer
     - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialField --version-suffix $CI_PIPELINE_ID
   artifacts:
