@@ -8,10 +8,10 @@
 //  *******************************************************/
 using System;
 using System.Collections.Generic;
-using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Service;
+using LIFE.Services.AgentShadowingService.Interface;
 
-namespace AgentShadowingService.Implementation
+namespace LIFE.Services.AgentShadowingService.Implementation
 {
     public class AgentShadowingServiceComponent<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface

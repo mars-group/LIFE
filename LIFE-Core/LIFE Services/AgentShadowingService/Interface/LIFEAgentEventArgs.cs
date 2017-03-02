@@ -9,7 +9,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AgentShadowingService.Interface
+namespace LIFE.Services.AgentShadowingService.Interface
 {
     public class LIFEAgentEventArgs<TServiceInterface> : EventArgs
     {

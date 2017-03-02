@@ -10,14 +10,14 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using AgentShadowingService.Interface;
 using ASC.Communication.ScsServices.Client;
 using ASC.Communication.ScsServices.Communication.Messages;
 using ASC.Communication.ScsServices.Service;
 using System.Threading.Tasks;
 using LIFE.Components.Utilities.MulticastAddressGenerator;
+using LIFE.Services.AgentShadowingService.Interface;
 
-namespace AgentShadowingService.Implementation
+namespace LIFE.Services.AgentShadowingService.Implementation
 {
     internal class AgentShadowingServiceUseCase<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface
