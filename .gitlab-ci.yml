@@ -489,6 +489,19 @@ build-SMConnector:
     paths:
       - out-SMConnector/
 
+build-LCConnector:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Core/Common/LCConnector
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 300 mins
+    paths:
+      - out-LCConnector/
+
 build-LIFECoreUtilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
@@ -527,6 +540,7 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-AgentShadowingService/AgentShadowingService.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-CommonTypes/CommonTypes.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LayerContainerFacade/LayerContainerFacade.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerContainerShared/LayerContainerShared.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LayerFactory/LayerFactory.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LayerLoader/LayerLoader.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LayerNameService/LayerNameService.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
@@ -541,4 +555,5 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-SimulationManagerFacade/SimulationManagerFacade.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-SimulationManagerShared/SimulationManagerShared.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-SMConnector/SMConnector.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LCConnector/LCConnector.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFECoreUtilities/LIFECoreUtilities.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
