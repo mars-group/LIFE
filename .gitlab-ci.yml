@@ -168,6 +168,33 @@ build-Utilities:
     paths:
       - out-Utilities
 
+build-ASC:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Core/T-Components/ASC
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-ASC
+
+
+build-Scs:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Core/T-Components/Scs
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-Scs
+
 pushAllPackages:
   stage: deploy
   image: frolvlad/alpine-mono
@@ -184,3 +211,5 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-ObstacleLayer/ObstacleLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-TimeSeriesLayer/TimeSeriesLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-Utilities/Utilities.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ASC/ASC.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-Scs/Scs.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
