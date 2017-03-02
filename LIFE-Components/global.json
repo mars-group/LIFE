@@ -1,10 +1,11 @@
 {
   "projects": [
     ".",
-    "..", 
-    "../LIFE-Core/T-Components", 
-    "Agents", 
-    "Environments", 
-    "Layers"  
+    "..",
+    "../LIFE-Core/T-Components",
+    "../LIFE-Core/Common", 
+    "Agents",
+    "Environments",
+    "Layers"
   ]
 }

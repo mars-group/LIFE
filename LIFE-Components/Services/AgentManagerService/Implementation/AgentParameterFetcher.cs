@@ -7,7 +7,7 @@ using ConfigService;
 using LIFE.API.Layer.Initialization;
 using MySql.Data.MySqlClient;
 
-namespace LIFE.Services.AgentManagerService.Implementation
+namespace LIFE.Components.Services.AgentManagerService.Implementation
 {
 
 

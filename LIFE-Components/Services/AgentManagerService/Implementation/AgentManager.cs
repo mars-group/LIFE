@@ -15,9 +15,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using AgentManager;
-using AgentManager.Interface.Exceptions;
-using AgentManagerService.Interface.Exceptions;
 using LIFE.API.Agent;
 using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
@@ -25,9 +22,10 @@ using LIFE.API.Layer.Initialization;
 using LIFE.API.LIFECapabilities;
 using LIFE.Components.Environments.GeoGridEnvironment;
 using LIFE.Components.ESC.SpatialAPI.Environment;
-using LIFE.Services.AgentManagerService.Interface;
+using LIFE.Components.Services.AgentManagerService.Interface;
+using LIFE.Components.Services.AgentManagerService.Interface.Exceptions;
 
-namespace LIFE.Services.AgentManagerService.Implementation {
+namespace LIFE.Components.Services.AgentManagerService.Implementation {
 
   public class AgentManager<T> : IAgentManager<T> where T : IAgent {
 

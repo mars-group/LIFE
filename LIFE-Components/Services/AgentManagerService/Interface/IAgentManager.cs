@@ -16,7 +16,7 @@ using LIFE.API.Layer.Initialization;
 using LIFE.Components.Environments.GeoGridEnvironment;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 
-namespace LIFE.Services.AgentManagerService.Interface
+namespace LIFE.Components.Services.AgentManagerService.Interface
 {
     public interface IAgentManager<T> where T : IAgent {
 		IDictionary<Guid,T> GetAgentsByAgentInitConfig(

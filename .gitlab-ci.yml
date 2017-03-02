@@ -173,6 +173,32 @@ build-Utilities:
     paths:
       - out-Utilities
 
+  build-AgentManagerService:
+    stage: build
+    image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+    script:
+      - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+      - cd LIFE-Components/Services/AgentManagerService
+      - dotnet build -c Release
+      - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager --version-suffix $CI_PIPELINE_ID
+    artifacts:
+      expire_in: 300 mins
+      paths:
+        - out-AgentManager/
+
+  build-AgentShadowingService:
+    stage: build
+    image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+    script:
+      - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+      - cd LIFE-Components/Services/AgentShadowingService
+      - dotnet build -c Release
+      - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService --version-suffix $CI_PIPELINE_ID
+    artifacts:
+      expire_in: 300 mins
+      paths:
+        - out-AgentShadowingService/
+
 # LIFE Core Sub Packages
 
 build-ASC:
@@ -240,32 +266,6 @@ build-ConfigurationAdapter:
     expire_in: 120 mins
     paths:
       - out-ConfigurationAdapter
-
-build-AgentManagerService:
-  stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
-  script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd LIFE-Core/LIFE\ Services/AgentManagerService
-    - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager --version-suffix $CI_PIPELINE_ID
-  artifacts:
-    expire_in: 300 mins
-    paths:
-      - out-AgentManager/
-
-build-AgentShadowingService:
-  stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
-  script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd LIFE-Core/LIFE\ Services/AgentShadowingService
-    - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService --version-suffix $CI_PIPELINE_ID
-  artifacts:
-    expire_in: 300 mins
-    paths:
-      - out-AgentShadowingService/
 
 build-CommonTypes:
   stage: build

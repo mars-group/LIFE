@@ -7,18 +7,16 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 using System;
-using System.Collections.Generic;
 
-namespace LIFE.Services.AgentShadowingService.Interface
+
+namespace LIFE.Components.Services.AgentManagerService.Interface.Exceptions
 {
-    public class LIFEAgentEventArgs<TServiceInterface> : EventArgs
+    [Serializable]
+    public class MissingLayerForAgentConstructionException : Exception
     {
-        public LIFEAgentEventArgs(List<TServiceInterface> removedAgents, List<TServiceInterface> newAgents) {
-            RemovedAgents = removedAgents;
-            NewAgents = newAgents;
+        public MissingLayerForAgentConstructionException(string msg) : base(msg) {
+
         }
 
-        public List<TServiceInterface> NewAgents { get; private set; }
-        public List<TServiceInterface> RemovedAgents { get; private set; } 
     }
 }

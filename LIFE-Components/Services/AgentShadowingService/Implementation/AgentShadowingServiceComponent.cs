@@ -9,9 +9,10 @@
 using System;
 using System.Collections.Generic;
 using ASC.Communication.ScsServices.Service;
-using LIFE.Services.AgentShadowingService.Interface;
+using LIFE.Components.Services.AgentShadowingService.Interface;
 
-namespace LIFE.Services.AgentShadowingService.Implementation
+
+namespace LIFE.Components.Services.AgentShadowingService.Implementation
 {
     public class AgentShadowingServiceComponent<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface

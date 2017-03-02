@@ -14,7 +14,7 @@
       "target": "project"
     },  
     "ConfigService": "2.0.0-9",
-    "MongoDB.Driver": "2.4.1",
+    "MongoDB.Driver": "2.4.2",
     "RabbitMQ.Client": "4.1.1",
     "System.Threading.Tasks.Parallel": "4.3.0"    
   },

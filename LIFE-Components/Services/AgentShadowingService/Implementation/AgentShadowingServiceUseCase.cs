@@ -14,10 +14,10 @@ using ASC.Communication.ScsServices.Client;
 using ASC.Communication.ScsServices.Communication.Messages;
 using ASC.Communication.ScsServices.Service;
 using System.Threading.Tasks;
+using LIFE.Components.Services.AgentShadowingService.Interface;
 using LIFE.Components.Utilities.MulticastAddressGenerator;
-using LIFE.Services.AgentShadowingService.Interface;
 
-namespace LIFE.Services.AgentShadowingService.Implementation
+namespace LIFE.Components.Services.AgentShadowingService.Implementation
 {
     internal class AgentShadowingServiceUseCase<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface

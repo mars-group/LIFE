@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LIFE.Services.AgentManagerService.Interface.Exceptions
+namespace LIFE.Components.Services.AgentManagerService.Interface.Exceptions
 {
     [Serializable]
     public class ActualParameterNullPointerException : Exception
