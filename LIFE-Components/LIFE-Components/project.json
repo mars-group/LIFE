@@ -44,6 +44,14 @@
             "target": "project",
             "version": "2.1.0-*"
         },
+        "AgentManagerService": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
+        "AgentShadowingService": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
         "NETStandard.Library": "1.6.1"
     },
     "frameworks": {

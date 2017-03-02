@@ -3,8 +3,9 @@
     ".",
     "..",
     "../LIFE-Core/T-Components",
-    "../LIFE-Core/Common", 
+    "../LIFE-Core/Common",
     "Agents",
+    "Services",
     "Environments",
     "Layers"
   ]
