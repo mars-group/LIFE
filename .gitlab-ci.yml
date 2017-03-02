@@ -110,7 +110,7 @@ build-GeoPotentialField:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Layers/GeoPotentialFieldLayer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialField --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -123,7 +123,7 @@ build-GridPotentialField:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Layers/GridPotentialFieldLayer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialField --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
