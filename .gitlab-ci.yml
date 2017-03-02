@@ -114,7 +114,7 @@ build-GeoPotentialField:
   artifacts:
     expire_in: 120 mins
     paths:
-      - out-GeoPotentialField
+      - out-GeoPotentialFieldLayer
 
 build-GridPotentialField:
   stage: build
@@ -127,7 +127,7 @@ build-GridPotentialField:
   artifacts:
     expire_in: 120 mins
     paths:
-      - out-GridPotentialField
+      - out-GridPotentialFieldLayer
 
 build-ObstacleLayer:
   stage: build
@@ -179,8 +179,8 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/GeoPotentialFieldLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/GridPotentialFieldLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/ObstacleLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/TimeSeriesLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/Utilities.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GeoPotentialFieldLayer/GeoPotentialFieldLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GridPotentialFieldLayer/GridPotentialFieldLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ObstacleLayer/ObstacleLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-TimeSeriesLayer/TimeSeriesLayer.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-Utilities/Utilities.2.1.0-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
