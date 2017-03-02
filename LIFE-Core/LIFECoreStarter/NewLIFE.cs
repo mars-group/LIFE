@@ -15,9 +15,9 @@ using Mono.Options;
 using SimulationManagerFacade.Interface;
 using SMConnector.TransportTypes;
 
-namespace MARSLocalStarter {
+namespace LIFE.Core.LIFELocalStarter {
 
-  public static class LIFE {
+  public static class NewLIFE {
 
     private static TModelDescription _chosenModel;
     private static ISimulationManagerApplicationCore _simCore;
@@ -35,7 +35,7 @@ namespace MARSLocalStarter {
       catch (Exception exception) {
         Console.WriteLine($"MARS LIFE crashed fatally. Exception:\n {exception}."+
                           "\n InnerException:\n {exception.InnerException}");
-        
+
         // ReSharper disable once PossibleIntendedRethrow
         throw exception;
         //Environment.Exit(1);
