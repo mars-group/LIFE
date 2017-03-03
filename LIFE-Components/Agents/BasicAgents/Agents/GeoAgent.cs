@@ -16,7 +16,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   ///   An agent with a geospatial position (lat, lng).
   ///   It is placed in a GeoGrid-Environment and also has a GPS movement module.
   /// </summary>
-  public abstract class GeoAgent : Agent, IGeoCoordinate {
+  public abstract class GeoAgent : Agent, IGeoCoordinate, IEquatable<GeoAgent> {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
     private readonly GeoPosition _position;                    // Agent position backing structure.
@@ -83,6 +83,16 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
       const double threshold = 0.00000000000001;
       return (Math.Abs(Latitude - other.Latitude) < threshold) &&
              (Math.Abs(Longitude - other.Longitude) < threshold);
+    }
+
+
+    /// <summary>
+    ///   Compares this agent with another one.
+    /// </summary>
+    /// <param name="other">The other agent.</param>
+    /// <returns>Equality boolean.</returns>
+    public bool Equals(GeoAgent other) {
+      return ID.Equals(other.ID);
     }
   }
 }

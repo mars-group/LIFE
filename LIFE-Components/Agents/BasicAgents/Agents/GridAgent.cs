@@ -1,4 +1,5 @@
-﻿using LIFE.API.GridCommon;
+﻿using System;
+using LIFE.API.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Movement;
@@ -14,7 +15,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   /// <summary>
   ///   A 2D-grid extension for the base agent.
   /// </summary>
-  public abstract class GridAgent : Agent, IGridCoordinate {
+  public abstract class GridAgent : Agent, IGridCoordinate, IEquatable<GridAgent> {
 
     private readonly IGridEnvironment<IGridCoordinate> _env; // IESC implementation for collision detection.
     private readonly GridPosition _position;                 // Agent position backing structure.
@@ -79,6 +80,16 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     /// <returns>'True', if both grid coordinates represent the same cell.</returns>
     public bool Equals(IGridCoordinate other) {
       return X.Equals(other.X) && Y.Equals(other.Y);
+    }
+
+
+    /// <summary>
+    ///   Compares this agent with another one.
+    /// </summary>
+    /// <param name="other">The other agent.</param>
+    /// <returns>Equality boolean.</returns>
+    public bool Equals(GridAgent other) {
+      return ID.Equals(other.ID);
     }
   }
 }
