@@ -16,7 +16,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
   public class GridMover : AgentMover {
 
     private readonly IGridEnvironment<IGridCoordinate> _grid; // The grid environment to use.
-    private readonly GridPosition _position;                  // Agent position structure.
+    private GridPosition _position;                  // Agent position structure.
 
     public bool DiagonalEnabled { get; set; } // This flag enables diagonal movement [default: disabled].
 
@@ -40,8 +40,8 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="x">Agent start position (x-coordinate).</param>
     /// <param name="y">Agent start position (y-coordinate).</param>
     public void InsertIntoEnvironment(int x, int y) {
-      _position.X = x;
-      _position.Y = y;
+        // !!!! warum wird hier x und y übergeben? Position wird doch schon im Konstruktor übergeben?! !!!!
+      _position = new GridPosition(x,y);
       _grid.Insert(_position);
     }
 
@@ -83,8 +83,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
           MovementSensor.SetMovementResult(new MovementResult(MovementStatus.OutOfBounds));
         }
         else {
-          _position.X = result.X;
-          _position.Y = result.Y;  
+          _position = new GridPosition(result.X, result.Y);
           MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));                
         }
       });
