@@ -13,6 +13,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _geoGrid; // The grid environment to use.
     private readonly GeoPosition _position;                        // Agent position structure.
+    private bool _isInserted;                                      // Is this agent already inserted?
 
 
     /// <summary>
@@ -35,9 +36,12 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="lat">Agent start position (latitude).</param>
     /// <param name="lng">Agent start position (longitude).</param>
     public void InsertIntoEnvironment(double lat, double lng) {
-      _position.Latitude = lat;
-      _position.Longitude = lng;
-      _geoGrid.Insert(_position);
+      if (!_isInserted) {
+        _position.Latitude = lat;
+        _position.Longitude = lng;
+        _geoGrid.Insert(_position);
+        _isInserted = true;
+      }
     }
 
 
@@ -89,6 +93,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="bearing">New agent bearing.</param>
     /// <returns>An interaction describing the movement.</returns>
     public MovementAction SetToPosition(double lat, double lng, double bearing) {
+      if (!_isInserted) return null;
       return new MovementAction(() => {
         try {
           var newPos = _geoGrid.MoveToPosition(new GeoCoordinate(_position.Latitude, _position.Longitude), lat, lng);

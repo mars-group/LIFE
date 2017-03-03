@@ -124,8 +124,9 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
             return GetNearest(gpsCoordinate.Latitude, gpsCoordinate.Longitude, maxDistanceInM, predicate);
         }
 
-        public T MoveToPosition(T objectToMove, double latitudeDestination, double longitudeDestination)
+        public IGeoCoordinate MoveToPosition(T objectToMove, double latitudeDestination, double longitudeDestination)
         {
+            var result = new GeoCoordinate(objectToMove.Latitude, objectToMove.Longitude);
             var currentCell = GetCellForGps(objectToMove.Latitude, objectToMove.Longitude);
             var currentColl = _geoGrid[currentCell];
             var targetCell = GetCellForGps(latitudeDestination, longitudeDestination);
@@ -134,12 +135,13 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
             if (currentColl.TryRemove(objectToMove, out dummy))
             {
                 targetColl.GetOrAdd(objectToMove, new byte());
-                objectToMove.Latitude = latitudeDestination;
-                objectToMove.Longitude = longitudeDestination;
+                result = new GeoCoordinate(latitudeDestination, longitudeDestination);
             }
 
-            return objectToMove;
+            return result;
         }
+
+
 
         public string PrintPotentialField()
         {

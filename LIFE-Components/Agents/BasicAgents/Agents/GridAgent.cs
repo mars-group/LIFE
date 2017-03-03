@@ -9,72 +9,76 @@ using LIFE.Components.Environments.GridEnvironment;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
-namespace LIFE.Components.Agents.BasicAgents.Agents
-{
+namespace LIFE.Components.Agents.BasicAgents.Agents {
+
+  /// <summary>
+  ///   A 2D-grid extension for the base agent.
+  /// </summary>
+  public abstract class GridAgent : Agent, IGridCoordinate {
+
+    private readonly IGridEnvironment<IGridCoordinate> _env; // IESC implementation for collision detection.
+    private readonly GridPosition _position;                 // Agent position backing structure.
+    protected readonly GridMover Mover;                      // Agent movement module.
+    public GridDirection Heading => _position.GridDirection; // Yaw value.
+    public int X => _position.X;                             // X coordinate.
+    public int Y => _position.Y;                             // Y coordinate.
+
+
     /// <summary>
-    ///   A 2D-grid extension for the base agent.
+    ///   Create an agent for use in 2D grid-environments.
     /// </summary>
-    public abstract class GridAgent : Agent, IGridCoordinate
-    {
-        private readonly IGridEnvironment<IGridCoordinate> _env; // IESC implementation for collision detection.
-        private GridPosition _position; // Agent position backing structure.
-        protected readonly GridMover Mover; // Agent movement module.
-
-
-        public int X => _position.X;
-        public int Y => _position.Y;
-
-        /// <summary>
-        ///   Create an agent for use in 2D grid-environments.
-        /// </summary>
-        /// <param name="layer">Layer reference needed for delegate calls.</param>
-        /// <param name="regFkt">Agent registration function pointer.</param>
-        /// <param name="unregFkt"> Delegate for unregistration function.</param>
-        /// <param name="env">Environment implementation.</param>
-        /// <param name="id">The agent identifier (serialized GUID).</param>
-        /// <param name="freq">MARS LIFE execution freqency.</param>
-        protected GridAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-            IGridEnvironment<IGridCoordinate> env, byte[] id = null, int freq = 1)
-            : base(layer, regFkt, unregFkt, id, freq)
-        {
-            _env = env;
-            _position = new GridPosition(X, Y);
-           Mover = new GridMover(env, _position, SensorArray);
-        }
-
-
-        /// <summary>
-        ///   This function unbinds the agent from the environment.
-        ///   It is triggered by the base agent, when alive flag is 'false'.
-        /// </summary>
-        protected override void Remove()
-        {
-            base.Remove();
-            _env.Remove(_position);
-        }
-
-        /// <summary>
-        ///   Return the result data for this agent.
-        /// </summary>
-        /// <returns>The agent's output values formatted into the result object.</returns>
-        public AgentSimResult GetResultData()
-        {
-            return new AgentSimResult
-            {
-                AgentId = ID.ToString(),
-                AgentType = GetType().Name,
-                Layer = Layer.GetType().Name,
-                Tick = GetTick(),
-                Position = new[] {X, Y},
-                //Orientation = new[] {_position.Yaw, 0.0},
-                AgentData = AgentData
-            };
-        }
-
-        public bool Equals(IGridCoordinate other)
-        {
-            return this.X.Equals(other.X) && this.Y.Equals(other.Y);
-        }
-
+    /// <param name="layer">Layer reference needed for delegate calls.</param>
+    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="unregFkt"> Delegate for unregistration function.</param>
+    /// <param name="env">Environment implementation.</param>
+    /// <param name="startPos">Optional starting position. If omitted, agent is not inserted.</param>
+    /// <param name="id">The agent identifier (serialized GUID).</param>
+    /// <param name="freq">MARS LIFE execution freqency.</param>
+    protected GridAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
+                        IGridEnvironment<IGridCoordinate> env, IGridCoordinate startPos=null,
+                        byte[] id=null, int freq=1)
+      : base(layer, regFkt, unregFkt, id, freq) {
+      _env = env;
+      _position = new GridPosition(0,0);
+      Mover = new GridMover(env, _position, SensorArray);
+      if (startPos != null) Mover.InsertIntoEnvironment(startPos.X, startPos.Y);
     }
+
+
+    /// <summary>
+    ///   This function unbinds the agent from the environment.
+    ///   It is triggered by the base agent, when alive flag is 'false'.
+    /// </summary>
+    protected override void Remove() {
+      base.Remove();
+      _env.Remove(_position);
+    }
+
+
+    /// <summary>
+    ///   Return the result data for this agent.
+    /// </summary>
+    /// <returns>The agent's output values formatted into the result object.</returns>
+    public AgentSimResult GetResultData() {
+      return new AgentSimResult {
+        AgentId = ID.ToString(),
+        AgentType = GetType().Name,
+        Layer = Layer.GetType().Name,
+        Tick = GetTick(),
+        Position = new [] {X, Y},
+        Orientation = new [] {_position.GetHeading(), 0.0},
+        AgentData = AgentData
+      };
+    }
+
+
+    /// <summary>
+    ///   Position comparison for the IGridCoordinate.
+    /// </summary>
+    /// <param name="other">The other X/Y coordinate pair.</param>
+    /// <returns>'True', if both grid coordinates represent the same cell.</returns>
+    public bool Equals(IGridCoordinate other) {
+      return X.Equals(other.X) && Y.Equals(other.Y);
+    }
+  }
 }

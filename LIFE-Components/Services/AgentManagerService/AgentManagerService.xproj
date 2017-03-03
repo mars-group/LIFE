@@ -6,7 +6,7 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>d75dbfad-d932-474d-b73a-0f352627f52e</ProjectGuid>
+    <ProjectGuid>6e490d74-8807-4581-a0ed-6cd5ac64ee0d</ProjectGuid>
     <RootNamespace>LIFE.Services.AgentManagerService</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
