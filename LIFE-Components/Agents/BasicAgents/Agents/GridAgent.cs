@@ -53,11 +53,6 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
             _env.Remove(_position);
         }
 
-        internal virtual void SetPosition(int x, int y)
-        {
-            _position = new GridPosition(x, y);
-        }
-
         /// <summary>
         ///   Return the result data for this agent.
         /// </summary>
