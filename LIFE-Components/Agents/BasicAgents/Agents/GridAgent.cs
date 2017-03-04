@@ -21,7 +21,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         private GridPosition _position; // AgentReference position backing structure.
         protected readonly GridMover<T> Mover; // AgentReference movement module.
 
-        public T AgentReference { get; private set; }
+        public T AgentReference { get; protected set; }
 
         public int X => _position.X;
         public int Y => _position.Y;
@@ -47,14 +47,18 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         /// <param name="id">The agentReference identifier (serialized GUID).</param>
         /// <param name="freq">MARS LIFE execution freqency.</param>
         protected GridAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-            IGridEnvironment<GridAgent<T>> env, T agentReference, byte[] id = null, int freq = 1)
+            IGridEnvironment<GridAgent<T>> env, GridPosition position = null, byte[] id = null, int freq = 1)
             : base(layer, regFkt, unregFkt, id, freq)
         {
-            AgentReference = agentReference;
             _env = env;
-            _position = new GridPosition(X, Y);
-           Mover = new GridMover<T>(env, this, SensorArray);
+            Mover = new GridMover<T>(env, this, SensorArray);
+            if (position != null)
+            {
+                _position = position;
+                Mover.InsertIntoEnvironment(position.X, position.Y);
+            }
         }
+
 
 
         /// <summary>
