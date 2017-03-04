@@ -10,6 +10,7 @@
 
         public int X { get; private set; }
         public int Y { get; private set; }
+        public GridDirection GridDirection { get; }
 
 
         public bool Equals(IGridCoordinate other)

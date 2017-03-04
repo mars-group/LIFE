@@ -12,7 +12,7 @@ using MovementResult = LIFE.Components.Agents.BasicAgents.Perception.MovementRes
 namespace LIFE.Components.Agents.BasicAgents.Movement {
 
   /// <summary>
-  ///   Agent mover for three-dimensional cartesian environments.
+  ///   AgentReference mover for three-dimensional cartesian environments.
   /// </summary>
   public class AgentMover3D : AgentMover {
 
@@ -25,7 +25,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     ///   This function is automatically invoked in the abstract agent!
     /// </summary>
     /// <param name="env">The environment to use (probably some crappy ESC).</param>
-    /// <param name="agentPos">Agent position data structure.</param>
+    /// <param name="agentPos">AgentReference position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
     public AgentMover3D(IEnvironment env, CartesianPosition agentPos, SensorArray sensorArray)
       : base(sensorArray) {
@@ -37,9 +37,9 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <summary>
     ///   Try to insert this agent into the environment at the given position.
     /// </summary>
-    /// <param name="x">Agent start position (x-coordinate).</param>
-    /// <param name="y">Agent start position (y-coordinate).</param>
-    /// <param name="z">Agent start position (z-coordinate).</param>
+    /// <param name="x">AgentReference start position (x-coordinate).</param>
+    /// <param name="y">AgentReference start position (y-coordinate).</param>
+    /// <param name="z">AgentReference start position (z-coordinate).</param>
     /// <returns>Success flag. If failed, the agent may not be moved!</returns>
     public bool InsertIntoEnvironment(double x, double y, double z) {
       _pos.Shape = new Cuboid(new Vector3(1,1,1), new Vector3(x,y,z));
@@ -62,7 +62,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// </summary>
     /// <param name="distance">The distance to move.</param>
     /// <param name="yaw">New agent heading.</param>
-    /// <param name="pitch">Agent climb angle.</param>
+    /// <param name="pitch">AgentReference climb angle.</param>
     /// <returns>An interaction describing the movement.</returns>
     public MovementAction MoveInDirection(double distance, double yaw, double pitch) {
       var dir = new Direction();

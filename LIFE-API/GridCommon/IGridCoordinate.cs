@@ -7,5 +7,6 @@ namespace LIFE.API.GridCommon
     {
         int X { get; }
         int Y { get; }
+        GridDirection GridDirection { get; }
     }
 }

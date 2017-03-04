@@ -12,7 +12,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
   public class GeospatialMover : AgentMover {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _geoGrid; // The grid environment to use.
-    private readonly GeoPosition _position;                        // Agent position structure.
+    private readonly GeoPosition _position;                        // AgentReference position structure.
 
 
     /// <summary>
@@ -20,7 +20,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     ///   This function is automatically invoked in the abstract agent!
     /// </summary>
     /// <param name="env">The geospatial environment to use.</param>
-    /// <param name="pos">Agent position data structure.</param>
+    /// <param name="pos">AgentReference position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
     public GeospatialMover(IGeoGridEnvironment<IGeoCoordinate> env, GeoPosition pos, SensorArray sensorArray)
       : base(sensorArray) {
@@ -32,8 +32,8 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <summary>
     ///   Try to insert this agent into the environment at the given position.
     /// </summary>
-    /// <param name="lat">Agent start position (latitude).</param>
-    /// <param name="lng">Agent start position (longitude).</param>
+    /// <param name="lat">AgentReference start position (latitude).</param>
+    /// <param name="lng">AgentReference start position (longitude).</param>
     public void InsertIntoEnvironment(double lat, double lng) {
       _position.Latitude = lat;
       _position.Longitude = lng;

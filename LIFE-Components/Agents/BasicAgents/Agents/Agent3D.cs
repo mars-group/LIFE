@@ -18,16 +18,16 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   public abstract class Agent3D : Agent {
 
     private readonly IEnvironment _env;           // IESC implementation for collision detection.
-    private readonly CartesianPosition _position; // Agent position backing structure.
-    protected readonly AgentMover3D Mover;        // Agent movement module.
-    public readonly Position3D Position;          // Agent position container.
+    private readonly CartesianPosition _position; // AgentReference position backing structure.
+    protected readonly AgentMover3D Mover;        // AgentReference movement module.
+    public readonly Position3D Position;          // AgentReference position container.
 
 
     /// <summary>
     ///   Create a new agent for continuous 3D environments.
     /// </summary>
     /// <param name="layer">Layer reference needed for delegate calls.</param>
-    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="regFkt">AgentReference registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">Environment implementation.</param>
     /// <param name="colType">Collision class. ('MASSIVE' [default], 'ENVIRONMENT', 'GHOST').</param>

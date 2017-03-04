@@ -22,7 +22,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         private readonly UnregisterAgent _unregFkt; // Delegate for unregistration function.
         protected readonly SensorArray SensorArray; // Sensor aggregation unit and data storage.
         protected bool IsAlive; // Alive flag for execution and deletion checks.
-        protected int ExecutionGroup; // Agent execution frequency.
+        protected int ExecutionGroup; // AgentReference execution frequency.
         protected readonly ILayer Layer; // Layer reference needed for delegate calls.
         protected readonly Dictionary<string, object> AgentData; // Dictionary for arbitrary result values.
         public Guid ID { get; set; } // The agent identifier [required by LifeAPI].
@@ -33,10 +33,10 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         /// domain specific sensors, actions and reasoning, optionally containing a knowledge base.
         /// </summary>
         /// <param name="layer">Layer reference needed for delegate calls.</param>
-        /// <param name="regFkt">Agent registration function pointer.</param>
+        /// <param name="regFkt">AgentReference registration function pointer.</param>
         /// <param name="unregFkt"> Delegate for unregistration function.</param>
         /// <param name="id">Fixed GUID to use in this agent (optional).</param>
-        /// <param name="freq">Agent execution frequency (ticks). [default: 1]</param>
+        /// <param name="freq">AgentReference execution frequency (ticks). [default: 1]</param>
         protected Agent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, byte[] id = null, int freq = 1)
         {
             if (id == null) ID = Guid.NewGuid();
@@ -60,11 +60,11 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         {
             try
             {
-                if (!IsAlive) Remove(); // Agent deletion.
+                if (!IsAlive) Remove(); // AgentReference deletion.
                 Sense(); // Phase 1: Perception
                 var action = Reason(); // Phase 2: Reasoning
                 if (IsAlive && action != null) action.Execute(); // Phase 3: Execution
-                else if (!IsAlive) Remove(); // Agent deletion.
+                else if (!IsAlive) Remove(); // AgentReference deletion.
             }
             catch (Exception ex)
             {

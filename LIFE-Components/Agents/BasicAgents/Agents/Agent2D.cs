@@ -18,16 +18,16 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   public abstract class Agent2D : Agent {
 
     private readonly IEnvironment _env;           // IESC implementation for collision detection.
-    private readonly CartesianPosition _position; // Agent position backing structure.
-    protected readonly AgentMover2D Mover;        // Agent movement module.
-    public readonly Position2D Position;          // Agent position container.
+    private readonly CartesianPosition _position; // AgentReference position backing structure.
+    protected readonly AgentMover2D Mover;        // AgentReference movement module.
+    public readonly Position2D Position;          // AgentReference position container.
 
 
     /// <summary>
     ///   Create an agent for a 2D cartesian environment.
     /// </summary>
     /// <param name="layer">Layer reference needed for delegate calls.</param>
-    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="regFkt">AgentReference registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">Environment implementation.</param>
     /// <param name="colType">Collision class. ('MASSIVE' [default], 'ENVIRONMENT', 'GHOST').</param>

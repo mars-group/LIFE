@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using LIFE.API.Agent;
 using LIFE.API.GridCommon;
+using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
 using LIFE.Components.Environments.GridEnvironment;
@@ -13,10 +15,10 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
   ///   Two-dimensional, grid-based movement module.
   ///   For now, this mover rests upon the 2D continuous environment, emulating grid behaviour.
   /// </summary>
-  public class GridMover : AgentMover {
+  public class GridMover<T> : AgentMover where T : IAgent{
 
-    private readonly IGridEnvironment<IGridCoordinate> _grid; // The grid environment to use.
-    private GridPosition _position;                  // Agent position structure.
+    private readonly IGridEnvironment<GridAgent<T>> _grid; // The grid environment to use.
+    private GridAgent<T> _agent;                  // AgentReference position structure.
 
     public bool DiagonalEnabled { get; set; } // This flag enables diagonal movement [default: disabled].
 
@@ -25,24 +27,12 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     ///   Create a new grid movement module.
     /// </summary>
     /// <param name="env">The grid environment to use.</param>
-    /// <param name="pos">Agent position data structure.</param>
+    /// <param name="pos">AgentReference position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
-    public GridMover(IGridEnvironment<IGridCoordinate> env, GridPosition pos, SensorArray sensorArray)
+    public GridMover(IGridEnvironment<GridAgent<T>> env, GridAgent<T> pos, SensorArray sensorArray)
       : base(sensorArray) {
       _grid = env;
-      _position = pos;
-    }
-
-
-    /// <summary>
-    ///   Try to insert this agent into the environment at the given position.
-    /// </summary>
-    /// <param name="x">Agent start position (x-coordinate).</param>
-    /// <param name="y">Agent start position (y-coordinate).</param>
-    public void InsertIntoEnvironment(int x, int y) {
-        // !!!! warum wird hier x und y übergeben? Position wird doch schon im Konstruktor übergeben?! !!!!
-      _position = new GridPosition(x,y);
-      _grid.Insert(_position);
+      _agent = pos;
     }
 
 
@@ -52,8 +42,8 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="dir">The direction to move (enumeration value).</param>
     /// <returns>An interaction object that contains the code to execute this movement.</returns>
     public MovementAction MoveInDirection(GridDirection dir) {
-      var x = _position.X;
-      var y = _position.Y;
+      var x = _agent.X;
+      var y = _agent.Y;
       switch (dir) {
         case GridDirection.Up       : return SetToPosition(x,   y+1, dir);
         case GridDirection.UpRight  : return SetToPosition(x+1, y+1, dir);
@@ -73,17 +63,17 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// </summary>
     /// <param name="x">X coordinate to move to.</param>
     /// <param name="y">Y coordinate to move to.</param>
-    /// <param name="dir">Agent orientation (optional).</param>
+    /// <param name="dir">AgentReference orientation (optional).</param>
     /// <returns></returns>
     public MovementAction SetToPosition(int x, int y, GridDirection dir = GridDirection.NotSet) {  
       return new MovementAction(() => {
-        var result = _grid.MoveToPosition(_position, x, y);
-        if (dir != GridDirection.NotSet) _position.GridDirection = dir;
-        if (result.X == _position.X && result.Y == _position.Y) {
+        var result = _grid.MoveToPosition(_agent, x, y);
+        if (dir != GridDirection.NotSet) _agent.SetDirection(dir);
+        if (result.X == _agent.X && result.Y == _agent.Y) {
           MovementSensor.SetMovementResult(new MovementResult(MovementStatus.OutOfBounds));
         }
         else {
-          _position = new GridPosition(result.X, result.Y);
+          _agent.SetPosition(new GridPosition(result.X, result.Y));
           MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));                
         }
       });
@@ -100,10 +90,10 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     public List<MovementOption> GetMovementOptions(int targetX, int targetY) {
 
       // Check, if we are already there. Otherwise no need to move anyway (empty list).
-      if (targetX == _position.X && targetY == _position.Y) return new List<MovementOption>();
+      if (targetX == _agent.X && targetY == _agent.Y) return new List<MovementOption>();
 
       // Calculate yaw to target position.
-      var joint = new Vector3(targetX - _position.X, targetY - _position.Y, 0);
+      var joint = new Vector3(targetX - _agent.X, targetY - _agent.Y, 0);
       var dir = new Direction();
       dir.SetDirectionalVector(joint);
       var angle = dir.Yaw;

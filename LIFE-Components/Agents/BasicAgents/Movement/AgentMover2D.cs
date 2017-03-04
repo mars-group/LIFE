@@ -23,8 +23,8 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <summary>
     ///   Try to insert this agent into the environment at the given position.
     /// </summary>
-    /// <param name="x">Agent start position (x-coordinate).</param>
-    /// <param name="y">Agent start position (y-coordinate).</param>
+    /// <param name="x">AgentReference start position (x-coordinate).</param>
+    /// <param name="y">AgentReference start position (y-coordinate).</param>
     /// <returns>Success flag. If failed, the agent may not be moved!</returns>
     public bool InsertIntoEnvironment(double x, double y) {
       return _mover3D.InsertIntoEnvironment(x, y, 0);

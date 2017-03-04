@@ -57,7 +57,7 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation {
       // initialized from that default value in case no mapping is present
       if (neededParameters.Length - neededParameters.Count(p => p.HasDefaultValue) != agentParameterCount) {
         var errmsg = new StringBuilder();
-        errmsg.AppendLine("There were not enough parameters provided in your SimConfig for Agent of type: " + agentType);
+        errmsg.AppendLine("There were not enough parameters provided in your SimConfig for AgentReference of type: " + agentType);
         errmsg.Append("NeededParams are:");
         foreach (var np in neededParameters) errmsg.AppendLine($"Name: {np.Name}, Type: {np.GetType()}");
         errmsg.Append("ActualParams are:");
@@ -99,7 +99,7 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation {
 
       // iterate over all agents and create them
       Parallel.For(0L, agentCount, index => {
-        // create Agent ID
+        // create AgentReference ID
         var realAgentId = agentIds[index];
 
         // the list which will hold the actual Parameters
@@ -119,7 +119,7 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation {
           }
           else if (layerType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)) {
             if (!additionalLayerDependencies.Any(l => neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(l)))
-              throw new MissingLayerForAgentConstructionException("Agent type '" + agentInitConfig.AgentName +
+              throw new MissingLayerForAgentConstructionException("AgentReference type '" + agentInitConfig.AgentName +
                                                                   "' needs missing layer type '"
                                                                   + neededParam.ParameterType + "' to initialize.");
             actualParameters.Add(

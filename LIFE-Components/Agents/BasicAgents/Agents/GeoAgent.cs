@@ -18,8 +18,8 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   public abstract class GeoAgent : Agent {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
-    private readonly GeoPosition _position;                    // Agent position backing structure.
-    protected readonly GeospatialMover Mover;                  // Agent movement module.
+    private readonly GeoPosition _position;                    // AgentReference position backing structure.
+    protected readonly GeospatialMover Mover;                  // AgentReference movement module.
     public double Latitude => _position.Latitude;              // Latitude of this agent.
     public double Longitude => _position.Longitude;            // Longitude of agent position.
     public double Bearing => _position.Bearing;                // The agent's heading.
@@ -29,7 +29,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     ///   Create a new geospatial agent.
     /// </summary>
     /// <param name="layer">Layer reference needed for delegate calls.</param>
-    /// <param name="regFkt">Agent registration function pointer.</param>
+    /// <param name="regFkt">AgentReference registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">The grid environment.</param>
     /// <param name="id">The agent identifier (serialized GUID).</param>

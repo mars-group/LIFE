@@ -6,7 +6,7 @@ using LIFE.API.GridCommon;
 
 namespace LIFE.Components.Environments.GridEnvironment
 {
-    public class GridEnvironment<T> : IGridEnvironment<T> where T : IEquatable<T>, IGridCoordinate
+    public class GridEnvironment<T> : IGridEnvironment<T> where T : IGridCoordinate
     {
         private readonly ConcurrentDictionary<T, byte>[] _grid;
         private readonly int _numberOfGridCellsX;

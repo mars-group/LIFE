@@ -14,20 +14,20 @@ namespace LIFE.Components.Agents.BasicAgents.Environment {
   /// </summary>
   public class CartesianPosition : ISpatialEntity {
 
-    private readonly Agent _agent;               // Agent associated with this position.
-    private readonly CT _collisionType;          // Agent collision class.
+    private readonly Agent _agent;               // AgentReference associated with this position.
+    private readonly CT _collisionType;          // AgentReference collision class.
     public double X => Shape.Position.X;         // Position (X-coordinate).
     public double Y => Shape.Position.Y;         // Position (Y-coordinate).
     public double Z => Shape.Position.Z;         // Position (Z-coordinate).
-    public double Yaw => Shape.Rotation.Yaw;     // Agent orientation (X,Y).
-    public double Pitch => Shape.Rotation.Pitch; // Agent climb angle.
+    public double Yaw => Shape.Rotation.Yaw;     // AgentReference orientation (X,Y).
+    public double Pitch => Shape.Rotation.Pitch; // AgentReference climb angle.
 
 
     /// <summary>
     ///   Create a new cartesian position structure.
     /// </summary>
     /// <param name="agent">The agent this position belongs to.</param>
-    /// <param name="collisionType">Agent collision type.</param>
+    /// <param name="collisionType">AgentReference collision type.</param>
     public CartesianPosition(Agent agent, string collisionType) {
       _agent = agent;
       Shape = new Cuboid(new Vector3(1,1,1), new Vector3(0,0,0));

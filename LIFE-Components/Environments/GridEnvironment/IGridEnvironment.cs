@@ -4,7 +4,7 @@ using LIFE.API.GridCommon;
 
 namespace LIFE.Components.Environments.GridEnvironment
 {
-    public interface IGridEnvironment<T> where T : IEquatable<T>, IGridCoordinate
+    public interface IGridEnvironment<T> where T : IGridCoordinate
     {
         /// Inserts item into environment at position defined by latitute and longitude
         void Insert(T objectToInsert);
