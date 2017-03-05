@@ -1,5 +1,6 @@
 ﻿﻿using System;
 using LIFE.API.GeoCommon;
+using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
 using LIFE.Components.Environments.GeoGridEnvironment;
@@ -9,10 +10,10 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
   /// <summary>
   ///   Movement module for geospatial agents.
   /// </summary>
-  public class GeospatialMover : AgentMover {
+  public class GeoMover<T> : AgentMover where T : GeoAgent<T> {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _geoGrid; // The grid environment to use.
-    private readonly GeoPosition _position;                        // AgentReference position structure.
+    private readonly GeoAgent<T> _agent;                        // AgentReference position structure.
 
 
     /// <summary>
@@ -22,10 +23,10 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="env">The geospatial environment to use.</param>
     /// <param name="pos">AgentReference position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
-    public GeospatialMover(IGeoGridEnvironment<IGeoCoordinate> env, GeoPosition pos, SensorArray sensorArray)
+    public GeoMover(IGeoGridEnvironment<IGeoCoordinate> env, GeoAgent<T> agent, SensorArray sensorArray)
       : base(sensorArray) {
       _geoGrid = env;
-      _position = pos;
+      _agent = agent;
     }
 
 
@@ -33,11 +34,10 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     ///   Try to insert this agent into the environment at the given position.
     /// </summary>
     /// <param name="lat">AgentReference start position (latitude).</param>
-    /// <param name="lng">AgentReference start position (longitude).</param>
-    public void InsertIntoEnvironment(double lat, double lng) {
-      _position.Latitude = lat;
-      _position.Longitude = lng;
-      _geoGrid.Insert(_position);
+    /// <param name="lon">AgentReference start position (longitude).</param>
+    public void InsertIntoEnvironment(double lat, double lon) {
+      _agent.SetPosition(new GeoPosition(lat, lon));
+      _geoGrid.Insert(_agent);
     }
 
 
@@ -47,7 +47,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="distance">The distance to move.</param>
     /// <returns>Interaction expressing this movement.</returns>
     public MovementAction MoveForward(double distance) {
-      return MoveInDirection(distance, _position.Bearing);
+      return MoveInDirection(distance, _agent.Bearing);
     }
 
 
@@ -60,7 +60,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     public MovementAction MoveInDirection(double distance, double bearing) {
       double targetLat, targetLong;
       CalculateNewCoordinates(
-        _position.Latitude, _position.Longitude, // At this position are we now.
+        _agent.Latitude, _agent.Longitude, // At this position are we now.
         bearing, distance,                       // This is our heading and traveling distance.
         out targetLat, out targetLong            // Return the calculated target position.
       );
@@ -76,7 +76,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="targetLng">Longitude of target position.</param>
     /// <returns>An interaction describing the movement.</returns>
     public MovementAction MoveTowardsPosition(double distance, double targetLat, double targetLng) {
-      var bearing = CalculateBearing(_position.Latitude, _position.Longitude, targetLat, targetLng);
+      var bearing = CalculateBearing(_agent.Latitude, _agent.Longitude, targetLat, targetLng);
       return MoveInDirection(distance, bearing);
     }
 
@@ -91,10 +91,8 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     public MovementAction SetToPosition(double lat, double lng, double bearing) {
       return new MovementAction(() => {
         try {
-          var newPos = _geoGrid.MoveToPosition(new GeoCoordinate(_position.Latitude, _position.Longitude), lat, lng);
-          _position.Bearing = bearing;
-          _position.Latitude = newPos.Latitude;
-          _position.Longitude = newPos.Longitude;
+          var newPos = _geoGrid.MoveToPosition(new GeoCoordinate(_agent.Latitude, _agent.Longitude), lat, lng);
+          _agent.SetPosition(new GeoPosition(newPos.Latitude, newPos.Longitude), bearing);
           MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));
         }
         catch (IndexOutOfRangeException) { // Movement failed, stay at the old position.
@@ -111,7 +109,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="lng">Longitude (-: ← west | +: → east) of the target coordinate.</param>
     /// <returns>A direction with the calculated bearing as yaw and a pitch of 0°.</returns>
     public double CalculateBearingToCoordinate(double lat, double lng) {
-      return CalculateBearing(_position.Latitude, _position.Longitude, lat, lng);
+      return CalculateBearing(_agent.Latitude, _agent.Longitude, lat, lng);
     }
   }
 }

@@ -1,6 +1,5 @@
 ﻿﻿using System;
 using System.Collections.Generic;
-using LIFE.API.Agent;
 using LIFE.API.GridCommon;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Perception;
@@ -16,7 +15,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement
     ///   Two-dimensional, grid-based movement module.
     ///   For now, this mover rests upon the 2D continuous environment, emulating grid behaviour.
     /// </summary>
-    public class GridMover<T> : AgentMover where T : IAgent
+    public class GridMover<T> : AgentMover where T : GridAgent<T>
     {
         private readonly IGridEnvironment<GridAgent<T>> _grid; // The grid environment to use.
         private GridAgent<T> _agent; // AgentReference position structure.

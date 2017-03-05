@@ -1,4 +1,5 @@
 ﻿using System;
+using LIFE.API.Agent;
 using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
@@ -16,15 +17,27 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   ///   An agent with a geospatial position (lat, lng).
   ///   It is placed in a GeoGrid-Environment and also has a GPS movement module.
   /// </summary>
-  public abstract class GeoAgent : Agent, IGeoCoordinate, IEquatable<GeoAgent> {
+  public abstract class GeoAgent<T> : Agent, IGeoCoordinate where T : GeoAgent<T> {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
-    private readonly GeoPosition _position;                    // AgentReference position backing structure.
-    protected readonly GeospatialMover Mover;                  // AgentReference movement module.
+    private GeoPosition _position;                    // AgentReference position backing structure.
+    protected readonly GeoMover<T> Mover;                  // AgentReference movement module.
     public double Latitude => _position.Latitude;              // Latitude of this agent.
     public double Longitude => _position.Longitude;            // Longitude of agent position.
     public double Bearing => _position.Bearing;                // The agent's heading.
 
+    public T AgentReference { get; protected set; }
+
+    internal void SetPosition(GeoPosition newPosition, double bearing = 361)
+    {
+      var oldBearing = _position.Bearing;
+      _position = newPosition;
+        if (Math.Abs(bearing - 361.0) < 0.001)
+        {
+            _position.Bearing = oldBearing;
+        }
+      _position.Bearing = bearing;
+    }
 
     /// <summary>
     ///   Create a new geospatial agent.
@@ -42,8 +55,11 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
       _position = new GeoPosition(0, 0);
-      Mover = new GeospatialMover(env, _position, SensorArray);
-      if (startPos != null) Mover.InsertIntoEnvironment(startPos.Latitude, startPos.Longitude);
+      Mover = new GeoMover<T>(env, this, SensorArray);
+        if (startPos != null)
+        {
+            Mover.InsertIntoEnvironment(startPos.Latitude, startPos.Longitude);
+        }
     }
 
 
@@ -85,14 +101,5 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
              (Math.Abs(Longitude - other.Longitude) < threshold);
     }
 
-
-    /// <summary>
-    ///   Compares this agent with another one.
-    /// </summary>
-    /// <param name="other">The other agent.</param>
-    /// <returns>Equality boolean.</returns>
-    public bool Equals(GeoAgent other) {
-      return ID.Equals(other.ID);
-    }
   }
 }
