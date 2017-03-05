@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LIFE.API.Agent;
 using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
@@ -17,7 +18,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   ///   An agent with a geospatial position (lat, lng).
   ///   It is placed in a GeoGrid-Environment and also has a GPS movement module.
   /// </summary>
-  public abstract class GeoAgent<T> : Agent, IGeoCoordinate where T : GeoAgent<T> {
+  public abstract class GeoAgent<T> : Agent, IGeoAgent<T>, IEquatable<GeoAgent<T>> where T : IGeoAgent<T> {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
     private GeoPosition _position;                    // AgentReference position backing structure.
@@ -101,5 +102,27 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
              (Math.Abs(Longitude - other.Longitude) < threshold);
     }
 
+      public bool Equals(GeoAgent<T> other)
+      {
+          if (ReferenceEquals(null, other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          return Equals(_position, other._position) && EqualityComparer<T>.Default.Equals(AgentReference, other.AgentReference);
+      }
+
+      public override bool Equals(object obj)
+      {
+          if (ReferenceEquals(null, obj)) return false;
+          if (ReferenceEquals(this, obj)) return true;
+          if (obj.GetType() != this.GetType()) return false;
+          return Equals((GeoAgent<T>) obj);
+      }
+
+      public override int GetHashCode()
+      {
+          unchecked
+          {
+              return ((_position != null ? _position.GetHashCode() : 0) * 397) ^ EqualityComparer<T>.Default.GetHashCode(AgentReference);
+          }
+      }
   }
 }

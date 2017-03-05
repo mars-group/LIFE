@@ -1,4 +1,6 @@
-﻿using LIFE.API.Agent;
+﻿using System;
+using System.Collections.Generic;
+using LIFE.API.Agent;
 using LIFE.API.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
@@ -15,7 +17,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
     /// <summary>
     ///   A 2D-grid extension for the base agentReference.
     /// </summary>
-    public abstract class GridAgent<T> : Agent, IGridCoordinate where T : GridAgent<T>
+    public abstract class GridAgent<T> : Agent, IGridAgent<T>, IEquatable<GridAgent<T>> where T : IGridAgent<T>
     {
         private readonly IGridEnvironment<GridAgent<T>> _env; // IESC implementation for collision detection.
         private GridPosition _position; // AgentReference initialPosition backing structure.
@@ -95,5 +97,27 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
             return this.X.Equals(other.X) && this.Y.Equals(other.Y);
         }
 
+        public bool Equals(GridAgent<T> other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(_position, other._position) && EqualityComparer<T>.Default.Equals(AgentReference, other.AgentReference);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((GridAgent<T>) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((_position != null ? _position.GetHashCode() : 0) * 397) ^ EqualityComparer<T>.Default.GetHashCode(AgentReference);
+            }
+        }
     }
 }
