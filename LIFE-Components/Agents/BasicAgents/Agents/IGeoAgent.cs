@@ -12,7 +12,5 @@ using LIFE.API.GeoCommon;
 namespace LIFE.Components.Agents.BasicAgents.Agents
 {
     public interface IGeoAgent<T> : IGeoCoordinate
-    {
-        T AgentReference { get; }
-    }
+    {}
 }

@@ -12,7 +12,5 @@ using LIFE.API.GridCommon;
 namespace LIFE.Components.Agents.BasicAgents.Agents
 {
     public interface IGridAgent<T> : IGridCoordinate
-    {
-        T AgentReference { get; }
-    }
+    {}
 }
