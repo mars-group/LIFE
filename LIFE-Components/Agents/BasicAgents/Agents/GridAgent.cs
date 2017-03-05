@@ -18,7 +18,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
     public abstract class GridAgent<T> : Agent, IGridCoordinate where T : IAgent
     {
         private readonly IGridEnvironment<GridAgent<T>> _env; // IESC implementation for collision detection.
-        private GridPosition _position; // AgentReference position backing structure.
+        private GridPosition _position; // AgentReference initialPosition backing structure.
         protected readonly GridMover<T> Mover; // AgentReference movement module.
 
         public T AgentReference { get; protected set; }
@@ -44,18 +44,19 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         /// <param name="regFkt">AgentReference registration function pointer.</param>
         /// <param name="unregFkt"> Delegate for unregistration function.</param>
         /// <param name="env">Environment implementation.</param>
+        /// <param name="initialPosition">The initial position for the agent, random if left null</param>
         /// <param name="id">The agentReference identifier (serialized GUID).</param>
         /// <param name="freq">MARS LIFE execution freqency.</param>
         protected GridAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-            IGridEnvironment<GridAgent<T>> env, GridPosition position = null, byte[] id = null, int freq = 1)
+            IGridEnvironment<GridAgent<T>> env, GridPosition initialPosition = null, byte[] id = null, int freq = 1)
             : base(layer, regFkt, unregFkt, id, freq)
         {
             _env = env;
             Mover = new GridMover<T>(env, this, SensorArray);
-            if (position != null)
+            if (initialPosition != null)
             {
-                _position = position;
-                Mover.InsertIntoEnvironment(position.X, position.Y);
+                _position = initialPosition;
+                Mover.InsertIntoEnvironment(initialPosition.X, initialPosition.Y);
             }
         }
 
