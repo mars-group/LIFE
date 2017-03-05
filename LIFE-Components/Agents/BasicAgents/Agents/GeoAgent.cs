@@ -1,4 +1,5 @@
-﻿using LIFE.API.GeoCommon;
+﻿using System;
+using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Movement;
@@ -15,7 +16,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   ///   An agent with a geospatial position (lat, lng).
   ///   It is placed in a GeoGrid-Environment and also has a GPS movement module.
   /// </summary>
-  public abstract class GeoAgent : Agent {
+  public abstract class GeoAgent : Agent, IGeoCoordinate, IEquatable<GeoAgent> {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
     private readonly GeoPosition _position;                    // AgentReference position backing structure.
@@ -32,14 +33,17 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     /// <param name="regFkt">AgentReference registration function pointer.</param>
     /// <param name="unregFkt"> Delegate for unregistration function.</param>
     /// <param name="env">The grid environment.</param>
+    /// <param name="startPos">Optional starting position. If omitted, agent is not inserted.</param>
     /// <param name="id">The agent identifier (serialized GUID).</param>
     /// <param name="freq">MARS LIFE execution freqency.</param>
     protected GeoAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-                              IGeoGridEnvironment<IGeoCoordinate> env, byte[] id=null, int freq=1)
+                       IGeoGridEnvironment<IGeoCoordinate> env, IGeoCoordinate startPos=null,
+                       byte[] id=null, int freq=1)
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
       _position = new GeoPosition(0, 0);
       Mover = new GeospatialMover(env, _position, SensorArray);
+      if (startPos != null) Mover.InsertIntoEnvironment(startPos.Latitude, startPos.Longitude);
     }
 
 
@@ -67,6 +71,28 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
         Orientation = new [] {Bearing, 0},
         AgentData = AgentData
       };
+    }
+
+
+    /// <summary>
+    ///   Position comparison for the IGeoCoordinate.
+    /// </summary>
+    /// <param name="other">The other X/Y coordinate pair.</param>
+    /// <returns>'True', if both geo coordinates sufficiently close enough.</returns>
+    public bool Equals(IGeoCoordinate other) {
+      const double threshold = 0.00000000000001;
+      return (Math.Abs(Latitude - other.Latitude) < threshold) &&
+             (Math.Abs(Longitude - other.Longitude) < threshold);
+    }
+
+
+    /// <summary>
+    ///   Compares this agent with another one.
+    /// </summary>
+    /// <param name="other">The other agent.</param>
+    /// <returns>Equality boolean.</returns>
+    public bool Equals(GeoAgent other) {
+      return ID.Equals(other.ID);
     }
   }
 }

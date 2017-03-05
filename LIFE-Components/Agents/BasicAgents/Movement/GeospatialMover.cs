@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using LIFE.API.GeoCommon;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;

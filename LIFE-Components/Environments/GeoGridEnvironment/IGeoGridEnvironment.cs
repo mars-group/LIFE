@@ -59,7 +59,7 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
         /// <param name="objectToMove">the object to move</param>
         /// <param name="latitudeDestination">Latitude of destination</param>
         /// <param name="longitudeDestination">Longitude of destination</param>
-        /// <returns>T with updated coordinates</returns>
-        T MoveToPosition(T objectToMove, double latitudeDestination, double longitudeDestination);
+        /// <returns>The new position to set in the agent.</returns>
+        IGeoCoordinate MoveToPosition(T objectToMove, double latitudeDestination, double longitudeDestination);
     }
 }

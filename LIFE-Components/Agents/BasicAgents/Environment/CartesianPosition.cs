@@ -1,5 +1,4 @@
 ﻿using System;
-using LIFE.API.GridCommon;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
@@ -45,26 +44,5 @@ namespace LIFE.Components.Agents.BasicAgents.Environment {
     public Guid AgentGuid => _agent.ID;          // Returns the base agent's identifier.
     public Type AgentType => _agent.GetType();   // Returns the agent's specific type.
     public Enum CollisionType => _collisionType; // Returns this agent's collision type.
-
-
-    /// <summary>
-    ///   Returns the current yaw as grid orientation constant.
-    /// </summary>
-    public GridDirection GridDirection {
-      get {
-        var yaw = Convert.ToInt32(Yaw);
-        switch (yaw) {
-          case   0: return GridDirection.Up;
-          case  45: return GridDirection.UpRight;
-          case  90: return GridDirection.Right;
-          case 135: return GridDirection.DownRight;
-          case 180: return GridDirection.Down;
-          case 225: return GridDirection.DownLeft;
-          case 270: return GridDirection.Left;
-          case 315: return GridDirection.UpLeft;
-          default : return GridDirection.Up;
-        }
-      }
-    }
   }
 }

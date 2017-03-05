@@ -20,7 +20,7 @@ namespace LIFE.Components.Agents.BasicAgents.Environment {
 
     public double X => _pos.X;     // X-coordinate.
     public double Y => _pos.Y;     // Y-coordinate.
-    public double Yaw => _pos.Yaw; // AgentReference orientation.
+    public double Yaw => _pos.Yaw; // Agent orientation.
   }
 
 
@@ -42,8 +42,7 @@ namespace LIFE.Components.Agents.BasicAgents.Environment {
     public double X => _pos.X;       // X-coordinate.
     public double Y => _pos.Y;       // Y-coordinate.
     public double Z => _pos.Z;       // Z-coordinate.
-    public double Yaw => _pos.Yaw;   // AgentReference orientation (X,Y).
-    public double Pitch => _pos.Yaw; // AgentReference climb angle.
+    public double Yaw => _pos.Yaw;   // Agent orientation (X,Y).
+    public double Pitch => _pos.Yaw; // Agent climb angle.
   }
-
 }
