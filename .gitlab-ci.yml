@@ -1,7 +1,7 @@
 stages:
-  #- build
+  - build
   - test
-  #- deploy
+  - deploy
 
 variables:
   NUGET_FEED: "https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/"

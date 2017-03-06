@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using ConfigService;
 using InfluxDB.Net;
 using InfluxDB.Net.Enums;
-using InfluxDB.Net.Infrastructure.Influx;
 using InfluxDB.Net.Models;
 using LIFE.API.Layer.Initialization;
 using NSubstitute;
@@ -26,8 +24,7 @@ namespace LIFE.Components.Layers
         public void IntegrationTest()
         {
             // given
-            InitDatabaseValues();
-
+            InitDatabaseWithValues();
             var timeSeriesLayer = InitTimeSeriesLayer();
 
             // when
@@ -37,37 +34,30 @@ namespace LIFE.Components.Layers
             Assert.AreEqual(valueForCurrentSimulationTime, 123);
         }
 
-        private static void InitDatabaseValues()
+        private static void InitDatabaseWithValues()
         {
-            Console.WriteLine("-------------");
             var influxDb = new InfluxDb("http://" + InfluxDbHost + ":8086", User, Password, InfluxVersion.v096);
-            Console.WriteLine("Lets create the Database");
 
             var databaseAsync = influxDb.CreateDatabaseAsync(DatabaseName);
             databaseAsync.Wait();
 
-            var point = new Point()
+            var point = new Point
             {
                 Measurement = Measurement,
                 Precision = TimeUnit.Milliseconds,
-                Timestamp = DateTime.ParseExact("2000-01-01 00:00", "yyyy-MM-dd HH:mm", null),
+                Timestamp = DateTime.ParseExact("2000-01-01 00:00", "yyyy-MM-dd HH:mm", null)
             };
             point.Fields.Add(Column, 123);
             var writeResponse = influxDb.WriteAsync(DatabaseName, point);
             writeResponse.Wait();
-
-            var taskStatus = databaseAsync.Status;
-            Console.WriteLine("Status for creating database: " + taskStatus);
-
-            var writeStatus = writeResponse.Status;
-            Console.WriteLine("Status for value write: " + writeStatus);
         }
 
         private ConcreteTimeSeriesLayer InitTimeSeriesLayer()
         {
             var timeSeriesLayer = new ConcreteTimeSeriesLayer();
 
-            var hostNameField = timeSeriesLayer.GetType().GetField("HostName", BindingFlags.NonPublic | BindingFlags.Instance);
+            var hostNameField = timeSeriesLayer.GetType()
+                .GetField("HostName", BindingFlags.NonPublic | BindingFlags.Instance);
             hostNameField.SetValue(timeSeriesLayer, InfluxDbHost);
 
             var configServiceClient = Substitute.For<IConfigServiceClient>();
@@ -78,15 +68,16 @@ namespace LIFE.Components.Layers
                 .GetField("ConfigService", BindingFlags.NonPublic | BindingFlags.Instance);
             configServiceField.SetValue(timeSeriesLayer, configServiceClient);
 
-            TInitData initData = createTInitDataWithoutTimeSeriesInitInfo();
+            var initData = CreateTInitDataWithoutTimeSeriesInitInfo();
             initData.TimeSeriesInitInfo = new TimeSeriesInitConfig(Measurement, Column, "temperature");
             timeSeriesLayer.InitLayer(initData, null, null);
             return timeSeriesLayer;
         }
 
-        private TInitData createTInitDataWithoutTimeSeriesInitInfo()
+        private TInitData CreateTInitDataWithoutTimeSeriesInitInfo()
         {
-            return new TInitData(false, TimeSpan.FromDays(1), DateTime.ParseExact("2000-01-01 00:00", "yyyy-MM-dd HH:mm", null), Guid.NewGuid(), "");
+            return new TInitData(false, TimeSpan.FromDays(1),
+                DateTime.ParseExact("2000-01-01 00:00", "yyyy-MM-dd HH:mm", null), Guid.NewGuid(), "");
         }
     }
 }
