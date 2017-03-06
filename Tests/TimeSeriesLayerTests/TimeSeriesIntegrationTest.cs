@@ -20,6 +20,7 @@ namespace LIFE.Components.Layers
         private const string InfluxDbHost = "artifactory.mars.haw-hamburg.de-influxdb";
         private const string DatabaseName = "timeseries";
         private const string Measurement = "my_measurement";
+        private const string Column = "c_0";
 
         [Test]
         public void IntegrationTest()
@@ -51,8 +52,9 @@ namespace LIFE.Components.Layers
                 Precision = TimeUnit.Milliseconds,
                 Timestamp = DateTime.ParseExact("2000-01-01 00:00", "yyyy-MM-dd HH:mm", null),
             };
-            point.Fields.Add("temperature", 123);
+            point.Fields.Add(Column, 123);
             var writeResponse = influxDb.WriteAsync(DatabaseName, point);
+            writeResponse.Wait();
 
             var taskStatus = databaseAsync.Status;
             Console.WriteLine("Status for creating database: " + taskStatus);
@@ -77,7 +79,7 @@ namespace LIFE.Components.Layers
             configServiceField.SetValue(timeSeriesLayer, configServiceClient);
 
             TInitData initData = createTInitDataWithoutTimeSeriesInitInfo();
-            initData.TimeSeriesInitInfo = new TimeSeriesInitConfig("t1sdfghjkl", "c_1", "temperature");
+            initData.TimeSeriesInitInfo = new TimeSeriesInitConfig(Measurement, Column, "temperature");
             timeSeriesLayer.InitLayer(initData, null, null);
             return timeSeriesLayer;
         }
