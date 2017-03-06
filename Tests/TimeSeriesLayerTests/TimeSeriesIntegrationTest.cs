@@ -19,7 +19,6 @@ namespace LIFE.Components.Layers
         [Test]
         public void IntegrationTest()
         {
-            Console.WriteLine("--------------- Start test");
             // given
             InitDatabaseValues();
 
@@ -37,7 +36,9 @@ namespace LIFE.Components.Layers
             Console.WriteLine("-------------");
             var influxDb = new InfluxDb("http://" + InfluxDbHost + ":8086", User, Password, InfluxVersion.v096);
             Console.WriteLine("Lets create the Database");
-            var taskStatus = influxDb.CreateDatabaseAsync("timeseries").Status;
+            var databaseAsync = influxDb.CreateDatabaseAsync("timeseries");
+            databaseAsync.Wait();
+            var taskStatus = databaseAsync.Status;
             Console.WriteLine("Status for creating database: " + taskStatus);
         }
 
