@@ -23,7 +23,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         protected readonly GridMover<T> Mover; // AgentReference movement module.
 
         // return 'this' in actual agent class
-        public abstract T AgentReference { get; protected set; }
+        public abstract T AgentReference { get; }
 
         public int X => _position.X;
         public int Y => _position.Y;
