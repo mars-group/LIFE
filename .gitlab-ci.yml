@@ -1,6 +1,6 @@
 stages:
   - build
-  #- test
+  - test
   - deploy
 
 variables:
@@ -12,7 +12,24 @@ cache:
   paths:
     - /root/.nuget/packages/
 
+
 # Meta Packages
+test:
+  stage: test
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  services:
+    - artifactory.mars.haw-hamburg.de:5000/influxdb:0.13 
+  script:
+    - cat /etc/hosts
+    - cd $CI_PROJECT_DIR/LIFE-API
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd $CI_PROJECT_DIR/LIFE-Core
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd $CI_PROJECT_DIR/LIFE-Components
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd $CI_PROJECT_DIR/Tests/TimeSeriesLayerTests
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet test
 
 build-LIFE-API:
   stage: build
