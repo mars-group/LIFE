@@ -27,7 +27,8 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     public double Longitude => _position.Longitude;            // Longitude of agent position.
     public double Bearing => _position.Bearing;                // The agent's heading.
 
-    public T AgentReference { get; protected set; }
+    // return 'this' in actual agent class
+    protected abstract T AgentReference { get; }
 
     internal void SetPosition(GeoPosition newPosition, double bearing = 361)
     {

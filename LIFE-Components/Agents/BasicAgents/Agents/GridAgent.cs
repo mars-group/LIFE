@@ -22,7 +22,8 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         private GridPosition _position; // AgentReference initialPosition backing structure.
         protected readonly GridMover<T> Mover; // AgentReference movement module.
 
-        public T AgentReference { get; protected set; }
+        // return 'this' in actual agent class
+        protected abstract T AgentReference { get; }
 
         public int X => _position.X;
         public int Y => _position.Y;
