@@ -122,6 +122,7 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AgentManagerService", "LIFE-Components\Services\AgentManagerService\AgentManagerService.xproj", "{6E490D74-8807-4581-A0ED-6CD5AC64EE0D}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AgentShadowingService", "LIFE-Components\Services\AgentShadowingService\AgentShadowingService.xproj", "{BB993CDA-38FA-4316-8F27-44C5CEBA8317}"
+EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TimeSeriesLayerTests", "Tests\TimeSeriesLayerTests\TimeSeriesLayerTests.xproj", "{1CDEB166-17D0-4E72-8272-4C6ED61A7341}"
 EndProject
 Global
