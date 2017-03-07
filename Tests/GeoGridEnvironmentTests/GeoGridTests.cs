@@ -174,5 +174,16 @@ namespace GeoGridEnvironmentTests
             get { return Gps.Longitude; }
             set { Gps.Longitude = value; }
         }
+
+        /// <summary>
+        ///   Position comparison for the IGeoCoordinate.
+        /// </summary>
+        /// <param name="other">The other X/Y coordinate pair.</param>
+        /// <returns>'True', if both geo coordinates sufficiently close enough.</returns>
+        public bool Equals(IGeoCoordinate other) {
+            const double threshold = 0.00000000000001;
+            return (Math.Abs(Latitude - other.Latitude) < threshold) &&
+                   (Math.Abs(Longitude - other.Longitude) < threshold);
+        }
     }
 }

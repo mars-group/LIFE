@@ -63,11 +63,6 @@ namespace LIFE.API.GeoCommon {
     }
 
 
-    public override bool Equals(object other) {
-      var a = other as IGeoCoordinate;
-      return (a != null) && Equals(a);
-    }
-
     public override int GetHashCode() {
       return Latitude.GetHashCode() ^ Longitude.GetHashCode();
     }
