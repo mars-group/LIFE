@@ -14,22 +14,34 @@ cache:
 
 
 # Meta Packages
-test:
+testAll:
   stage: test
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
   services:
-    - artifactory.mars.haw-hamburg.de:5000/influxdb:0.13 
+    - artifactory.mars.haw-hamburg.de:5000/influxdb:0.13
   script:
-    - cat /etc/hosts
-    - cd $CI_PROJECT_DIR/LIFE-API
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd $CI_PROJECT_DIR/LIFE-Core
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd $CI_PROJECT_DIR/LIFE-Components
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd $CI_PROJECT_DIR/Tests/TimeSeriesLayerTests
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd Tests/BasicAgentTests
     - dotnet test
+    - cd ../EnvironmentServiceComponentTests
+    - dotnet test
+    - cd ../GridEnvironmentTest
+    - dotnet test
+    - cd ../GeoGridEnvironmentTests
+    - dotnet test
+    - cd ../GeoPotentialFieldLayerTests
+    - dotnet test
+    - cd ../ModelContainerTests
+    - dotnet test
+    - cd ../MulticastAdapterTests
+    - dotnet test
+    - cd ../NodeRegistryTests
+    - dotnet test
+    - cd ../SimulationPlanParserTests
+    - dotnet test
+    - cd ../TimeSeriesLayerTests
+    - dotnet test
+
 
 build-LIFE-API:
   stage: build
