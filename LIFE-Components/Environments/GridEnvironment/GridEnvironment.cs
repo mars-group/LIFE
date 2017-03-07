@@ -71,11 +71,11 @@ namespace LIFE.Components.Environments.GridEnvironment
 
         public IGridCoordinate MoveToPosition(T objectToMove, int xDestination, int yDestination)
         {
-            IGridCoordinate result = new GridCoordinate(objectToMove.X, objectToMove.Y);
+            var result = new GridCoordinate(objectToMove.X, objectToMove.Y);
             var currentCell = GetCell(objectToMove);
             var currentColl = _grid[currentCell];
             var targetCell = GetCell(xDestination, yDestination);
-            if ((targetCell >= _grid.Length) || (targetCell < 0))
+            if (targetCell >= _grid.Length || targetCell < 0)
             {
                 return result;
             }
@@ -131,10 +131,12 @@ namespace LIFE.Components.Environments.GridEnvironment
                         if (coll.Count > 0)
                             if (predicate == null)
                             {
-                                foreach (var key in coll.Keys)
+                                var enumerator = coll.Keys.GetEnumerator();
+                                while (enumerator.MoveNext() && (result.Count < maxNumberOfResults || maxNumberOfResults == -1))
                                 {
-                                    result.Add(key);
+                                    result.Add(enumerator.Current);
                                 }
+                                enumerator.Dispose();
                                 if (maxNumberOfResults > 0 && result.Count >= maxNumberOfResults)
                                     return result;
                             }

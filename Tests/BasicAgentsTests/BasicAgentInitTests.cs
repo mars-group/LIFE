@@ -4,6 +4,7 @@ using LIFE.API.Agent;
 using LIFE.API.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
+using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
 using LIFE.Components.Environments.GridEnvironment;
@@ -51,6 +52,11 @@ namespace BasicAgentsTests
             _tickClientsPerLayer[layer].GetOrAdd(executionInterval, new ConcurrentDictionary<ITickClient, byte>());
             // add tickClient to execution group
             _tickClientsPerLayer[layer][executionInterval].TryAdd(tickClient, new byte());
+
+            var visAgent = tickClient as ISimResult;
+            if(visAgent != null){
+
+            }
         }
 
         [Test]
@@ -84,7 +90,7 @@ namespace BasicAgentsTests
     internal abstract class A<T> : C where T : IEquatable<T>{ }
 
 
-    internal class Tree : GridAgent<Tree>
+    internal class Tree : GridAgent<Tree>, ISimResult
     {
         public Tree(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IGridEnvironment<GridAgent<Tree>> env,
             GridPosition initialPosition = null, byte[] id = null, int freq = 1)

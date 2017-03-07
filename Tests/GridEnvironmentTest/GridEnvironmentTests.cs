@@ -67,7 +67,7 @@ namespace GridEnvironmentTest
                 });
             });
 
-            // explore 'em
+            // explore 1
             Assert.DoesNotThrow(() =>
             {
                 var res = _env.Explore(GetRandomCoord(), maxNumberOfResults: 1);
@@ -76,7 +76,15 @@ namespace GridEnvironmentTest
 
             // explore 'em all
             var res2 = _env.Explore(GetRandomCoord());
-            Assert.IsTrue(res2.Count() == agentCount);
+            Assert.AreEqual(agentCount, res2.Count());
+
+            // explore 5
+            var res3 = _env.Explore(GetRandomCoord(), maxNumberOfResults: 5);
+            Assert.AreEqual(5, res3.Count());
+
+            // explore out of grid
+            var res4 = _env.Explore(new GridCoordinate(DimensionX+1,DimensionY+1), maxNumberOfResults: 5);
+            Assert.AreEqual(0, res4.Count());
         }
 
         [Test]
@@ -89,7 +97,7 @@ namespace GridEnvironmentTest
             Assert.AreEqual(res.First(), agent);
         }
 
-        private GridCoordinate GetRandomCoord()
+        private IGridCoordinate GetRandomCoord()
         {
             return new GridCoordinate(_random.Next(DimensionX), _random.Next(DimensionY));
         }
@@ -98,12 +106,12 @@ namespace GridEnvironmentTest
 
 
     internal class Tree : IEquatable<Tree>, IGridCoordinate {
-        public Tree(GridCoordinate cord) {
+        public Tree(IGridCoordinate cord) {
             TreeId = Guid.NewGuid();
             Coord = cord;
         }
 
-        public GridCoordinate Coord { get; }
+        public IGridCoordinate Coord { get; }
 
         public Guid TreeId { get; }
 

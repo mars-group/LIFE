@@ -131,6 +131,10 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
             var currentColl = _geoGrid[currentCell];
             var targetCell = GetCellForGps(latitudeDestination, longitudeDestination);
             var targetColl = _geoGrid[targetCell];
+            if (targetCell >= _geoGrid.Length || targetCell < 0)
+            {
+                return result;
+            }
             byte dummy;
             if (currentColl.TryRemove(objectToMove, out dummy))
             {
@@ -139,19 +143,6 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
             }
 
             return result;
-        }
-
-
-
-        public string PrintPotentialField()
-        {
-            var stb = new StringBuilder();
-            for (var i = 0; i < _numberOfGridCellsX * _numberOfGridCellsY; i++)
-            {
-                if ((i > 0) && (i % _numberOfGridCellsX == 0)) stb.Append("\n");
-                stb.Append(_geoGrid[i].Count + " ");
-            }
-            return stb.ToString();
         }
 
 
@@ -175,10 +166,12 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
                         if (coll.Count > 0)
                             if (predicate == null)
                             {
-                                foreach (var key in coll.Keys)
+                                var enumerator = coll.Keys.GetEnumerator();
+                                while (enumerator.MoveNext() && (result.Count < maxNumberOfResults || maxNumberOfResults == -1))
                                 {
-                                    result.Add(key);
+                                    result.Add(enumerator.Current);
                                 }
+                                enumerator.Dispose();
                                 if ((maxNumberOfResults > 0) && (result.Count >= maxNumberOfResults))
                                     return result;
                             }
