@@ -17,6 +17,10 @@
       "version": "2.1.0-*",
       "target": "project"
     },
+    "LayerContainerFacade": {
+        "version": "2.1.0-*",
+        "target": "project"
+    },
     "System.ComponentModel.TypeConverter": "4.3.0"
   },
 

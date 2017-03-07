@@ -38,6 +38,10 @@
       "version": "2.1.0-*",
       "target": "project"
     },
+    "LayerContainerFacade": {
+        "version": "2.1.0-*",
+        "target": "project"
+    },
     "Autofac": "4.2.1",
     "Microsoft.Net.Http.Server": "1.1.0",
     "Newtonsoft.Json": "9.0.1"

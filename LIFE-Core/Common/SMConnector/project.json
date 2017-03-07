@@ -5,7 +5,11 @@
   "authors": [ "Christian Huening" ],
   
   "dependencies": {
-    "System.Runtime.Serialization.Formatters": "4.3.0"
+    "System.Runtime.Serialization.Formatters": "4.3.0",
+    "LayerContainerFacade": {
+        "version": "2.1.0-*",
+        "target": "project"
+    }
   },
 
   // Build solution as .NET Core 1.1 library (DLL).

@@ -36,6 +36,10 @@
     "SMConnector": {
       "version": "2.1.0-*",
       "target": "project"
+    },
+    "LayerContainerFacade": {
+        "version": "2.1.0-*",
+        "target": "project"
     }
   },
   
