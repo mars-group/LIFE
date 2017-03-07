@@ -18,32 +18,41 @@ namespace RuntimeEnvironment.Implementation.Entities {
     internal class LayerContainerClient {
         private readonly IScsServiceClient<ILayerContainer> _layerContainer;
 
+        private readonly ILayerContainer _proxy;
+
+        public LayerContainerClient(ILayerContainer inMemorylayerContainer, ModelContent content)
+        {
+            _proxy = inMemorylayerContainer;
+            _proxy.LoadModelContent(content);
+        }
+
         public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer, ModelContent content) {
             _layerContainer = layerContainer;
-			// set timeout to infinite
-			_layerContainer.Timeout = -1;
+            // set timeout to infinite
+            _layerContainer.Timeout = -1;
             _layerContainer.Connect();
-			// set the config service address for the layerContainer. It might have been overriden by a 
-			// parameter during startup through the MARSLocalStarter
-			_layerContainer.ServiceProxy.SetMarsConfigServiceAddress(MARSConfigServiceSettings.Address);
-            _layerContainer.ServiceProxy.LoadModelContent(content);
+            // set the config service address for the layerContainer. It might have been overriden by a
+            // parameter during startup through the MARSLocalStarter
+            _layerContainer.ServiceProxy.SetMarsConfigServiceAddress(MARSConfigServiceSettings.Address);
+            _proxy = _layerContainer.ServiceProxy;
+            _proxy.LoadModelContent(content);
         }
 
         public void Instantiate(TLayerInstanceId instanceId) {
-            _layerContainer.ServiceProxy.Instantiate(instanceId);
+            _proxy.Instantiate(instanceId);
         }
 
         public long Tick(long amountOfTicks = 1)
         {
-            return _layerContainer.ServiceProxy.Tick(amountOfTicks);
+            return _proxy.Tick(amountOfTicks);
         }
 
         public void CleanUp(){
-			_layerContainer.ServiceProxy.CleanUp ();
-		}
+            _proxy.CleanUp ();
+        }
 
         public ILayerContainer Proxy {
-            get { return _layerContainer.ServiceProxy; }
+            get { return _proxy; }
         }
 
         public void Initialize(TLayerInstanceId layerInstanceId, TInitData initData)

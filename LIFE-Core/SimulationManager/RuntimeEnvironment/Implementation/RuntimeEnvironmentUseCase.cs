@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,6 +20,7 @@ using CommonTypes.DataTypes;
 using CommonTypes.Types;
 using Hik.Communication.ScsServices.Client;
 using Hik.Communication.ScsServices.Communication.Messages;
+using LayerContainerFacade.Interfaces;
 using LCConnector;
 using LIFE.API.Config;
 using LIFE.API.Layer.Initialization;
@@ -36,7 +38,8 @@ using SMConnector.TransportTypes;
 
 namespace RuntimeEnvironment.Implementation
 {
-	internal class RuntimeEnvironmentUseCase : IRuntimeEnvironment {
+    internal class RuntimeEnvironmentUseCase : IRuntimeEnvironment
+    {
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
         private readonly IDictionary<TModelDescription, SteppedSimulationExecutionUseCase> _steppedSimulations;
@@ -45,9 +48,10 @@ namespace RuntimeEnvironment.Implementation
         private Guid _simulationId;
 
         public RuntimeEnvironmentUseCase
-            (
+        (
             IModelContainer modelContainer,
-            INodeRegistry nodeRegistry) {
+            INodeRegistry nodeRegistry)
+        {
             _modelContainer = modelContainer;
             _nodeRegistry = nodeRegistry;
 
@@ -61,20 +65,25 @@ namespace RuntimeEnvironment.Implementation
 
         #region IRuntimeEnvironment Members
 
-        public void StartWithModel(Guid simulationId, TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
-            int? nrOfTicks = null, string scenarioConfigId = "", bool startPaused = false) {
+        public void StartWithModel(Guid simulationId, TModelDescription model,
+            ICollection<TNodeInformation> layerContainerNodes,
+            int? nrOfTicks = null, string scenarioConfigId = "", bool startPaused = false,
+            ILayerContainerFacade layerContainer = null)
+        {
             _simulationId = simulationId;
 
-			if(layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0){
-				throw new NoLayerContainersArePresentException ();
-			}
+            if (layerContainer == null && (layerContainerNodes.Count <= 0 || _idleLayerContainers.Count <= 0))
+            {
+                throw new NoLayerContainersArePresentException();
+            }
 
             Console.WriteLine("Found and working with " + layerContainerNodes.Count + " Layercontainers.");
 
             // if not all LayerContainers are idle throw exception
-			if (!layerContainerNodes.All (l => _idleLayerContainers.Any (c => c.Equals (l)))) {
-				throw new LayerContainerBusyException ();
-			}
+            if (!layerContainerNodes.All(l => _idleLayerContainers.Any(c => c.Equals(l))))
+            {
+                throw new LayerContainerBusyException();
+            }
 
             Console.WriteLine("Setting up SimulationRun...");
             var sw = Stopwatch.StartNew();
@@ -90,8 +99,9 @@ namespace RuntimeEnvironment.Implementation
                 var deltaTUnit = globalParams["DeltaTUnit"].ToString();
                 var duration = (endDate - startDate);
                 var simStepDuration = GetDeltaTUnitTimeSpan(deltaTUnit, deltaT);
-                var tickCount = (int)(duration.TotalMilliseconds / simStepDuration.TotalMilliseconds);
-                if (tickCount > 0) {
+                var tickCount = (int) (duration.TotalMilliseconds / simStepDuration.TotalMilliseconds);
+                if (tickCount > 0)
+                {
                     nrOfTicks = tickCount;
                 }
             }
@@ -99,64 +109,74 @@ namespace RuntimeEnvironment.Implementation
             model.Name = scenarioconfigJson["Name"].ToString();
 
 
-            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId);
-
+            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId, layerContainer);
 
 
             sw.Stop();
             Console.WriteLine("...done in " + sw.ElapsedMilliseconds + "ms or " + sw.Elapsed);
 
-			_steppedSimulations[model] = new SteppedSimulationExecutionUseCase(nrOfTicks, clients, simulationId, startPaused);
-
+            _steppedSimulations[model] =
+                new SteppedSimulationExecutionUseCase(nrOfTicks, clients, simulationId, startPaused);
         }
 
-        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {
+        public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes,
+            int? nrOfTicks = null)
+        {
             if (!_steppedSimulations.ContainsKey(model))
             {
                 throw new SimulationHasNotBeenStartedException
-                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
-            }  
-    	    _steppedSimulations[model].StepSimulation(nrOfTicks);
-
+                (
+                    "It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+            }
+            _steppedSimulations[model].StepSimulation(nrOfTicks);
         }
 
-        public void Pause(TModelDescription model) {
+        public void Pause(TModelDescription model)
+        {
             if (!_steppedSimulations.ContainsKey(model))
             {
                 throw new SimulationHasNotBeenStartedException
-                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+                (
+                    "It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
             }
 
             _steppedSimulations[model].PauseSimulation();
         }
 
-        public void Resume(TModelDescription model) {
-            if (!_steppedSimulations.ContainsKey(model)) {
+        public void Resume(TModelDescription model)
+        {
+            if (!_steppedSimulations.ContainsKey(model))
+            {
                 throw new SimulationHasNotBeenStartedException
-                    ("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+                (
+                    "It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
             }
 
             _steppedSimulations[model].ResumeSimulation();
         }
 
-        public void Abort(TModelDescription model) {
+        public void Abort(TModelDescription model)
+        {
             if (!_steppedSimulations.ContainsKey(model)) return;
 
             _steppedSimulations[model].Abort();
         }
-			
 
-		public void WaitForSimulationToFinish (TModelDescription model)
-		{
-			if (!_steppedSimulations.ContainsKey(model))
-			{
-				throw new SimulationHasNotBeenStartedException
-				("It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
-			}
-			_steppedSimulations [model].WaitForSimulationToFinish ();
-		}
 
-        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {}
+        public void WaitForSimulationToFinish(TModelDescription model)
+        {
+            if (!_steppedSimulations.ContainsKey(model))
+            {
+                throw new SimulationHasNotBeenStartedException
+                (
+                    "It appears that you did not start your simulation yet. Please call StartSimulationWithModel(...) first.");
+            }
+            _steppedSimulations[model].WaitForSimulationToFinish();
+        }
+
+        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable)
+        {
+        }
 
         #endregion
 
@@ -167,66 +187,72 @@ namespace RuntimeEnvironment.Implementation
         /// <param name="modelDescription">not null</param>
         /// <param name="layerContainers">not null</param>
         /// <returns></returns>
-        private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription, ICollection<TNodeInformation> layerContainers, string simConfigName) {
-
+        private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription,
+            ICollection<TNodeInformation> layerContainers, string simConfigName,
+            ILayerContainerFacade layerContainer = null)
+        {
             var content = _modelContainer.GetSerializedModel(modelDescription);
             var layerContainerClients = new List<LayerContainerClient>();
             Console.Write("Creating LayerContainer Clients...");
             /* 1.
-             * Create LayerContainerClients for all connected LayerContainers
+             * Create LayerContainerClients for all connected LayerContainers if no direct reference is passed
              */
-            foreach (var nodeInformationType in layerContainers)
+            if (layerContainer != null)
             {
-                var retries = 0;
-                var connected = false;
-                while (!connected && retries < 3)
+                layerContainerClients.Add(new LayerContainerClient(layerContainer, content));
+            }
+            else
+            {
+                foreach (var nodeInformationType in layerContainers)
                 {
-                    try
+                    var retries = 0;
+                    var connected = false;
+                    while (!connected && retries < 3)
                     {
-                        var client = new LayerContainerClient(
-                            ScsServiceClientBuilder.CreateClient<ILayerContainer>
-                            (
-                                nodeInformationType.NodeEndpoint.IpAddress + ":" +
-                                nodeInformationType.NodeEndpoint.Port
-                            ),
-                            content);
-                        layerContainerClients.Add(client);
-                        connected = true;
-                    }
-                    catch (ScsRemoteException scsEx)
-                    {
-                        Console.WriteLine(scsEx.StackTrace);
-
-                        throw scsEx;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Layercontainer Connection ERROR: " + ex.Message);
-                        // fail after 3 attempts
-                        if (retries > 1)
+                        try
                         {
-                            var sockEx = ex as SocketException;
-                            if (sockEx != null)
+                            var client = new LayerContainerClient(
+                                ScsServiceClientBuilder.CreateClient<ILayerContainer>
+                                (
+                                    nodeInformationType.NodeEndpoint.IpAddress + ":" +
+                                    nodeInformationType.NodeEndpoint.Port
+                                ),
+                                content);
+                            layerContainerClients.Add(client);
+                            connected = true;
+                        }
+                        catch (ScsRemoteException scsEx)
+                        {
+                            Console.WriteLine(scsEx.StackTrace);
+
+                            throw scsEx;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Layercontainer Connection ERROR: " + ex.Message);
+                            // fail after 3 attempts
+                            if (retries > 1)
                             {
-                                Console.WriteLine(
-                                    "A LayerContainer could not be connected. Continueing without it. Exception was: {0}",
-                                    sockEx.Message);
+                                var sockEx = ex as SocketException;
+                                if (sockEx != null)
+                                {
+                                    Console.WriteLine(
+                                        "A LayerContainer could not be connected. Continueing without it. Exception was: {0}",
+                                        sockEx.Message);
+                                }
+                                else
+                                {
+                                    throw ex;
+                                }
                             }
                             else
                             {
-                                throw ex;
-
+                                Thread.Sleep(500);
+                                retries++;
                             }
-                        }
-                        else
-                        {
-                            Thread.Sleep(500);
-                            retries++;
                         }
                     }
                 }
-
-
             }
 
             Console.Write("...done!");
@@ -241,41 +267,50 @@ namespace RuntimeEnvironment.Implementation
 
             // only accept ScenarioConfig based configuration
             if (scenarioConfig != null)
-			{
-				// configure via ScenarioConfig
-				return SetupSimulationRunViaScenarioConfig(modelDescription, layerContainerClients.ToArray(), scenarioConfig, modelConfig);
-			}
-			throw new Exception("No ScenarioConfiguration has been found. Please use the --sc flag to provide the ID of a ScenarioConfiguration and make sure" +
-			                    "you're running this simulation in a MARS Cloud instance!");
-		}
+            {
+                // configure via ScenarioConfig
+                return SetupSimulationRunViaScenarioConfig(modelDescription, layerContainerClients.ToArray(),
+                    scenarioConfig, modelConfig);
+            }
+            throw new Exception(
+                "No ScenarioConfiguration has been found. Please use the --sc flag to provide the ID of a ScenarioConfiguration and make sure" +
+                "you're running this simulation in a MARS Cloud instance!");
+        }
 
 
-        private LayerContainerClient[] SetupSimulationRunViaScenarioConfig(TModelDescription modelDescription, LayerContainerClient[] layerContainerClients, JObject scenarioConfig, ModelConfig modelConfig)
+        private LayerContainerClient[] SetupSimulationRunViaScenarioConfig(TModelDescription modelDescription,
+            LayerContainerClient[] layerContainerClients, JObject scenarioConfig, ModelConfig modelConfig)
         {
             /* 2.
              * Instantiate and initialize Layers by InstantiationOrder,
              * For now don'tdifferentiate between distributable and non-distributable layers
-             * as this is not yet supported in SHUTTLE. 
+             * as this is not yet supported in SHUTTLE.
              */
 
-            // unique layerID per LayerContainer, does not need to be unique across whole simulation 
+            // unique layerID per LayerContainer, does not need to be unique across whole simulation
             var layerId = 0;
 
             var thereAreGisLayers = scenarioConfig["InitializationDescription"]["GISLayers"].HasValues;
 
-			var distributionPossible = layerContainerClients.Count() > 1;
+            var distributionPossible = layerContainerClients.Count() > 1;
 
 
-            var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"].Children().GetEnumerator();
+            var timeSeriesSourceEnumerator = scenarioConfig["InitializationDescription"]["TimeSeriesLayers"]
+                .Children()
+                .GetEnumerator();
             var thereAreTimeSeriesLayers = timeSeriesSourceEnumerator.MoveNext();
 
-            var obstacleLayerSourceEnumerator = scenarioConfig["InitializationDescription"]["ObstacleLayers"].Children().GetEnumerator();
+            var obstacleLayerSourceEnumerator = scenarioConfig["InitializationDescription"]["ObstacleLayers"]
+                .Children()
+                .GetEnumerator();
             var thereAreObstacleLayer = obstacleLayerSourceEnumerator.MoveNext();
 
-            var geoPotentialFieldLayerSourceEnumerator = scenarioConfig["InitializationDescription"]["GeoPotentialFieldLayers"].Children().GetEnumerator();
+            var geoPotentialFieldLayerSourceEnumerator =
+                scenarioConfig["InitializationDescription"]["GeoPotentialFieldLayers"].Children().GetEnumerator();
             var thereAreGeoPotentialFieldLayers = geoPotentialFieldLayerSourceEnumerator.MoveNext();
 
-            var gridPotentialFieldLayerSourceEnumerator = scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Children().GetEnumerator();
+            var gridPotentialFieldLayerSourceEnumerator =
+                scenarioConfig["InitializationDescription"]["GridPotentialFieldLayers"].Children().GetEnumerator();
             var thereAreGridPotentialFieldLayers = gridPotentialFieldLayerSourceEnumerator.MoveNext();
 
             foreach (var layerDescription in _modelContainer.GetInstantiationOrder(modelDescription))
@@ -291,71 +326,76 @@ namespace RuntimeEnvironment.Implementation
 
                 var simStepDuration = GetDeltaTUnitTimeSpan(deltaTUnit, deltaT);
 
-				var initData = new TInitData(false, simStepDuration, startDate, _simulationId, MARSConfigServiceSettings.Address);
+                var initData = new TInitData(false, simStepDuration, startDate, _simulationId,
+                    MARSConfigServiceSettings.Address);
 
-				// fetch layerConfig by layerName
-				LayerConfig layerConfig;
-				try
-				{
-					layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
-				}
-				catch
-				{
-					throw new NoLayerConfigurationPresentException(
-						"Please specify an appropriate LayerConfig for " + layerDescription.Name + " in your config file: " + modelDescription.Name +
-						".cfg");
-				}
+                // fetch layerConfig by layerName
+                LayerConfig layerConfig;
+                try
+                {
+                    layerConfig = modelConfig.LayerConfigs.First(cfg => cfg.LayerName == layerDescription.Name);
+                }
+                catch
+                {
+                    throw new NoLayerConfigurationPresentException(
+                        "Please specify an appropriate LayerConfig for " + layerDescription.Name +
+                        " in your config file: " + modelDescription.Name +
+                        ".cfg");
+                }
 
-				// make distinction between distributed initialization...
+                // make distinction between distributed initialization...
+
                 #region distributed init
-				if (distributionPossible && layerConfig.DistributionStrategy != DistributionStrategy.NO_DISTRIBUTION)
-				{
-					// currently we only support EVEN_DISTRIBUTION or ENV_REPLICATION
-					// each of which lead to the distributed layers being instantiated on all nodes
-					foreach (var lc in layerContainerClients)
-					{
-						lc.Instantiate(layerInstanceId);
-					}
 
-					// check if the current layer is a GIS Layer
-					var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
-					var interfaces = layerType.GetInterfaces();
+                if (distributionPossible && layerConfig.DistributionStrategy != DistributionStrategy.NO_DISTRIBUTION)
+                {
+                    // currently we only support EVEN_DISTRIBUTION or ENV_REPLICATION
+                    // each of which lead to the distributed layers being instantiated on all nodes
+                    foreach (var lc in layerContainerClients)
+                    {
+                        lc.Instantiate(layerInstanceId);
+                    }
+
+                    // check if the current layer is a GIS Layer
+                    var layerType = Type.GetType(layerDescription.AssemblyQualifiedName);
+                    var interfaces = layerType.GetInterfaces();
 
                     // TODO: Maybe reimplement some day with new GIS Library
-					/*if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
-					{
-						var gisInfo = gisLayerSourceEnumerator.Current;
-						initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
+                    /*if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
+                    {
+                        var gisInfo = gisLayerSourceEnumerator.Current;
+                        initData.AddGisInitConfig(gisInfo.GISFileName, gisInfo.LayerNames.ToArray());
 
 
-						//...and finally initialize all layer instances with it
-						foreach (var lc in layerContainerClients)
-						{
-							lc.Initialize(layerInstanceId, initData);
-						}
+                        //...and finally initialize all layer instances with it
+                        foreach (var lc in layerContainerClients)
+                        {
+                            lc.Initialize(layerInstanceId, initData);
+                        }
 
-						if (!gisLayerSourceEnumerator.MoveNext())
-						{
-							thereAreGisLayers = false;
-						}
+                        if (!gisLayerSourceEnumerator.MoveNext())
+                        {
+                            thereAreGisLayers = false;
+                        }
 
-					}
-					else*/ 
+                    }
+                    else*/
                     if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
-					{
-						var tsInfo = timeSeriesSourceEnumerator.Current;
-						initData.AddTimeSeriesInitConfig(tsInfo["TableName"].ToString(), tsInfo["ColumnName"].ToString(), tsInfo["ColumnClearName"].ToString());
+                    {
+                        var tsInfo = timeSeriesSourceEnumerator.Current;
+                        initData.AddTimeSeriesInitConfig(tsInfo["TableName"].ToString(),
+                            tsInfo["ColumnName"].ToString(), tsInfo["ColumnClearName"].ToString());
 
-						foreach (var lc in layerContainerClients)
-						{
-							lc.Initialize(layerInstanceId, initData);
-						}
+                        foreach (var lc in layerContainerClients)
+                        {
+                            lc.Initialize(layerInstanceId, initData);
+                        }
 
-						if (!timeSeriesSourceEnumerator.MoveNext())
-						{
-							thereAreTimeSeriesLayers = false;
-						}
-					}
+                        if (!timeSeriesSourceEnumerator.MoveNext())
+                        {
+                            thereAreTimeSeriesLayers = false;
+                        }
+                    }
                     else if (thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
                     {
                         var olInfo = obstacleLayerSourceEnumerator.Current;
@@ -364,7 +404,8 @@ namespace RuntimeEnvironment.Implementation
                         {
                             thereAreObstacleLayer = false;
                         }
-                    } else if (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
+                    }
+                    else if (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
                     {
                         var gridInfo = gridPotentialFieldLayerSourceEnumerator.Current;
                         initData.AddFileInitInfo(gridInfo["MetaDataId"].ToString());
@@ -386,81 +427,87 @@ namespace RuntimeEnvironment.Implementation
                         .Children()
                         .Any(j => j["LayerName"].ToString() == layerDescription.Name))
                     {
-                        var basicLayerMapping = (JObject)scenarioConfig["InitializationDescription"]["BasicLayers"].Children()
+                        var basicLayerMapping = (JObject) scenarioConfig["InitializationDescription"]["BasicLayers"]
+                            .Children()
                             .First(j => j["LayerName"].ToString() == layerDescription.Name);
 
                         foreach (var agentMapping in basicLayerMapping["Agents"])
-					    {
+                        {
+                            var agentCount = int.Parse(agentMapping["InstanceCount"].ToString());
+                            var lcCount = layerContainerClients.Count();
+                            var normalAgentCount = agentCount / lcCount;
+                            var overheadAgentCount = agentCount % lcCount;
 
-					        var agentCount = int.Parse(agentMapping["InstanceCount"].ToString());
-							var lcCount = layerContainerClients.Count();
-							var normalAgentCount = agentCount / lcCount;
-							var overheadAgentCount = agentCount % lcCount;
+                            Parallel.For(0, lcCount, i =>
+                            {
+                                initData = new TInitData(false, simStepDuration, startDate, _simulationId,
+                                    MARSConfigServiceSettings.Address);
 
-							Parallel.For(0, lcCount, i => {
+                                // add overhead of agents to first layer
+                                var actualAgentCount = i == 0
+                                    ? normalAgentCount + overheadAgentCount
+                                    : normalAgentCount;
+                                var offset = i * actualAgentCount;
 
-								initData = new TInitData(false, simStepDuration, startDate, _simulationId, MARSConfigServiceSettings.Address);
-
-								// add overhead of agents to first layer
-								var actualAgentCount = i == 0 ? normalAgentCount + overheadAgentCount : normalAgentCount;
-								var offset = i * actualAgentCount;
-
-							    initData.AddAgentInitConfig(
-							        agentMapping["Name"].ToString(),
-							        agentMapping["FullName"].ToString(),
-							        actualAgentCount,
-							        offset,
-							        new List<TConstructorParameterMapping>(
-							            agentMapping["ConstructorParameterMapping"]
-							                .Children()
-							                .Select(j =>
-							                {
-							                    if (j["TableName"] != null)
-							                    {
-							                        return new TConstructorParameterMapping(
-							                            j["Type"].ToString(),
-							                            j["Name"].ToString(),
-							                            bool.Parse(j["IsAutoInitialized"].ToString()),
-							                            j["MappingType"].ToString(),
+                                initData.AddAgentInitConfig(
+                                    agentMapping["Name"].ToString(),
+                                    agentMapping["FullName"].ToString(),
+                                    actualAgentCount,
+                                    offset,
+                                    new List<TConstructorParameterMapping>(
+                                        agentMapping["ConstructorParameterMapping"]
+                                            .Children()
+                                            .Select(j =>
+                                            {
+                                                if (j["TableName"] != null)
+                                                {
+                                                    return new TConstructorParameterMapping(
+                                                        j["Type"].ToString(),
+                                                        j["Name"].ToString(),
+                                                        bool.Parse(j["IsAutoInitialized"].ToString()),
+                                                        j["MappingType"].ToString(),
                                                         j["TableName"].ToString(),
-							                            j["ColumnName"].ToString()
-							                        );
-							                    }
+                                                        j["ColumnName"].ToString()
+                                                    );
+                                                }
 
-							                    return new TConstructorParameterMapping(
-							                        j["Type"].ToString(),
-							                        j["Name"].ToString(),
-							                        bool.Parse(j["IsAutoInitialized"].ToString()),
-							                        j["MappingType"].ToString(),
-							                        value: j["Value"].ToString()
-							                    );
-							                }).ToList()
-							        )
-							    );
-								layerContainerClients[i].Initialize(layerInstanceId, initData);
-							});
-						}
+                                                return new TConstructorParameterMapping(
+                                                    j["Type"].ToString(),
+                                                    j["Name"].ToString(),
+                                                    bool.Parse(j["IsAutoInitialized"].ToString()),
+                                                    j["MappingType"].ToString(),
+                                                    value: j["Value"].ToString()
+                                                );
+                                            })
+                                            .ToList()
+                                    )
+                                );
+                                layerContainerClients[i].Initialize(layerInstanceId, initData);
+                            });
+                        }
+                    }
+                }
 
-					}
-				}
                 #endregion
-				// ... and non-distributed initialization
-				else
-				{
 
-				    Console.WriteLine($"INIT OF: {layerInstanceId.LayerDescription.Name}");
+                // ... and non-distributed initialization
+                else
+                {
+                    Console.WriteLine($"INIT OF: {layerInstanceId.LayerDescription.Name}");
 
-				    layerContainerClients[0].Instantiate(layerInstanceId);
+                    layerContainerClients[0].Instantiate(layerInstanceId);
 
 
-					var layerType = Type.GetType(layerDescription.FullName)
-					                ??
-					                new LayerLoader.Implementation.LayerLoader()
-					                    .LoadAllLayersForModel(modelDescription.ModelPath)
-					                    .FirstOrDefault(l => l.LayerType.AssemblyQualifiedName.Equals(layerDescription.AssemblyQualifiedName))
-					                    .LayerType;
+                    var layerType = Type.GetType(layerDescription.FullName)
+                                    ??
+                                    new LayerLoader.Implementation.LayerLoader()
+                                        .LoadAllLayersForModel(modelDescription.ModelPath)
+                                        .FirstOrDefault(
+                                            l => l.LayerType.AssemblyQualifiedName.Equals(layerDescription
+                                                .AssemblyQualifiedName))
+                                        .LayerType;
 
-				    var interfaces = layerType.GetTypeInfo().GetInterfaces();
+                    var interfaces = layerType.GetTypeInfo().GetInterfaces();
                     /*
                     if (thereAreGisLayers && interfaces.Contains(typeof(IGISAccess)))
 					{
@@ -471,18 +518,19 @@ namespace RuntimeEnvironment.Implementation
 							thereAreGisLayers = false;
 						}
 					}
-					else 
+					else
                     */
                     if (thereAreTimeSeriesLayers && interfaces.Contains(typeof(ITimeSeriesLayer)))
-					{
-						var tsInfo = timeSeriesSourceEnumerator.Current;
-						initData.AddTimeSeriesInitConfig(tsInfo["TableName"].ToString(), tsInfo["ColumnName"].ToString(), tsInfo["ColumnClearName"].ToString());
-						if (!timeSeriesSourceEnumerator.MoveNext())
-						{
-							thereAreTimeSeriesLayers = false;
-						}
-					}
-				    else if (thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
+                    {
+                        var tsInfo = timeSeriesSourceEnumerator.Current;
+                        initData.AddTimeSeriesInitConfig(tsInfo["TableName"].ToString(),
+                            tsInfo["ColumnName"].ToString(), tsInfo["ColumnClearName"].ToString());
+                        if (!timeSeriesSourceEnumerator.MoveNext())
+                        {
+                            thereAreTimeSeriesLayers = false;
+                        }
+                    }
+                    else if (thereAreObstacleLayer && interfaces.Contains(typeof(IObstacleLayer)))
                     {
                         var olInfo = obstacleLayerSourceEnumerator.Current;
                         initData.AddFileInitInfo(olInfo["MetaDataId"].ToString());
@@ -490,81 +538,77 @@ namespace RuntimeEnvironment.Implementation
                         {
                             thereAreObstacleLayer = false;
                         }
-                    } else if (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
-				    {
-				        var gridInfo = gridPotentialFieldLayerSourceEnumerator.Current;
-				        initData.AddFileInitInfo(gridInfo["MetaDataId"].ToString());
-				        if (!gridPotentialFieldLayerSourceEnumerator.MoveNext())
-				        {
-				            thereAreGridPotentialFieldLayers = false;
-				        }
-				    }
-				    else if (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
-				    {
-				        var geoInfo = geoPotentialFieldLayerSourceEnumerator.Current;
-				        initData.AddFileInitInfo(geoInfo["MetaDataId"].ToString());
-				        if (!geoPotentialFieldLayerSourceEnumerator.MoveNext())
-				        {
-				            thereAreGeoPotentialFieldLayers = false;
-				        }
-				    }
-				    else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
-				        .Children()
-				        .Any(j => j["LayerName"].ToString() == layerDescription.Name))
-				    {
-				        var basicLayerMapping = scenarioConfig["InitializationDescription"]["BasicLayers"]
-				            .Children()
-				            .First(j => j["LayerName"].ToString() == layerDescription.Name);
+                    }
+                    else if (thereAreGridPotentialFieldLayers && interfaces.Contains(typeof(IGridPotentialFieldLayer)))
+                    {
+                        var gridInfo = gridPotentialFieldLayerSourceEnumerator.Current;
+                        initData.AddFileInitInfo(gridInfo["MetaDataId"].ToString());
+                        if (!gridPotentialFieldLayerSourceEnumerator.MoveNext())
+                        {
+                            thereAreGridPotentialFieldLayers = false;
+                        }
+                    }
+                    else if (thereAreGeoPotentialFieldLayers && interfaces.Contains(typeof(IGeoPotentialFieldLayer)))
+                    {
+                        var geoInfo = geoPotentialFieldLayerSourceEnumerator.Current;
+                        initData.AddFileInitInfo(geoInfo["MetaDataId"].ToString());
+                        if (!geoPotentialFieldLayerSourceEnumerator.MoveNext())
+                        {
+                            thereAreGeoPotentialFieldLayers = false;
+                        }
+                    }
+                    else if (scenarioConfig["InitializationDescription"]["BasicLayers"]
+                        .Children()
+                        .Any(j => j["LayerName"].ToString() == layerDescription.Name))
+                    {
+                        var basicLayerMapping = scenarioConfig["InitializationDescription"]["BasicLayers"]
+                            .Children()
+                            .First(j => j["LayerName"].ToString() == layerDescription.Name);
 
-				        foreach (var agentMapping in basicLayerMapping["Agents"])
-				        {
-				            initData = new TInitData(false, simStepDuration, startDate, _simulationId,
-				                MARSConfigServiceSettings.Address);
+                        foreach (var agentMapping in basicLayerMapping["Agents"])
+                        {
+                            initData = new TInitData(false, simStepDuration, startDate, _simulationId,
+                                MARSConfigServiceSettings.Address);
 
-				            initData.AddAgentInitConfig(
-				                agentMapping["Name"].ToString(),
-				                agentMapping["FullName"].ToString(),
-				                int.Parse(agentMapping["InstanceCount"].ToString()),
-				                0,
-				                new List<TConstructorParameterMapping>(
-				                    agentMapping["ConstructorParameterMapping"]
-				                        .Children()
-				                        .Select(j =>
-				                        {
-				                            if (j["TableName"] != null)
-				                            {
-				                                return new TConstructorParameterMapping(
-				                                    j["Type"].ToString(),
-				                                    j["Name"].ToString(),
-				                                    bool.Parse(j["IsAutoInitialized"].ToString()),
-				                                    j["MappingType"].ToString(),
-				                                    j["TableName"].ToString(),
-				                                    j["ColumnName"].ToString()
-				                                );
-				                            }
-				                            else
-				                            {
-				                                return new TConstructorParameterMapping(
-				                                    j["Type"].ToString(),
-				                                    j["Name"].ToString(),
-				                                    bool.Parse(j["IsAutoInitialized"].ToString()),
-				                                    j["MappingType"].ToString(),
-				                                    value: j["Value"].ToString()
+                            initData.AddAgentInitConfig(
+                                agentMapping["Name"].ToString(),
+                                agentMapping["FullName"].ToString(),
+                                int.Parse(agentMapping["InstanceCount"].ToString()),
+                                0,
+                                new List<TConstructorParameterMapping>(
+                                    agentMapping["ConstructorParameterMapping"]
+                                        .Children()
+                                        .Select(j =>
+                                        {
+                                            if (j["TableName"] != null)
+                                            {
+                                                return new TConstructorParameterMapping(
+                                                    j["Type"].ToString(),
+                                                    j["Name"].ToString(),
+                                                    bool.Parse(j["IsAutoInitialized"].ToString()),
+                                                    j["MappingType"].ToString(),
+                                                    j["TableName"].ToString(),
+                                                    j["ColumnName"].ToString()
+                                                );
+                                            }
+                                            else
+                                            {
+                                                return new TConstructorParameterMapping(
+                                                    j["Type"].ToString(),
+                                                    j["Name"].ToString(),
+                                                    bool.Parse(j["IsAutoInitialized"].ToString()),
+                                                    j["MappingType"].ToString(),
+                                                    value: j["Value"].ToString()
+                                                );
+                                            }
+                                        })
+                                        .ToList()
+                                )
+                            );
+                        }
+                    }
 
-				                                );
-				                            }
-
-
-				                        })
-				                        .ToList()
-				                )
-				            );
-				        }
-
-				    }
-
-				    layerContainerClients[0].Initialize(layerInstanceId, initData);
-
+                    layerContainerClients[0].Initialize(layerInstanceId, initData);
                 }
 
 
@@ -612,8 +656,10 @@ namespace RuntimeEnvironment.Implementation
         /// Handler to find new idle Layercontainers
         /// </summary>
         /// <param name="newnode"></param>
-        private void NewNode(TNodeInformation newnode) {
-            lock (this) {
+        private void NewNode(TNodeInformation newnode)
+        {
+            lock (this)
+            {
                 _idleLayerContainers.Add(newnode);
             }
         }

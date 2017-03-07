@@ -9,6 +9,7 @@
 using System;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
+using LayerContainerFacade.Interfaces;
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
 using ModelContainer.Interfaces;
@@ -60,8 +61,8 @@ namespace SimulationManagerFacade.Implementation {
         }
         
 		//local option for simulation start - connected layer containers unknown. Use all and use standard implementation.
-        public void StartSimulationWithModel(Guid simulationId,TModelDescription model, int? nrOfTicks = null, string scenarioConfig = "", bool startPaused = false) {
-            _runtimeEnvironment.StartWithModel(simulationId, model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, scenarioConfig, startPaused);
+        public void StartSimulationWithModel(Guid simulationId,TModelDescription model, int? nrOfTicks = null, string scenarioConfig = "", bool startPaused = false, ILayerContainerFacade layerContainer = null) {
+            _runtimeEnvironment.StartWithModel(simulationId, model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, scenarioConfig, startPaused, layerContainer);
         }
 
         public TModelDescription GetModelDescription(string modelPath)

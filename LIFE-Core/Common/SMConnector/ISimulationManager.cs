@@ -7,7 +7,7 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
 using System;
-using System.Collections.Generic;
+using LayerContainerFacade.Interfaces;
 using SMConnector.TransportTypes;
 
 namespace SMConnector {
@@ -42,7 +42,7 @@ namespace SMConnector {
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
         /// <param name="scenarioConfig">The ID of the ScenarioConfig to use</param>
-        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, string scenarioConfig = "", bool startPaused = false);
+        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, string scenarioConfig = "", bool startPaused = false, ILayerContainerFacade layerContainer = null);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.

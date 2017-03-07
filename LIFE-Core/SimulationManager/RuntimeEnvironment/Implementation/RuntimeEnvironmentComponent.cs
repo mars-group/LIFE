@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using CommonTypes.DataTypes;
+using LayerContainerFacade.Interfaces;
 using ModelContainer.Interfaces;
 using NodeRegistry.Interface;
 using RuntimeEnvironment.Interfaces;
@@ -27,8 +28,8 @@ namespace RuntimeEnvironment.Implementation {
         }
 
         public void StartWithModel
-            (Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, string scenarioConfigName = "SimConfig.json", bool startPaused = false) {
-            _runtimeEnvironmentUseCase.StartWithModel(simulationId, model, layerContainerNodes, nrOfTicks, scenarioConfigName, startPaused);
+            (Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, string scenarioConfigName = "SimConfig.json", bool startPaused = false, ILayerContainerFacade layerContainer = null) {
+            _runtimeEnvironmentUseCase.StartWithModel(simulationId, model, layerContainerNodes, nrOfTicks, scenarioConfigName, startPaused, layerContainer);
         }
 
         public void StepSimulation(TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null) {

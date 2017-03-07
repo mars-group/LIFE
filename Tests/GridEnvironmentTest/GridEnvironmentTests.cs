@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using LIFE.API.GridCommon;
@@ -50,6 +51,25 @@ namespace GridEnvironmentTest
                     _env.Insert(agent);
                 });
             });
+        }
+
+        [Test]
+        public void TestMovement()
+        {
+            // insert 10K agents
+            var agentCount = 10000;
+            var agents = new ConcurrentBag<Tree>();
+            Parallel.For(0, agentCount, i =>
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    var agent = new Tree(GetRandomCoord());
+                    agents.Add(agent);
+                    _env.Insert(agent);
+                });
+            });
+
+
         }
 
         [Test]
