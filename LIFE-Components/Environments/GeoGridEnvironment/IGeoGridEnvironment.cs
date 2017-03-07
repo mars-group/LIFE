@@ -14,7 +14,7 @@ using LIFE.API.LIFECapabilities;
 
 namespace LIFE.Components.Environments.GeoGridEnvironment
 {
-    public interface IGeoGridEnvironment<T> : ILifeAutoInitialized where T : IEquatable<T>, IGeoCoordinate
+    public interface IGeoGridEnvironment<T> : ILifeAutoInitialized where T : IGeoCoordinate
     {
         /// Inserts item into environment at position defined by latitute and longitude
         void Insert(T objectToInsert);

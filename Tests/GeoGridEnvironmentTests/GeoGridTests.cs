@@ -122,9 +122,13 @@ namespace GeoGridEnvironmentTests
             var movementCount = 24 * treeCount;
             var moves = new List<GeoCoordinate>(movementCount);
             for (var i = 0; i < movementCount; i++)
+            {
                 moves.Add(new GeoCoordinate(-24.3 + _random.NextDouble(), 31.1 + _random.NextDouble()));
+            }
+
             var sw = new Stopwatch();
             sw.Start();
+
             for (var i = 0; i < 24; i++)
                 Parallel.For
                 (0, treeCount,
@@ -147,7 +151,7 @@ namespace GeoGridEnvironmentTests
     }
 
 
-    internal class Tree : IEquatable<Tree>, IGeoCoordinate
+    internal class Tree : IGeoCoordinate
     {
         public Tree(double lat, double lon)
         {
@@ -158,16 +162,6 @@ namespace GeoGridEnvironmentTests
         public GeoCoordinate Gps { get; }
 
         public Guid TreeId { get; }
-
-        public bool Equals(Tree other)
-        {
-            return TreeId.Equals(other.TreeId);
-        }
-
-        public bool Equals(IGeoCoordinate other)
-        {
-            return Gps.Equals(other);
-        }
 
         public double Latitude
         {

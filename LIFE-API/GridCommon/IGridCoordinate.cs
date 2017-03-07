@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-
 namespace LIFE.API.GridCommon
 {
     public interface IGridCoordinate : IEquatable<IGridCoordinate>

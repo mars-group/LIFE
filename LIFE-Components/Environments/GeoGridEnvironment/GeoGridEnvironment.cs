@@ -18,7 +18,7 @@ using LIFE.API.GeoCommon;
 
 namespace LIFE.Components.Environments.GeoGridEnvironment
 {
-    public class GeoGridEnvironment<T> : IGeoGridEnvironment<T> where T : IEquatable<T>, IGeoCoordinate
+    public class GeoGridEnvironment<T> : IGeoGridEnvironment<T> where T : IGeoCoordinate
     {
         private static double _topLat;
         private static double _leftLong;

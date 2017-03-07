@@ -10,7 +10,7 @@ using System;
 
 namespace LIFE.API.GeoCommon {
 
-  public interface IGeoCoordinate : IEquatable<IGeoCoordinate> {
+  public interface IGeoCoordinate {
 
     double Latitude { get; }
     double Longitude { get; }

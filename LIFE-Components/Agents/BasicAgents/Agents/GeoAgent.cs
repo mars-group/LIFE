@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using LIFE.API.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
@@ -17,7 +16,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   ///   An agent with a geospatial position (lat, lng).
   ///   It is placed in a GeoGrid-Environment and also has a GPS movement module.
   /// </summary>
-  public abstract class GeoAgent<T> : Agent, IGeoAgent<T>, IEquatable<GeoAgent<T>> where T : IGeoAgent<T> {
+  public abstract class GeoAgent<T> : Agent, IGeoAgent<T> where T : IGeoAgent<T> {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
     private GeoPosition _position;                    // AgentReference position backing structure.
@@ -91,31 +90,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     }
 
 
-    /// <summary>
-    ///   Position comparison for the IGeoCoordinate.
-    /// </summary>
-    /// <param name="other">The other X/Y coordinate pair.</param>
-    /// <returns>'True', if both geo coordinates sufficiently close enough.</returns>
-    public bool Equals(IGeoCoordinate other) {
-      const double threshold = 0.00000000000001;
-      return (Math.Abs(Latitude - other.Latitude) < threshold) &&
-             (Math.Abs(Longitude - other.Longitude) < threshold);
-    }
 
-      public bool Equals(GeoAgent<T> other)
-      {
-          if (ReferenceEquals(null, other)) return false;
-          if (ReferenceEquals(this, other)) return true;
-          return Equals(_position, other._position) && EqualityComparer<T>.Default.Equals(AgentReference, other.AgentReference);
-      }
-
-      public override bool Equals(object obj)
-      {
-          if (ReferenceEquals(null, obj)) return false;
-          if (ReferenceEquals(this, obj)) return true;
-          if (obj.GetType() != this.GetType()) return false;
-          return Equals((GeoAgent<T>) obj);
-      }
 
 
   }

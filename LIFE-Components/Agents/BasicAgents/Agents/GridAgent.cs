@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using LIFE.API.GridCommon;
+﻿using LIFE.API.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Movement;
@@ -16,7 +14,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
     /// <summary>
     ///   A 2D-grid extension for the base agentReference.
     /// </summary>
-    public abstract class GridAgent<T> : Agent, IGridAgent<T>, IEquatable<GridAgent<T>> where T : IGridAgent<T>
+    public abstract class GridAgent<T> : Agent, IGridAgent<T> where T : IGridAgent<T>
     {
         private readonly IGridEnvironment<GridAgent<T>> _env; // IESC implementation for collision detection.
         private GridPosition _position; // AgentReference initialPosition backing structure.
@@ -94,23 +92,9 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
 
         public bool Equals(IGridCoordinate other)
         {
-            return this.X.Equals(other.X) && this.Y.Equals(other.Y);
+            return X == other.X && Y == other.Y;
         }
 
-        public bool Equals(GridAgent<T> other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(_position, other._position) && EqualityComparer<T>.Default.Equals(AgentReference, other.AgentReference);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((GridAgent<T>) obj);
-        }
 
     }
 }

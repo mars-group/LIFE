@@ -137,7 +137,7 @@ namespace GridEnvironmentTest
 
 
 
-    internal class Tree : IEquatable<Tree>, IGridCoordinate {
+    internal class Tree : IGridCoordinate {
         public Tree(IGridCoordinate cord) {
             TreeId = Guid.NewGuid();
             Coord = cord;
@@ -152,10 +152,7 @@ namespace GridEnvironmentTest
         public int X => Coord.X;
         public int Y => Coord.Y;
         public GridDirection GridDirection { get; }
-        public bool Equals(Tree other)
-        {
-            return this.TreeId.Equals(other.TreeId);
-        }
+
 
         public bool Equals(IGridCoordinate other)
         {
