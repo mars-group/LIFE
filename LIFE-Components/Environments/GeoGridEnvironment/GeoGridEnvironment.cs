@@ -128,13 +128,22 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
         {
             var result = new GeoCoordinate(objectToMove.Latitude, objectToMove.Longitude);
             var currentCell = GetCellForGps(objectToMove.Latitude, objectToMove.Longitude);
-            var currentColl = _geoGrid[currentCell];
+
+            if (currentCell >= _geoGrid.Length || currentCell < 0)
+            {
+                return result;
+            }
+
             var targetCell = GetCellForGps(latitudeDestination, longitudeDestination);
-            var targetColl = _geoGrid[targetCell];
+
             if (targetCell >= _geoGrid.Length || targetCell < 0)
             {
                 return result;
             }
+
+            var currentColl = _geoGrid[currentCell];
+            var targetColl = _geoGrid[targetCell];
+
             byte dummy;
             if (currentColl.TryRemove(objectToMove, out dummy))
             {
