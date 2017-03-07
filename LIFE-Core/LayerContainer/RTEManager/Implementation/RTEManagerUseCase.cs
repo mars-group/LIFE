@@ -183,11 +183,9 @@ namespace RTEManager.Implementation {
                 // set currentTick to all layers
                 Parallel.ForEach(_layers, l => l.Value.SetCurrentTick(_currentTick));
 
-
-                //Console.WriteLine ("[LIFE] Executing Pre-Tick");
                 // PreTick all ActiveLayers
                 Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PreTick());
-                //Console.WriteLine ($"[LIFE] Executing Tick {_currentTick}...");
+
                 // tick all tickClients
                 Parallel.ForEach
                 (
@@ -201,7 +199,6 @@ namespace RTEManager.Implementation {
                                 // execute all agents in tick 1 and none which are in execGroup 0
                                 if (_currentTick == 1 || _currentTick%executionGroup == 0)
                                 {
-                                    //Console.WriteLine($"[Tick {_currentTick}]Executing group {executionGroup} with {_tickClientsPerLayer[layer][executionGroup].Count} agents.");
                                     Parallel.ForEach(_tickClientsPerLayer[layer][executionGroup],
                                         client => client.Key.Tick()
                                     );
@@ -212,17 +209,12 @@ namespace RTEManager.Implementation {
                     }
                 );
 
-                //Console.WriteLine ("[LIFE] Executing Post-Tick");
-
                 // PostTick all ActiveLayers
                 Parallel.ForEach(_preAndPostTickLayer, activeLayer => activeLayer.PostTick());
 
-
-                //Console.WriteLine("[LIFE] Executing Result Writing");
                 // visualize all layers
                 _resultAdapter.WriteResults(_currentTick);
 
-                //Console.WriteLine ("[LIFE] Removing agents");
                 // clean up all deleted tickClients
                 Parallel.ForEach
                 (
@@ -248,6 +240,9 @@ namespace RTEManager.Implementation {
                         }
                     )
                 );
+
+
+
 
                 //Console.WriteLine ("[LIFE] Adding new Agents");
                 // add all new TickClients which were registered during the run

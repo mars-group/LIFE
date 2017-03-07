@@ -175,7 +175,10 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
                         if (coll.Count > 0)
                             if (predicate == null)
                             {
-                                result.Add(coll.First().Key);
+                                foreach (var key in coll.Keys)
+                                {
+                                    result.Add(key);
+                                }
                                 if ((maxNumberOfResults > 0) && (result.Count >= maxNumberOfResults))
                                     return result;
                             }

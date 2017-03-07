@@ -39,8 +39,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     /// <param name="id">Fixed GUID to use in this agent (optional).</param>
     /// <param name="freq">Agent execution frequency (ticks). [default: 1]</param>
     protected Agent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, byte[] id=null, int freq=1) {
-      if (id == null) ID = Guid.NewGuid();
-      else ID = ID = new Guid(id);
+      ID = id == null ? Guid.NewGuid() : new Guid(id);
       ExecutionGroup = freq;
       IsAlive = true;
       SensorArray = new SensorArray();

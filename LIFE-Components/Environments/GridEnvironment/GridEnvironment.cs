@@ -6,7 +6,7 @@ using LIFE.API.GridCommon;
 
 namespace LIFE.Components.Environments.GridEnvironment
 {
-    public class GridEnvironment<T> : IGridEnvironment<T> where T : IGridCoordinate
+    public class GridEnvironment<T> : IGridEnvironment<T> where T : IEquatable<T>, IGridCoordinate
     {
         private readonly ConcurrentDictionary<T, byte>[] _grid;
         private readonly int _numberOfGridCellsX;
@@ -17,6 +17,7 @@ namespace LIFE.Components.Environments.GridEnvironment
             _numberOfGridCellsX = numberOfGridCellsX;
             _numberOfGridCellsY = numberOfGridCellsY;
             _grid = new ConcurrentDictionary<T, byte>[_numberOfGridCellsX * _numberOfGridCellsY];
+            for (var i = 0; i < _grid.Length; i++) { _grid[i] = new ConcurrentDictionary<T, byte>(); }
         }
 
         #region InterfaceImplementation
@@ -130,8 +131,11 @@ namespace LIFE.Components.Environments.GridEnvironment
                         if (coll.Count > 0)
                             if (predicate == null)
                             {
-                                result.Add(coll.First().Key);
-                                if ((maxNumberOfResults > 0) && (result.Count >= maxNumberOfResults))
+                                foreach (var key in coll.Keys)
+                                {
+                                    result.Add(key);
+                                }
+                                if (maxNumberOfResults > 0 && result.Count >= maxNumberOfResults)
                                     return result;
                             }
                             else
@@ -201,6 +205,7 @@ namespace LIFE.Components.Environments.GridEnvironment
 
         private int GetCell(T objectToHandle)
         {
+
             return objectToHandle.Y * _numberOfGridCellsX + objectToHandle.X;
         }
 
