@@ -100,75 +100,24 @@ namespace LIFE.Components.Agents.BasicAgents.Movement
             });
         }
 
-
-        /// <summary>
-        ///   Get the movement options towards a given position.
-        /// </summary>
-        /// <param name="targetX">Target position x-coordinate.</param>
-        /// <param name="targetY">Target position y-coordinate.</param>
-        /// <returns>A list of available movement options. These are ordered
-        /// by angular offset to optimal heading (sorting value of struct).</returns>
-        public List<MovementOption> GetMovementOptions(int targetX, int targetY)
+        public MovementAction MoveTowardsTarget(int xDestination, int yDestination, int distance = 1)
         {
-            // Check, if we are already there. Otherwise no need to move anyway (empty list).
-            if (targetX == _agent.X && targetY == _agent.Y) return new List<MovementOption>();
-
-            // Calculate yaw to target position.
-            var joint = new Vector3(targetX - _agent.X, targetY - _agent.Y, 0);
-            var dir = new Direction();
-            dir.SetDirectionalVector(joint);
-            var angle = dir.Yaw;
-
-            // Create sortable list of movement options.
-            var list = new List<MovementOption>();
-
-            // Add directions enum values and angular differences to list.
-            // We loop over all options and calculate difference between desired and actual value.
-            for (int iEnum = 0, offset = 0, mod = 0; iEnum < 8; iEnum++, mod++)
+            return new MovementAction(() =>
             {
-                if (iEnum == 4)
+                var result = _grid.MoveTowardsTarget(_agent, xDestination, yDestination, distance);
+                if (result.X == _agent.X && result.Y == _agent.Y)
                 {
-                    //| If diagonal movement is
-                    if (DiagonalEnabled)
-                    {
-                        offset = 45;
-                        mod = 0;
-                    } //| allowed, set offset and
-                    else break; //| continue. Otherwise abort.
+                    MovementSensor.SetMovementResult(new MovementResult(MovementStatus.OutOfBounds));
                 }
-
-                // Calculate angular difference to current option. If >180°, consider other semicircle.
-                var diff = Math.Abs(angle - (offset + mod * 90));
-                if (diff > 180.0f) diff = 360.0f - diff;
-                list.Add(new MovementOption {Direction = (GridDirection) iEnum, Offset = diff});
-            }
-
-            // Now we have a list of available movement options, ordered by efficiency.
-            list.Sort();
-            return list;
+                else
+                {
+                    _agent.SetPosition(new GridPosition(result.X, result.Y));
+                    _agent.SetDirection(result.GridDirection);
+                    MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));
+                }
+            });
         }
-    }
 
 
-    /// <summary>
-    ///   This structure holds a movement option candidate (combination of direction and difference).
-    /// </summary>
-    public struct MovementOption : IComparable
-    {
-        public GridDirection Direction; // The represented grid movement direction.
-        public double Offset; // Angular offset to target (heuristic).
-
-
-        /// <summary>
-        ///   Comparison method to find the option with the smallest offset.
-        /// </summary>
-        /// <param name="obj">Another movement option.</param>
-        /// <returns></returns>
-        public int CompareTo(object obj)
-        {
-            var other = (MovementOption) obj;
-            if (Offset < other.Offset) return -1;
-            return Offset > other.Offset ? 1 : 0;
-        }
     }
 }

@@ -68,8 +68,20 @@ namespace GridEnvironmentTest
                     _env.Insert(agent);
                 });
             });
+            var a = agents.First();
 
+            // normale move to new position
+            var target = new GridCoordinate(50,32);
+            var newPos = _env.MoveToPosition(a, target);
+            a.Coord = newPos;
+            Assert.AreEqual(target, newPos);
+            Assert.AreEqual(a.Coord, newPos);
 
+            // move outside of bounds
+            var target2 = new GridCoordinate(60,41);
+            var newPos2 = _env.MoveToPosition(a, target2);
+            Assert.AreEqual(a.Coord, newPos2);
+            Assert.AreNotEqual(newPos2, target2);
         }
 
         [Test]
@@ -131,7 +143,7 @@ namespace GridEnvironmentTest
             Coord = cord;
         }
 
-        public IGridCoordinate Coord { get; }
+        public IGridCoordinate Coord { get; set; }
 
         public Guid TreeId { get; }
 
