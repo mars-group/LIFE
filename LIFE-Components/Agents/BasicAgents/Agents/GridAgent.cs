@@ -112,12 +112,5 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
             return Equals((GridAgent<T>) obj);
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return ((_position != null ? _position.GetHashCode() : 0) * 397) ^ EqualityComparer<T>.Default.GetHashCode(AgentReference);
-            }
-        }
     }
 }

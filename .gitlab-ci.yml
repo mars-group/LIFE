@@ -33,12 +33,12 @@ testAll:
     - dotnet test
     - cd ../ModelContainerTests
     - dotnet test
-    - cd ../MulticastAdapterTests
-    - dotnet test
-    - cd ../NodeRegistryTests
-    - dotnet test
-    - cd ../SimulationPlanParserTests
-    - dotnet test
+    #- cd ../MulticastAdapterTests
+    #- dotnet test
+    #- cd ../NodeRegistryTests
+    #- dotnet test
+    #- cd ../SimulationPlanParserTests
+    #- dotnet test
     - cd ../TimeSeriesLayerTests
     - dotnet test
 

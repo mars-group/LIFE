@@ -19,6 +19,6 @@ namespace LIFE.API.Agent {
     ///   The agent's main ID. Will be unique across the whole simulation.
     ///   Use this to reference the agent by ID.
     /// </summary>
-    Guid ID { get; set; }
+    Guid ID { get; }
   }
 }

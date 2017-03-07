@@ -117,12 +117,6 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
           return Equals((GeoAgent<T>) obj);
       }
 
-      public override int GetHashCode()
-      {
-          unchecked
-          {
-              return ((_position != null ? _position.GetHashCode() : 0) * 397) ^ EqualityComparer<T>.Default.GetHashCode(AgentReference);
-          }
-      }
+
   }
 }
