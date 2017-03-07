@@ -21,7 +21,7 @@ testAll:
     - artifactory.mars.haw-hamburg.de:5000/influxdb:0.13
   script:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd Tests/BasicAgentTests
+    - cd Tests/BasicAgentsTests
     - dotnet test
     - cd ../EnvironmentServiceComponentTests
     - dotnet test
