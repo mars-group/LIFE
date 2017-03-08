@@ -43,7 +43,9 @@ namespace LayerRegistry.Implementation {
             _layerServers = new List<IScsServiceApplication>();
 
             _layerServiceStartPort = nodeRegistryConfig.LayerServiceStartPort;
+
             TNodeInformation simManager = null;
+
             while (simManager == null)
             {
                 simManager = nodeRegistry.GetAllNodesByType(NodeType.SimulationManager).FirstOrDefault();
@@ -58,7 +60,6 @@ namespace LayerRegistry.Implementation {
                 };
                 manualEvent.WaitOne(3000);
             }
-
 
             // now create layerNameService Stub
             _layerNameServiceClient =
@@ -97,7 +98,7 @@ namespace LayerRegistry.Implementation {
             // and by its direct interface type if any
             if (layer.GetType().GetTypeInfo().GetInterfaces().Length > 0) {
                 var infs = layer.GetType().GetTypeInfo().GetInterfaces();
-                foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LifeAPI"))) {
+                foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LIFE"))) {
                     _localLayers.Add(type.FullName, layer);
                 }
             }
