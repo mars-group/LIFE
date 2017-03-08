@@ -87,7 +87,7 @@ namespace LIFE.Components.Environments.GridEnvironment
 
                 result = new GridCoordinate(xDestination, yDestination);
             }
-            Console.WriteLine($"object not found! {result}");
+
             return result;
         }
 
@@ -110,7 +110,7 @@ namespace LIFE.Components.Environments.GridEnvironment
             {
                 distance = path.Count - 1;
             }
-            Console.WriteLine($"distance: {distance}, moving to {path[distance]}");
+
             return MoveToPosition(objectToMove, path[distance].X, path[distance].Y);
         }
 
