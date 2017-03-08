@@ -22,15 +22,15 @@ namespace LIFE.Components.Environments.GridEnvironment
 
         #region InterfaceImplementation
 
-        public void Insert(T objectToInsert)
+        public bool Insert(T objectToInsert)
         {
             var cell = GetCell(objectToInsert);
-            if (cell >= _grid.Length || cell < 0) return;
+            if (cell >= _grid.Length || cell < 0) return false;
 
-
-            var entity = _grid[cell];
+            var dict = _grid[cell];
             // add only if not already in list
-            entity.GetOrAdd(objectToInsert, new byte());
+            dict.GetOrAdd(objectToInsert, new byte());
+            return true;
         }
 
         public bool Remove(T objectToRemove)
@@ -87,7 +87,7 @@ namespace LIFE.Components.Environments.GridEnvironment
 
                 result = new GridCoordinate(xDestination, yDestination);
             }
-
+            Console.WriteLine($"object not found! {result}");
             return result;
         }
 
@@ -98,8 +98,20 @@ namespace LIFE.Components.Environments.GridEnvironment
 
         public IGridCoordinate MoveTowardsTarget(T objectToMove, int xDestination, int yDestination, int distance)
         {
+            if (distance <= 0)
+            {
+                return new GridCoordinate(objectToMove.X, objectToMove.Y);
+            }
+
             var path = GetPathFromAtoB(objectToMove.X, objectToMove.Y, xDestination, yDestination);
-            return MoveToPosition(objectToMove, path[distance - 1].X, path[distance - 1].Y);
+
+            // dont walk further than target, path contains start position as well, so check for count-1 and set to count-1
+            if (distance > path.Count-1)
+            {
+                distance = path.Count - 1;
+            }
+            Console.WriteLine($"distance: {distance}, moving to {path[distance]}");
+            return MoveToPosition(objectToMove, path[distance].X, path[distance].Y);
         }
 
         public IGridCoordinate MoveTowardsTarget(T objectToMove, IGridCoordinate destination, int distance)
@@ -227,14 +239,17 @@ namespace LIFE.Components.Environments.GridEnvironment
             var x = x0;
             var y = y0;
 
+            var n = 1 + dx + dy;
+
             var xInc = x1 > x0 ? 1 : -1;
             var yInc = y1 > y0 ? 1 : -1;
+
             var error = dx - dy;
             dx *= 2;
             dy *= 2;
 
 
-            for (var n = 1 + dx + dy; n > 0; --n)
+            for (; n > 0; --n)
             {
                 path.Add(new GridCoordinate(x, y));
 

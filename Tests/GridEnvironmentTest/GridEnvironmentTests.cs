@@ -54,7 +54,7 @@ namespace GridEnvironmentTest
         }
 
         [Test]
-        public void TestMovement()
+        public void TestMoveToPosition()
         {
             // insert 10K agents
             var agentCount = 10000;
@@ -82,6 +82,66 @@ namespace GridEnvironmentTest
             var newPos2 = _env.MoveToPosition(a, target2);
             Assert.AreEqual(a.Coord, newPos2);
             Assert.AreNotEqual(newPos2, target2);
+        }
+
+        [Test]
+        public void TestMoveTowardsTarget()
+        {
+            // insert 10K agents
+            var agentCount = 10000;
+            var agents = new ConcurrentBag<Tree>();
+            Parallel.For(0, agentCount, i =>
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    var agent = new Tree(GetRandomCoord());
+                    agents.Add(agent);
+                    var success = _env.Insert(agent);
+                    Assert.IsTrue(success);
+                });
+            });
+            var a = agents.First();
+
+            IGridCoordinate target, oldPositionOfA;
+
+            // distance=0 should do a 'move' to my position
+            a.Coord = _env.MoveToPosition(a, 0, 0);
+            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            target = new GridCoordinate(a.X + 10, a.Y);
+            oldPositionOfA = a.Coord;
+            a.Coord = _env.MoveTowardsTarget(a, target, 0);
+            Assert.AreEqual(oldPositionOfA, a.Coord);
+
+
+            // normal move to new position with distance = 1
+            a.Coord = _env.MoveToPosition(a, 0, 0);
+            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            target = new GridCoordinate(a.X + 10, a.Y);
+            oldPositionOfA = a.Coord;
+            a.Coord = _env.MoveTowardsTarget(a, target, 1);
+            Assert.AreEqual(oldPositionOfA.X + 1, a.Coord.X);
+
+            // exact move to target
+            a.Coord = _env.MoveToPosition(a, 0, 0);
+            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            target = new GridCoordinate(a.X + 10, a.Y);
+            a.Coord = _env.MoveTowardsTarget(a, target, 10);
+            Assert.AreEqual(target, a.Coord);
+
+            // high-speed move to target, should not go further than target
+            a.Coord = _env.MoveToPosition(a, 0, 0);
+            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            target = new GridCoordinate(a.X + 10, a.Y);
+            a.Coord = _env.MoveTowardsTarget(a, target, 100);
+            Assert.AreEqual(target, a.Coord);
+
+            // distance=0 should do a 'move' to my position
+            a.Coord = _env.MoveToPosition(a, 0, 0);
+            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            target = new GridCoordinate(a.X + 10, a.Y);
+            oldPositionOfA = a.Coord;
+            a.Coord = _env.MoveTowardsTarget(a, target, -100);
+            Assert.AreEqual(oldPositionOfA, a.Coord);
         }
 
         [Test]
@@ -124,39 +184,32 @@ namespace GridEnvironmentTest
         {
             var agent = new Tree(new GridCoordinate(42,23));
             _env.Insert(agent);
-            var res = _env.Explore(agent.Coord, 0);
+            var res = _env.Explore(agent, 0);
             Assert.IsTrue(res.Count() == 1);
             Assert.AreEqual(res.First(), agent);
         }
 
-        private IGridCoordinate GetRandomCoord()
+
+        private GridCoordinate GetRandomCoord()
         {
             return new GridCoordinate(_random.Next(DimensionX), _random.Next(DimensionY));
         }
     }
 
-
-
     internal class Tree : IGridCoordinate {
         public Tree(IGridCoordinate cord) {
-            TreeId = Guid.NewGuid();
             Coord = cord;
         }
 
         public IGridCoordinate Coord { get; set; }
 
-        public Guid TreeId { get; }
-
-
-
         public int X => Coord.X;
         public int Y => Coord.Y;
         public GridDirection GridDirection { get; }
 
-
         public bool Equals(IGridCoordinate other)
         {
-            return X.Equals(other.X) && Y.Equals(other.Y);
+            return X == other.X && Y == other.Y;
         }
     }
 }

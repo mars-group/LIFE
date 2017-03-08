@@ -7,7 +7,7 @@ namespace LIFE.Components.Environments.GridEnvironment
     public interface IGridEnvironment<T> where T : IGridCoordinate
     {
         /// Inserts item into environment at position defined by latitute and longitude
-        void Insert(T objectToInsert);
+        bool Insert(T objectToInsert);
 
         /// Removes item from the environment.
         /// Item will be removed if objectToRemove.equals(other) == true;

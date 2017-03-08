@@ -1,4 +1,6 @@
-﻿namespace LIFE.API.GridCommon
+﻿using System;
+
+namespace LIFE.API.GridCommon
 {
     public class GridCoordinate : IGridCoordinate
     {
@@ -18,6 +20,7 @@
             return X == other.X && Y == other.Y;
         }
 
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -32,6 +35,11 @@
             {
                 return (X * 397) ^ Y;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"({X},{Y})";
         }
     }
 }
