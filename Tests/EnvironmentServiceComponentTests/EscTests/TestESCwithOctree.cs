@@ -20,7 +20,7 @@ namespace EnvironmentServiceComponentTests.EscTests {
     [Test]
     public void MoveOutOfBoundaryAndBeBlocked() {
       var boundary = new Vector3(10, 10);
-      IEnvironment esc = new TreeESC(null, new BoundarySpecification(EnvBoundaryType.BlockOnExit, boundary));
+      IESC esc = new TreeESC(null, new BoundarySpecification(EnvBoundaryType.BlockOnExit, boundary));
       ISpatialEntity a1 = new TestSpatialEntity(Vector3.One);
       Assert.True(esc.Add(a1, Vector3.Zero));
       Assert.True(esc.Move(a1, new Vector3(9, 9)).Success);

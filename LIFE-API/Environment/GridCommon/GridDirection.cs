@@ -1,4 +1,4 @@
-﻿namespace LIFE.API.GridCommon {
+﻿namespace LIFE.API.Environment.GridCommon {
   
   /// <summary>
   ///   Direction enumeration for grid movement.

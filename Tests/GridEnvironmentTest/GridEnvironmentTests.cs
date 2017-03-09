@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
-using LIFE.API.GridCommon;
+using LIFE.API.Environment.GridCommon;
 using LIFE.Components.Environments.GridEnvironment;
 using NUnit.Framework;
 

@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using LIFE.API.GridCommon;
+using LIFE.API.Environment.GridCommon;
 
 namespace LIFE.Components.Environments.GridEnvironment
 {

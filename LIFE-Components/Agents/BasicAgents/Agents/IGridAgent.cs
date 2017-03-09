@@ -7,7 +7,7 @@
 // //  * Written by Christian Hüning <christianhuening@gmail.com>, 05.03.2017
 // //  *******************************************************/
 
-using LIFE.API.GridCommon;
+using LIFE.API.Environment.GridCommon;
 
 namespace LIFE.Components.Agents.BasicAgents.Agents
 {

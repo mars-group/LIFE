@@ -9,7 +9,7 @@
 
 using System;
 using System.Collections.Generic;
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 using LIFE.API.LIFECapabilities;
 
 namespace LIFE.Components.Environments.GeoGridEnvironment

@@ -14,7 +14,7 @@ namespace BasicAgentsTests {
  /* [TestFixture]
   public class GPSMoverTest {
 
-    private IEnvironment _env;      // The default Environment Service Component.
+    private IESC _env;      // The default Environment Service Component.
     private AgentEntity _entity;    // A spatial object to use for probing.
     private MovementSensor _sensor; // Sensor for movement success evaluation.
     private GPSMover _mover;        // Mover instance.

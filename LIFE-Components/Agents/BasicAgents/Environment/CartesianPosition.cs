@@ -38,7 +38,7 @@ namespace LIFE.Components.Agents.BasicAgents.Environment {
     }
 
     //_________________________________________________________________________
-    // ISpatialEntity related methods for usage with IEnvironment instances.
+    // ISpatialEntity related methods for usage with IESC instances.
 
     public IShape Shape { get; set; }            // A geometric shape describing this agent's body.
     public Guid AgentGuid => _agent.ID;          // Returns the base agent's identifier.

@@ -1,5 +1,5 @@
 ﻿using System;
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Movement;

@@ -1,5 +1,5 @@
 ﻿using Hik.Communication.ScsServices.Service;
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.API.Layer.Obstacle;

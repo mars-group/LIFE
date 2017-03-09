@@ -1,5 +1,5 @@
 ﻿﻿using System;
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;

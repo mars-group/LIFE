@@ -1,5 +1,5 @@
 ﻿using System;
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 
 namespace LIFE.API.Layer.PotentialField {
 

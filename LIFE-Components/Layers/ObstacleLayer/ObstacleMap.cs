@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 
 namespace LIFE.Components.ObstacleLayer
 {

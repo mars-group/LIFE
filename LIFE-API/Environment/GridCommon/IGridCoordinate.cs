@@ -1,5 +1,5 @@
 ﻿using System;
-namespace LIFE.API.GridCommon
+namespace LIFE.API.Environment.GridCommon
 {
     public interface IGridCoordinate : IEquatable<IGridCoordinate>
     {

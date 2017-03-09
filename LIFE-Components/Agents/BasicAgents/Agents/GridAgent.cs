@@ -1,4 +1,4 @@
-﻿using LIFE.API.GridCommon;
+﻿using LIFE.API.Environment.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Movement;
@@ -17,7 +17,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
     public abstract class GridAgent<T> : Agent, IGridAgent<T> where T : IGridAgent<T>
     {
         private readonly IGridEnvironment<GridAgent<T>> _env; // IESC implementation for collision detection.
-        private GridPosition _position; // AgentReference initialPosition backing structure.
+        private GridCoordinate _position; // AgentReference initialPosition backing structure.
         protected readonly GridMover<T> Mover; // AgentReference movement module.
 
         // return 'this' in actual agent class
@@ -27,14 +27,9 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         public int Y => _position.Y;
         public GridDirection GridDirection => _position.GridDirection;
 
-        internal void SetPosition(GridPosition newPosition)
+        internal void SetPosition(GridCoordinate newPosition)
         {
             _position = newPosition;
-        }
-
-        internal void SetDirection(GridDirection dir)
-        {
-            _position.GridDirection = dir;
         }
 
         /// <summary>
@@ -48,7 +43,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         /// <param name="id">The agentReference identifier (serialized GUID).</param>
         /// <param name="freq">MARS LIFE execution freqency.</param>
         protected GridAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-            IGridEnvironment<GridAgent<T>> env, GridPosition initialPosition = null, byte[] id = null, int freq = 1)
+            IGridEnvironment<GridAgent<T>> env, GridCoordinate initialPosition = null, byte[] id = null, int freq = 1)
             : base(layer, regFkt, unregFkt, id, freq)
         {
             _env = env;

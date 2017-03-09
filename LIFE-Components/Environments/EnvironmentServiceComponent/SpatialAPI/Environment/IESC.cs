@@ -11,7 +11,7 @@ namespace LIFE.Components.ESC.SpatialAPI.Environment {
   /// <summary>
   ///   The ESC should provide the possibility to check collisisions between entities and to explore defined areas.
   /// </summary>
-  public interface IEnvironment : ILifeAutoInitialized {
+  public interface IESC : ILifeAutoInitialized {
   
     /// <summary>
     ///   Get the maximum extent (upper right position) of the environment.

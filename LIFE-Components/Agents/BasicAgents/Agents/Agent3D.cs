@@ -17,7 +17,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   /// </summary>
   public abstract class Agent3D : Agent {
 
-    private readonly IEnvironment _env;           // IESC implementation for collision detection.
+    private readonly IESC _env;           // IESC implementation for collision detection.
     private readonly CartesianPosition _position; // AgentReference position backing structure.
     protected readonly AgentMover3D Mover;        // AgentReference movement module.
     public readonly Position3D Position;          // AgentReference position container.
@@ -34,7 +34,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     /// <param name="id">The agent identifier (serialized GUID).</param>
     /// <param name="freq">MARS LIFE execution freqency.</param>
     protected Agent3D(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-                      IEnvironment env, string colType=null, byte[] id=null, int freq=1)
+                      IESC env, string colType=null, byte[] id=null, int freq=1)
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
       _position = new CartesianPosition(this, colType ?? "-");

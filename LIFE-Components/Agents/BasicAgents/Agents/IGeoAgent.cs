@@ -7,7 +7,7 @@
 // //  * Written by Christian Hüning <christianhuening@gmail.com>, 05.03.2017
 // //  *******************************************************/
 
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 
 namespace LIFE.Components.Agents.BasicAgents.Agents
 {

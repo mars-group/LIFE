@@ -1,6 +1,6 @@
 ﻿﻿using System;
 using System.Collections.Generic;
-using LIFE.API.GridCommon;
+using LIFE.API.Environment.GridCommon;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
@@ -38,7 +38,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement
 
         public void InsertIntoEnvironment(int x, int y)
         {
-            _agent.SetPosition(new GridPosition(x,y));
+            _agent.SetPosition(new GridCoordinate(x,y));
             _grid.Insert(_agent);
         }
 
@@ -87,14 +87,17 @@ namespace LIFE.Components.Agents.BasicAgents.Movement
             return new MovementAction(() =>
             {
                 var result = _grid.MoveToPosition(_agent, x, y);
-                if (dir != GridDirection.NotSet) _agent.SetDirection(dir);
                 if (result.X == _agent.X && result.Y == _agent.Y)
                 {
                     MovementSensor.SetMovementResult(new MovementResult(MovementStatus.OutOfBounds));
                 }
                 else
                 {
-                    _agent.SetPosition(new GridPosition(result.X, result.Y));
+                    if (dir == GridDirection.NotSet)
+                    {
+                        dir = _agent.GridDirection;
+                    }
+                    _agent.SetPosition(new GridCoordinate(result.X, result.Y, dir));
                     MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));
                 }
             });
@@ -111,8 +114,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement
                 }
                 else
                 {
-                    _agent.SetPosition(new GridPosition(result.X, result.Y));
-                    _agent.SetDirection(result.GridDirection);
+                    _agent.SetPosition(new GridCoordinate(result.X, result.Y, result.GridDirection));
                     MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));
                 }
             });

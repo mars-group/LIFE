@@ -1,7 +1,7 @@
 ﻿using System;
 // ReSharper disable NonReadonlyMemberInGetHashCode
 
-namespace LIFE.API.GeoCommon {
+namespace LIFE.API.Environment.GeoCommon {
 
   /// <summary>
   ///   Copying and pasting from stack overflow:

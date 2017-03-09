@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
-using LIFE.API.GeoCommon;
+using LIFE.API.Environment.GeoCommon;
 using LIFE.Components.GeoPotentialFieldLayer;
 using NUnit.Framework;
 

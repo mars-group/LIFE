@@ -13,9 +13,9 @@ using LIFE.Components.ESC.SpatialObjectTree;
 namespace LIFE.Components.ESC.Implementation {
 
   /// <summary>
-  ///   3-dimensional implementation of the IEnvironment interface.
+  ///   3-dimensional implementation of the IESC interface.
   /// </summary>
-  public class TreeESC : IEnvironment, IAsyncEnvironment {
+  public class TreeESC : IESC, IAsyncEnvironment {
 
     private const int MaxAttempsToAddRandom = 100000;
     private readonly BoundarySpecification _boundarySpecification;
@@ -132,7 +132,7 @@ namespace LIFE.Components.ESC.Implementation {
       return string.Format("{0}<{1}>", GetType(), _tree.GetType());
     }
 
-    #region IEnvironment Members
+    #region IESC Members
 
     public Vector3 MaxDimension { get; set; }
     public bool IsGrid { get; set; }

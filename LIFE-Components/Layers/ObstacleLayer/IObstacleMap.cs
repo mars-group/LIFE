@@ -1,4 +1,4 @@
-﻿using LIFE.API.GeoCommon;
+﻿using LIFE.API.Environment.GeoCommon;
 
 namespace LIFE.Components.ObstacleLayer {
 

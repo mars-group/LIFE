@@ -12,11 +12,11 @@ using LIFE.Components.ESC.SpatialObjectTree;
 namespace LIFE.Components.ESC.Implementation {
  
   /// <summary>
-  ///   An <code>IEnvironment</code> that has no collisions on placing or movement of entities. Explore always matches
+  ///   An <code>IESC</code> that has no collisions on placing or movement of entities. Explore always matches
   ///   entities in the explored area regardless the collision type, but is only exact for shapes that are
   ///   <code>BoundingBox</code>es, without rotation.
   /// </summary>
-  public class NoCollisionESC : IEnvironment, IAsyncEnvironment {
+  public class NoCollisionESC : IESC, IAsyncEnvironment {
 
     private readonly Random _random = new Random();
     private readonly IDictionary<Guid, ISpatialEntity> _spatialEntities;
@@ -99,7 +99,7 @@ namespace LIFE.Components.ESC.Implementation {
       return GetType() + "<" + _tree.GetType() + ">";
     }
 
-    #region IEnvironment Members
+    #region IESC Members
 
     public Vector3 MaxDimension { get; set; }
     public bool IsGrid { get; set; }

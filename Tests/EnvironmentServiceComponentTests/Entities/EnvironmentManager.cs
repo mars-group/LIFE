@@ -5,8 +5,8 @@ namespace EnvironmentServiceComponentTests.Entities {
 
   public static class EnvironmentManager {
 
-    public static IEnvironment[] GetAll() {
-      IEnvironment[] escs = {
+    public static IESC[] GetAll() {
+      IESC[] escs = {
         //new NoSQLEnvironmentServiceComponent(),
         //new TreeESC(new SpatialObjectOctree<ISpatialEntity>(new Vector3(25, 25, 25), 1)),
         //new TreeESC(new BoundingVolumeHierarchy<ISpatialEntity>()),

@@ -8,7 +8,7 @@
 //  *******************************************************/
 using System;
 
-namespace LIFE.API.GeoCommon {
+namespace LIFE.API.Environment.GeoCommon {
 
   public interface IGeoCoordinate : IEquatable<IGeoCoordinate> {
 

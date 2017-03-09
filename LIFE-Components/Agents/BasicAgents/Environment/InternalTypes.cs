@@ -1,5 +1,5 @@
 ﻿using System;
-using LIFE.API.GridCommon;
+using LIFE.API.Environment.GridCommon;
 
 namespace LIFE.Components.Agents.BasicAgents.Environment {
 

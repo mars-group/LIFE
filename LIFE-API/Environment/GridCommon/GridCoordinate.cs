@@ -1,6 +1,5 @@
-﻿using System;
-
-namespace LIFE.API.GridCommon
+﻿
+namespace LIFE.API.Environment.GridCommon
 {
     public class GridCoordinate : IGridCoordinate
     {
@@ -8,10 +7,18 @@ namespace LIFE.API.GridCommon
         {
             X = x;
             Y = y;
+            GridDirection = GridDirection.Up;
         }
 
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public GridCoordinate(int x, int y, GridDirection dir)
+        {
+            X = x;
+            Y = y;
+            GridDirection = dir;
+        }
+
+        public int X { get; }
+        public int Y { get; }
         public GridDirection GridDirection { get; }
 
 

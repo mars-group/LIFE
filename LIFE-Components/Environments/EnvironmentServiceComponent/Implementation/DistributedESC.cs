@@ -13,9 +13,9 @@ using LIFE.Components.ESC.SpatialAPI.Shape;
 namespace LIFE.Components.ESC.Implementation {
 
   /// <summary>
-  ///   3-dimensional implementation of the IEnvironment interface.
+  ///   3-dimensional implementation of the IESC interface.
   /// </summary>
-  public class DistributedESC : IEnvironment {
+  public class DistributedESC : IESC {
 
     private const int MaxAttempsToAddRandom = 100000;
 
@@ -138,7 +138,7 @@ namespace LIFE.Components.ESC.Implementation {
       return _random.NextDouble()*(max - min) + min;
     }
 
-    #region IEnvironment Members
+    #region IESC Members
 
     public Vector3 MaxDimension { get; set; }
     public bool IsGrid { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using LIFE.API.Agent;
-using LIFE.API.GridCommon;
+using LIFE.API.Environment.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.API.Results;
@@ -93,7 +93,7 @@ namespace BasicAgentsTests
     internal class Tree : GridAgent<Tree>, ISimResult
     {
         public Tree(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IGridEnvironment<GridAgent<Tree>> env,
-            GridPosition initialPosition = null, byte[] id = null, int freq = 1)
+            GridCoordinate initialPosition = null, byte[] id = null, int freq = 1)
             : base(layer, regFkt, unregFkt, env, initialPosition, id, freq)
         {
 

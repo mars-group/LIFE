@@ -10,7 +10,7 @@ namespace EnvironmentServiceComponentTests.EscTests {
 
   internal class TestEscWithDistribution {
 
-    private IEnvironment _esc;
+    private IESC _esc;
 
     [SetUp]
     public void Init() {

@@ -1,4 +1,4 @@
-﻿namespace LIFE.API.GeoCommon {
+﻿namespace LIFE.API.Environment.GeoCommon {
 
   /// <summary>
   ///   Position and orientation structure for geospatial entities.

@@ -16,7 +16,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
   /// </summary>
   public class AgentMover3D : AgentMover {
 
-    private readonly IEnvironment _env;      // The environment implementation to use.
+    private readonly IESC _env;      // The environment implementation to use.
     private readonly CartesianPosition _pos; // Agent position class.
 
 
@@ -27,7 +27,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="env">The environment to use (probably some crappy ESC).</param>
     /// <param name="agentPos">AgentReference position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
-    public AgentMover3D(IEnvironment env, CartesianPosition agentPos, SensorArray sensorArray)
+    public AgentMover3D(IESC env, CartesianPosition agentPos, SensorArray sensorArray)
       : base(sensorArray) {
       _env = env;
       _pos = agentPos;

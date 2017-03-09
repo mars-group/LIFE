@@ -21,7 +21,7 @@ namespace EnvironmentServiceComponentTests.EscTests {
     }
 
 
-    private void AddAndMoveNewEntity(IEnvironment esc, int i) {
+    private void AddAndMoveNewEntity(IESC esc, int i) {
       var entity = new TestSpatialEntity(i, new Vector3(1, 1, 1));
       esc.AddWithRandomPosition(entity, Vector3.Null, new Vector3(Next(100), Next(100), Next(100)), true);
       for (var tick = 0; tick < _tickCount; tick++) {

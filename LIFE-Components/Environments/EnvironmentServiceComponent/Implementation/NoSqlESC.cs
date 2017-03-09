@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 
 namespace LIFE.Components.ESC.Implementation {
 
-  public class NoSqlESC : IEnvironment {
+  public class NoSqlESC : IESC {
 
     private static IMongoCollection<BsonDocument> _collection;
     private readonly bool _distributed;

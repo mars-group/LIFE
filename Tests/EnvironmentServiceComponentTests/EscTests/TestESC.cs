@@ -11,7 +11,7 @@ namespace EnvironmentServiceComponentTests.EscTests {
 
   public abstract class TestEsc {
 
-    protected IEnvironment Esc;
+    protected IESC Esc;
 
     #region Add
 

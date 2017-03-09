@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using LIFE.API.GridCommon;
+using LIFE.API.Environment.GridCommon;
 
 namespace LIFE.Components.Environments.GridEnvironment
 {
