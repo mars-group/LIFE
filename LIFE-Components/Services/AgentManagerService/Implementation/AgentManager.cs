@@ -17,14 +17,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LIFE.API.Agent;
 using LIFE.API.Environment;
-using LIFE.API.Environment.GeoCommon;
-using LIFE.API.Environment.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.API.LIFECapabilities;
-using LIFE.Components.Environments.GeoGridEnvironment;
-using LIFE.Components.Environments.GridEnvironment;
-using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.Services.AgentManagerService.Interface.Exceptions;
 
 namespace LIFE.Components.Services.AgentManagerService.Implementation
@@ -34,8 +29,7 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
         public static IDictionary<Guid, T> GetAgentsByAgentInitConfig<T>(AgentInitConfig agentInitConfig,
             RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle,
             List<ILayer> additionalLayerDependencies,
-            IEnvironment environment = null,
-            int reducedAgentCount = -1) where T : IAgent
+            IEnvironment environment = null, int reducedAgentCount = -1) where T : IAgent
         {
             Console.WriteLine("[AM] Starting creation of agent type: " + agentInitConfig.AgentName);
 
@@ -82,17 +76,14 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var agentDbParamArrays =
                 agentParameterFetcher.GetParametersForInitConfig(agentInitConfig);
 
-            var initParams = agentInitConfig.AgentInitParameters;
+            var initParamsFromMARSCloud = agentInitConfig.AgentInitParameters;
 
 
-            Console.WriteLine("Finished fetching DB data, Starting agent ID creation....");
+            Console.WriteLine ("[AM] Finished fetching DB data, Starting agent ID creation....");
 
             // get types for special parameters
             var layerType = typeof(ILayer);
             var guidType = typeof(Guid);
-            var escEnvironmentType = typeof(IESC);
-            var geoGridEnvironmentType = typeof(IGeoGridEnvironment<IGeoCoordinate>);
-            var gridEnvironmentType = typeof(IGridEnvironment<IGridCoordinate>);
             var registerAgentType = typeof(RegisterAgent);
             var unregisterAgentType = typeof(UnregisterAgent);
 
@@ -105,8 +96,7 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var agentIds = new Guid[agentCount];
 
             Parallel.For(0, agentCount, i => agentIds[i] = Guid.NewGuid());
-            Console.WriteLine("Finished agent ID creation, Starting agent creation.... AgentCount is : {0}",
-                agentCount);
+            Console.WriteLine ("[AM] Finished agent ID creation, Starting agent creation.... AgentCount is : {0}", agentCount);
 
             // iterate over all agents and create them
             Parallel.For(0L, agentCount, index =>
@@ -117,25 +107,11 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                 // the list which will hold the actual Parameters
                 var actualParameters = new List<object>();
 
-                // get an enumerator for the parameters provided by SHUTTLE
-                var shuttleParams = initParams.GetEnumerator();
-                var nextParamAvailable = shuttleParams.MoveNext();
 
                 foreach (var neededParam in neededParameters)
                 {
                     // check special types
-                    if (escEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)
-                        && neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
-                    {
-                        actualParameters.Add(environment);
-                    }
-                    else if (geoGridEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)
-                             && neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
-                    {
-                        actualParameters.Add(environment);
-                    }
-                    else if (gridEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)
-                             && neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
+                    if (neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
                     {
                         actualParameters.Add(environment);
                     }
@@ -165,23 +141,22 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                     }
                     else
                     {
-                        // check whether a next parameter is avialable from SHUTTLE:
-                        if (nextParamAvailable)
+                        // check whether a parameter with correct name is available from MARS Cloud Mapping:
+                        if (initParamsFromMARSCloud.Any(e => e.Name.Equals(neededParam.Name)))
                         {
-                            // it's a primitive type, so take the next param from params list provided by SHUTTLE
-                            var param = shuttleParams.Current;
+
+                            // it's a primitive type, so take the matching param from params list provided by MARS Cloud Mapping
+                            var param = initParamsFromMARSCloud.First(e => e.Name.Equals(neededParam.Name));
 
                             if (param.MappingType == MappingType.ValueParameterMapping)
                             {
                                 // use static value
-
                                 var paramType = neededParam.ParameterType;
 
-                                if ((paramType != typeof(string)) &&
-                                    ((paramType == null) || !paramType.GetTypeInfo().IsPrimitive))
-                                    throw new ParameterMustBePrimitiveException("The parameter " + param.Name +
-                                                                                " must be a primitive C# type. But was: " +
-                                                                                paramType.Name);
+                                if (paramType != typeof(string) && !paramType.GetTypeInfo().IsEnum && (paramType == null || !paramType.GetTypeInfo().IsPrimitive))
+                                {
+                                    throw new ParameterMustBePrimitiveException("The parameter " + param.Name + " must be a primitive C# type. But was: " + paramType.Name);
+                                }
 
                                 try
                                 {
@@ -225,22 +200,36 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                                 }
                             }
                         }
-                        // no next param avialable, but still params are needed, these must be params with default values
+                        // no next param available, but still params are needed, these must be params with default values
                         else
                         {
                             if (!neededParam.HasDefaultValue)
+                            {
                                 throw new ParameterIsNotMappedOrHasNotDefaultValue(
                                     $"The parameter {neededParam.Name} was not mapped in SHUTTLE or has no default value assigned!");
+                            }
+
                             Console.WriteLine("Hit8");
                             actualParameters.Add(neededParam.DefaultValue);
+
                         }
+
                     }
 
-                    // move to next param
-                    nextParamAvailable = shuttleParams.MoveNext();
                 }
 
+
                 // call constructor of agent and store agent in return dictionary
+                int paramCounter = 0;
+                foreach (var actualParameter in actualParameters)
+                {
+                    if (actualParameter == null)
+                    {
+                        throw new ActualParameterNullPointerException($"Parameter {neededParameters[paramCounter].Name} was null after init.");
+                    }
+                    paramCounter++;
+                }
+
                 try
                 {
                     agents.TryAdd(realAgentId, (T) agentConstructor.Invoke(actualParameters.ToArray()));
@@ -256,7 +245,8 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                 }
             });
 
-            Console.WriteLine(string.Format("Finished agent creation. Created {0} agents.", agentCount));
+            Console.WriteLine (String.Format("[AM] Finished agent creation. Created {0} agents.", agentCount));
+
             return agents;
         }
 
@@ -269,47 +259,89 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
         private static object GetParameterValue(Type parameterDatatype, string parameterValue)
         {
             var provider = new NumberFormatInfo {NumberDecimalSeparator = ".", NumberGroupSeparator = ","};
-            if (parameterDatatype == typeof(double)) return Convert.ToDouble(parameterValue, provider);
+            if (parameterDatatype.GetTypeInfo().IsEnum)
+            {
+                Console.WriteLine(parameterDatatype.FullName);
+                Console.WriteLine($"Value: {parameterValue}");
+
+                var e = Enum.Parse(parameterDatatype, parameterValue, true);
+                if (e == null)
+                {
+                    throw new FormatException(
+                        $"Enum {parameterDatatype.Name} could not be parsed! Value was: {parameterValue}");
+                }
+                return e;
+            }
+            if (parameterDatatype == typeof(double))
+            {
+                return Convert.ToDouble(parameterValue, provider);
+            }
 
             if (parameterDatatype == typeof(int))
+            {
                 return int.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(bool))
+            {
                 return bool.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(float))
+            {
                 return float.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(char))
+            {
                 return char.Parse(parameterValue);
+            }
 
             // string is returned by default down below, but to save some if-checks, do it here too
             if (parameterDatatype == typeof(string))
+            {
                 return parameterValue;
+            }
 
             if (parameterDatatype == typeof(long))
+            {
                 return long.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(byte))
+            {
                 return byte.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(sbyte))
+            {
                 return sbyte.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(uint))
+            {
                 return uint.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(short))
+            {
                 return short.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(ushort))
+            {
                 return ushort.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(ulong))
+            {
                 return ulong.Parse(parameterValue);
+            }
 
             if (parameterDatatype == typeof(decimal))
+            {
                 return decimal.Parse(parameterValue);
+            }
 
             return parameterValue;
         }

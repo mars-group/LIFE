@@ -431,6 +431,9 @@ namespace RuntimeEnvironment.Implementation
                             .Children()
                             .First(j => j["LayerName"].ToString() == layerDescription.Name);
 
+                        initData = new TInitData(false, simStepDuration, startDate, _simulationId,
+                            MARSConfigServiceSettings.Address);
+
                         foreach (var agentMapping in basicLayerMapping["Agents"])
                         {
                             var agentCount = int.Parse(agentMapping["InstanceCount"].ToString());
@@ -440,8 +443,7 @@ namespace RuntimeEnvironment.Implementation
 
                             Parallel.For(0, lcCount, i =>
                             {
-                                initData = new TInitData(false, simStepDuration, startDate, _simulationId,
-                                    MARSConfigServiceSettings.Address);
+
 
                                 // add overhead of agents to first layer
                                 var actualAgentCount = i == 0
@@ -565,10 +567,11 @@ namespace RuntimeEnvironment.Implementation
                             .Children()
                             .First(j => j["LayerName"].ToString() == layerDescription.Name);
 
+                        initData = new TInitData(false, simStepDuration, startDate, _simulationId,
+                            MARSConfigServiceSettings.Address);
+
                         foreach (var agentMapping in basicLayerMapping["Agents"])
                         {
-                            initData = new TInitData(false, simStepDuration, startDate, _simulationId,
-                                MARSConfigServiceSettings.Address);
 
                             initData.AddAgentInitConfig(
                                 agentMapping["Name"].ToString(),
