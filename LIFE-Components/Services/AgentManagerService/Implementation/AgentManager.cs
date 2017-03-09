@@ -22,7 +22,6 @@ using LIFE.API.Environment.GridCommon;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.API.LIFECapabilities;
-using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Environments.GeoGridEnvironment;
 using LIFE.Components.Environments.GridEnvironment;
 using LIFE.Components.ESC.SpatialAPI.Environment;
@@ -36,9 +35,9 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle,
             List<ILayer> additionalLayerDependencies,
             IEnvironment environment = null,
-            int reducedAgentCount = -1) where T : IAgent, IGeoAgent<T>
+            int reducedAgentCount = -1) where T : IAgent
         {
-            Console.WriteLine("Starting creation of agent type: " + agentInitConfig.AgentName);
+            Console.WriteLine("[AM] Starting creation of agent type: " + agentInitConfig.AgentName);
 
             var agents = new ConcurrentDictionary<Guid, T>();
             var agentParameterCount = agentInitConfig.AgentInitParameters.Count;
@@ -125,7 +124,18 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                 foreach (var neededParam in neededParameters)
                 {
                     // check special types
-                    if (neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
+                    if (escEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)
+                        && neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
+                    {
+                        actualParameters.Add(environment);
+                    }
+                    else if (geoGridEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)
+                             && neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
+                    {
+                        actualParameters.Add(environment);
+                    }
+                    else if (gridEnvironmentType.GetTypeInfo().IsAssignableFrom(neededParam.ParameterType)
+                             && neededParam.ParameterType.GetTypeInfo().IsInstanceOfType(environment))
                     {
                         actualParameters.Add(environment);
                     }
