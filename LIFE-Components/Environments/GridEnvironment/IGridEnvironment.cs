@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using LIFE.API.Environment;
 using LIFE.API.Environment.GridCommon;
+using LIFE.API.LIFECapabilities;
 
 namespace LIFE.Components.Environments.GridEnvironment
 {
-    public interface IGridEnvironment<T> where T : IGridCoordinate
+    public interface IGridEnvironment<T> : ILifeAutoInitialized, IEnvironment where T : IGridCoordinate
     {
         /// Inserts item into environment at position defined by latitute and longitude
         bool Insert(T objectToInsert);

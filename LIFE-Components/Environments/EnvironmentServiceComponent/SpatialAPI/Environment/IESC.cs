@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LIFE.API.Environment;
 using LIFE.API.LIFECapabilities;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
@@ -11,7 +12,7 @@ namespace LIFE.Components.ESC.SpatialAPI.Environment {
   /// <summary>
   ///   The ESC should provide the possibility to check collisisions between entities and to explore defined areas.
   /// </summary>
-  public interface IESC : ILifeAutoInitialized {
+  public interface IESC : ILifeAutoInitialized, IEnvironment {
   
     /// <summary>
     ///   Get the maximum extent (upper right position) of the environment.

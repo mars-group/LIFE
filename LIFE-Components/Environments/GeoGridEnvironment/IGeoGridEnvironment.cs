@@ -9,12 +9,13 @@
 
 using System;
 using System.Collections.Generic;
+using LIFE.API.Environment;
 using LIFE.API.Environment.GeoCommon;
 using LIFE.API.LIFECapabilities;
 
 namespace LIFE.Components.Environments.GeoGridEnvironment
 {
-    public interface IGeoGridEnvironment<T> : ILifeAutoInitialized where T : IGeoCoordinate
+    public interface IGeoGridEnvironment<T> : ILifeAutoInitialized, IEnvironment where T : IGeoCoordinate
     {
         /// Inserts item into environment at position defined by latitute and longitude
         void Insert(T objectToInsert);
