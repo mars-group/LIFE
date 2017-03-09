@@ -146,7 +146,12 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                         {
 
                             // it's a primitive type, so take the matching param from params list provided by MARS Cloud Mapping
-                            var param = initParamsFromMARSCloud.First(e => e.Name.Equals(neededParam.Name));
+                            var param = initParamsFromMARSCloud.FirstOrDefault(e => e.Name.Equals(neededParam.Name));
+
+                            if (param == null)
+                            {
+                                throw new NotEnoughParametersProvidedException($"Parameter with name {neededParam.Name} could not be found in Mapping from MARS Cloud!");
+                            }
 
                             if (param.MappingType == MappingType.ValueParameterMapping)
                             {
