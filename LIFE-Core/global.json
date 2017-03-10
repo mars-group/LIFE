@@ -1,8 +1,5 @@
 {
   "projects": [
-    "../LIFE-Components", 
-    "../LIFE-Components/Agents", 
-    "../LIFE-Components/Environments", 
     "..", 
     "Common", 
     "LIFE Services", 
