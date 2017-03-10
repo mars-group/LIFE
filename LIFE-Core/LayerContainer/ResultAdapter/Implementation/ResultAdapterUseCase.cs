@@ -129,7 +129,7 @@ namespace ResultAdapter.Implementation
 
         private static JObject GetResultConfig(string resultConfigId)
         {
-            var resultServiceHost = "result-cfg-svc";
+            var resultServiceHost = "resultcfg-svc";
 
 
             var http = new HttpClient();
