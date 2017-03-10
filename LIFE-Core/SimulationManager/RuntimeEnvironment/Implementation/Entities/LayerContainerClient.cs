@@ -20,13 +20,14 @@ namespace RuntimeEnvironment.Implementation.Entities {
 
         private readonly ILayerContainer _proxy;
 
-        public LayerContainerClient(ILayerContainer inMemorylayerContainer, ModelContent content)
+        public LayerContainerClient(ILayerContainer inMemorylayerContainer, ModelContent content, string resultConfigId)
         {
             _proxy = inMemorylayerContainer;
             _proxy.LoadModelContent(content);
+            _proxy.Initialize(resultConfigId);
         }
 
-        public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer, ModelContent content) {
+        public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer, ModelContent content, string resultConfigId) {
             _layerContainer = layerContainer;
             // set timeout to infinite
             _layerContainer.Timeout = -1;
@@ -36,6 +37,7 @@ namespace RuntimeEnvironment.Implementation.Entities {
             _layerContainer.ServiceProxy.SetMarsConfigServiceAddress(MARSConfigServiceSettings.Address);
             _proxy = _layerContainer.ServiceProxy;
             _proxy.LoadModelContent(content);
+            _proxy.Initialize(resultConfigId);
         }
 
         public void Instantiate(TLayerInstanceId instanceId) {

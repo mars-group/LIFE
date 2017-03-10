@@ -24,6 +24,13 @@ namespace LCConnector {
         void LoadModelContent(ModelContent content);
 
         /// <summary>
+        /// Orders the LayerContainer to initialize itself with scenario specific information.
+        /// Will only setup the ResultConfigAdapter for now.
+        /// </summary>
+        /// <param name="resultConfigId"></param>
+        void Initialize(string resultConfigId);
+
+        /// <summary>
         ///     Orders the LayerContainer to instantiate a version of the given layer id from the model content.
         ///     If there already was an instance of that type instantiated, it will be overwritten by the new one.
         /// </summary>

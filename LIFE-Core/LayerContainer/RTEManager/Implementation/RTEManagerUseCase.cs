@@ -18,6 +18,7 @@ using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.API.Results;
+using ResultAdapter.Implementation;
 using ResultAdapter.Interface;
 
 [assembly: InternalsVisibleTo("RTEManagerBlackBoxTest")]
@@ -25,7 +26,7 @@ using ResultAdapter.Interface;
 namespace RTEManager.Implementation {
 
 	internal class RTEManagerUseCase : IRTEManager {
-        private readonly IResultAdapter _resultAdapter;
+        private IResultAdapter _resultAdapter;
 
         // the tickClients being executed per Layer and execution group
         private readonly ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>> _tickClientsPerLayer;
@@ -58,8 +59,7 @@ namespace RTEManager.Implementation {
 		private Guid _simulationId;
 
 
-        public RTEManagerUseCase(IResultAdapter resultAdapter, INodeRegistry nodeRegistry) {
-            _resultAdapter = resultAdapter;
+        public RTEManagerUseCase(INodeRegistry nodeRegistry) {
             _tickClientsPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>>();
             _preAndPostTickLayer = new ConcurrentBag<ISteppedActiveLayer>();
 			_disposableLayers = new ConcurrentBag<IDisposableLayer> ();
@@ -71,6 +71,11 @@ namespace RTEManager.Implementation {
         }
 
         #region Public Methods
+
+	    public void InitializeResultAdapter(string resultConfig)
+	    {
+	        _resultAdapter = new ResultAdapterComponent(resultConfig);
+	    }
 
         public void RegisterLayer(TLayerInstanceId layerInstanceId, ILayer layer) {
             if (!_tickClientsPerLayer.ContainsKey(layer)) {

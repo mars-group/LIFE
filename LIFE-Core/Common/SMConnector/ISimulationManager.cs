@@ -39,10 +39,11 @@ namespace SMConnector {
         /// </summary>
         /// <param name="simulationId">The unique ID identifing this simulation run.</param>
         /// <param name="model"></param>
+        /// <param name="resultConfigId"></param>
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
-        /// <param name="scenarioConfig">The ID of the ScenarioConfig to use</param>
-        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, string scenarioConfig = "", bool startPaused = false, ILayerContainerFacade layerContainer = null);
+        /// <param name="scenarioConfigId">The ID of the ScenarioConfig to use</param>
+        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, string scenarioConfigId = "", string resultConfigId = "", bool startPaused = false, ILayerContainerFacade layerContainer = null);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.

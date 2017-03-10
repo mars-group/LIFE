@@ -71,6 +71,7 @@ namespace LIFE.Core.LIFELocalStarter
             var simulationId = Guid.NewGuid();
             var marsConfigAddress = string.Empty;
             var scenarioConfigToUse = String.Empty;
+            var resultConfigToUse = String.Empty;
             string clusterName = null;
 
             var optionSet = new OptionSet()
@@ -82,6 +83,8 @@ namespace LIFE.Core.LIFELocalStarter
                     option => marsConfigAddress = option)
                 .Add("sc=|scenario=","The ID of a ScenarioConfiguration. Mandatory if the simulation requires data from the MARS Cloud!",
                     option => scenarioConfigToUse = option)
+                .Add("rc=|resultcfg=","The ID of a ResultConfiguration. Required if the simulation should use data from the MARS Cloud! If not set the legacy ISimResult interface is used.",
+                    option => resultConfigToUse = option)
                 .Add("cn=|clustername=", "Optional. Provide a name for the simulation cluster. Only LIFE process with the same name join each other",
                     option => clusterName = option);
 
@@ -125,7 +128,7 @@ namespace LIFE.Core.LIFELocalStarter
 
                     Console.WriteLine($"Using ConfigServiceAddress {MARSConfigServiceSettings.Address}");
                     // set layerContainerCore to avoid use of networking since we're running completely local
-                    simCore.StartSimulationWithModel(simulationId, model, 0, scenarioConfigToUse, layerContainer: layerContainerCore);
+                    simCore.StartSimulationWithModel(simulationId, model, 0, scenarioConfigToUse, resultConfigToUse, layerContainer: layerContainerCore);
                 }
             }
         }

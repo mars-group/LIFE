@@ -29,6 +29,7 @@ namespace ModelContainer.Implementation
     internal class ModelManagementUseCase {
         private TModelDescription _currentModel;
         private JObject _scenarioConfig;
+        private JObject _resultConfig;
 
         public ModelManagementUseCase(SimulationManagerSettings settings) {
         }

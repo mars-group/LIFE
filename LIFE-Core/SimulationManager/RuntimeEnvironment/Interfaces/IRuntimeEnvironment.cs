@@ -25,9 +25,9 @@ namespace RuntimeEnvironment.Interfaces {
         /// <param name="model">The model description to start with.</param>
         /// <param name="layerContainerNodes">The layer container instances to be used in this run.</param>
         /// <param name="nrOfTicks">The number of ticks to be simulated</param>
-        /// <param name="scenarioConfigName">The scenarioconfig to use, if any</param>
+        /// <param name="scenarioConfigId">The scenarioconfig to use, if any</param>
         /// <param name="startPaused">Whether or not to start the simulation paused.</param>
-        void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, string scenarioConfigName = "", bool startPaused = false, ILayerContainerFacade layerContainer = null);
+        void StartWithModel(Guid simulationId,TModelDescription model, ICollection<TNodeInformation> layerContainerNodes, int? nrOfTicks = null, string scenarioConfigId = "", string resultConfigId = "", bool startPaused = false, ILayerContainerFacade layerContainer = null);
 
         /// <summary>
         /// Steps the simulation by <param name="nrOfTicks"/> or 1 tick if the parameter is not set.

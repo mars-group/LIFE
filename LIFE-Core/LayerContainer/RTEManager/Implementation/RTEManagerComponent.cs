@@ -11,7 +11,6 @@ using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using NodeRegistry.Interface;
-using ResultAdapter.Interface;
 using RTEManager.Interfaces;
 
 
@@ -21,14 +20,18 @@ namespace RTEManager.Implementation {
 	public class RTEManagerComponent : IRTEManager {
         private readonly IRTEManager _rteManagerUseCase;
 
-        public RTEManagerComponent(IResultAdapter resultAdapter, INodeRegistry nodeRegistry) {
-            _rteManagerUseCase = new RTEManagerUseCase(resultAdapter, nodeRegistry);
+        public RTEManagerComponent(INodeRegistry nodeRegistry) {
+            _rteManagerUseCase = new RTEManagerUseCase(nodeRegistry);
         }
 
         #region IRTEManager Members
-       
 
-        public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {
+	    public void InitializeResultAdapter(string resultConfig)
+	    {
+	        _rteManagerUseCase.InitializeResultAdapter(resultConfig);
+	    }
+
+	    public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {
             _rteManagerUseCase.RegisterLayer(instanceId, layer);
         }
 

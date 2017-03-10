@@ -50,6 +50,11 @@ namespace LayerContainerFacade.Implementation {
             _partitionManager.LoadModelContent(content);
         }
 
+        public void Initialize(string resultConfigId)
+        {
+            _rteManager.InitializeResultAdapter(resultConfigId);
+        }
+
         public void Instantiate(TLayerInstanceId instanceId) {
             _partitionManager.AddLayer(instanceId);
         }

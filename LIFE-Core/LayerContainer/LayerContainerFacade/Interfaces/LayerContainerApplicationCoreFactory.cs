@@ -63,10 +63,6 @@ namespace LayerContainerFacade.Interfaces {
                 .As<IRTEManager>()
                 .InstancePerLifetimeScope();
 
-            containerBuilder.RegisterType<ResultAdapterComponent>()
-                .As<IResultAdapter>()
-                .InstancePerLifetimeScope();
-
             containerBuilder.RegisterType<LayerFactoryComponent>()
                 .As<ILayerFactory>()
                 .InstancePerLifetimeScope();

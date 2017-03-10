@@ -38,13 +38,10 @@ namespace ModelContainer.Implementation {
             return _modelContainerUseCase.GetModel(modelPath);
         }
 
-
-
         public ModelConfig GetModelConfig(TModelDescription modelId)
         {
             return _modelContainerUseCase.GetModelConfig(modelId);
         }
-
 
         public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
             return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);

@@ -18,7 +18,13 @@ namespace RTEManager.Interfaces {
     /// </summary>
     public interface IRTEManager
     {
-        
+
+        /// <summary>
+        /// Initializes the ResultAdapter with a custom ResultConfig from the MARS Cloud
+        /// </summary>
+        /// <param name="resultConfig"></param>
+        void InitializeResultAdapter(string resultConfig);
+
         /// <summary>
         ///     Registers a layer with the RuntimeEvironment
         ///     Hint: To retreive a layer instance, use the LayerRegistry-Component

@@ -67,7 +67,7 @@ namespace RuntimeEnvironment.Implementation
 
         public void StartWithModel(Guid simulationId, TModelDescription model,
             ICollection<TNodeInformation> layerContainerNodes,
-            int? nrOfTicks = null, string scenarioConfigId = "", bool startPaused = false,
+            int? nrOfTicks = null, string scenarioConfigId = "", string resultConfigId = "", bool startPaused = false,
             ILayerContainerFacade layerContainer = null)
         {
             _simulationId = simulationId;
@@ -109,7 +109,7 @@ namespace RuntimeEnvironment.Implementation
             model.Name = scenarioconfigJson["Name"].ToString();
 
 
-            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId, layerContainer);
+            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId, resultConfigId, layerContainer);
 
 
             sw.Stop();
@@ -188,7 +188,7 @@ namespace RuntimeEnvironment.Implementation
         /// <param name="layerContainers">not null</param>
         /// <returns></returns>
         private LayerContainerClient[] SetupSimulationRun(TModelDescription modelDescription,
-            ICollection<TNodeInformation> layerContainers, string simConfigName,
+            ICollection<TNodeInformation> layerContainers, string simConfigName, string resultConfigId,
             ILayerContainerFacade layerContainer = null)
         {
             var content = _modelContainer.GetSerializedModel(modelDescription);
@@ -199,7 +199,7 @@ namespace RuntimeEnvironment.Implementation
              */
             if (layerContainer != null)
             {
-                layerContainerClients.Add(new LayerContainerClient(layerContainer, content));
+                layerContainerClients.Add(new LayerContainerClient(layerContainer, content, resultConfigId));
             }
             else
             {
@@ -217,7 +217,7 @@ namespace RuntimeEnvironment.Implementation
                                     nodeInformationType.NodeEndpoint.IpAddress + ":" +
                                     nodeInformationType.NodeEndpoint.Port
                                 ),
-                                content);
+                                content, resultConfigId);
                             layerContainerClients.Add(client);
                             connected = true;
                         }
