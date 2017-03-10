@@ -273,9 +273,6 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var provider = new NumberFormatInfo {NumberDecimalSeparator = ".", NumberGroupSeparator = ","};
             if (parameterDatatype.GetTypeInfo().IsEnum)
             {
-                Console.WriteLine(parameterDatatype.FullName);
-                Console.WriteLine($"Value: {parameterValue}");
-
                 var e = Enum.Parse(parameterDatatype, parameterValue, true);
                 if (e == null)
                 {
