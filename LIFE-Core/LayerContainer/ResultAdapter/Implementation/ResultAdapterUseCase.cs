@@ -129,6 +129,11 @@ namespace ResultAdapter.Implementation
 
         private static JObject GetResultConfig(string resultConfigId)
         {
+            if (resultConfigId.Equals(string.Empty) || resultConfigId == null)
+            {
+                return null;
+            }
+
             var resultServiceHost = "resultcfg-svc";
 
 
