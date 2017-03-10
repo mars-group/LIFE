@@ -135,7 +135,8 @@ namespace GeoGridEnvironmentTests
                     ti =>
                     {
                         var newT = _geoGrid.MoveToPosition(trees[ti], moves[ti * i].Latitude, moves[ti * i].Longitude);
-                        Assert.AreEqual(newT.Latitude, moves[ti * i].Latitude);
+                        // move may either be rejected (crossing env borders) or should match the new position
+                        Assert.IsTrue(newT.Equals(moves[ti * i]) || newT.Equals(trees[ti]));
                     });
             sw.Stop();
             Console.WriteLine($"{movementCount} Moves took {sw.ElapsedMilliseconds} ms.");
