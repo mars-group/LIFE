@@ -17,7 +17,6 @@ using LCConnector.TransportTypes.ModelStructure;
 using LIFE.API.Layer.Initialization;
 using NodeRegistry.Interface;
 using PartitionManager.Interfaces;
-using ResultAdapter.Interface;
 using RTEManager.Interfaces;
 
 namespace LayerContainerFacade.Implementation {
@@ -30,7 +29,6 @@ namespace LayerContainerFacade.Implementation {
             (LayerContainerSettings settings,
                 IPartitionManager partitionManager,
                 IRTEManager rteManager,
-                IResultAdapter resultAdapter,
                 INodeRegistry nodeRegistry) {
 
             _partitionManager = partitionManager;
