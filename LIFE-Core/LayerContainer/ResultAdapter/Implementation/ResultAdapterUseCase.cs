@@ -62,12 +62,12 @@ namespace ResultAdapter.Implementation
             // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
             if (!_senders.Any())
             {
-                //for (var i = 0; i < 4; i++) {
-                var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-                var sender = new MongoSender(cfgClient, SimulationId.ToString());
-                sender.CreateMongoDbIndexes();
-                _senders.Add(sender);
-                //}
+                for (var i = 0; i < 4; i++) {
+                    var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+                    var sender = new MongoSender(cfgClient, SimulationId.ToString());
+                    sender.CreateMongoDbIndexes();
+                    _senders.Add(sender);
+                }
 
                 // _notifier = new RabbitNotifier(cfgClient);
             }
@@ -91,8 +91,8 @@ namespace ResultAdapter.Implementation
             }
 
             // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
-            //var lists = SplitList(results.ToList(), results.Count / _senders.Count);
-            //Parallel.For(0, _senders.Count, i => _senders[i].SendVisualizationData(lists[i], currentTick));
+            var lists = SplitList(results.ToList(), results.Count / _senders.Count);
+            Parallel.For(0, _senders.Count, i => _senders[i].SendVisualizationData(lists[i], currentTick));
             _senders.First().SendVisualizationData(results, currentTick);
             results = null;
         }
