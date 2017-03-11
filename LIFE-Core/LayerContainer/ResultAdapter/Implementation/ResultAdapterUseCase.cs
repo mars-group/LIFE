@@ -36,7 +36,7 @@ namespace ResultAdapter.Implementation
         private readonly ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>> _simObjects
             ; // List of all objects to output.
 
-        private readonly List<MongoSender> _senders; // Database connector.
+        private readonly MongoSender _sender; // Database connector.
 
 
         /// <summary>
@@ -46,7 +46,9 @@ namespace ResultAdapter.Implementation
         {
             _resultConfig = GetResultConfig(resultConfigId);
             _simObjects = new ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>>();
-            _senders = new List<MongoSender>();
+            var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+            _sender = new MongoSender(cfgClient, SimulationId.ToString());
+            _sender.CreateMongoDbIndexes();
         }
 
 
@@ -57,20 +59,6 @@ namespace ResultAdapter.Implementation
         public void WriteResults(int currentTick)
         {
             if (_simObjects.IsEmpty) return;
-
-
-            // Deferred init of the connectors. Reason: MongoDB uses the SimID as collection.
-            if (!_senders.Any())
-            {
-                for (var i = 0; i < 4; i++) {
-                    var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-                    var sender = new MongoSender(cfgClient, SimulationId.ToString());
-                    sender.CreateMongoDbIndexes();
-                    _senders.Add(sender);
-                }
-
-                // _notifier = new RabbitNotifier(cfgClient);
-            }
 
             // Loop in parallel over all simulation elements to output.
             var results = new ConcurrentBag<AgentSimResult>();
@@ -91,9 +79,8 @@ namespace ResultAdapter.Implementation
             }
 
             // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
-            var lists = SplitList(results.ToList(), results.Count / _senders.Count);
-            Parallel.For(0, _senders.Count, i => _senders[i].SendVisualizationData(lists[i], currentTick));
-            _senders.First().SendVisualizationData(results, currentTick);
+            var lists = SplitList(results.ToList(), results.Count / (Environment.ProcessorCount - 1));
+            Parallel.For(0, lists.Count, i => _sender.SendVisualizationData(lists[i], currentTick));
             results = null;
         }
 

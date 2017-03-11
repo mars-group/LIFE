@@ -8,7 +8,6 @@
 //  *******************************************************/
 
 using System;
-using System.Collections.Generic;
 using CommonTypes;
 using LayerContainerFacade.Interfaces;
 using Mono.Options;
