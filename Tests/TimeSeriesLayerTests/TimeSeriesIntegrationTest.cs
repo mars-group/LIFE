@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using ConfigService;
 using InfluxDB.Net;
 using InfluxDB.Net.Enums;
@@ -84,6 +85,22 @@ namespace LIFE.Components.Layers
 
             // then
             Assert.AreEqual(121.5, valueForCurrentSimulationTime);
+        }
+
+        [Test]
+        public void That10000AgentsCanQueryTheCurrentValue()
+        {
+            // given
+            InitDatabaseWithValues();
+            var timeSeriesLayer = InitTimeSeriesLayer(new HourSumTimeSeriesLayer());
+
+            // when
+            Parallel.For(1, 10000, i =>
+            {
+                var valueForCurrentSimulationTime = timeSeriesLayer.GetValueForCurrentSimulationTime();
+                // then
+                Assert.AreEqual(121.5, valueForCurrentSimulationTime);
+            });
         }
 
         private static void InitDatabaseWithValues()

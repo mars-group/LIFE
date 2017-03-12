@@ -111,7 +111,7 @@ namespace LIFE.Components.TimeSeriesLayer
         ///    }
         /// </code>
         /// </example>
-        /// <returns>The value for current simulation time depending on the time resolution.</returns>
+        /// <returns>The value for current simulation time depending on the time resolution or null if none found.</returns>
         public object GetValueForCurrentSimulationTime()
         {
             if (_valueCache.ContainsKey(_currentSimulationTime))
