@@ -10,7 +10,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
   /// <summary>
   ///   Movement module for geospatial agents.
   /// </summary>
-  public class GeoMover<T> : AgentMover where T : IGeoAgent<T> {
+  public class GeoMover<T> : AgentMover where T : IGeoCoordinate {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _geoGrid; // The grid environment to use.
     private readonly GeoAgent<T> _agent;                        // AgentReference position structure.

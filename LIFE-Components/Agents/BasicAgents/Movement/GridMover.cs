@@ -15,8 +15,8 @@ namespace LIFE.Components.Agents.BasicAgents.Movement
     ///   Two-dimensional, grid-based movement module.
     ///   For now, this mover rests upon the 2D continuous environment, emulating grid behaviour.
     /// </summary>
-    public class GridMover<T> : AgentMover where T : IGridAgent<T>
-    {
+    public class GridMover<T> : AgentMover where T : IGridCoordinate {
+
         private readonly IGridEnvironment<GridAgent<T>> _grid; // The grid environment to use.
         private GridAgent<T> _agent; // AgentReference position structure.
 

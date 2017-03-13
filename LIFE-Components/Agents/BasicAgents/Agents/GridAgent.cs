@@ -14,8 +14,8 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
     /// <summary>
     ///   A 2D-grid extension for the base agentReference.
     /// </summary>
-    public abstract class GridAgent<T> : Agent, IGridAgent<T> where T : IGridAgent<T>
-    {
+    public abstract class GridAgent<T> : Agent, IGridAgent<T> where T : IGridCoordinate {
+
         private readonly IGridEnvironment<GridAgent<T>> _env; // IESC implementation for collision detection.
         private GridCoordinate _position; // AgentReference initialPosition backing structure.
         protected readonly GridMover<T> Mover; // AgentReference movement module.

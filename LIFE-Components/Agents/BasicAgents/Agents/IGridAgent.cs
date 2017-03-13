@@ -6,11 +6,8 @@
 // //  * More information under: http://www.mars-group.org
 // //  * Written by Christian Hüning <christianhuening@gmail.com>, 05.03.2017
 // //  *******************************************************/
-
 using LIFE.API.Environment.GridCommon;
 
-namespace LIFE.Components.Agents.BasicAgents.Agents
-{
-    public interface IGridAgent<T> : IGridCoordinate
-    {}
+namespace LIFE.Components.Agents.BasicAgents.Agents {
+  public interface IGridAgent<T> : IGridCoordinate where T : IGridCoordinate {}
 }

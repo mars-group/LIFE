@@ -16,7 +16,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   ///   An agent with a geospatial position (lat, lng).
   ///   It is placed in a GeoGrid-Environment and also has a GPS movement module.
   /// </summary>
-  public abstract class GeoAgent<T> : Agent, IGeoAgent<T> where T : IGeoAgent<T> {
+  public abstract class GeoAgent<T> : Agent, IGeoAgent<T> where T : IGeoCoordinate {
 
     private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
     private GeoPosition _position;                    // AgentReference position backing structure.
