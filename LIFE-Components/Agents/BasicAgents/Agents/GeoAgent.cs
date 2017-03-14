@@ -18,7 +18,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
   /// </summary>
   public abstract class GeoAgent<T> : Agent, IGeoAgent<T> where T : IGeoCoordinate {
 
-    private readonly IGeoGridEnvironment<IGeoCoordinate> _env; // The grid environment to use.
+    private readonly IGeoGridEnvironment<GeoAgent<T>> _env; // The grid environment to use.
     private GeoPosition _position;                    // AgentReference position backing structure.
     protected readonly GeoMover<T> Mover;                  // AgentReference movement module.
     public double Latitude => _position.Latitude;              // Latitude of this agent.
@@ -50,7 +50,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     /// <param name="id">The agent identifier (serialized GUID).</param>
     /// <param name="freq">MARS LIFE execution freqency.</param>
     protected GeoAgent(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt,
-                       IGeoGridEnvironment<IGeoCoordinate> env, IGeoCoordinate startPos=null,
+                       GeoGridEnvironment<GeoAgent<T>> env, IGeoCoordinate startPos=null,
                        byte[] id=null, int freq=1)
       : base(layer, regFkt, unregFkt, id, freq) {
       _env = env;
@@ -69,7 +69,7 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
     /// </summary>
     protected override void Remove() {
       base.Remove();
-      _env.Remove(_position);
+      _env.Remove(this);
     }
 
 

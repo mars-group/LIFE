@@ -12,7 +12,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
   /// </summary>
   public class GeoMover<T> : AgentMover where T : IGeoCoordinate {
 
-    private readonly IGeoGridEnvironment<IGeoCoordinate> _geoGrid; // The grid environment to use.
+    private readonly IGeoGridEnvironment<GeoAgent<T>> _geoGrid; // The grid environment to use.
     private readonly GeoAgent<T> _agent;                        // AgentReference position structure.
 
 
@@ -23,7 +23,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     /// <param name="env">The geospatial environment to use.</param>
     /// <param name="pos">AgentReference position data structure.</param>
     /// <param name="sensorArray">The agent's sensor array (to provide movement feedback).</param>
-    public GeoMover(IGeoGridEnvironment<IGeoCoordinate> env, GeoAgent<T> agent, SensorArray sensorArray)
+    public GeoMover(GeoGridEnvironment<GeoAgent<T>> env, GeoAgent<T> agent, SensorArray sensorArray)
       : base(sensorArray) {
       _geoGrid = env;
       _agent = agent;
@@ -91,7 +91,7 @@ namespace LIFE.Components.Agents.BasicAgents.Movement {
     public MovementAction SetToPosition(double lat, double lng, double bearing) {
       return new MovementAction(() => {
         try {
-          var newPos = _geoGrid.MoveToPosition(new GeoCoordinate(_agent.Latitude, _agent.Longitude), lat, lng);
+          var newPos = _geoGrid.MoveToPosition(_agent, lat, lng);
           _agent.SetPosition(new GeoPosition(newPos.Latitude, newPos.Longitude), bearing);
           MovementSensor.SetMovementResult(new MovementResult(MovementStatus.Success));
         }

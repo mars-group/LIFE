@@ -1,11 +1,8 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using LIFE.API.Environment.GridCommon;
+﻿using LIFE.API.Environment.GridCommon;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
 using LIFE.Components.Environments.GridEnvironment;
-using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
