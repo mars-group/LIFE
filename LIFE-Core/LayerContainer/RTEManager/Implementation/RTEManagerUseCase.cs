@@ -17,7 +17,6 @@ using System;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
-using LIFE.API.Results;
 using ResultAdapter.Implementation;
 using ResultAdapter.Interface;
 
@@ -126,12 +125,7 @@ namespace RTEManager.Implementation {
                 _tickClientsPerLayer[layer].GetOrAdd(executionInterval, new ConcurrentDictionary<ITickClient, byte>());
                 // add tickClient to execution group
                 _tickClientsPerLayer[layer][executionInterval].TryAdd(tickClient, new byte());
-				// add tickClient to visualization if type is appropriate
-				var visAgent = tickClient as ISimResult;
-				if(visAgent != null){
-					_resultAdapter.Register(visAgent, executionInterval);
-
-				}
+                _resultAdapter.Register(tickClient, executionInterval);
             }
             else {
                 _tickClientsMarkedForRegistrationPerLayer[layer].GetOrAdd(executionInterval, new ConcurrentBag<ITickClient>());
@@ -236,11 +230,7 @@ namespace RTEManager.Implementation {
                                     out trash);
 
                                 // remove tickClient from visualization if type is appropiate
-                                var visAgent = tickClient as ISimResult;
-                                if (visAgent != null)
-                                {
-                                    _resultAdapter.DeRegister(visAgent, tickClientsPerExecGroup.Key);
-                                }
+                                _resultAdapter.DeRegister(tickClient, tickClientsPerExecGroup.Key);
                             });
                         }
                     )
@@ -264,11 +254,7 @@ namespace RTEManager.Implementation {
                                 _tickClientsPerLayer[layer][tickClientsPerExecGroup.Key].TryAdd(tickClient, new byte());
 
                                 // add tickClient to visualization if type is appropiate
-                                var visAgent = tickClient as ISimResult;
-                                if (visAgent != null)
-                                {
-                                    _resultAdapter.Register(visAgent, tickClientsPerExecGroup.Key);
-                                }
+                                _resultAdapter.Register(tickClient, tickClientsPerExecGroup.Key);
                             });
                         }
                     )
