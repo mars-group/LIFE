@@ -8,44 +8,42 @@
 //  *******************************************************/
 
 using System;
-using LIFE.API.Results;
-using Newtonsoft.Json.Linq;
+using LIFE.API.Agent;
 
-namespace ResultAdapter.Interface
-{
+namespace ResultAdapter.Interface {
+
+  /// <summary>
+  ///   The internal interface for the output adapter.
+  /// </summary>
+  public interface IResultAdapter {
+
     /// <summary>
-    ///   The internal interface for the visualization adapter. Its method's won't be avaibale via the ILayercontainer interface.
+    ///   The Simulation ID. It will be set before the first call to WriteResults().
     /// </summary>
-    public interface IResultAdapter
-    {
-        /// <summary>
-        ///   The Simulation ID. It will be set before the first call to WriteResults().
-        /// </summary>
-        /// <value>The simulation identifier.</value>
-        Guid SimulationId { get; set; }
+    /// <value>The simulation identifier.</value>
+    Guid SimulationId { get; set; }
 
 
-        /// <summary>
-        ///   Fetch all tick results and write them to the database.
-        /// </summary>
-        /// <param name="currentTick">The current tick. Needed for sanity check.</param>
-        void WriteResults(int currentTick);
+    /// <summary>
+    ///   Fetch all tick results and write them to the database.
+    /// </summary>
+    /// <param name="currentTick">The current tick. Needed for sanity check.</param>
+    void WriteResults(int currentTick);
 
 
-        /// <summary>
-        ///   Register a simulation object at the result adapter.
-        /// </summary>
-        /// <param name="simObject">The simulation entity to add to output queue.</param>
-        /// <param name="executionGroup">The executionGroup of the agent:
-        /// 0 : output never
-        /// 1 : output every tick
-        /// n : output every tick where tick % executionGroup == 0</param>
-        void Register(ISimResult simObject, int executionGroup = 1);
+    /// <summary>
+    ///   Register a simulation object at the result adapter. 
+    /// </summary>
+    /// <param name="simObject">The simulation entity to add to output queue.</param>
+    /// <param name="executionGroup">The execution group of the agent.</param>
+    void Register(ITickClient simObject, int executionGroup = 1);
 
-        /// <summary>
-        ///   Deregisters a simulation object from the result adapter.
-        /// </summary>
-        /// <param name="simObject">The simulation entity to remove.</param>
-        void DeRegister(ISimResult simObject, int executionGroup = 1);
-    }
+
+    /// <summary>
+    ///   Deregisters a simulation object from the result adapter. 
+    /// </summary>
+    /// <param name="simObject">The simulation entity to remove.</param>
+    /// <param name="executionGroup">Agent execution (and output) group.</param>
+    void DeRegister(ITickClient simObject, int executionGroup = 1);
+  }
 }
