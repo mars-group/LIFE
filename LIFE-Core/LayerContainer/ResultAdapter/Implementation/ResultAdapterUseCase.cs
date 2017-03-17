@@ -21,7 +21,7 @@ namespace ResultAdapter.Implementation {
   internal class ResultAdapterUseCase : IResultAdapter {
 
 
-    private readonly MongoSender _sender;        // Database connector.
+    private MongoSender _sender;        // Database connector.
     private readonly RabbitNotifier _notifier;   // Listener queue notifier.
     private readonly LoggerGenerator _generator; // Result logger generator.
 
@@ -43,9 +43,6 @@ namespace ResultAdapter.Implementation {
     public ResultAdapterUseCase(string resultConfigId) {
       _simObjects = new ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>>();
       _loggers = new ConcurrentDictionary<ITickClient, ResultLogger>();
-      var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-      _sender = new MongoSender(cfgClient, SimulationId.ToString());
-      _sender.CreateMongoDbIndexes();
       _generator = new LoggerGenerator(resultConfigId);
     }
 
@@ -55,6 +52,16 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
+
+      // Initialization in the first tick. It is deferred, because the simulation identifier
+      // is not available in the constructor.
+      if (_sender == null) {
+        var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
+        _sender = new MongoSender(cfgClient, SimulationId.ToString());
+        _sender.CreateMongoDbIndexes();
+      }
+
+
       if (_simObjects.IsEmpty) return;
 
       // Loop in parallel over all simulation elements to output.
@@ -79,7 +86,7 @@ namespace ResultAdapter.Implementation {
 
       // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
       Parallel.For(0, lists.Count, i => _sender.SendVisualizationData(lists[i], currentTick));
-      Console.WriteLine("--dbg: all results written ("+results.Count+").");
+      //Console.WriteLine("--dbg: all results written ("+results.Count+").");
     }
 
 
