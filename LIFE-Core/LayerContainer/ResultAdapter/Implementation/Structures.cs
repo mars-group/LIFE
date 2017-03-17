@@ -40,4 +40,28 @@ namespace ResultAdapter.Implementation {
     public float[] StaticOrientation;                    // Fixed rotation as (yaw,pitch,roll).
     public IDictionary<string, object> StaticProperties; // List of immutable properties.
   }
+
+
+  /// <summary>
+  ///   Configuration directives for logger creation.
+  /// </summary>
+  internal struct LoggerConfig {
+    internal string TypeName;                     // ITickClient type name.
+    internal int OutputFrequency;                 // Output frequency.
+    internal bool IsSpatial;                      // Is the spatial output desired?
+    internal bool IsStationary;                   // Is the object stationary (position fixed)?
+    internal Dictionary<string, bool> Properties; // Properties to output (and static flag).
+    internal IEnumerable<string> VisParameters;   // Visualization parameters to pass along.
+  }
+
+
+  /// <summary>
+  ///   Logger function code snippets.
+  /// </summary>
+  internal struct LoggerCodeFragment {
+    internal string TypeName;       // Name of the ITickClient class this logger belongs to.
+    internal string MetaCode;       // Code for meta table entry creation.
+    internal string KeyframeCode;   // Code for key frame (full state) output.
+    internal string DeltaframeCode; // Code for delta frame (changes) output.
+  }
 }

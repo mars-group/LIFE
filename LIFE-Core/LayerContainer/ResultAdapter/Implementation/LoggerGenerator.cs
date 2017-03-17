@@ -15,6 +15,7 @@ namespace ResultAdapter.Implementation {
   internal class LoggerGenerator {
 
     private readonly Dictionary<string, Type> _definitions; // List of compiled loggers.
+    private readonly LoggerCompiler _compiler;              // Source code templater and compiler.
     private readonly string _rcsHost;                       // ResultConfigService address.
     private readonly string _configId;                      // Configuration identifier.
 
@@ -26,6 +27,7 @@ namespace ResultAdapter.Implementation {
     /// <param name="configId">Configuration identifier.</param>
     public LoggerGenerator(string rcsHost, string configId) {
       _definitions = new Dictionary<string, Type>();
+      _compiler = new LoggerCompiler();
       _rcsHost = rcsHost;
       _configId = configId;
       var json = GetConfiguration();
@@ -99,6 +101,10 @@ namespace ResultAdapter.Implementation {
       //TODO ...
       // . . .
       foreach (var loggerConfig in loggerConfigs) {
+
+
+
+
         _definitions.Add(loggerConfig.TypeName, loggerConfig.GetType());
       }
     }
@@ -126,19 +132,6 @@ namespace ResultAdapter.Implementation {
     /// <returns>Boolean value, whether logger exists or not.</returns>
     public bool HasLoggerDefinition(ITickClient simObject) {
       return _definitions.ContainsKey(simObject.GetType().Name);
-    }
-
-
-    /// <summary>
-    ///   Configuration directives for logger creation.
-    /// </summary>
-    private struct LoggerConfig {
-      internal string TypeName;                     // ITickClient type name.
-      internal int OutputFrequency;                 // Output frequency.
-      internal bool IsSpatial;                      // Is the spatial output desired?
-      internal bool IsStationary;                   // Is the object stationary (position fixed)?
-      internal Dictionary<string, bool> Properties; // Properties to output (and static flag).
-      internal IEnumerable<string> VisParameters;   // Visualization parameters to pass along.
     }
 
 
