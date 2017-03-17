@@ -37,7 +37,7 @@ namespace LayerContainerShared {
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Address resolution failes, will use 127.0.0.1 instead");
+                Console.Error.WriteLine($"Address resolution failed, will use 127.0.0.1 instead");
                 // ignored
             }
 

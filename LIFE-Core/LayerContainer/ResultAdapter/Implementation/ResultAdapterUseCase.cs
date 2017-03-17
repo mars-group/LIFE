@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using CommonTypes;
 using ConfigService;
 using LIFE.API.Agent;
 using LIFE.API.Results;
-using Newtonsoft.Json.Linq;
 using ResultAdapter.Implementation.DataOutput;
 using ResultAdapter.Interface;
+[assembly: InternalsVisibleTo("ResultAdapterTests")]
 
 namespace ResultAdapter.Implementation {
 
@@ -20,14 +17,10 @@ namespace ResultAdapter.Implementation {
   /// </summary>
   internal class ResultAdapterUseCase : IResultAdapter {
 
-
-    private readonly MongoSender _sender;        // Database connector.
-    private readonly RabbitNotifier _notifier;   // Listener queue notifier.
-    private readonly LoggerGenerator _generator; // Result logger generator.
-
-
-    private readonly ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>> _simObjects; // List of all objects to output.
-    private readonly ConcurrentDictionary<ITickClient, ResultLogger> _loggers;
+    private readonly MongoSender _sender;                   // Database connector.
+    private readonly RabbitNotifier _notifier;              // Listener queue notifier.
+    private readonly LoggerGenerator _generator;            // Result logger generator.
+    private readonly Dictionary<int, LoggerGroup> _loggers; // Logger listing (key=frequency).
 
 
     /// <summary>
@@ -40,13 +33,18 @@ namespace ResultAdapter.Implementation {
     /// <summary>
     ///   Instantiate the concrete result adapter.
     /// </summary>
-    public ResultAdapterUseCase(string resultConfigId) {
-      _simObjects = new ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>>();
-      _loggers = new ConcurrentDictionary<ITickClient, ResultLogger>();
-      var cfgClient = new ConfigServiceClient(MARSConfigServiceSettings.Address);
-      _sender = new MongoSender(cfgClient, SimulationId.ToString());
+    public ResultAdapterUseCase(string resultConfigId, Guid? simId = null, bool enableTestMode = false) {
+      _loggers = new Dictionary<int, LoggerGroup>();
+      if (simId.HasValue) SimulationId = simId.Value;
+      var mongoDbHost = enableTestMode ? "127.0.0.1" : "result-mongodb";
+      var rcsHost = enableTestMode ? "127.0.0.1:8080" : "resultcfg-svc";
+      var configHost = enableTestMode ? "127.0.0.1:8080" : "config-svc";
+      var rabbitHost = enableTestMode ? "127.0.0.1" : "rabbitmq";
+      _generator = new LoggerGenerator(rcsHost, resultConfigId);
+      var cfgClient = new ConfigServiceClient("http://"+configHost);
+      _notifier = new RabbitNotifier(rabbitHost, cfgClient);
+      _sender = new MongoSender(mongoDbHost, SimulationId.ToString());
       _sender.CreateMongoDbIndexes();
-      _generator = new LoggerGenerator(resultConfigId);
     }
 
 
@@ -55,7 +53,24 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
-      if (_simObjects.IsEmpty) return;
+
+      foreach (var outputGroup in _loggers.Keys) { //| Loop over all logger groups and
+        if (currentTick % outputGroup == 0) {      //| check if output is necessary.
+
+          var oldResults = new ConcurrentBag<AgentSimResult>();
+          var oldLoggers = _loggers[outputGroup].OldLoggers.Keys;
+          Console.WriteLine("[ResultAdapter] Parallel run over "+oldLoggers.Count+" legacy loggers.");
+          Parallel.ForEach(oldLoggers, logger => {
+            oldResults.Add(logger.GetResultData());
+          });
+
+
+          //TODO Ausgabelogik für die neuen Logger hier einfügen!
+        }
+      }
+
+
+/*      if (_loggers.Count == 0) return;
 
       // Loop in parallel over all simulation elements to output.
       var results = new ConcurrentBag<AgentSimResult>();
@@ -78,8 +93,9 @@ namespace ResultAdapter.Implementation {
       }
 
       // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
-      Parallel.For(0, lists.Count, i => _sender.SendVisualizationData(lists[i], currentTick));
+      Parallel.For(0, lists.Count, i => _sender.SendVisualizationData(lists[i]));
       Console.WriteLine("--dbg: all results written ("+results.Count+").");
+*/
     }
 
 
@@ -87,105 +103,107 @@ namespace ResultAdapter.Implementation {
     ///   Register a simulation object at the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to add to output queue.</param>
-    /// <param name="executionGroup">Agent execution (and output) group.</param>
-    public void Register(ITickClient simObject, int executionGroup = 1) {
-
-
-      if (_generator != null) {
-        var logger = _generator.GetResultLogger(simObject);
-        if (logger != null) {
-          _loggers.TryAdd(simObject, logger);
-        }
+    /// <param name="execGrp">Agent execution (and output) group.</param>
+    public void Register(ITickClient simObject, int execGrp = 1) {
+      if (!_loggers.ContainsKey(execGrp)) {
+        _loggers.Add(execGrp, new LoggerGroup());
       }
-      else { // Output the entity the legacy way.
+      var logger = _generator.GetResultLogger(simObject);       //| If there is a logger
+      if (logger != null) {                                     //| specification for the
+        _loggers[execGrp].GenLoggers.TryAdd(simObject, logger); //| current type, use it!
+      }
+      else { // If no logger definition was found, attempt legacy output.
         var simResult = simObject as ISimResult;
-        if (simResult != null) { 
-          _simObjects.GetOrAdd(executionGroup, new ConcurrentDictionary<ISimResult, byte>());
-          _simObjects[executionGroup].TryAdd(simResult, new byte());        
+        if (simResult != null) {
+          _loggers[execGrp].OldLoggers.TryAdd(simResult, new byte());
         }
       }
     }
-
 
 
     /// <summary>
     ///   De-registers a simulation object from the result adapter. 
     /// </summary>
     /// <param name="simObject">The simulation entity to remove.</param>
-    /// <param name="executionGroup">Agent execution (and output) group.</param>
-    public void DeRegister(ITickClient simObject, int executionGroup = 1) {
-      if (simObject is ISimResult && _simObjects.ContainsKey(executionGroup)) {
-        byte b;
-        _simObjects[executionGroup].TryRemove((ISimResult) simObject, out b);
-      }
-      else {
-        ResultLogger logger;
-        _loggers.TryRemove(simObject, out logger);        
-      }
-    }
-
-
-
-    /// <summary>
-    ///   Register a simulation object at the result adapter.
-    /// </summary>
-    /// <param name="simObject">The simulation entity to add to output queue.</param>
-    /// <param name="executionGroup"></param>
-    public void Register(ISimResult simObject, int executionGroup = 1) {
-      _simObjects.GetOrAdd(executionGroup, new ConcurrentDictionary<ISimResult, byte>());
-      _simObjects[executionGroup].TryAdd(simObject, new byte());
-    }
-
-    /// <summary>
-    ///   Deregisters a simulation object from the result adapter.
-    /// </summary>
-    /// <param name="simObject">The simulation entity to remove.</param>
-    public void DeRegister(ISimResult simObject, int executionGroup = 1) {
-      if (_simObjects.ContainsKey(executionGroup)) {
-        byte b;
-        _simObjects[executionGroup].TryRemove(simObject, out b);
-      }
-    }
-  }
-
-
-
-  //TODO
-  class LoggerGenerator {
-
-    public LoggerGenerator(string configId) {
-      var json = GetConfiguration(configId);
-      if (json != null) {
-        //TODO hier weitermachen! 
-      }
-    }
-
-
-    internal ResultLogger GetResultLogger(ITickClient tickClient) {
-      return null;
-    }
-
-
-    private JObject GetConfiguration(string configId) {
-      var http = new HttpClient();
-      try {
-        var getTask = http.GetAsync("http://resultcfg-svc/api/ResultConfigs/");
-        getTask.Wait(4000);
-        if (getTask.Result.StatusCode == HttpStatusCode.OK) {
-          var readTask = getTask.Result.Content.ReadAsStringAsync();
-          readTask.Wait();
-          http.Dispose();
-          return JObject.Parse(readTask.Result);
+    /// <param name="execGrp">Agent execution (and output) group.</param>
+    public void DeRegister(ITickClient simObject, int execGrp = 1) {
+      if (_loggers.ContainsKey(execGrp)) {
+        if (_generator.HasLoggerDefinition(simObject)) {
+          var genLoggers = _loggers[execGrp].GenLoggers;
+          if (genLoggers.ContainsKey(simObject)) {
+            IGeneratedLogger logger;
+            genLoggers.TryRemove(simObject, out logger);
+          }
+        }
+        else {
+          var simResult = simObject as ISimResult;
+          if (simResult != null) {
+            var oldLoggers = _loggers[execGrp].OldLoggers;
+            if (oldLoggers.ContainsKey(simResult)) {
+              byte b;
+              oldLoggers.TryRemove(simResult, out b);
+            }
+          }
         }
       }
-      catch (Exception ex) {
-        Console.Error.WriteLine("[LoggerGenerator] Failed to read configuration '"+configId+"'.");
-        Console.Error.WriteLine("[LoggerGenerator] Exception: "+ex);
+    }
+
+
+    /// <summary>
+    ///   ResultAdapter debug output. Prints all properties.
+    /// </summary>
+    /// <param name="rec">Recursive flag. If set, all subcomponents are also printed.</param>
+    /// <returns>A formatted string with detailed property listings.</returns>
+    public string ToString(bool rec) {
+      var str = "[ResultAdapter] \n" +
+                " - Execution groups: \n";
+      foreach (var execGrp in _loggers.Keys) {
+        var gen = _loggers[execGrp].GenLoggers.Count;
+        var leg = _loggers[execGrp].OldLoggers.Count;
+        str += "    ["+execGrp+"] generated: "+gen+", legacy: "+leg+"\n";
       }
-      return null;
+
+
+      if (rec) {
+        str += _generator.ToString();
+      }
+      return str;
     }
   }
 
 
-  class ResultLogger { }
+
+
+  internal class GeneratedLogger : IGeneratedLogger {
+    public AgentMetadataEntry GetMetatableEntry() {
+      return new AgentMetadataEntry();
+    }
+
+    public string GetKeyFrame() {
+      return "";
+    }
+
+    public string GetDeltaFrame() {
+      return "";
+    }
+  }
+
+
+  /// <summary>
+  ///   The logger group groups old and new loggers for an execution group.
+  /// </summary>
+  internal class LoggerGroup {
+
+    public readonly ConcurrentDictionary<ISimResult, byte> OldLoggers;              // Direct references (legacy).
+    public readonly ConcurrentDictionary<ITickClient, IGeneratedLogger> GenLoggers; // Generated loggers.
+
+
+    /// <summary>
+    ///   Create a new looger group. This initializes the logger lists.
+    /// </summary>
+    public LoggerGroup() {
+      OldLoggers = new ConcurrentDictionary<ISimResult, byte>();
+      GenLoggers = new ConcurrentDictionary<ITickClient, IGeneratedLogger>();
+    }
+  }
 }
