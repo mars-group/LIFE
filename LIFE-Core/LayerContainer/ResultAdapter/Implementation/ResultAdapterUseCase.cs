@@ -43,7 +43,7 @@ namespace ResultAdapter.Implementation {
     public ResultAdapterUseCase(string resultConfigId) {
       _simObjects = new ConcurrentDictionary<int, ConcurrentDictionary<ISimResult, byte>>();
       _loggers = new ConcurrentDictionary<ITickClient, ResultLogger>();
-      _generator = new LoggerGenerator(resultConfigId);
+      //_generator = new LoggerGenerator(resultConfigId);
     }
 
 
