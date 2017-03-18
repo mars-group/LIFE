@@ -163,7 +163,6 @@ namespace ResultAdapter.Implementation {
         str += "    ["+execGrp+"] generated: "+gen+", legacy: "+leg+"\n";
       }
 
-
       if (rec) {
         str += _generator.ToString();
       }
@@ -171,22 +170,6 @@ namespace ResultAdapter.Implementation {
     }
   }
 
-
-
-
-  internal class GeneratedLogger : IGeneratedLogger {
-    public AgentMetadataEntry GetMetatableEntry() {
-      return new AgentMetadataEntry();
-    }
-
-    public string GetKeyFrame() {
-      return "";
-    }
-
-    public string GetDeltaFrame() {
-      return "";
-    }
-  }
 
 
   /// <summary>

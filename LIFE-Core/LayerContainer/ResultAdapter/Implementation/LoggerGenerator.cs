@@ -18,6 +18,9 @@ namespace ResultAdapter.Implementation {
     private readonly LoggerCompiler _compiler;              // Source code templater and compiler.
     private readonly string _rcsHost;                       // ResultConfigService address.
     private readonly string _configId;                      // Configuration identifier.
+    private string _generatedCode;                          // The generated code file.
+
+    internal string CodeFile; //TODO
 
 
     /// <summary>
@@ -79,11 +82,15 @@ namespace ResultAdapter.Implementation {
               fields.Add(field["Name"].ToString(), (bool) field["Static"]);
             }
           }
+          string spatialType = null;
+          if ((bool) agentDef["SpatialOutput"]) {
+            spatialType = agentDef["SpatialType"].ToString();
+          }
           loggers.Add(new LoggerConfig {
             TypeName = agentDef["TypeName"].ToString(),
             OutputFrequency = int.Parse(agentDef["Frequency"].ToString()),
-            IsSpatial = (bool) agentDef["SpatialOutput"],
-            IsStationary = agentDef["SpatialType"].ToString().Equals("stationary"),
+            SpatialType = spatialType,
+            IsStationary = agentDef["MovementType"].ToString().Equals("stationary"),
             Properties = fields,
             VisParameters = agentDef["VisualizationParams"].ToString().Split('\n')
           });
@@ -98,15 +105,22 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="loggerConfigs">Logger descriptions.</param>
     private void GenerateLoggerPrototypes(IEnumerable<LoggerConfig> loggerConfigs) {
-      //TODO ...
-      // . . .
+      var loggerClasses = new List<string>();
       foreach (var loggerConfig in loggerConfigs) {
-
-
-
-
+        var codeSnippets = new LoggerCodeFragment {
+          TypeName = loggerConfig.TypeName,
+          MetaCode = LoggerCompiler.GenerateFragmentMetadata(loggerConfig),
+          KeyframeCode = LoggerCompiler.GenerateFragmentKeyframe(loggerConfig),
+          DeltaframeCode = LoggerCompiler.GenerateFragmentDeltaframe(loggerConfig)
+        };
+        loggerClasses.Add(LoggerCompiler.GenerateLoggerClass(codeSnippets));
+        //TODO
         _definitions.Add(loggerConfig.TypeName, loggerConfig.GetType());
       }
+      _generatedCode = LoggerCompiler.GenerateSourceCodeFile(loggerClasses);
+
+      CodeFile = _generatedCode; //TODO
+
     }
 
 
@@ -117,9 +131,9 @@ namespace ResultAdapter.Implementation {
     /// <returns>An agent result logger instance for the given type.</returns>
     public IGeneratedLogger GetResultLogger(ITickClient simObject) {
       var agentType = simObject.GetType().Name;
-      if (_definitions.ContainsKey(agentType)) {
+      if (_definitions.ContainsKey("ResultLogger_"+agentType)) {
         var instance = Activator.CreateInstance(_definitions[agentType], simObject);
-        return (GeneratedLogger) instance;
+        return (IGeneratedLogger) instance;
       }
       return null;
     }
@@ -131,7 +145,7 @@ namespace ResultAdapter.Implementation {
     /// <param name="simObject">The simulation object to check for.</param>
     /// <returns>Boolean value, whether logger exists or not.</returns>
     public bool HasLoggerDefinition(ITickClient simObject) {
-      return _definitions.ContainsKey(simObject.GetType().Name);
+      return _definitions.ContainsKey("ResultLogger_"+simObject.GetType().Name);
     }
 
 
@@ -139,17 +153,12 @@ namespace ResultAdapter.Implementation {
     ///   Output the logger generator's connection settings and available loggers.
     /// </summary>
     /// <returns>Formatted output string.</returns>
-    public override string ToString() {
-      var str = "[LoggerGenerator] \n"+
-                " - Config ID: "+_configId+"\n"+
-                " - RCS address: "+_rcsHost+"\n"+
-                " - Definitions ("+_definitions.Count+"): ";
-      var cnt = 0;
-      foreach (var defkey in _definitions.Keys) {
-        str += _definitions[defkey].Name;
-        if (++cnt < _definitions.Count) str += ", ";
-      }
-      return str;
+    public string ToString(bool codeOutput) {
+      return "[LoggerGenerator] \n"+
+             " - Config ID: "+_configId+"\n"+
+             " - RCS address: "+_rcsHost+"\n"+
+             " - Definitions: "+_definitions.Count+
+             (codeOutput? "\n - Generated code:\n----------\n"+_generatedCode+"\n----------" : "");
     }
   }
 }

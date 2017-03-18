@@ -36,10 +36,11 @@ namespace ResultAdapter.Implementation {
     public string AgentId;                               //* GUID of this agent.
     public string AgentType;                             //* Derived class type.
     public string Layer;                                 //* The layer this agent lives on.
-    public float[] StaticPosition;                       // Fixed agent position (x,y,z).
-    public float[] StaticOrientation;                    // Fixed rotation as (yaw,pitch,roll).
+    public object[] StaticPosition;                      // Fixed agent position (x,y,z).
+    public object[] StaticOrientation;                   // Fixed rotation as (yaw,pitch,roll).
     public IDictionary<string, object> StaticProperties; // List of immutable properties.
   }
+
 
 
   /// <summary>
@@ -48,11 +49,12 @@ namespace ResultAdapter.Implementation {
   internal struct LoggerConfig {
     internal string TypeName;                     // ITickClient type name.
     internal int OutputFrequency;                 // Output frequency.
-    internal bool IsSpatial;                      // Is the spatial output desired?
+    internal string SpatialType;                  // Spatial type specifier [GPS/Grid/2D/3D] or 'null'.
     internal bool IsStationary;                   // Is the object stationary (position fixed)?
     internal Dictionary<string, bool> Properties; // Properties to output (and static flag).
     internal IEnumerable<string> VisParameters;   // Visualization parameters to pass along.
   }
+
 
 
   /// <summary>

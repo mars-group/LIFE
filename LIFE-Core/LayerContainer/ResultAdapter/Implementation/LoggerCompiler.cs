@@ -1,27 +1,60 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace ResultAdapter.Implementation {
 
-
   /// <summary>
-  ///   The logger compiler assembles the logger source code and compiles the logger
-  ///   classes into an assembly, which then is loaded into the runtime.
+  ///   The logger compiler assembles the logger source code and compiles the
+  ///   logger classes into an assembly, which then is loaded into the runtime.
   /// </summary>
-  public class LoggerCompiler {
+  internal class LoggerCompiler {
+
+
+    /// <summary>
+    ///   Assemble all logger classes in a source code file and analyze using directives.
+    /// </summary>
+    /// <param name="loggerClasses">The C# classes to compile.</param>
+    /// <returns>String for complete source code file.</returns>
+    internal static string GenerateSourceCodeFile(IEnumerable<string> loggerClasses) {
+
+      var usingList = new List<string> {
+        "using System.Collections.Generic;",
+        "using LIFE.API.Agent;",
+        "using ResultAdapter.Implementation;"
+      };
+
+      //TODO ...
+      //TODO Usings analysieren.
+
+      // Join the classes with the required imports to a single source code file.
+      var usings = new StringBuilder();
+      foreach (var str in usingList) usings.Append(str + "\n");
+      usings.Append("// ReSharper disable InconsistentNaming\n");
+      var loggerCode = new StringBuilder();
+      foreach (var logger in loggerClasses) loggerCode.Append(logger);
+      return string.Format(
+        "{0}" +
+        "\nnamespace ResultLoggerGenerated {{\n" +
+        "{1}" +
+        "}}\n",
+        usings,
+        loggerCode
+      );
+    }
 
 
     /// <summary>
     ///   Generate the class for a result logger.
     /// </summary>
-    /// <param name="definition">The logger definition.</param>
+    /// <param name="snippets">The logger code fragments.</param>
     /// <returns>C# code for the logger class.</returns>
-    internal static string GenerateLoggerClass(LoggerCodeFragment definition) {
+    internal static string GenerateLoggerClass(LoggerCodeFragment snippets) {
       var code = string.Format(
         "\n\n" +
         "  /// <summary>\n" +
         "  ///   Generated result logger for the '{0}' agent type.\n" +
         "  /// </summary>\n" +
-        "  public class ResultLogger_{0} : IGeneratedSimResult {{\n" +
+        "  public class ResultLogger_{0} : IGeneratedLogger {{\n" +
         "    private readonly {0} _agent;\n\n" +
         "    public ResultLogger_{0}(ITickClient agent) {{\n" +
         "      _agent = ({0}) agent;\n" +
@@ -30,10 +63,10 @@ namespace ResultAdapter.Implementation {
         "    public string GetKeyFrame() {{\n{2}    }}\n\n" +
         "    public string GetDeltaFrame() {{\n{3}    }}\n" +
         "  }}\n",
-        definition.TypeName,
-        definition.MetaCode,
-        definition.KeyframeCode,
-        definition.DeltaframeCode
+        snippets.TypeName,
+        snippets.MetaCode,
+        snippets.KeyframeCode,
+        snippets.DeltaframeCode
       );
       return code;
     }
@@ -52,11 +85,42 @@ namespace ResultAdapter.Implementation {
       var staticsListing = "";
       for (var i = 0; i < statProps.Count; i++) {
         staticsListing += string.Format(
-          "          {{\"{0}\", _agent.{0}.ToString()}}{1}\n",
+          "          {{\"{0}\", _agent.{0}}}{1}\n",
           statProps[i],
           i<statProps.Count-1? "," : ""
         );
       }
+
+      // Build the static position/orientation output, if applicable.
+      var spatialData = "";
+      if (config.SpatialType != null && config.IsStationary) {
+        switch (config.SpatialType.ToUpper()) { //| Check the agent's spatial type. For now,
+          case "GPS":                           //| only the LIFE base agents are supported.
+            spatialData = ",\n" +
+            "        StaticPosition = new object[] {_agent.Latitude, _agent.Longitude},\n" +
+            "        StaticOrientation = new object[] {_agent.Bearing}";
+            break;
+          case "GRID":
+            spatialData = ",\n" +
+            "        StaticPosition = new object[] {_agent.X, _agent.Y},\n" +
+            "        StaticOrientation = new object[] {(int) _agent.GridDirection}";
+            break;
+          case "2D":
+            spatialData = ",\n" +
+            "        StaticPosition = new object[] {_agent.Position.X, _agent.Position.Y},\n" +
+            "        StaticOrientation = new object[] {_agent.Position.Yaw}";
+            break;
+          case "3D":
+            spatialData = ",\n" +
+            "        StaticPosition = new object[] {_agent.Position.X, _agent.Position.Y, _agent.Position.Z},\n" +
+            "        StaticOrientation = new object[] {_agent.Position.Yaw, _agent.Position.Pitch}";
+            break;
+          default:
+            spatialData = "";
+            break;
+        }
+      }
+
 
       // Build and return the meta data structure.
       return string.Format(
@@ -65,26 +129,10 @@ namespace ResultAdapter.Implementation {
         "        AgentType = _agent.GetType().Name,\n" +
         "        Layer = _agent.Layer.GetType().Name{0}{1}\n" +
         "      }};\n",
-
-        // If the agent is of spatial type and fixed position, output that as meta entry.
-        config.IsSpatial && config.IsStationary? string.Format(
-          ",\n" +
-          "        StaticPosition = new [] {{\n" +
-          "          (float) _agent.SpatialData.Position.X,\n" +
-          "          (float) _agent.SpatialData.Position.Y,\n" +
-          "          (float) _agent.SpatialData.Position.Z\n" +
-          "        }},\n" +
-          "        StaticOrientation = new [] {{\n" +
-          "          (float) _agent.SpatialData.Direction.Yaw,\n" +
-          "          (float) _agent.SpatialData.Direction.Pitch,\n" +
-          "          0.0f\n" +
-          "        }}"
-        ) : "",
-
-        // If the agent contains static properties, list them and query their values.
+        spatialData,
         !staticsListing.Equals("")? string.Format(
           ",\n" +
-          "        StaticProperties = new Dictionary<string, string> {{\n{0}" +
+          "        StaticProperties = new Dictionary<string, object> {{\n{0}" +
           "        }}",
           staticsListing
         ) : ""
@@ -98,11 +146,16 @@ namespace ResultAdapter.Implementation {
     /// <param name="config">Logger configuration to use.</param>
     /// <returns>Key frame generation function content.</returns>
     internal static string GenerateFragmentKeyframe(LoggerConfig config) {
+
+      //TODO Umbauen!
+      return "      return \"\";\n";
+
+
       var dynProps = new List<string>();
       foreach (var prop in config.Properties) if (!prop.Value) dynProps.Add(prop.Key);
 
       // Build the keyframe output code.
-      var posOut = config.IsSpatial && !config.IsStationary;
+      var posOut = config.SpatialType != null && !config.IsStationary;
       var propQuery = "";
       var propFormat = "";
       for (var i = 0; i < dynProps.Count; i ++) {
@@ -160,7 +213,6 @@ namespace ResultAdapter.Implementation {
       //TODO Hier die Deltafunktion zusammenbauen!
       return "      return \"\";\n";
     }
-
 
 
 
@@ -267,7 +319,13 @@ namespace ResultAdapter.Implementation {
       stream.Seek(0, SeekOrigin.Begin);
       return Assembly.Load(stream.ToArray());
     }*/
+
+
+
+
   }
+
+
 
 
 
