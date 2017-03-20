@@ -32,6 +32,10 @@
             "target": "project",
             "version": "2.1.0-*"
         },
+        "RawFileLayer": {
+            "target": "project",
+            "version": "2.1.0-*"
+        },
         "TimeSeriesLayer": {
             "target": "project",
             "version": "2.1.0-*"
