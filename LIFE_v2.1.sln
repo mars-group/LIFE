@@ -130,6 +130,7 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerRegistryTests", "Tests\LayerRegistryTests\LayerRegistryTests.xproj", "{3503EFBE-A8E5-42A0-A39A-0AC1428C2A00}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ResultAdapterTests", "Tests\ResultAdapterTests\ResultAdapterTests.xproj", "{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RawFileLayer", "LIFE-Components\Layers\RawFileLayer\RawFileLayer.xproj", "{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -349,6 +350,10 @@ Global
 		{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -414,5 +419,6 @@ Global
 		{770B7FFC-C699-41CB-86A9-DE98EC623003} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
 		{3503EFBE-A8E5-42A0-A39A-0AC1428C2A00} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
 		{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
+		{76B19B5C-3885-459B-AF0B-0FB8932CA4A2} = {8A9E7B49-F653-4AA1-9E4D-0AEAA57DFE46}
 	EndGlobalSection
 EndGlobal

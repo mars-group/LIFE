@@ -23,6 +23,7 @@ namespace ResultAdapter.Implementation {
     private readonly Dictionary<int, LoggerGroup> _loggers; // Logger listing (key=frequency).
     private readonly string _mongoDbHost;                   // MongoDB host address.
 
+
     /// <summary>
     ///   The Simulation ID. It will be set before the first call to WriteResults().
     /// </summary>
@@ -33,9 +34,8 @@ namespace ResultAdapter.Implementation {
     /// <summary>
     ///   Instantiate the concrete result adapter.
     /// </summary>
-    public ResultAdapterUseCase(string resultConfigId, Guid? simId = null, bool enableTestMode = false) {
+    public ResultAdapterUseCase(string resultConfigId, bool enableTestMode = false) {
       _loggers = new Dictionary<int, LoggerGroup>();
-      if (simId.HasValue) SimulationId = simId.Value;
       _mongoDbHost = enableTestMode ? "127.0.0.1" : "result-mongodb";
       var rcsHost = enableTestMode ? "127.0.0.1:8080" : "resultcfg-svc";
       var configHost = enableTestMode ? "127.0.0.1:8080" : "config-svc";
@@ -73,39 +73,11 @@ namespace ResultAdapter.Implementation {
           //TODO Ausgabelogik für die neuen Logger hier einfügen!
         }
       }
-
-
-/*      if (_loggers.Count == 0) return;
-
-      // Loop in parallel over all simulation elements to output.
-      var results = new ConcurrentBag<AgentSimResult>();
-      Parallel.ForEach(_simObjects.Keys, executionGroup => {
-        if ((currentTick == 0) || (currentTick == 1) || (currentTick%executionGroup == 0))
-          Parallel.ForEach(_simObjects[executionGroup].Keys,
-            simResult => results.Add(simResult.GetResultData()));
-      });
-
-      // don't do shit, when results are empty
-      if (results.IsEmpty) return;
-      
-      // Create result lists (to perform a parallel insert). 
-      var resultList = results.ToList();
-      var lists = new List<List<AgentSimResult>>();
-      var nSize = results.Count/(Environment.ProcessorCount - 1);
-      if (nSize == 0) nSize = 1;
-      for (var i = 0; i < results.Count; i += nSize) {
-        lists.Add(resultList.GetRange(i, Math.Min(nSize, resultList.Count - i)));
-      }
-
-      // MongoDB bulk insert of the output strings and RMQ notification, then clean up.
-      Parallel.For(0, lists.Count, i => _sender.SendVisualizationData(lists[i]));
-      Console.WriteLine("--dbg: all results written ("+results.Count+").");
-*/
     }
 
 
     /// <summary>
-    ///   Register a simulation object at the result adapter. 
+    ///   Register a simulation object at the result adapter.
     /// </summary>
     /// <param name="simObject">The simulation entity to add to output queue.</param>
     /// <param name="execGrp">Agent execution (and output) group.</param>
@@ -127,7 +99,7 @@ namespace ResultAdapter.Implementation {
 
 
     /// <summary>
-    ///   De-registers a simulation object from the result adapter. 
+    ///   De-registers a simulation object from the result adapter.
     /// </summary>
     /// <param name="simObject">The simulation entity to remove.</param>
     /// <param name="execGrp">Agent execution (and output) group.</param>
