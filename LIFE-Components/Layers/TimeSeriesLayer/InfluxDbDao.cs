@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ConfigService;
 using InfluxDB.Net;
 using InfluxDB.Net.Contracts;
-using InfluxDB.Net.Enums;
 using InfluxDB.Net.Models;
 using LIFE.API.Layer.Initialization;
 
@@ -33,8 +32,7 @@ namespace LIFE.Components.TimeSeriesLayer
             var influxDbUser = configService.Get("influxdb/user");
             var influxDbPassword = configService.Get("influxdb/password");
 
-            InfluxDbClient = new InfluxDb("http://" + hostName + ":8086", influxDbUser, influxDbPassword,
-                InfluxVersion.v096);
+            InfluxDbClient = new InfluxDb("http://" + hostName + ":8086", influxDbUser, influxDbPassword);
         }
 
         public object GetValueForTimeRange(AggregationFunction aggregationFunction, DateTime start, DateTime end)
