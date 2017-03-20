@@ -20,7 +20,7 @@ namespace ResultAdapterTests {
     [Test]
     public void InitResultAdapter() {
 
-      var resultAdapter = new ResultAdapterUseCase("rc-wolves", Guid.NewGuid(), true);
+      var resultAdapter = new ResultAdapterUseCase("rc-wolves", true);
 
       var sheep = new Sheep(
         null,

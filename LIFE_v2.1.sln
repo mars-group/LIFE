@@ -130,6 +130,7 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerRegistryTests", "Tests\LayerRegistryTests\LayerRegistryTests.xproj", "{3503EFBE-A8E5-42A0-A39A-0AC1428C2A00}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ResultAdapterTests", "Tests\ResultAdapterTests\ResultAdapterTests.xproj", "{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8}"
+EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RawFileLayer", "LIFE-Components\Layers\RawFileLayer\RawFileLayer.xproj", "{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}"
 EndProject
 Global

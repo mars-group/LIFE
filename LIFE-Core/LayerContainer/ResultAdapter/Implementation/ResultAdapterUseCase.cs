@@ -59,20 +59,26 @@ namespace ResultAdapter.Implementation {
         _sender.CreateMongoDbIndexes();
       }
 
+      // Lists for the storage of the result data.
+      var oldResults = new ConcurrentBag<AgentSimResult>();
+      //TODO . . .
+
       foreach (var outputGroup in _loggers.Keys) { //| Loop over all logger groups and
         if (currentTick % outputGroup == 0) {      //| check if output is necessary.
 
-          var oldResults = new ConcurrentBag<AgentSimResult>();
           var oldLoggers = _loggers[outputGroup].OldLoggers.Keys;
           Console.WriteLine("[ResultAdapter] Parallel run over "+oldLoggers.Count+" legacy loggers.");
           Parallel.ForEach(oldLoggers, logger => {
             oldResults.Add(logger.GetResultData());
           });
 
-
           //TODO Ausgabelogik für die neuen Logger hier einfügen!
         }
       }
+
+      // MongoDB bulk insert of the output packets and RMQ notification.
+      if (!oldResults.IsEmpty) _sender.WriteLegacyResults(oldResults);
+      _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
     }
 
 

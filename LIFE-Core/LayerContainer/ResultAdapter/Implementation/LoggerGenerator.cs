@@ -30,7 +30,6 @@ namespace ResultAdapter.Implementation {
     /// <param name="configId">Configuration identifier.</param>
     public LoggerGenerator(string rcsHost, string configId) {
       _definitions = new Dictionary<string, Type>();
-
       _rcsHost = rcsHost;
       _configId = configId;
       var json = GetConfiguration();
