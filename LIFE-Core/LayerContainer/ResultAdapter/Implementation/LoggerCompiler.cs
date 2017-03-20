@@ -1,5 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace ResultAdapter.Implementation {
 
@@ -11,25 +18,15 @@ namespace ResultAdapter.Implementation {
 
 
     /// <summary>
-    ///   Assemble all logger classes in a source code file and analyze using directives.
+    ///   Assemble all logger classes in a source code file.
     /// </summary>
     /// <param name="loggerClasses">The C# classes to compile.</param>
+    /// <param name="usings">The required using directives.</param>
     /// <returns>String for complete source code file.</returns>
-    internal static string GenerateSourceCodeFile(IEnumerable<string> loggerClasses) {
-
-      var usingList = new List<string> {
-        "using System.Collections.Generic;",
-        "using LIFE.API.Agent;",
-        "using ResultAdapter.Implementation;"
-      };
-
-      //TODO ...
-      //TODO Usings analysieren.
-
-      // Join the classes with the required imports to a single source code file.
-      var usings = new StringBuilder();
-      foreach (var str in usingList) usings.Append(str + "\n");
-      usings.Append("// ReSharper disable InconsistentNaming\n");
+    internal static string GenerateSourceCodeFile(IEnumerable<string> loggerClasses, IEnumerable<string> usings) {
+      var usingStr = new StringBuilder();
+      foreach (var str in usings) usingStr.Append("using "+str+";\n");
+      usingStr.Append("// ReSharper disable InconsistentNaming\n");
       var loggerCode = new StringBuilder();
       foreach (var logger in loggerClasses) loggerCode.Append(logger);
       return string.Format(
@@ -37,8 +34,7 @@ namespace ResultAdapter.Implementation {
         "\nnamespace ResultLoggerGenerated {{\n" +
         "{1}" +
         "}}\n",
-        usings,
-        loggerCode
+        usingStr, loggerCode
       );
     }
 
@@ -60,8 +56,8 @@ namespace ResultAdapter.Implementation {
         "      _agent = ({0}) agent;\n" +
         "    }}\n\n" +
         "    public AgentMetadataEntry GetMetatableEntry() {{\n{1}    }}\n\n" +
-        "    public string GetKeyFrame() {{\n{2}    }}\n\n" +
-        "    public string GetDeltaFrame() {{\n{3}    }}\n" +
+        "    public AgentFrame GetKeyFrame() {{\n{2}    }}\n\n" +
+        "    public AgentFrame GetDeltaFrame() {{\n{3}    }}\n" +
         "  }}\n",
         snippets.TypeName,
         snippets.MetaCode,
@@ -94,30 +90,12 @@ namespace ResultAdapter.Implementation {
       // Build the static position/orientation output, if applicable.
       var spatialData = "";
       if (config.SpatialType != null && config.IsStationary) {
-        switch (config.SpatialType.ToUpper()) { //| Check the agent's spatial type. For now,
-          case "GPS":                           //| only the LIFE base agents are supported.
-            spatialData = ",\n" +
-            "        StaticPosition = new object[] {_agent.Latitude, _agent.Longitude},\n" +
-            "        StaticOrientation = new object[] {_agent.Bearing}";
-            break;
-          case "GRID":
-            spatialData = ",\n" +
-            "        StaticPosition = new object[] {_agent.X, _agent.Y},\n" +
-            "        StaticOrientation = new object[] {(int) _agent.GridDirection}";
-            break;
-          case "2D":
-            spatialData = ",\n" +
-            "        StaticPosition = new object[] {_agent.Position.X, _agent.Position.Y},\n" +
-            "        StaticOrientation = new object[] {_agent.Position.Yaw}";
-            break;
-          case "3D":
-            spatialData = ",\n" +
-            "        StaticPosition = new object[] {_agent.Position.X, _agent.Position.Y, _agent.Position.Z},\n" +
-            "        StaticOrientation = new object[] {_agent.Position.Yaw, _agent.Position.Pitch}";
-            break;
-          default:
-            spatialData = "";
-            break;
+        string posStr, ortStr;
+        var success = GetSpatialOutputStrings(config.SpatialType, out posStr, out ortStr);
+        if (success) {
+          spatialData =
+            ",\n        StaticPosition = "+posStr+
+            ",\n        StaticOrientation = "+ortStr;
         }
       }
 
@@ -146,60 +124,39 @@ namespace ResultAdapter.Implementation {
     /// <param name="config">Logger configuration to use.</param>
     /// <returns>Key frame generation function content.</returns>
     internal static string GenerateFragmentKeyframe(LoggerConfig config) {
-
-      //TODO Umbauen!
-      return "      return \"\";\n";
-
-
       var dynProps = new List<string>();
       foreach (var prop in config.Properties) if (!prop.Value) dynProps.Add(prop.Key);
 
-      // Build the keyframe output code.
-      var posOut = config.SpatialType != null && !config.IsStationary;
-      var propQuery = "";
-      var propFormat = "";
-      for (var i = 0; i < dynProps.Count; i ++) {
-        propQuery += string.Format(
-          "        _agent.{0}{1}\n",
-          dynProps[i],
-          i<dynProps.Count-1? "," : ""
-        );
-        propFormat += string.Format(
-          "        \"  \\\"{0}\\\": \\\"{{{1}}}\\\"{2}\\n\" +\n",
-          dynProps[i],
-          posOut? i+6 : i,
-          i<dynProps.Count-1? "," : ""
-        );
+      // Build the spatial output strings.
+      string posStr = "null", ortStr = "null";
+      if (config.SpatialType != null && !config.IsStationary) {
+        GetSpatialOutputStrings(config.SpatialType, out posStr, out ortStr);
       }
 
-      // Build and return the string that represents the function content.
+      // Build the property output listing.
+      var propList = "null";
+      if (dynProps.Count > 0) {
+        propList = "new Dictionary<string, object> {\n";
+        for (var i = 0; i < dynProps.Count; i++) {
+          propList += string.Format(
+            "          {{\"{0}\", _agent.{0}}}{1}\n",
+            dynProps[i], i<dynProps.Count-1? "," : ""
+          );
+        }
+        propList += "        }";
+      }
+
+      // Return the key frame.
       return string.Format(
-        "      return string.Format(\n{0}{1}{2}" +
-        "      );\n",
-
-        // Position and orientation output for mobile units.
-        posOut?
-        "        \"\\\"Position\\\": [{0}, {1}, {2}],\\n\" +\n" +
-        "        \"\\\"Orientation\\\": [{3}, {4}, {5}]"
-        : "",
-
-        // Custom property output, if available.
-        dynProps.Count > 0?
-        (posOut? ",\\n\" +\n" : "") + // Close spatial tag, if we had it.
-        "        \"\\\"Properties\\\": {{\\n\" +\n" + propFormat +
-        "        \"}}\\n\",\n"
-        : "\\n\",\n",
-
-        // Internal string format paramter list.
-        (posOut? string.Format(
-          "        _agent.SpatialData.Position.X,\n" +
-          "        _agent.SpatialData.Position.Y,\n" +
-          "        _agent.SpatialData.Position.Z,\n" +
-          "        _agent.SpatialData.Direction.Yaw,\n" +
-          "        _agent.SpatialData.Direction.Pitch,\n" +
-          "        0.0f"
-        ) : "") +
-        (dynProps.Count > 0? (posOut? ",\n" : "")+propQuery : "\n")
+        "      return new AgentFrame {{\n" +
+        "        IsKeyframe = true,\n"+
+        "        AgentId = _agent.ID.ToString(),\n" +
+        "        Tick = _agent.GetTick(),\n"+
+        "        Position = {0},\n"+
+        "        Orientation = {1},\n"+
+        "        Properties = {2}\n"+
+        "      }};\n",
+        posStr, ortStr, propList
       );
     }
 
@@ -211,32 +168,141 @@ namespace ResultAdapter.Implementation {
     /// <returns>C# snippet for the delta frame output function.</returns>
     internal static string GenerateFragmentDeltaframe(LoggerConfig config) {
       //TODO Hier die Deltafunktion zusammenbauen!
-      return "      return \"\";\n";
+      return string.Format(
+        "      return new AgentFrame {{\n" +
+        "        IsKeyframe = false,\n"+
+        "        AgentId = _agent.ID.ToString(),\n" +
+        "        Tick = _agent.GetTick()\n"+
+        "      }};\n"
+      );
+    }
+
+
+    /// <summary>
+    ///   Build the output strings for the position and orientation array.
+    /// </summary>
+    /// <param name="sType">The agent's spatial type [GPS, Grid, 2D, 3D].</param>
+    /// <param name="posStr">Position output array string.</param>
+    /// <param name="ortStr">Orientation output array string.</param>
+    /// <returns>String generation success boolean.</returns>
+    private static bool GetSpatialOutputStrings(string sType, out string posStr, out string ortStr) {
+      switch (sType.ToUpper()) {  //| Check the agent's spatial type. For now,
+        case "GPS":               //| only the LIFE base agents are supported.
+          posStr = "new object[] {_agent.Latitude, _agent.Longitude}";
+          ortStr = "new object[] {_agent.Bearing}";
+          return true;
+        case "GRID":
+          posStr = "new object[] {_agent.X, _agent.Y}";
+          ortStr = "new object[] {(int) _agent.GridDirection}";
+          return true;
+        case "2D":
+          posStr = "new object[] {_agent.Position.X, _agent.Position.Y}";
+          ortStr = "new object[] {_agent.Position.Yaw}";
+          return true;
+        case "3D":
+          posStr = "new object[] {_agent.Position.X, _agent.Position.Y, _agent.Position.Z}";
+          ortStr = "new object[] {_agent.Position.Yaw, _agent.Position.Pitch}";
+          return true;
+        default:
+          posStr = "null";
+          ortStr = "null";
+          return false;
+      }
     }
 
 
 
 
 
+    internal static Assembly CompileLoggers() {
 
-    /*
+      var codeFile = @"
+        using System;
+        using ResultAdapterTests;
+
+        namespace RoslynCompileSample {
+
+          public class Writer {
+
+            private readonly Sheep _sheep;
+
+            public void Write(string message) {
+              Console.WriteLine($""you said '{message}!'"");
+            }
+          }
+        }";
+
+
+      var dlls = new List<string>();
+      //dlls.Add(ResultAdapterTests.dll"); // We need the IGeneratedSimResult.
+
+
+      // Add all references needed for this code to compile.
+      var references = new List<MetadataReference> {
+        MetadataReference.CreateFromFile(typeof (object).GetTypeInfo().Assembly.Location),
+        //MetadataReference.CreateFromFile(typeof (Enumerable).GetTypeInfo().Assembly.Location),
+      };
+      foreach (var dll in dlls) references.Add(MetadataReference.CreateFromFile(dll));
+      var cmpOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+
+
+      // Create the compilation object based on the code to compile and default parameters.
+      var compilation = CSharpCompilation.Create(
+        Path.GetRandomFileName(),                     // Name of the DLL.
+        new[] {CSharpSyntaxTree.ParseText(codeFile)}, // The syntax tree.
+        references,                                   // Required assemblies.
+        cmpOptions                                    // Output type.
+      );
+      var stream = new MemoryStream();
+      var result = compilation.Emit(stream);
+
+      // Compilation failed: Output compiler errors.
+      if (!result.Success) {
+        Console.Error.WriteLine("Result logger compilation failed!");
+        var failures = result.Diagnostics.Where(diagnostic =>
+          diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error
+        );
+        foreach (var err in failures) {
+          Console.Error.WriteLine("{0}: {1}", err.Id, err.GetMessage());
+        }
+        stream.Dispose();
+        return null;
+      }
+
+      // DLL successfully built! Return loaded assembly.
+      Console.WriteLine("Compilation successful! Now instantiating and executing the code ...");
+      stream.Seek(0, SeekOrigin.Begin);
+      var assembly = AssemblyLoadContext.Default.LoadFromStream(stream);
+      stream.Dispose();
+      return assembly;
+    }
+
+
     /// <summary>
     ///   Analyze the required imports and assembly references.
     /// </summary>
     /// <param name="types">The agent types used in the loggers.</param>
-    /// <param name="usingStr">The usings needed by the loggers.</param>
+    /// <param name="dir">DLL base directory.</param>
+    /// <param name="usings">The usings needed by the loggers.</param>
     /// <param name="dlls">Required libraries to link against.</param>
     /// <returns>Success flag. Set to 'false', if some error occured.</returns>
-    private static bool AnalyseUsings(IList<string> types, out string usingStr, out List<string> dlls) {
-      usingStr = "";
-      dlls = new List<string>();
-      var usings = new List<string> {
-        "using System;",
-        "using System.Collections.Generic;",
-        "using LifeAPI.Agent;",
-        "using ResultAdapter.Implementation.ResultLoggerGenerator;"
+    internal static bool AnalyseUsings(IEnumerable<string> types, string dir,
+      out IEnumerable<string> usings, out IEnumerable<string> dlls) {
+
+      // Add the base DLL and usings that are always required.
+      dlls = new List<string> {
+        dir+"/ResultAdapter.dll"
+      };
+      usings = new List<string> {
+        "System.Collections.Generic",
+        "LIFE.API.Agent",
+        "ResultAdapter.Implementation"
       };
 
+
+
+
+/*
       // Get the directory that holds all relevant model assemblies.
       const string modelDir = "layers/addins/";
       var pathToModel = "";
@@ -258,78 +324,19 @@ namespace ResultAdapter.Implementation {
       var sb = new StringBuilder();
       foreach (var str in usings) sb.Append(str + "\n");
       usingStr = sb.ToString();
+*/
       return true;
     }
-
-
-
-    /// <summary>
-    ///   Compile the result logger classes to MSIL during runtime via the Roslyn compiler.
-    /// </summary>
-    /// <param name="usings">Import directives needed by the logger classes.</param>
-    /// <param name="dlls">Required dependencies (dll paths).</param>
-    /// <param name="loggerClasses">The C# classes to compile.</param>
-    /// <returns>The loaded assembly or 'null', if something failed.</returns>
-    private static Assembly CompileCode(string usings, IEnumerable<string> dlls, IEnumerable<string> loggerClasses) {
-
-      // Join the classes with the required imports to a single source code file.
-      var loggerCode = new StringBuilder();
-      foreach (var logger in loggerClasses) loggerCode.Append(logger);
-      var codeFile = string.Format(
-        "{0}" +
-        "\nnamespace ResultLoggerGenerated {{\n" +
-        "{1}" +
-        "}}\n",
-        usings,
-        loggerCode
-      );
-      //Console.WriteLine(codeFile);
-
-      // All references needed for the logger code to compile.
-      var references = new List<MetadataReference> {
-        MetadataReference.CreateFromFile(typeof (object).Assembly.Location),     // mscorlib.dll
-        MetadataReference.CreateFromFile(typeof (Enumerable).Assembly.Location), // System.Core.dll
-        MetadataReference.CreateFromFile("ResultAdapter.dll")  // We need the IGeneratedSimResult.
-      };
-      foreach (var dll in dlls) references.Add(MetadataReference.CreateFromFile(dll));
-
-
-      // Create the compilation object based on the code to compile and default parameters.
-      var compilation = CSharpCompilation.Create(
-        Path.GetRandomFileName(),                      // Name of the DLL.
-        new[] {CSharpSyntaxTree.ParseText(codeFile)},  // The syntax tree.
-        references,                                    // Required assemblies.
-        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary) // Output type.
-      );
-      var stream = new MemoryStream();
-      var result = compilation.Emit(stream);
-
-      // Compilation failed: Output compiler errors.
-      if (!result.Success) {
-        var failures = result.Diagnostics.Where(diagnostic =>
-          diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error
-        );
-        foreach (var err in failures) {
-          Console.Error.WriteLine("{0}: {1}", err.Id, err.GetMessage());
-        }
-        return null;
-      }
-
-      // DLL successfully built! Return loaded assembly.
-      stream.Seek(0, SeekOrigin.Begin);
-      return Assembly.Load(stream.ToArray());
-    }*/
-
-
-
-
   }
+}
 
 
 
 
 
  /*
+
+
   /// <summary>
   ///   This class provides DLL reflection logic for the agents types used by the loggers.
   /// </summary>
@@ -390,43 +397,4 @@ namespace ResultAdapter.Implementation {
       }
       return true;
     }
-  }
-
-
-
-  /// <summary>
-  ///   Wrapper class to execute code in a separate app domain.
-  /// </summary>
-  /// <typeparam name="T">Class type to instantiate.</typeparam>
-  internal sealed class Isolated<T> : IDisposable where T : MarshalByRefObject {
-
-    private AppDomain _domain;           // App domain reference.
-    public T Value { get; private set; } // Instance to execute.
-
-
-    /// <summary>
-    ///   Create new app domain and instance.
-    /// </summary>
-    public Isolated() {
-      _domain = AppDomain.CreateDomain(
-        "Isolated:" + Guid.NewGuid(),
-        null,
-        AppDomain.CurrentDomain.SetupInformation
-      );
-      var type = typeof (T);
-      Value = (T) _domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
-    }
-
-
-    /// <summary>
-    ///   Destroy this app domain.
-    /// </summary>
-    public void Dispose() {
-      if (_domain != null) {
-        try { AppDomain.Unload(_domain); }
-        catch (Exception ex) { Console.WriteLine(ex); }
-        _domain = null;
-      }
-    }
-  }  */
-}
+  } */

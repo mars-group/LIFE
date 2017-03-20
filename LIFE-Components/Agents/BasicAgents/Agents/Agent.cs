@@ -85,20 +85,20 @@ namespace LIFE.Components.Agents.BasicAgents.Agents {
 
 
     /// <summary>
-    ///   Returns the current simulation tick.
-    /// </summary>
-    /// <returns>Execution tick counter value.</returns>
-    protected long GetTick() {
-      return Layer.GetCurrentTick();
-    }
-
-
-    /// <summary>
     ///   The removal method stops external triggering of the agent. It is designed
     ///   to be overridden by more specific methods calling down to this via 'base'.
     /// </summary>
     protected virtual void Remove() {
       _unregFkt(Layer, this, ExecutionGroup);
+    }
+
+
+    /// <summary>
+    ///   Returns the current simulation tick.
+    /// </summary>
+    /// <returns>Execution tick counter value.</returns>
+    public long GetTick() {
+      return Layer.GetCurrentTick();
     }
 
 

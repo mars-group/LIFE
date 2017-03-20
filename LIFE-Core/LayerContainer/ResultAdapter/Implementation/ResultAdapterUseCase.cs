@@ -54,6 +54,8 @@ namespace ResultAdapter.Implementation {
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
 
+
+
       foreach (var outputGroup in _loggers.Keys) { //| Loop over all logger groups and
         if (currentTick % outputGroup == 0) {      //| check if output is necessary.
 

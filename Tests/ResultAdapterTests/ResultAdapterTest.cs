@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Agents;
@@ -23,6 +24,15 @@ namespace ResultAdapterTests {
 
       var resultAdapter = new ResultAdapterUseCase("rc-wolves", Guid.NewGuid(), true);
 
+      var sheep = new Sheep(
+        null,
+        (layer, client, interval) => { },
+        (layer, client, interval) => { },
+        null
+      );
+
+      sheep.GetTick();
+
       Console.WriteLine(resultAdapter.ToString(true));
       Console.WriteLine("done!");
     }
@@ -38,49 +48,37 @@ namespace ResultAdapterTests {
         "ResultAdapterTests/GeneratedCode.cs",
         "using ResultAdapterTests;\n"+
         generator.CodeFile);
-
     }
 
 
 
     [Test]
-    public void TestCodeGeneration() {
+    public void TestCodeGeneration3() {
+/*
+      var dll = LoggerCompiler.CompileLoggers();
+      if (dll != null) {
 
-      var config = new LoggerConfig {
-        TypeName = "Sheep",
-        OutputFrequency = 1,
-        SpatialType = "Grid",
-        IsStationary = true,
-        VisParameters = new [] {"model=sheep.mdx", "scale=0.95"},
-        Properties = new Dictionary<string, bool> {
-          {"Hunger", false},
-          {"Energy", false},
-          {"MaxEnergy", true}
-        }
-      };
+        var type = dll.GetType("RoslynCompileSample.Writer");
+        var instance = dll.CreateInstance("RoslynCompileSample.Writer");
+        var method = type.GetMember("Write").First() as MethodInfo;
+        method.Invoke(instance, new [] {"joel"});
+      }
 
+*/
+      IEnumerable<string> usings, dlls;
+      LoggerCompiler.AnalyseUsings(
+        new[] {"Sheep", "Grass", "Wolf"},
+        "ResultAdapterTests/bin/Debug/netcoreapp1.1",
+        out usings, out dlls
+      );
+      foreach (var u in usings) Console.WriteLine("USING: "+u);
+      foreach (var d in dlls) Console.WriteLine("DLL: "+d);
 
-      var snippets = new LoggerCodeFragment {
-        TypeName = "Sheep",
-        KeyframeCode = "      return \"\";\n",
-        DeltaframeCode = "      return \"\";\n",
-        MetaCode = LoggerCompiler.GenerateFragmentMetadata(config)
-      };
-
-      var codeFile = LoggerCompiler.GenerateSourceCodeFile(new [] {
-        LoggerCompiler.GenerateLoggerClass(snippets)
-      });
-
-      Console.WriteLine("GENERATED CODE FILE");
-      Console.WriteLine("===================");
-      Console.WriteLine(codeFile);
-
-      File.WriteAllText(
-        "ResultAdapterTests/GeneratedCode.cs",
-        "using ResultAdapterTests;\n"+
-        codeFile);
+      Console.WriteLine("done.");
     }
   }
+
+
 
 
 

@@ -16,7 +16,9 @@
     "ConfigService": "2.0.0-9",
     "MongoDB.Driver": "2.4.2",
     "RabbitMQ.Client": "4.1.1",
-    "System.Threading.Tasks.Parallel": "4.3.0"    
+    "Microsoft.CodeAnalysis.CSharp": "2.0.0",
+    "System.Runtime.Loader": "4.3.0",
+    "System.Threading.Tasks.Parallel": "4.3.0"
   },
   
   // Build solution as .NET Core 1.1 library (DLL).

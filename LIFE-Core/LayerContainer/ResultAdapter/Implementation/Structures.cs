@@ -18,13 +18,13 @@ namespace ResultAdapter.Implementation {
     ///   Generates a full-state message of this simulation object.
     /// </summary>
     /// <returns>A JSON-compliant output for all agent states.</returns>
-    string GetKeyFrame();
+    AgentFrame GetKeyFrame();
 
     /// <summary>
     ///   Creates a delta message that expresses the changes to the last tick.
     /// </summary>
     /// <returns>JSON object containing the changes.</returns>
-    string GetDeltaFrame();
+    AgentFrame GetDeltaFrame();
   }
 
 
@@ -42,6 +42,18 @@ namespace ResultAdapter.Implementation {
   }
 
 
+  /// <summary>
+  ///   Output frame (either full or delta-state output) for an agent and tick.
+  /// </summary>
+  public class AgentFrame {
+    public bool IsKeyframe;                        // Is this a key- [or delta] frame?
+    public string AgentId;                         // Associated agent.
+    public long Tick;                              // Simulation tick.
+    public object[] Position;                      // Agent position.
+    public object[] Orientation;                   // Agent orientation (bearing [, pitch]).
+    public IDictionary<string, object> Properties; // Agent property listing.
+  }
+
 
   /// <summary>
   ///   Configuration directives for logger creation.
@@ -54,7 +66,6 @@ namespace ResultAdapter.Implementation {
     internal Dictionary<string, bool> Properties; // Properties to output (and static flag).
     internal IEnumerable<string> VisParameters;   // Visualization parameters to pass along.
   }
-
 
 
   /// <summary>

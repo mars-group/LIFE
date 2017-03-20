@@ -117,7 +117,14 @@ namespace ResultAdapter.Implementation {
         //TODO
         _definitions.Add(loggerConfig.TypeName, loggerConfig.GetType());
       }
-      _generatedCode = LoggerCompiler.GenerateSourceCodeFile(loggerClasses);
+
+      IEnumerable<string> usings, dlls;
+      LoggerCompiler.AnalyseUsings(
+        new[] {"Sheep", "Grass", "Wolf"},  //TODO
+        "ResultAdapterTests/bin/Debug/netcoreapp1.1",
+        out usings, out dlls
+      );
+      _generatedCode = LoggerCompiler.GenerateSourceCodeFile(loggerClasses, usings);
 
       CodeFile = _generatedCode; //TODO
 
