@@ -176,6 +176,19 @@ build-ObstacleLayer:
     paths:
       - out-ObstacleLayer
 
+build-RawFileLayer:
+  stage: build
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
+  script:
+    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - cd LIFE-Components/Layers/RawFileLayer
+    - dotnet build -c Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer --version-suffix $CI_PIPELINE_ID
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-RawFileLayer
+
 build-TimeSeriesLayer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.0-sdk-projectjson
@@ -560,6 +573,7 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-GeoPotentialFieldLayer/GeoPotentialFieldLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-GridPotentialFieldLayer/GridPotentialFieldLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-ObstacleLayer/ObstacleLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-RawFileLayer/RawFileLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-TimeSeriesLayer/TimeSeriesLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-Utilities/Utilities.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-ASC/ASC.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
