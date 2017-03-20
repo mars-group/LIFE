@@ -17,11 +17,11 @@ namespace ResultAdapter.Implementation {
   /// </summary>
   internal class ResultAdapterUseCase : IResultAdapter {
 
-    private readonly MongoSender _sender;                   // Database connector.
+    private MongoSender _sender;                            // Database connector.
     private readonly RabbitNotifier _notifier;              // Listener queue notifier.
     private readonly LoggerGenerator _generator;            // Result logger generator.
     private readonly Dictionary<int, LoggerGroup> _loggers; // Logger listing (key=frequency).
-
+    private readonly string _mongoDbHost;                   // MongoDB host address.
 
     /// <summary>
     ///   The Simulation ID. It will be set before the first call to WriteResults().
@@ -36,15 +36,13 @@ namespace ResultAdapter.Implementation {
     public ResultAdapterUseCase(string resultConfigId, Guid? simId = null, bool enableTestMode = false) {
       _loggers = new Dictionary<int, LoggerGroup>();
       if (simId.HasValue) SimulationId = simId.Value;
-      var mongoDbHost = enableTestMode ? "127.0.0.1" : "result-mongodb";
+      _mongoDbHost = enableTestMode ? "127.0.0.1" : "result-mongodb";
       var rcsHost = enableTestMode ? "127.0.0.1:8080" : "resultcfg-svc";
       var configHost = enableTestMode ? "127.0.0.1:8080" : "config-svc";
       var rabbitHost = enableTestMode ? "127.0.0.1" : "rabbitmq";
       _generator = new LoggerGenerator(rcsHost, resultConfigId);
       var cfgClient = new ConfigServiceClient("http://"+configHost);
       _notifier = new RabbitNotifier(rabbitHost, cfgClient);
-      _sender = new MongoSender(mongoDbHost, SimulationId.ToString());
-      _sender.CreateMongoDbIndexes();
     }
 
 
@@ -54,7 +52,12 @@ namespace ResultAdapter.Implementation {
     /// <param name="currentTick">The current tick. Needed for sanity check.</param>
     public void WriteResults(int currentTick) {
 
-
+      // Initialization in the first tick. It is deferred, because the
+      // simulation identifier is not available in the constructor.
+      if (_sender == null) {
+        _sender = new MongoSender(_mongoDbHost, SimulationId.ToString());
+        _sender.CreateMongoDbIndexes();
+      }
 
       foreach (var outputGroup in _loggers.Keys) { //| Loop over all logger groups and
         if (currentTick % outputGroup == 0) {      //| check if output is necessary.

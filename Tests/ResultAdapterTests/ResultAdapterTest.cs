@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Agents;
@@ -82,7 +80,7 @@ namespace ResultAdapterTests {
 
 
 
-  #region Agent Definitions for Testing. Use result config 'rc-wolves'.
+  #region Agent Definitions for Testing. Use Result Config 'rc-wolves'.
 
   public class Grass : GridAgent<Grass>, ISimResult {
 

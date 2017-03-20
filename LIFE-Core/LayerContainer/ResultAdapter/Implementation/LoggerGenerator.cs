@@ -30,13 +30,15 @@ namespace ResultAdapter.Implementation {
     /// <param name="configId">Configuration identifier.</param>
     public LoggerGenerator(string rcsHost, string configId) {
       _definitions = new Dictionary<string, Type>();
-      _compiler = new LoggerCompiler();
+
       _rcsHost = rcsHost;
       _configId = configId;
       var json = GetConfiguration();
       if (json != null) {
         var loggerDefs = ParseConfiguration(json);
-        GenerateLoggerPrototypes(loggerDefs);
+        _compiler = new LoggerCompiler(loggerDefs);
+        CodeFile = _compiler.CodeFile;
+        _generatedCode = CodeFile;
       }
     }
 
@@ -97,37 +99,6 @@ namespace ResultAdapter.Implementation {
         }
       }
       return loggers;
-    }
-
-
-    /// <summary>
-    ///   Generate the logger prototypes for the given configs.
-    /// </summary>
-    /// <param name="loggerConfigs">Logger descriptions.</param>
-    private void GenerateLoggerPrototypes(IEnumerable<LoggerConfig> loggerConfigs) {
-      var loggerClasses = new List<string>();
-      foreach (var loggerConfig in loggerConfigs) {
-        var codeSnippets = new LoggerCodeFragment {
-          TypeName = loggerConfig.TypeName,
-          MetaCode = LoggerCompiler.GenerateFragmentMetadata(loggerConfig),
-          KeyframeCode = LoggerCompiler.GenerateFragmentKeyframe(loggerConfig),
-          DeltaframeCode = LoggerCompiler.GenerateFragmentDeltaframe(loggerConfig)
-        };
-        loggerClasses.Add(LoggerCompiler.GenerateLoggerClass(codeSnippets));
-        //TODO
-        _definitions.Add(loggerConfig.TypeName, loggerConfig.GetType());
-      }
-
-      IEnumerable<string> usings, dlls;
-      LoggerCompiler.AnalyseUsings(
-        new[] {"Sheep", "Grass", "Wolf"},  //TODO
-        "ResultAdapterTests/bin/Debug/netcoreapp1.1",
-        out usings, out dlls
-      );
-      _generatedCode = LoggerCompiler.GenerateSourceCodeFile(loggerClasses, usings);
-
-      CodeFile = _generatedCode; //TODO
-
     }
 
 
