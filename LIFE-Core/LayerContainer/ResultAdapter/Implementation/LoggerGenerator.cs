@@ -29,12 +29,13 @@ namespace ResultAdapter.Implementation {
       _definitions = new Dictionary<string, Type>();
       _rcsHost = rcsHost;
       _configId = configId;
+      return;
       var json = GetConfiguration();
       if (json != null) {
         Console.WriteLine("[LoggerGenerator] Retrieved configuration '"+configId+"' from "+rcsHost+".");
         var loggerDefs = ParseConfiguration(json);
         IList<string> reqDlls;
-        var compiler = new LoggerCompiler("ResultAdapterTests/bin/Debug/out/");
+        var compiler = new LoggerCompiler(".");
         _generatedCode = compiler.GenerateLoggerCode(loggerDefs, out reqDlls);
         var dll = compiler.CompileSourceCode(_generatedCode, reqDlls);
         if (dll != null) {
@@ -116,7 +117,8 @@ namespace ResultAdapter.Implementation {
     public IGeneratedLogger GetResultLogger(ITickClient simObject) {
       var agentType = simObject.GetType().Name;
       if (_definitions.ContainsKey("ResultLogger_"+agentType)) {
-        var instance = Activator.CreateInstance(_definitions[agentType], simObject);
+        var logger = _definitions["ResultLogger_" + agentType];
+        var instance = Activator.CreateInstance(logger, simObject);
         return (IGeneratedLogger) instance;
       }
       return null;

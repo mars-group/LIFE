@@ -78,7 +78,7 @@ namespace ResultAdapter.Implementation {
 
       // MongoDB bulk insert of the output packets and RMQ notification.
       if (!oldResults.IsEmpty) _sender.WriteLegacyResults(oldResults);
-      _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
+      //TODO _notifier.AnnounceNewPackage(SimulationId.ToString(), currentTick);
     }
 
 
