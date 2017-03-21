@@ -15,12 +15,9 @@ namespace ResultAdapter.Implementation {
   internal class LoggerGenerator {
 
     private readonly Dictionary<string, Type> _definitions; // List of compiled loggers.
-    private readonly LoggerCompiler _compiler;              // Source code templater and compiler.
     private readonly string _rcsHost;                       // ResultConfigService address.
     private readonly string _configId;                      // Configuration identifier.
-    private string _generatedCode;                          // The generated code file.
-
-    internal string CodeFile; //TODO
+    private readonly string _generatedCode;                 // The generated code file.
 
 
     /// <summary>
@@ -34,10 +31,19 @@ namespace ResultAdapter.Implementation {
       _configId = configId;
       var json = GetConfiguration();
       if (json != null) {
+        Console.WriteLine("[LoggerGenerator] Retrieved configuration '"+configId+"' from "+rcsHost+".");
         var loggerDefs = ParseConfiguration(json);
-        _compiler = new LoggerCompiler(loggerDefs);
-        CodeFile = _compiler.CodeFile;
-        _generatedCode = CodeFile;
+        IList<string> reqDlls;
+        var compiler = new LoggerCompiler("ResultAdapterTests/bin/Debug/out/");
+        _generatedCode = compiler.GenerateLoggerCode(loggerDefs, out reqDlls);
+        var dll = compiler.CompileSourceCode(_generatedCode, reqDlls);
+        if (dll != null) {
+          Console.WriteLine("[LoggerGenerator] Generated "+dll.GetExportedTypes().Length+" loggers:");
+          foreach (var loggerType in dll.GetExportedTypes()) {
+            Console.WriteLine(" - "+loggerType.Name);
+            _definitions.Add(loggerType.Name, loggerType);
+          }
+        }
       }
     }
 
@@ -89,6 +95,7 @@ namespace ResultAdapter.Implementation {
           }
           loggers.Add(new LoggerConfig {
             TypeName = agentDef["TypeName"].ToString(),
+            FullName = agentDef["FullName"].ToString(),
             OutputFrequency = int.Parse(agentDef["Frequency"].ToString()),
             SpatialType = spatialType,
             IsStationary = agentDef["MovementType"].ToString().Equals("stationary"),
@@ -136,6 +143,15 @@ namespace ResultAdapter.Implementation {
              " - RCS address: "+_rcsHost+"\n"+
              " - Definitions: "+_definitions.Count+
              (codeOutput? "\n - Generated code:\n----------\n"+_generatedCode+"\n----------" : "");
+    }
+
+
+    /// <summary>
+    ///   Save the generated logger code as a file (for debugging purposes).
+    /// </summary>
+    /// <param name="fileName">The save name.</param>
+    public void WriteGeneratedCodeFile(string fileName) {
+      System.IO.File.WriteAllText(fileName, _generatedCode);
     }
   }
 }

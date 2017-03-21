@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using LIFE.API.Layer;
+﻿using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
@@ -16,67 +13,12 @@ namespace ResultAdapterTests {
   [TestFixture]
   public class ResultAdapterTest {
 
-
-    [Test]
-    public void InitResultAdapter() {
-
-      var resultAdapter = new ResultAdapterUseCase("rc-wolves", true);
-
-      var sheep = new Sheep(
-        null,
-        (layer, client, interval) => { },
-        (layer, client, interval) => { },
-        null
-      );
-
-      sheep.GetTick();
-
-      Console.WriteLine(resultAdapter.ToString(true));
-      Console.WriteLine("done!");
-    }
-
-
     [Test]
     public void TestCodeGeneration2() {
-
       var generator = new LoggerGenerator("127.0.0.1:8080", "rc-wolves");
-      Console.WriteLine(generator.ToString(true));
-
-      File.WriteAllText(
-        "ResultAdapterTests/GeneratedCode.cs",
-        "using ResultAdapterTests;\n"+
-        generator.CodeFile);
-    }
-
-
-
-    [Test]
-    public void TestCodeGeneration3() {
-/*
-      var dll = LoggerCompiler.CompileLoggers();
-      if (dll != null) {
-
-        var type = dll.GetType("RoslynCompileSample.Writer");
-        var instance = dll.CreateInstance("RoslynCompileSample.Writer");
-        var method = type.GetMember("Write").First() as MethodInfo;
-        method.Invoke(instance, new [] {"joel"});
-      }
-
-*/
-      IEnumerable<string> usings, dlls;
-      LoggerCompiler.AnalyseUsings(
-        new[] {"Sheep", "Grass", "Wolf"},
-        "ResultAdapterTests/bin/Debug/netcoreapp1.1",
-        out usings, out dlls
-      );
-      foreach (var u in usings) Console.WriteLine("USING: "+u);
-      foreach (var d in dlls) Console.WriteLine("DLL: "+d);
-
-      Console.WriteLine("done.");
+      generator.WriteGeneratedCodeFile("ResultAdapterTests/GeneratedCode.cs");
     }
   }
-
-
 
 
 

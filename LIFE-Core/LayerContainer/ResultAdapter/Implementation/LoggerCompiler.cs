@@ -10,111 +10,61 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace ResultAdapter.Implementation {
 
+
   /// <summary>
   ///   The logger compiler assembles the logger source code and compiles the
   ///   logger classes into an assembly, which then is loaded into the runtime.
   /// </summary>
   internal class LoggerCompiler {
 
-
-    internal readonly string CodeFile;
+    private readonly string _systemPath; // Path to the .NET Core runtime DLLs.
+    private readonly string _modelPath;  // Path to the simulation model folder.
 
 
     /// <summary>
-    ///   Create a new logger compiler for a given set of logger definitions.
+    ///   Create a new logger compiler.
     /// </summary>
-    /// <param name="configs">Logger creation directives.</param>
-    public LoggerCompiler(IEnumerable<LoggerConfig> configs) {
+    /// <param name="modelPath">Model folder path, relative to working directory.</param>
+    public LoggerCompiler(string modelPath) {
+      _modelPath = Path.GetFullPath(modelPath);
+      _systemPath = Path.GetDirectoryName(typeof(object).GetTypeInfo().Assembly.Location);
+    }
+
+
+    /// <summary>
+    ///   Generate the logger code for a set of logger definitions.
+    /// </summary>
+    /// <param name="configs">The specifications of the loggers to create.</param>
+    /// <param name="dlls">References libraries needed for compilation.</param>
+    /// <returns>The complete source code file, nicely formatted and annotated. :-) </returns>
+    internal string GenerateLoggerCode(IEnumerable<LoggerConfig> configs, out IList<string> dlls) {
+      var usings = new List<string> {
+        "LIFE.API.Agent",
+        "ResultAdapter.Implementation",
+        "System.Collections.Generic"
+      };
       var loggerClasses = new List<string>();
-      var agentTypes = new List<string>();
       foreach (var config in configs) {
         loggerClasses.Add(GenerateLoggerClass(config));
-        agentTypes.Add(config.TypeName);
+        var ns = config.FullName.Split(',')[0];    //| Get the agent namespace
+        var li = ns.LastIndexOf('.');              //| from the fully-qualified
+        if (li != -1) ns = ns.Substring(0, li);    //| name and add it to the
+        if (!usings.Contains(ns)) usings.Add(ns);  //| usings, if not done yet.
       }
-      IEnumerable<string> usings, reqDlls;
-      AnalyseUsings(agentTypes, "ResultAdapterTests/bin/Debug/netcoreapp1.1", out usings, out reqDlls);
-      CodeFile = GenerateSourceCodeFile(loggerClasses, usings);
+      usings.Sort();
 
-      //TODO ..................................
-      var codeFile = @"
-        using System;
-        using ResultAdapterTests;
-
-        namespace RoslynCompileSample {
-
-          public class Writer {
-
-            private readonly Sheep _sheep;
-
-            public void Write(string message) {
-              Console.WriteLine($""you said '{message}!'"");
-            }
-          }
-        }";
-
-      var dll = CompileSourceCode(codeFile, reqDlls);
-      if (dll != null) {
-
+      // Also get the DLLs. Because the dependency resolver still sucks, we just do the overkill
+      // and add all libraries as references. Better too much than missing one. It won't hurt anyway.
+      dlls = new List<string>();
+      foreach (var fileinfo in new DirectoryInfo(_modelPath).GetFileSystemInfos("*.dll")) {
+        dlls.Add(fileinfo.FullName);
       }
 
+      // Now assemble the logger code file and return it.
+      var codeFile = GenerateSourceCodeFile(loggerClasses, usings);
+      return codeFile;
     }
 
-
-
-
-
-
-
-
-
-    /// <summary>
-    ///   Analyze the required imports and assembly references.
-    /// </summary>
-    /// <param name="types">The agent types used in the loggers.</param>
-    /// <param name="dir">DLL base directory.</param>
-    /// <param name="usings">The usings needed by the loggers.</param>
-    /// <param name="dlls">Required libraries to link against.</param>
-    /// <returns>Success flag. Set to 'false', if some error occured.</returns>
-    internal static bool AnalyseUsings(IEnumerable<string> types, string dir,
-      out IEnumerable<string> usings, out IEnumerable<string> dlls) {
-
-      // Add the base DLL and usings that are always required.
-      dlls = new List<string> {
-        dir+"/ResultAdapter.dll"
-      };
-      usings = new List<string> {
-        "System.Collections.Generic",
-        "LIFE.API.Agent",
-        "ResultAdapter.Implementation"
-      };
-
-
-/*
-      // Loop over all libraries and check for the required types.
-      var dllFile = Directory.GetFiles(path, "*.dll");
-      foreach (var dll in dllFile) {
-        try {
-          var assembly = Assembly.LoadFile(new FileInfo(dll).FullName);
-          var dllpath = path + "/" + assembly.FullName.Split(',')[0] + ".dll";
-          if (!dlls.Contains(dllpath)) dlls.Add(dllpath);
-          var includedTypes = assembly.GetTypes();
-          foreach (var type in includedTypes) {
-            if (types.Contains(type.Name)) {
-              var usingStr = "using " + type.Namespace + ";";
-              if (!usings.Contains(usingStr)) usings.Add(usingStr);
-              if (debug) {
-                Console.WriteLine("[AssemblyResolver] Found type '{0}' at '{1}' in DLL '{2}'",
-                  type.Name, type.Namespace, assembly.FullName.Split(',')[0]);
-              }
-            }
-          }
-        }
-*/
-      return true;
-    }
-
-
-    #region Compilation and Dependency Resolving.
 
     /// <summary>
     ///   Compile a code file and load it into the running program.
@@ -122,11 +72,11 @@ namespace ResultAdapter.Implementation {
     /// <param name="codeFile">The complete source code file.</param>
     /// <param name="dlls">All referenced DLLs needed for compilation.</param>
     /// <returns>Compiled and loaded DLL or 'null', if any compilation error occured.</returns>
-    private static Assembly CompileSourceCode(string codeFile, IEnumerable<string> dlls) {
+    internal Assembly CompileSourceCode(string codeFile, IEnumerable<string> dlls) {
       var references = new List<MetadataReference> {
-        MetadataReference.CreateFromFile(
-          typeof (object).GetTypeInfo().Assembly.Location  // mscorlib.dll
-        ),
+        MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location),
+        MetadataReference.CreateFromFile(Path.Combine(_systemPath, "mscorlib.dll")),
+        MetadataReference.CreateFromFile(Path.Combine(_systemPath, "System.Runtime.dll"))
       };
       foreach (var dll in dlls) references.Add(MetadataReference.CreateFromFile(dll));
       var cmpOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
@@ -162,7 +112,6 @@ namespace ResultAdapter.Implementation {
       return assembly;
     }
 
-    #endregion
 
 
     #region Source Code Generation Methods.

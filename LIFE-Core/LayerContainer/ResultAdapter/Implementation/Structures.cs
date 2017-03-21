@@ -59,22 +59,12 @@ namespace ResultAdapter.Implementation {
   ///   Configuration directives for logger creation.
   /// </summary>
   internal struct LoggerConfig {
-    internal string TypeName;                     // ITickClient type name.
+    internal string TypeName;                     // Simulation entity type name.
+    internal string FullName;                     // Fully-qualified name, including namespace and assembly.
     internal int OutputFrequency;                 // Output frequency.
     internal string SpatialType;                  // Spatial type specifier [GPS/Grid/2D/3D] or 'null'.
     internal bool IsStationary;                   // Is the object stationary (position fixed)?
     internal Dictionary<string, bool> Properties; // Properties to output (and static flag).
     internal IEnumerable<string> VisParameters;   // Visualization parameters to pass along.
-  }
-
-
-  /// <summary>
-  ///   Logger function code snippets.
-  /// </summary>
-  internal struct LoggerCodeFragment {
-    internal string TypeName;       // Name of the ITickClient class this logger belongs to.
-    internal string MetaCode;       // Code for meta table entry creation.
-    internal string KeyframeCode;   // Code for key frame (full state) output.
-    internal string DeltaframeCode; // Code for delta frame (changes) output.
   }
 }
