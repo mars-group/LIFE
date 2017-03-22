@@ -73,21 +73,13 @@ namespace ResultAdapter.Implementation {
     /// <param name="dlls">All referenced DLLs needed for compilation.</param>
     /// <returns>Compiled and loaded DLL or 'null', if any compilation error occured.</returns>
     internal Assembly CompileSourceCode(string codeFile, IEnumerable<string> dlls) {
-
-      Console.WriteLine("-0--");
-
       var references = new List<MetadataReference> {
         MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location),
         MetadataReference.CreateFromFile(Path.Combine(_systemPath, "mscorlib.dll")),
         MetadataReference.CreateFromFile(Path.Combine(_systemPath, "System.Runtime.dll"))
       };
-
-      Console.WriteLine("-1-");
-
       foreach (var dll in dlls) references.Add(MetadataReference.CreateFromFile(dll));
       var cmpOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
-
-      Console.WriteLine("-2-");
 
       // Create the compilation object based on the code to compile and default parameters.
       var compilation = CSharpCompilation.Create(
@@ -211,7 +203,8 @@ namespace ResultAdapter.Implementation {
         "      return new AgentMetadataEntry {{\n" +
         "        AgentId = _agent.ID.ToString(),\n" +
         "        AgentType = _agent.GetType().Name,\n" +
-        "        Layer = _agent.Layer.GetType().Name{0}{1}\n" +
+        "        Layer = _agent.Layer.GetType().Name,\n"+
+        "        CreationTick = _agent.GetTick(){0}{1}\n"+
         "      }};\n",
         spatialData,
         !staticsListing.Equals("")? string.Format(

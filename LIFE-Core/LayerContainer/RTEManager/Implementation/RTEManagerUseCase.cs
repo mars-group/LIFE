@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 using System;
+using System.Linq;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
@@ -115,7 +116,9 @@ namespace RTEManager.Implementation {
         public void UnregisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval=1) {
             if (_tickClientsMarkedForDeletionPerLayer.ContainsKey(layer)) {
                 _tickClientsMarkedForDeletionPerLayer[layer].GetOrAdd(executionInterval, new ConcurrentBag<ITickClient>());
-                _tickClientsMarkedForDeletionPerLayer[layer][executionInterval].Add(tickClient);
+                if (!_tickClientsMarkedForDeletionPerLayer[layer][executionInterval].Contains(tickClient)) {
+                    _tickClientsMarkedForDeletionPerLayer[layer][executionInterval].Add(tickClient);
+                }
             }
         }
 
@@ -168,7 +171,7 @@ namespace RTEManager.Implementation {
                 // visualize all visualizable layers once prior to first execution if tick = 0
                 if (_currentTick == 0)
                 {
-                    Console.Write ("[LIFE] Executing Result Writing to fetch initial state");
+                    Console.WriteLine("[LIFE] Executing Result Writing to fetch initial state");
                     _resultAdapter.WriteResults(_currentTick);
 
                     if (_explicitGC)

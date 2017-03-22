@@ -193,7 +193,7 @@ namespace RuntimeEnvironment.Implementation
         {
             var content = _modelContainer.GetSerializedModel(modelDescription);
             var layerContainerClients = new List<LayerContainerClient>();
-            Console.Write("Creating LayerContainer Clients...");
+            Console.WriteLine("Creating LayerContainer Clients...");
             /* 1.
              * Create LayerContainerClients for all connected LayerContainers if no direct reference is passed
              */
@@ -255,7 +255,7 @@ namespace RuntimeEnvironment.Implementation
                 }
             }
 
-            Console.Write("...done!");
+            Console.WriteLine("...done!");
 
             /* Load configuration and determine which one to use. SHUTTLE files will be prefered, old-school
              * XML config files are still valid but will be deprecated in the near future

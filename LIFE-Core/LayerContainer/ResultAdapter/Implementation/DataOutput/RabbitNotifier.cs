@@ -34,7 +34,7 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// </summary>
     /// <param name="simId">Simulation ID.</param>
     /// <param name="tick">Simulation time step.</param>
-    public void AnnounceNewPackage(string simId, int tick) {
+    public void AnnounceNewTick(string simId, int tick) {
       var msg = string.Format("{{\"SimID\":\"{0}\", \"Tick\":{1}}}", simId, tick);
       var bytes = Encoding.UTF8.GetBytes(msg);      
       try {

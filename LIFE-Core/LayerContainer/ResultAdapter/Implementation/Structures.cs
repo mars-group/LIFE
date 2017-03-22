@@ -36,6 +36,8 @@ namespace ResultAdapter.Implementation {
     public string AgentId;                               //* GUID of this agent.
     public string AgentType;                             //* Derived class type.
     public string Layer;                                 //* The layer this agent lives on.
+    public long CreationTick;                            //* The tick this agent was created in.
+    public long? DeletionTick = null;                    // Deletion of this agent.
     public object[] StaticPosition;                      // Fixed agent position (x,y,z).
     public object[] StaticOrientation;                   // Fixed rotation as (yaw,pitch,roll).
     public IDictionary<string, object> StaticProperties; // List of immutable properties.

@@ -29,7 +29,7 @@ namespace ResultAdapter.Implementation {
       _definitions = new Dictionary<string, Type>();
       _rcsHost = rcsHost;
       _configId = configId;
-      return;
+      if (_configId == null || _configId.Equals("")) return;
       var json = GetConfiguration();
       if (json != null) {
         Console.WriteLine("[LoggerGenerator] Retrieved configuration '"+configId+"' from "+rcsHost+".");
@@ -64,6 +64,8 @@ namespace ResultAdapter.Implementation {
           http.Dispose();
           return JObject.Parse(readTask.Result);
         }
+        Console.Error.WriteLine("[LoggerGenerator] Failed to fetch "+
+                                "configuration '"+_configId+"' from "+_rcsHost+".");
       }
       catch (Exception ex) {
         Console.Error.WriteLine("[LoggerGenerator] Failed to generate output loggers!");
