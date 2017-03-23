@@ -75,14 +75,14 @@ namespace LIFE.Components.TimeSeriesLayer
                 IEnumerable<Serie> seriesList = continueTask.Result;
                 if (!seriesList.Any())
                 {
-                    Console.Error.WriteLine($"No value found for time: {whereClause}");
+                    //Console.Error.WriteLine($"No value found for time: {whereClause}");
                     return null;
                 }
                 IList<IList<object>> seriesValues = seriesList.First().Values;
                 var currentValues = seriesValues.First();
                 if (currentValues.Count < 2)
                 {
-                    Console.Error.WriteLine($"No value found for time: {whereClause}");
+                    //Console.Error.WriteLine($"No value found for time: {whereClause}");
                     return null;
                 }
                 //We query the time column and the value column - therefore the first value is the datetime and the second our value

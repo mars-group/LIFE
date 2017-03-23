@@ -18,15 +18,15 @@ namespace ResultAdapter.Implementation {
   /// </summary>
   internal class ResultAdapterUseCase : IResultAdapter {
 
-    private MongoSender _sender;                             // Database connector.
-    private readonly string _mongoDbHost;                    // MongoDB host address.
-    private readonly RabbitNotifier _notifier;               // Listener queue notifier.
-    private readonly LoggerGenerator _generator;             // Result logger generator.
-    private readonly JsonSerializerSettings _jsonSettings;   // Serialization settings.
-    private readonly IDictionary<int, LoggerGroup> _loggers; // Logger listing (key=frequency).
-    private readonly IList<IGeneratedLogger> _newAgents;     // Meta entries of new agents.
-    private readonly IList<string> _deletedAgents;           // Agents removed in last tick.
-
+    private MongoSender _sender;                                      // Database connector.
+    private readonly string _mongoDbHost;                             // MongoDB host address.
+    private readonly RabbitNotifier _notifier;                        // Listener queue notifier.
+    private readonly LoggerGenerator _generator;                      // Result logger generator.
+    private readonly JsonSerializerSettings _jsonSettings;            // Serialization settings.
+    private readonly ConcurrentDictionary<int, LoggerGroup> _loggers; // Logger listing (key=frequency).
+    private readonly IList<IGeneratedLogger> _newAgents;              // Meta entries of new agents.
+    private readonly IList<string> _deletedAgents;                    // Agents removed in last tick.
+    private readonly bool _verboseOutput;                             // Is verbose output desired?
 
     /// <summary>
     ///   The Simulation ID. It will be set before the first call to WriteResults().
@@ -39,7 +39,7 @@ namespace ResultAdapter.Implementation {
     ///   Instantiate the concrete result adapter.
     /// </summary>
     public ResultAdapterUseCase(string resultConfigId, bool enableTestMode = false) {
-      _loggers = new Dictionary<int, LoggerGroup>();
+      _loggers = new ConcurrentDictionary<int, LoggerGroup>();
       _newAgents = new List<IGeneratedLogger>();
       _deletedAgents = new List<string>();
       _jsonSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore};
@@ -50,6 +50,7 @@ namespace ResultAdapter.Implementation {
       _generator = new LoggerGenerator(rcsHost, resultConfigId);
       var cfgClient = new ConfigServiceClient("http://"+configHost);
       _notifier = new RabbitNotifier(rabbitHost, cfgClient);
+      _verboseOutput = false;
     }
 
 
@@ -69,7 +70,7 @@ namespace ResultAdapter.Implementation {
 
       // Write the metadata entries of the new agents.
       if (_newAgents.Count > 0) {
-        Console.Write("[ResultAdapter] Adding "+_newAgents.Count+
+        if (_verboseOutput) Console.Write("[ResultAdapter] Adding "+_newAgents.Count+
                       (_newAgents.Count>1? " entries" : " entry")+": ");
         var metadataList = new ConcurrentBag<string>();
         foreach (var newAgent in _newAgents) {
@@ -79,15 +80,15 @@ namespace ResultAdapter.Implementation {
         }
         _newAgents.Clear();
         _sender.AddMetaData(metadataList);
-        Console.WriteLine("[done]");
+        if (_verboseOutput) Console.WriteLine("[done]");
       }
 
       // Set the deletion flags for unregistered agents.
       if (_deletedAgents.Count > 0) {
-        Console.Write("[ResultAdapter] Deleting "+_deletedAgents.Count+" old agents: ");
+        if (_verboseOutput) Console.Write("[ResultAdapter] Deleting "+_deletedAgents.Count+" old agents: ");
         _sender.UpdateMetaData(_deletedAgents, currentTick - 1);
         _deletedAgents.Clear();
-        Console.WriteLine("[done]");
+        if (_verboseOutput) Console.WriteLine("[done]");
       }
 
 
@@ -97,40 +98,40 @@ namespace ResultAdapter.Implementation {
 
       foreach (var outputGroup in _loggers.Keys) { //| Loop over all logger groups and
         if (currentTick % outputGroup == 0) {      //| check if output is necessary.
-          Console.WriteLine("[ResultAdapter] Aggregating for exec. group ["+outputGroup+"]: ");
+          if (_verboseOutput) Console.WriteLine("[ResultAdapter] Aggregating for exec. group ["+outputGroup+"]: ");
 
           var oldLoggers = _loggers[outputGroup].OldLoggers.Keys;
           var newLoggers = _loggers[outputGroup].GenLoggers.Values;
           if (oldLoggers.Count > 0) {
-            Console.Write(" - "+oldLoggers.Count+" legacy: ");
+            if (_verboseOutput) Console.Write(" - "+oldLoggers.Count+" legacy: ");
             Parallel.ForEach(oldLoggers, logger => {
               oldResults.Add(logger.GetResultData());
             });
-            Console.WriteLine("[done]");
+            if (_verboseOutput) Console.WriteLine("[done]");
           }
           if (newLoggers.Count > 0) {
-            Console.Write(" - "+newLoggers.Count+" generated: ");
+            if (_verboseOutput) Console.Write(" - "+newLoggers.Count+" generated: ");
             Parallel.ForEach(newLoggers, logger => {
               var keyframe = logger.GetKeyFrame();
               var json = JsonConvert.SerializeObject(keyframe, _jsonSettings);
               keyframes.Add(json);
             });
-            Console.WriteLine("[done]");
+            if (_verboseOutput) Console.WriteLine("[done]");
           }
         }
       }
 
       // MongoDB bulk insert of the output packets and RMQ notification.
-      Console.WriteLine("[ResultAdapter] Writing to database: ");
+      if (_verboseOutput) Console.WriteLine("[ResultAdapter] Writing to database: ");
       if (!oldResults.IsEmpty) {
-        Console.Write(" - "+oldResults.Count+" legacy (ISimResult): ");
+        if (_verboseOutput) Console.Write(" - "+oldResults.Count+" legacy (ISimResult): ");
         _sender.WriteLegacyResults(oldResults);
-        Console.WriteLine("[done]");
+        if (_verboseOutput) Console.WriteLine("[done]");
       }
       if (!keyframes.IsEmpty) {
-        Console.Write(" - "+keyframes.Count+" keyframes (JSON): ");
+        if (_verboseOutput) Console.Write(" - "+keyframes.Count+" keyframes (JSON): ");
         _sender.WriteKeyframes(keyframes);
-        Console.WriteLine("[done]");
+        if (_verboseOutput) Console.WriteLine("[done]");
       }
       _notifier.AnnounceNewTick(SimulationId.ToString(), currentTick);
     }
@@ -143,7 +144,7 @@ namespace ResultAdapter.Implementation {
     /// <param name="execGrp">Agent execution (and output) group.</param>
     public void Register(ITickClient simObject, int execGrp = 1) {
       if (!_loggers.ContainsKey(execGrp)) {
-        _loggers.Add(execGrp, new LoggerGroup());
+        _loggers.TryAdd(execGrp, new LoggerGroup());
       }
       var logger = _generator.GetResultLogger(simObject);       //| If there is a logger
       if (logger != null) {                                     //| specification for the
