@@ -20,7 +20,7 @@ cache:
 #  services:
 #    - artifactory.mars.haw-hamburg.de:5000/influxdb:1.2
 #  script:
-#    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+#    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
 #    - cd Tests/BasicAgentsTests
 #    - dotnet test
 #    - cd ../EnvironmentServiceComponentTests
@@ -48,8 +48,7 @@ build-LIFE-API:
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
     - cd LIFE-API
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - dotnet build -c Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-API --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -61,9 +60,8 @@ build-LIFE-Core:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LIFECoreStarter
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -74,9 +72,8 @@ build-LIFE-Components:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/LIFE-Components
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Components --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -89,9 +86,8 @@ build-BasicAgents:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Agents/BasicAgents
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -102,9 +98,8 @@ build-ESC:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Environments/EnvironmentServiceComponent
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -115,9 +110,8 @@ build-GeoGridEnvironment:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Environments/GeoGridEnvironment
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -128,9 +122,8 @@ build-GridEnvironment:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Environments/GridEnvironment
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -141,9 +134,8 @@ build-GeoPotentialField:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/GeoPotentialFieldLayer
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -154,9 +146,8 @@ build-GridPotentialField:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/GridPotentialFieldLayer
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -167,9 +158,8 @@ build-ObstacleLayer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/ObstacleLayer
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -180,9 +170,8 @@ build-RawFileLayer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/RawFileLayer
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -193,9 +182,8 @@ build-TimeSeriesLayer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/TimeSeriesLayer
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -206,9 +194,8 @@ build-Utilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Utilities
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -219,9 +206,8 @@ build-AgentManagerService:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Services/AgentManagerService
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -232,9 +218,8 @@ build-AgentShadowingService:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Services/AgentShadowingService
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -247,9 +232,8 @@ build-ASC:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/ASC
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -261,9 +245,8 @@ build-Scs:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/Scs
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -274,9 +257,8 @@ build-MulticastAdapter:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/MulticastAdapter
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-MulticastAdapter --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -287,9 +269,8 @@ build-CustomUtilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/CustomUtilities
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CustomUtilities --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -300,9 +281,8 @@ build-ConfigurationAdapter:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/ConfigurationAdapter
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ConfigurationAdapter --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
@@ -313,9 +293,8 @@ build-CommonTypes:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/CommonTypes
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CommonTypes --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -326,9 +305,8 @@ build-LayerContainerFacade:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerFacade
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerFacade --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -340,9 +318,8 @@ build-LayerContainerShared:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerShared
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerShared --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -353,9 +330,8 @@ build-LayerFactory:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerFactory
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerFactory --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -366,9 +342,8 @@ build-LayerLoader:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/LayerLoader
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerLoader --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -379,9 +354,8 @@ build-LayerNameService:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/LayerNameService
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerNameService --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -392,9 +366,8 @@ build-LayerRegistry:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerRegistry
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerRegistry --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -405,9 +378,8 @@ build-LNSConnector:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/LNSConnector
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LNSConnector --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -418,9 +390,8 @@ build-ModelContainer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/ModelContainer
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ModelContainer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -431,9 +402,8 @@ build-NodeRegistry:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/NodeRegistry
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-NodeRegistry --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -444,9 +414,8 @@ build-PartitionManager:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/PartitionManager
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-PartitionManager --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -457,9 +426,8 @@ build-ResultAdapter:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/ResultAdapter
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ResultAdapter --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -470,9 +438,8 @@ build-RTEManager:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/RTEManager
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RTEManager --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -483,9 +450,8 @@ build-RuntimeEnvironment:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/RuntimeEnvironment
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RuntimeEnvironment --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -496,9 +462,8 @@ build-SimulationManagerFacade:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerFacade
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerFacade --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -509,9 +474,8 @@ build-SimulationManagerShared:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerShared
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerShared --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -522,9 +486,8 @@ build-SMConnector:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/SMConnector
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SMConnector --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -535,9 +498,8 @@ build-LCConnector:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/LCConnector
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
@@ -548,9 +510,8 @@ build-LIFECoreUtilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/LIFECoreUtilities
-    - dotnet build -c Release
     - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFECoreUtilities --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
