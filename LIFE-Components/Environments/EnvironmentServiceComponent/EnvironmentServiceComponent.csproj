@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="ConfigService" Version="2.0.0-494" />
-    <PackageReference Include="MongoDB.Driver" Version="2.4.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.4.3" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
