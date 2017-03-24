@@ -14,33 +14,33 @@ cache:
 
 
 # Meta Packages
-testAll:
-  stage: test
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
-  services:
-    - artifactory.mars.haw-hamburg.de:5000/influxdb:1.2
-  script:
-    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
-    - cd Tests/BasicAgentsTests
-    - dotnet test
-    - cd ../EnvironmentServiceComponentTests
-    - dotnet test
-    - cd ../GridEnvironmentTest
-    - dotnet test
-    - cd ../GeoGridEnvironmentTests
-    - dotnet test
-    - cd ../GeoPotentialFieldLayerTests
-    - dotnet test
-    - cd ../ModelContainerTests
-    - dotnet test
+#testAll:
+#  stage: test
+#  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+#  services:
+#    - artifactory.mars.haw-hamburg.de:5000/influxdb:1.2
+#  script:
+#    - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
+#    - cd Tests/BasicAgentsTests
+#    - dotnet test
+#    - cd ../EnvironmentServiceComponentTests
+#    - dotnet test
+#    - cd ../GridEnvironmentTest
+#    - dotnet test
+#    - cd ../GeoGridEnvironmentTests
+#    - dotnet test
+#    - cd ../GeoPotentialFieldLayerTests
+#    - dotnet test
+#    - cd ../ModelContainerTests
+#    - dotnet test
     #- cd ../MulticastAdapterTests
     #- dotnet test
     #- cd ../NodeRegistryTests
     #- dotnet test
     #- cd ../SimulationPlanParserTests
     #- dotnet test
-    - cd ../TimeSeriesLayerTests
-    - dotnet test
+#    - cd ../TimeSeriesLayerTests
+#    - dotnet test
 
 
 build-LIFE-API:
@@ -562,6 +562,7 @@ pushAllPackages:
   image: frolvlad/alpine-mono
   only:
     - master
+    - csprojMigration
   script:
     - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
