@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>SimulationManagerFacade</AssemblyName>
+    <PackageId>SimulationManagerFacade</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj" />
+    <ProjectReference Include="..\..\Common\LNSConnector\LNSConnector.csproj" />
+    <ProjectReference Include="..\..\Common\NodeRegistry\NodeRegistry.csproj" />
+    <ProjectReference Include="..\..\Common\SMConnector\SMConnector.csproj" />
+    <ProjectReference Include="..\..\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj" />
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj" />
+    <ProjectReference Include="..\LayerNameService\LayerNameService.csproj" />
+    <ProjectReference Include="..\ModelContainer\ModelContainer.csproj" />
+    <ProjectReference Include="..\RuntimeEnvironment\RuntimeEnvironment.csproj" />
+    <ProjectReference Include="..\SimulationManagerShared\SimulationManagerShared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.2.1" />
+    <PackageReference Include="Microsoft.Net.Http.Server" Version="1.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+</Project>

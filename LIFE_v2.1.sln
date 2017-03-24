@@ -1,85 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIFE-Components", "LIFE-Components", "{28FCE32D-FC59-453D-BC5D-ED59ABF3E240}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LIFE-API", "LIFE-API\LIFE-API.xproj", "{C74FD969-3FA1-413A-B43C-912B4BA78639}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIFE-Core", "LIFE-Core", "{9E593362-F79E-4B46-909D-6AC8AF5F55C5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B7027C3F-ECBB-42CB-928F-F982832F9869}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BasicAgentsTests", "Tests\BasicAgentsTests\BasicAgentsTests.xproj", "{6BFADC70-D64E-45B7-BDE0-11A53149414D}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoGridEnvironmentTests", "Tests\GeoGridEnvironmentTests\GeoGridEnvironmentTests.xproj", "{256F0220-4B1D-4CED-A80E-9DC91A705ADD}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GridPotentialFieldLayerTests", "Tests\GridPotentialFieldLayerTests\GridPotentialFieldLayerTests.xproj", "{E113EE00-5673-4EAE-A90F-EB5375E9C1E5}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoPotentialFieldLayerTests", "Tests\GeoPotentialFieldLayerTests\GeoPotentialFieldLayerTests.xproj", "{04EAD2FF-22D2-4DF3-9B6B-D20E2C81847F}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EnvironmentServiceComponentTests", "Tests\EnvironmentServiceComponentTests\EnvironmentServiceComponentTests.xproj", "{2E9D72F6-7E9B-470A-BC1D-B9F8B24E132D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{EF3EA4AE-9E78-4DF4-ADBB-512D83396189}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CommonTypes", "LIFE-Core\Common\CommonTypes\CommonTypes.xproj", "{2E7AE294-A148-40C9-8786-C9675EF13023}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ConfigurationAdapter", "LIFE-Core\Common\ConfigurationAdapter\ConfigurationAdapter.xproj", "{D63B030F-8A26-4904-B517-8B139E3A8BA2}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerLoader", "LIFE-Core\Common\LayerLoader\LayerLoader.xproj", "{F71CA2F0-D355-4193-9403-5342A83FC33B}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LCConnector", "LIFE-Core\Common\LCConnector\LCConnector.xproj", "{741DD47B-A743-4E77-8FF6-C6AD188C8818}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LNSConnector", "LIFE-Core\Common\LNSConnector\LNSConnector.xproj", "{DF363280-9067-4721-82EE-04EC4A12DCD2}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NodeRegistry", "LIFE-Core\Common\NodeRegistry\NodeRegistry.xproj", "{C801E271-55D9-4D87-8B7E-B9F936A2931E}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SMConnector", "LIFE-Core\Common\SMConnector\SMConnector.xproj", "{F4347D0F-129B-4624-A149-B0FD604C7A09}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LayerContainer", "LayerContainer", "{E3A6D7BB-8A3B-4683-B256-4F4F3647DA26}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerContainer", "LIFE-Core\LayerContainer\LayerContainer\LayerContainer.xproj", "{609BDF0B-464F-4AD8-A088-1C31E608AC49}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerContainerFacade", "LIFE-Core\LayerContainer\LayerContainerFacade\LayerContainerFacade.xproj", "{E087EE51-ADDD-4DCC-8301-BDDC2A3E780A}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerContainerShared", "LIFE-Core\LayerContainer\LayerContainerShared\LayerContainerShared.xproj", "{EEF06961-0F5D-4787-BC48-740B2D308F8A}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerFactory", "LIFE-Core\LayerContainer\LayerFactory\LayerFactory.xproj", "{BA5D42FA-4496-4F0B-9E8E-9E11AF7623B5}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerRegistry", "LIFE-Core\LayerContainer\LayerRegistry\LayerRegistry.xproj", "{F46132FA-7988-41B6-A569-F4BC9566B8F3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "PartitionManager", "LIFE-Core\LayerContainer\PartitionManager\PartitionManager.xproj", "{61C065CA-D990-4521-A10D-829E04E912F9}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ResultAdapter", "LIFE-Core\LayerContainer\ResultAdapter\ResultAdapter.xproj", "{1B10449C-5FA1-4435-B6BA-CC186688B8E8}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RTEManager", "LIFE-Core\LayerContainer\RTEManager\RTEManager.xproj", "{922896AE-82FD-4BF9-8C36-24437F218F05}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LIFECoreStarter", "LIFE-Core\LIFECoreStarter\LIFECoreStarter.xproj", "{38F0F292-E07B-4F27-8015-12FE4D90C050}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimulationManager", "SimulationManager", "{5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerNameService", "LIFE-Core\SimulationManager\LayerNameService\LayerNameService.xproj", "{5DFACA6C-861F-4A6C-B45E-06D0C70C3CE8}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ModelContainer", "LIFE-Core\SimulationManager\ModelContainer\ModelContainer.xproj", "{4799C6F6-AE90-4127-BD29-B1DA76558EC1}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RuntimeEnvironment", "LIFE-Core\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.xproj", "{8F2673F2-0773-4838-B612-F4BA7E256499}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SimulationManager", "LIFE-Core\SimulationManager\SimulationManager\SimulationManager.xproj", "{8B873E34-1BB2-4D0C-AD87-899D49791685}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SimulationManagerFacade", "LIFE-Core\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.xproj", "{BA841439-5E1C-4CEA-B8A4-4750681EA218}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SimulationManagerShared", "LIFE-Core\SimulationManager\SimulationManagerShared\SimulationManagerShared.xproj", "{028898EC-EC5D-402E-895A-8726A0000BAE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "T-Components", "T-Components", "{59B2267F-FB3E-4D22-98EB-AF44757F691D}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ASC", "LIFE-Core\T-Components\ASC\ASC.xproj", "{8BD13119-E411-4ED0-944D-D5D93A2DF8AF}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CustomUtilities", "LIFE-Core\T-Components\CustomUtilities\CustomUtilities.xproj", "{178B6159-4C2B-4B4D-A09C-9AC371EF1D46}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MulticastAdapter", "LIFE-Core\T-Components\MulticastAdapter\MulticastAdapter.xproj", "{4A3E43DA-2EAD-4598-A6EB-25E7532DF93C}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Scs", "LIFE-Core\T-Components\Scs\Scs.xproj", "{B614821F-1252-417E-BE3D-5A656137474C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agents", "Agents", "{36EC8847-D918-4239-9361-F58ACE288C3F}"
 EndProject
@@ -87,51 +23,115 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Environments", "Environment
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Layers", "Layers", "{8A9E7B49-F653-4AA1-9E4D-0AEAA57DFE46}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EnvironmentServiceComponent", "LIFE-Components\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.xproj", "{9A93BE1A-E906-4779-A8B3-DD42DFC9DBB3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoGridEnvironment", "LIFE-Components\Environments\GeoGridEnvironment\GeoGridEnvironment.xproj", "{2D8AB843-15EB-4C94-B927-F03668AFA258}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GeoPotentialFieldLayer", "LIFE-Components\Layers\GeoPotentialFieldLayer\GeoPotentialFieldLayer.xproj", "{596868A0-7FD5-45E4-888D-470498EDBABB}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GridPotentialFieldLayer", "LIFE-Components\Layers\GridPotentialFieldLayer\GridPotentialFieldLayer.xproj", "{2B303598-DC1D-416B-97D8-559949F6EE1F}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ObstacleLayer", "LIFE-Components\Layers\ObstacleLayer\ObstacleLayer.xproj", "{D0A7D675-A3C8-4DD0-A76F-05ED594FBCF5}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TimeSeriesLayer", "LIFE-Components\Layers\TimeSeriesLayer\TimeSeriesLayer.xproj", "{CD94051A-AAC0-45F8-A043-69BF75139405}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BasicAgents", "LIFE-Components\Agents\BasicAgents\BasicAgents.xproj", "{853362EB-F018-4E27-AB30-9EF34B5A788C}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GridEnvironment", "LIFE-Components\Environments\GridEnvironment\GridEnvironment.xproj", "{B13350F2-917C-4C4C-9E94-945F78CD27BA}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ModelContainerTests", "Tests\ModelContainerTests\ModelContainerTests.xproj", "{59662717-196A-48CA-A0D4-E79A894888A3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MulticastAdapterTests", "Tests\MulticastAdapterTests\MulticastAdapterTests.xproj", "{BEB60F97-49C6-48A9-82B5-E0D67EDD88D4}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NodeRegistryTests", "Tests\NodeRegistryTests\NodeRegistryTests.xproj", "{E2B760C6-8D47-4A8A-92B8-9A1F3A25FE60}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SimulationPlanParserTests", "Tests\SimulationPlanParserTests\SimulationPlanParserTests.xproj", "{9BB3D8DF-545D-487B-8EC2-151F974AA7A5}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Utilities", "LIFE-Components\Utilities\Utilities.xproj", "{F8BDDDD3-7A49-41EE-AEDC-9C67B27EF234}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LIFECoreUtilities", "LIFE-Core\T-Components\LIFECoreUtilities\LIFECoreUtilities.xproj", "{7D098664-E07F-4D94-91A2-9A3E3B91AB75}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LIFE-Components", "LIFE-Components\LIFE-Components\LIFE-Components.xproj", "{55F61E33-87D8-4198-9200-823EFC4C1718}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{BFAA05FB-B805-4707-B79D-F81CC7809BEB}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AgentManagerService", "LIFE-Components\Services\AgentManagerService\AgentManagerService.xproj", "{6E490D74-8807-4581-A0ED-6CD5AC64EE0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIFE-API", "LIFE-API\LIFE-API.csproj", "{C74FD969-3FA1-413A-B43C-912B4BA78639}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AgentShadowingService", "LIFE-Components\Services\AgentShadowingService\AgentShadowingService.xproj", "{BB993CDA-38FA-4316-8F27-44C5CEBA8317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicAgentsTests", "Tests\BasicAgentsTests\BasicAgentsTests.csproj", "{6BFADC70-D64E-45B7-BDE0-11A53149414D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TimeSeriesLayerTests", "Tests\TimeSeriesLayerTests\TimeSeriesLayerTests.xproj", "{1CDEB166-17D0-4E72-8272-4C6ED61A7341}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoGridEnvironmentTests", "Tests\GeoGridEnvironmentTests\GeoGridEnvironmentTests.csproj", "{256F0220-4B1D-4CED-A80E-9DC91A705ADD}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GridEnvironmentTest", "Tests\GridEnvironmentTest\GridEnvironmentTest.xproj", "{770B7FFC-C699-41CB-86A9-DE98EC623003}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GridPotentialFieldLayerTests", "Tests\GridPotentialFieldLayerTests\GridPotentialFieldLayerTests.csproj", "{E113EE00-5673-4EAE-A90F-EB5375E9C1E5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LayerRegistryTests", "Tests\LayerRegistryTests\LayerRegistryTests.xproj", "{3503EFBE-A8E5-42A0-A39A-0AC1428C2A00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoPotentialFieldLayerTests", "Tests\GeoPotentialFieldLayerTests\GeoPotentialFieldLayerTests.csproj", "{04EAD2FF-22D2-4DF3-9B6B-D20E2C81847F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ResultAdapterTests", "Tests\ResultAdapterTests\ResultAdapterTests.xproj", "{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnvironmentServiceComponentTests", "Tests\EnvironmentServiceComponentTests\EnvironmentServiceComponentTests.csproj", "{2E9D72F6-7E9B-470A-BC1D-B9F8B24E132D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RawFileLayer", "LIFE-Components\Layers\RawFileLayer\RawFileLayer.xproj", "{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonTypes", "LIFE-Core\Common\CommonTypes\CommonTypes.csproj", "{2E7AE294-A148-40C9-8786-C9675EF13023}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationAdapter", "LIFE-Core\Common\ConfigurationAdapter\ConfigurationAdapter.csproj", "{D63B030F-8A26-4904-B517-8B139E3A8BA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerLoader", "LIFE-Core\Common\LayerLoader\LayerLoader.csproj", "{F71CA2F0-D355-4193-9403-5342A83FC33B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCConnector", "LIFE-Core\Common\LCConnector\LCConnector.csproj", "{741DD47B-A743-4E77-8FF6-C6AD188C8818}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LNSConnector", "LIFE-Core\Common\LNSConnector\LNSConnector.csproj", "{DF363280-9067-4721-82EE-04EC4A12DCD2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeRegistry", "LIFE-Core\Common\NodeRegistry\NodeRegistry.csproj", "{C801E271-55D9-4D87-8B7E-B9F936A2931E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMConnector", "LIFE-Core\Common\SMConnector\SMConnector.csproj", "{F4347D0F-129B-4624-A149-B0FD604C7A09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerContainer", "LIFE-Core\LayerContainer\LayerContainer\LayerContainer.csproj", "{609BDF0B-464F-4AD8-A088-1C31E608AC49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerContainerFacade", "LIFE-Core\LayerContainer\LayerContainerFacade\LayerContainerFacade.csproj", "{E087EE51-ADDD-4DCC-8301-BDDC2A3E780A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerContainerShared", "LIFE-Core\LayerContainer\LayerContainerShared\LayerContainerShared.csproj", "{EEF06961-0F5D-4787-BC48-740B2D308F8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerFactory", "LIFE-Core\LayerContainer\LayerFactory\LayerFactory.csproj", "{BA5D42FA-4496-4F0B-9E8E-9E11AF7623B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerRegistry", "LIFE-Core\LayerContainer\LayerRegistry\LayerRegistry.csproj", "{F46132FA-7988-41B6-A569-F4BC9566B8F3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartitionManager", "LIFE-Core\LayerContainer\PartitionManager\PartitionManager.csproj", "{61C065CA-D990-4521-A10D-829E04E912F9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResultAdapter", "LIFE-Core\LayerContainer\ResultAdapter\ResultAdapter.csproj", "{1B10449C-5FA1-4435-B6BA-CC186688B8E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RTEManager", "LIFE-Core\LayerContainer\RTEManager\RTEManager.csproj", "{922896AE-82FD-4BF9-8C36-24437F218F05}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIFECoreStarter", "LIFE-Core\LIFECoreStarter\LIFECoreStarter.csproj", "{38F0F292-E07B-4F27-8015-12FE4D90C050}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerNameService", "LIFE-Core\SimulationManager\LayerNameService\LayerNameService.csproj", "{5DFACA6C-861F-4A6C-B45E-06D0C70C3CE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelContainer", "LIFE-Core\SimulationManager\ModelContainer\ModelContainer.csproj", "{4799C6F6-AE90-4127-BD29-B1DA76558EC1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuntimeEnvironment", "LIFE-Core\SimulationManager\RuntimeEnvironment\RuntimeEnvironment.csproj", "{8F2673F2-0773-4838-B612-F4BA7E256499}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationManager", "LIFE-Core\SimulationManager\SimulationManager\SimulationManager.csproj", "{8B873E34-1BB2-4D0C-AD87-899D49791685}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationManagerFacade", "LIFE-Core\SimulationManager\SimulationManagerFacade\SimulationManagerFacade.csproj", "{BA841439-5E1C-4CEA-B8A4-4750681EA218}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationManagerShared", "LIFE-Core\SimulationManager\SimulationManagerShared\SimulationManagerShared.csproj", "{028898EC-EC5D-402E-895A-8726A0000BAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASC", "LIFE-Core\T-Components\ASC\ASC.csproj", "{8BD13119-E411-4ED0-944D-D5D93A2DF8AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomUtilities", "LIFE-Core\T-Components\CustomUtilities\CustomUtilities.csproj", "{178B6159-4C2B-4B4D-A09C-9AC371EF1D46}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MulticastAdapter", "LIFE-Core\T-Components\MulticastAdapter\MulticastAdapter.csproj", "{4A3E43DA-2EAD-4598-A6EB-25E7532DF93C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scs", "LIFE-Core\T-Components\Scs\Scs.csproj", "{B614821F-1252-417E-BE3D-5A656137474C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnvironmentServiceComponent", "LIFE-Components\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj", "{9A93BE1A-E906-4779-A8B3-DD42DFC9DBB3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoGridEnvironment", "LIFE-Components\Environments\GeoGridEnvironment\GeoGridEnvironment.csproj", "{2D8AB843-15EB-4C94-B927-F03668AFA258}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoPotentialFieldLayer", "LIFE-Components\Layers\GeoPotentialFieldLayer\GeoPotentialFieldLayer.csproj", "{596868A0-7FD5-45E4-888D-470498EDBABB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GridPotentialFieldLayer", "LIFE-Components\Layers\GridPotentialFieldLayer\GridPotentialFieldLayer.csproj", "{2B303598-DC1D-416B-97D8-559949F6EE1F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObstacleLayer", "LIFE-Components\Layers\ObstacleLayer\ObstacleLayer.csproj", "{D0A7D675-A3C8-4DD0-A76F-05ED594FBCF5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSeriesLayer", "LIFE-Components\Layers\TimeSeriesLayer\TimeSeriesLayer.csproj", "{CD94051A-AAC0-45F8-A043-69BF75139405}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicAgents", "LIFE-Components\Agents\BasicAgents\BasicAgents.csproj", "{853362EB-F018-4E27-AB30-9EF34B5A788C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GridEnvironment", "LIFE-Components\Environments\GridEnvironment\GridEnvironment.csproj", "{B13350F2-917C-4C4C-9E94-945F78CD27BA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelContainerTests", "Tests\ModelContainerTests\ModelContainerTests.csproj", "{59662717-196A-48CA-A0D4-E79A894888A3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MulticastAdapterTests", "Tests\MulticastAdapterTests\MulticastAdapterTests.csproj", "{BEB60F97-49C6-48A9-82B5-E0D67EDD88D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeRegistryTests", "Tests\NodeRegistryTests\NodeRegistryTests.csproj", "{E2B760C6-8D47-4A8A-92B8-9A1F3A25FE60}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationPlanParserTests", "Tests\SimulationPlanParserTests\SimulationPlanParserTests.csproj", "{9BB3D8DF-545D-487B-8EC2-151F974AA7A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "LIFE-Components\Utilities\Utilities.csproj", "{F8BDDDD3-7A49-41EE-AEDC-9C67B27EF234}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIFECoreUtilities", "LIFE-Core\T-Components\LIFECoreUtilities\LIFECoreUtilities.csproj", "{7D098664-E07F-4D94-91A2-9A3E3B91AB75}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIFE-Components", "LIFE-Components\LIFE-Components\LIFE-Components.csproj", "{55F61E33-87D8-4198-9200-823EFC4C1718}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentManagerService", "LIFE-Components\Services\AgentManagerService\AgentManagerService.csproj", "{6E490D74-8807-4581-A0ED-6CD5AC64EE0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentShadowingService", "LIFE-Components\Services\AgentShadowingService\AgentShadowingService.csproj", "{BB993CDA-38FA-4316-8F27-44C5CEBA8317}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSeriesLayerTests", "Tests\TimeSeriesLayerTests\TimeSeriesLayerTests.csproj", "{1CDEB166-17D0-4E72-8272-4C6ED61A7341}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GridEnvironmentTest", "Tests\GridEnvironmentTest\GridEnvironmentTest.csproj", "{770B7FFC-C699-41CB-86A9-DE98EC623003}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerRegistryTests", "Tests\LayerRegistryTests\LayerRegistryTests.csproj", "{3503EFBE-A8E5-42A0-A39A-0AC1428C2A00}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResultAdapterTests", "Tests\ResultAdapterTests\ResultAdapterTests.csproj", "{C58998D4-0CD2-40AB-A4BD-FB7B4852D5B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RawFileLayer", "LIFE-Components\Layers\RawFileLayer\RawFileLayer.csproj", "{76B19B5C-3885-459B-AF0B-0FB8932CA4A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -360,12 +360,19 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{EF3EA4AE-9E78-4DF4-ADBB-512D83396189} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
+		{E3A6D7BB-8A3B-4683-B256-4F4F3647DA26} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
+		{5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
+		{59B2267F-FB3E-4D22-98EB-AF44757F691D} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
+		{36EC8847-D918-4239-9361-F58ACE288C3F} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
+		{2D7A829D-894C-4E8C-BDD6-EBAECE462B36} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
+		{8A9E7B49-F653-4AA1-9E4D-0AEAA57DFE46} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
+		{BFAA05FB-B805-4707-B79D-F81CC7809BEB} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
 		{6BFADC70-D64E-45B7-BDE0-11A53149414D} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
 		{256F0220-4B1D-4CED-A80E-9DC91A705ADD} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
 		{E113EE00-5673-4EAE-A90F-EB5375E9C1E5} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
 		{04EAD2FF-22D2-4DF3-9B6B-D20E2C81847F} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
 		{2E9D72F6-7E9B-470A-BC1D-B9F8B24E132D} = {B7027C3F-ECBB-42CB-928F-F982832F9869}
-		{EF3EA4AE-9E78-4DF4-ADBB-512D83396189} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
 		{2E7AE294-A148-40C9-8786-C9675EF13023} = {EF3EA4AE-9E78-4DF4-ADBB-512D83396189}
 		{D63B030F-8A26-4904-B517-8B139E3A8BA2} = {EF3EA4AE-9E78-4DF4-ADBB-512D83396189}
 		{F71CA2F0-D355-4193-9403-5342A83FC33B} = {EF3EA4AE-9E78-4DF4-ADBB-512D83396189}
@@ -373,7 +380,6 @@ Global
 		{DF363280-9067-4721-82EE-04EC4A12DCD2} = {EF3EA4AE-9E78-4DF4-ADBB-512D83396189}
 		{C801E271-55D9-4D87-8B7E-B9F936A2931E} = {EF3EA4AE-9E78-4DF4-ADBB-512D83396189}
 		{F4347D0F-129B-4624-A149-B0FD604C7A09} = {EF3EA4AE-9E78-4DF4-ADBB-512D83396189}
-		{E3A6D7BB-8A3B-4683-B256-4F4F3647DA26} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
 		{609BDF0B-464F-4AD8-A088-1C31E608AC49} = {E3A6D7BB-8A3B-4683-B256-4F4F3647DA26}
 		{E087EE51-ADDD-4DCC-8301-BDDC2A3E780A} = {E3A6D7BB-8A3B-4683-B256-4F4F3647DA26}
 		{EEF06961-0F5D-4787-BC48-740B2D308F8A} = {E3A6D7BB-8A3B-4683-B256-4F4F3647DA26}
@@ -383,21 +389,16 @@ Global
 		{1B10449C-5FA1-4435-B6BA-CC186688B8E8} = {E3A6D7BB-8A3B-4683-B256-4F4F3647DA26}
 		{922896AE-82FD-4BF9-8C36-24437F218F05} = {E3A6D7BB-8A3B-4683-B256-4F4F3647DA26}
 		{38F0F292-E07B-4F27-8015-12FE4D90C050} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
-		{5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
 		{5DFACA6C-861F-4A6C-B45E-06D0C70C3CE8} = {5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068}
 		{4799C6F6-AE90-4127-BD29-B1DA76558EC1} = {5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068}
 		{8F2673F2-0773-4838-B612-F4BA7E256499} = {5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068}
 		{8B873E34-1BB2-4D0C-AD87-899D49791685} = {5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068}
 		{BA841439-5E1C-4CEA-B8A4-4750681EA218} = {5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068}
 		{028898EC-EC5D-402E-895A-8726A0000BAE} = {5E8D69B9-1AF7-41B2-9D4A-F3CA4183B068}
-		{59B2267F-FB3E-4D22-98EB-AF44757F691D} = {9E593362-F79E-4B46-909D-6AC8AF5F55C5}
 		{8BD13119-E411-4ED0-944D-D5D93A2DF8AF} = {59B2267F-FB3E-4D22-98EB-AF44757F691D}
 		{178B6159-4C2B-4B4D-A09C-9AC371EF1D46} = {59B2267F-FB3E-4D22-98EB-AF44757F691D}
 		{4A3E43DA-2EAD-4598-A6EB-25E7532DF93C} = {59B2267F-FB3E-4D22-98EB-AF44757F691D}
 		{B614821F-1252-417E-BE3D-5A656137474C} = {59B2267F-FB3E-4D22-98EB-AF44757F691D}
-		{36EC8847-D918-4239-9361-F58ACE288C3F} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
-		{2D7A829D-894C-4E8C-BDD6-EBAECE462B36} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
-		{8A9E7B49-F653-4AA1-9E4D-0AEAA57DFE46} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
 		{9A93BE1A-E906-4779-A8B3-DD42DFC9DBB3} = {2D7A829D-894C-4E8C-BDD6-EBAECE462B36}
 		{2D8AB843-15EB-4C94-B927-F03668AFA258} = {2D7A829D-894C-4E8C-BDD6-EBAECE462B36}
 		{596868A0-7FD5-45E4-888D-470498EDBABB} = {8A9E7B49-F653-4AA1-9E4D-0AEAA57DFE46}
@@ -413,7 +414,6 @@ Global
 		{F8BDDDD3-7A49-41EE-AEDC-9C67B27EF234} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
 		{7D098664-E07F-4D94-91A2-9A3E3B91AB75} = {59B2267F-FB3E-4D22-98EB-AF44757F691D}
 		{55F61E33-87D8-4198-9200-823EFC4C1718} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
-		{BFAA05FB-B805-4707-B79D-F81CC7809BEB} = {28FCE32D-FC59-453D-BC5D-ED59ABF3E240}
 		{6E490D74-8807-4581-A0ED-6CD5AC64EE0D} = {BFAA05FB-B805-4707-B79D-F81CC7809BEB}
 		{BB993CDA-38FA-4316-8F27-44C5CEBA8317} = {BFAA05FB-B805-4707-B79D-F81CC7809BEB}
 		{1CDEB166-17D0-4E72-8272-4C6ED61A7341} = {B7027C3F-ECBB-42CB-928F-F982832F9869}

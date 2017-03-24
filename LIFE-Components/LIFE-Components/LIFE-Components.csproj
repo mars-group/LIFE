@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>LIFE-Components</AssemblyName>
+    <PackageId>LIFE-Components</PackageId>
+    <PackageLicenseUrl>https://www.mars-group.org</PackageLicenseUrl>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Agents\BasicAgents\BasicAgents.csproj" />
+    <ProjectReference Include="..\Environments\GridEnvironment\GridEnvironment.csproj" />
+    <ProjectReference Include="..\Environments\GeoGridEnvironment\GeoGridEnvironment.csproj" />
+    <ProjectReference Include="..\Layers\GeoPotentialFieldLayer\GeoPotentialFieldLayer.csproj" />
+    <ProjectReference Include="..\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
+    <ProjectReference Include="..\Layers\ObstacleLayer\ObstacleLayer.csproj" />
+    <ProjectReference Include="..\Layers\RawFileLayer\RawFileLayer.csproj" />
+    <ProjectReference Include="..\Layers\TimeSeriesLayer\TimeSeriesLayer.csproj" />
+    <ProjectReference Include="..\Layers\GridPotentialFieldLayer\GridPotentialFieldLayer.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    <ProjectReference Include="..\Services\AgentManagerService\AgentManagerService.csproj" />
+    <ProjectReference Include="..\Services\AgentShadowingService\AgentShadowingService.csproj" />
+  </ItemGroup>
+
+</Project>

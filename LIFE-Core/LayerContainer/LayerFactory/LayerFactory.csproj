@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>LayerFactory allows to create layer instances by either using a local or remote reference.</Description>
+    <Copyright>(c) 2016 - MARS Group</Copyright>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <Authors>Christian Huening</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>LayerFactory</AssemblyName>
+    <PackageId>LayerFactory</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\LayerLoader\LayerLoader.csproj" />
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj" />
+    <ProjectReference Include="..\LayerRegistry\LayerRegistry.csproj" />
+    <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>LayerContainerFacade</AssemblyName>
+    <PackageId>LayerContainerFacade</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj" />
+    <ProjectReference Include="..\..\Common\ConfigurationAdapter\ConfigurationAdapter.csproj" />
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj" />
+    <ProjectReference Include="..\LayerContainerShared\LayerContainerShared.csproj" />
+    <ProjectReference Include="..\LayerFactory\LayerFactory.csproj" />
+    <ProjectReference Include="..\LayerRegistry\LayerRegistry.csproj" />
+    <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj" />
+    <ProjectReference Include="..\PartitionManager\PartitionManager.csproj" />
+    <ProjectReference Include="..\ResultAdapter\ResultAdapter.csproj" />
+    <ProjectReference Include="..\RTEManager\RTEManager.csproj" />
+    <ProjectReference Include="..\..\T-Components\Scs\Scs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.2.1" />
+  </ItemGroup>
+
+</Project>

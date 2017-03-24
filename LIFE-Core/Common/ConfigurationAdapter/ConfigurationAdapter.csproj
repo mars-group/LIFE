@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>ConfigurationAdapter which writes and reads MARS LIFE config files in XML</Description>
+    <Copyright>(c) 2016 - MARS Group</Copyright>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <Authors>Christian Huening</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>ConfigurationAdapter</AssemblyName>
+    <PackageId>ConfigurationAdapter</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The PartitionManager intends to manage the partitioning of layers in a distributed case</Description>
+    <Copyright>(c) 2016 - MARS Group</Copyright>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <Authors>Christian Huening</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>PartitionManager</AssemblyName>
+    <PackageId>PartitionManager</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
+    <ProjectReference Include="..\..\Common\LCConnector\LCConnector.csproj" />
+    <ProjectReference Include="..\LayerFactory\LayerFactory.csproj" />
+    <ProjectReference Include="..\RTEManager\RTEManager.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The ResultAdapter manages the output of agent data</Description>
+    <Copyright>(c) 2016 - MARS Group</Copyright>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <Authors>Christian Huening</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>ResultAdapter</AssemblyName>
+    <PackageId>ResultAdapter</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
+    <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ConfigService" Version="2.0.0-9" />
+    <PackageReference Include="MongoDB.Driver" Version="2.4.2" />
+    <PackageReference Include="RabbitMQ.Client" Version="4.1.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.0.0" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

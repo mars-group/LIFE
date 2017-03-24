@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>BasicAgents</AssemblyName>
+    <PackageId>BasicAgents</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE-Core\T-Components\ASC\ASC.csproj" />
+    <ProjectReference Include="..\..\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
+    <ProjectReference Include="..\..\Environments\GeoGridEnvironment\GeoGridEnvironment.csproj" />
+    <ProjectReference Include="..\..\Environments\GridEnvironment\GridEnvironment.csproj" />
+    <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

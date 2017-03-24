@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The NodeRegistry. Used for zero-configuration setup of LIFE clusters.</Description>
+    <Copyright>(c) 2016 - MARS Group</Copyright>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <Authors>Christian Huening</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>NodeRegistry</AssemblyName>
+    <PackageId>NodeRegistry</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\T-Components\CustomUtilities\CustomUtilities.csproj" />
+    <ProjectReference Include="..\..\T-Components\MulticastAdapter\MulticastAdapter.csproj" />
+    <ProjectReference Include="..\..\T-Components\LIFECoreUtilities\LIFECoreUtilities.csproj" />
+    <ProjectReference Include="..\CommonTypes\CommonTypes.csproj" />
+    <ProjectReference Include="..\ConfigurationAdapter\ConfigurationAdapter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
