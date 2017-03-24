@@ -42,6 +42,8 @@ cache:
 #    - cd ../TimeSeriesLayerTests
 #    - dotnet test
 
+##### for future reference ######
+# the dotnet pack --output option is named /p:PackageOutputPath= in msbuild #
 
 build-LIFE-API:
   stage: build
