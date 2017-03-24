@@ -50,7 +50,7 @@ build-LIFE-API:
     - cd LIFE-API
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-API --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-API --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -64,7 +64,7 @@ build-LIFE-Core:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LIFECoreStarter
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -77,7 +77,7 @@ build-LIFE-Components:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/LIFE-Components
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Components --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Components --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -92,7 +92,7 @@ build-BasicAgents:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Agents/BasicAgents
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -105,7 +105,7 @@ build-ESC:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Environments/EnvironmentServiceComponent
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -118,7 +118,7 @@ build-GeoGridEnvironment:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Environments/GeoGridEnvironment
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -131,7 +131,7 @@ build-GridEnvironment:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Environments/GridEnvironment
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -144,7 +144,7 @@ build-GeoPotentialField:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Layers/GeoPotentialFieldLayer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -157,7 +157,7 @@ build-GridPotentialField:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Layers/GridPotentialFieldLayer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -170,7 +170,7 @@ build-ObstacleLayer:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Layers/ObstacleLayer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -183,7 +183,7 @@ build-RawFileLayer:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Layers/RawFileLayer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -196,7 +196,7 @@ build-TimeSeriesLayer:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Layers/TimeSeriesLayer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -209,7 +209,7 @@ build-Utilities:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Utilities
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -222,7 +222,7 @@ build-AgentManagerService:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Services/AgentManagerService
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -235,7 +235,7 @@ build-AgentShadowingService:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Components/Services/AgentShadowingService
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -250,7 +250,7 @@ build-ASC:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/T-Components/ASC
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -264,7 +264,7 @@ build-Scs:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/T-Components/Scs
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -277,7 +277,7 @@ build-MulticastAdapter:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/T-Components/MulticastAdapter
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-MulticastAdapter --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-MulticastAdapter --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -290,7 +290,7 @@ build-CustomUtilities:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/T-Components/CustomUtilities
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CustomUtilities --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CustomUtilities --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -303,7 +303,7 @@ build-ConfigurationAdapter:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/Common/ConfigurationAdapter
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ConfigurationAdapter --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ConfigurationAdapter --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -316,7 +316,7 @@ build-CommonTypes:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/Common/CommonTypes
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CommonTypes --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CommonTypes --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -329,7 +329,7 @@ build-LayerContainerFacade:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LayerContainer/LayerContainerFacade
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerFacade --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerFacade --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -343,7 +343,7 @@ build-LayerContainerShared:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LayerContainer/LayerContainerShared
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerShared --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerShared --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -356,7 +356,7 @@ build-LayerFactory:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LayerContainer/LayerFactory
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerFactory --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerFactory --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -369,7 +369,7 @@ build-LayerLoader:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/Common/LayerLoader
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerLoader --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerLoader --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -382,7 +382,7 @@ build-LayerNameService:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/SimulationManager/LayerNameService
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerNameService --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerNameService --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -395,7 +395,7 @@ build-LayerRegistry:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LayerContainer/LayerRegistry
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerRegistry --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerRegistry --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -408,7 +408,7 @@ build-LNSConnector:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/Common/LNSConnector
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LNSConnector --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LNSConnector --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -421,7 +421,7 @@ build-ModelContainer:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/SimulationManager/ModelContainer
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ModelContainer --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ModelContainer --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -434,7 +434,7 @@ build-NodeRegistry:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/Common/NodeRegistry
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-NodeRegistry --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-NodeRegistry --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -447,7 +447,7 @@ build-PartitionManager:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LayerContainer/PartitionManager
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-PartitionManager --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-PartitionManager --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -460,7 +460,7 @@ build-ResultAdapter:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LayerContainer/ResultAdapter
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ResultAdapter --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ResultAdapter --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -473,7 +473,7 @@ build-RTEManager:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/LayerContainer/RTEManager
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RTEManager --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RTEManager --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -486,7 +486,7 @@ build-RuntimeEnvironment:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/SimulationManager/RuntimeEnvironment
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RuntimeEnvironment --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RuntimeEnvironment --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -499,7 +499,7 @@ build-SimulationManagerFacade:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/SimulationManager/SimulationManagerFacade
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerFacade --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerFacade --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -512,7 +512,7 @@ build-SimulationManagerShared:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/SimulationManager/SimulationManagerShared
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerShared --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerShared --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -525,7 +525,7 @@ build-SMConnector:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/Common/SMConnector
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SMConnector --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SMConnector --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -538,7 +538,7 @@ build-LCConnector:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/Common/LCConnector
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -551,7 +551,7 @@ build-LIFECoreUtilities:
     - dotnet restore -s https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/ .
     - cd LIFE-Core/T-Components/LIFECoreUtilities
     - dotnet build -c Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFECoreUtilities --version-suffix beta-$CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFECoreUtilities --version-suffix $CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -564,42 +564,42 @@ pushAllPackages:
     - master
     - csprojMigration
   script:
-    - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/LIFE-Components.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-BasicAgents/BasicAgents.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GeoPotentialFieldLayer/GeoPotentialFieldLayer.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GridPotentialFieldLayer/GridPotentialFieldLayer.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ObstacleLayer/ObstacleLayer.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-RawFileLayer/RawFileLayer.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-TimeSeriesLayer/TimeSeriesLayer.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-Utilities/Utilities.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ASC/ASC.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-Scs/Scs.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-MulticastAdapter/MulticastAdapter.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-CustomUtilities/CustomUtilities.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ConfigurationAdapter/ConfigurationAdapter.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-AgentManager/AgentManagerService.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-AgentShadowingService/AgentShadowingService.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-CommonTypes/CommonTypes.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerContainerFacade/LayerContainerFacade.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerContainerShared/LayerContainerShared.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerFactory/LayerFactory.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerLoader/LayerLoader.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerNameService/LayerNameService.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerRegistry/LayerRegistry.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LNSConnector/LNSConnector.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ModelContainer/ModelContainer.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-NodeRegistry/NodeRegistry.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-PartitionManager/PartitionManager.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ResultAdapter/ResultAdapter.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-RTEManager/RTEManager.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-RuntimeEnvironment/RuntimeEnvironment.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-SimulationManagerFacade/SimulationManagerFacade.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-SimulationManagerShared/SimulationManagerShared.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-SMConnector/SMConnector.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LCConnector/LCConnector.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFECoreUtilities/LIFECoreUtilities.$MAJOR_LIFE_VERSION-beta-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Components/LIFE-Components.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-BasicAgents/BasicAgents.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GeoPotentialFieldLayer/GeoPotentialFieldLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GridPotentialFieldLayer/GridPotentialFieldLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ObstacleLayer/ObstacleLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-RawFileLayer/RawFileLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-TimeSeriesLayer/TimeSeriesLayer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-Utilities/Utilities.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ASC/ASC.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-Scs/Scs.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-MulticastAdapter/MulticastAdapter.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-CustomUtilities/CustomUtilities.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ConfigurationAdapter/ConfigurationAdapter.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-AgentManager/AgentManagerService.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-AgentShadowingService/AgentShadowingService.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-CommonTypes/CommonTypes.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerContainerFacade/LayerContainerFacade.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerContainerShared/LayerContainerShared.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerFactory/LayerFactory.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerLoader/LayerLoader.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerNameService/LayerNameService.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerRegistry/LayerRegistry.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LNSConnector/LNSConnector.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ModelContainer/ModelContainer.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-NodeRegistry/NodeRegistry.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-PartitionManager/PartitionManager.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ResultAdapter/ResultAdapter.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-RTEManager/RTEManager.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-RuntimeEnvironment/RuntimeEnvironment.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-SimulationManagerFacade/SimulationManagerFacade.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-SimulationManagerShared/SimulationManagerShared.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-SMConnector/SMConnector.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LCConnector/LCConnector.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFECoreUtilities/LIFECoreUtilities.$MAJOR_LIFE_VERSION-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
