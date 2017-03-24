@@ -4,7 +4,7 @@
     <VersionPrefix>2.1.0</VersionPrefix>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>LIFE-Core</AssemblyName>
-    <PackageId>LIFECoreStarter</PackageId>
+    <PackageId>LIFE-Core</PackageId>
     <PackageLicenseUrl>https://www.mars-group.org</PackageLicenseUrl>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
