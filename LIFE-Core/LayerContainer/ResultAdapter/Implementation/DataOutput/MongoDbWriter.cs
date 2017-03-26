@@ -5,21 +5,24 @@ using LIFE.API.Results;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 
 namespace ResultAdapter.Implementation.DataOutput {
 
   /// <summary>
   ///   A MongoDB adapter to save the simulation results to a database.
   /// </summary>
-  internal class MongoSender {
+  internal class MongoDbWriter : IResultWriter {
 
-    private readonly string _simId;                       // The simulation identifier (name).
-    private readonly IMongoDatabase _dbLegacy;            // Legacy database.
-    private readonly IMongoDatabase _dbSimRuns;           // Simulation meta information database.
-    private readonly IMongoDatabase _dbResults;           // Database for new result output.
-    private IMongoCollection<AgentSimResult> _colLegacy;  // ISimResult output collection.
-    private IMongoCollection<BsonDocument> _colKeyframes; // Key frame collection.
-    private IMongoCollection<BsonDocument> _colMetadata;  // Meta data entries.
+    private readonly string _simId;                         // The simulation identifier (name).
+    private readonly IMongoDatabase _dbLegacy;              // Legacy database.
+    private readonly IMongoDatabase _dbSimRuns;             // Simulation meta information database.
+    private readonly IMongoDatabase _dbResults;             // Database for new result output.
+    private IMongoCollection<AgentSimResult> _colLegacy;    // ISimResult output collection.
+    private IMongoCollection<BsonDocument> _colKeyframes;   // Key frame collection.
+    private IMongoCollection<BsonDocument> _colDeltaframes; // Delta frame collection.
+    private IMongoCollection<BsonDocument> _colMetadata;    // Meta data entries.
+    private readonly JsonSerializerSettings _jsonConf;      // Serialization settings.
 
 
     /// <summary>
@@ -27,12 +30,15 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// </summary>
     /// <param name="mongoDbHost">Address of the MongoDB to connect to..</param>
     /// <param name="simId">Simulation ID. Used as collection name.</param>
-    public MongoSender(string mongoDbHost, string simId) {
+    public MongoDbWriter(string mongoDbHost, string simId) {
       var client = new MongoClient("mongodb://"+mongoDbHost+":27017");
       _dbLegacy = client.GetDatabase("SimResults");
       _dbSimRuns = client.GetDatabase("SimulationRuns");
       _dbResults = client.GetDatabase("ResultData");
       _simId = simId;
+      _jsonConf = new JsonSerializerSettings {
+        NullValueHandling = NullValueHandling.Ignore
+      };
     }
 
 
@@ -62,47 +68,57 @@ namespace ResultAdapter.Implementation.DataOutput {
 
 
     /// <summary>
-    ///   Write keyframe result data to the MongoDB.
-    /// </summary>
-    /// <param name="results">A number of keyframes (JSON strings).</param>
-    public void WriteKeyframes(IEnumerable<string> results) {
-      if (_colKeyframes == null) {
-        _colKeyframes = _dbResults.GetCollection<BsonDocument>(_simId+"-kf");
-      }
-      var documents = new ConcurrentBag<BsonDocument>();
-      Parallel.ForEach(results, result => {
-        documents.Add(BsonSerializer.Deserialize<BsonDocument>(result));
-      });
-      _colKeyframes.InsertMany(documents);
-    }
-
-
-    /// <summary>
     ///   Add agent meta data entries.
     /// </summary>
     /// <param name="metadata">Set of meta data information to write.</param>
-    public void AddMetaData(IEnumerable<string> metadata) {
+    public void AddMetadataEntries(IEnumerable<AgentMetadataEntry> metadata) {
       if (_colMetadata == null) {
         _colMetadata = _dbResults.GetCollection<BsonDocument>(_simId+"-meta");
       }
       var documents = new ConcurrentBag<BsonDocument>();
       Parallel.ForEach(metadata, result => {
-        documents.Add(BsonSerializer.Deserialize<BsonDocument>(result));
+        var json = JsonConvert.SerializeObject(result, _jsonConf);
+        documents.Add(BsonSerializer.Deserialize<BsonDocument>(json));
       });
       _colMetadata.InsertMany(documents);
     }
 
 
     /// <summary>
-    ///   Update agent meta data entries.
+    ///   Mark agents as removed by setting their meta data deletion flag.
     /// </summary>
     /// <param name="agentIds">List of agents that were deleted.</param>
     /// <param name="delTick">Tick of deletion.</param>
-    public void UpdateMetaData(IEnumerable<string> agentIds, int delTick) {
+    public void SetAgentDeletionFlags(IEnumerable<string> agentIds, int delTick) {
       foreach (var agent in agentIds) {
         var filter = Builders<BsonDocument>.Filter.Eq(s => s["AgentId"], agent);
         var update = Builders<BsonDocument>.Update.Set(s => s["DeletionTick"], delTick);
         //_colMetadata.UpdateOne(filter, update);
+      }
+    }
+
+
+    /// <summary>
+    ///   Write agent result data to the storage.
+    /// </summary>
+    /// <param name="results">A list of agent frames.</param>
+    /// <param name="isKeyframe">Set to 'true' on keyframes, 'false' on delta frames.</param>
+    public void WriteAgentFrames(IEnumerable<AgentFrame> results, bool isKeyframe) {
+      var documents = new ConcurrentBag<BsonDocument>();
+      Parallel.ForEach(results, result => {
+        var json = JsonConvert.SerializeObject(result, _jsonConf);
+        documents.Add(BsonSerializer.Deserialize<BsonDocument>(json));
+      });
+      if (isKeyframe) {
+        if (_colKeyframes == null) {
+          _colKeyframes = _dbResults.GetCollection<BsonDocument>(_simId + "-kf");
+        }
+        _colKeyframes.InsertMany(documents);
+      } else {
+        if (_colDeltaframes == null) {
+          _colDeltaframes = _dbResults.GetCollection<BsonDocument>(_simId + "-df");
+        }
+        _colDeltaframes.InsertMany(documents);
       }
     }
   }

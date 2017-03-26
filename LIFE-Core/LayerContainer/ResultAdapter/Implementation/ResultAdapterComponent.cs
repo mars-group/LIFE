@@ -11,6 +11,7 @@ namespace ResultAdapter.Implementation {
 
     private readonly IResultAdapter _resultAdapterInternalUseCase;
 
+
     /// <summary>
     ///   The Simulation ID. It will be set before the first call to WriteResults().
     /// </summary>

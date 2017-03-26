@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 
 namespace ResultAdapter.Implementation {
 
-
   /// <summary>
   ///   Logger generation and distribution class.
   ///   It is initialized together with the ResultAdapter and called on each new registration.
@@ -19,6 +18,9 @@ namespace ResultAdapter.Implementation {
     private readonly string _configId;                      // Configuration identifier.
     private readonly string _generatedCode;                 // The generated code file.
 
+    internal string OutputTarget { get; private set; }                      // Database/CEP output target.
+    internal IDictionary<string, string> OutputParams { get; private set; } // Output component parameters.
+
 
     /// <summary>
     ///   Create a new logger generator.
@@ -27,6 +29,8 @@ namespace ResultAdapter.Implementation {
     /// <param name="configId">Configuration identifier.</param>
     public LoggerGenerator(string rcsHost, string configId) {
       _definitions = new Dictionary<string, Type>();
+      OutputParams = new Dictionary<string, string>();
+      OutputTarget = "";
       _rcsHost = rcsHost;
       _configId = configId;
       if (_configId == null || _configId.Equals("")) return;
@@ -68,10 +72,11 @@ namespace ResultAdapter.Implementation {
                                 "configuration '"+_configId+"' from "+_rcsHost+".");
       }
       catch (Exception ex) {
+        var intl = ex.InnerException != null ? " => "+ex.InnerException.GetType().Name : "";
         Console.Error.WriteLine("[LoggerGenerator] Failed to generate output loggers!");
         Console.Error.WriteLine(" - Output configuration ID: '"+_configId+"'");
         Console.Error.WriteLine(" - ResultConfigService host: '"+_rcsHost+"'");
-        Console.Error.WriteLine(" - Exception: "+ex.GetType().Name+" => "+ex.InnerException.GetType().Name);
+        Console.Error.WriteLine(" - Exception: "+ex.GetType().Name + intl);
       }
       return null;
     }
@@ -82,8 +87,15 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="config">RCS output configuration (JSON).</param>
     /// <returns>A list of logger definitions to generate classes from.</returns>
-    private static IEnumerable<LoggerConfig> ParseConfiguration(JObject config) {
+    private IEnumerable<LoggerConfig> ParseConfiguration(JObject config) {
       var loggers = new List<LoggerConfig>();
+      if (config["OutputTarget"] != null) OutputTarget = config["OutputTarget"].ToString();
+      if (config["OutputParams"] != null) {
+        foreach (var par in config["OutputParams"]) {
+          var sa = par.ToString().Split('=');
+          if (sa.Length == 2) OutputParams[sa[0]] = sa[1];
+        }
+      }
       foreach (var agentDef in config["Agents"]) {
         if ((bool) agentDef["OutputEnabled"]) {
           var fields = new Dictionary<string, bool>();
@@ -146,7 +158,8 @@ namespace ResultAdapter.Implementation {
              " - Config ID: "+_configId+"\n"+
              " - RCS address: "+_rcsHost+"\n"+
              " - Definitions: "+_definitions.Count+
-             (codeOutput? "\n - Generated code:\n----------\n"+_generatedCode+"\n----------" : "");
+             (codeOutput? "\n - Generated code:\n----------\n"+
+               _generatedCode+"\n----------" : "");
     }
 
 

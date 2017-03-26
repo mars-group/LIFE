@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <Description>The ResultAdapter manages the output of agent data</Description>
     <Copyright>(c) 2016 - MARS Group</Copyright>
@@ -14,12 +13,10 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="ConfigService" Version="2.0.0-494" />
     <PackageReference Include="MongoDB.Driver" Version="2.4.3" />
@@ -28,5 +25,4 @@
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
     <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
   </ItemGroup>
-
 </Project>

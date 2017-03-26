@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ConfigService;
 using LIFE.API.Agent;
 using LIFE.API.Results;
-using Newtonsoft.Json;
 using ResultAdapter.Implementation.DataOutput;
 using ResultAdapter.Interface;
 [assembly: InternalsVisibleTo("ResultAdapterTests")]
@@ -18,11 +17,10 @@ namespace ResultAdapter.Implementation {
   /// </summary>
   internal class ResultAdapterUseCase : IResultAdapter {
 
-    private MongoSender _sender;                                      // Database connector.
+    private IResultWriter _writer;                                    // Database connector.
     private readonly string _mongoDbHost;                             // MongoDB host address.
     private readonly RabbitNotifier _notifier;                        // Listener queue notifier.
     private readonly LoggerGenerator _generator;                      // Result logger generator.
-    private readonly JsonSerializerSettings _jsonSettings;            // Serialization settings.
     private readonly ConcurrentDictionary<int, LoggerGroup> _loggers; // Logger listing (key=frequency).
     private readonly IList<IGeneratedLogger> _newAgents;              // Meta entries of new agents.
     private readonly IList<string> _deletedAgents;                    // Agents removed in last tick.
@@ -42,7 +40,6 @@ namespace ResultAdapter.Implementation {
       _loggers = new ConcurrentDictionary<int, LoggerGroup>();
       _newAgents = new List<IGeneratedLogger>();
       _deletedAgents = new List<string>();
-      _jsonSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore};
       _mongoDbHost = enableTestMode ? "127.0.0.1" : "result-mongodb";
       var rcsHost = enableTestMode ? "127.0.0.1:8080" : "resultcfg-svc";
       var configHost = enableTestMode ? "127.0.0.1:8080" : "config-svc";
@@ -62,31 +59,45 @@ namespace ResultAdapter.Implementation {
 
       // Initialization in the first tick. It is deferred, because the
       // simulation identifier is not available in the constructor.
-      if (_sender == null) {
-        _sender = new MongoSender(_mongoDbHost, SimulationId.ToString());
+      if (currentTick == 0 && _writer == null) {
+        if (_generator.OutputTarget == string.Empty ||
+            _generator.OutputTarget.ToUpper().Equals("MONGODB")) {
+          _writer = new MongoDbWriter(_mongoDbHost, SimulationId.ToString());
+          Console.WriteLine("[ResultAdapter] Initialized MongoDB adapter to '"+_mongoDbHost+"'.");
+        }
+        else if (_generator.OutputTarget.ToUpper().Equals("KAFKA/CASSANDRA")) {
+          _generator.OutputParams["SimulationId"] = SimulationId.ToString();
+          _writer = new KafkaWriter(_generator.OutputParams);
+          Console.WriteLine("[ResultAdapter] Initialized Kafka/Cassandra connector.");
+        }
+        else {
+          Console.Error.WriteLine("[ResultAdapter] Error: Unable to initialize database "+
+                                  "connector '"+_generator.OutputTarget+"'.");
+        }
         Console.WriteLine(ToString(false));
       }
+      if (_writer == null) return;
 
 
       // Write the metadata entries of the new agents.
       if (_newAgents.Count > 0) {
         if (_verboseOutput) Console.Write("[ResultAdapter] Adding "+_newAgents.Count+
-                      (_newAgents.Count>1? " entries" : " entry")+": ");
-        var metadataList = new ConcurrentBag<string>();
-        foreach (var newAgent in _newAgents) {
+                     (_newAgents.Count>1? " entries" : " entry")+": ");
+        var metadataList = new ConcurrentBag<AgentMetadataEntry>();
+        Parallel.ForEach(_newAgents, newAgent => {
           var entry = newAgent.GetMetatableEntry();
-          var json = JsonConvert.SerializeObject(entry, _jsonSettings);
-          metadataList.Add(json);
-        }
+          metadataList.Add(entry);
+        });
         _newAgents.Clear();
-        _sender.AddMetaData(metadataList);
+        _writer.AddMetadataEntries(metadataList);
         if (_verboseOutput) Console.WriteLine("[done]");
       }
+
 
       // Set the deletion flags for unregistered agents.
       if (_deletedAgents.Count > 0) {
         if (_verboseOutput) Console.Write("[ResultAdapter] Deleting "+_deletedAgents.Count+" old agents: ");
-        _sender.UpdateMetaData(_deletedAgents, currentTick - 1);
+        _writer.SetAgentDeletionFlags(_deletedAgents, currentTick - 1);
         _deletedAgents.Clear();
         if (_verboseOutput) Console.WriteLine("[done]");
       }
@@ -94,7 +105,7 @@ namespace ResultAdapter.Implementation {
 
       // Lists for the storage of the result data.
       var oldResults = new ConcurrentBag<AgentSimResult>();
-      var keyframes = new ConcurrentBag<string>();
+      var keyframes = new ConcurrentBag<AgentFrame>();
 
       foreach (var outputGroup in _loggers.Keys) { //| Loop over all logger groups and
         if (currentTick % outputGroup == 0) {      //| check if output is necessary.
@@ -104,33 +115,27 @@ namespace ResultAdapter.Implementation {
           var newLoggers = _loggers[outputGroup].GenLoggers.Values;
           if (oldLoggers.Count > 0) {
             if (_verboseOutput) Console.Write(" - "+oldLoggers.Count+" legacy: ");
-            Parallel.ForEach(oldLoggers, logger => {
-              oldResults.Add(logger.GetResultData());
-            });
+            Parallel.ForEach(oldLoggers, logger => oldResults.Add(logger.GetResultData()));
             if (_verboseOutput) Console.WriteLine("[done]");
           }
           if (newLoggers.Count > 0) {
             if (_verboseOutput) Console.Write(" - "+newLoggers.Count+" generated: ");
-            Parallel.ForEach(newLoggers, logger => {
-              var keyframe = logger.GetKeyFrame();
-              var json = JsonConvert.SerializeObject(keyframe, _jsonSettings);
-              keyframes.Add(json);
-            });
+            Parallel.ForEach(newLoggers, logger => keyframes.Add(logger.GetKeyFrame()));
             if (_verboseOutput) Console.WriteLine("[done]");
           }
         }
       }
 
-      // MongoDB bulk insert of the output packets and RMQ notification.
+      // Database bulk insert of the output packets and RMQ notification.
       if (_verboseOutput) Console.WriteLine("[ResultAdapter] Writing to database: ");
       if (!oldResults.IsEmpty) {
         if (_verboseOutput) Console.Write(" - "+oldResults.Count+" legacy (ISimResult): ");
-        _sender.WriteLegacyResults(oldResults);
+        _writer.WriteLegacyResults(oldResults);
         if (_verboseOutput) Console.WriteLine("[done]");
       }
       if (!keyframes.IsEmpty) {
         if (_verboseOutput) Console.Write(" - "+keyframes.Count+" keyframes (JSON): ");
-        _sender.WriteKeyframes(keyframes);
+        _writer.WriteAgentFrames(keyframes, true);
         if (_verboseOutput) Console.WriteLine("[done]");
       }
       _notifier.AnnounceNewTick(SimulationId.ToString(), currentTick);
