@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ConfigService;
@@ -8,6 +7,7 @@ using LIFE.API.Agent;
 using LIFE.API.Results;
 using ResultAdapter.Implementation.DataOutput;
 using ResultAdapter.Interface;
+// ReSharper disable SuspiciousTypeConversion.Global
 [assembly: InternalsVisibleTo("ResultAdapterTests")]
 
 namespace ResultAdapter.Implementation {
@@ -22,8 +22,8 @@ namespace ResultAdapter.Implementation {
     private readonly RabbitNotifier _notifier;                        // Listener queue notifier.
     private readonly LoggerGenerator _generator;                      // Result logger generator.
     private readonly ConcurrentDictionary<int, LoggerGroup> _loggers; // Logger listing (key=frequency).
-    private readonly IList<IGeneratedLogger> _newAgents;              // Meta entries of new agents.
-    private readonly IList<string> _deletedAgents;                    // Agents removed in last tick.
+    private ConcurrentBag<IGeneratedLogger> _newAgents;               // Meta entries of new agents.
+    private ConcurrentBag<string> _deletedAgents;                     // Agents removed in last tick.
     private readonly bool _verboseOutput;                             // Is verbose output desired?
 
     /// <summary>
@@ -38,8 +38,8 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     public ResultAdapterUseCase(string resultConfigId, bool enableTestMode = false) {
       _loggers = new ConcurrentDictionary<int, LoggerGroup>();
-      _newAgents = new List<IGeneratedLogger>();
-      _deletedAgents = new List<string>();
+      _newAgents = new ConcurrentBag<IGeneratedLogger>();
+      _deletedAgents = new ConcurrentBag<string>();
       _mongoDbHost = enableTestMode ? "127.0.0.1" : "result-mongodb";
       var rcsHost = enableTestMode ? "127.0.0.1:8080" : "resultcfg-svc";
       var configHost = enableTestMode ? "127.0.0.1:8080" : "config-svc";
@@ -74,7 +74,7 @@ namespace ResultAdapter.Implementation {
           Console.Error.WriteLine("[ResultAdapter] Error: Unable to initialize database "+
                                   "connector '"+_generator.OutputTarget+"'.");
         }
-        Console.WriteLine(ToString(false));
+        Console.WriteLine(ToString(true));
       }
       if (_writer == null) return;
 
@@ -88,7 +88,7 @@ namespace ResultAdapter.Implementation {
           var entry = newAgent.GetMetatableEntry();
           metadataList.Add(entry);
         });
-        _newAgents.Clear();
+        _newAgents = new ConcurrentBag<IGeneratedLogger>();
         _writer.AddMetadataEntries(metadataList);
         if (_verboseOutput) Console.WriteLine("[done]");
       }
@@ -98,7 +98,7 @@ namespace ResultAdapter.Implementation {
       if (_deletedAgents.Count > 0) {
         if (_verboseOutput) Console.Write("[ResultAdapter] Deleting "+_deletedAgents.Count+" old agents: ");
         _writer.SetAgentDeletionFlags(_deletedAgents, currentTick - 1);
-        _deletedAgents.Clear();
+        _deletedAgents = new ConcurrentBag<string>();
         if (_verboseOutput) Console.WriteLine("[done]");
       }
 
@@ -227,7 +227,7 @@ namespace ResultAdapter.Implementation {
 
 
     /// <summary>
-    ///   Create a new looger group. This initializes the logger lists.
+    ///   Create a new logger group. This initializes the logger lists.
     /// </summary>
     public LoggerGroup() {
       OldLoggers = new ConcurrentDictionary<ISimResult, byte>();

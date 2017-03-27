@@ -104,22 +104,44 @@ namespace ResultAdapter.Implementation.DataOutput {
     /// <param name="results">A list of agent frames.</param>
     /// <param name="isKeyframe">Set to 'true' on keyframes, 'false' on delta frames.</param>
     public void WriteAgentFrames(IEnumerable<AgentFrame> results, bool isKeyframe) {
-      var documents = new ConcurrentBag<BsonDocument>();
-      Parallel.ForEach(results, result => {
-        var json = JsonConvert.SerializeObject(result, _jsonConf);
-        documents.Add(BsonSerializer.Deserialize<BsonDocument>(json));
-      });
+      IMongoCollection<BsonDocument> col;
       if (isKeyframe) {
         if (_colKeyframes == null) {
           _colKeyframes = _dbResults.GetCollection<BsonDocument>(_simId + "-kf");
         }
-        _colKeyframes.InsertMany(documents);
+        col = _colKeyframes;
       } else {
         if (_colDeltaframes == null) {
           _colDeltaframes = _dbResults.GetCollection<BsonDocument>(_simId + "-df");
         }
-        _colDeltaframes.InsertMany(documents);
+        col = _colDeltaframes;
       }
+
+      var documents = new ConcurrentBag<BsonDocument>();
+      Parallel.ForEach(results, result => {
+        var json = JsonConvert.SerializeObject(result, _jsonConf);
+        /*var json = JsonConvert.SerializeObject(new FrameComp {
+          K = result.IsKeyframe,
+          I = result.AgentId,
+          T = (int) result.Tick,
+          P = result.Position,
+          O = result.Orientation,
+          V = result.Properties
+        }, _jsonConf);*/
+        documents.Add(BsonSerializer.Deserialize<BsonDocument>(json));
+      });
+
+      // Insert the documents.
+      col.InsertMany(documents);
+    }
+
+
+    private class FrameComp {
+      public bool K;
+      public string I;
+      public int T;
+      public object[] P, O;
+      public IDictionary<string, object> V;
     }
   }
 }
