@@ -51,7 +51,7 @@ build-LIFE-API:
   script:
     - cd LIFE-API
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-API --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-API
   artifacts:
     expire_in: 120 mins
     paths:
@@ -64,7 +64,7 @@ build-LIFE-Core:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LIFECoreStarter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core
   artifacts:
     expire_in: 120 mins
     paths:
@@ -76,7 +76,7 @@ build-LIFE-Components:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/LIFE-Components
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Components --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Components
   artifacts:
     expire_in: 120 mins
     paths:
@@ -90,7 +90,7 @@ build-BasicAgents:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Agents/BasicAgents
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents
   artifacts:
     expire_in: 120 mins
     paths:
@@ -102,7 +102,7 @@ build-ESC:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/EnvironmentServiceComponent
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC
   artifacts:
     expire_in: 120 mins
     paths:
@@ -114,7 +114,7 @@ build-GeoGridEnvironment:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/GeoGridEnvironment
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment
   artifacts:
     expire_in: 120 mins
     paths:
@@ -126,7 +126,7 @@ build-GridEnvironment:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/GridEnvironment
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment
   artifacts:
     expire_in: 120 mins
     paths:
@@ -138,7 +138,7 @@ build-GeoPotentialField:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/GeoPotentialFieldLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer
   artifacts:
     expire_in: 120 mins
     paths:
@@ -150,7 +150,7 @@ build-GridPotentialField:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/GridPotentialFieldLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer
   artifacts:
     expire_in: 120 mins
     paths:
@@ -162,7 +162,7 @@ build-ObstacleLayer:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/ObstacleLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer
   artifacts:
     expire_in: 120 mins
     paths:
@@ -174,7 +174,7 @@ build-RawFileLayer:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/RawFileLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer
   artifacts:
     expire_in: 120 mins
     paths:
@@ -186,7 +186,7 @@ build-TimeSeriesLayer:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/TimeSeriesLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer
   artifacts:
     expire_in: 120 mins
     paths:
@@ -198,7 +198,7 @@ build-Utilities:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Utilities
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities
   artifacts:
     expire_in: 120 mins
     paths:
@@ -210,7 +210,7 @@ build-AgentManagerService:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Services/AgentManagerService
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager
   artifacts:
     expire_in: 300 mins
     paths:
@@ -222,7 +222,7 @@ build-AgentShadowingService:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Services/AgentShadowingService
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService
   artifacts:
     expire_in: 300 mins
     paths:
@@ -236,7 +236,7 @@ build-ASC:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/ASC
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC
   artifacts:
     expire_in: 120 mins
     paths:
@@ -249,7 +249,7 @@ build-Scs:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/Scs
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs
   artifacts:
     expire_in: 120 mins
     paths:
@@ -261,7 +261,7 @@ build-MulticastAdapter:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/MulticastAdapter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-MulticastAdapter --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-MulticastAdapter
   artifacts:
     expire_in: 120 mins
     paths:
@@ -273,7 +273,7 @@ build-CustomUtilities:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/CustomUtilities
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CustomUtilities --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CustomUtilities
   artifacts:
     expire_in: 120 mins
     paths:
@@ -285,7 +285,7 @@ build-ConfigurationAdapter:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/ConfigurationAdapter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ConfigurationAdapter --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ConfigurationAdapter
   artifacts:
     expire_in: 120 mins
     paths:
@@ -297,7 +297,7 @@ build-CommonTypes:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/CommonTypes
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CommonTypes --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CommonTypes
   artifacts:
     expire_in: 300 mins
     paths:
@@ -309,7 +309,7 @@ build-LayerContainerFacade:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerFacade
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerFacade --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerFacade
   artifacts:
     expire_in: 300 mins
     paths:
@@ -322,7 +322,7 @@ build-LayerContainerShared:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerShared
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerShared --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerShared
   artifacts:
     expire_in: 300 mins
     paths:
@@ -334,7 +334,7 @@ build-LayerFactory:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerFactory
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerFactory --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerFactory
   artifacts:
     expire_in: 300 mins
     paths:
@@ -346,7 +346,7 @@ build-LayerLoader:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LayerLoader
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerLoader --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerLoader
   artifacts:
     expire_in: 300 mins
     paths:
@@ -358,7 +358,7 @@ build-LayerNameService:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/LayerNameService
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerNameService --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerNameService
   artifacts:
     expire_in: 300 mins
     paths:
@@ -370,7 +370,7 @@ build-LayerRegistry:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerRegistry
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerRegistry --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerRegistry
   artifacts:
     expire_in: 300 mins
     paths:
@@ -382,7 +382,7 @@ build-LNSConnector:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LNSConnector
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LNSConnector --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LNSConnector
   artifacts:
     expire_in: 300 mins
     paths:
@@ -394,7 +394,7 @@ build-ModelContainer:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/ModelContainer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ModelContainer --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ModelContainer
   artifacts:
     expire_in: 300 mins
     paths:
@@ -406,7 +406,7 @@ build-NodeRegistry:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/NodeRegistry
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-NodeRegistry --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-NodeRegistry
   artifacts:
     expire_in: 300 mins
     paths:
@@ -418,7 +418,7 @@ build-PartitionManager:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/PartitionManager
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-PartitionManager --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-PartitionManager
   artifacts:
     expire_in: 300 mins
     paths:
@@ -430,7 +430,7 @@ build-ResultAdapter:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/ResultAdapter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ResultAdapter --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ResultAdapter
   artifacts:
     expire_in: 300 mins
     paths:
@@ -442,7 +442,7 @@ build-RTEManager:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/RTEManager
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RTEManager --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RTEManager
   artifacts:
     expire_in: 300 mins
     paths:
@@ -454,7 +454,7 @@ build-RuntimeEnvironment:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/RuntimeEnvironment
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RuntimeEnvironment --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RuntimeEnvironment
   artifacts:
     expire_in: 300 mins
     paths:
@@ -466,7 +466,7 @@ build-SimulationManagerFacade:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerFacade
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerFacade --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerFacade
   artifacts:
     expire_in: 300 mins
     paths:
@@ -478,7 +478,7 @@ build-SimulationManagerShared:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerShared
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerShared --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerShared
   artifacts:
     expire_in: 300 mins
     paths:
@@ -490,7 +490,7 @@ build-SMConnector:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/SMConnector
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SMConnector --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SMConnector
   artifacts:
     expire_in: 300 mins
     paths:
@@ -502,7 +502,7 @@ build-LCConnector:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LCConnector
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector
   artifacts:
     expire_in: 300 mins
     paths:
@@ -514,7 +514,7 @@ build-LIFECoreUtilities:
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/LIFECoreUtilities
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFECoreUtilities --version-suffix $CI_PIPELINE_ID
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFECoreUtilities
   artifacts:
     expire_in: 120 mins
     paths:
