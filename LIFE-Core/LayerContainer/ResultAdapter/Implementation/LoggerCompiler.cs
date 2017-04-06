@@ -173,7 +173,7 @@ namespace ResultAdapter.Implementation {
     /// <returns>Generator function content for the agent metadata entry.</returns>
     private static string GenerateFragmentMetadata(LoggerConfig config) {
       var statProps = new List<string>();
-      foreach (var prop in config.Properties) if (prop.Value) statProps.Add(prop.Key);
+      foreach (var prop in config.Properties) if (prop.Value.Item1) statProps.Add(prop.Key);
 
       // Build the static property list for the meta table entry.
       var staticsListing = "";
@@ -223,7 +223,7 @@ namespace ResultAdapter.Implementation {
     /// <returns>Key frame generation function content.</returns>
     private static string GenerateFragmentKeyframe(LoggerConfig config) {
       var dynProps = new List<string>();
-      foreach (var prop in config.Properties) if (!prop.Value) dynProps.Add(prop.Key);
+      foreach (var prop in config.Properties) if (!prop.Value.Item1) dynProps.Add(prop.Key);
 
       // Build the spatial output strings.
       string posStr = "null", ortStr = "null";

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using LIFE.API.Agent;
@@ -20,7 +21,7 @@ namespace ResultAdapter.Implementation {
 
     internal string OutputTarget { get; private set; }                      // Database/CEP output target.
     internal IDictionary<string, string> OutputParams { get; private set; } // Output component parameters.
-
+    internal List<LoggerConfig> LoggerDefinitions { get; private set; }
 
     /// <summary>
     ///   Create a new logger generator.
@@ -37,10 +38,10 @@ namespace ResultAdapter.Implementation {
       var json = GetConfiguration();
       if (json != null) {
         Console.WriteLine("[LoggerGenerator] Retrieved configuration '"+configId+"' from "+rcsHost+".");
-        var loggerDefs = ParseConfiguration(json);
+        LoggerDefinitions = ParseConfiguration(json);
         IList<string> reqDlls;
         var compiler = new LoggerCompiler(".");
-        _generatedCode = compiler.GenerateLoggerCode(loggerDefs, out reqDlls);
+        _generatedCode = compiler.GenerateLoggerCode(LoggerDefinitions, out reqDlls);
         var dll = compiler.CompileSourceCode(_generatedCode, reqDlls);
         if (dll != null) {
           Console.WriteLine("[LoggerGenerator] Generated "+dll.GetExportedTypes().Length+" loggers:");
@@ -87,7 +88,7 @@ namespace ResultAdapter.Implementation {
     /// </summary>
     /// <param name="config">RCS output configuration (JSON).</param>
     /// <returns>A list of logger definitions to generate classes from.</returns>
-    private IEnumerable<LoggerConfig> ParseConfiguration(JObject config) {
+    private List<LoggerConfig> ParseConfiguration(JObject config) {
       var loggers = new List<LoggerConfig>();
       if (config["OutputTarget"] != null) OutputTarget = config["OutputTarget"].ToString();
       if (config["OutputParams"] != null) {
@@ -98,10 +99,12 @@ namespace ResultAdapter.Implementation {
       }
       foreach (var agentDef in config["Agents"]) {
         if ((bool) agentDef["OutputEnabled"]) {
-          var fields = new Dictionary<string, bool>();
+          var fields = new Dictionary<string, Tuple<bool, string>>();
           foreach (var field in agentDef["OutputProperties"]) {
             if ((bool) field["Selected"]) {
-              fields.Add(field["Name"].ToString(), (bool) field["Static"]);
+              fields.Add(field["Name"].ToString(),
+                         new Tuple<bool, string>( (bool) field["Static"],
+                                                  field["Type"].ToString()));
             }
           }
           string spatialType = null;

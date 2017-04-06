@@ -15,7 +15,8 @@ namespace ResultAdapter.Implementation.DataOutput {
     ///   Create a new Kafka connector.
     /// </summary>
     /// <param name="initParams">Initialization settings.</param>
-    public KafkaWriter(IDictionary<string, string> initParams) {
+    public KafkaWriter(IDictionary<string, string> initParams,
+                       IEnumerable<LoggerConfig> loggerDef) {
       _simId = initParams["SimulationId"];
       //TODO
       // ...

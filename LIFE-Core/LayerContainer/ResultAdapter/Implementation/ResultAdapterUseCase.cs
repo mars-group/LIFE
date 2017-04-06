@@ -67,7 +67,7 @@ namespace ResultAdapter.Implementation {
         }
         else if (_generator.OutputTarget.ToUpper().Equals("KAFKA/CASSANDRA")) {
           _generator.OutputParams["SimulationId"] = SimulationId.ToString();
-          _writer = new KafkaWriter(_generator.OutputParams);
+          _writer = new KafkaWriter(_generator.OutputParams, _generator.LoggerDefinitions);
           Console.WriteLine("[ResultAdapter] Initialized Kafka/Cassandra connector.");
         }
         else {
