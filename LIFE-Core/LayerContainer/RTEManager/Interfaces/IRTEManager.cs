@@ -6,19 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Collections.Generic;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 
-namespace RTEManager.Interfaces {
+namespace RTEManager.Interfaces
+{
     /// <summary>
     ///     The RunTimeEnvironment Manager manages the ressources available within this
     ///     LayerContainer and triggers each layer's Tick client according to the available ressources.
     /// </summary>
     public interface IRTEManager
     {
-
         /// <summary>
         /// Initializes the ResultAdapter with a custom ResultConfig from the MARS Cloud
         /// </summary>
@@ -44,7 +45,7 @@ namespace RTEManager.Interfaces {
         /// </summary>
         /// <param name="layer"></param>
         /// <param name="tickClient"></param>
-        void UnregisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval=1);
+        void UnregisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1);
 
         /// <summary>
         ///     Registers an agent with the LayerContainer.
@@ -55,7 +56,7 @@ namespace RTEManager.Interfaces {
         /// <param name="tickClient"></param>
         /// <param name="executionInterval">Set to tell LIFE to execute this agent in a specific interval
         /// other than every tick.</param>
-        void RegisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval=1);
+        void RegisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1);
 
         /// <summary>
         ///     Initializes the layer wit

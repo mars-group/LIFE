@@ -8,7 +8,8 @@
 
     public class TConstructorParameterMapping
     {
-        public TConstructorParameterMapping(string type, string name, bool isAutoInitialized, string mappingType, string tableName="", string columnName="", string value = "")
+        public TConstructorParameterMapping(string type, string name, bool isAutoInitialized, string mappingType,
+            string tableName = "", string columnName = "", string value = "")
         {
             Type = type;
             Name = name;

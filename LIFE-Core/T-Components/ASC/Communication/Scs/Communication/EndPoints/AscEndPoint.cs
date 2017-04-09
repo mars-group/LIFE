@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,14 +14,15 @@ using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Communication.EndPoints.Udp;
 using ASC.Communication.Scs.Server;
 
-namespace ASC.Communication.Scs.Communication.EndPoints {
+namespace ASC.Communication.Scs.Communication.EndPoints
+{
     /// <summary>
     ///     Represents a server side end point in SCS.
     /// </summary>
     public abstract class AscEndPoint
     {
-
-        private static IDictionary<string, AscEndPoint> udpEndPointDictionary = new ConcurrentDictionary<string, AscEndPoint>();
+        private static IDictionary<string, AscEndPoint> udpEndPointDictionary =
+            new ConcurrentDictionary<string, AscEndPoint>();
 
         /// <summary>
         ///     Create a Scs End Point from a string.
@@ -31,7 +33,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints {
         /// <param name="port">Port to create endpoint</param>
         /// <param name="multicastGroup"></param>
         /// <returns>Created end point</returns>
-        public static AscEndPoint CreateEndPoint(int port, string multicastGroup) {
+        public static AscEndPoint CreateEndPoint(int port, string multicastGroup)
+        {
             //Check if end point address is null
             if (string.IsNullOrEmpty(multicastGroup)) throw new ArgumentNullException("multicastGroup");
 

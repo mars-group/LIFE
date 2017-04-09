@@ -7,9 +7,6 @@ namespace LIFE.Components.Services.AgentManagerService.Interface.Exceptions
     {
         public ParameterIsNotMappedOrHasNotDefaultValue(string msg) : base(msg)
         {
-
         }
-
     }
 }
-

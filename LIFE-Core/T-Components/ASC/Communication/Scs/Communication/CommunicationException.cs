@@ -6,31 +6,40 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Runtime.Serialization;
 
-namespace ASC.Communication.Scs.Communication {
+namespace ASC.Communication.Scs.Communication
+{
     /// <summary>
     ///     This application is thrown in a communication error.
     /// </summary>
     [Serializable]
-    public class CommunicationException : Exception {
+    public class CommunicationException : Exception
+    {
         /// <summary>
         ///     Contstructor.
         /// </summary>
-        public CommunicationException() {}
+        public CommunicationException()
+        {
+        }
 
         /// <summary>
         ///     Contstructor for serializing.
         /// </summary>
-        public CommunicationException(SerializationInfo serializationInfo, StreamingContext context){}
+        public CommunicationException(SerializationInfo serializationInfo, StreamingContext context)
+        {
+        }
 
         /// <summary>
         ///     Contstructor.
         /// </summary>
         /// <param name="message">Exception message</param>
         public CommunicationException(string message)
-            : base(message) {}
+            : base(message)
+        {
+        }
 
         /// <summary>
         ///     Contstructor.
@@ -38,6 +47,8 @@ namespace ASC.Communication.Scs.Communication {
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
         public CommunicationException(string message, Exception innerException)
-            : base(message, innerException) {}
+            : base(message, innerException)
+        {
+        }
     }
 }

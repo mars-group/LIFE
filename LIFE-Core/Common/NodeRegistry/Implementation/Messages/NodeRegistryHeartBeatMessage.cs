@@ -11,22 +11,26 @@ using CommonTypes.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NodeRegistry.Implementation.Messages {
+namespace NodeRegistry.Implementation.Messages
+{
+    public class NodeRegistryHeartBeatMessage : AbstractNodeRegistryMessage
+    {
+        public string NodeIdentifier;
 
-  public class NodeRegistryHeartBeatMessage : AbstractNodeRegistryMessage {
+        [JsonConverter(typeof(StringEnumConverter))] public NodeType NodeType;
 
-    public string NodeIdentifier;
-
-    [JsonConverter(typeof(StringEnumConverter))] public NodeType NodeType;
-
-    public NodeRegistryHeartBeatMessage() {}
+        public NodeRegistryHeartBeatMessage()
+        {
+        }
 
 
-    public NodeRegistryHeartBeatMessage(NodeRegistryMessageType messageType, string nodeIdentifier, NodeType nodeType,
-      string clusterName)
-      : base(messageType, clusterName) {
-      NodeIdentifier = nodeIdentifier;
-      NodeType = nodeType;
+        public NodeRegistryHeartBeatMessage(NodeRegistryMessageType messageType, string nodeIdentifier,
+            NodeType nodeType,
+            string clusterName)
+            : base(messageType, clusterName)
+        {
+            NodeIdentifier = nodeIdentifier;
+            NodeType = nodeType;
+        }
     }
-  }
 }

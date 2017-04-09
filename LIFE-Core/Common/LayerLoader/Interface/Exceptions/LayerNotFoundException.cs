@@ -4,6 +4,8 @@ namespace LayerLoader.Interface.Exceptions
 {
     public class LayerNotFoundException : Exception
     {
-        public LayerNotFoundException(string msg) : base(msg) { }
+        public LayerNotFoundException(string msg) : base(msg)
+        {
+        }
     }
 }

@@ -6,11 +6,15 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace LCConnector.Exceptions {
+namespace LCConnector.Exceptions
+{
     /// <summary>
     ///     This exception is thrown, when a layer is tried to initialize, that was not yet instantiated.
     /// </summary>
-    public class LayerNotInstantiatedException : Exception {}
+    public class LayerNotInstantiatedException : Exception
+    {
+    }
 }

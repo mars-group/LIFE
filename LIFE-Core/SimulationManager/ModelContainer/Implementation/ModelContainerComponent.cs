@@ -16,25 +16,28 @@ using Newtonsoft.Json.Linq;
 using SimulationManagerShared;
 using SMConnector.TransportTypes;
 
-namespace ModelContainer.Implementation {
-    public class ModelContainerComponent : IModelContainer {
+namespace ModelContainer.Implementation
+{
+    public class ModelContainerComponent : IModelContainer
+    {
         private readonly ModelManagementUseCase _modelContainerUseCase;
         private readonly ModelInstantiationOrderingUseCase _modelInstantionOrderingUseCase;
 
-        public ModelContainerComponent(SimulationManagerSettings settings) {
+        public ModelContainerComponent(SimulationManagerSettings settings)
+        {
             _modelContainerUseCase = new ModelManagementUseCase(settings);
             _modelInstantionOrderingUseCase = new ModelInstantiationOrderingUseCase();
         }
 
         #region IModelContainer Members
 
-
         public TModelDescription GetModelDescription(string modelPath)
         {
             return _modelContainerUseCase.GetModelDescription(modelPath);
         }
 
-        public ModelContent GetSerializedModel(TModelDescription modelPath) {
+        public ModelContent GetSerializedModel(TModelDescription modelPath)
+        {
             return _modelContainerUseCase.GetModel(modelPath);
         }
 
@@ -43,7 +46,8 @@ namespace ModelContainer.Implementation {
             return _modelContainerUseCase.GetModelConfig(modelId);
         }
 
-        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model) {
+        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription model)
+        {
             return _modelInstantionOrderingUseCase.GetInstantiationOrder(model);
         }
 
@@ -51,7 +55,6 @@ namespace ModelContainer.Implementation {
         {
             return _modelContainerUseCase.GetScenarioConfig(scenarioConfigId);
         }
-
 
         #endregion
     }

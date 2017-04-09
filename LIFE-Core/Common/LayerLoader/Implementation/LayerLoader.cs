@@ -24,7 +24,7 @@ namespace LayerLoader.Implementation
 
         public LayerLoader(string modelPath = "./model")
         {
-            _simulationManagerLayerCache  = new List<LayerTypeInfo>();
+            _simulationManagerLayerCache = new List<LayerTypeInfo>();
 
             AssemblyLoadContext.Default.Resolving += (context, name) =>
             {
@@ -43,7 +43,8 @@ namespace LayerLoader.Implementation
                     }
                 }
 
-                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(modelPath).FullName, name.Name + ".dll", SearchOption.AllDirectories);
+                var foundDlls = Directory.GetFileSystemEntries(new FileInfo(modelPath).FullName, name.Name + ".dll",
+                    SearchOption.AllDirectories);
                 if (foundDlls.Any())
                 {
                     return context.LoadFromAssemblyPath(foundDlls[0]);
@@ -52,15 +53,17 @@ namespace LayerLoader.Implementation
                 //return context.LoadFromAssemblyName(name);
             };
         }
+
         private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
         {
             return (library.Name == (assemblyName.Name))
-                    || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
+                   || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
             /*
             return (library.Name == (assemblyName.Name) && library.Version == assemblyName.Version.ToString())
                 || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name) && d.Version == assemblyName.Version.ToString()));
                 */
         }
+
         /// <summary>
         /// Gets called on LayerContainer only!
         /// </summary>
@@ -84,7 +87,8 @@ namespace LayerLoader.Implementation
         {
             if (_layerTypes.Count <= 0)
             {
-                throw new ModelCodeFailedToLoadException("It appears there was no valid model code found in the ./models/tmp subdirectory. Please check!");
+                throw new ModelCodeFailedToLoadException(
+                    "It appears there was no valid model code found in the ./models/tmp subdirectory. Please check!");
             }
 
             var layerType = _layerTypes.FirstOrDefault(t => t.Name == layerName);
@@ -93,10 +97,12 @@ namespace LayerLoader.Implementation
                 throw new LayerNotFoundException($"A Layer with Name {layerName} could not be found");
             }
 
-            var ctors = layerType.GetConstructors(); // ToDo: Implement constraint check on constructor: No special types!
+            var ctors =
+                layerType.GetConstructors(); // ToDo: Implement constraint check on constructor: No special types!
             if (ctors == null)
             {
-                throw new ConstructorNotFoundException($"A constructor for layer with name {layerName} could not be found.");    
+                throw new ConstructorNotFoundException(
+                    $"A constructor for layer with name {layerName} could not be found.");
             }
 
             return new LayerTypeInfo(layerType, ctors);
@@ -125,7 +131,8 @@ namespace LayerLoader.Implementation
 
             if (!_simulationManagerLayerCache.Any())
             {
-                throw new ModelCodeFailedToLoadException($"It appears there was no valid mode code found in the {modelPath} subdirectory. Please check your build config etc.!");
+                throw new ModelCodeFailedToLoadException(
+                    $"It appears there was no valid mode code found in the {modelPath} subdirectory. Please check your build config etc.!");
             }
             return _simulationManagerLayerCache;
         }
@@ -134,7 +141,8 @@ namespace LayerLoader.Implementation
         {
             var types = new List<Type>();
             // iterate all DLLs and try to find ILayer implementations
-            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll", SearchOption.TopDirectoryOnly))
+            foreach (var fileSystemInfo in new DirectoryInfo(modelPath).GetFileSystemInfos("*.dll",
+                SearchOption.TopDirectoryOnly))
             {
                 Assembly asm = null;
                 try
@@ -143,16 +151,17 @@ namespace LayerLoader.Implementation
                 }
                 catch (FileLoadException fex)
                 {
-
                     // Get loaded assembly 
-                    asm = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(fileSystemInfo.Name)));
+                    asm =
+                        AssemblyLoadContext.Default.LoadFromAssemblyName(
+                            new AssemblyName(Path.GetFileNameWithoutExtension(fileSystemInfo.Name)));
 
                     if (asm == null)
                     {
-                        Console.WriteLine($"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
+                        Console.WriteLine(
+                            $"Caught a FileLoadException. Msg was: {fex.Message}, Error was: {fex.InnerException}");
                         throw fex;
                     }
-
                 }
 
                 try
@@ -160,20 +169,20 @@ namespace LayerLoader.Implementation
                     types.AddRange(asm.GetTypes()
                         .Where(t => t.GetTypeInfo().GetInterface("ILayer") != null && !t.GetTypeInfo().IsAbstract)
                         .ToList()
-                        );
+                    );
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
-                    Console.WriteLine($"Caught type load error while Loading model code. Error was: {ex.LoaderExceptions.First()}");
+                    Console.WriteLine(
+                        $"Caught type load error while Loading model code. Error was: {ex.LoaderExceptions.First()}");
                     throw ex;
                 }
                 catch (BadImageFormatException bex)
                 {
-                    Console.WriteLine($"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");
+                    Console.WriteLine(
+                        $"Caught a BadImageFormatException. File was: {bex.FileName}, Msg was: {bex.Message}");
                     throw bex;
                 }
-
-
             }
             return types;
         }

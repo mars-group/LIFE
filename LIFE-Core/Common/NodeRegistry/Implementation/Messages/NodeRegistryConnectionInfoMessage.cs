@@ -9,22 +9,25 @@
 
 using CommonTypes.DataTypes;
 
-namespace NodeRegistry.Implementation.Messages {
+namespace NodeRegistry.Implementation.Messages
+{
+    public class NodeRegistryConnectionInfoMessage : AbstractNodeRegistryMessage
+    {
+        public NodeRegistryConnectionInfoMessage()
+        {
+        }
 
-  public class NodeRegistryConnectionInfoMessage : AbstractNodeRegistryMessage {
+        public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, TNodeInformation information,
+            string address, string clusterName)
+            : base(messageType, clusterName)
+        {
+            OriginAddress = address;
+            NodeInformation = information;
+        }
 
-    public NodeRegistryConnectionInfoMessage() {}
+        public string OriginAddress { get; set; }
 
-    public NodeRegistryConnectionInfoMessage(NodeRegistryMessageType messageType, TNodeInformation information,
-      string address, string clusterName)
-      : base(messageType, clusterName) {
-      OriginAddress = address;
-      NodeInformation = information;
+
+        public TNodeInformation NodeInformation { get; set; }
     }
-
-    public string OriginAddress { get; set; }
-
-
-    public TNodeInformation NodeInformation { get; set; }
-  }
 }

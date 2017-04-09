@@ -17,3 +17,4 @@ namespace LIFE.API.Layer.GIS {
   /// </summary>
   public interface IGISPassiveLayer : ISteppedLayer, IGISAccess {} 
 }*/
+

@@ -13,31 +13,35 @@ using System.Linq;
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
 
-namespace LayerNameService.Implementation {
+namespace LayerNameService.Implementation
+{
+    internal class LayerNameServiceUseCase : ILayerNameService
+    {
+        private readonly IDictionary<string, List<TLayerNameServiceEntry>> _layerMap;
 
-  internal class LayerNameServiceUseCase : ILayerNameService {
+        public LayerNameServiceUseCase()
+        {
+            _layerMap = new ConcurrentDictionary<string, List<TLayerNameServiceEntry>>();
+        }
 
-    private readonly IDictionary<string, List<TLayerNameServiceEntry>> _layerMap;
+        public TLayerNameServiceEntry ResolveLayer(string layerType)
+        {
+            return _layerMap[layerType].FirstOrDefault();
+        }
 
-    public LayerNameServiceUseCase() {
-      _layerMap = new ConcurrentDictionary<string, List<TLayerNameServiceEntry>>();
+        public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            if (!_layerMap.ContainsKey(layerType))
+                _layerMap[layerType] = new List<TLayerNameServiceEntry>();
+            _layerMap[layerType].Add(layerNameServiceEntry);
+        }
+
+        public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            if (_layerMap[layerType].Count <= 1)
+                _layerMap.Remove(layerType);
+            else
+                _layerMap[layerType].Remove(layerNameServiceEntry);
+        }
     }
-
-    public TLayerNameServiceEntry ResolveLayer(string layerType) {
-      return _layerMap[layerType].FirstOrDefault();
-    }
-
-    public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
-      if (!_layerMap.ContainsKey(layerType))
-        _layerMap[layerType] = new List<TLayerNameServiceEntry>();
-      _layerMap[layerType].Add(layerNameServiceEntry);
-    }
-
-    public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
-      if (_layerMap[layerType].Count <= 1)
-        _layerMap.Remove(layerType);
-      else
-        _layerMap[layerType].Remove(layerNameServiceEntry);
-    }
-  }
 }

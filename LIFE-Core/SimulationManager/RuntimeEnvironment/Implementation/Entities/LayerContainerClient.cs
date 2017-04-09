@@ -14,8 +14,10 @@ using LCConnector.TransportTypes.ModelStructure;
 using LIFE.API.Layer.Initialization;
 using RuntimeEnvironment.Interfaces.Exceptions;
 
-namespace RuntimeEnvironment.Implementation.Entities {
-    internal class LayerContainerClient {
+namespace RuntimeEnvironment.Implementation.Entities
+{
+    internal class LayerContainerClient
+    {
         private readonly IScsServiceClient<ILayerContainer> _layerContainer;
 
         private readonly ILayerContainer _proxy;
@@ -27,7 +29,9 @@ namespace RuntimeEnvironment.Implementation.Entities {
             _proxy.Initialize(resultConfigId);
         }
 
-        public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer, ModelContent content, string resultConfigId) {
+        public LayerContainerClient(IScsServiceClient<ILayerContainer> layerContainer, ModelContent content,
+            string resultConfigId)
+        {
             _layerContainer = layerContainer;
             // set timeout to infinite
             _layerContainer.Timeout = -1;
@@ -40,7 +44,8 @@ namespace RuntimeEnvironment.Implementation.Entities {
             _proxy.Initialize(resultConfigId);
         }
 
-        public void Instantiate(TLayerInstanceId instanceId) {
+        public void Instantiate(TLayerInstanceId instanceId)
+        {
             _proxy.Instantiate(instanceId);
         }
 
@@ -49,17 +54,18 @@ namespace RuntimeEnvironment.Implementation.Entities {
             return _proxy.Tick(amountOfTicks);
         }
 
-        public void CleanUp(){
-            _proxy.CleanUp ();
+        public void CleanUp()
+        {
+            _proxy.CleanUp();
         }
 
-        public ILayerContainer Proxy {
+        public ILayerContainer Proxy
+        {
             get { return _proxy; }
         }
 
         public void Initialize(TLayerInstanceId layerInstanceId, TInitData initData)
         {
-
             if (!Proxy.InitializeLayer(layerInstanceId, initData))
             {
                 throw new LayerFailedToInitializeException("Layer "
@@ -68,8 +74,6 @@ namespace RuntimeEnvironment.Implementation.Entities {
                                                            " failed to initialize. Please review your InitLayer Code! MARS LIFE will shut down now."
                 );
             }
-
         }
     }
-
 }

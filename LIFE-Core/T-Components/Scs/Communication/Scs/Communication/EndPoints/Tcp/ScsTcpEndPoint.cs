@@ -6,17 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Client;
 using Hik.Communication.Scs.Client.Tcp;
 using Hik.Communication.Scs.Server;
 using Hik.Communication.Scs.Server.Tcp;
 
-namespace Hik.Communication.Scs.Communication.EndPoints.Tcp {
+namespace Hik.Communication.Scs.Communication.EndPoints.Tcp
+{
     /// <summary>
     ///     Represens a TCP end point in SCS.
     /// </summary>
-    public sealed class ScsTcpEndPoint : ScsEndPoint {
+    public sealed class ScsTcpEndPoint : ScsEndPoint
+    {
         /// <summary>
         ///     IP address of the server.
         /// </summary>
@@ -31,7 +34,8 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Creates a new ScsTcpEndPoint object with specified port number.
         /// </summary>
         /// <param name="tcpPort">Listening TCP Port for incoming connection requests on server</param>
-        public ScsTcpEndPoint(int tcpPort) {
+        public ScsTcpEndPoint(int tcpPort)
+        {
             TcpPort = tcpPort;
         }
 
@@ -40,7 +44,8 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Tcp {
         /// </summary>
         /// <param name="ipAddress">IP address of the server</param>
         /// <param name="port">Listening TCP Port for incoming connection requests on server</param>
-        public ScsTcpEndPoint(string ipAddress, int port) {
+        public ScsTcpEndPoint(string ipAddress, int port)
+        {
             IpAddress = ipAddress;
             TcpPort = port;
         }
@@ -51,7 +56,8 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Tcp {
         /// </summary>
         /// <param name="address">TCP end point Address</param>
         /// <returns>Created ScsTcpEndpoint object</returns>
-        public ScsTcpEndPoint(string address) {
+        public ScsTcpEndPoint(string address)
+        {
             var splittedAddress = address.Trim().Split(':');
             IpAddress = splittedAddress[0].Trim();
             TcpPort = Convert.ToInt32(splittedAddress[1].Trim());
@@ -61,7 +67,8 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Creates a Scs Server that uses this end point to listen incoming connections.
         /// </summary>
         /// <returns>Scs Server</returns>
-        internal override IScsServer CreateServer() {
+        internal override IScsServer CreateServer()
+        {
             return new ScsTcpServer(this);
         }
 
@@ -69,7 +76,8 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Creates a Scs Client that uses this end point to connect to server.
         /// </summary>
         /// <returns>Scs Client</returns>
-        internal override IScsClient CreateClient() {
+        internal override IScsClient CreateClient()
+        {
             return new ScsTcpClient(this);
         }
 
@@ -77,7 +85,8 @@ namespace Hik.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Generates a string representation of this end point object.
         /// </summary>
         /// <returns>String representation of this end point object</returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.IsNullOrEmpty(IpAddress) ? ("tcp://" + TcpPort) : ("tcp://" + IpAddress + ":" + TcpPort);
         }
     }

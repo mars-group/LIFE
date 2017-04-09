@@ -10,13 +10,13 @@
 using LNSConnector.Interface;
 using SMConnector;
 
-namespace SimulationManagerFacade.Interface {
+namespace SimulationManagerFacade.Interface
+{
     /// <summary>
     /// The SimulationManager main core.
     /// </summary>
     public interface ISimulationManagerApplicationCore :
-                            ISimulationManager, ILayerNameService
+        ISimulationManager, ILayerNameService
     {
-
     }
 }

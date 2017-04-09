@@ -14,6 +14,5 @@ namespace LayerLoader.Implementation
         public Type LayerType { get; private set; }
 
         public ConstructorInfo[] Constructors { get; private set; }
-
     }
 }

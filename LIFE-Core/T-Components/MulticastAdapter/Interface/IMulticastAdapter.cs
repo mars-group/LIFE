@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,8 @@ namespace MulticastAdapter.Interface
 
         /// <summary>
         ///     Reopen the closed socket if it was closed before. If the method is called and the Socket is already open nothing
-		///     happens.
+        ///     happens.
         /// </summary>
         void ReopenSocket();
-
     }
 }

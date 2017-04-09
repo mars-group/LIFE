@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
 namespace ASC.Communication.ScsServices.Communication.Messages
@@ -14,7 +15,8 @@ namespace ASC.Communication.ScsServices.Communication.Messages
     {
         public AddShadowAgentMessage AddShadowAgentMessage { get; private set; }
 
-        public AddShadowAgentEventArgs(AddShadowAgentMessage message) {
+        public AddShadowAgentEventArgs(AddShadowAgentMessage message)
+        {
             AddShadowAgentMessage = message;
         }
     }

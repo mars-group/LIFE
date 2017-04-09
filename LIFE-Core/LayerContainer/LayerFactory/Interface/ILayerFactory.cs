@@ -6,12 +6,15 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using LCConnector.TransportTypes.ModelStructure;
 using LIFE.API.Layer;
 
 
-namespace LayerFactory.Interface {
-    public interface ILayerFactory {
+namespace LayerFactory.Interface
+{
+    public interface ILayerFactory
+    {
         /// <summary>
         ///     Retreives a layer from internal structures
         /// </summary>

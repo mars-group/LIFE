@@ -1,450 +1,456 @@
 {
-    "Description": "sgeiles Mapping",
-    "Group": "",
-    "InitializationDescription": {
-        "BasicLayers": [
-            {
-                "Agents": [],
-                "LayerName": "GridPotentialFieldLayer"
-            },
-            {
-                "Agents": [],
-                "LayerName": "WaterPotentialLayer"
-            },
-            {
-                "Agents": [
-                    {
-                        "ConstructorParameterMapping": [
-                            {
-                                "ColumnName": "oLqtDw",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "6452fd3e-d61e-492e-83c0-14a7e5c5ab71",
-                                "Name": "layer",
-                                "TableName": "zPeF2XhG3U80t2gI",
-                                "Type": "ILayer"
-                            },
-                            {
-                                "IsAutoInitialized": true,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "regFkt",
-                                "Type": "RegisterAgent",
-                                "Value": null
-                            },
-                            {
-                                "IsAutoInitialized": true,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "unregFkt",
-                                "Type": "UnregisterAgent",
-                                "Value": null
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "env",
-                                "Type": "IEnvironment",
-                                "Value": "YTsmJ74Py0M"
-                            },
-                            {
-                                "ColumnName": "9Z8C98y6OR",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "3c8a111b-4b83-4a2e-be1b-f7776ba1be7a",
-                                "Name": "id",
-                                "TableName": "m7z10WFBo6Q0",
-                                "Type": "Guid"
-                            },
-                            {
-                                "ColumnName": "0252D2XlWkfxmOu07",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "8c7968b3-efb7-4ceb-acb0-959f156dbaba",
-                                "Name": "waterPointName",
-                                "TableName": "9m1czzZUA62Q",
-                                "Type": "String"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "waterPointType",
-                                "Type": "Int32",
-                                "Value": 408842247
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "waterPointPurpose",
-                                "Type": "Int32",
-                                "Value": 991839438
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "currentStatus",
-                                "Type": "Int32",
-                                "Value": 312443053
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "waterPointFuture",
-                                "Type": "Int32",
-                                "Value": -644225175
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "lat",
-                                "Type": "Double",
-                                "Value": 3401889953
-                            },
-                            {
-                                "ColumnName": "63Aa9S",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "14488621-5157-4123-b9a2-fc72f39793a0",
-                                "Name": "lon",
-                                "TableName": "37ZXr9P5i",
-                                "Type": "Double"
-                            }
-                        ],
-                        "FullName": "KNPWaterPointLayer.Agents.WaterPoint, KNPWaterPointLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-                        "InstanceCount": 11452,
-                        "Name": "WaterPoint"
-                    }
-                ],
-                "LayerName": "WaterPointLayer"
-            },
-            {
-                "Agents": [],
-                "LayerName": "KNPObstacleLayer"
-            },
-            {
-                "Agents": [
-                    {
-                        "ConstructorParameterMapping": [
-                            {
-                                "ColumnName": "crEaR59kA",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "b5591856-e759-4ca5-a333-0d323e9a08a3",
-                                "Name": "marulaLayer",
-                                "TableName": "d75R9V09tUKSt0kmLrEw",
-                                "Type": "IKNPMarulaLayer"
-                            },
-                            {
-                                "IsAutoInitialized": true,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "registerAgent",
-                                "Type": "RegisterAgent",
-                                "Value": null
-                            },
-                            {
-                                "IsAutoInitialized": true,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "unregisterAgent",
-                                "Type": "UnregisterAgent",
-                                "Value": null
-                            },
-                            {
-                                "ColumnName": "853r0",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "7c378f41-06e8-43ca-809a-c51c5bbb9881",
-                                "Name": "env",
-                                "TableName": "5ACc",
-                                "Type": "IGeoGridEnvironment`1"
-                            },
-                            {
-                                "ColumnName": "26o2m559Evm4mwQU52Bg",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "c8b76d5b-ec93-4a5d-8472-f1260dce92ce",
-                                "Name": "precipitationLayer",
-                                "TableName": "lZ32h8e5qJCO3XRR",
-                                "Type": "IPrecipitationLayer"
-                            },
-                            {
-                                "ColumnName": "mf11UuO74WN1IW",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "9ac59ee7-e697-48b0-8987-78cb10035f10",
-                                "Name": "id",
-                                "TableName": "G2abk5lo0Xc7lF8Gf",
-                                "Type": "Guid"
-                            },
-                            {
-                                "ColumnName": "k8vGq455Vjq0k",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "e763a776-ea97-4a86-ae16-e6a9f40dc4ce",
-                                "Name": "lat",
-                                "TableName": "ol628kup02B0FA1W6iU",
-                                "Type": "Double"
-                            },
-                            {
-                                "ColumnName": "vnv0E",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "14036220-7cc7-4e63-a751-7f78b8c58904",
-                                "Name": "lon",
-                                "TableName": "TMX6IPBBI1tM89D",
-                                "Type": "Double"
-                            },
-                            {
-                                "ColumnName": "7JGINxH9",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "cff6c165-c4e0-4419-884a-6d30825c23a9",
-                                "Name": "heightInM",
-                                "TableName": "bPxlAcuDKrBjSgU8O7rU",
-                                "Type": "Double"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "ageInDays",
-                                "Type": "Int32",
-                                "Value": 1778894401
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "stemDiameterInM",
-                                "Type": "Double",
-                                "Value": 584501662
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "sex",
-                                "Type": "Int32",
-                                "Value": 1053245923
-                            }
-                        ],
-                        "FullName": "KNPMarulaTreeLayer.Agents.MarulaTree, KNPMarulaTreeLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-                        "InstanceCount": 161847,
-                        "Name": "MarulaTree"
-                    }
-                ],
-                "LayerName": "MarulaLayer"
-            },
-            {
-                "Agents": [],
-                "LayerName": "GeoPotentialFieldLayer"
-            },
-            {
-                "Agents": [
-                    {
-                        "ConstructorParameterMapping": [
-                            {
-                                "ColumnName": "33IqJA72X8410n9pL7",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "b38e3b5b-969f-4a0f-a1ca-511528aea79b",
-                                "Name": "layer",
-                                "TableName": "x6P51FnzA0",
-                                "Type": "IKnpElephantLayer"
-                            },
-                            {
-                                "IsAutoInitialized": true,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "registerAgent",
-                                "Type": "RegisterAgent",
-                                "Value": null
-                            },
-                            {
-                                "IsAutoInitialized": true,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "unregisterAgent",
-                                "Type": "UnregisterAgent",
-                                "Value": null
-                            },
-                            {
-                                "ColumnName": "4F73z0ji",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "8bd0b93b-b7e4-455d-942a-1ab2af9b45cd",
-                                "Name": "environment",
-                                "TableName": "AUptSVq35WxN",
-                                "Type": "IGeoGridEnvironment`1"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "waterPointLayer",
-                                "Type": "IKnpWaterPointLayer",
-                                "Value": "Mt8IRm2BM0M3Rg9ZXlNc"
-                            },
-                            {
-                                "ColumnName": "3KbAfpa9BN6Cwl",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "825dfd0b-f2ce-447c-b149-89135164f7a4",
-                                "Name": "waterPotentialLayer",
-                                "TableName": "eipZ5X9",
-                                "Type": "IWaterPotentialLayer"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "obstacleLayer",
-                                "Type": "IKNPObstacleLayer",
-                                "Value": "Vs6zEzD8HGe0hx"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "marulaLayer",
-                                "Type": "IKNPMarulaLayer",
-                                "Value": "kgyoeNu4"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "temperatureTimeSeriesLayer",
-                                "Type": "ITemperatureTimeSeriesLayer",
-                                "Value": "AEvB"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "shadeLayer",
-                                "Type": "IShadeLayer",
-                                "Value": "2JiHeTN3g3"
-                            },
-                            {
-                                "ColumnName": "5wZaDV",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "8a235938-ed6b-4043-b160-e15bd6031c0a",
-                                "Name": "id",
-                                "TableName": "UmXGT2",
-                                "Type": "Guid"
-                            },
-                            {
-                                "ColumnName": "Ps4z98Y99X3XF3E25Jk5",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "9756fa92-637f-4e72-8648-0fb1a633487c",
-                                "Name": "lat",
-                                "TableName": "cY82oT9xf8",
-                                "Type": "Double"
-                            },
-                            {
-                                "ColumnName": "Z6vO3s145HCro",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "1cab799f-dc1f-4643-aff5-9498d06a0110",
-                                "Name": "lon",
-                                "TableName": "R4tbH649AOCvOHoZE67",
-                                "Type": "Double"
-                            },
-                            {
-                                "ColumnName": "p3VQkE40UCkmIW1P8",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "f76aa405-72af-4092-9a60-3e228ed52334",
-                                "Name": "herdId",
-                                "TableName": "tM9e6LImiX9tp",
-                                "Type": "Int32"
-                            },
-                            {
-                                "IsAutoInitialized": false,
-                                "MappingType": "ValueParameterMapping",
-                                "Name": "elephantType",
-                                "Type": "String",
-                                "Value": "N8r30H9F"
-                            },
-                            {
-                                "ColumnName": "hXEGtFCmfFLSizHq",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "c0f4c0a0-ae9a-493e-8162-f7a302d8200a",
-                                "Name": "isLeading",
-                                "TableName": "2S9AmOW",
-                                "Type": "Boolean"
-                            },
-                            {
-                                "ColumnName": "qcF7xTA3",
-                                "IsAutoInitialized": false,
-                                "MappingType": "ColumnParameterMapping",
-                                "MetaDataId": "0455cb9d-94f1-4a6e-b7cb-ca64b6ee8236",
-                                "Name": "reproductionYears",
-                                "TableName": "S7e7Rr931WP0raU0442",
-                                "Type": "String"
-                            }
-                        ],
-                        "FullName": "KNPElephantLayer.Agents.Elephant, KNPElephantLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-                        "InstanceCount": 112091,
-                        "Name": "Elephant"
-                    }
-                ],
-                "LayerName": "ElephantLayer"
-            },
-            {
-                "Agents": [],
-                "LayerName": "ShadeLayer"
-            }
+  "Description": "sgeiles Mapping",
+  "Group": "",
+  "InitializationDescription": {
+    "BasicLayers": [
+      {
+        "Agents": [],
+        "LayerName": "GridPotentialFieldLayer"
+      },
+      {
+        "Agents": [],
+        "LayerName": "WaterPotentialLayer"
+      },
+      {
+        "Agents": [
+          {
+            "ConstructorParameterMapping": [
+              {
+                "ColumnName": "oLqtDw",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "6452fd3e-d61e-492e-83c0-14a7e5c5ab71",
+                "Name": "layer",
+                "TableName": "zPeF2XhG3U80t2gI",
+                "Type": "ILayer"
+              },
+              {
+                "IsAutoInitialized": true,
+                "MappingType": "ValueParameterMapping",
+                "Name": "regFkt",
+                "Type": "RegisterAgent",
+                "Value": null
+              },
+              {
+                "IsAutoInitialized": true,
+                "MappingType": "ValueParameterMapping",
+                "Name": "unregFkt",
+                "Type": "UnregisterAgent",
+                "Value": null
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "env",
+                "Type": "IEnvironment",
+                "Value": "YTsmJ74Py0M"
+              },
+              {
+                "ColumnName": "9Z8C98y6OR",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "3c8a111b-4b83-4a2e-be1b-f7776ba1be7a",
+                "Name": "id",
+                "TableName": "m7z10WFBo6Q0",
+                "Type": "Guid"
+              },
+              {
+                "ColumnName": "0252D2XlWkfxmOu07",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "8c7968b3-efb7-4ceb-acb0-959f156dbaba",
+                "Name": "waterPointName",
+                "TableName": "9m1czzZUA62Q",
+                "Type": "String"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "waterPointType",
+                "Type": "Int32",
+                "Value": 408842247
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "waterPointPurpose",
+                "Type": "Int32",
+                "Value": 991839438
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "currentStatus",
+                "Type": "Int32",
+                "Value": 312443053
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "waterPointFuture",
+                "Type": "Int32",
+                "Value": -644225175
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "lat",
+                "Type": "Double",
+                "Value": 3401889953
+              },
+              {
+                "ColumnName": "63Aa9S",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "14488621-5157-4123-b9a2-fc72f39793a0",
+                "Name": "lon",
+                "TableName": "37ZXr9P5i",
+                "Type": "Double"
+              }
+            ],
+            "FullName":
+              "KNPWaterPointLayer.Agents.WaterPoint, KNPWaterPointLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "InstanceCount": 11452,
+            "Name": "WaterPoint"
+          }
         ],
-        "GISLayers": [],
-        "LogicalChangeTime": 1,
-        "TimeSeriesLayers": [
-            {
-                "ColumnClearName": "5YSS2o",
-                "ColumnName": "DCa66r2uN",
-                "FullName": "KNPTemperatureLayer.TemperatureTimeSeriesLayer, KNPTemperatureLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-                "LayerName": "TemperatureTimeSeriesLayer",
-                "MetaDataId": "90ea30b6-cdc0-45af-99cb-d75cc0a8e28b",
-                "TableName": "X73vc"
-            },
-            {
-                "ColumnClearName": "4AQMN1ZifjLZsM340hR",
-                "ColumnName": "9LN8Fb5714WqBtu",
-                "FullName": "LIFETimeSeriesLayer.TimeSeriesLayer, LIFETimeSeriesLayer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null",
-                "LayerName": "TimeSeriesLayer",
-                "MetaDataId": "0060c328-03db-4d62-b158-14d2b17c2842",
-                "TableName": "oSL4pz698Ar9k"
-            },
-            {
-                "ColumnClearName": "jProtNOU60abOzNV4ky",
-                "ColumnName": "993R00OoTi21",
-                "FullName": "KNPPrecipitationLayer.PrecipitationLayer, KNPPrecipitationLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-                "LayerName": "PrecipitationLayer",
-                "MetaDataId": "7f96f5ff-bb97-47c5-931c-6681d2d01cca",
-                "TableName": "zikih71ruorkU"
-            }
-        ]
+        "LayerName": "WaterPointLayer"
+      },
+      {
+        "Agents": [],
+        "LayerName": "KNPObstacleLayer"
+      },
+      {
+        "Agents": [
+          {
+            "ConstructorParameterMapping": [
+              {
+                "ColumnName": "crEaR59kA",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "b5591856-e759-4ca5-a333-0d323e9a08a3",
+                "Name": "marulaLayer",
+                "TableName": "d75R9V09tUKSt0kmLrEw",
+                "Type": "IKNPMarulaLayer"
+              },
+              {
+                "IsAutoInitialized": true,
+                "MappingType": "ValueParameterMapping",
+                "Name": "registerAgent",
+                "Type": "RegisterAgent",
+                "Value": null
+              },
+              {
+                "IsAutoInitialized": true,
+                "MappingType": "ValueParameterMapping",
+                "Name": "unregisterAgent",
+                "Type": "UnregisterAgent",
+                "Value": null
+              },
+              {
+                "ColumnName": "853r0",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "7c378f41-06e8-43ca-809a-c51c5bbb9881",
+                "Name": "env",
+                "TableName": "5ACc",
+                "Type": "IGeoGridEnvironment`1"
+              },
+              {
+                "ColumnName": "26o2m559Evm4mwQU52Bg",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "c8b76d5b-ec93-4a5d-8472-f1260dce92ce",
+                "Name": "precipitationLayer",
+                "TableName": "lZ32h8e5qJCO3XRR",
+                "Type": "IPrecipitationLayer"
+              },
+              {
+                "ColumnName": "mf11UuO74WN1IW",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "9ac59ee7-e697-48b0-8987-78cb10035f10",
+                "Name": "id",
+                "TableName": "G2abk5lo0Xc7lF8Gf",
+                "Type": "Guid"
+              },
+              {
+                "ColumnName": "k8vGq455Vjq0k",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "e763a776-ea97-4a86-ae16-e6a9f40dc4ce",
+                "Name": "lat",
+                "TableName": "ol628kup02B0FA1W6iU",
+                "Type": "Double"
+              },
+              {
+                "ColumnName": "vnv0E",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "14036220-7cc7-4e63-a751-7f78b8c58904",
+                "Name": "lon",
+                "TableName": "TMX6IPBBI1tM89D",
+                "Type": "Double"
+              },
+              {
+                "ColumnName": "7JGINxH9",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "cff6c165-c4e0-4419-884a-6d30825c23a9",
+                "Name": "heightInM",
+                "TableName": "bPxlAcuDKrBjSgU8O7rU",
+                "Type": "Double"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "ageInDays",
+                "Type": "Int32",
+                "Value": 1778894401
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "stemDiameterInM",
+                "Type": "Double",
+                "Value": 584501662
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "sex",
+                "Type": "Int32",
+                "Value": 1053245923
+              }
+            ],
+            "FullName":
+              "KNPMarulaTreeLayer.Agents.MarulaTree, KNPMarulaTreeLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "InstanceCount": 161847,
+            "Name": "MarulaTree"
+          }
+        ],
+        "LayerName": "MarulaLayer"
+      },
+      {
+        "Agents": [],
+        "LayerName": "GeoPotentialFieldLayer"
+      },
+      {
+        "Agents": [
+          {
+            "ConstructorParameterMapping": [
+              {
+                "ColumnName": "33IqJA72X8410n9pL7",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "b38e3b5b-969f-4a0f-a1ca-511528aea79b",
+                "Name": "layer",
+                "TableName": "x6P51FnzA0",
+                "Type": "IKnpElephantLayer"
+              },
+              {
+                "IsAutoInitialized": true,
+                "MappingType": "ValueParameterMapping",
+                "Name": "registerAgent",
+                "Type": "RegisterAgent",
+                "Value": null
+              },
+              {
+                "IsAutoInitialized": true,
+                "MappingType": "ValueParameterMapping",
+                "Name": "unregisterAgent",
+                "Type": "UnregisterAgent",
+                "Value": null
+              },
+              {
+                "ColumnName": "4F73z0ji",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "8bd0b93b-b7e4-455d-942a-1ab2af9b45cd",
+                "Name": "environment",
+                "TableName": "AUptSVq35WxN",
+                "Type": "IGeoGridEnvironment`1"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "waterPointLayer",
+                "Type": "IKnpWaterPointLayer",
+                "Value": "Mt8IRm2BM0M3Rg9ZXlNc"
+              },
+              {
+                "ColumnName": "3KbAfpa9BN6Cwl",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "825dfd0b-f2ce-447c-b149-89135164f7a4",
+                "Name": "waterPotentialLayer",
+                "TableName": "eipZ5X9",
+                "Type": "IWaterPotentialLayer"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "obstacleLayer",
+                "Type": "IKNPObstacleLayer",
+                "Value": "Vs6zEzD8HGe0hx"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "marulaLayer",
+                "Type": "IKNPMarulaLayer",
+                "Value": "kgyoeNu4"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "temperatureTimeSeriesLayer",
+                "Type": "ITemperatureTimeSeriesLayer",
+                "Value": "AEvB"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "shadeLayer",
+                "Type": "IShadeLayer",
+                "Value": "2JiHeTN3g3"
+              },
+              {
+                "ColumnName": "5wZaDV",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "8a235938-ed6b-4043-b160-e15bd6031c0a",
+                "Name": "id",
+                "TableName": "UmXGT2",
+                "Type": "Guid"
+              },
+              {
+                "ColumnName": "Ps4z98Y99X3XF3E25Jk5",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "9756fa92-637f-4e72-8648-0fb1a633487c",
+                "Name": "lat",
+                "TableName": "cY82oT9xf8",
+                "Type": "Double"
+              },
+              {
+                "ColumnName": "Z6vO3s145HCro",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "1cab799f-dc1f-4643-aff5-9498d06a0110",
+                "Name": "lon",
+                "TableName": "R4tbH649AOCvOHoZE67",
+                "Type": "Double"
+              },
+              {
+                "ColumnName": "p3VQkE40UCkmIW1P8",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "f76aa405-72af-4092-9a60-3e228ed52334",
+                "Name": "herdId",
+                "TableName": "tM9e6LImiX9tp",
+                "Type": "Int32"
+              },
+              {
+                "IsAutoInitialized": false,
+                "MappingType": "ValueParameterMapping",
+                "Name": "elephantType",
+                "Type": "String",
+                "Value": "N8r30H9F"
+              },
+              {
+                "ColumnName": "hXEGtFCmfFLSizHq",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "c0f4c0a0-ae9a-493e-8162-f7a302d8200a",
+                "Name": "isLeading",
+                "TableName": "2S9AmOW",
+                "Type": "Boolean"
+              },
+              {
+                "ColumnName": "qcF7xTA3",
+                "IsAutoInitialized": false,
+                "MappingType": "ColumnParameterMapping",
+                "MetaDataId": "0455cb9d-94f1-4a6e-b7cb-ca64b6ee8236",
+                "Name": "reproductionYears",
+                "TableName": "S7e7Rr931WP0raU0442",
+                "Type": "String"
+              }
+            ],
+            "FullName":
+              "KNPElephantLayer.Agents.Elephant, KNPElephantLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "InstanceCount": 112091,
+            "Name": "Elephant"
+          }
+        ],
+        "LayerName": "ElephantLayer"
+      },
+      {
+        "Agents": [],
+        "LayerName": "ShadeLayer"
+      }
+    ],
+    "GISLayers": [],
+    "LogicalChangeTime": 1,
+    "TimeSeriesLayers": [
+      {
+        "ColumnClearName": "5YSS2o",
+        "ColumnName": "DCa66r2uN",
+        "FullName":
+          "KNPTemperatureLayer.TemperatureTimeSeriesLayer, KNPTemperatureLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "LayerName": "TemperatureTimeSeriesLayer",
+        "MetaDataId": "90ea30b6-cdc0-45af-99cb-d75cc0a8e28b",
+        "TableName": "X73vc"
+      },
+      {
+        "ColumnClearName": "4AQMN1ZifjLZsM340hR",
+        "ColumnName": "9LN8Fb5714WqBtu",
+        "FullName":
+          "LIFETimeSeriesLayer.TimeSeriesLayer, LIFETimeSeriesLayer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "LayerName": "TimeSeriesLayer",
+        "MetaDataId": "0060c328-03db-4d62-b158-14d2b17c2842",
+        "TableName": "oSL4pz698Ar9k"
+      },
+      {
+        "ColumnClearName": "jProtNOU60abOzNV4ky",
+        "ColumnName": "993R00OoTi21",
+        "FullName":
+          "KNPPrecipitationLayer.PrecipitationLayer, KNPPrecipitationLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "LayerName": "PrecipitationLayer",
+        "MetaDataId": "7f96f5ff-bb97-47c5-931c-6681d2d01cca",
+        "TableName": "zikih71ruorkU"
+      }
+    ]
+  },
+  "LogicalChangeTime": 0,
+  "ModelMetaData": "96efbeae-c0f1-4827-8483-2b7eaec16c00",
+  "Name": "MyKNPScenario",
+  "Owner": "8888",
+  "ParameterizationDescription": {
+    "Agents": {
+      "Elephant": {},
+      "MarulaTree": {},
+      "WaterPoint": {}
     },
-    "LogicalChangeTime": 0,
-    "ModelMetaData": "96efbeae-c0f1-4827-8483-2b7eaec16c00",
-    "Name": "MyKNPScenario",
-    "Owner": "8888",
-    "ParameterizationDescription": {
-        "Agents": {
-            "Elephant": {},
-            "MarulaTree": {},
-            "WaterPoint": {}
-        },
-        "Global": {
-            "DeltaT": 5,
-            "SimulationEndDateTime": "1996-12-19T16:39:57-08:00",
-            "SimulationStartDateTime": "1985-04-12T23:20:50.52Z"
-        },
-        "Layers": {
-            "ElephantLayer": {},
-            "GeoPotentialFieldLayer": {},
-            "GridPotentialFieldLayer": {},
-            "KNPObstacleLayer": {},
-            "MarulaLayer": {},
-            "PrecipitationLayer": {},
-            "ShadeLayer": {},
-            "TemperatureTimeSeriesLayer": {},
-            "TimeSeriesLayer": {},
-            "WaterPointLayer": {},
-            "WaterPotentialLayer": {}
-        },
-        "LogicalChangeTime": 1
+    "Global": {
+      "DeltaT": 5,
+      "SimulationEndDateTime": "1996-12-19T16:39:57-08:00",
+      "SimulationStartDateTime": "1985-04-12T23:20:50.52Z"
     },
-    "Project": "42"
+    "Layers": {
+      "ElephantLayer": {},
+      "GeoPotentialFieldLayer": {},
+      "GridPotentialFieldLayer": {},
+      "KNPObstacleLayer": {},
+      "MarulaLayer": {},
+      "PrecipitationLayer": {},
+      "ShadeLayer": {},
+      "TemperatureTimeSeriesLayer": {},
+      "TimeSeriesLayer": {},
+      "WaterPointLayer": {},
+      "WaterPotentialLayer": {}
+    },
+    "LogicalChangeTime": 1
+  },
+  "Project": "42"
 }

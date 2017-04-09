@@ -13,12 +13,14 @@ using System.Net.Sockets;
 using System.Threading;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 
-namespace Hik.Communication.Scs.Communication.Channels.Tcp {
+namespace Hik.Communication.Scs.Communication.Channels.Tcp
+{
     /// <summary>
     ///     This class is used to listen and accept incoming TCP
     ///     connection requests on a TCP port.
     /// </summary>
-    internal class TcpConnectionListener : ConnectionListenerBase {
+    internal class TcpConnectionListener : ConnectionListenerBase
+    {
         /// <summary>
         ///     The endpoint address of the server to listen incoming connections.
         /// </summary>
@@ -43,14 +45,16 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         ///     Creates a new TcpConnectionListener for given endpoint.
         /// </summary>
         /// <param name="endPoint">The endpoint address of the server to listen incoming connections</param>
-        public TcpConnectionListener(ScsTcpEndPoint endPoint) {
+        public TcpConnectionListener(ScsTcpEndPoint endPoint)
+        {
             _endPoint = endPoint;
         }
 
         /// <summary>
         ///     Starts listening incoming connections.
         /// </summary>
-        public override void Start() {
+        public override void Start()
+        {
             StartSocket();
             _running = true;
             _thread = new Thread(DoListenAsThread);
@@ -60,7 +64,8 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Stops listening incoming connections.
         /// </summary>
-        public override void Stop() {
+        public override void Stop()
+        {
             _running = false;
             StopSocket();
         }
@@ -68,19 +73,24 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Starts listening socket.
         /// </summary>
-        private void StartSocket() {
-            _listenerSocket = new TcpListener(IPAddress.Any, _endPoint.TcpPort); 
+        private void StartSocket()
+        {
+            _listenerSocket = new TcpListener(IPAddress.Any, _endPoint.TcpPort);
             _listenerSocket.Start();
         }
 
         /// <summary>
         ///     Stops listening socket.
         /// </summary>
-        private void StopSocket() {
-            try {
+        private void StopSocket()
+        {
+            try
+            {
                 _listenerSocket.Stop();
             }
-            catch {}
+            catch
+            {
+            }
         }
 
         /// <summary>
@@ -112,7 +122,8 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
                     }
                     catch (Exception ex2)
                     {
-                        Console.Write($"Caught an exception in SCS while restarting listening Thread. Exception: {ex2}");
+                        Console.Write(
+                            $"Caught an exception in SCS while restarting listening Thread. Exception: {ex2}");
                     }
                 }
             }

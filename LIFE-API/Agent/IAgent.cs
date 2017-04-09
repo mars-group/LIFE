@@ -6,19 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace LIFE.API.Agent {
-
-  /// <summary>
-  ///   The basic IAgent interface.
-  /// </summary>
-  public interface IAgent : ITickClient {
-  
+namespace LIFE.API.Agent
+{
     /// <summary>
-    ///   The agent's main ID. Will be unique across the whole simulation.
-    ///   Use this to reference the agent by ID.
+    ///   The basic IAgent interface.
     /// </summary>
-    Guid ID { get; }
-  }
+    public interface IAgent : ITickClient
+    {
+        /// <summary>
+        ///   The agent's main ID. Will be unique across the whole simulation.
+        ///   Use this to reference the agent by ID.
+        /// </summary>
+        Guid ID { get; }
+    }
 }

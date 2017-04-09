@@ -14,7 +14,8 @@ using System.Text;
 using ASC.Communication.Scs.Communication.Messages;
 using Newtonsoft.Json;
 
-namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
+namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization
+{
     /// <summary>
     ///     Default communication protocol between server and clients to send and receive a message.
     ///     It uses .NET binary serialization to write and read messages.
@@ -25,15 +26,17 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
     ///     This class can be derived to change serializer (default: BinaryFormatter). To do this,
     ///     SerializeMessage and DeserializeMessage methods must be overrided.
     /// </summary>
-    public class JsonSerializationProtocol : IAcsWireProtocol {
+    public class JsonSerializationProtocol : IAcsWireProtocol
+    {
         #region Private fields
 
         /// <summary>
         ///     Maximum length of a message.
         /// </summary>
-        private const int MaxMessageLength = 128*1024*1024; //128 Megabytes.
+        private const int MaxMessageLength = 128 * 1024 * 1024; //128 Megabytes.
 
-        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+        private static readonly JsonSerializerSettings Jset =
+            new JsonSerializerSettings() {TypeNameHandling = TypeNameHandling.All};
 
         /// <summary>
         ///     This MemoryStream object is used to collect receiving bytes to build messages.
@@ -47,7 +50,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// <summary>
         ///     Creates a new instance of JsonSerializationProtocol.
         /// </summary>
-        public JsonSerializationProtocol() {
+        public JsonSerializationProtocol()
+        {
             _receiveMemoryStream = new MemoryStream();
         }
 
@@ -64,7 +68,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Throws CommunicationException if message is bigger than maximum allowed
         ///     message length.
         /// </exception>
-        public byte[] GetBytes(IAscMessage message) {
+        public byte[] GetBytes(IAscMessage message)
+        {
             //Serialize the message to a byte array
             var serializedMessage = SerializeMessage(message);
             /*
@@ -99,7 +104,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Also, if received bytes are not sufficient to build a message, the protocol
         ///     may return an empty list (and save bytes to combine with next method call).
         /// </returns>
-        public IEnumerable<IAscMessage> CreateMessages(byte[] receivedBytes) {
+        public IEnumerable<IAscMessage> CreateMessages(byte[] receivedBytes)
+        {
             //Write all received bytes to the _receiveMemoryStream
             //_receiveMemoryStream.Write(receivedBytes, 0, receivedBytes.Length);
             //Create a list to collect messages
@@ -119,7 +125,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     connecting).
         ///     So, wire protocol must reset itself.
         /// </summary>
-        public void Reset() {
+        public void Reset()
+        {
             if (_receiveMemoryStream.Length > 0) _receiveMemoryStream = new MemoryStream();
         }
 
@@ -152,8 +159,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     of a single whole message)
         /// </param>
         /// <returns>Deserialized message</returns>
-        protected virtual IAscMessage DeserializeMessage(byte[] bytes) {
-
+        protected virtual IAscMessage DeserializeMessage(byte[] bytes)
+        {
             //Return the deserialized message
             return JsonConvert.DeserializeObject<IAscMessage>(Encoding.UTF8.GetString(bytes), Jset);
         }
@@ -173,7 +180,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Throws CommunicationException if message is bigger than maximum allowed
         ///     message length.
         /// </exception>
-        private bool ReadSingleMessage(ICollection<IAscMessage> messages) {
+        private bool ReadSingleMessage(ICollection<IAscMessage> messages)
+        {
             //Go to the begining of the stream
             _receiveMemoryStream.Position = 0;
 
@@ -183,15 +191,18 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
 
             //Read length of the message
             var messageLength = ReadInt32(_receiveMemoryStream);
-            if (messageLength > MaxMessageLength) {
+            if (messageLength > MaxMessageLength)
+            {
                 throw new Exception("Message is too big (" + messageLength + " bytes). Max allowed length is " +
                                     MaxMessageLength + " bytes.");
             }
 
             //If message is zero-length (It must not be but good approach to check it)
-            if (messageLength == 0) {
+            if (messageLength == 0)
+            {
                 //if no more bytes, return immediately
-                if (_receiveMemoryStream.Length == 4) {
+                if (_receiveMemoryStream.Length == 4)
+                {
                     _receiveMemoryStream = new MemoryStream(); //Clear the stream
                     return false;
                 }
@@ -204,7 +215,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
             }
 
             //If all bytes of the message is not received yet, return to wait more bytes
-            if (_receiveMemoryStream.Length < (4 + messageLength)) {
+            if (_receiveMemoryStream.Length < (4 + messageLength))
+            {
                 _receiveMemoryStream.Position = _receiveMemoryStream.Length;
                 return false;
             }
@@ -215,13 +227,15 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
 
             //Check for remaining bytes
             var remainingLength = _receiveMemoryStream.Length - (4 + messageLength);
-            if (remainingLength > 0) {
+            if (remainingLength > 0)
+            {
                 var remainingBytes = ReadByteArray(_receiveMemoryStream, (int) remainingLength);
                 //Re-create the receive memory stream and write remaining bytes
                 _receiveMemoryStream = new MemoryStream();
                 _receiveMemoryStream.Write(remainingBytes, 0, remainingBytes.Length);
             }
-            else {
+            else
+            {
                 // just recreate the memory stream
                 _receiveMemoryStream = new MemoryStream();
             }
@@ -236,7 +250,8 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// <param name="buffer">Byte array to write int value</param>
         /// <param name="startIndex">Start index of byte array to write</param>
         /// <param name="number">An integer value to write</param>
-        private static void WriteInt32(byte[] buffer, int startIndex, int number) {
+        private static void WriteInt32(byte[] buffer, int startIndex, int number)
+        {
             buffer[startIndex] = (byte) ((number >> 24) & 0xFF);
             buffer[startIndex + 1] = (byte) ((number >> 16) & 0xFF);
             buffer[startIndex + 2] = (byte) ((number >> 8) & 0xFF);
@@ -247,13 +262,14 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Deserializes and returns a serialized integer.
         /// </summary>
         /// <returns>Deserialized integer</returns>
-        private static int ReadInt32(Stream stream) {
+        private static int ReadInt32(Stream stream)
+        {
             var buffer = ReadByteArray(stream, 4);
             return ((buffer[0] << 24) |
                     (buffer[1] << 16) |
                     (buffer[2] << 8) |
                     (buffer[3])
-                );
+            );
         }
 
         /// <summary>
@@ -263,10 +279,12 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// <param name="length">Length of the byte array to read</param>
         /// <returns>Read byte array</returns>
         /// <exception cref="EndOfStreamException">Throws EndOfStreamException if can not read from stream.</exception>
-        private static byte[] ReadByteArray(Stream stream, int length) {
+        private static byte[] ReadByteArray(Stream stream, int length)
+        {
             var buffer = new byte[length];
             var totalRead = 0;
-            while (totalRead < length) {
+            while (totalRead < length)
+            {
                 var read = stream.Read(buffer, totalRead, length - totalRead);
                 if (read <= 0) throw new EndOfStreamException("Can not read from stream! Input stream is closed.");
 
@@ -277,6 +295,5 @@ namespace ASC.Communication.Scs.Communication.Protocols.JsonSerialization {
         }
 
         #endregion
-
     }
 }

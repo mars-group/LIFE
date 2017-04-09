@@ -6,15 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 
 
-namespace LIFE.Components.Services.AgentManagerService.Interface.Exceptions {
+namespace LIFE.Components.Services.AgentManagerService.Interface.Exceptions
+{
     [Serializable]
-    public class ParameterMustBePrimitiveException : Exception {
-        public ParameterMustBePrimitiveException(string msg) : base(msg) {
-            
+    public class ParameterMustBePrimitiveException : Exception
+    {
+        public ParameterMustBePrimitiveException(string msg) : base(msg)
+        {
         }
-
     }
 }

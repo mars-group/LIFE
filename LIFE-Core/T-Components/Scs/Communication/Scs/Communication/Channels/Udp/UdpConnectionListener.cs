@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,15 +25,18 @@ namespace Hik.Communication.Scs.Communication.Channels.Udp
     {
         private ScsUdpEndPoint _endPoint;
 
-        public UdpConnectionListener(ScsUdpEndPoint endpoint) {
+        public UdpConnectionListener(ScsUdpEndPoint endpoint)
+        {
             _endPoint = endpoint;
         }
 
-        public override void Start() {
+        public override void Start()
+        {
             OnCommunicationChannelConnected(new UdpCommunicationChannel(_endPoint));
         }
 
-        public override void Stop() {
+        public override void Stop()
+        {
             // nothing to be done here
         }
     }

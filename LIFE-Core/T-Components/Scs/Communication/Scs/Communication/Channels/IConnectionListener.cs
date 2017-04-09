@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace Hik.Communication.Scs.Communication.Channels {
+namespace Hik.Communication.Scs.Communication.Channels
+{
     /// <summary>
     ///     Represents a communication listener.
     ///     A connection listener is used to accept incoming client connection requests.
     /// </summary>
-    internal interface IConnectionListener {
+    internal interface IConnectionListener
+    {
         /// <summary>
         ///     This event is raised when a new communication channel connected.
         /// </summary>

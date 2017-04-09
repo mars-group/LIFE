@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,10 +19,10 @@ using System.Threading.Tasks;
 
 namespace RuntimeEnvironment.Implementation
 {
-
-    internal enum SimulationStatus {
+    internal enum SimulationStatus
+    {
         Running,
-		Stepped,
+        Stepped,
         Paused,
         Aborted
     }
@@ -31,7 +32,8 @@ namespace RuntimeEnvironment.Implementation
     /// For each system tick, each layer container is ticked parallely and we wait until every container is finished
     /// before the next system tick starts.
     /// </summary>
-    internal class SteppedSimulationExecutionUseCase {
+    internal class SteppedSimulationExecutionUseCase
+    {
         private readonly int? _nrOfTicks;
         private readonly IList<LayerContainerClient> _layerContainerClients;
         private long _maxExecutionTime;
@@ -39,25 +41,27 @@ namespace RuntimeEnvironment.Implementation
 
         private readonly ManualResetEvent _simulationExecutionSwitch;
         private int? _steppedTicks;
-		private Task _simulationTask;
-		private Guid _simulationId;
-
+        private Task _simulationTask;
+        private Guid _simulationId;
 
 
         public SteppedSimulationExecutionUseCase
-		(int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, Guid simulationId, bool startPaused = false) {
+        (int? nrOfTicks, IList<LayerContainerClient> layerContainerClients, Guid simulationId,
+            bool startPaused = false)
+        {
             _nrOfTicks = nrOfTicks;
             _layerContainerClients = layerContainerClients;
             _status = startPaused ? SimulationStatus.Paused : SimulationStatus.Running;
             _simulationExecutionSwitch = new ManualResetEvent(false);
-			_simulationId = simulationId;
+            _simulationId = simulationId;
 
 
             // start simulation
-			_simulationTask = Task.Run(() => RunSimulation());
+            _simulationTask = Task.Run(() => RunSimulation());
         }
 
-        private void RunSimulation() {
+        private void RunSimulation()
+        {
             Console.WriteLine($"[LIFE] Starting Simulation with ID: {_simulationId} for {_nrOfTicks} ticks.");
             // if there's only a single layercontainer, just run all ticks at once as a batch run!
             if (_layerContainerClients.Count == 1)
@@ -69,11 +73,9 @@ namespace RuntimeEnvironment.Implementation
                 var sw = Stopwatch.StartNew();
                 for (var i = 1; _nrOfTicks == null || i <= _nrOfTicks; i++)
                 {
-
                     // check for status change
                     switch (_status)
                     {
-
                         case SimulationStatus.Paused:
                             // pause execution and wait to be signaled
                             sw.Stop();
@@ -117,13 +119,13 @@ namespace RuntimeEnvironment.Implementation
                     DoStep(i);
 
 
-
                     // clean up after simulation, by calling DisposeLayer on all IDisposableLayers
                     CleanUp();
                 }
 
                 sw.Stop();
-                Console.WriteLine("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 + " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
+                Console.WriteLine("Executed " + _nrOfTicks + " Ticks in " + sw.ElapsedMilliseconds / 1000 +
+                                  " seconds. Or " + sw.ElapsedMilliseconds + " ms.");
             }
         }
 
@@ -132,69 +134,80 @@ namespace RuntimeEnvironment.Implementation
             _layerContainerClients[0].Tick(nrOfTicks);
         }
 
-        private void DoStep(int currentTick){
+        private void DoStep(int currentTick)
+        {
+            _maxExecutionTime = 0;
 
-			_maxExecutionTime = 0;
-
-			// now for some .NET 4.5 magic: parallel execution of layerContainer.tick() while updating shared variable
-			Parallel.ForEach<LayerContainerClient, long> // elem, accu
-			(
-				_layerContainerClients, //source for elems
-				() => 0, // intialization for accu
-				(currentContainer, loop, lastExecutionTime) => { // currentElem, ParallelLoopState, lastAccu
-					var currentExecutionTime = currentContainer.Tick(); // do actual simulation step
-					return Math.Max(currentExecutionTime, lastExecutionTime); 
-				},
-				(finalResult) => { // finalResult = final result from inner partitioned loop
-					// now read shared variable
-					long localMax = Interlocked.Read(ref _maxExecutionTime); 
-					// while finalResult is larger than _maxExecutionTime, update it, and try again
-					while (finalResult > localMax) {
-						Interlocked.CompareExchange(ref _maxExecutionTime, finalResult, localMax);
-						localMax = Interlocked.Read(ref _maxExecutionTime);
-					}
-				});
+            // now for some .NET 4.5 magic: parallel execution of layerContainer.tick() while updating shared variable
+            Parallel.ForEach<LayerContainerClient, long> // elem, accu
+            (
+                _layerContainerClients, //source for elems
+                () => 0, // intialization for accu
+                (currentContainer, loop, lastExecutionTime) =>
+                {
+                    // currentElem, ParallelLoopState, lastAccu
+                    var currentExecutionTime = currentContainer.Tick(); // do actual simulation step
+                    return Math.Max(currentExecutionTime, lastExecutionTime);
+                },
+                (finalResult) =>
+                {
+                    // finalResult = final result from inner partitioned loop
+                    // now read shared variable
+                    long localMax = Interlocked.Read(ref _maxExecutionTime);
+                    // while finalResult is larger than _maxExecutionTime, update it, and try again
+                    while (finalResult > localMax)
+                    {
+                        Interlocked.CompareExchange(ref _maxExecutionTime, finalResult, localMax);
+                        localMax = Interlocked.Read(ref _maxExecutionTime);
+                    }
+                });
 
             var status = $"Finished tick {currentTick} in {_maxExecutionTime} ms.";
-            Console.SetCursorPosition(0,Console.CursorTop);
-			Console.Write(status);
-		}
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(status);
+        }
 
-		private void CleanUp(){
-			Parallel.ForEach<LayerContainerClient> (_layerContainerClients, lc => lc.CleanUp());
-		}
+        private void CleanUp()
+        {
+            Parallel.ForEach<LayerContainerClient>(_layerContainerClients, lc => lc.CleanUp());
+        }
 
-		public void StepSimulation(int? nrOfTicks = null) {
-			_status = SimulationStatus.Stepped;
-		    _steppedTicks = nrOfTicks;
-			// signal ManualResetEvent
-			_simulationExecutionSwitch.Set();
-		}
+        public void StepSimulation(int? nrOfTicks = null)
+        {
+            _status = SimulationStatus.Stepped;
+            _steppedTicks = nrOfTicks;
+            // signal ManualResetEvent
+            _simulationExecutionSwitch.Set();
+        }
 
-        public void PauseSimulation() {
+        public void PauseSimulation()
+        {
             // set switch to non-signaled in case it was signaled before
             _simulationExecutionSwitch.Reset();
             _status = SimulationStatus.Paused;
         }
 
-        internal void ResumeSimulation() {
+        internal void ResumeSimulation()
+        {
             _status = SimulationStatus.Running;
 
             // signal ManualResetEvent
             _simulationExecutionSwitch.Set();
         }
 
-        public void Abort() {
+        public void Abort()
+        {
             _status = SimulationStatus.Aborted;
         }
 
-		public void WaitForSimulationToFinish ()
-		{
-			_simulationTask.Wait ();
-		}
+        public void WaitForSimulationToFinish()
+        {
+            _simulationTask.Wait();
+        }
 
-		private int GetUnixTimeStamp(){
-			return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-		}
+        private int GetUnixTimeStamp()
+        {
+            return (Int32) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
     }
 }

@@ -6,17 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using LCConnector.TransportTypes;
 using LCConnector.TransportTypes.ModelStructure;
 
-namespace PartitionManager.Interfaces {
+namespace PartitionManager.Interfaces
+{
     /// <summary>
     /// The PartitionaManager controls storage and loading
     /// operations of a layer which is about to be instantiated on 
     /// this LayerContainer.
     /// </summary>
-    public interface IPartitionManager {
-
+    public interface IPartitionManager
+    {
         /// <summary>
         /// Adds a Layer derived from the provied TLayerInstanceId.
         /// </summary>

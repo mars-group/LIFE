@@ -6,14 +6,15 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Reflection;
 using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Communication;
 using ASC.Communication.Scs.Communication.Messengers;
 
-namespace ASC.Communication.ScsServices.Communication {
-
+namespace ASC.Communication.ScsServices.Communication
+{
 #if HAS_REAL_PROXY
     using System.Runtime.Remoting.Messaging;
         /// <summary>
@@ -69,6 +70,7 @@ namespace ASC.Communication.ScsServices.Communication {
         }
 
 #else
+
     /// <summary>
     ///     This class extends RemoteInvokeProxy to provide auto connect/disconnect mechanism
     ///     if client is not connected to the server when a service method is called.
@@ -104,7 +106,10 @@ namespace ASC.Communication.ScsServices.Communication {
         /// <returns>Method invoke return message (to RealProxy base class)</returns>
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            if (!_configured) { throw new Exception("Proxy not configured"); }
+            if (!_configured)
+            {
+                throw new Exception("Proxy not configured");
+            }
 
             if (_client.CommunicationState == CommunicationStates.Connected)
             {
@@ -124,6 +129,6 @@ namespace ASC.Communication.ScsServices.Communication {
             }
         }
     }
-#endif
 
+#endif
 }

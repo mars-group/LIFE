@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 namespace ASC.Communication.Scs.Communication.Channels.Udp
 {
     /// <summary>
@@ -21,11 +22,13 @@ namespace ASC.Communication.Scs.Communication.Channels.Udp
             _udpchannel = udpchannel;
         }
 
-        public override void Start() {
+        public override void Start()
+        {
             OnCommunicationChannelConnected(_udpchannel);
         }
 
-        public override void Stop() {
+        public override void Stop()
+        {
             // nothing to be done here
         }
     }

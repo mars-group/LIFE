@@ -9,16 +9,19 @@
 
 using ASC.Communication.Scs.Communication.Protocols.JsonSerialization;
 
-namespace ASC.Communication.Scs.Communication.Protocols {
+namespace ASC.Communication.Scs.Communication.Protocols
+{
     /// <summary>
     ///     This class is used to get default protocols.
     /// </summary>
-    internal static class WireProtocolManager {
+    internal static class WireProtocolManager
+    {
         /// <summary>
         ///     Creates a default wire protocol factory object to be used on communicating of applications.
         /// </summary>
         /// <returns>A new instance of default wire protocol</returns>
-        public static IAcsWireProtocolFactory GetDefaultWireProtocolFactory() {
+        public static IAcsWireProtocolFactory GetDefaultWireProtocolFactory()
+        {
             return new JsonSerializationProtocolFactory();
             //return new ProtobufSerializationProtocolFactory();
         }
@@ -27,7 +30,8 @@ namespace ASC.Communication.Scs.Communication.Protocols {
         ///     Creates a default wire protocol object to be used on communicating of applications.
         /// </summary>
         /// <returns>A new instance of default wire protocol</returns>
-        public static IAcsWireProtocol GetDefaultWireProtocol() {
+        public static IAcsWireProtocol GetDefaultWireProtocol()
+        {
             return new JsonSerializationProtocol();
             //return new ProtobufSerializationProtocol();
         }

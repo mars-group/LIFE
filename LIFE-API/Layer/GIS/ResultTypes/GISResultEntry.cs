@@ -20,3 +20,4 @@ namespace LIFE.API.Layer.GIS.ResultTypes {
     public object Value { get; set; }
   }
 }*/
+

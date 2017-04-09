@@ -7,11 +7,13 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 
-namespace ASC.Communication.Scs.Communication.Messages {
+namespace ASC.Communication.Scs.Communication.Messages
+{
     /// <summary>
     ///     Represents a message that is sent and received by server and client.
     /// </summary>
-    public interface IAscMessage {
+    public interface IAscMessage
+    {
         /// <summary>
         ///     Unique identified for this message.
         /// </summary>

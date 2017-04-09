@@ -4,6 +4,8 @@ namespace LayerLoader.Interface.Exceptions
 {
     public class ConstructorNotFoundException : Exception
     {
-        public ConstructorNotFoundException(string msg) : base(msg) { }
+        public ConstructorNotFoundException(string msg) : base(msg)
+        {
+        }
     }
 }

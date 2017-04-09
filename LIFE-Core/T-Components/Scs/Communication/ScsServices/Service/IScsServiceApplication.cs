@@ -6,13 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace Hik.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Represents a SCS Service Application that is used to construct and manage a SCS service.
     /// </summary>
-    public interface IScsServiceApplication {
+    public interface IScsServiceApplication
+    {
         /// <summary>
         ///     This event is raised when a new client connected to the service.
         /// </summary>

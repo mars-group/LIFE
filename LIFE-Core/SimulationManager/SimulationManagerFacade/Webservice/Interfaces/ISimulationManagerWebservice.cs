@@ -6,13 +6,12 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 
 namespace SimulationManagerWebservice
 {
-	public interface ISimulationManagerWebservice
-	{
-
-	}
+    public interface ISimulationManagerWebservice
+    {
+    }
 }
-

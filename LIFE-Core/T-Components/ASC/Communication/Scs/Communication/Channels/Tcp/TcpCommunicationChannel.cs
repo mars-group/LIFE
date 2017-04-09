@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -15,7 +16,8 @@ using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 using ASC.Communication.Scs.Communication.Messages;
 
-namespace ASC.Communication.Scs.Communication.Channels.Tcp {
+namespace ASC.Communication.Scs.Communication.Channels.Tcp
+{
     /// <summary>
     ///     This class is used to communicate with a remote application over TCP/IP protocol.
     /// </summary>
@@ -79,13 +81,19 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
         /// </param>
         public TcpCommunicationChannel(Socket clientSocket)
         {
-            if (clientSocket == null) { throw new ArgumentNullException(nameof(clientSocket)); }
+            if (clientSocket == null)
+            {
+                throw new ArgumentNullException(nameof(clientSocket));
+            }
             _clientSocket = clientSocket;
             _clientSocket.NoDelay = true;
 
-            if (_clientSocket.RemoteEndPoint == null) { Console.WriteLine("ERROR ENDPOINT NULL!"); }
+            if (_clientSocket.RemoteEndPoint == null)
+            {
+                Console.WriteLine("ERROR ENDPOINT NULL!");
+            }
 
-            var ipEndPoint = (IPEndPoint)_clientSocket.RemoteEndPoint;
+            var ipEndPoint = (IPEndPoint) _clientSocket.RemoteEndPoint;
             _remoteEndPoint = new AscTcpEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
 
             _readBufferManager = new BufferManager(ReceiveBufferSize * NumReadConnections, ReceiveBufferSize);
@@ -150,10 +158,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
             }
 
             // begin to receive in Thread to not block the sending side
-            _listenThread = new Thread(Receive) { IsBackground = true };
+            _listenThread = new Thread(Receive) {IsBackground = true};
             _listenThread.Start();
         }
-
 
         #endregion
 
@@ -224,9 +231,9 @@ namespace ASC.Communication.Scs.Communication.Channels.Tcp {
                     break;
                 default:
 
-                    throw new ArgumentException($"The last operation completed on the socket was not a receive or send, but: {e.LastOperation}");
+                    throw new ArgumentException(
+                        $"The last operation completed on the socket was not a receive or send, but: {e.LastOperation}");
             }
-
         }
 
         // This method is invoked when an asynchronous receive operation completes.

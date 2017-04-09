@@ -6,36 +6,39 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Linq;
 using LIFE.API.Layer.Data;
 
-namespace LIFE.API.Perception.Sensors {
-
-  /// <summary>
-  ///   Sensor for query data layers.
-  /// </summary>
-  /// <typeparam name="T">Layer data type.</typeparam>
-  public class QuerySensor<T> {
-
-    private readonly IQueryLayer<T> _layer; // Layer reference.
-
-
+namespace LIFE.API.Perception.Sensors
+{
     /// <summary>
-    ///   Create a sensor for LINQ query grids.
+    ///   Sensor for query data layers.
     /// </summary>
-    /// <param name="layer">The data layer.</param>
-    public QuerySensor(IQueryLayer<T> layer) {
-      _layer = layer;
-    }
+    /// <typeparam name="T">Layer data type.</typeparam>
+    public class QuerySensor<T>
+    {
+        private readonly IQueryLayer<T> _layer; // Layer reference.
 
 
-    /// <summary>
-    ///   Allows arbitrary queries with the LINQ interface.
-    /// </summary>
-    /// <param name="query">LINQ query.</param>
-    /// <returns>Layer data subset.</returns>
-    public IQueryable<T> GetQuery(string query) {
-      return _layer.GetQuery(query);
+        /// <summary>
+        ///   Create a sensor for LINQ query grids.
+        /// </summary>
+        /// <param name="layer">The data layer.</param>
+        public QuerySensor(IQueryLayer<T> layer)
+        {
+            _layer = layer;
+        }
+
+
+        /// <summary>
+        ///   Allows arbitrary queries with the LINQ interface.
+        /// </summary>
+        /// <param name="query">LINQ query.</param>
+        /// <returns>Layer data subset.</returns>
+        public IQueryable<T> GetQuery(string query)
+        {
+            return _layer.GetQuery(query);
+        }
     }
-  }
 }

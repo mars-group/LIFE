@@ -14,8 +14,8 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
     /// <summary>
     ///   A 2D-grid extension for the base agentReference.
     /// </summary>
-    public abstract class GridAgent<T> : Agent, IGridAgent<T> where T : IGridCoordinate {
-
+    public abstract class GridAgent<T> : Agent, IGridAgent<T> where T : IGridCoordinate
+    {
         private readonly IGridEnvironment<GridAgent<T>> _env; // IESC implementation for collision detection.
         private GridCoordinate _position; // AgentReference initialPosition backing structure.
         protected readonly GridMover<T> Mover; // AgentReference movement module.
@@ -56,7 +56,6 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         }
 
 
-
         /// <summary>
         ///   This function unbinds the agentReference from the environment.
         ///   It is triggered by the base agentReference, when alive flag is 'false'.
@@ -89,7 +88,5 @@ namespace LIFE.Components.Agents.BasicAgents.Agents
         {
             return X == other.X && Y == other.Y;
         }
-
-
     }
 }

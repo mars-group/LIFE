@@ -6,16 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Net;
 using ASC.Communication.Scs.Communication.Channels;
 using ASC.Communication.Scs.Communication.Channels.Tcp;
 using ASC.Communication.Scs.Communication.EndPoints.Tcp;
 
-namespace ASC.Communication.Scs.Client.Tcp {
+namespace ASC.Communication.Scs.Client.Tcp
+{
     /// <summary>
     ///     This class is used to communicate with server over TCP/IP protocol.
     /// </summary>
-    internal class AscTcpClient : AscClientBase {
+    internal class AscTcpClient : AscClientBase
+    {
         /// <summary>
         ///     The endpoint address of the server.
         /// </summary>
@@ -25,7 +28,8 @@ namespace ASC.Communication.Scs.Client.Tcp {
         ///     Creates a new AscTcpClient object.
         /// </summary>
         /// <param name="serverEndPoint">The endpoint address to connect to the server</param>
-        public AscTcpClient(AscTcpEndPoint serverEndPoint) {
+        public AscTcpClient(AscTcpEndPoint serverEndPoint)
+        {
             _serverEndPoint = serverEndPoint;
         }
 
@@ -33,12 +37,13 @@ namespace ASC.Communication.Scs.Client.Tcp {
         ///     Creates a communication channel using ServerIpAddress and ServerPort.
         /// </summary>
         /// <returns>Ready communication channel to communicate</returns>
-        protected override ICommunicationChannel CreateCommunicationChannel() {
+        protected override ICommunicationChannel CreateCommunicationChannel()
+        {
             return new TcpCommunicationChannel(
                 TcpHelper.ConnectToServer(
                     new IPEndPoint(IPAddress.Parse(_serverEndPoint.IpAddress), _serverEndPoint.TcpPort),
                     ConnectTimeout
-                    ));
+                ));
         }
     }
 }

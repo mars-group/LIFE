@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Reflection;
 using ASC.Communication.Scs.Client;
@@ -15,12 +16,14 @@ using ASC.Communication.Scs.Communication.Messengers;
 using ASC.Communication.ScsServices.Communication;
 using ASC.Communication.ScsServices.Communication.Messages;
 
-namespace ASC.Communication.ScsServices.Client {
+namespace ASC.Communication.ScsServices.Client
+{
     /// <summary>
     ///     Represents a service client that consumes a ACS service.
     /// </summary>
     /// <typeparam name="T">Type of service interface</typeparam>
-    internal class AscServiceClient<T> : IAscServiceClient<T> where T : class {
+    internal class AscServiceClient<T> : IAscServiceClient<T> where T : class
+    {
         #region Public events
 
         /// <summary>
@@ -41,7 +44,8 @@ namespace ASC.Communication.ScsServices.Client {
         ///     Timeout for connecting to a server (as milliseconds).
         ///     Default value: 15 seconds (15000 ms).
         /// </summary>
-        public int ConnectTimeout {
+        public int ConnectTimeout
+        {
             get { return _client.ConnectTimeout; }
             set { _client.ConnectTimeout = value; }
         }
@@ -49,7 +53,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// <summary>
         ///     Gets the current communication state.
         /// </summary>
-        public CommunicationStates CommunicationState {
+        public CommunicationStates CommunicationState
+        {
             get { return _client.CommunicationState; }
         }
 
@@ -64,11 +69,12 @@ namespace ASC.Communication.ScsServices.Client {
         ///     Use -1 for no timeout (wait indefinite).
         ///     Default value: 60000 (1 minute).
         /// </summary>
-        public int Timeout {
+        public int Timeout
+        {
             get { return _requestReplyMessenger.Timeout; }
             set { _requestReplyMessenger.Timeout = value; }
         }
-        
+
         #endregion
 
         #region Private fields
@@ -107,7 +113,9 @@ namespace ASC.Communication.ScsServices.Client {
         ///     May be null if client has no methods to be invoked by server.
         /// </param>
         /// <param name="serviceID"></param>
-        public AscServiceClient(RequestReplyMessenger<IScsClient> requestReplyMessenger, object clientObject, Guid serviceID) {
+        public AscServiceClient(RequestReplyMessenger<IScsClient> requestReplyMessenger, object clientObject,
+            Guid serviceID)
+        {
             _client = requestReplyMessenger.Messenger;
             _clientObject = clientObject;
 
@@ -119,7 +127,8 @@ namespace ASC.Communication.ScsServices.Client {
             //_requestReplyMessenger.MessageReceived += RequestReplyMessenger_MessageReceived;
 
 #if HAS_REAL_PROXY
-            _realServiceProxy = new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this, serviceID);
+            _realServiceProxy =
+new AutoConnectRemoteInvokeProxy<T, IScsClient>(_requestReplyMessenger, this, serviceID);
             ServiceProxy = (T)_realServiceProxy.GetTransparentProxy();
 #else
             var proxy = DispatchProxy.Create<T, AutoConnectRemoteInvokeProxy<T, IScsClient>>();
@@ -135,7 +144,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// <summary>
         ///     Connects to server.
         /// </summary>
-        public void Connect() {
+        public void Connect()
+        {
             _client.Connect();
         }
 
@@ -143,14 +153,16 @@ namespace ASC.Communication.ScsServices.Client {
         ///     Disconnects from server.
         ///     Does nothing if already disconnected.
         /// </summary>
-        public void Disconnect() {
+        public void Disconnect()
+        {
             _client.Disconnect();
         }
 
         /// <summary>
         ///     Calls Disconnect method.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             Disconnect();
         }
 
@@ -163,8 +175,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// </summary>
         /// <param name="sender">Source of object</param>
         /// <param name="e">Event arguments</param>
-        private void Client_Connected(object sender, EventArgs e) {
-
+        private void Client_Connected(object sender, EventArgs e)
+        {
             OnConnected();
         }
 
@@ -173,7 +185,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// </summary>
         /// <param name="sender">Source of object</param>
         /// <param name="e">Event arguments</param>
-        private void Client_Disconnected(object sender, EventArgs e) {
+        private void Client_Disconnected(object sender, EventArgs e)
+        {
             _requestReplyMessenger.Stop();
             OnDisconnected();
         }
@@ -182,7 +195,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// <summary>
         ///     Raises Connected event.
         /// </summary>
-        private void OnConnected() {
+        private void OnConnected()
+        {
             var handler = Connected;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -190,7 +204,8 @@ namespace ASC.Communication.ScsServices.Client {
         /// <summary>
         ///     Raises Disconnected event.
         /// </summary>
-        private void OnDisconnected() {
+        private void OnDisconnected()
+        {
             var handler = Disconnected;
             if (handler != null) handler(this, EventArgs.Empty);
         }

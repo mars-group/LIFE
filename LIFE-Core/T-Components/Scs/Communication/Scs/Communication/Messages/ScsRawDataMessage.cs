@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace Hik.Communication.Scs.Communication.Messages {
+namespace Hik.Communication.Scs.Communication.Messages
+{
     /// <summary>
     ///     This message is used to send/receive a raw byte array as message data.
     /// </summary>
     [Serializable]
-    public class ScsRawDataMessage : ScsMessage {
+    public class ScsRawDataMessage : ScsMessage
+    {
         /// <summary>
         ///     Message data that is being transmitted.
         /// </summary>
@@ -22,13 +25,16 @@ namespace Hik.Communication.Scs.Communication.Messages {
         /// <summary>
         ///     Default empty constructor.
         /// </summary>
-        public ScsRawDataMessage() {}
+        public ScsRawDataMessage()
+        {
+        }
 
         /// <summary>
         ///     Creates a new ScsRawDataMessage object with MessageData property.
         /// </summary>
         /// <param name="messageData">Message data that is being transmitted</param>
-        public ScsRawDataMessage(byte[] messageData) {
+        public ScsRawDataMessage(byte[] messageData)
+        {
             MessageData = messageData;
         }
 
@@ -41,7 +47,8 @@ namespace Hik.Communication.Scs.Communication.Messages {
         ///     a message.
         /// </param>
         public ScsRawDataMessage(byte[] messageData, string repliedMessageId)
-            : this(messageData) {
+            : this(messageData)
+        {
             RepliedMessageId = repliedMessageId;
         }
 
@@ -49,7 +56,8 @@ namespace Hik.Communication.Scs.Communication.Messages {
         ///     Creates a string to represents this object.
         /// </summary>
         /// <returns>A string to represents this object</returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             var messageLength = MessageData == null ? 0 : MessageData.Length;
             return string.IsNullOrEmpty(RepliedMessageId)
                 ? string.Format("ScsRawDataMessage [{0}]: {1} bytes", MessageId, messageLength)

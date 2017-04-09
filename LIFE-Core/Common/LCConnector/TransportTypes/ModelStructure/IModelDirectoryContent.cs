@@ -6,11 +6,14 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian H�ning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-namespace LCConnector.TransportTypes.ModelStructure {
+
+namespace LCConnector.TransportTypes.ModelStructure
+{
     /// <summary>
     ///     the interface of an item that can occur in a model folder.
     /// </summary>
-    internal interface IModelDirectoryContent {
+    internal interface IModelDirectoryContent
+    {
         /// <summary>
         ///     The item's filename in the fileystem.
         /// </summary>

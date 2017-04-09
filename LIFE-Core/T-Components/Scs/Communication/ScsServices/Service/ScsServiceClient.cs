@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Reflection;
 using Hik.Communication.Scs.Communication;
@@ -14,8 +15,8 @@ using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.Scs.Server;
 using Hik.Communication.ScsServices.Communication;
 
-namespace Hik.Communication.ScsServices.Service {
-
+namespace Hik.Communication.ScsServices.Service
+{
 #if HAS_REAL_PROXY
 
     using System.Runtime.Remoting.Proxies;
@@ -143,6 +144,7 @@ namespace Hik.Communication.ScsServices.Service {
     #endregion
     }
 #else
+
     /// <summary>
     ///     Implements IScsServiceClient.
     ///     It is used to manage and monitor a service client.
@@ -198,7 +200,6 @@ namespace Hik.Communication.ScsServices.Service {
         /// </summary>
         private readonly RequestReplyMessenger<IScsServerClient> _requestReplyMessenger;
 
-
         #endregion
 
         #region Constructor
@@ -242,7 +243,7 @@ namespace Hik.Communication.ScsServices.Service {
 
         #endregion
 
-            #region Private methods
+        #region Private methods
 
         /// <summary>
         ///     Handles disconnect event of _serverClient object.
@@ -255,9 +256,9 @@ namespace Hik.Communication.ScsServices.Service {
             OnDisconnected();
         }
 
-            #endregion
+        #endregion
 
-            #region Event raising methods
+        #region Event raising methods
 
         /// <summary>
         ///     Raises Disconnected event.
@@ -268,7 +269,8 @@ namespace Hik.Communication.ScsServices.Service {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-            #endregion
+        #endregion
     }
+
 #endif
-        }
+}

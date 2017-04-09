@@ -6,18 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Collections.Concurrent;
 using ASC.Communication.Scs.Communication.Channels;
 using ASC.Communication.Scs.Communication.Messengers;
 using ASC.Communication.Scs.Communication.Protocols;
 using CustomUtilities.Collections;
 
-namespace ASC.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server
+{
     /// <summary>
     ///     This class provides base functionality for server classes.
     /// </summary>
-    internal abstract class AscServerBase : IAscServer {
-
+    internal abstract class AscServerBase : IAscServer
+    {
         #region Public properties
 
         /// <summary>
@@ -46,7 +48,8 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Constructor.
         /// </summary>
-        protected AscServerBase() {
+        protected AscServerBase()
+        {
             Clients = new ConcurrentDictionary<long, IAscServerClient>();
             WireProtocolFactory = WireProtocolManager.GetDefaultWireProtocolFactory();
         }
@@ -58,14 +61,15 @@ namespace ASC.Communication.Scs.Server {
         /// <summary>
         ///     Starts the server.
         /// </summary>
-        public virtual void Start() {
-            
+        public virtual void Start()
+        {
         }
 
         /// <summary>
         ///     Stops the server.
         /// </summary>
-        public virtual void Stop() {
+        public virtual void Stop()
+        {
         }
 
         public abstract IMessenger GetMessenger();
@@ -84,7 +88,6 @@ namespace ASC.Communication.Scs.Server {
         #endregion
 
         #region Private methods
-
 
         #endregion
     }

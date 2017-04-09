@@ -6,17 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Client.Tcp;
 using ASC.Communication.Scs.Server;
 using ASC.Communication.Scs.Server.Tcp;
 
-namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
+namespace ASC.Communication.Scs.Communication.EndPoints.Tcp
+{
     /// <summary>
     ///     Represens a TCP end point in SCS.
     /// </summary>
-    public sealed class AscTcpEndPoint : AscEndPoint {
+    public sealed class AscTcpEndPoint : AscEndPoint
+    {
         /// <summary>
         ///     IP address of the server.
         /// </summary>
@@ -31,7 +34,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Creates a new AscTcpEndPoint object with specified port number.
         /// </summary>
         /// <param name="tcpPort">Listening TCP Port for incoming connection requests on server</param>
-        public AscTcpEndPoint(int tcpPort) {
+        public AscTcpEndPoint(int tcpPort)
+        {
             TcpPort = tcpPort;
         }
 
@@ -40,7 +44,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         /// </summary>
         /// <param name="ipAddress">IP address of the server</param>
         /// <param name="port">Listening TCP Port for incoming connection requests on server</param>
-        public AscTcpEndPoint(string ipAddress, int port) {
+        public AscTcpEndPoint(string ipAddress, int port)
+        {
             IpAddress = ipAddress;
             TcpPort = port;
         }
@@ -51,7 +56,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         /// </summary>
         /// <param name="address">TCP end point Address</param>
         /// <returns>Created ScsTcpEndpoint object</returns>
-        public AscTcpEndPoint(string address) {
+        public AscTcpEndPoint(string address)
+        {
             var splittedAddress = address.Trim().Split(':');
             IpAddress = splittedAddress[0].Trim();
             TcpPort = Convert.ToInt32(splittedAddress[1].Trim());
@@ -61,7 +67,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Creates a Scs Server that uses this end point to listen incoming connections.
         /// </summary>
         /// <returns>Scs Server</returns>
-        internal override IAscServer CreateServer() {
+        internal override IAscServer CreateServer()
+        {
             return new AscTcpServer(this);
         }
 
@@ -69,7 +76,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Creates a Scs Client that uses this end point to connect to server.
         /// </summary>
         /// <returns>Scs Client</returns>
-        internal override IScsClient CreateClient() {
+        internal override IScsClient CreateClient()
+        {
             return new AscTcpClient(this);
         }
 
@@ -77,7 +85,8 @@ namespace ASC.Communication.Scs.Communication.EndPoints.Tcp {
         ///     Generates a string representation of this end point object.
         /// </summary>
         /// <returns>String representation of this end point object</returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.IsNullOrEmpty(IpAddress) ? ("tcp://" + TcpPort) : ("tcp://" + IpAddress + ":" + TcpPort);
         }
     }

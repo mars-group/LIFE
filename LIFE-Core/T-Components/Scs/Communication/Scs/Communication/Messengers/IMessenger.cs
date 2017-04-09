@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Communication.Messengers {
+namespace Hik.Communication.Scs.Communication.Messengers
+{
     /// <summary>
     ///     Represents an object that can send and receive messages.
     /// </summary>
-    public interface IMessenger {
+    public interface IMessenger
+    {
         /// <summary>
         ///     This event is raised when a new message is received.
         /// </summary>

@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using ASC.Communication.Scs.Communication;
 using ASC.Communication.Scs.Communication.EndPoints;
 
-namespace ASC.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Represents a client that uses a SDS service.
     /// </summary>
-    public interface IAscServiceClient {
+    public interface IAscServiceClient
+    {
         /// <summary>
         ///     This event is raised when client is disconnected from service.
         /// </summary>

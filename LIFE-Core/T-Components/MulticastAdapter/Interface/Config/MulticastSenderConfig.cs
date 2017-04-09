@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using MulticastAdapter.Interface.Config.Types;
 
@@ -17,13 +18,17 @@ namespace MulticastAdapter.Interface.Config
         public Boolean SendOnAllInterfaces;
 
         #region single sending interface options
+
         // determines by which type the binding interface should be chosen
         public BindingType BindingType;
+
         public string SendingInterfaceName;
         public string SendingInterfaceIP;
+
         #endregion
 
-        public MulticastSenderConfig(bool sendOnAllInterfaces, string sendingInterfaceName, string sendingInterfaceIp, BindingType bindingType)
+        public MulticastSenderConfig(bool sendOnAllInterfaces, string sendingInterfaceName, string sendingInterfaceIp,
+            BindingType bindingType)
         {
             this.SendOnAllInterfaces = sendOnAllInterfaces;
             SendingInterfaceName = sendingInterfaceName;
@@ -38,9 +43,5 @@ namespace MulticastAdapter.Interface.Config
             SendingInterfaceIP = "127.0.0.1";
             BindingType = BindingType.IP;
         }
-      
     }
-
 }
-
-

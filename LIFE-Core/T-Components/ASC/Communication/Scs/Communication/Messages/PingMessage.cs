@@ -6,19 +6,24 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace ASC.Communication.Scs.Communication.Messages {
+namespace ASC.Communication.Scs.Communication.Messages
+{
     /// <summary>
     ///     This message is used to send/receive ping messages.
     ///     Ping messages is used to keep connection alive between server and client.
     /// </summary>
     [Serializable]
-    public sealed class AscPingMessage : AscMessage {
+    public sealed class AscPingMessage : AscMessage
+    {
         /// <summary>
         ///     Creates a new PingMessage object.
         /// </summary>
-        public AscPingMessage() {}
+        public AscPingMessage()
+        {
+        }
 
         /// <summary>
         ///     Creates a new reply PingMessage object.
@@ -28,7 +33,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         ///     a message.
         /// </param>
         public AscPingMessage(string repliedMessageId)
-            : this() {
+            : this()
+        {
             RepliedMessageId = repliedMessageId;
         }
 
@@ -36,7 +42,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         ///     Creates a string to represents this object.
         /// </summary>
         /// <returns>A string to represents this object</returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.IsNullOrEmpty(RepliedMessageId)
                 ? string.Format("AscPingMessage [{0}]", MessageId)
                 : string.Format("AscPingMessage [{0}] Replied To [{1}]", MessageId, RepliedMessageId);

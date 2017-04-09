@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Linq;
 using System.Net;
@@ -18,22 +19,27 @@ using NodeRegistry.Interface;
 using NodeRegistry.Interface.Config;
 using static System.String;
 
-namespace LayerContainerShared {
+namespace LayerContainerShared
+{
     [Serializable]
-    public class LayerContainerSettings {
+    public class LayerContainerSettings
+    {
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
 
         public GlobalConfig GlobalConfig { get; set; }
         public MulticastSenderConfig MulticastSenderConfig { get; set; }
 
-        public LayerContainerSettings() {
+        public LayerContainerSettings()
+        {
             var foundAddress = "";
             try
             {
                 foundAddress = NetworkInterface.GetAllNetworkInterfaces()
                     .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                    .GetIPProperties().UnicastAddresses
-                    .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
+                    .GetIPProperties()
+                    .UnicastAddresses
+                    .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                    .Address.ToString();
             }
             catch (Exception ex)
             {
@@ -44,7 +50,8 @@ namespace LayerContainerShared {
 
             var ipAddress = foundAddress != Empty ? foundAddress : "127.0.0.1";
             var fqdn = "";
-            try {
+            try
+            {
                 // Step 1: Get the host name
                 var hostname = Dns.GetHostName();
                 // Step 2: Perform a DNS lookup.
@@ -54,8 +61,11 @@ namespace LayerContainerShared {
                 var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
                 // Step 3: Retrieve the canonical name.
                 fqdn = hostinfo.HostName;
-            }catch(SocketException ex){
-                Console.Error.WriteLine("Dns Hostname Resolution failed, using random GUID as unique identifier for LayerContainer");
+            }
+            catch (SocketException ex)
+            {
+                Console.Error.WriteLine(
+                    "Dns Hostname Resolution failed, using random GUID as unique identifier for LayerContainer");
                 fqdn = Guid.NewGuid().ToString();
             }
 

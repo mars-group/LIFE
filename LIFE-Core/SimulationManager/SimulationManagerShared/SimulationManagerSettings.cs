@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.IO;
 using System.Linq;
@@ -21,8 +22,6 @@ using static System.String;
 
 namespace SimulationManagerShared
 {
-
-
     /// <summary>
     /// This class holds all local settings for the SimulationManager.
     /// </summary>
@@ -33,10 +32,12 @@ namespace SimulationManagerShared
         /// The model directory path
         /// </summary>
         public string ModelDirectoryPath { get; set; }
+
         /// <summary>
         /// The NoderegistryConfig for this SimulationManager
         /// </summary>
         public NodeRegistryConfig NodeRegistryConfig { get; set; }
+
         /// <summary>
         /// The MulticastSenderConfig for this SimulationManager
         /// </summary>
@@ -49,8 +50,10 @@ namespace SimulationManagerShared
             {
                 foundAddress = NetworkInterface.GetAllNetworkInterfaces()
                     .First(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                    .GetIPProperties().UnicastAddresses
-                    .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork).Address.ToString();
+                    .GetIPProperties()
+                    .UnicastAddresses
+                    .First(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                    .Address.ToString();
             }
             catch (Exception ex)
             {
@@ -61,7 +64,8 @@ namespace SimulationManagerShared
 
             var ipAddress = foundAddress != Empty ? foundAddress : "127.0.0.1";
             var fqdn = "";
-            try {
+            try
+            {
                 // Step 1: Get the host name
                 var hostname = Dns.GetHostName();
                 // Step 2: Perform a DNS lookup.
@@ -71,8 +75,11 @@ namespace SimulationManagerShared
                 var hostinfo = Dns.GetHostEntryAsync(hostname).Result;
                 // Step 3: Retrieve the canonical name.
                 fqdn = hostinfo.HostName;
-            }catch(SocketException ex){
-                Console.Error.WriteLine("Dns Hostname Resolution failed, using random GUID as unique identifier for SimulationManager");
+            }
+            catch (SocketException ex)
+            {
+                Console.Error.WriteLine(
+                    "Dns Hostname Resolution failed, using random GUID as unique identifier for SimulationManager");
                 fqdn = Guid.NewGuid().ToString();
             }
 

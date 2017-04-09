@@ -6,17 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 using LayerContainerFacade.Interfaces;
 using SMConnector.TransportTypes;
 
-namespace SMConnector {
+namespace SMConnector
+{
     public delegate void StatusUpdateAvailable(TStatusUpdate update);
 
     /// <summary>
     ///     Provides access to the SimulationManager's functions
     /// </summary>
-    public interface ISimulationManager {
+    public interface ISimulationManager
+    {
         /// <summary>
         ///     Returns a list of TModelDescriptions, describing all available models on the
         ///     SimulationManager node.
@@ -43,7 +46,9 @@ namespace SMConnector {
         /// <param name="startPaused"></param>
         /// <param name="nrOfTicks"></param>
         /// <param name="scenarioConfigId">The ID of the ScenarioConfig to use</param>
-        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null, string scenarioConfigId = "", string resultConfigId = "", bool startPaused = false, ILayerContainerFacade layerContainer = null);
+        void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null,
+            string scenarioConfigId = "", string resultConfigId = "", bool startPaused = false,
+            ILayerContainerFacade layerContainer = null);
 
         /// <summary>
         ///     Holds the execution of the simulation with the given model indefinitely until it is either aborted or resumed.
@@ -64,7 +69,7 @@ namespace SMConnector {
         /// <param name="model"></param>
         void AbortSimulation(TModelDescription model);
 
-		void WaitForSimulationToFinish(TModelDescription model);
+        void WaitForSimulationToFinish(TModelDescription model);
 
         /// <summary>
         ///     Subscribe for StatusUpdates from the SimulationManager.

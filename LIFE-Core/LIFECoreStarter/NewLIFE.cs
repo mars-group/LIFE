@@ -24,7 +24,6 @@ namespace LIFE.Core.LIFELocalStarter
 
         public static void Start(string[] args)
         {
-
             Console.WriteLine("MARS LIFE 2.0 trying to start up.");
 
             try
@@ -40,7 +39,8 @@ namespace LIFE.Core.LIFELocalStarter
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"MARS LIFE crashed fatally. Exception:\n {exception}.\n InnerException:\n {exception.InnerException}");
+                Console.WriteLine(
+                    $"MARS LIFE crashed fatally. Exception:\n {exception}.\n InnerException:\n {exception.InnerException}");
                 throw exception;
                 //Environment.Exit(1);
             }
@@ -51,7 +51,6 @@ namespace LIFE.Core.LIFELocalStarter
 
             Environment.Exit(0);
         }
-
 
 
         /// <summary>
@@ -75,16 +74,20 @@ namespace LIFE.Core.LIFELocalStarter
 
             var optionSet = new OptionSet()
                 .Add("?|h|help", "Shows short usage", option => help = option != null)
-                .Add("m=|model=", "Path to the Modelcode to simulate. Defaults to current directory.", option => modelPath = option)
+                .Add("m=|model=", "Path to the Modelcode to simulate. Defaults to current directory.",
+                    option => modelPath = option)
                 .Add("id=", "Set SimulationID (must be a valid UUIDv4!)",
                     option => simulationId = Guid.Parse(option))
                 .Add("mca=|marsconfigaddress=", "MARSConfig address to use (DEPRECATED)",
                     option => marsConfigAddress = option)
-                .Add("sc=|scenario=","The ID of a ScenarioConfiguration. Mandatory if the simulation requires data from the MARS Cloud!",
+                .Add("sc=|scenario=",
+                    "The ID of a ScenarioConfiguration. Mandatory if the simulation requires data from the MARS Cloud!",
                     option => scenarioConfigToUse = option)
-                .Add("rc=|resultcfg=","The ID of a ResultConfiguration. Required if the simulation should use data from the MARS Cloud! If not set the legacy ISimResult interface is used.",
+                .Add("rc=|resultcfg=",
+                    "The ID of a ResultConfiguration. Required if the simulation should use data from the MARS Cloud! If not set the legacy ISimResult interface is used.",
                     option => resultConfigToUse = option)
-                .Add("cn=|clustername=", "Optional. Provide a name for the simulation cluster. Only LIFE process with the same name join each other",
+                .Add("cn=|clustername=",
+                    "Optional. Provide a name for the simulation cluster. Only LIFE process with the same name join each other",
                     option => clusterName = option);
 
             try
@@ -127,7 +130,8 @@ namespace LIFE.Core.LIFELocalStarter
 
                     Console.WriteLine($"Using ConfigServiceAddress {MARSConfigServiceSettings.Address}");
                     // set layerContainerCore to avoid use of networking since we're running completely local
-                    simCore.StartSimulationWithModel(simulationId, model, 0, scenarioConfigToUse, resultConfigToUse, layerContainer: layerContainerCore);
+                    simCore.StartSimulationWithModel(simulationId, model, 0, scenarioConfigToUse, resultConfigToUse,
+                        layerContainer: layerContainerCore);
                 }
             }
         }

@@ -10,12 +10,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace ConfigurationAdapter {
+namespace ConfigurationAdapter
+{
     /// <summary>
     ///     The global configuration for all LIFE processes.
     /// </summary>
     [Serializable]
-    public class GlobalConfig {
+    public class GlobalConfig
+    {
         /// <summary>
         ///     The IP of the multicast group, through which auto-discovery of nodes will happen.
         /// </summary>
@@ -30,12 +32,14 @@ namespace ConfigurationAdapter {
         /// </summary>
         public int MulticastGroupSendingStartPort { get; set; }
 
-        public List<string> Strings { get; set; } 
+        public List<string> Strings { get; set; }
+
         /// <summary>
         /// </summary>
         public int IPVersion { get; set; }
 
-        public GlobalConfig() {
+        public GlobalConfig()
+        {
             MulticastGroupIp = "239.0.0.1";
             MulticastGroupListenPort = 50100;
             MulticastGroupSendingStartPort = 50500;
@@ -43,7 +47,8 @@ namespace ConfigurationAdapter {
         }
 
         public GlobalConfig
-            (string multicastGroupIp, int multicastGroupListenPort, int multicastGroupSendingStartPort, int ipVersion) {
+            (string multicastGroupIp, int multicastGroupListenPort, int multicastGroupSendingStartPort, int ipVersion)
+        {
             MulticastGroupIp = multicastGroupIp;
             MulticastGroupListenPort = multicastGroupListenPort;
             MulticastGroupSendingStartPort = multicastGroupSendingStartPort;

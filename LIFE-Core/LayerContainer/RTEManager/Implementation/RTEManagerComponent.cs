@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Collections.Generic;
 using LIFE.API.Agent;
 using LIFE.API.Layer;
@@ -14,49 +15,56 @@ using NodeRegistry.Interface;
 using RTEManager.Interfaces;
 
 
-
-
-namespace RTEManager.Implementation {
-	public class RTEManagerComponent : IRTEManager {
+namespace RTEManager.Implementation
+{
+    public class RTEManagerComponent : IRTEManager
+    {
         private readonly IRTEManager _rteManagerUseCase;
 
-        public RTEManagerComponent(INodeRegistry nodeRegistry) {
+        public RTEManagerComponent(INodeRegistry nodeRegistry)
+        {
             _rteManagerUseCase = new RTEManagerUseCase(nodeRegistry);
         }
 
         #region IRTEManager Members
 
-	    public void InitializeResultAdapter(string resultConfig)
-	    {
-	        _rteManagerUseCase.InitializeResultAdapter(resultConfig);
-	    }
+        public void InitializeResultAdapter(string resultConfig)
+        {
+            _rteManagerUseCase.InitializeResultAdapter(resultConfig);
+        }
 
-	    public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer) {
+        public void RegisterLayer(TLayerInstanceId instanceId, ILayer layer)
+        {
             _rteManagerUseCase.RegisterLayer(instanceId, layer);
         }
 
-        public void UnregisterLayer(TLayerInstanceId layerInstanceId) {
+        public void UnregisterLayer(TLayerInstanceId layerInstanceId)
+        {
             _rteManagerUseCase.UnregisterLayer(layerInstanceId);
         }
 
-        public void UnregisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1) {
+        public void UnregisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1)
+        {
             _rteManagerUseCase.UnregisterTickClient(layer, tickClient);
         }
 
-        public void RegisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1) {
+        public void RegisterTickClient(ILayer layer, ITickClient tickClient, int executionInterval = 1)
+        {
             _rteManagerUseCase.RegisterTickClient(layer, tickClient);
         }
 
-        public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+        public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData)
+        {
             return _rteManagerUseCase.InitializeLayer(instanceId, initData);
         }
 
-		public void DisposeSuitableLayers ()
-		{
-			_rteManagerUseCase.DisposeSuitableLayers ();
-		}
+        public void DisposeSuitableLayers()
+        {
+            _rteManagerUseCase.DisposeSuitableLayers();
+        }
 
-        public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer) {
+        public IEnumerable<ITickClient> GetAllTickClientsByLayer(TLayerInstanceId layer)
+        {
             return _rteManagerUseCase.GetAllTickClientsByLayer(layer);
         }
 
