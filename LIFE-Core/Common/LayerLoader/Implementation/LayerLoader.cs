@@ -152,9 +152,8 @@ namespace LayerLoader.Implementation
                 catch (FileLoadException fex)
                 {
                     // Get loaded assembly 
-                    asm =
-                        AssemblyLoadContext.Default.LoadFromAssemblyName(
-                            new AssemblyName(Path.GetFileNameWithoutExtension(fileSystemInfo.Name)));
+                    asm = AssemblyLoadContext.Default.LoadFromAssemblyName(
+                        new AssemblyName(Path.GetFileNameWithoutExtension(fileSystemInfo.Name)));
 
                     if (asm == null)
                     {

@@ -108,7 +108,6 @@ namespace RuntimeEnvironment.Implementation
                             sw.Stop();
                             _simulationExecutionSwitch.WaitOne();
                             sw.Start();
-
                             continue;
 
                         case SimulationStatus.Aborted:

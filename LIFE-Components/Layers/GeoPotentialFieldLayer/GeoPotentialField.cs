@@ -30,7 +30,7 @@ namespace LIFE.Components.GeoPotentialFieldLayer
 
         public new int NumberOfGridCellsX
         {
-            get { return base.NumberOfGridCellsY; }
+            get { return base.NumberOfGridCellsX; }
             set
             {
                 base.NumberOfGridCellsX = value;

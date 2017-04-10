@@ -41,9 +41,9 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var agentType = Type.GetType(agentInitConfig.AgentFullName);
             var agentCtors = agentType.GetConstructors();
 
-            var agentConstructor =
-                agentCtors.FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishForMappingInMarsAttribute), true)
-                    .Any());
+            var agentConstructor = agentCtors.FirstOrDefault(c => c
+                .GetCustomAttributes(typeof(PublishForMappingInMarsAttribute), true)
+                .Any());
 
             // if not annotated constructor was found, try to take the single constructor if only one is present
             if (agentConstructor == null && agentCtors.Length == 1)

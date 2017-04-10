@@ -21,8 +21,8 @@ using LIFE.Components.Utilities.MulticastAddressGenerator;
 namespace LIFE.Components.Services.AgentShadowingService.Implementation
 {
     internal class
-        AgentShadowingServiceUseCase<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface,
-            TServiceClass>
+        AgentShadowingServiceUseCase<TServiceInterface, TServiceClass> :
+            IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface
         where TServiceInterface : class
     {

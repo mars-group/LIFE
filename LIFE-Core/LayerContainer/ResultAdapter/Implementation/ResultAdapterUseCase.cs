@@ -9,6 +9,7 @@ using ResultAdapter.Implementation.DataOutput;
 using ResultAdapter.Interface;
 
 // ReSharper disable SuspiciousTypeConversion.Global
+
 [assembly: InternalsVisibleTo("ResultAdapterTests")]
 
 namespace ResultAdapter.Implementation

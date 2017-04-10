@@ -525,7 +525,7 @@ pushAllPackages:
   image: frolvlad/alpine-mono
   only:
     - master
-    - csprojMigration
+    - Development
   script:
     - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH

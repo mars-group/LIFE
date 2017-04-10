@@ -230,7 +230,6 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp
                     // ProcessSend(e);
                     break;
                 default:
-
                     throw new ArgumentException(
                         $"The last operation completed on the socket was not a receive or send, but: {e.LastOperation}");
             }
