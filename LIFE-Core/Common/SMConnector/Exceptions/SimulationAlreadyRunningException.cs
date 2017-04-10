@@ -6,8 +6,12 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace SMConnector.Exceptions {
-    public class SimulationAlreadyRunningException : Exception {}
+namespace SMConnector.Exceptions
+{
+    public class SimulationAlreadyRunningException : Exception
+    {
+    }
 }

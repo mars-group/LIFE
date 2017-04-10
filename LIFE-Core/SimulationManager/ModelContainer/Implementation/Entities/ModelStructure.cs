@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,30 +15,36 @@ using LCConnector.TransportTypes;
 
 [assembly: InternalsVisibleTo("ModelContainerTests")]
 
-namespace ModelContainer.Implementation.Entities {
+namespace ModelContainer.Implementation.Entities
+{
     /// <summary>
     ///     This class is an internal representation of a model structure.
     /// </summary>
     /// <remarks>It is essentially a graph and used to examine possible instantiation orders for the model's</remarks>
-    internal class ModelStructure {
+    internal class ModelStructure
+    {
         private readonly ISet<ModelNode> _nodes;
 
-        public ModelStructure() {
+        public ModelStructure()
+        {
             _nodes = new HashSet<ModelNode>();
         }
 
-        public void AddLayer(TLayerDescription layerDescription, Type nodeType, params Type[] dependencies) {
+        public void AddLayer(TLayerDescription layerDescription, Type nodeType, params Type[] dependencies)
+        {
             ModelNode newNode = new ModelNode(layerDescription, nodeType, dependencies);
             _nodes.Add(newNode);
 
             // update all dependencies
-            foreach (var modelNode in _nodes) {
+            foreach (var modelNode in _nodes)
+            {
                 modelNode.UpdateEdges(newNode);
                 newNode.UpdateEdges(modelNode);
             }
         }
 
-        public IList<TLayerDescription> CalculateInstantiationOrder() {
+        public IList<TLayerDescription> CalculateInstantiationOrder()
+        {
             /* This algorithm works backwards from nodes without any dependencies.
              * It works iteratively outwards on the graph, parallely tracking all possibilities.
              * For each iteration, we check if there is a node that depends on at least one of the previous ones.
@@ -46,18 +53,21 @@ namespace ModelContainer.Implementation.Entities {
              */
 
             IList<HashSet<ModelNode>> setList = new List<HashSet<ModelNode>>();
-            while (_nodes.Any()) {
+            while (_nodes.Any())
+            {
                 // get all satisfied nodes from _nodes
                 var dependentNodes = _nodes.Where
                     (
                         n => n.Edges.All
-                            (
-                                e => setList.Any(s => s.Contains(e))
-                            )
-                    ).ToArray();
+                        (
+                            e => setList.Any(s => s.Contains(e))
+                        )
+                    )
+                    .ToArray();
 
                 // remove these from the _nodes collection
-                foreach (var dependentNode in dependentNodes) {
+                foreach (var dependentNode in dependentNodes)
+                {
                     _nodes.Remove(dependentNode);
                 }
 
@@ -66,11 +76,12 @@ namespace ModelContainer.Implementation.Entities {
             }
 
             return setList.Aggregate
-                (new List<TLayerDescription>(),
-                    (list, set) => {
-                        list.AddRange(set.Select(n => n.LayerDescription).ToList());
-                        return list;
-                    });
+            (new List<TLayerDescription>(),
+                (list, set) =>
+                {
+                    list.AddRange(set.Select(n => n.LayerDescription).ToList());
+                    return list;
+                });
         }
     }
 }

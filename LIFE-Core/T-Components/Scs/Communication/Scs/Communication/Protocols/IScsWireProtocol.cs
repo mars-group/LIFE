@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Collections.Generic;
 using Hik.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.Scs.Communication.Protocols {
+namespace Hik.Communication.Scs.Communication.Protocols
+{
     /// <summary>
     ///     Represents a byte-level communication protocol between applications.
     /// </summary>
-    public interface IScsWireProtocol {
+    public interface IScsWireProtocol
+    {
         /// <summary>
         ///     Serializes a message to a byte array to send to remote application.
         ///     This method is synchronized. So, only one thread can call it concurrently.

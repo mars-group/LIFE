@@ -6,13 +6,14 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 30.07.2016
 //  *******************************************************/
+
 using System;
 
-namespace LIFE.API.Environment.GeoCommon {
-
-  public interface IGeoCoordinate : IEquatable<IGeoCoordinate> {
-
-    double Latitude { get; }
-    double Longitude { get; }
-  }
+namespace LIFE.API.Environment.GeoCommon
+{
+    public interface IGeoCoordinate : IEquatable<IGeoCoordinate>
+    {
+        double Latitude { get; }
+        double Longitude { get; }
+    }
 }

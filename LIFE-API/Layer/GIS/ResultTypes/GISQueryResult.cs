@@ -22,3 +22,4 @@ namespace LIFE.API.Layer.GIS.ResultTypes {
     public List<GISResultEntry> ResultEntries { get; private set; }
   }
 }*/
+

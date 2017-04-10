@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.Scs.Server;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace Hik.Communication.ScsServices.Service
+{
     /// <summary>
     ///     This class is used to create service client objects that is used in server-side.
     /// </summary>
-    internal static class ScsServiceClientFactory {
+    internal static class ScsServiceClientFactory
+    {
         /// <summary>
         ///     Creates a new service client object that is used in server-side.
         /// </summary>
@@ -21,7 +24,8 @@ namespace Hik.Communication.ScsServices.Service {
         /// <param name="requestReplyMessenger">RequestReplyMessenger object to send/receive messages over serverClient</param>
         /// <returns></returns>
         public static IScsServiceClient CreateServiceClient(IScsServerClient serverClient,
-            RequestReplyMessenger<IScsServerClient> requestReplyMessenger) {
+            RequestReplyMessenger<IScsServerClient> requestReplyMessenger)
+        {
             return new ScsServiceClient(serverClient, requestReplyMessenger);
         }
     }

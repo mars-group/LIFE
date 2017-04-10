@@ -20,88 +20,100 @@ using NodeRegistry.Implementation.UseCases;
 using NodeRegistry.Interface;
 using NodeRegistry.Interface.Config;
 
-namespace NodeRegistry.Implementation {
+namespace NodeRegistry.Implementation
+{
+    public class NodeRegistryComponent : INodeRegistry
+    {
+        private readonly NodeRegistryEventHandlerUseCase _eventHandlerUseCase;
+        private readonly NodeRegistryHeartBeatUseCase _heartBeatUseCase;
+        private readonly IMulticastAdapter _multicastAdapter;
+        private readonly NodeRegistryNetworkUseCase _networkUseCase;
+        private readonly NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
 
-  public class NodeRegistryComponent : INodeRegistry {
+        public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config, string clusterName)
+        {
+            if (!string.IsNullOrEmpty(clusterName))
+            {
+                // recreate MultiCastAdapter with specific mcastGroup if clusterName is set
+                var globalSettings = new GlobalConfig();
+                globalSettings.MulticastGroupIp = MulticastAddressGenerator.GetIPv4MulticastAddress(clusterName);
+                multicastAdapter = new MulticastAdapterComponent(globalSettings, new MulticastSenderConfig());
+            }
 
-    private readonly NodeRegistryEventHandlerUseCase _eventHandlerUseCase;
-    private readonly NodeRegistryHeartBeatUseCase _heartBeatUseCase;
-    private readonly IMulticastAdapter _multicastAdapter;
-    private readonly NodeRegistryNetworkUseCase _networkUseCase;
-    private readonly NodeRegistryNodeManagerUseCase _nodeManagerUseCase;
+            var locaNodeInformation = new TNodeInformation(
+                config.NodeType,
+                config.NodeIdentifier,
+                new NodeEndpoint(config.NodeEndPointIP, config.NodeEndPointPort)
+            );
 
-    public NodeRegistryComponent(IMulticastAdapter multicastAdapter, NodeRegistryConfig config, string clusterName) {
+            _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
+            _eventHandlerUseCase.SimulationManagerConnected += EventHandlerUseCaseOnSimulationManagerConnected;
+            _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
+            _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation,
+                multicastAdapter,
+                config.HeartBeatInterval, clusterName, config.HeartBeatTimeOutmultiplier);
+            _networkUseCase = new NodeRegistryNetworkUseCase(_nodeManagerUseCase, _heartBeatUseCase,
+                locaNodeInformation,
+                config.AddMySelfToActiveNodeList, multicastAdapter, clusterName);
 
-      if (!string.IsNullOrEmpty(clusterName)) {
-        // recreate MultiCastAdapter with specific mcastGroup if clusterName is set
-        var globalSettings = new GlobalConfig();
-        globalSettings.MulticastGroupIp = MulticastAddressGenerator.GetIPv4MulticastAddress(clusterName);
-        multicastAdapter = new MulticastAdapterComponent(globalSettings, new MulticastSenderConfig());
-      }
+            _multicastAdapter = multicastAdapter;
+        }
 
-      var locaNodeInformation = new TNodeInformation(
-        config.NodeType,
-        config.NodeIdentifier,
-        new NodeEndpoint(config.NodeEndPointIP, config.NodeEndPointPort)
-      );
 
-      _eventHandlerUseCase = new NodeRegistryEventHandlerUseCase();
-      _eventHandlerUseCase.SimulationManagerConnected += EventHandlerUseCaseOnSimulationManagerConnected;
-      _nodeManagerUseCase = new NodeRegistryNodeManagerUseCase(_eventHandlerUseCase);
-      _heartBeatUseCase = new NodeRegistryHeartBeatUseCase(_nodeManagerUseCase, locaNodeInformation, multicastAdapter,
-        config.HeartBeatInterval, clusterName, config.HeartBeatTimeOutmultiplier);
-      _networkUseCase = new NodeRegistryNetworkUseCase(_nodeManagerUseCase, _heartBeatUseCase, locaNodeInformation,
-        config.AddMySelfToActiveNodeList, multicastAdapter, clusterName);
+        public event EventHandler<TNodeInformation> SimulationManagerConnected;
 
-      _multicastAdapter = multicastAdapter;
+
+        public List<TNodeInformation> GetAllNodes()
+        {
+            return _nodeManagerUseCase.GetAllNodes();
+        }
+
+        public List<TNodeInformation> GetAllNodesByType(NodeType nodeType)
+        {
+            return _nodeManagerUseCase.GetAllNodesByType(nodeType);
+        }
+
+        public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler)
+        {
+            _eventHandlerUseCase.SubscribeForNewNodeConnected(newNodeConnectedHandler);
+        }
+
+        public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType)
+        {
+            _eventHandlerUseCase.SubscribeForNewNodeConnectedByType(newNodeConnectedHandler, nodeType);
+        }
+
+        public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node)
+        {
+            _eventHandlerUseCase.SubscribeForNodeDisconnected(nodeDisconnectedHandler, node);
+        }
+
+        public void LeaveCluster()
+        {
+            _networkUseCase.LeaveCluster();
+        }
+
+        public void JoinCluster()
+        {
+            _networkUseCase.JoinCluster();
+        }
+
+        public void ShutDownNodeRegistry()
+        {
+            _networkUseCase.Shutdown();
+            _heartBeatUseCase.Shutdow();
+            _multicastAdapter.CloseSocket();
+        }
+
+        private void EventHandlerUseCaseOnSimulationManagerConnected(object sender, TNodeInformation nodeInformation)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            var handler = SimulationManagerConnected;
+
+            // Event will be null if there are no subscribers
+            handler?.Invoke(this, nodeInformation);
+        }
     }
-
-
-    public event EventHandler<TNodeInformation> SimulationManagerConnected;
-
-
-    public List<TNodeInformation> GetAllNodes() {
-      return _nodeManagerUseCase.GetAllNodes();
-    }
-
-    public List<TNodeInformation> GetAllNodesByType(NodeType nodeType) {
-      return _nodeManagerUseCase.GetAllNodesByType(nodeType);
-    }
-
-    public void SubscribeForNewNodeConnected(NewNodeConnected newNodeConnectedHandler) {
-      _eventHandlerUseCase.SubscribeForNewNodeConnected(newNodeConnectedHandler);
-    }
-
-    public void SubscribeForNewNodeConnectedByType(NewNodeConnected newNodeConnectedHandler, NodeType nodeType) {
-      _eventHandlerUseCase.SubscribeForNewNodeConnectedByType(newNodeConnectedHandler, nodeType);
-    }
-
-    public void SubscribeForNodeDisconnected(NodeDisconnected nodeDisconnectedHandler, TNodeInformation node) {
-      _eventHandlerUseCase.SubscribeForNodeDisconnected(nodeDisconnectedHandler, node);
-    }
-
-    public void LeaveCluster() {
-      _networkUseCase.LeaveCluster();
-    }
-
-    public void JoinCluster() {
-      _networkUseCase.JoinCluster();
-    }
-
-    public void ShutDownNodeRegistry() {
-      _networkUseCase.Shutdown();
-      _heartBeatUseCase.Shutdow();
-      _multicastAdapter.CloseSocket();
-    }
-
-    private void EventHandlerUseCaseOnSimulationManagerConnected(object sender, TNodeInformation nodeInformation) {
-      // Make a temporary copy of the event to avoid possibility of
-      // a race condition if the last subscriber unsubscribes
-      // immediately after the null check and before the event is raised.
-      var handler = SimulationManagerConnected;
-
-      // Event will be null if there are no subscribers
-      handler?.Invoke(this, nodeInformation);
-    }
-  }
 }

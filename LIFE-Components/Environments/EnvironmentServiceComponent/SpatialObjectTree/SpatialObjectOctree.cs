@@ -9,8 +9,8 @@ using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Shape;
 
-namespace LIFE.Components.ESC.SpatialObjectTree {
-
+namespace LIFE.Components.ESC.SpatialObjectTree
+{
     /// <summary>
     ///   Implements an unbalanced, 3-dimensonal tree.
     /// </summary>
@@ -21,9 +21,10 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
     ///   The described structure allows for all operations to need only computing time O(log(n)) with n being the <br />
     ///   number of items within the tree.
     /// </remarks>
-    public class SpatialObjectOctree<T> : ITree<T> where T : class, ISpatialObject {
-
-        public enum Direction {
+    public class SpatialObjectOctree<T> : ITree<T> where T : class, ISpatialObject
+    {
+        public enum Direction
+        {
             Nwb = 0, //NORTH-WEST-BOTTOM
             Neb = 1,
             Swb = 2,
@@ -44,7 +45,8 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
         /// </summary>
         /// <param name="minLeafSize">The smallest size a leaf will split into</param>
         /// <param name="maxObjectsPerLeaf">Maximum number of objects per leaf before it forces a split into sub quadrants</param>
-        public SpatialObjectOctree(Vector3 minLeafSize, int maxObjectsPerLeaf) {
+        public SpatialObjectOctree(Vector3 minLeafSize, int maxObjectsPerLeaf)
+        {
             Root = null;
             _minLeafSize = minLeafSize;
             _maxObjectsPerLeaf = maxObjectsPerLeaf;
@@ -55,7 +57,8 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
 
         #region NestedType Ocnode
 
-        public class Ocnode {
+        public class Ocnode
+        {
             private readonly Mutex _mutex;
             private readonly Ocnode[] _nodes = new Ocnode[8];
             public readonly ReadOnlyCollection<Ocnode> Nodes;
@@ -63,7 +66,8 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
             internal readonly List<T> Shapes = new List<T>();
 
 
-            public Ocnode(BoundingBox bounds) {
+            public Ocnode(BoundingBox bounds)
+            {
                 _mutex = new Mutex();
                 Bounds = bounds;
                 Nodes = new ReadOnlyCollection<Ocnode>(_nodes);
@@ -74,9 +78,11 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
             public Ocnode(double x, double y, double z, Vector3 dimension)
                 : this(
                     BoundingBox.GenerateByDimension
-                        (
-                            new Vector3(x + dimension.X/2, y + dimension.Y/2, z + dimension.Z/2),
-                            new Vector3(dimension.X, dimension.Y, dimension.Z))) {}
+                    (
+                        new Vector3(x + dimension.X / 2, y + dimension.Y / 2, z + dimension.Z / 2),
+                        new Vector3(dimension.X, dimension.Y, dimension.Z)))
+            {
+            }
 
             public Ocnode Parent { get; internal set; }
 
@@ -84,7 +90,8 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
             {
                 get
                 {
-                    switch (direction) {
+                    switch (direction)
+                    {
                         case Direction.Nwt:
                             return _nodes[0];
                         case Direction.Net:
@@ -107,7 +114,8 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                 }
                 set
                 {
-                    switch (direction) {
+                    switch (direction)
+                    {
                         case Direction.Nwt:
                             _nodes[0] = value;
                             break;
@@ -133,7 +141,8 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                             _nodes[7] = value;
                             break;
                     }
-                    if (value != null) {
+                    if (value != null)
+                    {
                         value.Parent = this;
                     }
                 }
@@ -141,15 +150,18 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
 
             public BoundingBox Bounds { get; private set; }
 
-            public void GetAccess() {
+            public void GetAccess()
+            {
                 _mutex.WaitOne();
             }
 
-            public void ReleaseAccess() {
+            public void ReleaseAccess()
+            {
                 _mutex.ReleaseMutex();
             }
 
-            public bool HasChildNodes() {
+            public bool HasChildNodes()
+            {
                 return _nodes[0] != null;
             }
         }
@@ -158,39 +170,47 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
 
         #region ITree<T> Members
 
-        public void Insert(T spatialObject) {
+        public void Insert(T spatialObject)
+        {
             var bounds = spatialObject.Shape.Bounds;
 
             // still make use of lock here, since that's the only point where really only one thread may access
-            lock (_syncLock) {
+            lock (_syncLock)
+            {
                 // check if this is the first item to be added to the tree
-                if (Root == null) {
+                if (Root == null)
+                {
                     Root =
                         new Ocnode
-                            (BoundingBox.GenerateByDimension
-                                (bounds.Position,
-                                    _minLeafSize));
+                        (BoundingBox.GenerateByDimension
+                        (bounds.Position,
+                            _minLeafSize));
                 }
             }
 
             // expand Octree if new entity is out of current bounds
-            while (!Root.Bounds.Contains(bounds)) {
+            while (!Root.Bounds.Contains(bounds))
+            {
                 ExpandRoot(bounds);
             }
 
             InsertNodeObject(Root, spatialObject);
         }
 
-        public List<T> Query(BoundingBox shape) {
+        public List<T> Query(BoundingBox shape)
+        {
             var results = new List<T>();
-            if (Root != null) {
+            if (Root != null)
+            {
                 Query(shape, Root, results);
             }
             return results;
         }
 
-        public void Remove(T spatialObject) {
-            if (!_objectToNodeLookup.ContainsKey(spatialObject)) {
+        public void Remove(T spatialObject)
+        {
+            if (!_objectToNodeLookup.ContainsKey(spatialObject))
+            {
                 // object not found, so return. Why is that an error condition?
                 return;
             }
@@ -203,7 +223,8 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
             containingNode.ReleaseAccess();
         }
 
-        public List<T> GetAll() {
+        public List<T> GetAll()
+        {
             return _objectToNodeLookup.Keys.ToList();
         }
 
@@ -211,21 +232,26 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
 
         #region Private Methods
 
-        private void Query(BoundingBox shape, Ocnode node, List<T> results) {
-            if (node == null) {
+        private void Query(BoundingBox shape, Ocnode node, List<T> results)
+        {
+            if (node == null)
+            {
                 return;
             }
             bool alreadyReleased = false;
             node.GetAccess();
 
-            if (shape.IntersectsWith((IShape) node.Bounds)) {
+            if (shape.IntersectsWith((IShape) node.Bounds))
+            {
                 // copy objects to intermediate array because node's objects might be altered in the meantime
                 var objects = new T[node.Objects.Count];
                 node.Objects.CopyTo(objects, 0);
 
 
-                foreach (var spatialObject in objects) {
-                    if (shape.IntersectsWith((IShape) spatialObject.Shape.Bounds)) {
+                foreach (var spatialObject in objects)
+                {
+                    if (shape.IntersectsWith((IShape) spatialObject.Shape.Bounds))
+                    {
                         results.Add(spatialObject);
                     }
                 }
@@ -233,37 +259,47 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                 var nodes = node.Nodes;
                 node.ReleaseAccess();
                 alreadyReleased = true;
-                foreach (var childNode in nodes) {
+                foreach (var childNode in nodes)
+                {
                     Query(shape, childNode, results);
                 }
             }
 
-            if (!alreadyReleased) {
+            if (!alreadyReleased)
+            {
                 node.ReleaseAccess();
             }
         }
 
 
-        private void ExpandRoot(BoundingBox newChildBounds) {
-            lock (_syncLock) {
+        private void ExpandRoot(BoundingBox newChildBounds)
+        {
+            lock (_syncLock)
+            {
                 bool isWest = Root.Bounds.LeftBottomFront.X < newChildBounds.LeftBottomFront.X;
                 bool isNorth = Root.Bounds.LeftBottomFront.Y < newChildBounds.LeftBottomFront.Y;
                 bool isBottom = Root.Bounds.LeftBottomFront.Z > newChildBounds.LeftBottomFront.Z;
 
                 Direction rootDirection;
-                if (isBottom) {
-                    if (isNorth) {
+                if (isBottom)
+                {
+                    if (isNorth)
+                    {
                         rootDirection = isWest ? Direction.Nwb : Direction.Neb;
                     }
-                    else {
+                    else
+                    {
                         rootDirection = isWest ? Direction.Swb : Direction.Seb;
                     }
                 }
-                else {
-                    if (isNorth) {
+                else
+                {
+                    if (isNorth)
+                    {
                         rootDirection = isWest ? Direction.Nwt : Direction.Net;
                     }
-                    else {
+                    else
+                    {
                         rootDirection = isWest ? Direction.Swt : Direction.Set;
                     }
                 }
@@ -282,9 +318,9 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
                     : Root.Bounds.LeftBottomFront.Z - Root.Bounds.Length;
 
                 BoundingBox newRootBounds = BoundingBox.GenerateByDimension
-                    (
-                        new Vector3(newX + Root.Bounds.Width, newY + Root.Bounds.Height, newZ + Root.Bounds.Length),
-                        new Vector3(Root.Bounds.Width*2, Root.Bounds.Height*2, Root.Bounds.Length*2));
+                (
+                    new Vector3(newX + Root.Bounds.Width, newY + Root.Bounds.Height, newZ + Root.Bounds.Length),
+                    new Vector3(Root.Bounds.Width * 2, Root.Bounds.Height * 2, Root.Bounds.Length * 2));
                 Ocnode newRoot = new Ocnode(newRootBounds);
                 SetupChildNodes(newRoot);
                 newRoot[rootDirection] = Root;
@@ -293,8 +329,10 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
             }
         }
 
-        private void InsertNodeObject(Ocnode node, T spatialObject) {
-            if (!node.Bounds.Contains(spatialObject.Shape.Bounds)) {
+        private void InsertNodeObject(Ocnode node, T spatialObject)
+        {
+            if (!node.Bounds.Contains(spatialObject.Shape.Bounds))
+            {
                 throw new Exception("This should not happen, child does not fit within node bounds");
             }
 
@@ -302,27 +340,33 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
             // get exclusive Access to 'node'
             node.GetAccess();
             // Rearrange node's children if need be
-            if (!node.HasChildNodes() && node.Objects.Count + 1 > _maxObjectsPerLeaf) {
+            if (!node.HasChildNodes() && node.Objects.Count + 1 > _maxObjectsPerLeaf)
+            {
                 SetupChildNodes(node);
 
                 List<T> childObjects = new List<T>(node.Objects);
                 List<T> childrenToRelocate = new List<T>();
 
-                foreach (T childObject in childObjects) {
-                    foreach (Ocnode childNode in node.Nodes) {
-                        if (childNode == null) {
+                foreach (T childObject in childObjects)
+                {
+                    foreach (Ocnode childNode in node.Nodes)
+                    {
+                        if (childNode == null)
+                        {
                             continue;
                         }
 
                         // fetch all childObjects which belong into sub-nodes
-                        if (childNode.Bounds.Contains(childObject.Shape.Bounds)) {
+                        if (childNode.Bounds.Contains(childObject.Shape.Bounds))
+                        {
                             childrenToRelocate.Add(childObject);
                         }
                     }
                 }
 
                 // remove all childobjects which need to be relocated and re-add them
-                foreach (var childObject in childrenToRelocate) {
+                foreach (var childObject in childrenToRelocate)
+                {
                     RemoveSpatialObjectFromNode(childObject);
                     InsertNodeObject(node, childObject);
                 }
@@ -330,11 +374,14 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
 
 
             // check for all childNodes whether spatialObject belongs into them and insert if so
-            foreach (var childNode in node.Nodes) {
-                if (childNode == null) {
+            foreach (var childNode in node.Nodes)
+            {
+                if (childNode == null)
+                {
                     continue;
                 }
-                if (!childNode.Bounds.Contains(spatialObject.Shape.Bounds)) {
+                if (!childNode.Bounds.Contains(spatialObject.Shape.Bounds))
+                {
                     continue;
                 }
 
@@ -351,67 +398,71 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
             node.ReleaseAccess();
         }
 
-        private void RemoveSpatialObjectFromNode(T quadObject) {
+        private void RemoveSpatialObjectFromNode(T quadObject)
+        {
             Ocnode node = _objectToNodeLookup[quadObject];
             node.Shapes.Remove(quadObject);
             Ocnode junk;
             _objectToNodeLookup.TryRemove(quadObject, out junk);
         }
 
-        private void AddSpatialObjectToNode(Ocnode node, T quadObject) {
+        private void AddSpatialObjectToNode(Ocnode node, T quadObject)
+        {
             node.Shapes.Add(quadObject);
             _objectToNodeLookup.TryAdd(quadObject, node);
         }
 
 
-        private void SetupChildNodes(Ocnode node) {
-            if (_minLeafSize.X <= node.Bounds.Width/2 && _minLeafSize.Y <= node.Bounds.Height/2 &&
-                _minLeafSize.Z <= node.Bounds.Length/2) {
+        private void SetupChildNodes(Ocnode node)
+        {
+            if (_minLeafSize.X <= node.Bounds.Width / 2 && _minLeafSize.Y <= node.Bounds.Height / 2 &&
+                _minLeafSize.Z <= node.Bounds.Length / 2)
+            {
                 Vector3 dimension = new Vector3
-                    (node.Bounds.Width/2,
-                        node.Bounds.Height/2,
-                        node.Bounds.Length/2);
+                (node.Bounds.Width / 2,
+                    node.Bounds.Height / 2,
+                    node.Bounds.Length / 2);
 
                 node[Direction.Nwt] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X,
-                        node.Bounds.LeftBottomFront.Y,
-                        node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X,
+                    node.Bounds.LeftBottomFront.Y,
+                    node.Bounds.LeftBottomFront.Z + node.Bounds.Length / 2,
+                    dimension);
                 node[Direction.Net] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                        node.Bounds.LeftBottomFront.Y,
-                        node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X + node.Bounds.Width / 2,
+                    node.Bounds.LeftBottomFront.Y,
+                    node.Bounds.LeftBottomFront.Z + node.Bounds.Length / 2,
+                    dimension);
                 node[Direction.Swt] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X,
-                        node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                        node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X,
+                    node.Bounds.LeftBottomFront.Y + node.Bounds.Height / 2,
+                    node.Bounds.LeftBottomFront.Z + node.Bounds.Length / 2,
+                    dimension);
                 node[Direction.Set] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                        node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                        node.Bounds.LeftBottomFront.Z + node.Bounds.Length/2,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X + node.Bounds.Width / 2,
+                    node.Bounds.LeftBottomFront.Y + node.Bounds.Height / 2,
+                    node.Bounds.LeftBottomFront.Z + node.Bounds.Length / 2,
+                    dimension);
                 node[Direction.Nwb] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X,
-                        node.Bounds.LeftBottomFront.Y,
-                        node.Bounds.LeftBottomFront.Z,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X,
+                    node.Bounds.LeftBottomFront.Y,
+                    node.Bounds.LeftBottomFront.Z,
+                    dimension);
                 node[Direction.Neb] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                        node.Bounds.LeftBottomFront.Y,
-                        node.Bounds.LeftBottomFront.Z,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X + node.Bounds.Width / 2,
+                    node.Bounds.LeftBottomFront.Y,
+                    node.Bounds.LeftBottomFront.Z,
+                    dimension);
                 node[Direction.Swb] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X,
-                        node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                        node.Bounds.LeftBottomFront.Z,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X,
+                    node.Bounds.LeftBottomFront.Y + node.Bounds.Height / 2,
+                    node.Bounds.LeftBottomFront.Z,
+                    dimension);
                 node[Direction.Seb] = new Ocnode
-                    (node.Bounds.LeftBottomFront.X + node.Bounds.Width/2,
-                        node.Bounds.LeftBottomFront.Y + node.Bounds.Height/2,
-                        node.Bounds.LeftBottomFront.Z,
-                        dimension);
+                (node.Bounds.LeftBottomFront.X + node.Bounds.Width / 2,
+                    node.Bounds.LeftBottomFront.Y + node.Bounds.Height / 2,
+                    node.Bounds.LeftBottomFront.Z,
+                    dimension);
             }
         }
 
@@ -422,5 +473,4 @@ namespace LIFE.Components.ESC.SpatialObjectTree {
 
         #endregion
     }
-
 }

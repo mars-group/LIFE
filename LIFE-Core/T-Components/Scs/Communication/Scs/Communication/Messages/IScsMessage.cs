@@ -6,11 +6,14 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-namespace Hik.Communication.Scs.Communication.Messages {
+
+namespace Hik.Communication.Scs.Communication.Messages
+{
     /// <summary>
     ///     Represents a message that is sent and received by server and client.
     /// </summary>
-    public interface IScsMessage {
+    public interface IScsMessage
+    {
         /// <summary>
         ///     Unique identified for this message.
         /// </summary>

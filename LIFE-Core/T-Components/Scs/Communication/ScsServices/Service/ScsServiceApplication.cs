@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -18,11 +19,13 @@ using Hik.Communication.Scs.Communication.Messengers;
 using Hik.Communication.Scs.Server;
 using Hik.Communication.ScsServices.Communication.Messages;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace Hik.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Implements IScsServiceApplication and provides all functionallity.
     /// </summary>
-    internal class ScsServiceApplication : IScsServiceApplication {
+    internal class ScsServiceApplication : IScsServiceApplication
+    {
         #region Public events
 
         /// <summary>
@@ -68,7 +71,8 @@ namespace Hik.Communication.ScsServices.Service {
         /// </summary>
         /// <param name="scsServer">Underlying IScsServer object to accept and manage client connections</param>
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if scsServer argument is null</exception>
-        public ScsServiceApplication(IScsServer scsServer) {
+        public ScsServiceApplication(IScsServer scsServer)
+        {
             if (scsServer == null) throw new ArgumentNullException("scsServer");
 
             _scsServer = scsServer;
@@ -86,14 +90,16 @@ namespace Hik.Communication.ScsServices.Service {
         /// <summary>
         ///     Starts service application.
         /// </summary>
-        public void Start() {
+        public void Start()
+        {
             _scsServer.Start();
         }
 
         /// <summary>
         ///     Stops service application.
         /// </summary>
-        public void Stop() {
+        public void Stop()
+        {
             _scsServer.Stop();
         }
 
@@ -111,25 +117,30 @@ namespace Hik.Communication.ScsServices.Service {
         /// <exception cref="Exception">Throws Exception if service is already added before</exception>
         public void AddService<TServiceInterface, TServiceClass>(TServiceClass service)
             where TServiceClass : ScsService, TServiceInterface
-            where TServiceInterface : class {
+            where TServiceInterface : class
+        {
             if (service == null) throw new ArgumentNullException("service");
 
-            var type = typeof (TServiceInterface);
+            var type = typeof(TServiceInterface);
 
             // check if service is cacheable
             var cacheableService = service as ICacheable;
-            if (cacheableService != null) {
+            if (cacheableService != null)
+            {
                 if (_serviceObjects.ContainsKey(type.Name))
                     _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
-                else {
+                else
+                {
                     _serviceObjects[type.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
                     _serviceObjects[type.Name][service.ServiceID] = new CacheableServiceObject(type, service);
                 }
             }
-            else {
+            else
+            {
                 if (_serviceObjects.ContainsKey(type.Name))
                     _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
-                else {
+                else
+                {
                     _serviceObjects[type.Name] = new ConcurrentDictionary<Guid, ServiceObject>();
                     _serviceObjects[type.Name][service.ServiceID] = new ServiceObject(type, service);
                 }
@@ -146,7 +157,7 @@ namespace Hik.Communication.ScsServices.Service {
             where TServiceInterface : class
         {
             ConcurrentDictionary<Guid, ServiceObject> bla;
-            return _serviceObjects.TryRemove(typeof (TServiceInterface).Name, out bla);
+            return _serviceObjects.TryRemove(typeof(TServiceInterface).Name, out bla);
         }
 
         #endregion
@@ -158,7 +169,8 @@ namespace Hik.Communication.ScsServices.Service {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void ScsServer_ClientConnected(object sender, ServerClientEventArgs e) {
+        private void ScsServer_ClientConnected(object sender, ServerClientEventArgs e)
+        {
             var requestReplyMessenger = new RequestReplyMessenger<IScsServerClient>(e.Client);
             requestReplyMessenger.MessageReceived += Client_MessageReceived;
             requestReplyMessenger.Start();
@@ -174,7 +186,8 @@ namespace Hik.Communication.ScsServices.Service {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void ScsServer_ClientDisconnected(object sender, ServerClientEventArgs e) {
+        private void ScsServer_ClientDisconnected(object sender, ServerClientEventArgs e)
+        {
             var serviceClient = _serviceClients[e.Client.ClientId];
             if (serviceClient == null) return;
 
@@ -189,7 +202,8 @@ namespace Hik.Communication.ScsServices.Service {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void Client_MessageReceived(object sender, MessageEventArgs e) {
+        private void Client_MessageReceived(object sender, MessageEventArgs e)
+        {
             //Get RequestReplyMessenger object (sender of event) to get client
             var requestReplyMessenger = (RequestReplyMessenger<IScsServerClient>) sender;
 
@@ -197,30 +211,36 @@ namespace Hik.Communication.ScsServices.Service {
             var invokeMessage = e.Message as ScsRemoteInvokeMessage;
             if (invokeMessage == null) return;
 
-            try {
+            try
+            {
                 //Get client object
                 var client = _serviceClients[requestReplyMessenger.Messenger.ClientId];
-                if (client == null) {
+                if (client == null)
+                {
                     requestReplyMessenger.Messenger.Disconnect();
                     return;
                 }
 
                 //Get service object
                 ServiceObject serviceObject;
-                if (invokeMessage.ServiceID.Equals(Guid.Empty)) {
+                if (invokeMessage.ServiceID.Equals(Guid.Empty))
+                {
                     // we are not looking for a specific implementation, but just for any, so use first found
                     serviceObject = _serviceObjects[invokeMessage.ServiceClassName].First().Value;
                 }
                 else serviceObject = _serviceObjects[invokeMessage.ServiceClassName][invokeMessage.ServiceID];
 
-                if (serviceObject == null) {
+                if (serviceObject == null)
+                {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
-                        new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName + "'"));
+                        new ScsRemoteException("There is no service with name '" + invokeMessage.ServiceClassName +
+                                               "'"));
                     return;
                 }
 
                 //Invoke method
-                try {
+                try
+                {
                     // store RequestReplyMessenger in ServiceObject to publish changes in its properties
                     var cacheableServiceObject = serviceObject as CacheableServiceObject;
                     if (cacheableServiceObject != null)
@@ -230,10 +250,12 @@ namespace Hik.Communication.ScsServices.Service {
                     //Set client to service, so user service can get client
                     //in service method using CurrentClient property.
                     serviceObject.Service.CurrentClient = client;
-                    try {
+                    try
+                    {
                         returnValue = serviceObject.InvokeMethod(invokeMessage.MethodName, invokeMessage.Parameters);
                     }
-                    finally {
+                    finally
+                    {
                         //Set CurrentClient as null since method call completed
                         serviceObject.Service.CurrentClient = null;
                     }
@@ -245,19 +267,20 @@ namespace Hik.Communication.ScsServices.Service {
                 {
                     var innerEx = ex.InnerException;
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
-
                         new ScsRemoteException(
                             innerEx.Message, innerEx));
                     return;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
                         new ScsRemoteException(
                             ex.Message, ex));
                     return;
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 SendInvokeResponse(requestReplyMessenger, invokeMessage, null,
                     new ScsRemoteException("An error occured during remote service method call.", ex));
                 return;
@@ -276,7 +299,8 @@ namespace Hik.Communication.ScsServices.Service {
             ScsRemoteException exception)
         {
             client.SendMessage(
-                new ScsRemoteInvokeReturnMessage {
+                new ScsRemoteInvokeReturnMessage
+                {
                     RepliedMessageId = requestMessage.MessageId,
                     ReturnValue = returnValue,
                     RemoteException = exception
@@ -287,7 +311,8 @@ namespace Hik.Communication.ScsServices.Service {
         ///     Raises ClientConnected event.
         /// </summary>
         /// <param name="client"></param>
-        private void OnClientConnected(IScsServiceClient client) {
+        private void OnClientConnected(IScsServiceClient client)
+        {
             var handler = ClientConnected;
             if (handler != null) handler(this, new ServiceClientEventArgs(client));
         }
@@ -296,7 +321,8 @@ namespace Hik.Communication.ScsServices.Service {
         ///     Raises ClientDisconnected event.
         /// </summary>
         /// <param name="client"></param>
-        private void OnClientDisconnected(IScsServiceClient client) {
+        private void OnClientDisconnected(IScsServiceClient client)
+        {
             var handler = ClientDisconnected;
             if (handler != null) handler(this, new ServiceClientEventArgs(client));
         }
@@ -309,7 +335,8 @@ namespace Hik.Communication.ScsServices.Service {
         ///     Represents a user service object.
         ///     It is used to invoke methods on a ScsService object.
         /// </summary>
-        private class ServiceObject {
+        private class ServiceObject
+        {
             /// <summary>
             ///     The service object that is used to invoke methods on.
             /// </summary>
@@ -326,6 +353,7 @@ namespace Hik.Communication.ScsServices.Service {
             ///     Value: Informations about method.
             /// </summary>
             private readonly SortedList<string, MethodInfo> _methods;
+
             private readonly SortedList<string, MethodInfo> _internalMethods;
 
             /// <summary>
@@ -333,19 +361,24 @@ namespace Hik.Communication.ScsServices.Service {
             /// </summary>
             /// <param name="serviceInterfaceType">Type of service interface</param>
             /// <param name="service">The service object that is used to invoke methods on</param>
-            public ServiceObject(Type serviceInterfaceType, ScsService service) {
+            public ServiceObject(Type serviceInterfaceType, ScsService service)
+            {
                 Service = service;
-                var classAttributes = serviceInterfaceType.GetTypeInfo().GetCustomAttributes(typeof (ScsServiceAttribute), true).ToArray();
-                if (!classAttributes.Any()) {
+                var classAttributes = serviceInterfaceType.GetTypeInfo()
+                    .GetCustomAttributes(typeof(ScsServiceAttribute), true)
+                    .ToArray();
+                if (!classAttributes.Any())
+                {
                     throw new Exception("Service interface (" + serviceInterfaceType.Name +
                                         ") must have ScsService attribute.");
                 }
 
                 ServiceAttribute = classAttributes[0] as ScsServiceAttribute;
                 _methods = new SortedList<string, MethodInfo>();
-                foreach (var methodInfo in serviceInterfaceType.GetTypeInfo().GetMethods()) {
+                foreach (var methodInfo in serviceInterfaceType.GetTypeInfo().GetMethods())
+                {
                     // store with name + param count to allow for overloaded methods
-                    _methods.Add(methodInfo.Name+methodInfo.GetParameters().Length, methodInfo);
+                    _methods.Add(methodInfo.Name + methodInfo.GetParameters().Length, methodInfo);
                 }
                 _internalMethods = new SortedList<string, MethodInfo>();
                 foreach (var methodInfo in service.GetType().GetTypeInfo().GetMethods())
@@ -383,22 +416,25 @@ namespace Hik.Communication.ScsServices.Service {
                 {
                     method = _methods[sig];
                 }
-                
+
                 //Invoke method and return invoke result
                 return method.Invoke(Service, parameters);
             }
         }
 
-        private sealed class CacheableServiceObject : ServiceObject {
+        private sealed class CacheableServiceObject : ServiceObject
+        {
             private static ConcurrentDictionary<long, IMessenger> _clients;
             private readonly IDictionary<string, PropertyInfo> _properties;
 
             public CacheableServiceObject(Type serviceInterfaceType, ScsService service)
-                : base(serviceInterfaceType, service) {
+                : base(serviceInterfaceType, service)
+            {
                 _clients = new ConcurrentDictionary<long, IMessenger>();
 
                 _properties = new Dictionary<string, PropertyInfo>();
-                foreach (var propertyInfo in serviceInterfaceType.GetTypeInfo().GetProperties()) {
+                foreach (var propertyInfo in serviceInterfaceType.GetTypeInfo().GetProperties())
+                {
                     _properties.Add(propertyInfo.Name, propertyInfo);
                 }
 
@@ -412,19 +448,24 @@ namespace Hik.Communication.ScsServices.Service {
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="propertyChangedEventArgs"></param>
-            private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs) {
+            private void PropChangerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+            {
                 // send PropertyChangedMessage to all subscribed clients
                 // TODO: change or adapt this for Multicast Messaging (maybe not possible...)
-                Parallel.ForEach<IMessenger>(_clients.Values, messenger => {
-                    var newValue = _properties[propertyChangedEventArgs.PropertyName].GetGetMethod()
+                Parallel.ForEach<IMessenger>(_clients.Values, messenger =>
+                {
+                    var newValue = _properties[propertyChangedEventArgs.PropertyName]
+                        .GetGetMethod()
                         .Invoke(Service, null);
 
 
-                    try {
+                    try
+                    {
                         messenger.SendMessage(new PropertyChangedMessage(newValue,
                             _properties[propertyChangedEventArgs.PropertyName].GetGetMethod().Name));
                     }
-                    catch {
+                    catch
+                    {
                         // suppress all exceptions on purpose, since it might happen, that clients have disconnected meanwhile
                         // The send command will fail in that case, but that's ok.
                     }
@@ -437,7 +478,8 @@ namespace Hik.Communication.ScsServices.Service {
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="e"></param>
-            public static void CacheableObject_OnClientDisconnected(object sender, ServerClientEventArgs e) {
+            public static void CacheableObject_OnClientDisconnected(object sender, ServerClientEventArgs e)
+            {
                 if (_clients == null) return;
                 if (_clients.ContainsKey(e.Client.ClientId))
                 {
@@ -451,7 +493,8 @@ namespace Hik.Communication.ScsServices.Service {
             ///     This method is thread-safe.
             /// </summary>
             /// <param name="client"></param>
-            public void AddClient(long clientID, IMessenger client) {
+            public void AddClient(long clientID, IMessenger client)
+            {
                 _clients[clientID] = client;
             }
         }

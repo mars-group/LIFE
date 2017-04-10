@@ -41,7 +41,9 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var agentType = Type.GetType(agentInitConfig.AgentFullName);
             var agentCtors = agentType.GetConstructors();
 
-            var agentConstructor = agentCtors.FirstOrDefault(c => c.GetCustomAttributes(typeof(PublishForMappingInMarsAttribute), true).Any());
+            var agentConstructor = agentCtors.FirstOrDefault(c => c
+                .GetCustomAttributes(typeof(PublishForMappingInMarsAttribute), true)
+                .Any());
 
             // if not annotated constructor was found, try to take the single constructor if only one is present
             if (agentConstructor == null && agentCtors.Length == 1)
@@ -86,7 +88,7 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var initParamsFromMARSCloud = agentInitConfig.AgentInitParameters;
 
 
-            Console.WriteLine ("[AM] Finished fetching DB data, Starting agent ID creation....");
+            Console.WriteLine("[AM] Finished fetching DB data, Starting agent ID creation....");
 
             // get types for special parameters
             var layerType = typeof(ILayer);
@@ -103,7 +105,8 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var agentIds = new Guid[agentCount];
 
             Parallel.For(0, agentCount, i => agentIds[i] = Guid.NewGuid());
-            Console.WriteLine ("[AM] Finished agent ID creation, Starting agent creation.... AgentCount is : {0}", agentCount);
+            Console.WriteLine("[AM] Finished agent ID creation, Starting agent creation.... AgentCount is : {0}",
+                agentCount);
 
             // iterate over all agents and create them
             Parallel.For(0L, agentCount, index =>
@@ -151,13 +154,13 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                         // check whether a parameter with correct name is available from MARS Cloud Mapping:
                         if (initParamsFromMARSCloud.Any(e => e.Name.Equals(neededParam.Name)))
                         {
-
                             // it's a primitive type, so take the matching param from params list provided by MARS Cloud Mapping
                             var param = initParamsFromMARSCloud.FirstOrDefault(e => e.Name.Equals(neededParam.Name));
 
                             if (param == null)
                             {
-                                throw new NotEnoughParametersProvidedException($"Parameter with name {neededParam.Name} could not be found in Mapping from MARS Cloud!");
+                                throw new NotEnoughParametersProvidedException(
+                                    $"Parameter with name {neededParam.Name} could not be found in Mapping from MARS Cloud!");
                             }
 
                             if (param.MappingType == MappingType.ValueParameterMapping)
@@ -165,9 +168,12 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                                 // use static value
                                 var paramType = neededParam.ParameterType;
 
-                                if (paramType != typeof(string) && !paramType.GetTypeInfo().IsEnum && (paramType == null || !paramType.GetTypeInfo().IsPrimitive))
+                                if (paramType != typeof(string) && !paramType.GetTypeInfo().IsEnum &&
+                                    (paramType == null || !paramType.GetTypeInfo().IsPrimitive))
                                 {
-                                    throw new ParameterMustBePrimitiveException("The parameter " + param.Name + " must be a primitive C# type. But was: " + paramType.Name);
+                                    throw new ParameterMustBePrimitiveException(
+                                        "The parameter " + param.Name + " must be a primitive C# type. But was: " +
+                                        paramType.Name);
                                 }
 
                                 try
@@ -223,11 +229,8 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
 
                             Console.WriteLine("Hit8");
                             actualParameters.Add(neededParam.DefaultValue);
-
                         }
-
                     }
-
                 }
 
 
@@ -237,7 +240,8 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                 {
                     if (actualParameter == null)
                     {
-                        throw new ActualParameterNullPointerException($"Parameter {neededParameters[paramCounter].Name} was null after init.");
+                        throw new ActualParameterNullPointerException(
+                            $"Parameter {neededParameters[paramCounter].Name} was null after init.");
                     }
                     paramCounter++;
                 }
@@ -257,7 +261,7 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
                 }
             });
 
-            Console.WriteLine (String.Format("[AM] Finished agent creation. Created {0} agents.", agentCount));
+            Console.WriteLine(String.Format("[AM] Finished agent creation. Created {0} agents.", agentCount));
 
             return agents;
         }

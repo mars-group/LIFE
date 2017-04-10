@@ -109,7 +109,8 @@ namespace RuntimeEnvironment.Implementation
             model.Name = scenarioconfigJson["Name"].ToString();
 
 
-            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId, resultConfigId, layerContainer);
+            IList<LayerContainerClient> clients = SetupSimulationRun(model, layerContainerNodes, scenarioConfigId,
+                resultConfigId, layerContainer);
 
 
             sw.Stop();
@@ -443,8 +444,6 @@ namespace RuntimeEnvironment.Implementation
 
                             Parallel.For(0, lcCount, i =>
                             {
-
-
                                 // add overhead of agents to first layer
                                 var actualAgentCount = i == 0
                                     ? normalAgentCount + overheadAgentCount
@@ -572,7 +571,6 @@ namespace RuntimeEnvironment.Implementation
 
                         foreach (var agentMapping in basicLayerMapping["Agents"])
                         {
-
                             initData.AddAgentInitConfig(
                                 agentMapping["Name"].ToString(),
                                 agentMapping["FullName"].ToString(),

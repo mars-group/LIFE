@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,12 +27,14 @@ namespace ModelContainer.Implementation
     ///     This class implements all logic revolving around the immediate finding of models in the model folder,<br />
     ///     watching for changes, serialization for transport and so on.
     /// </summary>
-    internal class ModelManagementUseCase {
+    internal class ModelManagementUseCase
+    {
         private TModelDescription _currentModel;
         private JObject _scenarioConfig;
         private JObject _resultConfig;
 
-        public ModelManagementUseCase(SimulationManagerSettings settings) {
+        public ModelManagementUseCase(SimulationManagerSettings settings)
+        {
         }
 
 
@@ -73,10 +76,9 @@ namespace ModelContainer.Implementation
             if (_scenarioConfig != null) return _scenarioConfig;
 
 
+            var smServiceHost = "scenario-svc";
 
-             var smServiceHost = "scenario-svc";
 
-        
             var http = new HttpClient();
             Console.WriteLine("...downloading ScenarioConfig...");
             var uri = new Uri($"http://{smServiceHost}/scenarios/{scenarioConfigId}/complete");
@@ -110,7 +112,9 @@ namespace ModelContainer.Implementation
             // config does not exist, create the default one
             var addinLoader = new LayerLoader.Implementation.LayerLoader();
             var nodes = addinLoader.LoadAllLayersForModel(model.ModelPath);
-            var layerConfigs = nodes.Select(node => new LayerConfig(node.LayerType.Name, DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>())).ToList();
+            var layerConfigs = nodes.Select(node => new LayerConfig(node.LayerType.Name,
+                    DistributionStrategy.NO_DISTRIBUTION, new List<AgentConfig>()))
+                .ToList();
             var mc = new ModelConfig(layerConfigs);
             Configuration.Save(mc, path);
             return mc;

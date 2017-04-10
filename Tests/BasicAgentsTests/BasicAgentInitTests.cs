@@ -15,14 +15,17 @@ namespace BasicAgentsTests
     [TestFixture]
     public class BasicAgentInitTests
     {
-
         private IGridEnvironment<GridAgent<Tree>> _gridEnv;
-        private ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>> _tickClientsPerLayer;
+
+        private ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>>
+            _tickClientsPerLayer;
+
         [SetUp]
         public void Setup()
         {
             _gridEnv = new GridEnvironment<GridAgent<Tree>>(60, 40);
-            _tickClientsPerLayer = new ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>>();
+            _tickClientsPerLayer =
+                new ConcurrentDictionary<ILayer, ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>>();
         }
 
         [Test]
@@ -33,7 +36,8 @@ namespace BasicAgentsTests
                 var l = new TreeLayer(_gridEnv);
                 if (!_tickClientsPerLayer.ContainsKey(l))
                 {
-                    _tickClientsPerLayer.TryAdd(l,new ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>());
+                    _tickClientsPerLayer.TryAdd(l,
+                        new ConcurrentDictionary<int, ConcurrentDictionary<ITickClient, byte>>());
                 }
 
 
@@ -43,7 +47,6 @@ namespace BasicAgentsTests
 
         private void UnregisterAgentHandle(ILayer layer, ITickClient tickClient, int executionInterval)
         {
-
         }
 
         private void RegisterAgentHandle(ILayer layer, ITickClient tickClient, int executionInterval)
@@ -54,8 +57,8 @@ namespace BasicAgentsTests
             _tickClientsPerLayer[layer][executionInterval].TryAdd(tickClient, new byte());
 
             var visAgent = tickClient as ISimResult;
-            if(visAgent != null){
-
+            if (visAgent != null)
+            {
             }
         }
 
@@ -68,7 +71,9 @@ namespace BasicAgentsTests
         }
     }
 
-    interface C {}
+    interface C
+    {
+    }
 
     internal class B : A<B>, IEquatable<B>
     {
@@ -84,10 +89,11 @@ namespace BasicAgentsTests
             if (obj.GetType() != this.GetType()) return false;
             return Equals((B) obj);
         }
-
     }
 
-    internal abstract class A<T> : C where T : IEquatable<T>{ }
+    internal abstract class A<T> : C where T : IEquatable<T>
+    {
+    }
 
 
     internal class Tree : GridAgent<Tree>, ISimResult
@@ -96,7 +102,6 @@ namespace BasicAgentsTests
             GridCoordinate initialPosition = null, byte[] id = null, int freq = 1)
             : base(layer, regFkt, unregFkt, env, initialPosition, id, freq)
         {
-
         }
 
         protected override IInteraction Reason()
@@ -117,7 +122,8 @@ namespace BasicAgentsTests
             _env = env;
         }
 
-        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
+        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle,
+            UnregisterAgent unregisterAgentHandle)
         {
             var t = new Tree(this, registerAgentHandle, unregisterAgentHandle, _env);
             return true;

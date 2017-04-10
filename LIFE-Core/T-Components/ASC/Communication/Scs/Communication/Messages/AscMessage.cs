@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace ASC.Communication.Scs.Communication.Messages {
+namespace ASC.Communication.Scs.Communication.Messages
+{
     /// <summary>
     ///     Represents a message that is sent and received by server and client.
     ///     This is the base class for all messages.
     /// </summary>
     [Serializable]
-    public class AscMessage : IAscMessage {
+    public class AscMessage : IAscMessage
+    {
         /// <summary>
         ///     Unique identified for this message.
         ///     Default value: New GUID.
@@ -33,7 +36,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         /// <summary>
         ///     Creates a new AscMessage.
         /// </summary>
-        public AscMessage() {
+        public AscMessage()
+        {
             MessageId = Guid.NewGuid().ToString();
         }
 
@@ -45,7 +49,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         ///     a message.
         /// </param>
         public AscMessage(string repliedMessageId)
-            : this() {
+            : this()
+        {
             RepliedMessageId = repliedMessageId;
         }
 
@@ -53,7 +58,8 @@ namespace ASC.Communication.Scs.Communication.Messages {
         ///     Creates a string to represents this object.
         /// </summary>
         /// <returns>A string to represents this object</returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.IsNullOrEmpty(RepliedMessageId)
                 ? string.Format("AscMessage [{0}]", MessageId)
                 : string.Format("AscMessage [{0}] Replied To [{1}]", MessageId, RepliedMessageId);

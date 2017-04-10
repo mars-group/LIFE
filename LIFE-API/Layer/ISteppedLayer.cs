@@ -6,7 +6,10 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-namespace LIFE.API.Layer {
 
-    public interface ISteppedLayer : ILayer {}
+namespace LIFE.API.Layer
+{
+    public interface ISteppedLayer : ILayer
+    {
+    }
 }

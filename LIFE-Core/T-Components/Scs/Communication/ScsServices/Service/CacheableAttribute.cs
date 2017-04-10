@@ -6,14 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace Hik.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Indicates that the return type of a Method shall be cached by its stub.
     ///     Works only on Getter Methods.
     ///     Is not valid for void return types.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class CacheableAttribute : Attribute {}
+    public class CacheableAttribute : Attribute
+    {
+    }
 }

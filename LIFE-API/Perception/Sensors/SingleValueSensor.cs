@@ -6,34 +6,37 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using LIFE.API.Layer.Data;
 
-namespace LIFE.API.Perception.Sensors {
-
-  /// <summary>
-  ///   Sensor for single value data layers.
-  /// </summary>
-  /// <typeparam name="T">Layer data type.</typeparam>
-  public class SingleValueSensor<T> {
-
-    private readonly ISingleValueLayer<T> _layer; // Layer reference.
-
-
+namespace LIFE.API.Perception.Sensors
+{
     /// <summary>
-    ///   Create a sensor for single value grids.
+    ///   Sensor for single value data layers.
     /// </summary>
-    /// <param name="layer">The data layer.</param>
-    public SingleValueSensor(ISingleValueLayer<T> layer) {
-      _layer = layer;
-    }
+    /// <typeparam name="T">Layer data type.</typeparam>
+    public class SingleValueSensor<T>
+    {
+        private readonly ISingleValueLayer<T> _layer; // Layer reference.
 
 
-    /// <summary>
-    ///   Returns the current value of the layer.
-    /// </summary>
-    /// <returns>Layer value.</returns>
-    public T GetValue() {
-      return _layer.GetValue();
+        /// <summary>
+        ///   Create a sensor for single value grids.
+        /// </summary>
+        /// <param name="layer">The data layer.</param>
+        public SingleValueSensor(ISingleValueLayer<T> layer)
+        {
+            _layer = layer;
+        }
+
+
+        /// <summary>
+        ///   Returns the current value of the layer.
+        /// </summary>
+        /// <returns>Layer value.</returns>
+        public T GetValue()
+        {
+            return _layer.GetValue();
+        }
     }
-  }
 }

@@ -6,20 +6,22 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Concurrent;
 using ASC.Communication.Scs.Client;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.Messengers;
 
-namespace ASC.Communication.ScsServices.Client {
+namespace ASC.Communication.ScsServices.Client
+{
     /// <summary>
     ///     This class is used to build service clients to remotely invoke methods of a SCS service.
     /// </summary>
-    public class AscServiceClientBuilder {
-
-        private static readonly ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>> ReplyMessengers 
-            = new ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>>();  
+    public class AscServiceClientBuilder
+    {
+        private static readonly ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>> ReplyMessengers
+            = new ConcurrentDictionary<AscEndPoint, RequestReplyMessenger<IScsClient>>();
 
         /// <summary>
         ///     Creates a client to connect to a SCS service.
@@ -60,10 +62,10 @@ namespace ASC.Communication.ScsServices.Client {
         /// </param>
         /// <param name="endpointAddress">EndPoint address of the server</param>
         /// <returns>Created client object to connect to the server</returns>
-        public static IAscServiceClient<T> CreateClient<T>(int listenPort, string multicastGroup, Guid serviceID, object clientObject = null) where T : class {
-                return CreateClient<T>(AscEndPoint.CreateEndPoint(listenPort, multicastGroup), serviceID, clientObject);
+        public static IAscServiceClient<T> CreateClient<T>(int listenPort, string multicastGroup, Guid serviceID,
+            object clientObject = null) where T : class
+        {
+            return CreateClient<T>(AscEndPoint.CreateEndPoint(listenPort, multicastGroup), serviceID, clientObject);
         }
-
-
     }
 }

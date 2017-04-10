@@ -6,17 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using ASC.Communication.Scs.Communication;
 using ASC.Communication.Scs.Communication.Channels;
 using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Protocols;
 
-namespace ASC.Communication.Scs.Client {
+namespace ASC.Communication.Scs.Client
+{
     /// <summary>
     ///     This class provides base functionality for client classes.
     /// </summary>
-    internal abstract class AscClientBase : IScsClient {
+    internal abstract class AscClientBase : IScsClient
+    {
         #region Public events
 
         /// <summary>
@@ -53,9 +56,11 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Gets/sets wire protocol that is used while reading and writing messages.
         /// </summary>
-        public IAcsWireProtocol WireProtocol {
+        public IAcsWireProtocol WireProtocol
+        {
             get { return _wireProtocol; }
-            set {
+            set
+            {
                 if (CommunicationState == CommunicationStates.Connected)
                     throw new Exception("Wire protocol can not be changed while connected to server.");
 
@@ -68,8 +73,10 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Gets the communication state of the Client.
         /// </summary>
-        public CommunicationStates CommunicationState {
-            get {
+        public CommunicationStates CommunicationState
+        {
+            get
+            {
                 return _communicationChannel != null
                     ? _communicationChannel.CommunicationState
                     : CommunicationStates.Disconnected;
@@ -79,8 +86,10 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Gets the time of the last succesfully received message.
         /// </summary>
-        public DateTime LastReceivedMessageTime {
-            get {
+        public DateTime LastReceivedMessageTime
+        {
+            get
+            {
                 return _communicationChannel != null
                     ? _communicationChannel.LastReceivedMessageTime
                     : DateTime.MinValue;
@@ -90,8 +99,10 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Gets the time of the last succesfully received message.
         /// </summary>
-        public DateTime LastSentMessageTime {
-            get {
+        public DateTime LastSentMessageTime
+        {
+            get
+            {
                 return _communicationChannel != null
                     ? _communicationChannel.LastSentMessageTime
                     : DateTime.MinValue;
@@ -124,7 +135,8 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Constructor.
         /// </summary>
-        protected AscClientBase() {
+        protected AscClientBase()
+        {
             //_pingTimer = new Timer(30000);
             //_pingTimer.Elapsed += PingTimer_Elapsed;
             ConnectTimeout = DefaultConnectionAttemptTimeout;
@@ -138,7 +150,8 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Connects to server.
         /// </summary>
-        public void Connect() {
+        public void Connect()
+        {
             WireProtocol.Reset();
             _communicationChannel = CreateCommunicationChannel();
             _communicationChannel.WireProtocol = WireProtocol;
@@ -154,7 +167,8 @@ namespace ASC.Communication.Scs.Client {
         ///     Disconnects from server.
         ///     Does nothing if already disconnected.
         /// </summary>
-        public void Disconnect() {
+        public void Disconnect()
+        {
             if (CommunicationState != CommunicationStates.Connected) return;
 
             _communicationChannel.Disconnect();
@@ -163,7 +177,8 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Disposes this object and closes underlying connection.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             Disconnect();
         }
 
@@ -175,7 +190,8 @@ namespace ASC.Communication.Scs.Client {
         ///     Throws a CommunicationStateException if client is not connected to the
         ///     server.
         /// </exception>
-        public void SendMessage(IAscMessage message) {
+        public void SendMessage(IAscMessage message)
+        {
             if (CommunicationState != CommunicationStates.Connected)
                 throw new CommunicationStateException("Client is not connected to the server.");
 
@@ -201,7 +217,8 @@ namespace ASC.Communication.Scs.Client {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void CommunicationChannel_MessageReceived(object sender, MessageEventArgs e) {
+        private void CommunicationChannel_MessageReceived(object sender, MessageEventArgs e)
+        {
             if (e.Message is AscPingMessage) return;
 
             OnMessageReceived(e.Message);
@@ -212,7 +229,8 @@ namespace ASC.Communication.Scs.Client {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void CommunicationChannel_MessageSent(object sender, MessageEventArgs e) {
+        private void CommunicationChannel_MessageSent(object sender, MessageEventArgs e)
+        {
             OnMessageSent(e.Message);
         }
 
@@ -221,7 +239,8 @@ namespace ASC.Communication.Scs.Client {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void CommunicationChannel_Disconnected(object sender, EventArgs e) {
+        private void CommunicationChannel_Disconnected(object sender, EventArgs e)
+        {
             //_pingTimer.Stop();
             OnDisconnected();
         }
@@ -231,17 +250,21 @@ namespace ASC.Communication.Scs.Client {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void PingTimer_Elapsed(object sender, EventArgs e) {
+        private void PingTimer_Elapsed(object sender, EventArgs e)
+        {
             if (CommunicationState != CommunicationStates.Connected) return;
 
-            try {
+            try
+            {
                 var lastMinute = DateTime.Now.AddMinutes(-1);
                 if (_communicationChannel.LastReceivedMessageTime > lastMinute ||
                     _communicationChannel.LastSentMessageTime > lastMinute) return;
 
                 _communicationChannel.SendMessage(new AscPingMessage());
             }
-            catch {}
+            catch
+            {
+            }
         }
 
         #endregion
@@ -251,7 +274,8 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Raises Connected event.
         /// </summary>
-        protected virtual void OnConnected() {
+        protected virtual void OnConnected()
+        {
             var handler = Connected;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -259,7 +283,8 @@ namespace ASC.Communication.Scs.Client {
         /// <summary>
         ///     Raises Disconnected event.
         /// </summary>
-        protected virtual void OnDisconnected() {
+        protected virtual void OnDisconnected()
+        {
             var handler = Disconnected;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -268,7 +293,8 @@ namespace ASC.Communication.Scs.Client {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageReceived(IAscMessage message) {
+        protected virtual void OnMessageReceived(IAscMessage message)
+        {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -277,7 +303,8 @@ namespace ASC.Communication.Scs.Client {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IAscMessage message) {
+        protected virtual void OnMessageSent(IAscMessage message)
+        {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }

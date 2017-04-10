@@ -6,13 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using ASC.Communication.Scs.Communication.Messengers;
 
-namespace ASC.Communication.Scs.Client {
+namespace ASC.Communication.Scs.Client
+{
     /// <summary>
     ///     Represents a client to connect to server.
     /// </summary>
-    public interface IScsClient : IMessenger, IConnectableClient {
+    public interface IScsClient : IMessenger, IConnectableClient
+    {
         //Does not define any additional member
     }
 }

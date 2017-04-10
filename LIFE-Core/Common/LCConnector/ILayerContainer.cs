@@ -11,12 +11,14 @@ using Hik.Communication.ScsServices.Service;
 using LCConnector.TransportTypes.ModelStructure;
 using LIFE.API.Layer.Initialization;
 
-namespace LCConnector {
+namespace LCConnector
+{
     /// <summary>
     /// The LayerContainer's public interface. This may be jused locally or via the provided SCS service.
     /// </summary>
     [ScsService]
-    public interface ILayerContainer {
+    public interface ILayerContainer
+    {
         /// <summary>
         ///     Transmits the serialized model content for the next simulation run to the layer container.
         /// </summary>
@@ -52,18 +54,18 @@ namespace LCConnector {
         /// <exception cref="Exceptions.LayerNotInitializedException">If one of the layers not yet initialized.</exception>
         long Tick(long amountOfTicks = 1);
 
-		/// <summary>
-		/// Cleans up all Layers which implement the IDisposableLayer 
-		/// interface.
-		/// </summary>
-		void CleanUp();
+        /// <summary>
+        /// Cleans up all Layers which implement the IDisposableLayer 
+        /// interface.
+        /// </summary>
+        void CleanUp();
 
-		/// <summary>
-		/// Sets the mars config service address. Use this if you want to override the default setting
-		/// which points to the MARSConfig Docker container
-		/// </summary>
-		/// <returns>The mars config service address.</returns>
-		/// <param name="marsConfigServiceAddress">Mars config service address.</param>
-		void SetMarsConfigServiceAddress(string marsConfigServiceAddress);
+        /// <summary>
+        /// Sets the mars config service address. Use this if you want to override the default setting
+        /// which points to the MARSConfig Docker container
+        /// </summary>
+        /// <returns>The mars config service address.</returns>
+        /// <param name="marsConfigServiceAddress">Mars config service address.</param>
+        void SetMarsConfigServiceAddress(string marsConfigServiceAddress);
     }
 }

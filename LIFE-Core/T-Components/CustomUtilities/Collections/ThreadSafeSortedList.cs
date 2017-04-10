@@ -6,20 +6,20 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Collections.Generic;
 using System.Threading;
 
-namespace CustomUtilities.Collections {
+namespace CustomUtilities.Collections
+{
     /// <summary>
     ///     This class is used to store key-value based items in a thread safe manner.
     ///     It uses System.Collections.Generic.SortedList internally.
     /// </summary>
     /// <typeparam name="TK">Key type</typeparam>
     /// <typeparam name="TV">Value type</typeparam>
-    public class ThreadSafeSortedList<TK, TV> {
-
-
-
+    public class ThreadSafeSortedList<TK, TV>
+    {
         /// <summary>
         ///     Internal collection to store items.
         /// </summary>
@@ -35,23 +35,30 @@ namespace CustomUtilities.Collections {
         /// </summary>
         /// <param name="key">Key to get/set value</param>
         /// <returns>Item associated with this key</returns>
-        public TV this[TK key] {
-            get {
+        public TV this[TK key]
+        {
+            get
+            {
                 _lock.EnterReadLock();
-                try {
+                try
+                {
                     return _items.ContainsKey(key) ? _items[key] : default(TV);
                 }
-                finally {
+                finally
+                {
                     _lock.ExitReadLock();
                 }
             }
 
-            set {
+            set
+            {
                 _lock.EnterWriteLock();
-                try {
+                try
+                {
                     _items[key] = value;
                 }
-                finally {
+                finally
+                {
                     _lock.ExitWriteLock();
                 }
             }
@@ -60,13 +67,17 @@ namespace CustomUtilities.Collections {
         /// <summary>
         ///     Gets count of items in the collection.
         /// </summary>
-        public int Count {
-            get {
+        public int Count
+        {
+            get
+            {
                 _lock.EnterReadLock();
-                try {
+                try
+                {
                     return _items.Count;
                 }
-                finally {
+                finally
+                {
                     _lock.ExitReadLock();
                 }
             }
@@ -76,7 +87,8 @@ namespace CustomUtilities.Collections {
         /// <summary>
         ///     Creates a new ThreadSafeSortedList object.
         /// </summary>
-        public ThreadSafeSortedList() {
+        public ThreadSafeSortedList()
+        {
             _items = new SortedList<TK, TV>();
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         }
@@ -86,12 +98,15 @@ namespace CustomUtilities.Collections {
         /// </summary>
         /// <param name="key">Key to check</param>
         /// <returns>True; if collection contains given key</returns>
-        public bool ContainsKey(TK key) {
+        public bool ContainsKey(TK key)
+        {
             _lock.EnterReadLock();
-            try {
+            try
+            {
                 return _items.ContainsKey(key);
             }
-            finally {
+            finally
+            {
                 _lock.ExitReadLock();
             }
         }
@@ -101,12 +116,15 @@ namespace CustomUtilities.Collections {
         /// </summary>
         /// <param name="item">Item to check</param>
         /// <returns>True; if collection contains given item</returns>
-        public bool ContainsValue(TV item) {
+        public bool ContainsValue(TV item)
+        {
             _lock.EnterReadLock();
-            try {
+            try
+            {
                 return _items.ContainsValue(item);
             }
-            finally {
+            finally
+            {
                 _lock.ExitReadLock();
             }
         }
@@ -115,15 +133,18 @@ namespace CustomUtilities.Collections {
         ///     Removes an item from collection.
         /// </summary>
         /// <param name="key">Key of item to remove</param>
-        public bool Remove(TK key) {
+        public bool Remove(TK key)
+        {
             _lock.EnterWriteLock();
-            try {
+            try
+            {
                 if (!_items.ContainsKey(key)) return false;
 
                 _items.Remove(key);
                 return true;
             }
-            finally {
+            finally
+            {
                 _lock.ExitWriteLock();
             }
         }
@@ -132,12 +153,15 @@ namespace CustomUtilities.Collections {
         ///     Gets all items in collection.
         /// </summary>
         /// <returns>Item list</returns>
-        public List<TV> GetAllItems() {
+        public List<TV> GetAllItems()
+        {
             _lock.EnterReadLock();
-            try {
+            try
+            {
                 return new List<TV>(_items.Values);
             }
-            finally {
+            finally
+            {
                 _lock.ExitReadLock();
             }
         }
@@ -153,17 +177,20 @@ namespace CustomUtilities.Collections {
             {
                 _lock.ExitReadLock();
             }
-        } 
+        }
 
         /// <summary>
         ///     Removes all items from list.
         /// </summary>
-        public void ClearAll() {
+        public void ClearAll()
+        {
             _lock.EnterWriteLock();
-            try {
+            try
+            {
                 _items.Clear();
             }
-            finally {
+            finally
+            {
                 _lock.ExitWriteLock();
             }
         }
@@ -172,14 +199,17 @@ namespace CustomUtilities.Collections {
         ///     Gets then removes all items in collection.
         /// </summary>
         /// <returns>Item list</returns>
-        public List<TV> GetAndClearAllItems() {
+        public List<TV> GetAndClearAllItems()
+        {
             _lock.EnterWriteLock();
-            try {
+            try
+            {
                 var list = new List<TV>(_items.Values);
                 _items.Clear();
                 return list;
             }
-            finally {
+            finally
+            {
                 _lock.ExitWriteLock();
             }
         }

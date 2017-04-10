@@ -17,7 +17,10 @@ namespace LIFE.Components.Environments.GridEnvironment
             _numberOfGridCellsX = numberOfGridCellsX;
             _numberOfGridCellsY = numberOfGridCellsY;
             _grid = new ConcurrentDictionary<T, byte>[_numberOfGridCellsX * _numberOfGridCellsY];
-            for (var i = 0; i < _grid.Length; i++) { _grid[i] = new ConcurrentDictionary<T, byte>(); }
+            for (var i = 0; i < _grid.Length; i++)
+            {
+                _grid[i] = new ConcurrentDictionary<T, byte>();
+            }
         }
 
         #region InterfaceImplementation
@@ -106,7 +109,7 @@ namespace LIFE.Components.Environments.GridEnvironment
             var path = GetPathFromAtoB(objectToMove.X, objectToMove.Y, xDestination, yDestination);
 
             // dont walk further than target, path contains start position as well, so check for count-1 and set to count-1
-            if (distance > path.Count-1)
+            if (distance > path.Count - 1)
             {
                 distance = path.Count - 1;
             }
@@ -144,7 +147,8 @@ namespace LIFE.Components.Environments.GridEnvironment
                             if (predicate == null)
                             {
                                 var enumerator = coll.Keys.GetEnumerator();
-                                while (enumerator.MoveNext() && (result.Count < maxNumberOfResults || maxNumberOfResults == -1))
+                                while (enumerator.MoveNext() &&
+                                       (result.Count < maxNumberOfResults || maxNumberOfResults == -1))
                                 {
                                     result.Add(enumerator.Current);
                                 }
@@ -219,7 +223,6 @@ namespace LIFE.Components.Environments.GridEnvironment
 
         private int GetCell(T objectToHandle)
         {
-
             return objectToHandle.Y * _numberOfGridCellsX + objectToHandle.X;
         }
 

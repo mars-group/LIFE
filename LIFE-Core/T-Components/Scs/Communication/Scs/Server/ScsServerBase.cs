@@ -6,16 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using CustomUtilities.Collections;
 using Hik.Communication.Scs.Communication.Channels;
 using Hik.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Server {
+namespace Hik.Communication.Scs.Server
+{
     /// <summary>
     ///     This class provides base functionality for server classes.
     /// </summary>
-    internal abstract class ScsServerBase : IScsServer {
+    internal abstract class ScsServerBase : IScsServer
+    {
         #region Public events
 
         /// <summary>
@@ -58,7 +61,8 @@ namespace Hik.Communication.Scs.Server {
         /// <summary>
         ///     Constructor.
         /// </summary>
-        protected ScsServerBase() {
+        protected ScsServerBase()
+        {
             Clients = new ThreadSafeSortedList<long, IScsServerClient>();
             WireProtocolFactory = WireProtocolManager.GetDefaultWireProtocolFactory();
         }
@@ -70,7 +74,8 @@ namespace Hik.Communication.Scs.Server {
         /// <summary>
         ///     Starts the server.
         /// </summary>
-        public virtual void Start() {
+        public virtual void Start()
+        {
             _connectionListener = CreateConnectionListener();
             _connectionListener.CommunicationChannelConnected += ConnectionListener_CommunicationChannelConnected;
             _connectionListener.Start();
@@ -79,10 +84,12 @@ namespace Hik.Communication.Scs.Server {
         /// <summary>
         ///     Stops the server.
         /// </summary>
-        public virtual void Stop() {
+        public virtual void Stop()
+        {
             if (_connectionListener != null) _connectionListener.Stop();
 
-            foreach (var client in Clients.GetAllItems()) {
+            foreach (var client in Clients.GetAllItems())
+            {
                 client.Disconnect();
             }
         }
@@ -107,8 +114,10 @@ namespace Hik.Communication.Scs.Server {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void ConnectionListener_CommunicationChannelConnected(object sender, CommunicationChannelEventArgs e) {
-            var client = new ScsServerClient(e.Channel) {
+        private void ConnectionListener_CommunicationChannelConnected(object sender, CommunicationChannelEventArgs e)
+        {
+            var client = new ScsServerClient(e.Channel)
+            {
                 ClientId = ScsServerManager.GetClientId(),
                 WireProtocol = WireProtocolFactory.CreateWireProtocol()
             };
@@ -124,7 +133,8 @@ namespace Hik.Communication.Scs.Server {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void Client_Disconnected(object sender, EventArgs e) {
+        private void Client_Disconnected(object sender, EventArgs e)
+        {
             var client = (IScsServerClient) sender;
             Clients.Remove(client.ClientId);
             OnClientDisconnected(client);
@@ -138,7 +148,8 @@ namespace Hik.Communication.Scs.Server {
         ///     Raises ClientConnected event.
         /// </summary>
         /// <param name="client">Connected client</param>
-        protected virtual void OnClientConnected(IScsServerClient client) {
+        protected virtual void OnClientConnected(IScsServerClient client)
+        {
             var handler = ClientConnected;
             if (handler != null) handler(this, new ServerClientEventArgs(client));
         }
@@ -147,7 +158,8 @@ namespace Hik.Communication.Scs.Server {
         ///     Raises ClientDisconnected event.
         /// </summary>
         /// <param name="client">Disconnected client</param>
-        protected virtual void OnClientDisconnected(IScsServerClient client) {
+        protected virtual void OnClientDisconnected(IScsServerClient client)
+        {
             var handler = ClientDisconnected;
             if (handler != null) handler(this, new ServerClientEventArgs(client));
         }

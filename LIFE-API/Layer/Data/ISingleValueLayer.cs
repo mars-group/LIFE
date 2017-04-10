@@ -6,28 +6,28 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using LIFE.API.Perception.Sensors;
 
-namespace LIFE.API.Layer.Data {
-  
-  /// <summary>
-  ///   Data layer type for single-value use cases.
-  /// </summary>
-  /// <typeparam name="T">Layer data type.</typeparam>
-  public interface ISingleValueLayer<T> {
+namespace LIFE.API.Layer.Data
+{
+    /// <summary>
+    ///   Data layer type for single-value use cases.
+    /// </summary>
+    /// <typeparam name="T">Layer data type.</typeparam>
+    public interface ISingleValueLayer<T>
+    {
+        /// <summary>
+        ///   Creates a sensor for this layer and data type combination. 
+        /// </summary>
+        /// <returns>A sensor for this layer.</returns>
+        SingleValueSensor<T> GetSensor();
 
 
-    /// <summary>
-    ///   Creates a sensor for this layer and data type combination. 
-    /// </summary>
-    /// <returns>A sensor for this layer.</returns>
-    SingleValueSensor<T> GetSensor();
-      
-      
-    /// <summary>
-    ///   Returns the current value of the layer.
-    /// </summary>
-    /// <returns>Layer value.</returns>
-    T GetValue();
-  }
+        /// <summary>
+        ///   Returns the current value of the layer.
+        /// </summary>
+        /// <returns>Layer value.</returns>
+        T GetValue();
+    }
 }

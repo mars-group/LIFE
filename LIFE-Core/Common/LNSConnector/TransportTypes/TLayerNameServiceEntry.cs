@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
 namespace LNSConnector.TransportTypes
@@ -26,7 +27,8 @@ namespace LNSConnector.TransportTypes
 
         protected bool Equals(TLayerNameServiceEntry other)
         {
-            return string.Equals(IpAddress, other.IpAddress) && Port == other.Port && Equals(LayerType, other.LayerType);
+            return string.Equals(IpAddress, other.IpAddress) && Port == other.Port &&
+                   Equals(LayerType, other.LayerType);
         }
 
         public override bool Equals(object obj)
@@ -42,8 +44,8 @@ namespace LNSConnector.TransportTypes
             unchecked
             {
                 var hashCode = (IpAddress != null ? IpAddress.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ Port;
-                hashCode = (hashCode*397) ^ (LayerType != null ? LayerType.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Port;
+                hashCode = (hashCode * 397) ^ (LayerType != null ? LayerType.GetHashCode() : 0);
                 return hashCode;
             }
         }

@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using Hik.Communication.Scs.Communication.Channels;
 using Hik.Communication.Scs.Communication.Channels.Udp;
 using Hik.Communication.Scs.Communication.EndPoints.Udp;
@@ -16,11 +17,13 @@ namespace Hik.Communication.Scs.Server.Udp
     {
         private ScsUdpEndPoint _endpoint;
 
-        public ScsUdpServer(ScsUdpEndPoint scsUdpEndPoint) {
+        public ScsUdpServer(ScsUdpEndPoint scsUdpEndPoint)
+        {
             _endpoint = scsUdpEndPoint;
         }
 
-        protected override IConnectionListener CreateConnectionListener() {
+        protected override IConnectionListener CreateConnectionListener()
+        {
             return new UdpConnectionListener(_endpoint);
         }
     }

@@ -6,14 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
 namespace RuntimeEnvironment.Interfaces
 {
     [Serializable]
-    public class NoLayerConfigurationPresentException : Exception {
-        public NoLayerConfigurationPresentException(string msg) : base(msg) {
-            
+    public class NoLayerConfigurationPresentException : Exception
+    {
+        public NoLayerConfigurationPresentException(string msg) : base(msg)
+        {
         }
     }
 }

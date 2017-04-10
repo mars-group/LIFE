@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -15,17 +16,20 @@ using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Scs.Communication.Scs.Communication.Channels.Tcp;
 
-namespace Hik.Communication.Scs.Communication.Channels.Tcp {
+namespace Hik.Communication.Scs.Communication.Channels.Tcp
+{
     /// <summary>
     ///     This class is used to communicate with a remote application over TCP/IP protocol.
     /// </summary>
-    internal class TcpCommunicationChannel : CommunicationChannelBase {
+    internal class TcpCommunicationChannel : CommunicationChannelBase
+    {
         #region Public properties
 
         /// <summary>
         ///     Gets the endpoint of remote application.
         /// </summary>
-        public override ScsEndPoint RemoteEndPoint {
+        public override ScsEndPoint RemoteEndPoint
+        {
             get { return _remoteEndPoint; }
         }
 
@@ -38,7 +42,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Size of the buffer that is used to receive bytes from TCP socket.
         /// </summary>
-        private const int ReceiveBufferSize = 128*1024*1024; //128MB
+        private const int ReceiveBufferSize = 128 * 1024 * 1024; //128MB
 
         private const int NumReadConnections = 1;
         private const int NumWriteConnections = 10;
@@ -75,12 +79,19 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         ///     A connected Socket object that is
         ///     used to communicate over network
         /// </param>
-        public TcpCommunicationChannel(Socket clientSocket) {
-            if(clientSocket == null) { throw new ArgumentNullException(nameof(clientSocket));}
+        public TcpCommunicationChannel(Socket clientSocket)
+        {
+            if (clientSocket == null)
+            {
+                throw new ArgumentNullException(nameof(clientSocket));
+            }
             _clientSocket = clientSocket;
             _clientSocket.NoDelay = true;
 
-            if(_clientSocket.RemoteEndPoint == null) { Console.WriteLine("ERROR ENDPOINT NULL!");}
+            if (_clientSocket.RemoteEndPoint == null)
+            {
+                Console.WriteLine("ERROR ENDPOINT NULL!");
+            }
 
             var ipEndPoint = (IPEndPoint) _clientSocket.RemoteEndPoint;
             _remoteEndPoint = new ScsTcpEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
@@ -99,9 +110,11 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Disconnects from remote application and closes channel.
         /// </summary>
-        public override void Disconnect() {
+        public override void Disconnect()
+        {
             if (CommunicationState != CommunicationStates.Connected) return;
-            try {
+            try
+            {
                 if (_clientSocket.Connected) _clientSocket.Shutdown(SocketShutdown.Both);
 
                 _clientSocket.Dispose();
@@ -122,7 +135,8 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
         /// <summary>
         ///     Starts the thread to receive messages from socket.
         /// </summary>
-        protected override void StartInternal() {
+        protected override void StartInternal()
+        {
             // Allocates one large byte buffer which all I/O operations use a piece of.  This gaurds
             // against memory fragmentation
             _readBufferManager.InitBuffer();
@@ -147,7 +161,6 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
             _listenThread = new Thread(Receive) {IsBackground = true};
             _listenThread.Start();
         }
-
 
         #endregion
 
@@ -214,13 +227,12 @@ namespace Hik.Communication.Scs.Communication.Channels.Tcp {
                     ProcessReceive(e);
                     break;
                 case SocketAsyncOperation.Send:
-                   // ProcessSend(e);
+                    // ProcessSend(e);
                     break;
                 default:
-
-                    throw new ArgumentException($"The last operation completed on the socket was not a receive or send, but: {e.LastOperation}");
+                    throw new ArgumentException(
+                        $"The last operation completed on the socket was not a receive or send, but: {e.LastOperation}");
             }
-
         }
 
         // This method is invoked when an asynchronous receive operation completes.

@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Reflection;
 using ASC.Communication.Scs.Communication;
@@ -15,7 +16,8 @@ using ASC.Communication.Scs.Server;
 using ASC.Communication.ScsServices.Communication;
 using ASC.Communication.ScsServices.Service;
 
-namespace ASC.Communication.AscServices.Service {
+namespace ASC.Communication.AscServices.Service
+{
 #if HAS_REAL_PROXY
 
     using System.Runtime.Remoting.Proxies;
@@ -143,6 +145,7 @@ namespace ASC.Communication.AscServices.Service {
     #endregion
     }
 #else
+
     /// <summary>
     ///     Implements IAscServiceClient.
     ///     It is used to manage and monitor a service client.
@@ -197,7 +200,6 @@ namespace ASC.Communication.AscServices.Service {
         ///     This object is used to send messages to client.
         /// </summary>
         private readonly RequestReplyMessenger<IAscServerClient> _requestReplyMessenger;
-
 
         #endregion
 
@@ -270,5 +272,6 @@ namespace ASC.Communication.AscServices.Service {
 
         #endregion
     }
+
 #endif
 }

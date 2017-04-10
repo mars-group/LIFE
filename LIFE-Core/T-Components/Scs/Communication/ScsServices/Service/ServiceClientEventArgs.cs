@@ -6,13 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace Hik.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Stores service client informations to be used by an event.
     /// </summary>
-    public class ServiceClientEventArgs : EventArgs {
+    public class ServiceClientEventArgs : EventArgs
+    {
         /// <summary>
         ///     Client that is associated with this event.
         /// </summary>
@@ -22,7 +25,8 @@ namespace Hik.Communication.ScsServices.Service {
         ///     Creates a new ServiceClientEventArgs object.
         /// </summary>
         /// <param name="client">Client that is associated with this event</param>
-        public ServiceClientEventArgs(IScsServiceClient client) {
+        public ServiceClientEventArgs(IScsServiceClient client)
+        {
             Client = client;
         }
     }

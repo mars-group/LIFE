@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication.EndPoints;
 
-namespace Hik.Communication.ScsServices.Client {
+namespace Hik.Communication.ScsServices.Client
+{
     /// <summary>
     ///     This class is used to build service clients to remotely invoke methods of a SCS service.
     /// </summary>
-    public class ScsServiceClientBuilder {
+    public class ScsServiceClientBuilder
+    {
         /// <summary>
         ///     Creates a client to connect to a SCS service.
         /// </summary>
@@ -26,7 +29,8 @@ namespace Hik.Communication.ScsServices.Client {
         /// </param>
         /// <returns>Created client object to connect to the server</returns>
         public static IScsServiceClient<T> CreateClient<T>(ScsEndPoint endpoint, Guid serviceID,
-            object clientObject = null) where T : class {
+            object clientObject = null) where T : class
+        {
             return new ScsServiceClient<T>(endpoint.CreateClient(), clientObject, serviceID);
         }
 
@@ -42,7 +46,8 @@ namespace Hik.Communication.ScsServices.Client {
         /// </param>
         /// <returns>Created client object to connect to the server</returns>
         public static IScsServiceClient<T> CreateClient<T>(string endpointAddress, Guid serviceID,
-            object clientObject = null) where T : class {
+            object clientObject = null) where T : class
+        {
             return CreateClient<T>(ScsEndPoint.CreateEndPoint(endpointAddress), serviceID, clientObject);
         }
 
@@ -58,7 +63,8 @@ namespace Hik.Communication.ScsServices.Client {
         /// </param>
         /// <returns>Created client object to connect to the server</returns>
         public static IScsServiceClient<T> CreateClient<T>(ScsEndPoint endpoint, object clientObject = null)
-            where T : class {
+            where T : class
+        {
             return new ScsServiceClient<T>(endpoint.CreateClient(), clientObject);
         }
 
@@ -73,7 +79,8 @@ namespace Hik.Communication.ScsServices.Client {
         /// </param>
         /// <returns>Created client object to connect to the server</returns>
         public static IScsServiceClient<T> CreateClient<T>(string endpointAddress, object clientObject = null)
-            where T : class {
+            where T : class
+        {
             return CreateClient<T>(ScsEndPoint.CreateEndPoint(endpointAddress), clientObject);
         }
     }

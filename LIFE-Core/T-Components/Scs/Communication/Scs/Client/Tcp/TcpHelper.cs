@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hik.Communication.Scs.Client.Tcp {
+namespace Hik.Communication.Scs.Client.Tcp
+{
     /// <summary>
     ///     This class is used to simplify TCP socket operations.
     /// </summary>
-    internal static class TcpHelper {
+    internal static class TcpHelper
+    {
         /// <summary>
         ///     This code is used to connect to a TCP socket with timeout option.
         /// </summary>

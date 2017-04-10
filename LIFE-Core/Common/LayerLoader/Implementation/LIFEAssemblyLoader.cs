@@ -16,7 +16,8 @@ namespace LayerLoader.Implementation
         ///   Create a new assembly loader.
         /// </summary>
         /// <param name="folderPath">Base path for the dependency resolving.</param>
-        public LIFEAssemblyLoader(string folderPath) {
+        public LIFEAssemblyLoader(string folderPath)
+        {
             _folderPath = folderPath;
             this.Resolving += OnResolving;
         }
@@ -31,15 +32,18 @@ namespace LayerLoader.Implementation
         /// </summary>
         /// <param name="assemblyName">Assembly description.</param>
         /// <returns>The loaded assembly.</returns>
-        protected override Assembly Load(AssemblyName assemblyName) {
+        protected override Assembly Load(AssemblyName assemblyName)
+        {
             var deps = DependencyContext.Default;
             var res = deps.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
-            if (res.Count > 0) {
+            if (res.Count > 0)
+            {
                 return Assembly.Load(new AssemblyName(res.First().Name));
             }
             var dllPath = _folderPath + Path.DirectorySeparatorChar + assemblyName.Name + ".dll";
             var fileinfo = new FileInfo(dllPath);
-            if (File.Exists(fileinfo.FullName)) {
+            if (File.Exists(fileinfo.FullName))
+            {
                 return LoadFromAssemblyPath(fileinfo.FullName);
             }
             return Assembly.Load(assemblyName);

@@ -6,11 +6,15 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.ComponentModel;
 
-namespace ASC.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Marks a Service Class as chacheable
     /// </summary>
-    public interface ICacheable : INotifyPropertyChanged {}
+    public interface ICacheable : INotifyPropertyChanged
+    {
+    }
 }

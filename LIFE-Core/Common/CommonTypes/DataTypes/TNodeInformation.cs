@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Text;
 using CommonTypes.Types;
@@ -13,10 +14,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using static System.String;
 
-namespace CommonTypes.DataTypes {
-
-    public class TNodeInformation : IComparable {
-
+namespace CommonTypes.DataTypes
+{
+    public class TNodeInformation : IComparable
+    {
         [JsonConverter(typeof(StringEnumConverter))]
         public NodeType NodeType { get; private set; }
 
@@ -27,9 +28,12 @@ namespace CommonTypes.DataTypes {
         public NodeEndpoint NodeEndpoint { get; private set; }
 
 
-        private TNodeInformation() {}
+        private TNodeInformation()
+        {
+        }
 
-        public TNodeInformation(NodeType nodeType, string nodeIdentifier, NodeEndpoint nodeEndpoint) {
+        public TNodeInformation(NodeType nodeType, string nodeIdentifier, NodeEndpoint nodeEndpoint)
+        {
             NodeType = nodeType;
             NodeIdentifier = nodeIdentifier;
             NodeEndpoint = nodeEndpoint;
@@ -37,13 +41,15 @@ namespace CommonTypes.DataTypes {
 
         #region IComparable Members
 
-        public int CompareTo(object obj) {
+        public int CompareTo(object obj)
+        {
             return Compare(NodeIdentifier, (obj as TNodeInformation).NodeIdentifier, StringComparison.Ordinal);
         }
 
         #endregion
 
-        public override string ToString() {
+        public override string ToString()
+        {
             var sb = new StringBuilder();
 
             return
@@ -53,20 +59,20 @@ namespace CommonTypes.DataTypes {
         }
 
 
-        public override bool Equals(object obj) {
-
-
+        public override bool Equals(object obj)
+        {
             var otherNodeInfo = obj as TNodeInformation;
-            if (otherNodeInfo?.NodeIdentifier == null) {
+            if (otherNodeInfo?.NodeIdentifier == null)
+            {
                 return false;
             }
 
-           return otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType);
-
+            return otherNodeInfo.NodeIdentifier.Equals(NodeIdentifier) && otherNodeInfo.NodeType.Equals(NodeType);
         }
 
-        public override int GetHashCode() {
-            return NodeIdentifier.GetHashCode()*NodeType.GetHashCode()*347;
+        public override int GetHashCode()
+        {
+            return NodeIdentifier.GetHashCode() * NodeType.GetHashCode() * 347;
         }
     }
 }

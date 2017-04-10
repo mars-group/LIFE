@@ -6,22 +6,26 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using ASC.Communication.Scs.Communication;
 using CustomUtilities.Threading;
 
 
-namespace ASC.Communication.Scs.Client {
+namespace ASC.Communication.Scs.Client
+{
     /// <summary>
     ///     This class is used to automatically re-connect to server if disconnected.
     ///     It attempts to reconnect to server periodically until connection established.
     /// </summary>
-    public class ClientReConnecter : IDisposable {
+    public class ClientReConnecter : IDisposable
+    {
         /// <summary>
         ///     Reconnect check period.
         ///     Default: 20 seconds.
         /// </summary>
-        public int ReConnectCheckPeriod {
+        public int ReConnectCheckPeriod
+        {
             get { return _reconnectTimer.Period; }
             set { _reconnectTimer.Period = value; }
         }
@@ -48,7 +52,8 @@ namespace ASC.Communication.Scs.Client {
         /// </summary>
         /// <param name="client">Reference to client object</param>
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if client is null.</exception>
-        public ClientReConnecter(IConnectableClient client) {
+        public ClientReConnecter(IConnectableClient client)
+        {
             if (client == null) throw new ArgumentNullException("client");
 
             _client = client;
@@ -62,7 +67,8 @@ namespace ASC.Communication.Scs.Client {
         ///     Disposes this object.
         ///     Does nothing if already disposed.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             if (_disposed) return;
 
             _disposed = true;
@@ -75,7 +81,8 @@ namespace ASC.Communication.Scs.Client {
         /// </summary>
         /// <param name="sender">Source of the event</param>
         /// <param name="e">Event arguments</param>
-        private void Client_Disconnected(object sender, EventArgs e) {
+        private void Client_Disconnected(object sender, EventArgs e)
+        {
             _reconnectTimer.Start();
         }
 
@@ -84,17 +91,21 @@ namespace ASC.Communication.Scs.Client {
         /// </summary>
         /// <param name="sender">Source of the event</param>
         /// <param name="e">Event arguments</param>
-        private void ReconnectTimer_Elapsed(object sender, EventArgs e) {
-            if (_disposed || _client.CommunicationState == CommunicationStates.Connected) {
+        private void ReconnectTimer_Elapsed(object sender, EventArgs e)
+        {
+            if (_disposed || _client.CommunicationState == CommunicationStates.Connected)
+            {
                 _reconnectTimer.Stop();
                 return;
             }
 
-            try {
+            try
+            {
                 _client.Connect();
                 _reconnectTimer.Stop();
             }
-            catch {
+            catch
+            {
                 //No need to catch since it will try to re-connect again
             }
         }

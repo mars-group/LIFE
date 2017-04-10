@@ -6,8 +6,12 @@
 // //  * More information under: http://www.mars-group.org
 // //  * Written by Christian Hüning <christianhuening@gmail.com>, 05.03.2017
 // //  *******************************************************/
+
 using LIFE.API.Environment.GeoCommon;
 
-namespace LIFE.Components.Agents.BasicAgents.Agents {
-  public interface IGeoAgent<T> : IGeoCoordinate where T : IGeoCoordinate {}
+namespace LIFE.Components.Agents.BasicAgents.Agents
+{
+    public interface IGeoAgent<T> : IGeoCoordinate where T : IGeoCoordinate
+    {
+    }
 }

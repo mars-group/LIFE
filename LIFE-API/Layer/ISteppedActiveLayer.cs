@@ -6,25 +6,26 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using LIFE.API.Agent;
 
-namespace LIFE.API.Layer {
-
-  /// <summary>
-  ///   The ISteppedActiveLayer will get ticked by the LayerContainer, just as the average ITickClient.
-  ///   In Addition it provides to more methods which allow to hook into the moment just before and after a tick.
-  /// </summary>
-  public interface ISteppedActiveLayer : ISteppedLayer, ITickClient {
-
+namespace LIFE.API.Layer
+{
     /// <summary>
-    ///   Gets called just before all agents get ticked
+    ///   The ISteppedActiveLayer will get ticked by the LayerContainer, just as the average ITickClient.
+    ///   In Addition it provides to more methods which allow to hook into the moment just before and after a tick.
     /// </summary>
-    void PreTick();
+    public interface ISteppedActiveLayer : ISteppedLayer, ITickClient
+    {
+        /// <summary>
+        ///   Gets called just before all agents get ticked
+        /// </summary>
+        void PreTick();
 
-    /// <summary>
-    ///   Gets called after all agents get ticked, but before
-    ///   the next Tick launches.
-    /// </summary>
-    void PostTick();
-  }
+        /// <summary>
+        ///   Gets called after all agents get ticked, but before
+        ///   the next Tick launches.
+        /// </summary>
+        void PostTick();
+    }
 }

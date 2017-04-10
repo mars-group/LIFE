@@ -6,13 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System.Threading;
 
-namespace Hik.Communication.Scs.Server {
+namespace Hik.Communication.Scs.Server
+{
     /// <summary>
     ///     Provides some functionality that are used by servers.
     /// </summary>
-    internal static class ScsServerManager {
+    internal static class ScsServerManager
+    {
         /// <summary>
         ///     Used to set an auto incremential unique identifier to clients.
         /// </summary>
@@ -22,7 +25,8 @@ namespace Hik.Communication.Scs.Server {
         ///     Gets an unique number to be used as idenfitier of a client.
         /// </summary>
         /// <returns></returns>
-        public static long GetClientId() {
+        public static long GetClientId()
+        {
             return Interlocked.Increment(ref _lastClientId);
         }
     }

@@ -6,13 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace ASC.Communication.Scs.Communication.Channels {
+namespace ASC.Communication.Scs.Communication.Channels
+{
     /// <summary>
     ///     This class provides base functionality for communication listener classes.
     /// </summary>
-    internal abstract class ConnectionListenerBase : IConnectionListener {
+    internal abstract class ConnectionListenerBase : IConnectionListener
+    {
         /// <summary>
         ///     This event is raised when a new communication channel is connected.
         /// </summary>
@@ -32,7 +35,8 @@ namespace ASC.Communication.Scs.Communication.Channels {
         ///     Raises CommunicationChannelConnected event.
         /// </summary>
         /// <param name="client"></param>
-        protected virtual void OnCommunicationChannelConnected(ICommunicationChannel client) {
+        protected virtual void OnCommunicationChannelConnected(ICommunicationChannel client)
+        {
             var handler = CommunicationChannelConnected;
             if (handler != null) handler(this, new CommunicationChannelEventArgs(client));
         }

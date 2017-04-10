@@ -6,14 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace SMConnector.TransportTypes {
+namespace SMConnector.TransportTypes
+{
     [Serializable]
-    public class TStatusUpdate {
+    public class TStatusUpdate
+    {
         public string StatusMessage { get; set; }
 
-        public TStatusUpdate(string msg) {
+        public TStatusUpdate(string msg)
+        {
             StatusMessage = msg;
         }
     }

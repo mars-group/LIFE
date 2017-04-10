@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace ASC.Communication.ScsServices.Service {
+namespace ASC.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Any SCS Service interface class must have this attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class)]
-    public class AscServiceAttribute : Attribute {
+    public class AscServiceAttribute : Attribute
+    {
         /// <summary>
         ///     Service Version. This property can be used to indicate the code version.
         ///     This value is sent to client application on an exception, so, client application can know that service version is
@@ -25,7 +28,8 @@ namespace ASC.Communication.ScsServices.Service {
         /// <summary>
         ///     Creates a new AscServiceAttribute object.
         /// </summary>
-        public AscServiceAttribute() {
+        public AscServiceAttribute()
+        {
             Version = "NO_VERSION";
         }
     }

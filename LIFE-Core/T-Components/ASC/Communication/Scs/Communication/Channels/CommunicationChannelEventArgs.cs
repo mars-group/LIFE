@@ -6,13 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace ASC.Communication.Scs.Communication.Channels {
+namespace ASC.Communication.Scs.Communication.Channels
+{
     /// <summary>
     ///     Stores communication channel information to be used by an event.
     /// </summary>
-    internal class CommunicationChannelEventArgs : EventArgs {
+    internal class CommunicationChannelEventArgs : EventArgs
+    {
         /// <summary>
         ///     Communication channel that is associated with this event.
         /// </summary>
@@ -22,7 +25,8 @@ namespace ASC.Communication.Scs.Communication.Channels {
         ///     Creates a new CommunicationChannelEventArgs object.
         /// </summary>
         /// <param name="channel">Communication channel that is associated with this event</param>
-        public CommunicationChannelEventArgs(ICommunicationChannel channel) {
+        public CommunicationChannelEventArgs(ICommunicationChannel channel)
+        {
             Channel = channel;
         }
     }

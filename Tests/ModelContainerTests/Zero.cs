@@ -9,34 +9,55 @@
 
 // ReSharper disable UnusedParameter.Local
 
-namespace ModelContainerTests {
+namespace ModelContainerTests
+{
+    /* These are test classes that only exist to check the dependency 
+     * injection. See the TestSimulationManagerPositive Test. */
 
-  /* These are test classes that only exist to check the dependency 
-   * injection. See the TestSimulationManagerPositive Test. */
+    internal class Zero
+    {
+    }
 
-  internal class Zero {}
+    internal class One
+    {
+    }
 
-  internal class One {}
+    internal class Two
+    {
+    }
 
-  internal class Two {}
+    internal class Three
+    {
+        public Three(One one, Two two, Three three)
+        {
+        }
+    }
 
-  internal class Three {
-    public Three(One one, Two two, Three three) {}
-  }
+    internal class Four
+    {
+        public Four(Three three)
+        {
+        }
+    }
 
-  internal class Four {
-    public Four(Three three) {}
-  }
+    internal class Five
+    {
+        public Five(Three three, Six six)
+        {
+        }
+    }
 
-  internal class Five {
-    public Five(Three three, Six six) {}
-  }
+    internal class Six
+    {
+        public Six(Four four)
+        {
+        }
+    }
 
-  internal class Six {
-    public Six(Four four) {}
-  }
-
-  internal class Seven {
-    public Seven(Seven seven) {}
-  }
+    internal class Seven
+    {
+        public Seven(Seven seven)
+        {
+        }
+    }
 }

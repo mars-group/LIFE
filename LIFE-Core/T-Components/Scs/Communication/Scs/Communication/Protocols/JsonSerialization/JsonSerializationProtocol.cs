@@ -18,7 +18,8 @@ using Hik.Communication.ScsServices.Communication.Messages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
+namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization
+{
     /// <summary>
     ///     Default communication protocol between server and clients to send and receive a message.
     ///     It uses .NET binary serialization to write and read messages.
@@ -29,15 +30,18 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
     ///     This class can be derived to change serializer (default: BinaryFormatter). To do this,
     ///     SerializeMessage and DeserializeMessage methods must be overrided.
     /// </summary>
-    public class JsonSerializationProtocol : IScsWireProtocol {
+    public class JsonSerializationProtocol : IScsWireProtocol
+    {
         #region Private fields
 
-        private static readonly JsonSerializerSettings Jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+        private static readonly JsonSerializerSettings Jset =
+            new JsonSerializerSettings() {TypeNameHandling = TypeNameHandling.All};
 
         /// <summary>
         ///     This MemoryStream object is used to collect receiving bytes to build messages.
         /// </summary>
         private MemoryStream _receiveMemoryStream;
+
         #endregion
 
         #region Constructor
@@ -45,7 +49,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// <summary>
         ///     Creates a new instance of JsonSerializationProtocol.
         /// </summary>
-        public JsonSerializationProtocol() {
+        public JsonSerializationProtocol()
+        {
             _receiveMemoryStream = new MemoryStream();
         }
 
@@ -62,7 +67,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Throws CommunicationException if message is bigger than maximum allowed
         ///     message length.
         /// </exception>
-        public byte[] GetBytes(IScsMessage message) {
+        public byte[] GetBytes(IScsMessage message)
+        {
             //Serialize the message to a byte array
             var serializedMessage = SerializeMessage(message);
 
@@ -96,14 +102,18 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Also, if received bytes are not sufficient to build a message, the protocol
         ///     may return an empty list (and save bytes to combine with next method call).
         /// </returns>
-        public IEnumerable<IScsMessage> CreateMessages(byte[] receivedBytes) {
-            lock(_receiveMemoryStream){
+        public IEnumerable<IScsMessage> CreateMessages(byte[] receivedBytes)
+        {
+            lock (_receiveMemoryStream)
+            {
                 //Write all received bytes to the _receiveMemoryStream
                 _receiveMemoryStream.Write(receivedBytes, 0, receivedBytes.Length);
                 //Create a list to collect messages
                 var messages = new List<IScsMessage>();
                 //Read all available messages and add to messages collection
-                while (ReadSingleMessage(messages)) {}
+                while (ReadSingleMessage(messages))
+                {
+                }
                 //Return message list
                 return messages;
             }
@@ -114,7 +124,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     connecting).
         ///     So, wire protocol must reset itself.
         /// </summary>
-        public void Reset() {
+        public void Reset()
+        {
             if (_receiveMemoryStream.Length > 0) _receiveMemoryStream = new MemoryStream();
         }
 
@@ -132,8 +143,9 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Serialized message bytes.
         ///     Does not include length of the message.
         /// </returns>
-        private static byte[] SerializeMessage(IScsMessage message) {
-            var json = JsonConvert.SerializeObject(message,Formatting.Indented, Jset);
+        private static byte[] SerializeMessage(IScsMessage message)
+        {
+            var json = JsonConvert.SerializeObject(message, Formatting.Indented, Jset);
             return Encoding.UTF8.GetBytes(json);
         }
 
@@ -147,7 +159,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     of a single whole message)
         /// </param>
         /// <returns>Deserialized message</returns>
-        protected virtual IScsMessage DeserializeMessage(byte[] bytes) {
+        protected virtual IScsMessage DeserializeMessage(byte[] bytes)
+        {
             var output = Encoding.UTF8.GetString(bytes);
             try
             {
@@ -162,7 +175,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
             }
             catch (FormatException fex)
             {
-                Console.WriteLine($"Exception occured during DeSerialization. Message was: {output}, messagelength = {bytes.Length}, error = {fex.Message}");
+                Console.WriteLine(
+                    $"Exception occured during DeSerialization. Message was: {output}, messagelength = {bytes.Length}, error = {fex.Message}");
                 throw fex;
             }
         }
@@ -182,7 +196,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Throws CommunicationException if message is bigger than maximum allowed
         ///     message length.
         /// </exception>
-        private bool ReadSingleMessage(ICollection<IScsMessage> messages) {
+        private bool ReadSingleMessage(ICollection<IScsMessage> messages)
+        {
             //Go to the begining of the stream
             _receiveMemoryStream.Position = 0;
 
@@ -198,9 +213,11 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
             }*/
 
             //If message is zero-length (It must not be but good approach to check it)
-            if (messageLength == 0) {
+            if (messageLength == 0)
+            {
                 //if no more bytes, return immediately
-                if (_receiveMemoryStream.Length == 4) {
+                if (_receiveMemoryStream.Length == 4)
+                {
                     _receiveMemoryStream = new MemoryStream(); //Clear the stream
                     return false;
                 }
@@ -213,7 +230,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
             }
 
             //If all bytes of the message is not received yet, return to wait more bytes
-            if (_receiveMemoryStream.Length < (4 + messageLength)) {
+            if (_receiveMemoryStream.Length < (4 + messageLength))
+            {
                 _receiveMemoryStream.Position = _receiveMemoryStream.Length;
                 return false;
             }
@@ -240,7 +258,8 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// <param name="buffer">Byte array to write int value</param>
         /// <param name="startIndex">Start index of byte array to write</param>
         /// <param name="number">An integer value to write</param>
-        private static void WriteInt32(byte[] buffer, int startIndex, int number) {
+        private static void WriteInt32(byte[] buffer, int startIndex, int number)
+        {
             buffer[startIndex] = (byte) ((number >> 24) & 0xFF);
             buffer[startIndex + 1] = (byte) ((number >> 16) & 0xFF);
             buffer[startIndex + 2] = (byte) ((number >> 8) & 0xFF);
@@ -251,13 +270,14 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         ///     Deserializes and returns a serialized integer.
         /// </summary>
         /// <returns>Deserialized integer</returns>
-        private static int ReadInt32(Stream stream) {
+        private static int ReadInt32(Stream stream)
+        {
             var buffer = ReadByteArray(stream, 4);
             return ((buffer[0] << 24) |
                     (buffer[1] << 16) |
                     (buffer[2] << 8) |
                     (buffer[3])
-                );
+            );
         }
 
         /// <summary>
@@ -267,10 +287,12 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         /// <param name="length">Length of the byte array to read</param>
         /// <returns>Read byte array</returns>
         /// <exception cref="EndOfStreamException">Throws EndOfStreamException if can not read from stream.</exception>
-        private static byte[] ReadByteArray(Stream stream, int length) {
+        private static byte[] ReadByteArray(Stream stream, int length)
+        {
             var buffer = new byte[length];
             var totalRead = 0;
-            while (totalRead < length) {
+            while (totalRead < length)
+            {
                 var read = stream.Read(buffer, totalRead, length - totalRead);
                 if (read <= 0) throw new EndOfStreamException("Can not read from stream! Input stream is closed.");
 
@@ -281,6 +303,7 @@ namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
         }
 
         #endregion
+
         /*
         #region Nested classes
 

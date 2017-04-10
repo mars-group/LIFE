@@ -19,21 +19,24 @@ using NodeRegistry.Interface;
 using PartitionManager.Interfaces;
 using RTEManager.Interfaces;
 
-namespace LayerContainerFacade.Implementation {
+namespace LayerContainerFacade.Implementation
+{
     [ScsService]
-	internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade {
+    internal class LayerContainerFacadeImpl : ScsService, ILayerContainerFacade
+    {
         private readonly IPartitionManager _partitionManager;
         private readonly IRTEManager _rteManager;
 
         public LayerContainerFacadeImpl
-            (LayerContainerSettings settings,
-                IPartitionManager partitionManager,
-                IRTEManager rteManager,
-                INodeRegistry nodeRegistry) {
-
+        (LayerContainerSettings settings,
+            IPartitionManager partitionManager,
+            IRTEManager rteManager,
+            INodeRegistry nodeRegistry)
+        {
             _partitionManager = partitionManager;
             _rteManager = rteManager;
-            var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
+            var server =
+                ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
             server.AddService<ILayerContainer, LayerContainerFacadeImpl>(this);
 
             //Start server
@@ -44,7 +47,8 @@ namespace LayerContainerFacade.Implementation {
 
         #region ILayerContainerFacade Members
 
-        public void LoadModelContent(ModelContent content) {
+        public void LoadModelContent(ModelContent content)
+        {
             _partitionManager.LoadModelContent(content);
         }
 
@@ -53,31 +57,31 @@ namespace LayerContainerFacade.Implementation {
             _rteManager.InitializeResultAdapter(resultConfigId);
         }
 
-        public void Instantiate(TLayerInstanceId instanceId) {
+        public void Instantiate(TLayerInstanceId instanceId)
+        {
             _partitionManager.AddLayer(instanceId);
         }
 
-        public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData) {
+        public bool InitializeLayer(TLayerInstanceId instanceId, TInitData initData)
+        {
             return _rteManager.InitializeLayer(instanceId, initData);
         }
+
         public long Tick(long amountOfTicks = 1)
         {
             return _rteManager.Advance(amountOfTicks);
         }
-        public void CleanUp ()
-		{
-			_rteManager.DisposeSuitableLayers ();
-		}
 
-		public void SetMarsConfigServiceAddress(string marsConfigServiceAddress)
-		{
-			MARSConfigServiceSettings.Address = marsConfigServiceAddress;
-		}
+        public void CleanUp()
+        {
+            _rteManager.DisposeSuitableLayers();
+        }
 
-		#endregion
+        public void SetMarsConfigServiceAddress(string marsConfigServiceAddress)
+        {
+            MARSConfigServiceSettings.Address = marsConfigServiceAddress;
+        }
 
-
-
-	}
-
+        #endregion
+    }
 }

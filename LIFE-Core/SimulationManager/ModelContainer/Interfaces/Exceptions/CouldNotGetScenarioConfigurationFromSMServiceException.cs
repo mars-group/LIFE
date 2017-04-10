@@ -14,7 +14,8 @@ namespace ModelContainer.Interfaces.Exceptions
     [Serializable]
     public class CouldNotGetScenarioConfigurationFromSMServiceException : Exception
     {
-        public CouldNotGetScenarioConfigurationFromSMServiceException(string msg) : base(msg) { }
-
+        public CouldNotGetScenarioConfigurationFromSMServiceException(string msg) : base(msg)
+        {
+        }
     }
 }

@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication;
 
-namespace Hik.Communication.Scs.Client {
+namespace Hik.Communication.Scs.Client
+{
     /// <summary>
     ///     Represents a client for SCS servers.
     /// </summary>
-    public interface IConnectableClient : IDisposable {
+    public interface IConnectableClient : IDisposable
+    {
         /// <summary>
         ///     This event is raised when client connected to server.
         /// </summary>

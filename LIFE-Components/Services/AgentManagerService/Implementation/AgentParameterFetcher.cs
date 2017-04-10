@@ -9,15 +9,12 @@ using MySql.Data.MySqlClient;
 
 namespace LIFE.Components.Services.AgentManagerService.Implementation
 {
-
-
-
     public class AgentParameterFetcher : IAgentParameterFetcher
     {
         private readonly string _connectionString;
 
-        public AgentParameterFetcher() {
-
+        public AgentParameterFetcher()
+        {
             // connect to MARS ROCK
             // create ConfigService and connect to marsconfig container. This is due to convention. This LIFE container
             // should be linked to the marsconfig container and thus marsconfig should lead to the correct ip
@@ -31,14 +28,13 @@ namespace LIFE.Components.Services.AgentManagerService.Implementation
             var rockUser = marsConfigService.Get("rock/serveruser");
             var rockPassword = marsConfigService.Get("rock/serverpassword");
 
-            _connectionString = string.Format("Server={0};Uid={1};Pwd={2};",rockIP,rockUser,rockPassword);
-
+            _connectionString = string.Format("Server={0};Uid={1};Pwd={2};", rockIP, rockUser, rockPassword);
         }
 
         public ConcurrentDictionary<string, string[]> GetParametersForInitConfig(AgentInitConfig agentInitConfig)
         {
             var agentDbParamArrays = new ConcurrentDictionary<string, string[]>();
-            Parallel.ForEach (agentInitConfig.AgentInitParameters, param =>
+            Parallel.ForEach(agentInitConfig.AgentInitParameters, param =>
             {
                 if (param.MappingType !=
                     MappingType.ColumnParameterMapping)

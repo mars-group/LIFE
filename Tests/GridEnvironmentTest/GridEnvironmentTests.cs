@@ -29,7 +29,6 @@ namespace GridEnvironmentTest
 
             for (var i = 0; i < agentCount; i++)
             {
-
                 Assert.DoesNotThrow(() =>
                 {
                     var agent = new Tree(GetRandomCoord());
@@ -71,14 +70,14 @@ namespace GridEnvironmentTest
             var a = agents.First();
 
             // normale move to new position
-            var target = new GridCoordinate(50,32);
+            var target = new GridCoordinate(50, 32);
             var newPos = _env.MoveToPosition(a, target);
             a.Coord = newPos;
             Assert.AreEqual(target, newPos);
             Assert.AreEqual(a.Coord, newPos);
 
             // move outside of bounds
-            var target2 = new GridCoordinate(60,41);
+            var target2 = new GridCoordinate(60, 41);
             var newPos2 = _env.MoveToPosition(a, target2);
             Assert.AreEqual(a.Coord, newPos2);
             Assert.AreNotEqual(newPos2, target2);
@@ -106,7 +105,7 @@ namespace GridEnvironmentTest
 
             // distance=0 should do a 'move' to my position
             a.Coord = _env.MoveToPosition(a, 0, 0);
-            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            Assert.AreEqual(new GridCoordinate(0, 0), a.Coord);
             target = new GridCoordinate(a.X + 10, a.Y);
             oldPositionOfA = a.Coord;
             a.Coord = _env.MoveTowardsTarget(a, target, 0);
@@ -115,7 +114,7 @@ namespace GridEnvironmentTest
 
             // normal move to new position with distance = 1
             a.Coord = _env.MoveToPosition(a, 0, 0);
-            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            Assert.AreEqual(new GridCoordinate(0, 0), a.Coord);
             target = new GridCoordinate(a.X + 10, a.Y);
             oldPositionOfA = a.Coord;
             a.Coord = _env.MoveTowardsTarget(a, target, 1);
@@ -123,21 +122,21 @@ namespace GridEnvironmentTest
 
             // exact move to target
             a.Coord = _env.MoveToPosition(a, 0, 0);
-            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            Assert.AreEqual(new GridCoordinate(0, 0), a.Coord);
             target = new GridCoordinate(a.X + 10, a.Y);
             a.Coord = _env.MoveTowardsTarget(a, target, 10);
             Assert.AreEqual(target, a.Coord);
 
             // high-speed move to target, should not go further than target
             a.Coord = _env.MoveToPosition(a, 0, 0);
-            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            Assert.AreEqual(new GridCoordinate(0, 0), a.Coord);
             target = new GridCoordinate(a.X + 10, a.Y);
             a.Coord = _env.MoveTowardsTarget(a, target, 100);
             Assert.AreEqual(target, a.Coord);
 
             // distance=0 should do a 'move' to my position
             a.Coord = _env.MoveToPosition(a, 0, 0);
-            Assert.AreEqual(new GridCoordinate(0,0), a.Coord);
+            Assert.AreEqual(new GridCoordinate(0, 0), a.Coord);
             target = new GridCoordinate(a.X + 10, a.Y);
             oldPositionOfA = a.Coord;
             a.Coord = _env.MoveTowardsTarget(a, target, -100);
@@ -175,14 +174,14 @@ namespace GridEnvironmentTest
             Assert.AreEqual(5, res3.Count());
 
             // explore out of grid
-            var res4 = _env.Explore(new GridCoordinate(DimensionX+1,DimensionY+1), maxNumberOfResults: 5);
+            var res4 = _env.Explore(new GridCoordinate(DimensionX + 1, DimensionY + 1), maxNumberOfResults: 5);
             Assert.AreEqual(0, res4.Count());
         }
 
         [Test]
         public void TestExploreSpecific()
         {
-            var agent = new Tree(new GridCoordinate(42,23));
+            var agent = new Tree(new GridCoordinate(42, 23));
             _env.Insert(agent);
             var res = _env.Explore(agent, 0);
             Assert.IsTrue(res.Count() == 1);
@@ -196,8 +195,10 @@ namespace GridEnvironmentTest
         }
     }
 
-    internal class Tree : IGridCoordinate {
-        public Tree(IGridCoordinate cord) {
+    internal class Tree : IGridCoordinate
+    {
+        public Tree(IGridCoordinate cord)
+        {
             Coord = cord;
         }
 

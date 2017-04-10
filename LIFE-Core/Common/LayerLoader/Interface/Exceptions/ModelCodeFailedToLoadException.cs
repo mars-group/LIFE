@@ -2,8 +2,10 @@
 
 namespace LayerLoader.Interface.Exceptions
 {
-    public class ModelCodeFailedToLoadException : Exception 
+    public class ModelCodeFailedToLoadException : Exception
     {
-        public ModelCodeFailedToLoadException(string msg) : base(msg) { }
+        public ModelCodeFailedToLoadException(string msg) : base(msg)
+        {
+        }
     }
 }

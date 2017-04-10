@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 07.02.2016
 //  *******************************************************/
+
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -13,14 +14,16 @@ using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Protocols;
 
 
-namespace ASC.Communication.Scs.Communication.Messengers {
+namespace ASC.Communication.Scs.Communication.Messengers
+{
     /// <summary>
     ///     This class adds SendMessageAndWaitForResponse(...) and SendAndReceiveMessage methods
     ///     to a IMessenger for synchronous request/response style messaging.
     ///     It also adds queued processing of incoming messages.
     /// </summary>
     /// <typeparam name="T">Type of IMessenger object to use as underlying communication</typeparam>
-    public class RequestReplyMessenger<T> : IMessenger, IDisposable where T : IMessenger {
+    public class RequestReplyMessenger<T> : IMessenger, IDisposable where T : IMessenger
+    {
         #region Public events
 
         /// <summary>
@@ -41,7 +44,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     Gets/sets wire protocol that is used while reading and writing messages.
         /// </summary>
-        public IAcsWireProtocol WireProtocol {
+        public IAcsWireProtocol WireProtocol
+        {
             get { return Messenger.WireProtocol; }
             set { Messenger.WireProtocol = value; }
         }
@@ -49,14 +53,16 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     Gets the time of the last succesfully received message.
         /// </summary>
-        public DateTime LastReceivedMessageTime {
+        public DateTime LastReceivedMessageTime
+        {
             get { return Messenger.LastReceivedMessageTime; }
         }
 
         /// <summary>
         ///     Gets the time of the last succesfully received message.
         /// </summary>
-        public DateTime LastSentMessageTime {
+        public DateTime LastSentMessageTime
+        {
             get { return Messenger.LastSentMessageTime; }
         }
 
@@ -75,7 +81,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         #endregion
 
         #region Private fields
-		private int resent_counter = 0;
+
+        private int resent_counter = 0;
 
         /// <summary>
         ///     Default Timeout value.
@@ -98,7 +105,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Creates a new RequestReplyMessenger.
         /// </summary>
         /// <param name="messenger">IMessenger object to use as underlying communication</param>
-        public RequestReplyMessenger(T messenger) {
+        public RequestReplyMessenger(T messenger)
+        {
             Messenger = messenger;
             messenger.MessageReceived += Messenger_MessageReceived;
             //messenger.MessageSent += Messenger_MessageSent;
@@ -113,7 +121,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     Starts the messenger.
         /// </summary>
-        public virtual void Start() {
+        public virtual void Start()
+        {
         }
 
         /// <summary>
@@ -122,23 +131,25 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     SendMessageAndWaitForResponse method throws exception if there is a thread that is waiting for response message.
         ///     Also stops incoming message processing and deletes all messages in incoming message queue.
         /// </summary>
-        public virtual void Stop() {
+        public virtual void Stop()
+        {
             //Pulse waiting threads for incoming messages, since underlying messenger is disconnected
             //and can not receive messages anymore.
 
-            foreach (var waitingMessage in _waitingMessages.Values) {
+            foreach (var waitingMessage in _waitingMessages.Values)
+            {
                 waitingMessage.State = WaitingMessageStates.Cancelled;
                 waitingMessage.WaitEvent.Set();
             }
 
             _waitingMessages.Clear();
-            
         }
 
         /// <summary>
         ///     Calls Stop method of this object.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             Stop();
         }
 
@@ -146,7 +157,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Sends a message.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        public void SendMessage(IAscMessage message) {
+        public void SendMessage(IAscMessage message)
+        {
             Messenger.SendMessage(message);
         }
 
@@ -162,7 +174,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// </remarks>
         /// <param name="message">message to send</param>
         /// <returns>Response message</returns>
-        public IAscMessage SendMessageAndWaitForResponse(IAscMessage message) {
+        public IAscMessage SendMessageAndWaitForResponse(IAscMessage message)
+        {
             return SendMessageAndWaitForResponse(message, Timeout);
         }
 
@@ -190,7 +203,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             //Create a waiting message record and add to list
             var waitingMessage = new WaitingMessage();
 
-			_waitingMessages.AddOrUpdate (message.MessageId, waitingMessage, (key, oldMsg) => waitingMessage);
+            _waitingMessages.AddOrUpdate(message.MessageId, waitingMessage, (key, oldMsg) => waitingMessage);
 
             try
             {
@@ -205,9 +218,9 @@ namespace ASC.Communication.Scs.Communication.Messengers {
                 {
                     case WaitingMessageStates.WaitingForResponse:
                         // timeout, so resend
-					//Interlocked.Increment(ref resent_counter);
-					//Console.WriteLine("T/O : {0}, Resent: {1}", timeout, resent_counter);
-						return SendMessageAndWaitForResponse(message, timeoutMilliseconds);
+                        //Interlocked.Increment(ref resent_counter);
+                        //Console.WriteLine("T/O : {0}, Resent: {1}", timeout, resent_counter);
+                        return SendMessageAndWaitForResponse(message, timeoutMilliseconds);
                     case WaitingMessageStates.Cancelled:
                         throw new CommunicationException("Disconnected before response received.");
                 }
@@ -219,8 +232,7 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             {
                 //Remove message from waiting messages
                 WaitingMessage delMessage;
-				_waitingMessages.TryRemove(message.MessageId, out delMessage);
-
+                _waitingMessages.TryRemove(message.MessageId, out delMessage);
             }
         }
 
@@ -229,7 +241,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void Messenger_MessageReceived(object sender, MessageEventArgs e) {
+        private void Messenger_MessageReceived(object sender, MessageEventArgs e)
+        {
             // Check if there is a waiting thread for this message in SendMessageAndWaitForResponse method
             if (string.IsNullOrEmpty(e.Message.RepliedMessageId)) return;
 
@@ -247,7 +260,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void Messenger_MessageSent(object sender, MessageEventArgs e) {
+        private void Messenger_MessageSent(object sender, MessageEventArgs e)
+        {
             OnMessageSent(e.Message);
         }
 
@@ -259,7 +273,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageReceived(IAscMessage message) {
+        protected virtual void OnMessageReceived(IAscMessage message)
+        {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -268,7 +283,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IAscMessage message) {
+        protected virtual void OnMessageSent(IAscMessage message)
+        {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -281,7 +297,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         ///     This class is used to store messaging context for a request message
         ///     until response is received.
         /// </summary>
-        private sealed class WaitingMessage {
+        private sealed class WaitingMessage
+        {
             /// <summary>
             ///     Response message for request message
             ///     (null if response is not received yet).
@@ -301,7 +318,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
             /// <summary>
             ///     Creates a new WaitingMessage object.
             /// </summary>
-            public WaitingMessage() {
+            public WaitingMessage()
+            {
                 WaitEvent = new ManualResetEventSlim(false);
                 State = WaitingMessageStates.WaitingForResponse;
             }
@@ -310,7 +328,8 @@ namespace ASC.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     This enum is used to store the state of a waiting message.
         /// </summary>
-        private enum WaitingMessageStates {
+        private enum WaitingMessageStates
+        {
             /// <summary>
             ///     Still waiting for response.
             /// </summary>
