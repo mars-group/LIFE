@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +14,8 @@ namespace LIFE.Components.Services.AgentShadowingService.Interface
 {
     public class LIFEAgentEventArgs<TServiceInterface> : EventArgs
     {
-        public LIFEAgentEventArgs(List<TServiceInterface> removedAgents, List<TServiceInterface> newAgents) {
+        public LIFEAgentEventArgs(List<TServiceInterface> removedAgents, List<TServiceInterface> newAgents)
+        {
             RemovedAgents = removedAgents;
             NewAgents = newAgents;
         }

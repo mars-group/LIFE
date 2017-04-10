@@ -6,16 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.Messengers;
 
-namespace ASC.Communication.Scs.Communication.Channels {
+namespace ASC.Communication.Scs.Communication.Channels
+{
     /// <summary>
     ///     Represents a communication channel.
     ///     A communication channel is used to communicate (send/receive messages) with a remote application.
     /// </summary>
-    public interface ICommunicationChannel : IMessenger {
+    public interface ICommunicationChannel : IMessenger
+    {
         /// <summary>
         ///     This event is raised when client disconnected from server.
         /// </summary>
@@ -40,6 +43,5 @@ namespace ASC.Communication.Scs.Communication.Channels {
         ///     Closes messenger.
         /// </summary>
         void Disconnect();
-
     }
 }

@@ -1,14 +1,14 @@
-﻿namespace LIFE.Components.Agents.BasicAgents.Reasoning {
-  
-  /// <summary>
-  ///   Interaction interface. Just ensures executability,
-  ///   needed by the abstract base agent.
-  /// </summary>
-  public interface IInteraction {
-    
+﻿namespace LIFE.Components.Agents.BasicAgents.Reasoning
+{
     /// <summary>
-    ///   Execute the interaction object.
+    ///   Interaction interface. Just ensures executability,
+    ///   needed by the abstract base agent.
     /// </summary>
-    void Execute();
-  }
+    public interface IInteraction
+    {
+        /// <summary>
+        ///   Execute the interaction object.
+        /// </summary>
+        void Execute();
+    }
 }

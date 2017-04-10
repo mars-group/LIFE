@@ -26,19 +26,23 @@ using ResultAdapter.Interface;
 using RTEManager.Implementation;
 using RTEManager.Interfaces;
 
-namespace LayerContainerFacade.Interfaces {
+namespace LayerContainerFacade.Interfaces
+{
     /// <summary>
     /// The LayerContainerCore factory constructs a layer container instance 
     /// via an IoC container and provides a reference.
     /// </summary>
-    public static class LayerContainerApplicationCoreFactory {
+    public static class LayerContainerApplicationCoreFactory
+    {
         private static IContainer _container;
+
         /// <summary>
         /// Instantiates a LayercontainerFacade instance and returns the reference. Use this to
         /// retreive a new LayerContainer or to reset an old one.
         /// </summary>
         /// <returns>A reference to an ILayerContainerFacade instance.</returns>
-        public static ILayerContainerFacade GetLayerContainerFacade(string clusterName = null) {
+        public static ILayerContainerFacade GetLayerContainerFacade(string clusterName = null)
+        {
             if (_container != null) return _container.Resolve<ILayerContainerFacade>();
             var containerBuilder = new ContainerBuilder();
 

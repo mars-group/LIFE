@@ -6,11 +6,14 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-namespace Hik.Communication.Scs.Communication {
+
+namespace Hik.Communication.Scs.Communication
+{
     /// <summary>
     ///     Communication states.
     /// </summary>
-    public enum CommunicationStates {
+    public enum CommunicationStates
+    {
         /// <summary>
         ///     Connected.
         /// </summary>

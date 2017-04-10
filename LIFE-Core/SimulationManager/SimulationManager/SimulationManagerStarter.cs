@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 using SimulationManagerFacade.Interface;
 using Mono.Options;
@@ -46,12 +47,12 @@ namespace SimulationManager
             OptionSet optionSet = new OptionSet()
                 .Add("?|h|help", "Shows short usage", option => help = option != null)
                 .Add("c=|count=", "Specifies number of ticks to simulate",
-                                      option => numOfTicksS = option)
+                    option => numOfTicksS = option)
                 .Add("l|list", "List all available models",
-                                      option => listModels = option != null)
+                    option => listModels = option != null)
                 .Add("m=|model=", "Model to simulate", option => modelPath = option)
                 .Add("cli", "Use interactive model chooser",
-                                      option => interactive = option != null);
+                    option => interactive = option != null);
 
             try
             {
@@ -102,14 +103,14 @@ namespace SimulationManager
 
         private static void Main(string[] args)
         {
-
             Console.WriteLine("SimulationManager trying to start up.");
 
             try
             {
                 Console.WriteLine("Initializing components and building application core...");
 
-                ISimulationManagerApplicationCore core = SimulationManagerApplicationCoreFactory.GetProductionApplicationCore();
+                ISimulationManagerApplicationCore core = SimulationManagerApplicationCoreFactory
+                    .GetProductionApplicationCore();
 
                 Console.WriteLine("SimulationManager successfully started.");
 
@@ -126,11 +127,11 @@ namespace SimulationManager
             catch (Exception exception)
             {
                 Console.Error.WriteLine("SimulationManager crashed fatally. Exception:\n {0}", exception);
-				throw;
+                throw;
             }
 
 
-           Console.WriteLine("SimulationController shutting down.");
+            Console.WriteLine("SimulationController shutting down.");
         }
     }
 }

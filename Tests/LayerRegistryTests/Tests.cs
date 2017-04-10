@@ -20,7 +20,6 @@ namespace LayerRegistryTests
         }
 
 
-
         [Test]
         public void Test1()
         {
@@ -29,8 +28,6 @@ namespace LayerRegistryTests
 
             RegisterLayer(layer);
             RegisterLayer(layer2);
-
-
         }
 
         private void RegisterLayer(ILayer layer)
@@ -39,21 +36,22 @@ namespace LayerRegistryTests
             _localLayers.Add(layer.GetType().FullName, layer);
             Console.WriteLine(layer.GetType().FullName);
             // and by its direct interface type if any
-            if (layer.GetType().GetTypeInfo().GetInterfaces().Length > 0) {
+            if (layer.GetType().GetTypeInfo().GetInterfaces().Length > 0)
+            {
                 var infs = layer.GetType().GetTypeInfo().GetInterfaces();
-                foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LIFE"))) {
+                foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LIFE")))
+                {
                     _localLayers.Add(type.FullName, layer);
                 }
             }
         }
-
-
     }
 
 
     internal class TestLayer : ITestLayer
     {
-        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
+        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle,
+            UnregisterAgent unregisterAgentHandle)
         {
             throw new System.NotImplementedException();
         }
@@ -72,7 +70,8 @@ namespace LayerRegistryTests
 
     internal class TestLayer2 : ITestLayer2
     {
-        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
+        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle,
+            UnregisterAgent unregisterAgentHandle)
         {
             throw new System.NotImplementedException();
         }

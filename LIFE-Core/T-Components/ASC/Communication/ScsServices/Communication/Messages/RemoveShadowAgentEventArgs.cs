@@ -6,13 +6,15 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 namespace ASC.Communication.ScsServices.Communication.Messages
 {
     public class RemoveShadowAgentEventArgs
     {
         public RemoveShadowAgentMessage RemoveShadowAgentMessage { get; private set; }
 
-        public RemoveShadowAgentEventArgs(RemoveShadowAgentMessage message) {
+        public RemoveShadowAgentEventArgs(RemoveShadowAgentMessage message)
+        {
             RemoveShadowAgentMessage = message;
         }
     }

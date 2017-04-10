@@ -108,7 +108,8 @@
                                 "Type": "Double"
                             }
                         ],
-                        "FullName": "KNPWaterPointLayer.Agents.WaterPoint, KNPWaterPointLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                        "FullName":
+                            "KNPWaterPointLayer.Agents.WaterPoint, KNPWaterPointLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
                         "InstanceCount": 11452,
                         "Name": "WaterPoint"
                     }
@@ -222,7 +223,8 @@
                                 "Value": 1053245923
                             }
                         ],
-                        "FullName": "KNPMarulaTreeLayer.Agents.MarulaTree, KNPMarulaTreeLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                        "FullName":
+                            "KNPMarulaTreeLayer.Agents.MarulaTree, KNPMarulaTreeLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
                         "InstanceCount": 161847,
                         "Name": "MarulaTree"
                     }
@@ -375,7 +377,8 @@
                                 "Type": "String"
                             }
                         ],
-                        "FullName": "KNPElephantLayer.Agents.Elephant, KNPElephantLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                        "FullName":
+                            "KNPElephantLayer.Agents.Elephant, KNPElephantLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
                         "InstanceCount": 112091,
                         "Name": "Elephant"
                     }
@@ -393,7 +396,8 @@
             {
                 "ColumnClearName": "5YSS2o",
                 "ColumnName": "DCa66r2uN",
-                "FullName": "KNPTemperatureLayer.TemperatureTimeSeriesLayer, KNPTemperatureLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "FullName":
+                    "KNPTemperatureLayer.TemperatureTimeSeriesLayer, KNPTemperatureLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "LayerName": "TemperatureTimeSeriesLayer",
                 "MetaDataId": "90ea30b6-cdc0-45af-99cb-d75cc0a8e28b",
                 "TableName": "X73vc"
@@ -401,7 +405,8 @@
             {
                 "ColumnClearName": "4AQMN1ZifjLZsM340hR",
                 "ColumnName": "9LN8Fb5714WqBtu",
-                "FullName": "LIFETimeSeriesLayer.TimeSeriesLayer, LIFETimeSeriesLayer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "FullName":
+                    "LIFETimeSeriesLayer.TimeSeriesLayer, LIFETimeSeriesLayer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "LayerName": "TimeSeriesLayer",
                 "MetaDataId": "0060c328-03db-4d62-b158-14d2b17c2842",
                 "TableName": "oSL4pz698Ar9k"
@@ -409,7 +414,8 @@
             {
                 "ColumnClearName": "jProtNOU60abOzNV4ky",
                 "ColumnName": "993R00OoTi21",
-                "FullName": "KNPPrecipitationLayer.PrecipitationLayer, KNPPrecipitationLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "FullName":
+                    "KNPPrecipitationLayer.PrecipitationLayer, KNPPrecipitationLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "LayerName": "PrecipitationLayer",
                 "MetaDataId": "7f96f5ff-bb97-47c5-931c-6681d2d01cca",
                 "TableName": "zikih71ruorkU"

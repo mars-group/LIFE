@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using Autofac;
 using ConfigurationAdapter;
 using ConfigurationAdapter.Interface;
@@ -22,15 +23,18 @@ using RuntimeEnvironment.Interfaces;
 using SimulationManagerFacade.Implementation;
 using SimulationManagerShared;
 
-namespace SimulationManagerFacade.Interface {
+namespace SimulationManagerFacade.Interface
+{
     /// <summary>
     ///     This class can be used to obtain all versions of the application core, either for testing or
     ///     for production use. It works via the factory pattern.
     /// </summary>
-    public class SimulationManagerApplicationCoreFactory {
+    public class SimulationManagerApplicationCoreFactory
+    {
         private static IContainer container;
 
-        public static ISimulationManagerApplicationCore GetProductionApplicationCore(string clusterName = null) {
+        public static ISimulationManagerApplicationCore GetProductionApplicationCore(string clusterName = null)
+        {
             if (container != null) return container.Resolve<ISimulationManagerApplicationCore>();
             var builder = new ContainerBuilder();
 

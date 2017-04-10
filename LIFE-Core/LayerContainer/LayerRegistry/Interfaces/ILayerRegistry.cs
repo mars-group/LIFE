@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using LIFE.API.Layer;
 
-namespace LayerRegistry.Interfaces {
+namespace LayerRegistry.Interfaces
+{
     /// <summary>
     ///     The LayerRegistry.
     ///     Takes care of resolving layer instances locally and remotely
     /// </summary>
-    public interface ILayerRegistry {
+    public interface ILayerRegistry
+    {
         /// <summary>
         ///     Removes the layer with instance layerInstanceId.
         ///     CAUTION: Can not be undone! Use only in re-partitioning process

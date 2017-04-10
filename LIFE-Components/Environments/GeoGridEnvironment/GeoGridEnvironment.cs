@@ -176,7 +176,8 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
                             if (predicate == null)
                             {
                                 var enumerator = coll.Keys.GetEnumerator();
-                                while (enumerator.MoveNext() && (result.Count < maxNumberOfResults || maxNumberOfResults == -1))
+                                while (enumerator.MoveNext() &&
+                                       (result.Count < maxNumberOfResults || maxNumberOfResults == -1))
                                 {
                                     result.Add(enumerator.Current);
                                 }

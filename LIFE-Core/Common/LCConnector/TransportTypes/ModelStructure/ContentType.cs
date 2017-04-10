@@ -7,9 +7,10 @@
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
 
-namespace LCConnector.TransportTypes.ModelStructure {
-
-    internal enum ContentType {
+namespace LCConnector.TransportTypes.ModelStructure
+{
+    internal enum ContentType
+    {
         File,
         Folder
     }

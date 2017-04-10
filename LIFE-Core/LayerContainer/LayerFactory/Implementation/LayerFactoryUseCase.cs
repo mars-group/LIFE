@@ -20,12 +20,15 @@ using LIFE.API.Layer;
 using Microsoft.Extensions.DependencyModel;
 
 
-namespace LayerFactory.Implementation {
-    internal class LayerFactoryUseCase : ILayerFactory {
+namespace LayerFactory.Implementation
+{
+    internal class LayerFactoryUseCase : ILayerFactory
+    {
         private readonly ILayerRegistry _layerRegistry;
         private readonly ILayerLoader _layerLoader;
 
-        public LayerFactoryUseCase(ILayerRegistry layerRegistry) {
+        public LayerFactoryUseCase(ILayerRegistry layerRegistry)
+        {
             _layerRegistry = layerRegistry;
             _layerLoader = new LayerLoader.Implementation.LayerLoader();
         }
@@ -50,12 +53,12 @@ namespace LayerFactory.Implementation {
         private static bool IsCandidateLibrary(RuntimeLibrary library, string assemblyName)
         {
             return library.Name == (assemblyName)
-                || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName));
+                   || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName));
         }
 
 
-
-        public ILayer GetLayer(string layerName) {
+        public ILayer GetLayer(string layerName)
+        {
             ILayer result;
 
             var layerTypeInfo = _layerLoader.LoadLayerOnLayerContainer(layerName);
@@ -72,7 +75,8 @@ namespace LayerFactory.Implementation {
                 result = (ILayer) Activator.CreateInstance(layerTypeInfo.LayerType);
                 //result = (ILayer) ctor.Invoke(new object[0]);
             }
-            else {
+            else
+            {
                 // take first constructor, resolve dependencies from LayerRegistry and instantiate Layer
                 var currentConstructor = constructors[0];
                 var neededParameters = currentConstructor.GetParameters();
@@ -80,7 +84,8 @@ namespace LayerFactory.Implementation {
                 var actualParameters = new object[neededParameters.Length];
 
                 var i = 0;
-                foreach (var parameterInfo in neededParameters) {
+                foreach (var parameterInfo in neededParameters)
+                {
                     //Console.WriteLine($"Trying to resolve Layer Param: {parameterInfo.ParameterType.FullName}");
                     var param = _layerRegistry.GetLayerInstance(parameterInfo.ParameterType);
                     /*Console.WriteLine($"Got param: {param.GetType().FullName}");
@@ -108,15 +113,18 @@ namespace LayerFactory.Implementation {
                         stb.Append(actualParameter.GetType().FullName);
                         stb.Append(" | ");
                     }
-                    Console.Error.WriteLine($"Something was wrong with the parameters for Layer {layerTypeInfo.LayerType.FullName}. Parameters were: " + stb);
+                    Console.Error.WriteLine(
+                        $"Something was wrong with the parameters for Layer {layerTypeInfo.LayerType.FullName}. Parameters were: " +
+                        stb);
                     throw mex;
                 }
-             }
+            }
             _layerRegistry.RegisterLayer(result);
             return result;
         }
 
-        public void LoadModelContent(ModelContent content) {
+        public void LoadModelContent(ModelContent content)
+        {
             _layerLoader.LoadModelContent(content);
         }
 

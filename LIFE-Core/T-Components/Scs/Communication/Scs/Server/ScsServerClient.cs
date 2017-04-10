@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.Channels;
@@ -13,11 +14,13 @@ using Hik.Communication.Scs.Communication.EndPoints;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Server {
+namespace Hik.Communication.Scs.Server
+{
     /// <summary>
     ///     This class represents a client in server side.
     /// </summary>
-    internal class ScsServerClient : IScsServerClient {
+    internal class ScsServerClient : IScsServerClient
+    {
         #region Public events
 
         /// <summary>
@@ -48,14 +51,16 @@ namespace Hik.Communication.Scs.Server {
         /// <summary>
         ///     Gets the communication state of the Client.
         /// </summary>
-        public CommunicationStates CommunicationState {
+        public CommunicationStates CommunicationState
+        {
             get { return _communicationChannel.CommunicationState; }
         }
 
         /// <summary>
         ///     Gets/sets wire protocol that is used while reading and writing messages.
         /// </summary>
-        public IScsWireProtocol WireProtocol {
+        public IScsWireProtocol WireProtocol
+        {
             get { return _communicationChannel.WireProtocol; }
             set { _communicationChannel.WireProtocol = value; }
         }
@@ -63,21 +68,24 @@ namespace Hik.Communication.Scs.Server {
         /// <summary>
         ///     Gets endpoint of remote application.
         /// </summary>
-        public ScsEndPoint RemoteEndPoint {
+        public ScsEndPoint RemoteEndPoint
+        {
             get { return _communicationChannel.RemoteEndPoint; }
         }
 
         /// <summary>
         ///     Gets the time of the last succesfully received message.
         /// </summary>
-        public DateTime LastReceivedMessageTime {
+        public DateTime LastReceivedMessageTime
+        {
             get { return _communicationChannel.LastReceivedMessageTime; }
         }
 
         /// <summary>
         ///     Gets the time of the last succesfully received message.
         /// </summary>
-        public DateTime LastSentMessageTime {
+        public DateTime LastSentMessageTime
+        {
             get { return _communicationChannel.LastSentMessageTime; }
         }
 
@@ -98,7 +106,8 @@ namespace Hik.Communication.Scs.Server {
         ///     Creates a new ScsClient object.
         /// </summary>
         /// <param name="communicationChannel">The communication channel that is used by client to send and receive messages</param>
-        public ScsServerClient(ICommunicationChannel communicationChannel) {
+        public ScsServerClient(ICommunicationChannel communicationChannel)
+        {
             _communicationChannel = communicationChannel;
             _communicationChannel.MessageReceived += CommunicationChannel_MessageReceived;
             _communicationChannel.MessageSent += CommunicationChannel_MessageSent;
@@ -112,7 +121,8 @@ namespace Hik.Communication.Scs.Server {
         /// <summary>
         ///     Disconnects from client and closes underlying communication channel.
         /// </summary>
-        public void Disconnect() {
+        public void Disconnect()
+        {
             _communicationChannel.Disconnect();
         }
 
@@ -120,7 +130,8 @@ namespace Hik.Communication.Scs.Server {
         ///     Sends a message to the client.
         /// </summary>
         /// <param name="message">Message to be sent</param>
-        public void SendMessage(IScsMessage message) {
+        public void SendMessage(IScsMessage message)
+        {
             _communicationChannel.SendMessage(message);
         }
 
@@ -133,7 +144,8 @@ namespace Hik.Communication.Scs.Server {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void CommunicationChannel_Disconnected(object sender, EventArgs e) {
+        private void CommunicationChannel_Disconnected(object sender, EventArgs e)
+        {
             OnDisconnected();
         }
 
@@ -142,9 +154,11 @@ namespace Hik.Communication.Scs.Server {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void CommunicationChannel_MessageReceived(object sender, MessageEventArgs e) {
+        private void CommunicationChannel_MessageReceived(object sender, MessageEventArgs e)
+        {
             var message = e.Message;
-            if (message is ScsPingMessage) {
+            if (message is ScsPingMessage)
+            {
                 _communicationChannel.SendMessage(new ScsPingMessage {RepliedMessageId = message.MessageId});
                 return;
             }
@@ -157,7 +171,8 @@ namespace Hik.Communication.Scs.Server {
         /// </summary>
         /// <param name="sender">Source of event</param>
         /// <param name="e">Event arguments</param>
-        private void CommunicationChannel_MessageSent(object sender, MessageEventArgs e) {
+        private void CommunicationChannel_MessageSent(object sender, MessageEventArgs e)
+        {
             OnMessageSent(e.Message);
         }
 
@@ -168,7 +183,8 @@ namespace Hik.Communication.Scs.Server {
         /// <summary>
         ///     Raises Disconnected event.
         /// </summary>
-        private void OnDisconnected() {
+        private void OnDisconnected()
+        {
             var handler = Disconnected;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -177,7 +193,8 @@ namespace Hik.Communication.Scs.Server {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        private void OnMessageReceived(IScsMessage message) {
+        private void OnMessageReceived(IScsMessage message)
+        {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -186,7 +203,8 @@ namespace Hik.Communication.Scs.Server {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IScsMessage message) {
+        protected virtual void OnMessageSent(IScsMessage message)
+        {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }

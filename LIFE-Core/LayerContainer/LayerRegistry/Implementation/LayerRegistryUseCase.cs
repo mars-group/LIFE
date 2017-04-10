@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -27,8 +28,10 @@ using LNSConnector.TransportTypes;
 using NodeRegistry.Interface;
 using NodeRegistry.Interface.Config;
 
-namespace LayerRegistry.Implementation {
-    internal class LayerRegistryUseCase : ILayerRegistry {
+namespace LayerRegistry.Implementation
+{
+    internal class LayerRegistryUseCase : ILayerRegistry
+    {
         private IDictionary<string, ILayer> _localLayers;
         private readonly IScsServiceClient<ILayerNameService> _layerNameServiceClient;
         private readonly ILayerNameService _layerNameService;
@@ -64,7 +67,7 @@ namespace LayerRegistry.Implementation {
             // now create layerNameService Stub
             _layerNameServiceClient =
                 ScsServiceClientBuilder.CreateClient<ILayerNameService>(
-                        "tcp://" + simManager.NodeEndpoint.IpAddress + ":" + simManager.NodeEndpoint.Port
+                    "tcp://" + simManager.NodeEndpoint.IpAddress + ":" + simManager.NodeEndpoint.Port
                 );
 
             // connect the client!
@@ -77,28 +80,37 @@ namespace LayerRegistry.Implementation {
 
         #region ILayerRegistry Members
 
-        public void RemoveLayerInstance(Type layerType) {
+        public void RemoveLayerInstance(Type layerType)
+        {
             if (!_localLayers.ContainsKey(layerType.FullName)) return;
-            _layerNameServiceClient.ServiceProxy.RemoveLayer(layerType.FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, layerType.FullName));
+            _layerNameServiceClient.ServiceProxy.RemoveLayer(layerType.FullName,
+                new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort,
+                    layerType.FullName));
             _localLayers.Remove(layerType.FullName);
             _layerServiceStartPort--; // TODO: this won't work... need to manage a port array or something...
         }
 
-        public void ResetLayerRegistry() {
+        public void ResetLayerRegistry()
+        {
             foreach (var localLayer in _localLayers)
             {
-                _layerNameServiceClient.ServiceProxy.RemoveLayer(localLayer.GetType().FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort, localLayer.GetType().FullName));
+                _layerNameServiceClient.ServiceProxy.RemoveLayer(localLayer.GetType().FullName,
+                    new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, _nodeRegistryConfig.NodeEndPointPort,
+                        localLayer.GetType().FullName));
             }
             _localLayers = new ConcurrentDictionary<string, ILayer>();
         }
 
-        public void RegisterLayer(ILayer layer) {
+        public void RegisterLayer(ILayer layer)
+        {
             // store in Dict for local usage, by its direct type
             _localLayers.Add(layer.GetType().FullName, layer);
             // and by its direct interface type if any
-            if (layer.GetType().GetTypeInfo().GetInterfaces().Length > 0) {
+            if (layer.GetType().GetTypeInfo().GetInterfaces().Length > 0)
+            {
                 var infs = layer.GetType().GetTypeInfo().GetInterfaces();
-                foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LIFE"))) {
+                foreach (var type in infs.Where(type => type.Namespace != null && !type.Namespace.StartsWith("LIFE")))
+                {
                     _localLayers.Add(type.FullName, layer);
                 }
             }
@@ -109,13 +121,17 @@ namespace LayerRegistry.Implementation {
             var layerType = layer.GetType();
             // check if an interface with ScsService Attribute is present
             Type interfaceType = null;
-            foreach (var @interface in from @interface in layerType.GetTypeInfo().GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
+            foreach (var @interface in from @interface in layerType.GetTypeInfo().GetInterfaces()
+                from customAttributeData in @interface.GetTypeInfo().CustomAttributes
+                where customAttributeData.AttributeType == typeof(ScsServiceAttribute)
+                select @interface)
             {
                 interfaceType = @interface;
             }
 
             // if interfaceType is not null, we can create a service endpoint, so do it.
-            if (interfaceType != null) {
+            if (interfaceType != null)
+            {
                 // add service to SCS Server
                 var serversPort = _layerServiceStartPort++;
                 var server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(serversPort));
@@ -125,20 +141,20 @@ namespace LayerRegistry.Implementation {
 
                 genericAddServiceMethod = addServiceMethod.MakeGenericMethod(interfaceType, layerType);
 
-                genericAddServiceMethod.Invoke(server, new object[]{layer});
+                genericAddServiceMethod.Invoke(server, new object[] {layer});
 
                 server.Start();
                 _layerServers.Add(server);
 
                 // store LayerRegistryEntry in LayerNameService for remote resolution
-                _layerNameServiceClient.ServiceProxy.RegisterLayer(interfaceType.FullName, new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort, layer.GetType().FullName));
-
+                _layerNameServiceClient.ServiceProxy.RegisterLayer(interfaceType.FullName,
+                    new TLayerNameServiceEntry(_nodeRegistryConfig.NodeEndPointIP, serversPort,
+                        layer.GetType().FullName));
             }
         }
 
         public object GetLayerInstance(Type layerType)
         {
-
             if (!_localLayers.ContainsKey(layerType.FullName))
             {
                 var stb = new StringBuilder();
@@ -149,7 +165,9 @@ namespace LayerRegistry.Implementation {
                 }
                 Console.Error.WriteLine($"Layer with Key: {layerType} could not be found! Keys are: {stb}");
             }
-            return _localLayers.ContainsKey(layerType.FullName) ? _localLayers[layerType.FullName] : GetRemoteLayerInstance(layerType);
+            return _localLayers.ContainsKey(layerType.FullName)
+                ? _localLayers[layerType.FullName]
+                : GetRemoteLayerInstance(layerType);
         }
 
         #endregion
@@ -167,7 +185,8 @@ namespace LayerRegistry.Implementation {
         private object GetRemoteLayerInstance(Type layerType)
         {
             var entry = _layerNameServiceClient.ServiceProxy.ResolveLayer(layerType.FullName);
-            var createClientMethod = typeof(ScsServiceClientBuilder).GetTypeInfo().GetMethod("CreateClient", new[] { typeof(ScsEndPoint), typeof(object) });
+            var createClientMethod = typeof(ScsServiceClientBuilder).GetTypeInfo()
+                .GetMethod("CreateClient", new[] {typeof(ScsEndPoint), typeof(object)});
 
             // we need to use the layer's interface type and not the class type, so make sure
             // layerType either is an interface type or reflect the correct interface type
@@ -178,9 +197,12 @@ namespace LayerRegistry.Implementation {
                 interfaceType = layerType;
                 genericCreateClientMethod = createClientMethod.MakeGenericMethod(interfaceType);
             }
-            else 
+            else
             {
-                foreach (var @interface in from @interface in layerType.GetTypeInfo().GetInterfaces() from customAttributeData in @interface.GetTypeInfo().CustomAttributes where customAttributeData.AttributeType == typeof(ScsServiceAttribute) select @interface)
+                foreach (var @interface in from @interface in layerType.GetTypeInfo().GetInterfaces()
+                    from customAttributeData in @interface.GetTypeInfo().CustomAttributes
+                    where customAttributeData.AttributeType == typeof(ScsServiceAttribute)
+                    select @interface)
                 {
                     interfaceType = @interface;
                 }
@@ -188,7 +210,8 @@ namespace LayerRegistry.Implementation {
             }
 
 
-            var scsStub = genericCreateClientMethod.Invoke(null, new object[] { new ScsTcpEndPoint(entry.IpAddress, entry.Port), null });
+            var scsStub = genericCreateClientMethod.Invoke(null,
+                new object[] {new ScsTcpEndPoint(entry.IpAddress, entry.Port), null});
 
             Type typeOfScsStub = scsStub.GetType();
 
@@ -196,7 +219,7 @@ namespace LayerRegistry.Implementation {
             typeOfScsStub.GetTypeInfo().GetProperty("Timeout").SetValue(scsStub, -1);
 
             // cast to IConnectableClient since dynamic binding only exposes the statically implemented members
-            ((IConnectableClient)scsStub).Connect();
+            ((IConnectableClient) scsStub).Connect();
 
             var proxy = typeOfScsStub.GetTypeInfo().GetProperty("ServiceProxy").GetValue(scsStub);
 
@@ -209,10 +232,14 @@ namespace LayerRegistry.Implementation {
     [Serializable]
     internal class SCSServiceAttributeHasNotBeenSpecifiedException : Exception
     {
-        public SCSServiceAttributeHasNotBeenSpecifiedException(string msg) : base(msg){}
+        public SCSServiceAttributeHasNotBeenSpecifiedException(string msg) : base(msg)
+        {
+        }
     }
 
 
     [Serializable]
-    internal class LayerInstanceNotRegisteredException : Exception {}
+    internal class LayerInstanceNotRegisteredException : Exception
+    {
+    }
 }

@@ -6,26 +6,32 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using LayerFactory.Interface;
 using LayerRegistry.Interfaces;
 using LCConnector.TransportTypes.ModelStructure;
 using LIFE.API.Layer;
 
-namespace LayerFactory.Implementation {
-    public class LayerFactoryComponent : ILayerFactory {
+namespace LayerFactory.Implementation
+{
+    public class LayerFactoryComponent : ILayerFactory
+    {
         private readonly ILayerFactory _layerFactoryUseCase;
 
-        public LayerFactoryComponent(ILayerRegistry layerRegistry) {
+        public LayerFactoryComponent(ILayerRegistry layerRegistry)
+        {
             _layerFactoryUseCase = new LayerFactoryUseCase(layerRegistry);
         }
 
         #region ILayerFactory Members
 
-        public ILayer GetLayer(string layerName) {
+        public ILayer GetLayer(string layerName)
+        {
             return _layerFactoryUseCase.GetLayer(layerName);
         }
 
-        public void LoadModelContent(ModelContent content) {
+        public void LoadModelContent(ModelContent content)
+        {
             _layerFactoryUseCase.LoadModelContent(content);
         }
 

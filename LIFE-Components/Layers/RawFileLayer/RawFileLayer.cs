@@ -24,7 +24,8 @@ namespace LIFE.Components.RawFileLayer
         /// <returns>If the initialization was successfull</returns>
         protected abstract bool AfterInit();
 
-        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle, UnregisterAgent unregisterAgentHandle)
+        public bool InitLayer(TInitData layerInitData, RegisterAgent registerAgentHandle,
+            UnregisterAgent unregisterAgentHandle)
         {
             var fileId = layerInitData.FileInitInfo.FileId;
             FilePath = new FileClient().DownloadFile(fileId);

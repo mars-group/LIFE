@@ -6,26 +6,33 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
 
-namespace Hik.Communication.Scs.Communication {
+namespace Hik.Communication.Scs.Communication
+{
     /// <summary>
     ///     This application is thrown if communication is not expected state.
     /// </summary>
     [Serializable]
-    public class CommunicationStateException : CommunicationException {
+    public class CommunicationStateException : CommunicationException
+    {
         /// <summary>
         ///     Contstructor.
         /// </summary>
-        public CommunicationStateException() {}
+        public CommunicationStateException()
+        {
+        }
 
         /// <summary>
         ///     Contstructor.
         /// </summary>
         /// <param name="message">Exception message</param>
         public CommunicationStateException(string message)
-            : base(message) {}
+            : base(message)
+        {
+        }
 
         /// <summary>
         ///     Contstructor.
@@ -33,6 +40,8 @@ namespace Hik.Communication.Scs.Communication {
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
         public CommunicationStateException(string message, Exception innerException)
-            : base(message, innerException) {}
+            : base(message, innerException)
+        {
+        }
     }
 }

@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using ASC.Communication.Scs.Communication.Channels;
 
 namespace ASC.Communication.Scs.Client.Udp
@@ -19,7 +20,8 @@ namespace ASC.Communication.Scs.Client.Udp
             _udpchannel = udpChannel;
         }
 
-        protected override ICommunicationChannel CreateCommunicationChannel() {
+        protected override ICommunicationChannel CreateCommunicationChannel()
+        {
             return _udpchannel;
         }
     }

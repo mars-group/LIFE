@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using LayerRegistry.Interfaces;
 using LIFE.API.Layer;
 using NodeRegistry.Interface;
 using NodeRegistry.Interface.Config;
 
-namespace LayerRegistry.Implementation {
-    public class LayerRegistryComponent : ILayerRegistry {
+namespace LayerRegistry.Implementation
+{
+    public class LayerRegistryComponent : ILayerRegistry
+    {
         private readonly ILayerRegistry _layerRegistryUseCase;
 
         public LayerRegistryComponent(INodeRegistry nodeRegistry, NodeRegistryConfig nodeRegistryConfig)
@@ -23,19 +26,23 @@ namespace LayerRegistry.Implementation {
 
         #region ILayerRegistry Members
 
-        public void RemoveLayerInstance(Type layerType) {
+        public void RemoveLayerInstance(Type layerType)
+        {
             _layerRegistryUseCase.RemoveLayerInstance(layerType);
         }
 
-        public void ResetLayerRegistry() {
+        public void ResetLayerRegistry()
+        {
             _layerRegistryUseCase.ResetLayerRegistry();
         }
 
-        public object GetLayerInstance(Type layerType) {
+        public object GetLayerInstance(Type layerType)
+        {
             return _layerRegistryUseCase.GetLayerInstance(layerType);
         }
 
-        public void RegisterLayer(ILayer layer) {
+        public void RegisterLayer(ILayer layer)
+        {
             _layerRegistryUseCase.RegisterLayer(layer);
         }
 

@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using CustomUtilities.Collections;
 using Hik.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Server {
+namespace Hik.Communication.Scs.Server
+{
     /// <summary>
     ///     Represents a SCS server that is used to accept and manage client connections.
     /// </summary>
-    public interface IScsServer {
+    public interface IScsServer
+    {
         /// <summary>
         ///     This event is raised when a new client connected to the server.
         /// </summary>

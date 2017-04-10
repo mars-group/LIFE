@@ -13,11 +13,13 @@ using Hik.Communication.Scs.Communication.Channels;
 using Hik.Communication.Scs.Communication.Channels.Tcp;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 
-namespace Hik.Communication.Scs.Client.Tcp {
+namespace Hik.Communication.Scs.Client.Tcp
+{
     /// <summary>
     ///     This class is used to communicate with server over TCP/IP protocol.
     /// </summary>
-    internal class ScsTcpClient : ScsClientBase {
+    internal class ScsTcpClient : ScsClientBase
+    {
         /// <summary>
         ///     The endpoint address of the server.
         /// </summary>
@@ -27,7 +29,8 @@ namespace Hik.Communication.Scs.Client.Tcp {
         ///     Creates a new ScsTcpClient object.
         /// </summary>
         /// <param name="serverEndPoint">The endpoint address to connect to the server</param>
-        public ScsTcpClient(ScsTcpEndPoint serverEndPoint) {
+        public ScsTcpClient(ScsTcpEndPoint serverEndPoint)
+        {
             _serverEndPoint = serverEndPoint;
         }
 

@@ -6,17 +6,30 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace CommonTypes.TransportTypes {
-    public class TSimModel : IEquatable<TSimModel> {
-        public string Path { get { return _path; } set { } }
+namespace CommonTypes.TransportTypes
+{
+    public class TSimModel : IEquatable<TSimModel>
+    {
+        public string Path
+        {
+            get { return _path; }
+            set { }
+        }
 
-        public string Name { get { return _name; } set { } }
+        public string Name
+        {
+            get { return _name; }
+            set { }
+        }
+
         private readonly string _path;
         private readonly string _name;
 
-        public TSimModel(string path) {
+        public TSimModel(string path)
+        {
             _path = path;
             string[] tmp = path.Split(System.IO.Path.DirectorySeparatorChar);
             _name = tmp[tmp.Length - 1];
@@ -24,28 +37,33 @@ namespace CommonTypes.TransportTypes {
 
         #region Object Contracts
 
-        public bool Equals(TSimModel other) {
+        public bool Equals(TSimModel other)
+        {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return string.Equals(_path, other._path);
         }
 
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
             return Equals((TSimModel) obj);
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return (_path != null ? _path.GetHashCode() : 0);
         }
 
-        public static bool operator ==(TSimModel left, TSimModel right) {
+        public static bool operator ==(TSimModel left, TSimModel right)
+        {
             return Equals(left, right);
         }
 
-        public static bool operator !=(TSimModel left, TSimModel right) {
+        public static bool operator !=(TSimModel left, TSimModel right)
+        {
             return !Equals(left, right);
         }
 

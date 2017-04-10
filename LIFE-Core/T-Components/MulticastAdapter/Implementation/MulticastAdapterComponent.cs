@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Net;
 using System.Threading;
@@ -16,19 +17,17 @@ using ConfigurationAdapter;
 
 namespace MulticastAdapter.Implementation
 {
-
-
     public class MulticastAdapterComponent : IMulticastAdapter
     {
-
         #region properties & fields
+
         private IMulticastSender _sender;
         private IMulticastReceiver _reciever;
         private Thread _listenThread;
+
         #endregion
 
         #region Constructors
-
 
         public MulticastAdapterComponent(GlobalConfig globalConfiguration, MulticastSenderConfig senderConfiguration)
         {
@@ -36,7 +35,6 @@ namespace MulticastAdapter.Implementation
             _sender = new UDPMulticastSender(globalConfiguration, senderConfiguration);
             _reciever = new UDPMulticastReceiver(globalConfiguration);
         }
-
 
         #endregion
 
@@ -60,20 +58,17 @@ namespace MulticastAdapter.Implementation
         {
             _sender.ReopenSocket();
             _reciever.ReopenSocket();
-
         }
 
-        private void ValidateMulticastGroup(string mcastIp) {
-
-
+        private void ValidateMulticastGroup(string mcastIp)
+        {
             if (IPAddress.Parse(mcastIp).IsIPv6Multicast || MulticastNetworkUtils.IsIPv4Multicast(mcastIp))
             {
-             return; 
+                return;
             }
             //TODO schauen wie ipv6 mcast ips ausschauen.
-            throw new InvalidConfigurationException("The configured IP " + mcastIp + " is not a valid in this context. Use a IPv4 or IPv6 multicast IP.");
+            throw new InvalidConfigurationException("The configured IP " + mcastIp +
+                                                    " is not a valid in this context. Use a IPv4 or IPv6 multicast IP.");
         }
-
-
     }
 }

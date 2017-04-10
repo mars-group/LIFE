@@ -9,16 +9,19 @@
 
 using Hik.Communication.Scs.Communication.Protocols;
 
-namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization {
+namespace Scs.Communication.Scs.Communication.Protocols.JsonSerialization
+{
     /// <summary>
     ///     This class is used to create Binary Serialization Protocol objects.
     /// </summary>
-    public class JsonSerializationProtocolFactory : IScsWireProtocolFactory {
+    public class JsonSerializationProtocolFactory : IScsWireProtocolFactory
+    {
         /// <summary>
         ///     Creates a new Wire Protocol object.
         /// </summary>
         /// <returns>Newly created wire protocol object</returns>
-        public IScsWireProtocol CreateWireProtocol() {
+        public IScsWireProtocol CreateWireProtocol()
+        {
             return new JsonSerializationProtocol();
         }
     }

@@ -9,9 +9,12 @@
 
 using System;
 
-namespace ConfigurationAdapter.Interface.Exceptions {
-
-  internal class CantParseKeyFromConfigExceptions : Exception {
-    public CantParseKeyFromConfigExceptions(string msg) : base(msg) {}
-  }
+namespace ConfigurationAdapter.Interface.Exceptions
+{
+    internal class CantParseKeyFromConfigExceptions : Exception
+    {
+        public CantParseKeyFromConfigExceptions(string msg) : base(msg)
+        {
+        }
+    }
 }

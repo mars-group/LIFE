@@ -6,16 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using ASC.Communication.Scs.Communication;
 using ASC.Communication.Scs.Communication.EndPoints;
 using ASC.Communication.Scs.Communication.Messengers;
 
-namespace ASC.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server
+{
     /// <summary>
     ///     Represents a client from a perspective of a server.
     /// </summary>
-    public interface IAscServerClient : IMessenger {
+    public interface IAscServerClient : IMessenger
+    {
         /// <summary>
         ///     This event is raised when client disconnected from server.
         /// </summary>

@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace Hik.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Base class for all services that is serviced by IScsServiceApplication.
     ///     A class must be derived from ScsService to serve as a SCS service.
     /// </summary>
-    public abstract class ScsService {
+    public abstract class ScsService
+    {
         /// <summary>
         ///     The current client for a thread that called service method.
         /// </summary>
@@ -27,9 +30,12 @@ namespace Hik.Communication.ScsServices.Service {
         ///     called in a service method if the method is called by SCS system,
         ///     else throws exception.
         /// </remarks>
-        protected internal IScsServiceClient CurrentClient {
-            get {
-                if (_currentClient == null) {
+        protected internal IScsServiceClient CurrentClient
+        {
+            get
+            {
+                if (_currentClient == null)
+                {
                     throw new Exception(
                         "Client channel can not be obtained. CurrentClient property must be called by the thread which runs the service method.");
                 }
@@ -44,7 +50,8 @@ namespace Hik.Communication.ScsServices.Service {
         ///     Initializes a new ScsService Class with a unique Guid
         /// </summary>
         /// <param name="serviceGuid">Optional parameter to set the Guid of this Service. Usually auto-generated.</param>
-        protected ScsService(byte[] serviceGuid = null) {
+        protected ScsService(byte[] serviceGuid = null)
+        {
             ServiceID = serviceGuid != null ? new Guid(serviceGuid) : Guid.NewGuid();
         }
 

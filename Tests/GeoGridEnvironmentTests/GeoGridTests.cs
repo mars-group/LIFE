@@ -65,7 +65,6 @@ namespace GeoGridEnvironmentTests
 
             var res = _geoGrid.Explore(new Tree(-24.3 + _random.NextDouble(), 31.1 + _random.NextDouble()).Gps);
             Assert.IsTrue(res.Count() == treeCount);
-
         }
 
 
@@ -181,7 +180,8 @@ namespace GeoGridEnvironmentTests
         /// </summary>
         /// <param name="other">The other X/Y coordinate pair.</param>
         /// <returns>'True', if both geo coordinates sufficiently close enough.</returns>
-        public bool Equals(IGeoCoordinate other) {
+        public bool Equals(IGeoCoordinate other)
+        {
             const double threshold = 0.00000000000001;
             return (Math.Abs(Latitude - other.Latitude) < threshold) &&
                    (Math.Abs(Longitude - other.Longitude) < threshold);

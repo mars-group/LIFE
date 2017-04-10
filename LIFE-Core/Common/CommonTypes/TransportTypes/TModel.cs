@@ -6,6 +6,10 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-namespace CommonTypes.TransportTypes {
-    public class TModel {}
+
+namespace CommonTypes.TransportTypes
+{
+    public class TModel
+    {
+    }
 }

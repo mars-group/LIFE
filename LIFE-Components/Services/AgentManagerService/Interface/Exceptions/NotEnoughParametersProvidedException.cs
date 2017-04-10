@@ -6,14 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
-namespace LIFE.Components.Services.AgentManagerService.Interface.Exceptions {
+namespace LIFE.Components.Services.AgentManagerService.Interface.Exceptions
+{
     [Serializable]
-    public class NotEnoughParametersProvidedException : Exception {
-        public NotEnoughParametersProvidedException(string msg) : base(msg) {
-            
+    public class NotEnoughParametersProvidedException : Exception
+    {
+        public NotEnoughParametersProvidedException(string msg) : base(msg)
+        {
         }
-
     }
 }

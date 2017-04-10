@@ -1,5 +1,4 @@
-﻿
-namespace LIFE.API.Environment.GridCommon
+﻿namespace LIFE.API.Environment.GridCommon
 {
     public class GridCoordinate : IGridCoordinate
     {

@@ -6,14 +6,17 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using ASC.Communication.Scs.Client;
 
-namespace ASC.Communication.ScsServices.Client {
+namespace ASC.Communication.ScsServices.Client
+{
     /// <summary>
     ///     Represents a service client that consumes a SCS service.
     /// </summary>
     /// <typeparam name="T">Type of service interface</typeparam>
-    public interface IAscServiceClient<out T> : IConnectableClient where T : class {
+    public interface IAscServiceClient<out T> : IConnectableClient where T : class
+    {
         /// <summary>
         ///     Reference to the service proxy to invoke remote service methods.
         /// </summary>

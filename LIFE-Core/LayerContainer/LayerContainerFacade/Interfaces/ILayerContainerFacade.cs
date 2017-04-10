@@ -6,12 +6,16 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using LCConnector;
 
-namespace LayerContainerFacade.Interfaces {
+namespace LayerContainerFacade.Interfaces
+{
     /// <summary>
     /// The marker interface for the LayerContainerFacade. 
     /// For now it just implements ILayerContainer
     /// </summary>
-    public interface ILayerContainerFacade : ILayerContainer {}
+    public interface ILayerContainerFacade : ILayerContainer
+    {
+    }
 }

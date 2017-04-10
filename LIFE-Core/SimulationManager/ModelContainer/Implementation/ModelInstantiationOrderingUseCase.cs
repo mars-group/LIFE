@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,31 +17,29 @@ using ModelContainer.Implementation.Entities;
 using SMConnector.TransportTypes;
 
 
-namespace ModelContainer.Implementation {
+namespace ModelContainer.Implementation
+{
     /// <summary>
     ///     This class reads one specific model and converts it into a representation that allows<br />
     ///     for instantiation order analysis.
     /// </summary>
     internal class ModelInstantiationOrderingUseCase
     {
-
-
         public ModelInstantiationOrderingUseCase()
         {
         }
 
 
-        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description) {
-
+        public IList<TLayerDescription> GetInstantiationOrder(TModelDescription description)
+        {
             ILayerLoader addinLoader = new LayerLoader.Implementation.LayerLoader();
 
             var nodes = addinLoader.LoadAllLayersForModel(description.ModelPath);
 
             var modelStructure = new ModelStructure();
 
-            foreach (var node in nodes) {
-
-
+            foreach (var node in nodes)
+            {
                 var type = node.LayerType;
                 var constructors = type.GetConstructors();
 
@@ -49,20 +48,21 @@ namespace ModelContainer.Implementation {
                 // make sure all parameters in all constructors are Interfaces, throw exception otherwise
                 if (
                     constructors.Any(
-                        info => info.GetParameters().Any(parameterInfo => !parameterInfo.ParameterType.GetTypeInfo().IsInterface)))
+                        info => info.GetParameters()
+                            .Any(parameterInfo => !parameterInfo.ParameterType.GetTypeInfo().IsInterface)))
                 {
                     throw new AllLayerConstructorParamtersNeedToBeInterfacesException(
                         "Make sure all your parameters in your Layer's constructor are interface types." +
                         "This is required for MARS LIFE's distribution to work properly."
-                        );
+                    );
                 }
                 var layerDescription = new TLayerDescription
-                    (type.Name,
-                        type.GetTypeInfo().Assembly.GetName().Version.Major,
-                        type.GetTypeInfo().Assembly.GetName().Version.Minor,
-                        type.GetTypeInfo().Assembly.Location,
-                        type.FullName,
-                        type.AssemblyQualifiedName);
+                (type.Name,
+                    type.GetTypeInfo().Assembly.GetName().Version.Major,
+                    type.GetTypeInfo().Assembly.GetName().Version.Minor,
+                    type.GetTypeInfo().Assembly.Location,
+                    type.FullName,
+                    type.AssemblyQualifiedName);
 
                 if (constructors.Any(c => c.GetParameters().Length == 0))
                 {
@@ -86,7 +86,6 @@ namespace ModelContainer.Implementation {
     {
         public AllLayerConstructorParamtersNeedToBeInterfacesException(string s) : base(s)
         {
-            
         }
     }
 }

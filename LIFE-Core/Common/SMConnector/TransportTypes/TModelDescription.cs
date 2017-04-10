@@ -6,55 +6,61 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 using System.IO;
 
-namespace SMConnector.TransportTypes {
+namespace SMConnector.TransportTypes
+{
     [Serializable]
-	public class TModelDescription : IEquatable<TModelDescription> {
-
-        public string Name {  get; set; }
+    public class TModelDescription : IEquatable<TModelDescription>
+    {
+        public string Name { get; set; }
 
         public string ModelPath { get; private set; }
 
-        public TModelDescription(string modelPath) {
+        public TModelDescription(string modelPath)
+        {
             Name = modelPath.Split(Path.DirectorySeparatorChar)[0];
             ModelPath = modelPath;
         }
 
-        public TModelDescription() {}
+        public TModelDescription()
+        {
+        }
 
         #region Object contracts
 
-		public override bool Equals (object obj)
-    	{
-    		if (obj == null)
-    			return false;
-    		if (ReferenceEquals (this, obj))
-    			return true;
-    		if (obj.GetType () != typeof(TModelDescription))
-    			return false;
-    		TModelDescription other = (TModelDescription)obj;
-    		return Name == other.Name;
-    	}
-    	
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (obj.GetType() != typeof(TModelDescription))
+                return false;
+            TModelDescription other = (TModelDescription) obj;
+            return Name == other.Name;
+        }
 
-    	public override int GetHashCode ()
-    	{
-    		unchecked {
-    			return (Name != null ? Name.GetHashCode () : 0);
-    		}
-    	}
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Name != null ? Name.GetHashCode() : 0);
+            }
+        }
 
         #endregion
 
-		#region IEquatable implementation
+        #region IEquatable implementation
 
-		public bool Equals (TModelDescription other)
-		{
-			return this.Name == other.Name;
-		}
+        public bool Equals(TModelDescription other)
+        {
+            return this.Name == other.Name;
+        }
 
-		#endregion
+        #endregion
     }
 }

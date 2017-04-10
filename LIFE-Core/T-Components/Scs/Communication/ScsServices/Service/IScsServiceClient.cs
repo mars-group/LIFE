@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication;
 using Hik.Communication.Scs.Communication.EndPoints;
 
-namespace Hik.Communication.ScsServices.Service {
+namespace Hik.Communication.ScsServices.Service
+{
     /// <summary>
     ///     Represents a client that uses a SDS service.
     /// </summary>
-    public interface IScsServiceClient {
+    public interface IScsServiceClient
+    {
         /// <summary>
         ///     This event is raised when client is disconnected from service.
         /// </summary>

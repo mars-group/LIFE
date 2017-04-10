@@ -14,7 +14,8 @@ using LIFE.API.Config;
 using Newtonsoft.Json.Linq;
 using SMConnector.TransportTypes;
 
-namespace ModelContainer.Interfaces {
+namespace ModelContainer.Interfaces
+{
     /// <summary>
     ///     The event that is raised, if the model directory has been altered and there might be new models available or old
     ///     ones deleted.
@@ -31,8 +32,8 @@ namespace ModelContainer.Interfaces {
     ///     * deleting models<br />
     ///     * It also actively scans the model directory for changes and informs possible interested listeners.
     /// </remarks>
-    public interface IModelContainer {
-
+    public interface IModelContainer
+    {
         /// <summary>
         ///     Returns a TModelDescription for the given modelPath
         /// </summary>

@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 23.01.2016
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using ASC.Communication.ScsServices.Service;
@@ -14,7 +15,9 @@ using LIFE.Components.Services.AgentShadowingService.Interface;
 
 namespace LIFE.Components.Services.AgentShadowingService.Implementation
 {
-    public class AgentShadowingServiceComponent<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface, TServiceClass>
+    public class
+        AgentShadowingServiceComponent<TServiceInterface, TServiceClass> :
+            IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface
         where TServiceInterface : class
     {
@@ -26,10 +29,10 @@ namespace LIFE.Components.Services.AgentShadowingService.Implementation
         {
             _agentShadowingUseCase = new AgentShadowingServiceUseCase<TServiceInterface, TServiceClass>(port);
             _agentShadowingUseCase.AgentUpdates += OnAgentUpdates;
-
         }
 
-        private void OnAgentUpdates(object sender, LIFEAgentEventArgs<TServiceInterface> e) {
+        private void OnAgentUpdates(object sender, LIFEAgentEventArgs<TServiceInterface> e)
+        {
             var handler = AgentUpdates;
             if (handler != null) handler(this, e);
         }
@@ -40,11 +43,13 @@ namespace LIFE.Components.Services.AgentShadowingService.Implementation
             return _agentShadowingUseCase.ResolveAgent(agentId);
         }
 
-        public List<TServiceInterface> ResolveAgents(Guid[] agentIds) {
+        public List<TServiceInterface> ResolveAgents(Guid[] agentIds)
+        {
             return _agentShadowingUseCase.ResolveAgents(agentIds);
         }
 
-        public void RemoveShadowAgent(Guid agentId) {
+        public void RemoveShadowAgent(Guid agentId)
+        {
             _agentShadowingUseCase.RemoveShadowAgent(agentId);
         }
 
@@ -53,11 +58,13 @@ namespace LIFE.Components.Services.AgentShadowingService.Implementation
             _agentShadowingUseCase.RegisterRealAgent(agentToRegister);
         }
 
-        public void RegisterRealAgents(TServiceClass[] agentsToRegister) {
+        public void RegisterRealAgents(TServiceClass[] agentsToRegister)
+        {
             _agentShadowingUseCase.RegisterRealAgents(agentsToRegister);
         }
 
-        public void RemoveRealAgent(TServiceClass agentToRemove) {
+        public void RemoveRealAgent(TServiceClass agentToRemove)
+        {
             _agentShadowingUseCase.RemoveRealAgent(agentToRemove);
         }
 

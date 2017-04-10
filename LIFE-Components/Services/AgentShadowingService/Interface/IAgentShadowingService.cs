@@ -6,37 +6,38 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 23.01.2016
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using ASC.Communication.ScsServices.Service;
 
 namespace LIFE.Components.Services.AgentShadowingService.Interface
 {
-    public interface IAgentShadowingService<TServiceInterface, TServiceClass> 
+    public interface IAgentShadowingService<TServiceInterface, TServiceClass>
         where TServiceClass : AscService, TServiceInterface
-            where TServiceInterface : class {
-
+        where TServiceInterface : class
+    {
         event EventHandler<LIFEAgentEventArgs<TServiceInterface>> AgentUpdates;
 
         /// <summary> 
         /// Resolves an agent by its agentId.
-		/// Will create a ShadowAgent for a real agent with id <param name="agentId"/> and Type T,
-		/// if the agent instance is not found to be running locally. 
+        /// Will create a ShadowAgent for a real agent with id <param name="agentId"/> and Type T,
+        /// if the agent instance is not found to be running locally. 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>The reference to the local agent if found, the ShadowAgent proxy object of type T otherwise</returns>
         TServiceInterface ResolveAgent(Guid agentId);
 
         /// <summary>
-		/// Resolves agents by their agentId.
-		/// Will create one ShadowAgent for each real agent with id <param name="agentId"/> and Type T,
-		/// if the agent instance is not found to be running locally. 
+        /// Resolves agents by their agentId.
+        /// Will create one ShadowAgent for each real agent with id <param name="agentId"/> and Type T,
+        /// if the agent instance is not found to be running locally. 
         /// Uses parallelism, so use this method, whenever you have more than a few ShadowAgents to create.
         /// e.g.: at first Initialization!
         /// </summary>
         /// <param name="agentIds"></param>
         /// <returns>List of TSerivceInterface</returns>
-        List<TServiceInterface> ResolveAgents(Guid[] agentIds); 
+        List<TServiceInterface> ResolveAgents(Guid[] agentIds);
 
         /// <summary>
         /// Removes the Shadow Agent with id agentId from the Service.
@@ -67,5 +68,5 @@ namespace LIFE.Components.Services.AgentShadowingService.Interface
         ///  Stops and disposes this service.
         /// </summary>
         void Dispose();
-        }
+    }
 }

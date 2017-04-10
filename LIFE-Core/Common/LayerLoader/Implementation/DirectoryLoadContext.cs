@@ -10,8 +10,6 @@ namespace LayerLoader.Implementation
 
         public DirectoryLoadContext(DirectoryInfo directory)
         {
-
-
             this.directory = directory;
         }
 

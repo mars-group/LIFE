@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using ASC.Communication.Scs.Communication.Channels;
 using ASC.Communication.Scs.Communication.Channels.Udp;
@@ -13,12 +14,13 @@ using ASC.Communication.Scs.Communication.Messengers;
 using ASC.Communication.Scs.Communication.Protocols;
 using CustomUtilities.Collections;
 
-namespace ASC.Communication.Scs.Server {
+namespace ASC.Communication.Scs.Server
+{
     /// <summary>
     ///     Represents a SCS server that is used to accept and manage client connections.
     /// </summary>
-    public interface IAscServer {
-
+    public interface IAscServer
+    {
         /// <summary>
         ///     Gets/sets wire protocol factory to create IWireProtocol objects.
         /// </summary>

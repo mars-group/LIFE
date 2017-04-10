@@ -10,20 +10,23 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NodeRegistry.Implementation.Messages {
+namespace NodeRegistry.Implementation.Messages
+{
+    public abstract class AbstractNodeRegistryMessage
+    {
+        [JsonConverter(typeof(StringEnumConverter))] public NodeRegistryMessageType MessageType;
 
-  public abstract class AbstractNodeRegistryMessage {
+        public AbstractNodeRegistryMessage()
+        {
+        }
 
-    [JsonConverter(typeof(StringEnumConverter))] public NodeRegistryMessageType MessageType;
+        protected AbstractNodeRegistryMessage(NodeRegistryMessageType messageType, string clusterName)
+        {
+            MessageType = messageType;
+            ClusterName = clusterName;
+        }
 
-    public AbstractNodeRegistryMessage() {}
 
-    protected AbstractNodeRegistryMessage(NodeRegistryMessageType messageType, string clusterName) {
-      MessageType = messageType;
-      ClusterName = clusterName;
+        public string ClusterName { get; set; }
     }
-
-
-    public string ClusterName { get; set; }
-  }
 }

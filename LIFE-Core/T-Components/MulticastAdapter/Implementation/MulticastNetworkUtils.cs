@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,16 +59,21 @@ namespace MulticastAdapter.Implementation
             return null;
         }
 
-        public static List<NetworkInterface> GetAllMulticastInterfaces() {
-                var result = NetworkInterface.GetAllNetworkInterfaces().Where
-                    (
-                        networkInterface => networkInterface.SupportsMulticast &&
-						(networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)  && 
-						OperationalStatus.Up == networkInterface.OperationalStatus && 
-						networkInterface.GetIPProperties().UnicastAddresses.Any()
-                    ).ToList();
+        public static List<NetworkInterface> GetAllMulticastInterfaces()
+        {
+            var result = NetworkInterface.GetAllNetworkInterfaces()
+                .Where
+                (
+                    networkInterface => networkInterface.SupportsMulticast &&
+                                        (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
+                                         networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211) &&
+                                        OperationalStatus.Up == networkInterface.OperationalStatus &&
+                                        networkInterface.GetIPProperties().UnicastAddresses.Any()
+                )
+                .ToList();
 
-            if (result.Count <= 0) {
+            if (result.Count <= 0)
+            {
                 result = NetworkInterface.GetAllNetworkInterfaces().ToList();
             }
 
@@ -88,18 +94,16 @@ namespace MulticastAdapter.Implementation
                 default:
                     return AddressFamily.InterNetwork;
             }
-
         }
 
         public static bool IsIPv4Multicast(String ip)
         {
-                var octet1 = Int32.Parse(ip.Split(new Char[] { '.' }, 4)[0]);
-                if ((octet1 >= 224) && (octet1 <= 239))
-                    return true;
-            
-            
+            var octet1 = Int32.Parse(ip.Split(new Char[] {'.'}, 4)[0]);
+            if ((octet1 >= 224) && (octet1 <= 239))
+                return true;
+
+
             return false;
         }
-
     }
 }

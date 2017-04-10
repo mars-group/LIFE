@@ -6,16 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.ScsServices.Communication.Messages {
+namespace Hik.Communication.ScsServices.Communication.Messages
+{
     /// <summary>
     ///     This message is sent to invoke a method of a remote application.
     /// </summary>
     // TODO Extend to support additional parameter for target agent
     [Serializable]
-    public class ScsRemoteInvokeMessage : ScsMessage {
+    public class ScsRemoteInvokeMessage : ScsMessage
+    {
         /// <summary>
         ///     Name of the remove service class.
         /// </summary>
@@ -40,7 +43,8 @@ namespace Hik.Communication.ScsServices.Communication.Messages {
         ///     Represents this object as string.
         /// </summary>
         /// <returns>String representation of this object</returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.Format("ScsRemoteInvokeMessage: {0}.{1}(...)", ServiceClassName, MethodName);
         }
     }

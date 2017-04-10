@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -16,7 +17,6 @@ using Hik.Communication.ScsServices.Service;
 
 namespace Hik.Communication.ScsServices.Communication
 {
-
 #if HAS_REAL_PROXY
     using System.Runtime.Remoting.Messaging;
     using System.Runtime.Remoting.Proxies;
@@ -129,6 +129,7 @@ namespace Hik.Communication.ScsServices.Communication
 
 
 #else
+
     /// <summary>
     ///     This class is used to generate a dynamic proxy to invoke remote methods.
     ///     It translates method invocations to messaging.
@@ -207,7 +208,10 @@ namespace Hik.Communication.ScsServices.Communication
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             if (targetMethod == null) return null;
-            if(!_configured) { throw new Exception("Proxy not configured"); }
+            if (!_configured)
+            {
+                throw new Exception("Proxy not configured");
+            }
 
             // Answer request from cache if available
             if (_cache.ContainsKey(targetMethod.Name))

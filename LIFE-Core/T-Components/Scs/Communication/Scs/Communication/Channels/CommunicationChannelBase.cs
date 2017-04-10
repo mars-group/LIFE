@@ -6,16 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication.EndPoints;
 using Hik.Communication.Scs.Communication.Messages;
 using Hik.Communication.Scs.Communication.Protocols;
 
-namespace Hik.Communication.Scs.Communication.Channels {
+namespace Hik.Communication.Scs.Communication.Channels
+{
     /// <summary>
     ///     This class provides base functionality for all communication channel classes.
     /// </summary>
-    internal abstract class CommunicationChannelBase : ICommunicationChannel {
+    internal abstract class CommunicationChannelBase : ICommunicationChannel
+    {
         #region Public events
 
         /// <summary>
@@ -75,7 +78,8 @@ namespace Hik.Communication.Scs.Communication.Channels {
         /// <summary>
         ///     Constructor.
         /// </summary>
-        protected CommunicationChannelBase() {
+        protected CommunicationChannelBase()
+        {
             CommunicationState = CommunicationStates.Disconnected;
             LastReceivedMessageTime = DateTime.MinValue;
             LastSentMessageTime = DateTime.MinValue;
@@ -97,7 +101,8 @@ namespace Hik.Communication.Scs.Communication.Channels {
         /// <summary>
         ///     Starts the communication with remote application.
         /// </summary>
-        public void Start() {
+        public void Start()
+        {
             StartInternal();
             CommunicationState = CommunicationStates.Connected;
         }
@@ -107,7 +112,8 @@ namespace Hik.Communication.Scs.Communication.Channels {
         /// </summary>
         /// <param name="message">Message to be sent</param>
         /// <exception cref="ArgumentNullException">Throws ArgumentNullException if message is null</exception>
-        public void SendMessage(IScsMessage message) {
+        public void SendMessage(IScsMessage message)
+        {
             if (message == null) throw new ArgumentNullException("message");
 
             SendMessageInternal(message);
@@ -136,7 +142,8 @@ namespace Hik.Communication.Scs.Communication.Channels {
         /// <summary>
         ///     Raises Disconnected event.
         /// </summary>
-        protected virtual void OnDisconnected() {
+        protected virtual void OnDisconnected()
+        {
             var handler = Disconnected;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -145,7 +152,8 @@ namespace Hik.Communication.Scs.Communication.Channels {
         ///     Raises MessageReceived event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageReceived(IScsMessage message) {
+        protected virtual void OnMessageReceived(IScsMessage message)
+        {
             var handler = MessageReceived;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
@@ -154,7 +162,8 @@ namespace Hik.Communication.Scs.Communication.Channels {
         ///     Raises MessageSent event.
         /// </summary>
         /// <param name="message">Received message</param>
-        protected virtual void OnMessageSent(IScsMessage message) {
+        protected virtual void OnMessageSent(IScsMessage message)
+        {
             var handler = MessageSent;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }

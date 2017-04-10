@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Threading.Tasks;
 using ConfigurationAdapter;
@@ -17,7 +18,8 @@ using MulticastAdapter.Interface.Config;
 
 namespace Hik.Communication.Scs.Communication.Channels.Udp
 {
-    class UdpCommunicationChannel : CommunicationChannelBase {
+    class UdpCommunicationChannel : CommunicationChannelBase
+    {
         private ScsUdpEndPoint _endPoint;
         private readonly MulticastAdapterComponent _multicastAdapter;
         private bool _running;
@@ -27,12 +29,14 @@ namespace Hik.Communication.Scs.Communication.Channels.Udp
         /// </summary>
         private readonly object _syncLock;
 
-        public override ScsEndPoint RemoteEndPoint {
+        public override ScsEndPoint RemoteEndPoint
+        {
             get { throw new UdpCommunicationHasNoRemoteEndpointException(); }
         }
 
 
-        public UdpCommunicationChannel(ScsUdpEndPoint endPoint) {
+        public UdpCommunicationChannel(ScsUdpEndPoint endPoint)
+        {
             _endPoint = endPoint;
             _running = false;
             _multicastAdapter = new MulticastAdapterComponent(
@@ -42,21 +46,25 @@ namespace Hik.Communication.Scs.Communication.Channels.Udp
             _syncLock = new object();
         }
 
-        public override void Disconnect() {
+        public override void Disconnect()
+        {
             if (CommunicationState != CommunicationStates.Connected) return;
             _multicastAdapter.CloseSocket();
             CommunicationState = CommunicationStates.Disconnected;
             OnDisconnected();
         }
 
-        protected override void StartInternal() {
+        protected override void StartInternal()
+        {
             _running = true;
             _multicastAdapter.ReopenSocket();
             Task.Run(() => ListenAndReceive());
         }
 
-        private void ListenAndReceive() {
-            while (_running) {
+        private void ListenAndReceive()
+        {
+            while (_running)
+            {
                 var receivedBytes = _multicastAdapter.ReadMulticastGroupMessage();
 
                 //Read messages according to current wire protocol
@@ -70,7 +78,8 @@ namespace Hik.Communication.Scs.Communication.Channels.Udp
             }
         }
 
-        protected override void SendMessageInternal(IScsMessage message) {
+        protected override void SendMessageInternal(IScsMessage message)
+        {
             //Send message
 
             lock (_syncLock)
@@ -87,5 +96,7 @@ namespace Hik.Communication.Scs.Communication.Channels.Udp
         }
     }
 
-    internal class UdpCommunicationHasNoRemoteEndpointException : Exception {}
+    internal class UdpCommunicationHasNoRemoteEndpointException : Exception
+    {
+    }
 }

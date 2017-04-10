@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian H�ning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,18 +14,25 @@ using System.Linq;
 using System.Reflection;
 using LCConnector.TransportTypes;
 
-namespace ModelContainer.Implementation.Entities {
-    internal class ModelNode : IEquatable<ModelNode> {
+namespace ModelContainer.Implementation.Entities
+{
+    internal class ModelNode : IEquatable<ModelNode>
+    {
         public TLayerDescription LayerDescription { get; protected set; }
 
         public Type Layer { get; protected set; }
 
         protected IReadOnlyCollection<Type> Dependencies { get; set; }
 
-        public IReadOnlyCollection<ModelNode> Edges { get { return new ReadOnlyCollection<ModelNode>(_edges); } }
+        public IReadOnlyCollection<ModelNode> Edges
+        {
+            get { return new ReadOnlyCollection<ModelNode>(_edges); }
+        }
+
         private IList<ModelNode> _edges;
 
-        public ModelNode(TLayerDescription layerDescription, Type layer, Type[] dependencies) {
+        public ModelNode(TLayerDescription layerDescription, Type layer, Type[] dependencies)
+        {
             LayerDescription = layerDescription;
             Layer = layer;
             Dependencies = dependencies;
@@ -34,7 +42,8 @@ namespace ModelContainer.Implementation.Entities {
 
         #region IEquatable<ModelNode> Members
 
-        public bool Equals(ModelNode other) {
+        public bool Equals(ModelNode other)
+        {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Equals(this.LayerDescription, other.LayerDescription) && Equals(this.Layer, other.Layer)
@@ -48,33 +57,40 @@ namespace ModelContainer.Implementation.Entities {
         ///     and adds an edge if true
         /// </summary>
         /// <param name="newNode"></param>
-        public void UpdateEdges(ModelNode newNode) {
-            if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo()))) _edges.Add(newNode);
+        public void UpdateEdges(ModelNode newNode)
+        {
+            if (Dependencies.Any(d => d.GetTypeInfo().IsAssignableFrom(newNode.Layer.GetTypeInfo())))
+                _edges.Add(newNode);
             // somewhat dirty workaround because IsAssignableFrom didnt work in
             //if (Dependencies.Any(dependency => newNode.Layer.GetInterfaces().Any(i => i.FullName == dependency.FullName))) _edges.Add(newNode);
         }
 
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
             return Equals((ModelNode) obj);
         }
 
-        public override int GetHashCode() {
-            unchecked {
+        public override int GetHashCode()
+        {
+            unchecked
+            {
                 int hashCode = (this.LayerDescription != null ? this.LayerDescription.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (this.Layer != null ? this.Layer.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (this._edges != null ? this._edges.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (this.Layer != null ? this.Layer.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (this._edges != null ? this._edges.GetHashCode() : 0);
                 return hashCode;
             }
         }
 
-        public static bool operator ==(ModelNode left, ModelNode right) {
+        public static bool operator ==(ModelNode left, ModelNode right)
+        {
             return Equals(left, right);
         }
 
-        public static bool operator !=(ModelNode left, ModelNode right) {
+        public static bool operator !=(ModelNode left, ModelNode right)
+        {
             return !Equals(left, right);
         }
     }

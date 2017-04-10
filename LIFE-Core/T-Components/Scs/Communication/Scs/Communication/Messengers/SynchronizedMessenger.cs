@@ -6,12 +6,14 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using Hik.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.Scs.Communication.Messengers {
+namespace Hik.Communication.Scs.Communication.Messengers
+{
     /// <summary>
     ///     This class is a wrapper for IMessenger and is used
     ///     to synchronize message receiving operation.
@@ -20,7 +22,8 @@ namespace Hik.Communication.Scs.Communication.Messengers {
     ///     messages by synchronized method calls instead of asynchronous
     ///     MessageReceived event.
     /// </summary>
-    public class SynchronizedMessenger<T> : RequestReplyMessenger<T> where T : IMessenger {
+    public class SynchronizedMessenger<T> : RequestReplyMessenger<T> where T : IMessenger
+    {
         #region Public properties
 
         /// <summary>
@@ -60,7 +63,9 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         /// </summary>
         /// <param name="messenger">A IMessenger object to be used to send/receive messages</param>
         public SynchronizedMessenger(T messenger)
-            : this(messenger, int.MaxValue) {}
+            : this(messenger, int.MaxValue)
+        {
+        }
 
         /// <summary>
         ///     Creates a new SynchronizedMessenger object.
@@ -68,7 +73,8 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         /// <param name="messenger">A IMessenger object to be used to send/receive messages</param>
         /// <param name="incomingMessageQueueCapacity">capacity of the incoming message queue</param>
         public SynchronizedMessenger(T messenger, int incomingMessageQueueCapacity)
-            : base(messenger) {
+            : base(messenger)
+        {
             _receiveWaiter = new ManualResetEventSlim();
             _receivingMessageQueue = new Queue<IScsMessage>();
             IncomingMessageQueueCapacity = incomingMessageQueueCapacity;
@@ -81,8 +87,10 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     Starts the messenger.
         /// </summary>
-        public override void Start() {
-            lock (_receivingMessageQueue) {
+        public override void Start()
+        {
+            lock (_receivingMessageQueue)
+            {
                 _running = true;
             }
 
@@ -92,10 +100,12 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         /// <summary>
         ///     Stops the messenger.
         /// </summary>
-        public override void Stop() {
+        public override void Stop()
+        {
             base.Stop();
 
-            lock (_receivingMessageQueue) {
+            lock (_receivingMessageQueue)
+            {
                 _running = false;
                 _receiveWaiter.Set();
             }
@@ -106,7 +116,8 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         ///     It waits until a message is received.
         /// </summary>
         /// <returns>Received message</returns>
-        public IScsMessage ReceiveMessage() {
+        public IScsMessage ReceiveMessage()
+        {
             return ReceiveMessage(System.Threading.Timeout.Infinite);
         }
 
@@ -121,9 +132,12 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         /// <returns>Received message</returns>
         /// <exception cref="TimeoutException">Throws TimeoutException if timeout occurs</exception>
         /// <exception cref="Exception">Throws Exception if SynchronizedMessenger stops before a message is received</exception>
-        public IScsMessage ReceiveMessage(int timeout) {
-            while (_running) {
-                lock (_receivingMessageQueue) {
+        public IScsMessage ReceiveMessage(int timeout)
+        {
+            while (_running)
+            {
+                lock (_receivingMessageQueue)
+                {
                     //Check if SynchronizedMessenger is running
                     if (!_running) throw new Exception("SynchronizedMessenger is stopped. Can not receive message.");
 
@@ -148,7 +162,8 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         ///     It waits until a message is received.
         /// </summary>
         /// <returns>Received message</returns>
-        public TMessage ReceiveMessage<TMessage>() where TMessage : IScsMessage {
+        public TMessage ReceiveMessage<TMessage>() where TMessage : IScsMessage
+        {
             return ReceiveMessage<TMessage>(System.Threading.Timeout.Infinite);
         }
 
@@ -161,11 +176,13 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         ///     Use -1 to wait indefinitely.
         /// </param>
         /// <returns>Received message</returns>
-        public TMessage ReceiveMessage<TMessage>(int timeout) where TMessage : IScsMessage {
+        public TMessage ReceiveMessage<TMessage>(int timeout) where TMessage : IScsMessage
+        {
             var receivedMessage = ReceiveMessage(timeout);
-            if (!(receivedMessage is TMessage)) {
+            if (!(receivedMessage is TMessage))
+            {
                 throw new Exception("Unexpected message received." +
-                                    " Expected type: " + typeof (TMessage).Name +
+                                    " Expected type: " + typeof(TMessage).Name +
                                     ". Received message type: " + receivedMessage.GetType().Name);
             }
 
@@ -180,8 +197,10 @@ namespace Hik.Communication.Scs.Communication.Messengers {
         ///     Overrides
         /// </summary>
         /// <param name="message"></param>
-        protected override void OnMessageReceived(IScsMessage message) {
-            lock (_receivingMessageQueue) {
+        protected override void OnMessageReceived(IScsMessage message)
+        {
+            lock (_receivingMessageQueue)
+            {
                 if (_receivingMessageQueue.Count < IncomingMessageQueueCapacity)
                     _receivingMessageQueue.Enqueue(message);
 

@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 
 
@@ -15,7 +16,6 @@ namespace RuntimeEnvironment.Interfaces.Exceptions
     {
         public LayerFailedToInitializeException(string msg) : base(msg)
         {
-            
         }
     }
 }

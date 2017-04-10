@@ -10,26 +10,30 @@
 using LNSConnector.Interface;
 using LNSConnector.TransportTypes;
 
-namespace LayerNameService.Implementation {
+namespace LayerNameService.Implementation
+{
+    public class LayerNameServiceComponent : ILayerNameService
+    {
+        private readonly ILayerNameService _layerNameServiceUseCase;
 
-  public class LayerNameServiceComponent : ILayerNameService {
+        public LayerNameServiceComponent()
+        {
+            _layerNameServiceUseCase = new LayerNameServiceUseCase();
+        }
 
-    private readonly ILayerNameService _layerNameServiceUseCase;
+        public TLayerNameServiceEntry ResolveLayer(string layerType)
+        {
+            return _layerNameServiceUseCase.ResolveLayer(layerType);
+        }
 
-    public LayerNameServiceComponent() {
-      _layerNameServiceUseCase = new LayerNameServiceUseCase();
+        public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            _layerNameServiceUseCase.RegisterLayer(layerType, layerNameServiceEntry);
+        }
+
+        public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry)
+        {
+            _layerNameServiceUseCase.RemoveLayer(layerType, layerNameServiceEntry);
+        }
     }
-
-    public TLayerNameServiceEntry ResolveLayer(string layerType) {
-      return _layerNameServiceUseCase.ResolveLayer(layerType);
-    }
-
-    public void RegisterLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
-      _layerNameServiceUseCase.RegisterLayer(layerType, layerNameServiceEntry);
-    }
-
-    public void RemoveLayer(string layerType, TLayerNameServiceEntry layerNameServiceEntry) {
-      _layerNameServiceUseCase.RemoveLayer(layerType, layerNameServiceEntry);
-    }
-  }
 }

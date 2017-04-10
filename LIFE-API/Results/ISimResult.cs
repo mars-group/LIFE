@@ -1,15 +1,15 @@
-﻿namespace LIFE.API.Results {
-
-  /// <summary>
-  ///   All simulation entities that produce simulation results intended
-  ///   to be stored in the database should implement this interface. 
-  /// </summary>
-  public interface ISimResult {
-    
+﻿namespace LIFE.API.Results
+{
     /// <summary>
-    ///   Returns an appropriately formatted JSON string.
+    ///   All simulation entities that produce simulation results intended
+    ///   to be stored in the database should implement this interface. 
     /// </summary>
-    /// <returns>Agent properties in JSON notation.</returns>
-    AgentSimResult GetResultData();
-  }
+    public interface ISimResult
+    {
+        /// <summary>
+        ///   Returns an appropriately formatted JSON string.
+        /// </summary>
+        /// <returns>Agent properties in JSON notation.</returns>
+        AgentSimResult GetResultData();
+    }
 }

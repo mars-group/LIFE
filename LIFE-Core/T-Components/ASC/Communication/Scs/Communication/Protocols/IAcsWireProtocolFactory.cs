@@ -6,11 +6,14 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
-namespace ASC.Communication.Scs.Communication.Protocols {
+
+namespace ASC.Communication.Scs.Communication.Protocols
+{
     /// <summary>
     ///     Defines a Wire Protocol Factory class that is used to create Wire Protocol objects.
     /// </summary>
-    public interface IAcsWireProtocolFactory {
+    public interface IAcsWireProtocolFactory
+    {
         /// <summary>
         ///     Creates a new Wire Protocol object.
         /// </summary>

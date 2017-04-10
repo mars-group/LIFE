@@ -6,16 +6,19 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.ScsServices.Communication.Messages {
+namespace Hik.Communication.ScsServices.Communication.Messages
+{
     /// <summary>
     ///     This message is sent as response message to a ScsRemoteInvokeMessage.
     ///     It is used to send return value of method invocation.
     /// </summary>
     [Serializable]
-    public class ScsRemoteInvokeReturnMessage : ScsMessage {
+    public class ScsRemoteInvokeReturnMessage : ScsMessage
+    {
         /// <summary>
         ///     Return value of remote method invocation.
         /// </summary>
@@ -31,7 +34,8 @@ namespace Hik.Communication.ScsServices.Communication.Messages {
         ///     Represents this object as string.
         /// </summary>
         /// <returns>String representation of this object</returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.Format("ScsRemoteInvokeReturnMessage: Returns {0}, Exception = {1}", ReturnValue,
                 RemoteException);
         }

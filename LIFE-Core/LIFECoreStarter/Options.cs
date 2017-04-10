@@ -34,7 +34,6 @@ namespace Mono.Options
 {
     static class StringCoda
     {
-
         public static IEnumerable<string> WrappedLines(string self, params int[] widths)
         {
             IEnumerable<int> w = widths;
@@ -123,7 +122,6 @@ namespace Mono.Options
 
     public class OptionValueCollection : IList, IList<string>
     {
-
         List<string> values = new List<string>();
         OptionContext c;
 
@@ -586,7 +584,6 @@ namespace Mono.Options
 
     public abstract class ArgumentSource
     {
-
         protected ArgumentSource()
         {
         }
@@ -662,7 +659,6 @@ namespace Mono.Options
 
     public class ResponseFileSource : ArgumentSource
     {
-
         public override string[] GetNames()
         {
             return new string[] {"@file"};
@@ -706,7 +702,6 @@ namespace Mono.Options
         }
 
 
-
         public string OptionName
         {
             get { return this.option; }
@@ -717,13 +712,10 @@ namespace Mono.Options
 
     public class OptionSet : KeyedCollection<string, Option>
     {
-
-
         public OptionSet()
         {
             this.roSources = new ReadOnlyCollection<ArgumentSource>(sources);
         }
-
 
 
         List<ArgumentSource> sources = new List<ArgumentSource>();
@@ -816,7 +808,6 @@ namespace Mono.Options
 
         internal sealed class Category : Option
         {
-
             // Prototype starts with '=' because this is an invalid prototype
             // (see Option.ParsePrototype(), and thus it'll prevent Category
             // instances from being accidentally used as normal options.
@@ -1438,4 +1429,3 @@ namespace Mono.Options
         }
     }
 }
-

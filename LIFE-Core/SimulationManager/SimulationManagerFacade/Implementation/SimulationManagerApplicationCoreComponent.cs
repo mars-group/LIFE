@@ -6,6 +6,7 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 18.12.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Service;
@@ -20,7 +21,8 @@ using SMConnector;
 using SMConnector.TransportTypes;
 using SimulationManagerShared;
 
-namespace SimulationManagerFacade.Implementation {
+namespace SimulationManagerFacade.Implementation
+{
     /// <summary>
     ///     This class represents the implementation of the simulation manager's application core.
     /// </summary>
@@ -30,7 +32,8 @@ namespace SimulationManagerFacade.Implementation {
     ///     (If it is allowed to access them from the outside). Also one would find something like transaction-<br />
     ///     or access controls here. So far this is not yet implemented.
     /// </remarks>
-    public class SimulationManagerApplicationCoreComponent : ScsService, ISimulationManagerApplicationCore {
+    public class SimulationManagerApplicationCoreComponent : ScsService, ISimulationManagerApplicationCore
+    {
         private readonly IRuntimeEnvironment _runtimeEnvironment;
         private readonly IModelContainer _modelContainer;
         private readonly INodeRegistry _nodeRegistry;
@@ -38,16 +41,17 @@ namespace SimulationManagerFacade.Implementation {
         private IScsServiceApplication _server;
 
         public SimulationManagerApplicationCoreComponent(SimulationManagerSettings settings,
-                                        IRuntimeEnvironment runtimeEnvironment,
-                                        IModelContainer modelContainer,
-                                        INodeRegistry nodeRegistry,
-                                        ILayerNameService layerNameService) {
+            IRuntimeEnvironment runtimeEnvironment,
+            IModelContainer modelContainer,
+            INodeRegistry nodeRegistry,
+            ILayerNameService layerNameService)
+        {
             _runtimeEnvironment = runtimeEnvironment;
             _modelContainer = modelContainer;
             _nodeRegistry = nodeRegistry;
             _layerNameService = layerNameService;
 
-			// Create and start RemoteService for LayerNameService
+            // Create and start RemoteService for LayerNameService
             _server = ScsServiceBuilder.CreateService(new ScsTcpEndPoint(settings.NodeRegistryConfig.NodeEndPointPort));
 
             _server.AddService<ILayerNameService, SimulationManagerApplicationCoreComponent>(this);
@@ -55,14 +59,18 @@ namespace SimulationManagerFacade.Implementation {
             _server.Start();
 
             nodeRegistry.JoinCluster();
-			// create and start SM WebService
-			//var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
-
+            // create and start SM WebService
+            //var simManagerWebservice = new SimulationManagerWebserviceComponent(this);
         }
-        
-		//local option for simulation start - connected layer containers unknown. Use all and use standard implementation.
-        public void StartSimulationWithModel(Guid simulationId,TModelDescription model, int? nrOfTicks = null, string scenarioConfigId = "", string resultConfigId = "", bool startPaused = false, ILayerContainerFacade layerContainer = null) {
-            _runtimeEnvironment.StartWithModel(simulationId, model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, scenarioConfigId, resultConfigId, startPaused, layerContainer);
+
+        //local option for simulation start - connected layer containers unknown. Use all and use standard implementation.
+        public void StartSimulationWithModel(Guid simulationId, TModelDescription model, int? nrOfTicks = null,
+            string scenarioConfigId = "", string resultConfigId = "", bool startPaused = false,
+            ILayerContainerFacade layerContainer = null)
+        {
+            _runtimeEnvironment.StartWithModel(simulationId, model,
+                _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks, scenarioConfigId,
+                resultConfigId, startPaused, layerContainer);
         }
 
         public TModelDescription GetModelDescription(string modelPath)
@@ -72,21 +80,24 @@ namespace SimulationManagerFacade.Implementation {
 
         public void StepSimulation(TModelDescription model, int? nrOfTicks = null)
         {
-            _runtimeEnvironment.StepSimulation(model, _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks);
+            _runtimeEnvironment.StepSimulation(model,
+                _nodeRegistry.GetAllNodesByType(CommonTypes.Types.NodeType.LayerContainer), nrOfTicks);
         }
 
         #region RuntimeEnvironment delegation
 
-
-        public void PauseSimulation(TModelDescription model) {
+        public void PauseSimulation(TModelDescription model)
+        {
             _runtimeEnvironment.Pause(model);
         }
 
-        public void ResumeSimulation(TModelDescription model) {
+        public void ResumeSimulation(TModelDescription model)
+        {
             _runtimeEnvironment.Resume(model);
         }
 
-        public void AbortSimulation(TModelDescription model) {
+        public void AbortSimulation(TModelDescription model)
+        {
             _runtimeEnvironment.Abort(model);
         }
 
@@ -96,15 +107,14 @@ namespace SimulationManagerFacade.Implementation {
         }
 
 
-        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable) {
+        public void SubscribeForStatusUpdate(StatusUpdateAvailable statusUpdateAvailable)
+        {
             _runtimeEnvironment.SubscribeForStatusUpdate(statusUpdateAvailable);
         }
 
         #endregion
 
         #region ModelContainer delegation
-
-
 
         #endregion
 

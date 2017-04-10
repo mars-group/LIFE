@@ -6,19 +6,24 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using LCConnector.TransportTypes;
 
-namespace LCConnector.Exceptions {
-    public class LayerNotInitializedException : Exception {
+namespace LCConnector.Exceptions
+{
+    public class LayerNotInitializedException : Exception
+    {
         public TLayerInstanceId Id { get; protected set; }
 
         public LayerNotInitializedException(string message, TLayerInstanceId id)
-            : base(message) {
+            : base(message)
+        {
             Id = id;
         }
 
-        public LayerNotInitializedException(TLayerInstanceId id) {
+        public LayerNotInitializedException(TLayerInstanceId id)
+        {
             Id = id;
         }
     }

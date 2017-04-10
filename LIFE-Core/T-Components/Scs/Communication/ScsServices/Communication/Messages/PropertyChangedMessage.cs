@@ -6,15 +6,18 @@
 //  * More information under: http://www.mars-group.org
 //  * Written by Christian Hüning <christianhuening@gmail.com>, 19.10.2015
 //  *******************************************************/
+
 using System;
 using Hik.Communication.Scs.Communication.Messages;
 
-namespace Hik.Communication.ScsServices.Communication.Messages {
+namespace Hik.Communication.ScsServices.Communication.Messages
+{
     /// <summary>
     ///     Represents the update of a property in a remote stub
     /// </summary>
     [Serializable]
-    public class PropertyChangedMessage : ScsMessage {
+    public class PropertyChangedMessage : ScsMessage
+    {
         /// <summary>
         ///     The new value which is to be updated in the stub
         /// </summary>
@@ -26,12 +29,14 @@ namespace Hik.Communication.ScsServices.Communication.Messages {
         public string PropertyGetMethodName { get; set; }
 
 
-        public PropertyChangedMessage(object newValue, string propertyGetMethodName) {
+        public PropertyChangedMessage(object newValue, string propertyGetMethodName)
+        {
             NewValue = newValue;
             PropertyGetMethodName = propertyGetMethodName;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.Format("PropertyChangedMessage: {0}.{1}(...)", NewValue, PropertyGetMethodName);
         }
     }
