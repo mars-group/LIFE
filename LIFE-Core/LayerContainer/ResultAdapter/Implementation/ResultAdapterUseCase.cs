@@ -70,12 +70,12 @@ namespace ResultAdapter.Implementation
                     _writer = new MongoDbWriter(_mongoDbHost, SimulationId.ToString());
                     Console.WriteLine("[ResultAdapter] Initialized MongoDB adapter to '" + _mongoDbHost + "'.");
                 }
-                else if (_generator.OutputTarget.ToUpper().Equals("KAFKA/CASSANDRA"))
+                else if (_generator.OutputTarget.ToUpper().Equals("CASSANDRA"))
                 {
                     _generator.OutputParams["SimulationId"] = SimulationId.ToString();
-                    _writer = new KafkaWriter(_generator.OutputParams,
-                                              _generator.LoggerDefinitions);
-                    Console.WriteLine("[ResultAdapter] Initialized Kafka/Cassandra connector.");
+                    _writer = new CassandraWriter(_generator.OutputParams,
+                                                  _generator.LoggerDefinitions);
+                    Console.WriteLine("[ResultAdapter] Initialized Cassandra adapter.");
                 }
                 else
                 {

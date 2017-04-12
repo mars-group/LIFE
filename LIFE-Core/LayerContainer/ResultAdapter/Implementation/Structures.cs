@@ -70,7 +70,7 @@ namespace ResultAdapter.Implementation
         // Output frequency.
         internal int OutputFrequency;
         // Spatial type specifier [GPS/Grid/2D/3D] or 'null'.
-        internal string SpatialType;
+        internal string SpatialType; //TODO: USE ENUMS?!
         // Is the object stationary (position fixed)?
         internal bool IsStationary;
         // Properties to output (and static flag, type [int, string etc.]).

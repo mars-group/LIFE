@@ -1,5 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using LIFE.API.Results;
 using MongoDB.Bson;
@@ -23,7 +26,6 @@ namespace ResultAdapter.Implementation.DataOutput
         private IMongoCollection<BsonDocument> _colDeltaframes; // Delta frame collection.
         private IMongoCollection<BsonDocument> _colMetadata; // Meta data entries.
         private readonly JsonSerializerSettings _jsonConf; // Serialization settings.
-
 
         /// <summary>
         ///   Create the MongoDB adapter for data output.
@@ -117,6 +119,7 @@ namespace ResultAdapter.Implementation.DataOutput
         /// <param name="isKeyframe">Set to 'true' on keyframes, 'false' on delta frames.</param>
         public void WriteAgentFrames(IEnumerable<AgentFrame> results, bool isKeyframe)
         {
+            var swParallel = Stopwatch.StartNew();
             IMongoCollection<BsonDocument> col;
             if (isKeyframe)
             {
@@ -152,6 +155,7 @@ namespace ResultAdapter.Implementation.DataOutput
 
             // Insert the documents.
             col.InsertMany(documents);
+            Console.WriteLine("MongoDB finished writting results in " + swParallel.ElapsedMilliseconds + " ms");
         }
 
 
