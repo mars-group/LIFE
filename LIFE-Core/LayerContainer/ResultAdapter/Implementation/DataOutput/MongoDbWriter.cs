@@ -46,9 +46,14 @@ namespace ResultAdapter.Implementation.DataOutput
                 NullValueHandling = NullValueHandling.Ignore
             };
             // all valid geo agents? then use geospatial index!
-            foreach (var loggerConf in loggerConfigs)
+            if (loggerConfigs != null || loggerConfigs.Any())
             {
-                _useGeoSpatialIndex = loggerConf.SpatialType == "GPS";
+                foreach (var loggerConf in loggerConfigs)
+                {
+                    _useGeoSpatialIndex = loggerConf.SpatialType == "GPS";
+                }
+            } else {
+                _useGeoSpatialIndex = false;
             }
         }
 
@@ -65,7 +70,7 @@ namespace ResultAdapter.Implementation.DataOutput
             await _colLegacy.Indexes.CreateOneAsync(indexKeys, indexOptions);
             if (_useGeoSpatialIndex)
             {
-                var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position");
+                var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position._v");
                 await _colLegacy.Indexes.CreateOneAsync(geoIndexKeys);
             }
         }
