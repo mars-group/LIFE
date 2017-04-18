@@ -46,6 +46,7 @@ namespace ResultAdapter.Implementation.DataOutput
                 NullValueHandling = NullValueHandling.Ignore
             };
             // all valid geo agents? then use geospatial index!
+            _useGeoSpatialIndex = true;
             if (loggerConfigs != null || loggerConfigs.Any())
             {
                 foreach (var loggerConf in loggerConfigs) {
