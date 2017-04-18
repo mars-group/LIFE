@@ -120,8 +120,9 @@ namespace ResultAdapter.Implementation.DataOutput
 
 
                 // create lucence index
-                if (useGeoSpatialIndex) {
-                    _session.Execute(string.Format(@"
+                if (useGeoSpatialIndex)
+                {
+                    string geospatialIndexStmt = string.Format(@"
                         CREATE CUSTOM INDEX {0}_{1}_index ON {0}.{1} ()
                         USING 'com.stratio.cassandra.lucene.Index'
                         WITH OPTIONS = {{
@@ -134,7 +135,9 @@ namespace ResultAdapter.Implementation.DataOutput
                                 }}
                             }}'
                         }};
-                    ", _keyspace, tableName));
+                    ", _keyspace, tableName);
+                    _session.Execute(geospatialIndexStmt);
+                    Console.WriteLine("Cassandra: Create GeoIndex: " + geospatialIndexStmt);
                 }
 
                 // create prepared statements for later use
@@ -263,12 +266,10 @@ namespace ResultAdapter.Implementation.DataOutput
                 _propertiesTableMapping.TryGetValue(tableName, out propPreparedStmtSorting);
 
                 List<object> bindValues = new List<object>();
-                int reservedProportiesIndex = 2;
                 bindValues.Add(result.AgentId);
                 bindValues.Add(result.Tick);
 
                 if(propPreparedStmtSorting.Item1) {
-                    reservedProportiesIndex = 4;
                     bindValues.Add(result.Position.ElementAt(0));
                     bindValues.Add(result.Position.ElementAt(1));
                 }

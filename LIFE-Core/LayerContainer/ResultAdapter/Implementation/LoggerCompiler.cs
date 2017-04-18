@@ -160,7 +160,9 @@ namespace ResultAdapter.Implementation
                 "  /// </summary>\n" +
                 "  public class ResultLogger_{0} : IGeneratedLogger {{\n" +
                 "    private readonly {0} _agent;\n\n" +
-                "    public ResultLogger_{0}(ITickClient agent) {{\n" +
+                "    public " +
+                "ResultLogger" +
+                "_{0}(ITickClient agent) {{\n" +
                 "      _agent = ({0}) agent;\n" +
                 "    }}\n\n" +
                 "    public AgentMetadataEntry GetMetatableEntry() {{\n{1}    }}\n\n" +

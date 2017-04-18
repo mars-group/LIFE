@@ -26,13 +26,15 @@ namespace ResultAdapter.Implementation.DataOutput
         private IMongoCollection<BsonDocument> _colDeltaframes; // Delta frame collection.
         private IMongoCollection<BsonDocument> _colMetadata; // Meta data entries.
         private readonly JsonSerializerSettings _jsonConf; // Serialization settings.
+        private bool _useGeoSpatialIndex; // Determine if Geo2D index should be used
 
         /// <summary>
         ///   Create the MongoDB adapter for data output.
         /// </summary>
         /// <param name="mongoDbHost">Address of the MongoDB to connect to..</param>
         /// <param name="simId">Simulation ID. Used as collection name.</param>
-        public MongoDbWriter(string mongoDbHost, string simId)
+        public MongoDbWriter(string mongoDbHost, string simId,
+                             IEnumerable<LoggerConfig> loggerConfigs)
         {
             var client = new MongoClient("mongodb://" + mongoDbHost + ":27017");
             _dbLegacy = client.GetDatabase("SimResults");
@@ -43,6 +45,11 @@ namespace ResultAdapter.Implementation.DataOutput
             {
                 NullValueHandling = NullValueHandling.Ignore
             };
+            // all valid geo agents? then use geospatial index!
+            foreach (var loggerConf in loggerConfigs)
+            {
+                _useGeoSpatialIndex = loggerConf.SpatialType == "GPS";
+            }
         }
 
 
@@ -56,8 +63,11 @@ namespace ResultAdapter.Implementation.DataOutput
                 .Ascending("Layer");
             var indexOptions = new CreateIndexOptions {Background = true};
             await _colLegacy.Indexes.CreateOneAsync(indexKeys, indexOptions);
-            //var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position._v");
-            //await _collection.Indexes.CreateOneAsync(geoIndexKeys);
+            if (_useGeoSpatialIndex)
+            {
+                var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position");
+                await _colLegacy.Indexes.CreateOneAsync(geoIndexKeys);
+            }
         }
 
 
@@ -158,7 +168,7 @@ namespace ResultAdapter.Implementation.DataOutput
             Console.WriteLine("MongoDB finished writting results in " + swParallel.ElapsedMilliseconds + " ms");
         }
 
-
+/*
         private class FrameComp
         {
             public bool K;
@@ -167,5 +177,6 @@ namespace ResultAdapter.Implementation.DataOutput
             public object[] P, O;
             public IDictionary<string, object> V;
         }
+*/
     }
 }
