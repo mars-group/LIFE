@@ -5,7 +5,7 @@ stages:
 
 variables:
   NUGET_FEED: "https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/"
-  MAJOR_LIFE_VERSION: "2.1.1"
+  MAJOR_LIFE_VERSION: "2.1.0"
 
 cache:
   untracked: true
@@ -20,7 +20,7 @@ cache:
 #  services:
 #    - artifactory.mars.haw-hamburg.de:5000/influxdb:1.2
 #  script:
-#    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+#    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
 #    - cd Tests/BasicAgentsTests
 #    - dotnet test
 #    - cd ../EnvironmentServiceComponentTests
@@ -50,8 +50,8 @@ build-LIFE-API:
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
     - cd LIFE-API
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-API
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-API --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -62,9 +62,9 @@ build-LIFE-Core:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LIFECoreStarter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Core --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -74,9 +74,9 @@ build-LIFE-Components:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/LIFE-Components
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Components
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFE-Components --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -88,9 +88,9 @@ build-BasicAgents:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Agents/BasicAgents
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-BasicAgents --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -100,9 +100,9 @@ build-ESC:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Environments/EnvironmentServiceComponent
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ESC --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -112,9 +112,9 @@ build-GeoGridEnvironment:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Environments/GeoGridEnvironment
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoGridEnvironment --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -124,9 +124,9 @@ build-GridEnvironment:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Environments/GridEnvironment
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridEnvironment --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -136,9 +136,9 @@ build-GeoPotentialField:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/GeoPotentialFieldLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GeoPotentialFieldLayer --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -148,9 +148,9 @@ build-GridPotentialField:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/GridPotentialFieldLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GridPotentialFieldLayer --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -160,9 +160,9 @@ build-ObstacleLayer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/ObstacleLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ObstacleLayer --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -172,9 +172,9 @@ build-RawFileLayer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/RawFileLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RawFileLayer --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -184,9 +184,9 @@ build-TimeSeriesLayer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Layers/TimeSeriesLayer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-TimeSeriesLayer --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -196,9 +196,9 @@ build-Utilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Utilities
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Utilities --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -208,9 +208,9 @@ build-AgentManagerService:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Services/AgentManagerService
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentManager --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -220,9 +220,9 @@ build-AgentShadowingService:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Components/Services/AgentShadowingService
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AgentShadowingService --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -234,9 +234,9 @@ build-ASC:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/ASC
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ASC --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -247,9 +247,9 @@ build-Scs:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/Scs
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-Scs --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -259,9 +259,9 @@ build-MulticastAdapter:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/MulticastAdapter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-MulticastAdapter
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-MulticastAdapter --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -271,9 +271,9 @@ build-CustomUtilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/CustomUtilities
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CustomUtilities
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CustomUtilities --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -283,9 +283,9 @@ build-ConfigurationAdapter:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/ConfigurationAdapter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ConfigurationAdapter
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ConfigurationAdapter --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -295,9 +295,9 @@ build-CommonTypes:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/CommonTypes
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CommonTypes
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-CommonTypes --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -307,9 +307,9 @@ build-LayerContainerFacade:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerFacade
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerFacade
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerFacade --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -320,9 +320,9 @@ build-LayerContainerShared:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerShared
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerShared
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerContainerShared --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -332,9 +332,9 @@ build-LayerFactory:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerFactory
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerFactory
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerFactory --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -344,9 +344,9 @@ build-LayerLoader:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/LayerLoader
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerLoader
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerLoader --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -356,9 +356,9 @@ build-LayerNameService:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/LayerNameService
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerNameService
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerNameService --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -368,9 +368,9 @@ build-LayerRegistry:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerRegistry
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerRegistry
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LayerRegistry --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -380,9 +380,9 @@ build-LNSConnector:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/LNSConnector
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LNSConnector
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LNSConnector --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -392,9 +392,9 @@ build-ModelContainer:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/ModelContainer
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ModelContainer
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ModelContainer --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -404,9 +404,9 @@ build-NodeRegistry:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/NodeRegistry
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-NodeRegistry
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-NodeRegistry --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -416,9 +416,9 @@ build-PartitionManager:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/PartitionManager
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-PartitionManager
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-PartitionManager --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -428,9 +428,9 @@ build-ResultAdapter:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/ResultAdapter
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ResultAdapter
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-ResultAdapter --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -440,9 +440,9 @@ build-RTEManager:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/RTEManager
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RTEManager
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RTEManager --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -452,9 +452,9 @@ build-RuntimeEnvironment:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/RuntimeEnvironment
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RuntimeEnvironment
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-RuntimeEnvironment --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -464,9 +464,9 @@ build-SimulationManagerFacade:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerFacade
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerFacade
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerFacade --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -476,9 +476,9 @@ build-SimulationManagerShared:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerShared
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerShared
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SimulationManagerShared --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -488,9 +488,9 @@ build-SMConnector:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/SMConnector
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SMConnector
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-SMConnector --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -500,9 +500,9 @@ build-LCConnector:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/Common/LCConnector
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LCConnector --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 300 mins
     paths:
@@ -512,9 +512,9 @@ build-LIFECoreUtilities:
   stage: build
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
   script:
-    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd LIFE-Core/T-Components/LIFECoreUtilities
-    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFECoreUtilities
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-LIFECoreUtilities --version-suffix unstable-$CI_PIPELINE_ID
   artifacts:
     expire_in: 120 mins
     paths:
@@ -527,42 +527,42 @@ pushAllPackages:
     - master
     - Development
   script:
-    - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFE-Components/LIFE-Components.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-BasicAgents/BasicAgents.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GeoPotentialFieldLayer/GeoPotentialFieldLayer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-GridPotentialFieldLayer/GridPotentialFieldLayer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ObstacleLayer/ObstacleLayer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-RawFileLayer/RawFileLayer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-TimeSeriesLayer/TimeSeriesLayer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-Utilities/Utilities.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ASC/ASC.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-Scs/Scs.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-MulticastAdapter/MulticastAdapter.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-CustomUtilities/CustomUtilities.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ConfigurationAdapter/ConfigurationAdapter.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-AgentManager/AgentManagerService.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-AgentShadowingService/AgentShadowingService.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-CommonTypes/CommonTypes.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerContainerFacade/LayerContainerFacade.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerContainerShared/LayerContainerShared.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerFactory/LayerFactory.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerLoader/LayerLoader.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerNameService/LayerNameService.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LayerRegistry/LayerRegistry.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LNSConnector/LNSConnector.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ModelContainer/ModelContainer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-NodeRegistry/NodeRegistry.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-PartitionManager/PartitionManager.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-ResultAdapter/ResultAdapter.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-RTEManager/RTEManager.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-RuntimeEnvironment/RuntimeEnvironment.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-SimulationManagerFacade/SimulationManagerFacade.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-SimulationManagerShared/SimulationManagerShared.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-SMConnector/SMConnector.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LCConnector/LCConnector.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
-    - mono .nuget/NuGet.exe push out-LIFECoreUtilities/LIFECoreUtilities.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-API/LIFE-API.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFE-Components/LIFE-Components.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-BasicAgents/BasicAgents.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GeoPotentialFieldLayer/GeoPotentialFieldLayer.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GridPotentialFieldLayer/GridPotentialFieldLayer.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ObstacleLayer/ObstacleLayer.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-RawFileLayer/RawFileLayer.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-TimeSeriesLayer/TimeSeriesLayer.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-Utilities/Utilities.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ASC/ASC.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-Scs/Scs.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-MulticastAdapter/MulticastAdapter.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-CustomUtilities/CustomUtilities.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ConfigurationAdapter/ConfigurationAdapter.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-AgentManager/AgentManagerService.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-AgentShadowingService/AgentShadowingService.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-CommonTypes/CommonTypes.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerContainerFacade/LayerContainerFacade.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerContainerShared/LayerContainerShared.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerFactory/LayerFactory.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerLoader/LayerLoader.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerNameService/LayerNameService.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LayerRegistry/LayerRegistry.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LNSConnector/LNSConnector.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ModelContainer/ModelContainer.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-NodeRegistry/NodeRegistry.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-PartitionManager/PartitionManager.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-ResultAdapter/ResultAdapter.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-RTEManager/RTEManager.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-RuntimeEnvironment/RuntimeEnvironment.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-SimulationManagerFacade/SimulationManagerFacade.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-SimulationManagerShared/SimulationManagerShared.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-SMConnector/SMConnector.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LCConnector/LCConnector.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-LIFECoreUtilities/LIFECoreUtilities.$MAJOR_LIFE_VERSION-unstable-$CI_PIPELINE_ID.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
