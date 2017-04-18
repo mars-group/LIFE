@@ -48,15 +48,11 @@ namespace ResultAdapter.Implementation.DataOutput
             // all valid geo agents? then use geospatial index!
             if (loggerConfigs != null || loggerConfigs.Any())
             {
-                foreach (var loggerConf in loggerConfigs)
-                {
-                    _useGeoSpatialIndex = loggerConf.SpatialType == "GPS";
+                foreach (var loggerConf in loggerConfigs) {
+                    _useGeoSpatialIndex = _useGeoSpatialIndex && (loggerConf.SpatialType == "GPS");
                 }
-            } else {
-                _useGeoSpatialIndex = false;
             }
         }
-
 
         /// <summary>
         ///   Create MongoDB indexes for AgentSimResult attributes.
