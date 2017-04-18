@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ConfigService;
@@ -67,14 +68,16 @@ namespace ResultAdapter.Implementation
                 if (_generator.OutputTarget == string.Empty ||
                     _generator.OutputTarget.ToUpper().Equals("MONGODB"))
                 {
-                    _writer = new MongoDbWriter(_mongoDbHost, SimulationId.ToString());
+                    _writer = new MongoDbWriter(_mongoDbHost, SimulationId.ToString(),
+                        _generator.LoggerDefinitions);
                     Console.WriteLine("[ResultAdapter] Initialized MongoDB adapter to '" + _mongoDbHost + "'.");
                 }
-                else if (_generator.OutputTarget.ToUpper().Equals("KAFKA/CASSANDRA"))
+                else if (_generator.OutputTarget.ToUpper().Equals("CASSANDRA"))
                 {
                     _generator.OutputParams["SimulationId"] = SimulationId.ToString();
-                    _writer = new KafkaWriter(_generator.OutputParams);
-                    Console.WriteLine("[ResultAdapter] Initialized Kafka/Cassandra connector.");
+                    _writer = new CassandraWriter(_generator.OutputParams,
+                                                  _generator.LoggerDefinitions);
+                    Console.WriteLine("[ResultAdapter] Initialized Cassandra adapter.");
                 }
                 else
                 {
@@ -173,21 +176,28 @@ namespace ResultAdapter.Implementation
             {
                 _loggers.TryAdd(execGrp, new LoggerGroup());
             }
-            var logger = _generator.GetResultLogger(simObject); //| If there is a logger
-            if (logger != null)
+
+            bool useLegacy = false;
+            if (simObject.GetType().GetTypeInfo().GetInterfaces().Length > 0)
             {
-                //| specification for the
-                _loggers[execGrp].GenLoggers.TryAdd(simObject, logger); //| current type, use it!
-                _newAgents.Add(logger);
+                foreach (Type tinterface in simObject.GetType().GetTypeInfo().GetInterfaces())
+                {
+                    if (tinterface == typeof(ISimResult))
+                        useLegacy = true;
+                }
             }
-            else
-            {
-                // If no logger definition was found, attempt legacy output.
+            if (useLegacy) {
+                // If ISimResults is being used -> attempt legacy output.
                 var simResult = simObject as ISimResult;
                 if (simResult != null)
                 {
                     _loggers[execGrp].OldLoggers.TryAdd(simResult, new byte());
                 }
+            } else {
+                var logger = _generator.GetResultLogger(simObject);     //| If there is a logger
+                if (logger == null) return;                             //| specification for the
+                _loggers[execGrp].GenLoggers.TryAdd(simObject, logger); //| current type, use it!
+                _newAgents.Add(logger);
             }
         }
 
@@ -201,18 +211,16 @@ namespace ResultAdapter.Implementation
         {
             if (_loggers.ContainsKey(execGrp))
             {
-                if (_generator.HasLoggerDefinition(simObject))
+                bool useLegacy = false;
+                if (simObject.GetType().GetTypeInfo().GetInterfaces().Length > 0)
                 {
-                    var genLoggers = _loggers[execGrp].GenLoggers;
-                    if (genLoggers.ContainsKey(simObject))
+                    foreach (Type tinterface in simObject.GetType().GetTypeInfo().GetInterfaces())
                     {
-                        IGeneratedLogger logger;
-                        var success = genLoggers.TryRemove(simObject, out logger);
-                        if (success) _deletedAgents.Add(((IAgent) simObject).ID.ToString());
+                        if (tinterface == typeof(ISimResult))
+                            useLegacy = true;
                     }
                 }
-                else
-                {
+                if (useLegacy) {
                     var simResult = simObject as ISimResult;
                     if (simResult != null)
                     {
@@ -221,6 +229,17 @@ namespace ResultAdapter.Implementation
                         {
                             byte b;
                             oldLoggers.TryRemove(simResult, out b);
+                        }
+                    }
+                } else {
+                    if (_generator.HasLoggerDefinition(simObject))
+                    {
+                        var genLoggers = _loggers[execGrp].GenLoggers;
+                        if (genLoggers.ContainsKey(simObject))
+                        {
+                            IGeneratedLogger logger;
+                            var success = genLoggers.TryRemove(simObject, out logger);
+                            if (success) _deletedAgents.Add(((IAgent) simObject).ID.ToString());
                         }
                     }
                 }

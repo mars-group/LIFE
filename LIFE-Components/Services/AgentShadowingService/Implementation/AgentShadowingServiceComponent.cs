@@ -16,8 +16,8 @@ using LIFE.Components.Services.AgentShadowingService.Interface;
 namespace LIFE.Components.Services.AgentShadowingService.Implementation
 {
     public class
-        AgentShadowingServiceComponent<TServiceInterface, TServiceClass> :
-            IAgentShadowingService<TServiceInterface, TServiceClass>
+        AgentShadowingServiceComponent<TServiceInterface, TServiceClass> : IAgentShadowingService<TServiceInterface,
+            TServiceClass>
         where TServiceClass : AscService, TServiceInterface
         where TServiceInterface : class
     {

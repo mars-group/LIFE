@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ResultAdapter.Implementation
 {
@@ -60,14 +61,22 @@ namespace ResultAdapter.Implementation
     /// <summary>
     ///   Configuration directives for logger creation.
     /// </summary>
-    internal struct LoggerConfig
+    public struct LoggerConfig
     {
-        internal string TypeName; // Simulation entity type name.
-        internal string FullName; // Fully-qualified name, including namespace and assembly.
-        internal int OutputFrequency; // Output frequency.
-        internal string SpatialType; // Spatial type specifier [GPS/Grid/2D/3D] or 'null'.
-        internal bool IsStationary; // Is the object stationary (position fixed)?
-        internal Dictionary<string, bool> Properties; // Properties to output (and static flag).
-        internal IEnumerable<string> VisParameters; // Visualization parameters to pass along.
+        // Simulation entity type name.
+        internal string TypeName;
+        // Fully-qualified name, including namespace and assembly.
+        internal string FullName;
+        // Output frequency.
+        internal int OutputFrequency;
+        // Spatial type specifier [GPS/Grid/2D/3D] or 'null'.
+        internal string SpatialType; //TODO: USE ENUMS?!
+        // Is the object stationary (position fixed)?
+        internal bool IsStationary;
+        // Properties to output (and static flag, type [int, string etc.]).
+        internal Dictionary<string, Tuple<bool, string>> Properties;
+        // Visualization parameters to pass along.
+        internal IEnumerable<string> VisParameters;
+
     }
 }

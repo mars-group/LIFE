@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>The ResultAdapter manages the output of agent data</Description>
     <Copyright>(c) 2016 - MARS Group</Copyright>
-    <VersionPrefix>2.1.0</VersionPrefix>
+    <VersionPrefix>2.1.1</VersionPrefix>
     <Authors>Christian Huening</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>ResultAdapter</AssemblyName>
@@ -18,6 +18,9 @@
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CassandraCSharpDriver">
+      <Version>3.2.1</Version>
+    </PackageReference>
     <PackageReference Include="ConfigService" Version="2.0.0-494" />
     <PackageReference Include="MongoDB.Driver" Version="2.4.3" />
     <PackageReference Include="RabbitMQ.Client" Version="4.1.1" />

@@ -1,5 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using LIFE.API.Results;
 using MongoDB.Bson;
@@ -23,14 +26,15 @@ namespace ResultAdapter.Implementation.DataOutput
         private IMongoCollection<BsonDocument> _colDeltaframes; // Delta frame collection.
         private IMongoCollection<BsonDocument> _colMetadata; // Meta data entries.
         private readonly JsonSerializerSettings _jsonConf; // Serialization settings.
-
+        private bool _useGeoSpatialIndex; // Determine if Geo2D index should be used
 
         /// <summary>
         ///   Create the MongoDB adapter for data output.
         /// </summary>
         /// <param name="mongoDbHost">Address of the MongoDB to connect to..</param>
         /// <param name="simId">Simulation ID. Used as collection name.</param>
-        public MongoDbWriter(string mongoDbHost, string simId)
+        public MongoDbWriter(string mongoDbHost, string simId,
+                             IEnumerable<LoggerConfig> loggerConfigs)
         {
             var client = new MongoClient("mongodb://" + mongoDbHost + ":27017");
             _dbLegacy = client.GetDatabase("SimResults");
@@ -41,8 +45,15 @@ namespace ResultAdapter.Implementation.DataOutput
             {
                 NullValueHandling = NullValueHandling.Ignore
             };
+            // all valid geo agents? then use geospatial index!
+            _useGeoSpatialIndex = true;
+            if (loggerConfigs != null || loggerConfigs.Any())
+            {
+                foreach (var loggerConf in loggerConfigs) {
+                    _useGeoSpatialIndex = _useGeoSpatialIndex && (loggerConf.SpatialType == "GPS");
+                }
+            }
         }
-
 
         /// <summary>
         ///   Create MongoDB indexes for AgentSimResult attributes.
@@ -54,8 +65,11 @@ namespace ResultAdapter.Implementation.DataOutput
                 .Ascending("Layer");
             var indexOptions = new CreateIndexOptions {Background = true};
             await _colLegacy.Indexes.CreateOneAsync(indexKeys, indexOptions);
-            //var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position._v");
-            //await _collection.Indexes.CreateOneAsync(geoIndexKeys);
+            if (_useGeoSpatialIndex)
+            {
+                var geoIndexKeys = Builders<AgentSimResult>.IndexKeys.Geo2DSphere("Position._v");
+                await _colLegacy.Indexes.CreateOneAsync(geoIndexKeys);
+            }
         }
 
 
@@ -117,6 +131,7 @@ namespace ResultAdapter.Implementation.DataOutput
         /// <param name="isKeyframe">Set to 'true' on keyframes, 'false' on delta frames.</param>
         public void WriteAgentFrames(IEnumerable<AgentFrame> results, bool isKeyframe)
         {
+            var swParallel = Stopwatch.StartNew();
             IMongoCollection<BsonDocument> col;
             if (isKeyframe)
             {
@@ -152,9 +167,10 @@ namespace ResultAdapter.Implementation.DataOutput
 
             // Insert the documents.
             col.InsertMany(documents);
+            Console.WriteLine("MongoDB finished writting results in " + swParallel.ElapsedMilliseconds + " ms");
         }
 
-
+/*
         private class FrameComp
         {
             public bool K;
@@ -163,5 +179,6 @@ namespace ResultAdapter.Implementation.DataOutput
             public object[] P, O;
             public IDictionary<string, object> V;
         }
+*/
     }
 }

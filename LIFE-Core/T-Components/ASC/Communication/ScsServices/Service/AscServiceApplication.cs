@@ -14,7 +14,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using ASC.Communication.Scs.Communication.Messages;
 using ASC.Communication.Scs.Communication.Messengers;

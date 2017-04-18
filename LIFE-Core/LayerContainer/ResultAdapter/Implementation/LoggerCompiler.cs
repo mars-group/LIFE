@@ -160,7 +160,9 @@ namespace ResultAdapter.Implementation
                 "  /// </summary>\n" +
                 "  public class ResultLogger_{0} : IGeneratedLogger {{\n" +
                 "    private readonly {0} _agent;\n\n" +
-                "    public ResultLogger_{0}(ITickClient agent) {{\n" +
+                "    public " +
+                "ResultLogger" +
+                "_{0}(ITickClient agent) {{\n" +
                 "      _agent = ({0}) agent;\n" +
                 "    }}\n\n" +
                 "    public AgentMetadataEntry GetMetatableEntry() {{\n{1}    }}\n\n" +
@@ -184,7 +186,7 @@ namespace ResultAdapter.Implementation
         private static string GenerateFragmentMetadata(LoggerConfig config)
         {
             var statProps = new List<string>();
-            foreach (var prop in config.Properties) if (prop.Value) statProps.Add(prop.Key);
+            foreach (var prop in config.Properties) if (prop.Value.Item1) statProps.Add(prop.Key);
 
             // Build the static property list for the meta table entry.
             var staticsListing = "";
@@ -240,7 +242,7 @@ namespace ResultAdapter.Implementation
         private static string GenerateFragmentKeyframe(LoggerConfig config)
         {
             var dynProps = new List<string>();
-            foreach (var prop in config.Properties) if (!prop.Value) dynProps.Add(prop.Key);
+            foreach (var prop in config.Properties) if (!prop.Value.Item1) dynProps.Add(prop.Key);
 
             // Build the spatial output strings.
             string posStr = "null", ortStr = "null";

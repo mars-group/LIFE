@@ -422,35 +422,25 @@
             }
         ]
     },
-    "LogicalChangeTime": 0,
-    "ModelMetaData": "96efbeae-c0f1-4827-8483-2b7eaec16c00",
-    "Name": "MyKNPScenario",
-    "Owner": "8888",
-    "ParameterizationDescription": {
-        "Agents": {
-            "Elephant": {},
-            "MarulaTree": {},
-            "WaterPoint": {}
-        },
-        "Global": {
-            "DeltaT": 5,
-            "SimulationEndDateTime": "1996-12-19T16:39:57-08:00",
-            "SimulationStartDateTime": "1985-04-12T23:20:50.52Z"
-        },
-        "Layers": {
-            "ElephantLayer": {},
-            "GeoPotentialFieldLayer": {},
-            "GridPotentialFieldLayer": {},
-            "KNPObstacleLayer": {},
-            "MarulaLayer": {},
-            "PrecipitationLayer": {},
-            "ShadeLayer": {},
-            "TemperatureTimeSeriesLayer": {},
-            "TimeSeriesLayer": {},
-            "WaterPointLayer": {},
-            "WaterPotentialLayer": {}
-        },
-        "LogicalChangeTime": 1
+    "Global": {
+      "DeltaT": 5,
+      "SimulationEndDateTime": "1996-12-19T16:39:57-08:00",
+      "SimulationStartDateTime": "1985-04-12T23:20:50.52Z"
     },
-    "Project": "42"
+    "Layers": {
+      "ElephantLayer": {},
+      "GeoPotentialFieldLayer": {},
+      "GridPotentialFieldLayer": {},
+      "KNPObstacleLayer": {},
+      "MarulaLayer": {},
+      "PrecipitationLayer": {},
+      "ShadeLayer": {},
+      "TemperatureTimeSeriesLayer": {},
+      "TimeSeriesLayer": {},
+      "WaterPointLayer": {},
+      "WaterPotentialLayer": {}
+    },
+    "LogicalChangeTime": 1
+  },
+  "Project": "42"
 }
