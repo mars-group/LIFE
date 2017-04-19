@@ -47,7 +47,7 @@ namespace ResultAdapter.Implementation.DataOutput
             };
             // all valid geo agents? then use geospatial index!
             _useGeoSpatialIndex = true;
-            if (loggerConfigs != null || loggerConfigs.Any())
+            if (loggerConfigs != null)
             {
                 foreach (var loggerConf in loggerConfigs) {
                     _useGeoSpatialIndex = _useGeoSpatialIndex && (loggerConf.SpatialType == "GPS");
