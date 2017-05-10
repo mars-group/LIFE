@@ -14,40 +14,42 @@ cache:
 
 
 # Meta Packages
-#testAll:
-#  stage: test
-#  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
-#  services:
-#    - artifactory.mars.haw-hamburg.de:5000/influxdb:1.2
-#  script:
-#    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
-#    - cd Tests/BasicAgentsTests
-#    - dotnet test
-#    - cd ../EnvironmentServiceComponentTests
-#    - dotnet test
-#    - cd ../GridEnvironmentTest
-#    - dotnet test
-#    - cd ../GeoGridEnvironmentTests
-#    - dotnet test
-#    - cd ../GeoPotentialFieldLayerTests
-#    - dotnet test
-#    - cd ../ModelContainerTests
-#    - dotnet test
-    #- cd ../MulticastAdapterTests
-    #- dotnet test
+testAll:
+ stage: test
+ image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+ services:
+   - artifactory.mars.haw-hamburg.de:5000/influxdb:1.2
+ script:
+    - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
+    - cd Tests/BasicAgentsTests
+    - dotnet test
+    - cd ../EnvironmentServiceComponentTests
+    - dotnet test
+    - cd ../GridEnvironmentTest
+    - dotnet test
+    - cd ../GeoGridEnvironmentTests
+    - dotnet test
+    - cd ../GeoPotentialFieldLayerTests
+    - dotnet test
+    - cd ../GridPotentialFieldLayerTests
+    - dotnet test
+    - cd ../ModelContainerTests
+    - dotnet test
+    - cd ../MulticastAdapterTests
+    - dotnet test
     #- cd ../NodeRegistryTests
     #- dotnet test
-    #- cd ../SimulationPlanParserTests
-    #- dotnet test
-#    - cd ../TimeSeriesLayerTests
-#    - dotnet test
+    - cd ../SimulationPlanParserTests
+    - dotnet test
+    - cd ../TimeSeriesLayerTests
+    - dotnet test
 
 ##### for future reference ######
 # the dotnet pack --output option is named /p:PackageOutputPath= in msbuild #
 
 build-LIFE-API:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - cd LIFE-API
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -60,7 +62,7 @@ build-LIFE-API:
 
 build-LIFE-Core:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LIFECoreStarter
@@ -72,7 +74,7 @@ build-LIFE-Core:
 
 build-LIFE-Components:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/LIFE-Components
@@ -86,7 +88,7 @@ build-LIFE-Components:
 
 build-BasicAgents:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Agents/BasicAgents
@@ -98,7 +100,7 @@ build-BasicAgents:
 
 build-ESC:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/EnvironmentServiceComponent
@@ -110,7 +112,7 @@ build-ESC:
 
 build-GeoGridEnvironment:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/GeoGridEnvironment
@@ -122,7 +124,7 @@ build-GeoGridEnvironment:
 
 build-GridEnvironment:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/GridEnvironment
@@ -134,7 +136,7 @@ build-GridEnvironment:
 
 build-GeoPotentialField:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/GeoPotentialFieldLayer
@@ -146,7 +148,7 @@ build-GeoPotentialField:
 
 build-GridPotentialField:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/GridPotentialFieldLayer
@@ -158,7 +160,7 @@ build-GridPotentialField:
 
 build-ObstacleLayer:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/ObstacleLayer
@@ -170,7 +172,7 @@ build-ObstacleLayer:
 
 build-RawFileLayer:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/RawFileLayer
@@ -182,7 +184,7 @@ build-RawFileLayer:
 
 build-TimeSeriesLayer:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/TimeSeriesLayer
@@ -194,7 +196,7 @@ build-TimeSeriesLayer:
 
 build-Utilities:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Utilities
@@ -206,7 +208,7 @@ build-Utilities:
 
 build-AgentManagerService:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Services/AgentManagerService
@@ -218,7 +220,7 @@ build-AgentManagerService:
 
 build-AgentShadowingService:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Services/AgentShadowingService
@@ -232,7 +234,7 @@ build-AgentShadowingService:
 
 build-ASC:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/ASC
@@ -245,7 +247,7 @@ build-ASC:
 
 build-Scs:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/Scs
@@ -257,7 +259,7 @@ build-Scs:
 
 build-MulticastAdapter:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/MulticastAdapter
@@ -269,7 +271,7 @@ build-MulticastAdapter:
 
 build-CustomUtilities:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/CustomUtilities
@@ -281,7 +283,7 @@ build-CustomUtilities:
 
 build-ConfigurationAdapter:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/ConfigurationAdapter
@@ -293,7 +295,7 @@ build-ConfigurationAdapter:
 
 build-CommonTypes:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/CommonTypes
@@ -305,7 +307,7 @@ build-CommonTypes:
 
 build-LayerContainerFacade:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerFacade
@@ -318,7 +320,7 @@ build-LayerContainerFacade:
 
 build-LayerContainerShared:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerShared
@@ -330,7 +332,7 @@ build-LayerContainerShared:
 
 build-LayerFactory:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerFactory
@@ -342,7 +344,7 @@ build-LayerFactory:
 
 build-LayerLoader:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LayerLoader
@@ -354,7 +356,7 @@ build-LayerLoader:
 
 build-LayerNameService:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/LayerNameService
@@ -366,7 +368,7 @@ build-LayerNameService:
 
 build-LayerRegistry:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerRegistry
@@ -378,7 +380,7 @@ build-LayerRegistry:
 
 build-LNSConnector:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LNSConnector
@@ -390,7 +392,7 @@ build-LNSConnector:
 
 build-ModelContainer:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/ModelContainer
@@ -402,7 +404,7 @@ build-ModelContainer:
 
 build-NodeRegistry:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/NodeRegistry
@@ -414,7 +416,7 @@ build-NodeRegistry:
 
 build-PartitionManager:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/PartitionManager
@@ -426,7 +428,7 @@ build-PartitionManager:
 
 build-ResultAdapter:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/ResultAdapter
@@ -438,7 +440,7 @@ build-ResultAdapter:
 
 build-RTEManager:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/RTEManager
@@ -450,7 +452,7 @@ build-RTEManager:
 
 build-RuntimeEnvironment:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/RuntimeEnvironment
@@ -462,7 +464,7 @@ build-RuntimeEnvironment:
 
 build-SimulationManagerFacade:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerFacade
@@ -474,7 +476,7 @@ build-SimulationManagerFacade:
 
 build-SimulationManagerShared:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerShared
@@ -486,7 +488,7 @@ build-SimulationManagerShared:
 
 build-SMConnector:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/SMConnector
@@ -498,7 +500,7 @@ build-SMConnector:
 
 build-LCConnector:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LCConnector
@@ -510,7 +512,7 @@ build-LCConnector:
 
 build-LIFECoreUtilities:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.1-sdk
+  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/LIFECoreUtilities

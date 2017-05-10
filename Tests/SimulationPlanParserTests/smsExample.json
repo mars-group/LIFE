@@ -1,6 +1,7 @@
 {
     "Description": "sgeiles Mapping",
     "Group": "",
+    "Project": "42",
     "InitializationDescription": {
         "BasicLayers": [
             {
@@ -441,6 +442,4 @@
       "WaterPotentialLayer": {}
     },
     "LogicalChangeTime": 1
-  },
-  "Project": "42"
-}
+  }

@@ -11,7 +11,7 @@ namespace SimulationPlanParserTests
         [SetUp]
         public void Setup()
         {
-            var json = File.ReadAllText(Directory.GetCurrentDirectory() + "./smsExample.json");
+            var json = File.ReadAllText(Directory.GetCurrentDirectory() + "/smsExample.json");
             _scenarioConfig = JObject.Parse(json);
         }
 
@@ -20,7 +20,7 @@ namespace SimulationPlanParserTests
         [Test]
         public void Test1()
         {
-            var globalParams = _scenarioConfig["ParameterizationDescription"]["Global"];
+            var globalParams = _scenarioConfig["Global"];
             var startDate = DateTime.Parse(globalParams["SimulationStartDateTime"].ToString());
             var endDate = DateTime.Parse(globalParams["SimulationEndDateTime"].ToString());
             var deltaT = int.Parse(globalParams["DeltaT"].ToString());
