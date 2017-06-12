@@ -51,7 +51,7 @@ namespace LIFE.Components.Environments.GridEnvironment
             var cell = GetCell(x, y);
             return cell < 0
                 ? new List<T>()
-                : PerformBfs(new HashSet<int> {cell}, maxDistanceInCells, maxNumberOfResults, predicate);
+                : PerformBfs(new SortedSet<int> {cell}, maxDistanceInCells, maxNumberOfResults, predicate);
         }
 
         public IEnumerable<T> Explore(IGridCoordinate gridCoordinate, int maxDistanceInCells = -1,
@@ -64,7 +64,7 @@ namespace LIFE.Components.Environments.GridEnvironment
         public T GetNearest(int x, int y, int maxDistanceInCells = -1, Predicate<T> predicate = null)
         {
             var cell = GetCell(x, y);
-            return PerformBfs(new HashSet<int> {cell}, maxDistanceInCells, 1, predicate).FirstOrDefault();
+            return PerformBfs(new SortedSet<int> {cell}, maxDistanceInCells, 1, predicate).FirstOrDefault();
         }
 
         public T GetNearest(IGridCoordinate gridCoordinate, int maxDistanceInCells = -1, Predicate<T> predicate = null)
@@ -128,9 +128,9 @@ namespace LIFE.Components.Environments.GridEnvironment
 
         // Performs a breath-first-search powered by sets to avoid double checking cells
         private IEnumerable<T> PerformBfs
-            (HashSet<int> cells, int maxDistanceInCells, int maxNumberOfResults, Predicate<T> predicate)
+            (SortedSet<int> cells, int maxDistanceInCells, int maxNumberOfResults, Predicate<T> predicate)
         {
-            var doneSet = new HashSet<int>();
+            var doneSet = new SortedSet<int>();
             var distanceInCells = 0;
             var result = new ConcurrentBag<T>();
 
@@ -175,7 +175,7 @@ namespace LIFE.Components.Environments.GridEnvironment
                 if ((maxDistanceInCells > 0) && (maxDistanceInCells < distanceInCells)) return result;
 
                 // create next cell set (avoid duplicates)
-                var nextCells = new HashSet<int>();
+                var nextCells = new SortedSet<int>();
                 foreach (var cell in cells)
                 {
                     if ((cell >= _grid.Length) || (cell < 0)) continue;
@@ -195,7 +195,7 @@ namespace LIFE.Components.Environments.GridEnvironment
         /// Return all neighboring cells for currentCell
         private IEnumerable<int> GetNeighborCells(int currentCell)
         {
-            var neighbors = new HashSet<int>();
+            var neighbors = new SortedSet<int>();
             var upperMostRow = currentCell < _numberOfGridCellsX;
             var bottomMostRow = currentCell > _numberOfGridCellsX * (_numberOfGridCellsY - 1);
             var leftColumn = (currentCell == 0) || (currentCell % _numberOfGridCellsX == 0);

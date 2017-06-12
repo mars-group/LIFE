@@ -11,7 +11,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using LIFE.API.Environment.GeoCommon;
 
 // ReSharper disable StaticMemberInGenericType
@@ -100,7 +99,7 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
             var cell = GetCellForGps(latitude, longitude);
             return cell < 0
                 ? new List<T>()
-                : PerformBfs(new HashSet<int> {cell}, maxDistanceInM, maxNumberOfResults, predicate);
+                : PerformBfs(new SortedSet<int> {cell}, maxDistanceInM, maxNumberOfResults, predicate);
         }
 
         public IEnumerable<T> Explore
@@ -115,7 +114,7 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
             Predicate<T> predicate = null)
         {
             var cell = GetCellForGps(latitude, longitude);
-            return PerformBfs(new HashSet<int> {cell}, maxDistanceInM, 1, predicate).FirstOrDefault();
+            return PerformBfs(new SortedSet<int> {cell}, maxDistanceInM, 1, predicate).FirstOrDefault();
         }
 
 
@@ -157,9 +156,9 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
 
         // Performs a breath-first-search powered by sets to avoid double checking cells
         private IEnumerable<T> PerformBfs
-            (HashSet<int> cells, double maxDistanceInM, int maxNumberOfResults, Predicate<T> predicate)
+            (SortedSet<int> cells, double maxDistanceInM, int maxNumberOfResults, Predicate<T> predicate)
         {
-            var doneSet = new HashSet<int>();
+            var doneSet = new SortedSet<int>();
             var distanceInCells = 0;
             var result = new ConcurrentBag<T>();
 
@@ -204,7 +203,7 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
                 if ((maxDistanceInM > 0) && (maxDistanceInM < distanceInCells * _cellSizeInM)) return result;
 
                 // create next cell set (avoid duplicates)
-                var nextCells = new HashSet<int>();
+                var nextCells = new SortedSet<int>();
                 foreach (var cell in cells)
                 {
                     if ((cell >= _geoGrid.Length) || (cell < 0)) continue;
@@ -258,7 +257,7 @@ namespace LIFE.Components.Environments.GeoGridEnvironment
         /// Return all neighboring cells for currentCell
         private IEnumerable<int> GetNeighborCells(int currentCell)
         {
-            var neighbors = new HashSet<int>();
+            var neighbors = new SortedSet<int>();
             var upperMostRow = currentCell < _numberOfGridCellsX;
             var bottomMostRow = currentCell > _numberOfGridCellsX * (_numberOfGridCellsY - 1);
             var leftColumn = (currentCell == 0) || (currentCell % _numberOfGridCellsX == 0);
