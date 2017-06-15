@@ -5,7 +5,7 @@ stages:
 
 variables:
   NUGET_FEED: "https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/"
-  MAJOR_LIFE_VERSION: "2.1.1"
+  MAJOR_LIFE_VERSION: "2.1.2"
 
 cache:
   untracked: true

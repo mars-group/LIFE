@@ -91,21 +91,23 @@ namespace LIFE.Components.GridPotentialFieldLayer
 
         private int GetClosestFullPotentialCell(int cell)
         {
-            var neighbors = GetNeighborCells(cell);
-            var maxNeighborValue = -1;
-            var neighborWithMaxValue = -1;
-            foreach (var neighbor in neighbors)
-                if (Field.PotentialFieldData[neighbor] > maxNeighborValue)
-                {
-                    maxNeighborValue = Field.PotentialFieldData[neighbor];
-                    neighborWithMaxValue = neighbor;
-                }
-            if (neighborWithMaxValue == -1)
-                throw new InvalidOperationException(
-                    "There should be a valid neighbor. Otherwise this method should return null");
-            if (maxNeighborValue == MaxPotential)
-                return neighborWithMaxValue;
-            return GetClosestFullPotentialCell(neighborWithMaxValue);
+            while (true)
+            {
+                var neighbors = GetNeighborCells(cell);
+                var maxNeighborValue = -1;
+                var neighborWithMaxValue = -1;
+                foreach (var neighbor in neighbors)
+                    if (Field.PotentialFieldData[neighbor] > maxNeighborValue)
+                    {
+                        maxNeighborValue = Field.PotentialFieldData[neighbor];
+                        neighborWithMaxValue = neighbor;
+                    }
+                if (neighborWithMaxValue == -1)
+                    throw new InvalidOperationException("There should be a valid neighbor. Otherwise this method should return null");
+                if (maxNeighborValue == MaxPotential)
+                    return neighborWithMaxValue;
+                cell = neighborWithMaxValue;
+            }
         }
 
         private IEnumerable<int> GetNeighborCells(int currentCell)

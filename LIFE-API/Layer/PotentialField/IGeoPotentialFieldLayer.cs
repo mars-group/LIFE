@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LIFE.API.Environment.GeoCommon;
 
 namespace LIFE.API.Layer.PotentialField
@@ -35,5 +36,17 @@ namespace LIFE.API.Layer.PotentialField
         /// <param name="lon">longitude value of an agent</param>
         /// <returns>If the current cell has full potential</returns>
         bool HasFullPotential(double lat, double lon);
+
+        /// <summary>
+        ///  Returns an Array with GeoCoordinates of the center of all cells in the PotentialField.
+        /// </summary>
+        IEnumerable<GeoCoordinate> GetAllCellCoordinates();
+
+        /// <summary>
+        ///  Returns the PotentialValue for a 
+        /// </summary>
+        /// <param name="coordinate"></param>
+        /// <returns></returns>
+        int GetPotentialByGeoCoordinate(GeoCoordinate coordinate);
     }
 }

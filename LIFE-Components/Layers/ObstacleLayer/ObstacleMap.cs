@@ -81,25 +81,29 @@ namespace LIFE.Components.ObstacleLayer
         public void AddCellRating(IGeoCoordinate position, double ratingValue)
         {
             var cell = GetCellForGps(position.Latitude, position.Longitude);
+            if (cell == -1) return;
             Grid.AddOrUpdate(cell, 0.0, (key, oldValue) => oldValue + ratingValue);
         }
 
         public void ReduceCellRating(IGeoCoordinate position, double ratingValue)
         {
             var cell = GetCellForGps(position.Latitude, position.Longitude);
+            if (cell == -1) return;
             Grid.AddOrUpdate(cell, 0.0, (key, oldValue) => oldValue - ratingValue);
         }
 
         public void SetCellRating(IGeoCoordinate position, double cellRating)
         {
             var cell = GetCellForGps(position.Latitude, position.Longitude);
+            if (cell == -1) return;
             Grid.AddOrUpdate(cell, cellRating, (k, v) => cellRating);
         }
 
         public double TryTakeFromCell(IGeoCoordinate position, double amount)
         {
-            var cell = GetCellForGps(position.Latitude, position.Longitude);
+            var cell = GetCellForGps(position.Latitude, position.Longitude);;
             var amountTaken = 0.0;
+            if (cell == -1) return amountTaken;
             Grid.AddOrUpdate(cell, 0.0,
                 (key, oldValue) =>
                 {

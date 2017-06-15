@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using LIFE.API.Environment.GeoCommon;
 using LIFE.API.Layer.PotentialField;
 using LIFE.Components.GridPotentialFieldLayer;
@@ -33,6 +35,19 @@ namespace LIFE.Components.GeoPotentialFieldLayer
         {
             var cell = GetFieldPositionByCoordinate(lat, lon);
             return (cell != -1) && base.HasFullPotential(cell);
+        }
+
+        public IEnumerable<GeoCoordinate> GetAllCellCoordinates()
+        {
+            var coords = new GeoCoordinate[Field.PotentialFieldData.Length];
+            Parallel.For(0, Field.PotentialFieldData.Length, cell => coords[cell] = GetGpsForCenterOfCell(cell));
+            return coords;
+        }
+
+        public int GetPotentialByGeoCoordinate(GeoCoordinate coordinate)
+        {
+            var cell = GetFieldPositionByCoordinate(coordinate.Latitude, coordinate.Longitude);
+            return Field.PotentialFieldData[cell];
         }
 
         protected override IFieldLoader<GeoPotentialField> GetPotentialFieldLoader()
