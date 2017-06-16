@@ -1,4 +1,5 @@
-﻿using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
+﻿using System.Runtime.InteropServices.ComTypes;
+using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 
 namespace LIFE.Components.ESC.SpatialAPI.Shape
 {
@@ -18,13 +19,6 @@ namespace LIFE.Components.ESC.SpatialAPI.Shape
         ///   Provides an axis-aligned bounding box that fully surrounds this shape.
         /// </summary>
         BoundingBox Bounds { get; }
-
-        /// <summary>
-        ///   Indicates wheter or not this shape overlaps with the given one.
-        /// </summary>
-        /// <param name="shape">The other shape that is tested on intersection.</param>
-        /// <returns>True, if any intersection is existent, false otherwise.</returns>
-        bool IntersectsWith(IShape shape);
 
         /// <summary>
         ///   Generates a new shape by applying given parameters to this shape.
