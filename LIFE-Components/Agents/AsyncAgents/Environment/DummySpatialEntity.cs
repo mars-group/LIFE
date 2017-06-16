@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SpatialAPI.Entities;
-using SpatialAPI.Shape;
+using LIFE.Components.ESC.SpatialAPI.Entities;
+using LIFE.Components.ESC.SpatialAPI.Shape;
 
 namespace EnvironmentServiceComponent.Implementation
 {

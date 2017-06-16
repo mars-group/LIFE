@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DalskiAgent.Interactions;
-using DalskiAgent.Movement;
-using DalskiAgent.Perception;
-using SpatialAPI.Entities.Transformation;
-using SpatialAPI.Environment;
+using LIFE.Components.Agents.BasicAgents.Reasoning;
+using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
+using LIFE.Components.ESC.SpatialAPI.Environment;
 using Guid = System.Guid;
 
 namespace DalskiAgent.newAsycClasses

@@ -6,5 +6,6 @@ namespace AsyncAgents.Agents
 {
     class Agent2DAsync
     {
+
     }
 }

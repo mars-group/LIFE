@@ -1,7 +1,7 @@
-﻿using DalskiAgent.Perception;
-using SpatialAPI.Entities;
-using SpatialAPI.Entities.Movement;
-using SpatialAPI.Environment;
+﻿using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
+using LIFE.Components.Agents.BasicAgents.Perception;
+using LIFE.Components.ESC.SpatialAPI.Entities;
+using LIFE.Components.ESC.SpatialAPI.Environment;
 
 namespace DalskiAgent.newAsycClasses {
 
