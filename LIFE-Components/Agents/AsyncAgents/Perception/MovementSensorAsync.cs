@@ -1,4 +1,5 @@
 ﻿using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
+using EnvironmentServiceComponent.SpatialAPI.Environment;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Environment;

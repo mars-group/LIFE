@@ -8,6 +8,7 @@ using System.Threading;
 using Cloo;
 using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
+using EnvironmentServiceComponent.SpatialAPI.Environment;
 using GpuEnvironment.Helper;
 using GpuEnvironment.Types;
 using LIFE.Components.ESC.SpatialAPI.Entities;

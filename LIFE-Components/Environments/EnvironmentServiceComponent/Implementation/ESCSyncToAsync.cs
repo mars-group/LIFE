@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
+using EnvironmentServiceComponent.SpatialAPI.Environment;
 using LIFE.API.Environment;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Movement;

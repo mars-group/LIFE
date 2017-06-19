@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
 using LIFE.Components.ESC.SpatialAPI.Entities;
-using LIFE.Components.ESC.SpatialAPI.Entities.Movement;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Shape;
 
-namespace LIFE.Components.ESC.SpatialAPI.Environment
+namespace EnvironmentServiceComponent.SpatialAPI.Environment
 {
 
     public enum COMMIT_RESULT

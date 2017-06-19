@@ -5,6 +5,7 @@ using System.Text;
 using AsyncAgents.Movement;
 using AsyncAgents.Perception;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
+using EnvironmentServiceComponent.SpatialAPI.Environment;
 using LIFE.API.Layer;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Agents;
