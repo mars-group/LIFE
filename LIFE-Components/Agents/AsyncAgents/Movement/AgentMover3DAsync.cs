@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AsyncAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Movement;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
 using LIFE.Components.ESC.SpatialAPI.Entities;
-using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Shape;
-using RabbitMQ.Client;
 
-namespace DalskiAgent.newAsycClasses
+namespace AsyncAgents.Movement
 {
 
     public class AgentMover3DAsync : AgentMover

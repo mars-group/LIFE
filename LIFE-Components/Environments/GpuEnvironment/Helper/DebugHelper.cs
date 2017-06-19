@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using GpuEnvironment.Implementation;
+using GpuEnvironment.Types;
 
 namespace GpuEnvironment.Helper
 {

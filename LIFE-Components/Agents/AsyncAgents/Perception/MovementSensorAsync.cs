@@ -3,7 +3,7 @@ using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 
-namespace DalskiAgent.newAsycClasses {
+namespace AsyncAgents.Perception {
 
     class MovementSensorAsync : ISensor {
         private EnvironmentResult _EnvironmentResult;

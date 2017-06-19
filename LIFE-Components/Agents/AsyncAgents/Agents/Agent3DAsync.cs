@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using DalskiAgent.newAsycClasses;
+using AsyncAgents.Movement;
+using AsyncAgents.Perception;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
 using LIFE.API.Agent;
 using LIFE.API.Layer;

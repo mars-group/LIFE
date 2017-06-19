@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using AsyncAgents.Movement;
-using DalskiAgent.newAsycClasses;
+using AsyncAgents.Perception;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
 using LIFE.API.Layer;
 using LIFE.API.Results;

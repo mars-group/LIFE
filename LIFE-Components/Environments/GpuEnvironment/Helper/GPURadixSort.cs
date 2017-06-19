@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Cloo;
+using GpuEnvironment.Types;
 
 namespace GpuEnvironment.Helper
 {

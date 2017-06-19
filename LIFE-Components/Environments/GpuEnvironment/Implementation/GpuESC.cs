@@ -9,12 +9,13 @@ using Cloo;
 using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
 using GpuEnvironment.Helper;
+using GpuEnvironment.Types;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Shape;
 
-namespace GpuEnvironment
+namespace GpuEnvironment.Implementation
 {
     public class GpuESC :IAsyncEnvironment {
 

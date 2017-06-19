@@ -9,17 +9,18 @@ using Cloo;
 using EnvironmentServiceComponent.Implementation;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
 using GpuEnvironment.Helper;
+using GpuEnvironment.Types;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Shape;
 
-namespace GpuEnvironment
+namespace GpuEnvironment.Implementation
 {
 
     public class HierarchicalGpuESC : IAsyncEnvironment {
 
-        public const string LOG_BASE_PATH = @"C:\Users\PhilippK\Desktop\OpenCL_DebugLogs\logs\";
+        public static string LOG_BASE_PATH = GpuESC.LOG_BASE_PATH ;
 //        public const string OPENCL_BASE_PATH = @"D:\Projects\environmentservicecomponent\LIFE Services\EnvironmentServiceComponent\Implementation\GPU-ESC\";
 
         private const int CELL_DATA_ELEMENT_SIZE = 8;

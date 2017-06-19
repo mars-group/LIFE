@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DalskiAgent.newAsycClasses;
 using LIFE.Components.Agents.BasicAgents.Movement;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;

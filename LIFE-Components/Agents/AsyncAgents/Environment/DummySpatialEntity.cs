@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Shape;
 
-namespace EnvironmentServiceComponent.Implementation
+namespace AsyncAgents.Environment
 {
     class DummySpatialEntity : ISpatialEntity
     {

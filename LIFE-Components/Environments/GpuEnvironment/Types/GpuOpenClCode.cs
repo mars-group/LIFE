@@ -1,4 +1,4 @@
-﻿namespace GpuEnvironment
+﻿namespace GpuEnvironment.Types
 {
     public class GpuOpenClCode
     {
