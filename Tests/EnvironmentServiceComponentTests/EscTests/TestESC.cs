@@ -141,7 +141,7 @@ namespace EnvironmentServiceComponentTests.EscTests
 
             Assert.True(Esc.ExploreAll().ToList().Count == 2);
             Assert.True(Esc.Explore(explore.Shape).ToList().Count == 2);
-           //Assert.True(Esc.Explore(explore.Shape, typeof(TestSpatialEntity)).ToList().Count == 1);
+           Assert.True(Esc.Explore(explore, typeof(TestSpatialEntity)).ToList().Count == 1);
         }
 
 
@@ -152,7 +152,7 @@ namespace EnvironmentServiceComponentTests.EscTests
             ISpatialEntity a2 = new TestSpatialEntity(Vector3.One);
             Assert.True(Esc.Add(a1, Vector3.Zero));
             Assert.True(Esc.Add(a2, new Vector3(10, 10)));
-            //Assert.True(Esc.Explore(new ExploreEntity(a1) * 10).Count() == 2);
+            Assert.True(Esc.Explore(new ExploreEntity(a1) * 10).Count() == 2);
         }
 
 
@@ -173,7 +173,7 @@ namespace EnvironmentServiceComponentTests.EscTests
             Assert.True(Esc.Explore(shape).ToList().Count == 3);
             Assert.True(Esc.Explore(shape, CollisionType.SelfCollision).ToList().Count == 1);
 
-            //Assert.True(Esc.Explore(a3).ToList().Count == 1);
+            Assert.True(Esc.Explore(a3).ToList().Count == 1);
         }
 
         #endregion
