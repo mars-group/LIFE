@@ -564,7 +564,7 @@ namespace GpuEnvironment
            Interlocked.Decrement(ref m_ActiveOperationCount);
         }
 
-        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Type agentType = null, Enum collisionType = null, int maxResults = 100)
+        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Type agentType = null, int maxResults = 100)
         {
             
             if (gpuActive) gpuActiveWait.WaitOne();
@@ -1043,7 +1043,7 @@ namespace GpuEnvironment
         }
 #endregion
 
-        public void Commit()
+        public COMMIT_RESULT Commit()
         {
             var before = DateTime.Now;
             // Block all incoming requests until the calculation 
@@ -1058,7 +1058,7 @@ namespace GpuEnvironment
              _constants.numTotalElements = (uint)( _EnvActEnvObjs.Count + _EnvExploreObjs.Count + _EnvFreshAddedObjs.Count);
 
             if (_constants.numTotalElements == 0)
-                return;
+                return COMMIT_RESULT.OK;
 
             if (DEBUG)
             {
@@ -1084,238 +1084,251 @@ namespace GpuEnvironment
             }
 
             _constants.numTotalElements =  (uint)_clObjArray.Count;
-   
-            #region CreateBuffers
-            // Create the Buffers
-            CreateBuffers();
-            #endregion
 
-            Debug.WriteLine("Execution time Create Buffers =" + (DateTime.Now - before).TotalMilliseconds);
-            before = DateTime.Now;
-
-            #region createCellList
-            CreateCellId();
-            #endregion
-
-            Debug.WriteLine("Execution time CreateCellIdArray =" + (DateTime.Now - before).TotalMilliseconds);
-            before = DateTime.Now;
-
-
-
-            #region RadixSort
-
-            ComputeEventList eventList = new ComputeEventList();
-
-//            ErrorCode error;
-//            Event eve;
-
-            sort.sortKeysValue(cl_cellIds, cl_cellData, (int)_constants.numTotalElements * CELL_DATA_ELEMENT_SIZE);
-
-            cqCommandQueue.ReadFromBuffer(cl_cellData, ref _readCellData, true, eventList);
-
-//            error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_cellData, Bool.True, IntPtr.Zero, (IntPtr)(_constants.numTotalElements * CELL_DATA_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-//            _readCellData, 0, null, out eve);
-//            CheckErr(error, "Cl.EnqueueReadBuffer");
-            if (DEBUG)
+            try
             {
-                cqCommandQueue.ReadFromBuffer(cl_cellIds, ref _readCellIds, true, eventList);
+                #region CreateBuffers
+                // Create the Buffers
+                CreateBuffers();
+                #endregion
 
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_cellIds, Bool.True, IntPtr.Zero, (IntPtr)(_constants.numTotalElements * CELL_ID_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-//                _readCellIds, 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
-
-                for (int i = 0; i < _readCellIds.Count(); i++)
-                {
-                    if (_cellMap.ContainsKey(_readCellIds[i]))
-                    {
-                        _cell3DPosList[i] = _cellMap[_readCellIds[i]];
-                    }
-                    else
-                    {
-                        _cell3DPosList[i] = new CollisionCell3D();
-                    }
-                }
-
-                DebugHelper.PrintCellIdBufferExtended(_debugReadInput, _readCellIds, _readCellData, _cell3DPosList, "Sorted Keys", (int)_constants.numTotalElements);
-
-            }
-
-            #endregion
-
-            Debug.WriteLine("Execution time RadixSort =" + (DateTime.Now - before).TotalMilliseconds);
-            before = DateTime.Now;
-
-            #region CollisionList
-            CreateCollisionList();
-            #endregion
-
-            Debug.WriteLine("Execution time CreateCollisionList =" + (DateTime.Now - before).TotalMilliseconds);
-            before = DateTime.Now;
-
-            #region CreateCollisionTuples
-            CreateCollsionTuples();
-            #endregion
-            Debug.WriteLine("Execution time CreateCollisionTuples =" + (DateTime.Now - before).TotalMilliseconds);
-            before = DateTime.Now;
-            #region CheckCollisions
-            if (_sharedIdx[0] > 0)
-            {
-                CheckCollsions();
-                Debug.WriteLine("Execution time CheckCollisions =" + (DateTime.Now - before).TotalMilliseconds);
+                Debug.WriteLine("Execution time Create Buffers =" + (DateTime.Now - before).TotalMilliseconds);
                 before = DateTime.Now;
 
-                //TODO: Maybe do this threadwise to get some more performance.
-                for (int i = 0; i < _sharedIdx[0]; i++)
+                #region createCellList
+                CreateCellId();
+                #endregion
+
+                Debug.WriteLine("Execution time CreateCellIdArray =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
+
+
+
+                #region RadixSort
+
+                ComputeEventList eventList = new ComputeEventList();
+
+                //            ErrorCode error;
+                //            Event eve;
+
+                sort.sortKeysValue(cl_cellIds, cl_cellData, (int)_constants.numTotalElements * CELL_DATA_ELEMENT_SIZE);
+
+                cqCommandQueue.ReadFromBuffer(cl_cellData, ref _readCellData, true, eventList);
+
+                //            error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_cellData, Bool.True, IntPtr.Zero, (IntPtr)(_constants.numTotalElements * CELL_DATA_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
+                //            _readCellData, 0, null, out eve);
+                //            CheckErr(error, "Cl.EnqueueReadBuffer");
+                if (DEBUG)
                 {
-                    if (_collisionMap.ContainsKey(_tupelList[i].obj1))
+                    cqCommandQueue.ReadFromBuffer(cl_cellIds, ref _readCellIds, true, eventList);
+
+                    //                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_cellIds, Bool.True, IntPtr.Zero, (IntPtr)(_constants.numTotalElements * CELL_ID_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
+                    //                _readCellIds, 0, null, out eve);
+                    //                CheckErr(error, "Cl.EnqueueReadBuffer");
+
+                    for (int i = 0; i < _readCellIds.Count(); i++)
                     {
-                        _collisionMap[_tupelList[i].obj1].Add(_tupelList[i].obj2);
+                        if (_cellMap.ContainsKey(_readCellIds[i]))
+                        {
+                            _cell3DPosList[i] = _cellMap[_readCellIds[i]];
+                        }
+                        else
+                        {
+                            _cell3DPosList[i] = new CollisionCell3D();
+                        }
+                    }
+
+                    DebugHelper.PrintCellIdBufferExtended(_debugReadInput, _readCellIds, _readCellData, _cell3DPosList, "Sorted Keys", (int)_constants.numTotalElements);
+
+                }
+
+                #endregion
+
+                Debug.WriteLine("Execution time RadixSort =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
+
+                #region CollisionList
+                CreateCollisionList();
+                #endregion
+
+                Debug.WriteLine("Execution time CreateCollisionList =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
+
+                #region CreateCollisionTuples
+                CreateCollsionTuples();
+                #endregion
+                Debug.WriteLine("Execution time CreateCollisionTuples =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
+                #region CheckCollisions
+                if (_sharedIdx[0] > 0)
+                {
+                    CheckCollsions();
+                    Debug.WriteLine("Execution time CheckCollisions =" + (DateTime.Now - before).TotalMilliseconds);
+                    before = DateTime.Now;
+
+                    //TODO: Maybe do this threadwise to get some more performance.
+                    for (int i = 0; i < _sharedIdx[0]; i++)
+                    {
+                        if (_collisionMap.ContainsKey(_tupelList[i].obj1))
+                        {
+                            _collisionMap[_tupelList[i].obj1].Add(_tupelList[i].obj2);
+                        }
+                        else
+                        {
+                            HashSet<uint> tmp = new HashSet<uint>();
+                            tmp.Add(_tupelList[i].obj2);
+                            _collisionMap.TryAdd(_tupelList[i].obj1, tmp);
+                        }
+                        if (_collisionMap.ContainsKey(_tupelList[i].obj2))
+                        {
+                            _collisionMap[_tupelList[i].obj2].Add(_tupelList[i].obj1);
+                        }
+                        else
+                        {
+                            HashSet<uint> tmp = new HashSet<uint>();
+                            tmp.Add(_tupelList[i].obj1);
+                            _collisionMap.TryAdd(_tupelList[i].obj2, tmp);
+                        }
+                    }
+
+                    // Check Results
+                }
+
+
+                // RemoveSet
+                var itemsToRemove = new HashSet<uint>();
+                // Call all delegates
+                foreach (var actDele in m_AddDelegates.ToList())
+                {
+                    uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
+                    ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
+
+
+                    // TODO: Fresh added elements can collide.
+                    /*                if (_collisionMap.ContainsKey(tmpId))
+                                    {
+                                        // Add collided -> dont add item to environment
+                                        List<ISpatialEntity> deleList = new List<ISpatialEntity>();//collisionMap[tmpId].Select(actObj => objIdSpatialMap[actObj]).ToList();
+                                        foreach (var actobjId in _collisionMap[tmpId].ToList())
+                                        {
+                                            deleList.Add(_objIdSpatialMap[actobjId]);
+                                        }
+                                        var ret = new EnvironmentResult(deleList);
+                                        actDele.Item2.Invoke(ret, actAEntity);
+                                       // itemsToRemove.Add(tmpId);
+                                    }
+                                    else*/
+                    {
+                        // Add successful -> Add Element to environment and invoke corresponding delegate
+                        actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
+                        _EnvActEnvObjs.TryAdd(tmpId, _objIdClShapeMap[tmpId]);
+                    }
+                }
+                foreach (var actDele in m_MoveDelegates.ToList())
+                {
+                    uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
+                    ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
+                    if (_collisionMap.ContainsKey(tmpId))
+                    {
+
+                        List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
+                        var ret = new EnvironmentResult(deleList);
+                        actDele.Item2.Invoke(ret, actAEntity);
                     }
                     else
                     {
-                        HashSet<uint> tmp = new HashSet<uint>();
-                        tmp.Add(_tupelList[i].obj2);
-                        _collisionMap.TryAdd(_tupelList[i].obj1, tmp);
+                        actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
                     }
-                    if (_collisionMap.ContainsKey(_tupelList[i].obj2))
+                }
+                foreach (var actDele in m_ExploreDelegates.ToList())
+                {
+                    uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
+                    if (_collisionMap.ContainsKey(tmpId))
                     {
-                        _collisionMap[_tupelList[i].obj2].Add(_tupelList[i].obj1);
+                        List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
+                        var ret = new EnvironmentResult(deleList);
+                        actDele.Item2.Invoke(ret);
                     }
                     else
                     {
-                        HashSet<uint> tmp = new HashSet<uint>();
-                        tmp.Add(_tupelList[i].obj1);
-                        _collisionMap.TryAdd(_tupelList[i].obj2, tmp);
+                        actDele.Item2.Invoke(new EnvironmentResult());
                     }
                 }
 
-                // Check Results
-            }
 
 
-            // RemoveSet
-            var itemsToRemove = new HashSet<uint>();
-            // Call all delegates
-            foreach (var actDele in m_AddDelegates.ToList())
-            {
-                uint tmpId = (uint) (actDele.Item1 & 0xFFFFFFFF);
-                ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
-
-
-                // TODO: Fresh added elements can collide.
-/*                if (_collisionMap.ContainsKey(tmpId))
+                foreach (var actRemove in m_ActRemoves.ToList())
                 {
-                    // Add collided -> dont add item to environment
-                    List<ISpatialEntity> deleList = new List<ISpatialEntity>();//collisionMap[tmpId].Select(actObj => objIdSpatialMap[actObj]).ToList();
-                    foreach (var actobjId in _collisionMap[tmpId].ToList())
+                    if (_spatialObjIdMap.ContainsKey(actRemove.Item1))
                     {
-                        deleList.Add(_objIdSpatialMap[actobjId]);
+                        //Debug.WriteLine("Removing at delegate agentID: {0} ", actRemove.Item1);
+                        var objId = _spatialObjIdMap[actRemove.Item1];
+                        var entity = _objIdSpatialMap[objId];
+
+
+                        //ulong objId = _spatialObjIdMap[entity.AgentGuid];
+                        clRectangleShapeObject tmp;
+                        uint tmp2;
+                        ISpatialEntity tmp3;
+                        _EnvActEnvObjs.TryRemove(objId, out tmp);
+                        _spatialObjIdMap.TryRemove(actRemove.Item1, out tmp2);
+                        _objIdSpatialMap.TryRemove((uint)objId, out tmp3);
+
+                        lock (_sync)
+                        {
+                            _objIdList.Remove(objId);
+                            _shapeList.Remove(_objIdClShapeMap[(uint)objId]);
+                        }
+                        _objIdClShapeMap.TryRemove((uint)objId, out tmp);
+                        actRemove.Item2?.Invoke(entity);
+
                     }
-                    var ret = new EnvironmentResult(deleList);
-                    actDele.Item2.Invoke(ret, actAEntity);
-                   // itemsToRemove.Add(tmpId);
-                }
-                else*/
-                {
-                    // Add successful -> Add Element to environment and invoke corresponding delegate
-                    actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
-                    _EnvActEnvObjs.TryAdd(tmpId,_objIdClShapeMap[tmpId]);
-                }
-            }
-            foreach (var actDele in m_MoveDelegates.ToList())
-            {
-                uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
-                ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
-                if (_collisionMap.ContainsKey(tmpId))
-                {
-       
-                    List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
-                    var ret = new EnvironmentResult(deleList);
-                    actDele.Item2.Invoke(ret, actAEntity);
-                }
-                else
-                {
-                    actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
-                }
-            }
-            foreach (var actDele in m_ExploreDelegates.ToList())
-            {
-                uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
-                if (_collisionMap.ContainsKey(tmpId))
-                {
-                    List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
-                    var ret = new EnvironmentResult(deleList);
-                    actDele.Item2.Invoke(ret);
-                }
-                else
-                {
-                    actDele.Item2.Invoke(new EnvironmentResult());
-                }
-            }
-
-
-
-            foreach (var actRemove in m_ActRemoves.ToList()) {
-                if (_spatialObjIdMap.ContainsKey(actRemove.Item1)) {
-                    //Debug.WriteLine("Removing at delegate agentID: {0} ", actRemove.Item1);
-                    var objId = _spatialObjIdMap[actRemove.Item1];
-                    var entity = _objIdSpatialMap[objId];
-
-
-                    //ulong objId = _spatialObjIdMap[entity.AgentGuid];
-                    clRectangleShapeObject tmp;
-                    uint tmp2;
-                    ISpatialEntity tmp3;
-                    _EnvActEnvObjs.TryRemove(objId, out tmp);
-                    _spatialObjIdMap.TryRemove(actRemove.Item1, out tmp2);
-                    _objIdSpatialMap.TryRemove((uint)objId, out tmp3);
-
-                    lock (_sync)
+                    else
                     {
-                        _objIdList.Remove(objId);
-                        _shapeList.Remove(_objIdClShapeMap[(uint)objId]);
+                        Debug.WriteLine("Tried to remove {0} which does not exist", actRemove.Item1);
                     }
-                    _objIdClShapeMap.TryRemove((uint)objId, out tmp);
-                    actRemove.Item2?.Invoke(entity);
+
 
                 }
-                else {
-                    Debug.WriteLine("Tried to remove {0} which does not exist",actRemove.Item1);
+                foreach (var act in m_ExploreAllDelegates.ToList())
+                {
+
+                    var ret = new EnvironmentResult(_objIdSpatialMap.Values);
+                    act.Invoke(ret);
                 }
-               
+                foreach (var act in itemsToRemove)
+                {
+                    RemoveByObjId(act);
+                }
+                #endregion
+                m_ActRemoves.Clear();
+                m_AddDelegates.Clear();
+                m_MoveDelegates.Clear();
+                m_ExploreDelegates.Clear();
+                m_ExploreAllDelegates.Clear();
+                _EnvFreshAddedObjs.Clear();
+                _EnvExploreObjs.Clear();
+                _collisionMap.Clear();
+
+                layerTickWait.Set();
+                Thread.Sleep(10);
+                layerTickWait.Reset();
+                gpuActive = false;
+
+                gpuActiveWait.Set();
+                Thread.Sleep(10);
+                gpuActiveWait.Reset();
+                Debug.WriteLine("Execution time Call Delegates and Cleanup =" + (DateTime.Now - before).TotalMilliseconds);
+                // before = DateTime.Now;
 
             }
-            foreach (var act in m_ExploreAllDelegates.ToList())
+            catch (ComputeException e)
             {
-           
-                var ret = new EnvironmentResult(_objIdSpatialMap.Values);
-                act.Invoke(ret);
+                Console.WriteLine(e);
+                return COMMIT_RESULT.MEMORY_ERROR;
             }
-            foreach (var act in itemsToRemove)
-            {
-                RemoveByObjId(act);
-            }
-            #endregion
-            m_ActRemoves.Clear();
-            m_AddDelegates.Clear();
-            m_MoveDelegates.Clear();
-            m_ExploreDelegates.Clear();
-            m_ExploreAllDelegates.Clear();
-            _EnvFreshAddedObjs.Clear();
-            _EnvExploreObjs.Clear();
-            _collisionMap.Clear();
 
-            layerTickWait.Set();
-            Thread.Sleep(10);
-            layerTickWait.Reset();
-            gpuActive = false;
-
-            gpuActiveWait.Set();
-            Thread.Sleep(10);
-            gpuActiveWait.Reset();
-            Debug.WriteLine("Execution time Call Delegates and Cleanup =" + (DateTime.Now - before).TotalMilliseconds);
-           // before = DateTime.Now;
-
+          return COMMIT_RESULT.OK;
 
         }
 

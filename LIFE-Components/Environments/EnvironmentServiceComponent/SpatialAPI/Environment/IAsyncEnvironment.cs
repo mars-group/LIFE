@@ -8,6 +8,13 @@ using LIFE.Components.ESC.SpatialAPI.Shape;
 
 namespace LIFE.Components.ESC.SpatialAPI.Environment
 {
+
+    public enum COMMIT_RESULT
+    {
+        OK,
+        MEMORY_ERROR,
+        GENERAL_ERROR
+    }
     /// <summary>
     ///     Is called after commit to publish the operation results.
     ///     In case this is called after an UNSUCCESSFUL environment.Add (ResultCode != OK) newPosition will contain the Guid of the agent that could'nt be added.
@@ -122,6 +129,6 @@ namespace LIFE.Components.ESC.SpatialAPI.Environment
         ///     Executes all operations that were called since the last commit. Triggers all delegates afterwards. Must be called
         ///     in the PostTick-phase of the ActiveSteppedLayer.
         /// </summary>
-        void Commit();
+        COMMIT_RESULT Commit();
     }
 }

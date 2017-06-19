@@ -47,13 +47,13 @@
 //                throw new AgentAddException("[SpatialAgent] Change environment failed -> Agent did'nt exist in old environment!", this.ID);
 //            _env = _tmpNewEnv;
 //            spatialData.Shape = spatialData.Shape.Transform(-spatialData.Shape.Position +_position,null);
-//            Mover3D = new AgentMover3DAsync(_env, (Guid)spatialData.AgentGuid, SensorArray);
+//            Mover2D = new AgentMover3DAsync(_env, (Guid)spatialData.AgentGuid, SensorArray);
 //            _env.Add(spatialData, _movementDelegate);
 //        }
 //        /// <summary>
 //        ///   Class for agent movement.
 //        /// </summary>
-//        protected AgentMover3DAsync Mover3D;
+//        protected AgentMover3DAsync Mover2D;
 //
 //        
 //
@@ -122,7 +122,7 @@
 //            // Save the environment reference and add an agent mover.
 //            _env = env;
 //            _layer = layer;
-//            Mover3D = new AgentMover3DAsync(_env, entity.AgentGuid, SensorArray);
+//            Mover2D = new AgentMover3DAsync(_env, entity.AgentGuid, SensorArray);
 //            AgentData = new Dictionary<string, object>();
 //        }
 //

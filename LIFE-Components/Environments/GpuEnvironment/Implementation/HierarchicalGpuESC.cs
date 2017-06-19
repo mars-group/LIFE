@@ -231,11 +231,7 @@ namespace GpuEnvironment
             _spatialObjIdMap = new ConcurrentDictionary<Guid, uint>();
             _collisionMap = new ConcurrentDictionary<uint, HashSet<uint>>();
             _clShapeIdArray = new List<clShapeIdTupel>();
-            //            _lvlElements = new uint[numLvls];
-            //            _lvlTotalElements = new uint[numLvls];
-            //            _lvlTotalElements.Initialize();
-            //            _lvlElements.Initialize();
-
+                                                
 
             _OuterBoundary = enviromentSize;
             _CellSize = maxElementSize;
@@ -260,40 +256,6 @@ namespace GpuEnvironment
         private Vector3 GetNextFreeCell(Vector3 min, Vector3 max)
         {
             Vector3 res = new Vector3();
-//            uint xBegin = (uint)(min.X / _constants.cellSizeX);
-//            uint yBegin = (uint)(min.Y / _constants.cellSizeY);
-//            uint zBegin = (uint)(min.Z / _constants.cellSizeZ);
-//            uint xEnd = (uint)(max.X / _constants.cellSizeX);
-//            uint yEnd = (uint)(max.Y / _constants.cellSizeY);
-//            uint zEnd = (uint)(max.Z / _constants.cellSizeZ);*/
-//            /*  cellBegin.Y = min.Y / constants.cellSizeY;
-//              cellBegin.Z = min.Z / constants.cellSizeZ;
-//              cellEnd.X = max.X / constants.cellSizeX;
-//              cellEnd.Y = max.Y / constants.cellSizeY;
-//              cellEnd.Z = max.Z / constants.cellSizeZ;
-//  */
-//
-//            for (uint x = xBegin; x < xEnd; x++)
-//            {
-//                for (uint y = yBegin; y < yEnd; y++)
-//                {
-//                    for (uint z = zBegin; z < zEnd; z++)
-//                    {
-//                        if (_freeCellList[
-//                            z * _constants.xGridBoundary * _constants.yGridBoundary
-//                            + y * _constants.xGridBoundary
-//                            + x
-//                            ])
-//                        {
-//                            res.X = x * _constants.cellSizeX + (_constants.cellSizeX / 2);
-//                            res.Y = y * _constants.cellSizeY + (_constants.cellSizeY / 2);
-//                            res.Z = z * _constants.cellSizeZ + (_constants.cellSizeZ / 2);
-//                            _freeCellList[z * _constants.xGridBoundary * _constants.yGridBoundary + y * _constants.xGridBoundary + x] = false;
-//                            return res;
-//                        }
-//                    }
-//                }
-//            }
 
             return Vector3.Null;
         }
@@ -315,18 +277,6 @@ namespace GpuEnvironment
             //shapeList.Remove(objIdClShapeMap[(uint)objId]);
 
         }
-//        private void CheckErr(ErrorCode err, string name)
-//        {
-//            if (err != ErrorCode.Success)
-//            {
-//                Debug.WriteLine("error: " + name + " (" + err.ToString() + ")");
-//                Debug.WriteLine("error: " + name + " (" + err + ")");
-//                using (StreamWriter sw = File.AppendText(LOG_BASE_PATH + @"OpenCLDebugLog.txt"))
-//                {
-//                    sw.WriteLine("error: " + name + " (" + err + ")");
-//                }
-//            }
-//        }
         private void InitOpenCl()
         {
             if (DEBUG)
@@ -374,8 +324,7 @@ namespace GpuEnvironment
                 }
                 cxGPUContext = new ComputeContext(ComputeDeviceTypes.Gpu, properties, null, IntPtr.Zero);
                 devicesList.AddRange(cxGPUContext.Devices);
-                //We will be looking only for GPU devices
-                foreach (ComputeDevice device in cxGPUContext.Devices)
+                                foreach (ComputeDevice device in cxGPUContext.Devices)
                 {
 
                     Console.WriteLine("Vendor: " + device.Vendor + " , " + device.Name);
@@ -430,48 +379,8 @@ namespace GpuEnvironment
             ckCheckCollsions = prog.CreateKernel("CheckCollsions");
 
 
-            //
-            //            string programSource = System.IO.File.ReadAllText(Path.Combine(OPENCL_BASE_PATH + "CollisionDetection2D.cl"));
-            //            IntPtr[] progSize = new IntPtr[] { (IntPtr)programSource.Length };
-            //            OpenCL.Net.Program clProgramCollision = Cl.CreateProgramWithSource(cxGPUContext, 1, new[] { programSource }, progSize,
-            //                out error);
-            //            CheckErr(error, "createProgramm");
-            //            string flags = "-cl-fast-relaxed-math";
-            //
-            //            error = Cl.BuildProgram(clProgramCollision, 1, new[] { _device }, flags, null, IntPtr.Zero);
-            //            CheckErr(error, "Cl.BuildProgram");
-            //            //Check for any compilation errors
-            //            if (Cl.GetProgramBuildInfo(clProgramCollision, _device, ProgramBuildInfo.Status, out error).CastTo<BuildStatus>()
-            //                != BuildStatus.Success)
-            //            {
-            //                CheckErr(error, "Cl.GetProgramBuildInfo");
-            //                Debug.WriteLine("Cl.GetProgramBuildInfo != Success");
-            //                Debug.WriteLine(Cl.GetProgramBuildInfo(clProgramCollision, _device, ProgramBuildInfo.Log, out error));
-            //                using (StreamWriter sw = File.AppendText(Path.Combine(LOG_BASE_PATH + "OpenCLDebugLog.txt")))
-            //                {
-            //                    sw.WriteLine(Cl.GetProgramBuildInfo(clProgramCollision, _device, ProgramBuildInfo.Log, out error));
-            //                }
-            //                return;
-            //            }
-            //            uint ciErrNum;
-            //
-            //
-            //
-            //            ckReorderElements = Cl.CreateKernel(clProgramCollision, "ReorderElements", out error);
-            //            CheckErr(error, "Cl.CreateKernel");
-            //            ckCreateCellIdArray = Cl.CreateKernel(clProgramCollision, "CreateCellId", out error);
-            //            CheckErr(error, "Cl.CreateKernel");
-            //            ckCreateNarrowCheckList = Cl.CreateKernel(clProgramCollision, "CreateNarrowCheckList", out error);
-            //            CheckErr(error, "Cl.CreateKernel");
-            //            ckCreateCollsionTuples = Cl.CreateKernel(clProgramCollision, "CreateCollsionTuples", out error);
-            //            CheckErr(error, "Cl.CreateKernel");
-            //            ckCheckCollsions = Cl.CreateKernel(clProgramCollision, "CheckCollsions", out error);
-            //            CheckErr(error, "Cl.CreateKernel");
-            //            _freeCellList = new bool[_constants.xGridBoundary * _constants.yGridBoundary ];
-            //
-            //      /*      cl_freeCellMem = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)((_freeCellList.Length > 0) ? _freeCellList.Length : 1 * Marshal.SizeOf(typeof(bool))), cl_sharedIdxMem,
-            //                 out error);*/
-            //            CheckErr(error, "Createbuffer");
+                                                                                                                                                                                                                                                                                                                                                //            ckReorderElements = Cl.CreateKernel(clProgramCollision, "ReorderElements", out error);
+ 
 
         }
 
@@ -573,6 +482,7 @@ namespace GpuEnvironment
 
 
 
+
         public void ExploreAll(ExploreDelegate exploreDelegate)
         {
             lock (_sync)
@@ -643,7 +553,6 @@ namespace GpuEnvironment
 
             clCircleShapeObject tmpCircleShape;
             _EnvActEnvObjs.TryRemove(objId, out tmpCircleShape);
-            // TODO Testen ob es auch mit Konstruktoren funktioniert
             clCircleShapeObject act = ConvertShapeToClShape(entity.Shape);
 
 
@@ -655,7 +564,7 @@ namespace GpuEnvironment
             Interlocked.Decrement(ref m_ActiveOperationCount);
         }
 
-        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Type agentType = null, Enum collisionType = null, int maxResults = 100)
+        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Type agentType = null, int maxResults = 100)
         {
 
             IEnumerable<ISpatialEntity> res;
@@ -706,57 +615,14 @@ namespace GpuEnvironment
             cl_lvlShapeIdMem = new ComputeBuffer<clShapeIdTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite , _constants.numTotalElements * _constants.numLvls);
 
 
-            //            // All shapes and objIds as input
-            //            cl_shapeIdInputMem = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_constants.numTotalElements * Marshal.SizeOf(typeof(clShapeIdTupel))),_clShapeIdArray.ToArray(),
-            //                   out error);
-            //            CheckErr(error, "Createbuffer");
-            //
-            //            // Resultbuffer for the ReorderElements Kernel, since we don't know the distribution we need to allocate enough space for every element at every lvl
-            //            cl_lvlShapeIdMem = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_constants.numTotalElements * _constants.numLvls * Marshal.SizeOf(typeof(clShapeIdTupel))),
-            //                   out error);
-            //            CheckErr(error, "Createbuffer");
-
 
             // lvlElements contains the number of native elements for each lvl 
             cl_lvlElements = new ComputeBuffer<uint>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _lvlElements);
-            //            cl_lvlElements = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_constants.numLvls * Marshal.SizeOf(typeof(uint))),
-            //                 out error);
-            //            CheckErr(error, "Createbuffer");
+
 
             //Contains the total amout of element at this lvl, these numbers will be higher than lvlElements because the elements of the lower lvls will be importe into the upper lvls
             cl_lvlTotalElements = new ComputeBuffer<uint>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _constants.numLvls);
 
-//            cl_lvlTotalElements = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_constants.numLvls * Marshal.SizeOf(typeof(uint))),
-//                 out error);
-//            CheckErr(error, "Createbuffer");
-
-            // TODO; we first need to know the amount of lvls....
-
-
-            /*
-                        cl_lvlCellData = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_clObjArray.Count * CELL_DATA_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-                            out error);
-                        CheckErr(error, "Createbuffer");
-
-                        cl_lvlCellIds = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_clObjArray.Count * CELL_ID_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-                            out error);
-                        CheckErr(error, "Createbuffer");
-            */
-
-//
-//            error = Cl.EnqueueWriteBuffer(cqCommandQueue, cl_shapeIdInputMem, Bool.True, IntPtr.Zero, (IntPtr)(_clShapeIdArray.Count * Marshal.SizeOf(typeof(clShapeIdTupel))),
-//                _clShapeIdArray.ToArray(), 0, null,
-//                out eve);
-//            CheckErr(error, "EnqBuffer");
-//
-//
-//            error = Cl.EnqueueWriteBuffer(cqCommandQueue, cl_lvlElements, Bool.True, IntPtr.Zero, (IntPtr) (_constants.numLvls * 4),
-//                _lvlElements, 0, null,
-//                out eve);
-//            CheckErr(error, "EnqBuffer");
-//
-//            error = Cl.Finish(cqCommandQueue);
-//            CheckErr(error, "Cl.Finish");
         }
 
         private void ClReorderElements() {
@@ -774,62 +640,20 @@ namespace GpuEnvironment
             cqCommandQueue.Finish();
 
 
-//            ErrorCode error;
-//            Event eve;
-//            // Enqueue create list kernel
-//            IntPtr agentPtrSize = (IntPtr) 0;
-//            var ptrSize = (IntPtr) Marshal.SizeOf(typeof(Mem));
-//
-//
-////            uint globalWorkSize = _constants.numThreadsPerBlock*(uint) _constants.numBlocks;
-////            uint localWorkSize = _constants.numThreadsPerBlock;
-//
-//            IntPtr[] workGroupSizePtr = new IntPtr[] {(IntPtr) globalWorkSize};
-//            IntPtr[] localWorkGroupSizePtr = new IntPtr[] {(IntPtr) localWorkSize};
-//            Event clevent;
-//            error = Cl.SetKernelArg(ckReorderElements, 0, ptrSize, cl_shapeIdInputMem);
-//            CheckErr(error, "Cl.SetKernelArg");
-//            error = Cl.SetKernelArg(ckReorderElements, 1, ptrSize, cl_lvlShapeIdMem);
-//            CheckErr(error, "Cl.SetKernelArg");
-//            error = Cl.SetKernelArg(ckReorderElements, 2, ptrSize, cl_lvlElements);
-//            CheckErr(error, "Cl.SetKernelArg");
-//            error = Cl.SetKernelArg(ckReorderElements, 3, (IntPtr) (Marshal.SizeOf(typeof(cl2DCollisionConstants))), _constants);
-//            CheckErr(error, "Cl.SetKernelArg");
-//
-//            error = Cl.EnqueueNDRangeKernel(cqCommandQueue, ckReorderElements, 1, null, workGroupSizePtr, localWorkGroupSizePtr, 0, null, out clevent);
-//            CheckErr(error, "Cl.EnqueueNDRangeKernel REORDER_ELEMENTS");
-//
-//
-//            error = Cl.Finish(cqCommandQueue);
-//            CheckErr(error, "Cl.Finish REORDER_ELEMENTS");
-//
-//            error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlElements, Bool.True, IntPtr.Zero, (IntPtr)(_constants.numLvls * 4),
-//                _lvlElements, 0, null, out eve);    
-//            CheckErr(error, "Cl.EnqueueReadBuffer");
-
 
             if (DEBUG) {
                 cqCommandQueue.ReadFromBuffer(cl_lvlShapeIdMem,ref _readLvlShapeElements, false, eventList);
-//                error = Cl.EnqueueReadBuffer
-//                    (cqCommandQueue, cl_lvlShapeIdMem, Bool.True, IntPtr.Zero, (IntPtr) ((IntPtr)(_constants.numTotalElements * _constants.numLvls * Marshal.SizeOf(typeof(clShapeIdTupel)))),
-//                        _readLvlShapeElements, 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
+
 
                 var tmp = new clShapeIdTupel[_constants.numTotalElements];
                 cqCommandQueue.ReadFromBuffer(cl_shapeIdInputMem, ref tmp, false, eventList);
 
-//                error = Cl.EnqueueReadBuffer
-//                    (cqCommandQueue, cl_shapeIdInputMem, Bool.True, IntPtr.Zero, (IntPtr)((IntPtr)(_constants.numTotalElements  * Marshal.SizeOf(typeof(clShapeIdTupel)))),
-//                        tmp, 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
                 cqCommandQueue.Finish();
 
 
                 DebugHelper.PrintElementBuffer( _lvlElements, 5, "Level elements after reorder");
                 DebugHelper.PrintLevelShapeElements(_readLvlShapeElements, _lvlElements,_constants,  "Level shape reorder result");
 
-//                DebugHelper.PrintCellIdBufferExtended
-//                    (_debugReadInput, _readCellIds, _readCellData, _cell3DPosList, "CreateCellId Array", (int) _constants.numTotalElements);
 
             }
         }
@@ -910,38 +734,22 @@ namespace GpuEnvironment
             for (int i = 0; i < _constants.numLvls; i++) {
                 cl_sharedIdxMem[i] = new ComputeBuffer<int>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _sharedIdx[i]);
 
-//                error = Cl.EnqueueWriteBuffer(cqCommandQueue, cl_sharedIdxMem[i], Bool.True, IntPtr.Zero, (IntPtr)(4),
-//                    0, 0, null,
-//                    out eve);
-//                CheckErr(error, "EnqBuffer");
 //                // Create the cellbuffers, the size is now know after the reorder happened
                 cl_lvlCellData[i] = new ComputeBuffer<ulong>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _lvlTotalElements[i]  * GRID_FIELDS_PER_ELEMENT);
-                //Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_lvlTotalElements[i] * CELL_DATA_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-                //                    out error);
-                //                CheckErr(error, "Createbuffer");
 
                 cl_lvlCellIds[i] = new ComputeBuffer<uint>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT);
 
-//                cl_lvlCellIds[i] = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_lvlTotalElements[i] * CELL_ID_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-//                    out error);
-//                CheckErr(error, "Createbuffer");
 
                 // When debugmode is enabled allocate memory for the debug cells, elsewise just create a dummy buffer to prevent the kernel call from crashing
                 if (DEBUG)
                 {
                     cl_DebugLvl2DPosList[i] = new ComputeBuffer<CollisionCell2D>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _constants.cellArraySize * GRID_FIELDS_PER_ELEMENT);
 
-//                    cl_DebugLvl2DPosList[i] = Cl.CreateBuffer
-//                        (cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_constants.cellArraySize * GRID_FIELDS_PER_ELEMENT * Marshal.SizeOf(typeof(CollisionCell2D))),
-//                            out error);
                 }
                 else
                 {
                     cl_DebugLvl2DPosList[i] = new ComputeBuffer<CollisionCell2D>(cxGPUContext, ComputeMemoryFlags.ReadWrite, 1);
 //
-//                    cl_DebugLvl2DPosList[i] = Cl.CreateBuffer
-//                        (cxGPUContext, MemFlags.ReadWrite, (IntPtr)(4),
-//                            out error);
 
                 }
 
@@ -949,10 +757,6 @@ namespace GpuEnvironment
             cqCommandQueue.ReadFromBuffer(cl_lvlTotalElements,ref _lvlTotalElements,true, eventList);
 
 
-            //            error = Cl.EnqueueWriteBuffer(cqCommandQueue, cl_lvlTotalElements, Bool.True, IntPtr.Zero, (IntPtr)(_constants.numLvls * 4),
-            //                _lvlTotalElements, 0, null,
-            //                         out eve);
-            //            CheckErr(error, "EnqBuffer");
 
 
             long[] globalWorkSize = new long[] { _constants.numThreadsPerBlock * (uint)_constants.numBlocks };
@@ -961,15 +765,6 @@ namespace GpuEnvironment
        
 
             // Enqueue create list kernel
-//            IntPtr agentPtrSize = (IntPtr)0;
-//            var ptrSize = (IntPtr)Marshal.SizeOf(typeof(Mem));
-
-
-//            uint globalWorkSize = _constants.numThreadsPerBlock * (uint)_constants.numBlocks;
-//            uint localWorkSize = _constants.numThreadsPerBlock;
-//
-//            IntPtr[] workGroupSizePtr = new IntPtr[] { (IntPtr)globalWorkSize };
-//            IntPtr[] localWorkGroupSizePtr = new IntPtr[] { (IntPtr)localWorkSize };
             for (int i = 0; i < _constants.numLvls; i++) {
                 // Calculate offsets and startidx 
                 long numKernelElements = 0;
@@ -988,63 +783,24 @@ namespace GpuEnvironment
                 ckCreateCellIdArray.SetMemoryArgument(7, cl_DebugLvl2DPosList[i]);
                 cqCommandQueue.Execute(ckCreateCellIdArray, null, globalWorkSize, localWorkSize, eventList);
 
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 0, ptrSize, cl_lvlShapeIdMem);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 1, ptrSize, cl_lvlElements);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 2, ptrSize, cl_lvlCellIds[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 3, ptrSize, cl_lvlCellData[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 4, (IntPtr)(Marshal.SizeOf(typeof(cl2DCollisionConstants))), _constants);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 5, (IntPtr)4, i);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 6, (IntPtr)4, _lvlTotalElements[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCellIdArray, 7, ptrSize, cl_DebugLvl2DPosList[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//
-//                error = Cl.EnqueueNDRangeKernel(cqCommandQueue, ckCreateCellIdArray, 1, null, workGroupSizePtr, localWorkGroupSizePtr, 0, null, out clevent);
-//                CheckErr(error, "Cl.EnqueueNDRangeKernel");
 
             }
 
             cqCommandQueue.Finish();
 
-//            error = Cl.Finish(cqCommandQueue);
-//            CheckErr(error, "Cl.Finish");
-
-
-            /*   error = Cl.EnqueueReadBuffer(cqCommandQueue, freeCellMem, Bool.True, IntPtr.Zero, (IntPtr)(2),
-                   freeCellList, 0, null, out eve);
-               CheckErr(error, "Cl.EnqueueReadBuffer");*/
 
 
             if (DEBUG)
             {
 
-                /*error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_shapeIdInputMem, Bool.True, IntPtr.Zero, (IntPtr)(_constants.numTotalElements * CELL_DATA_ELEMENT_SIZE),
-                    _debugReadInput, 0, null, out eve);
-                CheckErr(error, "Cl.EnqueueReadBuffer");
-*/
                 for (int i = 0; i < _constants.numLvls; i++) {
                     cqCommandQueue.ReadFromBuffer(cl_lvlCellIds[i], ref _readCellIds[i],false, eventList);
-//                    error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlCellIds[i], Bool.True, IntPtr.Zero, (IntPtr)(_lvlTotalElements[i] * CELL_ID_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-//                    _readCellIds[i], 0, null, out eve);
-//                    CheckErr(error, "Cl.EnqueueReadBuffer");
 
                     cqCommandQueue.ReadFromBuffer(cl_lvlCellData[i], ref _readCellData[i], false, eventList);
 
-                    //                    error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlCellData[i], Bool.True, IntPtr.Zero, (IntPtr)(_lvlTotalElements[i] * CELL_DATA_ELEMENT_SIZE * GRID_FIELDS_PER_ELEMENT),
-                    //                    _readCellData[i], 0, null, out eve);
-                    //                    CheckErr(error, "Cl.EnqueueReadBuffer");
 
                     cqCommandQueue.ReadFromBuffer(cl_DebugLvl2DPosList[i], ref _readLvlCell2DPosList[i], false, eventList);
 
-//                    error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_DebugLvl2DPosList[i], Bool.True, IntPtr.Zero, (IntPtr)(_lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT * Marshal.SizeOf(typeof(CollisionCell2D))),
-//                    _readLvlCell2DPosList[i], 0, null, out eve);
-//                    CheckErr(error, "Cl.EnqueueReadBuffer");
 
                     for (int j = 0; j < _lvlTotalElements[i]; j++)
                     {
@@ -1059,20 +815,12 @@ namespace GpuEnvironment
 
                 DebugHelper.PrintCellIdBufferExtended( _readCellIds, _readCellData, _readLvlCell2DPosList, "CreateCellId Array", _constants, _lvlTotalElements);
 
-                //DebugHelper.PrintCellIdBuffer(debugReadInput,readCellIdList,readCellData,"CreateCellId Array",constants.numTotalElements);
-
-                //Debug.WriteLine();
             };
             cl_shapeIdInputMem.Dispose();
-//            error = Cl.ReleaseMemObject(cl_shapeIdInputMem);
-//            CheckErr(error, "Cl.ReleaseMemObj");
 
             for (int i = 0; i < _constants.numLvls; i++) {
                 cl_DebugLvl2DPosList[i].Dispose();
-//                error = Cl.ReleaseMemObject(cl_DebugLvl2DPosList[i]);
-//                CheckErr(error, "Cl.ReleaseMemObj");
             }
-            //Cl.ReleaseMemObject(objIdMem);
         }
 
         private void ClCreateNarrowCheckSublists()
@@ -1081,9 +829,6 @@ namespace GpuEnvironment
             {
                 // TODO: Find a proper way to choose a size....
                 cl_narrowCheckSublists[i] = new ComputeBuffer<clCollisionSublist>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _lvlTotalElements[i]/2 );
-                //                    Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_lvlTotalElements[i]  * Marshal.SizeOf(typeof(clCollisionSublist)) / 2) , 
-                //                     out error);
-                //                CheckErr(error, "Createbuffer");
             }
             long[] globalWorkSize = new long[] { _constants.numThreadsPerBlock * (uint)_constants.numBlocks };
             long[] localWorkSize = new long[] { _constants.numThreadsPerBlock };
@@ -1092,12 +837,6 @@ namespace GpuEnvironment
 
 
 
-            //            int globalWorkSize = (int)(_constants.numThreadsPerBlock * _constants.numBlocks);
-            //            int localWorkSize = (int)_constants.numThreadsPerBlock;
-            //
-            //            IntPtr[] workGroupSizePtr = new IntPtr[] { (IntPtr)globalWorkSize };
-            //            IntPtr[] localWorkGroupSizePtr = new IntPtr[] { (IntPtr)localWorkSize };
-            //            Event clevent;
             for (int i = 0; i < _constants.numLvls; i++) {
                 // Create Collision List
 
@@ -1109,36 +848,12 @@ namespace GpuEnvironment
                 ckCreateNarrowCheckList.SetValueArgument(5, _lvlTotalElements[i]);
                 cqCommandQueue.Execute(ckCreateNarrowCheckList, null, globalWorkSize, localWorkSize, eventList);
 
-//
-//                error = Cl.SetKernelArg(ckCreateNarrowCheckList, 0, ptrSize, cl_lvlCellIds[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateNarrowCheckList, 1, ptrSize, cl_lvlCellData[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateNarrowCheckList, 2, ptrSize, cl_narrowCheckSublists[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateNarrowCheckList, 3, ptrSize, cl_sharedIdxMem[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateNarrowCheckList, 4, (IntPtr)(Marshal.SizeOf(typeof(cl2DCollisionConstants))), _constants);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateNarrowCheckList, 5, (IntPtr)4, _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT);
-//                CheckErr(error, "Cl.SetKernelArg");
-//
-//                error = Cl.EnqueueNDRangeKernel(cqCommandQueue, ckCreateNarrowCheckList, 1, null, workGroupSizePtr, localWorkGroupSizePtr, 0, null, out clevent);
-//                CheckErr(error, "Cl.EnqueueNDRangeKernel");
-
             }
             cqCommandQueue.Finish();
 
-//            error = Cl.Finish(cqCommandQueue);
-//            CheckErr(error, "Cl.Finish");
 
             for (int i = 0; i < _constants.numLvls; i++) {
                 cqCommandQueue.ReadFromBuffer(cl_sharedIdxMem[i], ref _sharedIdx[i], false, eventList);
-//                error = Cl.EnqueueReadBuffer
-//                    (cqCommandQueue, cl_sharedIdxMem[i], Bool.True, IntPtr.Zero, (IntPtr) (4),
-//                        _sharedIdx[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
-
             }
 
             if (DEBUG)
@@ -1149,9 +864,6 @@ namespace GpuEnvironment
                     _readNarrowCheckList[i] = new clCollisionSublist[_sharedIdx[i][0]];
                     cqCommandQueue.ReadFromBuffer(cl_narrowCheckSublists[i], ref _readNarrowCheckList[i], false, eventList);
 
-//                    error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_narrowCheckSublists[i], Bool.True, IntPtr.Zero, (IntPtr)(_sharedIdx[i][0] * GRID_FIELDS_PER_ELEMENT),
-//                        _readNarrowCheckList[i], 0, null, out eve);
-//                    CheckErr(error, "Cl.EnqueueReadBuffer");
                 }
           
                 cqCommandQueue.Finish();
@@ -1179,31 +891,13 @@ namespace GpuEnvironment
             long[] globalWorkSize = new long[] { _constants.numThreadsPerBlock * (uint)_constants.numBlocks };
             long[] localWorkSize = new long[] { _constants.numThreadsPerBlock };
             ComputeEventList eventList = new ComputeEventList();
-            //            ErrorCode error;
-            //            Event eve;
-            //            IntPtr agentPtrSize = (IntPtr)0;
-            //            var ptrSize = (IntPtr)Marshal.SizeOf(typeof(Mem));
-
-//            uint globalWorkSize = _constants.numThreadsPerBlock * (uint)_constants.numBlocks;
-//            uint localWorkSize = _constants.numThreadsPerBlock;
-//
-//            IntPtr[] workGroupSizePtr = new IntPtr[] { (IntPtr)globalWorkSize };
-//            IntPtr[] localWorkGroupSizePtr = new IntPtr[] { (IntPtr)localWorkSize };
             for (int i = 0; i < _constants.numLvls; i++) {
                 cl_lvlCollisionCheckTuples[i] = new ComputeBuffer<CollisionTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT);
-
-//                cl_lvlCollisionCheckTuples[i] = Cl.CreateBuffer(cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT * Marshal.SizeOf(typeof(CollisionTupel))),
-//                    out error);
-//                CheckErr(error, "Createbuffer");
                 
                 cqCommandQueue.WriteToBuffer(new int[]{0}, cl_sharedIdxMem[i] ,true,eventList);
-//                error = Cl.EnqueueWriteBuffer(cqCommandQueue, cl_sharedIdxMem[i], Bool.True, IntPtr.Zero, (IntPtr)(4),
-//                     0, 0, null, out eve);
 
 
                 if (DEBUG) Debug.WriteLine(" Num Elements {0} total {1}", _sharedIdx[0], _constants.numTotalElements);
-                //                CheckErr(error, "EnqBuffer")
-                //                    ;
                 ckCreateCollsionTuples.SetMemoryArgument(0, cl_lvlCellData[i]);
                 ckCreateCollsionTuples.SetMemoryArgument(1, cl_narrowCheckSublists[i]);
                 ckCreateCollsionTuples.SetMemoryArgument(2, cl_lvlCollisionCheckTuples[i]);
@@ -1213,46 +907,19 @@ namespace GpuEnvironment
                 cqCommandQueue.Execute(ckCreateCollsionTuples, null, globalWorkSize, localWorkSize, eventList);
 
 
-//                error = Cl.SetKernelArg(ckCreateCollsionTuples, 0, ptrSize, cl_lvlCellData[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCollsionTuples, 1, ptrSize, cl_narrowCheckSublists[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCollsionTuples, 2, ptrSize, cl_lvlCollisionCheckTuples[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCollsionTuples, 3, ptrSize, cl_sharedIdxMem[i]);
-//
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCollsionTuples, 4, (IntPtr)(Marshal.SizeOf(typeof(cl2DCollisionConstants))), _constants);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCreateCollsionTuples, 5, (IntPtr)4, _sharedIdx[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//
-//                error = Cl.EnqueueNDRangeKernel(cqCommandQueue, ckCreateCollsionTuples, 1, null, workGroupSizePtr, localWorkGroupSizePtr, 0, null, out clevent);
-//                CheckErr(error, "Cl.EnqueueNDRangeKernel");
 
             }
 
             cqCommandQueue.Finish();
 
-//            error = Cl.Finish(cqCommandQueue);
-//            CheckErr(error, "Cl.Finish");
             for (int i = 0; i < _constants.numLvls; i++) {
                 cqCommandQueue.ReadFromBuffer(cl_sharedIdxMem[i], ref _sharedIdx[i],true,eventList);
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_sharedIdxMem[i], Bool.True, IntPtr.Zero, (IntPtr)(4),
-//                    _sharedIdx[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
 
                 _readLvlCheckTupelList[i] = new CollisionTupel[_sharedIdx[i][0]];
                 cqCommandQueue.ReadFromBuffer(cl_lvlCollisionCheckTuples[i], ref _readLvlCheckTupelList[i], true, eventList);
 
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlCollisionCheckTuples[i], Bool.True, IntPtr.Zero, (IntPtr)(_sharedIdx[i][0] * Marshal.SizeOf(typeof(CollisionTupel))),
-//                _readLvlCheckTupelList[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
-
 
                 cl_narrowCheckSublists[i].Dispose();
-//                error = Cl.ReleaseMemObject(cl_narrowCheckSublists[i]);
-//                CheckErr(error, "Cl.ReleaseMem");
 
 
 
@@ -1283,17 +950,6 @@ namespace GpuEnvironment
             long[] globalWorkSize = new long[] { _constants.numThreadsPerBlock * (uint)_constants.numBlocks };
             long[] localWorkSize = new long[] { _constants.numThreadsPerBlock };
             ComputeEventList eventList = new ComputeEventList();
-            //            ErrorCode error;
-            //            Event eve;
-            //            IntPtr agentPtrSize = (IntPtr)0;
-            //            var ptrSize = (IntPtr)Marshal.SizeOf(typeof(Mem));
-
-//            uint globalWorkSize = _constants.numThreadsPerBlock * (uint)_constants.numBlocks;
-//            uint localWorkSize = _constants.numThreadsPerBlock;
-
-//            IntPtr[] workGroupSizePtr = new IntPtr[] { (IntPtr)globalWorkSize };
-//            IntPtr[] localWorkGroupSizePtr = new IntPtr[] { (IntPtr)localWorkSize };
-//            Event clevent;
             for (int i = 0; i < _constants.numLvls; i++) {
                 if (_sharedIdx[i][0] <= 0)
                     continue;
@@ -1302,25 +958,6 @@ namespace GpuEnvironment
                 cl_lvlCollisonShapes[i] = new ComputeBuffer<clCircleShapeTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _collisionShapeTupels[i]);
                 cl_lvlExploreElementIdx[i] = new ComputeBuffer<int>(cxGPUContext, ComputeMemoryFlags.ReadWrite, 1);
 
-//                cl_lvlCollisonTuples[i] = Cl.CreateBuffer
-//                    (cxGPUContext, MemFlags.ReadWrite, (IntPtr) (_sharedIdx[i][0]*Marshal.SizeOf(typeof(CollisionTupel))),
-//                        out error);
-//                CheckErr(error, "Createbuffer");
-//
-//                cl_lvlExporeTuples[i] = Cl.CreateBuffer
-//                   (cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_sharedIdx[i][0] * Marshal.SizeOf(typeof(CollisionTupel))),
-//                       out error);
-//                CheckErr(error, "Createbuffer");
-//
-//                cl_lvlCollisonShapes[i] = Cl.CreateBuffer
-//                    (cxGPUContext, MemFlags.ReadWrite, (IntPtr) (_sharedIdx[i][0]*Marshal.SizeOf(typeof(clCircleShapeTupel))),
-//                        out error);
-//                CheckErr(error, "Createbuffer");
-//
-//                cl_lvlExploreElementIdx[i] = Cl.CreateBuffer
-//                    (cxGPUContext, MemFlags.ReadWrite, (IntPtr)(_sharedIdx[i][0] * Marshal.SizeOf(typeof(clCircleShapeTupel))),
-//                        out error);
-//                CheckErr(error, "Createbuffer");
 
                 _collisionShapeTupels[i] = new clCircleShapeTupel[_sharedIdx[i][0]];
                 _readLvlExploreList[i] = new CollisionTupel[_sharedIdx[i][0]];
@@ -1337,25 +974,6 @@ namespace GpuEnvironment
                     keytmp = (uint) (_readCellData[i][_readLvlCheckTupelList[i][j].obj2] & 0xFFFFFFFF);
 
                     _collisionShapeTupels[i][j].obj2 = _objIdClShapeMap[keytmp];
-
-
-//                    // Set idx to 0
-//                    error = Cl.EnqueueWriteBuffer
-//                    (cqCommandQueue, cl_lvlExploreElementIdx[i], Bool.True, IntPtr.Zero, (IntPtr)(4),
-//                        0, 0, null, out eve);
-//                    CheckErr(error, "EnqBuffer");
-//
-//                    error = Cl.EnqueueWriteBuffer
-//                    (cqCommandQueue, cl_sharedIdxMem[i], Bool.True, IntPtr.Zero, (IntPtr)(4),
-//                        0, 0, null, out eve);
-//                    CheckErr(error, "EnqBuffer");
-//                    // CheckCollsions
-//
-//                    error = Cl.EnqueueWriteBuffer
-//                        (cqCommandQueue, cl_lvlCollisonShapes[i], Bool.False, IntPtr.Zero, (IntPtr)(_sharedIdx[i][0] * Marshal.SizeOf(typeof(clCircleShapeTupel))),
-//                            _collisionShapeTupels[i], 0, null, out eve);
-//
-//                    CheckErr(error, "EnqBuffer");
                 }
                 // Set idx to 0
                 cqCommandQueue.WriteToBuffer(new int[] { 0 }, cl_lvlExploreElementIdx[i], true, eventList);
@@ -1372,46 +990,15 @@ namespace GpuEnvironment
                 ckCheckCollsions.SetValueArgument(8, _sharedIdx[i][0]);
                 cqCommandQueue.Execute(ckCheckCollsions, null, globalWorkSize, localWorkSize, eventList);
 
-//
-//                error = Cl.SetKernelArg(ckCheckCollsions, 0, ptrSize, cl_lvlCellData[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 1, ptrSize, cl_lvlCollisionCheckTuples[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 2, ptrSize, cl_lvlCollisonShapes[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 3, ptrSize, cl_lvlCollisonTuples[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 4, ptrSize, cl_lvlExporeTuples[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 5, ptrSize, cl_sharedIdxMem[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 6, ptrSize, cl_lvlExploreElementIdx[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 7, (IntPtr)(Marshal.SizeOf(typeof(cl2DCollisionConstants))), _constants);
-//                CheckErr(error, "Cl.SetKernelArg");
-//                error = Cl.SetKernelArg(ckCheckCollsions, 8, (IntPtr)4, _sharedIdx[i]);
-//                CheckErr(error, "Cl.SetKernelArg");
-//
-//                error = Cl.EnqueueNDRangeKernel(cqCommandQueue, ckCheckCollsions, 1, null, workGroupSizePtr, localWorkGroupSizePtr, 0, null, out clevent);
-//                CheckErr(error, "Cl.EnqueueNDRangeKernel");
             }
 
             cqCommandQueue.Finish();
-//            error = Cl.Finish(cqCommandQueue);
-//            CheckErr(error, "Cl.Finish");
 
             for (int i = 0; i < _constants.numLvls; i++) {
                 if (_sharedIdx[i][0] <= 0)
                     continue;
                 cqCommandQueue.ReadFromBuffer(cl_sharedIdxMem[i], ref _sharedIdx[i], true, eventList );
                 cqCommandQueue.ReadFromBuffer(cl_lvlExploreElementIdx[i], ref _lvlExploreIdx[i], true, eventList);
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_sharedIdxMem[i], Bool.False, IntPtr.Zero, (IntPtr)(4),
-//                     _sharedIdx[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlExploreElementIdx[i], Bool.False, IntPtr.Zero, (IntPtr)(4),
-//                    _lvlExploreIdx[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
-
 
 
                 _readLvlCollisionList[i] = new CollisionTupel[_sharedIdx[i][0]];
@@ -1419,13 +1006,6 @@ namespace GpuEnvironment
 
                 cqCommandQueue.ReadFromBuffer(cl_lvlCollisonTuples[i], ref _readLvlCollisionList[i], false, eventList);
                 cqCommandQueue.ReadFromBuffer(cl_lvlExporeTuples[i], ref _readLvlExploreList[i], false, eventList);
-
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlCollisonTuples[i], Bool.False, IntPtr.Zero, (IntPtr)(_sharedIdx[i][0] * Marshal.SizeOf(typeof(CollisionTupel))),
-//                    _readLvlCollisionList[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlExporeTuples[i], Bool.False, IntPtr.Zero, (IntPtr)(_lvlExploreIdx[i][0] * Marshal.SizeOf(typeof(CollisionTupel))),
-//                    _readLvlExploreList[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
             }
             cqCommandQueue.Finish();
             
@@ -1433,7 +1013,7 @@ namespace GpuEnvironment
         }
         #endregion
 
-        public void Commit()
+        public COMMIT_RESULT Commit()
         {
             var before = DateTime.Now;
             // Block all incoming requests until the calculation 
@@ -1449,13 +1029,7 @@ namespace GpuEnvironment
 
 
             if (_constants.numTotalElements == 0)
-                return;
-
- 
-//            _cell2DPosList = new CollisionCell2D[_constants.numTotalElements * GRID_FIELDS_PER_ELEMENT];
-//            _tupelList = new CollisionTupel[_constants.numTotalElements * GRID_FIELDS_PER_ELEMENT];
-//            _readCellData = new ulong[_constants.numTotalElements * GRID_FIELDS_PER_ELEMENT];
-//            _readCellIds = new uint[_constants.numTotalElements * GRID_FIELDS_PER_ELEMENT];
+                return COMMIT_RESULT.OK;
 
             _clShapeArray = _EnvActEnvObjs.Values.ToList();
             _clShapeArray.AddRange(_EnvExploreObjs.Values.ToList());
@@ -1474,99 +1048,91 @@ namespace GpuEnvironment
             _constants.numTotalElements = (uint)_clObjArray.Count;
             if(DEBUG) _readLvlShapeElements = new clShapeIdTupel[numLvls * _constants.numTotalElements];
 
-            #region CreateBuffers
-            // Create the Buffers
-            CreateBuffers();
-            #endregion
-            #region ReorderElements
-           if(DEBUG) Debug.WriteLine("Execution time Create Buffers =" + (DateTime.Now - before).TotalMilliseconds);
-             ClReorderElements();
-            #endregion
-           if(DEBUG) Debug.WriteLine("Execution time ReorderElements =" + (DateTime.Now - before).TotalMilliseconds);
-             before = DateTime.Now;
-
-            #region createCellList
-            ClCreateCellId();
-            #endregion
-
-           if(DEBUG) Debug.WriteLine("Execution time CreateCellIdArray =" + (DateTime.Now - before).TotalMilliseconds);
-             before = DateTime.Now;
-
-
-
-            #region RadixSort
-
-            ComputeEventList eventList = new ComputeEventList();
-
-            //            ErrorCode error;
-            //            Event eve;
-            for (int i = 0; i < _constants.numLvls; i++) {
-                sort.sortKeysValue(cl_lvlCellIds[i], cl_lvlCellData[i],(int) _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT);
-
-
-                cqCommandQueue.ReadFromBuffer(cl_lvlCellData[i], ref _readCellData[i], true ,eventList);
-//                error = Cl.EnqueueReadBuffer(cqCommandQueue, cl_lvlCellData[i], Bool.True, IntPtr.Zero, (IntPtr)(_lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT * CELL_DATA_ELEMENT_SIZE ),
-//                _readCellData[i], 0, null, out eve);
-//                CheckErr(error, "Cl.EnqueueReadBuffer");
-            }
-
-            if (DEBUG)
+            try
             {
-                for (int i = 0; i < _constants.numLvls; i++) {
-                    cqCommandQueue.ReadFromBuffer(cl_lvlCellIds[i], ref _readCellIds[i], true, eventList);
+                #region CreateBuffers
+                // Create the Buffers
+                CreateBuffers();
+                #endregion
+                #region ReorderElements
+                if (DEBUG) Debug.WriteLine("Execution time Create Buffers =" + (DateTime.Now - before).TotalMilliseconds);
+                ClReorderElements();
+                #endregion
+                if (DEBUG) Debug.WriteLine("Execution time ReorderElements =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
 
-//                    error = Cl.EnqueueReadBuffer
-//                        (cqCommandQueue, cl_lvlCellIds[i], Bool.True, IntPtr.Zero,
-//                            (IntPtr) (_lvlTotalElements[i]*CELL_ID_ELEMENT_SIZE*GRID_FIELDS_PER_ELEMENT),
-//                            _readCellIds[i], 0, null, out eve);
-//                    CheckErr(error, "Cl.EnqueueReadBuffer");
-                    for (int j = 0; j < _readCellIds[i].Count(); j++)
+                #region createCellList
+                ClCreateCellId();
+                #endregion
+
+                if (DEBUG) Debug.WriteLine("Execution time CreateCellIdArray =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
+
+
+
+                #region RadixSort
+
+                ComputeEventList eventList = new ComputeEventList();
+
+                for (int i = 0; i < _constants.numLvls; i++)
+                {
+                    sort.sortKeysValue(cl_lvlCellIds[i], cl_lvlCellData[i], (int)_lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT);
+
+
+                    cqCommandQueue.ReadFromBuffer(cl_lvlCellData[i], ref _readCellData[i], true, eventList);
+                }
+
+                if (DEBUG)
+                {
+                    for (int i = 0; i < _constants.numLvls; i++)
                     {
-                        if (_cellMap.ContainsKey(_readCellIds[i][j]))
+                        cqCommandQueue.ReadFromBuffer(cl_lvlCellIds[i], ref _readCellIds[i], true, eventList);
+
+                        for (int j = 0; j < _readCellIds[i].Count(); j++)
                         {
-                            _readLvlCell2DPosList[i][j] = _cellMap[_readCellIds[i][j]];
+                            if (_cellMap.ContainsKey(_readCellIds[i][j]))
+                            {
+                                _readLvlCell2DPosList[i][j] = _cellMap[_readCellIds[i][j]];
+                            }
+                            else
+                            {
+                                _readLvlCell2DPosList[i][j] = new CollisionCell2D();
+                            }
                         }
-                        else
-                        {
-                            _readLvlCell2DPosList[i][j] = new CollisionCell2D();
-                        }
+
+                        DebugHelper.PrintCellIdBufferExtended(_readCellIds, _readCellData, _readLvlCell2DPosList, "CreateCellId Array", _constants, _lvlTotalElements);
+
                     }
 
-                                   DebugHelper.PrintCellIdBufferExtended( _readCellIds, _readCellData, _readLvlCell2DPosList, "CreateCellId Array", _constants, _lvlTotalElements);
 
                 }
 
-             //   DebugHelper.PrintCellIdBufferExtended(_readCellIds, _readCellData, _readLvlCell2DPosList, "CreateCellId Array", _constants, _lvlTotalElements);
+                #endregion
 
-                //DebugHelper.PrintCellIdBufferExtended(_debugReadInput, _readCellIds, _readCellData, _cell3DPosList, "Sorted Keys", (int)_constants.numTotalElements);
+                if (DEBUG) Debug.WriteLine("Execution time RadixSort =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
 
-            }
+                #region CollisionList
+                ClCreateNarrowCheckSublists();
+                #endregion
 
-            #endregion
+                if (DEBUG) Debug.WriteLine("Execution time CreateCollisionList =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
 
-           if(DEBUG) Debug.WriteLine("Execution time RadixSort =" + (DateTime.Now - before).TotalMilliseconds);
-             before = DateTime.Now;
+                #region CreateCollisionTuples
+                ClCreateCollsionTuples();
+                #endregion
+                if (DEBUG) Debug.WriteLine("Execution time CreateCollisionTuples =" + (DateTime.Now - before).TotalMilliseconds);
+                before = DateTime.Now;
+                #region CheckCollisions
+                ClCheckCollsions();
 
-            #region CollisionList
-            ClCreateNarrowCheckSublists();
-            #endregion
+                for (int i = 0; i < _constants.numLvls; i++)
+                {
 
-           if(DEBUG) Debug.WriteLine("Execution time CreateCollisionList =" + (DateTime.Now - before).TotalMilliseconds);
-             before = DateTime.Now;
-
-            #region CreateCollisionTuples
-            ClCreateCollsionTuples();
-            #endregion
-           if(DEBUG) Debug.WriteLine("Execution time CreateCollisionTuples =" + (DateTime.Now - before).TotalMilliseconds);
-             before = DateTime.Now;
-            #region CheckCollisions
-            ClCheckCollsions();
-
-            for (int i = 0; i < _constants.numLvls; i++) {
-                    
                     // TODO: Call method with lvl idx -> Maybe rework all methods like that
-                   if(DEBUG) Debug.WriteLine("Execution time CheckCollisions =" + (DateTime.Now - before).TotalMilliseconds);
-                     before = DateTime.Now;
+                    if (DEBUG) Debug.WriteLine("Execution time CheckCollisions =" + (DateTime.Now - before).TotalMilliseconds);
+                    before = DateTime.Now;
 
                     //TODO: Maybe do this threadwise to get some more performance.
                     for (int j = 0; j < _sharedIdx[i][0]; j++)
@@ -1591,159 +1157,168 @@ namespace GpuEnvironment
                             tmp.Add(_readLvlCollisionList[i][j].obj1);
                             _collisionMap.TryAdd(_readLvlCollisionList[i][j].obj2, tmp);
                         }
-                    
-
-                    // Check Results
-                }
-            }
-  
 
 
-            // RemoveSet
-            var itemsToRemove = new HashSet<uint>();
-
-            foreach (var act in _collisionMap.Keys) {
-               if(DEBUG) Debug.Write(String.Format("ID: {0}: [",act));
-                 foreach (var actVal in _collisionMap[act]) {
-                   if(DEBUG) Debug.Write(String.Format("{0} ", actVal));
- 
-                }
-               if(DEBUG) Debug.WriteLine("]");
-             }
-
-            // Call all delegates
-            foreach (var actDele in m_AddDelegates.ToList())
-            {
-                if(actDele.Item2 == null) continue;
-                uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
-                ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
-
-
-                // TODO: Fresh added elements can collide.
-                if (_collisionMap.ContainsKey(tmpId))
-                {
-                    // Add collided -> dont add item to environment
-                    List<ISpatialEntity> collidedList = new List<ISpatialEntity>();//collisionMap[tmpId].Select(actObj => objIdSpatialMap[actObj]).ToList();
-                    foreach (var actobjId in _collisionMap[tmpId].ToList())
-                    {
-                        collidedList.Add(_objIdSpatialMap[actobjId]);
+                        // Check Results
                     }
-                    var ret = new EnvironmentResult(collidedList);
-                    actDele.Item2.Invoke(ret, actAEntity);
-                    // itemsToRemove.Add(tmpId);
                 }
-                else
+
+
+
+                // RemoveSet
+                var itemsToRemove = new HashSet<uint>();
+
+                foreach (var act in _collisionMap.Keys)
                 {
-                    // Add successful -> Add Element to environment and invoke corresponding delegate
-                    actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
-                }
-                _EnvActEnvObjs.TryAdd(tmpId, _objIdClShapeMap[tmpId]);
-
-            }
-            foreach (var actDele in m_MoveDelegates.ToList())
-            {
-                if (actDele.Item2 == null) continue;
-
-                uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
-                ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
-                if (_collisionMap.ContainsKey(tmpId))
-                {
-
-                    List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
-                    var ret = new EnvironmentResult(deleList);
-                    actDele.Item2.Invoke(ret, actAEntity);
-                }
-                else
-                {
-                    actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
-                }
-            }
-            foreach (var actDele in m_ExploreDelegates.ToList())
-            {
-                if (actDele.Item2 == null) continue;
-
-                uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
-                if (_collisionMap.ContainsKey(tmpId))
-                {
-                    List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
-                    var ret = new EnvironmentResult(deleList);
-                    actDele.Item2.Invoke(ret);
-                }
-                else
-                {
-                    actDele.Item2.Invoke(new EnvironmentResult());
-                }
-            }
-
-
-
-            foreach (var actRemove in m_ActRemoves.ToList())
-            {
-                if (actRemove.Item2 == null) continue;
-
-                if (_spatialObjIdMap.ContainsKey(actRemove.Item1))
-                {
-                   if(DEBUG) Debug.WriteLine("Removing at delegate agentID: {0} ", actRemove.Item1);
-                     var objId = _spatialObjIdMap[actRemove.Item1];
-                    var entity = _objIdSpatialMap[objId];
-
-
-                    //ulong objId = _spatialObjIdMap[entity.AgentGuid];
-                    clCircleShapeObject tmp;
-                    uint tmp2;
-                    ISpatialEntity tmp3;
-                    _EnvActEnvObjs.TryRemove(objId, out tmp);
-                    _spatialObjIdMap.TryRemove(actRemove.Item1, out tmp2);
-                    _objIdSpatialMap.TryRemove((uint)objId, out tmp3);
-
-                    lock (_sync)
+                    if (DEBUG) Debug.Write(String.Format("ID: {0}: [", act));
+                    foreach (var actVal in _collisionMap[act])
                     {
-                        _objIdList.Remove(objId);
-                        _shapeList.Remove(_objIdClShapeMap[(uint)objId]);
+                        if (DEBUG) Debug.Write(String.Format("{0} ", actVal));
+
                     }
-                    _objIdClShapeMap.TryRemove((uint)objId, out tmp);
-                    actRemove.Item2?.Invoke(entity);
+                    if (DEBUG) Debug.WriteLine("]");
+                }
+
+                // Call all delegates
+                foreach (var actDele in m_AddDelegates.ToList())
+                {
+                    if (actDele.Item2 == null) continue;
+                    uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
+                    ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
+
+
+                    // TODO: Fresh added elements can collide.
+                    if (_collisionMap.ContainsKey(tmpId))
+                    {
+                        // Add collided -> dont add item to environment
+                        List<ISpatialEntity> collidedList = new List<ISpatialEntity>();//collisionMap[tmpId].Select(actObj => objIdSpatialMap[actObj]).ToList();
+                        foreach (var actobjId in _collisionMap[tmpId].ToList())
+                        {
+                            collidedList.Add(_objIdSpatialMap[actobjId]);
+                        }
+                        var ret = new EnvironmentResult(collidedList);
+                        actDele.Item2.Invoke(ret, actAEntity);
+                        // itemsToRemove.Add(tmpId);
+                    }
+                    else
+                    {
+                        // Add successful -> Add Element to environment and invoke corresponding delegate
+                        actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
+                    }
+                    _EnvActEnvObjs.TryAdd(tmpId, _objIdClShapeMap[tmpId]);
 
                 }
-                else
+                foreach (var actDele in m_MoveDelegates.ToList())
                 {
-                   if(DEBUG) Debug.WriteLine("Tried to remove {0} which does not exist", actRemove.Item1);
-                 }
+                    if (actDele.Item2 == null) continue;
+
+                    uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
+                    ISpatialEntity actAEntity = _objIdSpatialMap[tmpId];
+                    if (_collisionMap.ContainsKey(tmpId))
+                    {
+
+                        List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
+                        var ret = new EnvironmentResult(deleList);
+                        actDele.Item2.Invoke(ret, actAEntity);
+                    }
+                    else
+                    {
+                        actDele.Item2.Invoke(new EnvironmentResult(), actAEntity);
+                    }
+                }
+                foreach (var actDele in m_ExploreDelegates.ToList())
+                {
+                    if (actDele.Item2 == null) continue;
+
+                    uint tmpId = (uint)(actDele.Item1 & 0xFFFFFFFF);
+                    if (_collisionMap.ContainsKey(tmpId))
+                    {
+                        List<ISpatialEntity> deleList = _collisionMap[tmpId].Select(actObj => _objIdSpatialMap[actObj]).ToList();
+                        var ret = new EnvironmentResult(deleList);
+                        actDele.Item2.Invoke(ret);
+                    }
+                    else
+                    {
+                        actDele.Item2.Invoke(new EnvironmentResult());
+                    }
+                }
 
 
+
+                foreach (var actRemove in m_ActRemoves.ToList())
+                {
+                    if (actRemove.Item2 == null) continue;
+
+                    if (_spatialObjIdMap.ContainsKey(actRemove.Item1))
+                    {
+                        if (DEBUG) Debug.WriteLine("Removing at delegate agentID: {0} ", actRemove.Item1);
+                        var objId = _spatialObjIdMap[actRemove.Item1];
+                        var entity = _objIdSpatialMap[objId];
+
+
+                        //ulong objId = _spatialObjIdMap[entity.AgentGuid];
+                        clCircleShapeObject tmp;
+                        uint tmp2;
+                        ISpatialEntity tmp3;
+                        _EnvActEnvObjs.TryRemove(objId, out tmp);
+                        _spatialObjIdMap.TryRemove(actRemove.Item1, out tmp2);
+                        _objIdSpatialMap.TryRemove((uint)objId, out tmp3);
+
+                        lock (_sync)
+                        {
+                            _objIdList.Remove(objId);
+                            _shapeList.Remove(_objIdClShapeMap[(uint)objId]);
+                        }
+                        _objIdClShapeMap.TryRemove((uint)objId, out tmp);
+                        actRemove.Item2?.Invoke(entity);
+
+                    }
+                    else
+                    {
+                        if (DEBUG) Debug.WriteLine("Tried to remove {0} which does not exist", actRemove.Item1);
+                    }
+
+
+                }
+                foreach (var act in m_ExploreAllDelegates.ToList())
+                {
+
+                    var ret = new EnvironmentResult(_objIdSpatialMap.Values);
+                    act.Invoke(ret);
+                }
+                foreach (var act in itemsToRemove)
+                {
+                    RemoveByObjId(act);
+                }
+                #endregion
+                m_ActRemoves.Clear();
+                m_AddDelegates.Clear();
+                m_MoveDelegates.Clear();
+                m_ExploreDelegates.Clear();
+                m_ExploreAllDelegates.Clear();
+                _EnvFreshAddedObjs.Clear();
+                _EnvExploreObjs.Clear();
+                _collisionMap.Clear();
+
+                layerTickWait.Set();
+                Thread.Sleep(10);
+                layerTickWait.Reset();
+                gpuActive = false;
+
+                gpuActiveWait.Set();
+                Thread.Sleep(10);
+                gpuActiveWait.Reset();
+                if (DEBUG) Debug.WriteLine("Execution time Call Delegates and Cleanup =" + (DateTime.Now - before).TotalMilliseconds);
+                // before = DateTime.Now;
             }
-            foreach (var act in m_ExploreAllDelegates.ToList())
+            catch (ComputeException e)
             {
-
-                var ret = new EnvironmentResult(_objIdSpatialMap.Values);
-                act.Invoke(ret);
+                Debug.WriteLine(e);
+                return COMMIT_RESULT.MEMORY_ERROR;
             }
-            foreach (var act in itemsToRemove)
-            {
-                RemoveByObjId(act);
-            }
-            #endregion
-            m_ActRemoves.Clear();
-            m_AddDelegates.Clear();
-            m_MoveDelegates.Clear();
-            m_ExploreDelegates.Clear();
-            m_ExploreAllDelegates.Clear();
-            _EnvFreshAddedObjs.Clear();
-            _EnvExploreObjs.Clear();
-            _collisionMap.Clear();
+           
 
-            layerTickWait.Set();
-            Thread.Sleep(10);
-            layerTickWait.Reset();
-            gpuActive = false;
-
-            gpuActiveWait.Set();
-            Thread.Sleep(10);
-            gpuActiveWait.Reset();
-           if(DEBUG) Debug.WriteLine("Execution time Call Delegates and Cleanup =" + (DateTime.Now - before).TotalMilliseconds);
-             // before = DateTime.Now;
-
-
+            return  COMMIT_RESULT.OK;
         }
 
 

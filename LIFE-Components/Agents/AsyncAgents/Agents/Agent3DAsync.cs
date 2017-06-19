@@ -20,14 +20,12 @@ namespace AsyncAgents.Agents
 {
     public abstract class Agent3DAsync : Agent
     {
-        private IAsyncEnvironment _env;      // IESC implementation for collision detection.
-        private IAsyncEnvironment _tmpNewEnv;      // IESC implementation just needed to save the new env until the remove delegate was called
-        private readonly ILayer _layer; // Layer reference, needed for type/tick in result object.
-        private MovementDelegate _movementDelegate;
-        private Action<ISpatialEntity> _removeDelegate;
-        private Action<ISpatialEntity> _removeDelegate2;
+        private IAsyncEnvironment _env;         // IESC implementation for collision detection.
+        private IAsyncEnvironment _tmpNewEnv;   // IESC implementation just needed to save the new env until the remove delegate was called
+        private readonly ILayer _layer;         // Layer reference, needed for type/tick in result object.
+        private readonly MovementDelegate _movementDelegate;
+        private readonly Action<ISpatialEntity> _removeDelegate;
         private Vector3 _position;
-        private Vector3 _direction;
         private bool _removed = false;
         private ISpatialEntity _removedEntity = null;
 
@@ -51,7 +49,7 @@ namespace AsyncAgents.Agents
                 throw new AgentAddException("[SpatialAgent] Change environment failed -> Agent did'nt exist in old environment!", this.ID);
             _env = _tmpNewEnv;
             spatialData.Shape = spatialData.Shape.Transform(-spatialData.Shape.Position + _position, null);
-            Mover3D = new AgentMover3DAsync(_env, (Guid)spatialData.AgentGuid, SensorArray);
+            Mover3D = new AgentMover3DAsync(_env, spatialData, SensorArray);
             _env.Add(spatialData, _movementDelegate);
         }
         /// <summary>
@@ -87,38 +85,20 @@ namespace AsyncAgents.Agents
         ///   n : execute every tick where tick % executionGroup == 0
         /// </param>
         protected Agent3DAsync(ILayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IAsyncEnvironment env,
-            byte[] id = null, IShape shape = null, Vector3 minPos = default(Vector3), Vector3 maxPos = default(Vector3),
-            string collisionType = null, int freq = 1) :
+            byte[] id = null,string collisionType = null, int freq = 1) :
             base(layer, regFkt, unregFkt, id, freq) {
             _movementDelegate = new MovementDelegate(MovementDelegate);
             _removeDelegate = new Action<ISpatialEntity>(RemoveDelegate);
-            _removeDelegate2 = new Action<ISpatialEntity>(RemoveDelegate2);
+            _removeDelegate = new Action<ISpatialEntity>(RemoveDelegate2);
             // Set up the agent entity. Per default it is collidable.  
             ISpatialEntity entity = new CartesianPosition(this, collisionType ?? "-");
             
-            // Set agent shape. If the agent has no shape yet, create a cube facing north and add at a random position. 
-            if (shape != null) entity.Shape = shape;
-            else entity.Shape = new Cuboid(new Vector3(1.0, 1.0, 1.0), new Vector3(), new Direction());
-
-            // Place the agent in the environment.
-            if (shape != null && minPos.IsNull() && maxPos.IsNull())
-            {
-                env.Add(entity, _movementDelegate);
-            }
-            else
-            {
-                // Random position shall be used. 
-                if (minPos.IsNull()) minPos = Vector3.Zero;
-                if (maxPos.IsNull()) maxPos = env.MaxDimension;
-                env.AddWithRandomPosition(entity, minPos, maxPos, env.IsGrid, _movementDelegate);
-            }
-
-
+         
 
             // Save the environment reference and add an agent mover.
             _env = env;
             _layer = layer;
-            Mover3D = new AgentMover3DAsync(_env, entity.AgentGuid, SensorArray);
+            Mover3D = new AgentMover3DAsync(_env, entity, SensorArray);
             AgentData = new Dictionary<string, object>();
         }
 
@@ -131,27 +111,10 @@ namespace AsyncAgents.Agents
         /// </summary>
         protected override void Remove()
         {
-            Debug.WriteLine("SpatialAgentRemoveCalled GUID: " + ID);
             _removed = true;
             _removedEntity = _env.GetSpatialEntity(ID);
             base.Remove();
-            _env.Remove(this.ID, _removeDelegate2);
-
-        }
-
-
-
-        /// <summary>
-        ///   Moves the agent to a new environment reference. 
-        /// </summary>
-        /// <param name="newEnv">The new environment to use.</param>
-        /// <param name="newPos">Position to insert to.</param>
-        /// <returns>Placement result of new environment.</returns>
-        protected void ChangeEnvironment(IAsyncEnvironment newEnv, Vector3 newPos)
-        {
-            _tmpNewEnv = newEnv;
             _env.Remove(this.ID, _removeDelegate);
-            _position = newPos;
 
         }
 
@@ -163,14 +126,7 @@ namespace AsyncAgents.Agents
         public virtual AgentSimResult GetResultData()
         {
             ISpatialEntity SpatialData;
-            if (_removed)
-            {
-                SpatialData = _removedEntity;
-            }
-            else
-            {
-                SpatialData = _env.GetSpatialEntity(this.ID);
-            }
+            SpatialData = _removed ? _removedEntity : _env.GetSpatialEntity(this.ID);
 
             if (SpatialData == null)
             {
@@ -190,8 +146,8 @@ namespace AsyncAgents.Agents
 //                Position = GeoJson.Point(new GeoJson2DCoordinates(pos.X, pos.Y)),
                 //   Orientation = new[] { (float)dir.Yaw, (float)dir.Pitch, 0.0f },
                 Tick = GetTick(),
-                Position = new[] { pos.X, pos.Y, pos.Z },
-                Orientation = new[] { dir.Yaw, dir.Pitch },
+                Position = new[] { pos.X, pos.Y },
+                Orientation = new[] { dir.Yaw,0 },
                 AgentData = AgentData
             };
         }

@@ -75,15 +75,7 @@ namespace LIFE.Components.ESC.SpatialAPI.Environment
 
         IEnumerable<ISpatialEntity> Explore(Sphere sphere, int maxResults = -1);
 
-        /// <summary>
-        ///   Get spatial entities that corresponds with given parameters. Beware that geometry and collision type are both taken
-        ///   into account. So if you ask for a specific agent type that does not correspond with given collision type, it will
-        ///   not be found. The order of reduction is: shape, collision type, agent type.
-        /// </summary>
-        /// <param name="spatial">Defines geometry and collision type that should restrict the exploration.</param>
-        /// <param name="agentType">If agent type is not null, only ISpatialEntities with same agent type are returned.</param>
-        /// <returns>All spatial entities that correspond with given parameters.</returns>
-        IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial, Type agentType = null);
+
 
         /// <summary>
         ///   Get spatial entities that corresponds with given shape and collision type.

@@ -30,7 +30,7 @@ namespace EnvironmentServiceComponent.Implementation
 
         private List<Tuple<ISpatialObject, ExploreDelegate, Type>> _actAgentExplores;
 
-        private List<Tuple<IShape, ExploreDelegate, Enum>> _actExplores;
+        private List<Tuple<IShape, ExploreDelegate, Type>> _actExplores;
         private List<ExploreDelegate> _actExploreAlls;
 
         private ConcurrentDictionary<Guid, ISpatialEntity> _currentAgents;
@@ -48,7 +48,7 @@ namespace EnvironmentServiceComponent.Implementation
             _actExploreAlls = new List<ExploreDelegate>();
             _currentAgents = new ConcurrentDictionary<Guid, ISpatialEntity>();
             _actAgentExplores = new List<Tuple<ISpatialObject, ExploreDelegate, Type>>();
-            _actExplores = new List<Tuple<IShape, ExploreDelegate, Enum>>();
+            _actExplores = new List<Tuple<IShape, ExploreDelegate, Type>>();
 
         }
 
@@ -112,19 +112,28 @@ namespace EnvironmentServiceComponent.Implementation
             }
         }
 
-        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Type agentType = null, Enum collisionType = null, int maxResults = 100) {
-
-            if (agentType == null) {
-                lock (_sync) {
-                    _actExplores.Add(new Tuple<IShape, ExploreDelegate, Enum>(shape, exploreDelegate, collisionType));
+        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Type agentType = null, int maxResults = 100)
+        {
+            if (agentType == null)
+            {
+                lock (_sync)
+                {
+                    _actExplores.Add(new Tuple<IShape, ExploreDelegate, Type>(shape, exploreDelegate, agentType));
                 }
             }
-            else {
-                var dummy = new DummySpatialEntity {Shape = shape};
-                lock (_sync) {
+            else
+            {
+                var dummy = new DummySpatialEntity { Shape = shape };
+                lock (_sync)
+                {
                     _actAgentExplores.Add(new Tuple<ISpatialObject, ExploreDelegate, Type>(dummy, exploreDelegate, agentType));
                 }
             }
+        }
+
+        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Type agentType = null, Enum collisionType = null, int maxResults = 100) {
+
+          
         }
 
 
@@ -137,7 +146,7 @@ namespace EnvironmentServiceComponent.Implementation
 
 
 
-        public void Commit()
+        public COMMIT_RESULT Commit()
         {
 
             lock (_sync) {
@@ -188,8 +197,9 @@ namespace EnvironmentServiceComponent.Implementation
                 // Explore 
                 foreach (var act in _actExplores.ToList())
                 {
-                    var tmp = m_ESC.Explore(act.Item1, act.Item3);
-                    act.Item2?.Invoke(new EnvironmentResult(tmp, EnvironmentResultCode.OK));
+                    // TODO: Fix old environments
+//                    var tmp = m_ESC.Explore(act.Item1, act.Item3);
+//                    act.Item2?.Invoke(new EnvironmentResult(tmp, EnvironmentResultCode.OK));
                 }
                 
                 foreach (var act in _actRemoves.ToList())
@@ -219,8 +229,10 @@ namespace EnvironmentServiceComponent.Implementation
                 // Explore Agent 
                 foreach (var act in _actAgentExplores.ToList())
                 {
-                    var tmp = m_ESC.Explore(act.Item1, act.Item3);
-                    act.Item2?.Invoke(new EnvironmentResult(tmp, EnvironmentResultCode.OK));
+                    // TODO: Sync esc does not longer support it
+ //
+//                    var tmp = m_ESC.Explore(act.Item1, act.Item3);
+//                    act.Item2?.Invoke(new EnvironmentResult(tmp, EnvironmentResultCode.OK));
                 }
 
                 foreach (var act in _actExploreAlls.ToList())
@@ -237,8 +249,9 @@ namespace EnvironmentServiceComponent.Implementation
                 _actAgentExplores.Clear();
                 _actRemoves.Clear();
                 _actExploreAlls.Clear();
+    
             }
-            
+            return COMMIT_RESULT.OK;
         }
     }
 }
