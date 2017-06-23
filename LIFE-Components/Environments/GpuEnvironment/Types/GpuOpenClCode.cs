@@ -1121,7 +1121,7 @@ __kernel void CheckCollsions(
 #define GHOST (((long)1)<<39)
 
 
-//#define DEBUG
+#define DEBUG
 
 
 typedef struct CollisionConstants

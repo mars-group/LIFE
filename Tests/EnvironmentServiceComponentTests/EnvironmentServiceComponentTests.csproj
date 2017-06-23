@@ -13,7 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\LIFE-Components\Environments\Cloo.NetCore11\Cloo.NetCore11.csproj" />
     <ProjectReference Include="..\..\LIFE-Components\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
+    <ProjectReference Include="..\..\LIFE-Components\Environments\GpuEnvironment\GpuEnvironment.csproj" />
   </ItemGroup>
 
   <ItemGroup>
