@@ -46,17 +46,6 @@ namespace EnvironmentServiceComponentTests.EscTests
         public void initOpenCL()
         {
 
-            //            System.IO.Directory.CreateDirectory(@"C:\Users\PhilippK\Desktop\OpenCL_DebugLogs\logs");
-            //            System.IO.DirectoryInfo di = new DirectoryInfo(@"C:\Users\PhilippK\Desktop\OpenCL_DebugLogs\logs");
-            //            foreach (FileInfo file in di.GetFiles())
-            //            {
-            //                file.Delete();
-            //            }
-            //            foreach (DirectoryInfo dir in di.GetDirectories())
-            //            {
-            //                dir.Delete(true);
-            //            }
-
             List<ComputeDevice> devicesList = new List<ComputeDevice>();
 
 
@@ -176,7 +165,7 @@ namespace EnvironmentServiceComponentTests.EscTests
         {
 
 
-            const int agentCount = 1000;
+            const int agentCount = 200;
             const int ticks = 10;
 
             double maxEnvDim = 10000;//Math.Sqrt(agentCount) * 1.7;
@@ -236,11 +225,9 @@ namespace EnvironmentServiceComponentTests.EscTests
         [Test]
         public void TestCollisionCase()
         {
-
-
             const int agentCount = 16;
             const int ticks = 10;
-
+            _collisionCnt = 0;
             double maxEnvDim = 500;//Math.Sqrt(agentCount) * 1.7;
             var maxEnvVector = new Vector3(maxEnvDim, maxEnvDim);
             Console.WriteLine("Maximal environment dimension: " + maxEnvVector);
@@ -275,7 +262,7 @@ namespace EnvironmentServiceComponentTests.EscTests
             agents.Add(a1);
             esc.Add(a1, EnvironmentDelegate);
 
-            a1 = new TestSpatialEntity(4, 4);
+            a1 = new TestSpatialEntity(7, 7);
             a1.Shape = new Circle(20, 20, 7);
             agents.Add(a1);
             esc.Add(a1, EnvironmentDelegate);
@@ -289,6 +276,8 @@ namespace EnvironmentServiceComponentTests.EscTests
             Random random = new Random();
 
             Debug.WriteLine("InvolvedEntities: " + _collisionCnt);
+
+            Assert.AreEqual(6, _collisionCnt);
             Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");
 
             /*    int collisions = 0;

@@ -13,18 +13,7 @@
 #define GHOST (((long)1)<<39)
 
 
-#define TYPESTART (((long)1)<<40)
-//#define TYPE2 (((long)1)<<41)
-//#define EXPLORE (((long)1)<<37)
-//#define EXPLORE (((long)1)<<37)
-//#define EXPLORE (((long)1)<<37)
-//#define EXPLORE (((long)1)<<37)
-//#define EXPLORE (((long)1)<<37)
-//#define EXPLORE (((long)1)<<37)
-//#define EXPLORE (((long)1)<<37)
-
-
-//#define DEBUG
+#define DEBUG
 
 
 typedef struct CollisionConstants
@@ -60,11 +49,11 @@ char cellType;
 }ObjectData;
 
 
-typedef struct ClPoint2D
+typedef struct clPoint2D
 {
 float x;
 float y;
-}ClPoint2D;
+}clPoint2D;
 
 typedef struct ObjectTupel
 {
@@ -74,7 +63,7 @@ int obj2Idx;
 
 typedef struct clCircleShapeObject
 {
-ClPoint2D center;
+clPoint2D center;
 float radius;
 }clCircleShapeObject;
 
@@ -446,12 +435,11 @@ __kernel void CreateNarrowCheckList(__global  uint* cellIdArray,
 			continue;
 		} 
 		if(cellIdArray[idx] == cellIdArray[idx+1]  ){
-			CollisionSublist tmpLst;
-			tmpLst.startIdx = idx;
-			tmpLst.objCnt = 1;
-			tmpLst.nHome = 0;
-			tmpLst.nPhant = 0;
-			tmpLst.iHome = 0;
+			uint startIdx = idx;
+			ushort objCnt = 1;
+			ushort nHome = 0;
+			ushort nPhant = 0;
+			ushort iHome = 0;
 
 			// Native homecell -> 
 			// values:
@@ -460,11 +448,13 @@ __kernel void CreateNarrowCheckList(__global  uint* cellIdArray,
 			// - Total number of elements im the same cell
 			// - Amount of native cells......
 			if(cellObjArray[idx] & HOMECELL)
-				tmpLst.nHome++;
+				nHome++;
+			else
+				nPhant++;
 			
 
 			while(cellIdArray[idx] == cellIdArray[idx+1] && idx+1 < numElements){
-				tmpLst.objCnt++;
+				objCnt++;
 				if(cellObjArray[idx+1] & NATIVE){
 					// Native cell
 					// Native homecell -> 
@@ -474,18 +464,23 @@ __kernel void CreateNarrowCheckList(__global  uint* cellIdArray,
 					// - Total number of elements im the same cell
 					// - Amount of native cells......
 					if(cellObjArray[idx+1] & HOMECELL)
-						tmpLst.nHome++;
+						nHome++;
 					else
-						tmpLst.nPhant++;
+						nPhant++;
 				}else{
 					// Imported cell
 					if(cellObjArray[idx+1] & HOMECELL)
-						tmpLst.iHome++;
+						iHome++;
 
-				}
+				} 
 				idx++;
 			}
 
+			if(nHome == 0 && iHome == 0){
+              idx++;                            
+              continue;
+            }
+			CollisionSublist tmpLst = {startIdx,nHome,nPhant,iHome,objCnt};
 			// TODO : check objcount -> maybe shard the cartesian product calculation
 			narrowCheckSublist[atomic_inc(narrowCheckSublistIdx)] = tmpLst;
 		}
@@ -584,21 +579,19 @@ __kernel void CheckCollsions(
 			if(!((cellObjArray[collisionCheckTuples[idx].obj1Idx] & EXPLORE) || (cellObjArray[collisionCheckTuples[idx].obj2Idx] & EXPLORE)))
 				continue;
 		}
-
-		float dx = abs((int)(collidingObjs[idx].obj1.center.x -collidingObjs[idx].obj2.center.x));  
-		float dy = abs((int)(collidingObjs[idx].obj1.center.y -collidingObjs[idx].obj2.center.y));  
-		float dist = sqrt(pow(2,dx) + pow(2,dy));  
+		float dx = fabs((float)(collidingObjs[idx].obj1.center.x -collidingObjs[idx].obj2.center.x));  
+		float dy = fabs((float)(collidingObjs[idx].obj1.center.y -collidingObjs[idx].obj2.center.y));  
+		float dist = sqrt(pown(dx,2) + pown(dy,2));  
 		if(	dist <	 collidingObjs[idx].obj1.radius +collidingObjs[idx].obj2.radius){
+		    if ( (cellObjArray[collisionCheckTuples[idx].obj1Idx] & EXPLORE) || (cellObjArray[collisionCheckTuples[idx].obj2Idx] & EXPLORE)){
+			    // add to explores
+ 			    __private int actIdx2 =atomic_inc(collidingObjIdx);
 
-			if ( (cellObjArray[collisionCheckTuples[idx].obj1Idx] & EXPLORE) || (cellObjArray[collisionCheckTuples[idx].obj2Idx] & EXPLORE)){
-			 	// add to explores
- 				__private int actIdx2 =atomic_inc(collidingObjIdx);
-
-			 	explores[actIdx2].obj1Idx = cellObjArray[collisionCheckTuples[idx].obj1Idx] & 0xFFFFFFFF;
-			 	explores[actIdx2].obj2Idx = cellObjArray[collisionCheckTuples[idx].obj2Idx] & 0xFFFFFFFF;
-			 	continue;
-			}
-			// no collision
+			    explores[actIdx2].obj1Idx = cellObjArray[collisionCheckTuples[idx].obj1Idx] & 0xFFFFFFFF;
+			    explores[actIdx2].obj2Idx = cellObjArray[collisionCheckTuples[idx].obj2Idx] & 0xFFFFFFFF;
+			    continue;
+		    }
+		
 			__private int actIdx =atomic_inc(collidingObjIdx);
 			collisons[actIdx].obj1Idx = cellObjArray[collisionCheckTuples[idx].obj1Idx] & 0xFFFFFFFF;
 			collisons[actIdx].obj2Idx = cellObjArray[collisionCheckTuples[idx].obj2Idx] & 0xFFFFFFFF;		
@@ -606,4 +599,3 @@ __kernel void CheckCollsions(
 		}
 	}
 }
-

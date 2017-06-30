@@ -27,7 +27,7 @@ namespace GpuEnvironment.Implementation
         private const int CELL_ID_ELEMENT_SIZE = 4;
         private const int GRID_FIELDS_PER_ELEMENT = 4;
 
-        private bool DEBUG = true;
+        private bool DEBUG = false;
 
         private object _sync = new object();
 
@@ -372,13 +372,13 @@ namespace GpuEnvironment.Implementation
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(e);
             }
 
 
             if (prog.GetBuildStatus(_device) != ComputeProgramBuildStatus.Success)
             {
-                Console.WriteLine(prog.GetBuildLog(_device));
+                Debug.WriteLine(prog.GetBuildLog(_device));
                 throw new ArgumentException("UNABLE to build programm");
             }
             ckReorderElements = prog.CreateKernel("ReorderElements");
@@ -743,7 +743,7 @@ namespace GpuEnvironment.Implementation
                 if (DEBUG)
                 {
                     cl_DebugLvl2DPosList[i] = new ComputeBuffer<CollisionCell2D>(cxGPUContext,
-                        ComputeMemoryFlags.ReadWrite, _constants.cellArraySize * GRID_FIELDS_PER_ELEMENT);
+                        ComputeMemoryFlags.ReadWrite, _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT);
                 }
                 else
                 {
@@ -786,15 +786,16 @@ namespace GpuEnvironment.Implementation
             {
                 for (int i = 0; i < _constants.numLvls; i++)
                 {
-                    cqCommandQueue.ReadFromBuffer(cl_lvlCellIds[i], ref _readCellIds[i], false, eventList);
 
-                    cqCommandQueue.ReadFromBuffer(cl_lvlCellData[i], ref _readCellData[i], false, eventList);
+                    cqCommandQueue.ReadFromBuffer(cl_lvlCellIds[i], ref _readCellIds[i], false,0,0,_readCellIds[i].Length, eventList);
+
+                    cqCommandQueue.ReadFromBuffer(cl_lvlCellData[i], ref _readCellData[i], false, 0, 0, _readCellData[i].Length, eventList);
 
 
                     cqCommandQueue.ReadFromBuffer(cl_DebugLvl2DPosList[i], ref _readLvlCell2DPosList[i], false,
                         eventList);
 
-
+                    cqCommandQueue.Finish();
                     for (int j = 0; j < _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT; j++)
                     {
                         if (!_cellMap.ContainsKey(_readCellIds[i][j]))
@@ -817,16 +818,18 @@ namespace GpuEnvironment.Implementation
 
         private void ClCreateNarrowCheckSublists()
         {
+            ComputeEventList eventList = new ComputeEventList();
+
             for (int i = 0; i < _constants.numLvls; i++)
             {
                 // TODO: Find a proper way to choose a size....
                 cl_narrowCheckSublists[i] =
                     new ComputeBuffer<clCollisionSublist>(cxGPUContext, ComputeMemoryFlags.ReadWrite,
                         _lvlTotalElements[i] / 2);
+                cqCommandQueue.WriteToBuffer(_sharedIdx[i], cl_sharedIdxMem[i],true,eventList);
             }
             long[] globalWorkSize = new long[] {_constants.numThreadsPerBlock * (uint) _constants.numBlocks};
             long[] localWorkSize = new long[] {_constants.numThreadsPerBlock};
-            ComputeEventList eventList = new ComputeEventList();
 
 
             for (int i = 0; i < _constants.numLvls; i++)
@@ -846,7 +849,7 @@ namespace GpuEnvironment.Implementation
 
             for (int i = 0; i < _constants.numLvls; i++)
             {
-                cqCommandQueue.ReadFromBuffer(cl_sharedIdxMem[i], ref _sharedIdx[i], false, eventList);
+                cqCommandQueue.ReadFromBuffer(cl_sharedIdxMem[i], ref _sharedIdx[i], true, eventList);
             }
 
             if (DEBUG)
@@ -854,7 +857,7 @@ namespace GpuEnvironment.Implementation
                 for (int i = 0; i < _constants.numLvls; i++)
                 {
                     _readNarrowCheckList[i] = new clCollisionSublist[_sharedIdx[i][0]];
-                    cqCommandQueue.ReadFromBuffer(cl_narrowCheckSublists[i], ref _readNarrowCheckList[i], false,
+                    cqCommandQueue.ReadFromBuffer(cl_narrowCheckSublists[i], ref _readNarrowCheckList[i], false, 0 , 0 , _readNarrowCheckList[i].Length,
                         eventList);
                 }
 
@@ -886,7 +889,7 @@ namespace GpuEnvironment.Implementation
             for (int i = 0; i < _constants.numLvls; i++)
             {
                 cl_lvlCollisionCheckTuples[i] = new ComputeBuffer<CollisionTupel>(cxGPUContext,
-                    ComputeMemoryFlags.ReadWrite, _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT);
+                    ComputeMemoryFlags.ReadWrite, _lvlTotalElements[i] * GRID_FIELDS_PER_ELEMENT );
 
                 cqCommandQueue.WriteToBuffer(new int[] {0}, cl_sharedIdxMem[i], true, eventList);
 
@@ -908,7 +911,7 @@ namespace GpuEnvironment.Implementation
                 cqCommandQueue.ReadFromBuffer(cl_sharedIdxMem[i], ref _sharedIdx[i], true, eventList);
 
                 _readLvlCheckTupelList[i] = new CollisionTupel[_sharedIdx[i][0]];
-                cqCommandQueue.ReadFromBuffer(cl_lvlCollisionCheckTuples[i], ref _readLvlCheckTupelList[i], true,
+                cqCommandQueue.ReadFromBuffer(cl_lvlCollisionCheckTuples[i], ref _readLvlCheckTupelList[i], true, 0L ,0L, (long)_sharedIdx[i][0],
                     eventList);
 
 
@@ -941,33 +944,37 @@ namespace GpuEnvironment.Implementation
             {
                 if (_sharedIdx[i][0] <= 0)
                     continue;
-                cl_lvlCollisonTuples[i] =
-                    new ComputeBuffer<CollisionTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _sharedIdx[i][0]);
-                cl_lvlExporeTuples[i] =
-                    new ComputeBuffer<CollisionTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _sharedIdx[i][0]);
-                cl_lvlCollisonShapes[i] =
-                    new ComputeBuffer<clCircleShapeTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite,
-                        _collisionShapeTupels[i]);
-                cl_lvlExploreElementIdx[i] = new ComputeBuffer<int>(cxGPUContext, ComputeMemoryFlags.ReadWrite, 1);
 
 
                 _collisionShapeTupels[i] = new clCircleShapeTupel[_sharedIdx[i][0]];
                 _readLvlExploreList[i] = new CollisionTupel[_sharedIdx[i][0]];
+
                 // Merge all tupels to one list -> 
 
                 for (int j = 0; j < _sharedIdx[i][0]; j++)
                 {
                     _collisionShapeTupels[i][j] = new clCircleShapeTupel();
                     // _readLvlCheckTupelList contains the lvl specific idx of the elements
-                    uint keytmp = (uint) (_readCellData[i][_readLvlCheckTupelList[i][j].obj1] & 0xFFFFFFFF);
+                    uint keytmp = (uint)(_readCellData[i][_readLvlCheckTupelList[i][j].obj1] & 0xFFFFFFFF);
                     if (!_objIdClShapeMap.ContainsKey(keytmp))
                         if (DEBUG) Debug.WriteLine("Wrong Tempkey : " + keytmp);
                     _collisionShapeTupels[i][j].obj1 = _objIdClShapeMap[keytmp];
 
-                    keytmp = (uint) (_readCellData[i][_readLvlCheckTupelList[i][j].obj2] & 0xFFFFFFFF);
+                    keytmp = (uint)(_readCellData[i][_readLvlCheckTupelList[i][j].obj2] & 0xFFFFFFFF);
 
                     _collisionShapeTupels[i][j].obj2 = _objIdClShapeMap[keytmp];
                 }
+                cl_lvlCollisonTuples[i] =
+                    new ComputeBuffer<CollisionTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _sharedIdx[i][0]);
+                cl_lvlExporeTuples[i] =
+                    new ComputeBuffer<CollisionTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite, _sharedIdx[i][0]);
+                cl_lvlCollisonShapes[i] =
+                    new ComputeBuffer<clCircleShapeTupel>(cxGPUContext, ComputeMemoryFlags.ReadWrite | ComputeMemoryFlags.CopyHostPointer,
+                        _collisionShapeTupels[i]);
+                cl_lvlExploreElementIdx[i] = new ComputeBuffer<int>(cxGPUContext, ComputeMemoryFlags.ReadWrite, 1);
+
+
+                
                 // Set idx to 0
                 cqCommandQueue.WriteToBuffer(new int[] {0}, cl_lvlExploreElementIdx[i], true, eventList);
                 cqCommandQueue.WriteToBuffer(new int[] {0}, cl_sharedIdxMem[i], true, eventList);
@@ -997,8 +1004,10 @@ namespace GpuEnvironment.Implementation
                 _readLvlCollisionList[i] = new CollisionTupel[_sharedIdx[i][0]];
                 _readLvlExploreList[i] = new CollisionTupel[_lvlExploreIdx[i][0]];
 
-                cqCommandQueue.ReadFromBuffer(cl_lvlCollisonTuples[i], ref _readLvlCollisionList[i], false, eventList);
-                cqCommandQueue.ReadFromBuffer(cl_lvlExporeTuples[i], ref _readLvlExploreList[i], false, eventList);
+                if(_sharedIdx[i][0] > 0)
+                    cqCommandQueue.ReadFromBuffer(cl_lvlCollisonTuples[i], ref _readLvlCollisionList[i], false,0L, 0L, (long)_sharedIdx[i][0], eventList);
+                if (_lvlExploreIdx[i][0] > 0)
+                    cqCommandQueue.ReadFromBuffer(cl_lvlExporeTuples[i], ref _readLvlExploreList[i], false, 0L, 0L, (long)_lvlExploreIdx[i][0], eventList);
             }
             cqCommandQueue.Finish();
         }
@@ -1104,9 +1113,10 @@ namespace GpuEnvironment.Implementation
                             }
                         }
 
-                        DebugHelper.PrintCellIdBufferExtended(_readCellIds, _readCellData, _readLvlCell2DPosList,
-                            "CreateCellId Array", _constants, _lvlTotalElements);
                     }
+
+                    DebugHelper.PrintCellIdBufferExtended(_readCellIds, _readCellData, _readLvlCell2DPosList,
+                        "CreateCellId Array", _constants, _lvlTotalElements);
                 }
 
                 #endregion
