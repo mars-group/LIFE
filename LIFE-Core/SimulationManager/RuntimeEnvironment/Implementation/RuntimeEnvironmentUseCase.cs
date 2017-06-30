@@ -631,6 +631,9 @@ namespace RuntimeEnvironment.Implementation
                 case "months":
                     simStepDuration = new TimeSpan(deltaT * 30, 0, 0, 0);
                     break;
+                case "weeks":
+                    simStepDuration = new TimeSpan(deltaT * 7, 0, 0, 0);
+                    break;
                 case "days":
                     simStepDuration = new TimeSpan(deltaT, 0, 0, 0);
                     break;
