@@ -16,7 +16,6 @@ using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Environment;
 using LIFE.Components.ESC.SpatialAPI.Shape;
-using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace AsyncAgents.Agents
 {
