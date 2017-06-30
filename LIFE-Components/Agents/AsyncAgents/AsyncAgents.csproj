@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\LIFEStarter\LIFEStarter.csproj" />
     <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
     <ProjectReference Include="..\..\..\LIFE-Core\LayerContainer\ResultAdapter\ResultAdapter.csproj" />
     <ProjectReference Include="..\..\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
