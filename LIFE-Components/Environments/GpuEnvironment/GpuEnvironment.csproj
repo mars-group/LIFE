@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
+    <ProjectReference Include="..\..\..\LIFE-Core\LayerContainer\ResultAdapter\ResultAdapter.csproj" />
     <ProjectReference Include="..\Cloo.NetCore11\Cloo.NetCore11.csproj" />
     <ProjectReference Include="..\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
   </ItemGroup>
