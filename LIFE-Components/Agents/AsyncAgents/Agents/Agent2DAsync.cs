@@ -19,7 +19,7 @@ namespace AsyncAgents.Agents
 {
     public abstract class Agent2DAsync :Agent
     {
-        private IAsyncEnvironment _env;         // IESC implementation for collision detection.
+        protected IAsyncEnvironment _env;         // IESC implementation for collision detection.
         private IAsyncEnvironment _tmpNewEnv;   // IESC implementation just needed to save the new env until the remove delegate was called
         private readonly ILayer _layer;         // Layer reference, needed for type/tick in result object.
         private readonly MovementDelegate _movementDelegate;

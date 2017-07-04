@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EnvironmentServiceComponent.SpatialAPI.Environment;
+using GpuEnvironment.Implementation;
+using LionsModelAsync.Agents;
+using LionsModelAsync.Environment;
 using LIFE.API.Layer;
 using LIFE.API.Layer.Initialization;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Environments.GridEnvironment;
+using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.Services.AgentManagerService.Implementation;
 using WolvesModel.Agents;
 // ReSharper disable ObjectCreationAsStatement
@@ -16,11 +21,20 @@ namespace WolvesModel.Environment {
   ///   This layer serves as an environment for the Wolves vs. Sheep scenario.
   ///   In addition, it randomly spawns new grass agents for the sheep to eat.
   /// </summary>
-  public class EnvironmentLayer : IEnvironmentLayer {
+  public class EnvironmentLayer : IEnvironmentLayer
+  {
+      // The GpuESC needs to know the Size of the largest objects/explores which it contains,
+      // to determine the internal grid size.
+      private const int MAX_EXPLORE_RADIUS = 20;
+      private const int ENVIRONMENT_DIM_X = 200;
+      private const int ENVIRONMENT_DIM_Y = 200;
 
-    private readonly IGridEnvironment<GridAgent<Grass>> _gridGrass; //| Separate grids for the
-    private readonly IGridEnvironment<GridAgent<Sheep>> _gridSheep; //| positioning of grass,
-    private readonly IGridEnvironment<GridAgent<Wolf>> _gridWolves; //| sheep and wolf agents.
+
+
+        // TODO: Maybe create separate evironments for grass and moving agents.
+        private readonly IAsyncEnvironment _environment;
+//        private readonly IGridEnvironment<GridAgent<Sheep>> _gridSheep; //| positioning of grass,
+//    private readonly IGridEnvironment<GridAgent<Wolf>> _gridWolves; //| sheep and wolf agents.
     private readonly Random _random;           // Random number generator for agent spawning.
     private readonly int[] _initCounts;        // Agent init counts (if AgentManager is not used).
     private RegisterAgent _regFkt;             // Agent registration function pointer.
@@ -36,12 +50,10 @@ namespace WolvesModel.Environment {
     ///   Layer constructor. Set up the grid environments and their dimension.
     /// </summary>
     public EnvironmentLayer() {
-      DimensionX = 60;
-      DimensionY = 60;
+      DimensionX = 150;
+      DimensionY = 150;
       _initCounts = new[] { 2000, 300, 150 };
-      _gridGrass = new GridEnvironment<GridAgent<Grass>>(DimensionX, DimensionY);
-      _gridSheep = new GridEnvironment<GridAgent<Sheep>>(DimensionX, DimensionY);
-      _gridWolves = new GridEnvironment<GridAgent<Wolf>>(DimensionX, DimensionY);
+      _environment = new HierarchicalGpuESC(new Vector3(MAX_EXPLORE_RADIUS,MAX_EXPLORE_RADIUS), new Vector3(ENVIRONMENT_DIM_X,ENVIRONMENT_DIM_Y) );
       _random = new Random(Guid.NewGuid().GetHashCode());
     }
 
@@ -61,33 +73,37 @@ namespace WolvesModel.Environment {
       // ReSharper disable HeuristicUnreachableCode
       if (UseAgentManager) {
 
+
         var grass = AgentManager.GetAgentsByAgentInitConfig<Grass>(
+            
           layerInitData.AgentInitConfigs.First(e => e.AgentName.Equals("Grass")),
-          _regFkt, _unregFkt, new List<ILayer>() {this}, _gridGrass);
+          _regFkt, _unregFkt, new List<ILayer>() {this}, _environment);
         Console.WriteLine("[EnvironmentLayer] Grass spawned (" + grass.Count + ").");
 
-        var sheep = AgentManager.GetAgentsByAgentInitConfig<Sheep>(
-          layerInitData.AgentInitConfigs.First(e => e.AgentName.Equals("Sheep")),
-          _regFkt, _unregFkt, new List<ILayer>() {this}, _gridSheep);
-        Console.WriteLine("[EnvironmentLayer] Sheep spawned (" + sheep.Count + ").");
 
-        var wolves = AgentManager.GetAgentsByAgentInitConfig<Wolf>(
-          layerInitData.AgentInitConfigs.First(e => e.AgentName.Equals("Wolf")),
-          _regFkt, _unregFkt, new List<ILayer>() {this}, _gridWolves);
-        Console.WriteLine("[EnvironmentLayer] Wolves spawned (" + wolves.Count + ").");
+
+        var antelopes = AgentManager.GetAgentsByAgentInitConfig<Antelope>(
+          layerInitData.AgentInitConfigs.First(e => e.AgentName.Equals("Antelope")),
+          _regFkt, _unregFkt, new List<ILayer>() {this}, _environment);
+        Console.WriteLine("[EnvironmentLayer] Sheep spawned (" + antelopes.Count + ").");
+
+        var lions= AgentManager.GetAgentsByAgentInitConfig<Lion>(
+          layerInitData.AgentInitConfigs.First(e => e.AgentName.Equals("Lion")),
+          _regFkt, _unregFkt, new List<ILayer>() {this}, _environment);
+        Console.WriteLine("[EnvironmentLayer] Wolves spawned (" + lions.Count + ").");
       }
 
       else {
-        for (var i = 0; i < _initCounts[0]; i++)
-          new Grass(this, _regFkt, _unregFkt, _gridGrass);
+//        for (var i = 0; i < _initCounts[0]; i++)
+//          new Grass(this, _regFkt, _unregFkt, _environment);
         Console.WriteLine("[EnvironmentLayer] Grass spawned ("+_initCounts[0]+").");
 
         for (var i = 0; i < _initCounts[1]; i++)
-          new Sheep(this, _regFkt, _unregFkt, _gridSheep, (Sex)_random.Next(0, 1));
+          new Antelope(this, _regFkt, _unregFkt, _environment);
         Console.WriteLine("[EnvironmentLayer] Sheep spawned ("+_initCounts[1]+").");
 
         for (var i = 0; i < _initCounts[2]; i++)
-          new Wolf(this, _regFkt, _unregFkt, _gridWolves);
+          new Lion(this, _regFkt, _unregFkt, _environment);
         Console.WriteLine("[EnvironmentLayer] Wolves spawned ("+_initCounts[2]+").");
       }
       // ReSharper restore HeuristicUnreachableCode
@@ -119,61 +135,19 @@ namespace WolvesModel.Environment {
     ///   Spawns new grass agents based on their current count.
     /// </summary>
     public void PostTick() {
-      var nrGrass = _gridGrass.Explore(0, 0).Count();
-      var create = _random.Next(40 + nrGrass*2) < 60;
-      if (create) new Grass(this, _regFkt, _unregFkt, _gridGrass);
-      Console.WriteLine("\n[EnvironmentLayer] Tick " + _tick +
-                        " | Grass: " + _gridGrass.Explore(0, 0).Count() +
-                        ", Sheep: " + _gridSheep.Explore(0, 0).Count() +
-                        ", Wolves: " + _gridWolves.Explore(0, 0).Count());
+
+            //TODO: Implement grass respawn
+
+//      var nrGrass = _gridGrass.Explore(0, 0).Count();
+//      var create = _random.Next(40 + nrGrass*2) < 60;
+//      if (create) new Grass(this, _regFkt, _unregFkt, _gridGrass);
+//      Console.WriteLine("\n[EnvironmentLayer] Tick " + _tick +
+//                        " | Grass: " + _gridGrass.Explore(0, 0).Count() +
+//                        ", Sheep: " + _gridSheep.Explore(0, 0).Count() +
+//                        ", Wolves: " + _gridWolves.Explore(0, 0).Count());
     }
 
 
-    /// <summary>
-    ///   Find grass agents in the environment.
-    /// </summary>
-    /// <param name="posX">Explore base position (X).</param>
-    /// <param name="posY">Explore base position (Y).</param>
-    /// <param name="viewRange">Exploration range.</param>
-    /// <returns>A list of grass agents found.</returns>
-    public IList<Grass> FindGrass(int posX, int posY, int viewRange) {
-      var list = new List<Grass>();
-      var agents = _gridGrass.Explore(posX, posY, viewRange);
-      foreach (var agent in agents) list.Add(agent.AgentReference);
-      return list;      
-    }
-
-
-
-    /// <summary>
-    ///   Find sheep in the environment.
-    /// </summary>
-    /// <param name="posX">Explore base position (X).</param>
-    /// <param name="posY">Explore base position (Y).</param>
-    /// <param name="viewRange">Exploration range.</param>
-    /// <returns>A list of sheep agents found.</returns>
-    public IList<Sheep> FindSheep(int posX, int posY, int viewRange) {
-      var list = new List<Sheep>();
-      var agents = _gridSheep.Explore(posX, posY, viewRange);
-      foreach (var agent in agents) list.Add(agent.AgentReference);
-      return list;      
-    }
-
-
-
-    /// <summary>
-    ///   Find wolves in the environment.
-    /// </summary>
-    /// <param name="posX">Explore base position (X).</param>
-    /// <param name="posY">Explore base position (Y).</param>
-    /// <param name="viewRange">Exploration range.</param>
-    /// <returns>A list of wolves found.</returns>
-    public IList<Wolf> FindWolves(int posX, int posY, int viewRange) {
-      var list = new List<Wolf>();
-      var agents = _gridWolves.Explore(posX, posY, viewRange);
-      foreach (var agent in agents) list.Add(agent.AgentReference);
-      return list;      
-    }
 
     
     /// <summary>
@@ -183,12 +157,12 @@ namespace WolvesModel.Environment {
     public int[] GetFreeCell() {
       var x = _random.Next(DimensionX);
       var y = _random.Next(DimensionY);
-      var found = _gridGrass.Explore(x, y, 1);
-      if (found.Any()) {
-        Console.WriteLine("Occupied at ("+x+","+y+").");
-        return null;
-      }
-      Console.WriteLine("Free at ("+x+","+y+").");
+//      var found = _gridGrass.Explore(x, y, 1);
+//      if (found.Any()) {
+//        Console.WriteLine("Occupied at ("+x+","+y+").");
+//        return null;
+//      }
+//      Console.WriteLine("Free at ("+x+","+y+").");
       return new[] {x, y};
     }
 

@@ -6,7 +6,7 @@ using LIFE.Components.ESC.SpatialAPI.Environment;
 
 namespace AsyncAgents.Perception {
 
-    class MovementSensorAsync : ISensor {
+    public class MovementSensorAsync : ISensor {
         private EnvironmentResult _EnvironmentResult;
         private readonly MovementDelegate _movementDelegate;
 

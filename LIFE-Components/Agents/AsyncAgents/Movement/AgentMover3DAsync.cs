@@ -28,8 +28,12 @@ namespace AsyncAgents.Movement
         /// <param name="sensorArray">Sensor and perception storage (used for movement results).</param>
         public AgentMover3DAsync(IAsyncEnvironment env, ISpatialEntity entity, SensorArray sensorArray): base(sensorArray)
         {
+            // Remove sychron sensor
+            sensorArray.DeleteSensor(typeof(MovementSensor).ToString());
+
+            // Add asyc sensor with the same id as the sync sensor
             var movementSensor = new MovementSensorAsync();
-            sensorArray.AddSensor(movementSensor);
+            sensorArray.AddSensor(movementSensor, typeof(MovementSensor).ToString());
             _movementDelegate = movementSensor.GetDelegate();
             _agentId = entity.AgentGuid;
             _initEntity = entity;
