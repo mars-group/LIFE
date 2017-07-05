@@ -60,80 +60,80 @@ namespace WolvesModel.Agents {
     ///   The wolf reasoning logic.
     /// </summary>
     /// <returns>The interaction to execute.</returns>
-    protected override IInteraction Reason() {
-
-      // Energy substraction is made first. 
-      Energy -= 1 + _random.Next(3);
-      if (Energy <= 0) {
-        IsAlive = false;
-        return null;
-      }
-
-      // Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
-      Hunger = (int) ((double) (EnergyMax - Energy)/EnergyMax*100);
-      var sheep = _environment.FindSheep(X, Y, 10);
-      var wolves = _environment.FindWolves(X, Y, 10);
-      for (var i = 0; i < wolves.Count; i++) {
-        if (wolves[i].Equals(this)) {
-          wolves.RemoveAt(i);
-          break;
-        }
-      }
-
-
-      Targets = "S:" + sheep.Count + " / W:" + wolves.Count;
-      IInteraction interaction;
-
-
-      // The wolf is hungry and has sheep spotted.
-      if (sheep.Count > 0 && Hunger > 20) {
-
-        // Get the nearest sheep and calculate the distance towards it.
-        var nearest = sheep[0];
-        TargetDistance = AgentMover.CalculateDistance2D(X, Y, nearest.X, nearest.Y);
-        foreach (var s in sheep) {
-          var dist = AgentMover.CalculateDistance2D(X, Y, s.X, s.Y);
-          if (dist < TargetDistance) {
-            nearest = s;
-            TargetDistance = dist;
-          }
-        }
-
-        // R1: Sheep nearby: Go for the kill!
-        if (TargetDistance <= 1.4143) {
-          Rule = "R1 - Kill the sheep.";
-          interaction = new EatInteraction(this, nearest);
-        }
-
-        // R2: Move to the sheep. You better watch out ...
-        else {
-          Rule = "R2 - Moving towards sheep ("+nearest.X+","+nearest.Y+").";
-          interaction = Mover.MoveTowardsTarget(nearest.X, nearest.Y, 2);
-        }
-      }
-
-
-      // Perform random movement.
-      else {
-        TargetDistance = -1f;
-        Rule = "R3 - No target: Random movement.";
-        var x = _random.Next(_environment.DimensionX);
-        var y = _random.Next(_environment.DimensionY);
-        interaction = Mover.MoveTowardsTarget(x, y);
-      }
-
-
-      // Write the properties to the result structure.
-      AgentData["Energy"] = Energy;
-      AgentData["EnergyMax"] = EnergyMax;
-      AgentData["Hunger"] = Hunger;
-      AgentData["Rule"] = Rule;
-      AgentData["Targets"] = Targets;
-      AgentData["TargetDistance"] = TargetDistance;
-      //Console.WriteLine(this);
-
-      return interaction;  // End of reasoning.
-    }
+//    protected override IInteraction Reason() {
+//
+//      // Energy substraction is made first. 
+//      Energy -= 1 + _random.Next(3);
+//      if (Energy <= 0) {
+//        IsAlive = false;
+//        return null;
+//      }
+//
+//      // Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
+//      Hunger = (int) ((double) (EnergyMax - Energy)/EnergyMax*100);
+//      var sheep = _environment.FindSheep(X, Y, 10);
+//      var wolves = _environment.FindWolves(X, Y, 10);
+//      for (var i = 0; i < wolves.Count; i++) {
+//        if (wolves[i].Equals(this)) {
+//          wolves.RemoveAt(i);
+//          break;
+//        }
+//      }
+//
+//
+//      Targets = "S:" + sheep.Count + " / W:" + wolves.Count;
+//      IInteraction interaction;
+//
+//
+//      // The wolf is hungry and has sheep spotted.
+//      if (sheep.Count > 0 && Hunger > 20) {
+//
+//        // Get the nearest sheep and calculate the distance towards it.
+//        var nearest = sheep[0];
+//        TargetDistance = AgentMover.CalculateDistance2D(X, Y, nearest.X, nearest.Y);
+//        foreach (var s in sheep) {
+//          var dist = AgentMover.CalculateDistance2D(X, Y, s.X, s.Y);
+//          if (dist < TargetDistance) {
+//            nearest = s;
+//            TargetDistance = dist;
+//          }
+//        }
+//
+//        // R1: Sheep nearby: Go for the kill!
+//        if (TargetDistance <= 1.4143) {
+//          Rule = "R1 - Kill the sheep.";
+//          interaction = new EatInteraction(this, nearest);
+//        }
+//
+//        // R2: Move to the sheep. You better watch out ...
+//        else {
+//          Rule = "R2 - Moving towards sheep ("+nearest.X+","+nearest.Y+").";
+//          interaction = Mover.MoveTowardsTarget(nearest.X, nearest.Y, 2);
+//        }
+//      }
+//
+//
+//      // Perform random movement.
+//      else {
+//        TargetDistance = -1f;
+//        Rule = "R3 - No target: Random movement.";
+//        var x = _random.Next(_environment.DimensionX);
+//        var y = _random.Next(_environment.DimensionY);
+//        interaction = Mover.MoveTowardsTarget(x, y);
+//      }
+//
+//
+//      // Write the properties to the result structure.
+//      AgentData["Energy"] = Energy;
+//      AgentData["EnergyMax"] = EnergyMax;
+//      AgentData["Hunger"] = Hunger;
+//      AgentData["Rule"] = Rule;
+//      AgentData["Targets"] = Targets;
+//      AgentData["TargetDistance"] = TargetDistance;
+//      //Console.WriteLine(this);
+//
+//      return interaction;  // End of reasoning.
+//    }
 
 
 

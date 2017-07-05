@@ -9,6 +9,7 @@ using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
 using EnvironmentServiceComponent.SpatialAPI.Environment;
 using LionsModelAsync.Environment;
 using LIFE.API.Layer;
+using LIFE.API.LIFECapabilities;
 using LIFE.API.Results;
 using LIFE.Components.Agents.BasicAgents.Agents;
 using LIFE.Components.Agents.BasicAgents.Movement;
@@ -16,6 +17,7 @@ using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
+using LIFE.Components.ESC.SpatialAPI.Shape;
 using WolvesModel.Interactions;
 
 namespace LionsModelAsync.Agents
@@ -23,6 +25,7 @@ namespace LionsModelAsync.Agents
     public class Lion : Agent2DAsync, IEatInteractionSource, IEatInteractionTarget, ISimResult
     {
 
+        private const int SIGHT_RADIUS = 50;
         private IEnumerable<ISpatialEntity> _antelopsInSight;
         private Antelope _Target;
         public int Energy { get; private set; }            // Current energy (with initial value).
@@ -52,7 +55,7 @@ namespace LionsModelAsync.Agents
             }
         }
 
-
+        [PublishForMappingInMars]
         public Lion(IEnvironmentLayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IAsyncEnvironment env, byte[] id = null, string collisionType = null, int freq = 1) : base(layer, regFkt, unregFkt, env, id, collisionType, freq)
         {
             _random = new Random(ID.GetHashCode());
@@ -61,6 +64,7 @@ namespace LionsModelAsync.Agents
             Energy = 80;
             EnergyMax = 100;
             State = "";
+
             Targets = "";
             TargetDistance = -1f;
         }
@@ -72,9 +76,10 @@ namespace LionsModelAsync.Agents
         {
             //this.SensorArray.SenseAll();
             List<ISpatialEntity> collisions = new List<ISpatialEntity>();
-                // TODO: read positon and collision from movement sensor
             CurrentPosition = _env.GetSpatialEntity(this.ID).Shape.Position;
-            EnvironmentResult moveResult = (EnvironmentResult) SensorArray.Get<MovementSensorAsync>(typeof(MovementSensorAsync).ToString()).Sense();
+//            EnvironmentResult moveResult = (EnvironmentResult) SensorArray.Get<MovementSensorAsync>(typeof(MovementSensorAsync).ToString()).Sense();
+            EnvironmentResult moveResult = SensorArray.Get<MovementSensorAsync,EnvironmentResult>();
+            //             SensorArray.Get>()
 //            moveResult.
             if (!moveResult.Success)
             {
@@ -100,16 +105,6 @@ namespace LionsModelAsync.Agents
 
             // Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
             Hunger = (int)((double)(EnergyMax - Energy) / EnergyMax * 100);
-//            var sheep = _environment.FindSheep(X, Y, 10);
-//            var wolves = _environment.FindWolves(X, Y, 10);
-//            for (var i = 0; i < wolves.Count; i++)
-//            {
-//                if (wolves[i].Equals(this))
-//                {
-//                    wolves.RemoveAt(i);
-//                    break;
-//                }
-//            }
 
             
             var antelopeList = _antelopsInSight.ToList();
@@ -127,30 +122,42 @@ namespace LionsModelAsync.Agents
                         if(actAntelope == null)
                             continue;
                         interaction = new EatInteraction(this,actAntelope);
-
+                        // Write the properties to the result structure.
+                        AgentData["Energy"] = Energy;
+                        AgentData["EnergyMax"] = EnergyMax;
+                        AgentData["Hunger"] = Hunger;
+                        AgentData["State"] = State;
+                        AgentData["Targets"] = Targets;
+                        AgentData["TargetDistance"] = TargetDistance;
+                        _env.Explore(new Circle(CurrentPosition.X, CurrentPosition.Y, SIGHT_RADIUS), ExploreDelegate);
+                        return interaction;
                     }
 
                 }
-                else
+           
+                var nearest = antelopeList[0];
+                TargetDistance = AgentMover.CalculateDistance2D(CurrentPosition.X, CurrentPosition.Y, nearest.Shape.Position.X, nearest.Shape.Position.Y);
+                foreach (var s in antelopeList)
                 {
-                    var nearest = antelopeList[0];
-                    TargetDistance = AgentMover.CalculateDistance2D(CurrentPosition.X, CurrentPosition.Y, nearest.Shape.Position.X, nearest.Shape.Position.Y);
-                    foreach (var s in antelopeList)
+                    var dist = AgentMover.CalculateDistance2D(CurrentPosition.X, CurrentPosition.Y, nearest.Shape.Position.X, nearest.Shape.Position.Y);
+                    if (dist < TargetDistance)
                     {
-                        var dist = AgentMover.CalculateDistance2D(CurrentPosition.X, CurrentPosition.Y, nearest.Shape.Position.X, nearest.Shape.Position.Y);
-                        if (dist < TargetDistance)
-                        {
-                            nearest = s;
-                            TargetDistance = dist;
-                        }
+                        nearest = s;
+                        TargetDistance = dist;
                     }
-                    State = "Moving towards antelope (" + nearest.Shape.Position.X + "," + nearest.Shape.Position.Y + ").";
-                    interaction = Mover2D.MoveTowardsPosition(200, nearest.Shape.Position.X, nearest.Shape.Position.Y);
-
                 }
-                //Get the nearest Antelope and calculate the distance towards it.
+                State = "Moving towards antelope (" + nearest.Shape.Position.X + "," + nearest.Shape.Position.Y + ").";
+                Direction dir;
+                Vector3 pos;
+                _environment.GetMoveTowardsPositionVector(this.ID, 200, nearest.Shape.Position.X, nearest.Shape.Position.Y, out pos, out dir);
+                _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
+                interaction = Mover2D.SetToPosition(pos.X, pos.Y);
+//                interaction = Mover2D.MoveTowardsPosition(200, nearest.Shape.Position.X, nearest.Shape.Position.Y);
 
             }
+            //Get the nearest Antelope and calculate the distance towards it.
+
+            
 
             // Perform random movement.
             else
@@ -159,7 +166,11 @@ namespace LionsModelAsync.Agents
                 State = "No antelope in sight/ no hunger: Random movement.";
                 var x = _random.Next(_environment.DimensionX);
                 var y = _random.Next(_environment.DimensionY);
-                interaction = Mover2D.MoveTowardsPosition(200,x, y);
+                Direction dir;
+                Vector3 pos;
+                _environment.GetMoveTowardsPositionVector(this.ID,200,x,y,out pos,out dir);
+                _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
+                interaction = Mover2D.SetToPosition(pos.X, pos.Y);
             }
 
             // Write the properties to the result structure.
@@ -169,7 +180,9 @@ namespace LionsModelAsync.Agents
             AgentData["State"] = State;
             AgentData["Targets"] = Targets;
             AgentData["TargetDistance"] = TargetDistance;
-            
+
+
+
             //interaction = Mover2D.MoveTowardsPosition(10.2,2,2);
             return interaction;
         }

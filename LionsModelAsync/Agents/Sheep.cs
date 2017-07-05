@@ -77,71 +77,71 @@ namespace WolvesModel.Agents {
       }
 
       // Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
-      Hunger = (int) ((double) (EnergyMax - Energy)/EnergyMax*100);
-      var grass = _environment.FindGrass(X, Y, 10);
-      var sheep = _environment.FindSheep(X, Y, 10);
-      for (var i = 0; i < sheep.Count; i++) {
-        if (sheep[i].ID.Equals(ID)) {
-          sheep.RemoveAt(i);
-          break;
-        }
-      }
+//      Hunger = (int) ((double) (EnergyMax - Energy)/EnergyMax*100);
+//      var grass = _environment.FindGrass(X, Y, 10);
+//      var sheep = _environment.FindSheep(X, Y, 10);
+//      for (var i = 0; i < sheep.Count; i++) {
+//        if (sheep[i].ID.Equals(ID)) {
+//          sheep.RemoveAt(i);
+//          break;
+//        }
+//      }
+//
+//
+//      Targets = "G:" + grass.Count + " / S:" + sheep.Count;
+//      IInteraction interaction;
+//
+//
+//      // If grass exists and the sheep is hungry at all.
+//      if (grass.Count > 0 && Hunger > 20) {
+//
+//        // Get the nearest grass agent and calculate the distance towards it.
+//        var nearest = grass[0];
+//        TargetDistance = AgentMover.CalculateDistance2D(X, Y, nearest.X, nearest.Y);
+//        foreach (var g in grass) {
+//          var dist = AgentMover.CalculateDistance2D(X, Y, g.X, g.Y);
+//          if (dist < TargetDistance) {
+//            nearest = g;
+//            TargetDistance = dist;
+//          }
+//        }
+//
+//        // R1: Eat nearby grass.
+//        if (TargetDistance <= 1.4143) {
+//          Rule = "R1 - Eat nearby grass.";
+//          interaction = new EatInteraction(this, nearest);
+//        }
+//
+//        // R2: Grass exists, but not on adjoining cells: We have to move.
+//        else {
+//          Rule = "R2 - Moving towards grass ("+nearest.X+","+nearest.Y+").";
+//          interaction = Mover.MoveTowardsTarget(nearest.X, nearest.Y);
+//        }
+//      }
+//
+//
+//      // Either the grass is too far away or the sheep is not hungry.
+//      // Wander randomly around.
+//      else {
+//        TargetDistance = -1f;
+//        Rule = "R3 - No target: Random movement.";
+//        var x = _random.Next(_environment.DimensionX);
+//        var y = _random.Next(_environment.DimensionY);
+//        interaction = Mover.MoveTowardsTarget(x, y);
+//      }
+//
+//
+//      // Write the properties to the result structure.
+//      AgentData["Energy"] = Energy;
+//      AgentData["EnergyMax"] = EnergyMax;
+//      AgentData["Hunger"] = Hunger;
+//      AgentData["Rule"] = Rule;
+//      AgentData["Sex"] = Sex.ToString();
+//      AgentData["Targets"] = Targets;
+//      AgentData["TargetDistance"] = TargetDistance;
+//      //Console.WriteLine(this);
 
-
-      Targets = "G:" + grass.Count + " / S:" + sheep.Count;
-      IInteraction interaction;
-
-
-      // If grass exists and the sheep is hungry at all.
-      if (grass.Count > 0 && Hunger > 20) {
-
-        // Get the nearest grass agent and calculate the distance towards it.
-        var nearest = grass[0];
-        TargetDistance = AgentMover.CalculateDistance2D(X, Y, nearest.X, nearest.Y);
-        foreach (var g in grass) {
-          var dist = AgentMover.CalculateDistance2D(X, Y, g.X, g.Y);
-          if (dist < TargetDistance) {
-            nearest = g;
-            TargetDistance = dist;
-          }
-        }
-
-        // R1: Eat nearby grass.
-        if (TargetDistance <= 1.4143) {
-          Rule = "R1 - Eat nearby grass.";
-          interaction = new EatInteraction(this, nearest);
-        }
-
-        // R2: Grass exists, but not on adjoining cells: We have to move.
-        else {
-          Rule = "R2 - Moving towards grass ("+nearest.X+","+nearest.Y+").";
-          interaction = Mover.MoveTowardsTarget(nearest.X, nearest.Y);
-        }
-      }
-
-
-      // Either the grass is too far away or the sheep is not hungry.
-      // Wander randomly around.
-      else {
-        TargetDistance = -1f;
-        Rule = "R3 - No target: Random movement.";
-        var x = _random.Next(_environment.DimensionX);
-        var y = _random.Next(_environment.DimensionY);
-        interaction = Mover.MoveTowardsTarget(x, y);
-      }
-
-
-      // Write the properties to the result structure.
-      AgentData["Energy"] = Energy;
-      AgentData["EnergyMax"] = EnergyMax;
-      AgentData["Hunger"] = Hunger;
-      AgentData["Rule"] = Rule;
-      AgentData["Sex"] = Sex.ToString();
-      AgentData["Targets"] = Targets;
-      AgentData["TargetDistance"] = TargetDistance;
-      //Console.WriteLine(this);
-
-      return interaction;  // End of reasoning.
+      return null;  // End of reasoning.
     }
 
 
