@@ -27,6 +27,8 @@ namespace LionsModelAsync.Environment
         Lion GetLion(Guid agentID);
         Grass GetGrass(Guid agentID);
 
+        void RemoveAgent(Guid agentID);
+
         /// <summary>
         ///   The environment's extent in X-direction.
         /// </summary>

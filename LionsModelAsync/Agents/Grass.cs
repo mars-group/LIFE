@@ -24,17 +24,20 @@ namespace WolvesModel.Agents {
 //    public override Grass AgentReference => this; // Concrete agent reference. 
     private readonly Random _random;              // Random number generator for unequal growing.
 
+      private IEnvironmentLayer _environment;
 
-    /// <summary>
-    ///   Create a new grass agent.
-    /// </summary>
-    /// <param name="layer">Layer reference needed for delegate calls.</param>
-    /// <param name="regFkt">Agent registration function pointer.</param>
-    /// <param name="unregFkt"> Delegate for unregistration function.</param>
-    /// <param name="grid">Grid environment implementation reference.</param>
+
+     /// <summary>
+     ///   Create a new grass agent.
+     /// </summary>
+     /// <param name="layer">Layer reference needed for delegate calls.</param>
+     /// <param name="regFkt">Agent registration function pointer.</param>
+     /// <param name="unregFkt"> Delegate for unregistration function.</param>
+     /// <param name="grid">Grid environment implementation reference.</param>
      public Grass(IEnvironmentLayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IAsyncEnvironment env, byte[] id = null, string collisionType = null, int freq = 1) 
             : base(layer, regFkt, unregFkt, env, id, collisionType, freq)
-      {
+     {
+         _environment = layer;
           _random = new Random(ID.GetHashCode());
                 FoodValue = 2;
                 FoodValueMax = 60;
@@ -78,7 +81,9 @@ namespace WolvesModel.Agents {
     ///   Remove this agent (as result of an eating interaction).
     /// </summary>
     public void RemoveAgent() {
-      IsAlive = false;
+        _environment.RemoveAgent(this.ID);
+
+            IsAlive = false;
     }
 
       

@@ -79,6 +79,7 @@ namespace LionsModelAsync.Agents
             if (Energy <= 0)
             {
                 IsAlive = false;
+                _environment.RemoveAgent(this.ID);
                 return null;
             }
             IInteraction interaction;
@@ -142,65 +143,17 @@ namespace LionsModelAsync.Agents
             else
             {
                 TargetDistance = -1f;
-                Rule = "R3 - No target: Random movement.";
-                var x = _random.Next(_environment.DimensionX);
+                State = "R3 - No target: Random movement.";
+                var x= _random.Next(_environment.DimensionX);
                 var y = _random.Next(_environment.DimensionY);
-                interaction = Mover.MoveTowardsTarget(x, y);
-            }
 
-
-            // Write the properties to the result structure.
-            AgentData["Energy"] = Energy;
-            AgentData["EnergyMax"] = EnergyMax;
-            AgentData["Hunger"] = Hunger;
-            AgentData["Rule"] = Rule;
-            AgentData["Sex"] = Sex.ToString();
-            AgentData["Targets"] = Targets;
-            AgentData["TargetDistance"] = TargetDistance;
-            //Console.WriteLine(this);
-
-
-            // The wolf is hungry and has sheep spotted.
-            if (antelopeList.Count > 0 && Hunger > 20)
-            {
-               
-
-                var nearest = antelopeList[0];
-                foreach (var s in antelopeList)
-                {
-                    var dist = AgentMover.CalculateDistance2D(CurrentPosition.X, CurrentPosition.Y, nearest.Shape.Position.X, nearest.Shape.Position.Y);
-                    if (dist < TargetDistance)
-                    {
-                        nearest = s;
-                        TargetDistance = dist;
-                    }
-                }
-                State = "Moving towards antelope (" + nearest.Shape.Position.X + "," + nearest.Shape.Position.Y + ").";
-                Direction dir;
-                Vector3 pos;
-                _environment.GetMoveTowardsPositionVector(this.ID, 200, nearest.Shape.Position.X, nearest.Shape.Position.Y, out pos, out dir);
-                _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
-                interaction = Mover2D.SetToPosition(pos.X, pos.Y);
-                //                interaction = Mover2D.MoveTowardsPosition(200, nearest.Shape.Position.X, nearest.Shape.Position.Y);
-
-            }
-            //Get the nearest Antelope and calculate the distance towards it.
-
-
-
-            // Perform random movement.
-            else
-            {
-                TargetDistance = -1f;
-                State = "No antelope in sight/ no hunger: Random movement.";
-                var x = _random.Next(_environment.DimensionX);
-                var y = _random.Next(_environment.DimensionY);
                 Direction dir;
                 Vector3 pos;
                 _environment.GetMoveTowardsPositionVector(this.ID, 200, x, y, out pos, out dir);
                 _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
                 interaction = Mover2D.SetToPosition(pos.X, pos.Y);
             }
+
 
             // Write the properties to the result structure.
             AgentData["Energy"] = Energy;
@@ -209,38 +162,8 @@ namespace LionsModelAsync.Agents
             AgentData["State"] = State;
             AgentData["Targets"] = Targets;
             AgentData["TargetDistance"] = TargetDistance;
-
-
-
-            //interaction = Mover2D.MoveTowardsPosition(10.2,2,2);
-            return interaction;
-            // Energy substraction is made first. 
-            Energy -= 1 + _random.Next(3);
-            if (Energy <= 0)
-            {
-                IsAlive = false;
-                return null;
-            }
-
-//             Calculate hunger percentage, read-out nearby agents and remove own agent from perception list.
-                  Hunger = (int) ((double) (EnergyMax - Energy)/EnergyMax*100);
-                  var grass = _environment.FindGrass(X, Y, 10);
-                  var sheep = _environment.FindSheep(X, Y, 10);
-                  for (var i = 0; i < sheep.Count; i++) {
-                    if (sheep[i].ID.Equals(ID)) {
-                      sheep.RemoveAt(i);
-                      break;
-                    }
-                  }
-            
-            
-                  Targets = "G:" + grass.Count + " / S:" + sheep.Count;
-//                  IInteraction interaction;
-            
-            
-                  
-
-            return null;  // End of reasoning.            throw new NotImplementedException();
+            //Console.WriteLine(this);
+            return interaction;  // End of reasoning.            throw new NotImplementedException();
         }
 
         public int GetFoodValue()
@@ -251,6 +174,8 @@ namespace LionsModelAsync.Agents
         public void RemoveAgent()
         {
             IsAlive = false;
+            _environment.RemoveAgent(this.ID);
+
         }
 
         public void IncreaseEnergy(int points)

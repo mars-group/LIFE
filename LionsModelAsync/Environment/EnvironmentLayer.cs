@@ -51,7 +51,25 @@ namespace WolvesModel.Environment
         private UnregisterAgent _unregFkt; // Delegate for unregistration function.
         private long _tick; // Current tick.
 
-       
+
+        public void RemoveAgent(Guid agentID)
+        {
+            if (_lionAgents.ContainsKey(agentID))
+            {
+                _lionAgents.Remove(agentID);
+                return;
+            }
+            if (_antelopeAgents.ContainsKey(agentID))
+            {
+                _antelopeAgents.Remove(agentID);
+                return;
+            }
+            if (_grassAgents.ContainsKey(agentID))
+            {
+                _grassAgents.Remove(agentID);
+                return;
+            }
+        }
 
         public int DimensionX { get; } // Grid X dimension (- left <=> right +).
         public int DimensionY { get; } // Grid Y dimension (- down <=>    up +).
@@ -170,15 +188,19 @@ namespace WolvesModel.Environment
         /// </summary>
         public void PostTick()
         {
-            //TODO: Implement grass respawn
+            //TODO: Maybe spawn more grass according to agent count
 
-//      var nrGrass = _gridGrass.Explore(0, 0).Count();
-//      var create = _random.Next(40 + nrGrass*2) < 60;
-//      if (create) new Grass(this, _regFkt, _unregFkt, _gridGrass);
-//      Console.WriteLine("\n[EnvironmentLayer] Tick " + _tick +
-//                        " | Grass: " + _gridGrass.Explore(0, 0).Count() +
-//                        ", Sheep: " + _gridSheep.Explore(0, 0).Count() +
-//                        ", Wolves: " + _gridWolves.Explore(0, 0).Count());
+            var nrGrass = _grassAgents.Count;
+            var create = _random.Next(40 + nrGrass * 2) < 60;
+            if (create)
+            {
+                var tmp = new Grass(this, _regFkt, _unregFkt, _environment);
+                _grassAgents.Add(tmp.ID, tmp);
+            }
+            Console.WriteLine("\n[EnvironmentLayer] Tick " + _tick +
+                              " | Grass: " + _grassAgents.Count +
+                              ", Antelopes: " + _antelopeAgents.Count +
+                              ", Lions: " + _lionAgents.Count);
         }
 
 
@@ -199,7 +221,8 @@ namespace WolvesModel.Environment
             return new[] {x, y};
         }
 
-        public void GetMoveTowardsPositionVector(Guid agentId, double distance, double x, double y, out Vector3 newPos, out Direction newDirection)
+        public void GetMoveTowardsPositionVector(Guid agentId, double distance, double x, double y, out Vector3 newPos,
+            out Direction newDirection)
         {
             var actShape = _environment.GetSpatialEntity(agentId).Shape;
             // Check, if we are already there. Otherwise no need to move anyway.
@@ -210,7 +233,7 @@ namespace WolvesModel.Environment
                 newDirection = actShape.Rotation;
                 return;
             }
-   
+
 
             // Get the right direction.
             var diff = new Vector3(x - actShape.Position.X,
@@ -234,18 +257,18 @@ namespace WolvesModel.Environment
             var xNew = factor * Math.Cos(pitchRad) * Math.Sin(yawRad);
             var yNew = factor * Math.Sin(pitchRad);
             var z = 0;
-           newPos = new Vector3(xNew , yNew, z);
+            newPos = new Vector3(xNew, yNew, z);
             newDirection = dir;
         }
 
         public Grass GetGrass(Guid agentID)
         {
-            lock(_grassAgents)
+            lock (_grassAgents)
             {
                 return _grassAgents.ContainsKey(agentID) ? _grassAgents[agentID] : null;
             }
-            
         }
+
         public Antelope GetAntelope(Guid agentID)
         {
             lock (_antelopeAgents)

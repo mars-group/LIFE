@@ -97,6 +97,8 @@ namespace LionsModelAsync.Agents
             if (Energy <= 0)
             {
                 IsAlive = false;
+                _environment.RemoveAgent(this.ID);
+
                 return null;
             }
             IInteraction interaction;
@@ -201,6 +203,8 @@ namespace LionsModelAsync.Agents
         public void RemoveAgent()
         {
             IsAlive = false;
+            _environment.RemoveAgent(this.ID);
+
         }
     }
 }
