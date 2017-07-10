@@ -24,6 +24,7 @@ namespace LionsModelAsync.Agents
         private IEnumerable<ISpatialEntity> _elementsInSight;
 
         private const int SIGHT_RADIUS = 50;
+        public double Speed { get; private set; }            // Current energy (with initial value).
 
         public Vector3 CurrentPosition { get; private set; }
         public int Energy { get; private set; }            // Current energy (with initial value).
@@ -38,7 +39,15 @@ namespace LionsModelAsync.Agents
         public Antelope(IEnvironmentLayer layer, RegisterAgent regFkt, UnregisterAgent unregFkt, IAsyncEnvironment env, byte[] id = null, string collisionType = null, int freq = 1) 
             : base(layer, regFkt, unregFkt, env, id, collisionType, freq)
         {
-//            Mover2D.InsertIntoEnvironment();
+            _random = new Random(ID.GetHashCode());
+            _environment = layer;
+            Mover2D.InsertIntoEnvironment(_random.Next(layer.DimensionX), _random.Next(layer.DimensionY));
+            Energy = 80;
+            EnergyMax = 100;
+            State = "";
+            Speed = 200;
+            Targets = "";
+            TargetDistance = -1f;
         }
 
         private void ExploreDelegate(EnvironmentResult res)
@@ -125,13 +134,9 @@ namespace LionsModelAsync.Agents
                         TargetDistance = dist;
                     }
                 }
-//                _environment.GetMoveTowardsPositionVector(this.ID, 200, x, y, out pos, out dir);
-//                _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
-//                interaction = Mover2D.SetToPosition(pos.X, pos.Y);
-                // R1: Eat nearby grass.
                 Direction dir;
                 Vector3 pos;
-                _environment.GetMoveTowardsPositionVector(this.ID, 200, nearest.Shape.Position.X, nearest.Shape.Position.Y, out pos, out dir);
+                _environment.GetMoveTowardsPositionVector(this.ID, Speed, nearest.Shape.Position.X, nearest.Shape.Position.Y, out pos, out dir);
                 _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
                 interaction = Mover2D.SetToPosition(pos.X, pos.Y);
                 State = "R2 - Moving towards grass (" + nearest.Shape.Position.X + "," + nearest.Shape.Position.Y + ").";
@@ -149,7 +154,7 @@ namespace LionsModelAsync.Agents
 
                 Direction dir;
                 Vector3 pos;
-                _environment.GetMoveTowardsPositionVector(this.ID, 200, x, y, out pos, out dir);
+                _environment.GetMoveTowardsPositionVector(this.ID, Speed, x, y, out pos, out dir);
                 _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
                 interaction = Mover2D.SetToPosition(pos.X, pos.Y);
             }

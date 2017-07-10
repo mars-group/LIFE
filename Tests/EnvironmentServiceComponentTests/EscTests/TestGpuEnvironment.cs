@@ -41,7 +41,7 @@ namespace EnvironmentServiceComponentTests.EscTests
                 _collisionCnt++;
             }
         }
-
+#if GPU
         [SetUp]
         public void initOpenCL()
         {
@@ -92,7 +92,8 @@ namespace EnvironmentServiceComponentTests.EscTests
         }
 
 
-        
+
+
         public void TestSortWithRandomValues()
         {
             //int[] numOfSortValues = new[] { 16,1 << 10, 1 << 15, 100, 10000};//, 100000, 500000};
@@ -310,6 +311,7 @@ namespace EnvironmentServiceComponentTests.EscTests
                         Debug.WriteLine("Movement succeeded: " + movementSucess);
                         Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");*/
         }
+#endif
 
     }
 }

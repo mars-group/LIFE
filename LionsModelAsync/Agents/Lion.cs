@@ -29,6 +29,7 @@ namespace LionsModelAsync.Agents
         private IEnumerable<ISpatialEntity> _antelopsInSight;
         private Antelope _Target;
         public int Energy { get; private set; }            // Current energy (with initial value).
+        public double Speed{ get; private set; }            // Current energy (with initial value).
         public int EnergyMax { get; private set; }         // Maximum health.
         public int Hunger { get; private set; }            // Hunger value of this Lion.
         public string State { get; private set; }           // Agent State.
@@ -64,7 +65,7 @@ namespace LionsModelAsync.Agents
             Energy = 80;
             EnergyMax = 100;
             State = "";
-
+            Speed = 200;
             Targets = "";
             TargetDistance = -1f;
         }
@@ -151,7 +152,7 @@ namespace LionsModelAsync.Agents
                 State = "Moving towards antelope (" + nearest.Shape.Position.X + "," + nearest.Shape.Position.Y + ").";
                 Direction dir;
                 Vector3 pos;
-                _environment.GetMoveTowardsPositionVector(this.ID, 200, nearest.Shape.Position.X, nearest.Shape.Position.Y, out pos, out dir);
+                _environment.GetMoveTowardsPositionVector(this.ID, Speed, nearest.Shape.Position.X, nearest.Shape.Position.Y, out pos, out dir);
                 _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
                 interaction = Mover2D.SetToPosition(pos.X, pos.Y);
 //                interaction = Mover2D.MoveTowardsPosition(200, nearest.Shape.Position.X, nearest.Shape.Position.Y);
@@ -170,7 +171,7 @@ namespace LionsModelAsync.Agents
                 var y = _random.Next(_environment.DimensionY);
                 Direction dir;
                 Vector3 pos;
-                _environment.GetMoveTowardsPositionVector(this.ID,200,x,y,out pos,out dir);
+                _environment.GetMoveTowardsPositionVector(this.ID, Speed, x,y,out pos,out dir);
                 _env.Explore(new Circle(pos.X, pos.Y, SIGHT_RADIUS), ExploreDelegate);
                 interaction = Mover2D.SetToPosition(pos.X, pos.Y);
             }
