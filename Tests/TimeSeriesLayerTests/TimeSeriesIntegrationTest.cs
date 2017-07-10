@@ -18,8 +18,8 @@ namespace LIFE.Components.Layers
         private const string User = "mars";
         private const string Password = "sram2015";
 
-        private const string InfluxDbHost = "artifactory.mars.haw-hamburg.de-influxdb";
-        //private const string InfluxDbHost = "localhost";
+        //private const string InfluxDbHost = "artifactory.mars.haw-hamburg.de-influxdb";
+        private const string InfluxDbHost = "localhost";
 
         private const string DatabaseName = "timeseries";
 
