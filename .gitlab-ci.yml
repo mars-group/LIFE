@@ -12,9 +12,13 @@ cache:
   paths:
     - /root/.nuget/packages/
 
+tags:
+    - k8s
 
 # Meta Packages
 testAll:
+ tags:
+    - k8s
  stage: test
  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
  services:
@@ -49,6 +53,8 @@ testAll:
 
 build-LIFE-API:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - cd LIFE-API
@@ -62,6 +68,8 @@ build-LIFE-API:
 
 build-LIFE-Core:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -74,6 +82,8 @@ build-LIFE-Core:
 
 build-LIFE-Components:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -88,6 +98,8 @@ build-LIFE-Components:
 
 build-BasicAgents:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -100,6 +112,8 @@ build-BasicAgents:
 
 build-ESC:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
