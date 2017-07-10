@@ -12,9 +12,6 @@ cache:
   paths:
     - /root/.nuget/packages/
 
-tags:
-    - k8s
-
 # Meta Packages
 testAll:
  tags:
@@ -126,6 +123,8 @@ build-ESC:
 
 build-GeoGridEnvironment:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -138,6 +137,8 @@ build-GeoGridEnvironment:
 
 build-GridEnvironment:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -150,6 +151,8 @@ build-GridEnvironment:
 
 build-GeoPotentialField:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -162,6 +165,8 @@ build-GeoPotentialField:
 
 build-GridPotentialField:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -174,6 +179,8 @@ build-GridPotentialField:
 
 build-ObstacleLayer:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -186,6 +193,8 @@ build-ObstacleLayer:
 
 build-RawFileLayer:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -198,6 +207,8 @@ build-RawFileLayer:
 
 build-TimeSeriesLayer:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -210,6 +221,8 @@ build-TimeSeriesLayer:
 
 build-Utilities:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -222,6 +235,8 @@ build-Utilities:
 
 build-AgentManagerService:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -248,6 +263,8 @@ build-AgentShadowingService:
 
 build-ASC:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -261,6 +278,8 @@ build-ASC:
 
 build-Scs:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -273,6 +292,8 @@ build-Scs:
 
 build-MulticastAdapter:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -285,6 +306,8 @@ build-MulticastAdapter:
 
 build-CustomUtilities:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -297,6 +320,8 @@ build-CustomUtilities:
 
 build-ConfigurationAdapter:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -309,6 +334,8 @@ build-ConfigurationAdapter:
 
 build-CommonTypes:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -321,6 +348,8 @@ build-CommonTypes:
 
 build-LayerContainerFacade:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -334,6 +363,8 @@ build-LayerContainerFacade:
 
 build-LayerContainerShared:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -346,6 +377,8 @@ build-LayerContainerShared:
 
 build-LayerFactory:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -358,6 +391,8 @@ build-LayerFactory:
 
 build-LayerLoader:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -370,6 +405,8 @@ build-LayerLoader:
 
 build-LayerNameService:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -382,6 +419,8 @@ build-LayerNameService:
 
 build-LayerRegistry:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -394,6 +433,8 @@ build-LayerRegistry:
 
 build-LNSConnector:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -406,6 +447,8 @@ build-LNSConnector:
 
 build-ModelContainer:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -418,6 +461,8 @@ build-ModelContainer:
 
 build-NodeRegistry:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -430,6 +475,8 @@ build-NodeRegistry:
 
 build-PartitionManager:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -442,6 +489,8 @@ build-PartitionManager:
 
 build-ResultAdapter:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -454,6 +503,8 @@ build-ResultAdapter:
 
 build-RTEManager:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -466,6 +517,8 @@ build-RTEManager:
 
 build-RuntimeEnvironment:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -478,6 +531,8 @@ build-RuntimeEnvironment:
 
 build-SimulationManagerFacade:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -490,6 +545,8 @@ build-SimulationManagerFacade:
 
 build-SimulationManagerShared:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -502,6 +559,8 @@ build-SimulationManagerShared:
 
 build-SMConnector:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -514,6 +573,8 @@ build-SMConnector:
 
 build-LCConnector:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -526,6 +587,8 @@ build-LCConnector:
 
 build-LIFECoreUtilities:
   stage: build
+  tags:
+    - k8s
   image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -538,6 +601,8 @@ build-LIFECoreUtilities:
 
 pushAllPackages:
   stage: deploy
+  tags:
+    - k8s
   image: frolvlad/alpine-mono
   only:
     - master
