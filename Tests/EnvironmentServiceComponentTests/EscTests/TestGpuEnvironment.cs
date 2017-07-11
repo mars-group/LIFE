@@ -42,7 +42,7 @@ namespace EnvironmentServiceComponentTests.EscTests
             }
         }
 
-#if NO_GPU
+#if GPU
         [SetUp]
         public void initOpenCL()
         {
