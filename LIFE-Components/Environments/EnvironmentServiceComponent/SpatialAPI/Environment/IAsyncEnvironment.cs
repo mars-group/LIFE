@@ -1,5 +1,6 @@
 ﻿using System;
 using EnvironmentServiceComponent.SpatialAPI.Entities.Movement;
+using LIFE.API.Environment;
 using LIFE.Components.ESC.SpatialAPI.Entities;
 using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 using LIFE.Components.ESC.SpatialAPI.Shape;
@@ -36,7 +37,7 @@ namespace EnvironmentServiceComponent.SpatialAPI.Environment
     ///     The IAsyncEnvironmentRefactor should provide the possibility to check collisions between entities and to explore defined
     ///     areas. It is asynchronous thus provides the results after commit.
     /// </summary>
-    public interface IAsyncEnvironment
+    public interface IAsyncEnvironment : IEnvironment
     {
 
         /// <summary>

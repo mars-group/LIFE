@@ -4,6 +4,7 @@ using System.Text;
 using LIFE.Components.Agents.BasicAgents.Movement;
 using LIFE.Components.Agents.BasicAgents.Perception;
 using LIFE.Components.Agents.BasicAgents.Reasoning;
+using LIFE.Components.ESC.SpatialAPI.Shape;
 
 namespace AsyncAgents.Movement
 {
@@ -29,9 +30,9 @@ namespace AsyncAgents.Movement
         /// <param name="x">AgentReference start position (x-coordinate).</param>
         /// <param name="y">AgentReference start position (y-coordinate).</param>
         /// <returns>Success flag. If failed, the agent may not be moved!</returns>
-        public void InsertIntoEnvironment(double x, double y)
+        public void InsertIntoEnvironment(double x, double y, IShape shape = null)
         {
-            _mover3D.InsertIntoEnvironment(x, y, 0);
+            _mover3D.InsertIntoEnvironment(x, y, 0, shape);
         }
 
 
