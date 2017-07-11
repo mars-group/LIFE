@@ -42,6 +42,7 @@ namespace EnvironmentServiceComponentTests.EscTests
             }
         }
 
+#if NO_GPU
         [SetUp]
         public void initOpenCL()
         {
@@ -92,16 +93,15 @@ namespace EnvironmentServiceComponentTests.EscTests
         }
 
 
-        
+
+
         public void TestSortWithRandomValues()
         {
-            //int[] numOfSortValues = new[] { 16,1 << 10, 1 << 15, 100, 10000};//, 100000, 500000};
             List<int> numOfSortValues = new List<int>();
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 numOfSortValues.Add(1 << 16);
             }
-            //uint[] data = new uint[] { 0xa39, 0xdd1, 0x2671, 0x2da, 0x37a, 0x138, 0x2385, 0x26ba, 0x78c, 0x138f, 0x1041, 0x1ff4, 0x236e, 0x1d99, 0x44b, 0x1568, 0x210c, 0x225, 0x91a, 0x158f, 0x867, 0x19d8, 0x2081, 0x17a6, 0x1129, 0x4d0, 0x16da, 0x18b7, 0x166, 0x87e, 0x12b6, 0xb0, 0x2420, 0x5d8, 0x23cf, 0xadd, 0xca6, 0x1acf, 0x23b9, 0x1df9, 0x357, 0x11a3, 0x7d0, 0x123e, 0x53d, 0xf13, 0x16c1, 0xe3f, 0x1c1a, 0x0 };
 
 
             foreach (var numElements in numOfSortValues)
@@ -159,22 +159,21 @@ namespace EnvironmentServiceComponentTests.EscTests
         }
 
 
-
         [Test]
-        public void TestPerfomanceParallelMovement()
+        public void TestPerfomanceParallelMovement3D()
         {
 
 
             const int agentCount = 200;
             const int ticks = 10;
-
+            Debug.WriteLine(typeof(IAsyncEnvironment));
             double maxEnvDim = 10000;//Math.Sqrt(agentCount) * 1.7;
             var maxEnvVector = new Vector3(maxEnvDim, maxEnvDim);
             Debug.WriteLine("Maximal environment dimension: " + maxEnvVector);
 
             Stopwatch initTime = Stopwatch.StartNew();
             var agents = new ConcurrentBag<ISpatialEntity>();
-            var esc = new HierarchicalGpuESC(new Vector3(20, 20), maxEnvVector);
+            var esc = new GpuESC(new Vector3(20, 20), maxEnvVector);
             Parallel.For
             (0,
                 agentCount / 4,
@@ -218,12 +217,73 @@ namespace EnvironmentServiceComponentTests.EscTests
 
 
 
+            Debug.WriteLine("Collisions: " + _collisionCnt);
+            Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");
+        }
+
+        [Test]
+        public void TestPerfomanceParallelMovement2D()
+        {
+
+
+            const int agentCount = 200;
+            Debug.WriteLine(typeof(IAsyncEnvironment));
+            double maxEnvDim = 10000;//Math.Sqrt(agentCount) * 1.7;
+            var maxEnvVector = new Vector3(maxEnvDim, maxEnvDim);
+            Debug.WriteLine("Maximal environment dimension: " + maxEnvVector);
+
+            Stopwatch initTime = Stopwatch.StartNew();
+            var agents = new ConcurrentBag<ISpatialEntity>();
+            var esc = new HierarchicalGpuESC(new Vector3(20, 20), maxEnvVector);
+            Parallel.For
+            (0,
+                agentCount / 4,
+                t => {
+                    ISpatialEntity a1 = new TestSpatialEntity(14, 14);
+                    agents.Add(a1);
+                    esc.AddWithRandomPosition(a1, Vector3.Zero, maxEnvVector, false, EnvironmentDelegate);
+                });
+
+            Parallel.For
+            (0,
+                agentCount / 4,
+                t => {
+                    ISpatialEntity a1 = new TestSpatialEntity(7, 7);
+                    agents.Add(a1);
+                    esc.AddWithRandomPosition(a1, Vector3.Zero, maxEnvVector, false, EnvironmentDelegate);
+                });
+            Parallel.For
+            (0,
+                agentCount / 4,
+                t => {
+                    ISpatialEntity a1 = new TestSpatialEntity(4, 4);
+                    agents.Add(a1);
+                    esc.AddWithRandomPosition(a1, Vector3.Zero, maxEnvVector, false, EnvironmentDelegate);
+                });
+            Parallel.For
+            (0,
+                agentCount / 4,
+                t => {
+                    ISpatialEntity a1 = new TestSpatialEntity(1, 1);
+                    agents.Add(a1);
+                    esc.AddWithRandomPosition(a1, Vector3.Zero, maxEnvVector, false, EnvironmentDelegate);
+                });
+            Assert.AreEqual(esc.Commit(),COMMIT_RESULT.OK);
+            Debug.WriteLine
+                ("Time for adding " + agentCount + " agents:" + initTime.ElapsedMilliseconds + "ms");
+
+            Stopwatch moveTime = Stopwatch.StartNew();
+            Random random = new Random();
+
+
+
+
                     Debug.WriteLine("Collisions: " + _collisionCnt);
                     Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");
         }
 
         [Test]
-        public void TestCollisionCase()
+        public void TestCollisionCase2D()
         {
             const int agentCount = 16;
             const int ticks = 10;
@@ -279,37 +339,69 @@ namespace EnvironmentServiceComponentTests.EscTests
 
             Assert.AreEqual(6, _collisionCnt);
             Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");
-
-            /*    int collisions = 0;
-                int movementSucess = 0;
-                for (int i = 0; i < ticks; i++)
-                {
-                    Stopwatch tickTime = Stopwatch.StartNew();
-                    Parallel.ForEach
-                        (agents,
-                            agent => {
-                                if (esc.Move(agent.AgentGuid, new Vector3(random.Next(-2, 2), 0, random.Next(-2, 2)))
-                                {
-                                    movementSucess++;
-                                }
-                                else
-                                {
-                                    collisions++;
-                                }
-                            });
-
-                    noSqlEsc.CommitTick();
-
-                    Debug.WriteLine("Tick " + i + " required " + tickTime.ElapsedMilliseconds + "ms");
-                }*/
-            /*            Debug.WriteLine("InvolvedEntities: " + collisions);
-                        Debug.WriteLine("Movement succeeded: " + movementSucess);
-                        Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");
-
-                        Debug.WriteLine("InvolvedEntities: " + collisions);
-                        Debug.WriteLine("Movement succeeded: " + movementSucess);
-                        Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");*/
         }
 
+        [Test]
+        public void TestCollisionCase3D()
+        {
+            const int agentCount = 16;
+            const int ticks = 10;
+            _collisionCnt = 0;
+            double maxEnvDim = 500;//Math.Sqrt(agentCount) * 1.7;
+            var maxEnvVector = new Vector3(maxEnvDim, maxEnvDim);
+            Console.WriteLine("Maximal environment dimension: " + maxEnvVector);
+
+            Stopwatch initTime = Stopwatch.StartNew();
+            var agents = new ConcurrentBag<ISpatialEntity>();
+            var esc = new GpuESC(new Vector3(20, 20), maxEnvVector);
+
+
+            ISpatialEntity a1 = new TestSpatialEntity(14, 14);
+            a1.Shape = new Cuboid(new Vector3(5,5,5), new Vector3(14,14,14));
+            agents.Add(a1);
+            esc.Add(a1, EnvironmentDelegate);
+
+            a1 = new TestSpatialEntity(14, 14);
+            a1.Shape = new Cuboid(new Vector3(5, 5, 5), new Vector3(14, 14, 14));
+
+            agents.Add(a1);
+            esc.Add(a1, EnvironmentDelegate);
+
+            a1 = new TestSpatialEntity(14, 14);
+
+            a1.Shape = new Cuboid(new Vector3(10,10,5), new Vector3(14,14,14));
+            agents.Add(a1);
+            esc.Add(a1, EnvironmentDelegate);
+
+            a1 = new TestSpatialEntity(14, 14);
+            a1.Shape = new Cuboid(new Vector3(5, 5, 5), new Vector3(10, 10, 14));
+            agents.Add(a1);
+            esc.Add(a1, EnvironmentDelegate);
+
+            a1 = new TestSpatialEntity(7, 7);
+
+            a1.Shape = new Cuboid(new Vector3(5,5,5), new Vector3(14,20,4));
+            agents.Add(a1);
+            esc.Add(a1, EnvironmentDelegate);
+
+            a1 = new TestSpatialEntity(7, 7);
+            a1.Shape = new Cuboid(new Vector3(5, 5, 5), new Vector3(14, 14, 14));
+            agents.Add(a1);
+            esc.Add(a1, EnvironmentDelegate);
+
+
+            esc.Commit();
+            Debug.WriteLine
+                ("Time for adding " + agentCount + " agents:" + initTime.ElapsedMilliseconds + "ms");
+
+            Stopwatch moveTime = Stopwatch.StartNew();
+            Random random = new Random();
+
+            Debug.WriteLine("InvolvedEntities: " + _collisionCnt);
+
+            Assert.AreEqual(6, _collisionCnt);
+            Debug.WriteLine("Complete movement time: " + moveTime.ElapsedMilliseconds + "ms");
+        }
+#endif
     }
 }

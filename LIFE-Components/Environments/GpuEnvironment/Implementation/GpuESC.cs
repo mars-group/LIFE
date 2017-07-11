@@ -95,7 +95,6 @@ namespace GpuEnvironment.Implementation
         private List<ulong> _clObjArray;
         private int[] _sharedIdx = new int[1];
         private bool[] _freeCellList;
-        private int _sortElements;
 
         // Variables for reading the debug output
         private ulong[] _debugReadInput;
