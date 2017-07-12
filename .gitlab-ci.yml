@@ -250,6 +250,8 @@ build-AgentManagerService:
 
 build-AgentShadowingService:
   stage: build
+  tags:
+    - k8s
   image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
