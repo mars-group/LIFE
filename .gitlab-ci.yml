@@ -4,7 +4,8 @@ stages:
   - deploy
 
 variables:
-  NUGET_FEED: "https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-virtual/"
+  PUSH_PATH: "https://nexus.informatik.haw-hamburg.de/repository/nuget-group/"
+    #"https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-local/"
   MAJOR_LIFE_VERSION: "2.1.2"
 
 cache:
@@ -17,9 +18,9 @@ testAll:
  tags:
     - k8s
  stage: test
- image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+ image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
  services:
-   - artifactory.mars.haw-hamburg.de:5000/influxdb:1.2
+   - nexus.informatik.haw-hamburg.de/influxdb:1.2
  script:
     - dotnet msbuild "/t:Restore" /p:VersionSuffix=unstable-$CI_PIPELINE_ID /p:Configuration=Release
     - cd Tests/BasicAgentsTests
@@ -52,7 +53,7 @@ build-LIFE-API:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - cd LIFE-API
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
@@ -67,7 +68,7 @@ build-LIFE-Core:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LIFECoreStarter
@@ -81,7 +82,7 @@ build-LIFE-Components:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/LIFE-Components
@@ -97,7 +98,7 @@ build-BasicAgents:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Agents/BasicAgents
@@ -111,7 +112,7 @@ build-ESC:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/EnvironmentServiceComponent
@@ -125,7 +126,7 @@ build-GeoGridEnvironment:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/GeoGridEnvironment
@@ -139,7 +140,7 @@ build-GridEnvironment:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Environments/GridEnvironment
@@ -153,7 +154,7 @@ build-GeoPotentialField:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/GeoPotentialFieldLayer
@@ -167,7 +168,7 @@ build-GridPotentialField:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/GridPotentialFieldLayer
@@ -181,7 +182,7 @@ build-ObstacleLayer:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/ObstacleLayer
@@ -195,7 +196,7 @@ build-RawFileLayer:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/RawFileLayer
@@ -209,7 +210,7 @@ build-TimeSeriesLayer:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Layers/TimeSeriesLayer
@@ -223,7 +224,7 @@ build-Utilities:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Utilities
@@ -237,7 +238,7 @@ build-AgentManagerService:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Services/AgentManagerService
@@ -249,7 +250,7 @@ build-AgentManagerService:
 
 build-AgentShadowingService:
   stage: build
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Components/Services/AgentShadowingService
@@ -265,7 +266,7 @@ build-ASC:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/ASC
@@ -280,7 +281,7 @@ build-Scs:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/Scs
@@ -294,7 +295,7 @@ build-MulticastAdapter:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/MulticastAdapter
@@ -308,7 +309,7 @@ build-CustomUtilities:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/CustomUtilities
@@ -322,7 +323,7 @@ build-ConfigurationAdapter:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/ConfigurationAdapter
@@ -336,7 +337,7 @@ build-CommonTypes:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/CommonTypes
@@ -350,7 +351,7 @@ build-LayerContainerFacade:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerFacade
@@ -365,7 +366,7 @@ build-LayerContainerShared:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerContainerShared
@@ -379,7 +380,7 @@ build-LayerFactory:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerFactory
@@ -393,7 +394,7 @@ build-LayerLoader:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LayerLoader
@@ -407,7 +408,7 @@ build-LayerNameService:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/LayerNameService
@@ -421,7 +422,7 @@ build-LayerRegistry:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/LayerRegistry
@@ -435,7 +436,7 @@ build-LNSConnector:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LNSConnector
@@ -449,7 +450,7 @@ build-ModelContainer:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/ModelContainer
@@ -463,7 +464,7 @@ build-NodeRegistry:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/NodeRegistry
@@ -477,7 +478,7 @@ build-PartitionManager:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/PartitionManager
@@ -491,7 +492,7 @@ build-ResultAdapter:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/ResultAdapter
@@ -505,7 +506,7 @@ build-RTEManager:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/LayerContainer/RTEManager
@@ -519,7 +520,7 @@ build-RuntimeEnvironment:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/RuntimeEnvironment
@@ -533,7 +534,7 @@ build-SimulationManagerFacade:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerFacade
@@ -547,7 +548,7 @@ build-SimulationManagerShared:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/SimulationManager/SimulationManagerShared
@@ -561,7 +562,7 @@ build-SMConnector:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/SMConnector
@@ -575,7 +576,7 @@ build-LCConnector:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/Common/LCConnector
@@ -589,7 +590,7 @@ build-LIFECoreUtilities:
   stage: build
   tags:
     - k8s
-  image: artifactory.mars.haw-hamburg.de:5000/microsoft/dotnet:1.1.2-sdk
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
   script:
     - dotnet msbuild "/t:Restore"  /p:Configuration=Release
     - cd LIFE-Core/T-Components/LIFECoreUtilities
