@@ -16,7 +16,7 @@ namespace LIFE.Components.ESC.Implementation
     ///   entities in the explored area regardless the collision type, but is only exact for shapes that are
     ///   <code>BoundingBox</code>es, without rotation.
     /// </summary>
-    public class NoCollisionESC : IESC, IAsyncEnvironment
+    public class NoCollisionESC : IESC
     {
         private readonly Random _random = new Random();
         private readonly IDictionary<Guid, ISpatialEntity> _spatialEntities;
@@ -130,49 +130,55 @@ namespace LIFE.Components.ESC.Implementation
             return true;
         }
 
-        public void Add(ISpatialEntity entity, Vector3 position, Direction rotation, MovementDelegate movementDelegate)
-        {
-            Add(entity, position, rotation);
-            movementDelegate(new MovementResult());
-        }
-
-        public void AddWithRandomPosition
-            (ISpatialEntity entity, Vector3 min, Vector3 max, bool grid, MovementDelegate movementDelegate)
-        {
-            AddWithRandomPosition(entity, min, max, grid);
-            movementDelegate(new MovementResult());
-        }
-
         public void Remove(ISpatialEntity entity)
         {
             _tree.Remove(entity);
             _spatialEntities.Remove(entity.AgentGuid);
         }
 
-        public void Resize(ISpatialEntity entity, IShape shape, MovementDelegate movementDelegate)
-        {
-            Resize(entity, shape);
-            movementDelegate(new MovementResult());
-        }
-
-        public void Move
-            (ISpatialEntity entity, Vector3 movementVector, Direction rotation, MovementDelegate movementDelegate)
-        {
-            Move(entity, movementVector, rotation);
-            movementDelegate(new MovementResult());
-        }
-
-        public void Explore(ISpatialObject spatial, ExploreDelegate exploreDelegate, Type agentType = null)
-        {
-            var result = Explore(spatial, agentType);
-            exploreDelegate(result);
-        }
-
-        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Enum collisionType = null)
-        {
-            var result = Explore(shape, collisionType);
-            exploreDelegate(result);
-        }
+        //        public void Add(ISpatialEntity entity, Vector3 position, Direction rotation, MovementDelegate movementDelegate)
+        //        {
+        //            Add(entity, position, rotation);
+        //            movementDelegate(new MovementResult());
+        //        }
+        //
+        //        public void AddWithRandomPosition
+        //            (ISpatialEntity entity, Vector3 min, Vector3 max, bool grid, MovementDelegate movementDelegate)
+        //        {
+        //            AddWithRandomPosition(entity, min, max, grid);
+        //            movementDelegate(new MovementResult());
+        //        }
+        //
+        //        public void Remove(ISpatialEntity entity)
+        //        {
+        //            _tree.Remove(entity);
+        //            _spatialEntities.Remove(entity.AgentGuid);
+        //        }
+        //
+        //        public void Resize(ISpatialEntity entity, IShape shape, MovementDelegate movementDelegate)
+        //        {
+        //            Resize(entity, shape);
+        //            movementDelegate(new MovementResult());
+        //        }
+        //
+        //        public void Move
+        //            (ISpatialEntity entity, Vector3 movementVector, Direction rotation, MovementDelegate movementDelegate)
+        //        {
+        //            Move(entity, movementVector, rotation);
+        //            movementDelegate(new MovementResult());
+        //        }
+        //
+        //        public void Explore(ISpatialObject spatial, ExploreDelegate exploreDelegate, Type agentType = null)
+        //        {
+        //            var result = Explore(spatial, agentType);
+        //            exploreDelegate(result);
+        //        }
+        //
+        //        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Enum collisionType = null)
+        //        {
+        //            var result = Explore(shape, collisionType);
+        //            exploreDelegate(result);
+        //        }
 
         public bool Resize(ISpatialEntity entity, IShape shape)
         {
@@ -187,7 +193,7 @@ namespace LIFE.Components.ESC.Implementation
             return Move(true, entity, movementVector, rotation);
         }
 
-        public IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial, Type agentType = null)
+        public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial, Type agentType = null)
         {
             if ((spatial == null) || (spatial.Shape == null)) return new List<ISpatialEntity>();
             if (agentType == null) return Explore(spatial.Shape, spatial.CollisionType);

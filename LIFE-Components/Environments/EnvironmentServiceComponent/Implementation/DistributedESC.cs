@@ -210,7 +210,7 @@ namespace LIFE.Components.ESC.Implementation
             return true;
         }
 
-        public IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial, Type agentType = null)
+        public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial, Type agentType = null)
         {
             if ((spatial == null) || (spatial.Shape == null)) return new List<ISpatialEntity>();
             if (agentType == null) return Explore(spatial.Shape, spatial.CollisionType);

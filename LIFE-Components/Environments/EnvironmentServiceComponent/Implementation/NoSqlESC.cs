@@ -168,7 +168,7 @@ namespace LIFE.Components.ESC.Implementation
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial, Type agentType = null)
+        public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial, Type agentType = null)
         {
             // Setup filter to find other entites
             FilterDefinition<BsonDocument> collisionFilter;

@@ -15,7 +15,7 @@ namespace LIFE.Components.ESC.Implementation
     /// <summary>
     ///   3-dimensional implementation of the IESC interface.
     /// </summary>
-    public class TreeESC : IESC, IAsyncEnvironment
+    public class TreeESC : IESC
     {
         private const int MaxAttempsToAddRandom = 100000;
         private readonly BoundarySpecification _boundarySpecification;
@@ -182,18 +182,6 @@ namespace LIFE.Components.ESC.Implementation
             return new MovementResult(Explore(entity));
         }
 
-        public void Add(ISpatialEntity entity, Vector3 position, Direction rotation, MovementDelegate movementDelegate)
-        {
-            var result = AddEntity(entity, position, rotation);
-            movementDelegate(result);
-        }
-
-        public void AddWithRandomPosition
-            (ISpatialEntity entity, Vector3 min, Vector3 max, bool grid, MovementDelegate movementDelegate)
-        {
-            var result = AddEntityWithRandomPosition(entity, min, max, grid);
-            movementDelegate(result);
-        }
 
         public void Remove(ISpatialEntity entity)
         {
@@ -201,30 +189,7 @@ namespace LIFE.Components.ESC.Implementation
             _spatialEntities.Remove(entity.AgentGuid);
         }
 
-        public void Resize(ISpatialEntity entity, IShape shape, MovementDelegate movementDelegate)
-        {
-            var result = ResizeEntity(entity, shape);
-            movementDelegate(result);
-        }
-
-        public void Move
-            (ISpatialEntity entity, Vector3 movementVector, Direction rotation, MovementDelegate movementDelegate)
-        {
-            Move(entity, movementVector, rotation);
-            movementDelegate(new MovementResult());
-        }
-
-        public void Explore(ISpatialObject spatial, ExploreDelegate exploreDelegate, Type agentType = null)
-        {
-            var result = Explore(spatial, agentType);
-            exploreDelegate(result);
-        }
-
-        public void Explore(IShape shape, ExploreDelegate exploreDelegate, Enum collisionType = null)
-        {
-            var result = Explore(shape, collisionType);
-            exploreDelegate(result);
-        }
+       
 
         public bool Resize(ISpatialEntity entity, IShape shape)
         {
@@ -254,7 +219,7 @@ namespace LIFE.Components.ESC.Implementation
             return Move(true, entity, movementVector, rotation);
         }
 
-        public IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial, Type agentType = null)
+        public IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial, Type agentType = null)
         {
             if ((spatial == null) || (spatial.Shape == null)) return new List<ISpatialEntity>();
             if (agentType == null) return Explore(spatial.Shape, spatial.CollisionType);

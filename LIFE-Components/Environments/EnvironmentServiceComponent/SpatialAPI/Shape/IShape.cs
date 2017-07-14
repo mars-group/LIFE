@@ -1,4 +1,5 @@
-﻿using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
+﻿using System.Runtime.InteropServices.ComTypes;
+using LIFE.Components.ESC.SpatialAPI.Entities.Transformation;
 
 namespace LIFE.Components.ESC.SpatialAPI.Shape
 {

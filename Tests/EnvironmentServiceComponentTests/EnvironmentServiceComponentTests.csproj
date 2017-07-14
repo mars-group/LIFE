@@ -12,14 +12,24 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP1_1;NO_GPU</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\LIFE-Components\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
+    <ProjectReference Include="..\..\LIFE-Components\Environments\GpuEnvironment\GpuEnvironment.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="mars-cloo" Version="1.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="NUnit" Version="3.6.1" />
     <packagereference Include="NUnit3TestAdapter" Version="3.8.0-alpha1"></packagereference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>
