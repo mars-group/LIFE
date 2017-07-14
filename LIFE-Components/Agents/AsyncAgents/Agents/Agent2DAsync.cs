@@ -20,7 +20,7 @@ namespace AsyncAgents.Agents
     public abstract class Agent2DAsync :Agent
     {
         protected IAsyncEnvironment _env;         // IESC implementation for collision detection.
-        private IAsyncEnvironment _tmpNewEnv;   // IESC implementation just needed to save the new env until the remove delegate was called
+//        private IAsyncEnvironment _tmpNewEnv;   // IESC implementation just needed to save the new env until the remove delegate was called
         private readonly ILayer _layer;         // Layer reference, needed for type/tick in result object.
         private readonly MovementDelegate _movementDelegate;
         private readonly Action<ISpatialEntity> _removeDelegate;
@@ -46,7 +46,7 @@ namespace AsyncAgents.Agents
             var spatialData = _env.GetSpatialEntity(this.ID);
             if (spatialData == null)
                 throw new AgentAddException("[SpatialAgent] Change environment failed -> Agent did'nt exist in old environment!", this.ID);
-            _env = _tmpNewEnv;
+//            _env = _tmpNewEnv;
             spatialData.Shape = spatialData.Shape.Transform(-spatialData.Shape.Position + _position, null);
             Mover2D = new AgentMover2DAsync(new AgentMover3DAsync(_env, spatialData, SensorArray), SensorArray);
             _env.Add(spatialData, _movementDelegate);

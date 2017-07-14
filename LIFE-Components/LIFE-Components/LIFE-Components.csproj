@@ -31,7 +31,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Agents\AsyncAgents\AsyncAgents.csproj" />
     <ProjectReference Include="..\Agents\BasicAgents\BasicAgents.csproj" />
-    <ProjectReference Include="..\Environments\Cloo.NetCore11\Cloo.NetCore11.csproj" />
     <ProjectReference Include="..\Environments\GpuEnvironment\GpuEnvironment.csproj" />
     <ProjectReference Include="..\Environments\GridEnvironment\GridEnvironment.csproj" />
     <ProjectReference Include="..\Environments\GeoGridEnvironment\GeoGridEnvironment.csproj" />

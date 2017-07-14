@@ -5,9 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="mars-cloo" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
     <ProjectReference Include="..\..\..\LIFE-Core\LayerContainer\ResultAdapter\ResultAdapter.csproj" />
-    <ProjectReference Include="..\Cloo.NetCore11\Cloo.NetCore11.csproj" />
     <ProjectReference Include="..\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
   </ItemGroup>
 
