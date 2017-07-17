@@ -108,6 +108,22 @@ build-BasicAgents:
     paths:
       - out-BasicAgents/
 
+
+build-AsyncAgents:
+  stage: build
+  tags:
+    - k8s
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
+  script:
+    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - cd LIFE-Components/Agents/AsyncAgents
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AsyncAgents
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-AsyncAgents/
+
+
 build-ESC:
   stage: build
   tags:
@@ -149,6 +165,22 @@ build-GridEnvironment:
     expire_in: 120 mins
     paths:
       - out-GridEnvironment
+
+build-GpuEnvironment:
+  stage: build
+  tags:
+    - k8s
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
+  script:
+    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - cd LIFE-Components/Environments/GpuEnvironment
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GpuEnvironment
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-GpuEnvironment
+
+
 
 build-GeoPotentialField:
   stage: build
@@ -614,8 +646,10 @@ pushAllPackages:
     - mono .nuget/NuGet.exe push out-LIFE-Core/LIFE-Core.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-LIFE-Components/LIFE-Components.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-BasicAgents/BasicAgents.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-AsyncAgents/AsyncAgents.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-GeoGridEnvironment/GeoGridEnvironment.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-GridEnvironment/GridEnvironment.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
+    - mono .nuget/NuGet.exe push out-GpuEnvironment/GpuEnvironment.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-ESC/EnvironmentServiceComponent.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-GeoPotentialFieldLayer/GeoPotentialFieldLayer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
     - mono .nuget/NuGet.exe push out-GridPotentialFieldLayer/GridPotentialFieldLayer.$MAJOR_LIFE_VERSION.nupkg -ApiKey $PUSH_KEY -Source $PUSH_PATH
