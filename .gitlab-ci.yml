@@ -108,6 +108,22 @@ build-BasicAgents:
     paths:
       - out-BasicAgents/
 
+
+build-AsyncAgents:
+  stage: build
+  tags:
+    - k8s
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
+  script:
+    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - cd LIFE-Components/Agents/AsyncAgents
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-AsyncAgents
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-AsyncAgents/
+
+
 build-ESC:
   stage: build
   tags:
@@ -149,6 +165,22 @@ build-GridEnvironment:
     expire_in: 120 mins
     paths:
       - out-GridEnvironment
+
+build-GpuEnvironment:
+  stage: build
+  tags:
+    - k8s
+  image: nexus.informatik.haw-hamburg.de/microsoft/dotnet:1.1.2-sdk
+  script:
+    - dotnet msbuild "/t:Restore"  /p:Configuration=Release
+    - cd LIFE-Components/Environments/GpuEnvironment
+    - dotnet pack -c Release --output $CI_PROJECT_DIR/out-GpuEnvironment
+  artifacts:
+    expire_in: 120 mins
+    paths:
+      - out-GpuEnvironment
+
+
 
 build-GeoPotentialField:
   stage: build
