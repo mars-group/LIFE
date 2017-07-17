@@ -4,7 +4,7 @@ stages:
   - deploy
 
 variables:
-  PUSH_PATH: "https://nexus.informatik.haw-hamburg.de/repository/nuget-group/"
+  PUSH_PATH: "https://nexus.informatik.haw-hamburg.de/repository/nuget-hosted/"
     #"https://artifactory.mars.haw-hamburg.de/artifactory/api/nuget/nuget-local/"
   MAJOR_LIFE_VERSION: "2.1.2"
 
