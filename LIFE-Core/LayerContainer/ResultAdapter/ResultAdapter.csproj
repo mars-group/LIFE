@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\Common\CommonTypes\CommonTypes.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ConfigService" Version="2.0.0-494" />
+    <PackageReference Include="ConfigService" Version="2.0.0-7682" />
     <PackageReference Include="MongoDB.Driver" Version="2.4.3" />
     <PackageReference Include="RabbitMQ.Client" Version="4.1.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.0.0" />
