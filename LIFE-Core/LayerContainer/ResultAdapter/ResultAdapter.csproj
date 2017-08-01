@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>The ResultAdapter manages the output of agent data</Description>
     <Copyright>(c) 2016 - MARS Group</Copyright>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionPrefix>2.1.2.1</VersionPrefix>
     <Authors>Christian Huening</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>ResultAdapter</AssemblyName>

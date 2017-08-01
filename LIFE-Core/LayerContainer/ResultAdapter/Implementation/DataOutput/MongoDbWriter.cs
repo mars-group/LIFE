@@ -39,6 +39,7 @@ namespace ResultAdapter.Implementation.DataOutput
             _simId = simId;
             // In case this particular run got restarted due to Pod failure, we try to drop the collection
             _dbLegacy.DropCollection(_simId);
+            
             _jsonConf = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
