@@ -5,7 +5,7 @@ stages:
 
 variables:
   PUSH_PATH: "https://nexus.informatik.haw-hamburg.de/repository/nuget-hosted/"
-  MAJOR_LIFE_VERSION: "2.1.2"
+  MAJOR_LIFE_VERSION: "2.1.2.1"
 
 cache:
   untracked: true

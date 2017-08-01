@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionPrefix>2.1.2.1</VersionPrefix>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>TimeSeriesLayer</AssemblyName>
     <PackageId>TimeSeriesLayer</PackageId>
