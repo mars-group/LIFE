@@ -45,11 +45,33 @@ namespace LIFE.API.Layer.Obstacle
         void ReduceCellRating(IGeoCoordinate position, double ratingValue);
 
         /// <summary>
+        /// Try to reduce a cell rating by a given value
+        /// </summary>
+        /// <param name="position">gps position to find the cell</param>
+        /// <param name="amountToTake">value by which the cell rating should be reduced</param>
+        /// <returns>the amount that was took or 0 if there isn't enough left</returns>
+        double TryToReduceCellRating(IGeoCoordinate position, double amountToTake);
+
+        /// <summary>
         ///   Set the rating of the cell at the given position.
         ///   Will overwrite any other rating in that cell.
         /// </summary>
         /// <param name="position">The gps position used to obtain the cell.</param>
         /// <param name="cellValue">The new value for the cell</param>
         void SetCellRating(IGeoCoordinate position, double cellValue);
+
+        /// <summary>
+        /// Get the cell rating for a geo coordinate
+        /// </summary>
+        /// <param name="position">the geo coordinate</param>
+        /// <returns>the value of the corresponding cell</returns>
+        double GetCellRating(IGeoCoordinate position);
+
+        /// <summary>
+        /// Get the gps positon of the the adjacent cell with the highest value
+        /// </summary>
+        /// <param name="positon">gps position where the search starts</param>
+        /// <returns>position of the cell with the highest value</returns>
+        IGeoCoordinate GetNeighbourCellWithMaxValue(IGeoCoordinate positon);
     }
 }
