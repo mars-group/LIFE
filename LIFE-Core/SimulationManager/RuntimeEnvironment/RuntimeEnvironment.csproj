@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>The RuntimeEnvironmment contains the actual simulation execution code</Description>
     <Copyright>(c) 2016 - MARS Group</Copyright>
-    <VersionPrefix>2.1.2.1</VersionPrefix>
+    <VersionPrefix>2.1.2.2</VersionPrefix>
     <Authors>Christian Huening</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>RuntimeEnvironment</AssemblyName>
