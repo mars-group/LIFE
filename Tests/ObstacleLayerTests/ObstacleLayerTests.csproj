@@ -8,6 +8,12 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LIFE-API\LIFE-API.csproj" />
     <ProjectReference Include="..\..\LIFE-Components\Layers\ObstacleLayer\ObstacleLayer.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="dgvm.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
