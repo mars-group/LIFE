@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using LIFE.API.Environment.GeoCommon;
 
@@ -16,6 +17,12 @@ namespace LIFE.Components.ObstacleLayer
             _leftLong = leftLong;
             _rightLong = rightLong;
             _cellSizeInM = cellSizeInM;
+            
+            Debug.WriteLine("LatitudeTop="+_topLat);
+            Debug.WriteLine("LongitudeLeft="+_leftLong);
+            Debug.WriteLine("LatitudeBottom="+_bottomLat);
+            Debug.WriteLine("LongitudeRight="+_rightLong);
+            Debug.WriteLine("CellSizeInM="+_cellSizeInM);
 
             _latDistance = Math.Abs(_bottomLat - _topLat);
             _longDistance = Math.Abs(_rightLong - _leftLong);
@@ -36,6 +43,7 @@ namespace LIFE.Components.ObstacleLayer
 
             var distanceTop = GetDistanceFromLatLonInKm(topLat, leftLong, topLat, rightLong);
             var distanceLeft = GetDistanceFromLatLonInKm(topLat, leftLong, bottomLat, leftLong);
+            Debug.WriteLine("Distance top: "+ distanceTop+" Distance left: "+distanceLeft);
 
             //add 1 to avoid exception based on rounding
             _numberOfGridCellsX = (int) Math.Round(distanceTop * 1000 / _cellSizeInM, 0);
@@ -45,6 +53,7 @@ namespace LIFE.Components.ObstacleLayer
 
             _latDistancePerCell = Math.Abs(_latDistance / _numberOfGridCellsY);
             _longDistancePerCell = Math.Abs(_longDistance / _numberOfGridCellsX);
+            Debug.WriteLine("Number of grid cells. x="+_numberOfGridCellsX+" y="+_numberOfGridCellsY);
 
             // check whether Pre-Init should be done
             if (defaultInitValue == null) return;

@@ -44,6 +44,8 @@ testAll:
     - dotnet test
     - cd ../TimeSeriesLayerTests
     - dotnet test
+    - cd ../ObstacleLayerTests
+    - dotnet test
 
 ##### for future reference ######
 # the dotnet pack --output option is named /p:PackageOutputPath= in msbuild #
