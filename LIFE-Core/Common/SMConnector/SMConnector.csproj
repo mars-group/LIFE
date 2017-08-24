@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>SMConnector provides common classes for the SimulationManager and its services</Description>
     <Copyright>(c) 2016 - MARS Group</Copyright>
-    <VersionPrefix>2.1.2.2</VersionPrefix>
+    <VersionPrefix>2.1.2.3</VersionPrefix>
     <Authors>Christian Huening</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>SMConnector</AssemblyName>
