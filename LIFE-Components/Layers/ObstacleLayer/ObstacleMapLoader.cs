@@ -78,7 +78,7 @@ namespace LIFE.Components.ObstacleLayer
                     cellSize = int.Parse(split5[1]);
                 }
             }
-            var obstacleMap = new ObstacleMap(topLat, leftLon, bottomLat, rightLon, cellSize);
+            var obstacleMap = new ObstacleMap( topLat, bottomLat, leftLon, rightLon, cellSize);
             return obstacleMap;
         }
     }

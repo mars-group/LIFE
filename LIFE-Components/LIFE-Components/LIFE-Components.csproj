@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
   <PropertyGroup>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionPrefix>2.1.2.3</VersionPrefix>
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>LIFE-Components</AssemblyName>
@@ -15,10 +19,19 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <ApplicationIcon />
+    <OutputTypeEx>library</OutputTypeEx>
+    <StartupObject />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.6\LIFE-Components.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Agents\AsyncAgents\AsyncAgents.csproj" />
     <ProjectReference Include="..\Agents\BasicAgents\BasicAgents.csproj" />
+    <ProjectReference Include="..\Environments\GpuEnvironment\GpuEnvironment.csproj" />
     <ProjectReference Include="..\Environments\GridEnvironment\GridEnvironment.csproj" />
     <ProjectReference Include="..\Environments\GeoGridEnvironment\GeoGridEnvironment.csproj" />
     <ProjectReference Include="..\Layers\GeoPotentialFieldLayer\GeoPotentialFieldLayer.csproj" />

@@ -137,11 +137,11 @@ namespace EnvironmentServiceComponentTests.EscTests
             Assert.True(Esc.Add(a2, Vector3.One));
 
             var exploreShape = BoundingBox.GenerateByCorners(Vector3.Zero, new Vector3(5, 5, 5));
-            ISpatialObject explore = new ExploreEntity(exploreShape);
+            ISpatialEntity explore = new ExploreEntity(exploreShape);
 
             Assert.True(Esc.ExploreAll().ToList().Count == 2);
-            Assert.True(Esc.Explore(explore).ToList().Count == 2);
-            Assert.True(Esc.Explore(explore, typeof(TestSpatialEntity)).ToList().Count == 1);
+            Assert.True(Esc.Explore(explore.Shape).ToList().Count == 2);
+           Assert.True(Esc.Explore(explore, typeof(TestSpatialEntity)).ToList().Count == 1);
         }
 
 

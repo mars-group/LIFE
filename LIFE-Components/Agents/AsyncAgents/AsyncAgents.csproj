@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>2.1.2.3</VersionPrefix>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
+    <ProjectReference Include="..\..\..\LIFE-Core\LayerContainer\ResultAdapter\ResultAdapter.csproj" />
+    <ProjectReference Include="..\..\Environments\EnvironmentServiceComponent\EnvironmentServiceComponent.csproj" />
+    <ProjectReference Include="..\BasicAgents\BasicAgents.csproj" />
+  </ItemGroup>
+
+</Project>

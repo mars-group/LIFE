@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionPrefix>2.1.2.3</VersionPrefix>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>GridPotentialFieldLayer</AssemblyName>
     <PackageId>GridPotentialFieldLayer</PackageId>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>1.6</NetStandardImplicitPackageVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionPrefix>2.1.2.3</VersionPrefix>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>EnvironmentServiceComponent</AssemblyName>
     <PackageId>EnvironmentServiceComponent</PackageId>
@@ -14,15 +13,12 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\LIFE-API\LIFE-API.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="ConfigService" Version="2.0.0-494" />
+    <PackageReference Include="ConfigService" Version="2.0.0-7682" />
     <PackageReference Include="MongoDB.Driver" Version="2.4.3" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
-
 </Project>

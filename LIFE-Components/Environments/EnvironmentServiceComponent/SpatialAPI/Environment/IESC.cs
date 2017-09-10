@@ -83,7 +83,7 @@ namespace LIFE.Components.ESC.SpatialAPI.Environment
         /// <param name="spatial">Defines geometry and collision type that should restrict the exploration.</param>
         /// <param name="agentType">If agent type is not null, only ISpatialEntities with same agent type are returned.</param>
         /// <returns>All spatial entities that correspond with given parameters.</returns>
-        IEnumerable<ISpatialEntity> Explore(ISpatialObject spatial, Type agentType = null);
+        IEnumerable<ISpatialEntity> Explore(ISpatialEntity spatial, Type agentType = null);
 
         /// <summary>
         ///   Get spatial entities that corresponds with given shape and collision type.

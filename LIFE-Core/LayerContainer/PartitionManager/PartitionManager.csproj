@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>The PartitionManager intends to manage the partitioning of layers in a distributed case</Description>
     <Copyright>(c) 2016 - MARS Group</Copyright>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionPrefix>2.1.2.3</VersionPrefix>
     <Authors>Christian Huening</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>PartitionManager</AssemblyName>

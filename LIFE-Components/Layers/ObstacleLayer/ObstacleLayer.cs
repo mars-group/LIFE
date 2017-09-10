@@ -43,6 +43,21 @@ namespace LIFE.Components.ObstacleLayer
             _obstacleMap.ReduceCellRating(position, ratingValue);
         }
 
+        public double TryToReduceCellRating(IGeoCoordinate position, double amountToTake)
+        {
+            return _obstacleMap.TryTakeFromCell(position, amountToTake);
+        }
+
+        public double GetCellRating(IGeoCoordinate position)
+        {
+            return _obstacleMap.GetCellRating(position);
+        }
+
+        public IGeoCoordinate GetNeighbourCellWithMaxValue(IGeoCoordinate positon)
+        {
+            return _obstacleMap.GetMaxValueNeighbourCoordinate(positon);
+        }
+
         public void SetCellRating(IGeoCoordinate position, double cellValue)
         {
             _obstacleMap.SetCellRating(position, cellValue);
